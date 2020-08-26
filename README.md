@@ -129,7 +129,7 @@ To activate the Firebase Cloud Messaging service, please follow these steps:
 
 ### Android
 
-First things first, to create your Firebase Cloud Message and send notifications even when your app is terminated (killed), go to the [[Firebase Console]][firebase_link] and create a new project.
+First things first, to create your Firebase Cloud Message and send notifications even when your app is terminated (killed), go to the [Firebase Console](https://console.firebase.google.com/) and create a new project.
 
 After that, go to "Cloud Messaging" option and add an "Android app", put the packge name of your project (**certifies to put the correct one**) to generate the file ***google-services.json***.
 
@@ -165,7 +165,7 @@ Please, be patient.
 
 ## Firebase Token
 
-The firebase token is necessary to your sever send Push Notifications to the remote device. The token could eventualy change and is created to every device instalation on each application.
+The firebase token is necessary to your sever send Push Notifications to the remote device. The token could eventually change and is created to every device installation on each application.
 
 Every token created could be captured on Flutter by this plugin listen to ``
 
@@ -181,7 +181,7 @@ Notifications are received by local code or FCM using native code, so the messag
 
 ## Flutter Streams
 
-The Flutter code will be called as soon as possible using [[Streams]][stream_dart].
+The Flutter code will be called as soon as possible using [Dart Streams](https://dart.dev/tutorials/language/streams).
 
 **createdNotificationStream**: Fires when a notification is created
 **displayedNotificationStream**: Fires when a notification is displayed on system status bar
@@ -193,6 +193,18 @@ The Flutter code will be called as soon as possible using [[Streams]][stream_dar
 | --------------------------: | ----------------- | ----------------- | -------------- |
 | **Android** | Fires all streams imeadtly after occours | Fires all streams imeadtly after occours | Fires `created` and `displayed` after the plugin initializes, but fires `action` imeadtly after occours |
 | **iOS**     | Fires all streams imeadtly after occours | Fires all streams imeadtly after occours | Fires `created` and `displayed` after the plugin initializes, but fires `action` imeadtly after occours |
+
+<br>
+
+
+## Scheduling a notification
+
+
+Notifications could be scheduled as you wish using two main options:
+
+**initialDate**: (YYYY-MM-DD hh:mm:ss) The initial date that schedule should be called by first time
+**crontabSchedule**: Crontab expression as repetition rule (with seconds precision), as described in [this article](https://www.baeldung.com/cron-expressions)
+**allowWhileIdle**: Determines if notification will send even when the device is in critical situation, such as low battery.
 
 <br>
 
@@ -218,7 +230,7 @@ To send a notification using Awesome Notifications and FCM Services, use only th
             "autoCancel": true,
             "privacy": "Private"
         },
-        "actionButtons": [  /* OPTIONAL */
+        "actionButtons": [  // OPTIONAL
             {
                 "key": "REPLY",
                 "label": "Reply",
@@ -231,14 +243,13 @@ To send a notification using Awesome Notifications and FCM Services, use only th
                 "autoCancel": true
             }
         ],
-        "schedule": [  /* OPTIONAL */
+        "schedule": {  // OPTIONAL
             "initialDateTime": "2020-08-30 11:00:00",
-            "crontabSchedule": "5 38 20 ? * MON-FRI *"
-        ],
+            "crontabSchedule": "5 38 20 ? * MON-FRI *", // all workdays, at 20:38:05
+            "allowWhileIdle": true
+        }
     }
 }
 ```
 
 Read me construction in progress... please be patient
-[firebase_link]: https://console.firebase.google.com/ "Firebase Console"
-[stream_dart]: https://dart.dev/tutorials/language/streams "Streams"
