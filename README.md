@@ -198,14 +198,70 @@ The Flutter code will be called as soon as possible using [Dart Streams](https:/
 <br>
 
 
-## Scheduling a notification
+## Notification Layout Types
 
 
-Notifications could be scheduled as you wish using two main options:
+Notifications action buttons could be classified in 3 types:
 
 **initialDate**: (YYYY-MM-DD hh:mm:ss) The initial date that schedule should be called by first time
 **crontabSchedule**: Crontab expression as repetition rule (with seconds precision), as described in [this article](https://www.baeldung.com/cron-expressions)
 **allowWhileIdle**: Determines if notification will send even when the device is in critical situation, such as low battery.
+
+<br>
+
+## Notification Structures
+
+### Notification Layout Types
+
+To show any images on notification, at any place, you need to include the respective source prefix before the path.
+
+Images can be defined using 4 prefix types:
+
+- Default:
+- BigPicture:
+- BigText:
+- Inbox:
+- ProgressBar:
+- Messaging:
+- MediaPlayer:
+
+<br>
+
+### Media Source Types
+
+To show any images on notification, at any place, you need to include the respective source prefix before the path.
+
+Images can be defined using 4 prefix types:
+
+- Asset: images access through Flutter asset method. **Example**: asset://path/to/image-asset.png
+- Network: images access through internet connection. **Example**: http(s)://url.com/to/image-asset.png
+- File: images access through files stored on device. **Example**: file://path/to/image-asset.png
+- Resource: images access through drawable native resources. **Example**: resource://url.com/to/image-asset.png
+
+
+<br>
+
+### Notification Action Button Types
+
+
+Notifications action buttons could be classified in 3 types:
+
+- Default: after user taps, the notification bar is closed and an action event is fired.
+- InputField: after user taps, a input text field is displayed to capture input by the user.
+- DisabledAction: after user taps, the notification bar is closed, but the respective action event is not fired.
+- KeepOnTop: after user taps, the notification bar is not closed, but an action event is fired.
+
+<br>
+
+
+### Scheduling a notification
+
+
+Notifications could be scheduled as you wish using two main options:
+
+- initialDate: (YYYY-MM-DD hh:mm:ss) The initial date that schedule should be called by first time
+- crontabSchedule: Crontab expression as repetition rule (with seconds precision), as described in [this article](https://www.baeldung.com/cron-expressions)
+- allowWhileIdle: Determines if notification will send even when the device is in critical situation, such as low battery.
 
 <br>
 
@@ -215,6 +271,7 @@ Notifications could be scheduled as you wish using two main options:
 To send a notification using Awesome Notifications and FCM Services, use only the data field as bellow:
 
 OBS: `actionButtons` and `schedule` are **optional**
+
 ```json
 {
     "to" : "[YOUR APP TOKEN]",
