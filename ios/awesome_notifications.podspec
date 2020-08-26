@@ -5,9 +5,9 @@
 Pod::Spec.new do |s|
   s.name             = 'awesome_notifications'
   s.version          = '0.0.1'
-  s.summary          = 'Complete solution for Flutter to create Local Notifications and Push Notifications throught Firebase service.'
+  s.summary          = 'A complete solution to create Local Notifications and Push Notifications, throught Firebase or another services, using Flutter.'
   s.description      = <<-DESC
-Complete solution for Flutter to create Local Notifications and Push Notifications throught Firebase service.
+A complete solution to create Local Notifications and Push Notifications, throught Firebase or another services, using Flutter.
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }

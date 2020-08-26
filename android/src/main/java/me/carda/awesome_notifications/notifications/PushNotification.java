@@ -64,7 +64,10 @@ public class PushNotification {
         Object obj = parameters.get(reference);
 
         if(!(obj instanceof Map<?,?>)) return null;
+
+        @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) obj;
+
         if(map.isEmpty()) return null;
         else return NotificationContentModel.fromMap(map);
     }
@@ -74,7 +77,10 @@ public class PushNotification {
         Object obj = parameters.get(reference);
 
         if(!(obj instanceof Map<?,?>)) return null;
+
+        @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) obj;
+
         if(map.isEmpty()) return null;
         else return NotificationScheduleModel.fromMap(map);
     }

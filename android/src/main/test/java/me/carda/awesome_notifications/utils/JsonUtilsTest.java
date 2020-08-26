@@ -1,4 +1,4 @@
-package android.src.main.test.java.me.carda.push_notifications.utils;
+package android.src.main.test.java.me.carda.awesome_notifications.utils;
 
 import com.google.common.reflect.TypeToken;
 

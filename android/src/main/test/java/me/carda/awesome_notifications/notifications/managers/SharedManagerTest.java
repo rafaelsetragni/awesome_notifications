@@ -1,4 +1,4 @@
-package android.src.main.test.java.me.carda.push_notifications.notifications.managers;
+package android.src.main.test.java.me.carda.awesome_notifications.notifications.managers;
 
 import android.content.Context;
 
