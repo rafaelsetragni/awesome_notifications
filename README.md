@@ -62,6 +62,7 @@ This way, your Application will receive **all notifications at Flutter level cod
 ## A very simple example
 
 <br>
+
 1. Add *awesome_notifications* as a dependency in your pubspec.yaml file.
 
 ```yaml
@@ -213,6 +214,7 @@ Notifications could be scheduled as you wish using two main options:
 
 To send a notification using Awesome Notifications and FCM Services, use only the data field as bellow:
 
+OBS: `actionButtons` and `schedule` are **optional**
 ```json
 {
     "to" : "[YOUR APP TOKEN]",
@@ -230,7 +232,7 @@ To send a notification using Awesome Notifications and FCM Services, use only th
             "autoCancel": true,
             "privacy": "Private"
         },
-        "actionButtons": [  // OPTIONAL
+        "actionButtons": [
             {
                 "key": "REPLY",
                 "label": "Reply",
@@ -243,9 +245,9 @@ To send a notification using Awesome Notifications and FCM Services, use only th
                 "autoCancel": true
             }
         ],
-        "schedule": {  // OPTIONAL
+        "schedule": {
             "initialDateTime": "2020-08-30 11:00:00",
-            "crontabSchedule": "5 38 20 ? * MON-FRI *", // all workdays, at 20:38:05
+            "crontabSchedule": "5 38 20 ? * MON-FRI *",
             "allowWhileIdle": true
         }
     }
