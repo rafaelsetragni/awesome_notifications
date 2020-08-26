@@ -30,7 +30,7 @@
 
 All notifications could be created localy or via Firebase services, with all the features.
 
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-example.jpg)
+![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-examples.jpg)
 
 *Some examples of notifications produced using awesome notifications*
 
