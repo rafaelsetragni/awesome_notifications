@@ -40,6 +40,7 @@ All notifications could be created localy or via Firebase services, with all the
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-atention.jpg)
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-progress.jpg)
+
 *Working progress percentages of awesome notifications plugin*
 
 <br>
@@ -63,50 +64,60 @@ This way, your Application will receive **all notifications at Flutter level cod
 <br>
 1. Add *awesome_notifications* as a dependency in your pubspec.yaml file.
 
-		awesome_notifications: any
+```yaml
+  awesome_notifications: any
+```
 
 2. import the plugin package to your dart code
 
-		import 'package:awesome_notifications/awesome_notifications.dart';
+```dart
+import 'package:awesome_notifications/awesome_notifications.dart';
+```
 
 3. Initialize the plugin on main.dart, with at least one native icon and one channel
-        
-		AwesomeNotifications().initialize(
-			'resource://drawable/app_icon',
-			[
-				NotificationChannel(
-					channelKey: 'basic_channel',
-					channelName: 'Basic notifications',
-					channelDescription: 'Notification channel for basic tests',
-					defaultColor: Color(0xFF9D50DD),
-					ledColor: Colors.white
-				)
-			]
-         );
+
+```dart
+AwesomeNotifications().initialize(
+    'resource://drawable/app_icon',
+    [
+        NotificationChannel(
+            channelKey: 'basic_channel',
+            channelName: 'Basic notifications',
+            channelDescription: 'Notification channel for basic tests',
+            defaultColor: Color(0xFF9D50DD),
+            ledColor: Colors.white
+        )
+    ]
+);
+```
 
 4. On your main page, starts to listen the notification actions (to detect tap)
-        
-		AwesomeNotifications().actionNotificationStream.listen(
-			(receivedNotification){
 
-				Navigator.of(context).pushName(context,
-					'/NotificationPage',
-					arguments: { id: receivedNotification.id } // your page params. I recomend to you to pass all *receivedNotification* object
-				);
-
-			}
-		);
+```dart
+AwesomeNotifications().actionNotificationStream.listen(
+    (receivedNotification){
+    
+        Navigator.of(context).pushName(context,
+            '/NotificationPage',
+            arguments: { id: receivedNotification.id } // your page params. I recomend to you to pass all *receivedNotification* object
+        );
+    
+    }
+);
+```
 
 5. In any place of your app, create a new notification
 
-		  AwesomeNotifications().createNotification(
-			  content: NotificationContent(
-				  id: 10,
-				  channelKey: 'basic_channel',
-				  title: 'Simple Notification',
-				  body: 'Simple body'
-			  )
-		  );
+```dart
+AwesomeNotifications().createNotification(
+  content: NotificationContent(
+      id: 10,
+      channelKey: 'basic_channel',
+      title: 'Simple Notification',
+      body: 'Simple body'
+  )
+);
+```
 
 **THATS IT! CONGRATZ MY FRIEND!!!**
 
@@ -128,17 +139,20 @@ Download the file and place it inside your android/app folder.
 
 Add the classpath to the [project]/android/build.gradle file. (Firebase ones was already added by the plugin)
 
-	dependencies {
-		classpath 'com.android.tools.build:gradle:3.5.0'
-		// Add the google services classpath
-		classpath 'com.google.gms:google-services:4.3.3'
-	}
+```editorconfig
+dependencies {
+    classpath 'com.android.tools.build:gradle:3.5.0'
+    // Add the google services classpath
+    classpath 'com.google.gms:google-services:4.3.3'
+}
+```
 
 Add the apply plugin to the [project]/android/app/build.gradle file.
 
-	// ADD THIS AT THE BOTTOM
-	apply plugin: 'com.google.gms.google-services'
-
+```editorconfig
+// ADD THIS AT THE BOTTOM
+apply plugin: 'com.google.gms.google-services'
+```
 
 ### iOS
 
@@ -185,43 +199,45 @@ The Flutter code will be called as soon as possible using [[Streams]][stream_dar
 
 ## FCM data example
 
-To send a notification using Awesome Notifications, use only the data field.
+To send a notification using Awesome Notifications and FCM Services, use only the data field as bellow:
 
-		{
-			"to" : "[YOUR APP TOKEN]",
-			"collapse_key" : "type_a",
-			"data" : {
-				"content": {
-					"id": 100,
-					"channelKey": "big_picture",
-					"title": "Huston!\nThe eagle has landed!",
-					"body": "A small step for a man, but a giant leap to Flutter's community!",
-					"notificationLayout": "BigPicture",
-					"largeIcon": "https://avidabloga.files.wordpress.com/2012/08/emmemc3b3riadeneilarmstrong3.jpg",
-					"bigPicture": "https://www.dw.com/image/49519617_303.jpg",
-					"showWhen": true,
-					"autoCancel": true,
-					"privacy": "Private"
-				},
-				"actionButtons": [  /* OPTIONAL */
-					{
-						"key": "REPLY",
-						"label": "Reply",
-						"autoCancel": true,
-						"buttonType":  "InputField",
-					},
-					{
-						"key": "ARCHIVE",
-						"label": "Archive",
-						"autoCancel": true
-					}
-				],
-				"schedule": [  /* OPTIONAL */
-					"initialDateTime": "2020-08-30 11:00:00",
-					"crontabSchedule": "5 38 20 ? * MON-FRI *"
-				],
-			}
-		}
+```json
+{
+    "to" : "[YOUR APP TOKEN]",
+    "collapse_key" : "type_a",
+    "data" : {
+        "content": {
+            "id": 100,
+            "channelKey": "big_picture",
+            "title": "Huston!\nThe eagle has landed!",
+            "body": "A small step for a man, but a giant leap to Flutter's community!",
+            "notificationLayout": "BigPicture",
+            "largeIcon": "https://avidabloga.files.wordpress.com/2012/08/emmemc3b3riadeneilarmstrong3.jpg",
+            "bigPicture": "https://www.dw.com/image/49519617_303.jpg",
+            "showWhen": true,
+            "autoCancel": true,
+            "privacy": "Private"
+        },
+        "actionButtons": [  /* OPTIONAL */
+            {
+                "key": "REPLY",
+                "label": "Reply",
+                "autoCancel": true,
+                "buttonType":  "InputField",
+            },
+            {
+                "key": "ARCHIVE",
+                "label": "Archive",
+                "autoCancel": true
+            }
+        ],
+        "schedule": [  /* OPTIONAL */
+            "initialDateTime": "2020-08-30 11:00:00",
+            "crontabSchedule": "5 38 20 ? * MON-FRI *"
+        ],
+    }
+}
+```
 
 Read me construction in progress... please be patient
 [firebase_link]: https://console.firebase.google.com/ "Firebase Console"
