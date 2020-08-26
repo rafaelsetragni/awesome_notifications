@@ -1,0 +1,161 @@
+import 'dart:typed_data';
+
+import 'package:awesome_notifications/src/enumerators/group_alert_behaviour.dart';
+import 'package:awesome_notifications/src/enumerators/media_source.dart';
+import 'package:awesome_notifications/src/utils/assert_utils.dart';
+import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
+import 'package:awesome_notifications/src/utils/string_utils.dart';
+import 'package:flutter/material.dart';
+
+import 'package:awesome_notifications/src/enumerators/notification_importance.dart';
+import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
+import 'package:awesome_notifications/src/models/model.dart';
+
+class NotificationChannel extends Model {
+
+  String channelKey;
+  String channelName;
+  String channelDescription;
+  bool channelShowBadge;
+
+  NotificationImportance importance;
+
+  bool playSound;
+  String soundSource;
+
+  bool enableVibration;
+  Int64List vibrationPattern;
+
+  bool enableLights;
+  Color ledColor;
+  int ledOnMs;
+  int ledOffMs;
+
+  String  groupKey;
+  bool setAsGroupSummary;
+  GroupAlertBehavior groupAlertBehavior;
+
+  NotificationPrivacy defaultPrivacy;
+
+  String  icon;
+  Color defaultColor;
+
+  bool locked;
+  bool onlyAlertOnce;
+
+  NotificationChannel({
+      Key key,
+      @required this.channelKey,
+      @required this.channelName,
+      @required this.channelDescription,
+      this.channelShowBadge,
+      this.importance,
+      this.playSound,
+      this.soundSource,
+      this.enableVibration,
+      this.vibrationPattern,
+      this.enableLights,
+      this.ledColor,
+      this.ledOnMs,
+      this.ledOffMs,
+      this.groupKey,
+      this.setAsGroupSummary,
+      this.groupAlertBehavior,
+      this.icon,
+      this.defaultColor,
+      this.locked,
+      this.onlyAlertOnce,
+      this.defaultPrivacy
+  }) : super() {
+
+    this.channelKey         = AssertUtils.getValueOrDefault('channelKey', this.channelKey, String);
+    this.channelName        = AssertUtils.getValueOrDefault('channelName', this.channelName, String);
+    this.channelDescription = AssertUtils.getValueOrDefault('channelDescription', this.channelDescription, String);
+    this.channelShowBadge   = AssertUtils.getValueOrDefault('channelShowBadge', this.channelShowBadge, bool);
+    this.importance         = AssertUtils.getValueOrDefault('importance', this.importance, NotificationImportance);
+    this.playSound          = AssertUtils.getValueOrDefault('playSound', this.playSound, bool);
+    this.soundSource        = AssertUtils.getValueOrDefault('soundSource', this.soundSource, String);
+    this.enableVibration    = AssertUtils.getValueOrDefault('enableVibration', this.enableVibration, bool);
+    this.vibrationPattern   = AssertUtils.getValueOrDefault('vibrationPattern', this.vibrationPattern, Int64List);
+    this.enableLights       = AssertUtils.getValueOrDefault('enableLights', this.enableLights, bool);
+    this.ledColor           = AssertUtils.getValueOrDefault('ledColor', this.ledColor, Color);
+    this.ledOnMs            = AssertUtils.getValueOrDefault('ledOnMs', this.ledOnMs, int);
+    this.ledOffMs           = AssertUtils.getValueOrDefault('ledOffMs', this.ledOffMs, int);
+    this.groupKey           = AssertUtils.getValueOrDefault('groupKey', this.groupKey, bool);
+    this.setAsGroupSummary  = AssertUtils.getValueOrDefault('setAsGroupSummary', this.setAsGroupSummary, bool);
+    this.groupAlertBehavior = AssertUtils.getValueOrDefault('groupAlertBehavior', this.groupAlertBehavior, GroupAlertBehavior);
+    this.icon               = AssertUtils.getValueOrDefault('icon', this.icon, String);
+    this.defaultColor       = AssertUtils.getValueOrDefault('defaultColor', this.defaultColor, Color);
+    this.locked             = AssertUtils.getValueOrDefault('locked', this.locked, bool);
+    this.onlyAlertOnce      = AssertUtils.getValueOrDefault('onlyAlertOnce', this.onlyAlertOnce, bool);
+    this.defaultPrivacy     = AssertUtils.getValueOrDefault('defaultPrivacy', this.defaultPrivacy, NotificationPrivacy);
+
+    // For small icons, it's only allowed resource media types
+    assert(StringUtils.isNullOrEmpty(icon) || BitmapUtils().getMediaSource(icon) == MediaSource.Resource);
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'icon':icon,
+      'channelKey':channelKey,
+      'channelName':channelName,
+      'channelDescription':channelDescription,
+      'channelShowBadge':channelShowBadge,
+      'importance':AssertUtils.toSimpleEnumString(importance),
+      'playSound':playSound,
+      'soundSource':soundSource,
+      'enableVibration':enableVibration,
+      'vibrationPattern':vibrationPattern,
+      'enableLights':enableLights,
+      'defaultColor':defaultColor?.value,
+      'ledColor':ledColor?.value,
+      'ledOnMs':ledOnMs,
+      'ledOffMs':ledOffMs,
+      'groupKey':groupKey,
+      'setAsGroupSummary':setAsGroupSummary,
+      'groupAlertBehavior':AssertUtils.toSimpleEnumString(groupAlertBehavior),
+      'defaultPrivacy':AssertUtils.toSimpleEnumString(defaultPrivacy),
+      'locked':locked,
+      'onlyAlertOnce':onlyAlertOnce
+    };
+  }
+
+  NotificationChannel fromMap(Map<String, dynamic> dataMap) {
+
+      this.channelKey         = AssertUtils.extractValue(dataMap, 'channelKey');
+      this.channelName        = AssertUtils.extractValue(dataMap, 'channelName');
+      this.channelDescription = AssertUtils.extractValue(dataMap, 'channelDescription');
+      this.channelShowBadge   = AssertUtils.extractValue(dataMap, 'channelShowBadge');
+      this.importance         = AssertUtils.extractEnum(dataMap,  'importance', NotificationImportance.values);
+      this.playSound          = AssertUtils.extractValue(dataMap, 'playSound');
+      this.soundSource        = AssertUtils.extractValue(dataMap, 'soundPath');
+      this.enableVibration    = AssertUtils.extractValue(dataMap, 'enableVibration');
+      this.vibrationPattern   = AssertUtils.extractValue(dataMap, 'vibrationPattern');
+      this.enableLights       = AssertUtils.extractValue(dataMap, 'enableLights');
+      this.groupKey           = AssertUtils.extractValue(dataMap, 'groupKey');
+      this.setAsGroupSummary  = AssertUtils.extractValue(dataMap, 'setAsGroupSummary');
+      this.groupAlertBehavior = AssertUtils.extractEnum(dataMap,  'groupAlertBehavior', GroupAlertBehavior.values);
+      this.defaultPrivacy     = AssertUtils.extractEnum(dataMap,  'defaultPrivacy', NotificationPrivacy.values);
+      this.icon               = AssertUtils.extractValue(dataMap, 'icon');
+      this.locked             = AssertUtils.extractValue(dataMap, 'locked');
+      this.onlyAlertOnce      = AssertUtils.extractValue(dataMap, 'onlyAlertOnce');
+
+      int defaultColorValue   = AssertUtils.extractValue(dataMap, 'defaultColor');
+      this.defaultColor       = defaultColor == null ? null : Color(defaultColorValue);
+
+      int ledColorValue       = AssertUtils.extractValue(dataMap, 'ledColor');
+      this.ledColor           = defaultColor == null ? null : Color(ledColorValue);
+
+      this.ledOnMs            = AssertUtils.extractValue(dataMap, 'ledOnMs');
+      this.ledOffMs           = AssertUtils.extractValue(dataMap, 'ledOffMs');
+
+      return this;
+  }
+
+  @override
+  void validate() {
+    assert(!AssertUtils.isNullOrEmptyOrInvalid(channelKey, String));
+    assert(!AssertUtils.isNullOrEmptyOrInvalid(channelName, String));
+    assert(!AssertUtils.isNullOrEmptyOrInvalid(channelDescription, String));
+  }
+}

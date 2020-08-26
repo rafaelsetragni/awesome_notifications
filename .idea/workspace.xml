@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a0df8def-4211-45bb-a52a-d460740e19e2" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_XL" />
+  <component name="ProjectId" id="1gbcCiwakSvHVrSHuUDPnxhjeax" />
+  <component name="ProjectViewState">
+    <option name="foldersAlwaysOnTop" value="false" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DEBUGGABLE_DEVICE" value="emulator-5554" />
+    <property name="DEBUGGABLE_PROCESS" value="me.carda.awesome_notifications_example" />
+    <property name="DEBUGGER_ID" value="Java" />
+    <property name="SHOW_ALL_PROCESSES" value="false" />
+    <property name="dart.analysis.tool.window.force.activate" value="false" />
+    <property name="io.flutter.reload.alreadyRun" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/example/assets/images" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\plugins\awesome_notifications\example\assets\images" />
+      <recent name="E:\plugins\awesome_notifications\example\android\app\src\main\res" />
+      <recent name="E:\plugins\awesome_notifications\android\src\main\java\me\carda" />
+      <recent name="E:\plugins\awesome_notifications\android\src\main" />
+      <recent name="E:\plugins\awesome_notifications\example" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\plugins\awesome_notifications\example\android\app\src\main\res\drawable" />
+    </key>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a0df8def-4211-45bb-a52a-d460740e19e2" name="Default Changelist" comment="" />
+      <created>1598386606710</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1598386606710</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1328" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1598387905144">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1328" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598387905144" />
+    <state x="1650" y="270" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1598386800572">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1650" y="270" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598386800572" />
+    <state x="1561" y="285" key="AndroidProcessChooserDialog" timestamp="1598393309291">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1561" y="285" key="AndroidProcessChooserDialog/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598393309291" />
+    <state x="1700" y="278" key="FileChooserDialogImpl" timestamp="1598387960413">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1700" y="278" key="FileChooserDialogImpl/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598387960413" />
+    <state width="2517" height="341" key="GridCell.Tab.0.bottom" timestamp="1598441491531">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="341" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598441491531" />
+    <state width="2517" height="341" key="GridCell.Tab.0.center" timestamp="1598441491531">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="341" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598441491531" />
+    <state width="2517" height="341" key="GridCell.Tab.0.left" timestamp="1598441491531">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="341" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598441491531" />
+    <state width="2517" height="341" key="GridCell.Tab.0.right" timestamp="1598441491531">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="341" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598441491531" />
+    <state width="1288" height="528" key="XDebugger.FullValuePopup" timestamp="1598390864872">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="1288" height="528" key="XDebugger.FullValuePopup/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598390864872" />
+    <state x="1551" y="220" width="737" height="606" key="find.popup" timestamp="1598390748127">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1551" y="220" width="737" height="606" key="find.popup/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598390748127" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java</url>
+          <line>126</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java</url>
+          <line>336</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java</url>
+          <line>544</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java</url>
+          <line>570</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/awesome_notifications_core.dart</url>
+          <line>213</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

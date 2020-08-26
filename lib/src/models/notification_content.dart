@@ -1,0 +1,125 @@
+import 'dart:convert';
+
+import 'package:awesome_notifications/src/enumerators/notification_life_cycle.dart';
+import 'package:awesome_notifications/src/utils/assert_utils.dart';
+import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+
+import 'package:awesome_notifications/src/enumerators/notification_layout.dart';
+import 'package:awesome_notifications/src/enumerators/notification_source.dart';
+
+import 'package:awesome_notifications/src/models/basic_notification_content.dart';
+
+import 'notification_button.dart';
+
+class NotificationContent extends BaseNotificationContent {
+
+  bool hideLargeIconOnExpand;
+  int progress;
+  String ticker;
+
+  NotificationLifeCycle displayedLifeCycle;
+
+  NotificationSource createdSource;
+  NotificationLifeCycle createdLifeCycle;
+
+  NotificationLayout notificationLayout;
+
+  String createdDate;
+  String displayedDate;
+
+  bool locked;
+
+  NotificationContent({
+    @required int id,
+    @required String channelKey,
+    String title,
+    String body,
+    String summary,
+    bool showWhen,
+    String largeIcon,
+    String bigPicture,
+    bool autoCancel,
+    Color color,
+    Color backgroundColor,
+    Map<String, String> payload,
+    this.notificationLayout,
+    this.hideLargeIconOnExpand,
+    this.locked,
+    this.progress,
+    this.ticker,
+    this.createdSource,
+    this.createdLifeCycle,
+    this.displayedLifeCycle,
+    this.createdDate,
+    this.displayedDate
+  }) : super(
+      id: id,
+      channelKey: channelKey,
+      title: title,
+      body: body,
+      summary: summary,
+      showWhen: showWhen,
+      payload: payload,
+      largeIcon: largeIcon,
+      bigPicture: bigPicture,
+      autoCancel: autoCancel,
+      color: color,
+      backgroundColor: backgroundColor
+  );
+
+  @override
+  fromMap(Map<String, dynamic> mapData) {
+
+    super.fromMap(mapData);
+
+    this.hideLargeIconOnExpand = AssertUtils.extractValue(mapData,'hideLargeIconOnExpand');
+    this.progress              = AssertUtils.extractValue(mapData,'progress');
+    this.ticker                = AssertUtils.extractValue(mapData,'ticker');
+    this.locked                = AssertUtils.extractValue(mapData,'locked');
+
+    this.notificationLayout    = AssertUtils.extractEnum(mapData,'notificationLayout', NotificationLayout.values);
+
+    this.displayedLifeCycle    = AssertUtils.extractEnum(mapData,'displayedLifeCycle', NotificationLifeCycle.values);
+
+    this.createdSource         = AssertUtils.extractEnum(mapData,'createdSource', NotificationSource.values);
+    this.createdLifeCycle      = AssertUtils.extractEnum(mapData,'createdLifeCycle', NotificationLifeCycle.values);
+
+    this.createdDate           = AssertUtils.extractValue<String>(mapData,'createdDate');
+    this.displayedDate         = AssertUtils.extractValue<String>(mapData,'displayedDate');
+
+    return this;
+  }
+
+  @override
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> dataMap = super.toMap();
+
+    List<dynamic> actionButtonList = [];
+
+    dataMap = dataMap..addAll({
+      'hideLargeIconOnExpand': hideLargeIconOnExpand,
+      'progress': progress,
+      'ticker': ticker,
+      'locked': locked,
+
+      'actionButtons': actionButtonList.length > 0 ? actionButtonList : null,
+
+      'notificationLayout': AssertUtils.toSimpleEnumString(notificationLayout),
+
+      'createdSource': AssertUtils.toSimpleEnumString(createdSource),
+      'createdLifeCycle': AssertUtils.toSimpleEnumString(createdLifeCycle),
+
+      'displayedLifeCycle': AssertUtils.toSimpleEnumString(displayedLifeCycle),
+
+      'createdDate': createdDate,
+      'displayedDate': displayedDate,
+    });
+    return dataMap;
+  }
+
+  @override
+  String toString() {
+    return toMap().toString().replaceAll(',', ',\n');
+  }
+}

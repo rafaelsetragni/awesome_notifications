@@ -1,0 +1,84 @@
+name: awesome_notifications_example
+description: Demonstrates how to use the awesome_notifications plugin.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  awesome_notifications:
+    # When depending on this package from a real application you should use:
+    #   awesome_notifications: ^x.y.z
+    # See https://dart.dev/tools/pub/dependencies#version-constraints
+    # The example app is bundled with the plugin so we use a path dependency on
+    # the parent directory to use the current plugin's version. 
+    path: ../
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.3
+  font_awesome_flutter: ^8.8.1
+  fluttertoast: ^4.0.1
+  http: ^0.12.0
+  path_provider: ^1.4.0
+  shared_preferences: ^0.4.3
+
+  url_launcher: ^3.0.2
+
+  intl: ^0.16.1
+
+  progressive_image: ^1.0.1
+  bitmap: ^0.0.6
+
+  palette_generator: ^0.2.3
+
+  flutter_circular_slider: ^2.5.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_launcher_icons: ^0.7.3
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/launcher/icon.png"
+  image_path_android: "assets/launcher/icon.png"
+  adaptive_icon_background: "assets/launcher/background.png"
+  adaptive_icon_foreground: "assets/launcher/foreground.png"
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  assets:
+    - assets/images/awesome-notifications-logo-color.png
+    - assets/images/awesome-notifications-logo-black.png
+    - assets/images/awesome-notifications-logo-white.png
+    - assets/images/placeholder.gif
+    - assets/images/happy-dogs.jpg
+    - assets/images/balloons-in-sky.jpg
+    - assets/images/fireman-hero.jpg
+    - assets/images/delivery.jpeg
+    - assets/images/melted-clock.png
+    - assets/images/rock-disc.jpg
+    - assets/images/classic-disc.jpg
+    - assets/images/dj-disc.jpg
+    - assets/images/80s-disc.jpg
+    - assets/images/remix-disc.jpg
+    - assets/images/old-disc.jpg
