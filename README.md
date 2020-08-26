@@ -197,18 +197,6 @@ The Flutter code will be called as soon as possible using [Dart Streams](https:/
 
 <br>
 
-
-## Notification Layout Types
-
-
-Notifications action buttons could be classified in 3 types:
-
-**initialDate**: (YYYY-MM-DD hh:mm:ss) The initial date that schedule should be called by first time
-**crontabSchedule**: Crontab expression as repetition rule (with seconds precision), as described in [this article](https://www.baeldung.com/cron-expressions)
-**allowWhileIdle**: Determines if notification will send even when the device is in critical situation, such as low battery.
-
-<br>
-
 ## Notification Structures
 
 ### Notification Layout Types
@@ -217,13 +205,13 @@ To show any images on notification, at any place, you need to include the respec
 
 Images can be defined using 4 prefix types:
 
-- Default:
-- BigPicture:
-- BigText:
-- Inbox:
-- ProgressBar:
-- Messaging:
-- MediaPlayer:
+- Default: The default layout. Also is the layout used in case of any failure found on other ones
+- BigPicture: Is the layout that shows a big picture and/or a small image.
+- BigText: Is the layout that shows more than 2 lines of text.
+- Inbox: Is the layout who lists messages or items separated by lines
+- ProgressBar: Is the layout that shows a progress bar, such as download progress bar
+- Messaging: (in construction)
+- MediaPlayer: Is the layout that shows a media controller with action buttons, that allows the user to send commands without brings the application to foreground.
 
 <br>
 
