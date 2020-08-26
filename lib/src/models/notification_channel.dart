@@ -45,9 +45,9 @@ class NotificationChannel extends Model {
 
   NotificationChannel({
       Key key,
-      @required this.channelKey,
-      @required this.channelName,
-      @required this.channelDescription,
+      this.channelKey,
+      this.channelName,
+      this.channelDescription,
       this.channelShowBadge,
       this.importance,
       this.playSound,

@@ -17,14 +17,15 @@
 
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-example.jpg)
-**Some of our examples**
 
-#ATENTION
+**Some examples**
+
+##ATENTION
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-atention.jpg)
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-progress.jpg)
 
-#Main Philosophy
+##Main Philosophy
 
 Considering all the many different devices available, with different hardware and software resources, this plugin ALWAYS shows the notification, trying to use the maximum resources available. If the resource is not available, the notification ignores that specifc resource, but it shows anyway.
 
@@ -36,7 +37,7 @@ And all notifications sent while the app was killed are registered and delivered
 
 This way, your Application will receive **all notifications at Flutter level code**.
 
-#A very simple example
+##A very simple example
 
 
 1. Add the plugin on your pubspec.yaml
@@ -90,4 +91,4 @@ This way, your Application will receive **all notifications at Flutter level cod
 
 **THATS IT! CONGRATZ!**
 
-Read me construction in progress...
+Read me construction in progress... please be patient

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
 import 'package:awesome_notifications/src/models/model.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
@@ -25,10 +24,10 @@ class BaseNotificationContent extends Model {
   NotificationPrivacy privacy;
 
   BaseNotificationContent({
-    @required this.id,
-    @required this.channelKey,
-    @required this.title,
-    @required this.body,
+    this.id,
+    this.channelKey,
+    this.title,
+    this.body,
     this.summary,
     this.showWhen,
     this.largeIcon,

@@ -2,7 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a0df8def-4211-45bb-a52a-d460740e19e2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/basic_notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/basic_notification_content.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_content.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,22 +79,22 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="1700" y="278" key="FileChooserDialogImpl/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598387960413" />
-    <state width="2517" height="341" key="GridCell.Tab.0.bottom" timestamp="1598441491531">
+    <state width="2517" height="341" key="GridCell.Tab.0.bottom" timestamp="1598447076028">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="341" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598441491531" />
-    <state width="2517" height="341" key="GridCell.Tab.0.center" timestamp="1598441491531">
+    <state width="2517" height="341" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598447076028" />
+    <state width="2517" height="341" key="GridCell.Tab.0.center" timestamp="1598447076028">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="341" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598441491531" />
-    <state width="2517" height="341" key="GridCell.Tab.0.left" timestamp="1598441491531">
+    <state width="2517" height="341" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598447076028" />
+    <state width="2517" height="341" key="GridCell.Tab.0.left" timestamp="1598447076028">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="341" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598441491531" />
-    <state width="2517" height="341" key="GridCell.Tab.0.right" timestamp="1598441491531">
+    <state width="2517" height="341" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598447076028" />
+    <state width="2517" height="341" key="GridCell.Tab.0.right" timestamp="1598447076028">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="341" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598441491531" />
+    <state width="2517" height="341" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598447076028" />
     <state width="1288" height="528" key="XDebugger.FullValuePopup" timestamp="1598390864872">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>

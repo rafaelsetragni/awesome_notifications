@@ -1,16 +1,12 @@
-import 'dart:convert';
+import 'package:flutter/material.dart';
 
 import 'package:awesome_notifications/src/enumerators/notification_life_cycle.dart';
-import 'package:awesome_notifications/src/utils/assert_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-
 import 'package:awesome_notifications/src/enumerators/notification_layout.dart';
 import 'package:awesome_notifications/src/enumerators/notification_source.dart';
 
 import 'package:awesome_notifications/src/models/basic_notification_content.dart';
 
-import 'notification_button.dart';
+import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
 class NotificationContent extends BaseNotificationContent {
 
@@ -31,8 +27,8 @@ class NotificationContent extends BaseNotificationContent {
   bool locked;
 
   NotificationContent({
-    @required int id,
-    @required String channelKey,
+    int id,
+    String channelKey,
     String title,
     String body,
     String summary,
