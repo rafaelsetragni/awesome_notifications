@@ -31,9 +31,11 @@
 All notifications could be created localy or via Firebase services, with all the features.
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-example.jpg)
+
 *Some examples of notifications produced using awesome notifications*
 
 <br>
+
 ## ATENTION - PLUGIN UNDER CONSTRUCTION
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-atention.jpg)
@@ -41,6 +43,7 @@ All notifications could be created localy or via Firebase services, with all the
 *Working progress percentages of awesome notifications plugin*
 
 <br>
+
 ## Main Philosophy
 
 Considering all the many different devices available, with different hardware and software resources, this plugin ALWAYS shows the notification, trying to use the maximum resources available. If the resource is not available, the notification ignores that specifc resource, but it shows anyway.
@@ -54,6 +57,7 @@ And all notifications sent while the app was killed are registered and delivered
 This way, your Application will receive **all notifications at Flutter level code**.
 
 <br>
+
 ## A very simple example
 
 <br>
@@ -105,7 +109,9 @@ This way, your Application will receive **all notifications at Flutter level cod
 		  );
 
 **THATS IT! CONGRATZ MY FRIEND!!!**
+
 <br>
+
 ## Using Firebase Services (Optional)
 
 To activate the Firebase Cloud Messaging service, please follow these steps:
