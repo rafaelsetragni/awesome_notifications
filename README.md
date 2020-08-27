@@ -234,7 +234,7 @@ OBS: Unfortunately, icons can be only resource media types.
 ### Notification Action Button Types
 
 
-Notifications action buttons could be classified in 3 types:
+Notifications action buttons could be classified in 4 types:
 
 - Default: after user taps, the notification bar is closed and an action event is fired.
 - InputField: after user taps, a input text field is displayed to capture input by the user.
