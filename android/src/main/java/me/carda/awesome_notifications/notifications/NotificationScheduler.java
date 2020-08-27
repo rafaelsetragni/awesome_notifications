@@ -140,7 +140,7 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
 
             if(scheduled){
                 ScheduleManager.saveSchedule(context, pushNotification);
-                BroadcastSender.SendBroadcastCreatedNotification(
+                BroadcastSender.SendBroadcastNotificationCreated(
                     context,
                     new NotificationReceived(pushNotification.content)
                 );

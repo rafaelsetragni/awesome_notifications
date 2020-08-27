@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:typed_data';
-import 'dart:ui' as ui show Codec;
-
 
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
 import 'package:flutter/foundation.dart';
@@ -33,15 +31,15 @@ class AwesomeNotifications  {
 
   final StreamController<ReceivedNotification>
             // ignore: close_sinks
-            _createdNotificationSubject = StreamController<ReceivedNotification>.broadcast(sync: true);
+            _createdSubject = StreamController<ReceivedNotification>.broadcast(sync: true);
 
   final StreamController<ReceivedNotification>
             // ignore: close_sinks
-            _displayedNotificationSubject = StreamController<ReceivedNotification>.broadcast(sync: true);
+            _displayedSubject = StreamController<ReceivedNotification>.broadcast(sync: true);
 
   final StreamController<ReceivedAction>
             // ignore: close_sinks
-            _actionNotificationSubject = StreamController<ReceivedAction>.broadcast(sync: true);
+            _actionSubject = StreamController<ReceivedAction>.broadcast(sync: true);
 
 
 
@@ -52,16 +50,16 @@ class AwesomeNotifications  {
     return _tokenStreamController.stream;
   }
 
-  Stream<ReceivedNotification> get createdNotificationStream {
-    return _createdNotificationSubject.stream;
+  Stream<ReceivedNotification> get createdStream {
+    return _createdSubject.stream;
   }
 
-  Stream<ReceivedNotification> get displayedNotificationStream {
-    return _displayedNotificationSubject.stream;
+  Stream<ReceivedNotification> get displayedStream {
+    return _displayedSubject.stream;
   }
 
-  Stream<ReceivedAction> get actionNotificationStream {
-    return _actionNotificationSubject.stream;
+  Stream<ReceivedAction> get actionStream {
+    return _actionSubject.stream;
   }
 
 
@@ -72,16 +70,16 @@ class AwesomeNotifications  {
     return _tokenStreamController.sink;
   }
 
-  Sink get createdNotificationSink {
-    return _createdNotificationSubject.sink;
+  Sink get createdSink {
+    return _createdSubject.sink;
   }
 
-  Sink get displayedNotificationSink {
-    return _displayedNotificationSubject.sink;
+  Sink get displayedSink {
+    return _displayedSubject.sink;
   }
 
-  Sink get actionNotificationSink {
-    return _actionNotificationSubject.sink;
+  Sink get actionSink {
+    return _actionSubject.sink;
   }
 
 
@@ -89,9 +87,9 @@ class AwesomeNotifications  {
 
   dispose(){
     _tokenStreamController.close();
-    _createdNotificationSubject.close();
-    _displayedNotificationSubject.close();
-    _actionNotificationSubject.close();
+    _createdSubject.close();
+    _displayedSubject.close();
+    _actionSubject.close();
   }
 
 
@@ -166,7 +164,7 @@ class AwesomeNotifications  {
         return;
 
       case CHANNEL_METHOD_NOTIFICATION_CREATED:
-        _createdNotificationSubject.sink.add(
+        _createdSubject.sink.add(
             ReceivedNotification()
                 .fromMap(arguments)
         );
@@ -174,7 +172,7 @@ class AwesomeNotifications  {
         return;
 
       case CHANNEL_METHOD_NOTIFICATION_DISPLAYED:
-        _displayedNotificationSubject.sink.add(
+        _displayedSubject.sink.add(
             ReceivedNotification()
                 .fromMap(arguments)
         );
@@ -182,7 +180,7 @@ class AwesomeNotifications  {
         return;
 
       case CHANNEL_METHOD_ACTION_RECEIVED:
-        _actionNotificationSubject.sink.add(
+        _actionSubject.sink.add(
             ReceivedAction()
                 .fromMap(arguments)
         );

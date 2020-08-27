@@ -204,11 +204,11 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                 return;
 
             case Definitions.BROADCAST_CREATED_NOTIFICATION:
-                onBroadcastCreatedNotification(intent);
+                onBroadcastNotificationCreated(intent);
                 return;
 
             case Definitions.BROADCAST_DISPLAYED_NOTIFICATION:
-                onBroadcastDisplayedNotification(intent);
+                onBroadcastNotificationDisplayed(intent);
                 return;
 
             case Definitions.BROADCAST_KEEP_ON_TOP:
@@ -226,7 +226,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NEW_FCM_TOKEN, token);
     }
 
-    private void onBroadcastCreatedNotification(Intent intent) {
+    private void onBroadcastNotificationCreated(Intent intent) {
         try {
 
             Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
@@ -258,7 +258,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
     }
 
-    private void onBroadcastDisplayedNotification(Intent intent) {
+    private void onBroadcastNotificationDisplayed(Intent intent) {
         try {
 
             Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
@@ -279,7 +279,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
     }
 
-    private void recoverCreatedNotifications(Context context) {
+    private void recoverNotificationCreateds(Context context) {
         List<NotificationReceived> lostCreated = CreatedManager.listCreated(context);
 
         if(lostCreated != null) {
@@ -297,7 +297,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
     }
 
-    private void recoverDisplayedNotifications(Context context) {
+    private void recoverNotificationDisplayeds(Context context) {
         List<NotificationReceived> lostDisplayed = DisplayedManager.listDisplayed(context);
 
         if(lostDisplayed != null) {
@@ -602,8 +602,8 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         setDefaultIcon(context, defaultIcon);
         setChannels(context, channelsData);
 
-        recoverCreatedNotifications(context);
-        recoverDisplayedNotifications(context);
+        recoverNotificationCreateds(context);
+        recoverNotificationDisplayeds(context);
 
         captureNotificationActionOnLaunch();
         return true;

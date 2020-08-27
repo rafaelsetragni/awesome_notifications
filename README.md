@@ -95,7 +95,7 @@ AwesomeNotifications().initialize(
 4. On your main page, starts to listen the notification actions (to detect tap)
 
 ```dart
-AwesomeNotifications().actionNotificationStream.listen(
+AwesomeNotifications().receivedActionStream.listen(
     (receivedNotification){
     
         Navigator.of(context).pushName(context,
@@ -184,16 +184,16 @@ Notifications are received by local code or FCM using native code, so the messag
 
 The Flutter code will be called as soon as possible using [Dart Streams](https://dart.dev/tutorials/language/streams).
 
-**createdNotificationStream**: Fires when a notification is created
-**displayedNotificationStream**: Fires when a notification is displayed on system status bar
-**actionNotificationStream**: Fires when a notification is tapped by the user
+**createdStream**: Fires when a notification is created
+**displayedStream**: Fires when a notification is displayed on system status bar
+**actionStream**: Fires when a notification is tapped by the user
 
 <br>
 
 |                             | App in Foreground | App in Background | App Terminated (Killed) |
 | --------------------------: | ----------------- | ----------------- | -------------- |
-| **Android** | Fires all streams imeadtly after occours | Fires all streams imeadtly after occours | Fires `created` and `displayed` after the plugin initializes, but fires `action` imeadtly after occours |
-| **iOS**     | Fires all streams imeadtly after occours | Fires all streams imeadtly after occours | Fires `created` and `displayed` after the plugin initializes, but fires `action` imeadtly after occours |
+| **Android** | Fires all streams immediately after occurs | Fires all streams immediately after occurs | Fires `createdStream` and `displayedStream` after the plugin initializes, but fires `actionStream` immediately after occurs |
+| **iOS**     | Fires all streams immediately after occurs | Fires all streams immediately after occurs | Fires `createdStream` and `displayedStream` after the plugin initializes, but fires `actionStream` immediately after occurs |
 
 <br>
 

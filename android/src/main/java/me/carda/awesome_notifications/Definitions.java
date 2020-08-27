@@ -55,9 +55,9 @@ public interface Definitions {
     String CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = "cancelAllSchedules";
     String CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = "cancelAllNotifications";
 
-    String CHANNEL_METHOD_NOTIFICATION_CREATED = "createdNotification";
-    String CHANNEL_METHOD_NOTIFICATION_DISPLAYED = "displayedNotification";
-    String CHANNEL_METHOD_RECEIVED_ACTION = "actionNotification";
+    String CHANNEL_METHOD_NOTIFICATION_CREATED = "notificationCreated";
+    String CHANNEL_METHOD_NOTIFICATION_DISPLAYED = "notificationDisplayed";
+    String CHANNEL_METHOD_RECEIVED_ACTION = "receivedAction";
 
     String CHANNEL_METHOD_LIST_ALL_SCHEDULES = "listAllSchedules";
 

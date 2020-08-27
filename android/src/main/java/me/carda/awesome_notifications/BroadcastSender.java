@@ -27,7 +27,7 @@ public class BroadcastSender {
         return success;
     }
 
-    public static Boolean SendBroadcastCreatedNotification(Context context, NotificationReceived notificationReceived){
+    public static Boolean SendBroadcastNotificationCreated(Context context, NotificationReceived notificationReceived){
 
         Boolean success = false;
 
@@ -75,7 +75,7 @@ public class BroadcastSender {
         return success;
     }
 
-    public static Boolean SendBroadcastDisplayedNotification(Context context, NotificationReceived notificationReceived){
+    public static Boolean SendBroadcastNotificationDisplayed(Context context, NotificationReceived notificationReceived){
 
         Boolean success = false;
 

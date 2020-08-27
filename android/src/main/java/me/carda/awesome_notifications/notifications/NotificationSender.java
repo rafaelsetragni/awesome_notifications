@@ -156,7 +156,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
             if(created){
                 CreatedManager.saveCreated(context, receivedNotification);
-                BroadcastSender.SendBroadcastCreatedNotification(
+                BroadcastSender.SendBroadcastNotificationCreated(
                     context,
                     receivedNotification
                 );
@@ -164,7 +164,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
             if(displayed){
                 DisplayedManager.saveDisplayed(context, receivedNotification);
-                BroadcastSender.SendBroadcastDisplayedNotification(
+                BroadcastSender.SendBroadcastNotificationDisplayed(
                     context,
                     receivedNotification
                 );

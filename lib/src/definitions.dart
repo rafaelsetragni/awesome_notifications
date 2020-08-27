@@ -46,9 +46,9 @@ import 'enumerators/notification_layout.dart';
 
   const CHANNEL_METHOD_CREATE_NOTIFICATION = 'createNewNotification';
 
-  const CHANNEL_METHOD_NOTIFICATION_CREATED = 'createdNotification';
-  const CHANNEL_METHOD_NOTIFICATION_DISPLAYED = 'displayedNotification';
-  const CHANNEL_METHOD_ACTION_RECEIVED = 'actionNotification';
+  const CHANNEL_METHOD_NOTIFICATION_CREATED = 'notificationCreated';
+  const CHANNEL_METHOD_NOTIFICATION_DISPLAYED = 'notificationDisplayed';
+  const CHANNEL_METHOD_ACTION_RECEIVED = 'receivedAction';
 
   const CHANNEL_METHOD_NOTIFICATION_AT_LAUNCH = 'notificationAtLaunch';
 

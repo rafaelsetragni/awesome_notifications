@@ -91,21 +91,21 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
     // getting a valid token
     initializeFirebaseService();
 
-    AwesomeNotifications().createdNotificationStream.listen(
+    AwesomeNotifications().createdStream.listen(
         (receivedNotification){
           String createdSourceText = AssertUtils.toSimpleEnumString(receivedNotification.createdSource);
           Fluttertoast.showToast(msg: '$createdSourceText notification created');
         }
     );
 
-    AwesomeNotifications().displayedNotificationStream.listen(
+    AwesomeNotifications().displayedStream.listen(
         (receivedNotification){
           String createdSourceText = AssertUtils.toSimpleEnumString(receivedNotification.createdSource);
           Fluttertoast.showToast(msg: '$createdSourceText notification displayed');
         }
     );
 
-    AwesomeNotifications().actionNotificationStream.listen(
+    AwesomeNotifications().actionStream.listen(
         (receivedNotification){
 
           if(!StringUtils.isNullOrEmpty(receivedNotification.buttonKeyInput)){
@@ -186,9 +186,9 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
   @override
   void dispose() {
-    AwesomeNotifications().createdNotificationSink.close();
-    AwesomeNotifications().displayedNotificationSink.close();
-    AwesomeNotifications().actionNotificationSink.close();
+    AwesomeNotifications().createdSink.close();
+    AwesomeNotifications().displayedSink.close();
+    AwesomeNotifications().actionSink.close();
     super.dispose();
   }
 
