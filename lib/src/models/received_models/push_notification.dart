@@ -4,6 +4,7 @@ import 'package:awesome_notifications/src/models/notification_content.dart';
 import 'package:awesome_notifications/src/models/notification_schedule.dart';
 
 /// Reference Model to create a new notification
+/// [schedule] and [actionButtons] are optional
 class PushNotification extends Model {
   NotificationContent content;
   NotificationSchedule schedule;
@@ -11,6 +12,7 @@ class PushNotification extends Model {
 
   PushNotification({this.content, this.schedule, this.actionButtons});
 
+  /// Imports data from a serializable object
   PushNotification fromMap(Map<String, dynamic> mapData) {
     try {
       assert(mapData.containsKey('content') && mapData['content'] is Map);
@@ -53,6 +55,7 @@ class PushNotification extends Model {
     return this;
   }
 
+  /// Exports all content into a serializable object
   Map<String, dynamic> toMap() {
     List<Map<String, dynamic>> actionButtonsData = [];
     if (actionButtons != null) {
@@ -69,6 +72,7 @@ class PushNotification extends Model {
   }
 
   @override
+  /// Validates if the models has all the requirements to be considerated valid
   void validate() {
     assert(content != null);
   }

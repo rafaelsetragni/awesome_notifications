@@ -8,6 +8,8 @@ import 'package:awesome_notifications/src/models/basic_notification_content.dart
 
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
+/// Main content of notification
+/// If notification has no [body] or [title], it will only be created, but not displayed to the user (background notification).
 class NotificationContent extends BaseNotificationContent {
   bool hideLargeIconOnExpand;
   int progress;

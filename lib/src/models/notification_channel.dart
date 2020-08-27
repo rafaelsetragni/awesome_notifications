@@ -11,6 +11,8 @@ import 'package:awesome_notifications/src/enumerators/notification_importance.da
 import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
 import 'package:awesome_notifications/src/models/model.dart';
 
+/// A representation of default settings that applies to all notifications with same channel key
+/// [soundSource] needs to be a native resource media type
 class NotificationChannel extends Model {
   String channelKey;
   String channelName;
