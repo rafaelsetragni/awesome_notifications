@@ -24,7 +24,7 @@ class NotificationExamplesPage extends StatefulWidget {
 class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
   String _firebaseAppToken = '';
-  String _oneSignalToken = '';
+  //String _oneSignalToken = '';
 
   MediaQueryData mediaQuery;
 

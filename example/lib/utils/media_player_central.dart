@@ -101,7 +101,6 @@ class MediaPlayerCentral {
   }
 
   static void remove(MediaModel oldMedia){
-    int temporaryIndex = _index;
     if(currentMedia == oldMedia){
       _timer.stop();
       _playlist.remove(oldMedia);
