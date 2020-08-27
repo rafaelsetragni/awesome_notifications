@@ -6,6 +6,8 @@ import 'package:awesome_notifications/src/models/basic_notification_content.dart
 
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
+/// All received details of a notification created or displayed on the system
+/// The data field
 class ReceivedNotification extends BaseNotificationContent {
 
   NotificationLifeCycle displayedLifeCycle;

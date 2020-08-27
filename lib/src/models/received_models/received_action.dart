@@ -2,6 +2,7 @@ import 'package:awesome_notifications/src/enumerators/notification_life_cycle.da
 import 'package:awesome_notifications/src/models/received_models/received_notification.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
+/// All received details of a user action over a Notification
 class ReceivedAction extends ReceivedNotification {
 
   NotificationLifeCycle actionLifeCycle;

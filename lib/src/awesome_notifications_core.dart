@@ -45,19 +45,22 @@ class AwesomeNotifications  {
 
   /// STREAM METHODS *********************************************
 
-
+  /// Stream to capture all FCM token updates. Could be changed at any time.
   Stream<String> get fcmTokenStream {
     return _tokenStreamController.stream;
   }
 
+  /// Stream to capture all created notifications
   Stream<ReceivedNotification> get createdStream {
     return _createdSubject.stream;
   }
 
+  /// Stream to capture all notifications displayed on user's screen.
   Stream<ReceivedNotification> get displayedStream {
     return _displayedSubject.stream;
   }
 
+  /// Stream to capture all actions (tap) over notifications
   Stream<ReceivedAction> get actionStream {
     return _actionSubject.stream;
   }
@@ -65,19 +68,22 @@ class AwesomeNotifications  {
 
   /// SINK METHODS *********************************************
 
-
+  /// Sink to dispose the stream, if you don't need it anymore.
   Sink get fcmTokenSink {
     return _tokenStreamController.sink;
   }
 
+  /// Sink to dispose the stream, if you don't need it anymore.
   Sink get createdSink {
     return _createdSubject.sink;
   }
 
+  /// Sink to dispose the stream, if you don't need it anymore.
   Sink get displayedSink {
     return _displayedSubject.sink;
   }
 
+  /// Sink to dispose the stream, if you don't need it anymore.
   Sink get actionSink {
     return _actionSubject.sink;
   }
@@ -85,6 +91,7 @@ class AwesomeNotifications  {
 
   /// CLOSE STREAM METHODS *********************************************
 
+  /// Closes definitely all the streams.
   dispose(){
     _tokenStreamController.close();
     _createdSubject.close();
@@ -112,7 +119,10 @@ class AwesomeNotifications  {
 
   /// INITIALIZING METHODS *********************************************
 
-
+  /// Initializes the plugin, creating a default icon and the initial channels. Only needs
+  /// to be called at main.dart once.
+  /// OBS: [defaultIcon] needs to be a Resource media type
+  /// OBS 2: [channels] are updated if they already exists
   Future<bool> initialize(String defaultIcon, List<NotificationChannel> channels) async {
 
     WidgetsFlutterBinding.ensureInitialized();
@@ -142,9 +152,9 @@ class AwesomeNotifications  {
 
   /// NATIVE MEDIA METHODS *********************************************
 
-
+  /// Decode a drawable resource bytes into a Uint8List to be used in Flutter widgets
   Future<Uint8List> getDrawableData (String drawablePath) async {
-    DecoderCallback decode;
+
     var result2 = await _channel.invokeMethod(CHANNEL_METHOD_GET_DRAWABLE_DATA, drawablePath);
 
     if(result2 == null) return null;
@@ -201,17 +211,13 @@ class AwesomeNotifications  {
 
   /// FIREBASE METHODS *********************************************
 
-
-  /// Fires when a new FCM token is generated.
-  Stream<String> get onTokenRefresh {
-    return _tokenStreamController.stream;
-  }
-
+  /// Gets the firebase cloud messaging token
   Future<String> get firebaseAppToken async {
     final String token = await _channel.invokeMethod(CHANNEL_METHOD_GET_FCM_TOKEN);
     return token;
   }
 
+  /// Check if firebase is fully available on the project
   Future<bool> get isFirebaseAvailable async {
     final bool isAvailable = await _channel.invokeMethod(CHANNEL_METHOD_IS_FCM_AVAILABLE);
     return isAvailable;
@@ -220,6 +226,9 @@ class AwesomeNotifications  {
 
   /// LOCAL NOTIFICATION METHODS *********************************************
 
+  /// Creates a new notification.
+  /// If notification has no [body] or [title], it will only be created, but never displayed. (background notification)
+  /// [schedule] and [actionButtons] are optional
   Future<bool> createNotification({
       @required NotificationContent content,
       NotificationSchedule schedule,
@@ -239,6 +248,7 @@ class AwesomeNotifications  {
     return wasCreated;
   }
 
+  /// List all active scheduled notifications.
   Future<List<PushNotification>> listScheduledNotifications() async {
     List<PushNotification> scheduledNotifications = List<PushNotification>();
     List<Object> returned = await _channel.invokeListMethod(CHANNEL_METHOD_LIST_ALL_SCHEDULES);
@@ -255,29 +265,35 @@ class AwesomeNotifications  {
     return scheduledNotifications;
   }
 
+  /// Set a new notification channel or updates if already exists
   Future<void> setChannel(NotificationChannel notificationChannel) async {
     await _channel.invokeMethod(CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL, notificationChannel.toMap());
   }
 
+  /// Remove a notification channel
   Future<bool> removeChannel(String channelKey) async {
     final bool wasRemoved = await _channel.invokeMethod(CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL, channelKey);
     return wasRemoved;
   }
 
+  /// Cancel a single notification
   Future<void> cancel(int id) async {
     _validateId(id);
     await _channel.invokeMethod(CHANNEL_METHOD_CANCEL_NOTIFICATION, id);
   }
 
+  /// Cancel a single scheduled notification
   Future<void> cancelSchedule(int id) async {
     _validateId(id);
     await _channel.invokeMethod(CHANNEL_METHOD_CANCEL_SCHEDULE, id);
   }
 
+  /// Cancel all active notification schedules
   Future<void> cancelAllSchedules() async {
     await _channel.invokeMethod(CHANNEL_METHOD_CANCEL_ALL_SCHEDULES);
   }
 
+  /// Cancel all notifications and active schedules
   Future<void> cancelAll() async {
     await _channel.invokeMethod(CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS);
   }

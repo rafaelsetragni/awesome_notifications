@@ -15,7 +15,6 @@ export 'src/enumerators/action_button_type.dart';
 export 'src/enumerators/time_and_date.dart';
 
 export 'src/helpers/cron_helper.dart';
-export 'src/helpers/navigator_helper.dart';
 
 export 'src/models/notification_content.dart';
 export 'src/models/notification_button.dart';
@@ -25,7 +24,7 @@ export 'src/models/received_models/received_action.dart';
 export 'src/models/received_models/push_notification.dart';
 export 'src/models/received_models/received_notification.dart';
 
-export 'src/utils/decent_navigator_state.dart';
+export 'src/extensions/extension_navigator_state.dart';
 export 'src/utils/date_utils.dart';
 export 'src/utils/assert_utils.dart';
 export 'src/utils/bitmap_utils.dart';

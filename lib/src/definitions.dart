@@ -1,11 +1,9 @@
-
-import 'dart:typed_data';
-
-import 'package:awesome_notifications/src/enumerators/group_alert_behaviour.dart';
 import 'package:flutter/material.dart';
+
 import 'package:awesome_notifications/src/enumerators/action_button_type.dart';
-import 'package:awesome_notifications/src/enumerators/notification_importance.dart';
 import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
+import 'package:awesome_notifications/src/enumerators/group_alert_behaviour.dart';
+import 'package:awesome_notifications/src/enumerators/notification_importance.dart';
 
 import 'enumerators/notification_layout.dart';
 

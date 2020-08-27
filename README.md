@@ -17,6 +17,11 @@
 - Notifications are received on **Flutter level code** when they are created, displayed or even tapped by the user.
 - Notifications could be **scheduled** repeatedly using **Cron rules**, such linux does, including seconds precision.
 
+![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-examples.jpg)
+
+*Some examples of notifications produced using awesome notifications*
+
+
 ### Notification Types Available
 
 - Basic notification
@@ -28,11 +33,7 @@
 - Grouped notifications
 - Progress bar notifications
 
-All notifications could be created localy or via Firebase services, with all the features.
-
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-examples.jpg)
-
-*Some examples of notifications produced using awesome notifications*
+All notifications could be created locally or via Firebase services, with all the features.
 
 <br>
 
@@ -59,7 +60,7 @@ This way, your Application will receive **all notifications at Flutter level cod
 
 <br>
 
-## A very simple example
+## How to show Local Notifications
 
 <br>
 
@@ -95,7 +96,7 @@ AwesomeNotifications().initialize(
 4. On your main page, starts to listen the notification actions (to detect tap)
 
 ```dart
-AwesomeNotifications().receivedActionStream.listen(
+AwesomeNotifications().actionStream.listen(
     (receivedNotification){
     
         Navigator.of(context).pushName(context,
@@ -128,7 +129,7 @@ AwesomeNotifications().createNotification(
 
 To activate the Firebase Cloud Messaging service, please follow these steps:
 
-### Android
+### *Android*
 
 First things first, to create your Firebase Cloud Message and send notifications even when your app is terminated (killed), go to the [Firebase Console](https://console.firebase.google.com/) and create a new project.
 
@@ -155,7 +156,7 @@ Add the apply plugin to the [project]/android/app/build.gradle file.
 apply plugin: 'com.google.gms.google-services'
 ```
 
-### iOS
+### *iOS*
 
 In construction... 
 
@@ -224,7 +225,7 @@ Images can be defined using 4 prefix types:
 - Asset: images access through Flutter asset method. **Example**: asset://path/to/image-asset.png
 - Network: images access through internet connection. **Example**: http(s)://url.com/to/image-asset.png
 - File: images access through files stored on device. **Example**: file://path/to/image-asset.png
-- Resource: images access through drawable native resources. **Example**: resource://url.com/to/image-asset.png
+- Resource: images access through drawable native resources. On Android, those files are stored inside [project]/android/app/src/main/res folder. **Example**: resource://url.com/to/image-asset.png
 
 OBS: Unfortunately, icons can be only resource media types.
 
@@ -252,12 +253,15 @@ Notifications could be scheduled as you wish using two main options:
 - crontabSchedule: Crontab expression as repetition rule (with seconds precision), as described in [this article](https://www.baeldung.com/cron-expressions)
 - allowWhileIdle: Determines if notification will send, even when the device is in critical situation, such as low battery.
 
+OBS: All dates are set to use UTC timezone.
+
 <br>
 
 
-## FCM data example
+## How to show Push Notifications using Firebase Cloud Messaging (FCM)
 
-To send a notification using Awesome Notifications and FCM Services, use only the data field as bellow:
+To send a notification using Awesome Notifications and FCM Services, you need to send a POST request to the address https://fcm.googleapis.com/fcm/send.
+Due to limitations on Notification body, you should use only the data field as bellow:
 
 OBS: `actionButtons` and `schedule` are **optional**
 
@@ -300,4 +304,6 @@ OBS: `actionButtons` and `schedule` are **optional**
 }
 ```
 
-Read me construction in progress... please be patient
+You can download a example of how to send Push Notifications through FCM using "Postman" [here](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/Firebase FCM Example.postman_collection.json)
+
+

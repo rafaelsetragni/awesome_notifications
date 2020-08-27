@@ -1,8 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+
 import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
+
 import 'package:awesome_notifications/src/models/model.dart';
+
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
 import 'package:awesome_notifications/src/utils/html_utils.dart';

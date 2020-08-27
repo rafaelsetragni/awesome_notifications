@@ -3,6 +3,7 @@ import 'package:awesome_notifications/src/models/notification_button.dart';
 import 'package:awesome_notifications/src/models/notification_content.dart';
 import 'package:awesome_notifications/src/models/notification_schedule.dart';
 
+/// Reference Model to create a new notification
 class PushNotification extends Model {
 
   NotificationContent content;

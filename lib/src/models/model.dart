@@ -11,5 +11,6 @@ abstract class Model {
     return MapUtils.printPrettyMap(mapData);
   }
 
+  /// Validates
   void validate();
 }
