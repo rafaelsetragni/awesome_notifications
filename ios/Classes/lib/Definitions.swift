@@ -1,3 +1,4 @@
+
 enum Definitions {
     
     static let  BROADCAST_FCM_TOKEN = "me.carda.awesome_notifications.firebase.TOKEN"
@@ -10,9 +11,9 @@ enum Definitions {
 
     static let  INITIALIZE_CHANNELS = "initializeChannels"
 
-    static let  BROADCAST_CREATED_NOTIFICATION ="broadcast.awesome_notifications.CREATED_NOTIFICATION"
-    static let  BROADCAST_DISPLAYED_NOTIFICATION ="broadcast.awesome_notifications.DISPLAYED_NOTIFICATION"
-    static let  BROADCAST_KEEP_ON_TOP ="broadcast.awesome_notifications.KEEP_ON_TOP"
+    static let  BROADCAST_CREATED_NOTIFICATION = "broadcast.awesome_notifications.CREATED_NOTIFICATION"
+    static let  BROADCAST_DISPLAYED_NOTIFICATION = "broadcast.awesome_notifications.DISPLAYED_NOTIFICATION"
+    static let  BROADCAST_KEEP_ON_TOP = "broadcast.awesome_notifications.KEEP_ON_TOP"
     static let  EXTRA_BROADCAST_MESSAGE = "notification"
 
     static let  PUSH_NOTIFICATION_CONTENT = "content"
@@ -137,7 +138,7 @@ enum Definitions {
         Definitions.NOTIFICATION_ENABLED: true,
         Definitions.NOTIFICATION_SHOW_WHEN: true,
         Definitions.NOTIFICATION_BUTTON_TYPE: ActionButtonType.Default,
-        Definitions.NOTIFICATION_PAYLOAD: null,
+        Definitions.NOTIFICATION_PAYLOAD: nil,
         Definitions.NOTIFICATION_ENABLE_VIBRATION: true,
         Definitions.NOTIFICATION_DEFAULT_COLOR: 0xFF000000,
         Definitions.NOTIFICATION_LED_COLOR: 0xFFFFFFFF,
@@ -150,5 +151,5 @@ enum Definitions {
         Definitions.NOTIFICATION_TICKER: "ticker",
         Definitions.NOTIFICATION_ALLOW_WHILE_IDLE: false,
         Definitions.NOTIFICATION_ONLY_ALERT_ONCE: false
-    ]
+    ] as [String : Any?]
 }

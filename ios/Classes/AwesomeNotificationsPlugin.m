@@ -13,9 +13,10 @@
   [SwiftAwesomeNotificationsPlugin registerWithRegistrar:registrar];
 }
 @end
-
+/*
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
       
   return YES;
 }
+*/

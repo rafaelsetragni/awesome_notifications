@@ -7,20 +7,15 @@ import 'package:flutter/widgets.dart';
 
 import 'package:progressive_image/progressive_image.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications_example/main.dart';
 
 class NotificationDetailsPage extends StatefulWidget {
 
-  String results;
-  ReceivedNotification receivedNotification;
-
-  final ScrollController _scrollViewController = ScrollController();
+  String get results => receivedNotification.toString();
+  final ReceivedNotification receivedNotification;
 
   final String title = 'Notification Details';
 
-  NotificationDetailsPage(this.receivedNotification){
-    this.results = receivedNotification.toString();
-  }
+  NotificationDetailsPage(this.receivedNotification);
 
   @override
   _NotificationDetailsPageState createState() => _NotificationDetailsPageState();

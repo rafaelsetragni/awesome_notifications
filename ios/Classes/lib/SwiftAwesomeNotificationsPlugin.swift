@@ -2,8 +2,7 @@ import Flutter
 import UIKit
 
 public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin {
-  
-
+      
   private static func checkGooglePlayServices() -> Bool {
     return true
   }
@@ -12,11 +11,11 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin {
     let channel = FlutterMethodChannel(name: Definitions.CHANNEL_FLUTTER_PLUGIN, binaryMessenger: registrar.messenger())
     let instance = SwiftAwesomeNotificationsPlugin()
 
-    instance.initializeFlutterPlugin(channel)
+    instance.initializeFlutterPlugin(registrar: registrar, channel: channel)
   }
 
-  private func initializeFlutterPlugin(channel: channel) {
-    registrar.addMethodCallDelegate(self, channel: channel)    
+  private func initializeFlutterPlugin(registrar: FlutterPluginRegistrar, channel: FlutterMethodChannel) {
+      registrar.addMethodCallDelegate(self, channel: channel)
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -24,19 +23,19 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin {
     switch call.method {
       
       case Definitions.BROADCAST_FCM_TOKEN:
-        onHandlecastNewFcmToken(call, result);
+        onHandlecastNewFcmToken(call: call, result: result);
         return;
 
       case Definitions.BROADCAST_CREATED_NOTIFICATION:
-        onHandlecastNotificationCreated(call, result);
+        onHandlecastNotificationCreated(call: call, result: result);
         return;
 
       case Definitions.BROADCAST_DISPLAYED_NOTIFICATION:
-        onHandlecastNotificationDisplayed(call, result);
+        onHandlecastNotificationDisplayed(call: call, result: result);
         return;
 
       case Definitions.BROADCAST_KEEP_ON_TOP:
-        onHandlecastKeepOnTopActionNotification(call, result);
+        onHandlecastKeepOnTopActionNotification(call: call, result: result);
         return;
 
       default:

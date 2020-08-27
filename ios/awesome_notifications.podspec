@@ -22,4 +22,4 @@ A complete solution to create Local Notifications and Push Notifications, throug
   s.swift_version = '5.0'
 end
 
-pod 'Firebase/Messaging'
+#pod 'Firebase/Messaging'

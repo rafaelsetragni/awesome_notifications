@@ -4,11 +4,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
-import 'package:awesome_notifications_example/main.dart';
 import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart';
 import 'package:awesome_notifications_example/utils/media_player_central.dart';
@@ -1214,7 +1211,7 @@ Future<void> showProgressNotification(int id) async {
             content: NotificationContent(
                 id: id,
                 channelKey: 'progress_bar',
-                title: 'Downloading fake file in progress (${simulatedStep} of $maxStep)',
+                title: 'Downloading fake file in progress ($simulatedStep of $maxStep)',
                 body: 'filename.txt',
                 payload: {
                   'file' : 'filename.txt',
@@ -1293,6 +1290,3 @@ Future<void> cancelAllNotifications() async {
   await AwesomeNotifications().cancelAll();
 }
 
-String _toTwoDigitString(int value) {
-  return value.toString().padLeft(2, '0');
-}

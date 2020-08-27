@@ -1,11 +1,8 @@
 
-import 'dart:collection';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' show Client, Response;
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart';
 import 'datasource.dart';
 
@@ -23,12 +20,10 @@ class HttpDataSource extends DataSource {
     }
   );
 
-  @override
   String getDomainName() {
     return baseAPI;
   }
 
-  @override
   String getDomainUrl() {
     return (isUsingHttps ? 'https://' : 'http://') + baseAPI;
   }
@@ -47,14 +42,13 @@ class HttpDataSource extends DataSource {
       {
         String directory = '',
         Map<String, String> parameters,
-        Map<String, String> headers,// =
+        Map<String, String> headers = const {},
         String body,
         int timeoutInMilliseconds = 5000
       }
     ) async {
 
     int tries = 3;
-    Exception lastException;
 
     do {
       try {
@@ -71,13 +65,11 @@ class HttpDataSource extends DataSource {
         printDebugData(response);
         return response;
       }
-      on HttpException catch (exception) {
-        lastException = exception;
+      on HttpException {
         tries--;
         sleep(Duration(milliseconds: 500));
       }
-      on Exception catch (exception) {
-        lastException = exception;
+      on Exception {
         tries--;
         sleep(Duration(milliseconds: 500));
       }
