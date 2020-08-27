@@ -6,7 +6,6 @@ import 'package:awesome_notifications/src/utils/media_abstract_utils.dart';
 import 'package:awesome_notifications/src/utils/resource_image_provider.dart';
 
 class BitmapUtils extends MediaUtils {
-
   /// FACTORY METHODS *********************************************
 
   factory BitmapUtils() => _instance;

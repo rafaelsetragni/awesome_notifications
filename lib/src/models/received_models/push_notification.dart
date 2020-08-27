@@ -72,6 +72,7 @@ class PushNotification extends Model {
   }
 
   @override
+
   /// Validates if the models has all the requirements to be considerated valid
   void validate() {
     assert(content != null);

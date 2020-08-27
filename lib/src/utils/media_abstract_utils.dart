@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
 
 abstract class MediaUtils {
-
-  MediaSource getMediaSource(String mediaPath){
-    if(mediaPath != null){
-      if(RegExp(r'^https?:\/\/').hasMatch(mediaPath)){
+  MediaSource getMediaSource(String mediaPath) {
+    if (mediaPath != null) {
+      if (RegExp(r'^https?:\/\/').hasMatch(mediaPath)) {
         return MediaSource.Network;
       }
 
-      if(RegExp(r'^file:\/\/').hasMatch(mediaPath)){
+      if (RegExp(r'^file:\/\/').hasMatch(mediaPath)) {
         return MediaSource.File;
       }
 
-      if(RegExp(r'^asset:\/\/').hasMatch(mediaPath)){
+      if (RegExp(r'^asset:\/\/').hasMatch(mediaPath)) {
         return MediaSource.Asset;
       }
 
-      if(RegExp(r'^resource:\/\/').hasMatch(mediaPath)){
+      if (RegExp(r'^resource:\/\/').hasMatch(mediaPath)) {
         return MediaSource.Resource;
       }
     }
@@ -25,14 +24,14 @@ abstract class MediaUtils {
   }
 
   String cleanMediaPath(String mediaPath) {
-    if(mediaPath != null){
-      if(RegExp(r'^file:\/\/').hasMatch(mediaPath)){
+    if (mediaPath != null) {
+      if (RegExp(r'^file:\/\/').hasMatch(mediaPath)) {
         mediaPath = mediaPath.replaceAll('file:\/', '');
       }
-      if(RegExp(r'^asset:\/\/').hasMatch(mediaPath)){
+      if (RegExp(r'^asset:\/\/').hasMatch(mediaPath)) {
         mediaPath = mediaPath.replaceAll('asset:\/\/', '');
       }
-      if(RegExp(r'^resource:\/\/').hasMatch(mediaPath)){
+      if (RegExp(r'^resource:\/\/').hasMatch(mediaPath)) {
         mediaPath = mediaPath.replaceAll('resource:\/\/', '');
       }
     }
@@ -40,7 +39,7 @@ abstract class MediaUtils {
   }
 
   @protected
-  getFromMediaAsset(String mediaPath) ;
+  getFromMediaAsset(String mediaPath);
 
   @protected
   getFromMediaFile(String mediaPath);
@@ -52,9 +51,7 @@ abstract class MediaUtils {
   getFromMediaResource(String mediaPath);
 
   getFromMediaPath(String mediaPath) {
-
-    switch(getMediaSource(mediaPath)){
-
+    switch (getMediaSource(mediaPath)) {
       case MediaSource.Asset:
         return getFromMediaAsset(mediaPath);
         break;

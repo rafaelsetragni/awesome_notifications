@@ -5,7 +5,6 @@ import 'package:awesome_notifications/src/awesome_notifications_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-
 /// Decodes the given [Uint8List] buffer as an image, associating it with the
 /// given scale.
 ///
@@ -19,11 +18,10 @@ import 'package:flutter/material.dart';
 ///
 ///  * [Image.memory] for a shorthand of an [Image] widget backed by [ResourceImage].
 class ResourceImage extends ImageProvider<ResourceImage> {
-
   /// Creates an object that decodes a [Uint8List] buffer as an image.
   ///
   /// The arguments must not be null.
-  const ResourceImage(this.drawablePath, { this.scale = 1.0 })
+  const ResourceImage(this.drawablePath, {this.scale = 1.0})
       : assert(drawablePath != null),
         assert(scale != null);
 
@@ -57,16 +55,16 @@ class ResourceImage extends ImageProvider<ResourceImage> {
 
   @override
   bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType)
-      return false;
-    return other is ResourceImage
-        && other.drawablePath == drawablePath
-        && other.scale == scale;
+    if (other.runtimeType != runtimeType) return false;
+    return other is ResourceImage &&
+        other.drawablePath == drawablePath &&
+        other.scale == scale;
   }
 
   @override
   int get hashCode => hashValues(drawablePath.hashCode, scale);
 
   @override
-  String toString() => '${objectRuntimeType(this, 'ResourceImage')}($drawablePath, scale: $scale)';
+  String toString() =>
+      '${objectRuntimeType(this, 'ResourceImage')}($drawablePath, scale: $scale)';
 }

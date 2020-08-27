@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:awesome_notifications/src/utils/media_abstract_utils.dart';
 
 class AudioUtils extends MediaUtils {
-
   /// FACTORY METHODS *********************************************
 
   factory AudioUtils() => _instance;
@@ -15,26 +14,30 @@ class AudioUtils extends MediaUtils {
   /// FACTORY METHODS *********************************************
 
   @override
-  getFromMediaAsset(String mediaPath){
+  getFromMediaAsset(String mediaPath) {
     return null;
+
     /// TODO MISSING IMPLEMENTATION
   }
 
   @override
-  getFromMediaFile(String mediaPath){
+  getFromMediaFile(String mediaPath) {
     return null;
+
     /// TODO MISSING IMPLEMENTATION
   }
 
   @override
-  getFromMediaNetwork(String mediaPath){
+  getFromMediaNetwork(String mediaPath) {
     return null;
+
     /// TODO MISSING IMPLEMENTATION
   }
 
   @override
-  getFromMediaResource(String mediaPath){
+  getFromMediaResource(String mediaPath) {
     return null;
+
     /// TODO MISSING IMPLEMENTATION
     /*
         String cleanPath = BitmapUtils.cleanMediaPath(mediaPath);

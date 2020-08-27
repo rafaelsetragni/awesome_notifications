@@ -10,9 +10,9 @@ import 'package:awesome_notifications/src/utils/string_utils.dart';
 /// Notification button to display inside a notification.
 /// Since Android 7, icons are displayed only for Media Layout Notifications
 /// [icon] must be a native resource media type
-/// 
+///
 /// [buttonType] could be classified in 4 types:
-/// 
+///
 /// [ActionButtonType.Default]: after user taps, the notification bar is closed and an action event is fired.
 /// [ActionButtonType.InputField]: after user taps, a input text field is displayed to capture input by the user.
 /// [ActionButtonType.DisabledAction]: after user taps, the notification bar is closed, but the respective action event is not fired.
