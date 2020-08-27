@@ -1,14 +1,13 @@
 import 'package:flutter/widgets.dart';
 
 extension NavigatorStateExtension on NavigatorState {
-
-  void pushNamedIfNotCurrent( String routeName, {Object arguments} ) {
+  void pushNamedIfNotCurrent(String routeName, {Object arguments}) {
     if (!isCurrent(routeName)) {
-      pushNamed( routeName, arguments: arguments );
+      pushNamed(routeName, arguments: arguments);
     }
   }
 
-  Route getCurrentPage( String routeName ) {
+  Route getCurrentPage(String routeName) {
     Route currentRoute;
     popUntil((route) {
       currentRoute = route;
@@ -17,15 +16,14 @@ extension NavigatorStateExtension on NavigatorState {
     return currentRoute;
   }
 
-  bool isCurrent( String routeName ) {
+  bool isCurrent(String routeName) {
     bool isCurrent = false;
-    popUntil( (route) {
+    popUntil((route) {
       if (route.settings.name == routeName) {
         isCurrent = true;
       }
       return true;
-    } );
+    });
     return isCurrent;
   }
-
 }

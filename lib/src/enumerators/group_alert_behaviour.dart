@@ -1,5 +1,1 @@
-enum GroupAlertBehavior {
-  All,
-  Summary,
-  Children
-}
+enum GroupAlertBehavior { All, Summary, Children }

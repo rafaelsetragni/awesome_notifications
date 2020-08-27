@@ -258,7 +258,7 @@ OBS: All dates are set to use UTC timezone.
 <br>
 
 
-## How to show Push Notifications using Firebase Cloud Messaging (FCM)
+## How to send Push Notifications using Firebase Cloud Messaging (FCM)
 
 To send a notification using Awesome Notifications and FCM Services, you need to send a POST request to the address https://fcm.googleapis.com/fcm/send.
 Due to limitations on Notification body, you should use only the data field as bellow:
@@ -304,6 +304,6 @@ OBS: `actionButtons` and `schedule` are **optional**
 }
 ```
 
-You can download a example of how to send Push Notifications through FCM using "Postman" [here](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/Firebase FCM Example.postman_collection.json)
+You can download a example of how to send Push Notifications through FCM using "Postman" [here](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/Firebase_FCM_Example.postman_collection.json)
 
 

@@ -5,52 +5,49 @@ import 'package:awesome_notifications/src/models/notification_schedule.dart';
 
 /// Reference Model to create a new notification
 class PushNotification extends Model {
-
   NotificationContent content;
   NotificationSchedule schedule;
   List<NotificationActionButton> actionButtons;
 
-  PushNotification({
-    this.content,
-    this.schedule,
-    this.actionButtons
-  });
+  PushNotification({this.content, this.schedule, this.actionButtons});
 
   PushNotification fromMap(Map<String, dynamic> mapData) {
-
-    try{
-
+    try {
       assert(mapData.containsKey('content') && mapData['content'] is Map);
 
-      Map<String, dynamic> contentData = Map<String, dynamic>.from(mapData['content']);
+      Map<String, dynamic> contentData =
+          Map<String, dynamic>.from(mapData['content']);
 
       content = NotificationContent().fromMap(contentData);
       content.validate();
 
-      if(mapData.containsKey('schedule')){
-        Map<String, dynamic> scheduleData = Map<String, dynamic>.from(mapData['schedule']);
+      if (mapData.containsKey('schedule')) {
+        Map<String, dynamic> scheduleData =
+            Map<String, dynamic>.from(mapData['schedule']);
 
         schedule = NotificationSchedule().fromMap(scheduleData);
         schedule.validate();
       }
 
-      if(mapData.containsKey('actionButtons')){
+      if (mapData.containsKey('actionButtons')) {
         actionButtons = List<NotificationActionButton>();
-        List<Object> actionButtonsData = List<Object>.from(mapData['actionButtons']);
+        List<Object> actionButtonsData =
+            List<Object>.from(mapData['actionButtons']);
 
-        for(Object buttonData in actionButtonsData){
-          Map<String, dynamic> actionButtonData = Map<String, dynamic>.from(buttonData);
+        for (Object buttonData in actionButtonsData) {
+          Map<String, dynamic> actionButtonData =
+              Map<String, dynamic>.from(buttonData);
 
-          NotificationActionButton button = NotificationActionButton().fromMap(actionButtonData);
+          NotificationActionButton button =
+              NotificationActionButton().fromMap(actionButtonData);
           button.validate();
 
           actionButtons.add(button);
         }
         assert(actionButtons.isNotEmpty);
       }
-
-    } catch(e){
-       return null;
+    } catch (e) {
+      return null;
     }
 
     return this;
@@ -58,16 +55,16 @@ class PushNotification extends Model {
 
   Map<String, dynamic> toMap() {
     List<Map<String, dynamic>> actionButtonsData = [];
-    if(actionButtons != null){
-      for(NotificationActionButton button in actionButtons){
+    if (actionButtons != null) {
+      for (NotificationActionButton button in actionButtons) {
         Map<String, dynamic> data = button.toMap();
-        if(data != null && data.isNotEmpty) actionButtonsData.add(data);
+        if (data != null && data.isNotEmpty) actionButtonsData.add(data);
       }
     }
     return {
       'content': content?.toMap() ?? {},
       'schedule': schedule?.toMap() ?? {},
-      'actionButtons': actionButtonsData.isEmpty? null : actionButtonsData
+      'actionButtons': actionButtonsData.isEmpty ? null : actionButtonsData
     };
   }
 

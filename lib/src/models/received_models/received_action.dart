@@ -4,7 +4,6 @@ import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
 /// All received details of a user action over a Notification
 class ReceivedAction extends ReceivedNotification {
-
   NotificationLifeCycle actionLifeCycle;
   String buttonKeyPressed = '';
   String buttonKeyInput = '';
@@ -15,24 +14,25 @@ class ReceivedAction extends ReceivedNotification {
   ReceivedNotification fromMap(Map<String, dynamic> dataMap) {
     super.fromMap(dataMap);
 
-    actionLifeCycle  = AssertUtils.extractEnum<NotificationLifeCycle>(dataMap, 'actionLifeCycle', NotificationLifeCycle.values);
+    actionLifeCycle = AssertUtils.extractEnum<NotificationLifeCycle>(
+        dataMap, 'actionLifeCycle', NotificationLifeCycle.values);
 
-    actionDate       = AssertUtils.extractValue<String>(dataMap, 'actionDate');
+    actionDate = AssertUtils.extractValue<String>(dataMap, 'actionDate');
 
     buttonKeyPressed = AssertUtils.extractValue<String>(dataMap, 'actionKey');
-    buttonKeyInput   = AssertUtils.extractValue<String>(dataMap, 'actionInput');
+    buttonKeyInput = AssertUtils.extractValue<String>(dataMap, 'actionInput');
 
     return this;
   }
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
-    return map..addAll({
-      'actionDate': actionDate,
-      'actionLifeCycle': AssertUtils.toSimpleEnumString(actionLifeCycle),
-      'buttonKeyPressed': buttonKeyPressed,
-      'buttonKeyInput': buttonKeyInput
-    });
-
+    return map
+      ..addAll({
+        'actionDate': actionDate,
+        'actionLifeCycle': AssertUtils.toSimpleEnumString(actionLifeCycle),
+        'buttonKeyPressed': buttonKeyPressed,
+        'buttonKeyInput': buttonKeyInput
+      });
   }
 }

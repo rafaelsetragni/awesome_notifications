@@ -1,11 +1,4 @@
-
-enum MediaSource {
-  Resource,
-  Asset,
-  File,
-  Network,
-  Unknown
-}
+enum MediaSource { Resource, Asset, File, Network, Unknown }
 
 class MediaSourcePrefix {
   static const Resource = 'resource://';

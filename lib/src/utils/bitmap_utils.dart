@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:awesome_notifications/src/utils/media_abstract_utils.dart';
 import 'package:awesome_notifications/src/utils/resource_image_provider.dart';

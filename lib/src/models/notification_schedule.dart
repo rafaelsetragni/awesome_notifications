@@ -4,22 +4,18 @@ import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/date_utils.dart';
 
 class NotificationSchedule extends Model {
-
   DateTime initialDateTime;
   String crontabSchedule;
   bool allowWhileIdle;
 
-  NotificationSchedule({
-    this.initialDateTime,
-    this.crontabSchedule,
-    this.allowWhileIdle
-  });
+  NotificationSchedule(
+      {this.initialDateTime, this.crontabSchedule, this.allowWhileIdle});
 
   NotificationSchedule fromMap(Map<String, dynamic> dataMap) {
-
-    this.initialDateTime = DateUtils.parseStringToDate(AssertUtils.extractValue(dataMap, 'initialDateTime'));
+    this.initialDateTime = DateUtils.parseStringToDate(
+        AssertUtils.extractValue(dataMap, 'initialDateTime'));
     this.crontabSchedule = AssertUtils.extractValue(dataMap, 'crontabSchedule');
-    this.allowWhileIdle  = AssertUtils.extractValue(dataMap, 'allowWhileIdle');
+    this.allowWhileIdle = AssertUtils.extractValue(dataMap, 'allowWhileIdle');
 
     return this;
   }
@@ -41,5 +37,4 @@ class NotificationSchedule extends Model {
   void validate() {
     assert(initialDateTime != null || crontabSchedule != null);
   }
-
 }

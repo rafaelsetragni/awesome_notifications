@@ -9,7 +9,6 @@ import 'package:awesome_notifications/src/models/basic_notification_content.dart
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
 class NotificationContent extends BaseNotificationContent {
-
   bool hideLargeIconOnExpand;
   int progress;
   String ticker;
@@ -26,63 +25,67 @@ class NotificationContent extends BaseNotificationContent {
 
   bool locked;
 
-  NotificationContent({
-    int id,
-    String channelKey,
-    String title,
-    String body,
-    String summary,
-    bool showWhen,
-    String largeIcon,
-    String bigPicture,
-    bool autoCancel,
-    Color color,
-    Color backgroundColor,
-    Map<String, String> payload,
-    this.notificationLayout,
-    this.hideLargeIconOnExpand,
-    this.locked,
-    this.progress,
-    this.ticker,
-    this.createdSource,
-    this.createdLifeCycle,
-    this.displayedLifeCycle,
-    this.createdDate,
-    this.displayedDate
-  }) : super(
-      id: id,
-      channelKey: channelKey,
-      title: title,
-      body: body,
-      summary: summary,
-      showWhen: showWhen,
-      payload: payload,
-      largeIcon: largeIcon,
-      bigPicture: bigPicture,
-      autoCancel: autoCancel,
-      color: color,
-      backgroundColor: backgroundColor
-  );
+  NotificationContent(
+      {int id,
+      String channelKey,
+      String title,
+      String body,
+      String summary,
+      bool showWhen,
+      String largeIcon,
+      String bigPicture,
+      bool autoCancel,
+      Color color,
+      Color backgroundColor,
+      Map<String, String> payload,
+      this.notificationLayout,
+      this.hideLargeIconOnExpand,
+      this.locked,
+      this.progress,
+      this.ticker,
+      this.createdSource,
+      this.createdLifeCycle,
+      this.displayedLifeCycle,
+      this.createdDate,
+      this.displayedDate})
+      : super(
+            id: id,
+            channelKey: channelKey,
+            title: title,
+            body: body,
+            summary: summary,
+            showWhen: showWhen,
+            payload: payload,
+            largeIcon: largeIcon,
+            bigPicture: bigPicture,
+            autoCancel: autoCancel,
+            color: color,
+            backgroundColor: backgroundColor);
 
   @override
   fromMap(Map<String, dynamic> mapData) {
-
     super.fromMap(mapData);
 
-    this.hideLargeIconOnExpand = AssertUtils.extractValue(mapData,'hideLargeIconOnExpand');
-    this.progress              = AssertUtils.extractValue(mapData,'progress');
-    this.ticker                = AssertUtils.extractValue(mapData,'ticker');
-    this.locked                = AssertUtils.extractValue(mapData,'locked');
+    this.hideLargeIconOnExpand =
+        AssertUtils.extractValue(mapData, 'hideLargeIconOnExpand');
+    this.progress = AssertUtils.extractValue(mapData, 'progress');
+    this.ticker = AssertUtils.extractValue(mapData, 'ticker');
+    this.locked = AssertUtils.extractValue(mapData, 'locked');
 
-    this.notificationLayout    = AssertUtils.extractEnum(mapData,'notificationLayout', NotificationLayout.values);
+    this.notificationLayout = AssertUtils.extractEnum(
+        mapData, 'notificationLayout', NotificationLayout.values);
 
-    this.displayedLifeCycle    = AssertUtils.extractEnum(mapData,'displayedLifeCycle', NotificationLifeCycle.values);
+    this.displayedLifeCycle = AssertUtils.extractEnum(
+        mapData, 'displayedLifeCycle', NotificationLifeCycle.values);
 
-    this.createdSource         = AssertUtils.extractEnum(mapData,'createdSource', NotificationSource.values);
-    this.createdLifeCycle      = AssertUtils.extractEnum(mapData,'createdLifeCycle', NotificationLifeCycle.values);
+    this.createdSource = AssertUtils.extractEnum(
+        mapData, 'createdSource', NotificationSource.values);
+    this.createdLifeCycle = AssertUtils.extractEnum(
+        mapData, 'createdLifeCycle', NotificationLifeCycle.values);
 
-    this.createdDate           = AssertUtils.extractValue<String>(mapData,'createdDate');
-    this.displayedDate         = AssertUtils.extractValue<String>(mapData,'displayedDate');
+    this.createdDate = AssertUtils.extractValue<String>(mapData, 'createdDate');
+    this.displayedDate =
+        AssertUtils.extractValue<String>(mapData, 'displayedDate');
 
     return this;
   }
@@ -93,24 +96,22 @@ class NotificationContent extends BaseNotificationContent {
 
     List<dynamic> actionButtonList = [];
 
-    dataMap = dataMap..addAll({
-      'hideLargeIconOnExpand': hideLargeIconOnExpand,
-      'progress': progress,
-      'ticker': ticker,
-      'locked': locked,
-
-      'actionButtons': actionButtonList.length > 0 ? actionButtonList : null,
-
-      'notificationLayout': AssertUtils.toSimpleEnumString(notificationLayout),
-
-      'createdSource': AssertUtils.toSimpleEnumString(createdSource),
-      'createdLifeCycle': AssertUtils.toSimpleEnumString(createdLifeCycle),
-
-      'displayedLifeCycle': AssertUtils.toSimpleEnumString(displayedLifeCycle),
-
-      'createdDate': createdDate,
-      'displayedDate': displayedDate,
-    });
+    dataMap = dataMap
+      ..addAll({
+        'hideLargeIconOnExpand': hideLargeIconOnExpand,
+        'progress': progress,
+        'ticker': ticker,
+        'locked': locked,
+        'actionButtons': actionButtonList.length > 0 ? actionButtonList : null,
+        'notificationLayout':
+            AssertUtils.toSimpleEnumString(notificationLayout),
+        'createdSource': AssertUtils.toSimpleEnumString(createdSource),
+        'createdLifeCycle': AssertUtils.toSimpleEnumString(createdLifeCycle),
+        'displayedLifeCycle':
+            AssertUtils.toSimpleEnumString(displayedLifeCycle),
+        'createdDate': createdDate,
+        'displayedDate': displayedDate,
+      });
     return dataMap;
   }
 

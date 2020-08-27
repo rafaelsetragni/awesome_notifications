@@ -33,6 +33,8 @@ export 'src/utils/string_utils.dart';
 export 'src/utils/resource_image_provider.dart';
 
 // Pause and Play vibration sequences
-Int64List lowVibrationPattern    = Int64List.fromList([ 0, 200, 200, 200 ]);
-Int64List mediumVibrationPattern = Int64List.fromList([ 0, 500, 200, 200, 200, 200 ]);
-Int64List highVibrationPattern   = Int64List.fromList([ 0, 1000, 200, 200, 200, 200, 200, 200 ]);
+Int64List lowVibrationPattern = Int64List.fromList([0, 200, 200, 200]);
+Int64List mediumVibrationPattern =
+    Int64List.fromList([0, 500, 200, 200, 200, 200]);
+Int64List highVibrationPattern =
+    Int64List.fromList([0, 1000, 200, 200, 200, 200, 200, 200]);

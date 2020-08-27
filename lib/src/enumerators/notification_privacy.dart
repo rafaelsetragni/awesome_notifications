@@ -1,5 +1,1 @@
-enum NotificationPrivacy {
-  Public,
-  Secret,
-  Private
-}
+enum NotificationPrivacy { Public, Secret, Private }

@@ -1,5 +1,1 @@
-enum NotificationLifeCycle {
-  Foreground,
-  Background,
-  AppKilled
-}
+enum NotificationLifeCycle { Foreground, Background, AppKilled }

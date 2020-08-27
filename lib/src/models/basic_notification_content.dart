@@ -9,7 +9,6 @@ import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
 import 'package:awesome_notifications/src/utils/html_utils.dart';
 
 class BaseNotificationContent extends Model {
-
   int id;
   String channelKey;
   String title;
@@ -41,31 +40,32 @@ class BaseNotificationContent extends Model {
 
   @override
   fromMap(Map<String, dynamic> mapData) {
+    this.id = AssertUtils.extractValue<int>(mapData, 'id');
+    this.channelKey = AssertUtils.extractValue<String>(mapData, 'channelKey');
+    this.title = AssertUtils.extractValue<String>(mapData, 'title');
+    this.body = AssertUtils.extractValue<String>(mapData, 'body');
+    this.summary = AssertUtils.extractValue<String>(mapData, 'summary');
+    this.showWhen = AssertUtils.extractValue<bool>(mapData, 'showWhen');
+    this.payload = AssertUtils.extractMap<String, dynamic>(mapData, 'payload');
+    this.largeIcon = AssertUtils.extractValue<String>(mapData, 'largeIcon');
+    this.bigPicture = AssertUtils.extractValue<String>(mapData, 'bigPicture');
+    this.autoCancel = AssertUtils.extractValue<bool>(mapData, 'autoCancel');
+    this.privacy = AssertUtils.extractEnum<NotificationPrivacy>(
+        mapData, 'privacy', NotificationPrivacy.values);
 
-    this.id          = AssertUtils.extractValue<int>(mapData,'id');
-    this.channelKey  = AssertUtils.extractValue<String>(mapData,'channelKey');
-    this.title       = AssertUtils.extractValue<String>(mapData,'title');
-    this.body        = AssertUtils.extractValue<String>(mapData,'body');
-    this.summary     = AssertUtils.extractValue<String>(mapData,'summary');
-    this.showWhen   = AssertUtils.extractValue<bool>(mapData,'showWhen');
-    this.payload     = AssertUtils.extractMap<String, dynamic>(mapData,'payload');
-    this.largeIcon   = AssertUtils.extractValue<String>(mapData,'largeIcon');
-    this.bigPicture  = AssertUtils.extractValue<String>(mapData,'bigPicture');
-    this.autoCancel  = AssertUtils.extractValue<bool>(mapData,'autoCancel');
-    this.privacy     = AssertUtils.extractEnum<NotificationPrivacy>(mapData, 'privacy', NotificationPrivacy.values);
+    int colorValue = AssertUtils.extractValue<int>(mapData, 'color');
+    this.color = colorValue == null ? null : Color(colorValue);
 
-    int colorValue = AssertUtils.extractValue<int>(mapData,'color');
-    this.color      = colorValue == null ? null : Color(colorValue);
-
-    int backgroundColorValue = AssertUtils.extractValue<int>(mapData,'backgroundColor');
-    this.backgroundColor = backgroundColorValue == null ? null : Color(backgroundColorValue);
+    int backgroundColorValue =
+        AssertUtils.extractValue<int>(mapData, 'backgroundColor');
+    this.backgroundColor =
+        backgroundColorValue == null ? null : Color(backgroundColorValue);
 
     return this;
   }
 
   @override
   Map<String, dynamic> toMap() {
-
     return {
       'id': id,
       'channelKey': channelKey,
@@ -91,13 +91,12 @@ class BaseNotificationContent extends Model {
     return BitmapUtils().getFromMediaPath(largeIcon);
   }
 
-  String get titleWithoutHtml  => HtmlUtils.removeAllHtmlTags(title);
-  String get bodyWithoutHtml  => HtmlUtils.removeAllHtmlTags(body);
+  String get titleWithoutHtml => HtmlUtils.removeAllHtmlTags(title);
+  String get bodyWithoutHtml => HtmlUtils.removeAllHtmlTags(body);
 
   @override
   void validate() {
     assert(!AssertUtils.isNullOrEmptyOrInvalid(id, int));
     assert(!AssertUtils.isNullOrEmptyOrInvalid(channelKey, String));
   }
-
 }

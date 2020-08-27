@@ -1,7 +1,1 @@
-
-enum ActionButtonType {
-  Default,
-  InputField,
-  DisabledAction,
-  KeepOnTop
-}
+enum ActionButtonType { Default, InputField, DisabledAction, KeepOnTop }
