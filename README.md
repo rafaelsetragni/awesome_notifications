@@ -12,10 +12,10 @@
 - Easy to use and highly customizable.
 - Add **images**, **sounds**, **buttons** and different layouts on your notifications.
 - Notifications could be created at **any moment** (on Foreground, Background or even when the application is killed).
-- **High trustble** on receive notifications in any Application lifecycle.
-- High quality **data analytics** about when the notification was created, where it came from and when the user taps on it. A perfect solution to apply **AB tests** aproachings, etc, increasing the users engadgement.
+- **High trustworthy** on receive notifications in any Application lifecycle.
+- High quality **data analytics** about when the notification was created, where it came from and when the user taps on it. Ideal for applying **AB tests** approaches, etc, increasing the users engagement.
 - Notifications are received on **Flutter level code** when they are created, displayed or even tapped by the user.
-- Notifications could be **scheduled** repeatly using **Cron rules**, such linux does, including seconds precision.
+- Notifications could be **scheduled** repeatedly using **Cron rules**, such linux does, including seconds precision.
 
 ### Notification Types Available
 
@@ -226,6 +226,7 @@ Images can be defined using 4 prefix types:
 - File: images access through files stored on device. **Example**: file://path/to/image-asset.png
 - Resource: images access through drawable native resources. **Example**: resource://url.com/to/image-asset.png
 
+OBS: Unfortunately, icons can be only resource media types.
 
 <br>
 
@@ -249,7 +250,7 @@ Notifications could be scheduled as you wish using two main options:
 
 - initialDate: (YYYY-MM-DD hh:mm:ss) The initial date that schedule should be called by first time
 - crontabSchedule: Crontab expression as repetition rule (with seconds precision), as described in [this article](https://www.baeldung.com/cron-expressions)
-- allowWhileIdle: Determines if notification will send even when the device is in critical situation, such as low battery.
+- allowWhileIdle: Determines if notification will send, even when the device is in critical situation, such as low battery.
 
 <br>
 
