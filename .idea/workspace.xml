@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_button.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/received_models/push_notification.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/received_models/push_notification.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/audio_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/audio_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/bitmap_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/bitmap_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/date_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/date_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/html_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/html_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/map_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/map_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/media_abstract_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/media_abstract_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/resource_image_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/resource_image_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/string_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/string_utils.dart" afterDir="false" />
-    </list>
+    <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -63,22 +50,22 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state width="2517" height="344" key="GridCell.Tab.0.bottom" timestamp="1598529354800">
+    <state width="2517" height="344" key="GridCell.Tab.0.bottom" timestamp="1598535080246">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="344" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598529354800" />
-    <state width="2517" height="344" key="GridCell.Tab.0.center" timestamp="1598529354799">
+    <state width="2517" height="344" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598535080246" />
+    <state width="2517" height="344" key="GridCell.Tab.0.center" timestamp="1598535080246">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="344" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598529354799" />
-    <state width="2517" height="344" key="GridCell.Tab.0.left" timestamp="1598529354799">
+    <state width="2517" height="344" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598535080246" />
+    <state width="2517" height="344" key="GridCell.Tab.0.left" timestamp="1598535080246">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="344" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598529354799" />
-    <state width="2517" height="344" key="GridCell.Tab.0.right" timestamp="1598529354799">
+    <state width="2517" height="344" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598535080246" />
+    <state width="2517" height="344" key="GridCell.Tab.0.right" timestamp="1598535080246">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="344" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598529354799" />
+    <state width="2517" height="344" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1598535080246" />
     <state x="911" y="217" width="737" height="606" key="find.popup" timestamp="1598487608195">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
