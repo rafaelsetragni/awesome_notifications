@@ -18,7 +18,7 @@ class StringUtilsTest: XCTestCase {
     }
 
     func testExample() {
-        print(DateUtils.getUTCDate)
+        
     }
 
     func testPerformanceExample() {

@@ -1,7 +1,7 @@
 
 class ListUtils {
 
-    func isEmptyLists(dict: [AnyObject]?) -> Bool {
+    func isEmptyLists(list: [AnyObject]?) -> Bool {
         return list?.isEmpty ?? true
     }
 }

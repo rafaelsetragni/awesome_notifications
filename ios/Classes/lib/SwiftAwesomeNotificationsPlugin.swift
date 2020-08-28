@@ -1,25 +1,22 @@
+
 import Flutter
 import UIKit
 
 public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin {
 
-  public static var appLifeCycle = NotificationLifeCycle.AppKilled
+  static var appLifeCycle:NotificationLifeCycle = NotificationLifeCycle.AppKilled
 
   private static func checkGooglePlayServices() -> Bool {
     return true
   }
 
-  public static func getApplicationLifeCycle(){
+  public static func getApplicationLifeCycle() -> NotificationLifeCycle {
     // TODO NEED IMPLEMENTATION
+    return NotificationLifeCycle.AppKilled
   }
 
   private static func requestPermissions() -> Bool {
-    notificationCenter.requestAuthorization(options: options) {
-      (didAllow, error) in
-      if !didAllow {
-        print("User has declined notifications")
-      }
-    }
+    return NotificationBuilder.requestPermissions()
   }
 
   public static func register(with registrar: FlutterPluginRegistrar) {

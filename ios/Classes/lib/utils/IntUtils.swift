@@ -1,41 +1,31 @@
-package me.carda.awesome_notifications.utils;
 
-public class IntUtils {
-
-    // Note: sometimes Json parser converts Integer into Double values
-    public static extractInteger(value: AnyObject?) -> Int { 
-        return extractInteger(value: value, 0);
-    }
+class IntUtils {
 
     // Note: sometimes Json parser converts Integer into Double values
     public static func extractInteger(value: AnyObject?, defaultValue: AnyObject) -> Int {
         if(value == nil){
-            return convertToInt(value: defaultValue);
+            return convertToInt(value: defaultValue) ?? 0;
         }
-        return convertToInt(value: value);
+        return convertToInt(value: value) ?? 0;
     }
 
-    public static func convertToInt(value: AnyObject?) -> Int {
+    public static func convertToInt(value: AnyObject?) -> Int? {
     
-        var intValue?
+        var intValue:Int? = nil
         
         if(value != nil) {
 
             if (value is Int) {
-                intValue = value as! Int
+                intValue = value as? Int
             } else
             if (value is Float) {
-                intValue = Int(value as! Float)
+                intValue = Int(value as? Float ?? 0.0)
             } else
             if (value is Double) {
-                intValue = Int(value as! Double)
+                intValue = Int(value as? Double ?? 0.0)
             } else
             if (value is String){
-                do {
-                    intValue = Int(value as! String) ?? 0
-                } catch {
-                    print("Unexpected error: \(error).")
-                }
+                intValue = Int(value as? String ?? "") ?? 0
             }
         }
         return intValue;

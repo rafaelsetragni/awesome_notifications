@@ -1,5 +1,5 @@
 
-ppublic class DateUtils {
+class DateUtils {
 
     public static let utcTimeZone :TimeZone = TimeZone(secondsFromGMT: 0)!;
 
@@ -14,8 +14,8 @@ ppublic class DateUtils {
     }
 
     public static func getUTCDate() -> String {
-        var dateUtc = getUTCDateTime()
-        var formatter = DateFormatter()
+        let dateUtc = getUTCDateTime()
+        let formatter = DateFormatter()
         formatter.dateFormat = Definitions.DATE_FORMAT
         
         return formatter.string(from:dateUtc)

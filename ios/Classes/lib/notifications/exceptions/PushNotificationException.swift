@@ -1,3 +1,3 @@
 enum PushNotificationError: Error {
-    case notificationIsRequired
+    case invalidRequiredFields(msg:String)
 }

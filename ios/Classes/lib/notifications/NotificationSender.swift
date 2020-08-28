@@ -1,20 +1,20 @@
 
-public class NotificationSender {
+class NotificationSender {
 
     public static let TAG: String = "NotificationSender"
 
-    private var createdSource:      NotificationSource
-    private var appLifeCycle:       NotificationLifeCycle
-    private var pushNotification:   PushNotification
+    private var createdSource:      NotificationSource?
+    private var appLifeCycle:       NotificationLifeCycle?
+    private var pushNotification:   PushNotification?
 
     private var created:    Bool = false
     private var displayed:  Bool = false
 
     private let notificationBuilder:NotificationBuilder = NotificationBuilder()
 
-    public static func send(
+    public func send(
         createdSource: NotificationSource,
-        pushNotification: PushNotification
+        pushNotification: PushNotification?
     ) throws {
 
         if (pushNotification == nil){
@@ -32,7 +32,7 @@ public class NotificationSender {
 
         // Keep this way to future thread running
         self.createdSource = createdSource
-        self.appLifeCycle = appLifeCycle
+        self.appLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
         self.pushNotification = pushNotification
 
         self.execute()
