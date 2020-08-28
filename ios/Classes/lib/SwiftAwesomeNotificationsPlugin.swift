@@ -2,9 +2,15 @@ import Flutter
 import UIKit
 
 public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin {
-      
+
+  public static var appLifeCycle = NotificationLifeCycle.AppKilled
+
   private static func checkGooglePlayServices() -> Bool {
     return true
+  }
+
+  public static func getApplicationLifeCycle(){
+    // TODO NEED IMPLEMENTATION
   }
 
   public static func register(with registrar: FlutterPluginRegistrar) {
