@@ -13,6 +13,15 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin {
     // TODO NEED IMPLEMENTATION
   }
 
+  private static func requestPermissions() -> Bool {
+    notificationCenter.requestAuthorization(options: options) {
+      (didAllow, error) in
+      if !didAllow {
+        print("User has declined notifications")
+      }
+    }
+  }
+
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: Definitions.CHANNEL_FLUTTER_PLUGIN, binaryMessenger: registrar.messenger())
     let instance = SwiftAwesomeNotificationsPlugin()

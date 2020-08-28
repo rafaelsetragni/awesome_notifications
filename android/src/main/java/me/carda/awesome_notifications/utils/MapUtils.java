@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class MapUtils {
 
-    private static String TAG = "NotificationParser";
+    private static String TAG = "MapUtils";
 
     public static Boolean isNullOrEmptyKey(Map map, String key){
 

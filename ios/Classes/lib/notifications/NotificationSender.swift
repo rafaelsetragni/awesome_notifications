@@ -54,7 +54,7 @@ public class NotificationSender {
     
     /// AsyncTask METHODS BEGIN *********************************
 
-    private func execute() -> NotificationReceived {
+    private func doInBackground() -> NotificationReceived {
 
         do {
 
@@ -78,22 +78,22 @@ public class NotificationSender {
                     if(pushNotification.content.displayedLifeCycle == nil)
                         pushNotification.content.displayedLifeCycle = appLifeCycle
 
-                    pushNotification.content.displayedDate = DateUtils.getUTCDate();
+                    pushNotification.content.displayedDate = DateUtils.getUTCDate()
 
-                    pushNotification = showNotification(context, pushNotification);
+                    pushNotification = showNotification(context, pushNotification)
 
                     // Only save DisplayedMethods if pushNotification was created and displayed successfully
                     if(pushNotification != nil){
-                        displayed = true;
+                        displayed = true
 
-                        receivedNotification = new NotificationReceived(pushNotification.content);
+                        receivedNotification = new NotificationReceived(pushNotification.content)
 
                         receivedNotification.displayedLifeCycle = receivedNotification.displayedLifeCycle == nil ?
-                                appLifeCycle : receivedNotification.displayedLifeCycle;
+                            appLifeCycle : receivedNotification.displayedLifeCycle
                     }
 
                 } else {
-                    receivedNotification = new NotificationReceived(pushNotification.content);
+                    receivedNotification = NotificationReceived(pushNotification.content);
                 }
 
                 return receivedNotification;
@@ -132,11 +132,11 @@ public class NotificationSender {
 
     /// AsyncTask METHODS END *********************************
 
-    public PushNotification showNotification(Context context, PushNotification pushNotification) {
+    public PushNotification showNotification(PushNotification pushNotification) {
 
-        try {
+        do {
 
-            Notification notification = notificationBuilder.createNotification(context, pushNotification);
+            Notification notification = notificationBuilder.createNotification(pushNotification);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -149,8 +149,8 @@ public class NotificationSender {
 
             return pushNotification;
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch {
+            
         }
         return nil;
     }
@@ -161,6 +161,7 @@ public class NotificationSender {
 
     public static void cancelNotification(Context context, Integer id) {
         if(context != nil){
+            
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationManagerCompat notificationManager = getNotificationManager(context);
                 notificationManager.cancel(id.toString(), id);
