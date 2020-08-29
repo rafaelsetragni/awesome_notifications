@@ -23,5 +23,16 @@ extension String {
             return false
         }
     }
+
+    mutating func replaceRegex(_ pattern: String, replaceWith: String = "") -> Bool {
+        do {
+            let regex = try NSRegularExpression(pattern: pattern, options: NSRegularExpression.Options.caseInsensitive)
+            let range = NSMakeRange(0, self.count)
+            self = regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: replaceWith)
+            return true
+        } catch {
+            return false
+        }
+    }
     
 }

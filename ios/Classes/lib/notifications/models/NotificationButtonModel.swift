@@ -16,7 +16,8 @@ class NotificationButtonModel : AbstractModel {
     var autoCancel:Bool?
     var buttonType:ActionButtonType?
     
-    func fromMap(arguments: [String : AnyObject?]) -> AbstractModel {
+    func fromMap(arguments: [String : Any?]?) -> AbstractModel {
+        if(arguments == nil){ return self }
         
         self.key = MapUtils.getValueOrDefault(type: String.self , reference: "key", arguments: arguments)
         self.icon = MapUtils.getValueOrDefault(type: String.self , reference: "icon", arguments: arguments)
@@ -29,16 +30,16 @@ class NotificationButtonModel : AbstractModel {
         return self
     }
     
-    func toMap() -> [String : AnyObject?] {
-        var mapData:[String: AnyObject?] = [:]
+    func toMap() -> [String : Any?] {
+        var mapData:[String: Any?] = [:]
         
-        if(key != nil) {mapData["key"] = self.key as AnyObject?}
-        if(key != nil) {mapData["icon"] = self.icon as AnyObject?}
-        if(key != nil) {mapData["label"] = self.label as AnyObject?}
-        if(key != nil) {mapData["enabled"] = self.enabled as AnyObject?}
-        if(key != nil) {mapData["autoCancel"] = self.autoCancel as AnyObject?}
+        if(key != nil) {mapData["key"] = self.key}
+        if(key != nil) {mapData["icon"] = self.icon}
+        if(key != nil) {mapData["label"] = self.label}
+        if(key != nil) {mapData["enabled"] = self.enabled}
+        if(key != nil) {mapData["autoCancel"] = self.autoCancel}
         
-        if(key != nil) {mapData["buttonType"] = self.buttonType as AnyObject?}
+        if(key != nil) {mapData["buttonType"] = self.buttonType}
         
         return mapData
     }

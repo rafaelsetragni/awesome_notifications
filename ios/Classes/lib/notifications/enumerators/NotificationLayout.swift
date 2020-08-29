@@ -1,15 +1,17 @@
-enum NotificationLayout : CaseIterable, AbstractEnum {
+enum NotificationLayout : String, CaseIterable, AbstractEnum {
     
-  static let Default = "Default"
-  static let BigPicture = "BigPicture"
-  static let BigText = "BigText"
-  static let Inbox = "Inbox"
-  static let ProgressBar = "ProgressBar"
-  static let Messaging = "Messaging"
-  static let MediaPlayer = "MediaPlayer"
+  case Default = "Default"
+  case BigPicture = "BigPicture"
+  case BigText = "BigText"
+  case Inbox = "Inbox"
+  case ProgressBar = "ProgressBar"
+  case Messaging = "Messaging"
+  case MediaPlayer = "MediaPlayer"
   
   static func fromString(_ value: String?) -> AbstractEnum? {
       if(value == nil) { return self.allCases[0] }
       return self.allCases.first{ "\($0)" == value }
   }
 }
+
+// pascualoto cnpj  - recovery grupo - Guilerme 0800-772-3331

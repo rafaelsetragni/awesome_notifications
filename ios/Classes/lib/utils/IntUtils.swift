@@ -1,8 +1,12 @@
 
 class IntUtils {
 
+    public static func isNullOrEmpty(_ value:Int?) -> Bool {
+        return value == nil
+    }
+    
     // Note: sometimes Json parser converts Integer into Double values
-    public static func extractInteger(value: AnyObject?, defaultValue: AnyObject) -> Int {
+    public static func extractInteger(_ value: AnyObject?, defaultValue: AnyObject) -> Int {
         if(value == nil){
             return convertToInt(value: defaultValue) ?? 0;
         }

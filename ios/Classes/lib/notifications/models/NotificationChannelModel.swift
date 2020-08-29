@@ -21,8 +21,7 @@ class NotificationChannelModel : AbstractModel {
 
     var enableVibration: Bool?
     
-    // TODO missing implementation
-    // public long[] vibrationPattern;
+    var vibrationPattern:[Int]?
 
     var enableLights: Bool?
     var ledColor: Int?
@@ -33,7 +32,7 @@ class NotificationChannelModel : AbstractModel {
     var setAsGroupSummary: Bool?
     var groupAlertBehavior: GroupAlertBehaviour?
     
-    func fromMap(arguments: [String : AnyObject?]) -> AbstractModel {
+    func fromMap(arguments: [String : Any?]?) -> AbstractModel {
         
         self.channelKey         = MapUtils.getValueOrDefault(type: String.self , reference: "channelKey", arguments: arguments)
         self.channelName        = MapUtils.getValueOrDefault(type: String.self , reference: "channelName", arguments: arguments)
@@ -60,30 +59,30 @@ class NotificationChannelModel : AbstractModel {
         return self
     }
     
-    func toMap() -> [String : AnyObject?] {
-        var mapData:[String: AnyObject?] = [:]
+    func toMap() -> [String : Any?] {
+        var mapData:[String: Any?] = [:]
         
-        if(channelKey != nil) {mapData["channelKey"] = self.channelKey as AnyObject?}
-        if(channelName != nil) {mapData["channelName"] = self.channelName as AnyObject?}
-        if(channelDescription != nil) {mapData["channelDescription"] = self.channelDescription as AnyObject?}
-        if(channelShowBadge != nil) {mapData["channelShowBadge"] = self.channelShowBadge as AnyObject?}
+        if(channelKey != nil) {mapData["channelKey"] = self.channelKey}
+        if(channelName != nil) {mapData["channelName"] = self.channelName}
+        if(channelDescription != nil) {mapData["channelDescription"] = self.channelDescription}
+        if(channelShowBadge != nil) {mapData["channelShowBadge"] = self.channelShowBadge}
         
-        if(importance != nil) {mapData["importance"] = self.importance as AnyObject?}
+        if(importance != nil) {mapData["importance"] = self.importance}
         
-        if(playSound != nil) {mapData["playSound"] = self.playSound as AnyObject?}
-        if(soundSource != nil) {mapData["soundSource"] = self.soundSource as AnyObject?}
+        if(playSound != nil) {mapData["playSound"] = self.playSound}
+        if(soundSource != nil) {mapData["soundSource"] = self.soundSource}
         
-        if(enableVibration != nil) {mapData["enableVibration"] = self.enableVibration as AnyObject?}
+        if(enableVibration != nil) {mapData["enableVibration"] = self.enableVibration}
         
-        if(enableLights != nil) {mapData["enableLights"] = self.enableLights as AnyObject?}
-        if(ledColor != nil) {mapData["ledColor"] = self.ledColor as AnyObject?}
-        if(ledOnMs != nil) {mapData["ledOnMs"] = self.ledOnMs as AnyObject?}
-        if(ledOffMs != nil) {mapData["ledOffMs"] = self.ledOffMs as AnyObject?}
+        if(enableLights != nil) {mapData["enableLights"] = self.enableLights}
+        if(ledColor != nil) {mapData["ledColor"] = self.ledColor}
+        if(ledOnMs != nil) {mapData["ledOnMs"] = self.ledOnMs}
+        if(ledOffMs != nil) {mapData["ledOffMs"] = self.ledOffMs}
         
-        if(groupKey != nil) {mapData["groupKey"] = self.groupKey as AnyObject?}
-        if(setAsGroupSummary != nil) {mapData["setAsGroupSummary"] = self.setAsGroupSummary as AnyObject?}
+        if(groupKey != nil) {mapData["groupKey"] = self.groupKey}
+        if(setAsGroupSummary != nil) {mapData["setAsGroupSummary"] = self.setAsGroupSummary}
         
-        if(groupAlertBehavior != nil) {mapData["groupAlertBehavior"] = self.groupAlertBehavior as AnyObject?}
+        if(groupAlertBehavior != nil) {mapData["groupAlertBehavior"] = self.groupAlertBehavior}
         
         return mapData
     }
@@ -105,7 +104,7 @@ class NotificationChannelModel : AbstractModel {
                 msg: "channelDescription cannot be null or empty")
         }
         
-        if(BooleanUtils.getValue(value: playSound as AnyObject?, defaultValue: false) &&
+        if(BooleanUtils.getValue(value: playSound, defaultValue: false) &&
             !StringUtils.isNullOrEmpty(value: soundSource)){
             if(!AudioUtils.isValidAudio(audioPath: soundSource)){
                 throw PushNotificationError.invalidRequiredFields(msg: "Audio media is not valid")

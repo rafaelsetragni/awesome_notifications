@@ -1,45 +1,39 @@
-package me.carda.awesome_notifications.utils;
+//
+//  MediaUtils.swift
+//  awesome_notifications
+//
+//  Created by Rafael Setragni on 29/08/20.
+//
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import Foundation
 
-import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
+class MediaUtils {
 
-import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_ASSET;
-import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_FILE;
-import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_NETWORK;
-import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_RESOURCE;
-
-public abstract class MediaUtils {
-
-    protected static Boolean matchMediaType(String regex, String mediaPath){
-        return matchMediaType(regex, mediaPath, true);
+    static func matchMediaType(regex:String, mediaPath:String?) -> Bool {
+        return matchMediaType(regex:regex, mediaPath:mediaPath, filterEmpty:true);
     }
 
-    protected static Boolean matchMediaType(String regex, String mediaPath, Boolean filterEmpty){
-        Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(mediaPath);
-        String s = mediaPath.replaceFirst(regex, "");
-        return m.find() && (!filterEmpty || !s.isEmpty());
+    static func matchMediaType(regex:String, mediaPath:String?, filterEmpty:Bool) -> Bool {
+        return (mediaPath?.matches(regex) ?? false) && (!filterEmpty || mediaPath?.isEmpty ?? true) ;
     }
 
-    public static MediaSource getMediaSourceType(String mediaPath) {
+    public static func getMediaSourceType(mediaPath:String?) -> MediaSource {
 
-        if (mediaPath != null) {
+        if (mediaPath != nil) {
 
-            if (matchMediaType(MEDIA_VALID_NETWORK, mediaPath, false)) {
+            if (matchMediaType(regex:Definitions.MEDIA_VALID_NETWORK, mediaPath:mediaPath, filterEmpty:false)) {
                 return MediaSource.Network;
             }
 
-            if (matchMediaType(MEDIA_VALID_FILE, mediaPath)) {
+            if (matchMediaType(regex:Definitions.MEDIA_VALID_FILE, mediaPath:mediaPath)) {
                 return MediaSource.File;
             }
 
-            if (matchMediaType(MEDIA_VALID_RESOURCE, mediaPath)) {
+            if (matchMediaType(regex:Definitions.MEDIA_VALID_RESOURCE, mediaPath:mediaPath)) {
                 return MediaSource.Resource;
             }
 
-            if (matchMediaType(MEDIA_VALID_ASSET, mediaPath)) {
+            if (matchMediaType(regex:Definitions.MEDIA_VALID_ASSET, mediaPath:mediaPath)) {
                 return MediaSource.Asset;
             }
 
@@ -47,29 +41,21 @@ public abstract class MediaUtils {
         return MediaSource.Unknown;
     }
 
-    public static String cleanMediaPath(String mediaPath) {
-        if (mediaPath != null) {
-            Pattern pattern = Pattern.compile("^https?:\\/\\/", Pattern.CASE_INSENSITIVE);
-            Pattern pattern2 = Pattern.compile("^(asset:\\/\\/)(.*)", Pattern.CASE_INSENSITIVE);
-            Pattern pattern3 = Pattern.compile("^(file:\\/\\/)(.*)", Pattern.CASE_INSENSITIVE);
-            Pattern pattern4 = Pattern.compile("^(resource:\\/\\/)(.*)", Pattern.CASE_INSENSITIVE);
-
-            if(pattern.matcher(mediaPath).find()){
-                return mediaPath;
-            }
-
-            if(pattern2.matcher(mediaPath).find()){
-                return pattern2.matcher(mediaPath).replaceAll("$2");
-            }
-
-            if(pattern3.matcher(mediaPath).find()){
-                return pattern3.matcher(mediaPath).replaceAll("/$2");
-            }
-
-            if(pattern4.matcher(mediaPath).find()){
-                return pattern4.matcher(mediaPath).replaceAll("$2");
+    public static func cleanMediaPath(mediaPath:String?) -> String? {
+        
+        if (mediaPath != nil) {
+            
+            var cleanMedia = mediaPath ?? ""
+            
+            if(
+                cleanMedia.replaceRegex(Definitions.MEDIA_VALID_NETWORK, replaceWith: "$2") ||
+                cleanMedia.replaceRegex(Definitions.MEDIA_VALID_FILE, replaceWith: "") ||
+                cleanMedia.replaceRegex(Definitions.MEDIA_VALID_ASSET, replaceWith: "") ||
+                cleanMedia.replaceRegex(Definitions.MEDIA_VALID_RESOURCE, replaceWith: "")
+            ){
+                return cleanMedia;
             }
         }
-        return null;
+        return nil;
     }
 }

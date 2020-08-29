@@ -18,7 +18,7 @@ class NotificationSender {
     ) throws {
 
         if (pushNotification == nil){
-            throw PushNotificationError.notificationIsRequired
+            throw PushNotificationError.invalidRequiredFields(msg: "PushNotification not valid")
         }
 
         if(SwiftAwesomeNotificationsPlugin.appLifeCycle != NotificationLifeCycle.AppKilled){
@@ -28,7 +28,7 @@ class NotificationSender {
             self.appLifeCycle = NotificationLifeCycle.AppKilled
         }
 
-        pushNotification.validate()
+        try pushNotification!.validate()
 
         // Keep this way to future thread running
         self.createdSource = createdSource
@@ -54,46 +54,48 @@ class NotificationSender {
     
     /// AsyncTask METHODS BEGIN *********************************
 
-    private func doInBackground() -> NotificationReceived {
-
+    private func doInBackground() -> NotificationReceived? {
+        
         do {
 
             if (pushNotification != nil){
 
-                let receivedNotification: NotificationReceived = nil
+                var receivedNotification: NotificationReceived? = nil
 
-                if(pushNotification.content.createdSource == nil){
-                    pushNotification.content.createdSource = self.createdSource
+                if(pushNotification!.content!.createdSource == nil){
+                    pushNotification!.content!.createdSource = self.createdSource
                     created = true
                 }
 
-                if(pushNotification.content.createdLifeCycle == nil)
-                    pushNotification.content.createdLifeCycle = self.appLifeCycle
+                if(pushNotification!.content!.createdLifeCycle == nil){
+                    pushNotification!.content!.createdLifeCycle = self.appLifeCycle
+                }
 
                 if (
-                    !StringUtils.isnilOrEmpty(pushNotification.content.title) ||
-                    !StringUtils.isnilOrEmpty(pushNotification.content.body)
+                    !StringUtils.isNullOrEmpty(pushNotification!.content!.title) ||
+                    !StringUtils.isNullOrEmpty(pushNotification!.content!.body)
                 ){
 
-                    if(pushNotification.content.displayedLifeCycle == nil)
-                        pushNotification.content.displayedLifeCycle = appLifeCycle
+                    if(pushNotification!.content!.displayedLifeCycle == nil){
+                        pushNotification!.content!.displayedLifeCycle = appLifeCycle
+                    }
 
-                    pushNotification.content.displayedDate = DateUtils.getUTCDate()
+                    pushNotification!.content!.displayedDate = DateUtils.getUTCDate()
 
-                    pushNotification = showNotification(context, pushNotification)
+                    pushNotification = showNotification(pushNotification!)
 
                     // Only save DisplayedMethods if pushNotification was created and displayed successfully
                     if(pushNotification != nil){
                         displayed = true
 
-                        receivedNotification = new NotificationReceived(pushNotification.content)
+                        receivedNotification = NotificationReceived(pushNotification!.content)
 
-                        receivedNotification.displayedLifeCycle = receivedNotification.displayedLifeCycle == nil ?
-                            appLifeCycle : receivedNotification.displayedLifeCycle
+                        receivedNotification!.displayedLifeCycle = receivedNotification!.displayedLifeCycle == nil ?
+                            appLifeCycle : receivedNotification!.displayedLifeCycle
                     }
 
                 } else {
-                    receivedNotification = NotificationReceived(pushNotification.content);
+                    receivedNotification = NotificationReceived(pushNotification!.content);
                 }
 
                 return receivedNotification;
@@ -102,96 +104,46 @@ class NotificationSender {
         } catch {
         }
 
-        pushNotification = nil;
-        return nil;
+        pushNotification = nil
+        return nil
     }
 
-    protected void onPostExecute(NotificationReceived receivedNotification) {
-        Log.d(TAG, "Notification created");
+    private func onPostExecute(receivedNotification:NotificationReceived?) {
 
         // Only broadcast if pushNotification is valid
         if(pushNotification != nil){
 
             if(created){
-                CreatedManager.saveCreated(context, receivedNotification);
-                BroadcastSender.SendBroadcastNotificationCreated(
-                    context,
-                    receivedNotification
-                );
+                // TODO MISSING IMPLEMENTATION
             }
 
             if(displayed){
-                DisplayedManager.saveDisplayed(context, receivedNotification);
-                BroadcastSender.SendBroadcastNotificationDisplayed(
-                    context,
-                    receivedNotification
-                );
+                // TODO MISSING IMPLEMENTATION
             }
         }
     }
 
     /// AsyncTask METHODS END *********************************
 
-    public PushNotification showNotification(PushNotification pushNotification) {
+    public func showNotification(_ pushNotification:PushNotification) -> PushNotification? {
 
         do {
 
-            Notification notification = notificationBuilder.createNotification(pushNotification);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.notify(pushNotification.content.id, notification);
-            }
-            else {
-                NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
-                notificationManagerCompat.notify(pushNotification.content.id.toString(), pushNotification.content.id, notification);
-            }
-
-            return pushNotification;
+            return pushNotification
 
         } catch {
-            
+            return nil
         }
-        return nil;
+        return nil
     }
 
-    private static NotificationManagerCompat getNotificationManager(Context context) {
-        return NotificationManagerCompat.from(context);
+    public static func cancelNotification(id:Int) {
+        // TODO MISSING IMPLEMENTATION
     }
 
-    public static void cancelNotification(Context context, Integer id) {
-        if(context != nil){
-            
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationManagerCompat notificationManager = getNotificationManager(context);
-                notificationManager.cancel(id.toString(), id);
-                notificationManager.cancel(id);
-            }
-
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel(id.toString(), id);
-            notificationManager.cancel(id);
-
-
-            CreatedManager.cancelCreated(context, id);
-            DisplayedManager.cancelDisplayed(context, id);
-        }
-    }
-
-    public static boolean cancelAllNotifications(Context context) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManagerCompat notificationManager = getNotificationManager(context);
-            notificationManager.cancelAll();
-        }
-        else {
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-        }
-
-        CreatedManager.cancelAllCreated(context);
-        DisplayedManager.cancelAllDisplayed(context);
-
+    public static func cancelAllNotifications() -> Bool {
+        // TODO MISSING IMPLEMENTATION
         return true;
     }
 

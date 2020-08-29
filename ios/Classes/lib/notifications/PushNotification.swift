@@ -1,17 +1,24 @@
 
 public class PushNotification : AbstractModel {
     
-    func fromMap(arguments: [String : AnyObject?]) -> AbstractModel {
-        <#code#>
+    var content:NotificationContentModel?
+    var actionButtons:[NotificationButtonModel]?
+    var schedule:NotificationScheduleModel?
+    
+    func fromMap(arguments: [String : Any?]?) -> AbstractModel {
+        
+        
+        return self
     }
     
-    public func toMap() -> [String : AnyObject?] {
-        <#code#>
+    func toMap() -> [String : Any?] {
+        let mapData:[String: Any?] = [:]
+        
+        return mapData
     }
     
-    public func validate() throws {
-        <#code#>
+    func validate() throws {
+        
     }
-    
     
 }

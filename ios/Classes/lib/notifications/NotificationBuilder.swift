@@ -1,24 +1,37 @@
+
+import UIKit
 import UserNotifications
 
 public class NotificationBuilder {
+    var notificationCenter
 
-    let notificationCenter = UNUserNotificationCenter.current()
-
+    init(){
+         = UNUserNotificationCenter.current()
+    }
+    
     public static func requestPermissions() -> Bool {
-        let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+        
+        if #available(iOS 10.0, *) {
+          // For iOS 10 display notification (sent via APNS)
+          UNUserNotificationCenter.current().delegate = self
 
-        notificationCenter.requestAuthorization(options: options) {
-            (didAllow, error) in
-            if !didAllow {
-                print("User has declined notifications")
-                return false
-            }
+          let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+          UNUserNotificationCenter.current().requestAuthorization(
+            options: authOptions,
+            completionHandler: {_, _ in })
+        } else {
+          let settings: UIUserNotificationSettings =
+          UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+          application.registerUserNotificationSettings(settings)
         }
+
+        application.registerForRemoteNotifications()
+        
 
         return true
     }
 
-    public func createNotification(pushNotification: PushNotification){
+    public func createNotification(pushNotification: PushNotification) -> UNNotification? {
 
         if(!isAllowedNotification){ return nil }
 
@@ -38,26 +51,39 @@ public class NotificationBuilder {
     }
 
     private func isAllowedNotification() -> Bool {
-        notificationCenter.getNotificationSettings { (settings) in
-            if settings.authorizationStatus != .authorized {
-                // Notifications not allowed
+        
+        if #available(iOS 10.0, *) {
+            
+            guard let settings = UIApplication.shared.currentUserNotificationSettings
+              else {
+                return false
+            }
+            
+            return UIApplication.shared.isRegisteredForRemoteNotifications
+              && !settings.types.isEmpty
+            
+        } else {
+            // Fallback on earlier versions
+            if UIApplication.shared.isRegisteredForRemoteNotifications {
+                return true
+            } else {
+                return false
             }
         }
     }
 
+    @available(iOS 10.0, *)
     private func setNotificationContent(pushNotification: PushNotification, content: UNMutableNotificationContent)  {
 
-        content.title = pushNotification.content.title
-        content.body  = pushNotification.content.body
-
-        return intent;
+        content.title = pushNotification.content!.title ?? ""
+        content.body  = pushNotification.content!.body ?? ""
     }
 
+    @available(iOS 10.0, *)
     private func setNotificationActions(pushNotification: PushNotification, content: UNMutableNotificationContent)  {
 
         if(pushNotification.actionButtons == nil){ return }
 
-        for(Noti)
         let snoozeAction = UNNotificationAction(identifier: "Snooze", title: "Snooze", options: [])
         let deleteAction = UNNotificationAction(identifier: "Delete", title: "Delete", options: [.destructive])
 
