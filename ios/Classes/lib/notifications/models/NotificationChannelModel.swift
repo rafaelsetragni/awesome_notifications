@@ -34,27 +34,27 @@ class NotificationChannelModel : AbstractModel {
     
     func fromMap(arguments: [String : Any?]?) -> AbstractModel {
         
-        self.channelKey         = MapUtils.getValueOrDefault(type: String.self , reference: "channelKey", arguments: arguments)
-        self.channelName        = MapUtils.getValueOrDefault(type: String.self , reference: "channelName", arguments: arguments)
-        self.channelDescription = MapUtils.getValueOrDefault(type: String.self , reference: "channelDescription", arguments: arguments)
-        self.channelShowBadge   = MapUtils.getValueOrDefault(type: Bool.self , reference: "channelShowBadge", arguments: arguments)
+        self.channelKey         = MapUtils<String>.getValueOrDefault(reference: "channelKey", arguments: arguments)
+        self.channelName        = MapUtils<String>.getValueOrDefault(reference: "channelName", arguments: arguments)
+        self.channelDescription = MapUtils<String>.getValueOrDefault(reference: "channelDescription", arguments: arguments)
+        self.channelShowBadge   = MapUtils<Bool>.getValueOrDefault(reference: "channelShowBadge", arguments: arguments)
         
-        self.importance         = MapUtils.getEnumOrDefault(type: NotificationImportance.self, reference: "importance", arguments: arguments)
+        self.importance         = EnumUtils<NotificationImportance>.getEnumOrDefault(reference: "importance", arguments: arguments)
         
-        self.playSound          = MapUtils.getValueOrDefault(type: Bool.self , reference: "playSound", arguments: arguments)
-        self.soundSource        = MapUtils.getValueOrDefault(type: String.self , reference: "soundSource", arguments: arguments)
+        self.playSound          = MapUtils<Bool>.getValueOrDefault(reference: "playSound", arguments: arguments)
+        self.soundSource        = MapUtils<String>.getValueOrDefault(reference: "soundSource", arguments: arguments)
         
-        self.enableVibration    = MapUtils.getValueOrDefault(type: Bool.self , reference: "enableVibration", arguments: arguments)
+        self.enableVibration    = MapUtils<Bool>.getValueOrDefault(reference: "enableVibration", arguments: arguments)
         
-        self.enableLights       = MapUtils.getValueOrDefault(type: Bool.self , reference: "enableLights", arguments: arguments)
-        self.ledColor           = MapUtils.getValueOrDefault(type: Int.self , reference: "ledColor", arguments: arguments)
-        self.ledOnMs            = MapUtils.getValueOrDefault(type: Int.self , reference: "ledOnMs", arguments: arguments)
-        self.ledOffMs           = MapUtils.getValueOrDefault(type: Int.self , reference: "ledOffMs", arguments: arguments)
+        self.enableLights       = MapUtils<Bool>.getValueOrDefault(reference: "enableLights", arguments: arguments)
+        self.ledColor           = MapUtils<Int>.getValueOrDefault(reference: "ledColor", arguments: arguments)
+        self.ledOnMs            = MapUtils<Int>.getValueOrDefault(reference: "ledOnMs", arguments: arguments)
+        self.ledOffMs           = MapUtils<Int>.getValueOrDefault(reference: "ledOffMs", arguments: arguments)
         
-        self.groupKey           = MapUtils.getValueOrDefault(type: String.self , reference: "groupKey", arguments: arguments)
-        self.setAsGroupSummary  = MapUtils.getValueOrDefault(type: Bool.self , reference: "setAsGroupSummary", arguments: arguments)
+        self.groupKey           = MapUtils<String>.getValueOrDefault(reference: "groupKey", arguments: arguments)
+        self.setAsGroupSummary  = MapUtils<Bool>.getValueOrDefault(reference: "setAsGroupSummary", arguments: arguments)
         
-        self.groupAlertBehavior = MapUtils.getEnumOrDefault(type: GroupAlertBehaviour.self, reference: "groupAlertBehavior", arguments: arguments)
+        self.groupAlertBehavior = EnumUtils<GroupAlertBehaviour>.getEnumOrDefault(reference: "groupAlertBehavior", arguments: arguments)
         
         return self
     }
@@ -89,23 +89,23 @@ class NotificationChannelModel : AbstractModel {
     
     func validate() throws {
         
-        if(StringUtils.isNullOrEmpty(value: channelKey)){
+        if(StringUtils.isNullOrEmpty(channelKey)){
             throw PushNotificationError.invalidRequiredFields(
                 msg: "channelKey cannot be null or empty")
         }
 
-        if(StringUtils.isNullOrEmpty(value: channelName)){
+        if(StringUtils.isNullOrEmpty(channelName)){
             throw PushNotificationError.invalidRequiredFields(
                 msg: "channelName cannot be null or empty")
         }
 
-        if(StringUtils.isNullOrEmpty(value: channelDescription)){
+        if(StringUtils.isNullOrEmpty(channelDescription)){
             throw PushNotificationError.invalidRequiredFields(
                 msg: "channelDescription cannot be null or empty")
         }
         
         if(BooleanUtils.getValue(value: playSound, defaultValue: false) &&
-            !StringUtils.isNullOrEmpty(value: soundSource)){
+            !StringUtils.isNullOrEmpty(soundSource)){
             if(!AudioUtils.isValidAudio(audioPath: soundSource)){
                 throw PushNotificationError.invalidRequiredFields(msg: "Audio media is not valid")
             }

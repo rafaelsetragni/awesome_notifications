@@ -26,8 +26,8 @@ public class NotificationContentModel : AbstractModel {
     var bigPicture: String?
     var hideLargeIconOnExpand: Bool?
     var autoCancel: Bool?
-    var color: UIColor?
-    var backgroundColor: UIColor?
+    var color: Int64?
+    var backgroundColor: Int64?
     var progress: Int?
     var ticker: String?
 
@@ -44,37 +44,37 @@ public class NotificationContentModel : AbstractModel {
     
     func fromMap(arguments: [String : Any?]?) -> AbstractModel {
                 
-        self.id             = MapUtils.getValueOrDefault(type: Int.self , reference: "id", arguments: arguments)
-        self.channelKey     = MapUtils.getValueOrDefault(type: String.self , reference: "channelKey", arguments: arguments)
-        self.title          = MapUtils.getValueOrDefault(type: String.self , reference: "title", arguments: arguments)
-        self.body           = MapUtils.getValueOrDefault(type: String.self , reference: "body", arguments: arguments)
-        self.summary        = MapUtils.getValueOrDefault(type: String.self , reference: "summary", arguments: arguments)
-        self.showWhen       = MapUtils.getValueOrDefault(type: Bool.self , reference: "showWhen", arguments: arguments)
+        self.id             = MapUtils<Int>.getValueOrDefault(reference: "id", arguments: arguments)
+        self.channelKey     = MapUtils<String>.getValueOrDefault(reference: "channelKey", arguments: arguments)
+        self.title          = MapUtils<String>.getValueOrDefault(reference: "title", arguments: arguments)
+        self.body           = MapUtils<String>.getValueOrDefault(reference: "body", arguments: arguments)
+        self.summary        = MapUtils<String>.getValueOrDefault(reference: "summary", arguments: arguments)
+        self.showWhen       = MapUtils<Bool>.getValueOrDefault(reference: "showWhen", arguments: arguments)
         
-        self.playSound             = MapUtils.getValueOrDefault(type: Bool.self , reference: "playSound", arguments: arguments)
-        self.customSound           = MapUtils.getValueOrDefault(type: String.self , reference: "customSound", arguments: arguments)
-        self.largeIcon             = MapUtils.getValueOrDefault(type: String.self , reference: "largeIcon", arguments: arguments)
-        self.locked                = MapUtils.getValueOrDefault(type: Bool.self , reference: "locked", arguments: arguments)
-        self.bigPicture            = MapUtils.getValueOrDefault(type: String.self , reference: "bigPicture", arguments: arguments)
-        self.hideLargeIconOnExpand = MapUtils.getValueOrDefault(type: Bool.self , reference: "hideLargeIconOnExpand", arguments: arguments)
-        self.autoCancel            = MapUtils.getValueOrDefault(type: Bool.self , reference: "autoCancel", arguments: arguments)
-        self.color                 = MapUtils.getValueOrDefault(type: UIColor.self , reference: "color", arguments: arguments)
-        self.backgroundColor       = MapUtils.getValueOrDefault(type: UIColor.self , reference: "backgroundColor", arguments: arguments)
-        self.progress              = MapUtils.getValueOrDefault(type: Int.self , reference: "progress", arguments: arguments)
-        self.ticker                = MapUtils.getValueOrDefault(type: String.self , reference: "ticker", arguments: arguments)
+        self.playSound             = MapUtils<Bool>.getValueOrDefault(reference: "playSound", arguments: arguments)
+        self.customSound           = MapUtils<String>.getValueOrDefault(reference: "customSound", arguments: arguments)
+        self.largeIcon             = MapUtils<String>.getValueOrDefault(reference: "largeIcon", arguments: arguments)
+        self.locked                = MapUtils<Bool>.getValueOrDefault(reference: "locked", arguments: arguments)
+        self.bigPicture            = MapUtils<String>.getValueOrDefault(reference: "bigPicture", arguments: arguments)
+        self.hideLargeIconOnExpand = MapUtils<Bool>.getValueOrDefault(reference: "hideLargeIconOnExpand", arguments: arguments)
+        self.autoCancel            = MapUtils<Bool>.getValueOrDefault(reference: "autoCancel", arguments: arguments)
+        self.color                 = MapUtils<Int64>.getValueOrDefault(reference: "color", arguments: arguments)
+        self.backgroundColor       = MapUtils<Int64>.getValueOrDefault(reference: "backgroundColor", arguments: arguments)
+        self.progress              = MapUtils<Int>.getValueOrDefault(reference: "progress", arguments: arguments)
+        self.ticker                = MapUtils<String>.getValueOrDefault(reference: "ticker", arguments: arguments)
 
-        self.privacy            = MapUtils.getEnumOrDefault(type: NotificationPrivacy.self, reference: "privacy", arguments: arguments)
-        self.privateMessage     = MapUtils.getValueOrDefault(type: String.self , reference: "privateMessage", arguments: arguments)
+        self.privacy            = EnumUtils<NotificationPrivacy>.getEnumOrDefault(reference: "privacy", arguments: arguments)
+        self.privateMessage     = MapUtils<String>.getValueOrDefault(reference: "privateMessage", arguments: arguments)
         
-        self.notificationLayout = MapUtils.getEnumOrDefault(type: NotificationLayout.self, reference: "notificationLayout", arguments: arguments)
+        self.notificationLayout = EnumUtils<NotificationLayout>.getEnumOrDefault(reference: "notificationLayout", arguments: arguments)
         
-        self.createdSource      = MapUtils.getEnumOrDefault(type: NotificationSource.self, reference: "createdSource", arguments: arguments)
-        self.createdLifeCycle   = MapUtils.getEnumOrDefault(type: NotificationLifeCycle.self, reference: "createdLifeCycle", arguments: arguments)
-        self.displayedLifeCycle = MapUtils.getEnumOrDefault(type: NotificationLifeCycle.self, reference: "displayedLifeCycle", arguments: arguments)
-        self.createdDate        = MapUtils.getValueOrDefault(type: String.self , reference: "createdDate", arguments: arguments)
-        self.displayedDate      = MapUtils.getValueOrDefault(type: String.self , reference: "displayedDate", arguments: arguments)
+        self.createdSource      = EnumUtils<NotificationSource>.getEnumOrDefault(reference: "createdSource", arguments: arguments)
+        self.createdLifeCycle   = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: "createdLifeCycle", arguments: arguments)
+        self.displayedLifeCycle = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: "displayedLifeCycle", arguments: arguments)
+        self.createdDate        = MapUtils<String>.getValueOrDefault(reference: "createdDate", arguments: arguments)
+        self.displayedDate      = MapUtils<String>.getValueOrDefault(reference: "displayedDate", arguments: arguments)
         
-        self.payload  = MapUtils.getValueOrDefault(type: [String:String?].self, reference: "payload", arguments: arguments)
+        self.payload  = MapUtils<[String:String?]>.getValueOrDefault(reference: "payload", arguments: arguments)
         
         if(arguments?["actionButtons"] != nil){
             

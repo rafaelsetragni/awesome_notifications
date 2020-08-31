@@ -63,7 +63,7 @@ public class CronExpression {
     var nearestWeekday:Bool = false
     var lastdayOffset = 0
     var expressionParsed:Bool = false
-
+/*
     public static let MAX_YEAR:Int = Calendar.current.component(.year, from: Date()) + 100
 
     init(_ cronExpression:String?) throws {
@@ -950,7 +950,6 @@ public class CronExpression {
             var min:Int = components.minute!
 
             // get second.................................................
-            
             st = getSet(CronExpression.SECOND).split(whereSeparator: { (value:Int) -> Bool in
                 return value <= sec
             })[0];
@@ -1401,7 +1400,7 @@ public class CronExpression {
 
     public func clone() -> CronExpression {
         return CronExpression(self)
-    }
+    }*/
 }
 
 class ValueSet {

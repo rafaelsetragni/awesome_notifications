@@ -14,9 +14,9 @@ public class NotificationScheduleModel : AbstractModel {
     var allowWhileIdle: Bool?
     
     func fromMap(arguments: [String : Any?]?) -> AbstractModel {
-        self.initialDateTime = MapUtils.getValueOrDefault(type: String.self , reference: "initialDateTime", arguments: arguments)
-        self.crontabSchedule = MapUtils.getValueOrDefault(type: String.self , reference: "crontabSchedule", arguments: arguments)
-        self.allowWhileIdle  = MapUtils.getValueOrDefault(type: Bool.self , reference: "allowWhileIdle", arguments: arguments)
+        self.initialDateTime = MapUtils<String>.getValueOrDefault(reference: "initialDateTime", arguments: arguments)
+        self.crontabSchedule = MapUtils<String>.getValueOrDefault(reference: "crontabSchedule", arguments: arguments)
+        self.allowWhileIdle  = MapUtils<Bool>.getValueOrDefault(reference: "allowWhileIdle", arguments: arguments)
         
         return self
     }

@@ -1,5 +1,5 @@
 
-class MapUtils {
+class MapUtils<T> {
     
     public static func isNullOrEmptyKey(map: [String : Any?], key: String) -> Bool {
 
@@ -19,7 +19,7 @@ class MapUtils {
         return false
     }
 
-    public static func getValueOrDefault<T>(type: T.Type, reference: String, arguments: [String : Any?]?) -> T? {
+    public static func getValueOrDefault(reference: String, arguments: [String : Any?]?) -> T? {
         let value:Any? = arguments?[reference] ?? nil
         let defaultValue:T? = (Definitions.initialValues[reference] ?? nil) as T
 
@@ -39,8 +39,10 @@ class MapUtils {
 
         return defaultValue
     }
-    
-    public static func getEnumOrDefault<T: AbstractEnum>(type: T.Type, reference: String, arguments: [String : Any?]?) -> T {
+}
+
+class EnumUtils<T: AbstractEnum> {
+    public static func getEnumOrDefault(reference: String, arguments: [String : Any?]?) -> T {
         let value:Any? = arguments?[reference] ?? nil
         let defaultValue:T = T.fromString(Definitions.initialValues[reference] as? String) as! T
 

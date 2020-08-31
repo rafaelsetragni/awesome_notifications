@@ -15,10 +15,10 @@ public class ActionReceived : NotificationReceived {
     var actionLifeCycle: NotificationLifeCycle?
     var actionDate: String?
     
-    override init(_ contentModel:NotificationContentModel?){
+    override init(_ contentModel:NotificationContentModel?){        
+        super.init(contentModel)
         
         if(contentModel == nil){ return }
-        super.init(contentModel)
         
         self.actionDate = DateUtils.getUTCDate()
     }
@@ -26,9 +26,9 @@ public class ActionReceived : NotificationReceived {
     override func fromMap(arguments: [String : Any?]?) -> AbstractModel {
         super.fromMap(arguments: arguments)
         
-        self.actionKey       = MapUtils.getValueOrDefault(type: String.self, reference: "actionKey", arguments: arguments)
-        self.buttonInput     = MapUtils.getValueOrDefault(type: String.self, reference: "buttonInput", arguments: arguments)
-        self.actionLifeCycle = MapUtils.getEnumOrDefault(type: NotificationLifeCycle.self, reference: "actionLifeCycle", arguments: arguments)
+        self.actionKey       = MapUtils<String>.getValueOrDefault(reference: "actionKey", arguments: arguments)
+        self.buttonInput     = MapUtils<String>.getValueOrDefault(reference: "buttonInput", arguments: arguments)
+        self.actionLifeCycle = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: "actionLifeCycle", arguments: arguments)
         
         return self
     }

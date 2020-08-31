@@ -19,13 +19,13 @@ class NotificationButtonModel : AbstractModel {
     func fromMap(arguments: [String : Any?]?) -> AbstractModel {
         if(arguments == nil){ return self }
         
-        self.key = MapUtils.getValueOrDefault(type: String.self , reference: "key", arguments: arguments)
-        self.icon = MapUtils.getValueOrDefault(type: String.self , reference: "icon", arguments: arguments)
-        self.label = MapUtils.getValueOrDefault(type: String.self , reference: "label", arguments: arguments)
-        self.enabled = MapUtils.getValueOrDefault(type: Bool.self , reference: "enabled", arguments: arguments)
-        self.autoCancel = MapUtils.getValueOrDefault(type: Bool.self , reference: "autoCancel", arguments: arguments)
+        self.key        = MapUtils<String>.getValueOrDefault(reference: "key", arguments: arguments)
+        self.icon       = MapUtils<String>.getValueOrDefault(reference: "icon", arguments: arguments)
+        self.label      = MapUtils<String>.getValueOrDefault(reference: "label", arguments: arguments)
+        self.enabled    = MapUtils<Bool>.getValueOrDefault(reference: "enabled", arguments: arguments)
+        self.autoCancel = MapUtils<Bool>.getValueOrDefault(reference: "autoCancel", arguments: arguments)
         
-        self.buttonType = MapUtils.getEnumOrDefault(type: ActionButtonType.self, reference: "buttonType", arguments: arguments)
+        self.buttonType = MapUtils<ActionButtonType>.getEnumOrDefault(reference: "buttonType", arguments: arguments)
         
         return self
     }
@@ -46,12 +46,12 @@ class NotificationButtonModel : AbstractModel {
     
     func validate() throws {
         
-        if(StringUtils.isNullOrEmpty(value: key)){
+        if(StringUtils.isNullOrEmpty(key)){
             throw PushNotificationError.invalidRequiredFields(
                 msg: "Button action key cannot be null or empty")
         }
 
-        if(StringUtils.isNullOrEmpty(value: label)){
+        if(StringUtils.isNullOrEmpty(label)){
             throw PushNotificationError.invalidRequiredFields(
                 msg: "Button label cannot be null or empty")
         }

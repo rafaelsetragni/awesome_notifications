@@ -16,7 +16,7 @@ class BitmapUtils : MediaUtils {
     @available(iOS 10.0, *)
     public static func getBitmapFromSource(bitmapPath:String?) -> UNNotificationAttachment? {
         
-        if(StringUtils.isNullOrEmpty(value: bitmapPath)){ return nil }
+        if(StringUtils.isNullOrEmpty(bitmapPath)){ return nil }
         
         switch(MediaUtils.getMediaSourceType(mediaPath: bitmapPath)){
             

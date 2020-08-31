@@ -3,14 +3,14 @@ import UIKit
 import UserNotifications
 
 public class NotificationBuilder {
-    var notificationCenter
+    /*var notificationCenter
 
     init(){
          = UNUserNotificationCenter.current()
     }
-    
+    */
     public static func requestPermissions() -> Bool {
-        
+        /*
         if #available(iOS 10.0, *) {
           // For iOS 10 display notification (sent via APNS)
           UNUserNotificationCenter.current().delegate = self
@@ -26,11 +26,11 @@ public class NotificationBuilder {
         }
 
         application.registerForRemoteNotifications()
-        
+        */
 
         return true
     }
-
+/*
     public func createNotification(pushNotification: PushNotification) -> UNNotification? {
 
         if(!isAllowedNotification){ return nil }
@@ -90,5 +90,5 @@ public class NotificationBuilder {
         let category = UNNotificationCategory(identifier: userActions, actions: [snoozeAction, deleteAction], intentIdentifiers: [], options: [])
         notificationCenter.setNotificationCategories([category])
     }
-    
+    */
 }
