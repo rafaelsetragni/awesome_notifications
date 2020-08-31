@@ -10,6 +10,7 @@ import Foundation
 public class NotificationReceived : NotificationContentModel {
     
     init(_ contentModel:NotificationContentModel?){
+        super.init()
         
         if(contentModel == nil){ return }
         

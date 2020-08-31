@@ -40,13 +40,3 @@ class MapUtils<T> {
         return defaultValue
     }
 }
-
-class EnumUtils<T: AbstractEnum> {
-    public static func getEnumOrDefault(reference: String, arguments: [String : Any?]?) -> T {
-        let value:Any? = arguments?[reference] ?? nil
-        let defaultValue:T = T.fromString(Definitions.initialValues[reference] as? String) as! T
-
-        if(value == nil) { return defaultValue }
-        return value as! T
-    }
-}

@@ -8,7 +8,7 @@
 import Foundation
 
 class BitmapUtils : MediaUtils {
-    
+    /*
     public static func getBitmapFromSource(bitmapPath:String) -> Any? {
         return nil
     }
@@ -19,27 +19,22 @@ class BitmapUtils : MediaUtils {
         if(StringUtils.isNullOrEmpty(bitmapPath)){ return nil }
         
         switch(MediaUtils.getMediaSourceType(mediaPath: bitmapPath)){
-            
-        case .Resource:
-            return getBitmapFromAsset(bitmapPath ?? "")
-            
-        case .Asset:
-            return getBitmapFromAsset(bitmapPath ?? "")
-            
-        case .File:
-            return getBitmapFromFile(bitmapPath ?? "")
-            
-        case .Network:
-            return getBitmapFromUrl(bitmapPath ?? "")
-            
-        case .Unknown:
-            return nil
-            
-        @unknown default:
-            return nil
+                
+            case .Resource:
+                return getBitmapFromAsset(bitmapPath ?? "")
+                
+            case .Asset:
+                return getBitmapFromAsset(bitmapPath ?? "")
+                
+            case .File:
+                return getBitmapFromFile(bitmapPath ?? "")
+                
+            case .Network:
+                return getBitmapFromUrl(bitmapPath ?? "")
+                
+            case .Unknown:
+                return nil
         }
-        
-        return nil
     }
     
     @available(iOS 10.0, *)
@@ -74,8 +69,9 @@ class BitmapUtils : MediaUtils {
         return nil
     }
     
+    */
     public static func isValidBitmap(_ mediaPath:String?) -> Bool {
-        
+        /*
         if(mediaPath != nil){
             
 
@@ -99,8 +95,8 @@ class BitmapUtils : MediaUtils {
                 return true
             }
             
-        }
+        }*/
         
+        return false        
     }
-    
 }

@@ -25,7 +25,7 @@ class NotificationButtonModel : AbstractModel {
         self.enabled    = MapUtils<Bool>.getValueOrDefault(reference: "enabled", arguments: arguments)
         self.autoCancel = MapUtils<Bool>.getValueOrDefault(reference: "autoCancel", arguments: arguments)
         
-        self.buttonType = MapUtils<ActionButtonType>.getEnumOrDefault(reference: "buttonType", arguments: arguments)
+        self.buttonType = EnumUtils<ActionButtonType>.getEnumOrDefault(reference: "buttonType", arguments: arguments)
         
         return self
     }
