@@ -16,7 +16,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin {
   }
 
   private static func requestPermissions() -> Bool {
-    return NotificationBuilder.requestPermissions()
+    return false //NotificationBuilder.requestPermissions()
   }
 
   public static func register(with registrar: FlutterPluginRegistrar) {

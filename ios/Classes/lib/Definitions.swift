@@ -151,5 +151,5 @@ enum Definitions {
         Definitions.NOTIFICATION_TICKER: "ticker",
         Definitions.NOTIFICATION_ALLOW_WHILE_IDLE: false,
         Definitions.NOTIFICATION_ONLY_ALERT_ONCE: false
-    ] as [String : AnyObject?]
+    ] as [String : Any?]
 }
