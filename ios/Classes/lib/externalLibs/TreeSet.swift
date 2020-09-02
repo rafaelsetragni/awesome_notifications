@@ -7,7 +7,8 @@
 
 import Foundation
 
-public struct TreeSet<E: Comparable & Hashable>: Equatable, Collection {
+public class TreeSet<E: Comparable & Hashable>: Equatable, Collection, CustomStringConvertible {
+    
     public typealias Element = E
     public typealias Index = Int
     
@@ -19,25 +20,28 @@ public struct TreeSet<E: Comparable & Hashable>: Equatable, Collection {
     public typealias Indices = CountableRange<Int>
   #endif
 
-    private var array: [Element]
-    private var set: Set<Element>
+    internal var array: [Element]
 
     /// Creates an empty ordered set.
-    public init(reverse:Bool?) {
-        self.reverse = reverse ?? false
+    public init() {
+        self.reverse = false
         self.array = []
-        self.set = Set()
+    }
+
+    /// Creates an empty ordered set.
+    public init(reverse:Bool) {
+        self.reverse = reverse
+        self.array = []
     }
 
     /// Creates an ordered set with the contents of `array`.
     ///
     /// If an element occurs more than once in `element`, only the first one
     /// will be included.
-    public init(_ array: [Element], reverse:Bool?) {
-        self.init(reverse:reverse)
-        for element in array {
-            insert(element)
-        }
+    public init(_ initialValues: [Element], reverse:Bool?) {
+        self.reverse = reverse ?? false
+        self.array = initialValues
+        self.array = self.array.sorted(by: self.compare)
     }
 
     // MARK: Working with an ordered set
@@ -52,22 +56,21 @@ public struct TreeSet<E: Comparable & Hashable>: Equatable, Collection {
 
     /// Returns `true` if the ordered set contains `member`.
     public func contains(_ member: Element) -> Bool {
-        return set.contains(member)
+        return array.contains(member)
     }
-
+    
     /// Adds an element to the ordered set.
     ///
     /// If it already contains the element, then the set is unchanged.
     ///
     /// - returns: True if the item was inserted.
-    @discardableResult
-    public mutating func insert(_ newElement: Element) -> Bool {
-        let inserted = set.insert(newElement).inserted
-        if inserted {
-            array.append(newElement)
+    public func insert(_ newElement: Element) -> Bool {
+        let inserted = array.contains(newElement)
+        if !inserted {
+            self.array.append(newElement)
+            self.array = self.array.sorted(by: self.compare)
         }
-        array = array.sorted(by: compare)
-        return inserted
+        return !inserted
     }
 
     private func compare(first:E, second:E) -> Bool {
@@ -75,23 +78,20 @@ public struct TreeSet<E: Comparable & Hashable>: Equatable, Collection {
     }
     
     /// Remove and return the element at the beginning of the ordered set.
-    public mutating func removeFirst() -> Element {
+    public func removeFirst() -> Element {
         let firstElement = array.removeFirst()
-        set.remove(firstElement)
         return firstElement
     }
 
     /// Remove and return the element at the end of the ordered set.
-    public mutating func removeLast() -> Element {
+    public func removeLast() -> Element {
         let lastElement = array.removeLast()
-        set.remove(lastElement)
         return lastElement
     }
-
+    
     /// Remove all elements.
-    public mutating func removeAll(keepingCapacity keepCapacity: Bool) {
+    public func removeAll(keepingCapacity keepCapacity: Bool) {
         array.removeAll(keepingCapacity: keepCapacity)
-        set.removeAll(keepingCapacity: keepCapacity)
     }
     
     public func tail(reference:E) -> E? {
@@ -101,16 +101,12 @@ public struct TreeSet<E: Comparable & Hashable>: Equatable, Collection {
         }
         return nil
     }
-}
-
-extension TreeSet: ExpressibleByArrayLiteral {
-    /// Create an instance initialized with `elements`.
-    ///
-    /// If an element occurs more than once in `element`, only the first one
-    /// will be included.
-    public init(arrayLiteral elements: Element...) {
-        self.init(elements, reverse:false)
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.array)
     }
+
+    public var description: String { return "(TreeSet)\(self.array)" }
 }
 
 extension TreeSet: RandomAccessCollection {
