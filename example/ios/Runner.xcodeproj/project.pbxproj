@@ -3,10 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05415A21250185980031D9F2 /* AwesomeNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05415A18250185980031D9F2 /* AwesomeNotifications.framework */; };
+		05415A28250185980031D9F2 /* AwesomeNotificationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05415A27250185980031D9F2 /* AwesomeNotificationsTests.swift */; };
+		05415A2A250185980031D9F2 /* AwesomeNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 05415A1A250185980031D9F2 /* AwesomeNotifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05415A2D250185980031D9F2 /* AwesomeNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05415A18250185980031D9F2 /* AwesomeNotifications.framework */; };
+		05415A2E250185980031D9F2 /* AwesomeNotifications.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05415A18250185980031D9F2 /* AwesomeNotifications.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		054A6B4224F883F100DBDAC1 /* StringUtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054A6B4124F883F100DBDAC1 /* StringUtilsTest.swift */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
@@ -18,6 +23,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		05415A22250185980031D9F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 05415A17250185980031D9F2;
+			remoteInfo = AwesomeNotifications;
+		};
+		05415A24250185980031D9F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
+			remoteInfo = Runner;
+		};
+		05415A2B250185980031D9F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 05415A17250185980031D9F2;
+			remoteInfo = AwesomeNotifications;
+		};
 		054A6B4424F883F100DBDAC1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
@@ -34,6 +60,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				05415A2E250185980031D9F2 /* AwesomeNotifications.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -41,6 +68,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		05415A18250185980031D9F2 /* AwesomeNotifications.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AwesomeNotifications.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05415A1A250185980031D9F2 /* AwesomeNotifications.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AwesomeNotifications.h; sourceTree = "<group>"; };
+		05415A1B250185980031D9F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		05415A20250185980031D9F2 /* AwesomeNotificationsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AwesomeNotificationsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		05415A27250185980031D9F2 /* AwesomeNotificationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwesomeNotificationsTests.swift; sourceTree = "<group>"; };
+		05415A29250185980031D9F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		054A6B3F24F883F100DBDAC1 /* StringUtilsTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StringUtilsTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		054A6B4124F883F100DBDAC1 /* StringUtilsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtilsTest.swift; sourceTree = "<group>"; };
 		054A6B4324F883F100DBDAC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -64,6 +97,21 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		05415A15250185980031D9F2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05415A1D250185980031D9F2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05415A21250185980031D9F2 /* AwesomeNotifications.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		054A6B3C24F883F100DBDAC1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -76,12 +124,31 @@
 			buildActionMask = 2147483647;
 			files = (
 				785A21CA636B9E3E655298E8 /* Pods_Runner.framework in Frameworks */,
+				05415A2D250185980031D9F2 /* AwesomeNotifications.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05415A19250185980031D9F2 /* AwesomeNotifications */ = {
+			isa = PBXGroup;
+			children = (
+				05415A1A250185980031D9F2 /* AwesomeNotifications.h */,
+				05415A1B250185980031D9F2 /* Info.plist */,
+			);
+			path = AwesomeNotifications;
+			sourceTree = "<group>";
+		};
+		05415A26250185980031D9F2 /* AwesomeNotificationsTests */ = {
+			isa = PBXGroup;
+			children = (
+				05415A27250185980031D9F2 /* AwesomeNotificationsTests.swift */,
+				05415A29250185980031D9F2 /* Info.plist */,
+			);
+			path = AwesomeNotificationsTests;
+			sourceTree = "<group>";
+		};
 		054A6B4024F883F100DBDAC1 /* StringUtilsTest */ = {
 			isa = PBXGroup;
 			children = (
@@ -126,6 +193,8 @@
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				054A6B4024F883F100DBDAC1 /* StringUtilsTest */,
+				05415A19250185980031D9F2 /* AwesomeNotifications */,
+				05415A26250185980031D9F2 /* AwesomeNotificationsTests */,
 				97C146EF1CF9000F007C117D /* Products */,
 				6CF2C3F9CC76F4DEF1646149 /* Pods */,
 				899F1D80671D75943576437C /* Frameworks */,
@@ -137,6 +206,8 @@
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				054A6B3F24F883F100DBDAC1 /* StringUtilsTest.xctest */,
+				05415A18250185980031D9F2 /* AwesomeNotifications.framework */,
+				05415A20250185980031D9F2 /* AwesomeNotificationsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -166,7 +237,55 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		05415A13250185980031D9F2 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05415A2A250185980031D9F2 /* AwesomeNotifications.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		05415A17250185980031D9F2 /* AwesomeNotifications */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 05415A2F250185980031D9F2 /* Build configuration list for PBXNativeTarget "AwesomeNotifications" */;
+			buildPhases = (
+				05415A13250185980031D9F2 /* Headers */,
+				05415A14250185980031D9F2 /* Sources */,
+				05415A15250185980031D9F2 /* Frameworks */,
+				05415A16250185980031D9F2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AwesomeNotifications;
+			productName = AwesomeNotifications;
+			productReference = 05415A18250185980031D9F2 /* AwesomeNotifications.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		05415A1F250185980031D9F2 /* AwesomeNotificationsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 05415A33250185980031D9F2 /* Build configuration list for PBXNativeTarget "AwesomeNotificationsTests" */;
+			buildPhases = (
+				05415A1C250185980031D9F2 /* Sources */,
+				05415A1D250185980031D9F2 /* Frameworks */,
+				05415A1E250185980031D9F2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				05415A23250185980031D9F2 /* PBXTargetDependency */,
+				05415A25250185980031D9F2 /* PBXTargetDependency */,
+			);
+			name = AwesomeNotificationsTests;
+			productName = AwesomeNotificationsTests;
+			productReference = 05415A20250185980031D9F2 /* AwesomeNotificationsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		054A6B3E24F883F100DBDAC1 /* StringUtilsTest */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 054A6B4924F883F100DBDAC1 /* Build configuration list for PBXNativeTarget "StringUtilsTest" */;
@@ -201,6 +320,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				05415A2C250185980031D9F2 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
@@ -213,10 +333,17 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1120;
+				LastSwiftUpdateCheck = 1160;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
+					05415A17250185980031D9F2 = {
+						CreatedOnToolsVersion = 11.6;
+					};
+					05415A1F250185980031D9F2 = {
+						CreatedOnToolsVersion = 11.6;
+						TestTargetID = 97C146ED1CF9000F007C117D;
+					};
 					054A6B3E24F883F100DBDAC1 = {
 						CreatedOnToolsVersion = 11.2.1;
 						TestTargetID = 97C146ED1CF9000F007C117D;
@@ -242,11 +369,27 @@
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 				054A6B3E24F883F100DBDAC1 /* StringUtilsTest */,
+				05415A17250185980031D9F2 /* AwesomeNotifications */,
+				05415A1F250185980031D9F2 /* AwesomeNotificationsTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		05415A16250185980031D9F2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05415A1E250185980031D9F2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		054A6B3D24F883F100DBDAC1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -338,6 +481,21 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		05415A14250185980031D9F2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05415A1C250185980031D9F2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05415A28250185980031D9F2 /* AwesomeNotificationsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		054A6B3B24F883F100DBDAC1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -358,6 +516,21 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		05415A23250185980031D9F2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 05415A17250185980031D9F2 /* AwesomeNotifications */;
+			targetProxy = 05415A22250185980031D9F2 /* PBXContainerItemProxy */;
+		};
+		05415A25250185980031D9F2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 97C146ED1CF9000F007C117D /* Runner */;
+			targetProxy = 05415A24250185980031D9F2 /* PBXContainerItemProxy */;
+		};
+		05415A2C250185980031D9F2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 05415A17250185980031D9F2 /* AwesomeNotifications */;
+			targetProxy = 05415A2B250185980031D9F2 /* PBXContainerItemProxy */;
+		};
 		054A6B4524F883F100DBDAC1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 97C146ED1CF9000F007C117D /* Runner */;
@@ -385,6 +558,195 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		05415A30250185980031D9F2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = AwesomeNotifications/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.AwesomeNotifications;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		05415A31250185980031D9F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = AwesomeNotifications/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.AwesomeNotifications;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		05415A32250185980031D9F2 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = AwesomeNotifications/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.AwesomeNotifications;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Profile;
+		};
+		05415A34250185980031D9F2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = AwesomeNotificationsTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.AwesomeNotificationsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/Runner";
+			};
+			name = Debug;
+		};
+		05415A35250185980031D9F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = AwesomeNotificationsTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.AwesomeNotificationsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/Runner";
+			};
+			name = Release;
+		};
+		05415A36250185980031D9F2 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = AwesomeNotificationsTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.AwesomeNotificationsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/Runner";
+			};
+			name = Profile;
+		};
 		054A6B4624F883F100DBDAC1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -720,6 +1082,26 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		05415A2F250185980031D9F2 /* Build configuration list for PBXNativeTarget "AwesomeNotifications" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05415A30250185980031D9F2 /* Debug */,
+				05415A31250185980031D9F2 /* Release */,
+				05415A32250185980031D9F2 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		05415A33250185980031D9F2 /* Build configuration list for PBXNativeTarget "AwesomeNotificationsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05415A34250185980031D9F2 /* Debug */,
+				05415A35250185980031D9F2 /* Release */,
+				05415A36250185980031D9F2 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		054A6B4924F883F100DBDAC1 /* Build configuration list for PBXNativeTarget "StringUtilsTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

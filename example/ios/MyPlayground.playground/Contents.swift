@@ -1,11 +1,223 @@
+import UIKit
+
+
+extension String {
+    
+    public func charAt(_ pos:Int) -> Character {
+        if(pos < 0 || pos >= count) { return Character("") }
+        return Array(self)[pos]
+    }
+    
+    public func index(from: Int) -> Index {
+        return self.index(startIndex, offsetBy: from)
+    }
+    
+    public func indexOf(_ char: Character) -> Int? {
+       return firstIndex(of: char)?.utf16Offset(in: self)
+    }
+
+    public func substring(from: Int) -> String {
+        let fromIndex = index(from: from)
+        return String(self[fromIndex...])
+    }
+
+    public func substring(_ from: Int,_ until: Int) -> String? {
+        let fromIndex = index(from: from)
+        let untilIndex = index(from: until)
+        return String(self[fromIndex..<untilIndex])
+    }
+    
+    public func indexOf(_ char: Character, offsetBy:Int) -> Int? {
+        return substring(from: offsetBy).firstIndex(of: char)?.utf16Offset(in: self)
+    }
+    
+    public var isDigits: Bool {
+        let notDigits = NSCharacterSet.decimalDigits.inverted
+        return rangeOfCharacter(from: notDigits, options: String.CompareOptions.literal, range: nil) == nil
+    }
+    
+    public var isLetters: Bool {
+        let notLetters = NSCharacterSet.letters.inverted
+        return rangeOfCharacter(from: notLetters, options: String.CompareOptions.literal, range: nil) == nil
+    }
+    
+    public var isAlphanumeric: Bool {
+        let notAlphanumeric = NSCharacterSet.decimalDigits.union(NSCharacterSet.letters).inverted
+        return rangeOfCharacter(from: notAlphanumeric, options: String.CompareOptions.literal, range: nil) == nil
+    }
+
+    public func matches(_ expression: String) -> Bool {
+        if let range = range(of: expression, options: .regularExpression, range: nil, locale: nil) {
+            return range.lowerBound == startIndex && range.upperBound == endIndex
+        } else {
+            return false
+        }
+    }
+
+    public mutating func replaceRegex(_ pattern: String, replaceWith: String = "") -> Bool {
+        do {
+            let regex = try NSRegularExpression(pattern: pattern, options: NSRegularExpression.Options.caseInsensitive)
+            let range = NSMakeRange(0, self.count)
+            self = regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: replaceWith)
+            return true
+        } catch {
+            return false
+        }
+    }
+
+    public func toDate(_ format: String = "yyyy-MM-dd HH:mm:ss", with timeZone: TimeZone = TimeZone(abbreviation: "UTC")!)-> Date?{
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = timeZone
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.dateFormat = format
+        let date = dateFormatter.date(from: self)
+
+        return date
+    }
+
+    public func split(regex pattern: String) -> [String] {
+
+        guard let re = try? NSRegularExpression(pattern: pattern, options: [])
+            else { return [] }
+
+        let nsString = self as NSString // needed for range compatibility
+        let stop = "<SomeStringThatYouDoNotExpectToOccurInSelf>"
+        let modifiedString = re.stringByReplacingMatches(
+            in: self,
+            options: [],
+            range: NSRange(location: 0, length: nsString.length),
+            withTemplate: stop)
+        return modifiedString.components(separatedBy: stop)
+    }
+    
+}
+
 //
-//  CronExpression.swift
+//  TreeSet.swift
 //  awesome_notifications
 //
-//  Created by Rafael Setragni on 01/09/20.
+//  Created by Rafael Setragni on 31/08/20.
 //
 
 import Foundation
+
+public class TreeSet<E: Comparable & Hashable>: Equatable, Collection, CustomStringConvertible {
+    
+    public typealias Element = E
+    public typealias Index = Int
+    
+    private let reverse:Bool
+
+  #if swift(>=4.1.50)
+    public typealias Indices = Range<Int>
+  #else
+    public typealias Indices = CountableRange<Int>
+  #endif
+
+    internal var array: [Element]
+
+    /// Creates an empty ordered set.
+    public init() {
+        self.reverse = false
+        self.array = []
+    }
+
+    /// Creates an empty ordered set.
+    public init(reverse:Bool) {
+        self.reverse = reverse
+        self.array = []
+    }
+
+    /// Creates an ordered set with the contents of `array`.
+    ///
+    /// If an element occurs more than once in `element`, only the first one
+    /// will be included.
+    public init(_ initialValues: [Element], reverse:Bool?) {
+        self.reverse = reverse ?? false
+        self.array = initialValues
+        self.array = self.array.sorted(by: self.compare)
+    }
+
+    // MARK: Working with an ordered set
+    /// The number of elements the ordered set stores.
+    public var count: Int { return array.count }
+
+    /// Returns `true` if the set is empty.
+    public var isEmpty: Bool { return array.isEmpty }
+
+    /// Returns the contents of the set as an array.
+    public var contents: [Element] { return array }
+
+    /// Returns `true` if the ordered set contains `member`.
+    public func contains(_ member: Element) -> Bool {
+        return array.contains(member)
+    }
+    
+    /// Adds an element to the ordered set.
+    ///
+    /// If it already contains the element, then the set is unchanged.
+    ///
+    /// - returns: True if the item was inserted.
+    public func insert(_ newElement: Element) -> Bool {
+        let inserted = array.contains(newElement)
+        if !inserted {
+            self.array.append(newElement)
+            self.array = self.array.sorted(by: self.compare)
+        }
+        return !inserted
+    }
+
+    private func compare(first:E, second:E) -> Bool {
+        return reverse ? (first > second) : (first < second)
+    }
+    
+    /// Remove and return the element at the beginning of the ordered set.
+    public func removeFirst() -> Element {
+        let firstElement = array.removeFirst()
+        return firstElement
+    }
+
+    /// Remove and return the element at the end of the ordered set.
+    public func removeLast() -> Element {
+        let lastElement = array.removeLast()
+        return lastElement
+    }
+    
+    /// Remove all elements.
+    public func removeAll(keepingCapacity keepCapacity: Bool) {
+        array.removeAll(keepingCapacity: keepCapacity)
+    }
+    
+    public func tail(reference:E) -> E? {
+        if(isEmpty){ return nil }
+        for val in array {
+            if compare(first:reference, second:val) { return val }
+        }
+        return nil
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.array)
+    }
+
+    public var description: String { return "(TreeSet)\(self.array)" }
+}
+
+extension TreeSet: RandomAccessCollection {
+    public var startIndex: Int { return contents.startIndex }
+    public var endIndex: Int { return contents.endIndex }
+    public subscript(index: Int) -> Element {
+      return contents[index]
+    }
+}
+
+public func == <T>(lhs: TreeSet<T>, rhs: TreeSet<T>) -> Bool {
+    return lhs.contents == rhs.contents
+}
+
+extension TreeSet: Hashable where Element: Hashable { }
+
 
 public class CronExpression {
 
@@ -18,7 +230,6 @@ public class CronExpression {
     }
 
     public enum CronComponent : Int, CaseIterable {
-        
         case second = 0
         case minute = 1
         case hour = 2
@@ -70,13 +281,26 @@ public class CronExpression {
         public var respectiveCalendar:Calendar.Component {
             get {
                 switch self {
-                    case .second:  return Calendar.Component.second
-                    case .minute:  return Calendar.Component.minute
-                    case .hour:    return Calendar.Component.hour
-                    case .weekday: return Calendar.Component.weekday
-                    case .day:     return Calendar.Component.day
-                    case .month:   return Calendar.Component.month
-                    case .year:    return Calendar.Component.year
+                    case .second:
+                        return Calendar.Component.second
+                        
+                    case .minute:
+                        return Calendar.Component.minute
+                        
+                    case .hour:
+                        return Calendar.Component.hour
+                        
+                    case .weekday:
+                        return Calendar.Component.weekday
+                        
+                    case .day:
+                        return Calendar.Component.day
+                        
+                    case .month:
+                        return Calendar.Component.month
+                        
+                    case .year:
+                        return Calendar.Component.year
                 }
             }
         }
@@ -131,56 +355,6 @@ public class CronExpression {
         ]
     ]
     
-    func isLeapYear(_ year:Int) -> Bool {
-        return ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
-    }
-    
-    func getDateInterval(_ component:CronComponent, fromComponents:[CronComponent:Int]) -> ComponentRange {
-        switch component {
-            case .second:
-                return ComponentRange(min: 0, max: 59, initial: 0)
-            case .minute:
-                return ComponentRange(min: 0, max: 59, initial: 0)
-            case .hour:
-                return ComponentRange(min: 0, max: 23, initial: 0)
-            case .weekday:
-                return ComponentRange(min: 0, max: 6, initial: 0)
-            case .day:
-                switch fromComponents[.month]! {
-                    case 1:
-                        return ComponentRange(min: 1, max: 31, initial: 1)
-                    case 2:
-                        return ComponentRange(min: 1, max: isLeapYear(fromComponents[.year]!) ? 29 : 28, initial: 1)
-                    case 3:
-                        return ComponentRange(min: 1, max: 31, initial: 1)
-                    case 4:
-                        return ComponentRange(min: 1, max: 30, initial: 1)
-                    case 5:
-                        return ComponentRange(min: 1, max: 31, initial: 1)
-                    case 6:
-                        return ComponentRange(min: 1, max: 30, initial: 1)
-                    case 7:
-                        return ComponentRange(min: 1, max: 31, initial: 1)
-                    case 8:
-                        return ComponentRange(min: 1, max: 31, initial: 1)
-                    case 9:
-                        return ComponentRange(min: 1, max: 30, initial: 1)
-                    case 10:
-                        return ComponentRange(min: 1, max: 31, initial: 1)
-                    case 11:
-                        return ComponentRange(min: 1, max: 30, initial: 1)
-                    case 12:
-                        return ComponentRange(min: 1, max: 31, initial: 1)
-                    default:
-                        return ComponentRange(min: -1, max: -1, initial: -1)
-                }
-            case .month:
-                return ComponentRange(min: 0, max: 12, initial: 0)
-            case .year:
-                return ComponentRange(min: 0, max: 9999, initial: fromComponents[.year]!)
-        }
-    }
-    
     func getDateInterval(_ component:CronComponent, fromDate:Date) -> ComponentRange {
         switch component {
         case .second:
@@ -196,7 +370,7 @@ public class CronExpression {
                 case 1:
                     return ComponentRange(min: 1, max: 31, initial: 1)
                 case 2:
-                    return ComponentRange(min: 1, max: isLeapYear(calendar.component(.year, from: fromDate)) ? 29 : 28, initial: 1)
+                    return ComponentRange(min: 1, max: isLeapYear(fromDate) ? 29 : 28, initial: 1)
                 case 3:
                     return ComponentRange(min: 1, max: 31, initial: 1)
                 case 4:
@@ -457,167 +631,131 @@ public class CronExpression {
         if(!isValidExpression || referenceDate == nil) { return nil }
         
         // add 1 second to ensure to return the next valid date
-        let secondFuruteDate:Date? = incrementByComponentDate(component: CronComponent.lessRelevant, date: referenceDate!)
-        let shiftedToFuture:Bool = false
-        
+        var secondFuruteDate:Date? = incrementByComponentDate(component: CronComponent.lessRelevant, date: referenceDate!)
         var finalComponents:[CronComponent:Int] = [:]
         
-        finalComponents[.year]   = calendar.component(.year,   from: secondFuruteDate!)
-        finalComponents[.month]  = calendar.component(.month,  from: secondFuruteDate!)
-        finalComponents[.day]    = calendar.component(.day,    from: secondFuruteDate!)
-        finalComponents[.hour]   = calendar.component(.hour,   from: secondFuruteDate!)
-        finalComponents[.minute] = calendar.component(.minute, from: secondFuruteDate!)
-        finalComponents[.second] = calendar.component(.second, from: secondFuruteDate!)
-        
-        let isInvalidDate = runSuperCronAlgorithm(
+        return runSuperCronAlgorithm(
             currentComponent: CronComponent.mostRelevant,
-            shiftedToFuture: shiftedToFuture,
-            finalComponents: &finalComponents
+            shiftedToFuture: false,
+            finalComponents: &finalComponents,
+            referenceDate: &secondFuruteDate
         )
-        
-        let finalDate:Date? = isInvalidDate ? nil : getDateFromComponents(components: finalComponents)
-        
-        if(finalDate != nil && !isValidDate(referenceDate: finalDate!)){
-            return nil
-        }
-        
-        return finalDate
     }
     
     func runSuperCronAlgorithm(
-        currentComponent: CronComponent,
-        shiftedToFuture: Bool,
-        finalComponents: inout [CronComponent:Int]
-    ) -> Bool {
+        currentComponent:CronComponent,
+        shiftedToFuture:Bool,
+        finalComponents: inout [CronComponent:Int],
+        referenceDate: inout Date?
+    ) -> Date? {
+        if(referenceDate == nil){ return nil }
         
-        var reachsInvalidDate = false
+        let currentFilter:TreeSet = filterSets[currentComponent]!
         
         // shifted mark should not propagates towards to top
         var shiftedToFuture:Bool = shiftedToFuture
         
-        // if the components bellow reach their limits, i should run again
-        repeat {
+        // if top component was shifted to future, every lower component must be initial, otherwise is current
+        var currentValue =
+            shiftedToFuture ?
+                currentFilter.first ?? getDateInterval(currentComponent, fromDate: referenceDate!).initial :
+                getRespectiveCalendarValue(currentComponent, referenceDate!)
+        
+        // get the respective lower component. if is on the bottom, sinalizes it with null
+        var nextComponent:CronComponent? = currentComponent.rawValue == 0 ? nil : CronComponent.dateComponents[currentComponent.rawValue - 1]
+        
+        // if there is restrictions to this component value, process it
+        if(!currentFilter.isEmpty){
             
-            let currentFilter:TreeSet = filterSets[currentComponent]!
-            
-            // if is the first time this level runs and and above component was shifted to future,
-            // every lower component must be initial, otherwise is current
-            var currentValue =
-                !reachsInvalidDate && shiftedToFuture ?
-                    currentFilter.first ?? getDateInterval(currentComponent, fromComponents: finalComponents).initial :
-                    finalComponents[currentComponent]!
-            
-            // update current component value
-            finalComponents[currentComponent] = currentValue
-            
-            // get the respective lower component. if is on the bottom, sinalizes it with null
-            var nextComponent:CronComponent? = currentComponent.bellowComponent
-            
-            // if the present value does not match the boundaries or the previous rules
-            // so it should be changed
-            if(reachsInvalidDate || !isValidComponent(currentComponent, currentValue, finalComponents)){
-                    
+            // if current element does not correspond to an allowed value
+            if(!currentFilter.contains(currentValue)){
+                
                 // now every generated date is in the future
                 shiftedToFuture = true
                 
-                let nextValue:Int? = getNextValidComponent(currentComponent, finalComponents)
+                let nextValue:Int? = getNextValidComponent(currentComponent, referenceValue: currentValue, referenceDate!)
                 
                 // if there is no more next valid componet, so the base component needs to be shifted one level above
                 if(nextValue == nil){
                     
-                    // if tail valid elements has ended, the top component must be shifted
-                    nextComponent = currentComponent.aboveComponent
-                    
                     // if there is no more valid component to shift, there is no more next valid dates
-                    if(nextComponent == nil){
-                        return true
+                    if(nextComponent == CronComponent.mostRelevant){
+                        return nil
                     }
+                    
+                    // if tail valid elements has ended, the top component must be shifted
+                    nextComponent = CronComponent.dateComponents[currentComponent.rawValue + 1]
                     
                 }
                 else {
                     currentValue = nextValue!
                 }
-                
-            }
-
-            // update current component value
-            finalComponents[currentComponent] = currentValue
-            
-            // if it reachs the bottom component, so we found a next valid date
-            if(nextComponent == nil){
-                
-                return false
-                
-            }
-            else {
-                
-                // tell to above component that he needs to shift to the future
-                if(nextComponent == currentComponent.aboveComponent){
-                    return true
-                }
-                
-                // process next step
-                (reachsInvalidDate) = runSuperCronAlgorithm(
-                    currentComponent: nextComponent!,
-                    shiftedToFuture: shiftedToFuture,
-                    finalComponents: &finalComponents
-                )
-            
-            }
-        
-            // if this component should run again, do it without call another method
-            // (to save memory)
-        } while (reachsInvalidDate)
-
-        // if the levels bellow reached the bottom component, so we found a next valid date
-        return false
-    }
-    
-    func getDateFromComponents(components:[CronComponent:Int]) -> Date? {
-        
-        // avoid calendar to be unsync in case of invalid components
-        for (component, value) in components {
-            if(!isValidComponent(component, value, components)){
-                return nil
             }
         }
+
+        // update current component value
+        finalComponents[currentComponent] = currentValue
         
-        let calendarDateComponents: DateComponents = DateComponents(
-            year:   components[.year],
-            month:  components[.month],
-            day:    components[.day],
-            hour:   components[.hour],
-            minute: components[.minute],
-            second: components[.second]
+        referenceDate = getNextDateFromComponents(
+            components: finalComponents,
+            referenceDate: &referenceDate
         )
+        
+        if(referenceDate == nil){ return nil }
+        
+        // if it reachs the bottom component, so there is a next valid date
+        if(nextComponent == nil){
             
-        return calendar.date(from: calendarDateComponents)
-    }
-    
-    func isValidComponent(_ component:CronComponent, _ value:Int, _ components:[CronComponent:Int]) -> Bool {
-        
-        let currentFilter = filterSets[component]!
-        let range:ComponentRange = getDateInterval(component, fromComponents: components)
-        
-        return (currentFilter.isEmpty || currentFilter.contains(value)) && (value <= range.max && value >= range.min);
-    }
-    
-    func getNextValidComponent(_ component:CronComponent, _ components:[CronComponent:Int]) -> Int? {
-        
-        var nextValue:Int?
-        let currentFilter = filterSets[component]!
-        
-        if currentFilter.isEmpty {
-            nextValue = components[component]!
-            nextValue! += 1
+            return referenceDate
+            
         }
         else {
-            nextValue = currentFilter.tail(reference: components[component]!)
+            
+            // process next step
+            return runSuperCronAlgorithm(
+                currentComponent: nextComponent!,
+                shiftedToFuture: shiftedToFuture,
+                finalComponents: &finalComponents,
+                referenceDate: &referenceDate
+            )
         }
+    }
+    
+    func getNextDateFromComponents(components:[CronComponent:Int], referenceDate: inout Date?) -> Date? {
+        
+        for (component, value) in components {
+            referenceDate = calendar.date(bySetting: component.respectiveCalendar, value: value, of: referenceDate!)
+            if(referenceDate == nil){ return nil }
+        }
+        return referenceDate
+    }
+    
+    func isLeapYear(_ fromDate:Date) -> Bool {
+        let year:Int = getYear(fromDate)
+        return ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+    }
+    
+    func getYear(_ fromDate:Date) -> Int {
+        return calendar.component(.year, from: fromDate)
+    }
+    
+    func getRespectiveCalendarValue(_ component:CronComponent, _ referenceDate:Date) -> Int {
+        
+        return calendar.component(component.respectiveCalendar, from: referenceDate)
+    }
+    
+    func incrementDateComponent(_ component:CronComponent, _ referenceDate:Date) -> Date {
+        
+        return calendar.date(byAdding: component.respectiveCalendar, value: 1, to: referenceDate)!
+    }
+    
+    func getNextValidComponent(_ component:CronComponent, referenceValue:Int, _ referenceDate:Date) -> Int? {
+        
+        let nextValue:Int? = filterSets[component]!.tail(reference: referenceValue)
         
         // if has next filter
         if(nextValue != nil){
-            let range:ComponentRange = getDateInterval(component, fromComponents: components)
+            let range:ComponentRange = getDateInterval(component, fromDate: referenceDate)
             
             // if next filter is invalid to current date
             if(nextValue! > range.max){
@@ -628,3 +766,14 @@ public class CronExpression {
         return nextValue
     }
 }
+
+
+var components = CronExpression.CronComponent.dateComponents
+
+for component in components {
+    print(component)
+}
+
+print( components[CronExpression.CronComponent.mostRelevant.rawValue - 1] )
+
+print("end...")

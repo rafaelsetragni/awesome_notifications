@@ -90,6 +90,60 @@ class StringUtilsTest: XCTestCase {
         XCTAssertEqual(cron!.filterSets[.year]?.array, [2016])
     }
 
+    func testCronNextDate(){
+        do {
+            let fixedDate:Date = "2020-08-05 14:00:00".toDate()!
+            
+            // test all valid
+            let cron1:CronExpression = try CronExpression.init("* * * * * * *", fixedDate:fixedDate)
+            let nextDate1 = cron1.getNextValidDate(referenceDate: fixedDate)
+            XCTAssertEqual(nextDate1, "2020-08-05 14:00:01".toDate()!)
+            
+            // test the bottom update
+            let cron2:CronExpression = try CronExpression.init("5 * * * * * *", fixedDate:fixedDate)
+            let nextDate2 = cron2.getNextValidDate(referenceDate: fixedDate)
+            XCTAssertEqual(nextDate2, "2020-08-05 14:00:05".toDate()!)
+            
+            // test the second level update
+            let cron3:CronExpression = try CronExpression.init("5 1-5 * * * * *", fixedDate:fixedDate)
+            let nextDate3 = cron3.getNextValidDate(referenceDate: fixedDate)
+            XCTAssertEqual(nextDate3, "2020-08-05 14:01:05".toDate()!)
+            
+            // test a invalid date (past)
+            let cron4:CronExpression = try CronExpression.init("59 59 23 * 31 12 2019", fixedDate:fixedDate)
+            let nextDate4 = cron4.getNextValidDate(referenceDate: fixedDate)
+            XCTAssertNil(nextDate4)
+            
+            // test the limit of an invalid date (past)
+            let cron5:CronExpression = try CronExpression.init("0 0 14 * 5 8 2020", fixedDate:fixedDate)
+            let nextDate5 = cron5.getNextValidDate(referenceDate: fixedDate)
+            XCTAssertNil(nextDate5)
+            
+            // test the limit of top level update
+            let cron6:CronExpression = try CronExpression.init("0 0 14 * 5 8 *", fixedDate:fixedDate)
+            let nextDate6 = cron6.getNextValidDate(referenceDate: fixedDate)
+            XCTAssertEqual(nextDate6, "2021-08-05 14:00:00".toDate()!)
+            
+            // test the limit of valid bottom update
+            let cron7:CronExpression = try CronExpression.init("* 0 14 * 5 8 *", fixedDate:fixedDate)
+            let nextDate7 = cron7.getNextValidDate(referenceDate: "2020-08-05 13:59:58".toDate()!)
+            XCTAssertEqual(nextDate7, "2020-08-05 14:00:00".toDate()!)
+            
+            // test the limit of "out of range" component update
+            let cron8:CronExpression = try CronExpression.init("0 * 13-14 * 5 8 *", fixedDate:fixedDate)
+            let nextDate8 = cron8.getNextValidDate(referenceDate: "2020-08-05 13:59:58".toDate()!)
+            XCTAssertEqual(nextDate8, "2020-08-05 14:00:00".toDate()!)
+            
+            // test the limit of "out of range" component update
+            let cron9:CronExpression = try CronExpression.init("59 59 23 * 29 2 *", fixedDate:fixedDate)
+            let nextDate9 = cron9.getNextValidDate(referenceDate: "2020-02-29 23:59:59".toDate()!)
+            XCTAssertEqual(nextDate9, "2024-02-29 23:59:59".toDate()!)
+            
+        } catch {
+            XCTFail("Unexpected error")
+        }
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         measure {

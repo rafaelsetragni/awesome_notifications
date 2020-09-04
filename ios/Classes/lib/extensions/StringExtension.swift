@@ -63,7 +63,7 @@ extension String {
         }
     }
 
-    func toDate(withFormat format: String = "yyyy-MM-dd HH:mm:ss", withFormat timeZone: TimeZone = TimeZone(abbreviation: "UTC")!)-> Date?{
+    public func toDate(_ format: String = "yyyy-MM-dd HH:mm:ss", with timeZone: TimeZone = TimeZone(abbreviation: "UTC")!)-> Date?{
 
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = timeZone
@@ -74,7 +74,7 @@ extension String {
         return date
     }
 
-    func split(regex pattern: String) -> [String] {
+    public func split(regex pattern: String) -> [String] {
 
         guard let re = try? NSRegularExpression(pattern: pattern, options: [])
             else { return [] }
