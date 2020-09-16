@@ -1,3 +1,5 @@
+## [0.0.2+1]
+* Documentation updated
 ## [0.0.2]
 * Added precise schedules option to schedule a notification multiple times with precisely date and time
 

@@ -2,18 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/src/utils/list_utils.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/Definitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/Definitions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/ScheduledNotificationReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/ScheduledNotificationReceiver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationScheduleModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationScheduleModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/CronUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/CronUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/datasources/common/http_datasource.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/datasources/common/http_datasource.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/pages/notification_examples_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/notification_examples_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/definitions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/definitions.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_schedule.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_schedule.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/assets/readme/notification-life-cycle.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/example/assets/readme/notification-life-cycle.jpeg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -72,22 +63,22 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="828" y="285" key="AndroidProcessChooserDialog/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1600294775638" />
-    <state width="1901" height="341" key="GridCell.Tab.0.bottom" timestamp="1600295424851">
+    <state width="1901" height="341" key="GridCell.Tab.0.bottom" timestamp="1600296042308">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1901" height="341" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1600295424851" />
-    <state width="1901" height="341" key="GridCell.Tab.0.center" timestamp="1600295424850">
+    <state width="1901" height="341" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1600296042308" />
+    <state width="1901" height="341" key="GridCell.Tab.0.center" timestamp="1600296042308">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1901" height="341" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1600295424850" />
-    <state width="1901" height="341" key="GridCell.Tab.0.left" timestamp="1600295424849">
+    <state width="1901" height="341" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1600296042308" />
+    <state width="1901" height="341" key="GridCell.Tab.0.left" timestamp="1600296042308">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1901" height="341" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1600295424849" />
-    <state width="1901" height="341" key="GridCell.Tab.0.right" timestamp="1600295424851">
+    <state width="1901" height="341" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1600296042308" />
+    <state width="1901" height="341" key="GridCell.Tab.0.right" timestamp="1600296042308">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="1901" height="341" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1600295424851" />
+    <state width="1901" height="341" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1600296042308" />
     <state x="911" y="217" width="737" height="606" key="find.popup" timestamp="1598487608195">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>

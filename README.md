@@ -173,6 +173,13 @@ Every token created could be captured on Flutter by this plugin listen to ``
 
 <br>
 
+## Error: Invalid Firebase notification content
+
+The notification sent via FCM services *MUST* respect the types of the respective Notification elements. Otherwise, your notification will be discarded as invalid one.
+Also, all the payload elements *MUST* be a String, as the same way as you do in Local Notifications.
+
+<br>
+
 ## Notification Life Cycle
 
 Notifications are received by local code or FCM using native code, so the messages will appears immediately or at schedule time, independent of your application state.
@@ -249,9 +256,10 @@ Notifications action buttons could be classified in 4 types:
 
 Notifications could be scheduled as you wish using two main options:
 
-- initialDate: (YYYY-MM-DD hh:mm:ss) The initial date that schedule should be called by first time
+- initialDate: (YYYY-MM-DD hh:mm:ss) The initial date that schedule should be called by first time. This option has the highest priority  among other options.
 - crontabSchedule: Crontab expression as repetition rule (with seconds precision), as described in [this article](https://www.baeldung.com/cron-expressions)
 - allowWhileIdle: Determines if notification will send, even when the device is in critical situation, such as low battery.
+- preciseSchedule: List of precise dates to schedule a notification multiple times. This option has the lowest priority  among other options.
 
 OBS: All dates are set to use UTC timezone.
 
@@ -298,7 +306,8 @@ OBS: `actionButtons` and `schedule` are **optional**
         "schedule": {
             "initialDateTime": "2020-08-30 11:00:00",
             "crontabSchedule": "5 38 20 ? * MON-FRI *",
-            "allowWhileIdle": true
+            "allowWhileIdle": true,
+            "preciseSchedule": []
         }
     }
 }
