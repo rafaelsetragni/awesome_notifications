@@ -1,4 +1,4 @@
-enum NotificationImportance : CaseIterable {
+enum NotificationImportance : String, CaseIterable {
       
     case None
     case Min

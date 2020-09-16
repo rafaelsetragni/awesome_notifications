@@ -1,4 +1,4 @@
-public enum NotificationLifeCycle : CaseIterable {
+public enum NotificationLifeCycle : String, CaseIterable {
     
     case Foreground
     case Background

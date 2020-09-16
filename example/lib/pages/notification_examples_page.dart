@@ -243,6 +243,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
       appBar: AppBar(
         centerTitle: false,
+        brightness: Brightness.light,
         title: Image.asset(
             'assets/images/awesome-notifications-logo-color.png',
             width: mediaQuery.size.width * 0.6

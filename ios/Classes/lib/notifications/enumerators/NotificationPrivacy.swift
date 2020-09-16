@@ -1,4 +1,4 @@
-enum NotificationPrivacy : CaseIterable {
+enum NotificationPrivacy : String, CaseIterable {
     
     case Public
     case Secret

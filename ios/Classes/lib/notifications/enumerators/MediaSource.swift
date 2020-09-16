@@ -1,4 +1,4 @@
-enum MediaSource : CaseIterable {
+enum MediaSource : String, CaseIterable {
     
     case Resource
     case Asset

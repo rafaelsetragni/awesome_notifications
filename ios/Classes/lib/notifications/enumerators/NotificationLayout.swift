@@ -1,4 +1,4 @@
-enum NotificationLayout : CaseIterable {
+enum NotificationLayout : String, CaseIterable {
     
   case Default
   case BigPicture
