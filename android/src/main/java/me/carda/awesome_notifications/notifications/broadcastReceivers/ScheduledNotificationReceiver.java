@@ -33,7 +33,10 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
 
                     pushNotification.schedule.initialDateTime = null;
 
-                    if(pushNotification.schedule.crontabSchedule != null){
+                    if(
+                        pushNotification.schedule.crontabSchedule != null ||
+                        pushNotification.schedule.preciseSchedules != null && !pushNotification.schedule.preciseSchedules.isEmpty()
+                    ){
 
                         NotificationScheduler.schedule(
                                 context,

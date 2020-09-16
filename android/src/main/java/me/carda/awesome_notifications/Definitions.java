@@ -99,6 +99,7 @@ public interface Definitions {
     String NOTIFICATION_PAYLOAD = "payload";
     String NOTIFICATION_INITIAL_DATE_TIME = "initialDateTime";
     String NOTIFICATION_CRONTAB_SCHEDULE = "crontabSchedule";
+    String NOTIFICATION_PRECISE_SCHEDULES = "preciseSchedules";
     String NOTIFICATION_ENABLED = "enabled";
     String NOTIFICATION_AUTO_CANCEL = "autoCancel";
     String NOTIFICATION_LOCKED = "locked";

@@ -110,6 +110,7 @@ const NOTIFICATION_ENABLED = "enabled";
 const NOTIFICATION_PAYLOAD = 'payload';
 const NOTIFICATION_INITIAL_DATE_TIME = 'initialDateTime';
 const NOTIFICATION_CRONTAB_SCHEDULE = 'crontabSchedule';
+const NOTIFICATION_PRECISE_SCHEDULES = 'preciseSchedules';
 const NOTIFICATION_PLATFORM_CONFIGURATION = 'platformConfiguration';
 const NOTIFICATION_PRIVATE_MESSAGE = "privateMessage";
 const NOTIFICATION_DEFAULT_PRIVACY = "defaultPrivacy";
