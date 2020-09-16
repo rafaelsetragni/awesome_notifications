@@ -560,7 +560,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             onPressed: () => repeatMinuteNotification(8),
           ),
           SimpleButton(
-            'Show notification at next 30 seconds, 3 times',
+            'Show notification 3 times, spaced 10 seconds from each other',
             onPressed: () => repeatPreciseThreeTimes(8),
           ),
           SimpleButton(

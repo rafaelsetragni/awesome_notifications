@@ -307,7 +307,7 @@ OBS: `actionButtons` and `schedule` are **optional**
             "initialDateTime": "2020-08-30 11:00:00",
             "crontabSchedule": "5 38 20 ? * MON-FRI *",
             "allowWhileIdle": true,
-            "preciseSchedule": []
+            "preciseSchedules": []
         }
     }
 }
