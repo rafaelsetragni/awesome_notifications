@@ -10,7 +10,7 @@ import Foundation
 public class ActionReceived : NotificationReceived {
     
     var actionKey: String?
-    var buttonInput: String?
+    var actionInput: String?
 
     var actionLifeCycle: NotificationLifeCycle?
     var actionDate: String?
@@ -27,7 +27,7 @@ public class ActionReceived : NotificationReceived {
         super.fromMap(arguments: arguments)
         
         self.actionKey       = MapUtils<String>.getValueOrDefault(reference: "actionKey", arguments: arguments)
-        self.buttonInput     = MapUtils<String>.getValueOrDefault(reference: "buttonInput", arguments: arguments)
+        self.actionInput     = MapUtils<String>.getValueOrDefault(reference: "actionInput", arguments: arguments)
         self.actionLifeCycle = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: "actionLifeCycle", arguments: arguments)
         
         return self
@@ -37,7 +37,7 @@ public class ActionReceived : NotificationReceived {
         var dataMap:[String : Any?] = super.toMap()
                 
         if(actionKey != nil) {dataMap["actionKey"] = self.actionKey}
-        if(buttonInput != nil) {dataMap["buttonInput"] = self.buttonInput}
+        if(actionInput != nil) {dataMap["actionInput"] = self.actionInput}
         if(actionLifeCycle != nil) {dataMap["actionLifeCycle"] = self.actionLifeCycle?.rawValue}
         if(actionDate != nil) {dataMap["actionDate"] = self.actionDate}
         

@@ -34,12 +34,12 @@ public class NotificationButtonModel : AbstractModel {
         var mapData:[String: Any?] = [:]
         
         if(key != nil) {mapData["key"] = self.key}
-        if(key != nil) {mapData["icon"] = self.icon}
-        if(key != nil) {mapData["label"] = self.label}
-        if(key != nil) {mapData["enabled"] = self.enabled}
-        if(key != nil) {mapData["autoCancel"] = self.autoCancel}
+        if(icon != nil) {mapData["icon"] = self.icon}
+        if(label != nil) {mapData["label"] = self.label}
+        if(enabled != nil) {mapData["enabled"] = self.enabled}
+        if(autoCancel != nil) {mapData["autoCancel"] = self.autoCancel}
         
-        if(key != nil) {mapData["buttonType"] = self.buttonType}
+        if(buttonType != nil) {mapData["buttonType"] = self.buttonType?.rawValue}
         
         return mapData
     }

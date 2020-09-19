@@ -7,6 +7,7 @@
 
 import Foundation
 
+@available(iOS 10.0, *)
 class NotificationBuilder {
     
     private static var badgeAmount:NSNumber = 0
@@ -29,72 +30,29 @@ class NotificationBuilder {
     
     public static func requestPermissions(_ application:UIApplication){
         
-        if #available(iOS 10, *)
-        {
-            // iOS 10 support
-            let notificationCenter = UNUserNotificationCenter.current()
-            
-            notificationCenter.requestAuthorization(options: [.sound,.alert,.badge]) { (granted, error) in
-                if granted {
-                    DispatchQueue.main.async {
-                      application.registerForRemoteNotifications()
-                    }
-                    print("Notification Enable Successfully")
+        // iOS 10 support
+        let notificationCenter = UNUserNotificationCenter.current()
+        
+        notificationCenter.requestAuthorization(options: [.sound,.alert,.badge]) { (granted, error) in
+            if granted {
+                DispatchQueue.main.async {
+                  application.registerForRemoteNotifications()
                 }
+                print("Notification Enable Successfully")
             }
         }
-        else if #available(iOS 9, *)
-        {
-            // iOS 9 support
-            application.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
-            application.registerForRemoteNotifications()
-            
-            print("Notification Enable Successfully")
-        }
-        else if #available(iOS 8, *)
-        {
-            // iOS 8 support
-            application.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
-            application.registerForRemoteNotifications()
-            
-            print("Notification Enable Successfully")
-        }
-        else
-        { // iOS 7 support
-            application.registerForRemoteNotifications(matching: [.badge, .sound, .alert])
-            
-            print("Notification Enable Successfully")
-        }        
     }
     
     public static func isNotificationAuthorized() -> Bool {
         
         let application = UIApplication.shared
-        
-        if #available(iOS 10, *)
-        {
             // iOS 10 support
             // TODO
-        }
-        else if #available(iOS 9, *)
-        {
-            // iOS 9 support
-            // TODO
-        }
-        else if #available(iOS 8, *)
-        {
-            // iOS 8 support
-            // TODO
-        }
-        else
-        { // iOS 7 support
-            // TODO
-        }
         
         return true
     }
     
-    public static func buildNotificationActionFromJson(jsonData:String?) -> ActionReceived? {
+    public static func buildNotificationActionFromJson(jsonData:String?, actionKey:String?, userText:String?) -> ActionReceived? {
         if(StringUtils.isNullOrEmpty(jsonData)){ return nil }
         
         let data:[String:Any?]? = JsonUtils.fromJson(jsonData)
@@ -103,7 +61,9 @@ class NotificationBuilder {
         let pushNotification:PushNotification? = PushNotification().fromMap(arguments: data!) as? PushNotification
         if(pushNotification == nil){ return nil }
         let actionReceived:ActionReceived = ActionReceived(pushNotification!.content)
-        
+                
+        actionReceived.actionKey = actionKey == UNNotificationDefaultActionIdentifier.description ? nil : actionKey
+        actionReceived.actionInput = userText
         actionReceived.actionLifeCycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
         actionReceived.actionDate = DateUtils.getUTCDate()
         
@@ -116,78 +76,273 @@ class NotificationBuilder {
     
     public static func createNotification(_ pushNotification:PushNotification) throws -> PushNotification? {
         
-        if #available(iOS 10, *)
+        guard let channel = ChannelManager.getChannelByKey(channelKey: pushNotification.content!.channelKey!) else {
+            return nil
+        }
+        
+        let content = buildNotificationContentFromModel(pushNotification: pushNotification)
+        
+        setTitle(pushNotification: pushNotification, channel: channel, content: content)
+        setBody(pushNotification: pushNotification, content: content)
+        setSummary(pushNotification: pushNotification, content: content)
+        
+        
+        setVisibility(pushNotification: pushNotification, channel: channel, content: content)
+        setShowWhen(pushNotification: pushNotification, content: content)
+        
+        setLayout(pushNotification: pushNotification, content: content)
+        
+        createActionButtons(pushNotification: pushNotification, content: content)
+        
+        setAutoCancel(pushNotification: pushNotification, content: content)
+        setTicker(pushNotification: pushNotification, content: content)
+        
+        setOnlyAlertOnce(pushNotification: pushNotification, channel: channel, content: content)
+        
+        setLockedNotification(pushNotification: pushNotification, channel: channel, content: content)
+        setImportance(channel: channel, content: content)
+        
+        setSound(channel: channel, content: content)
+        setVibrationPattern(channel: channel, content: content)
+        
+        setLights(channel: channel, content: content)
+        
+        setSmallIcon(channel: channel, content: content)
+        setLargeIcon(pushNotification: pushNotification, content: content)
+        
+        setLayoutColor(pushNotification: pushNotification, channel: channel, content: content)
+                
+        applyGrouping(channel: channel, content: content)
+        
+        
+        let request = UNNotificationRequest(identifier: pushNotification.content!.id!.description, content: content, trigger: nil)
+        
+        // 4
+        UNUserNotificationCenter.current().add(request)
         {
-            // 1
-            let content = UNMutableNotificationContent()
-            guard let channel = ChannelManager.getChannelByKey(channelKey: pushNotification.content!.channelKey!) else {
-                return nil
+            error in // called when message has been sent
+
+            if error != nil {
+                debugPrint("Error: \(error.debugDescription)")
+            }
+        }
+        return pushNotification
+    }
+    
+    private static func buildNotificationContentFromModel(pushNotification:PushNotification) -> UNMutableNotificationContent {
+        let content = UNMutableNotificationContent()
+        
+        let pushData = pushNotification.toMap()
+        let jsonData = JsonUtils.toJson(pushData)
+        content.userInfo[Definitions.NOTIFICATION_JSON] = jsonData
+        
+        return content
+    }
+
+    private static func setTitle(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        content.title = pushNotification.content!.title?.withoutHtmlTags() ?? ""
+    }
+    
+    private static func setBody(pushNotification:PushNotification, content:UNMutableNotificationContent){
+        content.body = pushNotification.content!.body?.withoutHtmlTags() ?? ""
+    }
+    
+    private static func setSummary(pushNotification:PushNotification, content:UNMutableNotificationContent){
+        content.subtitle = pushNotification.content!.summary?.withoutHtmlTags() ?? ""
+    }
+    
+    private static func setBadge(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        if(channel.channelShowBadge!){ NotificationBuilder.incrementBadge() }
+        content.badge = NotificationBuilder.getBadge()
+    }
+    
+    private static func createActionButtons(pushNotification:PushNotification, content:UNMutableNotificationContent){
+        
+        if(pushNotification.actionButtons != nil){
+            var actions:[UNNotificationAction] = []
+            var category:String = ""
+            
+            for button in pushNotification.actionButtons! {
+                
+                let action:UNNotificationAction?
+                
+                switch button.buttonType {
+                    
+                    case .InputField:
+                        action = UNTextInputNotificationAction(
+                            identifier: button.key!,
+                            title: button.label!
+                        )
+                        break
+                    
+                    default:
+                        action = UNNotificationAction(
+                            identifier: button.key!,
+                            title: button.label!
+                        )
+                        break
+                }
+                
+                category.append(button.key!)
+                actions.append(action!)
             }
             
-            content.title = pushNotification.content!.title ?? ""
-            content.subtitle = pushNotification.content!.summary ?? ""
-            content.body = pushNotification.content!.body ?? ""
+            let categoryIdentifier:String = category.md5
+            let categoryObject = UNNotificationCategory(identifier: categoryIdentifier, actions: actions, intentIdentifiers: [], options: [])
             
-            if(channel.channelShowBadge!){ NotificationBuilder.incrementBadge() }
-            content.badge = NotificationBuilder.getBadge()
+            UNUserNotificationCenter.current().setNotificationCategories([categoryObject])
             
-            let pushData = pushNotification.toMap()
-            let jsonData = JsonUtils.toJson(pushData)
-            content.userInfo[Definitions.NOTIFICATION_JSON] = jsonData
-            
-            /*
-            // 2
-            let imageName = "applelogo"
-            guard let imageURL = Bundle.main.url(forResource: imageName, withExtension: "png") else { return }
-                
-            let attachment = try! UNNotificationAttachment(identifier: imageName, url: imageURL, options: .none)
-                
-            content.attachments = [attachment]
-            */
-            // 3
-            
-            
-            let request = UNNotificationRequest(identifier: pushNotification.content!.id!.description, content: content, trigger: nil)
-            
-            // 4
-            UNUserNotificationCenter.current().add(request)
-            {
-                error in // called when message has been sent
+            content.categoryIdentifier = categoryIdentifier
+        }
+        
+    }
+    
+    private static func setVisibility(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        
+    }
+    
+    private static func setShowWhen(pushNotification:PushNotification, content:UNMutableNotificationContent){
+        
+    }
 
-                if error != nil {
-                    debugPrint("Error: \(error.debugDescription)")
+    private static func setAutoCancel(pushNotification:PushNotification, content:UNMutableNotificationContent){
+        
+    }
+    
+    private static func setTicker(pushNotification:PushNotification, content:UNMutableNotificationContent){
+        
+    }
+    
+    private static func setOnlyAlertOnce(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        
+    }
+
+    private static func setLockedNotification(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        
+    }
+    
+    private static func setImportance(channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        
+    }
+
+    private static func setSound(channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        
+    }
+    
+    private static func setVibrationPattern(channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        
+    }
+    
+    private static func setLights(channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        // iOS does not have any lights
+    }
+
+    private static func setSmallIcon(channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        
+    }
+    
+    private static func setLargeIcon(pushNotification:PushNotification, content:UNMutableNotificationContent){
+        
+    }
+    
+    private static func setLayoutColor(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        
+    }
+
+    private static func applyGrouping(channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        // in iOS, notifications are always grouped by app id
+    }
+
+    private static func setLayout(pushNotification:PushNotification, content:UNMutableNotificationContent){
+        
+        switch pushNotification.content!.notificationLayout {
+            
+            case .BigPicture:
+                setBigPictureLayout(pushNotification: pushNotification, content: content)
+                return
+                
+            case .BigText:
+                // In iOS, notifications are always a big text layout
+                return
+                
+            case .Inbox:
+                return
+                    
+            case .Messaging:
+                return
+                        
+            case .ProgressBar:
+                return
+                            
+            case .Default:
+                return
+            
+            default:
+                return
+        }
+    }
+    
+    private static func getAttatchmentFromBitmapSource(_ bitmapSource:String?) -> UNNotificationAttachment? {
+        
+        if !StringUtils.isNullOrEmpty(bitmapSource) {
+            
+            if let image:UIImage = BitmapUtils.getBitmapFromSource(bitmapPath: bitmapSource!) {
+                
+                let fileManager = FileManager.default
+                let tmpSubFolderName = ProcessInfo.processInfo.globallyUniqueString
+                let tmpSubFolderURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(tmpSubFolderName, isDirectory: true)
+                do {
+                    try fileManager.createDirectory(at: tmpSubFolderURL, withIntermediateDirectories: true, attributes: nil)
+                    let imageFileIdentifier = bitmapSource!.md5 + ".png"
+                    let fileURL = tmpSubFolderURL.appendingPathComponent(imageFileIdentifier)
+                    
+                    let imageData = UIImage.pngData(image)
+                    try imageData()?.write(to: fileURL)
+                    
+                    let imageAttachment = try UNNotificationAttachment.init(identifier: imageFileIdentifier, url: fileURL, options: nil)
+                    return imageAttachment
+                    
+                } catch {
+                    print("error " + error.localizedDescription)
                 }
             }
         }
+        return nil
+    }
+    
+    private static func setBigPictureLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
         
-        return pushNotification
+        if(!StringUtils.isNullOrEmpty(pushNotification.content?.bigPicture)){
+            
+            if let attachment:UNNotificationAttachment = getAttatchmentFromBitmapSource(pushNotification.content?.bigPicture) {
+                content.attachments.append(attachment)
+                //	return
+            }
+        }
+        
+        if(!StringUtils.isNullOrEmpty(pushNotification.content?.largeIcon)){
+            
+            if let attachment:UNNotificationAttachment = getAttatchmentFromBitmapSource(pushNotification.content?.largeIcon) {
+                content.attachments.append(attachment)
+            }
+        }
     }
     
     public static func cancelNotification(id:Int){
         let referenceKey:String = String(id)
-        
-        if #available(iOS 10.0, *) {
             
-            let center = UNUserNotificationCenter.current()
-            center.removeDeliveredNotifications(withIdentifiers: [referenceKey])
-            center.removePendingNotificationRequests(withIdentifiers: [referenceKey])
-            
-        } else {
-            // Fallback on earlier versions
-        }
+        let center = UNUserNotificationCenter.current()
+        center.removeDeliveredNotifications(withIdentifiers: [referenceKey])
+        center.removePendingNotificationRequests(withIdentifiers: [referenceKey])
+
     }
     
     public static func cancellAllNotifications(){
+            
+        let center = UNUserNotificationCenter.current()
+        center.removeAllDeliveredNotifications()
+        center.removeAllPendingNotificationRequests()
         
-        if #available(iOS 10.0, *) {
-            
-            let center = UNUserNotificationCenter.current()
-            center.removeAllDeliveredNotifications()
-            center.removeAllPendingNotificationRequests()
-            
-        } else {
-            // Fallback on earlier versions
-        }
     }
     
 }

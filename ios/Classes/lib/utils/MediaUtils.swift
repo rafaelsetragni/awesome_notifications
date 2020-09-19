@@ -14,7 +14,7 @@ class MediaUtils {
     }
 
     static func matchMediaType(regex:String, mediaPath:String?, filterEmpty:Bool) -> Bool {
-        return (mediaPath?.matches(regex) ?? false) && (!filterEmpty || mediaPath?.isEmpty ?? true) ;
+        return (mediaPath?.matches(regex) ?? false) && (!filterEmpty || !StringUtils.isNullOrEmpty(mediaPath))
     }
 
     public static func getMediaSourceType(mediaPath:String?) -> MediaSource {

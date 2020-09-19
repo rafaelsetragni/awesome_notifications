@@ -8,7 +8,7 @@
 import XCTest
 @testable import awesome_notifications
 
-class StringUtilsTest: XCTestCase {
+class CronTest: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.

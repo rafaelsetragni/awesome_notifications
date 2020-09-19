@@ -1,4 +1,8 @@
 
+import var CommonCrypto.CC_MD5_DIGEST_LENGTH
+import func CommonCrypto.CC_MD5
+import typealias CommonCrypto.CC_LONG
+
 extension String {
     
     public func charAt(_ pos:Int) -> Character {
@@ -43,12 +47,23 @@ extension String {
         let notAlphanumeric = NSCharacterSet.decimalDigits.union(NSCharacterSet.letters).inverted
         return rangeOfCharacter(from: notAlphanumeric, options: String.CompareOptions.literal, range: nil) == nil
     }
-
-    public func matches(_ expression: String) -> Bool {
-        if let range = range(of: expression, options: .regularExpression, range: nil, locale: nil) {
-            return range.lowerBound == startIndex && range.upperBound == endIndex
-        } else {
-            return false
+    
+    public func matches(_ regex: String) -> Bool {                
+        let range = NSRange(location: 0, length: self.utf16.count)
+        let regex = try! NSRegularExpression(pattern: regex, options: .caseInsensitive)
+        return regex.firstMatch(in: self, options: [], range: range) != nil
+    }
+    
+    public func matchList(_ regex: String) -> [[String]] {
+        guard let regex = try? NSRegularExpression(pattern: regex, options: []) else { return [] }
+        let nsString = self as NSString
+        let results  = regex.matches(in: self, options: [], range: NSMakeRange(0, nsString.length))
+        return results.map { result in
+            (0..<result.numberOfRanges).map {
+                result.range(at: $0).location != NSNotFound
+                    ? nsString.substring(with: result.range(at: $0))
+                    : ""
+            }
         }
     }
 
@@ -63,6 +78,23 @@ extension String {
         }
     }
 
+    public func withoutHtmlTags() -> String {
+        return self.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+    }
+    
+    public func htmlToRichText() -> NSAttributedString? {
+        guard let data = self.data(using: String.Encoding.unicode) else { return nil }
+
+        guard let converted = try? NSAttributedString(
+            data: data,
+            options: [.documentType:NSAttributedString.DocumentType.html],
+            documentAttributes: nil
+        )
+        else { return nil }
+        
+        return converted
+    }
+    
     public func toDate(_ format: String = "yyyy-MM-dd HH:mm:ss", with timeZone: TimeZone = TimeZone(abbreviation: "UTC")!)-> Date?{
 
         let dateFormatter = DateFormatter()
@@ -89,4 +121,13 @@ extension String {
         return modifiedString.components(separatedBy: stop)
     }
     
+    var md5: String {
+        let data = Data(self.utf8)
+        let hash = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> [UInt8] in
+            var hash = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
+            CC_MD5(bytes.baseAddress, CC_LONG(data.count), &hash)
+            return hash
+        }
+        return hash.map { String(format: "%02x", $0) }.joined()
+    }
 }

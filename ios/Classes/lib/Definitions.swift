@@ -5,9 +5,9 @@ enum Definitions {
     static let  EXTRA_BROADCAST_FCM_TOKEN = "token"
 
     static let  MEDIA_VALID_NETWORK = "^https?:\\/\\/"//(www)?(\\.?[a-zA-Z0-9@:%.\\-_\\+~#=]{2,256}\\/?)+(\\?\\S+)$
-    static let  MEDIA_VALID_FILE = "^file?:\\/\\/"
-    static let  MEDIA_VALID_ASSET = "^asset?:\\/\\/"
-    static let  MEDIA_VALID_RESOURCE = "^resource?:\\/\\/"
+    static let  MEDIA_VALID_FILE = "^file:\\/\\/"
+    static let  MEDIA_VALID_ASSET = "^asset:\\/\\/"
+    static let  MEDIA_VALID_RESOURCE = "^resource:\\/\\/"
 
     static let  INITIALIZE_CHANNELS = "initializeChannels"
 

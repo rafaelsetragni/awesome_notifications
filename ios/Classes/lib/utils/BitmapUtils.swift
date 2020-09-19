@@ -8,20 +8,15 @@
 import Foundation
 
 class BitmapUtils : MediaUtils {
-    /*
-    public static func getBitmapFromSource(bitmapPath:String) -> Any? {
-        return nil
-    }
     
-    @available(iOS 10.0, *)
-    public static func getBitmapFromSource(bitmapPath:String?) -> UNNotificationAttachment? {
+    public static func getBitmapFromSource(bitmapPath:String?) -> UIImage? {
         
         if(StringUtils.isNullOrEmpty(bitmapPath)){ return nil }
         
         switch(MediaUtils.getMediaSourceType(mediaPath: bitmapPath)){
                 
             case .Resource:
-                return getBitmapFromAsset(bitmapPath ?? "")
+                return getBitmapFromResource(bitmapPath ?? "")
                 
             case .Asset:
                 return getBitmapFromAsset(bitmapPath ?? "")
@@ -37,41 +32,111 @@ class BitmapUtils : MediaUtils {
         }
     }
     
-    @available(iOS 10.0, *)
-    public static func getBitmapFromUrl(_ mediaPath:String) -> UNNotificationAttachment? {
+    private static func cleanMediaPath(_ mediaPath:String?) -> String? {
+         if(mediaPath != nil){
+             var mediaPath = mediaPath
+             
+            if(mediaPath!.matches("^https?:\\/\\/")){
+                 return mediaPath
+             }
+             else
+             if(mediaPath!.matches("^(asset:\\/\\/)(.*)")){
+                 if mediaPath!.replaceRegex("^(asset:\\/\\/)(.*)", replaceWith: "$2") {
+                     return mediaPath
+                 }
+             }
+             else
+             if(mediaPath!.matches("^(file:\\/\\/)(.*)")){
+                 if mediaPath!.replaceRegex("^(file:\\/\\/)(.*)", replaceWith: "$2") {
+                     return mediaPath
+                 }
+             }
+             else
+             if(mediaPath!.matches("^(resource:\\/\\/)(.*)")){
+                 if mediaPath!.replaceRegex("^(resource:\\/\\/)(.*)", replaceWith: "$2") {
+                     return mediaPath
+                 }
+             }
+             
+         }
+         return nil
+    }
+    
+    public static func getBitmapFromUrl(_ bitmapUri:String) -> UIImage? {
+        let bitmapUri:String? = BitmapUtils.cleanMediaPath(bitmapUri)
         
-        guard let imageData = NSData(contentsOf:NSURL(string: mediaPath)! as URL) else { return nil }
-        guard let attachment = UNNotificationAttachment.create(imageFileIdentifier: "image.gif", data: imageData, options: nil) else {
-            return nil
+        if !StringUtils.isNullOrEmpty(bitmapUri), let url = URL(string: bitmapUri!) {
+
+            do {
+                
+                let imageData = try Data(contentsOf: url)
+                return UIImage(data: imageData)
+                
+            } catch let error {
+                print("error \(error)")
+            }
+        }
+
+        return nil
+    }
+    
+    public static func getBitmapFromFile(_ mediaPath:String) -> UIImage? {
+        let mediaPath:String? = BitmapUtils.cleanMediaPath(mediaPath)
+        
+        if(StringUtils.isNullOrEmpty(mediaPath)){ return nil }
+        
+        do {
+            
+            if FileManager.default.fileExists(atPath: mediaPath!) {
+                let url = URL.init(fileURLWithPath: mediaPath!) 
+                let data = try Data(contentsOf: url)
+                return UIImage(data: data)
+            }
+            
+        } catch let error {
+            print("error \(error)")
         }
         
-        return attachment
-    }
-    
-    @available(iOS 10.0, *)
-    public static func getBitmapFromFile(_ mediaPath:String) -> UNNotificationAttachment? {
-        
-        // TODO missing implementation
         return nil
     }
     
-    @available(iOS 10.0, *)
-    public static func getBitmapFromAsset(_ mediaPath:String) -> UNNotificationAttachment? {
+    public static func getBitmapFromAsset(_ mediaPath:String) -> UIImage? {
+        let mediaPath:String? = BitmapUtils.cleanMediaPath(mediaPath)
+
+        if(StringUtils.isNullOrEmpty(mediaPath)){ return nil }
         
-        // TODO missing implementation
+        do {
+            
+            let key = SwiftAwesomeNotificationsPlugin.registrar?.lookupKey(forAsset: mediaPath!)
+            let topPath = Bundle.main.path(forResource: key, ofType: nil)!
+            let image: UIImage = UIImage(contentsOfFile: topPath)!
+            
+            return image
+            
+        } catch let error {
+            print("error \(error)")
+        }
+        
         return nil
     }
     
-    @available(iOS 10.0, *)
-    public static func getBitmapFromResource(_ mediaPath:String) -> UNNotificationAttachment? {
+    public static func getBitmapFromResource(_ mediaPath:String) -> UIImage? {
+        var mediaPath:String? = BitmapUtils.cleanMediaPath(mediaPath)
         
-        // TODO missing implementation
+        do {
+            if mediaPath!.replaceRegex("^.*\\/([^\\/]+)$", replaceWith: "$1") {
+                return UIImage(named: mediaPath!)
+            }
+        } catch let error {
+            print("error \(error)")
+        }
+
+
         return nil
     }
     
-    */
     public static func isValidBitmap(_ mediaPath:String?) -> Bool {
-        /*
+        
         if(mediaPath != nil){
             
 
@@ -95,8 +160,35 @@ class BitmapUtils : MediaUtils {
                 return true
             }
             
-        }*/
+        }
         
         return false
     }
+    
+    /*
+     public static func isValidBitmap(_ mediaPath:String? ) -> Bool {
+         
+         if(!StringUtils.isNullOrEmpty(mediaPath)){
+             
+             if(MediaUtils.matchMediaType(regex: Definitions.MEDIA_VALID_NETWORK, mediaPath: mediaPath)){
+                 return true
+             }
+             
+             if(MediaUtils.matchMediaType(regex: Definitions.MEDIA_VALID_FILE, mediaPath: mediaPath)){
+                 return true
+             }
+             
+             if(MediaUtils.matchMediaType(regex: Definitions.MEDIA_VALID_ASSET, mediaPath: mediaPath)){
+                 return true
+             }
+             
+             if(MediaUtils.matchMediaType(regex: Definitions.MEDIA_VALID_RESOURCE, mediaPath: mediaPath)){
+                 return true
+             }
+             
+         }
+         
+         return false
+     }
+    */
 }
