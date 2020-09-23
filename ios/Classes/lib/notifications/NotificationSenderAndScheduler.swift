@@ -8,7 +8,7 @@
 import Foundation
 
 @available(iOS 10.0, *)
-class NotificationSender {
+class NotificationSenderAndScheduler {
 
     public static let TAG: String = "NotificationSender"
 
@@ -17,7 +17,6 @@ class NotificationSender {
     private var pushNotification:   PushNotification?
 
     private var created:    Bool = false
-    private var displayed:  Bool = false
 
     public func send(
         createdSource: NotificationSource,
@@ -86,7 +85,6 @@ class NotificationSender {
 
                     // Only save DisplayedMethods if pushNotification was created and displayed successfully
                     if(pushNotification != nil){
-                        displayed = true
 
                         receivedNotification = NotificationReceived(pushNotification!.content)
 
@@ -118,14 +116,6 @@ class NotificationSender {
                     CreatedManager.saveCreated(received: receivedNotification!)
                 } else {
                     SwiftAwesomeNotificationsPlugin.instance!.createEvent(notificationReceived: receivedNotification!)
-                }
-            }
-
-            if(displayed){
-                if(SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle() == .AppKilled){
-                    DisplayedManager.saveDisplayed(received: receivedNotification!)
-                } else {
-                    SwiftAwesomeNotificationsPlugin.instance!.displayEvent(notificationReceived: receivedNotification!)
                 }
             }
         }

@@ -21,3 +21,11 @@ extension String {
 print("".md5)
 print("".md5)
 print("test".md5)
+
+
+var now = Date()
+var future = Calendar.current.date(byAdding: .second, value: 5, to: now)
+
+print((future!.compare(now)).rawValue)
+print((now.compare(future!)).rawValue)
+print((now.compare(now)).rawValue)

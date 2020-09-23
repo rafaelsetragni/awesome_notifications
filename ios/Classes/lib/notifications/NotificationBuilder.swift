@@ -10,6 +10,8 @@ import Foundation
 @available(iOS 10.0, *)
 class NotificationBuilder {
     
+    private static let TAG = "NotificationBuilder"
+    
     private static var badgeAmount:NSNumber = 0
     
     public static func requestPermissions(){
@@ -52,13 +54,18 @@ class NotificationBuilder {
         return true
     }
     
-    public static func buildNotificationActionFromJson(jsonData:String?, actionKey:String?, userText:String?) -> ActionReceived? {
+    public static func jsonToPushNotification(jsonData:String?) -> PushNotification? {
         if(StringUtils.isNullOrEmpty(jsonData)){ return nil }
         
         let data:[String:Any?]? = JsonUtils.fromJson(jsonData)
         if(data == nil){ return nil }
         
         let pushNotification:PushNotification? = PushNotification().fromMap(arguments: data!) as? PushNotification
+        return pushNotification        
+    }
+    
+    public static func buildNotificationActionFromJson(jsonData:String?, actionKey:String?, userText:String?) -> ActionReceived? {
+        let pushNotification:PushNotification? = jsonToPushNotification(jsonData: jsonData)
         if(pushNotification == nil){ return nil }
         let actionReceived:ActionReceived = ActionReceived(pushNotification!.content)
                 
@@ -80,53 +87,67 @@ class NotificationBuilder {
             return nil
         }
         
-        let content = buildNotificationContentFromModel(pushNotification: pushNotification)
+        let nextDate:Date? = getNextScheduleDate(pushNotification: pushNotification)
         
-        setTitle(pushNotification: pushNotification, channel: channel, content: content)
-        setBody(pushNotification: pushNotification, content: content)
-        setSummary(pushNotification: pushNotification, content: content)
-        
-        
-        setVisibility(pushNotification: pushNotification, channel: channel, content: content)
-        setShowWhen(pushNotification: pushNotification, content: content)
-        
-        setLayout(pushNotification: pushNotification, content: content)
-        
-        createActionButtons(pushNotification: pushNotification, content: content)
-        
-        setAutoCancel(pushNotification: pushNotification, content: content)
-        setTicker(pushNotification: pushNotification, content: content)
-        
-        setOnlyAlertOnce(pushNotification: pushNotification, channel: channel, content: content)
-        
-        setLockedNotification(pushNotification: pushNotification, channel: channel, content: content)
-        setImportance(channel: channel, content: content)
-        
-        setSound(channel: channel, content: content)
-        setVibrationPattern(channel: channel, content: content)
-        
-        setLights(channel: channel, content: content)
-        
-        setSmallIcon(channel: channel, content: content)
-        setLargeIcon(pushNotification: pushNotification, content: content)
-        
-        setLayoutColor(pushNotification: pushNotification, channel: channel, content: content)
-                
-        applyGrouping(channel: channel, content: content)
-        
-        
-        let request = UNNotificationRequest(identifier: pushNotification.content!.id!.description, content: content, trigger: nil)
-        
-        // 4
-        UNUserNotificationCenter.current().add(request)
-        {
-            error in // called when message has been sent
+        if(pushNotification.schedule == nil || nextDate != nil){
+            
+            let content = buildNotificationContentFromModel(pushNotification: pushNotification)
+            
+            setTitle(pushNotification: pushNotification, channel: channel, content: content)
+            setBody(pushNotification: pushNotification, content: content)
+            setSummary(pushNotification: pushNotification, content: content)
+            
+            
+            setVisibility(pushNotification: pushNotification, channel: channel, content: content)
+            setShowWhen(pushNotification: pushNotification, content: content)
+            
+            setLayout(pushNotification: pushNotification, content: content)
+            
+            createActionButtons(pushNotification: pushNotification, content: content)
+            
+            setAutoCancel(pushNotification: pushNotification, content: content)
+            setTicker(pushNotification: pushNotification, content: content)
+            
+            setOnlyAlertOnce(pushNotification: pushNotification, channel: channel, content: content)
+            
+            setLockedNotification(pushNotification: pushNotification, channel: channel, content: content)
+            setImportance(channel: channel, content: content)
+            
+            setSound(channel: channel, content: content)
+            setVibrationPattern(channel: channel, content: content)
+            
+            setLights(channel: channel, content: content)
+            
+            setSmallIcon(channel: channel, content: content)
+            setLargeIcon(pushNotification: pushNotification, content: content)
+            
+            setLayoutColor(pushNotification: pushNotification, channel: channel, content: content)
+                    
+            applyGrouping(channel: channel, content: content)
+            
+            let trigger:UNCalendarNotificationTrigger? = dateToCalendarTrigger(targetDate: nextDate)
+            let request = UNNotificationRequest(identifier: pushNotification.content!.id!.description, content: content, trigger: trigger)
+            
+            UNUserNotificationCenter.current().add(request)
+            {
+                error in // called when message has been sent
 
-            if error != nil {
-                debugPrint("Error: \(error.debugDescription)")
+                if error != nil {
+                    debugPrint("Error: \(error.debugDescription)")
+                }
             }
+            return pushNotification
         }
-        return pushNotification
+        
+        return nil
+    }
+    
+    private static func dateToCalendarTrigger(targetDate:Date?) -> UNCalendarNotificationTrigger? {
+        if(targetDate == nil){ return nil}
+        
+        let dateComponents = Calendar.current.dateComponents([.day, .month, .year, .hour, .minute, .second], from: targetDate!)
+        let trigger = UNCalendarNotificationTrigger( dateMatching: dateComponents, repeats: false )
+        return trigger
     }
     
     private static func buildNotificationContentFromModel(pushNotification:PushNotification) -> UNMutableNotificationContent {
@@ -148,7 +169,9 @@ class NotificationBuilder {
     }
     
     private static func setSummary(pushNotification:PushNotification, content:UNMutableNotificationContent){
-        content.subtitle = pushNotification.content!.summary?.withoutHtmlTags() ?? ""
+        if #available(iOS 12.0, *) {
+            content.summaryArgument = pushNotification.content!.summary?.withoutHtmlTags() ?? ""
+        }
     }
     
     private static func setBadge(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
@@ -195,6 +218,63 @@ class NotificationBuilder {
             content.categoryIdentifier = categoryIdentifier
         }
         
+    }
+    
+    private static func getNextScheduleDate(pushNotification:PushNotification?) -> Date? {
+        
+        if pushNotification?.schedule == nil { return nil }
+        var nextValidDate:Date? = Date()
+        
+        do {
+
+            if(pushNotification != nil){
+
+                nextValidDate = CronUtils.getNextCalendar(
+                    initialDateTime: pushNotification!.schedule!.initialDateTime,
+                    crontabRule: pushNotification!.schedule!.crontabSchedule
+                )
+
+                if(nextValidDate != nil){
+
+                    return nextValidDate
+                }
+                else {
+
+                    if(!(ListUtils.isEmptyLists(pushNotification!.schedule!.preciseSchedules as [AnyObject]?))){
+
+                        for nextDateTime in pushNotification!.schedule!.preciseSchedules! {
+
+                            let closestDate:Date? = CronUtils.getNextCalendar(
+                                initialDateTime: nextDateTime,
+                                crontabRule: nil
+                            )
+
+                            if closestDate != nil {
+                                if nextValidDate == nil {
+                                    nextValidDate = closestDate
+                                }
+                                else {
+                                    if closestDate!.compare(nextValidDate!) == ComparisonResult.orderedAscending {
+                                        nextValidDate = closestDate
+                                    }
+                                }
+                            }
+                        }
+
+                        if nextValidDate != nil {
+                            return nextValidDate
+                        }
+                    }
+
+                    NotificationSenderAndScheduler.cancelNotification(id: pushNotification!.content!.id!)
+                    Log.d(TAG, "Date is not more valid. ("+DateUtils.getUTCDate()+")")
+                }
+            }
+
+        } catch {
+            debugPrint("\(error)")
+        }
+        return nil
     }
     
     private static func setVisibility(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){

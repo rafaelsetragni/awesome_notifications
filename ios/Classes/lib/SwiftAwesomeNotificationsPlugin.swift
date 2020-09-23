@@ -49,6 +49,29 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     @available(iOS 10.0, *)
     public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert, .badge, .sound])
+
+        let jsonData:String? = notification.request.content.userInfo[Definitions.NOTIFICATION_JSON] as? String
+        let pushNotification:PushNotification? = NotificationBuilder.jsonToPushNotification(jsonData: jsonData)
+        
+        if(pushNotification != nil){
+            let notificationReceived:NotificationReceived? = NotificationReceived(pushNotification?.content)
+            
+            if(notificationReceived != nil){
+                displayEvent(notificationReceived: notificationReceived!)
+            }
+            
+            if(pushNotification?.schedule != nil){
+                                
+                do {
+                    try NotificationSenderAndScheduler().send(
+                        createdSource: pushNotification!.content!.createdSource!,
+                        pushNotification: pushNotification
+                    )
+                } catch {
+                    // Fallback on earlier versions
+                }
+            }
+        }
     }
     
     private func receiveAction(jsonData: String?, actionKey:String?, userText:String?){
@@ -69,6 +92,11 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     
     public func displayEvent(notificationReceived:NotificationReceived){
         Log.d(SwiftAwesomeNotificationsPlugin.TAG, "NOTIFICATION DISPLAYED")
+
+        if(SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle() == .AppKilled){
+            DisplayedManager.saveDisplayed(received: notificationReceived)
+        }
+        
         flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISPLAYED, arguments: notificationReceived.toMap())
     }
     
@@ -160,9 +188,13 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             case Definitions.CHANNEL_METHOD_GET_FCM_TOKEN:
                 channelMethodGetFcmToken(call: call, result: result)
                 return
-                
+                    
             case Definitions.CHANNEL_METHOD_CREATE_NOTIFICATION:
                 channelMethodCreateNotification(call: call, result: result)
+                return
+                    
+            case Definitions.CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL:
+                channelMethodSetChannel(call: call, result: result)
                 return
                 
             case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATION:
@@ -178,7 +210,33 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 return
         }
     }
+    
+    private func channelMethodSetChannel(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        
+        do {
 
+            let channelData:[String:Any?] = call.arguments as! [String:Any?]
+            let channel:NotificationChannelModel = NotificationChannelModel().fromMap(arguments: channelData) as! NotificationChannelModel
+            
+            ChannelManager.saveChannel(channel: channel)
+            
+            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Channel updated")
+            result(true)
+
+        } catch {
+            
+            result(
+                FlutterError.init(
+                    code: "\(error)",
+                    message: "Invalid channel",
+                    details: error.localizedDescription
+                )
+            )
+        }
+        
+        result(false)
+    }
+    
     private func channelMethodInitialize(call: FlutterMethodCall, result: @escaping FlutterResult) {
         
         do {
@@ -257,7 +315,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         if(notificationId == nil){ result(false); return }
         
         if #available(iOS 10.0, *) {
-            NotificationSender.cancelNotification(id: notificationId!)
+            NotificationSenderAndScheduler.cancelNotification(id: notificationId!)
         } else {
             // Fallback on earlier versions
         }
@@ -268,7 +326,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     private func channelMethodCancelAllNotifications(call: FlutterMethodCall, result: @escaping FlutterResult) {
         
         if #available(iOS 10.0, *) {
-            NotificationSender.cancelAllNotifications()
+            NotificationSenderAndScheduler.cancelAllNotifications()
         } else {
             // Fallback on earlier versions
         }
@@ -283,21 +341,14 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             let pushNotification:PushNotification? = PushNotification().fromMap(arguments: pushData) as? PushNotification
             
             if(pushNotification != nil){
-            
-                if(pushNotification?.schedule == nil){
                     
-                    if #available(iOS 10.0, *) {
-                        try NotificationSender().send(
-                            createdSource: NotificationSource.Local,
-                            pushNotification: pushNotification
-                        )
-                    } else {
-                        // Fallback on earlier versions
-                    }
-                    
-                }
-                else {
-                    // TODO
+                if #available(iOS 10.0, *) {
+                    try NotificationSenderAndScheduler().send(
+                        createdSource: NotificationSource.Local,
+                        pushNotification: pushNotification
+                    )
+                } else {
+                    // Fallback on earlier versions
                 }
                 
                 Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification sent");

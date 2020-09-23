@@ -36,4 +36,8 @@ class DateUtils {
     public static func getUTCDateTime() -> Date {
         return Date();
     }
+    
+    public static func getNowUTC() -> Date {
+        return Date()
+    }
 }
