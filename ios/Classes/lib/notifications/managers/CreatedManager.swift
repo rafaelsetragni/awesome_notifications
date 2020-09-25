@@ -44,7 +44,7 @@ public class CreatedManager {
     }
 
     public static func cancelCreated(id:Int) {
-        shared.remove(referenceKey: String(id))
+        _ = shared.remove(referenceKey: String(id))
     }
     
 }

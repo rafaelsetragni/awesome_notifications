@@ -28,7 +28,10 @@ A complete solution to create Local Notifications and Push Notifications, throug
   s.author           = { 'Rafael Setragni' => 'rafaelsetra@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
+  s.static_framework = true
   s.dependency 'Flutter'
+  s.dependency 'Firebase'
+  s.dependency 'Firebase/Messaging'
   s.platform = :ios, '8.0'
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.

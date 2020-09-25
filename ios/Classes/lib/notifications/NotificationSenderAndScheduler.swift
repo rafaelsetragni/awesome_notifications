@@ -20,23 +20,35 @@ class NotificationSenderAndScheduler {
 
     public func send(
         createdSource: NotificationSource,
-        pushNotification: PushNotification?
+        pushNotification: PushNotification?,
+        completion: @escaping (Bool, Error?) -> ()
     ) throws {
 
         if (pushNotification == nil){
             throw PushNotificationError.invalidRequiredFields(msg: "PushNotification not valid")
         }
 
-        self.appLifeCycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
+        NotificationBuilder.isNotificationAuthorized(completion: { (authorized) in
+            
+            do{
+                if (authorized){
+                    self.appLifeCycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
 
-        try pushNotification!.validate()
+                    try pushNotification!.validate()
 
-        // Keep this way to future thread running
-        self.createdSource = createdSource
-        self.appLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
-        self.pushNotification = pushNotification
+                    // Keep this way to future thread running
+                    self.createdSource = createdSource
+                    self.appLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
+                    self.pushNotification = pushNotification
 
-        self.execute()
+                    self.execute()
+                    
+                    completion(true, nil)
+                }
+            } catch {
+                completion(false, error)
+            }
+        })
     }
 
     private func execute(){
@@ -138,8 +150,12 @@ class NotificationSenderAndScheduler {
 
     public static func cancelNotification(id:Int) {
         NotificationBuilder.cancelNotification(id: id)
-        CreatedManager.removeCreated(id: id)
-        DisplayedManager.removeDisplayed(id: id)
+        if CreatedManager.removeCreated(id: id) || DisplayedManager.removeDisplayed(id: id) {
+            debugPrint("Notification cancelled")
+        }
+        else {
+            debugPrint("Notification not found")
+        }
     }
 
     public static func cancelAllNotifications() -> Bool {

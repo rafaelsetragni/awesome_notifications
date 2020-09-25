@@ -7,7 +7,7 @@
 
 import Foundation
 
-class BitmapUtils : MediaUtils {
+public class BitmapUtils : MediaUtils {
     
     public static func getBitmapFromSource(bitmapPath:String?) -> UIImage? {
         
@@ -114,10 +114,9 @@ class BitmapUtils : MediaUtils {
             return image
             
         } catch let error {
-            print("error \(error)")
+            print("error \(error)")            
+            return nil
         }
-        
-        return nil
     }
     
     public static func getBitmapFromResource(_ mediaPath:String) -> UIImage? {

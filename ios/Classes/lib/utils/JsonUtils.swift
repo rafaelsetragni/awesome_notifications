@@ -21,10 +21,9 @@ public class JsonUtils {
             return jsonString
         }
         catch {
-            Log.d("JsonUtils", error.localizedDescription)
+            Log.d("JsonUtils", error.localizedDescription)            
+            return nil
         }
-        
-        return nil
     }
     
     public static func fromJson(_ text:String? ) -> [String:Any?]? {

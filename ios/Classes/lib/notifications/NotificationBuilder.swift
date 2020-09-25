@@ -13,11 +13,7 @@ class NotificationBuilder {
     private static let TAG = "NotificationBuilder"
     
     private static var badgeAmount:NSNumber = 0
-    
-    public static func requestPermissions(){
-        requestPermissions(UIApplication.shared)
-    }
-    
+        
     public static func incrementBadge(){
         NotificationBuilder.badgeAmount = NSNumber(value: NotificationBuilder.badgeAmount.intValue + 1)
     }
@@ -30,7 +26,7 @@ class NotificationBuilder {
         return NotificationBuilder.badgeAmount
     }
     
-    public static func requestPermissions(_ application:UIApplication){
+    public static func requestPermissions(completion: @escaping (Bool) -> ()){
         
         // iOS 10 support
         let notificationCenter = UNUserNotificationCenter.current()
@@ -38,20 +34,40 @@ class NotificationBuilder {
         notificationCenter.requestAuthorization(options: [.sound,.alert,.badge]) { (granted, error) in
             if granted {
                 DispatchQueue.main.async {
-                  application.registerForRemoteNotifications()
+                    UIApplication.shared.registerForRemoteNotifications()
                 }
                 print("Notification Enable Successfully")
+                completion(true)
+            }
+            else {
+                completion(false)
             }
         }
     }
     
-    public static func isNotificationAuthorized() -> Bool {
+    public static func isNotificationAuthorized(completion: @escaping (Bool) -> ()) {
         
-        let application = UIApplication.shared
-            // iOS 10 support
-            // TODO
+        let current = UNUserNotificationCenter.current()
+
+        current.getNotificationSettings(completionHandler: { (settings) in
+            
+            if settings.authorizationStatus == .notDetermined {
+                // Notification permission has not been asked yet, go for it!
+                requestPermissions(completion: { enabled in
+                    completion(enabled)
+                })
+                
+            } else if settings.authorizationStatus == .denied {
+                // Notification permission was previously denied, go to settings & privacy to re-enable
+                completion(false)
+                
+            } else if settings.authorizationStatus == .authorized {
+                // Notification permission was already granted
+                completion(true)
+            }
+        })
         
-        return true
+        //return UIApplication.shared.isRegisteredForRemoteNotifications
     }
     
     public static func jsonToPushNotification(jsonData:String?) -> PushNotification? {
@@ -113,7 +129,7 @@ class NotificationBuilder {
             setLockedNotification(pushNotification: pushNotification, channel: channel, content: content)
             setImportance(channel: channel, content: content)
             
-            setSound(channel: channel, content: content)
+            setSound(pushNotification: pushNotification, channel: channel, content: content)
             setVibrationPattern(channel: channel, content: content)
             
             setLights(channel: channel, content: content)
@@ -305,8 +321,24 @@ class NotificationBuilder {
         
     }
 
-    private static func setSound(channel:NotificationChannelModel, content:UNMutableNotificationContent){
-        
+    private static func setSound(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        if (pushNotification.content!.playSound ?? false) && (channel.playSound ?? false) {
+            
+            if(!StringUtils.isNullOrEmpty(pushNotification.content!.customSound)){
+                content.sound = AudioUtils.getSoundFromSource(SoundPath: pushNotification.content!.customSound!)
+                return
+            }
+            
+            if(!StringUtils.isNullOrEmpty(channel.soundSource)){
+                content.sound = AudioUtils.getSoundFromSource(SoundPath: channel.soundSource!)
+                return
+            }
+            
+            content.sound = UNNotificationSound.default
+        }
+        else {
+            content.sound = nil
+        }
     }
     
     private static func setVibrationPattern(channel:NotificationChannelModel, content:UNMutableNotificationContent){

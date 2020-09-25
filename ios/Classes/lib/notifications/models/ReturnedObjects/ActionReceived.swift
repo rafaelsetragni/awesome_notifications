@@ -24,7 +24,7 @@ public class ActionReceived : NotificationReceived {
     }
     
     override public func fromMap(arguments: [String : Any?]?) -> AbstractModel {
-        super.fromMap(arguments: arguments)
+        _ = super.fromMap(arguments: arguments)
         
         self.actionKey       = MapUtils<String>.getValueOrDefault(reference: "actionKey", arguments: arguments)
         self.actionInput     = MapUtils<String>.getValueOrDefault(reference: "actionInput", arguments: arguments)

@@ -32,6 +32,9 @@ public class NotificationChannelModel : AbstractModel {
     var setAsGroupSummary: Bool?
     var groupAlertBehavior: GroupAlertBehaviour?
     
+    var locked: Bool?
+    var onlyAlertOnce: Bool?
+    
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         
         self.channelKey         = MapUtils<String>.getValueOrDefault(reference: "channelKey", arguments: arguments)
@@ -53,6 +56,9 @@ public class NotificationChannelModel : AbstractModel {
         
         self.groupKey           = MapUtils<String>.getValueOrDefault(reference: "groupKey", arguments: arguments)
         self.setAsGroupSummary  = MapUtils<Bool>.getValueOrDefault(reference: "setAsGroupSummary", arguments: arguments)
+        
+        self.locked         = MapUtils<Bool>.getValueOrDefault(reference: "locked", arguments: arguments)
+        self.onlyAlertOnce  = MapUtils<Bool>.getValueOrDefault(reference: "onlyAlertOnce", arguments: arguments)
         
         self.groupAlertBehavior = EnumUtils<GroupAlertBehaviour>.getEnumOrDefault(reference: "groupAlertBehavior", arguments: arguments)
         
@@ -82,6 +88,9 @@ public class NotificationChannelModel : AbstractModel {
         if(groupKey != nil) {mapData["groupKey"] = self.groupKey}
         if(setAsGroupSummary != nil) {mapData["setAsGroupSummary"] = self.setAsGroupSummary}
         
+        if(locked != nil) {mapData["locked"] = self.locked}
+        if(onlyAlertOnce != nil) {mapData["onlyAlertOnce"] = self.onlyAlertOnce}
+        
         if(groupAlertBehavior != nil) {mapData["groupAlertBehavior"] = self.groupAlertBehavior}
         
         return mapData
@@ -104,10 +113,16 @@ public class NotificationChannelModel : AbstractModel {
                 msg: "channelDescription cannot be null or empty")
         }
         
-        if(BooleanUtils.getValue(value: playSound, defaultValue: false) &&
-            !StringUtils.isNullOrEmpty(soundSource)){
-            if(!AudioUtils.isValidAudio(audioPath: soundSource)){
-                throw PushNotificationError.invalidRequiredFields(msg: "Audio media is not valid")
+        if(
+            BooleanUtils.getValue(value: playSound, defaultValue: false) &&
+            !StringUtils.isNullOrEmpty(soundSource)
+        ){
+            if #available(iOS 10.0, *) {
+                if(!AudioUtils.isValidSound(soundSource)){
+                    throw PushNotificationError.invalidRequiredFields(msg: "Audio media is not valid")
+                }
+            } else {
+                // Fallback on earlier versions
             }
         }
     }

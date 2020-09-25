@@ -44,7 +44,7 @@ public class DisplayedManager {
     }
 
     public static func cancelDisplayed(id:Int) {
-        shared.remove(referenceKey: String(id))
+        _ = shared.remove(referenceKey: String(id))
     }
     
 }
