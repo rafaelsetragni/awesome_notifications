@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
@@ -46,6 +47,7 @@ import me.carda.awesome_notifications.notifications.NotificationBuilder;
 import me.carda.awesome_notifications.notifications.managers.ChannelManager;
 import me.carda.awesome_notifications.notifications.managers.CreatedManager;
 import me.carda.awesome_notifications.notifications.managers.DefaultsManager;
+import me.carda.awesome_notifications.notifications.managers.DismissedManager;
 import me.carda.awesome_notifications.notifications.managers.DisplayedManager;
 
 import me.carda.awesome_notifications.notifications.managers.ScheduleManager;
@@ -57,6 +59,7 @@ import me.carda.awesome_notifications.notifications.NotificationSender;
 import me.carda.awesome_notifications.notifications.NotificationScheduler;
 
 import me.carda.awesome_notifications.utils.BitmapUtils;
+import me.carda.awesome_notifications.utils.DateUtils;
 import me.carda.awesome_notifications.utils.JsonUtils;
 import me.carda.awesome_notifications.utils.ListUtils;
 import me.carda.awesome_notifications.utils.MapUtils;
@@ -145,10 +148,11 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         hasGooglePlayServices = checkGooglePlayServices();
 
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Definitions.EXTRA_BROADCAST_FCM_TOKEN);
 
+        intentFilter.addAction(Definitions.EXTRA_BROADCAST_FCM_TOKEN);
         intentFilter.addAction(Definitions.BROADCAST_CREATED_NOTIFICATION);
         intentFilter.addAction(Definitions.BROADCAST_DISPLAYED_NOTIFICATION);
+        intentFilter.addAction(Definitions.BROADCAST_DISMISSED_NOTIFICATION);
         intentFilter.addAction(Definitions.BROADCAST_KEEP_ON_TOP);
 
         LocalBroadcastManager manager = LocalBroadcastManager.getInstance(applicationContext);
@@ -157,6 +161,8 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         mediaSession = new MediaSessionCompat(applicationContext, "PUSH_MEDIA");
 
         getApplicationLifeCycle();
+
+        //FirebaseApp.initializeApp(context);
     }
 
     @Override
@@ -211,6 +217,10 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                 onBroadcastNotificationDisplayed(intent);
                 return;
 
+            case Definitions.BROADCAST_DISMISSED_NOTIFICATION:
+                onBroadcastNotificationDismissed(intent);
+                return;
+
             case Definitions.BROADCAST_KEEP_ON_TOP:
                 onBroadcastKeepOnTopActionNotification(intent);
                 return;
@@ -227,8 +237,8 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
     }
 
     private void onBroadcastNotificationCreated(Intent intent) {
-        try {
 
+        try {
             Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
 
             @SuppressWarnings("unchecked")
@@ -279,7 +289,28 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
     }
 
-    private void recoverNotificationCreateds(Context context) {
+    private void onBroadcastNotificationDismissed(Intent intent) {
+        try {
+
+            Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
+
+            @SuppressWarnings("unchecked")
+            Map<String, Object> content = (serializable instanceof Map ? (Map<String, Object>)serializable : null);
+            if(content == null) return;
+
+            ActionReceived received = (ActionReceived) ActionReceived.fromMap(content);
+            received.validate(applicationContext);
+
+            DismissedManager.removeDismissed(applicationContext, received.id);
+
+            pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED, content);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void recoverNotificationCreated(Context context) {
         List<NotificationReceived> lostCreated = CreatedManager.listCreated(context);
 
         if(lostCreated != null) {
@@ -297,7 +328,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
     }
 
-    private void recoverNotificationDisplayeds(Context context) {
+    private void recoverNotificationDisplayed(Context context) {
         List<NotificationReceived> lostDisplayed = DisplayedManager.listDisplayed(context);
 
         if(lostDisplayed != null) {
@@ -307,6 +338,24 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                     displayed.validate(applicationContext);
                     pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISPLAYED, displayed.toMap());
                     DisplayedManager.removeDisplayed(context, displayed.id);
+
+                } catch (PushNotificationException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void recoverNotificationDismissed(Context context) {
+        List<ActionReceived> lostDismissed = DismissedManager.listDismissed(context);
+
+        if(lostDismissed != null) {
+            for (ActionReceived received : lostDismissed) {
+                try {
+
+                    received.validate(applicationContext);
+                    pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED, received.toMap());
+                    DismissedManager.removeDismissed(context, received.id);
 
                 } catch (PushNotificationException e) {
                     e.printStackTrace();
@@ -602,8 +651,9 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         setDefaultIcon(context, defaultIcon);
         setChannels(context, channelsData);
 
-        recoverNotificationCreateds(context);
-        recoverNotificationDisplayeds(context);
+        recoverNotificationCreated(context);
+        recoverNotificationDisplayed(context);
+        recoverNotificationDismissed(context);
 
         captureNotificationActionOnLaunch();
         return true;
@@ -685,7 +735,10 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         ActionReceived actionModel = NotificationBuilder.buildNotificationActionFromIntent(applicationContext, intent);
 
         if (actionModel != null) {
+
+            actionModel.actionDate = DateUtils.getUTCDate();
             actionModel.actionLifeCycle = appLifeCycle;
+
             Map<String, Object> returnObject = actionModel.toMap();
 
             pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_RECEIVED_ACTION, returnObject);

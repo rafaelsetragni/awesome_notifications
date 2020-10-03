@@ -1,4 +1,4 @@
-package me.carda.awesome_notifications.firebase;
+package me.carda.awesome_notifications.services.firebase;
 
 import android.content.Context;
 import android.util.Log;

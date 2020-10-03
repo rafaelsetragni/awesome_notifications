@@ -5,9 +5,11 @@ import 'package:awesome_notifications/src/utils/assert_utils.dart';
 /// All received details of a user action over a Notification
 class ReceivedAction extends ReceivedNotification {
   NotificationLifeCycle actionLifeCycle;
+  NotificationLifeCycle dismissedLifeCycle;
   String buttonKeyPressed = '';
   String buttonKeyInput = '';
   String actionDate;
+  String dismissedDate;
 
   ReceivedAction();
 
@@ -18,7 +20,11 @@ class ReceivedAction extends ReceivedNotification {
     actionLifeCycle = AssertUtils.extractEnum<NotificationLifeCycle>(
         dataMap, 'actionLifeCycle', NotificationLifeCycle.values);
 
+    dismissedLifeCycle = AssertUtils.extractEnum(
+        dataMap, 'dismissedLifeCycle', NotificationLifeCycle.values);
+
     actionDate = AssertUtils.extractValue<String>(dataMap, 'actionDate');
+    dismissedDate = AssertUtils.extractValue<String>(dataMap, 'dismissedDate');
 
     buttonKeyPressed = AssertUtils.extractValue<String>(dataMap, 'actionKey');
     buttonKeyInput = AssertUtils.extractValue<String>(dataMap, 'actionInput');
@@ -32,7 +38,9 @@ class ReceivedAction extends ReceivedNotification {
     return map
       ..addAll({
         'actionDate': actionDate,
+        'dismissedDate': dismissedDate,
         'actionLifeCycle': AssertUtils.toSimpleEnumString(actionLifeCycle),
+        'dismissedLifeCycle': AssertUtils.toSimpleEnumString(dismissedLifeCycle),
         'buttonKeyPressed': buttonKeyPressed,
         'buttonKeyInput': buttonKeyInput
       });

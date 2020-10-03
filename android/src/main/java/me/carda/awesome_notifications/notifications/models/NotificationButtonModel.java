@@ -24,7 +24,7 @@ public class NotificationButtonModel extends Model {
     }
 
     @Override
-    Model fromMapImplementation(Map<String, Object> arguments) {
+    protected Model fromMapImplementation(Map<String, Object> arguments) {
 
         key        = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_KEY, String.class);
         icon       = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_ICON, String.class);

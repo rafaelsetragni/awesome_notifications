@@ -7,11 +7,11 @@ import 'package:awesome_notifications/src/enumerators/notification_importance.da
 
 import 'enumerators/notification_layout.dart';
 
-const BROADCAST_FCM_TOKEN = 'me.carda.awesome_notifications.firebase.TOKEN';
+const BROADCAST_FCM_TOKEN = 'me.carda.awesome_notifications.services.firebase.TOKEN';
 const EXTRA_BROADCAST_FCM_TOKEN = 'token';
 
 const BROADCAST_MESSAGE =
-    'me.carda.awesome_notifications.firebase.NOTIFICATION';
+    'me.carda.awesome_notifications.services.firebase.NOTIFICATION';
 const EXTRA_BROADCAST_MESSAGE = 'notification';
 
 const INITIALIZE_DEFAULT_ICON = "defaultIcon";
@@ -47,6 +47,7 @@ const CHANNEL_METHOD_CREATE_NOTIFICATION = 'createNewNotification';
 
 const CHANNEL_METHOD_NOTIFICATION_CREATED = 'notificationCreated';
 const CHANNEL_METHOD_NOTIFICATION_DISPLAYED = 'notificationDisplayed';
+const CHANNEL_METHOD_NOTIFICATION_DISMISSED = 'notificationDismissed';
 const CHANNEL_METHOD_ACTION_RECEIVED = 'receivedAction';
 
 const CHANNEL_METHOD_NOTIFICATION_AT_LAUNCH = 'notificationAtLaunch';

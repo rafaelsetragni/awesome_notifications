@@ -11,11 +11,13 @@ class RemarkableText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
-      child: RichText(
-        textAlign: TextAlign.center,
-        text: TextSpan(
-            text: text,
-            style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 18)
+      child: FittedBox(
+        child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+              text: text,
+              style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 18)
+          ),
         ),
       ),
     );

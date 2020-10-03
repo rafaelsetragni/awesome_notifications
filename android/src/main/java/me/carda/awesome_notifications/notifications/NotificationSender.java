@@ -178,15 +178,23 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
         try {
 
-            Notification notification = notificationBuilder.createNotification(context, pushNotification);
+            NotificationLifeCycle lifeCycle = AwesomeNotificationsPlugin.getApplicationLifeCycle();
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.notify(pushNotification.content.id, notification);
-            }
-            else {
-                NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
-                notificationManagerCompat.notify(pushNotification.content.id.toString(), pushNotification.content.id, notification);
+            if(
+                (lifeCycle == NotificationLifeCycle.AppKilled) ||
+                (lifeCycle == NotificationLifeCycle.Foreground && pushNotification.content.displayOnForeground) ||
+                (lifeCycle == NotificationLifeCycle.Background && pushNotification.content.displayOnBackground)
+            ){
+                Notification notification = notificationBuilder.createNotification(context, pushNotification);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.notify(pushNotification.content.id, notification);
+                }
+                else {
+                    NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
+                    notificationManagerCompat.notify(pushNotification.content.id.toString(), pushNotification.content.id, notification);
+                }
             }
 
             return pushNotification;

@@ -99,9 +99,16 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
     );
 
     AwesomeNotifications().displayedStream.listen(
-        (receivedNotification){
+            (receivedNotification){
           String createdSourceText = AssertUtils.toSimpleEnumString(receivedNotification.createdSource);
           Fluttertoast.showToast(msg: '$createdSourceText notification displayed');
+        }
+    );
+
+    AwesomeNotifications().dismissedStream.listen(
+            (receivedNotification){
+          String dismissedSourceText = AssertUtils.toSimpleEnumString(receivedNotification.dismissedLifeCycle);
+          Fluttertoast.showToast(msg: 'Notification dismissed on $dismissedSourceText');
         }
     );
 

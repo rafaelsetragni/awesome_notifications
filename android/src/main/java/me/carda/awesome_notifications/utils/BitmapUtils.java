@@ -5,6 +5,7 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -93,11 +94,13 @@ public class BitmapUtils extends MediaUtils {
         Bitmap bitmap = null;
         InputStream inputStream = null;
         try {
-            String assetLookupKey =  FlutterLoader.getInstance().getLookupKeyForAsset(bitmapPath);
-            AssetManager assetManager = context.getAssets();
-            AssetFileDescriptor fd = assetManager.openFd(assetLookupKey);
-            inputStream = fd.createInputStream();
-            bitmap = BitmapFactory.decodeStream(inputStream);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
+                String assetLookupKey =  FlutterLoader.getInstance().getLookupKeyForAsset(bitmapPath);
+                AssetManager assetManager = context.getAssets();
+                AssetFileDescriptor fd = assetManager.openFd(assetLookupKey);
+                inputStream = fd.createInputStream();
+                bitmap = BitmapFactory.decodeStream(inputStream);
+            }
             return bitmap;
         } catch (Exception e) {
             e.printStackTrace();

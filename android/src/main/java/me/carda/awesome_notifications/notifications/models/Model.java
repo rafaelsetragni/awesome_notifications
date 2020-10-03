@@ -14,7 +14,7 @@ import me.carda.awesome_notifications.utils.MapUtils;
 
 public abstract class Model {
 
-    abstract Model fromMapImplementation(Map<String, Object> arguments);
+    protected abstract Model fromMapImplementation(Map<String, Object> arguments);
     public abstract Map<String, Object> toMap();
 
     protected static <T> T getValueOrDefault(Map<String, Object> arguments, String reference, Class<T> expectedClass) {

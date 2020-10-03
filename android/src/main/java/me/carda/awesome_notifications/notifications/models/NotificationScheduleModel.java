@@ -27,7 +27,7 @@ public class NotificationScheduleModel extends Model {
 
     @Override
     @SuppressWarnings("unchecked")
-    Model fromMapImplementation(Map<String, Object> arguments) {
+    protected Model fromMapImplementation(Map<String, Object> arguments) {
 
         initialDateTime = getValueOrDefault(arguments, Definitions.NOTIFICATION_INITIAL_DATE_TIME, String.class);
         crontabSchedule = getValueOrDefault(arguments, Definitions.NOTIFICATION_CRONTAB_SCHEDULE, String.class);

@@ -86,8 +86,7 @@ class NotificationContent extends BaseNotificationContent {
         mapData, 'createdLifeCycle', NotificationLifeCycle.values);
 
     this.createdDate = AssertUtils.extractValue<String>(mapData, 'createdDate');
-    this.displayedDate =
-        AssertUtils.extractValue<String>(mapData, 'displayedDate');
+    this.displayedDate = AssertUtils.extractValue<String>(mapData, 'displayedDate');
 
     return this;
   }
@@ -109,8 +108,7 @@ class NotificationContent extends BaseNotificationContent {
             AssertUtils.toSimpleEnumString(notificationLayout),
         'createdSource': AssertUtils.toSimpleEnumString(createdSource),
         'createdLifeCycle': AssertUtils.toSimpleEnumString(createdLifeCycle),
-        'displayedLifeCycle':
-            AssertUtils.toSimpleEnumString(displayedLifeCycle),
+        'displayedLifeCycle': AssertUtils.toSimpleEnumString(displayedLifeCycle),
         'createdDate': createdDate,
         'displayedDate': displayedDate,
       });
