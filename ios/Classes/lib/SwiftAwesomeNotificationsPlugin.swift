@@ -46,6 +46,8 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             actionKey: response.actionIdentifier,
             userText: userText
         )
+        
+        completionHandler()
     }
     
     public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) -> Bool {
@@ -59,20 +61,17 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     }
     
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable : Any] = [:]) -> Bool {
-        
-        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
-        let url = NSURL(fileURLWithPath: path)
-        
-        if let pathComponent = url.appendingPathComponent("GoogleService-Info.plist") {
-            
-            let filePath = pathComponent.path
-            let fileManager = FileManager.default
-            
-            if fileManager.fileExists(atPath: filePath) {
-                FirebaseApp.configure()
-            }
-        }
+        enableFirebase()
         return true
+    }
+    
+    private func enableFirebase(){
+        let firebaseConfigPath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist")!
+        let fileManager = FileManager.default
+        
+        if fileManager.fileExists(atPath: firebaseConfigPath) {
+            FirebaseApp.configure()
+        }
     }
     
     @available(iOS 10.0, *)
@@ -171,6 +170,12 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         } else {
             // Fallback on earlier versions
         }
+    }
+    
+    @available(iOS 10.0, *)
+    public static func processNotificationContent(_ notification: UNNotification) -> UNNotification{
+        print("processNotificationContent SwiftAwesomeNotificationsPlugin")
+        return notification
     }
     
     public func createEvent(notificationReceived:NotificationReceived){

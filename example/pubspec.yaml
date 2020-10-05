@@ -1,4 +1,5 @@
 name: awesome_notifications_example
+version: 1.0.0
 description: Demonstrates how to use the awesome_notifications plugin.
 
 # The following line prevents the package from being accidentally published to

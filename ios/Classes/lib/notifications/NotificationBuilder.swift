@@ -298,7 +298,6 @@ class NotificationBuilder {
     }
     
     private static func setShowWhen(pushNotification:PushNotification, content:UNMutableNotificationContent){
-        
     }
 
     private static func setAutoCancel(pushNotification:PushNotification, content:UNMutableNotificationContent){
@@ -362,7 +361,10 @@ class NotificationBuilder {
     }
 
     private static func applyGrouping(channel:NotificationChannelModel, content:UNMutableNotificationContent){
-        // in iOS, notifications are always grouped by app id
+        
+        if((channel.setAsGroupSummary ?? false) && (!StringUtils.isNullOrEmpty(channel.groupKey))){
+            content.threadIdentifier = channel.groupKey!
+        }
     }
 
     private static func setLayout(pushNotification:PushNotification, content:UNMutableNotificationContent){
@@ -384,6 +386,7 @@ class NotificationBuilder {
                 return
                         
             case .ProgressBar:
+                setProgressBarLayout(pushNotification: pushNotification, content: content)
                 return
                             
             case .Default:
@@ -439,6 +442,11 @@ class NotificationBuilder {
             }
         }
     }
+    
+    private static func setProgressBarLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {        
+        content.categoryIdentifier = "AwesomeLayout"
+    }
+    
     
     public static func cancelNotification(id:Int){
         let referenceKey:String = String(id)
