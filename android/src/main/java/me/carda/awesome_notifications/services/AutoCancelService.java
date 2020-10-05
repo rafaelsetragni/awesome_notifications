@@ -1,4 +1,4 @@
-package me.carda.awesome_notifications.notifications.services;
+package me.carda.awesome_notifications.services;
 
 import android.app.Service;
 import android.content.Intent;

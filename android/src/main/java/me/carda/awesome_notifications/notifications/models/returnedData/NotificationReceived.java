@@ -1,7 +1,10 @@
 package me.carda.awesome_notifications.notifications.models.returnedData;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
+import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.models.NotificationContentModel;
 
 // Just created because of Json process
@@ -42,5 +45,10 @@ public class NotificationReceived extends NotificationContentModel {
     public static NotificationReceived fromMap(Map<String, Object> arguments) {
         NotificationContentModel contentModel = NotificationContentModel.fromMap(arguments);
         return new NotificationReceived(contentModel);
+    }
+
+    @Override
+    public Map<String, Object> toMap(){
+        return super.toMap();
     }
 }

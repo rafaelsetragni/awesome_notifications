@@ -39,6 +39,8 @@ public class NotificationContentModel extends Model {
     public String bigPicture;
     public Boolean hideLargeIconOnExpand;
     public Boolean autoCancel;
+    public Boolean displayOnForeground;
+    public Boolean displayOnBackground;
     public Long color;
     public Long backgroundColor;
     public Integer progress;
@@ -60,7 +62,7 @@ public class NotificationContentModel extends Model {
     }
 
     @Override
-    Model fromMapImplementation(Map<String, Object> arguments) {
+    protected Model fromMapImplementation(Map<String, Object> arguments) {
 
         createdDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_CREATED_DATE, String.class)
                             .or(DateUtils.getUTCDate());
@@ -91,6 +93,9 @@ public class NotificationContentModel extends Model {
 
         showWhen = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_WHEN, Boolean.class);
         locked = getValueOrDefault(arguments, Definitions.NOTIFICATION_LOCKED, Boolean.class);
+
+        displayOnForeground = getValueOrDefault(arguments, Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, Boolean.class);
+        displayOnBackground = getValueOrDefault(arguments, Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, Boolean.class);
 
         hideLargeIconOnExpand = getValueOrDefault(arguments, Definitions.NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND, Boolean.class);
 
@@ -158,6 +163,12 @@ public class NotificationContentModel extends Model {
 
         if(this.autoCancel != null)
             returnedObject.put(Definitions.NOTIFICATION_AUTO_CANCEL, this.autoCancel);
+
+        if(this.displayOnForeground != null)
+            returnedObject.put(Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, this.autoCancel);
+
+        if(this.displayOnBackground != null)
+            returnedObject.put(Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, this.autoCancel);
 
         if(this.color != null)
             returnedObject.put(Definitions.NOTIFICATION_COLOR, this.color);

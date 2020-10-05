@@ -34,7 +34,6 @@ dependencies:
   intl: ^0.16.1
 
   progressive_image: ^1.0.1
-  bitmap: ^0.0.6
 
   palette_generator: ^0.2.3
 

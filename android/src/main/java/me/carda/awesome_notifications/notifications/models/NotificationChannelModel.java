@@ -100,7 +100,7 @@ public class NotificationChannelModel extends Model {
     }
 
     @Override
-    Model fromMapImplementation(Map<String, Object> arguments) {
+    protected Model fromMapImplementation(Map<String, Object> arguments) {
 
         iconResourceId = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON_RESOURCE_ID, Integer.class);
         icon           = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON, String.class);

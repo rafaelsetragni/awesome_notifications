@@ -5,6 +5,7 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -15,6 +16,7 @@ import java.net.URLConnection;
 import java.util.regex.Pattern;
 
 import io.flutter.embedding.engine.loader.FlutterLoader;
+import io.flutter.view.FlutterMain;
 
 import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_ASSET;
 import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_FILE;
@@ -93,10 +95,16 @@ public class BitmapUtils extends MediaUtils {
         Bitmap bitmap = null;
         InputStream inputStream = null;
         try {
-            String assetLookupKey =  FlutterLoader.getInstance().getLookupKeyForAsset(bitmapPath);
-            AssetManager assetManager = context.getAssets();
-            AssetFileDescriptor fd = assetManager.openFd(assetLookupKey);
-            inputStream = fd.createInputStream();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                inputStream = context.getAssets().open("flutter_assets/" + bitmapPath);
+            } else {
+                String assetLookupKey = FlutterMain.getLookupKeyForAsset(bitmapPath);
+                AssetManager assetManager = context.getAssets();
+                AssetFileDescriptor assetFileDescriptor = assetManager.openFd(assetLookupKey);
+                inputStream = assetFileDescriptor.createInputStream();
+            }
+
             bitmap = BitmapFactory.decodeStream(inputStream);
             return bitmap;
         } catch (Exception e) {

@@ -3,6 +3,7 @@ package me.carda.awesome_notifications.notifications.broadcastReceivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.google.common.reflect.TypeToken;
 
@@ -22,6 +23,8 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
+
+        Toast.makeText(context, "ScheduledNotificationReceiver", Toast.LENGTH_SHORT).show();
 
         String notificationDetailsJson = intent.getStringExtra(Definitions.NOTIFICATION_JSON);
         if (!StringUtils.isNullOrEmpty(notificationDetailsJson)) {

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
+import 'package:flutter/material.dart';
 
 abstract class MediaUtils {
   MediaSource getMediaSource(String mediaPath) {

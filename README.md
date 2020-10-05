@@ -11,11 +11,11 @@
 - Create **Push notifications** using services as **Firebase** or any another one, **simultaneously**;
 - Easy to use and highly customizable.
 - Add **images**, **sounds**, **buttons** and different layouts on your notifications.
-- Notifications could be created at **any moment** (on Foreground, Background or even when the application is killed).
+- Notifications could be created at **any moment** (on Foreground, Background or even when the application is terminated/killed).
 - **High trustworthy** on receive notifications in any Application lifecycle.
 - High quality **data analytics** about when the notification was created, where it came from and when the user taps on it. Ideal for applying **AB tests** approaches, etc, increasing the users engagement.
-- Notifications are received on **Flutter level code** when they are created, displayed or even tapped by the user.
-- Notifications could be **scheduled** repeatedly using **Cron rules**, such linux does, including seconds precision.
+- Notifications are received on **Flutter level code** when they are created, displayed, dismissed or even tapped by the user.
+- Notifications could be **scheduled** repeatedly using a list or precise dates or even **Cron rules**, such linux does, with seconds precision.
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-examples.jpg)
 
@@ -43,16 +43,28 @@ All notifications could be created locally or via Firebase services, with all th
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-progress.jpg)
 
 *Working progress percentages of awesome notifications plugin*
+<br>
 
+### Next steps
+
+- Include Firebase support for iOS (In construction)
+- Finish notifications features for iOS (In construction)
+- Expiration date for notifications (not done yet due to iOS limitations) (https://github.com/rafaelsetragni/awesome_notifications/issues/7)
+- Fix channel's updates on Android (https://github.com/rafaelsetragni/awesome_notifications/issues/3)
+- Include Web support
+- Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
+- Video layout for notifications
+- Carousel layout for notifications
+- Increase the tolerance in the json deserialization process, to accept different types and convert them to the expected.
 <br>
 
 ## Main Philosophy
 
-Considering all the many different devices available, with different hardware and software resources, this plugin ALWAYS shows the notification, trying to use the maximum resources available. If the resource is not available, the notification ignores that specifc resource, but it shows anyway.
+Considering all the many different devices available, with different hardware and software resources, this plugin ALWAYS shows the notification, trying to use the maximum resources available. If the resource is not available, the notification ignores that specific resource, but shows the rest of notification anyway.
 
 **Example**: If the device has LED colored lights, use it. Otherwise, ignore the lights, but shows the notification with all another resources available. In last case, shows at least the most basic notification.
 
-Also, the Noification Channels follows the same rule. If there is no channel segregation of notifications, use the channel configuration as only defaults configuration. If the device has channels, use it as expected to be.
+Also, the Notification Channels follows the same rule. If there is no channel segregation of notifications, use the channel configuration as only defaults configuration. If the device has channels, use it as expected to be.
 
 And all notifications sent while the app was killed are registered and delivered as soon as possible to the Application, after the plugin initialziation, respecting the delivery order.
 
@@ -184,7 +196,7 @@ Also, all the payload elements *MUST* be a String, as the same way as you do in 
 
 Notifications are received by local code or FCM using native code, so the messages will appears immediately or at schedule time, independent of your application state.
 
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/notification-life-cycle.jpeg)
+![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/notification-life-cycle.png)
 
 <br>
 
@@ -195,13 +207,14 @@ The Flutter code will be called as soon as possible using [Dart Streams](https:/
 **createdStream**: Fires when a notification is created
 **displayedStream**: Fires when a notification is displayed on system status bar
 **actionStream**: Fires when a notification is tapped by the user
+**dismissedStream**: Fires when a notification is dismissed by the user
 
 <br>
 
 |                             | App in Foreground | App in Background | App Terminated (Killed) |
 | --------------------------: | ----------------- | ----------------- | -------------- |
-| **Android** | Fires all streams immediately after occurs | Fires all streams immediately after occurs | Fires `createdStream` and `displayedStream` after the plugin initializes, but fires `actionStream` immediately after occurs |
-| **iOS**     | Fires all streams immediately after occurs | Fires all streams immediately after occurs | Fires `createdStream` and `displayedStream` after the plugin initializes, but fires `actionStream` immediately after occurs |
+| **Android** | Fires all streams immediately after occurs | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes, but fires `actionStream` immediately after occurs |
+| **iOS**     | Fires all streams immediately after occurs | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes, but fires `actionStream` immediately after occurs |
 
 <br>
 
