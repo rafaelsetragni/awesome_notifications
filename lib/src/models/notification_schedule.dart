@@ -1,5 +1,4 @@
 import 'package:awesome_notifications/src/models/model.dart';
-
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/date_utils.dart';
 import 'package:awesome_notifications/src/utils/list_utils.dart';

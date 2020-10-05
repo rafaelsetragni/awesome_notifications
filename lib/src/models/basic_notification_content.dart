@@ -1,12 +1,9 @@
-import 'package:flutter/material.dart';
-
 import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
-
 import 'package:awesome_notifications/src/models/model.dart';
-
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
 import 'package:awesome_notifications/src/utils/html_utils.dart';
+import 'package:flutter/material.dart';
 
 class BaseNotificationContent extends Model {
   int id;
@@ -92,6 +89,7 @@ class BaseNotificationContent extends Model {
   }
 
   String get titleWithoutHtml => HtmlUtils.removeAllHtmlTags(title);
+
   String get bodyWithoutHtml => HtmlUtils.removeAllHtmlTags(body);
 
   @override

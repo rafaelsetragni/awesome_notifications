@@ -16,6 +16,7 @@ import java.net.URLConnection;
 import java.util.regex.Pattern;
 
 import io.flutter.embedding.engine.loader.FlutterLoader;
+import io.flutter.view.FlutterMain;
 
 import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_ASSET;
 import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_FILE;
@@ -94,13 +95,17 @@ public class BitmapUtils extends MediaUtils {
         Bitmap bitmap = null;
         InputStream inputStream = null;
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
-                String assetLookupKey =  FlutterLoader.getInstance().getLookupKeyForAsset(bitmapPath);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                inputStream = context.getAssets().open("flutter_assets/" + bitmapPath);
+            } else {
+                String assetLookupKey = FlutterMain.getLookupKeyForAsset(bitmapPath);
                 AssetManager assetManager = context.getAssets();
-                AssetFileDescriptor fd = assetManager.openFd(assetLookupKey);
-                inputStream = fd.createInputStream();
-                bitmap = BitmapFactory.decodeStream(inputStream);
+                AssetFileDescriptor assetFileDescriptor = assetManager.openFd(assetLookupKey);
+                inputStream = assetFileDescriptor.createInputStream();
             }
+
+            bitmap = BitmapFactory.decodeStream(inputStream);
             return bitmap;
         } catch (Exception e) {
             e.printStackTrace();

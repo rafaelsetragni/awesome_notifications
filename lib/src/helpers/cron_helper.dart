@@ -1,6 +1,6 @@
+import 'package:awesome_notifications/src/enumerators/time_and_date.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:awesome_notifications/src/enumerators/time_and_date.dart';
 
 /// Cron helper to set notification repetitions
 /// Use the rule bellow to specify your on cron repetition rule or access

@@ -1,3 +1,9 @@
+## [0.0.3]
+* Documentation updated
+* Included DismissedStream to capture dismissed notifications by the user
+* Updated asset's load file method inside the java native code, due to flutter's 1.22 deprecation on "FlutterLoader.getInstance()"
+* Extracted Bitmap class from bitmap package, due to buildGradle incompatibilities while running the project on release mode (Java)
+
 ## [0.0.2+2]
 ## [0.0.2+1]
 * Documentation updated

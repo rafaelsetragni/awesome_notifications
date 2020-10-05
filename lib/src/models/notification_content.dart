@@ -1,12 +1,9 @@
-import 'package:flutter/material.dart';
-
-import 'package:awesome_notifications/src/enumerators/notification_life_cycle.dart';
 import 'package:awesome_notifications/src/enumerators/notification_layout.dart';
+import 'package:awesome_notifications/src/enumerators/notification_life_cycle.dart';
 import 'package:awesome_notifications/src/enumerators/notification_source.dart';
-
 import 'package:awesome_notifications/src/models/basic_notification_content.dart';
-
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
+import 'package:flutter/material.dart';
 
 /// Main content of notification
 /// If notification has no [body] or [title], it will only be created, but not displayed to the user (background notification).
@@ -86,7 +83,8 @@ class NotificationContent extends BaseNotificationContent {
         mapData, 'createdLifeCycle', NotificationLifeCycle.values);
 
     this.createdDate = AssertUtils.extractValue<String>(mapData, 'createdDate');
-    this.displayedDate = AssertUtils.extractValue<String>(mapData, 'displayedDate');
+    this.displayedDate =
+        AssertUtils.extractValue<String>(mapData, 'displayedDate');
 
     return this;
   }
@@ -108,7 +106,8 @@ class NotificationContent extends BaseNotificationContent {
             AssertUtils.toSimpleEnumString(notificationLayout),
         'createdSource': AssertUtils.toSimpleEnumString(createdSource),
         'createdLifeCycle': AssertUtils.toSimpleEnumString(createdLifeCycle),
-        'displayedLifeCycle': AssertUtils.toSimpleEnumString(displayedLifeCycle),
+        'displayedLifeCycle':
+            AssertUtils.toSimpleEnumString(displayedLifeCycle),
         'createdDate': createdDate,
         'displayedDate': displayedDate,
       });

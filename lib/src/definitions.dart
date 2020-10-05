@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-
 import 'package:awesome_notifications/src/enumerators/action_button_type.dart';
-import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
 import 'package:awesome_notifications/src/enumerators/group_alert_behaviour.dart';
 import 'package:awesome_notifications/src/enumerators/notification_importance.dart';
+import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
+import 'package:flutter/material.dart';
 
 import 'enumerators/notification_layout.dart';
 
-const BROADCAST_FCM_TOKEN = 'me.carda.awesome_notifications.services.firebase.TOKEN';
+const BROADCAST_FCM_TOKEN =
+    'me.carda.awesome_notifications.services.firebase.TOKEN';
 const EXTRA_BROADCAST_FCM_TOKEN = 'token';
 
 const BROADCAST_MESSAGE =

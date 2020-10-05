@@ -40,7 +40,8 @@ class ReceivedAction extends ReceivedNotification {
         'actionDate': actionDate,
         'dismissedDate': dismissedDate,
         'actionLifeCycle': AssertUtils.toSimpleEnumString(actionLifeCycle),
-        'dismissedLifeCycle': AssertUtils.toSimpleEnumString(dismissedLifeCycle),
+        'dismissedLifeCycle':
+            AssertUtils.toSimpleEnumString(dismissedLifeCycle),
         'buttonKeyPressed': buttonKeyPressed,
         'buttonKeyInput': buttonKeyInput
       });

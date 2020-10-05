@@ -162,7 +162,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
         getApplicationLifeCycle();
 
-        //FirebaseApp.initializeApp(context);
+        FirebaseApp.initializeApp(context);
     }
 
     @Override
