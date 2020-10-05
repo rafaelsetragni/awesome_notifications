@@ -2,13 +2,16 @@ package me.carda.awesome_notifications.notifications.models;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.externalLibs.CronExpression;
 import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
 import me.carda.awesome_notifications.utils.DateUtils;
+import me.carda.awesome_notifications.utils.ListUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
 public class NotificationScheduleModel extends Model {
@@ -16,17 +19,29 @@ public class NotificationScheduleModel extends Model {
     public String initialDateTime;
     public String crontabSchedule;
     public Boolean allowWhileIdle;
+    public List<String> preciseSchedules;
 
     public static NotificationScheduleModel fromMap(Map<String, Object> arguments) {
         return (NotificationScheduleModel) new NotificationScheduleModel().fromMapImplementation(arguments);
     }
 
     @Override
-    Model fromMapImplementation(Map<String, Object> arguments) {
+    @SuppressWarnings("unchecked")
+    protected Model fromMapImplementation(Map<String, Object> arguments) {
 
         initialDateTime = getValueOrDefault(arguments, Definitions.NOTIFICATION_INITIAL_DATE_TIME, String.class);
         crontabSchedule = getValueOrDefault(arguments, Definitions.NOTIFICATION_CRONTAB_SCHEDULE, String.class);
         allowWhileIdle = getValueOrDefault(arguments, Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, Boolean.class);
+
+        if(arguments.containsKey("preciseSchedules"))
+        {
+           try {
+               preciseSchedules = (List<String>) arguments.get("preciseSchedules");
+           }
+           catch (Exception e){
+               e.printStackTrace();
+           }
+        }
 
         return this;
     }
@@ -38,6 +53,7 @@ public class NotificationScheduleModel extends Model {
         returnedObject.put(Definitions.NOTIFICATION_INITIAL_DATE_TIME, initialDateTime);
         returnedObject.put(Definitions.NOTIFICATION_CRONTAB_SCHEDULE, crontabSchedule);
         returnedObject.put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, allowWhileIdle);
+        returnedObject.put(Definitions.NOTIFICATION_PRECISE_SCHEDULES, preciseSchedules);
 
         return returnedObject;
     }
@@ -45,8 +61,8 @@ public class NotificationScheduleModel extends Model {
     @Override
     public void validate(Context context) throws PushNotificationException {
 
-        if(StringUtils.isNullOrEmpty(initialDateTime) && StringUtils.isNullOrEmpty(crontabSchedule))
-            throw new PushNotificationException("Schedule cannot have initial date time and cron rule null or empty");
+        if(StringUtils.isNullOrEmpty(initialDateTime) && StringUtils.isNullOrEmpty(crontabSchedule) && ListUtils.isNullOrEmpty(preciseSchedules))
+            throw new PushNotificationException("At least one schedule parameter is required");
 
         try {
 
@@ -55,6 +71,14 @@ public class NotificationScheduleModel extends Model {
 
             if(crontabSchedule != null && !CronExpression.isValidExpression(crontabSchedule))
                 throw new PushNotificationException("Schedule cron expression is invalid");
+
+            if(preciseSchedules != null){
+                for(String schedule : preciseSchedules){
+                    if(DateUtils.parseDate(schedule) == null){
+                        throw new PushNotificationException("Precise schedule '"+schedule+"' is invalid");
+                    }
+                }
+            }
 
         } catch (PushNotificationException e){
             throw e;

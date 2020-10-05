@@ -36,6 +36,7 @@ public class AwesomeNotificationsPlugin: FlutterPlugin, MethodCallHandler {
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "awesome_notifications")
       channel.setMethodCallHandler(AwesomeNotificationsPlugin())
+      FirebaseCloudMessagingPluginRegistrant.registerWith(registrar)
     }
   }
 

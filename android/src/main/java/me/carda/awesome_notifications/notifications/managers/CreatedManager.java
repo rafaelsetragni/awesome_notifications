@@ -32,7 +32,7 @@ public class CreatedManager {
     }
 
     public static void cancelAllCreated(Context context) {
-        List<NotificationReceived> receivedList = shared.getAllObjects(context, typeToken, Definitions.SHARED_SCHEDULED_NOTIFICATIONS);
+        List<NotificationReceived> receivedList = shared.getAllObjects(context, typeToken, Definitions.SHARED_CREATED);
         if (receivedList != null){
             for (NotificationReceived received : receivedList) {
                 cancelCreated(context, received.id);

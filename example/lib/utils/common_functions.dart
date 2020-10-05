@@ -2,9 +2,9 @@ import 'dart:ui';
 import 'dart:io';
 
 import 'dart:math' as math;
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:bitmap/bitmap.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -15,8 +15,8 @@ Future<String> saveAssetOnDisk(ImageProvider image, String fileName) async {
   File newFile = File(filePath);
 
   if(!await newFile.exists()) {
-    Bitmap bitmap = await Bitmap.fromProvider(image);
-    await newFile.writeAsBytes(bitmap.content);
+    BitmapHelper bitmapHelper = await BitmapHelper.fromProvider(image);
+    await newFile.writeAsBytes(bitmapHelper.content);
   }
 
   return filePath;

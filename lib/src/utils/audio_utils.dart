@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:awesome_notifications/src/utils/media_abstract_utils.dart';
+import 'package:flutter/material.dart';
 
 class AudioUtils extends MediaUtils {
   /// FACTORY METHODS *********************************************

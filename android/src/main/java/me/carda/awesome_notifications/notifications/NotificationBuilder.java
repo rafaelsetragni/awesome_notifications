@@ -23,6 +23,7 @@ import androidx.core.app.RemoteInput;
 import androidx.core.content.ContextCompat;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
+import me.carda.awesome_notifications.notifications.broadcastReceivers.DismissedNotificationReceiver;
 import me.carda.awesome_notifications.notifications.broadcastReceivers.KeepOnTopActionReceiver;
 import me.carda.awesome_notifications.notifications.enumeratos.ActionButtonType;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationLayout;
@@ -49,9 +50,16 @@ public class NotificationBuilder {
     public Notification createNotification(Context context, PushNotification pushNotification) throws PushNotificationException {
 
         Intent intent = buildNotificationIntentFromModel(
-                context,
-                Definitions.SELECT_NOTIFICATION,
-                pushNotification
+            context,
+            Definitions.SELECT_NOTIFICATION,
+            pushNotification
+        );
+
+        Intent deleteIntent = buildNotificationIntentFromModel(
+            context,
+            Definitions.DISMISSED_NOTIFICATION,
+            pushNotification,
+            DismissedNotificationReceiver.class
         );
 
         PendingIntent pendingIntent = PendingIntent.getActivity(
@@ -61,7 +69,14 @@ public class NotificationBuilder {
             PendingIntent.FLAG_UPDATE_CURRENT
         );
 
-        NotificationCompat.Builder builder = getNotificationBuilderFromModel(context, pushNotification, pendingIntent);
+        PendingIntent pendingDeleteIntent = PendingIntent.getBroadcast(
+            context,
+            pushNotification.content.id,
+            deleteIntent,
+            PendingIntent.FLAG_CANCEL_CURRENT
+        );
+
+        NotificationCompat.Builder builder = getNotificationBuilderFromModel(context, pushNotification, pendingIntent, pendingDeleteIntent);
 
         return builder.build();
     }
@@ -87,7 +102,7 @@ public class NotificationBuilder {
 
         if(actionKey == null) return null;
 
-        Boolean isNormalAction = Definitions.SELECT_NOTIFICATION.equals(actionKey);
+        Boolean isNormalAction = Definitions.SELECT_NOTIFICATION.equals(actionKey) || Definitions.DISMISSED_NOTIFICATION.equals(actionKey);
         Boolean isButtonAction = actionKey.startsWith(Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX);
 
         if (isNormalAction || isButtonAction){
@@ -103,14 +118,14 @@ public class NotificationBuilder {
             if (isButtonAction){
                 actionModel.actionKey = intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_KEY);
                 if(intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_TYPE).equals(ActionButtonType.InputField.toString()))
-                    actionModel.buttonInput = getButtonInputText(intent, intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_KEY));
+                    actionModel.actionInput = getButtonInputText(intent, intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_KEY));
             }
 
             if (intent.getBooleanExtra(Definitions.NOTIFICATION_AUTO_CANCEL, notificationId >= 0)) {
 
                 /* "IT WORKS", but is not the correct way to do
                 // https://stackoverflow.com/questions/54219914/cancel-notification-with-remoteinput-not-working/56867575#56867575
-                if(!StringUtils.isNullOrEmpty(actionModel.buttonInput) && Build.VERSION.SDK_INT >= 28){
+                if(!StringUtils.isNullOrEmpty(actionModel.actionInput) && Build.VERSION.SDK_INT >= 28){
                     pushNotification.actionButtons = null;
                     pushNotification.content.notificationLayout = NotificationLayout.Default;
                     try {
@@ -149,7 +164,7 @@ public class NotificationBuilder {
         return null;
     }
 
-    private NotificationCompat.Builder getNotificationBuilderFromModel(Context context, PushNotification pushNotification, PendingIntent pendingIntent) throws PushNotificationException {
+    private NotificationCompat.Builder getNotificationBuilderFromModel(Context context, PushNotification pushNotification, PendingIntent pendingIntent, PendingIntent deleteIntent) throws PushNotificationException {
 
         NotificationChannelModel channel = ChannelManager.getChannelByKey(context, pushNotification.content.channelKey);
 
@@ -185,6 +200,7 @@ public class NotificationBuilder {
         applyGrouping(channel, builder);
 
         builder.setContentIntent(pendingIntent);
+        builder.setDeleteIntent(deleteIntent);
 
         return builder;
     }

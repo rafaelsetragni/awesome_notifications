@@ -1,22 +1,20 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:awesome_notifications/src/enumerators/media_source.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-
 import 'package:awesome_notifications/src/definitions.dart';
-import 'package:awesome_notifications/src/models/received_models/push_notification.dart';
-
+import 'package:awesome_notifications/src/enumerators/media_source.dart';
+import 'package:awesome_notifications/src/models/notification_button.dart';
 import 'package:awesome_notifications/src/models/notification_channel.dart';
 import 'package:awesome_notifications/src/models/notification_content.dart';
 import 'package:awesome_notifications/src/models/notification_schedule.dart';
-import 'package:awesome_notifications/src/models/notification_button.dart';
+import 'package:awesome_notifications/src/models/received_models/push_notification.dart';
 import 'package:awesome_notifications/src/models/received_models/received_action.dart';
 import 'package:awesome_notifications/src/models/received_models/received_notification.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 class AwesomeNotifications {
   static String rootNativePath;
@@ -41,6 +39,11 @@ class AwesomeNotifications {
       // ignore: close_sinks
       _actionSubject = StreamController<ReceivedAction>.broadcast(sync: true);
 
+  final StreamController<ReceivedAction>
+      // ignore: close_sinks
+      _dismissedSubject =
+      StreamController<ReceivedAction>.broadcast(sync: true);
+
   /// STREAM METHODS *********************************************
 
   /// Stream to capture all FCM token updates. Could be changed at any time.
@@ -56,6 +59,11 @@ class AwesomeNotifications {
   /// Stream to capture all notifications displayed on user's screen.
   Stream<ReceivedNotification> get displayedStream {
     return _displayedSubject.stream;
+  }
+
+  /// Stream to capture all notifications dismissed by the user.
+  Stream<ReceivedAction> get dismissedStream {
+    return _dismissedSubject.stream;
   }
 
   /// Stream to capture all actions (tap) over notifications
@@ -81,6 +89,11 @@ class AwesomeNotifications {
   }
 
   /// Sink to dispose the stream, if you don't need it anymore.
+  Sink get dismissedSink {
+    return _dismissedSubject.sink;
+  }
+
+  /// Sink to dispose the stream, if you don't need it anymore.
   Sink get actionSink {
     return _actionSubject.sink;
   }
@@ -92,12 +105,14 @@ class AwesomeNotifications {
     _tokenStreamController.close();
     _createdSubject.close();
     _displayedSubject.close();
+    _dismissedSubject.close();
     _actionSubject.close();
   }
 
   /// SINGLETON METHODS *********************************************
 
   final MethodChannel _channel;
+
   factory AwesomeNotifications() => _instance;
 
   @visibleForTesting
@@ -167,6 +182,11 @@ class AwesomeNotifications {
       case CHANNEL_METHOD_NOTIFICATION_DISPLAYED:
         _displayedSubject.sink.add(ReceivedNotification().fromMap(arguments));
         debugPrint('Notification displayed');
+        return;
+
+      case CHANNEL_METHOD_NOTIFICATION_DISMISSED:
+        _dismissedSubject.sink.add(ReceivedAction().fromMap(arguments));
+        debugPrint('Notification dismissed');
         return;
 
       case CHANNEL_METHOD_ACTION_RECEIVED:

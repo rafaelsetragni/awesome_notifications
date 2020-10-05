@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import me.carda.awesome_notifications.notifications.managers.DismissedManager;
 import me.carda.awesome_notifications.notifications.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
 
@@ -91,6 +92,33 @@ public class BroadcastSender {
 
             if(success){
                 Log.d(TAG, "Sent displayed to broadcast");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return success;
+    }
+
+    public static Boolean SendBroadcastNotificationDismissed(Context context, ActionReceived actionReceived){
+
+        Boolean success = false;
+
+        DismissedManager.saveDismissed(context, actionReceived);
+
+        Map<String, Object> data = actionReceived.toMap();
+
+        Intent intent = new Intent(Definitions.BROADCAST_DISMISSED_NOTIFICATION);
+        intent.putExtra(Definitions.EXTRA_BROADCAST_MESSAGE, (Serializable) data);
+
+        try {
+
+            LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(context);
+            success = broadcastManager.sendBroadcast(intent);
+
+            if(success){
+                Log.d(TAG, "Sent dismissed to broadcast");
             }
 
         } catch (Exception e) {

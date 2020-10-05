@@ -139,7 +139,7 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                           ),
                           Container(
                             width: mediaQueryData.size.width,
-                            padding: EdgeInsets.only(left: 20.0, right:20.0, bottom: 10, top: bigPicture == null ? (largeIcon == null ? 100 : 190) : maxSize * 0.48),
+                            padding: EdgeInsets.only(left: 20.0, right:20.0, bottom: 10, top: bigPicture == null ? (largeIcon == null ? 100 : 190) : maxSize * 0.45 + 5),
                             child: RichText(
                                 text: TextSpan(
                                     children: [

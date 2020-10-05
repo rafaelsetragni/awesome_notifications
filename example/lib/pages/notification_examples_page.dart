@@ -99,9 +99,16 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
     );
 
     AwesomeNotifications().displayedStream.listen(
-        (receivedNotification){
+            (receivedNotification){
           String createdSourceText = AssertUtils.toSimpleEnumString(receivedNotification.createdSource);
           Fluttertoast.showToast(msg: '$createdSourceText notification displayed');
+        }
+    );
+
+    AwesomeNotifications().dismissedStream.listen(
+            (receivedNotification){
+          String dismissedSourceText = AssertUtils.toSimpleEnumString(receivedNotification.dismissedLifeCycle);
+          Fluttertoast.showToast(msg: 'Notification dismissed on $dismissedSourceText');
         }
     );
 
@@ -559,6 +566,10 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
           SimpleButton(
             'Show notification at every single minute',
             onPressed: () => repeatMinuteNotification(8),
+          ),
+          SimpleButton(
+            'Show notification 3 times, spaced 10 seconds from each other',
+            onPressed: () => repeatPreciseThreeTimes(8),
           ),
           SimpleButton(
             'Show notification at every single minute o\'clock',

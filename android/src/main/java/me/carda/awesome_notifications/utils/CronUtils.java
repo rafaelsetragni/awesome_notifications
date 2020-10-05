@@ -40,10 +40,8 @@ public final class CronUtils {
             initialScheduleDay = DateUtils.parseDate(initialDateTime);
         }
 
-        delayedNow = applyToleranceDate(now);
-
         // if initial date is a future one, show in future. Otherwise, show now
-        switch (initialScheduleDay.compareTo(delayedNow)){
+        switch (initialScheduleDay.compareTo(now)){
 
             case -1: // if initial date is not a repetition and is in the past, do not show
                 if(StringUtils.isNullOrEmpty(crontabRule))
@@ -57,6 +55,8 @@ public final class CronUtils {
                 calendar.setTime(initialScheduleDay);
                 break;
         }
+
+        delayedNow = applyToleranceDate(now);
 
         if (!StringUtils.isNullOrEmpty(crontabRule)) {
 

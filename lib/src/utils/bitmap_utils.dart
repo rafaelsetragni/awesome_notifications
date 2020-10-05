@@ -1,9 +1,8 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-
 import 'package:awesome_notifications/src/utils/media_abstract_utils.dart';
 import 'package:awesome_notifications/src/utils/resource_image_provider.dart';
+import 'package:flutter/material.dart';
 
 class BitmapUtils extends MediaUtils {
   /// FACTORY METHODS *********************************************

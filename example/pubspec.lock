@@ -28,14 +28,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1+7"
-  bitmap:
-    dependency: "direct main"
-    description:
-      name: bitmap
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.6"
+    version: "0.0.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -99,13 +92,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0-nullsafety.1"
-  ffi:
-    dependency: transitive
-    description:
-      name: ffi
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.3"
   file:
     dependency: transitive
     description:
@@ -364,13 +350,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0-nullsafety.3"
-  win32:
-    dependency: transitive
-    description:
-      name: win32
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.7.3"
   xdg_directories:
     dependency: transitive
     description:

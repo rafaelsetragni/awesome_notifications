@@ -32,7 +32,7 @@ public class DisplayedManager {
     }
 
     public static void cancelAllDisplayed(Context context) {
-        List<NotificationReceived> displayedList = shared.getAllObjects(context, typeToken, Definitions.SHARED_SCHEDULED_NOTIFICATIONS);
+        List<NotificationReceived> displayedList = shared.getAllObjects(context, typeToken, Definitions.SHARED_DISPLAYED);
         if(displayedList != null)
             for(NotificationReceived displayed : displayedList){
                 cancelDisplayed(context, displayed.id);

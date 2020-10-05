@@ -1,4 +1,5 @@
-
+import 'dart:collection';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' show Client, Response;
@@ -7,18 +8,12 @@ import 'package:awesome_notifications_example/utils/common_functions.dart';
 import 'datasource.dart';
 
 class HttpDataSource extends DataSource {
-
   final String baseAPI;
   final bool isUsingHttps;
   final bool isCertificateHttps;
 
-  HttpDataSource(
-    this.baseAPI,
-    {
-      this.isUsingHttps = true,
-      this.isCertificateHttps = true
-    }
-  );
+  HttpDataSource(this.baseAPI,
+      {this.isUsingHttps = true, this.isCertificateHttps = true});
 
   String getDomainName() {
     return baseAPI;
@@ -28,26 +23,22 @@ class HttpDataSource extends DataSource {
     return (isUsingHttps ? 'https://' : 'http://') + baseAPI;
   }
 
-  void printDebugData(Response response){
+  void printDebugData(Response response) {
     int sent;
     int received = response.contentLength;
-    debugPrint('${response.request.method} (${response.statusCode}) - ' +(
-        (sent == null ? '' : 'Up:${fileSize(sent)} ') +
-            (received == null ? '' : 'Down:${fileSize(received)} ')
-    )+ response.request.url.path);
+    debugPrint('${response.request.method} (${response.statusCode}) - ' +
+        ((sent == null ? '' : 'Up:${fileSize(sent)} ') +
+            (received == null ? '' : 'Down:${fileSize(received)} ')) +
+        response.request.url.path);
   }
 
   @override
   Future<Response> fetchData(
-      {
-        String directory = '',
-        Map<String, String> parameters,
-        Map<String, String> headers = const {},
-        String body,
-        int timeoutInMilliseconds = 5000
-      }
-    ) async {
-
+      {String directory = '',
+      Map<String, String> parameters,
+      Map<String, String> headers, // =
+      String body,
+      int timeoutInMilliseconds = 5000}) async {
     int tries = 3;
 
     do {
@@ -57,23 +48,22 @@ class HttpDataSource extends DataSource {
         debugPrint('Requesting url "$apiUrl"...');
 
         final Client client = Client();
-        final Uri uri = isUsingHttps ? Uri.https(baseAPI, directory, parameters) : Uri.http(baseAPI, directory, parameters);
-        final Response response = body.isEmpty ?
-            await client.get(uri.toString(), headers: headers) :
-            await client.post(uri.toString(), headers: headers, body: body);
+        final Uri uri = isUsingHttps
+            ? Uri.https(baseAPI, directory, parameters)
+            : Uri.http(baseAPI, directory, parameters);
+        final Response response = body.isEmpty
+            ? await client.get(uri.toString(), headers: headers)
+            : await client.post(uri.toString(), headers: headers, body: body);
 
         printDebugData(response);
         return response;
-      }
-      on HttpException {
+      } on HttpException catch (exception) {
+        tries--;
+        sleep(Duration(milliseconds: 500));
+      } on Exception catch (exception) {
         tries--;
         sleep(Duration(milliseconds: 500));
       }
-      on Exception {
-        tries--;
-        sleep(Duration(milliseconds: 500));
-      }
-
     } while (tries > 0);
 
     return null;

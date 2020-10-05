@@ -23,6 +23,7 @@ import me.carda.awesome_notifications.notifications.models.returnedData.Notifica
 import me.carda.awesome_notifications.utils.BooleanUtils;
 import me.carda.awesome_notifications.utils.CronUtils;
 import me.carda.awesome_notifications.utils.DateUtils;
+import me.carda.awesome_notifications.utils.ListUtils;
 
 public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
 
@@ -93,6 +94,7 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
     @Override
     protected Calendar doInBackground(String... parameters) {
         try {
+            Calendar nextValidDate;
 
             if(pushNotification != null){
 
@@ -104,7 +106,7 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                 if(pushNotification.content.createdLifeCycle == null)
                     pushNotification.content.createdLifeCycle = appLifeCycle;
 
-                Calendar nextValidDate = CronUtils.getNextCalendar(
+                nextValidDate = CronUtils.getNextCalendar(
                     pushNotification.schedule.initialDateTime,
                     pushNotification.schedule.crontabSchedule
                 );
@@ -120,6 +122,42 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                     return nextValidDate;
                 }
                 else {
+
+                    if(!ListUtils.isNullOrEmpty(pushNotification.schedule.preciseSchedules)){
+
+                        for (String nextDateTime: pushNotification.schedule.preciseSchedules) {
+
+                            Calendar closestDate = CronUtils.getNextCalendar(
+                                nextDateTime,
+                                null
+                            );
+
+                            if(closestDate != null){
+                                if(nextValidDate == null){
+                                    nextValidDate = closestDate;
+                                }
+                                else {
+                                    if(closestDate.compareTo(nextValidDate) < 0){
+                                        nextValidDate = closestDate;
+                                    }
+                                }
+                            }
+                        }
+
+                        if(nextValidDate != null){
+
+                            pushNotification = scheduleNotification(context, pushNotification, nextValidDate);
+
+                            if(pushNotification != null){
+                                scheduled = true;
+                            }
+
+                            return nextValidDate;
+                        }
+                    }
+
+                    cancelNotification(context, pushNotification.content.id);
+
                     String msg = "Date is not more valid. ("+DateUtils.getUTCDate()+")";
                     Log.d(TAG, msg);
                 }
@@ -136,7 +174,7 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
     protected void onPostExecute(Calendar nextValidDate) {
 
         // Only fire ActionReceived if notificationModel is valid
-        if(pushNotification != null) {
+        if(nextValidDate != null) {
 
             if(scheduled){
                 ScheduleManager.saveSchedule(context, pushNotification);

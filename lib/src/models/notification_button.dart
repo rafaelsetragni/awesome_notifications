@@ -1,8 +1,6 @@
-import 'package:awesome_notifications/src/models/model.dart';
-
 import 'package:awesome_notifications/src/enumerators/action_button_type.dart';
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
-
+import 'package:awesome_notifications/src/models/model.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
 import 'package:awesome_notifications/src/utils/string_utils.dart';

@@ -11,7 +11,7 @@ import me.carda.awesome_notifications.notifications.enumeratos.NotificationPriva
 
 public interface Definitions {
 
-    String BROADCAST_FCM_TOKEN = "me.carda.awesome_notifications.firebase.TOKEN";
+    String BROADCAST_FCM_TOKEN = "me.carda.awesome_notifications.services.firebase.TOKEN";
     String EXTRA_BROADCAST_FCM_TOKEN = "token";
 
     String MEDIA_VALID_NETWORK = "^https?:\\/\\/";//(www)?(\\.?[a-zA-Z0-9@:%.\\-_\\+~#=]{2,256}\\/?)+(\\?\\S+)$
@@ -21,8 +21,9 @@ public interface Definitions {
 
     String INITIALIZE_CHANNELS = "initializeChannels";
 
-    String BROADCAST_CREATED_NOTIFICATION ="broadcast.awesome_notifications.CREATED_NOTIFICATION";
-    String BROADCAST_DISPLAYED_NOTIFICATION ="broadcast.awesome_notifications.DISPLAYED_NOTIFICATION";
+    String BROADCAST_CREATED_NOTIFICATION   = "broadcast.awesome_notifications.CREATED_NOTIFICATION";
+    String BROADCAST_DISPLAYED_NOTIFICATION = "broadcast.awesome_notifications.DISPLAYED_NOTIFICATION";
+    String BROADCAST_DISMISSED_NOTIFICATION = "broadcast.awesome_notifications.DISMISSED_NOTIFICATION";
     String BROADCAST_KEEP_ON_TOP ="broadcast.awesome_notifications.KEEP_ON_TOP";
     String EXTRA_BROADCAST_MESSAGE = "notification";
 
@@ -35,6 +36,7 @@ public interface Definitions {
     String SHARED_CHANNELS = "channels";
     String SHARED_CREATED = "created";
     String SHARED_DISPLAYED = "displayed";
+    String SHARED_DISMISSED = "dismissed";
     String SHARED_SCHEDULED_NOTIFICATIONS = "schedules";
 
     String CHANNEL_FLUTTER_PLUGIN = "awesome_notifications";
@@ -57,12 +59,14 @@ public interface Definitions {
 
     String CHANNEL_METHOD_NOTIFICATION_CREATED = "notificationCreated";
     String CHANNEL_METHOD_NOTIFICATION_DISPLAYED = "notificationDisplayed";
+    String CHANNEL_METHOD_NOTIFICATION_DISMISSED = "notificationDismissed";
     String CHANNEL_METHOD_RECEIVED_ACTION = "receivedAction";
 
     String CHANNEL_METHOD_LIST_ALL_SCHEDULES = "listAllSchedules";
 
     String DEFAULT_ICON = "defaultIcon";
     String SELECT_NOTIFICATION = "SELECT_NOTIFICATION";
+    String DISMISSED_NOTIFICATION = "DISMISSED_NOTIFICATION";
     String NOTIFICATION_BUTTON_ACTION_PREFIX = "ACTION_NOTIFICATION";
 
     String SHARED_PREFERENCES_CHANNEL_MANAGER = "channel_manager";
@@ -74,10 +78,12 @@ public interface Definitions {
     String NOTIFICATION_CREATED_SOURCE = "createdSource";
     String NOTIFICATION_CREATED_LIFECYCLE = "createdLifeCycle";
     String NOTIFICATION_DISPLAYED_LIFECYCLE = "displayedLifeCycle";
+    String NOTIFICATION_DISMISSED_LIFECYCLE = "dismissedLifeCycle";
     String NOTIFICATION_ACTION_LIFECYCLE = "actionLifeCycle";
     String NOTIFICATION_CREATED_DATE = "createdDate";
-    String NOTIFICATION_DISPLAYED_DATE = "displayedDate";
     String NOTIFICATION_ACTION_DATE = "actionDate";
+    String NOTIFICATION_DISPLAYED_DATE = "displayedDate";
+    String NOTIFICATION_DISMISSED_DATE = "dismissedDate";
 
     String NOTIFICATION_ID = "id";
     String NOTIFICATION_LAYOUT = "notificationLayout";
@@ -99,9 +105,12 @@ public interface Definitions {
     String NOTIFICATION_PAYLOAD = "payload";
     String NOTIFICATION_INITIAL_DATE_TIME = "initialDateTime";
     String NOTIFICATION_CRONTAB_SCHEDULE = "crontabSchedule";
+    String NOTIFICATION_PRECISE_SCHEDULES = "preciseSchedules";
     String NOTIFICATION_ENABLED = "enabled";
     String NOTIFICATION_AUTO_CANCEL = "autoCancel";
     String NOTIFICATION_LOCKED = "locked";
+    String NOTIFICATION_DISPLAY_ON_FOREGROUND = "displayOnForeground";
+    String NOTIFICATION_DISPLAY_ON_BACKGROUND = "displayOnBackground";
     String NOTIFICATION_ICON = "icon";
     String NOTIFICATION_PLAY_SOUND = "playSound";
     String NOTIFICATION_SOUND_SOURCE = "soundSource";
@@ -144,6 +153,8 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_CHANNEL_DESCRIPTION, "Notifications");
         put(Definitions.NOTIFICATION_CHANNEL_NAME, "Notifications");
         put(Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE, false);
+        put(Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, true);
+        put(Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, true);
         put(Definitions.NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND, false);
         put(Definitions.NOTIFICATION_ENABLED, true);
         put(Definitions.NOTIFICATION_SHOW_WHEN, true);
