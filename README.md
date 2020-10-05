@@ -16,13 +16,15 @@
 - High quality **data analytics** about when the notification was created, where it came from and when the user taps on it. Ideal for applying **AB tests** approaches, etc, increasing the users engagement.
 - Notifications are received on **Flutter level code** when they are created, displayed, dismissed or even tapped by the user.
 - Notifications could be **scheduled** repeatedly using a list or precise dates or even **Cron rules**, such linux does, with seconds precision.
+<br>
 
+*Some **android** notification examples:*
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-android-examples.jpg)
-*Some android examples of notifications produced using awesome notifications*
+<br>
 
+*Some **iOS** notification examples **(work in progress)**:*
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-ios-examples.jpg)
-*Some iOS examples of notifications produced using awesome notifications (work in progress)*
-
+<br>
 
 ### Notification Types Available
 
