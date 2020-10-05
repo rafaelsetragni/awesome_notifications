@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' show Client, Response;
+import 'package:http/http.dart' show Response;
 
 import 'common/http_datasource.dart';
 
@@ -16,7 +14,7 @@ class FirebaseDataSource extends HttpDataSource {
   ///
   static FirebaseDataSource _instance;
   factory FirebaseDataSource({
-    @required String serverSecret
+    String serverSecret
   }) {
     _instance ??= FirebaseDataSource._internalConstructor();
     return _instance;

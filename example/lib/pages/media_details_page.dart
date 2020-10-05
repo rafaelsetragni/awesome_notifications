@@ -1,11 +1,9 @@
 import 'dart:math';
-import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:progressive_image/progressive_image.dart';
 import 'package:awesome_notifications_example/models/media_model.dart';
@@ -27,7 +25,6 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
   bool closeCaptionActivated = false;
   bool hasCloseCaption = false;
 
-  String _closeCaption;
 
   bool isLighten;
   Color mainColor;
@@ -91,11 +88,12 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
         maxColor - minColor - color.green,
         maxColor - minColor - color.blue,
     );
+    /*
     double y = (299 * color.red + 587 * color.green + 114 * color.blue) / 1000;
     return y >= 128 ? Colors.black : Colors.white;
+    */
   }
 
-  MediaModel _lastMedia;
   Future<void> _updatePlayer({MediaModel media}) async {
 
     if(media != null){
@@ -120,7 +118,6 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
 
     if(mounted) setState(() {});
 
-    _lastMedia = media;
   }
 
   Future<void> _updatePaletteGenerator({MediaModel media}) async {

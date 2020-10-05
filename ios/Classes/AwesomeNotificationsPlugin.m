@@ -9,7 +9,10 @@
 #endif
 
 @implementation AwesomeNotificationsPlugin
+
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   [SwiftAwesomeNotificationsPlugin registerWithRegistrar:registrar];
 }
+
 @end
+

@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -57,8 +55,6 @@ class _FirebaseTestPageState extends State<FirebaseTestPage> {
   @override
   Widget build(BuildContext context) {
 
-    MediaQueryData mediaQuery = MediaQuery.of(context);
-    ThemeData themeData = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(

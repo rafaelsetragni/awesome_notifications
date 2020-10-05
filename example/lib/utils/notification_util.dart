@@ -4,11 +4,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
-import 'package:awesome_notifications_example/main.dart';
 import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart';
 import 'package:awesome_notifications_example/utils/media_player_central.dart';
