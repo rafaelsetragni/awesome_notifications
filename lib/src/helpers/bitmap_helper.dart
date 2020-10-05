@@ -7,9 +7,9 @@ import 'package:flutter/rendering.dart';
 const int bitmapPixelLength = 4;
 const int RGBA32HeaderSize = 122;
 
-/**
- * EXTRACTED FROM bitmap: ^0.0.6 DUE TO BUILD GRADLE INCOMPATIBILITIES
- */
+///
+/// EXTRACTED FROM bitmap: ^0.0.6 DUE TO BUILD GRADLE INCOMPATIBILITIES
+///
 class BitmapHelper {
   BitmapHelper.fromHeadless(this.width, this.height, this.content);
 

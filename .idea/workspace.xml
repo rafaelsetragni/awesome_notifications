@@ -2,24 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/ContentExtension/Base.lproj/MainInterface.storyboard" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/ContentExtension/Info.plist" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/ContentExtension/NotificationViewController.swift" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Runner/GoogleService-Info.plist" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/ContentExtension/Base.lproj/MainInterface.storyboard" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/ContentExtension/Info.plist" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/ContentExtension/NotificationViewController.swift" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/Runner/GoogleService-Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/assets/readme/awesome-notifications-examples.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/awesome_notifications.iml" beforeDir="false" afterPath="$PROJECT_DIR$/awesome_notifications.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/helpers/bitmap_helper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/helpers/bitmap_helper.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="090bcd9c0182d9c6" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_XL" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -41,17 +37,17 @@
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\plugins\awesome_notifications\example\assets\readme" />
+      <recent name="E:\plugins\awesome_notifications\lib\src\helpers" />
+      <recent name="E:\plugins\awesome_notifications\lib\src\extensions" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\plugins\awesome_notifications\lib\src\utils" />
       <recent name="E:\plugins\awesome_notifications\example\assets\readme" />
       <recent name="E:\plugins\awesome_notifications\example\android\app" />
       <recent name="E:\plugins\awesome_notifications\example\android\app\src\main\res" />
       <recent name="E:\plugins\awesome_notifications\example\android\app\src\main\res\drawable" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\plugins\awesome_notifications\example\assets\readme" />
-      <recent name="E:\plugins\awesome_notifications\lib\src\helpers" />
-      <recent name="E:\plugins\awesome_notifications\lib\src\extensions" />
     </key>
   </component>
   <component name="SvnConfiguration">
@@ -72,22 +68,22 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="828" y="285" key="AndroidProcessChooserDialog/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1601824374340" />
-    <state width="2517" height="243" key="GridCell.Tab.0.bottom" timestamp="1601826086548">
+    <state width="2517" height="243" key="GridCell.Tab.0.bottom" timestamp="1601912674202">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="243" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1601826086548" />
-    <state width="2517" height="243" key="GridCell.Tab.0.center" timestamp="1601826086548">
+    <state width="2517" height="243" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1601912674202" />
+    <state width="2517" height="243" key="GridCell.Tab.0.center" timestamp="1601912674202">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="243" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1601826086548" />
-    <state width="2517" height="243" key="GridCell.Tab.0.left" timestamp="1601826086548">
+    <state width="2517" height="243" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1601912674202" />
+    <state width="2517" height="243" key="GridCell.Tab.0.left" timestamp="1601912674202">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="243" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1601826086548" />
-    <state width="2517" height="243" key="GridCell.Tab.0.right" timestamp="1601826086548">
+    <state width="2517" height="243" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1601912674202" />
+    <state width="2517" height="243" key="GridCell.Tab.0.right" timestamp="1601912674202">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="243" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1601826086548" />
+    <state width="2517" height="243" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1601912674202" />
     <state x="876" y="100" width="964" height="606" key="find.popup" timestamp="1601740176919">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -96,20 +92,9 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
-          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java</url>
-          <line>397</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/src/awesome_notifications_core.dart</url>
-          <line>144</line>
+          <line>159</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
@@ -119,7 +104,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/src/awesome_notifications_core.dart</url>
-          <line>147</line>
+          <line>162</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>

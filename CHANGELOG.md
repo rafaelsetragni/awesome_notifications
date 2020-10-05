@@ -1,3 +1,5 @@
+## [0.0.3+1]
+* Adjusting the plugin content to pub.dev patterns
 ## [0.0.3]
 * Documentation updated
 * Included DismissedStream to capture dismissed notifications by the user
