@@ -1,6 +1,7 @@
 ## [0.0.3]
 * Documentation updated
 * Included DismissedStream to capture dismissed notifications by the user
+* Included iOS notification source code to enable send local notifications on iOS devices (still in development)
 * Updated asset's load file method inside the java native code, due to flutter's 1.22 deprecation on "FlutterLoader.getInstance()"
 * Extracted Bitmap class from bitmap package, due to buildGradle incompatibilities while running the project on release mode (Java)
 
