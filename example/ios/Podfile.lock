@@ -3,8 +3,6 @@ PODS:
     - Firebase
     - Firebase/Messaging
     - Flutter
-  - bitmap (0.0.1):
-    - Flutter
   - Firebase (6.33.0):
     - Firebase/Core (= 6.33.0)
   - Firebase/Core (6.33.0):
@@ -97,7 +95,6 @@ PODS:
 
 DEPENDENCIES:
   - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
-  - bitmap (from `.symlinks/plugins/bitmap/ios`)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -123,8 +120,6 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   awesome_notifications:
     :path: ".symlinks/plugins/awesome_notifications/ios"
-  bitmap:
-    :path: ".symlinks/plugins/bitmap/ios"
   Flutter:
     :path: Flutter
   fluttertoast:
@@ -138,7 +133,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   awesome_notifications: 2a2a13de7d804df4352e221f4f7be5fd04dc11f6
-  bitmap: 518bfe1da32cb535d62e55a5c528245dd8719ae5
   Firebase: 8db6f2d1b2c5e2984efba4949a145875a8f65fe5
   FirebaseAnalytics: 5dd088bd2e67bb9d13dbf792d1164ceaf3052193
   FirebaseCore: d889d9e12535b7f36ac8bfbf1713a0836a3012cd

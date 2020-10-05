@@ -26,15 +26,12 @@ class DateUtils {
     }
 
     public static func getUTCDate() -> String {
-        let dateUtc = getUTCDateTime()
-        let formatter = DateFormatter()
-        formatter.dateFormat = Definitions.DATE_FORMAT
-        
-        return formatter.string(from:dateUtc)
+        let dateUtc = getUTCDateTime()        
+        return dateUtc.preciseGMTTime
     }
 
     public static func getUTCDateTime() -> Date {
-        return Date();
+        return Date()
     }
     
     public static func getNowUTC() -> Date {

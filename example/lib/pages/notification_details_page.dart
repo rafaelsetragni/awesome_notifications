@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:progressive_image/progressive_image.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -139,7 +140,7 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                           ),
                           Container(
                             width: mediaQueryData.size.width,
-                            padding: EdgeInsets.only(left: 20.0, right:20.0, bottom: 10, top: bigPicture == null ? (largeIcon == null ? 100 : 190) : maxSize * 0.45 + 5),
+                            padding: EdgeInsets.only(left: 20.0, right:20.0, bottom: 10, top: bigPicture == null ? (largeIcon == null ? 120 : 190) : maxSize * 0.48),
                             child: RichText(
                                 text: TextSpan(
                                     children: [
@@ -197,7 +198,7 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
               left: 10,
               child: Container(
                 height: 40,
-                padding: EdgeInsets.symmetric(horizontal: 5),
+                padding: EdgeInsets.zero,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -217,7 +218,8 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                   ],
                 ),
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
+                  alignment: Alignment.center,
+                  icon: Icon(FontAwesomeIcons.chevronLeft),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),

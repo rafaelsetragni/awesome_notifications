@@ -16,4 +16,16 @@ extension Date {
     init(fromMilliseconds:Int64) {
         self = Date(timeIntervalSince1970: TimeInterval(fromMilliseconds) / 1000)
     }
+    
+    var nanosecond: Int { return Calendar.current.component(.nanosecond,  from: self)   }
+    
+    // the same for your local time
+    var preciseLocalTime: String {
+        return Formatter.preciseLocalTime.string(for: self) ?? ""
+    }
+    
+    // or GMT time
+    var preciseGMTTime: String {
+        return Formatter.preciseGMTTime.string(for: self) ?? ""
+    }
 }
