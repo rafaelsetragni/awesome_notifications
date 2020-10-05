@@ -1,3 +1,5 @@
+## [0.0.3+3]
+* Fixed Shader's render problems on iOS devices
 ## [0.0.3+2]
 * Fixed UTC Dates on iOS devices
 ## [0.0.3+1]

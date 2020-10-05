@@ -103,13 +103,16 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                         ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
                                       },
                                       blendMode: BlendMode.dstIn,
-                                      child: ProgressiveImage(
-                                        placeholder: AssetImage('assets/images/placeholder.gif'),
-                                        thumbnail: AssetImage('assets/images/placeholder.gif'),
-                                        image: widget.receivedNotification.bigPictureImage,
-                                        width: mediaQueryData.size.width,
-                                        height: maxSize * 0.4 + mediaQueryData.padding.top,
-                                        fit: BoxFit.cover,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(bottom: 2.0), // 2 pixels to avoid render error on ShaderMask while the users are sliding the page
+                                        child: ProgressiveImage(
+                                          placeholder: AssetImage('assets/images/placeholder.gif'),
+                                          thumbnail: AssetImage('assets/images/placeholder.gif'),
+                                          image: widget.receivedNotification.bigPictureImage,
+                                          width: mediaQueryData.size.width,
+                                          height: maxSize * 0.4 + mediaQueryData.padding.top - 2,
+                                          fit: BoxFit.cover,
+                                        ),
                                       )
                                   )
                               ),

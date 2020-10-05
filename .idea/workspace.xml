@@ -2,25 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/extensions/FormatterExtension.swift" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Classes/lib/extensions/FormatterExtension.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/.idea/libraries/Dart_SDK.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Flutter/.last_build_id" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Flutter/.last_build_id" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Runner/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/lib/pages/notification_details_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/lib/pages/notification_details_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/extensions/DateExtension.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/extensions/DateExtension.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/utils/DateUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/utils/DateUtils.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Flutter/.last_build_id" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Flutter/.last_build_id" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner/Info.plist" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/pages/notification_details_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/notification_details_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/extensions/DateExtension.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/extensions/DateExtension.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/utils/DateUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/utils/DateUtils.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -80,26 +64,26 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="828" y="285" key="AndroidProcessChooserDialog/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1601824374340" />
-    <state width="1801" height="312" key="GridCell.Tab.0.bottom" timestamp="1601925765648">
+    <state width="1801" height="312" key="GridCell.Tab.0.bottom" timestamp="1601926759565">
       <screen x="0" y="23" width="1852" height="945" />
     </state>
     <state width="2517" height="243" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1601912674202" />
-    <state width="1801" height="312" key="GridCell.Tab.0.bottom/0.23.1852.945@0.23.1852.945" timestamp="1601925765648" />
-    <state width="1801" height="312" key="GridCell.Tab.0.center" timestamp="1601925765647">
+    <state width="1801" height="312" key="GridCell.Tab.0.bottom/0.23.1852.945@0.23.1852.945" timestamp="1601926759565" />
+    <state width="1801" height="312" key="GridCell.Tab.0.center" timestamp="1601926759563">
       <screen x="0" y="23" width="1852" height="945" />
     </state>
     <state width="2517" height="243" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1601912674202" />
-    <state width="1801" height="312" key="GridCell.Tab.0.center/0.23.1852.945@0.23.1852.945" timestamp="1601925765647" />
-    <state width="1801" height="312" key="GridCell.Tab.0.left" timestamp="1601925765643">
+    <state width="1801" height="312" key="GridCell.Tab.0.center/0.23.1852.945@0.23.1852.945" timestamp="1601926759563" />
+    <state width="1801" height="312" key="GridCell.Tab.0.left" timestamp="1601926759562">
       <screen x="0" y="23" width="1852" height="945" />
     </state>
     <state width="2517" height="243" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1601912674202" />
-    <state width="1801" height="312" key="GridCell.Tab.0.left/0.23.1852.945@0.23.1852.945" timestamp="1601925765643" />
-    <state width="1801" height="312" key="GridCell.Tab.0.right" timestamp="1601925765648">
+    <state width="1801" height="312" key="GridCell.Tab.0.left/0.23.1852.945@0.23.1852.945" timestamp="1601926759562" />
+    <state width="1801" height="312" key="GridCell.Tab.0.right" timestamp="1601926759563">
       <screen x="0" y="23" width="1852" height="945" />
     </state>
     <state width="2517" height="243" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1601912674202" />
-    <state width="1801" height="312" key="GridCell.Tab.0.right/0.23.1852.945@0.23.1852.945" timestamp="1601925765648" />
+    <state width="1801" height="312" key="GridCell.Tab.0.right/0.23.1852.945@0.23.1852.945" timestamp="1601926759563" />
     <state x="876" y="100" width="964" height="606" key="find.popup" timestamp="1601740176919">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -108,26 +92,5 @@
       <screen x="0" y="23" width="1852" height="945" />
     </state>
     <state x="586" y="231" width="670" height="676" key="search.everywhere.popup/0.23.1852.945@0.23.1852.945" timestamp="1601917424829" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/src/awesome_notifications_core.dart</url>
-          <line>159</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/src/utils/resource_image_provider.dart</url>
-          <line>52</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/src/awesome_notifications_core.dart</url>
-          <line>162</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
