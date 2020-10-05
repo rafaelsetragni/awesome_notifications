@@ -17,9 +17,11 @@
 - Notifications are received on **Flutter level code** when they are created, displayed, dismissed or even tapped by the user.
 - Notifications could be **scheduled** repeatedly using a list or precise dates or even **Cron rules**, such linux does, with seconds precision.
 
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-examples.jpg)
+![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-android-examples.jpg)
+*Some android examples of notifications produced using awesome notifications*
 
-*Some examples of notifications produced using awesome notifications*
+![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-ios-examples.jpg)
+*Some iOS examples of notifications produced using awesome notifications (work in progress)*
 
 
 ### Notification Types Available

@@ -2,40 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/example/assets/readme/notification-life-cycle.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/src/helpers/bitmap_helper.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/BitmapUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/BitmapUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/me/carda/awesome_notifications/AwesomeNotificationsPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/me/carda/awesome_notifications/AwesomeNotificationsPlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/assets/readme/notification-life-cycle.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/pages/notification_details_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/notification_details_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/utils/common_functions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/common_functions.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/awesome_notifications.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/definitions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/definitions.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/helpers/cron_helper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/helpers/cron_helper.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/basic_notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/basic_notification_content.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_button.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_content.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_schedule.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_schedule.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/received_models/received_action.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/received_models/received_action.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/received_models/received_notification.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/received_models/received_notification.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/audio_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/audio_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/bitmap_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/bitmap_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/date_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/date_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/html_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/html_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/media_abstract_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/media_abstract_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/resource_image_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/resource_image_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/assets/readme/awesome-notifications-examples.jpg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
