@@ -194,7 +194,7 @@ Also, all the payload elements *MUST* be a String, as the same way as you do in 
 
 ## Notification Life Cycle
 
-Notifications are received by local code or FCM using native code, so the messages will appears immediately or at schedule time, independent of your application state.
+Notifications are received by local code or Push service using native code, so the messages will appears immediately or at schedule time, independent of your application state.
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/notification-life-cycle.png)
 
