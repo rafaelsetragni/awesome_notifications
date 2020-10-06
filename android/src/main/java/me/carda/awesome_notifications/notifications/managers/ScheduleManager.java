@@ -8,6 +8,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import me.carda.awesome_notifications.Definitions;
+import me.carda.awesome_notifications.notifications.NotificationScheduler;
 import me.carda.awesome_notifications.notifications.PushNotification;
 
 public class ScheduleManager {
@@ -33,10 +34,11 @@ public class ScheduleManager {
 
     public static void cancelAllSchedules(Context context) {
         List<PushNotification> listSchedules = shared.getAllObjects(context, typeToken, Definitions.SHARED_SCHEDULED_NOTIFICATIONS);
-        if(listSchedules != null)
-            for(PushNotification pushNotification : listSchedules){
-                removeSchedule(context, pushNotification);
+        if(listSchedules != null) {
+            for (PushNotification pushNotification : listSchedules) {
+                NotificationScheduler.cancelNotification(context, pushNotification.content.id);
             }
+        }
     }
 
     public static void cancelSchedule(Context context, Integer id) {
