@@ -78,7 +78,6 @@
 		050F555C2520F02900E49A15 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		050F555E2520F02900E49A15 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
 		053A56D82522258600FCFDFE /* awesome_notifications.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = awesome_notifications.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		053A56F925225CEB00FCFDFE /* awesome_notifications.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = awesome_notifications.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		053A5774252260FA00FCFDFE /* AwesomeContentExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AwesomeContentExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		053A5778252260FA00FCFDFE /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		053A577B252260FA00FCFDFE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -197,7 +196,6 @@
 		899F1D80671D75943576437C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				053A56F925225CEB00FCFDFE /* awesome_notifications.framework */,
 				053A56D82522258600FCFDFE /* awesome_notifications.framework */,
 				F445988E9A634ABC40095CF1 /* Pods_Runner.framework */,
 				050F555C2520F02900E49A15 /* UserNotifications.framework */,

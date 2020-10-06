@@ -22,9 +22,9 @@ public class CronExpression {
         case second = 0
         case minute = 1
         case hour = 2
-        case weekday = 3
-        case day = 4
-        case month = 5
+        case day = 3
+        case month = 4
+        case weekday = 5
         case year = 6
         
         public static var mostRelevant:CronComponent {
@@ -309,9 +309,10 @@ public class CronExpression {
                 break
             
             case .WildCard:
-                if(!populateFromWildCard(component, translatedElement))
-                {throw CronError.invalidExpression(msg:"WildCard paramater is invalid (\(cronElement))")}
                 break
+                //if(!populateFromWildCard(component, translatedElement))
+                //{throw CronError.invalidExpression(msg:"WildCard paramater is invalid (\(cronElement))")}
+                //break
             
             case .Unknow:
                 throw CronError.invalidExpression(msg:"Unknow paramater is invalid (\(cronElement))")

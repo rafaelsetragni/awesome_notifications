@@ -45,6 +45,10 @@ class NotificationBuilder {
         }
     }
     
+    public static func preProcessNotification(){
+        
+    }
+    
     public static func isNotificationAuthorized(completion: @escaping (Bool) -> ()) {
         
         let current = UNUserNotificationCenter.current()

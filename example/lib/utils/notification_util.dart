@@ -887,9 +887,9 @@ Future<void> repeatPreciseThreeTimes(int id) async {
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/melted-clock.png'),
       schedule: NotificationSchedule(preciseSchedules: [
-        DateTime.now().add(Duration(seconds: 10)),
-        DateTime.now().add(Duration(seconds: 20)),
-        DateTime.now().add(Duration(seconds: 30))
+        DateTime.now().add(Duration(seconds: 10)).toUtc(),
+        DateTime.now().add(Duration(seconds: 20)).toUtc(),
+        DateTime.now().add(Duration(seconds: 30)).toUtc()
       ]));
 }
 
@@ -909,18 +909,20 @@ Future<void> repeatMinuteNotificationOClock(int id) async {
 
 Future<void> showNotificationAtScheduleCron(
     int id, DateTime scheduleTime) async {
+
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
           channelKey: 'schedule',
           title: 'Just in time!',
           body: 'This notification was schedule to shows at ' +
-              DateUtils.parseDateToString(scheduleTime.toLocal()),
+              DateUtils.parseDateToString(scheduleTime.toLocal()) +
+          '('+DateUtils.parseDateToString(scheduleTime.toUtc())+' utc)',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/delivery.jpeg',
           payload: {'uuid': 'uuid-test'}),
       schedule: NotificationSchedule(
-          crontabSchedule: CronHelper.instance.atDate(scheduleTime)));
+          crontabSchedule: CronHelper.instance.atDate(scheduleTime.toUtc(), initialSecond: 0)));
 }
 
 Future<void> showScheduleAtWorkweekDay10AmLocal(int id) async {

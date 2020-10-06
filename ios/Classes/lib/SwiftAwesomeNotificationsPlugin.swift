@@ -179,12 +179,12 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     }
     
     public func createEvent(notificationReceived:NotificationReceived){
-        Log.d(SwiftAwesomeNotificationsPlugin.TAG, "NOTIFICATION CREATED")
+        //Log.d(SwiftAwesomeNotificationsPlugin.TAG, "NOTIFICATION CREATED")
         flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED, arguments: notificationReceived.toMap())
     }
     
     public func displayEvent(notificationReceived:NotificationReceived){
-        Log.d(SwiftAwesomeNotificationsPlugin.TAG, "NOTIFICATION DISPLAYED")
+        //Log.d(SwiftAwesomeNotificationsPlugin.TAG, "NOTIFICATION DISPLAYED")
 
         let lifecycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
         
@@ -198,27 +198,27 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     
     public func applicationDidBecomeActive(_ application: UIApplication) {
         SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Foreground
-        debugPrint("applicationDidBecomeActive")
+        //debugPrint("applicationDidBecomeActive")
     }
     
     public func applicationWillTerminate(_ application: UIApplication) {
         SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.AppKilled
-        debugPrint("applicationWillTerminate")
+        //debugPrint("applicationWillTerminate")
     }
     
     public func applicationWillResignActive(_ application: UIApplication) {
         //SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Background
-        debugPrint("applicationWillResignActive")
+        //debugPrint("applicationWillResignActive")
     }
     
     public func applicationDidEnterBackground(_ application: UIApplication) {
         SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Background
-        debugPrint("applicationDidEnterBackground")
+        //debugPrint("applicationDidEnterBackground")
     }
     
     public func applicationWillEnterForeground(_ application: UIApplication) {
         SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Foreground
-        debugPrint("applicationWillEnterForeground")
+        //debugPrint("applicationWillEnterForeground")
     }
     
     public static func getApplicationLifeCycle() -> NotificationLifeCycle {
