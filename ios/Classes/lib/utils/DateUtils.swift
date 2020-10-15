@@ -24,6 +24,19 @@ class DateUtils {
         let date = dateFormatter.date(from: safeDateTime)!
         return date
     }
+    
+    public static func dateToString(_ dateTime:Date?) -> String? {
+        
+        if(dateTime == nil){ return nil }
+        
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.timeZone = self.utcTimeZone
+        dateFormatter.dateFormat = Definitions.DATE_FORMAT
+
+        let date = dateFormatter.string(from: dateTime!)
+        return date
+    }
 
     public static func getUTCDate() -> String {
         let dateUtc = getUTCDateTime()        

@@ -628,4 +628,50 @@ public class CronExpression {
         
         return nextValue
     }
+    
+    /// Produces a cartesian product of dates components, expressed by UNNotificationTrigger objects, that togetter are capable to represent a single cron expression
+    @available(iOS 10.0, *)
+    func getTriggerList() -> [UNCalendarNotificationTrigger] {
+        var triggerList:[UNCalendarNotificationTrigger] = []
+        
+        var positions:[CronComponent:Int] = [:]
+        for (component, filters) in filterSets {
+            if(!filters.isEmpty){
+                positions[component] = 0
+            }
+        }
+        
+        var notExausted:Bool = true
+        repeat {
+            
+            var dateComponents = DateComponents()
+            for (component, position) in positions {
+                
+                switch component {
+                    case .second:   dateComponents.second   = filterSets[component]?.atIndex(position); break
+                    case .minute:   dateComponents.minute   = filterSets[component]?.atIndex(position); break
+                    case .hour:     dateComponents.hour     = filterSets[component]?.atIndex(position); break
+                    case .day:      dateComponents.day      = filterSets[component]?.atIndex(position); break
+                    case .month:    dateComponents.month    = filterSets[component]?.atIndex(position); break
+                    case .weekday:  dateComponents.weekday  = filterSets[component]?.atIndex(position); break
+                    case .year:     dateComponents.year     = filterSets[component]?.atIndex(position); break
+                }
+            }
+            triggerList.append(UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true))
+            
+            notExausted = false
+            positions.forEach({ (component, _) -> Void in
+                positions[component]! += 1
+                if positions[component]! >= filterSets[component]!.count {
+                    positions[component] = 0
+                } else {
+                    notExausted = true
+                    return
+                }
+            })
+        
+        } while notExausted
+        
+        return triggerList
+    }
 }

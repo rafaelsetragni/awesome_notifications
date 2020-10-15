@@ -8,9 +8,29 @@
 import Foundation
 
 public class NotificationScheduleModel : AbstractModel {
+    
+    var _crontabSchedule: String?
+    var cronHelper: CronExpression?
         
     var initialDateTime: String?
-    var crontabSchedule: String?
+    var crontabSchedule: String? {
+        get {
+            return _crontabSchedule
+        }
+        set(value) {
+            if(StringUtils.isNullOrEmpty(value)){
+                cronHelper = nil
+            }
+            else {
+                do {
+                    cronHelper = try CronExpression(value!)
+                }
+                catch {
+                    cronHelper = nil
+                }
+            }
+        }
+    }
     var allowWhileIdle: Bool?
     var preciseSchedules: [String]?
     
@@ -54,7 +74,7 @@ public class NotificationScheduleModel : AbstractModel {
             throw PushNotificationError.invalidRequiredFields(msg: "Schedule initial date is invalid")
         }
         
-        if(crontabSchedule != nil && !CronExpression.validate(cronExpression: crontabSchedule!)){
+        if(!(cronHelper?.isValidExpression ?? true)){
             throw PushNotificationError.invalidRequiredFields(msg: "Schedule cron expression is invalid")
         }
         

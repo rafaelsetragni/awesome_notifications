@@ -17,6 +17,7 @@ class NotificationSenderAndScheduler {
     private var pushNotification:   PushNotification?
 
     private var created:    Bool = false
+    private var scheduled:  Bool = false
 
     public func send(
         createdSource: NotificationSource,
@@ -98,6 +99,8 @@ class NotificationSenderAndScheduler {
                     // Only save DisplayedMethods if pushNotification was created and displayed successfully
                     if(pushNotification != nil){
 
+                        scheduled = pushNotification?.schedule != nil
+                        
                         receivedNotification = NotificationReceived(pushNotification!.content)
 
                         receivedNotification!.displayedLifeCycle = receivedNotification!.displayedLifeCycle == nil ?
@@ -124,11 +127,16 @@ class NotificationSenderAndScheduler {
         if(receivedNotification != nil){
 
             if(created){
-                if(SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle() == .AppKilled){
+                if(SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle() != .Foreground){
                     CreatedManager.saveCreated(received: receivedNotification!)
                 } else {
                     SwiftAwesomeNotificationsPlugin.instance!.createEvent(notificationReceived: receivedNotification!)
                 }
+            }
+            
+            if(scheduled){                
+                
+                SwiftAwesomeNotificationsPlugin.rescheduleBackgroundTask()
             }
         }
     }

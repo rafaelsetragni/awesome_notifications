@@ -1,6 +1,7 @@
 
 import Flutter
 import UIKit
+import BackgroundTasks
 import UserNotifications
 import FirebaseCore
 import FirebaseMessaging
@@ -61,11 +62,99 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     }
     
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable : Any] = [:]) -> Bool {
-        enableFirebase()
+        enableFirebase(application)
         return true
     }
     
-    private func enableFirebase(){
+    private func enableScheduler(_ application: UIApplication){
+        
+        if #available(iOS 13.0, *) {
+            
+            BGTaskScheduler.shared.register(
+                forTaskWithIdentifier: Definitions.IOS_BACKGROUND_SCHEDULER,
+                using: nil//DispatchQueue.global(qos: .background).async
+            ){ (task) in
+                self.handleAppSchedules(task: task as! BGAppRefreshTask)
+            }
+            
+        } else {
+            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Scheduled notifications are not available on iOS < 13")
+        }
+    }
+    
+    private func startBackgroundScheduler(){
+        SwiftAwesomeNotificationsPlugin.rescheduleBackgroundTask()
+    }
+    
+    private func stopBackgroundScheduler(){
+        
+    }
+    
+    @available(iOS 13.0, *)
+    private func handleAppSchedules(task: BGAppRefreshTask){
+        
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        
+        queue.addOperation(runScheduler)
+        
+        task.expirationHandler = {
+            queue.cancelAllOperations()
+        }
+
+        let lastOperation = queue.operations.last
+        lastOperation?.completionBlock = {
+            task.setTaskCompleted(success: !(lastOperation?.isCancelled ?? false))
+        }
+    }
+    
+    @available(iOS 13.0, *)
+    private func runScheduler(){
+        
+        let pendingSchedules:[PushNotification] = ScheduleManager.listPendingSchedules(referenceDate: Date())
+        
+        let sender = NotificationSenderAndScheduler()
+        
+        for notification in pendingSchedules {
+            
+            _ = ScheduleManager.removeSchedule(id: notification.content!.id!)
+            
+            do {
+                try sender.send(
+                    createdSource: notification.content!.createdSource!,
+                    pushNotification: notification,
+                    completion: { (sent, error) in
+                })
+            } catch {
+                
+            }
+        }
+        
+        SwiftAwesomeNotificationsPlugin.rescheduleBackgroundTask()
+    }
+    
+    public static func rescheduleBackgroundTask(){
+        if #available(iOS 13.0, *) {
+            //if SwiftAwesomeNotificationsPlugin.appLifeCycle != .Foreground {
+                
+                let earliestDate:Date? = ScheduleManager.getEarliestDate()
+                
+                if earliestDate != nil {
+                    let request = BGAppRefreshTaskRequest(identifier: Definitions.IOS_BACKGROUND_SCHEDULER)
+                    request.earliestBeginDate = earliestDate!
+                         
+                    do {
+                        try BGTaskScheduler.shared.submit(request)
+                        Log.d(TAG, "(\(Date().toString()!)) BG Scheduled created: "+earliestDate!.toString()!)
+                    } catch {
+                       print("Could not schedule next notification: \(error)")
+                    }
+                }
+            //}
+        }
+    }
+    
+    private func enableFirebase(_ application: UIApplication){
         let firebaseConfigPath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist")!
         let fileManager = FileManager.default
         
@@ -166,7 +255,15 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         
         if #available(iOS 10.0, *) {
             let actionReceived:ActionReceived? = NotificationBuilder.buildNotificationActionFromJson(jsonData: jsonData, actionKey: actionKey, userText: userText)
-            flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_RECEIVED_ACTION, arguments: actionReceived?.toMap())
+            
+            if actionReceived!.dismissedDate == nil {
+                Log.d(SwiftAwesomeNotificationsPlugin.TAG, "NOTIFICATION RECEIVED")
+                flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_RECEIVED_ACTION, arguments: actionReceived?.toMap())
+            }
+            else {
+                Log.d(SwiftAwesomeNotificationsPlugin.TAG, "NOTIFICATION DISMISSED")
+                flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED, arguments: actionReceived?.toMap())
+            }
         } else {
             // Fallback on earlier versions
         }
@@ -213,11 +310,13 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     
     public func applicationDidEnterBackground(_ application: UIApplication) {
         SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Background
+        startBackgroundScheduler()
         //debugPrint("applicationDidEnterBackground")
     }
     
     public func applicationWillEnterForeground(_ application: UIApplication) {
         SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Foreground
+        stopBackgroundScheduler()
         //debugPrint("applicationWillEnterForeground")
     }
     
@@ -312,19 +411,18 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     private func channelMethodListAllSchedules(call: FlutterMethodCall, result: @escaping FlutterResult) {
         
         do {
-            ScheduleManager.listScheduled(completion: { schedules in
-                  var serializeds:[[String:Any?]]  = []
-                  
-                  if(!ListUtils.isEmptyLists(schedules)){
-                      for pushNotification in schedules {
-                          let serialized:[String:Any?] = pushNotification.toMap()
-                          serializeds.append(serialized)
-                      }
-                  }
-                  
-                  result(serializeds)
-            })
+            let schedules = ScheduleManager.listSchedules()
+            var serializeds:[[String:Any?]]  = []
 
+            if(!ListUtils.isEmptyLists(schedules)){
+                for pushNotification in schedules {
+                    let serialized:[String:Any?] = pushNotification.toMap()
+                    serializeds.append(serialized)
+                }
+            }
+
+            result(serializeds)
+            
         } catch {
             
             result(

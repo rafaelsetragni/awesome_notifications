@@ -85,14 +85,25 @@ class NotificationBuilder {
     }
     
     public static func buildNotificationActionFromJson(jsonData:String?, actionKey:String?, userText:String?) -> ActionReceived? {
+        
         let pushNotification:PushNotification? = jsonToPushNotification(jsonData: jsonData)
         if(pushNotification == nil){ return nil }
         let actionReceived:ActionReceived = ActionReceived(pushNotification!.content)
+        
+        switch actionKey {
+        
+            case UNNotificationDismissActionIdentifier.description:
+                actionReceived.actionKey = nil
+                actionReceived.actionInput = nil
+                actionReceived.dismissedLifeCycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
+                actionReceived.dismissedDate = DateUtils.getUTCDate()
                 
-        actionReceived.actionKey = actionKey == UNNotificationDefaultActionIdentifier.description ? nil : actionKey
-        actionReceived.actionInput = userText
-        actionReceived.actionLifeCycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
-        actionReceived.actionDate = DateUtils.getUTCDate()
+            default:
+                actionReceived.actionKey = actionKey == UNNotificationDefaultActionIdentifier.description ? nil : actionKey
+                actionReceived.actionInput = userText
+                actionReceived.actionLifeCycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
+                actionReceived.actionDate = DateUtils.getUTCDate()
+        }
         
         if(StringUtils.isNullOrEmpty(actionReceived.displayedDate)){
             actionReceived.displayedDate = DateUtils.getUTCDate()
@@ -145,6 +156,10 @@ class NotificationBuilder {
                     
             applyGrouping(channel: channel, content: content)
             
+            pushNotification.content!.displayedDate = nextDate?.toString() ?? DateUtils.getUTCDate()
+            
+            setUserInfoContent(pushNotification: pushNotification, content: content)
+            
             let trigger:UNCalendarNotificationTrigger? = dateToCalendarTrigger(targetDate: nextDate)
             let request = UNNotificationRequest(identifier: pushNotification.content!.id!.description, content: content, trigger: trigger)
             
@@ -154,6 +169,13 @@ class NotificationBuilder {
 
                 if error != nil {
                     debugPrint("Error: \(error.debugDescription)")
+                }
+                else {
+                    if(nextDate != nil){
+                        ScheduleManager.saveSchedule(notification: pushNotification, nextDate: nextDate!)
+                    } else {
+                        _ = ScheduleManager.removeSchedule(id: pushNotification.content!.id!)
+                    }
                 }
             }
             return pushNotification
@@ -172,12 +194,14 @@ class NotificationBuilder {
     
     private static func buildNotificationContentFromModel(pushNotification:PushNotification) -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
+        return content
+    }
+    
+    private static func setUserInfoContent(pushNotification:PushNotification, content:UNMutableNotificationContent) {
         
         let pushData = pushNotification.toMap()
         let jsonData = JsonUtils.toJson(pushData)
         content.userInfo[Definitions.NOTIFICATION_JSON] = jsonData
-        
-        return content
     }
 
     private static func setTitle(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
@@ -231,7 +255,16 @@ class NotificationBuilder {
             }
             
             let categoryIdentifier:String = category.md5
-            let categoryObject = UNNotificationCategory(identifier: categoryIdentifier, actions: actions, intentIdentifiers: [], options: [])
+            let categoryObject = UNNotificationCategory(identifier: categoryIdentifier, actions: actions, intentIdentifiers: [], options: .customDismissAction)
+            
+            UNUserNotificationCenter.current().setNotificationCategories([categoryObject])
+            
+            content.categoryIdentifier = categoryIdentifier
+        }
+        else {
+            
+            let categoryIdentifier:String = "standard".md5
+            let categoryObject = UNNotificationCategory(identifier: categoryIdentifier, actions: [], intentIdentifiers: [], options: .customDismissAction)
             
             UNUserNotificationCenter.current().setNotificationCategories([categoryObject])
             
@@ -447,8 +480,14 @@ class NotificationBuilder {
         }
     }
     
-    private static func setProgressBarLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {        
-        content.categoryIdentifier = "AwesomeLayout"
+    private static func setProgressBarLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
+        
+        let categoryIdentifier:String = "AwesomeLayout"
+        let categoryObject = UNNotificationCategory(identifier: categoryIdentifier, actions: [], intentIdentifiers: [], options: .customDismissAction)
+        
+        UNUserNotificationCenter.current().setNotificationCategories([categoryObject])
+        
+        content.categoryIdentifier = categoryIdentifier
     }
     
     

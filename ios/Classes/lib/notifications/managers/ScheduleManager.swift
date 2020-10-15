@@ -9,60 +9,83 @@ import Foundation
 
 public class ScheduleManager {
     
-    public static func removeScheduled(id:Int) {
-        if #available(iOS 10.0, *) {
-            let center = UNUserNotificationCenter.current()
-            center.removePendingNotificationRequests(withIdentifiers: [String(id)])
-        } else {
-            // Fallback on earlier versions
+    static let shared:SharedManager = SharedManager(tag: "NotificationSchedule")
+    static let pendingShared:SharedManager = SharedManager(tag: "PendingSchedules")
+    
+    static var pendingSchedules:[String:String] = pendingShared.get(referenceKey: "pending") as? [String:String] ?? [:]
+    
+    public static func removeSchedule( id:Int ) -> Bool {
+        let referenceKey = String(id)
+        pendingSchedules.removeValue(forKey: referenceKey)
+        updatePendingList()
+        return shared.remove(referenceKey: referenceKey)
+    }
+    
+    public static func listSchedules() -> [PushNotification] {
+        var returnedList:[PushNotification] = []
+        let dataList = shared.getAllObjects()
+        
+        for data in dataList {
+            let channel:PushNotification = PushNotification().fromMap(arguments: data) as! PushNotification
+            returnedList.append(channel)
         }
+        
+        return returnedList
     }
-
-    public static func listScheduled(completion: @escaping ([PushNotification]) -> ()){
+    
+    public static func listPendingSchedules(referenceDate:Date) -> [PushNotification] {
+        var returnedList:[PushNotification] = []
+        let referenceEpoch = referenceDate.timeIntervalSince1970.description
         
-        var scheduleds:[PushNotification] = []
-        
-        if #available(iOS 10.0, *) {
-            
-            let center = UNUserNotificationCenter.current()
-            center.getPendingNotificationRequests(completionHandler: { notifications in
-                
-                for notification in notifications {
-                    let jsonData:String? = notification.content.userInfo[Definitions.NOTIFICATION_JSON] as? String
-                    let pushNotification:PushNotification? = NotificationBuilder.jsonToPushNotification(jsonData: jsonData)
-                    if(pushNotification != nil){
-                        scheduleds.append(pushNotification!)
-                    }
-                }
-                
-                completion(scheduleds)
-            })
-            
-        } else {
-            completion(scheduleds)
-        }
-    }
-
-    public static func saveScheduled(received:NotificationReceived) {
-        
-    }
-
-    public static func getScheduledByKey(id:Int, completion: @escaping (PushNotification?) -> ()) {
-        
-        listScheduled(completion: { scheduleds in
-            for notification in scheduleds {
-                if notification.content?.id == id {
-                    completion(notification)
+        for (epoch, id) in pendingSchedules {
+            if epoch <= referenceEpoch {
+                let pushNotification = getScheduleByKey(id: Int(id)!)
+                if pushNotification != nil{
+                    returnedList.append(pushNotification!)
                 }
             }
-            completion(nil)
-        })
+        }
+        
+        return returnedList
     }
-
-    public static func cancelAllScheduled() {
+    
+    public static func saveSchedule(notification:PushNotification, nextDate:Date){
+        let referenceKey =  String(notification.content!.id!)
+        let epoch =  nextDate.secondsSince1970.description
+        
+        pendingSchedules[epoch] = referenceKey
+        shared.set(notification.toMap(), referenceKey:referenceKey)
+        updatePendingList()
     }
+    
+    public static func updatePendingList(){
+        pendingShared.set(pendingSchedules, referenceKey:"pending")
+    }
+    
+    public static func getEarliestDate() -> Date? {
+        var smallest:String?
+        
+        for (epoch, _) in pendingSchedules {
 
-    public static func cancelScheduled(id:Int) {
+            if smallest == nil || smallest! > epoch {
+                 smallest = epoch
+            }
+        }
+        
+        if(smallest == nil){ return nil }
+        
+        let seconds:Int64 = Int64(smallest!)!
+        let smallestDate:Date? = Date(seconds: seconds)
+        
+        return smallestDate
+    }
+    
+    public static func getScheduleByKey( id:Int ) -> PushNotification? {
+        return PushNotification().fromMap(arguments: shared.get(referenceKey: String(id))) as? PushNotification
+    }
+    
+    public static func isNotificationScheduleActive( channelKey:String ) -> Bool {
+        return shared.get(referenceKey: channelKey) != nil
     }
     
 }
