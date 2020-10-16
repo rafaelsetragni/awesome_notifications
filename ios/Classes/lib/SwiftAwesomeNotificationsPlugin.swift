@@ -70,7 +70,9 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         let fileManager = FileManager.default
         
         if fileManager.fileExists(atPath: firebaseConfigPath) {
-            FirebaseApp.configure()
+            if FirebaseApp.app() == nil {
+                FirebaseApp.configure()
+            }
         }
     }
     
