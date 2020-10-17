@@ -16,7 +16,11 @@ public class ScheduleManager {
     
     public static func removeSchedule( id:Int ) -> Bool {
         let referenceKey = String(id)
-        pendingSchedules.removeValue(forKey: referenceKey)
+        for (epoch, scheduledId) in pendingSchedules {
+            if (scheduledId == referenceKey) {
+                pendingSchedules.removeValue(forKey: epoch)
+            }
+        }
         updatePendingList()
         return shared.remove(referenceKey: referenceKey)
     }

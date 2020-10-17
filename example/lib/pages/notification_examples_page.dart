@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,6 +16,7 @@ import 'package:awesome_notifications_example/common_widgets/service_control_pan
 import 'package:awesome_notifications_example/common_widgets/simple_button.dart';
 import 'package:awesome_notifications_example/common_widgets/text_divisor.dart';
 import 'package:awesome_notifications_example/common_widgets/text_note.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class NotificationExamplesPage extends StatefulWidget {
 
@@ -61,6 +64,38 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
     }
 
     return false;
+  }
+
+  Future<int> pickBadgeCount(BuildContext context) async {
+    int amount ;
+
+    AlertDialog alert = AlertDialog(
+      title: Text("Choose the new badge amount"),
+      content: NumberPicker.integer(
+          initialValue: 50,
+          minValue: 0,
+          maxValue: 999,
+          onChanged: (newValue) => amount = newValue
+      ),
+      actions: [
+        FlatButton(
+          child: Text("Cancel"),
+          onPressed: () => amount = null,
+        ),
+        FlatButton(
+          child: Text("OK"),
+          onPressed: () { },
+        ),
+      ],
+    );
+
+    // show the dialog
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) => alert
+    );
+
+    return amount;
   }
 
   @override
@@ -353,6 +388,50 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
           ),
 
           /* ******************************************************************** */
+
+          /* ******************************************************************** */
+
+          TextDivisor( title: 'Badge Indicator' ),
+          TextNote(
+              '"badge" is a indicator of how many notifications (or anything else) are not viewed by the user (iOS)'
+                  'or even a reminder of new things arrived (Android).\n\n'
+                  'For iOS devices is highly recommended to erase this annoying counter as soon as possible and even let'
+                  'a shortcut menu with this option outside your app, similar to "mark as read" on e-mail. The ammount counter'
+                  'is automatically managed by this plugin for each individual installation, and incremented for every notification'
+                  'with "badge" set to TRUE.\n\n'
+                  'For Android, the badge is automatically reset when all notifications are cleared or tapped.\n\n'
+                  'OBS: Badge indicator are not activate while the application is in Foreground.\n\n'
+                  'OBS2: Badge indicator is defined on channel\'s config due to be more compatible across platforms than for each notification'
+          ),
+          SimpleButton(
+              'Shows a notification with a badge indicator channel activate',
+              onPressed: () => showBadgeNotification(Random().nextInt(100))
+          ),
+          SimpleButton(
+              'Shows a notification with a badge indicator channel deactivate',
+              onPressed: () => showWithoutBadgeNotification(Random().nextInt(100))
+          ),
+          SimpleButton(
+              'Read the badge indicator count',
+              onPressed: () async {
+                int amount = await getBadgeIndicator();
+                Fluttertoast.showToast(msg: 'Badge count: $amount');
+              }
+          ),
+          SimpleButton(
+              'Set manually the badge indicator',
+              onPressed: () => setBadgeIndicator()
+          ),
+          SimpleButton(
+              'Reset the badge indicator',
+              onPressed: () => resetBadgeIndicator()
+          ),
+          SimpleButton(
+              'Cancel all the badge test notifications',
+              backgroundColor: Colors.red,
+              labelColor: Colors.white,
+              onPressed: () => cancelAllNotifications()
+          ),
 
           TextDivisor(title: 'Big Picture Notifications'),
           TextNote(

@@ -402,6 +402,18 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                 channelMethodRemoveChannel(call, result);
                 return;
 
+            case Definitions.CHANNEL_METHOD_GET_BADGE_COUNT:
+                channelMethodGetBadgeCount(call, result);
+                return;
+
+            case Definitions.CHANNEL_METHOD_SET_BADGE_COUNT:
+                channelMethodSetBadgeCount(call, result);
+                return;
+
+            case Definitions.CHANNEL_METHOD_RESET_BADGE:
+                channelMethodResetBadge(call, result);
+                return;
+
             case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATION:
                 channelMethodCancelNotification(call, result);
                 return;
@@ -489,6 +501,21 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             Boolean removed = ChannelManager.removeChannel(applicationContext, channelKey);
             result.success(removed);
         }
+    }
+
+    private void channelMethodSetBadgeCount(MethodCall call, Result result) {
+        // Android resets badges automatically when all notifications are cleared
+        result.success(null);
+    }
+
+    private void channelMethodGetBadgeCount(MethodCall call, Result result) {
+        // Android resets badges automatically when all notifications are cleared
+        result.success(0);
+    }
+
+    private void channelMethodResetBadge(MethodCall call, Result result) {
+        // Android resets badges automatically when all notifications are cleared
+        result.success(null);
     }
 
     private void channelMethodCancelSchedule(MethodCall call, Result result) {

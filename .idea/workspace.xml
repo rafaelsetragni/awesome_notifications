@@ -2,18 +2,70 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/AwesomeServiceExtension/Info.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Runner/Runner.entitlements" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/Services/firebase/FCMService.swift" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/utils/SwiftUtils.swift" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/AwesomeServiceExtension/Info.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/Runner/Runner.entitlements" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ios/Classes/lib/Services/firebase/FCMService.swift" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ios/Classes/lib/utils/SwiftUtils.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/ScheduledNotificationReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/ScheduledNotificationReceiver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/ScheduleManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/ScheduleManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/Definitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/Definitions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/android/src/main/java/me/carda/awesome_notifications/Definitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/android/src/main/java/me/carda/awesome_notifications/Definitions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Flutter/.last_build_id" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Flutter/.last_build_id" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Podfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/ios/Runner/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/lib/pages/notification_examples_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/lib/pages/notification_examples_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/lib/utils/notification_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/example/lib/utils/notification_util.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/AwesomeNotificationService.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/Definitions.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/Definitions.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/extensions/NotificationService.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/firebase/FCMService.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/notifications/NotificationBuilder.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/notifications/NotificationBuilder.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/notifications/NotificationSenderAndScheduler.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/notifications/NotificationSenderAndScheduler.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/notifications/managers/DisplayedManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/notifications/managers/DisplayedManager.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/notifications/managers/ScheduleManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/Classes/lib/notifications/managers/ScheduleManager.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/awesome_notifications.podspec" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/ios/awesome_notifications.podspec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/lib/src/awesome_notifications_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/lib/src/awesome_notifications_core.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/lib/src/definitions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/awesome_notifications/lib/src/definitions.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Flutter/.last_build_id" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Flutter/.last_build_id" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/pages/notification_examples_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/notification_examples_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/AwesomeNotificationService.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/Definitions.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/Definitions.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/extensions/NotificationService.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/firebase/FCMService.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationBuilder.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationBuilder.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationSenderAndScheduler.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationSenderAndScheduler.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/DisplayedManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/DisplayedManager.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/ScheduleManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/ScheduleManager.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/awesome_notifications.podspec" beforeDir="false" afterPath="$PROJECT_DIR$/ios/awesome_notifications.podspec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/definitions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/definitions.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="090bcd9c0182d9c6" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -71,30 +123,35 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="828" y="285" key="AndroidProcessChooserDialog/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1602009172421" />
-    <state width="2517" height="243" key="GridCell.Tab.0.bottom" timestamp="1602009996755">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1878" height="274" key="GridCell.Tab.0.bottom" timestamp="1602903667993">
+      <screen x="0" y="23" width="1920" height="945" />
     </state>
     <state width="2517" height="243" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1602009996755" />
     <state width="1801" height="312" key="GridCell.Tab.0.bottom/0.23.1852.945@0.23.1852.945" timestamp="1601933837865" />
-    <state width="2517" height="243" key="GridCell.Tab.0.center" timestamp="1602009996754">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1878" height="274" key="GridCell.Tab.0.bottom/0.23.1920.945@0.23.1920.945" timestamp="1602903667993" />
+    <state width="1878" height="274" key="GridCell.Tab.0.center" timestamp="1602903667993">
+      <screen x="0" y="23" width="1920" height="945" />
     </state>
     <state width="2517" height="243" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1602009996754" />
     <state width="1801" height="312" key="GridCell.Tab.0.center/0.23.1852.945@0.23.1852.945" timestamp="1601933837864" />
-    <state width="2517" height="243" key="GridCell.Tab.0.left" timestamp="1602009996754">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1878" height="274" key="GridCell.Tab.0.center/0.23.1920.945@0.23.1920.945" timestamp="1602903667993" />
+    <state width="1878" height="274" key="GridCell.Tab.0.left" timestamp="1602903667993">
+      <screen x="0" y="23" width="1920" height="945" />
     </state>
     <state width="2517" height="243" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1602009996754" />
     <state width="1801" height="312" key="GridCell.Tab.0.left/0.23.1852.945@0.23.1852.945" timestamp="1601933837863" />
-    <state width="2517" height="243" key="GridCell.Tab.0.right" timestamp="1602009996754">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1878" height="274" key="GridCell.Tab.0.left/0.23.1920.945@0.23.1920.945" timestamp="1602903667993" />
+    <state width="1878" height="274" key="GridCell.Tab.0.right" timestamp="1602903667993">
+      <screen x="0" y="23" width="1920" height="945" />
     </state>
     <state width="2517" height="243" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1602009996754" />
     <state width="1801" height="312" key="GridCell.Tab.0.right/0.23.1852.945@0.23.1852.945" timestamp="1601933837865" />
-    <state x="781" y="163" key="SettingsEditor" timestamp="1602007208597">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1878" height="274" key="GridCell.Tab.0.right/0.23.1920.945@0.23.1920.945" timestamp="1602903667993" />
+    <state x="586" y="171" key="SettingsEditor" timestamp="1602849015390">
+      <screen x="0" y="23" width="1920" height="945" />
     </state>
     <state x="781" y="163" key="SettingsEditor/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1602007208597" />
+    <state x="586" y="171" key="SettingsEditor/0.23.1920.945@0.23.1920.945" timestamp="1602849015390" />
     <state x="876" y="100" width="964" height="606" key="find.popup" timestamp="1601740176919">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -116,6 +173,16 @@
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/ScheduledNotificationReceiver.java</url>
           <line>39</line>
           <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/example/lib/utils/notification_util.dart</url>
+          <line>77</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/example/lib/utils/notification_util.dart</url>
+          <line>91</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

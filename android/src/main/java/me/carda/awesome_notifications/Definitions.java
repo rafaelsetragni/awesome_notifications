@@ -52,6 +52,9 @@ public interface Definitions {
     String CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL = "setNotificationChannel";
     String CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL = "removeNotificationChannel";
 
+    String CHANNEL_METHOD_GET_BADGE_COUNT = "getBadgeCount";
+    String CHANNEL_METHOD_SET_BADGE_COUNT = "setBadgeCount";
+    String CHANNEL_METHOD_RESET_BADGE = "resetBadge";
     String CHANNEL_METHOD_CANCEL_NOTIFICATION = "cancelNotification";
     String CHANNEL_METHOD_CANCEL_SCHEDULE = "cancelSchedule";
     String CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = "cancelAllSchedules";

@@ -23,26 +23,26 @@ class AwesomeNotifications {
 
   // Streams are created so that app can respond to notification-related events since the plugin is initialised in the `main` function
   final StreamController<String> _tokenStreamController =
-      StreamController<String>.broadcast();
+      StreamController<String>();
 
   final StreamController<ReceivedNotification>
       // ignore: close_sinks
       _createdSubject =
-      StreamController<ReceivedNotification>.broadcast(sync: true);
+      StreamController<ReceivedNotification>();
 
   final StreamController<ReceivedNotification>
       // ignore: close_sinks
       _displayedSubject =
-      StreamController<ReceivedNotification>.broadcast(sync: true);
+      StreamController<ReceivedNotification>();
 
   final StreamController<ReceivedAction>
       // ignore: close_sinks
-      _actionSubject = StreamController<ReceivedAction>.broadcast(sync: true);
+      _actionSubject = StreamController<ReceivedAction>();
 
   final StreamController<ReceivedAction>
       // ignore: close_sinks
       _dismissedSubject =
-      StreamController<ReceivedAction>.broadcast(sync: true);
+      StreamController<ReceivedAction>();
 
   /// STREAM METHODS *********************************************
 
@@ -275,6 +275,23 @@ class AwesomeNotifications {
     final bool wasRemoved = await _channel.invokeMethod(
         CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL, channelKey);
     return wasRemoved;
+  }
+
+  /// Get badge counter (on Android is 0 or 1)
+  Future<void> setBadgeCount(int amount) async {
+    await _channel.invokeMethod(CHANNEL_METHOD_SET_BADGE_COUNT, amount);
+  }
+
+  /// Get badge counter (on Android is 0 or 1)
+  Future<int> getBadgeCount() async {
+    final int badgeCount =
+    await _channel.invokeMethod(CHANNEL_METHOD_GET_BADGE_COUNT);
+    return badgeCount;
+  }
+
+  /// Resets the badge counter
+  Future<void> resetBadge() async {
+    await _channel.invokeListMethod(CHANNEL_METHOD_RESET_BADGE);
   }
 
   /// Cancel a single notification

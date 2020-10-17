@@ -8,66 +8,79 @@
 import Foundation
 
 @available(iOS 10.0, *)
-class NotificationBuilder {
+public class NotificationBuilder {
     
     private static let TAG = "NotificationBuilder"
     
     private static var badgeAmount:NSNumber = 0
         
     public static func incrementBadge(){
-        NotificationBuilder.badgeAmount = NSNumber(value: NotificationBuilder.badgeAmount.intValue + 1)
+        NotificationBuilder.badgeAmount = NSNumber(value: getBadge().intValue + 1)
     }
     
     public static func resetBadge(){
         NotificationBuilder.badgeAmount = 0
+        if !SwiftUtils.isRunningOnExtension() {
+            UIApplication.shared.applicationIconBadgeNumber = 0
+        }
     }
     
     public static func getBadge() -> NSNumber {
+        if !SwiftUtils.isRunningOnExtension() {
+            NotificationBuilder.badgeAmount = NSNumber(value: UIApplication.shared.applicationIconBadgeNumber)
+        }
         return NotificationBuilder.badgeAmount
     }
     
     public static func requestPermissions(completion: @escaping (Bool) -> ()){
         
-        // iOS 10 support
-        let notificationCenter = UNUserNotificationCenter.current()
-        
-        notificationCenter.requestAuthorization(options: [.sound,.alert,.badge]) { (granted, error) in
-            if granted {
-                DispatchQueue.main.async {
-                    UIApplication.shared.registerForRemoteNotifications()
+        if !SwiftUtils.isRunningOnExtension() {
+            // iOS 10 support
+            let notificationCenter = UNUserNotificationCenter.current()
+            
+            notificationCenter.requestAuthorization(options: [.sound,.alert,.badge]) { (granted, error) in
+                if granted {
+                    DispatchQueue.main.async {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    }
+                    print("Notification Enable Successfully")
+                    completion(true)
                 }
-                print("Notification Enable Successfully")
-                completion(true)
+                else {
+                    completion(false)
+                }
             }
-            else {
-                completion(false)
-            }
+        } else {
+            completion(true)
         }
     }
     
-    public static func preProcessNotification(){
-        
-    }
-    
     public static func isNotificationAuthorized(completion: @escaping (Bool) -> ()) {
+                
+        if SwiftUtils.isRunningOnExtension() {
+            completion(true)
+            return
+        }
         
         let current = UNUserNotificationCenter.current()
-
         current.getNotificationSettings(completionHandler: { (settings) in
             
             if settings.authorizationStatus == .notDetermined {
                 // Notification permission has not been asked yet, go for it!
                 requestPermissions(completion: { enabled in
                     completion(enabled)
+                    return
                 })
                 
             } else if settings.authorizationStatus == .denied {
                 // Notification permission was previously denied, go to settings & privacy to re-enable
                 completion(false)
+                return
                 
             } else if settings.authorizationStatus == .authorized {
                 // Notification permission was already granted
                 completion(true)
+                return
             }
         })
         
@@ -84,9 +97,13 @@ class NotificationBuilder {
         return pushNotification        
     }
     
+    public static func buildNotificationFromJson(jsonData:String?) -> PushNotification? {
+        return  jsonToPushNotification(jsonData: jsonData)
+    }
+    
     public static func buildNotificationActionFromJson(jsonData:String?, actionKey:String?, userText:String?) -> ActionReceived? {
         
-        let pushNotification:PushNotification? = jsonToPushNotification(jsonData: jsonData)
+        let pushNotification:PushNotification? = buildNotificationFromJson(jsonData: jsonData)
         if(pushNotification == nil){ return nil }
         let actionReceived:ActionReceived = ActionReceived(pushNotification!.content)
         
@@ -99,7 +116,8 @@ class NotificationBuilder {
                 actionReceived.dismissedDate = DateUtils.getUTCDate()
                 
             default:
-                actionReceived.actionKey = actionKey == UNNotificationDefaultActionIdentifier.description ? nil : actionKey
+                let defaultIOSAction = UNNotificationDefaultActionIdentifier.description
+                actionReceived.actionKey = actionKey == defaultIOSAction ? nil : actionKey
                 actionReceived.actionInput = userText
                 actionReceived.actionLifeCycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
                 actionReceived.actionDate = DateUtils.getUTCDate()
@@ -112,7 +130,7 @@ class NotificationBuilder {
         return actionReceived
     }
     
-    public static func createNotification(_ pushNotification:PushNotification) throws -> PushNotification? {
+    public static func createNotification(_ pushNotification:PushNotification, content:UNMutableNotificationContent?) throws -> PushNotification? {
         
         guard let channel = ChannelManager.getChannelByKey(channelKey: pushNotification.content!.channelKey!) else {
             return nil
@@ -122,7 +140,7 @@ class NotificationBuilder {
         
         if(pushNotification.schedule == nil || nextDate != nil){
             
-            let content = buildNotificationContentFromModel(pushNotification: pushNotification)
+            let content = content ?? buildNotificationContentFromModel(pushNotification: pushNotification)
             
             setTitle(pushNotification: pushNotification, channel: channel, content: content)
             setBody(pushNotification: pushNotification, content: content)
@@ -131,10 +149,7 @@ class NotificationBuilder {
             
             setVisibility(pushNotification: pushNotification, channel: channel, content: content)
             setShowWhen(pushNotification: pushNotification, content: content)
-            
-            setLayout(pushNotification: pushNotification, content: content)
-            
-            createActionButtons(pushNotification: pushNotification, content: content)
+            setBadge(pushNotification: pushNotification, channel: channel, content: content)
             
             setAutoCancel(pushNotification: pushNotification, content: content)
             setTicker(pushNotification: pushNotification, content: content)
@@ -153,12 +168,20 @@ class NotificationBuilder {
             setLargeIcon(pushNotification: pushNotification, content: content)
             
             setLayoutColor(pushNotification: pushNotification, channel: channel, content: content)
+            
+            setLayout(pushNotification: pushNotification, content: content)
+            
+            createActionButtons(pushNotification: pushNotification, content: content)
                     
             applyGrouping(channel: channel, content: content)
             
             pushNotification.content!.displayedDate = nextDate?.toString() ?? DateUtils.getUTCDate()
             
             setUserInfoContent(pushNotification: pushNotification, content: content)
+            
+            if SwiftUtils.isRunningOnExtension() {
+                return pushNotification
+            }
             
             let trigger:UNCalendarNotificationTrigger? = dateToCalendarTrigger(targetDate: nextDate)
             let request = UNNotificationRequest(identifier: pushNotification.content!.id!.description, content: content, trigger: trigger)
@@ -171,14 +194,21 @@ class NotificationBuilder {
                     debugPrint("Error: \(error.debugDescription)")
                 }
                 else {
-                    if(nextDate != nil){
-                        ScheduleManager.saveSchedule(notification: pushNotification, nextDate: nextDate!)
-                    } else {
-                        _ = ScheduleManager.removeSchedule(id: pushNotification.content!.id!)
+                    if(pushNotification.schedule != nil){
+                        if (nextDate != nil){
+                            ScheduleManager.saveSchedule(notification: pushNotification, nextDate: nextDate!)
+                        } else {
+                            _ = ScheduleManager.removeSchedule(id: pushNotification.content!.id!)
+                        }
                     }
                 }
             }
             return pushNotification
+        }
+        else {
+            if(pushNotification.schedule != nil){
+                _ = ScheduleManager.removeSchedule(id: pushNotification.content!.id!)
+            }
         }
         
         return nil
@@ -202,6 +232,7 @@ class NotificationBuilder {
         let pushData = pushNotification.toMap()
         let jsonData = JsonUtils.toJson(pushData)
         content.userInfo[Definitions.NOTIFICATION_JSON] = jsonData
+        content.userInfo[Definitions.NOTIFICATION_ID] = pushNotification.content!.id!
     }
 
     private static func setTitle(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
@@ -227,7 +258,7 @@ class NotificationBuilder {
         
         if(pushNotification.actionButtons != nil){
             var actions:[UNNotificationAction] = []
-            var category:String = ""
+            var dynamicCategory:[String] = []
             
             for button in pushNotification.actionButtons! {
                 
@@ -250,11 +281,11 @@ class NotificationBuilder {
                         break
                 }
                 
-                category.append(button.key!)
+                dynamicCategory.append(button.key!)
                 actions.append(action!)
             }
             
-            let categoryIdentifier:String = category.md5
+            let categoryIdentifier:String = dynamicCategory.joined(separator: ",")
             let categoryObject = UNNotificationCategory(identifier: categoryIdentifier, actions: actions, intentIdentifiers: [], options: .customDismissAction)
             
             UNUserNotificationCenter.current().setNotificationCategories([categoryObject])
@@ -262,13 +293,7 @@ class NotificationBuilder {
             content.categoryIdentifier = categoryIdentifier
         }
         else {
-            
-            let categoryIdentifier:String = "standard".md5
-            let categoryObject = UNNotificationCategory(identifier: categoryIdentifier, actions: [], intentIdentifiers: [], options: .customDismissAction)
-            
-            UNUserNotificationCenter.current().setNotificationCategories([categoryObject])
-            
-            content.categoryIdentifier = categoryIdentifier
+            content.categoryIdentifier = "Standard"
         }
         
     }
@@ -481,13 +506,7 @@ class NotificationBuilder {
     }
     
     private static func setProgressBarLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
-        
-        let categoryIdentifier:String = "AwesomeLayout"
-        let categoryObject = UNNotificationCategory(identifier: categoryIdentifier, actions: [], intentIdentifiers: [], options: .customDismissAction)
-        
-        UNUserNotificationCenter.current().setNotificationCategories([categoryObject])
-        
-        content.categoryIdentifier = categoryIdentifier
+        content.categoryIdentifier = "AwesomeLayout"
     }
     
     

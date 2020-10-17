@@ -17,6 +17,14 @@ void main() async {
           ledColor: Colors.white
       ),
       NotificationChannel(
+          channelKey: 'badge_channel',
+          channelName: 'Badge indicator notifications',
+          channelDescription: 'Notification channel to activate badge indicator',
+          channelShowBadge: true,
+          defaultColor: Color(0xFF9D50DD),
+          ledColor: Colors.yellow
+      ),
+      NotificationChannel(
           icon: 'resource://drawable/schedule_icon',
           channelKey: 'schedule',
           channelName: 'Scheduled Notifications',

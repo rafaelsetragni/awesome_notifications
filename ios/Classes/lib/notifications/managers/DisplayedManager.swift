@@ -10,9 +10,19 @@ import Foundation
 public class DisplayedManager {
     
     static let shared:SharedManager = SharedManager(tag: Definitions.SHARED_DISPLAYED)
+    static let pendingShared:SharedManager = SharedManager(tag: "PendingDisplayed")
+    
+    static var pendingDisplay:[String:String] = pendingShared.get(referenceKey: "pending") as? [String:String] ?? [:]
     
     public static func removeDisplayed(id:Int) -> Bool {
-        return shared.remove(referenceKey: String(id));
+        let referenceKey = String(id)
+        for (epoch, scheduledId) in pendingDisplay {
+            if (scheduledId == referenceKey) {
+                pendingDisplay.removeValue(forKey: epoch)
+            }
+        }
+        updatePendingList()
+        return shared.remove(referenceKey: referenceKey)
     }
 
     public static func listDisplayed() -> [NotificationReceived] {
@@ -26,9 +36,34 @@ public class DisplayedManager {
         
         return returnedList
     }
+    
+    public static func listPendingDisplayed(referenceDate:Date) -> [NotificationReceived] {
+        var returnedList:[NotificationReceived] = []
+        let referenceEpoch = referenceDate.timeIntervalSince1970.description
+        
+        for (epoch, id) in pendingDisplay {
+            if epoch <= referenceEpoch {
+                let notification = getDisplayedByKey(id: Int(id)!)
+                if notification != nil{
+                    returnedList.append(notification!)
+                }
+            }
+        }
+        
+        return returnedList
+    }
 
     public static func saveDisplayed(received:NotificationReceived) {
-        shared.set(received.toMap(), referenceKey: String(describing: received.id))
+        let referenceKey = String(received.id!)
+        let epoch:String = ( received.displayedDate?.toDate() ?? Date() ).secondsSince1970.description
+        
+        pendingDisplay[epoch] = referenceKey
+        shared.set(received.toMap(), referenceKey:referenceKey)
+        updatePendingList()
+    }
+    
+    public static func updatePendingList(){
+        pendingShared.set(pendingDisplay, referenceKey:"pending")
     }
 
     public static func getDisplayedByKey(id:Int) -> NotificationReceived? {

@@ -15,15 +15,34 @@ class NotificationSenderAndScheduler {
     private var createdSource:      NotificationSource?
     private var appLifeCycle:       NotificationLifeCycle?
     private var pushNotification:   PushNotification?
+    private var content:            UNMutableNotificationContent?
 
     private var created:    Bool = false
     private var scheduled:  Bool = false
-
+    
+    private var completion: ((Bool, UNMutableNotificationContent?, Error?) -> ())?
+    
     public func send(
         createdSource: NotificationSource,
         pushNotification: PushNotification?,
-        completion: @escaping (Bool, Error?) -> ()
+        content: UNMutableNotificationContent?,
+        completion: @escaping (Bool, UNMutableNotificationContent?, Error?) -> ()
     ) throws {
+        self.content = content
+        try send(
+            createdSource: createdSource,
+            pushNotification: pushNotification,
+            completion: completion
+        )
+    }
+    
+    public func send(
+        createdSource: NotificationSource,
+        pushNotification: PushNotification?,
+        completion: @escaping (Bool, UNMutableNotificationContent?, Error?) -> ()
+    ) throws {
+        
+        self.completion = completion
 
         if (pushNotification == nil){
             throw PushNotificationError.invalidRequiredFields(msg: "PushNotification not valid")
@@ -43,11 +62,9 @@ class NotificationSenderAndScheduler {
                     self.pushNotification = pushNotification
 
                     self.execute()
-                    
-                    completion(true, nil)
                 }
             } catch {
-                completion(false, error)
+                completion(false, nil, error)
             }
         })
     }
@@ -115,6 +132,7 @@ class NotificationSenderAndScheduler {
             }
 
         } catch {
+            completion?(false, nil, error)
         }
 
         pushNotification = nil
@@ -125,19 +143,17 @@ class NotificationSenderAndScheduler {
 
         // Only broadcast if pushNotification is valid
         if(receivedNotification != nil){
+            
+            completion!(true, content, nil)
 
             if(created){
-                if(SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle() != .Foreground){
-                    CreatedManager.saveCreated(received: receivedNotification!)
-                } else {
-                    SwiftAwesomeNotificationsPlugin.instance!.createEvent(notificationReceived: receivedNotification!)
-                }
+                SwiftAwesomeNotificationsPlugin.createEvent(notificationReceived: receivedNotification!)
             }
             
-            if(scheduled){                
-                
-                SwiftAwesomeNotificationsPlugin.rescheduleBackgroundTask()
-            }
+            DisplayedManager.saveDisplayed(received: receivedNotification!)
+        }
+        else {
+            completion?(false, nil, nil)
         }
     }
 
@@ -147,7 +163,7 @@ class NotificationSenderAndScheduler {
 
         do {
             
-            return try NotificationBuilder.createNotification(pushNotification)
+            return try NotificationBuilder.createNotification(pushNotification, content: content)
 
         } catch {
             

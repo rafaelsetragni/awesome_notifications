@@ -38,5 +38,3 @@ A complete solution to create Local Notifications and Push Notifications, throug
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }
   s.swift_version = '5.0'
 end
-
-#pod 'Firebase/Messaging'

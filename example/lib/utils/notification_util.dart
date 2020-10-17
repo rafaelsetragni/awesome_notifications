@@ -71,6 +71,52 @@ Future<void> sendBackgroundNotification(int id) async {
 }
 
 /* *********************************************
+    BADGE NOTIFICATIONS
+************************************************ */
+
+Future<void> showBadgeNotification(int id) async {
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: id,
+          channelKey: 'badge_channel',
+          title: 'Badge test notification',
+          body: 'This notification does activate badge indicator'
+      ),
+      schedule: NotificationSchedule(
+          initialDateTime: DateTime.now().add(Duration(seconds: 5)).toUtc()
+      )
+  );
+}
+
+Future<void> showWithoutBadgeNotification(int id) async {
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: id,
+          channelKey: 'basic_channel',
+          title: 'Badge test notification',
+          body: 'This notification does not activate badge indicator'
+      ),
+      schedule: NotificationSchedule(
+          initialDateTime: DateTime.now().add(Duration(seconds: 5)).toUtc()
+      )
+  );
+}
+
+Future<int> getBadgeIndicator() async {
+  int amount = await AwesomeNotifications().getBadgeCount();
+  return amount;
+}
+
+Future<void> setBadgeIndicator() async {
+  int amount = 50;
+  await AwesomeNotifications().setBadgeCount(amount);
+}
+
+Future<void> resetBadgeIndicator() async {
+  await AwesomeNotifications().resetBadge();
+}
+
+/* *********************************************
     ACTION BUTTONS NOTIFICATIONS
 ************************************************ */
 
