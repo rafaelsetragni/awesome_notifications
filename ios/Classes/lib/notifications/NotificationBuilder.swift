@@ -15,48 +15,88 @@ public class NotificationBuilder {
     private static var badgeAmount:NSNumber = 0
         
     public static func incrementBadge(){
-        NotificationBuilder.badgeAmount = NSNumber(value: getBadge().intValue + 1)
+        NotificationBuilder.setBadge(NotificationBuilder.getBadge().intValue + 1)
     }
     
     public static func resetBadge(){
-        NotificationBuilder.badgeAmount = 0
-        if !SwiftUtils.isRunningOnExtension() {
-            UIApplication.shared.applicationIconBadgeNumber = 0
-        }
+        setBadge(0)
     }
     
     public static func getBadge() -> NSNumber {
-        if !SwiftUtils.isRunningOnExtension() {
+        if !SwiftUtils.isRunningOnExtension() && Thread.isMainThread {
             NotificationBuilder.badgeAmount = NSNumber(value: UIApplication.shared.applicationIconBadgeNumber)
         }
+        else{
+            let userDefaults = UserDefaults.standard
+            let badgeCount:Int = userDefaults.integer(forKey: "badgeCount")
+            NotificationBuilder.badgeAmount = NSNumber(value: badgeCount)
+        }
         return NotificationBuilder.badgeAmount
+    }
+    
+    public static func setBadge(_ count:Int) {
+        NotificationBuilder.badgeAmount = NSNumber(value: count)
+        
+        if !SwiftUtils.isRunningOnExtension() && Thread.isMainThread {
+            UIApplication.shared.applicationIconBadgeNumber = count
+        }
+        else{
+            NotificationBuilder.badgeAmount = NSNumber(value: count)
+        }
+        
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(count, forKey: "badgeCount")
     }
     
     public static func requestPermissions(completion: @escaping (Bool) -> ()){
         
         if !SwiftUtils.isRunningOnExtension() {
-            // iOS 10 support
-            let notificationCenter = UNUserNotificationCenter.current()
             
-            notificationCenter.requestAuthorization(options: [.sound,.alert,.badge]) { (granted, error) in
-                if granted {
-                    DispatchQueue.main.async {
-                        UIApplication.shared.registerForRemoteNotifications()
+            let notificationCenter = UNUserNotificationCenter.current()
+            notificationCenter.getNotificationSettings { settings in
+                
+                var isAllowed:Bool = false
+                if #available(iOS 12.0, *) {
+                    isAllowed =
+                        (settings.authorizationStatus == .authorized) ||
+                        (settings.authorizationStatus == .provisional)
+                } else {
+                    isAllowed =
+                        (settings.authorizationStatus == .authorized)
+                }
+
+                if !isAllowed && settings.authorizationStatus == .notDetermined {
+                    
+                    notificationCenter.requestAuthorization(options: [.sound,.alert,.badge]) { (granted, error) in
+                        if granted {
+                            DispatchQueue.main.async {
+                                UIApplication.shared.registerForRemoteNotifications()
+                            }
+                            print("Notification Enable Successfully")
+                            completion(true)
+                        }
+                        else {
+                            completion(false)
+                        }
                     }
-                    print("Notification Enable Successfully")
-                    completion(true)
                 }
                 else {
-                    completion(false)
+                    DispatchQueue.main.async {
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                    }
+                    completion(isAllowed)
                 }
             }
+            
         } else {
+            // For Extensions, the notification is always enabled
             completion(true)
         }
     }
     
-    public static func isNotificationAuthorized(completion: @escaping (Bool) -> ()) {
-                
+    public static func isNotificationAllowed(completion: @escaping (Bool) -> ()) {
+             
+        // Extension targets are always authorized
         if SwiftUtils.isRunningOnExtension() {
             completion(true)
             return
@@ -66,11 +106,9 @@ public class NotificationBuilder {
         current.getNotificationSettings(completionHandler: { (settings) in
             
             if settings.authorizationStatus == .notDetermined {
-                // Notification permission has not been asked yet, go for it!
-                requestPermissions(completion: { enabled in
-                    completion(enabled)
-                    return
-                })
+                // The user hasnt decided yet if he authorizes or not
+                completion(false)
+                return
                 
             } else if settings.authorizationStatus == .denied {
                 // Notification permission was previously denied, go to settings & privacy to re-enable
@@ -149,7 +187,7 @@ public class NotificationBuilder {
             
             setVisibility(pushNotification: pushNotification, channel: channel, content: content)
             setShowWhen(pushNotification: pushNotification, content: content)
-            setBadge(pushNotification: pushNotification, channel: channel, content: content)
+            setBadgeIndicator(pushNotification: pushNotification, channel: channel, content: content)
             
             setAutoCancel(pushNotification: pushNotification, content: content)
             setTicker(pushNotification: pushNotification, content: content)
@@ -249,9 +287,11 @@ public class NotificationBuilder {
         }
     }
     
-    private static func setBadge(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
-        if(channel.channelShowBadge!){ NotificationBuilder.incrementBadge() }
-        content.badge = NotificationBuilder.getBadge()
+    private static func setBadgeIndicator(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        if(channel.channelShowBadge!){
+            NotificationBuilder.incrementBadge()
+            content.badge = NotificationBuilder.getBadge()
+        }
     }
     
     private static func createActionButtons(pushNotification:PushNotification, content:UNMutableNotificationContent){

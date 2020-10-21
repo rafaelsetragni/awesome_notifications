@@ -234,15 +234,20 @@ class AwesomeNotifications {
   }) async {
     _validateId(content.id);
 
-    final bool wasCreated = await _channel.invokeMethod(
-        CHANNEL_METHOD_CREATE_NOTIFICATION,
-        PushNotification(
-                content: content,
-                schedule: schedule,
-                actionButtons: actionButtons)
-            .toMap());
+    try {
+      final bool wasCreated = await _channel.invokeMethod(
+          CHANNEL_METHOD_CREATE_NOTIFICATION,
+          PushNotification(
+              content: content,
+              schedule: schedule,
+              actionButtons: actionButtons)
+              .toMap());
 
-    return wasCreated;
+      return wasCreated;
+    } on PlatformException catch (error) {
+      print(error);
+    }
+    return false;
   }
 
   /// Check if the notifications are permitted

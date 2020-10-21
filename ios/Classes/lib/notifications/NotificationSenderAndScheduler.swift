@@ -48,10 +48,10 @@ class NotificationSenderAndScheduler {
             throw PushNotificationError.invalidRequiredFields(msg: "PushNotification not valid")
         }
 
-        NotificationBuilder.isNotificationAuthorized(completion: { (authorized) in
+        NotificationBuilder.isNotificationAllowed(completion: { (allowed) in
             
             do{
-                if (authorized){
+                if (allowed){
                     self.appLifeCycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
 
                     try pushNotification!.validate()
@@ -62,6 +62,9 @@ class NotificationSenderAndScheduler {
                     self.pushNotification = pushNotification
 
                     self.execute()
+                }
+                else {
+                    throw PushNotificationError.notificationNotAuthorized
                 }
             } catch {
                 completion(false, nil, error)

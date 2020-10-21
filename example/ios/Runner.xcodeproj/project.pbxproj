@@ -26,6 +26,7 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		DCB0AD38F6BA118ECB47713E /* Pods_AwesomeServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24CC2EDB23DCE4FC4502DF63 /* Pods_AwesomeServiceExtension.framework */; };
+		F23AE3CD5890CEF2F6561FD8 /* Pods_AwesomeContentExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B03500E0D2B71E907EDA261 /* Pods_AwesomeContentExtension.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,9 +119,11 @@
 		0B7764167F8BB1D302BE3C89 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+		16B799BE23A0B7EC596F0E12 /* Pods-AwesomeContentExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeContentExtension.release.xcconfig"; path = "Target Support Files/Pods-AwesomeContentExtension/Pods-AwesomeContentExtension.release.xcconfig"; sourceTree = "<group>"; };
 		1FF092842362B64994A807A0 /* Pods-AwesomeServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-AwesomeServiceExtension/Pods-AwesomeServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		24CC2EDB23DCE4FC4502DF63 /* Pods_AwesomeServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AwesomeServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		36780AAFF3AAFEBB996A6E17 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		3B03500E0D2B71E907EDA261 /* Pods_AwesomeContentExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AwesomeContentExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		5ABFD54ABFACED6B902BEA46 /* Pods-AwesomeServiceExtension.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeServiceExtension.profile.xcconfig"; path = "Target Support Files/Pods-AwesomeServiceExtension/Pods-AwesomeServiceExtension.profile.xcconfig"; sourceTree = "<group>"; };
 		6CC19FF02E06F3DDA3605A56 /* Pods-AwesomeServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-AwesomeServiceExtension/Pods-AwesomeServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
@@ -135,6 +138,8 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B476DDD4BE1248ABC8C9DA32 /* Pods-AwesomeContentExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeContentExtension.debug.xcconfig"; path = "Target Support Files/Pods-AwesomeContentExtension/Pods-AwesomeContentExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		E52B249ADBFFC6488465C00A /* Pods-AwesomeContentExtension.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeContentExtension.profile.xcconfig"; path = "Target Support Files/Pods-AwesomeContentExtension/Pods-AwesomeContentExtension.profile.xcconfig"; sourceTree = "<group>"; };
 		F445988E9A634ABC40095CF1 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -145,6 +150,7 @@
 			files = (
 				053A5776252260FA00FCFDFE /* UserNotificationsUI.framework in Frameworks */,
 				053A5775252260FA00FCFDFE /* UserNotifications.framework in Frameworks */,
+				F23AE3CD5890CEF2F6561FD8 /* Pods_AwesomeContentExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +243,9 @@
 				1FF092842362B64994A807A0 /* Pods-AwesomeServiceExtension.debug.xcconfig */,
 				6CC19FF02E06F3DDA3605A56 /* Pods-AwesomeServiceExtension.release.xcconfig */,
 				5ABFD54ABFACED6B902BEA46 /* Pods-AwesomeServiceExtension.profile.xcconfig */,
+				B476DDD4BE1248ABC8C9DA32 /* Pods-AwesomeContentExtension.debug.xcconfig */,
+				16B799BE23A0B7EC596F0E12 /* Pods-AwesomeContentExtension.release.xcconfig */,
+				E52B249ADBFFC6488465C00A /* Pods-AwesomeContentExtension.profile.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -248,6 +257,7 @@
 				050F555C2520F02900E49A15 /* UserNotifications.framework */,
 				050F555E2520F02900E49A15 /* UserNotificationsUI.framework */,
 				24CC2EDB23DCE4FC4502DF63 /* Pods_AwesomeServiceExtension.framework */,
+				3B03500E0D2B71E907EDA261 /* Pods_AwesomeContentExtension.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -323,6 +333,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 053A5781252260FA00FCFDFE /* Build configuration list for PBXNativeTarget "AwesomeContentExtension" */;
 			buildPhases = (
+				0674E2560F6FAA5F8CE04C3F /* [CP] Check Pods Manifest.lock */,
 				053A5770252260FA00FCFDFE /* Sources */,
 				053A5771252260FA00FCFDFE /* Frameworks */,
 				053A5772252260FA00FCFDFE /* Resources */,
@@ -513,6 +524,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0674E2560F6FAA5F8CE04C3F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AwesomeContentExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3255DDE67E2A01DA87A0AEE4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -702,6 +735,7 @@
 /* Begin XCBuildConfiguration section */
 		053A5782252260FA00FCFDFE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B476DDD4BE1248ABC8C9DA32 /* Pods-AwesomeContentExtension.debug.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -713,9 +747,10 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4R89PK952Q;
+				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = AwesomeContentExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -735,6 +770,7 @@
 		};
 		053A5783252260FA00FCFDFE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 16B799BE23A0B7EC596F0E12 /* Pods-AwesomeContentExtension.release.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -746,9 +782,10 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4R89PK952Q;
+				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = AwesomeContentExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -765,6 +802,7 @@
 		};
 		053A5784252260FA00FCFDFE /* Profile */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E52B249ADBFFC6488465C00A /* Pods-AwesomeContentExtension.profile.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -776,9 +814,10 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4R89PK952Q;
+				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = AwesomeContentExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -746,10 +746,6 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                 channelsData
             );
 
-            if(!isNotificationEnabled(applicationContext, null)){
-
-            }
-
             Log.d(TAG, "Push notification service initialized");
             result.success(true);
 

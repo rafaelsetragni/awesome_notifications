@@ -37,10 +37,20 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+    target.build_configurations.each do |config|
+      config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'NO'
+    end
   end
 end
 
 target 'AwesomeServiceExtension' do
+  use_frameworks!
+  use_modular_headers!
+
+  pod 'awesome_notifications', :path => '.symlinks/plugins/awesome_notifications/ios'
+end
+
+target 'AwesomeContentExtension' do
   use_frameworks!
   use_modular_headers!
 

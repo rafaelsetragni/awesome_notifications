@@ -65,10 +65,6 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         // TODO: If necessary send token to application server.
         // Note: This callback is fired at each app startup and whenever a new token is generated.
     }
-
-    public func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
-        print("Received data message: \(remoteMessage.appData)")
-    }
     
     @available(iOS 10.0, *)
     public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
@@ -124,7 +120,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                     forTaskWithIdentifier: Definitions.IOS_BACKGROUND_SCHEDULER,
                     using: nil//DispatchQueue.global()//DispatchQueue.global(qos: .background).async
                 ){ (task) in
-                    Log.d("BG Schedule","My backgroundTask is executed NOW: \(Date().toString())")
+                    Log.d("BG Schedule","My backgroundTask is executed NOW: \(Date().toString() ?? "")")
                     self.handleAppSchedules(task: task as! BGAppRefreshTask)
                 }
                 
@@ -506,6 +502,14 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             case Definitions.CHANNEL_METHOD_GET_FCM_TOKEN:
                 channelMethodGetFcmToken(call: call, result: result)
                 return
+                
+            case Definitions.CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED:
+                channelMethodIsNotificationAllowed(call: call, result: result)
+                return
+
+            case Definitions.CHANNEL_METHOD_REQUEST_NOTIFICATIONS:
+                channelMethodRequestNotification(call: call, result: result)
+                return
                     
             case Definitions.CHANNEL_METHOD_CREATE_NOTIFICATION:
                 channelMethodCreateNotification(call: call, result: result)
@@ -517,6 +521,10 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 
             case Definitions.CHANNEL_METHOD_GET_BADGE_COUNT:
                 channelMethodGetBadgeCounter(call: call, result: result)
+                return
+                
+            case Definitions.CHANNEL_METHOD_SET_BADGE_COUNT:
+                channelMethodSetBadgeCounter(call: call, result: result)
                 return
                 
             case Definitions.CHANNEL_METHOD_RESET_BADGE:
@@ -610,14 +618,6 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 defaultIconPath,
                 channelsData
             )
-
-            if #available(iOS 10.0, *) {
-                NotificationBuilder.requestPermissions(completion: { authorized in
-                    debugPrint("Notifications authorized")
-                })
-            } else {
-                // Fallback on earlier versions
-            }
             
             Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notification service initialized")
             result(true)
@@ -669,6 +669,28 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         result(!StringUtils.isNullOrEmpty(token))
     }
     
+    private func channelMethodIsNotificationAllowed(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if #available(iOS 10.0, *) {
+            NotificationBuilder.isNotificationAllowed(completion: { (allowed) in
+                result(allowed)
+            })
+        }
+        else {
+            result(nil)
+        }
+    }
+
+    private func channelMethodRequestNotification(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if #available(iOS 10.0, *) {
+            NotificationBuilder.requestPermissions { (allowed) in
+                result(allowed)
+            }
+        }
+        else {
+            result(nil)
+        }
+    }
+    
     private func channelMethodGetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) {
         if #available(iOS 10.0, *) {
             result(NotificationBuilder.getBadge().intValue)
@@ -676,6 +698,18 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         else {
             result(0)
         }
+    }
+    
+    private func channelMethodSetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        
+        let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
+        let value:Int? = platformParameters[Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE] as? Int
+        //let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
+        
+        if #available(iOS 10.0, *), value != nil {
+            NotificationBuilder.setBadge(value!)
+        }
+        result(nil)
     }
     
     private func channelMethodResetBadge(call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -727,7 +761,45 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                                 Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification sent")
                             }
                             
-                            result(sent)
+                            if error != nil {
+                                let flutterError:FlutterError?
+                                if let notificationError = error as? PushNotificationError {
+                                    switch notificationError {
+                                        case PushNotificationError.notificationNotAuthorized:
+                                            flutterError = FlutterError.init(
+                                                code: "notificationNotAuthorized",
+                                                message: "Notifications are disabled",
+                                                details: nil
+                                            )
+                                        case PushNotificationError.cronException:
+                                            flutterError = FlutterError.init(
+                                                code: "cronException",
+                                                message: notificationError.localizedDescription,
+                                                details: nil
+                                            )
+                                        default:
+                                            flutterError = FlutterError.init(
+                                                code: "exception",
+                                                message: "Unknow error",
+                                                details: notificationError.localizedDescription
+                                            )
+                                    }
+                                }
+                                else {
+                                    flutterError = FlutterError.init(
+                                        code: error.debugDescription,
+                                        message: error?.localizedDescription,
+                                        details: nil
+                                    )
+                                }
+                                result(flutterError)
+                                return
+                            }
+                            else {
+                                result(sent)
+                                return
+                            }
+                            
                         }
                     )
                 } else {
@@ -735,6 +807,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                     
                     Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification sent");
                     result(true)
+                    return
                 }
             }
             else {
@@ -745,6 +818,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                         details: nil
                     )
                 )
+                return
             }
 
         } catch {
@@ -756,6 +830,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                     details: error.localizedDescription
                 )
             )
+            return
         }
         
         result(nil)

@@ -396,7 +396,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
           /* ******************************************************************** */
 
-          TextDivisor( title: 'Permissions to send Notifications' ),
+          TextDivisor( title: 'Permission to send Notifications' ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -409,9 +409,9 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             ]
           ),
           TextNote(
-              'To send local and push notifications, is necessary to get the user consent.\n\n'
-                  '* Android: notifications are enabled by default and are considered not dangerous, but the user can deny your app access at any time.\n'
-                  '* iOS: notifications are not enabled by default and you must explicitly request it from the user.'
+              'To send local and push notifications, it is necessary to obtain the user\'s consent. Keep in mind that he user consent can be revoked at any time.\n\n'
+                  '* Android: notifications are enabled by default and are considered not dangerous.\n'
+                  '* iOS: notifications are not enabled by default and you must explicitly request it to the user.'
           ),
           SimpleButton(
               'Request permission',
@@ -556,7 +556,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
                   'or even a reminder of new things arrived (Android native).\n\n'
                   'For platforms that show the global indicator over the app icon, is highly recommended to erase this annoying counter as soon '
                   'as possible and even let a shortcut menu with this option outside your app, similar to "mark as read" on e-mail. The amount counter '
-                  'is automatically managed by this plugin for each individual installation, and incremented for every notification on channels '
+                  'is automatically managed by this plugin for each individual installation, and incremented for every notification sent to channels '
                   'with "badge" set to TRUE.\n\n'
                   'OBS: Some Android distributions provide badge counter over the app icon, similar to iOS (LG, Samsung, HTC, Sony, etc) .\n\n'
                   'OBS2: Android has 2 badge counters. One global and other for each channel. Because of that, Badge indicator is defined using '

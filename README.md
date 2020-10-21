@@ -109,7 +109,17 @@ AwesomeNotifications().initialize(
 );
 ```
 
-4. On your main page, starts to listen the notification actions (to detect tap)
+4. Request user authorization to send local and push notifications (Remember to show a dialog alert to the user before call the request)
+
+```dart
+AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+  if (!isAllowed) {
+    AwesomeNotifications().requestPermissionToSendNotifications();
+  }
+});
+```
+
+5. On your main page, starts to listen the notification actions (to detect tap)
 
 ```dart
 AwesomeNotifications().actionStream.listen(
@@ -124,7 +134,7 @@ AwesomeNotifications().actionStream.listen(
 );
 ```
 
-5. In any place of your app, create a new notification
+6. In any place of your app, create a new notification
 
 ```dart
 AwesomeNotifications().createNotification(
