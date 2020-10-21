@@ -245,6 +245,18 @@ class AwesomeNotifications {
     return wasCreated;
   }
 
+  /// Check if the notifications are permitted
+  Future<bool> isNotificationAllowed() async {
+    final bool isAllowed = await _channel.invokeMethod(CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED);
+    return isAllowed;
+  }
+
+  /// Prompts the user to enabled notifications
+  Future<bool> requestPermissionToSendNotifications() async {
+    final bool isAllowed = await _channel.invokeMethod(CHANNEL_METHOD_REQUEST_NOTIFICATIONS);
+    return isAllowed;
+  }
+
   /// List all active scheduled notifications.
   Future<List<PushNotification>> listScheduledNotifications() async {
     List<PushNotification> scheduledNotifications = List<PushNotification>();
@@ -278,20 +290,25 @@ class AwesomeNotifications {
   }
 
   /// Get badge counter (on Android is 0 or 1)
-  Future<void> setBadgeCount(int amount) async {
-    await _channel.invokeMethod(CHANNEL_METHOD_SET_BADGE_COUNT, amount);
+  Future<void> setBadgeCount(int amount, String channelKey) async {
+    if(amount == null){ return; }
+    Map<String,dynamic> data = {
+      NOTIFICATION_CHANNEL_SHOW_BADGE: amount,
+      NOTIFICATION_CHANNEL_KEY: channelKey
+    };
+    await _channel.invokeMethod(CHANNEL_METHOD_SET_BADGE_COUNT, data);
   }
 
-  /// Get badge counter (on Android is 0 or 1)
-  Future<int> getBadgeCount() async {
+  /// Get badge counter (on iOS the amount is global)
+  Future<int> getBadgeCount(String channelKey) async {
     final int badgeCount =
-    await _channel.invokeMethod(CHANNEL_METHOD_GET_BADGE_COUNT);
+    await _channel.invokeMethod(CHANNEL_METHOD_GET_BADGE_COUNT, channelKey);
     return badgeCount;
   }
 
   /// Resets the badge counter
-  Future<void> resetBadge() async {
-    await _channel.invokeListMethod(CHANNEL_METHOD_RESET_BADGE);
+  Future<void> resetBadge(String channelKey) async {
+    await _channel.invokeListMethod(CHANNEL_METHOD_RESET_BADGE, channelKey);
   }
 
   /// Cancel a single notification

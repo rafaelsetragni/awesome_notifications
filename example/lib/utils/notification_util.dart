@@ -102,18 +102,21 @@ Future<void> showWithoutBadgeNotification(int id) async {
   );
 }
 
+// ON BADGE METHODS, NULL CHANNEL SETS THE GLOBAL COUNTER
+
 Future<int> getBadgeIndicator() async {
-  int amount = await AwesomeNotifications().getBadgeCount();
+  int amount = await AwesomeNotifications().getBadgeCount('badge_channel');
   return amount;
 }
 
-Future<void> setBadgeIndicator() async {
-  int amount = 50;
-  await AwesomeNotifications().setBadgeCount(amount);
+Future<void> setBadgeIndicator(int amount) async {
+  await AwesomeNotifications().setBadgeCount(amount, 'badge_channel');
+  await AwesomeNotifications().setBadgeCount(amount, null);
 }
 
 Future<void> resetBadgeIndicator() async {
-  await AwesomeNotifications().resetBadge();
+  await AwesomeNotifications().resetBadge('badge_channel');
+  await AwesomeNotifications().resetBadge(null);
 }
 
 /* *********************************************

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:awesome_notifications_example/common_widgets/led_light.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,6 +18,7 @@ import 'package:awesome_notifications_example/common_widgets/simple_button.dart'
 import 'package:awesome_notifications_example/common_widgets/text_divisor.dart';
 import 'package:awesome_notifications_example/common_widgets/text_note.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:giffy_dialog/giffy_dialog.dart';
 
 class NotificationExamplesPage extends StatefulWidget {
 
@@ -34,6 +36,8 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
   bool delayLEDTests = false;
   DateTime _pickedDate;
   TimeOfDay _pickedTime;
+
+  bool notificationsAllowed = false;
 
   String packageName = 'me.carda.awesome_notifications_example';
 
@@ -67,12 +71,12 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
   }
 
   Future<int> pickBadgeCount(BuildContext context) async {
-    int amount ;
+    int amount = 50;
 
     AlertDialog alert = AlertDialog(
       title: Text("Choose the new badge amount"),
       content: NumberPicker.integer(
-          initialValue: 50,
+          initialValue: amount,
           minValue: 0,
           maxValue: 999,
           onChanged: (newValue) => amount = newValue
@@ -80,11 +84,16 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
       actions: [
         FlatButton(
           child: Text("Cancel"),
-          onPressed: () => amount = null,
+          onPressed: (){
+            amount = null;
+            Navigator.of(context).pop();
+          },
         ),
         FlatButton(
           child: Text("OK"),
-          onPressed: () { },
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
       ],
     );
@@ -104,9 +113,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
     // this is not part of notification system, but media player simulator instead
     MediaPlayerCentral.mediaStream.listen((media) {
-
-      switch(MediaPlayerCentral.mediaLifeCycle){
-
+      switch (MediaPlayerCentral.mediaLifeCycle) {
         case MediaLifeCycle.Stopped:
           cancelNotification(100);
           break;
@@ -119,7 +126,6 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
           updateNotificationMediaPlayer(100, media);
           break;
       }
-
     });
 
     // If you pretend to use the firebase service, you need to initialize it
@@ -127,44 +133,98 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
     initializeFirebaseService();
 
     AwesomeNotifications().createdStream.listen(
-        (receivedNotification){
-          String createdSourceText = AssertUtils.toSimpleEnumString(receivedNotification.createdSource);
-          Fluttertoast.showToast(msg: '$createdSourceText notification created');
+            (receivedNotification) {
+          String createdSourceText = AssertUtils.toSimpleEnumString(
+              receivedNotification.createdSource);
+          Fluttertoast.showToast(
+              msg: '$createdSourceText notification created');
         }
     );
 
     AwesomeNotifications().displayedStream.listen(
-            (receivedNotification){
-          String createdSourceText = AssertUtils.toSimpleEnumString(receivedNotification.createdSource);
-          Fluttertoast.showToast(msg: '$createdSourceText notification displayed');
+            (receivedNotification) {
+          String createdSourceText = AssertUtils.toSimpleEnumString(
+              receivedNotification.createdSource);
+          Fluttertoast.showToast(
+              msg: '$createdSourceText notification displayed');
         }
     );
 
     AwesomeNotifications().dismissedStream.listen(
-            (receivedNotification){
-          String dismissedSourceText = AssertUtils.toSimpleEnumString(receivedNotification.dismissedLifeCycle);
-          Fluttertoast.showToast(msg: 'Notification dismissed on $dismissedSourceText');
+            (receivedNotification) {
+          String dismissedSourceText = AssertUtils.toSimpleEnumString(
+              receivedNotification.dismissedLifeCycle);
+          Fluttertoast.showToast(
+              msg: 'Notification dismissed on $dismissedSourceText');
         }
     );
 
     AwesomeNotifications().actionStream.listen(
-        (receivedNotification){
-
-          if(!StringUtils.isNullOrEmpty(receivedNotification.buttonKeyInput)){
+            (receivedNotification) {
+          if (!StringUtils.isNullOrEmpty(receivedNotification.buttonKeyInput)) {
             processInputTextReceived(receivedNotification);
           }
-          else if(
-            !StringUtils.isNullOrEmpty(receivedNotification.buttonKeyPressed) &&
-            receivedNotification.buttonKeyPressed.startsWith('MEDIA_')
+          else if (
+          !StringUtils.isNullOrEmpty(receivedNotification.buttonKeyPressed) &&
+              receivedNotification.buttonKeyPressed.startsWith('MEDIA_')
           ) {
             processMediaControls(receivedNotification);
           }
           else {
             processDefaultActionReceived(receivedNotification);
           }
-
         }
     );
+
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      setState(() {
+        notificationsAllowed = isAllowed;
+      });
+
+      if (!isAllowed) {
+        requestUserPermission(isAllowed);
+      }
+    });
+  }
+
+  void requestUserPermission(bool isAllowed) async {
+      showDialog(
+          context: context,
+          builder: (_) =>
+              NetworkGiffyDialog(
+                buttonOkText: Text('Allow', style: TextStyle(color: Colors.white)),
+                buttonCancelText: Text('Later', style: TextStyle(color: Colors.white)),
+                buttonCancelColor: Colors.grey,
+                buttonOkColor: Colors.deepPurple,
+                buttonRadius: 0.0,
+                image: Image.network("https://thumbs.gfycat.com/BlindZigzagGreatargus-small.gif", fit: BoxFit.cover),
+                title: Text('Get Notified!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.w600)
+                ),
+                description: Text('Allow Awesome Notifications to send you beautiful notifications!',
+                  textAlign: TextAlign.center,
+                ),
+                entryAnimation: EntryAnimation.DEFAULT,
+                onCancelButtonPressed: () async {
+                  Navigator.of(context).pop();
+                  notificationsAllowed = await AwesomeNotifications().isNotificationAllowed();
+                  setState(() {
+                    notificationsAllowed = notificationsAllowed;
+                  });
+                },
+                onOkButtonPressed: () async {
+                  Navigator.of(context).pop();
+                  await AwesomeNotifications().requestPermissionToSendNotifications();
+                  notificationsAllowed = await AwesomeNotifications().isNotificationAllowed();
+                  setState(() {
+                    notificationsAllowed = notificationsAllowed;
+                  });
+                },
+              )
+      );
   }
 
   void processDefaultActionReceived(ReceivedAction receivedNotification) {
@@ -336,21 +396,26 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
           /* ******************************************************************** */
 
-          TextDivisor(title: 'Media Player'),
+          TextDivisor( title: 'Permissions to send Notifications' ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Column(
+                children: [
+                  Text(notificationsAllowed ? 'Allowed' : 'Not allowed', style: TextStyle(color: notificationsAllowed ? Colors.green : Colors.red)),
+                  LedLight(notificationsAllowed)
+                ],
+              )
+            ]
+          ),
           TextNote(
-              'The media player its just emulated and was built to help me to check if the notification media control contemplates the dev demands, such as sync state, etc.' '\n\n'
-                  'The layout itself was built just for fun, you can use it as you wish for.' '\n\n'
-                  'ATENTION: There is no media reproducing in any place, its just a Timer to pretend a time passing.'
+              'To send local and push notifications, is necessary to get the user consent.\n\n'
+                  '* Android: notifications are enabled by default and are considered not dangerous, but the user can deny your app access at any time.\n'
+                  '* iOS: notifications are not enabled by default and you must explicitly request it from the user.'
           ),
           SimpleButton(
-              'Show media player',
-              onPressed: () => Navigator.pushNamed(context, PAGE_MEDIA_DETAILS)
-          ),
-          SimpleButton(
-              'Cancel notification',
-              backgroundColor: Colors.red,
-              labelColor: Colors.white,
-              onPressed: () => cancelNotification(100)
+              'Request permission',
+              onPressed: () => requestUserPermission(notificationsAllowed)
           ),
 
           /* ******************************************************************** */
@@ -388,50 +453,6 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
           ),
 
           /* ******************************************************************** */
-
-          /* ******************************************************************** */
-
-          TextDivisor( title: 'Badge Indicator' ),
-          TextNote(
-              '"badge" is a indicator of how many notifications (or anything else) are not viewed by the user (iOS)'
-                  'or even a reminder of new things arrived (Android).\n\n'
-                  'For iOS devices is highly recommended to erase this annoying counter as soon as possible and even let'
-                  'a shortcut menu with this option outside your app, similar to "mark as read" on e-mail. The ammount counter'
-                  'is automatically managed by this plugin for each individual installation, and incremented for every notification'
-                  'with "badge" set to TRUE.\n\n'
-                  'For Android, the badge is automatically reset when all notifications are cleared or tapped.\n\n'
-                  'OBS: Badge indicator are not activate while the application is in Foreground.\n\n'
-                  'OBS2: Badge indicator is defined on channel\'s config due to be more compatible across platforms than for each notification'
-          ),
-          SimpleButton(
-              'Shows a notification with a badge indicator channel activate',
-              onPressed: () => showBadgeNotification(Random().nextInt(100))
-          ),
-          SimpleButton(
-              'Shows a notification with a badge indicator channel deactivate',
-              onPressed: () => showWithoutBadgeNotification(Random().nextInt(100))
-          ),
-          SimpleButton(
-              'Read the badge indicator count',
-              onPressed: () async {
-                int amount = await getBadgeIndicator();
-                Fluttertoast.showToast(msg: 'Badge count: $amount');
-              }
-          ),
-          SimpleButton(
-              'Set manually the badge indicator',
-              onPressed: () => setBadgeIndicator()
-          ),
-          SimpleButton(
-              'Reset the badge indicator',
-              onPressed: () => resetBadgeIndicator()
-          ),
-          SimpleButton(
-              'Cancel all the badge test notifications',
-              backgroundColor: Colors.red,
-              labelColor: Colors.white,
-              onPressed: () => cancelAllNotifications()
-          ),
 
           TextDivisor(title: 'Big Picture Notifications'),
           TextNote(
@@ -525,6 +546,56 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
               backgroundColor: Colors.red,
               labelColor: Colors.white,
               onPressed: () => cancelNotification(3)
+          ),
+
+          /* ******************************************************************** */
+
+          TextDivisor( title: 'Badge Indicator' ),
+          TextNote(
+              '"Badge" is an indicator of how many notifications (or anything else) that have not been viewed by the user (iOS and some versions of Android) '
+                  'or even a reminder of new things arrived (Android native).\n\n'
+                  'For platforms that show the global indicator over the app icon, is highly recommended to erase this annoying counter as soon '
+                  'as possible and even let a shortcut menu with this option outside your app, similar to "mark as read" on e-mail. The amount counter '
+                  'is automatically managed by this plugin for each individual installation, and incremented for every notification on channels '
+                  'with "badge" set to TRUE.\n\n'
+                  'OBS: Some Android distributions provide badge counter over the app icon, similar to iOS (LG, Samsung, HTC, Sony, etc) .\n\n'
+                  'OBS2: Android has 2 badge counters. One global and other for each channel. Because of that, Badge indicator is defined using '
+                  'channel\'s config, to be more compatible across platforms. If you pretend to manipulate the global indicator, set channel key to null.\n\n'
+                  'OBS3: Badges for native Android only works on Oreo version and beyond.'
+          ),
+          SimpleButton(
+              'Shows a notification with a badge indicator channel activate',
+              onPressed: () => showBadgeNotification(Random().nextInt(100))
+          ),
+          SimpleButton(
+              'Shows a notification with a badge indicator channel deactivate',
+              onPressed: () => showWithoutBadgeNotification(Random().nextInt(100))
+          ),
+          SimpleButton(
+              'Read the badge indicator count',
+              onPressed: () async {
+                int amount = await getBadgeIndicator();
+                Fluttertoast.showToast(msg: 'Badge count: $amount');
+              }
+          ),
+          SimpleButton(
+              'Set manually the badge indicator',
+              onPressed: () async {
+                int amount = await pickBadgeCount(context);
+                if(amount != null){
+                  setBadgeIndicator(amount);
+                }
+              }
+          ),
+          SimpleButton(
+              'Reset the badge indicator',
+              onPressed: () => resetBadgeIndicator()
+          ),
+          SimpleButton(
+              'Cancel all the badge test notifications',
+              backgroundColor: Colors.red,
+              labelColor: Colors.white,
+              onPressed: () => cancelAllNotifications()
           ),
 
           /* ******************************************************************** */
@@ -679,6 +750,25 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
               backgroundColor: Colors.red,
               labelColor: Colors.white,
               onPressed: () => cancelNotification(8)
+          ),
+
+          /* ******************************************************************** */
+
+          TextDivisor(title: 'Media Player'),
+          TextNote(
+              'The media player its just emulated and was built to help me to check if the notification media control contemplates the dev demands, such as sync state, etc.' '\n\n'
+                  'The layout itself was built just for fun, you can use it as you wish for.' '\n\n'
+                  'ATENTION: There is no media reproducing in any place, its just a Timer to pretend a time passing.'
+          ),
+          SimpleButton(
+              'Show media player',
+              onPressed: () => Navigator.pushNamed(context, PAGE_MEDIA_DETAILS)
+          ),
+          SimpleButton(
+              'Cancel notification',
+              backgroundColor: Colors.red,
+              labelColor: Colors.white,
+              onPressed: () => cancelNotification(100)
           ),
 
           /* ******************************************************************** */
