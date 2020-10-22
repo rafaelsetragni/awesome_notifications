@@ -92,4 +92,15 @@ public class ScheduleManager {
         return shared.get(referenceKey: channelKey) != nil
     }
     
+    public static func cancelAllSchedules() {
+        let scheduledList = shared.getAllObjects();
+        
+        for scheduled:[String:Any?] in scheduledList {
+            cancelScheduled(id: scheduled["id"] as! Int);
+        }
+    }
+
+    public static func cancelScheduled(id:Int) {
+        _ = shared.remove(referenceKey: String(id))
+    }
 }

@@ -22,6 +22,7 @@ public class NotificationScheduleModel : AbstractModel {
                 cronHelper = nil
             }
             else {
+                _crontabSchedule = value
                 do {
                     cronHelper = try CronExpression(value!)
                 }
@@ -40,11 +41,7 @@ public class NotificationScheduleModel : AbstractModel {
         self.allowWhileIdle  = MapUtils<Bool>.getValueOrDefault(reference: "allowWhileIdle", arguments: arguments)
         
         if(arguments?["preciseSchedules"] != nil){
-            do {
-                preciseSchedules = arguments!["preciseSchedules"] as? [String]
-            } catch {
-                
-            }
+            self.preciseSchedules = arguments!["preciseSchedules"] as? [String]
         }
         
         return self

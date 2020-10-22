@@ -175,21 +175,32 @@ class NotificationSenderAndScheduler {
         return nil
     }
 
-    public static func cancelNotification(id:Int) {
+    public static func cancelNotification(id:Int) -> Bool {
         NotificationBuilder.cancelNotification(id: id)
-        if CreatedManager.removeCreated(id: id) || DisplayedManager.removeDisplayed(id: id) {
-            debugPrint("Notification cancelled")
-        }
-        else {
-            debugPrint("Notification not found")
-        }
+        debugPrint("Notification cancelled")
+        return true
+    }
+    
+    public static func cancelSchedule(id:Int) -> Bool {
+        NotificationBuilder.cancelScheduledNotification(id: id)
+        ScheduleManager.cancelScheduled(id: id)
+        debugPrint("Schedule cancelled")
+        return true
+    }
+    
+    public static func cancelAllSchedules() -> Bool {
+        NotificationBuilder.cancellAllScheduledNotifications()
+        ScheduleManager.cancelAllSchedules()
+        debugPrint("All notifications scheduled was cancelled")
+        return true
     }
 
     public static func cancelAllNotifications() -> Bool {
+        NotificationBuilder.cancellAllScheduledNotifications()
         NotificationBuilder.cancellAllNotifications()
-        CreatedManager.cancelAllCreated()
-        DisplayedManager.cancelAllDisplayed()
-        return true;
+        ScheduleManager.cancelAllSchedules()
+        debugPrint("All notifications was cancelled")
+        return true
     }
 
 }

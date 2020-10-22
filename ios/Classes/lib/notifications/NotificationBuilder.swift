@@ -549,14 +549,19 @@ public class NotificationBuilder {
         content.categoryIdentifier = "AwesomeLayout"
     }
     
-    
     public static func cancelNotification(id:Int){
         let referenceKey:String = String(id)
             
         let center = UNUserNotificationCenter.current()
         center.removeDeliveredNotifications(withIdentifiers: [referenceKey])
         center.removePendingNotificationRequests(withIdentifiers: [referenceKey])
-
+    }
+    
+    public static func cancelScheduledNotification(id:Int){
+        let referenceKey:String = String(id)
+            
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [referenceKey])
     }
     
     public static func cancellAllNotifications(){
@@ -564,7 +569,12 @@ public class NotificationBuilder {
         let center = UNUserNotificationCenter.current()
         center.removeAllDeliveredNotifications()
         center.removeAllPendingNotificationRequests()
-        
+    }
+    
+    public static func cancellAllScheduledNotifications(){
+            
+        let center = UNUserNotificationCenter.current()
+        center.removeAllPendingNotificationRequests()        
     }
     
 }

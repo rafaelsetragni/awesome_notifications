@@ -530,9 +530,17 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             case Definitions.CHANNEL_METHOD_RESET_BADGE:
                 channelMethodResetBadge(call: call, result: result)
                 return
-            
+                
             case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATION:
                 channelMethodCancelNotification(call: call, result: result)
+                return
+                        
+            case Definitions.CHANNEL_METHOD_CANCEL_SCHEDULE:
+                channelMethodCancelSchedule(call: call, result: result)
+                return
+                
+            case Definitions.CHANNEL_METHOD_CANCEL_ALL_SCHEDULES:
+                channelMethodCancelAllSchedules(call: call, result: result)
                 return
                 
             case Definitions.CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS:
@@ -720,26 +728,57 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     }
 
     private func channelMethodCancelNotification(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        let notificationId:Int? = call.arguments as? Int
-        if(notificationId == nil){ result(false); return }
+        guard let notificationId:Int = call.arguments as? Int else {
+            result(false); return
+        }
         
         if #available(iOS 10.0, *) {
-            NotificationSenderAndScheduler.cancelNotification(id: notificationId!)
+            result(NotificationSenderAndScheduler.cancelNotification(id: notificationId))
+            return
         } else {
             // Fallback on earlier versions
         }
         
-        result(true)
+        result(false)
+    }
+    
+    private func channelMethodCancelSchedule(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let notificationId:Int = call.arguments as? Int else {
+            result(false); return
+        }
+        
+        if #available(iOS 10.0, *) {
+            result(NotificationSenderAndScheduler.cancelSchedule(id: notificationId))
+            return
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        result(false)
+    }
+    
+    private func channelMethodCancelAllSchedules(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        
+        if #available(iOS 10.0, *) {
+            result(NotificationSenderAndScheduler.cancelAllSchedules())
+            return
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        result(false)
     }
 
     private func channelMethodCancelAllNotifications(call: FlutterMethodCall, result: @escaping FlutterResult) {
         
         if #available(iOS 10.0, *) {
             result(NotificationSenderAndScheduler.cancelAllNotifications())
+            return
         } else {
             // Fallback on earlier versions
         }
-        result(true)
+        
+        result(false)
     }
 
     private func channelMethodCreateNotification(call: FlutterMethodCall, result: @escaping FlutterResult) {
