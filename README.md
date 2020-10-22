@@ -54,7 +54,7 @@ All notifications could be created locally or via Firebase services, with all th
 - Include Firebase support for iOS (In construction)
 - Finish notifications features for iOS (In construction)
 - Expiration date for notifications (not done yet due to iOS limitations) (https://github.com/rafaelsetragni/awesome_notifications/issues/7)
-- Fix channel's updates on Android (https://github.com/rafaelsetragni/awesome_notifications/issues/3)
+- Add a option to choose if a notification action should bring the app to foreground or not.
 - Include Web support
 - Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
 - Video layout for notifications
@@ -379,6 +379,24 @@ Notifications action buttons could be classified in 4 types:
 - InputField: after user taps, a input text field is displayed to capture input by the user.
 - DisabledAction: after user taps, the notification bar is closed, but the respective action event is not fired.
 - KeepOnTop: after user taps, the notification bar is not closed, but an action event is fired.
+
+<br>
+
+
+|  Android           | App in Foreground | App in Background | App Terminated (Killed) |
+| -----------------: | ----------------- | ----------------- | ----------------------- |
+| **Default**        | keeps the app in foreground | brings the app to foreground | brings the app to foreground |
+| **InputField**     | keeps the app in foreground | brings the app to foreground | brings the app to foreground |
+| **DisabledAction** | keeps the app in foreground | keeps the app in background  | keeps the app terminated |
+| **KeepOnTop**      | keeps the app in foreground | keeps the app in background  | keeps the app terminated |
+
+<br>
+
+If the app is terminated (killed):
+- Default: Wake up the app.
+- InputField: Wake up the app.
+- DisabledAction: Does not Wake up the app.
+- KeepOnTop: Does not Wake up the app.
 
 <br>
 
