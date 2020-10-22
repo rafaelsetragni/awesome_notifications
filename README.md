@@ -153,9 +153,9 @@ AwesomeNotifications().createNotification(
 
 ## iOS Limitations
 
-Due to the way that background task and notification schedules works on iOS, wasn't possible yet to enable all the schedule features on iOS while the app is in Background and even when the app is terminated (killed).
+Due to the way that background task and notification schedules works on iOS, wasn't possible yet to enable all the schedule features on iOS while the app is in Background and even when the app is terminated (Killed).
 
-On foreground, all notification schedules should work as expected. `InitialDate` parameter should work as expected in any circunstance.
+On Foreground, all notification schedules should work as expected. `InitialDate` parameter should work as expected at any circunstance.
 
 A support ticket was opened for Apple in order to resolve this issue. You can follow the progress of the process [here](https://github.com/rafaelsetragni/awesome_notifications/issues/16). 
 
