@@ -109,7 +109,7 @@ AwesomeNotifications().initialize(
 );
 ```
 
-4. Request user authorization to send local and push notifications (Remember to show a dialog alert to the user before call the request)
+4. Request the user authorization to send local and push notifications (Remember to show a dialog alert to the user before call this request)
 
 ```dart
 AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
@@ -150,6 +150,100 @@ AwesomeNotifications().createNotification(
 **THATS IT! CONGRATZ MY FRIEND!!!**
 
 <br>
+
+## iOS Limitations
+
+Due to the way that background task and notification schedules works on iOS, wasn't possible yet to enable all the schedule features on iOS while the app is in Background and even when the app is terminated (killed).
+
+On foreground, all notification schedules should work as expected.
+
+A support ticket was opened for Apple in order to resolve this issue. You can follow the progress of the process [here](https://github.com/rafaelsetragni/awesome_notifications/issues/16). 
+
+
+## iOS Extra Configurations (Optional)
+
+To activate all the features on iOS, is necessary to include two target extensions to your project:
+
+- **Notification Content Extension**: allows to use alternative layouts, such as Big text, Progress Bar and Inbox Messages.
+- **Notification Service Extension**: allows to receive push notifications using all Awesome Notifications Features.
+
+OBS: Is not necessary to include both extensions if you do not pretend to use just one of the features. Just include what you need.
+
+#### *Including Notification Service Extension to your project*
+
+1- Open your project directely on XCode, opening the file "/{path-to-your-project}/ios/Runner.xcworkspace"
+
+2- Create a new target for Notification Service Extension with **File > New > Target** and select **Notification Service Extension**. Name the extension as **AwesomeServiceExtension**.
+![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/add-notification-service-extension.jpg)
+
+3- Edit your Podfile in XCode and include the code bellow at the botton of the file:
+*This step will compile the framework awesome_notifications to be used on your target extensions*
+
+```
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if ['AwesomeServiceExtension','AwesomeContentExtension'].include? target.name
+      target.build_configurations.each do |config|
+        config.build_settings['ENABLE_BITCODE'] = 'NO'
+        config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'NO'
+      end
+    end
+  end
+end
+
+target 'AwesomeServiceExtension' do
+  use_frameworks!
+  use_modular_headers!
+
+  pod 'awesome_notifications', :path => '.symlinks/plugins/awesome_notifications/ios'
+end
+
+target 'AwesomeContentExtension' do
+  use_frameworks!
+  use_modular_headers!
+
+  pod 'awesome_notifications', :path => '.symlinks/plugins/awesome_notifications/ios'
+end
+```
+
+5- Go to the terminal, navigate to "/{path-to-your-project}/ios" folder and run `pod install` to compile the dependencies. 
+
+6- Replace the file content in NotificationService.swift by the code bellow:
+
+```Swift
+import UserNotifications
+import awesome_notifications
+
+@available(iOS 10.0, *)
+class NotificationService: UNNotificationServiceExtension {
+    
+    var awesomeServiceExtension:AwesomeServiceExtension?
+    
+    override func didReceive(
+        _ request: UNNotificationRequest,
+        withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void
+    ){
+        self.awesomeServiceExtension = AwesomeServiceExtension()
+        awesomeServiceExtension?.didReceive(request, withContentHandler: contentHandler)
+    }
+    
+    override func serviceExtensionTimeWillExpire() {
+        if let awesomeServiceExtension = awesomeServiceExtension {
+            awesomeServiceExtension.serviceExtensionTimeWillExpire()
+        }
+    }
+
+}
+```
+
+7- Certifies to disable `Enable Bitcode` and `Require Only App-Extension-Safe API` setting it to 'NO'
+![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/disable-bitcode.jpg)
+
+
+#### *Including Notification Content Extension to your project*
+
+WORK IN PROGRESS
+
 
 ## Using Firebase Services (Optional)
 
@@ -195,7 +289,7 @@ Please, be patient.
 
 The firebase token is necessary to your sever send Push Notifications to the remote device. The token could eventually change and is created to every device installation on each application.
 
-Every token created could be captured on Flutter by this plugin listen to ``
+Every token created could be captured on Flutter by this plugin listen to `tokenStream`.
 
 <br>
 
