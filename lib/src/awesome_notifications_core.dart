@@ -27,13 +27,11 @@ class AwesomeNotifications {
 
   final StreamController<ReceivedNotification>
       // ignore: close_sinks
-      _createdSubject =
-      StreamController<ReceivedNotification>();
+      _createdSubject = StreamController<ReceivedNotification>();
 
   final StreamController<ReceivedNotification>
       // ignore: close_sinks
-      _displayedSubject =
-      StreamController<ReceivedNotification>();
+      _displayedSubject = StreamController<ReceivedNotification>();
 
   final StreamController<ReceivedAction>
       // ignore: close_sinks
@@ -41,8 +39,7 @@ class AwesomeNotifications {
 
   final StreamController<ReceivedAction>
       // ignore: close_sinks
-      _dismissedSubject =
-      StreamController<ReceivedAction>();
+      _dismissedSubject = StreamController<ReceivedAction>();
 
   /// STREAM METHODS *********************************************
 
@@ -238,9 +235,9 @@ class AwesomeNotifications {
       final bool wasCreated = await _channel.invokeMethod(
           CHANNEL_METHOD_CREATE_NOTIFICATION,
           PushNotification(
-              content: content,
-              schedule: schedule,
-              actionButtons: actionButtons)
+                  content: content,
+                  schedule: schedule,
+                  actionButtons: actionButtons)
               .toMap());
 
       return wasCreated;
@@ -252,13 +249,15 @@ class AwesomeNotifications {
 
   /// Check if the notifications are permitted
   Future<bool> isNotificationAllowed() async {
-    final bool isAllowed = await _channel.invokeMethod(CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED);
+    final bool isAllowed =
+        await _channel.invokeMethod(CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED);
     return isAllowed;
   }
 
   /// Prompts the user to enabled notifications
   Future<bool> requestPermissionToSendNotifications() async {
-    final bool isAllowed = await _channel.invokeMethod(CHANNEL_METHOD_REQUEST_NOTIFICATIONS);
+    final bool isAllowed =
+        await _channel.invokeMethod(CHANNEL_METHOD_REQUEST_NOTIFICATIONS);
     return isAllowed;
   }
 
@@ -296,8 +295,10 @@ class AwesomeNotifications {
 
   /// Get badge counter (on Android is 0 or 1)
   Future<void> setGlobalBadgeCounter(int amount) async {
-    if(amount == null){ return; }
-    Map<String,dynamic> data = {
+    if (amount == null) {
+      return;
+    }
+    Map<String, dynamic> data = {
       NOTIFICATION_CHANNEL_SHOW_BADGE: amount
       //NOTIFICATION_CHANNEL_KEY: channelKey
     };
@@ -307,7 +308,7 @@ class AwesomeNotifications {
   /// Get badge counter (on iOS the amount is global)
   Future<int> getGlobalBadgeCounter() async {
     final int badgeCount =
-    await _channel.invokeMethod(CHANNEL_METHOD_GET_BADGE_COUNT);
+        await _channel.invokeMethod(CHANNEL_METHOD_GET_BADGE_COUNT);
     return badgeCount;
   }
 
