@@ -224,6 +224,22 @@ public class NotificationBuilder {
             let trigger:UNCalendarNotificationTrigger? = dateToCalendarTrigger(targetDate: nextDate)
             let request = UNNotificationRequest(identifier: pushNotification.content!.id!.description, content: content, trigger: trigger)
             
+            let customCategory = UNNotificationCategory(
+                identifier: "AwesomeLayout",
+                actions: [],
+                intentIdentifiers: [],
+                options: .customDismissAction
+            )
+            
+            let standardCategory = UNNotificationCategory(
+                identifier: "Standard",
+                actions: [],
+                intentIdentifiers: [],
+                options: .customDismissAction
+            )
+            
+            UNUserNotificationCenter.current().setNotificationCategories([customCategory, standardCategory])
+            
             UNUserNotificationCenter.current().add(request)
             {
                 error in // called when message has been sent

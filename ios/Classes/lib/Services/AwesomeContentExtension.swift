@@ -7,6 +7,16 @@
 
 import Foundation
 
-class AwesomeContentExtension {
+@available(iOS 10.0, *)
+public class AwesomeContentExtension {
     
+    public init(){}
+    
+    public func viewDidLoad() {
+        // TODO
+    }
+    
+    public func didReceive(_ notification: UNNotification) {
+        // TODO
+    }
 }

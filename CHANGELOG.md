@@ -1,3 +1,9 @@
+## [0.0.4]
+* Fixed complex schedules for iOS apps running on Foreground
+* Included Badge indicators for iOS and some Android distributions
+* Included request permission and check permission methods
+* Included Firebase support to send push notifications (work in progress)
+
 ## [0.0.3+3]
 * Fixed Shader's render problems on iOS devices
 ## [0.0.3+2]

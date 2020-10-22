@@ -180,13 +180,15 @@ OBS: Is not necessary to include both extensions if you do not pretend to use ju
 2- Create a new target for Notification Service Extension with **File > New > Target** and select **Notification Service Extension**. Name the extension as **AwesomeServiceExtension**.
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/add-notification-service-extension.jpg)
 
-3- Edit your Podfile in XCode and include the code bellow at the botton of the file:
+3- Edit your Podfile in XCode and replace the last `post_install do |installer|` branch by code bellow, at the bottom of the file:
+
 *This step will compile the framework awesome_notifications to be used on your target extensions*
 
 ```
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    if ['AwesomeServiceExtension','AwesomeContentExtension'].include? target.name
+    flutter_additional_ios_build_settings(target)
+    if target.name == 'AwesomeServiceExtension' || target.name == 'AwesomeContentExtension'
       target.build_configurations.each do |config|
         config.build_settings['ENABLE_BITCODE'] = 'NO'
         config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'NO'
