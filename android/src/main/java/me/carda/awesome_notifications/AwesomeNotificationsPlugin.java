@@ -1,18 +1,12 @@
 package me.carda.awesome_notifications;
 
-import android.Manifest;
-import android.app.AppOpsManager;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -26,9 +20,6 @@ import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -428,11 +419,11 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                 return;
 
             case Definitions.CHANNEL_METHOD_GET_BADGE_COUNT:
-                channelMethodGetBadgeCount(call, result);
+                channelMethodGetBadgeCounter(call, result);
                 return;
 
             case Definitions.CHANNEL_METHOD_SET_BADGE_COUNT:
-                channelMethodSetBadgeCount(call, result);
+                channelMethodSetBadgeCounter(call, result);
                 return;
 
             case Definitions.CHANNEL_METHOD_RESET_BADGE:
@@ -528,20 +519,20 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
     }
 
-    private void channelMethodSetBadgeCount(MethodCall call, Result result) {
+    private void channelMethodSetBadgeCounter(MethodCall call, Result result) {
         @SuppressWarnings("unchecked")
         Map<String, Object> data = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
         Integer count = (Integer) data.get(Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE);
         String channelKey = (String) data.get(Definitions.NOTIFICATION_CHANNEL_KEY);
 
         // Android resets badges automatically when all notifications are cleared
-        NotificationBuilder.setBadgeCount(applicationContext, count, channelKey);
+        NotificationBuilder.setGlobalBadgeCounter(applicationContext, channelKey, count);
         result.success(true);
     }
 
-    private void channelMethodGetBadgeCount(MethodCall call, Result result) {
+    private void channelMethodGetBadgeCounter(MethodCall call, Result result) {
         String channelKey = call.arguments();
-        Integer badgeCount = NotificationBuilder.getBadgeCount(applicationContext, channelKey);
+        Integer badgeCount = NotificationBuilder.getGlobalBadgeCounter(applicationContext, channelKey);
 
         // Android resets badges automatically when all notifications are cleared
         result.success(badgeCount);
@@ -549,7 +540,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
     private void channelMethodResetBadge(MethodCall call, Result result) {
         String channelKey = call.arguments();
-        NotificationBuilder.resetBadgeCount(applicationContext, channelKey);
+        NotificationBuilder.resetGlobalBadgeCounter(applicationContext, channelKey);
         result.success(null);
     }
 

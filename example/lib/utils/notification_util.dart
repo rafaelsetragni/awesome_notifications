@@ -105,18 +105,16 @@ Future<void> showWithoutBadgeNotification(int id) async {
 // ON BADGE METHODS, NULL CHANNEL SETS THE GLOBAL COUNTER
 
 Future<int> getBadgeIndicator() async {
-  int amount = await AwesomeNotifications().getBadgeCount('badge_channel');
+  int amount = await AwesomeNotifications().getGlobalBadgeCounter();
   return amount;
 }
 
 Future<void> setBadgeIndicator(int amount) async {
-  await AwesomeNotifications().setBadgeCount(amount, 'badge_channel');
-  await AwesomeNotifications().setBadgeCount(amount, null);
+  await AwesomeNotifications().setGlobalBadgeCounter(amount);
 }
 
 Future<void> resetBadgeIndicator() async {
-  await AwesomeNotifications().resetBadge('badge_channel');
-  await AwesomeNotifications().resetBadge(null);
+  await AwesomeNotifications().resetGlobalBadge();
 }
 
 /* *********************************************
@@ -211,6 +209,37 @@ Future<void> showUnlockedNotification(int id) async {
           title: 'Unlocked notification',
           body: 'This notification is not locked and can be dismissed',
           payload: {'uuid': 'uuid-test'}));
+}
+
+/* *********************************************
+    NOTIFICATION CHANNELS MANIPULATION
+************************************************ */
+
+Future<void> createTestChannel(String channelName) async {
+
+  await AwesomeNotifications().setChannel(
+    NotificationChannel(
+      channelKey: channelName.toLowerCase().replaceAll(' ', '_'),
+      channelName: channelName,
+      channelDescription: "Channel created to test the channels manipulation."
+    )
+  );
+}
+
+Future<void> updateTestChannel(String channelName) async {
+
+  await AwesomeNotifications().setChannel(
+      NotificationChannel(
+          channelKey: channelName.toLowerCase().replaceAll(' ', '_'),
+          channelName: channelName+" (updated)",
+          channelDescription: "This channel was successfuly updated."
+      )
+  );
+}
+
+Future<void> removeTestChannel(String channelName) async {
+
+  await AwesomeNotifications().removeChannel(channelName.toLowerCase().replaceAll(' ', '_'));
 }
 
 /* *********************************************

@@ -84,12 +84,14 @@ public class ChannelManager {
             }
         }
 
+/*
+        // TODO IMPROVE CHANNELS COMPARISION
         NotificationChannelModel oldChannel = getChannelByKey(context, newChannel.channelKey);
 
         if(isNotificationChannelActive(context, newChannel.channelKey) && oldChannel != null && oldChannel.equals(newChannel)){
             return;
         }
-
+*/
         try {
             newChannel.validate(context);
         } catch (PushNotificationException e) {

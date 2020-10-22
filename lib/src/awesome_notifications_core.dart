@@ -295,25 +295,25 @@ class AwesomeNotifications {
   }
 
   /// Get badge counter (on Android is 0 or 1)
-  Future<void> setBadgeCount(int amount, String channelKey) async {
+  Future<void> setGlobalBadgeCounter(int amount) async {
     if(amount == null){ return; }
     Map<String,dynamic> data = {
-      NOTIFICATION_CHANNEL_SHOW_BADGE: amount,
-      NOTIFICATION_CHANNEL_KEY: channelKey
+      NOTIFICATION_CHANNEL_SHOW_BADGE: amount
+      //NOTIFICATION_CHANNEL_KEY: channelKey
     };
     await _channel.invokeMethod(CHANNEL_METHOD_SET_BADGE_COUNT, data);
   }
 
   /// Get badge counter (on iOS the amount is global)
-  Future<int> getBadgeCount(String channelKey) async {
+  Future<int> getGlobalBadgeCounter() async {
     final int badgeCount =
-    await _channel.invokeMethod(CHANNEL_METHOD_GET_BADGE_COUNT, channelKey);
+    await _channel.invokeMethod(CHANNEL_METHOD_GET_BADGE_COUNT);
     return badgeCount;
   }
 
   /// Resets the badge counter
-  Future<void> resetBadge(String channelKey) async {
-    await _channel.invokeListMethod(CHANNEL_METHOD_RESET_BADGE, channelKey);
+  Future<void> resetGlobalBadge() async {
+    await _channel.invokeListMethod(CHANNEL_METHOD_RESET_BADGE);
   }
 
   /// Cancel a single notification

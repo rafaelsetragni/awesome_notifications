@@ -70,7 +70,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
     return false;
   }
 
-  Future<int> pickBadgeCount(BuildContext context) async {
+  Future<int> pickBadgeCounter(BuildContext context) async {
     int amount = 50;
 
     AlertDialog alert = AlertDialog(
@@ -559,9 +559,9 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
                   'is automatically managed by this plugin for each individual installation, and incremented for every notification sent to channels '
                   'with "badge" set to TRUE.\n\n'
                   'OBS: Some Android distributions provide badge counter over the app icon, similar to iOS (LG, Samsung, HTC, Sony, etc) .\n\n'
-                  'OBS2: Android has 2 badge counters. One global and other for each channel. Because of that, Badge indicator is defined using '
-                  'channel\'s config, to be more compatible across platforms. If you pretend to manipulate the global indicator, set channel key to null.\n\n'
-                  'OBS3: Badges for native Android only works on Oreo version and beyond.'
+                  'OBS2: Android has 2 badge counters. One global and other for each channel. You can only manipulate the global counter. The channels badge are automatically'
+                  'managed by the system and is reset when all notifications are cleared or tapped.\n\n'
+                  'OBS3: Badge channels for native Android only works on version 8.0 (API level 26) and beyond.'
           ),
           SimpleButton(
               'Shows a notification with a badge indicator channel activate',
@@ -581,7 +581,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
           SimpleButton(
               'Set manually the badge indicator',
               onPressed: () async {
-                int amount = await pickBadgeCount(context);
+                int amount = await pickBadgeCounter(context);
                 if(amount != null){
                   setBadgeIndicator(amount);
                 }
@@ -629,6 +629,30 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
               backgroundColor: Colors.red,
               labelColor: Colors.white,
               onPressed: () => cancelNotification(4)
+          ),
+
+          /* ******************************************************************** */
+
+          TextDivisor(title: 'Notification Channels'),
+          TextNote(
+              'The channel is a category identifier which notifications are pre-configured and organized before sent.' '\n\n'
+                  'On Android, since Oreo version, the notification channel is mandatory and can be managed by the user on your app config page.\n'
+                  'Also channels can only update his title and description. All the other parameters could only be change if you erase the channel and recreates it with a different ID.'
+                  'For other devices, such iOS, notification channels are emulated and used only as pre-configurations.'
+          ),
+          SimpleButton(
+              'Create a test channel called "Editable channel"',
+              onPressed: () => createTestChannel('Editable channel')
+          ),
+          SimpleButton(
+              'Update the title and description of "Editable channel"',
+              onPressed: () => updateTestChannel('Editable channel')
+          ),
+          SimpleButton(
+              'Remove "Editable channel"',
+              backgroundColor: Colors.red,
+              labelColor: Colors.white,
+              onPressed: () => removeTestChannel('Editable channel')
           ),
 
           /* ******************************************************************** */

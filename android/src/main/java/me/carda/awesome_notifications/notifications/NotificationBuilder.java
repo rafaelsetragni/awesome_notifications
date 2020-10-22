@@ -263,7 +263,8 @@ public class NotificationBuilder {
 
     private void setBadge(Context context, NotificationChannelModel channelModel, NotificationCompat.Builder builder){
         if(BooleanUtils.getValue(channelModel.channelShowBadge)){
-            builder.setNumber(incrementBadgeCount(context, channelModel));
+            incrementGlobalBadgeCounter(context, channelModel);
+            builder.setNumber(1);
         }
     }
 
@@ -333,23 +334,21 @@ public class NotificationBuilder {
         return "count_key"+(channelKey == null ? "_total" : channelKey);
     }
 
-    public static int getBadgeCount(Context context, String channelKey){
+    public static int getGlobalBadgeCounter(Context context, String channelKey){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         // Read previous value. If not found, use 0 as default value.
         return prefs.getInt(getBadgeKey(context, channelKey), 0);
     }
 
-    public static void setBadgeCount(Context context, int count, String channelKey){
+    public static void setGlobalBadgeCounter(Context context, String channelKey, int count){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
 
         try {
-            editor.putInt(getBadgeKey(context, channelKey), count);
 
-            if(channelKey == null){
-                Badges.setBadge(context, count);
-            }
+            editor.putInt(getBadgeKey(context, channelKey), count);
+            Badges.setBadge(context, count);
 
         } catch (BadgesNotSupportedException ignored) {
         }
@@ -357,18 +356,16 @@ public class NotificationBuilder {
         editor.apply();
     }
 
-    public static void resetBadgeCount(Context context, String channelKey){
-        setBadgeCount(context, 0, channelKey);
+    public static void resetGlobalBadgeCounter(Context context, String channelKey){
+        setGlobalBadgeCounter(context, channelKey, 0 );
     }
 
-    public static int incrementBadgeCount(Context context, NotificationChannelModel channelModel){
-        int count = getBadgeCount(context, channelModel.channelKey);
-        setBadgeCount(context, ++count, channelModel.channelKey);
+    public static int incrementGlobalBadgeCounter(Context context, NotificationChannelModel channelModel){
 
-        int totalAmount = getBadgeCount(context, null);
-        setBadgeCount(context, ++totalAmount, null);
+        int totalAmount = getGlobalBadgeCounter(context, null);
+        setGlobalBadgeCounter(context, null, ++totalAmount);
 
-        return count;
+        return totalAmount;
     }
 
     public Class getNotificationTargetActivityClass(Context context) {
