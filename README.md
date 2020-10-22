@@ -155,10 +155,12 @@ AwesomeNotifications().createNotification(
 
 Due to the way that background task and notification schedules works on iOS, wasn't possible yet to enable all the schedule features on iOS while the app is in Background and even when the app is terminated (killed).
 
-On foreground, all notification schedules should work as expected.
+On foreground, all notification schedules should work as expected. `InitialDate` parameter should work as expected in any circunstance.
 
 A support ticket was opened for Apple in order to resolve this issue. You can follow the progress of the process [here](https://github.com/rafaelsetragni/awesome_notifications/issues/16). 
 
+<br>
+<br>
 
 ## iOS Extra Configurations (Optional)
 
@@ -168,6 +170,8 @@ To activate all the features on iOS, is necessary to include two target extensio
 - **Notification Service Extension**: allows to receive push notifications using all Awesome Notifications Features.
 
 OBS: Is not necessary to include both extensions if you do not pretend to use just one of the features. Just include what you need.
+
+<br>
 
 #### *Including Notification Service Extension to your project*
 
@@ -236,13 +240,18 @@ class NotificationService: UNNotificationServiceExtension {
 }
 ```
 
-7- Certifies to disable `Enable Bitcode` and `Require Only App-Extension-Safe API` setting it to 'NO'
+7- Certifies to disable `Enable Bitcode` and `Require Only App-Extension-Safe API` setting it to `'NO'`
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/disable-bitcode.jpg)
+
+<br>
 
 
 #### *Including Notification Content Extension to your project*
 
 WORK IN PROGRESS
+
+<br>
+<br>
 
 
 ## Using Firebase Services (Optional)
@@ -322,7 +331,7 @@ The Flutter code will be called as soon as possible using [Dart Streams](https:/
 |                             | App in Foreground | App in Background | App Terminated (Killed) |
 | --------------------------: | ----------------- | ----------------- | -------------- |
 | **Android** | Fires all streams immediately after occurs | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes, but fires `actionStream` immediately after occurs |
-| **iOS**     | Fires all streams immediately after occurs | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes, but fires `actionStream` immediately after occurs |
+| **iOS**     | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the app returns to foreground, but fires `actionStream` immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes, but fires `actionStream` immediately after occurs |
 
 <br>
 
