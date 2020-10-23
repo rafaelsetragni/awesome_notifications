@@ -15,23 +15,43 @@ class NotificationSenderAndScheduler {
     private var createdSource:      NotificationSource?
     private var appLifeCycle:       NotificationLifeCycle?
     private var pushNotification:   PushNotification?
+    private var content:            UNMutableNotificationContent?
 
     private var created:    Bool = false
-
+    private var scheduled:  Bool = false
+    
+    private var completion: ((Bool, UNMutableNotificationContent?, Error?) -> ())?
+    
     public func send(
         createdSource: NotificationSource,
         pushNotification: PushNotification?,
-        completion: @escaping (Bool, Error?) -> ()
+        content: UNMutableNotificationContent?,
+        completion: @escaping (Bool, UNMutableNotificationContent?, Error?) -> ()
     ) throws {
+        self.content = content
+        try send(
+            createdSource: createdSource,
+            pushNotification: pushNotification,
+            completion: completion
+        )
+    }
+    
+    public func send(
+        createdSource: NotificationSource,
+        pushNotification: PushNotification?,
+        completion: @escaping (Bool, UNMutableNotificationContent?, Error?) -> ()
+    ) throws {
+        
+        self.completion = completion
 
         if (pushNotification == nil){
             throw PushNotificationError.invalidRequiredFields(msg: "PushNotification not valid")
         }
 
-        NotificationBuilder.isNotificationAuthorized(completion: { (authorized) in
+        NotificationBuilder.isNotificationAllowed(completion: { (allowed) in
             
             do{
-                if (authorized){
+                if (allowed){
                     self.appLifeCycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
 
                     try pushNotification!.validate()
@@ -42,11 +62,12 @@ class NotificationSenderAndScheduler {
                     self.pushNotification = pushNotification
 
                     self.execute()
-                    
-                    completion(true, nil)
+                }
+                else {
+                    throw PushNotificationError.notificationNotAuthorized
                 }
             } catch {
-                completion(false, error)
+                completion(false, nil, error)
             }
         })
     }
@@ -98,6 +119,8 @@ class NotificationSenderAndScheduler {
                     // Only save DisplayedMethods if pushNotification was created and displayed successfully
                     if(pushNotification != nil){
 
+                        scheduled = pushNotification?.schedule != nil
+                        
                         receivedNotification = NotificationReceived(pushNotification!.content)
 
                         receivedNotification!.displayedLifeCycle = receivedNotification!.displayedLifeCycle == nil ?
@@ -112,6 +135,7 @@ class NotificationSenderAndScheduler {
             }
 
         } catch {
+            completion?(false, nil, error)
         }
 
         pushNotification = nil
@@ -122,14 +146,17 @@ class NotificationSenderAndScheduler {
 
         // Only broadcast if pushNotification is valid
         if(receivedNotification != nil){
+            
+            completion!(true, content, nil)
 
             if(created){
-                if(SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle() == .AppKilled){
-                    CreatedManager.saveCreated(received: receivedNotification!)
-                } else {
-                    SwiftAwesomeNotificationsPlugin.instance!.createEvent(notificationReceived: receivedNotification!)
-                }
+                SwiftAwesomeNotificationsPlugin.createEvent(notificationReceived: receivedNotification!)
             }
+            
+            DisplayedManager.saveDisplayed(received: receivedNotification!)
+        }
+        else {
+            completion?(false, nil, nil)
         }
     }
 
@@ -139,7 +166,7 @@ class NotificationSenderAndScheduler {
 
         do {
             
-            return try NotificationBuilder.createNotification(pushNotification)
+            return try NotificationBuilder.createNotification(pushNotification, content: content)
 
         } catch {
             
@@ -148,21 +175,32 @@ class NotificationSenderAndScheduler {
         return nil
     }
 
-    public static func cancelNotification(id:Int) {
+    public static func cancelNotification(id:Int) -> Bool {
         NotificationBuilder.cancelNotification(id: id)
-        if CreatedManager.removeCreated(id: id) || DisplayedManager.removeDisplayed(id: id) {
-            debugPrint("Notification cancelled")
-        }
-        else {
-            debugPrint("Notification not found")
-        }
+        debugPrint("Notification cancelled")
+        return true
+    }
+    
+    public static func cancelSchedule(id:Int) -> Bool {
+        NotificationBuilder.cancelScheduledNotification(id: id)
+        ScheduleManager.cancelScheduled(id: id)
+        debugPrint("Schedule cancelled")
+        return true
+    }
+    
+    public static func cancelAllSchedules() -> Bool {
+        NotificationBuilder.cancellAllScheduledNotifications()
+        ScheduleManager.cancelAllSchedules()
+        debugPrint("All notifications scheduled was cancelled")
+        return true
     }
 
     public static func cancelAllNotifications() -> Bool {
+        NotificationBuilder.cancellAllScheduledNotifications()
         NotificationBuilder.cancellAllNotifications()
-        CreatedManager.cancelAllCreated()
-        DisplayedManager.cancelAllDisplayed()
-        return true;
+        ScheduleManager.cancelAllSchedules()
+        debugPrint("All notifications was cancelled")
+        return true
     }
 
 }

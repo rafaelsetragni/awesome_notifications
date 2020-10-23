@@ -54,7 +54,7 @@ All notifications could be created locally or via Firebase services, with all th
 - Include Firebase support for iOS (In construction)
 - Finish notifications features for iOS (In construction)
 - Expiration date for notifications (not done yet due to iOS limitations) (https://github.com/rafaelsetragni/awesome_notifications/issues/7)
-- Fix channel's updates on Android (https://github.com/rafaelsetragni/awesome_notifications/issues/3)
+- Add a option to choose if a notification action should bring the app to foreground or not.
 - Include Web support
 - Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
 - Video layout for notifications
@@ -109,7 +109,17 @@ AwesomeNotifications().initialize(
 );
 ```
 
-4. On your main page, starts to listen the notification actions (to detect tap)
+4. Request the user authorization to send local and push notifications (Remember to show a dialog alert to the user before call this request)
+
+```dart
+AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+  if (!isAllowed) {
+    AwesomeNotifications().requestPermissionToSendNotifications();
+  }
+});
+```
+
+5. On your main page, starts to listen the notification actions (to detect tap)
 
 ```dart
 AwesomeNotifications().actionStream.listen(
@@ -124,7 +134,7 @@ AwesomeNotifications().actionStream.listen(
 );
 ```
 
-5. In any place of your app, create a new notification
+6. In any place of your app, create a new notification
 
 ```dart
 AwesomeNotifications().createNotification(
@@ -140,6 +150,111 @@ AwesomeNotifications().createNotification(
 **THATS IT! CONGRATZ MY FRIEND!!!**
 
 <br>
+
+## iOS Limitations
+
+Due to the way that background task and notification schedules works on iOS, wasn't possible yet to enable all the schedule features on iOS while the app is in Background and even when the app is terminated (Killed).
+
+On Foreground, all notification schedules should work as expected. `InitialDate` parameter should work as expected at any circunstance.
+
+A support ticket was opened for Apple in order to resolve this issue. You can follow the progress of the process [here](https://github.com/rafaelsetragni/awesome_notifications/issues/16). 
+
+<br>
+<br>
+
+## iOS Extra Configurations (Optional)
+
+To activate all the features on iOS, is necessary to include two target extensions to your project:
+
+- **Notification Content Extension**: allows to use alternative layouts, such as Big text, Progress Bar and Inbox Messages.
+- **Notification Service Extension**: allows to receive push notifications using all Awesome Notifications Features.
+
+OBS: Is not necessary to include both extensions if you do not pretend to use just one of the features. Just include what you need.
+
+<br>
+
+#### *Including Notification Service Extension to your project*
+
+1- Open your project directely on XCode, opening the file "/{path-to-your-project}/ios/Runner.xcworkspace"
+
+2- Create a new target for Notification Service Extension with **File > New > Target** and select **Notification Service Extension**. Name the extension as **AwesomeServiceExtension**.
+![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/add-notification-service-extension.jpg)
+
+3- Edit your Podfile in XCode and replace the last `post_install do |installer|` branch by code bellow, at the bottom of the file:
+
+*This step will compile the framework awesome_notifications to be used on your target extensions*
+
+```
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+    if target.name == 'AwesomeServiceExtension' || target.name == 'AwesomeContentExtension'
+      target.build_configurations.each do |config|
+        config.build_settings['ENABLE_BITCODE'] = 'NO'
+        config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'NO'
+      end
+    end
+  end
+end
+
+target 'AwesomeServiceExtension' do
+  use_frameworks!
+  use_modular_headers!
+
+  pod 'awesome_notifications', :path => '.symlinks/plugins/awesome_notifications/ios'
+end
+
+target 'AwesomeContentExtension' do
+  use_frameworks!
+  use_modular_headers!
+
+  pod 'awesome_notifications', :path => '.symlinks/plugins/awesome_notifications/ios'
+end
+```
+
+5- Go to the terminal, navigate to "/{path-to-your-project}/ios" folder and run `pod install` to compile the dependencies. 
+
+6- Replace the file content in NotificationService.swift by the code bellow:
+
+```Swift
+import UserNotifications
+import awesome_notifications
+
+@available(iOS 10.0, *)
+class NotificationService: UNNotificationServiceExtension {
+    
+    var awesomeServiceExtension:AwesomeServiceExtension?
+    
+    override func didReceive(
+        _ request: UNNotificationRequest,
+        withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void
+    ){
+        self.awesomeServiceExtension = AwesomeServiceExtension()
+        awesomeServiceExtension?.didReceive(request, withContentHandler: contentHandler)
+    }
+    
+    override func serviceExtensionTimeWillExpire() {
+        if let awesomeServiceExtension = awesomeServiceExtension {
+            awesomeServiceExtension.serviceExtensionTimeWillExpire()
+        }
+    }
+
+}
+```
+
+7- Certifies to disable `Enable Bitcode` and `Require Only App-Extension-Safe API` setting it to `'NO'`
+![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/disable-bitcode.jpg)
+
+<br>
+
+
+#### *Including Notification Content Extension to your project*
+
+WORK IN PROGRESS
+
+<br>
+<br>
+
 
 ## Using Firebase Services (Optional)
 
@@ -185,7 +300,7 @@ Please, be patient.
 
 The firebase token is necessary to your sever send Push Notifications to the remote device. The token could eventually change and is created to every device installation on each application.
 
-Every token created could be captured on Flutter by this plugin listen to ``
+Every token created could be captured on Flutter by this plugin listen to `tokenStream`.
 
 <br>
 
@@ -217,8 +332,8 @@ The Flutter code will be called as soon as possible using [Dart Streams](https:/
 
 |                             | App in Foreground | App in Background | App Terminated (Killed) |
 | --------------------------: | ----------------- | ----------------- | -------------- |
-| **Android** | Fires all streams immediately after occurs | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes, but fires `actionStream` immediately after occurs |
-| **iOS**     | Fires all streams immediately after occurs | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes, but fires `actionStream` immediately after occurs |
+| **Android** | Fires all streams immediately after occurs | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes on Foreground, but fires `actionStream` immediately after occurs |
+| **iOS**     | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the app returns to Foreground, but fires `actionStream` immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes on Foreground, but fires `actionStream` immediately after occurs |
 
 <br>
 
@@ -264,6 +379,24 @@ Notifications action buttons could be classified in 4 types:
 - InputField: after user taps, a input text field is displayed to capture input by the user.
 - DisabledAction: after user taps, the notification bar is closed, but the respective action event is not fired.
 - KeepOnTop: after user taps, the notification bar is not closed, but an action event is fired.
+
+<br>
+
+
+|  Android           | App in Foreground | App in Background | App Terminated (Killed) |
+| -----------------: | ----------------- | ----------------- | ----------------------- |
+| **Default**        | keeps the app in foreground | brings the app to foreground | brings the app to foreground |
+| **InputField**     | keeps the app in foreground | brings the app to foreground | brings the app to foreground |
+| **DisabledAction** | keeps the app in foreground | keeps the app in background  | keeps the app terminated |
+| **KeepOnTop**      | keeps the app in foreground | keeps the app in background  | keeps the app terminated |
+
+<br>
+
+If the app is terminated (killed):
+- Default: Wake up the app.
+- InputField: Wake up the app.
+- DisabledAction: Does not Wake up the app.
+- KeepOnTop: Does not Wake up the app.
 
 <br>
 

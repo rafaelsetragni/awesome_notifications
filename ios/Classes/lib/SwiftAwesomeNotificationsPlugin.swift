@@ -1,16 +1,20 @@
 
-import Flutter
 import UIKit
-import UserNotifications
+import Flutter
 import FirebaseCore
 import FirebaseMessaging
+import BackgroundTasks
+import UserNotifications
 
-public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNotificationCenterDelegate {
+public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNotificationCenterDelegate, MessagingDelegate {
     
     private static var _instance:SwiftAwesomeNotificationsPlugin?
     
     static let TAG = "AwesomeNotificationsPlugin"
     static var registrar:FlutterPluginRegistrar?
+    
+    static var firebaseEnabled:Bool = false
+    static var firebaseDeviceToken:String?
     
     static var appLifeCycle:NotificationLifeCycle = NotificationLifeCycle.AppKilled
 
@@ -24,6 +28,19 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         return true
     }
     
+    public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) -> Bool {
+        
+        if let messageID = userInfo[Definitions.NOTIFICATION_ID] {
+            print("Message ID: \(messageID)")
+        }
+
+        // Print full message.
+        print(userInfo)
+        
+        completionHandler(UIBackgroundFetchResult.newData)
+        return true
+    }
+    
     public func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
         let jsonData:String? = notification.userInfo?[Definitions.NOTIFICATION_JSON] as? String
         receiveAction(
@@ -31,6 +48,22 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             actionKey: nil,
             userText: nil
         )
+    }
+    
+    public func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
+        if let token = requestFirebaseToken() {
+            flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NEW_FCM_TOKEN, arguments: token)
+        }
+    }
+    
+    public func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        print("Firebase registration token: \(fcmToken)")
+
+        let dataDict:[String: String] = ["token": fcmToken]
+        NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
+        // TODO: If necessary send token to application server.
+        // Note: This callback is fired at each app startup and whenever a new token is generated.
     }
     
     @available(iOS 10.0, *)
@@ -50,29 +83,123 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         completionHandler()
     }
     
-    public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) -> Bool {
-        print("test")
-        return true
-    }
-    
     @available(iOS 10.0, *)
     public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         receiveNotification(content: notification.request.content, withCompletionHandler: completionHandler)
     }
     
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable : Any] = [:]) -> Bool {
-        enableFirebase()
+        enableFirebase(application)
+        enableScheduler(application)
         return true
     }
     
-    private func enableFirebase(){
-        let firebaseConfigPath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist")!
+    var backgroundSessionCompletionHandler: (() -> Void)?
+    var backgroundSynchTask: UIBackgroundTaskIdentifier = .invalid
+    public func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) -> Bool {
+        
+        rescheduleLostNotifications()
+        
+        backgroundSessionCompletionHandler = completionHandler
+        return true
+    }
+    
+    private func requestFirebaseToken() -> String? {
+        if let token = SwiftAwesomeNotificationsPlugin.firebaseDeviceToken ?? Messaging.messaging().fcmToken {
+            SwiftAwesomeNotificationsPlugin.firebaseDeviceToken = token
+            return token
+        }
+        return nil
+    }
+    
+    private func enableScheduler(_ application: UIApplication){
+        if !SwiftUtils.isRunningOnExtension() {
+            if #available(iOS 13.0, *) {
+                
+                BGTaskScheduler.shared.register(
+                    forTaskWithIdentifier: Definitions.IOS_BACKGROUND_SCHEDULER,
+                    using: nil//DispatchQueue.global()//DispatchQueue.global(qos: .background).async
+                ){ (task) in
+                    Log.d("BG Schedule","My backgroundTask is executed NOW: \(Date().toString() ?? "")")
+                    self.handleAppSchedules(task: task as! BGAppRefreshTask)
+                }
+                
+            } else {
+                
+                Log.d("BG Schedule","iOS < 13  Registering for Background duty")
+                UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+            }
+        }
+    }
+    
+    private func startBackgroundScheduler(){
+        SwiftAwesomeNotificationsPlugin.rescheduleBackgroundTask()
+    }
+    
+    private func stopBackgroundScheduler(){
+        if #available(iOS 13.0, *) {
+            BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: Definitions.IOS_BACKGROUND_SCHEDULER)
+        }
+    }
+    
+    public static func rescheduleBackgroundTask(){
+        if #available(iOS 13.0, *) {
+            if SwiftAwesomeNotificationsPlugin.appLifeCycle != .Foreground {
+                
+                let earliestDate:Date? = ScheduleManager.getEarliestDate()
+                
+                if earliestDate != nil {
+                    let request = BGAppRefreshTaskRequest(identifier: Definitions.IOS_BACKGROUND_SCHEDULER)
+                    request.earliestBeginDate = earliestDate!
+                         
+                    do {
+                        try BGTaskScheduler.shared.submit(request)
+                        Log.d(TAG, "(\(Date().toString()!)) BG Scheduled created: "+earliestDate!.toString()!)
+                    } catch {
+                       print("Could not schedule next notification: \(error)")
+                    }
+                }
+            }
+        }
+    }
+    
+    @available(iOS 13.0, *)
+    private func handleAppSchedules(task: BGAppRefreshTask){
+        
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        
+        queue.addOperation(runScheduler)
+        
+        task.expirationHandler = {
+            queue.cancelAllOperations()
+        }
+
+        let lastOperation = queue.operations.last
+        lastOperation?.completionBlock = {
+            task.setTaskCompleted(success: !(lastOperation?.isCancelled ?? false))
+        }
+    }
+    
+    @available(iOS 13.0, *)
+    private func runScheduler(){
+        
+        rescheduleLostNotifications()
+        SwiftAwesomeNotificationsPlugin.rescheduleBackgroundTask()
+    }
+    
+    private func enableFirebase(_ application: UIApplication){
+        guard let firebaseConfigPath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist") else {
+            return
+        }
+        
         let fileManager = FileManager.default
         
         if fileManager.fileExists(atPath: firebaseConfigPath) {
             if FirebaseApp.app() == nil {
                 FirebaseApp.configure()
             }
+            SwiftAwesomeNotificationsPlugin.firebaseEnabled = true
         }
     }
     
@@ -82,7 +209,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         let jsonData:String? = content.userInfo[Definitions.NOTIFICATION_JSON] as? String
         let pushNotification:PushNotification? = NotificationBuilder.jsonToPushNotification(jsonData: jsonData)
         
-        if(pushNotification == nil){ return }
+        if(pushNotification == nil){ Log.d("receiveNotification","notification discarted"); return }
         
         if(content.userInfo["updated"] == nil){
             
@@ -124,7 +251,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 completionHandler: completionHandler
             )
             
-            displayEvent(notificationReceived: notificationReceived!)
+            SwiftAwesomeNotificationsPlugin.displayEvent(notificationReceived: notificationReceived!)
             
             if(pushNotification?.schedule != nil){
                                 
@@ -132,7 +259,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                     try NotificationSenderAndScheduler().send(
                         createdSource: pushNotification!.content!.createdSource!,
                         pushNotification: pushNotification,
-                        completion: { sent, error in
+                        completion: { sent, content, error in
                         
                         }
                     )
@@ -168,7 +295,15 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         
         if #available(iOS 10.0, *) {
             let actionReceived:ActionReceived? = NotificationBuilder.buildNotificationActionFromJson(jsonData: jsonData, actionKey: actionKey, userText: userText)
-            flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_RECEIVED_ACTION, arguments: actionReceived?.toMap())
+            
+            if actionReceived!.dismissedDate == nil {
+                Log.d(SwiftAwesomeNotificationsPlugin.TAG, "NOTIFICATION RECEIVED")
+                flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_RECEIVED_ACTION, arguments: actionReceived?.toMap())
+            }
+            else {
+                Log.d(SwiftAwesomeNotificationsPlugin.TAG, "NOTIFICATION DISMISSED")
+                flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED, arguments: actionReceived?.toMap())
+            }
         } else {
             // Fallback on earlier versions
         }
@@ -180,47 +315,69 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         return notification
     }
     
-    public func createEvent(notificationReceived:NotificationReceived){
-        Log.d(SwiftAwesomeNotificationsPlugin.TAG, "NOTIFICATION CREATED")
-        flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED, arguments: notificationReceived.toMap())
+    public static func createEvent(notificationReceived:NotificationReceived){
+        //Log.d(SwiftAwesomeNotificationsPlugin.TAG, "NOTIFICATION CREATED")
+        
+        let lifecycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
+        
+        if(lifecycle != .Foreground){
+            CreatedManager.saveCreated(received: notificationReceived)
+        } else {
+            _ = CreatedManager.removeCreated(id: notificationReceived.id!)
+        }
+        
+        if SwiftUtils.isRunningOnExtension() {
+            SwiftAwesomeNotificationsPlugin.instance?.flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED, arguments: notificationReceived.toMap())
+        }
     }
     
-    public func displayEvent(notificationReceived:NotificationReceived){
-        Log.d(SwiftAwesomeNotificationsPlugin.TAG, "NOTIFICATION DISPLAYED")
+    public static func displayEvent(notificationReceived:NotificationReceived){
+        //Log.d(SwiftAwesomeNotificationsPlugin.TAG, "NOTIFICATION DISPLAYED")
 
         let lifecycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
         
-        if(lifecycle == .AppKilled){
+        if(lifecycle != .Foreground){
             DisplayedManager.saveDisplayed(received: notificationReceived)
+        } else {
+            _ = DisplayedManager.removeDisplayed(id: notificationReceived.id!)
         }
         
-        flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISPLAYED, arguments: notificationReceived.toMap())
+        if SwiftUtils.isRunningOnExtension() {
+            SwiftAwesomeNotificationsPlugin.instance?.flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISPLAYED, arguments: notificationReceived.toMap())
+        }
     }
     
     
     public func applicationDidBecomeActive(_ application: UIApplication) {
+        //debugPrint("applicationDidBecomeActive")
         SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Foreground
-        debugPrint("applicationDidBecomeActive")
-    }
-    
-    public func applicationWillTerminate(_ application: UIApplication) {
-        SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.AppKilled
-        debugPrint("applicationWillTerminate")
     }
     
     public func applicationWillResignActive(_ application: UIApplication) {
+        //debugPrint("applicationWillResignActive")
         //SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Background
-        debugPrint("applicationWillResignActive")
     }
     
     public func applicationDidEnterBackground(_ application: UIApplication) {
+        //debugPrint("applicationDidEnterBackground")
         SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Background
-        debugPrint("applicationDidEnterBackground")
+        
+        startBackgroundScheduler()
     }
     
     public func applicationWillEnterForeground(_ application: UIApplication) {
+        //debugPrint("applicationWillEnterForeground")
         SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Foreground
-        debugPrint("applicationWillEnterForeground")
+        
+        fireBackgroundLostEvents()
+        stopBackgroundScheduler()
+    }
+    
+    public func applicationWillTerminate(_ application: UIApplication) {
+        //debugPrint("applicationWillTerminate")
+        SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.AppKilled
+        
+        SwiftAwesomeNotificationsPlugin.rescheduleBackgroundTask()
     }
     
     public static func getApplicationLifeCycle() -> NotificationLifeCycle {
@@ -230,7 +387,25 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     private static func requestPermissions() -> Bool {
         if #available(iOS 10.0, *) {
             NotificationBuilder.requestPermissions(completion: { authorized in
-                if authorized { debugPrint("Notifications authorized") }
+                if authorized {
+                    debugPrint("Notifications authorized")
+                    
+                    let customCategory = UNNotificationCategory(
+                        identifier: "AwesomeLayout",
+                        actions: [],
+                        intentIdentifiers: [],
+                        options: .customDismissAction
+                    )
+                    
+                    let standardCategory = UNNotificationCategory(
+                        identifier: "Standard",
+                        actions: [],
+                        intentIdentifiers: [],
+                        options: .customDismissAction
+                    )
+                    
+                    UNUserNotificationCenter.current().setNotificationCategories([customCategory, standardCategory])
+                }
                 else { debugPrint("Notifications not authorized") }
             })
         } else {
@@ -238,7 +413,44 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         }
         return true
     }
+    
+    public func rescheduleLostNotifications(){
+        let referenceDate = Date()
+        
+        let lostSchedules = ScheduleManager.listPendingSchedules(referenceDate: referenceDate)
+        for pushNotification in lostSchedules {
+            
+            do {
+                if #available(iOS 10.0, *) {
+                    try NotificationSenderAndScheduler().send(
+                        createdSource: pushNotification.content!.createdSource!,
+                        pushNotification: pushNotification,
+                        completion: { sent, content, error in
+                        }
+                    )
+                }
+            } catch {
+                // Fallback on earlier versions
+            }
+        }
+    }
 
+    public func fireBackgroundLostEvents(){
+        let referenceDate = Date()
+        
+        rescheduleLostNotifications()
+        
+        let lostCreated = CreatedManager.listCreated()
+        for createdNotification in lostCreated {
+            SwiftAwesomeNotificationsPlugin.createEvent(notificationReceived: createdNotification)
+        }
+        
+        let lostDisplayed = DisplayedManager.listPendingDisplayed(referenceDate: referenceDate)
+        for displayedNotification in lostDisplayed {
+            SwiftAwesomeNotificationsPlugin.displayEvent(notificationReceived: displayedNotification)
+        }
+    }
+    
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: Definitions.CHANNEL_FLUTTER_PLUGIN, binaryMessenger: registrar.messenger())
         let instance = SwiftAwesomeNotificationsPlugin()
@@ -254,13 +466,21 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         registrar.addApplicationDelegate(self)
                 
         SwiftAwesomeNotificationsPlugin.registrar = registrar
-                
-        UIApplication.shared.applicationIconBadgeNumber = 0
-        UIApplication.shared.registerForRemoteNotifications()
         
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = self
+            if(SwiftAwesomeNotificationsPlugin.firebaseEnabled){
+                Messaging.messaging().delegate = self
+            }
         }
+        
+        if !SwiftUtils.isRunningOnExtension() {
+            UIApplication.shared.registerForRemoteNotifications()
+        }
+        
+        fireBackgroundLostEvents()
+        
+        //UIApplication.shared.applicationIconBadgeNumber = 0
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -282,6 +502,14 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             case Definitions.CHANNEL_METHOD_GET_FCM_TOKEN:
                 channelMethodGetFcmToken(call: call, result: result)
                 return
+                
+            case Definitions.CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED:
+                channelMethodIsNotificationAllowed(call: call, result: result)
+                return
+
+            case Definitions.CHANNEL_METHOD_REQUEST_NOTIFICATIONS:
+                channelMethodRequestNotification(call: call, result: result)
+                return
                     
             case Definitions.CHANNEL_METHOD_CREATE_NOTIFICATION:
                 channelMethodCreateNotification(call: call, result: result)
@@ -291,8 +519,28 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 channelMethodSetChannel(call: call, result: result)
                 return
                 
+            case Definitions.CHANNEL_METHOD_GET_BADGE_COUNT:
+                channelMethodGetBadgeCounter(call: call, result: result)
+                return
+                
+            case Definitions.CHANNEL_METHOD_SET_BADGE_COUNT:
+                channelMethodSetBadgeCounter(call: call, result: result)
+                return
+                
+            case Definitions.CHANNEL_METHOD_RESET_BADGE:
+                channelMethodResetBadge(call: call, result: result)
+                return
+                
             case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATION:
                 channelMethodCancelNotification(call: call, result: result)
+                return
+                        
+            case Definitions.CHANNEL_METHOD_CANCEL_SCHEDULE:
+                channelMethodCancelSchedule(call: call, result: result)
+                return
+                
+            case Definitions.CHANNEL_METHOD_CANCEL_ALL_SCHEDULES:
+                channelMethodCancelAllSchedules(call: call, result: result)
                 return
                 
             case Definitions.CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS:
@@ -314,19 +562,18 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     private func channelMethodListAllSchedules(call: FlutterMethodCall, result: @escaping FlutterResult) {
         
         do {
-            ScheduleManager.listScheduled(completion: { schedules in
-                  var serializeds:[[String:Any?]]  = []
-                  
-                  if(!ListUtils.isEmptyLists(schedules)){
-                      for pushNotification in schedules {
-                          let serialized:[String:Any?] = pushNotification.toMap()
-                          serializeds.append(serialized)
-                      }
-                  }
-                  
-                  result(serializeds)
-            })
+            let schedules = ScheduleManager.listSchedules()
+            var serializeds:[[String:Any?]]  = []
 
+            if(!ListUtils.isEmptyLists(schedules)){
+                for pushNotification in schedules {
+                    let serialized:[String:Any?] = pushNotification.toMap()
+                    serializeds.append(serialized)
+                }
+            }
+
+            result(serializeds)
+            
         } catch {
             
             result(
@@ -379,14 +626,6 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 defaultIconPath,
                 channelsData
             )
-
-            if #available(iOS 10.0, *) {
-                NotificationBuilder.requestPermissions(completion: { authorized in
-                    debugPrint("Notifications authorized")
-                })
-            } else {
-                // Fallback on earlier versions
-            }
             
             Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notification service initialized")
             result(true)
@@ -429,34 +668,117 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     }
     
     private func channelMethodGetFcmToken(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        result(false)
+        let token = requestFirebaseToken()
+        result(token)
     }
 		
     private func channelMethodIsFcmAvailable(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        result(false)
+        let token = requestFirebaseToken()
+        result(!StringUtils.isNullOrEmpty(token))
+    }
+    
+    private func channelMethodIsNotificationAllowed(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if #available(iOS 10.0, *) {
+            NotificationBuilder.isNotificationAllowed(completion: { (allowed) in
+                result(allowed)
+            })
+        }
+        else {
+            result(nil)
+        }
+    }
+
+    private func channelMethodRequestNotification(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if #available(iOS 10.0, *) {
+            NotificationBuilder.requestPermissions { (allowed) in
+                result(allowed)
+            }
+        }
+        else {
+            result(nil)
+        }
+    }
+    
+    private func channelMethodGetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if #available(iOS 10.0, *) {
+            result(NotificationBuilder.getBadge().intValue)
+        }
+        else {
+            result(0)
+        }
+    }
+    
+    private func channelMethodSetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        
+        let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
+        let value:Int? = platformParameters[Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE] as? Int
+        //let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
+        
+        if #available(iOS 10.0, *), value != nil {
+            NotificationBuilder.setBadge(value!)
+        }
+        result(nil)
+    }
+    
+    private func channelMethodResetBadge(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if #available(iOS 10.0, *) {
+            NotificationBuilder.resetBadge()
+        }
+        result(nil)
     }
 
     private func channelMethodCancelNotification(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        let notificationId:Int? = call.arguments as? Int
-        if(notificationId == nil){ result(false); return }
+        guard let notificationId:Int = call.arguments as? Int else {
+            result(false); return
+        }
         
         if #available(iOS 10.0, *) {
-            NotificationSenderAndScheduler.cancelNotification(id: notificationId!)
+            result(NotificationSenderAndScheduler.cancelNotification(id: notificationId))
+            return
         } else {
             // Fallback on earlier versions
         }
         
-        result(true)
+        result(false)
+    }
+    
+    private func channelMethodCancelSchedule(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let notificationId:Int = call.arguments as? Int else {
+            result(false); return
+        }
+        
+        if #available(iOS 10.0, *) {
+            result(NotificationSenderAndScheduler.cancelSchedule(id: notificationId))
+            return
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        result(false)
+    }
+    
+    private func channelMethodCancelAllSchedules(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        
+        if #available(iOS 10.0, *) {
+            result(NotificationSenderAndScheduler.cancelAllSchedules())
+            return
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        result(false)
     }
 
     private func channelMethodCancelAllNotifications(call: FlutterMethodCall, result: @escaping FlutterResult) {
         
         if #available(iOS 10.0, *) {
             result(NotificationSenderAndScheduler.cancelAllNotifications())
+            return
         } else {
             // Fallback on earlier versions
         }
-        result(true)
+        
+        result(false)
     }
 
     private func channelMethodCreateNotification(call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -472,13 +794,51 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                     try NotificationSenderAndScheduler().send(
                         createdSource: NotificationSource.Local,
                         pushNotification: pushNotification,
-                        completion: { sent, error in
+                        completion: { sent, content, error in
                         
                             if sent {
                                 Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification sent")
                             }
                             
-                            result(sent)
+                            if error != nil {
+                                let flutterError:FlutterError?
+                                if let notificationError = error as? PushNotificationError {
+                                    switch notificationError {
+                                        case PushNotificationError.notificationNotAuthorized:
+                                            flutterError = FlutterError.init(
+                                                code: "notificationNotAuthorized",
+                                                message: "Notifications are disabled",
+                                                details: nil
+                                            )
+                                        case PushNotificationError.cronException:
+                                            flutterError = FlutterError.init(
+                                                code: "cronException",
+                                                message: notificationError.localizedDescription,
+                                                details: nil
+                                            )
+                                        default:
+                                            flutterError = FlutterError.init(
+                                                code: "exception",
+                                                message: "Unknow error",
+                                                details: notificationError.localizedDescription
+                                            )
+                                    }
+                                }
+                                else {
+                                    flutterError = FlutterError.init(
+                                        code: error.debugDescription,
+                                        message: error?.localizedDescription,
+                                        details: nil
+                                    )
+                                }
+                                result(flutterError)
+                                return
+                            }
+                            else {
+                                result(sent)
+                                return
+                            }
+                            
                         }
                     )
                 } else {
@@ -486,6 +846,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                     
                     Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification sent");
                     result(true)
+                    return
                 }
             }
             else {
@@ -496,6 +857,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                         details: nil
                     )
                 )
+                return
             }
 
         } catch {
@@ -507,6 +869,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                     details: error.localizedDescription
                 )
             )
+            return
         }
         
         result(nil)

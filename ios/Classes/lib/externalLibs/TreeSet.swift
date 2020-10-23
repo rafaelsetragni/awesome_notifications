@@ -53,6 +53,12 @@ public class TreeSet<E: Comparable & Hashable>: Equatable, Collection, CustomStr
 
     /// Returns the contents of the set as an array.
     public var contents: [Element] { return array }
+    
+    /// Returns the content inside a position.
+    public func atIndex(_ index: Int) -> Element? {
+        if(index < 0 || index >= array.count){ return nil }
+        return array[index]
+    }
 
     /// Returns `true` if the ordered set contains `member`.
     public func contains(_ member: Element) -> Bool {

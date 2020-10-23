@@ -22,9 +22,9 @@ public class CronExpression {
         case second = 0
         case minute = 1
         case hour = 2
-        case weekday = 3
-        case day = 4
-        case month = 5
+        case day = 3
+        case month = 4
+        case weekday = 5
         case year = 6
         
         public static var mostRelevant:CronComponent {
@@ -309,9 +309,10 @@ public class CronExpression {
                 break
             
             case .WildCard:
-                if(!populateFromWildCard(component, translatedElement))
-                {throw CronError.invalidExpression(msg:"WildCard paramater is invalid (\(cronElement))")}
                 break
+                //if(!populateFromWildCard(component, translatedElement))
+                //{throw CronError.invalidExpression(msg:"WildCard paramater is invalid (\(cronElement))")}
+                //break
             
             case .Unknow:
                 throw CronError.invalidExpression(msg:"Unknow paramater is invalid (\(cronElement))")
@@ -626,5 +627,51 @@ public class CronExpression {
         }
         
         return nextValue
+    }
+    
+    /// Produces a cartesian product of dates components, expressed by UNNotificationTrigger objects, that togetter are capable to represent a single cron expression
+    @available(iOS 10.0, *)
+    func getTriggerList() -> [UNCalendarNotificationTrigger] {
+        var triggerList:[UNCalendarNotificationTrigger] = []
+        
+        var positions:[CronComponent:Int] = [:]
+        for (component, filters) in filterSets {
+            if(!filters.isEmpty){
+                positions[component] = 0
+            }
+        }
+        
+        var notExausted:Bool = true
+        repeat {
+            
+            var dateComponents = DateComponents()
+            for (component, position) in positions {
+                
+                switch component {
+                    case .second:   dateComponents.second   = filterSets[component]?.atIndex(position); break
+                    case .minute:   dateComponents.minute   = filterSets[component]?.atIndex(position); break
+                    case .hour:     dateComponents.hour     = filterSets[component]?.atIndex(position); break
+                    case .day:      dateComponents.day      = filterSets[component]?.atIndex(position); break
+                    case .month:    dateComponents.month    = filterSets[component]?.atIndex(position); break
+                    case .weekday:  dateComponents.weekday  = filterSets[component]?.atIndex(position); break
+                    case .year:     dateComponents.year     = filterSets[component]?.atIndex(position); break
+                }
+            }
+            triggerList.append(UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true))
+            
+            notExausted = false
+            positions.forEach({ (component, _) -> Void in
+                positions[component]! += 1
+                if positions[component]! >= filterSets[component]!.count {
+                    positions[component] = 0
+                } else {
+                    notExausted = true
+                    return
+                }
+            })
+        
+        } while notExausted
+        
+        return triggerList
     }
 }

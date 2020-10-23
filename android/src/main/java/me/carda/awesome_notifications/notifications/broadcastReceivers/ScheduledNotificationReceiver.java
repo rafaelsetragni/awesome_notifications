@@ -11,6 +11,7 @@ import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.PushNotification;
 import me.carda.awesome_notifications.notifications.NotificationScheduler;
 import me.carda.awesome_notifications.notifications.NotificationSender;
+import me.carda.awesome_notifications.notifications.managers.ScheduleManager;
 import me.carda.awesome_notifications.utils.JsonUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
@@ -45,9 +46,11 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
                                 context,
                                 pushNotification
                         );
+
                     } else {
 
                         pushNotification.schedule = null;
+                        NotificationScheduler.cancelNotification(context, pushNotification.content.id);
                     }
 
                     NotificationSender.send(

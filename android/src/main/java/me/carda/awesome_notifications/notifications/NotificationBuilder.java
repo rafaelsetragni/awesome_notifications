@@ -5,11 +5,14 @@ import android.app.PendingIntent;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
+import com.github.arturogutierrez.BadgesNotSupportedException;
 import com.google.common.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -42,6 +45,9 @@ import me.carda.awesome_notifications.utils.IntegerUtils;
 import me.carda.awesome_notifications.utils.JsonUtils;
 import me.carda.awesome_notifications.utils.ListUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
+
+//badges
+import com.github.arturogutierrez.Badges;
 
 public class NotificationBuilder {
 
@@ -197,6 +203,8 @@ public class NotificationBuilder {
         setLargeIcon(context, pushNotification, builder);
         setLayoutColor(context, pushNotification, channel, builder);
 
+        setBadge(context, channel, builder);
+
         applyGrouping(channel, builder);
 
         builder.setContentIntent(pendingIntent);
@@ -232,7 +240,6 @@ public class NotificationBuilder {
         // Conversion to Priority
         int priorityValue = Math.min(Math.max(IntegerUtils.extractInteger(channel.importance) -2,-2),2);
         builder.setPriority(priorityValue);
-        //builder.setImportance(priorityValue);
     }
 
     private void setOnlyAlertOnce(PushNotification pushNotification, NotificationChannelModel channel, NotificationCompat.Builder builder) {
@@ -251,6 +258,13 @@ public class NotificationBuilder {
         tickerValue = StringUtils.getValueOrDefault(tickerValue, pushNotification.content.summary);
         tickerValue = StringUtils.getValueOrDefault(tickerValue, pushNotification.content.body);
         builder.setTicker(tickerValue);
+    }
+
+    private void setBadge(Context context, NotificationChannelModel channelModel, NotificationCompat.Builder builder){
+        if(BooleanUtils.getValue(channelModel.channelShowBadge)){
+            incrementGlobalBadgeCounter(context, channelModel);
+            builder.setNumber(1);
+        }
     }
 
     private void setAutoCancel(PushNotification pushNotification, NotificationCompat.Builder builder) {
@@ -313,6 +327,44 @@ public class NotificationBuilder {
                 builder.setLargeIcon(largeIcon);
             }
         }
+    }
+
+    public static String getBadgeKey(Context context, String channelKey){
+        return "count_key"+(channelKey == null ? "_total" : channelKey);
+    }
+
+    public static int getGlobalBadgeCounter(Context context, String channelKey){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        // Read previous value. If not found, use 0 as default value.
+        return prefs.getInt(getBadgeKey(context, channelKey), 0);
+    }
+
+    public static void setGlobalBadgeCounter(Context context, String channelKey, int count){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        try {
+
+            editor.putInt(getBadgeKey(context, channelKey), count);
+            Badges.setBadge(context, count);
+
+        } catch (BadgesNotSupportedException ignored) {
+        }
+
+        editor.apply();
+    }
+
+    public static void resetGlobalBadgeCounter(Context context, String channelKey){
+        setGlobalBadgeCounter(context, channelKey, 0 );
+    }
+
+    public static int incrementGlobalBadgeCounter(Context context, NotificationChannelModel channelModel){
+
+        int totalAmount = getGlobalBadgeCounter(context, null);
+        setGlobalBadgeCounter(context, null, ++totalAmount);
+
+        return totalAmount;
     }
 
     public Class getNotificationTargetActivityClass(Context context) {

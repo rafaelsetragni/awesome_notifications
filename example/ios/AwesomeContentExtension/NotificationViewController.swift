@@ -8,18 +8,22 @@
 import UIKit
 import UserNotifications
 import UserNotificationsUI
+import awesome_notifications
 
+@available(iOS 10.0, *)
 class NotificationViewController: UIViewController, UNNotificationContentExtension {
 
     @IBOutlet weak var filename: UILabel!
     
+    var awesomeContentExtension:AwesomeContentExtension?
+    
     override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any required interface initialization here.
+        self.awesomeContentExtension = AwesomeContentExtension()
+        awesomeContentExtension?.viewDidLoad()
     }
     
     func didReceive(_ notification: UNNotification) {
-        self.filename?.text = notification.request.content.body
+        awesomeContentExtension?.didReceive(notification)
     }
 
 }

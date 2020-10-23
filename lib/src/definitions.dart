@@ -36,6 +36,9 @@ const CHANNEL_FLUTTER_PLUGIN = 'awesome_notifications';
 const CHANNEL_METHOD_INITIALIZE = 'initialize';
 const CHANNEL_METHOD_GET_DRAWABLE_DATA = 'getDrawableData';
 
+const CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = 'isNotificationAllowed';
+const CHANNEL_METHOD_REQUEST_NOTIFICATIONS = 'requestNotifications';
+
 const CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL = 'setNotificationChannel';
 const CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL = 'removeNotificationChannel';
 
@@ -54,6 +57,9 @@ const CHANNEL_METHOD_NOTIFICATION_AT_LAUNCH = 'notificationAtLaunch';
 
 const CHANNEL_METHOD_LIST_ALL_SCHEDULES = 'listAllSchedules';
 
+const CHANNEL_METHOD_GET_BADGE_COUNT = 'getBadgeCount';
+const CHANNEL_METHOD_SET_BADGE_COUNT = 'setBadgeCount';
+const CHANNEL_METHOD_RESET_BADGE = 'resetBadge';
 const CHANNEL_METHOD_CANCEL_NOTIFICATION = 'cancelNotification';
 const CHANNEL_METHOD_CANCEL_SCHEDULE = 'cancelSchedule';
 const CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = 'cancelAllSchedules';

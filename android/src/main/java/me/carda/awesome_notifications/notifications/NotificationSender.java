@@ -2,6 +2,7 @@ package me.carda.awesome_notifications.notifications;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,6 +10,8 @@ import android.os.Build;
 import android.util.Log;
 
 import com.google.common.reflect.TypeToken;
+
+import java.util.List;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;

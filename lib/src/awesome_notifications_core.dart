@@ -23,26 +23,23 @@ class AwesomeNotifications {
 
   // Streams are created so that app can respond to notification-related events since the plugin is initialised in the `main` function
   final StreamController<String> _tokenStreamController =
-      StreamController<String>.broadcast();
+      StreamController<String>();
 
   final StreamController<ReceivedNotification>
       // ignore: close_sinks
-      _createdSubject =
-      StreamController<ReceivedNotification>.broadcast(sync: true);
+      _createdSubject = StreamController<ReceivedNotification>();
 
   final StreamController<ReceivedNotification>
       // ignore: close_sinks
-      _displayedSubject =
-      StreamController<ReceivedNotification>.broadcast(sync: true);
+      _displayedSubject = StreamController<ReceivedNotification>();
 
   final StreamController<ReceivedAction>
       // ignore: close_sinks
-      _actionSubject = StreamController<ReceivedAction>.broadcast(sync: true);
+      _actionSubject = StreamController<ReceivedAction>();
 
   final StreamController<ReceivedAction>
       // ignore: close_sinks
-      _dismissedSubject =
-      StreamController<ReceivedAction>.broadcast(sync: true);
+      _dismissedSubject = StreamController<ReceivedAction>();
 
   /// STREAM METHODS *********************************************
 
@@ -234,15 +231,34 @@ class AwesomeNotifications {
   }) async {
     _validateId(content.id);
 
-    final bool wasCreated = await _channel.invokeMethod(
-        CHANNEL_METHOD_CREATE_NOTIFICATION,
-        PushNotification(
-                content: content,
-                schedule: schedule,
-                actionButtons: actionButtons)
-            .toMap());
+    try {
+      final bool wasCreated = await _channel.invokeMethod(
+          CHANNEL_METHOD_CREATE_NOTIFICATION,
+          PushNotification(
+                  content: content,
+                  schedule: schedule,
+                  actionButtons: actionButtons)
+              .toMap());
 
-    return wasCreated;
+      return wasCreated;
+    } on PlatformException catch (error) {
+      print(error);
+    }
+    return false;
+  }
+
+  /// Check if the notifications are permitted
+  Future<bool> isNotificationAllowed() async {
+    final bool isAllowed =
+        await _channel.invokeMethod(CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED);
+    return isAllowed;
+  }
+
+  /// Prompts the user to enabled notifications
+  Future<bool> requestPermissionToSendNotifications() async {
+    final bool isAllowed =
+        await _channel.invokeMethod(CHANNEL_METHOD_REQUEST_NOTIFICATIONS);
+    return isAllowed;
   }
 
   /// List all active scheduled notifications.
@@ -275,6 +291,30 @@ class AwesomeNotifications {
     final bool wasRemoved = await _channel.invokeMethod(
         CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL, channelKey);
     return wasRemoved;
+  }
+
+  /// Get badge counter (on Android is 0 or 1)
+  Future<void> setGlobalBadgeCounter(int amount) async {
+    if (amount == null) {
+      return;
+    }
+    Map<String, dynamic> data = {
+      NOTIFICATION_CHANNEL_SHOW_BADGE: amount
+      //NOTIFICATION_CHANNEL_KEY: channelKey
+    };
+    await _channel.invokeMethod(CHANNEL_METHOD_SET_BADGE_COUNT, data);
+  }
+
+  /// Get badge counter (on iOS the amount is global)
+  Future<int> getGlobalBadgeCounter() async {
+    final int badgeCount =
+        await _channel.invokeMethod(CHANNEL_METHOD_GET_BADGE_COUNT);
+    return badgeCount;
+  }
+
+  /// Resets the badge counter
+  Future<void> resetGlobalBadge() async {
+    await _channel.invokeListMethod(CHANNEL_METHOD_RESET_BADGE);
   }
 
   /// Cancel a single notification

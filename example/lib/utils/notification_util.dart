@@ -71,6 +71,53 @@ Future<void> sendBackgroundNotification(int id) async {
 }
 
 /* *********************************************
+    BADGE NOTIFICATIONS
+************************************************ */
+
+Future<void> showBadgeNotification(int id) async {
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: id,
+          channelKey: 'badge_channel',
+          title: 'Badge test notification',
+          body: 'This notification does activate badge indicator'
+      ),
+      schedule: NotificationSchedule(
+          initialDateTime: DateTime.now().add(Duration(seconds: 5)).toUtc()
+      )
+  );
+}
+
+Future<void> showWithoutBadgeNotification(int id) async {
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: id,
+          channelKey: 'basic_channel',
+          title: 'Badge test notification',
+          body: 'This notification does not activate badge indicator'
+      ),
+      schedule: NotificationSchedule(
+          initialDateTime: DateTime.now().add(Duration(seconds: 5)).toUtc()
+      )
+  );
+}
+
+// ON BADGE METHODS, NULL CHANNEL SETS THE GLOBAL COUNTER
+
+Future<int> getBadgeIndicator() async {
+  int amount = await AwesomeNotifications().getGlobalBadgeCounter();
+  return amount;
+}
+
+Future<void> setBadgeIndicator(int amount) async {
+  await AwesomeNotifications().setGlobalBadgeCounter(amount);
+}
+
+Future<void> resetBadgeIndicator() async {
+  await AwesomeNotifications().resetGlobalBadge();
+}
+
+/* *********************************************
     ACTION BUTTONS NOTIFICATIONS
 ************************************************ */
 
@@ -162,6 +209,37 @@ Future<void> showUnlockedNotification(int id) async {
           title: 'Unlocked notification',
           body: 'This notification is not locked and can be dismissed',
           payload: {'uuid': 'uuid-test'}));
+}
+
+/* *********************************************
+    NOTIFICATION CHANNELS MANIPULATION
+************************************************ */
+
+Future<void> createTestChannel(String channelName) async {
+
+  await AwesomeNotifications().setChannel(
+    NotificationChannel(
+      channelKey: channelName.toLowerCase().replaceAll(' ', '_'),
+      channelName: channelName,
+      channelDescription: "Channel created to test the channels manipulation."
+    )
+  );
+}
+
+Future<void> updateTestChannel(String channelName) async {
+
+  await AwesomeNotifications().setChannel(
+      NotificationChannel(
+          channelKey: channelName.toLowerCase().replaceAll(' ', '_'),
+          channelName: channelName+" (updated)",
+          channelDescription: "This channel was successfuly updated."
+      )
+  );
+}
+
+Future<void> removeTestChannel(String channelName) async {
+
+  await AwesomeNotifications().removeChannel(channelName.toLowerCase().replaceAll(' ', '_'));
 }
 
 /* *********************************************
@@ -887,9 +965,9 @@ Future<void> repeatPreciseThreeTimes(int id) async {
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/melted-clock.png'),
       schedule: NotificationSchedule(preciseSchedules: [
-        DateTime.now().add(Duration(seconds: 10)),
-        DateTime.now().add(Duration(seconds: 20)),
-        DateTime.now().add(Duration(seconds: 30))
+        DateTime.now().add(Duration(seconds: 10)).toUtc(),
+        DateTime.now().add(Duration(seconds: 20)).toUtc(),
+        DateTime.now().add(Duration(seconds: 30)).toUtc()
       ]));
 }
 
@@ -909,18 +987,20 @@ Future<void> repeatMinuteNotificationOClock(int id) async {
 
 Future<void> showNotificationAtScheduleCron(
     int id, DateTime scheduleTime) async {
+
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
           channelKey: 'schedule',
           title: 'Just in time!',
           body: 'This notification was schedule to shows at ' +
-              DateUtils.parseDateToString(scheduleTime.toLocal()),
+              DateUtils.parseDateToString(scheduleTime.toLocal()) +
+          '('+DateUtils.parseDateToString(scheduleTime.toUtc())+' utc)',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/delivery.jpeg',
           payload: {'uuid': 'uuid-test'}),
       schedule: NotificationSchedule(
-          crontabSchedule: CronHelper.instance.atDate(scheduleTime)));
+          crontabSchedule: CronHelper.instance.atDate(scheduleTime.toUtc(), initialSecond: 0)));
 }
 
 Future<void> showScheduleAtWorkweekDay10AmLocal(int id) async {

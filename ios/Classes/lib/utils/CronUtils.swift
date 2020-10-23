@@ -11,8 +11,14 @@ public final class CronUtils {
 
     public static var fixedNowDate:Date?
 
-    public static let validDateFormat:String = "yyyy-MM-dd HH:mm:ss"
+    public static let validDateFormat:String = Definitions.DATE_FORMAT
 
+    public static func getInitialCalendar() -> Calendar {
+        var calendar:Calendar = Calendar.current
+        calendar.timeZone = DateUtils.utcTimeZone
+        return calendar
+    }
+    
     /// https://www.baeldung.com/cron-expressions
     /// <second> <minute> <hour> <day-of-month> <month> <day-of-week> <year>
     public static func getNextCalendar(
@@ -22,9 +28,6 @@ public final class CronUtils {
 
         if(StringUtils.isNullOrEmpty(initialDateTime) && StringUtils.isNullOrEmpty(crontabRule))
         { return nil }
-
-        var calendar:Calendar = Calendar.current
-        calendar.timeZone = DateUtils.utcTimeZone
 
         var now:Date, delayedNow:Date
         if(fixedNowDate == nil){
@@ -42,20 +45,23 @@ public final class CronUtils {
         }
 
         // if initial date is a future one, show in future. Otherwise, show now
-        switch (initialScheduleDay!.compare(now).rawValue) {
+        switch (now.compare(initialScheduleDay!)) {
 
-            case -1: // if initial date is not a repetition and is in the past, do not show
+            case .orderedDescending: // if initial date is not a repetition and is in the past, do not show
                 if(StringUtils.isNullOrEmpty(crontabRule))
                 { return nil }
+                break
 
-            case 0: // if initial date is in future, shows in future
-                return initialScheduleDay
+            case .orderedSame: // if initial date is right now, shows now
+                break
             
-            case 1: // if initial date is right now, shows now
-                return initialScheduleDay
+            case .orderedAscending: // if initial date is in future, shows in future
+                if(StringUtils.isNullOrEmpty(crontabRule))
+                { return initialScheduleDay }
+                break
             
             default:
-                return initialScheduleDay
+                break
         }
 
         delayedNow = applyToleranceDate(now);
@@ -68,7 +74,7 @@ public final class CronUtils {
                     let cronExpression:CronExpression = try CronExpression.init(crontabRule!)
                     let nextSchedule:Date? = cronExpression.getNextValidDate(referenceDate: now)
 
-                    if (nextSchedule != nil && nextSchedule!.compare(delayedNow) == ComparisonResult.orderedAscending) {
+                    if (nextSchedule != nil && delayedNow.compare(nextSchedule!) == ComparisonResult.orderedAscending) {
                         return nextSchedule
                     } else {
                         // if there is no more valid dates, remove the repetitions
@@ -83,7 +89,7 @@ public final class CronUtils {
             return nil
         }
 
-        return now
+        return delayedNow
     }
 
     /// Processing time tolerance

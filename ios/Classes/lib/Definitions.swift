@@ -11,6 +11,7 @@ enum Definitions {
 
     static let  INITIALIZE_CHANNELS = "initializeChannels"
 
+    static let  IOS_BACKGROUND_SCHEDULER = "awesome_notifications.scheduler"
     static let  BROADCAST_CREATED_NOTIFICATION = "broadcast.awesome_notifications.CREATED_NOTIFICATION"
     static let  BROADCAST_DISPLAYED_NOTIFICATION = "broadcast.awesome_notifications.DISPLAYED_NOTIFICATION"
     static let  BROADCAST_KEEP_ON_TOP = "broadcast.awesome_notifications.KEEP_ON_TOP"
@@ -40,6 +41,11 @@ enum Definitions {
     static let  CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL = "setNotificationChannel"
     static let  CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL = "removeNotificationChannel"
 
+    static let  CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed"
+    static let  CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications"
+    static let  CHANNEL_METHOD_GET_BADGE_COUNT = "getBadgeCount"
+    static let  CHANNEL_METHOD_SET_BADGE_COUNT = "setBadgeCount"
+    static let  CHANNEL_METHOD_RESET_BADGE = "resetBadge"
     static let  CHANNEL_METHOD_CANCEL_NOTIFICATION = "cancelNotification"
     static let  CHANNEL_METHOD_CANCEL_SCHEDULE = "cancelSchedule"
     static let  CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = "cancelAllSchedules"
@@ -47,6 +53,7 @@ enum Definitions {
 
     static let  CHANNEL_METHOD_NOTIFICATION_CREATED = "notificationCreated"
     static let  CHANNEL_METHOD_NOTIFICATION_DISPLAYED = "notificationDisplayed"
+    static let  CHANNEL_METHOD_NOTIFICATION_DISMISSED = "notificationDismissed"
     static let  CHANNEL_METHOD_RECEIVED_ACTION = "receivedAction"
 
     static let  CHANNEL_METHOD_LIST_ALL_SCHEDULES = "listAllSchedules"
@@ -92,6 +99,8 @@ enum Definitions {
     static let  NOTIFICATION_ENABLED = "enabled"
     static let  NOTIFICATION_AUTO_CANCEL = "autoCancel"
     static let  NOTIFICATION_LOCKED = "locked"
+    static let  NOTIFICATION_DISPLAY_ON_FOREGROUND = "displayOnForeground"
+    static let  NOTIFICATION_DISPLAY_ON_BACKGROUND = "displayOnBackground"
     static let  NOTIFICATION_ICON = "icon"
     static let  NOTIFICATION_PLAY_SOUND = "playSound"
     static let  NOTIFICATION_SOUND_SOURCE = "soundSource"
@@ -133,6 +142,8 @@ enum Definitions {
         Definitions.NOTIFICATION_CREATED_LIFECYCLE: NotificationLifeCycle.AppKilled,
         Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE: NotificationLifeCycle.AppKilled,
         Definitions.NOTIFICATION_ACTION_LIFECYCLE: NotificationLifeCycle.AppKilled,
+        Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND: true,
+        Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND: true,
         Definitions.NOTIFICATION_CHANNEL_KEY: "miscellaneous",
         Definitions.NOTIFICATION_CHANNEL_DESCRIPTION: "Notifications",
         Definitions.NOTIFICATION_CHANNEL_NAME: "Notifications",

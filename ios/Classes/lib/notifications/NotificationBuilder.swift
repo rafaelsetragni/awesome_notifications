@@ -8,62 +8,117 @@
 import Foundation
 
 @available(iOS 10.0, *)
-class NotificationBuilder {
+public class NotificationBuilder {
     
     private static let TAG = "NotificationBuilder"
     
     private static var badgeAmount:NSNumber = 0
         
     public static func incrementBadge(){
-        NotificationBuilder.badgeAmount = NSNumber(value: NotificationBuilder.badgeAmount.intValue + 1)
+        NotificationBuilder.setBadge(NotificationBuilder.getBadge().intValue + 1)
     }
     
     public static func resetBadge(){
-        NotificationBuilder.badgeAmount = 0
+        setBadge(0)
     }
     
     public static func getBadge() -> NSNumber {
+        if !SwiftUtils.isRunningOnExtension() && Thread.isMainThread {
+            NotificationBuilder.badgeAmount = NSNumber(value: UIApplication.shared.applicationIconBadgeNumber)
+        }
+        else{
+            let userDefaults = UserDefaults.standard
+            let badgeCount:Int = userDefaults.integer(forKey: "badgeCount")
+            NotificationBuilder.badgeAmount = NSNumber(value: badgeCount)
+        }
         return NotificationBuilder.badgeAmount
+    }
+    
+    public static func setBadge(_ count:Int) {
+        NotificationBuilder.badgeAmount = NSNumber(value: count)
+        
+        if !SwiftUtils.isRunningOnExtension() && Thread.isMainThread {
+            UIApplication.shared.applicationIconBadgeNumber = count
+        }
+        else{
+            NotificationBuilder.badgeAmount = NSNumber(value: count)
+        }
+        
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(count, forKey: "badgeCount")
     }
     
     public static func requestPermissions(completion: @escaping (Bool) -> ()){
         
-        // iOS 10 support
-        let notificationCenter = UNUserNotificationCenter.current()
-        
-        notificationCenter.requestAuthorization(options: [.sound,.alert,.badge]) { (granted, error) in
-            if granted {
-                DispatchQueue.main.async {
-                    UIApplication.shared.registerForRemoteNotifications()
+        if !SwiftUtils.isRunningOnExtension() {
+            
+            let notificationCenter = UNUserNotificationCenter.current()
+            notificationCenter.getNotificationSettings { settings in
+                
+                var isAllowed:Bool = false
+                if #available(iOS 12.0, *) {
+                    isAllowed =
+                        (settings.authorizationStatus == .authorized) ||
+                        (settings.authorizationStatus == .provisional)
+                } else {
+                    isAllowed =
+                        (settings.authorizationStatus == .authorized)
                 }
-                print("Notification Enable Successfully")
-                completion(true)
+
+                if !isAllowed && settings.authorizationStatus == .notDetermined {
+                    
+                    notificationCenter.requestAuthorization(options: [.sound,.alert,.badge]) { (granted, error) in
+                        if granted {
+                            DispatchQueue.main.async {
+                                UIApplication.shared.registerForRemoteNotifications()
+                            }
+                            print("Notification Enable Successfully")
+                            completion(true)
+                        }
+                        else {
+                            completion(false)
+                        }
+                    }
+                }
+                else {
+                    DispatchQueue.main.async {
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                    }
+                    completion(isAllowed)
+                }
             }
-            else {
-                completion(false)
-            }
+            
+        } else {
+            // For Extensions, the notification is always enabled
+            completion(true)
         }
     }
     
-    public static func isNotificationAuthorized(completion: @escaping (Bool) -> ()) {
+    public static func isNotificationAllowed(completion: @escaping (Bool) -> ()) {
+             
+        // Extension targets are always authorized
+        if SwiftUtils.isRunningOnExtension() {
+            completion(true)
+            return
+        }
         
         let current = UNUserNotificationCenter.current()
-
         current.getNotificationSettings(completionHandler: { (settings) in
             
             if settings.authorizationStatus == .notDetermined {
-                // Notification permission has not been asked yet, go for it!
-                requestPermissions(completion: { enabled in
-                    completion(enabled)
-                })
+                // The user hasnt decided yet if he authorizes or not
+                completion(false)
+                return
                 
             } else if settings.authorizationStatus == .denied {
                 // Notification permission was previously denied, go to settings & privacy to re-enable
                 completion(false)
+                return
                 
             } else if settings.authorizationStatus == .authorized {
                 // Notification permission was already granted
                 completion(true)
+                return
             }
         })
         
@@ -80,15 +135,31 @@ class NotificationBuilder {
         return pushNotification        
     }
     
+    public static func buildNotificationFromJson(jsonData:String?) -> PushNotification? {
+        return  jsonToPushNotification(jsonData: jsonData)
+    }
+    
     public static func buildNotificationActionFromJson(jsonData:String?, actionKey:String?, userText:String?) -> ActionReceived? {
-        let pushNotification:PushNotification? = jsonToPushNotification(jsonData: jsonData)
+        
+        let pushNotification:PushNotification? = buildNotificationFromJson(jsonData: jsonData)
         if(pushNotification == nil){ return nil }
         let actionReceived:ActionReceived = ActionReceived(pushNotification!.content)
+        
+        switch actionKey {
+        
+            case UNNotificationDismissActionIdentifier.description:
+                actionReceived.actionKey = nil
+                actionReceived.actionInput = nil
+                actionReceived.dismissedLifeCycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
+                actionReceived.dismissedDate = DateUtils.getUTCDate()
                 
-        actionReceived.actionKey = actionKey == UNNotificationDefaultActionIdentifier.description ? nil : actionKey
-        actionReceived.actionInput = userText
-        actionReceived.actionLifeCycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
-        actionReceived.actionDate = DateUtils.getUTCDate()
+            default:
+                let defaultIOSAction = UNNotificationDefaultActionIdentifier.description
+                actionReceived.actionKey = actionKey == defaultIOSAction ? nil : actionKey
+                actionReceived.actionInput = userText
+                actionReceived.actionLifeCycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
+                actionReceived.actionDate = DateUtils.getUTCDate()
+        }
         
         if(StringUtils.isNullOrEmpty(actionReceived.displayedDate)){
             actionReceived.displayedDate = DateUtils.getUTCDate()
@@ -97,7 +168,7 @@ class NotificationBuilder {
         return actionReceived
     }
     
-    public static func createNotification(_ pushNotification:PushNotification) throws -> PushNotification? {
+    public static func createNotification(_ pushNotification:PushNotification, content:UNMutableNotificationContent?) throws -> PushNotification? {
         
         guard let channel = ChannelManager.getChannelByKey(channelKey: pushNotification.content!.channelKey!) else {
             return nil
@@ -107,7 +178,7 @@ class NotificationBuilder {
         
         if(pushNotification.schedule == nil || nextDate != nil){
             
-            let content = buildNotificationContentFromModel(pushNotification: pushNotification)
+            let content = content ?? buildNotificationContentFromModel(pushNotification: pushNotification)
             
             setTitle(pushNotification: pushNotification, channel: channel, content: content)
             setBody(pushNotification: pushNotification, content: content)
@@ -116,10 +187,7 @@ class NotificationBuilder {
             
             setVisibility(pushNotification: pushNotification, channel: channel, content: content)
             setShowWhen(pushNotification: pushNotification, content: content)
-            
-            setLayout(pushNotification: pushNotification, content: content)
-            
-            createActionButtons(pushNotification: pushNotification, content: content)
+            setBadgeIndicator(pushNotification: pushNotification, channel: channel, content: content)
             
             setAutoCancel(pushNotification: pushNotification, content: content)
             setTicker(pushNotification: pushNotification, content: content)
@@ -138,11 +206,39 @@ class NotificationBuilder {
             setLargeIcon(pushNotification: pushNotification, content: content)
             
             setLayoutColor(pushNotification: pushNotification, channel: channel, content: content)
+            
+            setLayout(pushNotification: pushNotification, content: content)
+            
+            createActionButtons(pushNotification: pushNotification, content: content)
                     
             applyGrouping(channel: channel, content: content)
             
+            pushNotification.content!.displayedDate = nextDate?.toString() ?? DateUtils.getUTCDate()
+            
+            setUserInfoContent(pushNotification: pushNotification, content: content)
+            
+            if SwiftUtils.isRunningOnExtension() {
+                return pushNotification
+            }
+            
             let trigger:UNCalendarNotificationTrigger? = dateToCalendarTrigger(targetDate: nextDate)
             let request = UNNotificationRequest(identifier: pushNotification.content!.id!.description, content: content, trigger: trigger)
+            
+            let customCategory = UNNotificationCategory(
+                identifier: "AwesomeLayout",
+                actions: [],
+                intentIdentifiers: [],
+                options: .customDismissAction
+            )
+            
+            let standardCategory = UNNotificationCategory(
+                identifier: "Standard",
+                actions: [],
+                intentIdentifiers: [],
+                options: .customDismissAction
+            )
+            
+            UNUserNotificationCenter.current().setNotificationCategories([customCategory, standardCategory])
             
             UNUserNotificationCenter.current().add(request)
             {
@@ -151,8 +247,22 @@ class NotificationBuilder {
                 if error != nil {
                     debugPrint("Error: \(error.debugDescription)")
                 }
+                else {
+                    if(pushNotification.schedule != nil){
+                        if (nextDate != nil){
+                            ScheduleManager.saveSchedule(notification: pushNotification, nextDate: nextDate!)
+                        } else {
+                            _ = ScheduleManager.removeSchedule(id: pushNotification.content!.id!)
+                        }
+                    }
+                }
             }
             return pushNotification
+        }
+        else {
+            if(pushNotification.schedule != nil){
+                _ = ScheduleManager.removeSchedule(id: pushNotification.content!.id!)
+            }
         }
         
         return nil
@@ -168,12 +278,15 @@ class NotificationBuilder {
     
     private static func buildNotificationContentFromModel(pushNotification:PushNotification) -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
+        return content
+    }
+    
+    private static func setUserInfoContent(pushNotification:PushNotification, content:UNMutableNotificationContent) {
         
         let pushData = pushNotification.toMap()
         let jsonData = JsonUtils.toJson(pushData)
         content.userInfo[Definitions.NOTIFICATION_JSON] = jsonData
-        
-        return content
+        content.userInfo[Definitions.NOTIFICATION_ID] = pushNotification.content!.id!
     }
 
     private static func setTitle(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
@@ -190,16 +303,18 @@ class NotificationBuilder {
         }
     }
     
-    private static func setBadge(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
-        if(channel.channelShowBadge!){ NotificationBuilder.incrementBadge() }
-        content.badge = NotificationBuilder.getBadge()
+    private static func setBadgeIndicator(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        if(channel.channelShowBadge!){
+            NotificationBuilder.incrementBadge()
+            content.badge = NotificationBuilder.getBadge()
+        }
     }
     
     private static func createActionButtons(pushNotification:PushNotification, content:UNMutableNotificationContent){
         
         if(pushNotification.actionButtons != nil){
             var actions:[UNNotificationAction] = []
-            var category:String = ""
+            var dynamicCategory:[String] = []
             
             for button in pushNotification.actionButtons! {
                 
@@ -222,16 +337,19 @@ class NotificationBuilder {
                         break
                 }
                 
-                category.append(button.key!)
+                dynamicCategory.append(button.key!)
                 actions.append(action!)
             }
             
-            let categoryIdentifier:String = category.md5
-            let categoryObject = UNNotificationCategory(identifier: categoryIdentifier, actions: actions, intentIdentifiers: [], options: [])
+            let categoryIdentifier:String = dynamicCategory.joined(separator: ",")
+            let categoryObject = UNNotificationCategory(identifier: categoryIdentifier, actions: actions, intentIdentifiers: [], options: .customDismissAction)
             
             UNUserNotificationCenter.current().setNotificationCategories([categoryObject])
             
             content.categoryIdentifier = categoryIdentifier
+        }
+        else {
+            content.categoryIdentifier = "Standard"
         }
         
     }
@@ -443,10 +561,9 @@ class NotificationBuilder {
         }
     }
     
-    private static func setProgressBarLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {        
+    private static func setProgressBarLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "AwesomeLayout"
     }
-    
     
     public static func cancelNotification(id:Int){
         let referenceKey:String = String(id)
@@ -454,7 +571,13 @@ class NotificationBuilder {
         let center = UNUserNotificationCenter.current()
         center.removeDeliveredNotifications(withIdentifiers: [referenceKey])
         center.removePendingNotificationRequests(withIdentifiers: [referenceKey])
-
+    }
+    
+    public static func cancelScheduledNotification(id:Int){
+        let referenceKey:String = String(id)
+            
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [referenceKey])
     }
     
     public static func cancellAllNotifications(){
@@ -462,7 +585,12 @@ class NotificationBuilder {
         let center = UNUserNotificationCenter.current()
         center.removeAllDeliveredNotifications()
         center.removeAllPendingNotificationRequests()
-        
+    }
+    
+    public static func cancellAllScheduledNotifications(){
+            
+        let center = UNUserNotificationCenter.current()
+        center.removeAllPendingNotificationRequests()        
     }
     
 }

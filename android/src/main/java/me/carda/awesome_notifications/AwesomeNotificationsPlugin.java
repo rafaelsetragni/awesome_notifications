@@ -1,10 +1,14 @@
 package me.carda.awesome_notifications;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 
@@ -21,6 +25,10 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.*;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -386,6 +394,14 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                 channelMethodIsFcmAvailable(call, result);
                 return;
 
+            case Definitions.CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED:
+                channelIsNotificationAllowed(call, result);
+                return;
+
+            case Definitions.CHANNEL_METHOD_REQUEST_NOTIFICATIONS:
+                channelRequestNotification(call, result);
+                return;
+
             case Definitions.CHANNEL_METHOD_CREATE_NOTIFICATION:
                 channelMethodCreateNotification(call, result, appLifeCycle);
                 return;
@@ -400,6 +416,18 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
             case Definitions.CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL:
                 channelMethodRemoveChannel(call, result);
+                return;
+
+            case Definitions.CHANNEL_METHOD_GET_BADGE_COUNT:
+                channelMethodGetBadgeCounter(call, result);
+                return;
+
+            case Definitions.CHANNEL_METHOD_SET_BADGE_COUNT:
+                channelMethodSetBadgeCounter(call, result);
+                return;
+
+            case Definitions.CHANNEL_METHOD_RESET_BADGE:
+                channelMethodResetBadge(call, result);
                 return;
 
             case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATION:
@@ -491,6 +519,31 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
     }
 
+    private void channelMethodSetBadgeCounter(MethodCall call, Result result) {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> data = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
+        Integer count = (Integer) data.get(Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE);
+        String channelKey = (String) data.get(Definitions.NOTIFICATION_CHANNEL_KEY);
+
+        // Android resets badges automatically when all notifications are cleared
+        NotificationBuilder.setGlobalBadgeCounter(applicationContext, channelKey, count);
+        result.success(true);
+    }
+
+    private void channelMethodGetBadgeCounter(MethodCall call, Result result) {
+        String channelKey = call.arguments();
+        Integer badgeCount = NotificationBuilder.getGlobalBadgeCounter(applicationContext, channelKey);
+
+        // Android resets badges automatically when all notifications are cleared
+        result.success(badgeCount);
+    }
+
+    private void channelMethodResetBadge(MethodCall call, Result result) {
+        String channelKey = call.arguments();
+        NotificationBuilder.resetGlobalBadgeCounter(applicationContext, channelKey);
+        result.success(null);
+    }
+
     private void channelMethodCancelSchedule(MethodCall call, Result result) {
         try {
 
@@ -547,12 +600,38 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
     }
 
+    private void channelIsNotificationAllowed(MethodCall call, Result result){
+        result.success(isNotificationEnabled(applicationContext, null));
+    }
+
+    private void channelRequestNotification(MethodCall call, Result result){
+        final Intent intent = new Intent();
+
+        intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+
+        //for Android 5-7
+        intent.putExtra("app_package", applicationContext.getPackageName());
+        intent.putExtra("app_uid", applicationContext.getApplicationInfo().uid);
+
+        // for Android 8 and above
+        intent.putExtra("android.provider.extra.APP_PACKAGE", applicationContext.getPackageName());
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        applicationContext.startActivity(intent);
+    }
+
     private void channelMethodCreateNotification(MethodCall call, Result result, NotificationLifeCycle appLifeCycle) {
         try {
             Map<String, Object> pushData = call.arguments();
             PushNotification pushNotification = PushNotification.fromMap(pushData);
             if(pushNotification == null){
                 result.error("Invalid parameters", "null", "null");
+                return;
+            }
+
+            if(!isNotificationEnabled(applicationContext, pushNotification.content.channelKey)){
+                result.error("Notifications are disabled", "null", "null");
                 return;
             }
 
@@ -618,6 +697,27 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
         } catch (Exception e){
             result.error("Firebase service not available (check if you have google-services.json file)", e.getMessage(), e);
+        }
+    }
+
+
+    public static Boolean isNotificationEnabled(Context context, String channelKey){
+
+        NotificationManagerCompat manager = NotificationManagerCompat.from(context);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (!manager.areNotificationsEnabled()) {
+                return false;
+            }
+            if(!StringUtils.isNullOrEmpty(channelKey)){
+                NotificationChannel channel = manager.getNotificationChannel(channelKey);
+                if (channel.getImportance() == NotificationManager.IMPORTANCE_NONE) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return manager.areNotificationsEnabled();
         }
     }
 

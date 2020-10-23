@@ -149,9 +149,9 @@ SPEC CHECKSUMS:
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: b14b1c6b68e306650688599de8a45e49fae81151
   Protobuf: 3dac39b34a08151c6d949560efe3f86134a3f748
-  shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
-  url_launcher: 0067ddb8f10d36786672aa0722a21717dba3a298
+  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
-PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+PODFILE CHECKSUM: 4b0409299392a65d6ac2043087bc0fd4bdca1662
 
 COCOAPODS: 1.8.4

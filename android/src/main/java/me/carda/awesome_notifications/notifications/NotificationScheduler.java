@@ -174,20 +174,24 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
     protected void onPostExecute(Calendar nextValidDate) {
 
         // Only fire ActionReceived if notificationModel is valid
-        if(nextValidDate != null) {
+        if(pushNotification != null){
+            
+            if(nextValidDate != null) {
 
-            if(scheduled){
-                ScheduleManager.saveSchedule(context, pushNotification);
-                BroadcastSender.SendBroadcastNotificationCreated(
-                    context,
-                    new NotificationReceived(pushNotification.content)
-                );
-                Log.d(TAG, "Scheduled created");
+                if(scheduled){
+                    ScheduleManager.saveSchedule(context, pushNotification);
+                    BroadcastSender.SendBroadcastNotificationCreated(
+                            context,
+                            new NotificationReceived(pushNotification.content)
+                    );
+                    Log.d(TAG, "Scheduled created");
+                    return;
+                }
             }
-            else {
-                ScheduleManager.removeSchedule(context, pushNotification);
-                Log.d(TAG, "Scheduled removed");
-            }
+
+            ScheduleManager.removeSchedule(context, pushNotification);
+            _removeFromAlarm(context, pushNotification.content.id);
+            Log.d(TAG, "Scheduled removed");
         }
     }
 
