@@ -1,3 +1,5 @@
+## [0.0.4+1]
+* Simplifying the iOS setup process for the developer (it's still a bit complex)
 ## [0.0.4]
 * Fixed complex schedules for iOS apps running on Foreground
 * Included Global Badge indicators for iOS and some Android distributions

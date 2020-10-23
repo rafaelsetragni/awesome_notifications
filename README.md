@@ -47,6 +47,7 @@ All notifications could be created locally or via Firebase services, with all th
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-progress.jpg)
 
 *Working progress percentages of awesome notifications plugin*
+
 <br>
 
 ### Next steps
@@ -180,20 +181,16 @@ OBS: Is not necessary to include both extensions if you do not pretend to use ju
 2- Create a new target for Notification Service Extension with **File > New > Target** and select **Notification Service Extension**. Name the extension as **AwesomeServiceExtension**.
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/add-notification-service-extension.jpg)
 
-3- Edit your Podfile in XCode and replace the last `post_install do |installer|` branch by code bellow, at the bottom of the file:
-
+3- Edit your Podfile in XCode and insert the code bellow at the bottom of the file:
+<br>
 *This step will compile the framework awesome_notifications to be used on your target extensions*
+
+<br>
 
 ```
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
-    if target.name == 'AwesomeServiceExtension' || target.name == 'AwesomeContentExtension'
-      target.build_configurations.each do |config|
-        config.build_settings['ENABLE_BITCODE'] = 'NO'
-        config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'NO'
-      end
-    end
   end
 end
 
@@ -212,9 +209,15 @@ target 'AwesomeContentExtension' do
 end
 ```
 
-5- Go to the terminal, navigate to "/{path-to-your-project}/ios" folder and run `pod install` to compile the dependencies. 
+<br>
+
+5- Go to the terminal, navigate to "/{path-to-your-project}/ios" folder and run `pod install` to compile the dependencies.
+
+<br>
 
 6- Replace the file content in NotificationService.swift by the code bellow:
+
+<br>
 
 ```Swift
 import UserNotifications
@@ -241,6 +244,7 @@ class NotificationService: UNNotificationServiceExtension {
 
 }
 ```
+<br>
 
 7- Certifies to disable `Enable Bitcode` and `Require Only App-Extension-Safe API` setting it to `'NO'`
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/disable-bitcode.jpg)

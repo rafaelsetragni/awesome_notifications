@@ -132,7 +132,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher/ios"
 
 SPEC CHECKSUMS:
-  awesome_notifications: 2a2a13de7d804df4352e221f4f7be5fd04dc11f6
+  awesome_notifications: 263e7936224299a6cfad610c3fc73a9097043a44
   Firebase: 8db6f2d1b2c5e2984efba4949a145875a8f65fe5
   FirebaseAnalytics: 5dd088bd2e67bb9d13dbf792d1164ceaf3052193
   FirebaseCore: d889d9e12535b7f36ac8bfbf1713a0836a3012cd
@@ -152,6 +152,6 @@ SPEC CHECKSUMS:
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
-PODFILE CHECKSUM: 4b0409299392a65d6ac2043087bc0fd4bdca1662
+PODFILE CHECKSUM: 8dbfbccae3bc1cf0b920293aa3b9325d24e32ccc
 
 COCOAPODS: 1.8.4
