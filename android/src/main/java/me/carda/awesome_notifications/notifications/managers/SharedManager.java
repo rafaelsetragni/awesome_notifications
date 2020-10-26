@@ -2,7 +2,7 @@ package me.carda.awesome_notifications.notifications.managers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
+import io.flutter.Log;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;

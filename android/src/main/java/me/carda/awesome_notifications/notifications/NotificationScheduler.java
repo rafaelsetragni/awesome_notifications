@@ -5,7 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
+import io.flutter.Log;
 
 import java.util.Calendar;
 import java.util.List;

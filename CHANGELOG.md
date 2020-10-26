@@ -1,3 +1,7 @@
+## [0.0.4+2]
+* Clear log messages to decrease visual pollution.
+* Replaced the native Java Log package by the Flutter's one.
+* Fixed wrong "Invalid push notification content", wrongly showed when notification is successfully created.
 ## [0.0.4+1]
 * Simplifying the iOS setup process for the developer (it's still a bit complex)
 ## [0.0.4]

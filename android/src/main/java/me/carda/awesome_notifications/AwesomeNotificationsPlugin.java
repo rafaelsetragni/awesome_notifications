@@ -10,7 +10,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.media.session.MediaSessionCompat;
-import android.util.Log;
+import io.flutter.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -113,7 +113,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
     @Override
     public boolean onNewIntent(Intent intent){
-        Log.d(TAG, "onNewIntent called");
+        //Log.d(TAG, "onNewIntent called");
         return receiveNotificationAction(intent);
     }
 
@@ -206,7 +206,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
     public void onReceive(Context context, Intent intent) {
         getApplicationLifeCycle();
 
-        Log.d(TAG, "Broadcast received by flutter plugin");
+        //Log.d(TAG, "Broadcast received by flutter plugin");
         String action = intent.getAction();
 
         if(action == null) return;

@@ -1,7 +1,7 @@
 package me.carda.awesome_notifications.services.firebase;
 
 import android.content.Context;
-import android.util.Log;
+import io.flutter.Log;
 
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -88,6 +88,8 @@ public class FCMService extends FirebaseMessagingService {
                 NotificationSource.Firebase,
                 pushNotification
             );
+
+            return;
 
         } catch (Exception e) {
             e.printStackTrace();
