@@ -115,6 +115,7 @@ AwesomeNotifications().initialize(
 ```dart
 AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
   if (!isAllowed) {
+    // Insert here your friendly dialog box before call the request method
     AwesomeNotifications().requestPermissionToSendNotifications();
   }
 });
@@ -128,7 +129,7 @@ AwesomeNotifications().actionStream.listen(
     
         Navigator.of(context).pushName(context,
             '/NotificationPage',
-            arguments: { id: receivedNotification.id } // your page params. I recomend to you to pass all *receivedNotification* object
+            arguments: { id: receivedNotification.id } // your page params. I recommend to you to pass all *receivedNotification* object
         );
     
     }
@@ -176,7 +177,7 @@ OBS: Is not necessary to include both extensions if you do not pretend to use ju
 
 #### *Including Notification Service Extension to your project*
 
-1- Open your project directely on XCode, opening the file "/{path-to-your-project}/ios/Runner.xcworkspace"
+1- Open your project directly on XCode, opening the file "/{path-to-your-project}/ios/Runner.xcworkspace"
 
 2- Create a new target for Notification Service Extension with **File > New > Target** and select **Notification Service Extension**. Name the extension as **AwesomeServiceExtension**.
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/add-notification-service-extension.jpg)
@@ -290,6 +291,16 @@ Add the apply plugin to the [project]/android/app/build.gradle file.
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'
 ```
+
+```Dart
+dependencies {
+    classpath 'com.android.tools.build:gradle:3.5.0'
+    // Add the google services classpath
+    classpath 'com.google.gms:google-services:4.3.3'
+}
+```
+
+<br>
 
 ### *iOS*
 
@@ -430,7 +441,8 @@ OBS: `actionButtons` and `schedule` are **optional**
 ```json
 {
     "to" : "[YOUR APP TOKEN]",
-    "collapse_key" : "type_a",
+    "mutable_content" : true,
+    "content_available": true,
     "data" : {
         "content": {
             "id": 100,

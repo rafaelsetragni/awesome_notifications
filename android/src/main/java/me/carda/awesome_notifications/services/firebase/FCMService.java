@@ -1,6 +1,11 @@
 package me.carda.awesome_notifications.services.firebase;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
 import io.flutter.Log;
 
 import com.google.common.reflect.TypeToken;
@@ -13,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import me.carda.awesome_notifications.BroadcastSender;
 import me.carda.awesome_notifications.notifications.PushNotification;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationSource;
@@ -44,6 +48,45 @@ public class FCMService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String token) {
         BroadcastSender.SendBroadcastNewFcmToken(applicationContext, token);
+    }
+
+    @Override
+    public void onMessageSent(String s) {
+        super.onMessageSent(s);
+        Log.d(TAG, "onMessageSent: upstream message");
+    }
+
+    private void printIntentExtras(Intent intent){
+        Bundle bundle;
+        if ((bundle = intent.getExtras()) != null) {
+            for (String key : bundle.keySet()) {
+                System.out.println(key + " : " + (bundle.get(key) != null ? bundle.get(key) : "NULL"));
+            }
+        }
+    }
+
+    @Override
+    // Thank you Google, for that brilliant idea to treat notification message and notification data
+    // differently on Android, depending of what app life cycle is. Because of that, all the developers
+    // are doing "workarounds", using data to send push notifications, and that's not what you planned for.
+    // Let the developers decide what to do on their apps and always deliver the notification
+    // to "onMessageReceived" method. Its simple, is freedom and its what the creative ones need.
+    public void handleIntent(Intent intent){
+
+        //printIntentExtras(intent);
+
+        intent.removeExtra("gcm.notification.e");
+        intent.removeExtra("gcm.notification.title");
+        intent.removeExtra("gcm.notification.body");
+        intent.removeExtra("google.c.a.e");
+        intent.removeExtra("collapse_key");
+
+        intent.putExtra("gcm.notification.mutable_content", true);
+        intent.putExtra("gcm.notification.content_available", true);
+
+        //printIntentExtras(intent);
+
+        super.handleIntent(intent);
     }
 
     /**
@@ -89,13 +132,11 @@ public class FCMService extends FirebaseMessagingService {
                 pushNotification
             );
 
-            return;
-
         } catch (Exception e) {
+            Log.d(TAG, "Invalid push notification content");
             e.printStackTrace();
         }
 
-        Log.d(TAG, "Invalid push notification content");
     }
 
     private HashMap<String, Object> extractNotificationData(String reference, Map<String, String> remoteData) throws FCMParserException {
