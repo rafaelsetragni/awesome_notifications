@@ -54,4 +54,4 @@ flutter {
 }
 
 // UNCOMMENT THIS LINE TO ACTIVATE FIREBASE SERVICES
-apply plugin: 'com.google.gms.google-services'
+// apply plugin: 'com.google.gms.google-services'
