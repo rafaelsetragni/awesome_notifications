@@ -1,12 +1,12 @@
 {
 	"info": {
 		"_postman_id": "88f76358-35b6-4e06-8f17-42867cbd2644",
-		"name": "FIrebase FMC Example",
+		"name": "Firebase FMC Example",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Firebase Cloud Message Example",
+			"name": "Firebase Cloud Message Example - Awesome Notifications (Flutter)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -23,7 +23,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"to\" : \"[APP_TOKEN]\",\r\n    \"collapse_key\" : \"type_a\",\r\n    \"data\" : {\r\n        \"content\": {\r\n            \"id\": 100,\r\n            \"channelKey\": \"big_picture\",\r\n            \"title\": \"Huston!\\nThe eagle has landed!\",\r\n            \"body\": \"A small step for a man, but a giant leap to Flutter's community!\",\r\n            \"notificationLayout\": \"BigPicture\",\r\n            \"largeIcon\": \"https://avidabloga.files.wordpress.com/2012/08/emmemc3b3riadeneilarmstrong3.jpg\",\r\n            \"bigPicture\": \"https://www.dw.com/image/49519617_303.jpg\",\r\n            \"showWhen\": true,\r\n            \"autoCancel\": true,\r\n            \"privacy\": \"Private\",\r\n            \"payload\": {\r\n                \"secret\": \"Awesome Notifications Rocks!\"\r\n            }\r\n        }\r\n    }\r\n}",
+					"raw": "{\r\n    \"to\" : \"[APP_TOKEN]\",\r\n    \"mutable_content\" : true,\r\n    \"notification\": {\r\n        \"title\": \" \"\r\n    },\r\n    \"data\" : {\r\n        \"content\": {\r\n            \"id\": 100,\r\n            \"channelKey\": \"basic_channel\",\r\n            \"title\": \"Huston! The eagle has landed!\",\r\n            \"body\": \"A small step for a man, but a giant leap to Flutter's community!\",\r\n            \"notificationLayout\": \"BigPicture\",\r\n            \"largeIcon\": \"https://avidabloga.files.wordpress.com/2012/08/emmemc3b3riadeneilarmstrong3.jpg\",\r\n            \"bigPicture\": \"https://www.dw.com/image/49519617_303.jpg\",\r\n            \"showWhen\": true,\r\n            \"autoCancel\": true,\r\n            \"privacy\": \"Private\",\r\n            \"payload\": {\r\n                \"secret\": \"Awesome Notifications Rocks!\"\r\n            }\r\n        }\r\n    }\r\n}",
 					"options": {
 						"raw": {}
 					}

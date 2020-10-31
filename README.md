@@ -18,7 +18,7 @@
 - Notifications could be **scheduled** repeatedly using a list or precise dates or even **Cron rules**, such linux does, with seconds precision.
 <br>
 
-*Some **android** notification examples:*
+*Some **Android** notification examples:*
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-android-examples.jpg)
 <br>
 
@@ -41,7 +41,7 @@ All notifications could be created locally or via Firebase services, with all th
 
 <br>
 
-## ATENTION - PLUGIN UNDER CONSTRUCTION
+## ATTENTION - PLUGIN UNDER CONSTRUCTION
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-atention.jpg)
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-progress.jpg)
@@ -60,6 +60,7 @@ All notifications could be created locally or via Firebase services, with all th
 - Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
 - Video layout for notifications
 - Carousel layout for notifications
+- Add support for animated gif files in Big Picture layout for notifications
 - Increase the tolerance in the json deserialization process, to accept different types and convert them to the expected.
 <br>
 
@@ -97,6 +98,8 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 
 ```dart
 AwesomeNotifications().initialize(
+    // Set it to null to use your default app icon, in case you haven't
+    // already pasted your personalized icon into your project
     'resource://drawable/app_icon',
     [
         NotificationChannel(
@@ -427,10 +430,18 @@ Due to limitations on Notification body, you should use only the data field as b
 
 OBS: `actionButtons` and `schedule` are **optional**
 
+OBS 2: You **MUST** send `notification` field to push notifications work correctly on all platforms.
+Send the `title` empty (with a single space " ") and the `title` and `body` filled inside `data` field, as the example bellow, is more performative than do the traditional one. But both ways work, and the notification data has precedence over the data fields.
+
+OBS 3: `mutable_content` is necessary to activate all layouts in iOS devices.
+
 ```json
 {
     "to" : "[YOUR APP TOKEN]",
-    "collapse_key" : "type_a",
+    "mutable_content" : true,
+    "notification": {
+        "title": " "
+    },
     "data" : {
         "content": {
             "id": 100,
