@@ -711,7 +711,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             }
             if(!StringUtils.isNullOrEmpty(channelKey)){
                 NotificationChannel channel = manager.getNotificationChannel(channelKey);
-                if (channel.getImportance() == NotificationManager.IMPORTANCE_NONE) {
+                if (channel == null || channel.getImportance() == NotificationManager.IMPORTANCE_NONE) {
                     return false;
                 }
             }
