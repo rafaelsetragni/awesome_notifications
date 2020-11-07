@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:progressive_image/progressive_image.dart';
@@ -40,7 +41,14 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
   }
 
   @override
+  void deactivate() {
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
+    super.deactivate();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
 
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     ThemeData themeData = Theme.of(context);
@@ -51,12 +59,6 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
     if(largeIcon == bigPicture) largeIcon = null;
 
     double maxSize = max(mediaQueryData.size.width, mediaQueryData.size.height);
-
-    if(bigPicture != null){
-      SystemChrome.setSystemUIOverlayStyle(
-          SystemUiOverlayStyle(statusBarBrightness: Brightness.dark)
-      );
-    }
 
     return Scaffold(
         body: Stack(
@@ -226,7 +228,7 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
-            ),
+            )
           ],
         )
     );

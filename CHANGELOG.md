@@ -1,3 +1,7 @@
+## [0.0.4+4]
+* Improved error messages for notifications disabled in Android Devices
+## [0.0.4+3]
+* Fixing bug found at Android channel checking process (https://github.com/rafaelsetragni/awesome_notifications/issues/28)
 ## [0.0.4+2]
 * Cleared log messages to decrease visual pollution.
 * Replaced the native Java Log package by the Flutter's one.

@@ -20,6 +20,7 @@ import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+import java.nio.channels.Channel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -403,7 +404,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                 return;
 
             case Definitions.CHANNEL_METHOD_CREATE_NOTIFICATION:
-                channelMethodCreateNotification(call, result, appLifeCycle);
+                channelMethodCreateNotification(call, result);
                 return;
 
             case Definitions.CHANNEL_METHOD_LIST_ALL_SCHEDULES:
@@ -601,7 +602,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
     }
 
     private void channelIsNotificationAllowed(MethodCall call, Result result){
-        result.success(isNotificationEnabled(applicationContext, null));
+        result.success(isNotificationEnabled(applicationContext));
     }
 
     private void channelRequestNotification(MethodCall call, Result result){
@@ -621,18 +622,22 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         applicationContext.startActivity(intent);
     }
 
-    private void channelMethodCreateNotification(MethodCall call, Result result, NotificationLifeCycle appLifeCycle) {
+    private void channelMethodCreateNotification(MethodCall call, Result result) {
+
         try {
             Map<String, Object> pushData = call.arguments();
             PushNotification pushNotification = PushNotification.fromMap(pushData);
+
             if(pushNotification == null){
-                result.error("Invalid parameters", "null", "null");
-                return;
+                throw new PushNotificationException("Invalid parameters");
             }
 
-            if(!isNotificationEnabled(applicationContext, pushNotification.content.channelKey)){
-                result.error("Notifications are disabled", "null", "null");
-                return;
+            if(!isNotificationEnabled(applicationContext)){
+                throw new PushNotificationException("Notifications are disabled");
+            }
+
+            if(!isChannelEnabled(applicationContext, pushNotification.content.channelKey)){
+                throw new PushNotificationException("The notification channel '"+pushNotification.content.channelKey+"' do not exist or is disabled");
             }
 
             if(pushNotification.schedule == null){
@@ -664,7 +669,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         try {
             result.success(hasGooglePlayServices && FirebaseInstanceId.getInstance().getInstanceId() != null);
         } catch (Exception e) {
-            result.success(false);
+            result.error("FCM is not available", e.getMessage(), e);
         }
     }
 
@@ -686,7 +691,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                                 public void onComplete(@NonNull Task<InstanceIdResult> task) {
                                     if (!task.isSuccessful()) {
                                         Exception e = task.getException();
-                                        Log.w(TAG, "getFirebaseToken could not fetch instanceIDD: ", e);
+                                        Log.w(TAG, "getFirebaseToken could not fetch instanceID: ", e);
                                         result.error("getFirebaseToken could not fetch instanceID", e.getMessage(), e);
                                         return;
                                     }
@@ -700,25 +705,30 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
     }
 
+    public static Boolean isNotificationEnabled(Context context){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            NotificationManagerCompat manager = NotificationManagerCompat.from(context);
+            return manager != null && manager.areNotificationsEnabled();
+        }
+        return true;
+    }
 
-    public static Boolean isNotificationEnabled(Context context, String channelKey){
+    public static Boolean isChannelEnabled(Context context, String channelKey){
+
+        if(StringUtils.isNullOrEmpty(channelKey)){
+            return false;
+        }
 
         NotificationManagerCompat manager = NotificationManagerCompat.from(context);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!manager.areNotificationsEnabled()) {
-                return false;
-            }
-            if(!StringUtils.isNullOrEmpty(channelKey)){
-                NotificationChannel channel = manager.getNotificationChannel(channelKey);
-                if (channel == null || channel.getImportance() == NotificationManager.IMPORTANCE_NONE) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            return manager.areNotificationsEnabled();
+
+            NotificationChannel channel = manager.getNotificationChannel(channelKey);
+            return channel != null && channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
+
         }
+
+        return ChannelManager.getChannelByKey(context, channelKey) != null;
     }
 
     @SuppressWarnings("unchecked")
