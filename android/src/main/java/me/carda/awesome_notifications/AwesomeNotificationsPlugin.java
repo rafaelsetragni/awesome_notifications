@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -18,18 +17,13 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
-import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
-import java.nio.channels.Channel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.*;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -45,6 +39,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 import android.app.Activity;
 
+import me.carda.awesome_notifications.notifications.BitmapResourceDecoder;
 import me.carda.awesome_notifications.notifications.PushNotification;
 import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationLifeCycle;
@@ -67,7 +62,6 @@ import me.carda.awesome_notifications.notifications.models.returnedData.Notifica
 import me.carda.awesome_notifications.notifications.NotificationSender;
 import me.carda.awesome_notifications.notifications.NotificationScheduler;
 
-import me.carda.awesome_notifications.utils.BitmapUtils;
 import me.carda.awesome_notifications.utils.DateUtils;
 import me.carda.awesome_notifications.utils.JsonUtils;
 import me.carda.awesome_notifications.utils.ListUtils;
@@ -455,21 +449,13 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
         String bitmapReference = call.arguments();
 
-        Bitmap bitmap = BitmapUtils.getBitmapFromResource(applicationContext, bitmapReference);
+        BitmapResourceDecoder bitmapResourceDecoder = new BitmapResourceDecoder(
+            applicationContext,
+            result,
+            bitmapReference
+        );
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        bitmap.recycle();
-
-        result.success(byteArray);
-/*
-        int size = bitmap.getRowBytes() * bitmap.getHeight();
-        ByteBuffer byteBuffer = ByteBuffer.allocate(size);
-        bitmap.copyPixelsToBuffer(byteBuffer);
-        byte[] byteArray = byteBuffer.array();
-
-        result.success(byteArray);*/
+        bitmapResourceDecoder.execute();
     }
 
     private void channelMethodListAllSchedules(MethodCall call, Result result) {
