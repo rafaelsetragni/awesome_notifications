@@ -10,19 +10,20 @@ import Foundation
 public class DisplayedManager {
     
     static let shared:SharedManager = SharedManager(tag: Definitions.SHARED_DISPLAYED)
-    static let pendingShared:SharedManager = SharedManager(tag: "PendingDisplayed")
+    static let pendingShared:SharedManager = SharedManager(tag: Definitions.SHARED_SCHEDULED_DISPLAYED)
     
-    static var pendingDisplay:[String:String] = pendingShared.get(referenceKey: "pending") as? [String:String] ?? [:]
+    static var pendingSchedulesDisplayed:[String:[String:Any]] =
+        pendingShared.get(referenceKey: Definitions.SHARED_SCHEDULED_DISPLAYED_REFERENCE) as? [String:[String:Any]] ?? [:]
     
     public static func removeDisplayed(id:Int) -> Bool {
-        let referenceKey = String(id)
-        for (epoch, scheduledId) in pendingDisplay {
-            if (scheduledId == referenceKey) {
-                pendingDisplay.removeValue(forKey: epoch)
-            }
-        }
-        updatePendingList()
-        return shared.remove(referenceKey: referenceKey)
+        return shared.remove(referenceKey: String(id))
+    }
+    
+    public static func saveDisplayed(received:NotificationReceived) {
+        let referenceKey = String(received.id!)
+        let dataMap = received.toMap()
+        
+        shared.set(dataMap, referenceKey:referenceKey)
     }
 
     public static func listDisplayed() -> [NotificationReceived] {
@@ -37,49 +38,78 @@ public class DisplayedManager {
         return returnedList
     }
     
-    public static func listPendingDisplayed(referenceDate:Date) -> [NotificationReceived] {
-        var returnedList:[NotificationReceived] = []
-        let referenceEpoch = referenceDate.timeIntervalSince1970.description
-        
-        for (epoch, id) in pendingDisplay {
-            if epoch <= referenceEpoch {
-                let notification = getDisplayedByKey(id: Int(id)!)
-                if notification != nil{
-                    returnedList.append(notification!)
-                }
-            }
+    public static func getDisplayedByKey(id:Int) -> NotificationReceived? {
+        guard let data:[String:Any?] = shared.get(referenceKey: String(id)) else {
+          return nil
         }
-        
-        return returnedList
-    }
-
-    public static func saveDisplayed(received:NotificationReceived) {
-        let referenceKey = String(received.id!)
-        let epoch:String = ( received.displayedDate?.toDate() ?? Date() ).secondsSince1970.description
-        
-        pendingDisplay[epoch] = referenceKey
-        shared.set(received.toMap(), referenceKey:referenceKey)
-        updatePendingList()
+        return NotificationReceived(nil).fromMap(arguments: data) as? NotificationReceived
     }
     
     public static func updatePendingList(){
-        pendingShared.set(pendingDisplay, referenceKey:"pending")
+        pendingShared.set(pendingSchedulesDisplayed, referenceKey: Definitions.SHARED_SCHEDULED_DISPLAYED_REFERENCE)
     }
-
-    public static func getDisplayedByKey(id:Int) -> NotificationReceived? {
-        return NotificationReceived(nil).fromMap(arguments: shared.get(referenceKey: String(id))) as? NotificationReceived
+    
+    public static func saveScheduledToDisplay(received:NotificationReceived) {
+        let referenceKey = String(received.id!)
+        let epoch:String = ( received.displayedDate?.toDate() ?? Date() ).secondsSince1970.description
+        let dataMap = received.toMap()
+        
+        if(pendingSchedulesDisplayed[epoch] == nil){
+            pendingSchedulesDisplayed[epoch] = [:]
+        }
+        
+        pendingSchedulesDisplayed[epoch]![referenceKey] = dataMap
+        updatePendingList()
+    }
+    
+    public static func removeScheduledToDisplay(id:Int) -> Bool {
+        let referenceKey:String = String(id)
+        var removed = false
+        
+        for (epoch, alreadyDisplayed) in pendingSchedulesDisplayed {
+            var listToRemove:[String] = []
+            
+            for (pendingReferenceKey, _) in alreadyDisplayed {
+                if pendingReferenceKey == referenceKey {
+                    listToRemove.append(pendingReferenceKey)
+                }
+            }
+            
+            for (pendingReferenceKey) in listToRemove {
+                removed = true
+                pendingSchedulesDisplayed[epoch]?.removeValue(forKey: pendingReferenceKey)
+            }
+        }
+        
+        return removed
+    }
+    
+    public static func reloadLostSchedulesDisplayed(referenceDate:Date){
+        let referenceEpoch = referenceDate.timeIntervalSince1970.description
+    
+        for (epoch, alreadyDisplayed) in pendingSchedulesDisplayed {
+            if epoch <= referenceEpoch {
+                for (referenceKey, dataMap) in alreadyDisplayed {
+                    if let dataMap = dataMap as? [String:Any] {
+                        shared.set(dataMap, referenceKey:referenceKey)
+                    }
+                }
+                pendingSchedulesDisplayed.removeValue(forKey: epoch)
+            }
+        }
+        
+        updatePendingList()
     }
 
     public static func cancelAllDisplayed() {
-        let receivedList = shared.getAllObjects();
-        
-        for received:[String:Any?] in receivedList {
-            cancelDisplayed(id: received["id"] as! Int);
-        }
+        shared.removeAll()
+        pendingSchedulesDisplayed.removeAll()
+        updatePendingList()
     }
 
     public static func cancelDisplayed(id:Int) {
-        _ = shared.remove(referenceKey: String(id))
+        _ = removeDisplayed(id: id)
+        _ = removeScheduledToDisplay(id: id)
     }
     
 }

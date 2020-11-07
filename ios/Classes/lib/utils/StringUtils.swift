@@ -10,7 +10,7 @@ import Foundation
 public class StringUtils {
 
     public static func isNullOrEmpty(_ value:String?) -> Bool {
-        return value?.isEmpty ?? true
+        return value?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true
     }
     
     public static func random(length: Int) -> String {

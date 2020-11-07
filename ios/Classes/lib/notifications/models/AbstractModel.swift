@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol AbstractModel {
-
+    
     func fromMap(arguments: [String : Any?]?) -> AbstractModel?
     func toMap() -> [String : Any?]
 

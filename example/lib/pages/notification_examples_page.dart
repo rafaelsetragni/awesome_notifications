@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:awesome_notifications_example/common_widgets/led_light.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
@@ -337,6 +338,8 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
 
     mediaQuery = MediaQuery.of(context);
     ThemeData themeData = Theme.of(context);

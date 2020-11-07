@@ -1,8 +1,8 @@
 enum ActionButtonType : String, CaseIterable {
     
-    case Default
-    case InputField
-    case DisabledAction
-    case KeepOnTop
+    case Default = "Default"
+    case InputField = "InputField"
+    case DisabledAction = "DisabledAction"
+    case KeepOnTop = "KeepOnTop"
     
 }

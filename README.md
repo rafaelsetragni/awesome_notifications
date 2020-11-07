@@ -179,9 +179,14 @@ OBS: Is not necessary to include both extensions if you do not pretend to use ju
 
 #### *Including Notification Service Extension to your project*
 
+<br>
+
 1- Open your project directely on XCode, opening the file "/{path-to-your-project}/ios/Runner.xcworkspace"
 
 2- Create a new target for Notification Service Extension with **File > New > Target** and select **Notification Service Extension**. Name the extension as **AwesomeServiceExtension**.
+
+<br>
+
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/add-notification-service-extension.jpg)
 
 3- Edit your Podfile in XCode and insert the code bellow at the bottom of the file:
@@ -191,11 +196,6 @@ OBS: Is not necessary to include both extensions if you do not pretend to use ju
 <br>
 
 ```
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    flutter_additional_ios_build_settings(target)
-  end
-end
 
 target 'AwesomeServiceExtension' do
   use_frameworks!

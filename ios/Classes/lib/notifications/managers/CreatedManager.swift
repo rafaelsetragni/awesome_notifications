@@ -28,19 +28,18 @@ public class CreatedManager {
     }
 
     public static func saveCreated(received:NotificationReceived) {
-        shared.set(received.toMap(), referenceKey: String(describing: received.id))
+        shared.set(received.toMap(), referenceKey: String(received.id!))
     }
 
     public static func getCreatedByKey(id:Int) -> NotificationReceived? {
-        return NotificationReceived(nil).fromMap(arguments: shared.get(referenceKey: String(id))) as? NotificationReceived
+        guard let data:[String:Any?] = shared.get(referenceKey: String(id)) else {
+          return nil
+        }
+        return NotificationReceived(nil).fromMap(arguments: data) as? NotificationReceived
     }
 
     public static func cancelAllCreated() {
-        let receivedList = shared.getAllObjects();
-        
-        for received:[String:Any?] in receivedList {
-            cancelCreated(id: received["id"] as! Int);
-        }
+        shared.removeAll()
     }
 
     public static func cancelCreated(id:Int) {

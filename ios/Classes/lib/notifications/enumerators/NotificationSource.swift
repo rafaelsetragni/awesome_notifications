@@ -1,7 +1,7 @@
 enum NotificationSource : String, CaseIterable {
     
-    case Local
-    case Schedule
-    case Firebase
-    case OneSignal
+    case Local = "Local"
+    case Schedule = "Schedule"
+    case Firebase = "Firebase"
+    case OneSignal = "OneSignal"
 }

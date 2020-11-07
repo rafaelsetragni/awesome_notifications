@@ -13,31 +13,23 @@ public class JsonUtils {
         
         if data == nil { return nil }
         
-        do {
-            let jsonData = try! JSONSerialization.data(withJSONObject: data!, options: [])
-            let jsonString = String(data: jsonData, encoding: String.Encoding.utf8)
-            
-            if StringUtils.isNullOrEmpty(jsonString) { return nil }
-            return jsonString
-        }
-        catch {
-            Log.d("JsonUtils", error.localizedDescription)            
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: data!, options: []) else {
             return nil
         }
+        
+        let jsonString = String(data: jsonData, encoding: String.Encoding.utf8)
+        
+        if StringUtils.isNullOrEmpty(jsonString) { return nil }
+        return jsonString
     }
     
     public static func fromJson(_ text:String? ) -> [String:Any?]? {
                 
         if StringUtils.isNullOrEmpty(text) { return nil }
-        
-        do {
-            if let data = text!.data(using: String.Encoding.utf8) {
-                let decodedData:[String:Any?]? = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                return decodedData
-            }
-        }
-        catch {
-            Log.d("JsonUtils", error.localizedDescription)
+            
+        if let data = text!.data(using: String.Encoding.utf8) {
+            let decodedData:[String:Any?]? = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            return decodedData
         }
         
         return nil

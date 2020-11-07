@@ -105,31 +105,32 @@ public class BitmapUtils : MediaUtils {
 
         if(StringUtils.isNullOrEmpty(mediaPath)){ return nil }
         
-        do {
+        //do {
             
             let key = SwiftAwesomeNotificationsPlugin.registrar?.lookupKey(forAsset: mediaPath!)
             let topPath = Bundle.main.path(forResource: key, ofType: nil)!
             let image: UIImage = UIImage(contentsOfFile: topPath)!
             
             return image
-            
+           /*
         } catch let error {
             print("error \(error)")            
             return nil
-        }
+        }*/
     }
     
     public static func getBitmapFromResource(_ mediaPath:String) -> UIImage? {
         var mediaPath:String? = BitmapUtils.cleanMediaPath(mediaPath)
         
-        do {
+        //do {
             if mediaPath!.replaceRegex("^.*\\/([^\\/]+)$", replaceWith: "$1") {
                 return UIImage(named: mediaPath!)
             }
+        /*
         } catch let error {
             print("error \(error)")
         }
-
+        */
 
         return nil
     }

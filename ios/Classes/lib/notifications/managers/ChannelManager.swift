@@ -32,7 +32,10 @@ public class ChannelManager {
     }
     
     public static func getChannelByKey( channelKey:String ) -> NotificationChannelModel? {
-        return NotificationChannelModel().fromMap(arguments: shared.get(referenceKey: channelKey)) as? NotificationChannelModel
+        guard let data:[String:Any?] = shared.get(referenceKey: channelKey) else {
+          return nil
+        }
+        return NotificationChannelModel().fromMap(arguments: data) as? NotificationChannelModel
     }
     
     public static func isNotificationChannelActive( channelKey:String ) -> Bool {

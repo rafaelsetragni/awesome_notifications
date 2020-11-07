@@ -85,7 +85,10 @@ public class ScheduleManager {
     }
     
     public static func getScheduleByKey( id:Int ) -> PushNotification? {
-        return PushNotification().fromMap(arguments: shared.get(referenceKey: String(id))) as? PushNotification
+        guard let data:[String:Any?] = shared.get(referenceKey: String(id)) else {
+          return nil
+        }
+        return PushNotification().fromMap(arguments: data) as? PushNotification
     }
     
     public static func isNotificationScheduleActive( channelKey:String ) -> Bool {
@@ -93,11 +96,8 @@ public class ScheduleManager {
     }
     
     public static func cancelAllSchedules() {
-        let scheduledList = shared.getAllObjects();
-        
-        for scheduled:[String:Any?] in scheduledList {
-            cancelScheduled(id: scheduled["id"] as! Int);
-        }
+        shared.removeAll()
+        pendingShared.removeAll()
     }
 
     public static func cancelScheduled(id:Int) {
