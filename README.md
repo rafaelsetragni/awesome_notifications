@@ -56,7 +56,7 @@ All notifications could be created locally or via Firebase services, with all th
 - Finish notifications layouts for iOS (In construction)
 - Finish notifications schedules for iOS (In construction)
 - Expiration date for notifications (not done yet due to iOS limitations) (https://github.com/rafaelsetragni/awesome_notifications/issues/7)
-- Add a option to choose if a notification action should bring the app to foreground or not.
+- Add an option to choose if a notification action should bring the app to foreground or not.
 - Include Web support
 - Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
 - Video layout for notifications
