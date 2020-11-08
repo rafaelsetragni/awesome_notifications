@@ -22,6 +22,7 @@ public class JsonUtils {
 
     @NonNull
     private static Gson buildGson() {
+        return new Gson();/*
         RuntimeTypeAdapterFactory<Model> notificationModelAdapter =
                 RuntimeTypeAdapterFactory
                         .of(Model.class)
@@ -33,7 +34,7 @@ public class JsonUtils {
                         .registerSubtype(ActionReceived.class, "AReceived");
 
         GsonBuilder builder = new GsonBuilder().registerTypeAdapterFactory(notificationModelAdapter);
-        return builder.create();
+        return builder.create();*/
     }
 
     public static <T> List<T> fromJsonList(Type type, String jsonData){

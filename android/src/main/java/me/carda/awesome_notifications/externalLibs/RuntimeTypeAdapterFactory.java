@@ -195,7 +195,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
      *     have already been registered on this type adapter.
      */
     public RuntimeTypeAdapterFactory<T> registerSubtype(Class<? extends T> type) {
-        return registerSubtype(type, type.getSimpleName());
+        return registerSubtype(type, type.getName());
     }
 
     public <R> TypeAdapter<R> create(Gson gson, TypeToken<R> type) {
