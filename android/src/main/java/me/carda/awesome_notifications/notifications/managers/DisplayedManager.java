@@ -7,12 +7,13 @@ import com.google.common.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
 
 public class DisplayedManager {
 
-    private static SharedManager<NotificationReceived> shared = new SharedManager<>();
+    private static SharedManager<NotificationReceived> shared = new SharedManager<>("DisplayedManager", DisplayedManager.class);
     private static Type typeToken = new TypeToken<NotificationReceived>(){}.getType();
 
     public static Boolean removeDisplayed(Context context, Integer id) {
@@ -43,5 +44,9 @@ public class DisplayedManager {
         NotificationReceived received = getDisplayedByKey(context, id);
         if(received != null)
             removeDisplayed(context, received.id);
+    }
+
+    public static void commitChanges(Context context){
+        shared.commit(context);
     }
 }

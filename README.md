@@ -52,8 +52,9 @@ All notifications could be created locally or via Firebase services, with all th
 
 ### Next steps
 
-- Include Firebase support for iOS (In construction)
-- Finish notifications features for iOS (In construction)
+- Include Firebase Cloud Message support for iOS (Finished)
+- Finish notifications layouts for iOS (In construction)
+- Finish notifications schedules for iOS (In construction)
 - Expiration date for notifications (not done yet due to iOS limitations) (https://github.com/rafaelsetragni/awesome_notifications/issues/7)
 - Add a option to choose if a notification action should bring the app to foreground or not.
 - Include Web support

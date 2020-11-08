@@ -184,14 +184,18 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                             context,
                             new NotificationReceived(pushNotification.content)
                     );
+
                     Log.d(TAG, "Scheduled created");
+                    ScheduleManager.commitChanges(context);
                     return;
                 }
             }
 
             ScheduleManager.removeSchedule(context, pushNotification);
             _removeFromAlarm(context, pushNotification.content.id);
+
             Log.d(TAG, "Scheduled removed");
+            ScheduleManager.commitChanges(context);
         }
     }
 
@@ -244,11 +248,13 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
         if(context != null){
             _removeFromAlarm(context, id);
             ScheduleManager.cancelSchedule(context, id);
+            ScheduleManager.commitChanges(context);
         }
     }
 
     public static boolean cancelAllNotifications(Context context) {
         ScheduleManager.cancelAllSchedules(context);
+        ScheduleManager.commitChanges(context);
         return true;
     }
 

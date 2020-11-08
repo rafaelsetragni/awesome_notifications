@@ -76,7 +76,8 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
     public static NotificationLifeCycle appLifeCycle = NotificationLifeCycle.AppKilled;
 
-    private static final String TAG = "PushNotificationsPlugin";
+    private static final String TAG = "AwesomeNotificationsPlugin";
+    private static Boolean firebaseEnabled = false;
 
     private Activity initialActivity;
     private MethodChannel pluginChannel;
@@ -143,6 +144,8 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
     private void initializeFlutterPlugin(Context context, MethodChannel channel) {
 
+        Log.d(TAG, "Awesome Notifications initialized for Android "+Build.VERSION.SDK_INT);
+
         this.applicationContext = context;
         pluginChannel = channel;
 
@@ -165,7 +168,23 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
         getApplicationLifeCycle();
 
+        enableFirebase(context);
+    }
+
+    private void enableFirebase(Context context){
+
+        Integer resourceId = context.getResources().getIdentifier("google_api_key", "string", context.getPackageName());
+
+        if(resourceId == 0){
+            Log.d(TAG, "Firebase file not found.");
+            firebaseEnabled = false;
+            return;
+        }
+
+        Log.d(TAG, "Enabling firebase for resource id "+resourceId.toString()+"...");
         FirebaseApp.initializeApp(context);
+        firebaseEnabled = true;
+        Log.d(TAG, "Firebase enabled");
     }
 
     @Override
@@ -252,6 +271,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             received.validate(applicationContext);
 
             CreatedManager.removeCreated(applicationContext, received.id);
+            CreatedManager.commitChanges(applicationContext);
 
             pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED, content);
 
@@ -284,6 +304,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             received.validate(applicationContext);
 
             DisplayedManager.removeDisplayed(applicationContext, received.id);
+            DisplayedManager.commitChanges(applicationContext);
 
             pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISPLAYED, content);
 
@@ -305,6 +326,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             received.validate(applicationContext);
 
             DismissedManager.removeDismissed(applicationContext, received.id);
+            DisplayedManager.commitChanges(applicationContext);
 
             pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED, content);
 
@@ -323,6 +345,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                     created.validate(applicationContext);
                     pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED, created.toMap());
                     CreatedManager.removeCreated(context, created.id);
+                    CreatedManager.commitChanges(context);
 
                 } catch (PushNotificationException e) {
                     e.printStackTrace();
@@ -341,6 +364,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                     displayed.validate(applicationContext);
                     pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISPLAYED, displayed.toMap());
                     DisplayedManager.removeDisplayed(context, displayed.id);
+                    DisplayedManager.commitChanges(context);
 
                 } catch (PushNotificationException e) {
                     e.printStackTrace();
@@ -359,6 +383,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                     received.validate(applicationContext);
                     pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED, received.toMap());
                     DismissedManager.removeDismissed(context, received.id);
+                    DismissedManager.commitChanges(context);
 
                 } catch (PushNotificationException e) {
                     e.printStackTrace();
@@ -484,6 +509,9 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             } else {
                 ChannelManager.saveChannel(applicationContext, channelModel);
                 result.success(true);
+
+                ChannelManager.commitChanges(applicationContext);
+
                 return;
             }
         } catch (Exception e){
@@ -504,6 +532,8 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             Boolean removed = ChannelManager.removeChannel(applicationContext, channelKey);
             result.success(removed);
         }
+
+        ChannelManager.commitChanges(applicationContext);
     }
 
     private void channelMethodSetBadgeCounter(MethodCall call, Result result) {
@@ -653,9 +683,10 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
     private void channelMethodIsFcmAvailable(MethodCall call, Result result) {
         try {
-            result.success(hasGooglePlayServices && FirebaseInstanceId.getInstance().getInstanceId() != null);
+            result.success(hasGooglePlayServices && firebaseEnabled && FirebaseInstanceId.getInstance().getInstanceId() != null);
         } catch (Exception e) {
-            result.error("FCM is not available", e.getMessage(), e);
+            Log.w(TAG, "FCM could not enabled for this project.", e);
+            result.success(false );
         }
     }
 
@@ -668,6 +699,10 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
         try {
 
+            if(!firebaseEnabled){
+                throw new PushNotificationException("Firebase is not enabled for this project");
+            }
+
             FirebaseInstanceId
                     .getInstance()
                     .getInstanceId()
@@ -675,6 +710,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                             new OnCompleteListener<InstanceIdResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<InstanceIdResult> task) {
+
                                     if (!task.isSuccessful()) {
                                         Exception e = task.getException();
                                         Log.w(TAG, "getFirebaseToken could not fetch instanceID: ", e);
@@ -705,10 +741,9 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             return false;
         }
 
-        NotificationManagerCompat manager = NotificationManagerCompat.from(context);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
+            NotificationManagerCompat manager = NotificationManagerCompat.from(context);
             NotificationChannel channel = manager.getNotificationChannel(channelKey);
             return channel != null && channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
 
@@ -724,6 +759,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         try {
 
             Map<String, Object> platformParameters = call.arguments();
+
             String defaultIconPath = (String) platformParameters.get(Definitions.DEFAULT_ICON);
             channelsData = (List<Object>) platformParameters.get(Definitions.INITIALIZE_CHANNELS);
 
@@ -737,7 +773,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             result.success(true);
 
         } catch (Exception e){
-            result.error("getFirebaseToken could not fetch instanceID", e.getMessage(), e);
+            result.error("channelMethodInitialize could not create channels", e.getMessage(), e);
             e.printStackTrace();
         }
     }
@@ -745,6 +781,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
     private boolean setDefaultConfigurations(Context context, String defaultIcon, List<Object> channelsData) throws PushNotificationException {
 
         setDefaultIcon(context, defaultIcon);
+
         setChannels(context, channelsData);
 
         recoverNotificationCreated(context);
@@ -777,14 +814,18 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         for(NotificationChannelModel channelModel : channels){
             ChannelManager.saveChannel(context, channelModel);
         }
+
+        ChannelManager.commitChanges(context);
     }
 
     private void setDefaultIcon(Context context, String defaultIcon) {
+
         if (MediaUtils.getMediaSourceType(defaultIcon) != MediaSource.Resource) {
             defaultIcon = null;
         }
 
         DefaultsManager.saveDefault(context, "defaultIcon", defaultIcon);
+        DefaultsManager.commitChanges(context);
     }
 
     public static NotificationLifeCycle getApplicationLifeCycle(){

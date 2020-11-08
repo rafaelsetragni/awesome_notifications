@@ -23,6 +23,7 @@ import me.carda.awesome_notifications.notifications.enumeratos.NotificationSourc
 import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
 import me.carda.awesome_notifications.notifications.managers.CreatedManager;
 import me.carda.awesome_notifications.notifications.managers.DisplayedManager;
+import me.carda.awesome_notifications.notifications.managers.ScheduleManager;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
 import me.carda.awesome_notifications.utils.DateUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
@@ -163,6 +164,8 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                     context,
                     receivedNotification
                 );
+
+                CreatedManager.commitChanges(context);
             }
 
             if(displayed){
@@ -171,6 +174,8 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                     context,
                     receivedNotification
                 );
+
+                DisplayedManager.commitChanges(context);
             }
         }
     }
@@ -227,6 +232,9 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
             CreatedManager.cancelCreated(context, id);
             DisplayedManager.cancelDisplayed(context, id);
+
+            CreatedManager.commitChanges(context);
+            DisplayedManager.commitChanges(context);
         }
     }
 
@@ -243,6 +251,9 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
         CreatedManager.cancelAllCreated(context);
         DisplayedManager.cancelAllDisplayed(context);
+
+        CreatedManager.commitChanges(context);
+        DisplayedManager.commitChanges(context);
 
         return true;
     }

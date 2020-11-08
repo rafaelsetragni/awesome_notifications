@@ -7,13 +7,14 @@ import com.google.common.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.NotificationScheduler;
 import me.carda.awesome_notifications.notifications.PushNotification;
 
 public class ScheduleManager {
 
-    private static SharedManager<PushNotification> shared = new SharedManager<>();
+    private static SharedManager<PushNotification> shared = new SharedManager<>("ScheduleManager", ScheduleManager.class);
     private static Type typeToken = new TypeToken<PushNotification>(){}.getType();
 
     public static Boolean removeSchedule(Context context, PushNotification received) {
@@ -45,5 +46,9 @@ public class ScheduleManager {
         PushNotification schedule = shared.get(context, typeToken, Definitions.SHARED_SCHEDULED_NOTIFICATIONS, id.toString());
         if(schedule != null)
             removeSchedule(context, schedule);
+    }
+
+    public static void commitChanges(Context context){
+        shared.commit(context);
     }
 }

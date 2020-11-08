@@ -25,12 +25,12 @@ public class JsonUtils {
         RuntimeTypeAdapterFactory<Model> notificationModelAdapter =
                 RuntimeTypeAdapterFactory
                         .of(Model.class)
-                        .registerSubtype(NotificationButtonModel.class)
-                        .registerSubtype(NotificationChannelModel.class)
-                        .registerSubtype(NotificationContentModel.class)
-                        .registerSubtype(NotificationScheduleModel.class)
-                        .registerSubtype(NotificationReceived.class)
-                        .registerSubtype(ActionReceived.class);
+                        .registerSubtype(NotificationButtonModel.class, "Button")
+                        .registerSubtype(NotificationChannelModel.class, "Channel")
+                        .registerSubtype(NotificationContentModel.class, "Content")
+                        .registerSubtype(NotificationScheduleModel.class, "Schedule")
+                        .registerSubtype(NotificationReceived.class, "NReceived")
+                        .registerSubtype(ActionReceived.class, "AReceived");
 
         GsonBuilder builder = new GsonBuilder().registerTypeAdapterFactory(notificationModelAdapter);
         return builder.create();

@@ -178,6 +178,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
         if (type == null || label == null) {
             throw new NullPointerException();
         }
+        //System.out.println(type.toString()+" - "+label);
         if (subtypeToLabel.containsKey(type) || labelToSubtype.containsKey(label)) {
             throw new IllegalArgumentException("types and labels must be unique");
         }

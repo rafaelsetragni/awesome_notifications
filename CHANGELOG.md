@@ -1,3 +1,11 @@
+
+## [0.0.5]
+* Improved the resource bitmap decoder to work outside of main thread (Android)
+* Finished FCM push messages for iOS 10 or higher
+* Decreased the implementation complexity of NotificationServiceExtension and NotificationContentExtension targets (iOS)
+* Added two app examples on documentation with tutorials
+* Documentation on README file updated
+
 ## [0.0.4+4]
 * Improved error messages for notifications disabled in Android Devices
 ## [0.0.4+3]
