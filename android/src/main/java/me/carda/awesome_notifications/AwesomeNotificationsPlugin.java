@@ -40,7 +40,8 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import android.app.Activity;
 
 import me.carda.awesome_notifications.notifications.BitmapResourceDecoder;
-import me.carda.awesome_notifications.notifications.PushNotification;
+import me.carda.awesome_notifications.notifications.models.DefaultsModel;
+import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationSource;
@@ -267,7 +268,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             Map<String, Object> content = (serializable instanceof Map ? (Map<String, Object>)serializable : null);
             if(content == null) return;
 
-            NotificationReceived received = NotificationReceived.fromMap(content);
+            NotificationReceived received = new NotificationReceived().fromMap(content);
             received.validate(applicationContext);
 
             CreatedManager.removeCreated(applicationContext, received.id);
@@ -300,7 +301,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             Map<String, Object> content = (serializable instanceof Map ? (Map<String, Object>)serializable : null);
             if(content == null) return;
 
-            NotificationReceived received = NotificationReceived.fromMap(content);
+            NotificationReceived received = new NotificationReceived().fromMap(content);
             received.validate(applicationContext);
 
             DisplayedManager.removeDisplayed(applicationContext, received.id);
@@ -322,7 +323,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             Map<String, Object> content = (serializable instanceof Map ? (Map<String, Object>)serializable : null);
             if(content == null) return;
 
-            ActionReceived received = (ActionReceived) ActionReceived.fromMap(content);
+            ActionReceived received = new ActionReceived().fromMap(content);
             received.validate(applicationContext);
 
             DismissedManager.removeDismissed(applicationContext, received.id);
@@ -502,7 +503,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
             @SuppressWarnings("unchecked")
             Map<String, Object> channelData = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
-            NotificationChannelModel channelModel = NotificationChannelModel.fromMap(channelData);
+            NotificationChannelModel channelModel = new NotificationChannelModel().fromMap(channelData);
 
             if(channelModel == null){
                 result.error("Invalid channel", "Channel is invalid", "null");
@@ -642,7 +643,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
         try {
             Map<String, Object> pushData = call.arguments();
-            PushNotification pushNotification = PushNotification.fromMap(pushData);
+            PushNotification pushNotification = new PushNotification().fromMap(pushData);
 
             if(pushNotification == null){
                 throw new PushNotificationException("Invalid parameters");
@@ -801,7 +802,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             if(channelDataObject instanceof Map<?,?>){
                 @SuppressWarnings("unchecked")
                 Map<String, Object> channelData = (Map<String, Object>) channelDataObject;
-                NotificationChannelModel channelModel = NotificationChannelModel.fromMap(channelData);
+                NotificationChannelModel channelModel = new NotificationChannelModel().fromMap(channelData);
 
                 if(channelModel != null){
                     channels.add(channelModel);
@@ -824,7 +825,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             defaultIcon = null;
         }
 
-        DefaultsManager.saveDefault(context, "defaultIcon", defaultIcon);
+        DefaultsManager.saveDefault(context, new DefaultsModel(defaultIcon));
         DefaultsManager.commitChanges(context);
     }
 

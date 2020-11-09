@@ -19,6 +19,7 @@ import me.carda.awesome_notifications.notifications.enumeratos.NotificationLifeC
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationSource;
 import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
 import me.carda.awesome_notifications.notifications.managers.ScheduleManager;
+import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
 import me.carda.awesome_notifications.utils.BooleanUtils;
 import me.carda.awesome_notifications.utils.CronUtils;

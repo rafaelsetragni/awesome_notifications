@@ -138,6 +138,7 @@ public interface Definitions {
     String NOTIFICATION_COLOR = "color";
     String NOTIFICATION_BACKGROUND_COLOR = "backgroundColor";
     String NOTIFICATION_DEFAULT_COLOR = "defaultColor";
+    String NOTIFICATION_APP_ICON = "defaultIcon";
     String NOTIFICATION_LARGE_ICON = "largeIcon";
     String NOTIFICATION_BIG_PICTURE = "bigPicture";
     String NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND = "hideLargeIconOnExpand";

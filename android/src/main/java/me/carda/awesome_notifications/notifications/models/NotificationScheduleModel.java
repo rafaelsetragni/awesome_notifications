@@ -21,13 +21,11 @@ public class NotificationScheduleModel extends Model {
     public Boolean allowWhileIdle;
     public List<String> preciseSchedules;
 
-    public static NotificationScheduleModel fromMap(Map<String, Object> arguments) {
-        return (NotificationScheduleModel) new NotificationScheduleModel().fromMapImplementation(arguments);
-    }
+    public NotificationScheduleModel(){}
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Model fromMapImplementation(Map<String, Object> arguments) {
+    public NotificationScheduleModel fromMap(Map<String, Object> arguments) {
 
         initialDateTime = getValueOrDefault(arguments, Definitions.NOTIFICATION_INITIAL_DATE_TIME, String.class);
         crontabSchedule = getValueOrDefault(arguments, Definitions.NOTIFICATION_CRONTAB_SCHEDULE, String.class);
@@ -56,6 +54,16 @@ public class NotificationScheduleModel extends Model {
         returnedObject.put(Definitions.NOTIFICATION_PRECISE_SCHEDULES, preciseSchedules);
 
         return returnedObject;
+    }
+
+    @Override
+    public String toJson() {
+        return templateToJson();
+    }
+
+    @Override
+    public NotificationScheduleModel fromJson(String json){
+        return (NotificationScheduleModel) super.templateFromJson(json);
     }
 
     @Override

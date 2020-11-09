@@ -9,32 +9,25 @@ import io.flutter.Log;
 import java.security.*;
 import java.math.*;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-
 import me.carda.awesome_notifications.Definitions;
-import me.carda.awesome_notifications.notifications.PushNotification;
 import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
-import me.carda.awesome_notifications.utils.JsonUtils;
+import me.carda.awesome_notifications.notifications.models.Model;
+import me.carda.awesome_notifications.utils.StringUtils;
 
-public class SharedManager<T> {
-    private T t;
+public class SharedManager<T extends Model> {
+    private Class<T> clazz;
 
     private static String TAG = "SharedManager";
-    private String reference = "default";
+    private String reference;
     private String hashedReference = "default";
 
-    public SharedManager(String fileIdentifier, Class targetClass){
-
-        reference = Definitions.SHARED_MANAGER +"."+ fileIdentifier +"."+ targetClass.getName();
+    public SharedManager(String fileIdentifier, Class<T> targetClass){
+        clazz = targetClass;
+        reference = Definitions.SHARED_MANAGER +"."+ fileIdentifier +"."+ clazz.getName();
         try {
 
             MessageDigest m = MessageDigest.getInstance("MD5");
@@ -70,14 +63,6 @@ public class SharedManager<T> {
         return tag+'_'+referenceKey;
     }
 
-    private T parseJson(
-        Type typeToken,
-        String json
-    ){
-       //return JsonUtils.fromJson(new TypeToken<T>(getClass()){}.getType(), json);
-       return JsonUtils.fromJson(typeToken, json);
-    }
-
     public void commit(Context context){
         try {
 
@@ -93,7 +78,7 @@ public class SharedManager<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<T> getAllObjects(Context context, Type typeToken, String tag){
+    public List<T> getAllObjects(Context context, String tag){
         List<T> returnedList = new ArrayList<>();
         try {
             SharedPreferences shared = getSharedInstance(context);
@@ -106,7 +91,8 @@ public class SharedManager<T> {
                     Object value = entry.getValue();
 
                     if(key.startsWith(tag) && value instanceof String){
-                        returnedList.add(parseJson(typeToken, (String) value));
+                        T object = clazz.newInstance();
+                        returnedList.add((T) object.fromJson((String) value));
                     }
                 }
             }
@@ -118,7 +104,8 @@ public class SharedManager<T> {
         return returnedList;
     }
 
-    public T get(Context context, Type typeToken, String tag, String referenceKey){
+    @SuppressWarnings("unchecked")
+    public T get(Context context, String tag, String referenceKey){
 
         try {
             SharedPreferences shared = getSharedInstance(context);
@@ -127,8 +114,13 @@ public class SharedManager<T> {
             String json = shared.getString(sharedKey, null);
 
             T returnedObject = null;
-            if (json != null) {
-                returnedObject = parseJson(typeToken, json);
+            if (!StringUtils.isNullOrEmpty(json)) {
+                T genericModel = clazz.newInstance();
+
+                Model parsedModel = genericModel.fromJson(json);
+                if(parsedModel != null){
+                    returnedObject = (T) parsedModel;
+                }
             }
 
             return returnedObject;
@@ -136,6 +128,8 @@ public class SharedManager<T> {
         } catch (PushNotificationException e) {
             e.printStackTrace();
             Log.e(TAG, e.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return null;
@@ -149,7 +143,7 @@ public class SharedManager<T> {
 
             String sharedKey = generateSharedKey(tag, referenceKey);
 
-            String json = JsonUtils.toJson(data);
+            String json = data.toJson();
 
             SharedPreferences.Editor editor = shared.edit();
 

@@ -19,12 +19,10 @@ public class NotificationButtonModel extends Model {
     public Boolean autoCancel;
     public ActionButtonType buttonType;
 
-    public static NotificationButtonModel fromMap(Map<String, Object> arguments){
-        return (NotificationButtonModel) new NotificationButtonModel().fromMapImplementation(arguments);
-    }
+    public NotificationButtonModel(){}
 
     @Override
-    protected Model fromMapImplementation(Map<String, Object> arguments) {
+    public NotificationButtonModel fromMap(Map<String, Object> arguments) {
 
         key        = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_KEY, String.class);
         icon       = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_ICON, String.class);
@@ -48,12 +46,22 @@ public class NotificationButtonModel extends Model {
         returnedObject.put(Definitions.NOTIFICATION_BUTTON_LABEL, label);
 
         returnedObject.put(Definitions.NOTIFICATION_BUTTON_TYPE,
-                this.buttonType != null ? this.buttonType.toString() : "Default");
+                this.buttonType != null ? this.buttonType.toString() : ActionButtonType.Default.toString());
 
         returnedObject.put(Definitions.NOTIFICATION_ENABLED, enabled);
         returnedObject.put(Definitions.NOTIFICATION_AUTO_CANCEL, autoCancel);
 
         return returnedObject;
+    }
+
+    @Override
+    public String toJson() {
+        return templateToJson();
+    }
+
+    @Override
+    public NotificationButtonModel fromJson(String json){
+        return (NotificationButtonModel) super.templateFromJson(json);
     }
 
     @Override
