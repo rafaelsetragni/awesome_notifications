@@ -1,12 +1,12 @@
 enum NotificationLayout : String, CaseIterable {
     
-  case Default
-  case BigPicture
-  case BigText
-  case Inbox
-  case ProgressBar
-  case Messaging
-  case MediaPlayer
+  case Default = "Default"
+  case BigPicture = "BigPicture"
+  case BigText = "BigText"
+  case Inbox = "Inbox"
+  case ProgressBar = "ProgressBar"
+  case Messaging = "Messaging"
+  case MediaPlayer = "MediaPlayer"
   
 }
 

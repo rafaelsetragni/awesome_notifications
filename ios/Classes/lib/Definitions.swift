@@ -10,6 +10,9 @@ enum Definitions {
     static let  MEDIA_VALID_RESOURCE = "^resource:\\/\\/"
 
     static let  INITIALIZE_CHANNELS = "initializeChannels"
+    
+    static let  USER_DEFAULT_TAG = "group.AwesomeNotifications." + Bundle.main.getBundleName()
+    static let  DEFAULT_CATEGORY_IDENTIFIER = "DEFAULT"
 
     static let  IOS_BACKGROUND_SCHEDULER = "awesome_notifications.scheduler"
     static let  BROADCAST_CREATED_NOTIFICATION = "broadcast.awesome_notifications.CREATED_NOTIFICATION"
@@ -27,6 +30,8 @@ enum Definitions {
     static let  SHARED_CREATED = "created"
     static let  SHARED_DISPLAYED = "displayed"
     static let  SHARED_SCHEDULED_NOTIFICATIONS = "schedules"
+    static let  SHARED_SCHEDULED_DISPLAYED = "scheduledDisplayed"
+    static let  SHARED_SCHEDULED_DISPLAYED_REFERENCE = "pendingList"
 
     static let  CHANNEL_FLUTTER_PLUGIN = "awesome_notifications"
 

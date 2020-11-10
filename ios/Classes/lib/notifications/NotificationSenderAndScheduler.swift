@@ -18,7 +18,7 @@ class NotificationSenderAndScheduler {
     private var content:            UNMutableNotificationContent?
 
     private var created:    Bool = false
-    private var scheduled:  Bool = false
+    private var scheduled:  Date?
     
     private var completion: ((Bool, UNMutableNotificationContent?, Error?) -> ())?
     
@@ -52,7 +52,7 @@ class NotificationSenderAndScheduler {
             
             do{
                 if (allowed){
-                    self.appLifeCycle = SwiftAwesomeNotificationsPlugin.getApplicationLifeCycle()
+                    self.appLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
 
                     try pushNotification!.validate()
 
@@ -73,58 +73,61 @@ class NotificationSenderAndScheduler {
     }
 
     private func execute(){
-        DispatchQueue.global(qos: .background).async {
+        //DispatchQueue.global(qos: .background).async {
             
             let notificationReceived:NotificationReceived? = self.doInBackground()
 
-            DispatchQueue.main.async {
+            //DispatchQueue.main.async {
                 self.onPostExecute(receivedNotification: notificationReceived)
-            }
-        }
+            //}
+        //}
     }
     
     /// AsyncTask METHODS BEGIN *********************************
 
     private func doInBackground() -> NotificationReceived? {
         
+        let now = DateUtils.getUTCDate()
+        
         do {
 
-            if (pushNotification != nil){
+            //if (pushNotification != nil){
 
                 var receivedNotification: NotificationReceived? = nil
 
                 if(pushNotification!.content!.createdDate == nil){
                     pushNotification!.content!.createdSource = self.createdSource
-                    pushNotification!.content!.createdDate = DateUtils.getUTCDate()
-                    created = true
-                }
-
-                if(pushNotification!.content!.createdLifeCycle == nil){
+                    pushNotification!.content!.createdDate = now
                     pushNotification!.content!.createdLifeCycle = self.appLifeCycle
+                    created = true
                 }
 
                 if (
                     !StringUtils.isNullOrEmpty(pushNotification!.content!.title) ||
                     !StringUtils.isNullOrEmpty(pushNotification!.content!.body)
                 ){
-
-                    if(pushNotification!.content!.displayedLifeCycle == nil){
-                        pushNotification!.content!.displayedLifeCycle = appLifeCycle
-                    }
-
-                    pushNotification!.content!.displayedDate = DateUtils.getUTCDate()
-
-                    pushNotification = showNotification(pushNotification!)
+                    pushNotification = showNotification(pushNotification!, now: now)
 
                     // Only save DisplayedMethods if pushNotification was created and displayed successfully
                     if(pushNotification != nil){
-
-                        scheduled = pushNotification?.schedule != nil
+                        
+                        let displayedDate = pushNotification!.content!.displayedDate!.toDate()!
+                        
+                        if displayedDate.toString() == pushNotification!.content!.createdDate! {
+                            pushNotification!.content!.displayedLifeCycle = pushNotification!.content!.createdLifeCycle
+                        }
+                        else if displayedDate <= Date() {
+                            pushNotification!.content!.displayedLifeCycle = self.appLifeCycle
+                        }
+                        else {
+                            scheduled = displayedDate
+                            pushNotification!.content!.displayedLifeCycle = NotificationLifeCycle.AppKilled
+                        }
                         
                         receivedNotification = NotificationReceived(pushNotification!.content)
 
                         receivedNotification!.displayedLifeCycle = receivedNotification!.displayedLifeCycle == nil ?
-                            appLifeCycle : receivedNotification!.displayedLifeCycle
+                            self.appLifeCycle : receivedNotification!.displayedLifeCycle
                     }
 
                 } else {
@@ -133,27 +136,33 @@ class NotificationSenderAndScheduler {
 
                 return receivedNotification;
             }
-
+/*
         } catch {
             completion?(false, nil, error)
         }
 
         pushNotification = nil
-        return nil
+        return nil*/
     }
 
     private func onPostExecute(receivedNotification:NotificationReceived?) {
 
         // Only broadcast if pushNotification is valid
         if(receivedNotification != nil){
-            
-            completion!(true, content, nil)
 
             if(created){
                 SwiftAwesomeNotificationsPlugin.createEvent(notificationReceived: receivedNotification!)
+                //CreatedManager.saveCreated(received: receivedNotification!)
             }
             
-            DisplayedManager.saveDisplayed(received: receivedNotification!)
+            if scheduled == nil {
+                DisplayedManager.saveDisplayed(received: receivedNotification!)
+            }
+            else {
+                DisplayedManager.saveScheduledToDisplay(received: receivedNotification!)
+            }
+            
+            completion!(true, content, nil)
         }
         else {
             completion?(false, nil, nil)
@@ -162,11 +171,11 @@ class NotificationSenderAndScheduler {
 
     /// AsyncTask METHODS END *********************************
 
-    public func showNotification(_ pushNotification:PushNotification) -> PushNotification? {
+    public func showNotification(_ pushNotification:PushNotification, now:String) -> PushNotification? {
 
         do {
             
-            return try NotificationBuilder.createNotification(pushNotification, content: content)
+            return try NotificationBuilder.createNotification(pushNotification, content: content, now: now)
 
         } catch {
             

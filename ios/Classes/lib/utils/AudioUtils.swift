@@ -68,12 +68,12 @@ public class AudioUtils : MediaUtils {
             
             if !StringUtils.isNullOrEmpty(SoundUri) {
 
-                do {
+                //do {
                     return UNNotificationSound.default
                     
-                } catch let error {
-                    print("error \(error)")
-                }
+                //} catch let error {
+                //    print("error \(error)")
+                //}
             }
 
             return nil
@@ -84,18 +84,18 @@ public class AudioUtils : MediaUtils {
             
             if(StringUtils.isNullOrEmpty(mediaPath)){ return nil }
             
-            do {
+            //do {
                 
                 if FileManager.default.fileExists(atPath: mediaPath!) {
                     return UNNotificationSound(named: UNNotificationSoundName(rawValue: mediaPath!))
                 }
                 
                 return UNNotificationSound.default
-                
+             /*
             } catch let error {
                 print("error \(error)")
                 return nil
-            }
+            }*/
         }
         
         private static func getSoundFromAsset(_ mediaPath:String) -> UNNotificationSound? {
@@ -103,23 +103,23 @@ public class AudioUtils : MediaUtils {
 
             if(StringUtils.isNullOrEmpty(mediaPath)){ return nil }
             
-            do {
+            //do {
                 
                 let key = SwiftAwesomeNotificationsPlugin.registrar?.lookupKey(forAsset: mediaPath!)
                 let topPath = Bundle.main.path(forResource: key, ofType: nil)!
                 
                 return getSoundFromFile(topPath)
-                
+               /*
             } catch let error {
                 print("error \(error)")
                 return nil
-            }
+            }*/
         }
         
         private static func getSoundFromResource(_ mediaPath:String) -> UNNotificationSound? {
             var mediaPath:String? = AudioUtils.cleanMediaPath(mediaPath)
             
-            do {
+            //do {
                 if mediaPath!.replaceRegex("^.*\\/([^\\/]+)$", replaceWith: "$1") {
                     var topPath:String? = Bundle.main.url(forResource: mediaPath!, withExtension: "aiff")?.absoluteString
                     
@@ -129,11 +129,11 @@ public class AudioUtils : MediaUtils {
                     return UNNotificationSound.default
                 }
                 return nil
-                
+              /*
             } catch let error {
                 print("error \(error)")
                 return nil
-            }
+            }*/
         }
         
         public static func isValidSound(_ mediaPath:String?) -> Bool {

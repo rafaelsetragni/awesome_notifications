@@ -1,9 +1,9 @@
 public enum MediaSource : String, CaseIterable {
     
-    case Resource
-    case Asset
-    case File
-    case Network
-    case Unknown
+    case Resource = "Resource"
+    case Asset = "Asset"
+    case File = "File"
+    case Network = "Network"
+    case Unknown = "Unknown"
     
 }

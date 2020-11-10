@@ -1,10 +1,10 @@
 enum NotificationImportance : String, CaseIterable {
       
-    case None
-    case Min
-    case Low
-    case Default
-    case High
-    case Max
+    case None = "None"
+    case Min = "Min"
+    case Low = "Low"
+    case Default = "Default"
+    case High = "High"
+    case Max = "Max"
     
 }

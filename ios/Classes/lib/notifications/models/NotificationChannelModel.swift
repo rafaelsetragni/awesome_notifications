@@ -73,7 +73,7 @@ public class NotificationChannelModel : AbstractModel {
         if(channelDescription != nil) {mapData["channelDescription"] = self.channelDescription}
         if(channelShowBadge != nil) {mapData["channelShowBadge"] = self.channelShowBadge}
         
-        if(importance != nil) {mapData["importance"] = self.importance}
+        if(importance != nil) {mapData["importance"] = self.importance?.rawValue}
         
         if(playSound != nil) {mapData["playSound"] = self.playSound}
         if(soundSource != nil) {mapData["soundSource"] = self.soundSource}
@@ -91,7 +91,7 @@ public class NotificationChannelModel : AbstractModel {
         if(locked != nil) {mapData["locked"] = self.locked}
         if(onlyAlertOnce != nil) {mapData["onlyAlertOnce"] = self.onlyAlertOnce}
         
-        if(groupAlertBehavior != nil) {mapData["groupAlertBehavior"] = self.groupAlertBehavior}
+        if(groupAlertBehavior != nil) {mapData["groupAlertBehavior"] = self.groupAlertBehavior?.rawValue}
         
         return mapData
     }

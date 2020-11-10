@@ -1,6 +1,6 @@
 public enum NotificationLifeCycle : String, CaseIterable {
     
-    case Foreground
-    case Background
-    case AppKilled
+    case Foreground = "Foreground"
+    case Background = "Background"
+    case AppKilled = "AppKilled"
 }

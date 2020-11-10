@@ -543,16 +543,17 @@ Future<void> showNotificationWithNoSound(int id) async {
 ************************************************ */
 
 Future<void> showBigPictureNetworkNotification(int id) async {
+
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
-          id: id,
-          channelKey: "big_picture",
+          id: 11,
+          channelKey: 'big_picture',
           title: 'Big picture (Network)',
           body: '$lorenIpsumText\n\n$lorenIpsumText\n\n$lorenIpsumText',
-          bigPicture:
-              'https://images.freeimages.com/images/large-previews/d32/space-halo-2-1626962.jpg',
-          notificationLayout: NotificationLayout.BigPicture,
-          payload: {'uuid': 'uuid-test'}));
+          bigPicture: 'https://media.wired.com/photos/598e35994ab8482c0d6946e0/master/w_2560%2Cc_limit/phonepicutres-TA.jpg',
+          notificationLayout: NotificationLayout.BigPicture
+      )
+  );
 }
 
 Future<void> showBigPictureAssetNotification(int id) async {

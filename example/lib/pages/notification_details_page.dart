@@ -198,6 +198,24 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                 )
               ],
             ),
+            Theme.of(context).platform == TargetPlatform.android ?
+            SizedBox() :
+            Positioned(
+                top: 0,
+                left: 0,
+                child: Container(
+                  width: mediaQueryData.size.width,
+                  height: mediaQueryData.padding.top + 10,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.black54,Colors.black38, Colors.black12, Colors.transparent],
+                          stops: [0.2, 0.45, 0.75, 0.9]
+                      )
+                  ),
+                )
+            ),
             Positioned(
               top: mediaQueryData.padding.top + 10,
               left: 10,

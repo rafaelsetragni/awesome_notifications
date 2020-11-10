@@ -30,6 +30,9 @@ public class NotificationReceived : NotificationContentModel {
         self.progress = contentModel!.progress
         self.ticker = contentModel!.ticker
         self.locked = contentModel!.locked
+        
+        self.displayOnForeground = contentModel!.displayOnForeground
+        self.displayOnBackground = contentModel!.displayOnBackground
 
         self.notificationLayout = contentModel!.notificationLayout
 

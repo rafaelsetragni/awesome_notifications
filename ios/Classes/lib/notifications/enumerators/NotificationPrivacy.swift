@@ -1,6 +1,6 @@
 enum NotificationPrivacy : String, CaseIterable {
     
-    case Public
-    case Secret
-    case Private
+    case Public = "Public"
+    case Secret = "Secret"
+    case Private = "Private"
 }
