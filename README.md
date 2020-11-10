@@ -85,7 +85,7 @@ This way, your Application will receive **all notifications at Flutter level cod
 1. Add *awesome_notifications* as a dependency in your pubspec.yaml file.
 
 ```yaml
-  awesome_notifications: any
+awesome_notifications: any # Any attribute updates automatically your source to the last version
 ```
 
 2. import the plugin package to your dart code
@@ -203,13 +203,13 @@ OBS: Is not necessary to include both extensions if you pretend to use just one 
 <br>
 
 #### *Including Notification Service Extension to your project*
-
+<br>
 1- Open your project directly on XCode, opening the file "/{path-to-your-project}/ios/Runner.xcworkspace"
 
-2- Create a new target for Notification Service Extension with **File > New > Target** and select **Notification Service Extension**. Name the extension as **AwesomeServiceExtension**.
+2- Create a new target for Notification Service Extension with **File > New > Target** and select **Notification Service Extension**. Name the extension as **AwesomeServiceExtension**.<br>
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/add-notification-service-extension.jpg)
 
-3- Create a new target for Notification Content Extension with **File > New > Target** and select **Notification Content Extension**. Name the extension as **AwesomeContentExtension**.
+3- Create a new target for Notification Content Extension with **File > New > Target** and select **Notification Content Extension**. Name the extension as **AwesomeContentExtension**.<br>
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/add-notification-content-extension.jpg)
 
 4- Edit your Podfile in XCode and insert the code bellow at the bottom of the file:
@@ -246,7 +246,7 @@ end
 
 <br>
 
-```Swift
+```swift
 import awesome_notifications
 
 @available(iOS 10.0, *)
@@ -260,7 +260,7 @@ class NotificationService: AwesomeServiceExtension {
 
 <br>
 
-```Swift
+```swift
 import awesome_notifications
 
 @available(iOS 10.0, *)
@@ -274,12 +274,12 @@ class NotificationViewController: AwesomeContentExtension {
 
 <br>
 
-8- For ***Runner***, ***AwesomeServiceExtension*** and ***AwesomeContentExtension*** Targets, go to **Signing & Capabilities > App Groups** and add the group group.AwesomeNotifications.**your.bundle.domain.appname**
+8- For ***Runner***, ***AwesomeServiceExtension*** and ***AwesomeContentExtension*** Targets, go to **Signing & Capabilities > App Groups** and add the group group.AwesomeNotifications.**your.bundle.domain.appname**<br>
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/xcode-signing-and-capabilities.jpg)
 
 <br>
 
-9- Go to **Runner > Build Settings** and certifies to disable `Enable Bitcode` and `Require Only App-Extension-Safe API`, setting it to `'NO'` in both extensions.
+9- Go to **Runner > Build Settings** and certifies to disable `Enable Bitcode` and `Require Only App-Extension-Safe API`, setting it to `'NO'` in both extensions.<br>
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/disable-bitcode.jpg)
 
 <br>
@@ -371,8 +371,8 @@ The Flutter code will be called as soon as possible using [Dart Streams](https:/
 
 <br>
 
-|                             | App in Foreground | App in Background | App Terminated (Killed) |
-| --------------------------: | ----------------- | ----------------- | -------------- |
+| Platform    | App in Foreground | App in Background | App Terminated (Killed) |
+| ----------: | ----------------- | ----------------- | ----------------------- |
 | **Android** | Fires all streams immediately after occurs | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes on Foreground, but fires `actionStream` immediately after occurs |
 | **iOS**     | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the app returns to Foreground, but fires `actionStream` immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes on Foreground, but fires `actionStream` immediately after occurs |
 
@@ -465,7 +465,9 @@ To send a notification using Awesome Notifications and FCM Services, you need to
 Due to limitations on Android and iOS, you should send a empty **notification** field and use only the **data** field to send your data, as bellow:
 
 OBS: `actionButtons` and `schedule` are **optional**
+<br>
 OBS 2: you should not implement any native code to use FCM with Awesome Notifications. All of then was already implemented inside the plugin.
+<br>
 
 ```json
 {
