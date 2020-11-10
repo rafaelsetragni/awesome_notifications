@@ -1,3 +1,21 @@
+
+## [0.0.5]
+* Finished FCM push messages for iOS 10 or higher
+* Decreased the implementation complexity to use NotificationServiceExtension and NotificationContentExtension targets (iOS)
+* Added two app examples on documentation as tutorials
+* Improved the native resource decoder to work outside of main thread (Android)
+* Included protect mode to native resources against obfuscation (Android)
+* Improved object storage to work correctly with minification
+* Documentation on README file updated
+
+## [0.0.4+4]
+* Improved error messages for notifications disabled in Android Devices
+## [0.0.4+3]
+* Fixing bug found at Android channel checking process (https://github.com/rafaelsetragni/awesome_notifications/issues/28)
+## [0.0.4+2]
+* Cleared log messages to decrease visual pollution.
+* Replaced the native Java Log package by the Flutter's one.
+* Fixed wrong "Invalid push notification content", wrongly showed when notification is successfully created.
 ## [0.0.4+1]
 * Simplifying the iOS setup process for the developer (it's still a bit complex)
 ## [0.0.4]

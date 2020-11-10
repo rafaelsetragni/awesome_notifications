@@ -1,64 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="debug" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/example/ios/AwesomeContentExtension/AwesomeContentExtension.entitlements" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/AwesomeServiceExtension/AwesomeServiceExtension.entitlements" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Classes/lib/extensions/BundleExtension.swift" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/LifeCycleManager.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/AwesomeContentExtension/Base.lproj/MainInterface.storyboard" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/AwesomeContentExtension/Base.lproj/MainInterface.storyboard" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/AwesomeContentExtension/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/AwesomeContentExtension/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/AwesomeContentExtension/NotificationViewController.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/AwesomeContentExtension/NotificationViewController.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/AwesomeServiceExtension/NotificationService.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/AwesomeServiceExtension/NotificationService.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Flutter/.last_build_id" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Flutter/.last_build_id" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner/AppDelegate.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner/AppDelegate.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner/Runner.entitlements" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner/Runner.entitlements" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/pages/notification_details_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/notification_details_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/pages/notification_examples_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/notification_examples_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/Definitions.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/Definitions.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/Services/AwesomeContentExtension.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/Services/AwesomeContentExtension.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/Services/AwesomeServiceExtension.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/Services/AwesomeServiceExtension.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationBuilder.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationBuilder.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationSenderAndScheduler.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationSenderAndScheduler.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/ActionButtonType.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/ActionButtonType.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/GroupAlertBehaviour.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/GroupAlertBehaviour.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/MediaSource.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/MediaSource.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/NotificationImportance.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/NotificationImportance.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/NotificationLayout.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/NotificationLayout.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/NotificationLifeCycle.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/NotificationLifeCycle.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/NotificationPrivacy.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/NotificationPrivacy.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/NotificationSource.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/enumerators/NotificationSource.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/ChannelManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/ChannelManager.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/CreatedManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/CreatedManager.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/DisplayedManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/DisplayedManager.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/ScheduleManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/ScheduleManager.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/SharedManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/SharedManager.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/AbstractModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/AbstractModel.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationChannelModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationChannelModel.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/ReturnedObjects/NotificationReceived.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/ReturnedObjects/NotificationReceived.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/utils/AudioUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/utils/AudioUtils.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/utils/BitmapUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/utils/BitmapUtils.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/utils/JsonUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/utils/JsonUtils.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/utils/StringUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/utils/StringUtils.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[0029216329]" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -79,22 +40,23 @@
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/src/utils" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../issues_tests/28-flutter-test" />
     <property name="settings.editor.selected.configurable" value="flutter.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\plugins\awesome_notifications\example\assets\readme" />
-      <recent name="E:\plugins\awesome_notifications\lib\src\helpers" />
-      <recent name="E:\plugins\awesome_notifications\lib\src\extensions" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\plugins\awesome_notifications\lib\src\utils" />
       <recent name="E:\plugins\awesome_notifications\example\assets\readme" />
       <recent name="E:\plugins\awesome_notifications\example\android\app" />
       <recent name="E:\plugins\awesome_notifications\example\android\app\src\main\res" />
       <recent name="E:\plugins\awesome_notifications\example\android\app\src\main\res\drawable" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\plugins\awesome_notifications\example\android\app" />
+      <recent name="E:\plugins\awesome_notifications\example\assets\readme" />
+      <recent name="E:\plugins\awesome_notifications\lib\src\helpers" />
+      <recent name="E:\plugins\awesome_notifications\lib\src\extensions" />
     </key>
   </component>
   <component name="SvnConfiguration">
@@ -116,6 +78,10 @@
     </ignored-roots>
   </component>
   <component name="WindowStateProjectService">
+    <state x="1165" y="383" key="#Notifications" timestamp="1604885952862">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1165" y="383" key="#Notifications/451.-900.1600.860/0.0.2560.1040/2560.0.1920.1080@0.0.2560.1040" timestamp="1604885952862" />
     <state x="734" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602951314216">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -124,34 +90,64 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="960" y="256" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1603399097328" />
-    <state x="828" y="285" key="AndroidProcessChooserDialog" timestamp="1603401656658">
+    <state x="1035" y="223" key="#xdebugger.evaluate" timestamp="1604814520442">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1035" y="223" key="#xdebugger.evaluate/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1604814520442" />
+    <state x="828" y="285" key="AndroidProcessChooserDialog" timestamp="1604813342847">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="828" y="285" key="AndroidProcessChooserDialog/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1603401656658" />
-    <state width="1878" height="274" key="GridCell.Tab.0.bottom" timestamp="1604700098660">
-      <screen x="0" y="23" width="1920" height="945" />
+    <state x="828" y="285" key="AndroidProcessChooserDialog/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1604813342847" />
+    <state width="506" height="466" key="DebuggerActiveHint" timestamp="1604813318641">
+      <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="243" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1603405135496" />
+    <state width="506" height="466" key="DebuggerActiveHint/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1604813318641" />
+    <state x="1060" y="275" key="FileChooserDialogImpl" timestamp="1604495903103">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1060" y="275" key="FileChooserDialogImpl/0.0.2560.1040/451.-900.1600.900/2560.0.1920.1080@0.0.2560.1040" timestamp="1604495903103" />
+    <state x="1060" y="275" key="FileChooserDialogImpl/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1603724352160" />
+    <state width="2517" height="227" key="GridCell.Tab.0.bottom" timestamp="1604979745397">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2500" height="226" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900/2560.0.1920.1080@0.0.2560.1040" timestamp="1604746069539" />
+    <state width="2517" height="227" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1604979745397" />
     <state width="1801" height="312" key="GridCell.Tab.0.bottom/0.23.1852.945@0.23.1852.945" timestamp="1601933837865" />
-    <state width="1878" height="274" key="GridCell.Tab.0.bottom/0.23.1920.945@0.23.1920.945" timestamp="1604700098660" />
-    <state width="1878" height="274" key="GridCell.Tab.0.center" timestamp="1604700098659">
-      <screen x="0" y="23" width="1920" height="945" />
+    <state width="1878" height="274" key="GridCell.Tab.0.bottom/0.23.1920.945@0.23.1920.945" timestamp="1603384375504" />
+    <state width="2517" height="227" key="GridCell.Tab.0.bottom/451.-900.1600.860/0.0.2560.1040/2560.0.1920.1080@0.0.2560.1040" timestamp="1604887602662" />
+    <state width="2517" height="227" key="GridCell.Tab.0.bottom/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1604814933214" />
+    <state width="2517" height="242" key="GridCell.Tab.0.bottom/451.-900.1600.860/2560.0.1920.1080/0.0.2560.1040@0.0.2560.1040" timestamp="1604762314962" />
+    <state width="2517" height="227" key="GridCell.Tab.0.center" timestamp="1604979745397">
+      <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="243" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1603405135495" />
+    <state width="2500" height="226" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900/2560.0.1920.1080@0.0.2560.1040" timestamp="1604746069539" />
+    <state width="2517" height="227" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1604979745397" />
     <state width="1801" height="312" key="GridCell.Tab.0.center/0.23.1852.945@0.23.1852.945" timestamp="1601933837864" />
-    <state width="1878" height="274" key="GridCell.Tab.0.center/0.23.1920.945@0.23.1920.945" timestamp="1604700098659" />
-    <state width="1878" height="274" key="GridCell.Tab.0.left" timestamp="1604700098658">
-      <screen x="0" y="23" width="1920" height="945" />
+    <state width="1878" height="274" key="GridCell.Tab.0.center/0.23.1920.945@0.23.1920.945" timestamp="1603384375503" />
+    <state width="2517" height="227" key="GridCell.Tab.0.center/451.-900.1600.860/0.0.2560.1040/2560.0.1920.1080@0.0.2560.1040" timestamp="1604887602661" />
+    <state width="2517" height="227" key="GridCell.Tab.0.center/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1604814933214" />
+    <state width="2517" height="242" key="GridCell.Tab.0.center/451.-900.1600.860/2560.0.1920.1080/0.0.2560.1040@0.0.2560.1040" timestamp="1604762314962" />
+    <state width="2517" height="227" key="GridCell.Tab.0.left" timestamp="1604979745396">
+      <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="243" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1603405135495" />
+    <state width="2500" height="226" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900/2560.0.1920.1080@0.0.2560.1040" timestamp="1604746069539" />
+    <state width="2517" height="227" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1604979745396" />
     <state width="1801" height="312" key="GridCell.Tab.0.left/0.23.1852.945@0.23.1852.945" timestamp="1601933837863" />
-    <state width="1878" height="274" key="GridCell.Tab.0.left/0.23.1920.945@0.23.1920.945" timestamp="1604700098658" />
-    <state width="1878" height="274" key="GridCell.Tab.0.right" timestamp="1604700098660">
-      <screen x="0" y="23" width="1920" height="945" />
+    <state width="1878" height="274" key="GridCell.Tab.0.left/0.23.1920.945@0.23.1920.945" timestamp="1603384375502" />
+    <state width="2517" height="227" key="GridCell.Tab.0.left/451.-900.1600.860/0.0.2560.1040/2560.0.1920.1080@0.0.2560.1040" timestamp="1604887602661" />
+    <state width="2517" height="227" key="GridCell.Tab.0.left/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1604814933214" />
+    <state width="2517" height="242" key="GridCell.Tab.0.left/451.-900.1600.860/2560.0.1920.1080/0.0.2560.1040@0.0.2560.1040" timestamp="1604762314962" />
+    <state width="2517" height="227" key="GridCell.Tab.0.right" timestamp="1604979745397">
+      <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="243" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1603405135496" />
+    <state width="2500" height="226" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900/2560.0.1920.1080@0.0.2560.1040" timestamp="1604746069539" />
+    <state width="2517" height="227" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1604979745397" />
     <state width="1801" height="312" key="GridCell.Tab.0.right/0.23.1852.945@0.23.1852.945" timestamp="1601933837865" />
-    <state width="1878" height="274" key="GridCell.Tab.0.right/0.23.1920.945@0.23.1920.945" timestamp="1604700098660" />
+    <state width="1878" height="274" key="GridCell.Tab.0.right/0.23.1920.945@0.23.1920.945" timestamp="1603384375504" />
+    <state width="2517" height="227" key="GridCell.Tab.0.right/451.-900.1600.860/0.0.2560.1040/2560.0.1920.1080@0.0.2560.1040" timestamp="1604887602662" />
+    <state width="2517" height="227" key="GridCell.Tab.0.right/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1604814933214" />
+    <state width="2517" height="242" key="GridCell.Tab.0.right/451.-900.1600.860/2560.0.1920.1080/0.0.2560.1040@0.0.2560.1040" timestamp="1604762314962" />
     <state x="860" y="263" key="IDE.errors.dialog" timestamp="1603399731066">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -165,11 +161,12 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="1288" height="528" key="XDebugger.FullValuePopup/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1603240623241" />
-    <state x="657" y="114" width="723" height="551" key="find.popup" timestamp="1604687555596">
-      <screen x="0" y="23" width="1920" height="945" />
+    <state x="877" y="100" width="964" height="606" key="find.popup" timestamp="1604976185440">
+      <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="876" y="100" width="964" height="606" key="find.popup/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1603404870634" />
-    <state x="657" y="114" width="723" height="551" key="find.popup/0.23.1920.945@0.23.1920.945" timestamp="1604687555596" />
+    <state x="876" y="100" width="964" height="606" key="find.popup/0.0.2560.1040/451.-900.1600.900/2560.0.1920.1080@0.0.2560.1040" timestamp="1604741082795" />
+    <state x="877" y="100" width="964" height="606" key="find.popup/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1604976185440" />
+    <state x="876" y="100" width="964" height="606" key="find.popup/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1604788441535" />
     <state x="586" y="231" width="670" height="676" key="search.everywhere.popup" timestamp="1601917424829">
       <screen x="0" y="23" width="1852" height="945" />
     </state>
@@ -180,13 +177,28 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationSender.java</url>
-          <line>210</line>
+          <line>204</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/ChannelManager.java</url>
-          <line>72</line>
+          <line>71</line>
           <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java</url>
+          <line>46</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/services/firebase/FCMService.java</url>
+          <line>58</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java</url>
+          <line>171</line>
+          <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
           <url>file://$PROJECT_DIR$/example/lib/utils/notification_util.dart</url>

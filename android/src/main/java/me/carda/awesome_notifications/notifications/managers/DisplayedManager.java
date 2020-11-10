@@ -7,20 +7,20 @@ import com.google.common.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
 
 public class DisplayedManager {
 
-    private static SharedManager<NotificationReceived> shared = new SharedManager<>();
-    private static Type typeToken = new TypeToken<NotificationReceived>(){}.getType();
+    private static final SharedManager<NotificationReceived> shared = new SharedManager<>("DisplayedManager", NotificationReceived.class);
 
     public static Boolean removeDisplayed(Context context, Integer id) {
         return shared.remove(context, Definitions.SHARED_DISPLAYED, id.toString());
     }
 
     public static List<NotificationReceived> listDisplayed(Context context) {
-        return shared.getAllObjects(context, typeToken, Definitions.SHARED_DISPLAYED);
+        return shared.getAllObjects(context, Definitions.SHARED_DISPLAYED);
     }
 
     public static void saveDisplayed(Context context, NotificationReceived received) {
@@ -28,11 +28,11 @@ public class DisplayedManager {
     }
 
     public static NotificationReceived getDisplayedByKey(Context context, Integer id){
-        return shared.get(context, typeToken, Definitions.SHARED_DISPLAYED, id.toString());
+        return shared.get(context, Definitions.SHARED_DISPLAYED, id.toString());
     }
 
     public static void cancelAllDisplayed(Context context) {
-        List<NotificationReceived> displayedList = shared.getAllObjects(context, typeToken, Definitions.SHARED_DISPLAYED);
+        List<NotificationReceived> displayedList = shared.getAllObjects(context, Definitions.SHARED_DISPLAYED);
         if(displayedList != null)
             for(NotificationReceived displayed : displayedList){
                 cancelDisplayed(context, displayed.id);
@@ -43,5 +43,9 @@ public class DisplayedManager {
         NotificationReceived received = getDisplayedByKey(context, id);
         if(received != null)
             removeDisplayed(context, received.id);
+    }
+
+    public static void commitChanges(Context context){
+        shared.commit(context);
     }
 }

@@ -1,5 +1,7 @@
 package me.carda.awesome_notifications.utils;
 
+import io.flutter.Log;
+
 import com.google.common.base.Optional;
 
 import java.util.Map;
@@ -42,7 +44,7 @@ public class MapUtils {
             }
         }
         catch (Exception e){
-            System.out.println(TAG + ": Argument is not a type of " + Optional.class.getSimpleName());
+            Log.d(TAG,"Argument is not a type of " + Optional.class.getSimpleName());
         }
 
         return Optional.absent();
@@ -86,7 +88,7 @@ public class MapUtils {
             }*/
         }
         catch (Exception e){
-            System.out.println(TAG + ": " + key + " is not a type of " + Optional.class.getSimpleName());
+            Log.d(TAG, key + " is not a type of " + Optional.class.getSimpleName());
         }
 
         return Optional.absent();

@@ -1,8 +1,6 @@
-package me.carda.awesome_notifications.notifications;
+package me.carda.awesome_notifications.notifications.models;
 
 import android.content.Context;
-
-import com.google.common.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,56 +9,63 @@ import java.util.Map;
 
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
-import me.carda.awesome_notifications.notifications.models.NotificationButtonModel;
-import me.carda.awesome_notifications.notifications.models.NotificationContentModel;
-import me.carda.awesome_notifications.notifications.models.NotificationScheduleModel;
-import me.carda.awesome_notifications.utils.JsonUtils;
-import me.carda.awesome_notifications.utils.StringUtils;
 
-public class PushNotification {
+public class PushNotification extends Model {
 
     public NotificationContentModel content;
     public NotificationScheduleModel schedule;
     public List<NotificationButtonModel> actionButtons;
 
-    public static PushNotification fromMap(Map<String, Object> parameters){
+    public PushNotification(){}
 
-        PushNotification pushNotification = new PushNotification();
+    @Override
+    public PushNotification fromMap(Map<String, Object> parameters){
 
-        pushNotification.content = extractNotificationContent(Definitions.PUSH_NOTIFICATION_CONTENT, parameters);
+        content = extractNotificationContent(Definitions.PUSH_NOTIFICATION_CONTENT, parameters);
 
         // required
-        if(pushNotification.content == null) return null;
+        if(content == null) return null;
 
-        pushNotification.schedule = extractNotificationSchedule(Definitions.PUSH_NOTIFICATION_SCHEDULE, parameters);
-        pushNotification.actionButtons = extractNotificationButtons(Definitions.PUSH_NOTIFICATION_BUTTONS, parameters);
+        schedule = extractNotificationSchedule(Definitions.PUSH_NOTIFICATION_SCHEDULE, parameters);
+        actionButtons = extractNotificationButtons(Definitions.PUSH_NOTIFICATION_BUTTONS, parameters);
 
-        return pushNotification;
+        return this;
     }
 
+    @Override
     public Map<String, Object> toMap(){
 
         if(content == null) return null;
+        Map<String, Object> dataMap = new HashMap<String, Object>();
 
-        return new HashMap<String, Object>(){{
+        dataMap.put(Definitions.PUSH_NOTIFICATION_CONTENT, content.toMap());
 
-            put(Definitions.PUSH_NOTIFICATION_CONTENT, content.toMap());
+        if(schedule != null)
+            dataMap.put(Definitions.PUSH_NOTIFICATION_SCHEDULE, schedule.toMap());
 
-            if(schedule != null)
-                put(Definitions.PUSH_NOTIFICATION_SCHEDULE, schedule.toMap());
-
-            if(actionButtons != null && !actionButtons.isEmpty()){
-                List<Object> buttonsData = new ArrayList<>();
-                for(NotificationButtonModel button : actionButtons){
-                    buttonsData.add(button.toMap());
-                }
-                put(Definitions.PUSH_NOTIFICATION_BUTTONS, buttonsData);
+        if(actionButtons != null && !actionButtons.isEmpty()){
+            List<Object> buttonsData = new ArrayList<>();
+            for(NotificationButtonModel button : actionButtons){
+                buttonsData.add(button.toMap());
             }
-        }};
+            dataMap.put(Definitions.PUSH_NOTIFICATION_BUTTONS, buttonsData);
+        }
+
+        return dataMap;
+    }
+
+    @Override
+    public String toJson() {
+        return templateToJson();
+    }
+
+    @Override
+    public PushNotification fromJson(String json){
+        return (PushNotification) super.templateFromJson(json);
     }
 
     private static NotificationContentModel extractNotificationContent(String reference, Map<String, Object> parameters) {
-        if(!parameters.containsKey(reference)) return null;
+        if(parameters == null || !parameters.containsKey(reference)) return null;
         Object obj = parameters.get(reference);
 
         if(!(obj instanceof Map<?,?>)) return null;
@@ -69,11 +74,11 @@ public class PushNotification {
         Map<String, Object> map = (Map<String, Object>) obj;
 
         if(map.isEmpty()) return null;
-        else return NotificationContentModel.fromMap(map);
+        else return new NotificationContentModel().fromMap(map);
     }
 
     private static NotificationScheduleModel extractNotificationSchedule(String reference, Map<String, Object> parameters) {
-        if(!parameters.containsKey(reference)) return null;
+        if(parameters == null || !parameters.containsKey(reference)) return null;
         Object obj = parameters.get(reference);
 
         if(!(obj instanceof Map<?,?>)) return null;
@@ -82,12 +87,12 @@ public class PushNotification {
         Map<String, Object> map = (Map<String, Object>) obj;
 
         if(map.isEmpty()) return null;
-        else return NotificationScheduleModel.fromMap(map);
+        else return new NotificationScheduleModel().fromMap(map);
     }
 
     @SuppressWarnings("unchecked")
     private static List<NotificationButtonModel> extractNotificationButtons(String reference, Map<String, Object> parameters) {
-        if(!parameters.containsKey(reference)) return null;
+        if(parameters == null || !parameters.containsKey(reference)) return null;
         Object obj = parameters.get(reference);
 
         if(!(obj instanceof List<?>)) return null;
@@ -101,28 +106,13 @@ public class PushNotification {
             Map<String, Object> map = (Map<String, Object>) objButton;
             if(map.isEmpty()) continue;
 
-            NotificationButtonModel button = NotificationButtonModel.fromMap(map);
+            NotificationButtonModel button = new NotificationButtonModel().fromMap(map);
             actionButtons.add(button);
         }
 
         if(actionButtons.isEmpty()) return null;
 
         return actionButtons;
-    }
-
-    public String toJson() {
-        return JsonUtils.toJson(this);
-        /*
-        Map<String, Object> data = this.toMap();
-
-        Gson gson = Model.buildGson();
-        return gson.toJson(data);
-        */
-    }
-
-    public static PushNotification fromJson(String json){
-        if(StringUtils.isNullOrEmpty(json)) return null;
-        return JsonUtils.fromJson(new TypeToken<PushNotification>(){}.getType(), json);
     }
 
     public void validate(Context context) throws PushNotificationException {

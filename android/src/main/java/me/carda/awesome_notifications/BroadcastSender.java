@@ -2,12 +2,12 @@ package me.carda.awesome_notifications;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import java.io.Serializable;
 import java.util.Map;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import io.flutter.Log;
 import me.carda.awesome_notifications.notifications.managers.DismissedManager;
 import me.carda.awesome_notifications.notifications.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
@@ -43,7 +43,7 @@ public class BroadcastSender {
             success = broadcastManager.sendBroadcast(intent);
 
             if(success){
-                Log.d(TAG, "Sent created to broadcast");
+                //Log.d(TAG, "Sent created to broadcast");
             }
 
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public class BroadcastSender {
             success = broadcastManager.sendBroadcast(intent);
 
             if(success){
-                Log.d(TAG, "Sent created to broadcast");
+                //Log.d(TAG, "Sent created to broadcast");
             }
 
         } catch (Exception e) {
@@ -91,7 +91,7 @@ public class BroadcastSender {
             success = broadcastManager.sendBroadcast(intent);
 
             if(success){
-                Log.d(TAG, "Sent displayed to broadcast");
+                //Log.d(TAG, "Sent displayed to broadcast");
             }
 
         } catch (Exception e) {
@@ -118,7 +118,7 @@ public class BroadcastSender {
             success = broadcastManager.sendBroadcast(intent);
 
             if(success){
-                Log.d(TAG, "Sent dismissed to broadcast");
+                //Log.d(TAG, "Sent dismissed to broadcast");
             }
 
         } catch (Exception e) {

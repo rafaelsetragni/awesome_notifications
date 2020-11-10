@@ -89,9 +89,10 @@ class AssertUtils {
         break;
     }
 
-    if (value == null || value.runtimeType != T)
-      return _getDefaultValue(reference, T);
-    return value;
+    if (value == null) return _getDefaultValue(reference, T);
+    if (value.runtimeType.toString() == T.toString()) return value;
+
+    return _getDefaultValue(reference, T);
   }
 
   static _getDefaultValue(String reference, Type T) {

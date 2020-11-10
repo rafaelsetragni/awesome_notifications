@@ -246,7 +246,7 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
-            ),
+            )
           ],
         )
     );

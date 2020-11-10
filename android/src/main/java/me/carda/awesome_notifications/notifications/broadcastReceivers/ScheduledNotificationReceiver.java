@@ -8,10 +8,9 @@ import android.widget.Toast;
 import com.google.common.reflect.TypeToken;
 
 import me.carda.awesome_notifications.Definitions;
-import me.carda.awesome_notifications.notifications.PushNotification;
+import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.NotificationScheduler;
 import me.carda.awesome_notifications.notifications.NotificationSender;
-import me.carda.awesome_notifications.notifications.managers.ScheduleManager;
 import me.carda.awesome_notifications.utils.JsonUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
@@ -30,7 +29,7 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
         String notificationDetailsJson = intent.getStringExtra(Definitions.NOTIFICATION_JSON);
         if (!StringUtils.isNullOrEmpty(notificationDetailsJson)) {
 
-            PushNotification pushNotification = JsonUtils.fromJson(new TypeToken<PushNotification>(){}.getType(), notificationDetailsJson);
+            PushNotification pushNotification = new PushNotification().fromJson(notificationDetailsJson);
             if(pushNotification != null){
 
                 try {

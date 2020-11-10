@@ -10,6 +10,7 @@ import me.carda.awesome_notifications.notifications.enumeratos.NotificationPriva
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationSource;
 import me.carda.awesome_notifications.notifications.models.Model;
 import me.carda.awesome_notifications.notifications.models.NotificationContentModel;
+import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.utils.DateUtils;
 import me.carda.awesome_notifications.utils.MapUtils;
 
@@ -23,7 +24,7 @@ public class ActionReceived extends NotificationContentModel {
     public String actionDate;
     public String dismissedDate;
 
-    private ActionReceived(){}
+    public ActionReceived(){}
 
     public ActionReceived(NotificationContentModel contentModel){
 
@@ -75,13 +76,9 @@ public class ActionReceived extends NotificationContentModel {
         return returnedObject;
     }
 
-    public static ActionReceived fromMap(Map<String, Object> arguments) {
-        return new ActionReceived().fromMapImplementation(arguments);
-    }
-
     @Override
-    public ActionReceived fromMapImplementation(Map<String, Object> arguments) {
-        super.fromMapImplementation(arguments);
+    public ActionReceived fromMap(Map<String, Object> arguments) {
+        super.fromMap(arguments);
 
         actionKey     = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_ACTION_KEY, String.class).orNull();
         actionInput   = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_ACTION_INPUT, String.class).orNull();
@@ -96,4 +93,13 @@ public class ActionReceived extends NotificationContentModel {
         return this;
     }
 
+    @Override
+    public String toJson() {
+        return templateToJson();
+    }
+
+    @Override
+    public ActionReceived fromJson(String json){
+        return (ActionReceived) super.templateFromJson(json);
+    }
 }

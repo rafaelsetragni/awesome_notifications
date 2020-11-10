@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import androidx.core.app.NotificationManagerCompat;
+import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
 import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
@@ -26,8 +27,7 @@ import me.carda.awesome_notifications.utils.StringUtils;
 
 public class ChannelManager {
 
-    private static SharedManager<NotificationChannelModel> shared = new SharedManager<>();
-    private static Type typeToken = new TypeToken<NotificationChannelModel>(){}.getType();
+    private static final SharedManager<NotificationChannelModel> shared = new SharedManager<>("ChannelManager", NotificationChannelModel.class);
 
     public static Boolean removeChannel(Context context, String channelKey) {
         removeAndroidChannel(context, channelKey);
@@ -35,7 +35,7 @@ public class ChannelManager {
     }
 
     public static List<NotificationChannelModel> listChannels(Context context) {
-        return shared.getAllObjects(context, typeToken, Definitions.SHARED_CHANNELS);
+        return shared.getAllObjects(context, Definitions.SHARED_CHANNELS);
     }
 
     public static void saveChannel(Context context, NotificationChannelModel channelModel) {
@@ -44,7 +44,7 @@ public class ChannelManager {
     }
 
     public static NotificationChannelModel getChannelByKey(Context context, String channelKey){
-        return shared.get(context, typeToken, Definitions.SHARED_CHANNELS, channelKey);
+        return shared.get(context, Definitions.SHARED_CHANNELS, channelKey);
     }
 
     public static Uri retrieveSoundResourceUri(Context context, NotificationChannelModel channelModel) {
@@ -58,6 +58,10 @@ public class ChannelManager {
             }
         }
         return uri;
+    }
+
+    public static void commitChanges(Context context){
+        shared.commit(context);
     }
 
     private static void removeAndroidChannel(Context context, String channelKey) {
@@ -83,7 +87,6 @@ public class ChannelManager {
                 }
             }
         }
-
 /*
         // TODO IMPROVE CHANNELS COMPARISION
         NotificationChannelModel oldChannel = getChannelByKey(context, newChannel.channelKey);
@@ -105,7 +108,7 @@ public class ChannelManager {
 
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationChannel newNotificationChannel = null;
-            newNotificationChannel = new NotificationChannel(newChannel.channelKey, newChannel.channelName, newChannel.importance.ordinal());
+            newNotificationChannel = new NotificationChannel(newChannel.channelKey, newChannel.channelName, NotificationManager.IMPORTANCE_DEFAULT);
 
             newNotificationChannel.setDescription(newChannel.channelDescription);
 
@@ -134,7 +137,7 @@ public class ChannelManager {
             }
 
             // Ensures that the new rules are being updated
-            removeAndroidChannel(context, newChannel.channelKey);
+            // removeAndroidChannel(context, newChannel.channelKey);
 
             newNotificationChannel.setShowBadge(BooleanUtils.getValue(newChannel.channelShowBadge));
             notificationManager.createNotificationChannel(newNotificationChannel);

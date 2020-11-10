@@ -7,7 +7,7 @@ import 'package:awesome_notifications_example/utils/media_player_central.dart';
 void main() async {
 
   AwesomeNotifications().initialize(
-    'resource://drawable/app_icon',
+    'resource://drawable/res_app_icon',
     [
       NotificationChannel(
           channelKey: 'basic_channel',
@@ -64,12 +64,12 @@ void main() async {
           vibrationPattern: highVibrationPattern
       ),
       NotificationChannel(
-          icon: 'resource://drawable/power_ranger_thunder',
+          icon: 'resource://drawable/res_power_ranger_thunder',
           channelKey: "custom_sound",
           channelName: "Custom sound notifications",
           channelDescription: "Notifications with custom sound",
           playSound: true,
-          soundSource: 'resource://raw/morph_power_rangers',
+          soundSource: 'resource://raw/res_morph_power_rangers',
           defaultColor: Colors.red,
           ledColor: Colors.red,
           vibrationPattern: lowVibrationPattern
@@ -83,7 +83,7 @@ void main() async {
           enableLights: false
       ),
       NotificationChannel(
-        icon: 'resource://drawable/media_icon',
+        icon: 'resource://drawable/res_media_icon',
         channelKey: 'media_player',
         channelName: 'Media player controller',
         channelDescription: 'Media player controller',
@@ -127,7 +127,7 @@ void main() async {
           importance: NotificationImportance.High,
       ),
       NotificationChannel(
-          icon: 'resource://drawable/download_icon',
+          icon: 'resource://drawable/res_download_icon',
           channelKey: 'progress_bar',
           channelName: 'Progress bar notifications',
           channelDescription: 'Notifications with a progress bar layout',

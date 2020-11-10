@@ -2,55 +2,87 @@ package me.carda.awesome_notifications.notifications.managers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
+import android.os.AsyncTask;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import io.flutter.Log;
 
-import java.lang.reflect.Type;
+import java.security.*;
+import java.math.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-
 import me.carda.awesome_notifications.Definitions;
-import me.carda.awesome_notifications.utils.JsonUtils;
+import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
+import me.carda.awesome_notifications.notifications.models.Model;
+import me.carda.awesome_notifications.utils.StringUtils;
 
-public class SharedManager<T> {
-    private T t;
+public class SharedManager<T extends Model> {
+    private Class<T> clazz;
 
     private static String TAG = "SharedManager";
+    private String reference;
+    private String hashedReference = "default";
 
-    private static SharedPreferences _sharedInstance = null;
+    public SharedManager(String fileIdentifier, Class<T> targetClass){
+        clazz = targetClass;
+        reference = Definitions.SHARED_MANAGER +"."+ fileIdentifier +"."+ clazz.getName();
+        try {
 
-    public SharedManager(){
-    }
+            MessageDigest m = MessageDigest.getInstance("MD5");
+            m.update(reference.getBytes(),0,reference.length());
+            hashedReference = new BigInteger(1,m.digest()).toString(16);
 
-    private SharedPreferences getSharedInstance(Context context){
-        if(_sharedInstance == null){
-            _sharedInstance = context.getSharedPreferences(
-                Definitions.SHARED_MANAGER,
-                Context.MODE_PRIVATE
-            );
+            Log.d(TAG, fileIdentifier+": file initialized = "+ hashedReference);
+
+        } catch (Exception e) {
+
+            this.reference = fileIdentifier;
+
+            Log.e(TAG, "SharedManager could not be initialized: "+ e.getMessage());
+            e.printStackTrace();
         }
-        return _sharedInstance;
     }
 
-    private T parseJson(
-        Type typeToken,
-        String json
-    ){
-       //return JsonUtils.fromJson(new TypeToken<T>(getClass()){}.getType(), json);
-       return JsonUtils.fromJson(typeToken, json);
+    private SharedPreferences getSharedInstance(Context context) throws PushNotificationException {
+
+        SharedPreferences preferences = context.getSharedPreferences(
+                context.getPackageName() + "." + (hashedReference == null ? reference : hashedReference),
+                Context.MODE_PRIVATE
+        );
+
+        if(preferences == null){
+            throw new PushNotificationException("SharedPreferences.getSharedPreferences return null");
+        }
+
+        return preferences;
+    }
+
+    private String generateSharedKey(String tag, String referenceKey){
+        return tag+'_'+referenceKey;
+    }
+
+    public void commit(Context context){
+        try {
+
+            SharedPreferences shared = getSharedInstance(context);
+            SharedPreferences.Editor editor = shared.edit();
+
+            commitAsync(reference, editor);
+
+        } catch (Exception e){
+            e.printStackTrace();
+            Log.e(TAG, e.toString());
+        }
     }
 
     @SuppressWarnings("unchecked")
-    public List<T> getAllObjects(Context context, Type typeToken, String tag){
+    public List<T> getAllObjects(Context context, String tag){
         List<T> returnedList = new ArrayList<>();
         try {
             SharedPreferences shared = getSharedInstance(context);
+
             Map<String, ?> tempMap = shared.getAll();
 
             if(tempMap != null){
@@ -59,54 +91,111 @@ public class SharedManager<T> {
                     Object value = entry.getValue();
 
                     if(key.startsWith(tag) && value instanceof String){
-                        returnedList.add(parseJson(typeToken, (String) value));
+                        T object = clazz.newInstance();
+                        returnedList.add((T) object.fromJson((String) value));
                     }
                 }
             }
         } catch (Exception e){
             e.printStackTrace();
-            Log.d(TAG, e.toString());
+            Log.e(TAG, e.toString());
         }
+
         return returnedList;
     }
 
-    private String generateSharedKey(String tag, String referenceKey){
-        return tag+'_'+referenceKey;
-    }
+    @SuppressWarnings("unchecked")
+    public T get(Context context, String tag, String referenceKey){
 
-    public T get(Context context, Type typeToken, String tag, String referenceKey){
-        SharedPreferences shared = getSharedInstance(context);
-        String sharedKey = generateSharedKey(tag, referenceKey);
-        String json = shared.getString(sharedKey, null);
+        try {
+            SharedPreferences shared = getSharedInstance(context);
 
-        T returnedObject = null;
-        if (json != null) {
-            returnedObject = parseJson(typeToken, json);
+            String sharedKey = generateSharedKey(tag, referenceKey);
+            String json = shared.getString(sharedKey, null);
+
+            T returnedObject = null;
+            if (!StringUtils.isNullOrEmpty(json)) {
+                T genericModel = clazz.newInstance();
+
+                Model parsedModel = genericModel.fromJson(json);
+                if(parsedModel != null){
+                    returnedObject = (T) parsedModel;
+                }
+            }
+
+            return returnedObject;
+
+        } catch (PushNotificationException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return returnedObject;
+
+        return null;
     }
 
     public Boolean set(Context context, String tag, String referenceKey, T data){
-        SharedPreferences shared = getSharedInstance(context);
-        String sharedKey = generateSharedKey(tag, referenceKey);
 
-        String json = JsonUtils.toJson(data);
-        SharedPreferences.Editor editor = shared.edit();
+        try {
 
-        editor.putString(sharedKey, json);
+            SharedPreferences shared = getSharedInstance(context);
 
-        editor.apply();
-        return true;
+            String sharedKey = generateSharedKey(tag, referenceKey);
+
+            String json = data.toJson();
+
+            SharedPreferences.Editor editor = shared.edit();
+
+            editor.putString(sharedKey, json);
+            editor.apply();
+
+            return true;
+
+        } catch (PushNotificationException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.toString());
+        }
+
+        return false;
     }
 
     public Boolean remove(Context context, String tag, String referenceKey){
-        SharedPreferences shared = getSharedInstance(context);
-        String sharedKey = generateSharedKey(tag, referenceKey);
 
-        SharedPreferences.Editor editor = shared.edit();
-        editor.remove(sharedKey);
+        try {
 
-        editor.apply();
-        return true;
+            SharedPreferences shared = getSharedInstance(context);
+
+            String sharedKey = generateSharedKey(tag, referenceKey);
+
+            SharedPreferences.Editor editor = shared.edit();
+            editor.remove(sharedKey);
+
+            editor.apply();
+
+            return true;
+
+        } catch (PushNotificationException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.toString());
+        }
+
+        return false;
+    }
+
+    private static void commitAsync(final String reference, final SharedPreferences.Editor editor) {
+        new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+                return editor.commit();
+            }
+
+            @Override
+            protected void onPostExecute(Boolean value) {
+                if(!value){
+                    Log.d(reference,"shared data could not be saved");
+                }
+            }
+        }.execute();
     }
 }

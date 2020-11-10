@@ -178,6 +178,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
         if (type == null || label == null) {
             throw new NullPointerException();
         }
+        //System.out.println(type.toString()+" - "+label);
         if (subtypeToLabel.containsKey(type) || labelToSubtype.containsKey(label)) {
             throw new IllegalArgumentException("types and labels must be unique");
         }
@@ -194,7 +195,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
      *     have already been registered on this type adapter.
      */
     public RuntimeTypeAdapterFactory<T> registerSubtype(Class<? extends T> type) {
-        return registerSubtype(type, type.getSimpleName());
+        return registerSubtype(type, type.getName());
     }
 
     public <R> TypeAdapter<R> create(Gson gson, TypeToken<R> type) {
