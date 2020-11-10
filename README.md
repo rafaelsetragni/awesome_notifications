@@ -352,13 +352,6 @@ Every token created could be captured on Flutter by this plugin listen to `token
 
 <br>
 
-## Error: Invalid Firebase notification content
-
-The notification sent via FCM services *MUST* respect the types of the respective Notification elements. Otherwise, your notification will be discarded as invalid one.
-Also, all the payload elements *MUST* be a String, as the same way as you do in Local Notifications.
-
-<br>
-
 ## Notification Life Cycle
 
 Notifications are received by local code or Push service using native code, so the messages will appears immediately or at schedule time, independent of your application state.
@@ -472,6 +465,7 @@ To send a notification using Awesome Notifications and FCM Services, you need to
 Due to limitations on Android and iOS, you should send a empty **notification** field and use only the **data** field to send your data, as bellow:
 
 OBS: `actionButtons` and `schedule` are **optional**
+OBS 2: you should not implement any native code to use FCM with Awesome Notifications. All of then was already implemented inside the plugin.
 
 ```json
 {
@@ -517,3 +511,74 @@ OBS: `actionButtons` and `schedule` are **optional**
 ```
 
 You can download a example of how to send Push Notifications through FCM using "Postman" [here](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/Firebase_FCM_Example.postman_collection.json)
+
+<br>
+
+## Error: "Invalid notification content"
+
+The notification sent via FCM services *MUST* respect the types of the respective Notification elements. Otherwise, your notification will be discarded as invalid one.
+Also, all the payload elements *MUST* be a String, as the same way as you do in Local Notifications using dart code.
+
+<br>
+<br>
+
+## Notification types, values and defaults
+<br>
+
+### NotificationContent ("content" in Push data) - (required)
+<br>
+
+| Attribute          	| Required | Description                                                              | Type                  | Value Limits            | Default value             |
+| --------------------- | -------- | ------------------------------------------------------------------------ | --------------------- | ----------------------- | ------------------------- |
+| id 			     	|    YES   | Number that identifies a unique notification                             | int                   | 1 - 2.147.483.647       | -1                        |
+| channelKey 		 	|    YES   | String key that identifies a channel where not. will be displayed        | String                | channel must be enabled | basic_channel             |
+| title 			 	|     NO   | The title of notification                                                | String                | unlimited               |                           |
+| body 			 	    |     NO   | The body content of notification                                         | String                | unlimited               |                           |
+| summary 		 	    |     NO   | A summary to be displayed when the content is protected by privacy       | String                | unlimited               |                           |
+| showWhen 		 	    |     NO   | Hide/show the time elapsed since notification was displayed              | bool                  | true or false           | true                      |
+| largeIcon 		 	|     NO   | Large icon displayed at right middle of compact notification             | String                | unlimited               |                           |
+| bigPicture 		 	|     NO   | Big image displayed on expanded notification                             | String                | unlimited               |                           |
+| autoCancel 		 	|     NO   | Notification should auto cancel when gets tapped by the user             | bool                  | true or false           | true                      |
+| color 			 	|     NO   | Notification text color                                                  | Color                 | 0x00000000 to 0xFFFFFFFF| 0xFF000000 (Colors.black) |
+| backgroundColor  	    |     NO   | Notification background color                                            | Color                 | 0x00000000 to 0xFFFFFFFF| 0xFFFFFFFF (Colors.white) |
+| payload 		 	    |     NO   | Hidden payload content                                                   | Map<String, String>   | Only String for values  | null                      |
+| notificationLayout	|     NO   | Layout type of notification                                              | Enumerator            | NotificationLayout      | Default                   |
+| hideLargeIconOnExpand |     NO   | Hide/show the large icon when notification gets expanded                 | bool                  | true or false           | false                     |
+| locked 			    |     NO   | Blocks the user to dismiss the notification                              | bool                  | true or false           | false                     |
+| progress 			    |     NO   | Current value of progress bar (percentage). Null for indeterminate.      | int                   | 0 - 100                 | null                      |
+| ticker 			    |     NO   | Text to be displayed on top of the screen when a notification arrives    | String                | unlimited               |                           |
+
+<br>
+<br>
+
+### NotificationActionButton ("actionButtons" in Push data) - (optional)
+<br>
+
+* Is necessary at least one *required attribute
+
+| Attribute     | Required | Description                                                                   | Type                  | Value Limits             | Default value           |
+| ------------- | -------- | ----------------------------------------------------------------------------- | --------------------- | -----------------------  | ----------------------- |
+| key 		    |    YES   | Text key to identifies what action the user took when tapped the notification | String                | unlimited                |                         |
+| label 		|   *YES   | Text to be displayed over the action button                                   | String                | unlimited                |                         |
+| icon 		    |   *YES   | Icon to be displayed inside the button                                        | String                | must be a resource image |                         |
+| enabled 	    |     NO   | On Android, deactivates the button. On iOS, the button disappear              | bool                  | true or false            | true                    |
+| autoCancel    |     NO   | Notification should auto cancel when gets tapped by the user                  | bool                  | true or false            | true                    |
+| buttonType 	|     NO   | Button action response type                                                   | Enumerator            | ActionButtonType         | Default                 |
+
+<br>
+<br>
+
+### NotificationScheduleModel ("schedule" in Push data) - (optional)
+<br>
+
+* Is necessary at least one *required attribute
+* Cron expression must respect the format (with seconds precision) as described in [this article](https://www.baeldung.com/cron-expressions)
+
+| Attribute       	 | Required | Description                                                       | Type                               | Value Limits            | Default value   |
+| ------------------ | -------- | ----------------------------------------------------------------- | ---------------------------------- | ----------------------- | --------------- |
+| initialDateTime    |   *YES   | Mandatory initial notification fire date                          | String (YYYY-mm-dd HH:mi:ss)       | UTC valid date          |                 |
+| crontabSchedule    |   *YES   | Repetition cron rule expression                                   | Cron expression                    | valid cron expression   |                 |
+| allowWhileIdle     |     NO   | Displays the notification, even when the device is low battery    | bool                               | true or false           | false           |
+| preciseSchedule    |   *YES   | List of precise notification fire dates                           | List<String> (YYYY-mm-dd HH:mi:ss) | UTC valid dates         |                 |
+
+

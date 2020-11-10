@@ -9,14 +9,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner/Assets.xcassets/beach.imageset/Contents.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner/Assets.xcassets/beach.imageset/beach.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner/Assets.xcassets/mansion.imageset/Contents.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner/Assets.xcassets/mansion.imageset/mansion.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner/morph_power_rangers.aiff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,9 +165,10 @@
     <state x="876" y="100" width="964" height="606" key="find.popup/0.0.2560.1040/451.-900.1600.900/2560.0.1920.1080@0.0.2560.1040" timestamp="1604741082795" />
     <state x="877" y="100" width="964" height="606" key="find.popup/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1604976185440" />
     <state x="876" y="100" width="964" height="606" key="find.popup/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1604788441535" />
-    <state x="586" y="231" width="670" height="676" key="search.everywhere.popup" timestamp="1601917424829">
-      <screen x="0" y="23" width="1852" height="945" />
+    <state x="810" y="229" width="927" height="744" key="search.everywhere.popup" timestamp="1605035689001">
+      <screen x="0" y="0" width="2560" height="1040" />
     </state>
+    <state x="810" y="229" width="927" height="744" key="search.everywhere.popup/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1605035689001" />
     <state x="586" y="231" width="670" height="676" key="search.everywhere.popup/0.23.1852.945@0.23.1852.945" timestamp="1601917424829" />
   </component>
   <component name="XDebuggerManager">
