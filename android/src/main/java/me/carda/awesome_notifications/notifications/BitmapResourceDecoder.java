@@ -10,8 +10,10 @@ import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
+import java.util.concurrent.ExecutionException;
 
 import io.flutter.plugin.common.MethodChannel;
+import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
 import me.carda.awesome_notifications.utils.BitmapUtils;
 
 public class BitmapResourceDecoder extends AsyncTask<Void, Void, byte[]> {
@@ -21,6 +23,8 @@ public class BitmapResourceDecoder extends AsyncTask<Void, Void, byte[]> {
     private MethodChannel.Result result;
 
     private String bitmapReference;
+
+    private Exception exception;
 
     public BitmapResourceDecoder(Context context, MethodChannel.Result result, String bitmapReference) {
         this.wContextReference = new WeakReference<>(context);
@@ -34,16 +38,23 @@ public class BitmapResourceDecoder extends AsyncTask<Void, Void, byte[]> {
 
         Context context = wContextReference.get();
 
-        if(context != null) {
+        try {
 
-            Bitmap bitmap = BitmapUtils.getBitmapFromResource(context, bitmapReference);
+            if(context != null) {
+                Bitmap bitmap = BitmapUtils.getBitmapFromResource(context, bitmapReference);
 
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-            bitmap.recycle();
+                if(bitmap == null) throw new PushNotificationException("File '"+bitmapReference+"' not found or invalid");
 
-            return byteArray;
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                bitmap.recycle();
+
+                return byteArray;
+            }
+
+        } catch (Exception e){
+            exception = e;
         }
 
         return null;
@@ -51,7 +62,14 @@ public class BitmapResourceDecoder extends AsyncTask<Void, Void, byte[]> {
 
     @Override
     protected void onPostExecute(byte[] byteArray) {
+
         //check if bitmap is available or not
-        result.success(byteArray);
+        if(exception != null){
+            exception.printStackTrace();
+            result.error("BitmapResourceDecoder", exception.getMessage(), exception);
+        }
+        else {
+            result.success(byteArray);
+        }
     }
 }

@@ -65,7 +65,28 @@ public class AudioUtils extends MediaUtils {
     public static int getAudioResourceId(Context context, String audioReference){
         audioReference = AudioUtils.cleanMediaPath(audioReference);
         String[] reference = audioReference.split("\\/");
-        return context.getResources().getIdentifier(reference[1], reference[0], context.getPackageName());
+        try {
+            int resId;
+
+            String type = reference[0];
+            String label = reference[1];
+
+            // Resources protected from obfuscation
+            // https://developer.android.com/studio/build/shrink-code#strict-reference-checks
+            String name = String.format("res_%1s", label);
+            resId = context.getResources().getIdentifier(name, type, context.getPackageName());
+
+            if(resId == 0){
+                resId = context.getResources().getIdentifier(label, type, context.getPackageName());
+            }
+
+            return resId;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 
     private static Bitmap getAudioFromResource(Context context, String bitmapReference){

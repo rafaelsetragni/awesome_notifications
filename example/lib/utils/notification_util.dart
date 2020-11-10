@@ -595,7 +595,7 @@ Future<void> showBigPictureResourceNotification(int id) async {
           channelKey: "big_picture",
           title: 'Big picture (Resource)',
           body: '$lorenIpsumText\n\n$lorenIpsumText\n\n$lorenIpsumText',
-          bigPicture: 'resource://drawable/mansion',
+          bigPicture: 'resource://drawable/res_mansion',
           notificationLayout: NotificationLayout.BigPicture,
           payload: {'uuid': 'uuid-test'}));
 }
@@ -778,7 +778,7 @@ void updateNotificationMediaPlayer(int id, MediaModel mediaNow) {
       actionButtons: [
         NotificationActionButton(
             key: 'MEDIA_PREV',
-            icon: 'resource://drawable/ic_prev' +
+            icon: 'resource://drawable/res_ic_prev' +
                 (MediaPlayerCentral.hasPreviousMedia ? '' : '_disabled'),
             label: 'Previous',
             autoCancel: false,
@@ -787,13 +787,13 @@ void updateNotificationMediaPlayer(int id, MediaModel mediaNow) {
         MediaPlayerCentral.isPlaying
             ? NotificationActionButton(
                 key: 'MEDIA_PAUSE',
-                icon: 'resource://drawable/ic_pause',
+                icon: 'resource://drawable/res_ic_pause',
                 label: 'Pause',
                 autoCancel: false,
                 buttonType: ActionButtonType.KeepOnTop)
             : NotificationActionButton(
                 key: 'MEDIA_PLAY',
-                icon: 'resource://drawable/ic_play' +
+                icon: 'resource://drawable/res_ic_play' +
                     (MediaPlayerCentral.hasAnyMedia ? '' : '_disabled'),
                 label: 'Play',
                 autoCancel: false,
@@ -801,14 +801,14 @@ void updateNotificationMediaPlayer(int id, MediaModel mediaNow) {
                 buttonType: ActionButtonType.KeepOnTop),
         NotificationActionButton(
             key: 'MEDIA_NEXT',
-            icon: 'resource://drawable/ic_next' +
+            icon: 'resource://drawable/res_ic_next' +
                 (MediaPlayerCentral.hasNextMedia ? '' : '_disabled'),
             label: 'Previous',
             enabled: MediaPlayerCentral.hasNextMedia,
             buttonType: ActionButtonType.KeepOnTop),
         NotificationActionButton(
             key: 'MEDIA_CLOSE',
-            icon: 'resource://drawable/ic_close',
+            icon: 'resource://drawable/res_ic_close',
             label: 'Close',
             autoCancel: true,
             buttonType: ActionButtonType.KeepOnTop)
@@ -865,12 +865,12 @@ Future<void> showInboxNotification(int id) async {
             label: 'Dismiss',
             buttonType: ActionButtonType.DisabledAction,
             autoCancel: true,
-            icon: 'resource://drawable/ic_close'),
+            icon: 'resource://drawable/res_ic_close'),
         NotificationActionButton(
           key: 'READ',
           label: 'Mark as read',
           autoCancel: true,
-          //icon: 'resources://drawable/ic_close'
+          //icon: 'resources://drawable/res_ic_close'
         )
       ]);
 }
