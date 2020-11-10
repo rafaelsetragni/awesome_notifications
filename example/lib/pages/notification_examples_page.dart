@@ -198,7 +198,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
                 buttonCancelColor: Colors.grey,
                 buttonOkColor: Colors.deepPurple,
                 buttonRadius: 0.0,
-                image: Image.network("https://thumbs.gfycat.com/BlindZigzagGreatargus-small.gif", fit: BoxFit.cover),
+                image: Image.asset("assets/images/animated-bell.gif", fit: BoxFit.cover),
                 title: Text('Get Notified!',
                     textAlign: TextAlign.center,
                     style: TextStyle(

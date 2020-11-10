@@ -10,30 +10,10 @@
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/BitmapResourceDecoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/BitmapResourceDecoder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/AudioUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/AudioUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/BitmapUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/BitmapUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/app_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_app_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/beach.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/download_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_download_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/flutter_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_flutter_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/ic_close.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_ic_close.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/ic_next.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_ic_next.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/ic_next_disabled.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_ic_next_disabled.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/ic_pause.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_ic_pause.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/ic_play.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_ic_play.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/ic_play_disabled.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_ic_play_disabled.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/ic_prev.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_ic_prev.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/ic_prev_disabled.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_ic_prev_disabled.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/ic_stop.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_ic_stop.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/mansion.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_mansion.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/media_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_media_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/power_ranger_thunder.png" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_power_ranger_thunder.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/schedule_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/drawable/res_schedule_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/raw/morph_power_rangers.m4a" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/raw/res_morph_power_rangers.m4a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/pages/notification_examples_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/notification_examples_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,41 +109,41 @@
     </state>
     <state x="1060" y="275" key="FileChooserDialogImpl/0.0.2560.1040/451.-900.1600.900/2560.0.1920.1080@0.0.2560.1040" timestamp="1604495903103" />
     <state x="1060" y="275" key="FileChooserDialogImpl/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1603724352160" />
-    <state width="2517" height="227" key="GridCell.Tab.0.bottom" timestamp="1604887602662">
+    <state width="2517" height="227" key="GridCell.Tab.0.bottom" timestamp="1604979745397">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="2500" height="226" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900/2560.0.1920.1080@0.0.2560.1040" timestamp="1604746069539" />
-    <state width="2500" height="226" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1604685731280" />
+    <state width="2517" height="227" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1604979745397" />
     <state width="1801" height="312" key="GridCell.Tab.0.bottom/0.23.1852.945@0.23.1852.945" timestamp="1601933837865" />
     <state width="1878" height="274" key="GridCell.Tab.0.bottom/0.23.1920.945@0.23.1920.945" timestamp="1603384375504" />
     <state width="2517" height="227" key="GridCell.Tab.0.bottom/451.-900.1600.860/0.0.2560.1040/2560.0.1920.1080@0.0.2560.1040" timestamp="1604887602662" />
     <state width="2517" height="227" key="GridCell.Tab.0.bottom/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1604814933214" />
     <state width="2517" height="242" key="GridCell.Tab.0.bottom/451.-900.1600.860/2560.0.1920.1080/0.0.2560.1040@0.0.2560.1040" timestamp="1604762314962" />
-    <state width="2517" height="227" key="GridCell.Tab.0.center" timestamp="1604887602661">
+    <state width="2517" height="227" key="GridCell.Tab.0.center" timestamp="1604979745397">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="2500" height="226" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900/2560.0.1920.1080@0.0.2560.1040" timestamp="1604746069539" />
-    <state width="2500" height="226" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1604685731279" />
+    <state width="2517" height="227" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1604979745397" />
     <state width="1801" height="312" key="GridCell.Tab.0.center/0.23.1852.945@0.23.1852.945" timestamp="1601933837864" />
     <state width="1878" height="274" key="GridCell.Tab.0.center/0.23.1920.945@0.23.1920.945" timestamp="1603384375503" />
     <state width="2517" height="227" key="GridCell.Tab.0.center/451.-900.1600.860/0.0.2560.1040/2560.0.1920.1080@0.0.2560.1040" timestamp="1604887602661" />
     <state width="2517" height="227" key="GridCell.Tab.0.center/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1604814933214" />
     <state width="2517" height="242" key="GridCell.Tab.0.center/451.-900.1600.860/2560.0.1920.1080/0.0.2560.1040@0.0.2560.1040" timestamp="1604762314962" />
-    <state width="2517" height="227" key="GridCell.Tab.0.left" timestamp="1604887602661">
+    <state width="2517" height="227" key="GridCell.Tab.0.left" timestamp="1604979745396">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="2500" height="226" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900/2560.0.1920.1080@0.0.2560.1040" timestamp="1604746069539" />
-    <state width="2500" height="226" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1604685731279" />
+    <state width="2517" height="227" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1604979745396" />
     <state width="1801" height="312" key="GridCell.Tab.0.left/0.23.1852.945@0.23.1852.945" timestamp="1601933837863" />
     <state width="1878" height="274" key="GridCell.Tab.0.left/0.23.1920.945@0.23.1920.945" timestamp="1603384375502" />
     <state width="2517" height="227" key="GridCell.Tab.0.left/451.-900.1600.860/0.0.2560.1040/2560.0.1920.1080@0.0.2560.1040" timestamp="1604887602661" />
     <state width="2517" height="227" key="GridCell.Tab.0.left/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1604814933214" />
     <state width="2517" height="242" key="GridCell.Tab.0.left/451.-900.1600.860/2560.0.1920.1080/0.0.2560.1040@0.0.2560.1040" timestamp="1604762314962" />
-    <state width="2517" height="227" key="GridCell.Tab.0.right" timestamp="1604887602662">
+    <state width="2517" height="227" key="GridCell.Tab.0.right" timestamp="1604979745397">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="2500" height="226" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900/2560.0.1920.1080@0.0.2560.1040" timestamp="1604746069539" />
-    <state width="2500" height="226" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1604685731280" />
+    <state width="2517" height="227" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1604979745397" />
     <state width="1801" height="312" key="GridCell.Tab.0.right/0.23.1852.945@0.23.1852.945" timestamp="1601933837865" />
     <state width="1878" height="274" key="GridCell.Tab.0.right/0.23.1920.945@0.23.1920.945" timestamp="1603384375504" />
     <state width="2517" height="227" key="GridCell.Tab.0.right/451.-900.1600.860/0.0.2560.1040/2560.0.1920.1080@0.0.2560.1040" timestamp="1604887602662" />
@@ -225,11 +205,6 @@
           <url>file://$PROJECT_DIR$/example/lib/utils/notification_util.dart</url>
           <line>138</line>
           <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
-          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
-          <line>41</line>
-          <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
