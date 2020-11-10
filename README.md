@@ -202,14 +202,19 @@ OBS: Is not necessary to include both extensions if you pretend to use just one 
 
 <br>
 
-#### *Including Notification Service Extension to your project*
+### *Including Notification Service Extension to your project*
 <br>
+
 1- Open your project directly on XCode, opening the file "/{path-to-your-project}/ios/Runner.xcworkspace"
 
-2- Create a new target for Notification Service Extension with **File > New > Target** and select **Notification Service Extension**. Name the extension as **AwesomeServiceExtension**.<br>
+2- Create a new target for Notification Service Extension with **File > New > Target** and select **Notification Service Extension**. Name the extension as **AwesomeServiceExtension**.
+<br>
+
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/add-notification-service-extension.jpg)
 
-3- Create a new target for Notification Content Extension with **File > New > Target** and select **Notification Content Extension**. Name the extension as **AwesomeContentExtension**.<br>
+3- Create a new target for Notification Content Extension with **File > New > Target** and select **Notification Content Extension**. Name the extension as **AwesomeContentExtension**.
+<br>
+
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/add-notification-content-extension.jpg)
 
 4- Edit your Podfile in XCode and insert the code bellow at the bottom of the file:
@@ -274,12 +279,16 @@ class NotificationViewController: AwesomeContentExtension {
 
 <br>
 
-8- For ***Runner***, ***AwesomeServiceExtension*** and ***AwesomeContentExtension*** Targets, go to **Signing & Capabilities > App Groups** and add the group group.AwesomeNotifications.**your.bundle.domain.appname**<br>
+8- For ***Runner***, ***AwesomeServiceExtension*** and ***AwesomeContentExtension*** Targets, go to **Signing & Capabilities > App Groups** and add the group group.AwesomeNotifications.**your.bundle.domain.appname**
+<br>
+
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/xcode-signing-and-capabilities.jpg)
 
 <br>
 
-9- Go to **Runner > Build Settings** and certifies to disable `Enable Bitcode` and `Require Only App-Extension-Safe API`, setting it to `'NO'` in both extensions.<br>
+9- Go to **Runner > Build Settings** and certifies to disable `Enable Bitcode` and `Require Only App-Extension-Safe API`, setting it to `'NO'` in both extensions.
+<br>
+
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/disable-bitcode.jpg)
 
 <br>
