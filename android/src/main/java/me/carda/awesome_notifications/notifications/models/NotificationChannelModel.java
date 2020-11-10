@@ -53,17 +53,7 @@ public class NotificationChannelModel extends Model {
 
     public NotificationPrivacy defaultPrivacy;
 
-    public NotificationChannelModel(){
-    }
-
-    public NotificationChannelModel(Map<String, Object> arguments){
-        // Set default values
-        fromMapImplementation(arguments);
-
-        assert (channelKey != null);
-        assert (channelDescription != null);
-        assert (channelName != null);
-    }
+    public NotificationChannelModel(){}
 
     @Override
     public boolean equals(@Nullable Object obj) {
@@ -95,12 +85,8 @@ public class NotificationChannelModel extends Model {
             CompareUtils.assertEqualObjects(other.groupAlertBehavior, this.groupAlertBehavior);
     }
 
-    public static NotificationChannelModel fromMap(Map<String, Object> arguments) {
-        return (NotificationChannelModel) new NotificationChannelModel().fromMapImplementation(arguments);
-    }
-
     @Override
-    protected Model fromMapImplementation(Map<String, Object> arguments) {
+    public NotificationChannelModel fromMap(Map<String, Object> arguments) {
 
         iconResourceId = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON_RESOURCE_ID, Integer.class);
         icon           = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON, String.class);
@@ -205,6 +191,16 @@ public class NotificationChannelModel extends Model {
             returnedObject.put(Definitions.NOTIFICATION_ONLY_ALERT_ONCE, this.onlyAlertOnce);
 
         return returnedObject;
+    }
+
+    @Override
+    public String toJson() {
+        return templateToJson();
+    }
+
+    @Override
+    public NotificationChannelModel fromJson(String json){
+        return (NotificationChannelModel) super.templateFromJson(json);
     }
 
     @Override

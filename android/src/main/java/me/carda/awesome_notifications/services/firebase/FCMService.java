@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.WorkerThread;
 import io.flutter.Log;
 
 import com.google.common.reflect.TypeToken;
@@ -19,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.carda.awesome_notifications.BroadcastSender;
-import me.carda.awesome_notifications.notifications.PushNotification;
+import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationSource;
 import me.carda.awesome_notifications.notifications.NotificationSender;
 import me.carda.awesome_notifications.Definitions;
@@ -123,8 +121,8 @@ public class FCMService extends FirebaseMessagingService {
             if(!ListUtils.isNullOrEmpty(parsedActionButtons))
                 parsedRemoteMessage.put(Definitions.PUSH_NOTIFICATION_BUTTONS, parsedActionButtons);
 
-
-            PushNotification pushNotification = PushNotification.fromMap(parsedRemoteMessage);
+            PushNotification pushNotification = new PushNotification().fromMap(parsedRemoteMessage);
+            //pushNotification.validate(applicationContext);
 
             NotificationSender.send(
                 applicationContext,

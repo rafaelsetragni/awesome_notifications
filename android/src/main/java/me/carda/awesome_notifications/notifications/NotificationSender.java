@@ -2,18 +2,12 @@ package me.carda.awesome_notifications.notifications;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import io.flutter.Log;
 
-import com.google.common.reflect.TypeToken;
-
-import java.util.List;
-
-import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import me.carda.awesome_notifications.BroadcastSender;
@@ -23,7 +17,7 @@ import me.carda.awesome_notifications.notifications.enumeratos.NotificationSourc
 import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
 import me.carda.awesome_notifications.notifications.managers.CreatedManager;
 import me.carda.awesome_notifications.notifications.managers.DisplayedManager;
-import me.carda.awesome_notifications.notifications.managers.ScheduleManager;
+import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
 import me.carda.awesome_notifications.utils.DateUtils;
 import me.carda.awesome_notifications.utils.StringUtils;

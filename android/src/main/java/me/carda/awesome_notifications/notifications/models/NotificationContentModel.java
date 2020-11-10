@@ -57,12 +57,10 @@ public class NotificationContentModel extends Model {
     public String createdDate;
     public String displayedDate;
 
-    public static NotificationContentModel fromMap(Map<String, Object> arguments) {
-        return (NotificationContentModel) new NotificationContentModel().fromMapImplementation(arguments);
-    }
+    public NotificationContentModel(){}
 
     @Override
-    protected Model fromMapImplementation(Map<String, Object> arguments) {
+    public NotificationContentModel fromMap(Map<String, Object> arguments) {
 
         createdDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_CREATED_DATE, String.class)
                             .or(DateUtils.getUTCDate());
@@ -194,6 +192,16 @@ public class NotificationContentModel extends Model {
             returnedObject.put(Definitions.NOTIFICATION_PRIVATE_MESSAGE, this.privateMessage);
 
         return returnedObject;
+    }
+
+    @Override
+    public String toJson() {
+        return templateToJson();
+    }
+
+    @Override
+    public NotificationContentModel fromJson(String json){
+        return (NotificationContentModel) super.templateFromJson(json);
     }
 
     @Override

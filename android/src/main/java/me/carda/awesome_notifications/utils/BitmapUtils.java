@@ -11,12 +11,14 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.regex.Pattern;
 
 import io.flutter.embedding.engine.loader.FlutterLoader;
 import io.flutter.view.FlutterMain;
+import me.carda.awesome_notifications.R;
 
 import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_ASSET;
 import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_FILE;
@@ -73,14 +75,47 @@ public class BitmapUtils extends MediaUtils {
         return null;
     }
 
+    public static int getResId(String variableName, Class<?> c) {
+
+        try {
+            Field idField = c.getDeclaredField(variableName);
+            return idField.getInt(idField);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     public static int getDrawableResourceId(Context context, String bitmapReference){
         bitmapReference = BitmapUtils.cleanMediaPath(bitmapReference);
         String[] reference = bitmapReference.split("\\/");
-        return context.getResources().getIdentifier(reference[1], reference[0], context.getPackageName());
+        try {
+            int resId;
+
+            String type = reference[0];
+            String label = reference[1];
+
+            // Resources protected from obfuscation
+            // https://developer.android.com/studio/build/shrink-code#strict-reference-checks
+            String name = String.format("res_%1s", label);
+            resId = context.getResources().getIdentifier(name, type, context.getPackageName());
+
+            if(resId == 0){
+                resId = context.getResources().getIdentifier(label, type, context.getPackageName());
+            }
+
+            return resId;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 
     public static Bitmap getBitmapFromResource(Context context, String bitmapReference){
         int resourceId = getDrawableResourceId(context, bitmapReference);
+        if(resourceId <= 0) return null;
         return BitmapFactory.decodeResource(context.getResources(), resourceId);
     }
 

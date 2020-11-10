@@ -27,8 +27,7 @@ import me.carda.awesome_notifications.utils.StringUtils;
 
 public class ChannelManager {
 
-    private static SharedManager<NotificationChannelModel> shared = new SharedManager<>("ChannelManager", ChannelManager.class);
-    private static Type typeToken = new TypeToken<NotificationChannelModel>(){}.getType();
+    private static final SharedManager<NotificationChannelModel> shared = new SharedManager<>("ChannelManager", NotificationChannelModel.class);
 
     public static Boolean removeChannel(Context context, String channelKey) {
         removeAndroidChannel(context, channelKey);
@@ -36,7 +35,7 @@ public class ChannelManager {
     }
 
     public static List<NotificationChannelModel> listChannels(Context context) {
-        return shared.getAllObjects(context, typeToken, Definitions.SHARED_CHANNELS);
+        return shared.getAllObjects(context, Definitions.SHARED_CHANNELS);
     }
 
     public static void saveChannel(Context context, NotificationChannelModel channelModel) {
@@ -45,7 +44,7 @@ public class ChannelManager {
     }
 
     public static NotificationChannelModel getChannelByKey(Context context, String channelKey){
-        return shared.get(context, typeToken, Definitions.SHARED_CHANNELS, channelKey);
+        return shared.get(context, Definitions.SHARED_CHANNELS, channelKey);
     }
 
     public static Uri retrieveSoundResourceUri(Context context, NotificationChannelModel channelModel) {

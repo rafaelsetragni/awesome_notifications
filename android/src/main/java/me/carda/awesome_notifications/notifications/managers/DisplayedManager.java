@@ -13,15 +13,14 @@ import me.carda.awesome_notifications.notifications.models.returnedData.Notifica
 
 public class DisplayedManager {
 
-    private static SharedManager<NotificationReceived> shared = new SharedManager<>("DisplayedManager", DisplayedManager.class);
-    private static Type typeToken = new TypeToken<NotificationReceived>(){}.getType();
+    private static final SharedManager<NotificationReceived> shared = new SharedManager<>("DisplayedManager", NotificationReceived.class);
 
     public static Boolean removeDisplayed(Context context, Integer id) {
         return shared.remove(context, Definitions.SHARED_DISPLAYED, id.toString());
     }
 
     public static List<NotificationReceived> listDisplayed(Context context) {
-        return shared.getAllObjects(context, typeToken, Definitions.SHARED_DISPLAYED);
+        return shared.getAllObjects(context, Definitions.SHARED_DISPLAYED);
     }
 
     public static void saveDisplayed(Context context, NotificationReceived received) {
@@ -29,11 +28,11 @@ public class DisplayedManager {
     }
 
     public static NotificationReceived getDisplayedByKey(Context context, Integer id){
-        return shared.get(context, typeToken, Definitions.SHARED_DISPLAYED, id.toString());
+        return shared.get(context, Definitions.SHARED_DISPLAYED, id.toString());
     }
 
     public static void cancelAllDisplayed(Context context) {
-        List<NotificationReceived> displayedList = shared.getAllObjects(context, typeToken, Definitions.SHARED_DISPLAYED);
+        List<NotificationReceived> displayedList = shared.getAllObjects(context, Definitions.SHARED_DISPLAYED);
         if(displayedList != null)
             for(NotificationReceived displayed : displayedList){
                 cancelDisplayed(context, displayed.id);

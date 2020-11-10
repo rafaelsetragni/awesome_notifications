@@ -9,26 +9,27 @@ import java.util.List;
 
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
+import me.carda.awesome_notifications.notifications.models.DefaultsModel;
 
 public class DefaultsManager {
 
-    private static SharedManager<String> shared = new SharedManager<>("DefaultsManager", DefaultsManager.class);
-    private static Type typeToken = new TypeToken<String>(){}.getType();
+    private static final SharedManager<DefaultsModel> shared = new SharedManager<>("DefaultsManager", DefaultsModel.class);
 
-    public static Boolean removeDefault(Context context, String key) {
-        return shared.remove(context, Definitions.SHARED_DEFAULTS, key);
+    public static Boolean removeDefault(Context context) {
+        return shared.remove(context, Definitions.SHARED_DEFAULTS, "Defaults");
     }
 
-    public static List<String> listDefaults(Context context) {
-        return shared.getAllObjects(context, typeToken, Definitions.SHARED_DEFAULTS);
+    public static void saveDefault(Context context, DefaultsModel defaults) {
+        shared.set(context, Definitions.SHARED_DEFAULTS, "Defaults", defaults);
     }
 
-    public static void saveDefault(Context context, String key, String data) {
-        shared.set(context, Definitions.SHARED_DEFAULTS, key, data);
+    public static DefaultsModel getDefaultByKey(Context context){
+        return shared.get(context, Definitions.SHARED_DEFAULTS, "Defaults");
     }
 
-    public static String getDefaultByKey(Context context, String key){
-        return shared.get(context, typeToken, Definitions.SHARED_DEFAULTS, key);
+    public static String getDefaultIconByKey(Context context){
+        DefaultsModel defaults = shared.get(context, Definitions.SHARED_DEFAULTS, "Defaults");
+        return (defaults != null) ? defaults.appIcon : null;
     }
 
     public static void commitChanges(Context context){

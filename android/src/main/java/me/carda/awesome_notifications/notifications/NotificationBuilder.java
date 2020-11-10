@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.github.arturogutierrez.BadgesNotSupportedException;
-import com.google.common.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
-import androidx.core.content.ContextCompat;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.broadcastReceivers.DismissedNotificationReceiver;
@@ -36,13 +34,13 @@ import me.carda.awesome_notifications.notifications.managers.DefaultsManager;
 import me.carda.awesome_notifications.notifications.models.NotificationButtonModel;
 import me.carda.awesome_notifications.notifications.models.NotificationChannelModel;
 import me.carda.awesome_notifications.notifications.models.NotificationContentModel;
+import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.utils.BitmapUtils;
 import me.carda.awesome_notifications.utils.BooleanUtils;
 import me.carda.awesome_notifications.utils.DateUtils;
 import me.carda.awesome_notifications.utils.HtmlUtils;
 import me.carda.awesome_notifications.utils.IntegerUtils;
-import me.carda.awesome_notifications.utils.JsonUtils;
 import me.carda.awesome_notifications.utils.ListUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
@@ -97,7 +95,8 @@ public class NotificationBuilder {
         intent.setAction(ActionReference);
 
         intent.putExtra(Definitions.NOTIFICATION_ID, pushNotification.content.id);
-        intent.putExtra(Definitions.NOTIFICATION_JSON, pushNotification.toJson());
+        String jsonData = pushNotification.toJson();
+        intent.putExtra(Definitions.NOTIFICATION_JSON, jsonData);
         intent.putExtra(Definitions.NOTIFICATION_AUTO_CANCEL, pushNotification.content.autoCancel);
 
         return intent;
@@ -116,7 +115,9 @@ public class NotificationBuilder {
             Integer notificationId = intent.getIntExtra(Definitions.NOTIFICATION_ID, -1);
             String notificationJson = intent.getStringExtra(Definitions.NOTIFICATION_JSON);
 
-            PushNotification pushNotification = JsonUtils.fromJson(new TypeToken<PushNotification>(){}.getType(), notificationJson);
+            PushNotification pushNotification = new PushNotification().fromJson(notificationJson);
+            if(pushNotification == null) return null;
+
             ActionReceived actionModel = new ActionReceived(pushNotification.content);
 
             actionModel.actionLifeCycle = AwesomeNotificationsPlugin.appLifeCycle;
@@ -377,36 +378,6 @@ public class NotificationBuilder {
             e.printStackTrace();
             return null;
         }
-        /*
-        //return PushNotificationsPlugin.class;
-
-        String packageName = context.getPackageName();
-        Intent launchIntent = null;
-
-        try{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                launchIntent = context.getPackageManager().getLeanbackLaunchIntentForPackage(packageName);
-            }
-        } catch (NoSuchMethodError e){
-        }
-
-        if (launchIntent == null) launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-
-        if (launchIntent != null)  {
-            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(launchIntent);
-        } else {
-            return null;
-        }
-
-        String className = launchIntent.getComponent().getClassName();
-
-        try {
-            return Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }*/
     }
 
     @NonNull
@@ -491,7 +462,7 @@ public class NotificationBuilder {
         if (channelModel.icon != null) {
             builder.setSmallIcon(BitmapUtils.getDrawableResourceId(context, channelModel.icon));
         } else {
-            String defaultIcon = DefaultsManager.getDefaultByKey(context, Definitions.DEFAULT_ICON);
+            String defaultIcon = DefaultsManager.getDefaultIconByKey(context);
 
             if (StringUtils.isNullOrEmpty(defaultIcon)) {
 

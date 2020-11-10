@@ -98,7 +98,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 
 ```dart
 AwesomeNotifications().initialize(
-    'resource://drawable/app_icon',
+    'resource://drawable/res_app_icon',
     [
         NotificationChannel(
             channelKey: 'basic_channel',

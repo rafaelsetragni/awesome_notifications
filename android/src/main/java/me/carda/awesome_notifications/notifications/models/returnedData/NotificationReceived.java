@@ -5,10 +5,14 @@ import java.util.Map;
 
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
+import me.carda.awesome_notifications.notifications.models.Model;
 import me.carda.awesome_notifications.notifications.models.NotificationContentModel;
+import me.carda.awesome_notifications.notifications.models.PushNotification;
 
 // Just created because of Json process
 public class NotificationReceived extends NotificationContentModel {
+
+    public NotificationReceived(){}
 
     public NotificationReceived(NotificationContentModel contentModel){
         /*
@@ -42,13 +46,23 @@ public class NotificationReceived extends NotificationContentModel {
         this.createdDate = contentModel.createdDate;
     }
 
-    public static NotificationReceived fromMap(Map<String, Object> arguments) {
-        NotificationContentModel contentModel = NotificationContentModel.fromMap(arguments);
-        return new NotificationReceived(contentModel);
+    @Override
+    public NotificationReceived fromMap(Map<String, Object> parameters){
+        return (NotificationReceived) super.fromMap(parameters);
     }
 
     @Override
     public Map<String, Object> toMap(){
         return super.toMap();
+    }
+
+    @Override
+    public String toJson() {
+        return templateToJson();
+    }
+
+    @Override
+    public NotificationReceived fromJson(String json){
+        return (NotificationReceived) super.templateFromJson(json);
     }
 }

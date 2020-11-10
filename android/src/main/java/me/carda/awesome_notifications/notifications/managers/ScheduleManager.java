@@ -7,22 +7,20 @@ import com.google.common.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.NotificationScheduler;
-import me.carda.awesome_notifications.notifications.PushNotification;
+import me.carda.awesome_notifications.notifications.models.PushNotification;
 
 public class ScheduleManager {
 
-    private static SharedManager<PushNotification> shared = new SharedManager<>("ScheduleManager", ScheduleManager.class);
-    private static Type typeToken = new TypeToken<PushNotification>(){}.getType();
+    private static final SharedManager<PushNotification> shared = new SharedManager<>("ScheduleManager", PushNotification.class);
 
     public static Boolean removeSchedule(Context context, PushNotification received) {
         return shared.remove(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS, received.content.id.toString());
     }
 
     public static List<PushNotification> listSchedules(Context context) {
-        return shared.getAllObjects(context, typeToken, Definitions.SHARED_SCHEDULED_NOTIFICATIONS);
+        return shared.getAllObjects(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS);
     }
 
     public static void saveSchedule(Context context, PushNotification received) {
@@ -30,11 +28,11 @@ public class ScheduleManager {
     }
 
     public static PushNotification getScheduleByKey(Context context, String actionKey){
-        return shared.get(context, typeToken, Definitions.SHARED_SCHEDULED_NOTIFICATIONS, actionKey);
+        return shared.get(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS, actionKey);
     }
 
     public static void cancelAllSchedules(Context context) {
-        List<PushNotification> listSchedules = shared.getAllObjects(context, typeToken, Definitions.SHARED_SCHEDULED_NOTIFICATIONS);
+        List<PushNotification> listSchedules = shared.getAllObjects(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS);
         if(listSchedules != null) {
             for (PushNotification pushNotification : listSchedules) {
                 NotificationScheduler.cancelNotification(context, pushNotification.content.id);
@@ -43,7 +41,7 @@ public class ScheduleManager {
     }
 
     public static void cancelSchedule(Context context, Integer id) {
-        PushNotification schedule = shared.get(context, typeToken, Definitions.SHARED_SCHEDULED_NOTIFICATIONS, id.toString());
+        PushNotification schedule = shared.get(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS, id.toString());
         if(schedule != null)
             removeSchedule(context, schedule);
     }
