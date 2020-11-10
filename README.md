@@ -202,7 +202,7 @@ OBS: Is not necessary to include both extensions if you pretend to use just one 
 
 <br>
 
-### *Including Notification Service Extension to your project*
+### *Including Notification Target Extensions to your project*
 <br>
 
 1- Open your project directly on XCode, opening the file "/{path-to-your-project}/ios/Runner.xcworkspace"
