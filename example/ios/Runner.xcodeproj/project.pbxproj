@@ -16,7 +16,7 @@
 		054925B4254357E90056445E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 054925B2254357E90056445E /* MainInterface.storyboard */; };
 		054925B8254357E90056445E /* AwesomeContentExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 054925AC254357E90056445E /* AwesomeContentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		054A6B4224F883F100DBDAC1 /* CronTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054A6B4124F883F100DBDAC1 /* CronTest.swift */; };
-		05C131792555C8FB00DEA7C2 /* morph_power_rangers.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 05C131782555C8FB00DEA7C2 /* morph_power_rangers.aiff */; };
+		05C131792555C8FB00DEA7C2 /* res_morph_power_rangers.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 05C131782555C8FB00DEA7C2 /* res_morph_power_rangers.aiff */; };
 		05EEBFCE2539B41A00E17CF5 /* AwesomeServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 05EEBFC72539B41A00E17CF5 /* AwesomeServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		05FD37F12515239A001FF6B9 /* StringTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FD37F02515239A001FF6B9 /* StringTest.swift */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
@@ -115,7 +115,7 @@
 		054A6B4324F883F100DBDAC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		05B985572550CD0500719D0D /* AwesomeServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AwesomeServiceExtension.entitlements; sourceTree = "<group>"; };
 		05B985582550CD1000719D0D /* AwesomeContentExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AwesomeContentExtension.entitlements; sourceTree = "<group>"; };
-		05C131782555C8FB00DEA7C2 /* morph_power_rangers.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = morph_power_rangers.aiff; sourceTree = "<group>"; };
+		05C131782555C8FB00DEA7C2 /* res_morph_power_rangers.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = res_morph_power_rangers.aiff; sourceTree = "<group>"; };
 		05EEBE082538EB7200E17CF5 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		05EEBFC72539B41A00E17CF5 /* AwesomeServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AwesomeServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		05EEBFCB2539B41A00E17CF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -310,7 +310,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
-				05C131782555C8FB00DEA7C2 /* morph_power_rangers.aiff */,
+				05C131782555C8FB00DEA7C2 /* res_morph_power_rangers.aiff */,
 				05EEBE082538EB7200E17CF5 /* Runner.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -522,7 +522,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
-				05C131792555C8FB00DEA7C2 /* morph_power_rangers.aiff in Resources */,
+				05C131792555C8FB00DEA7C2 /* res_morph_power_rangers.aiff in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				050F5552251EB1AC00E49A15 /* GoogleService-Info.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
