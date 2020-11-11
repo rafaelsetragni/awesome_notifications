@@ -193,7 +193,7 @@ A support ticket was opened for Apple in order to resolve this issue. You can fo
 
 ## iOS Extra Configurations
 
-To activate all the features on iOS, is necessary to include two target extensions to your project:
+To activate all the features on iOS, is necessary to include two target extensions in your project:
 
 - **Notification Content Extension**: allows to use alternative layouts, such as Big text, Progress Bar and Inbox Messages.
 - **Notification Service Extension**: allows to receive push notifications using all Awesome Notifications Features.
@@ -202,7 +202,7 @@ OBS: Is not necessary to include both extensions if you pretend to use just one 
 
 <br>
 
-### *Including Notification Target Extensions to your project*
+### *Including Notification Target Extensions in your project*
 <br>
 
 1- Open your project directly on XCode, opening the file "/{path-to-your-project}/ios/Runner.xcworkspace"
