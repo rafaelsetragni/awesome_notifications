@@ -175,7 +175,7 @@ public class NotificationBuilder {
 
         NotificationChannelModel channel = ChannelManager.getChannelByKey(context, pushNotification.content.channelKey);
 
-        if(channel == null) throw new PushNotificationException("Invalid Channel "+pushNotification.content.channelKey);
+        if(channel == null) throw new PushNotificationException("Channel '"+pushNotification.content.channelKey+"' does not exist or is disabled");
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, pushNotification.content.channelKey);
 

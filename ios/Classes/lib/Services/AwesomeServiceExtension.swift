@@ -13,14 +13,14 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
     //var fcmService: FCMService?
     var pushNotification: PushNotification?
     
-    
+
     public override func didReceive(
         _ request: UNNotificationRequest,
         withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void
     ){
         self.contentHandler = contentHandler
         self.content = (request.content.mutableCopy() as? UNMutableNotificationContent)
-        
+
         if let content = content {
             
             if(!StringUtils.isNullOrEmpty(content.userInfo["gcm.message_id"] as? String)){
@@ -89,6 +89,10 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
                                 
                                 if sent {
                                     contentHandler(newContent ?? content)
+                                    return
+                                }
+                                else {
+                                    contentHandler(UNNotificationContent())
                                     return
                                 }
                                 

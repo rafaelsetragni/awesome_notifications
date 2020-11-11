@@ -177,7 +177,7 @@ public class NotificationBuilder {
     public static func createNotification(_ pushNotification:PushNotification, content:UNMutableNotificationContent?, now:String) throws -> PushNotification? {
         
         guard let channel = ChannelManager.getChannelByKey(channelKey: pushNotification.content!.channelKey!) else {
-            return nil
+            throw PushNotificationError.invalidRequiredFields(msg: "Channel '\(pushNotification.content!.channelKey!)' does not exist or is disabled")
         }
         
         let nextDate:Date? = getNextScheduleDate(pushNotification: pushNotification)

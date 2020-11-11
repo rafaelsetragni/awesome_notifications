@@ -1,4 +1,6 @@
-
+## [0.0.5+1]
+* Included canceling capability to notification push service in cases of invalid notification
+* Improved iOS documentation
 ## [0.0.5]
 * Finished FCM push messages for iOS 10 or higher
 * Decreased the implementation complexity to use NotificationServiceExtension and NotificationContentExtension targets (iOS)
