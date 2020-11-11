@@ -275,18 +275,21 @@ class NotificationViewController: AwesomeContentExtension {
 ```
 <br>
 
-8- Using XCode, inside the ios folder open your project file `Runner.xcworkspace`. Than go to *Runner > Signing & Capabilities* and add **App Groups**, **Push Notifications** and **Background Modes**, with *Background fetch*, *Remote notifications* and *Background processing* checked.
+8- Using XCode, inside the ios folder open your project file `Runner.xcworkspace`. Than go to *Runner > Signing & Capabilities* and add **App Groups**, **Push Notifications** and **Background Modes**, with ***Background fetch***, ***Remote notifications*** and ***Background processing*** checked.
 
 <br>
 
 9- For **Runner**, **AwesomeServiceExtension** and **AwesomeContentExtension** Targets, go to *Signing & Capabilities > App Groups* and add the group "group.AwesomeNotifications.*your.bundle.domain.appName*"
 <br>
 
+![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/xcode-signing-and-capabilities.jpg)
+
+
 OBS: the App Group identifier is case sensitive and MUST be exactely the same as your app bundle. In every plugin initialization on iOS, your app group is debug printed in your terminal with the text: 
 
 > "Awesome Notifications - App Group : group.AwesomeNotifications.*your.bundle.domain.appName*"
 
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/xcode-signing-and-capabilities.jpg)
+<br>
 
 You can manage your app groups as show in the tutorial bellow:
 <br>
@@ -355,7 +358,7 @@ Download the file and place it inside your [app]/ios/Runner/ folder using XCode.
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/google-plist-path.jpg)
 
-After, in your Google Console, go to **General (Gear icon) -> Cloud Messaging -> iOS configuration** and send your APNs key and include your iOS Team ID. To generate your APNs keys follow the tutorial bellow:
+After, in your Google Console, go to **General (Gear icon) -> Cloud Messaging -> iOS configuration** and send your **APNs key** and include your **iOS Team ID**. To generate your APNs keys, follow the tutorial bellow:
 
 https://docs.oracle.com/en/cloud/saas/marketing/responsys-develop-mobile/ios/auth-key/
 
