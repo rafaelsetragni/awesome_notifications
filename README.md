@@ -243,7 +243,11 @@ end
 
 <br>
 
-5- Replace the file content in NotificationService.swift by the code bellow:
+5- Go to the terminal, navigate to "/{path-to-your-project}/ios" folder and run `pod install` to compile the dependencies.
+
+<br>
+
+6- Replace the file content in NotificationService.swift by the code bellow:
 
 <br>
 
@@ -257,7 +261,7 @@ class NotificationService: AwesomeServiceExtension {
 ```
 <br>
 
-6- Replace the file content in NotificationContent.swift by the code bellow:
+7- Replace the file content in NotificationContent.swift by the code bellow:
 
 <br>
 
@@ -271,11 +275,11 @@ class NotificationViewController: AwesomeContentExtension {
 ```
 <br>
 
-7- Using XCode, inside the ios folder open your project file `Runner.xcworkspace`. Than go to *Runner > Signing & Capabilities* and add **App Groups**, **Push Notifications** and **Background Modes**, with *Background fetch*, *Remote notifications* and *Background processing* checked.
+8- Using XCode, inside the ios folder open your project file `Runner.xcworkspace`. Than go to *Runner > Signing & Capabilities* and add **App Groups**, **Push Notifications** and **Background Modes**, with *Background fetch*, *Remote notifications* and *Background processing* checked.
 
 <br>
 
-8- For **Runner**, **AwesomeServiceExtension** and **AwesomeContentExtension** Targets, go to *Signing & Capabilities > App Groups* and add the group "group.AwesomeNotifications.*your.bundle.domain.appName*"
+9- For **Runner**, **AwesomeServiceExtension** and **AwesomeContentExtension** Targets, go to *Signing & Capabilities > App Groups* and add the group "group.AwesomeNotifications.*your.bundle.domain.appName*"
 <br>
 
 OBS: the App Group identifier is case sensitive and MUST be exactely the same as your app bundle. In every plugin initialization on iOS, your app group is debug printed in your terminal with the text: 
@@ -290,14 +294,10 @@ https://www.appcoda.com/app-group-macos-ios-communication/
 
 <br>
 
-9- Go to **Runner > Build Settings** and certifies to disable `Enable Bitcode` and `Require Only App-Extension-Safe API`, setting it to `'NO'` in both extensions.
+10- Go to **Runner > Build Settings** and certifies to disable `Enable Bitcode` and `Require Only App-Extension-Safe API`, setting it to `'NO'` in both extensions.
 <br>
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/disable-bitcode.jpg)
-
-<br>
-
-10- Go to the terminal, navigate to "/{path-to-your-project}/ios" folder and run `pod install` to compile the dependencies.
 
 <br>
 
