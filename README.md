@@ -191,7 +191,7 @@ A support ticket was opened for Apple in order to resolve this issue. You can fo
 <br>
 <br>
 
-## iOS Configuration
+## iOS Extra Configurations
 
 To activate all the features on iOS, is necessary to include two target extensions to your project:
 
@@ -223,12 +223,7 @@ OBS: Is not necessary to include both extensions if you pretend to use just one 
 
 <br>
 
-```
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    flutter_additional_ios_build_settings(target)
-  end
-end
+```pod
 
 target 'AwesomeServiceExtension' do
   use_frameworks!
@@ -243,6 +238,7 @@ target 'AwesomeContentExtension' do
 
   pod 'awesome_notifications', :path => '.symlinks/plugins/awesome_notifications/ios'
 end
+
 ```
 
 <br>
@@ -275,14 +271,22 @@ class NotificationViewController: AwesomeContentExtension {
 ```
 <br>
 
-7- Opening your project file `project.pbxproj` with XCode, go to **Runner > Signing & Capabilities** and add App Groups, Push Notifications and Background Modes with Background fetch, Remote notifications and Background processing enabled.
+7- Using XCode, inside the ios folder open your project file `Runner.xcworkspace`. Than go to *Runner > Signing & Capabilities* and add **App Groups**, **Push Notifications** and **Background Modes**, with *Background fetch*, *Remote notifications* and *Background processing* checked.
 
 <br>
 
-8- For ***Runner***, ***AwesomeServiceExtension*** and ***AwesomeContentExtension*** Targets, go to **Signing & Capabilities > App Groups** and add the group group.AwesomeNotifications.**your.bundle.domain.appname**
+8- For **Runner**, **AwesomeServiceExtension** and **AwesomeContentExtension** Targets, go to *Signing & Capabilities > App Groups* and add the group "group.AwesomeNotifications.*your.bundle.domain.appName*"
 <br>
+
+OBS: the App Group identifier is case sensitive and MUST be exactely the same as your app bundle. In every plugin initialization on iOS, your app group is debug printed in your terminal with the text: 
+
+> "Awesome Notifications - App Group : group.AwesomeNotifications.*your.bundle.domain.appName*"
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/xcode-signing-and-capabilities.jpg)
+
+You can manage your app groups as show in the tutorial bellow:
+<br>
+https://www.appcoda.com/app-group-macos-ios-communication/
 
 <br>
 
@@ -350,6 +354,11 @@ Go to "Cloud Messaging" option and add an "iOS app", put the packge name of your
 Download the file and place it inside your [app]/ios/Runner/ folder using XCode. (Do not use Finder to copy and paste the file)
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/google-plist-path.jpg)
+
+After, in your Google Console, go to **General (Gear icon) -> Cloud Messaging -> iOS configuration** and send your APNs key and include your iOS Team ID. To generate your APNs keys follow the tutorial bellow:
+
+https://docs.oracle.com/en/cloud/saas/marketing/responsys-develop-mobile/ios/auth-key/
+
 
 <br>
 
