@@ -275,7 +275,7 @@ class NotificationViewController: AwesomeContentExtension {
 ```
 <br>
 
-8- Using XCode, inside the ios folder open your project file `Runner.xcworkspace`. Than go to *Runner > Signing & Capabilities* and add **App Groups**, **Push Notifications** and **Background Modes**, with ***Background fetch***, ***Remote notifications*** and ***Background processing*** checked.
+8- Using XCode, inside the ios folder open your project file `Runner.xcworkspace`. Than go to *Runner > Signing & Capabilities* and add **App Groups**, **Push Notifications** and **Background Modes**, with `Background fetch`, `Remote notifications` and `Background processing` checked.
 
 <br>
 
