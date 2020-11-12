@@ -10,7 +10,7 @@
 - Create **Local Notifications** on Android, iOS and Web using Flutter.
 - Create **Push notifications** using services as **Firebase** or any another one, **simultaneously**;
 - Easy to use and highly customizable.
-- Add **images**, **sounds**, **buttons** and different layouts on your notifications.
+- Add **images**, **sounds**, **emoticons**, **buttons** and different layouts on your notifications.
 - Notifications could be created at **any moment** (on Foreground, Background or even when the application is terminated/killed).
 - **High trustworthy** on receive notifications in any Application lifecycle.
 - High quality **data analytics** about when the notification was created, where it came from and when the user taps on it. Ideal for applying **AB tests** approaches, etc, increasing the users engagement.
@@ -468,6 +468,27 @@ Notifications could be scheduled as you wish using two main options:
 - preciseSchedule: List of precise dates to schedule a notification multiple times. This option has the lowest priority  among other options.
 
 OBS: All dates are set to use UTC timezone.
+
+<br>
+
+## Emojis (Emoticons)
+
+To send emojis in your local notifications, concatenate the class `Emoji` with your text.
+For push notifications, copy the emoji (unicode text) from http://www.unicode.org/emoji/charts/full-emoji-list.html and send it or use the format \u\{1f6f8}.
+
+OBS: not all emojis work with all platforms. Please, test the specific emoji before using it in production.
+
+```dart
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: id,
+          channelKey: 'basic_channel',
+          title: 'Emojis are awesome too! '+ Emojis.smille_face_with_tongue + Emojis.smille_rolling_on_the_floor_laughing + Emojis.emotion_red_heart,
+          body: 'Simple body with a bunch of Emojis! ${Emojis.transport_police_car} ${Emojis.animals_dog} ${Emojis.flag_UnitedStates} ${Emojis.person_baby}',
+          bigPicture: 'https://tecnoblog.net/wp-content/uploads/2019/09/emoji.jpg',
+          notificationLayout: NotificationLayout.BigPicture,
+  ));
+```
 
 <br>
 

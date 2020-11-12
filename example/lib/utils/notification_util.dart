@@ -9,6 +9,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart';
 import 'package:awesome_notifications_example/utils/media_player_central.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /* *********************************************
     LARGE TEXT FOR OUR NOTIFICATIONS TESTS
@@ -21,6 +22,14 @@ String lorenIpsumText =
     'nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit'
     'anim id est laborum';
 
+Future<void> externalUrl(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
 /* *********************************************
     BASIC NOTIFICATIONS
 ************************************************ */
@@ -32,6 +41,18 @@ Future<void> showBasicNotification(int id) async {
           channelKey: 'basic_channel',
           title: 'Simple Notification',
           body: 'Simple body'));
+}
+
+Future<void> showEmojiNotification(int id) async {
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: id,
+          channelKey: 'basic_channel',
+          title: 'Emojis are awesome too! '+ Emojis.smille_face_with_tongue + Emojis.smille_rolling_on_the_floor_laughing + Emojis.emotion_red_heart,
+          body: 'Simple body with a bunch of Emojis! ${Emojis.transport_police_car} ${Emojis.animals_dog} ${Emojis.flag_UnitedStates} ${Emojis.person_baby}',
+          bigPicture: 'https://tecnoblog.net/wp-content/uploads/2019/09/emoji.jpg',
+          notificationLayout: NotificationLayout.BigPicture,
+  ));
 }
 
 Future<void> showNotificationWithPayloadContent(int id) async {
