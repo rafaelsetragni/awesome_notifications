@@ -506,6 +506,22 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
           /* ******************************************************************** */
 
+          TextDivisor( title: 'Emojis ${Emojis.smille_alien}${Emojis.transport_air_rocket}' ),
+          TextNote(
+              'To send local and push notifications with emojis, use the class Emoji concatenated with your text.\n\n'
+                  'Attention: not all Emojis work with all platforms. Please, test the specific emoji before using it in production.'
+          ),
+          SimpleButton(
+              'Show notification with emojis',
+              onPressed: () => showEmojiNotification(1)
+          ),
+          SimpleButton(
+            'Go to complete Emojis list (web)',
+            onPressed: () => externalUrl('https://unicode.org/emoji/charts/full-emoji-list.html'),
+          ),
+
+          /* ******************************************************************** */
+
           TextDivisor( title: 'Action Buttons' ),
           TextNote(
               'Action buttons can be used in four types:' '\n\n'

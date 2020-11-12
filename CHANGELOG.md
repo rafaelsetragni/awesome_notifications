@@ -1,3 +1,6 @@
+## [0.0.5+2]
+* Included emojis to be sent on local and push notifications
+* Improved documentation
 ## [0.0.5+1]
 * Included canceling capability to notification push service in cases of invalid notification
 * Improved iOS documentation
