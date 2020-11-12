@@ -48,7 +48,7 @@ Future<void> showEmojiNotification(int id) async {
       content: NotificationContent(
           id: id,
           channelKey: 'basic_channel',
-          title: 'Emojis are awesome too! '+ Emojis.smille_face_with_tongue + Emojis.smille_rolling_on_the_floor_laughing + Emojis.emotion_red_heart,
+          title: 'Emojis are awesome too! '+ Emojis.smille_face_with_tongue + Emojis.smille_rolling_on_the_floor_laughing + Emojis.smille_smiling_face_with_heart_eyes,
           body: 'Simple body with a bunch of Emojis! ${Emojis.transport_police_car} ${Emojis.animals_dog} ${Emojis.flag_UnitedStates} ${Emojis.person_baby}',
           bigPicture: 'https://tecnoblog.net/wp-content/uploads/2019/09/emoji.jpg',
           notificationLayout: NotificationLayout.BigPicture,
