@@ -59,7 +59,7 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
                     
                     mapData[Definitions.PUSH_NOTIFICATION_CONTENT]  = JsonUtils.fromJson(content.userInfo[Definitions.PUSH_NOTIFICATION_CONTENT] as? String)
                     mapData[Definitions.PUSH_NOTIFICATION_SCHEDULE] = JsonUtils.fromJson(content.userInfo[Definitions.PUSH_NOTIFICATION_SCHEDULE] as? String)
-                    mapData[Definitions.PUSH_NOTIFICATION_BUTTONS]  = JsonUtils.fromJson(content.userInfo[Definitions.PUSH_NOTIFICATION_BUTTONS] as? String)
+                    mapData[Definitions.PUSH_NOTIFICATION_BUTTONS]  = JsonUtils.fromJsonArr(content.userInfo[Definitions.PUSH_NOTIFICATION_BUTTONS] as? String)
                     
                     pushNotification = PushNotification().fromMap(arguments: mapData) as? PushNotification
                     
