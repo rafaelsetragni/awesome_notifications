@@ -35,5 +35,16 @@ public class JsonUtils {
         return nil
         
     }
+
+        public static func fromJsonArr(_ text:String? ) -> [Dictionary<String,Any>]? {
+
+            if StringUtils.isNullOrEmpty(text) { return nil }
+            if let data = text!.data(using: String.Encoding.utf8) {
+              let jsonArray = try? JSONSerialization.jsonObject(with: data, options : .allowFragments) as? [Dictionary<String,Any>]
+              return jsonArray
+            }
+                return nil
+
+        }
     
 }
