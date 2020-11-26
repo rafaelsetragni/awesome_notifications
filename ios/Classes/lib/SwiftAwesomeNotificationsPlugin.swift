@@ -100,15 +100,28 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NEW_FCM_TOKEN, arguments: token)
         }
     }
+
+    // For Firebase Messaging versions older than 7.0
+    // https://github.com/rafaelsetragni/awesome_notifications/issues/39
+    public func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        
+        didReceiveRegistrationToken(messaging, fcmToken: fcmToken)
+    }
     
     public func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        if let token = fcmToken {
-            print("Firebase registration token: \(token)")
-            let dataDict:[String: String] = ["token": token]
-            NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
-            // TODO: If necessary send token to application server.
-            // Note: This callback is fired at each app startup and whenever a new token is generated.
+        
+        if let unwrapped = fcmToken {
+            didReceiveRegistrationToken(messaging, fcmToken: unwrapped)
         }
+    }
+    
+    private func didReceiveRegistrationToken(_ messaging: Messaging, fcmToken: String){
+        
+        print("Firebase registration token: \(fcmToken)")
+        let dataDict:[String: String] = ["token": fcmToken]
+        NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
+        
+        flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NEW_FCM_TOKEN, arguments: fcmToken)
     }
     
     @available(iOS 10.0, *)

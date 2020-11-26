@@ -517,7 +517,7 @@ OBS 2: you should not implement any native code to use FCM with Awesome Notifica
             "title": "Huston!\nThe eagle has landed!",
             "body": "A small step for a man, but a giant leap to Flutter's community!",
             "notificationLayout": "BigPicture",
-            "largeIcon": "https://avidabloga.files.wordpress.com/2012/08/emmemc3b3riadeneilarmstrong3.jpg",
+            "largeIcon": "https://media.fstatic.com/kdNpUx4VBicwDuRBnhBrNmVsaKU=/full-fit-in/290x478/media/artists/avatar/2013/08/neil-i-armstrong_a39978.jpeg",
             "bigPicture": "https://www.dw.com/image/49519617_303.jpg",
             "showWhen": true,
             "autoCancel": true,
