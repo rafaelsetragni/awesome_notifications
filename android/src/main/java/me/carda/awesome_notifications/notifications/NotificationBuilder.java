@@ -581,14 +581,10 @@ public class NotificationBuilder {
         CharSequence bigBody = HtmlUtils.fromHtml(contentModel.body);
         bigTextStyle.bigText(bigBody);
 
-        CharSequence summary;
-        if (StringUtils.isNullOrEmpty(contentModel.summary)) {
-            summary = bigBody.subSequence(0, 49);
+        if (!StringUtils.isNullOrEmpty(contentModel.summary)) {
+            CharSequence bigSummary = HtmlUtils.fromHtml(contentModel.summary);
+            bigTextStyle.setSummaryText(bigSummary);
         }
-        else {
-            summary = HtmlUtils.fromHtml(contentModel.body);
-        }
-        bigTextStyle.setSummaryText(summary);
 
         if (!StringUtils.isNullOrEmpty(contentModel.title)) {
             CharSequence bigTitle = HtmlUtils.fromHtml(contentModel.title);
