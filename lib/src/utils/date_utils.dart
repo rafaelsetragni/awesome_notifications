@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/material.dart';
 
-extension DateUtil on DateUtils {
+class DateUtils {
 
   static DateTime parseStringToDate(String date,
       {String format: 'yyyy-MM-dd HH:mm:ss'}) {
@@ -29,4 +27,5 @@ extension DateUtil on DateUtils {
         DateFormat(format).parse(parseDateToString(date));
     return parsedLocalDate.toUtc();
   }
+
 }

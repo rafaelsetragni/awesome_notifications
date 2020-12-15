@@ -4,7 +4,10 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+
+// TO AVOID CONFLICT WITH MATERIAL DATE UTILS CLASS
+import 'package:awesome_notifications/awesome_notifications.dart' hide DateUtils;
+import 'package:awesome_notifications/awesome_notifications.dart' as Utils show DateUtils;
 
 import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart';
@@ -1018,8 +1021,8 @@ Future<void> showNotificationAtScheduleCron(
       channelKey: 'schedule',
       title: 'Just in time!',
       body: 'This notification was schedule to shows at ' +
-          DateUtil.parseDateToString(scheduleTime.toLocal()) +
-      '('+DateUtil.parseDateToString(scheduleTime.toUtc())+' utc)',
+          Utils.DateUtils.parseDateToString(scheduleTime.toLocal()) +
+      '('+Utils.DateUtils.parseDateToString(scheduleTime.toUtc())+' utc)',
       notificationLayout: NotificationLayout.BigPicture,
       bigPicture: 'asset://assets/images/delivery.jpeg',
       payload: {'uuid': 'uuid-test'},
@@ -1042,7 +1045,7 @@ Future<void> showScheduleAtWorkweekDay10AmLocal(int id) async {
       schedule: NotificationSchedule(
           crontabSchedule: CronHelper.instance.workweekDay(
               referenceUtcDate:
-                DateUtil.parseStringToDate('10:00', format: 'HH:mm')
+                Utils.DateUtils.parseStringToDate('10:00', format: 'HH:mm')
                       .toUtc())));
 }
 

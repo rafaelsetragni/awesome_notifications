@@ -549,13 +549,6 @@ OBS 2: you should not implement any native code to use FCM with Awesome Notifica
 You can download a example of how to send Push Notifications through FCM using "Postman" [here](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/Firebase_FCM_Example.postman_collection.json)
 
 <br>
-
-## Error: "Invalid notification content"
-
-The notification sent via FCM services *MUST* respect the types of the respective Notification elements. Otherwise, your notification will be discarded as invalid one.
-Also, all the payload elements *MUST* be a String, as the same way as you do in Local Notifications using dart code.
-
-<br>
 <br>
 
 ## Notification types, values and defaults
@@ -617,4 +610,48 @@ Also, all the payload elements *MUST* be a String, as the same way as you do in 
 | allowWhileIdle     |     NO   | Displays the notification, even when the device is low battery    | bool                               | true or false           | false           |
 | preciseSchedule    |   *YES   | List of precise notification fire dates                           | List<String> (YYYY-mm-dd HH:mi:ss) | UTC valid dates         |                 |
 
+<br>
+<br>
 
+## Common Known Issues
+
+**Issue:** The name 'DateUtils' is defined in the libraries 'package:awesome_notifications/src/utils/date_utils.dart (via package:awesome_notifications/awesome_notifications.dart)' and 'package:flutter/src/material/date.dart (via package:flutter/material.dart)'.
+
+**Fix:** Use a prefix while importing or hide one of the DateUtils declarations:
+
+```dart
+import 'package:flutter/material.dart' hide DateUtils;
+import 'package:flutter/material.dart' as Material show DateUtils;
+
+DateUtils.utcToLocal(DateTime.now());
+Material.DateUtils.dateOnly(DateTime.now());
+```
+
+##
+
+**Issue:** Undefined symbols for architecture arm64/armv7
+
+**Fix:** XCode, to reduce the debug build time, only compiles for the current target architecure. For some reason, when you try to build on release and profile mode without clean your project, XCode tries to reuse those base libraries and fails because of their lack of other architectures.
+
+Try to clean up your project in XCode (⇧ + ⌘ + K) and try to clean up your flutter project (flutter clean) to ensure that all debug files are not reusable in other enviroments.
+<br>
+
+##
+
+**Issue:** So, because myApp depends on both awesome_notifications and intl from sdk, version solving failed. pub get failed
+
+**Fix:** The awesome_notifications plugin must be limited to all other last plugin versions in the stable bracket, to be the most compatible as possible to any flutter application in production stage.
+Because of it, this issue could happen if you are creating a application using another bracket, such as beta one.
+But you can manually upgrade those dependencies into your local files. Just change the pubspec.yaml inside your awesome_notifications local folder and you should be ready to go.
+
+To see an example of how to solve it, please go to https://github.com/rafaelsetragni/awesome_notifications/issues/49
+<br>
+
+##
+
+**Issue:** Invalid notification content
+
+**Fix:** The notification sent via FCM services *MUST* respect the types of the respective Notification elements. Otherwise, your notification will be discarded as invalid one.
+Also, all the payload elements *MUST* be a String, as the same way as you do in Local Notifications using dart code.
+
+To see more information about each type, please go to https://github.com/rafaelsetragni/awesome_notifications#notification-types-values-and-defaults
