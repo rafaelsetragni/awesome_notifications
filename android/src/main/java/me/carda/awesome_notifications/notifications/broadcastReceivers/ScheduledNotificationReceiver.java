@@ -24,7 +24,7 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
 
-        Toast.makeText(context, "ScheduledNotificationReceiver", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "ScheduledNotificationReceiver", Toast.LENGTH_SHORT).show();
 
         String notificationDetailsJson = intent.getStringExtra(Definitions.NOTIFICATION_JSON);
         if (!StringUtils.isNullOrEmpty(notificationDetailsJson)) {

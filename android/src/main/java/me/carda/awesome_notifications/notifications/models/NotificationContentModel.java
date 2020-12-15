@@ -163,10 +163,10 @@ public class NotificationContentModel extends Model {
             returnedObject.put(Definitions.NOTIFICATION_AUTO_CANCEL, this.autoCancel);
 
         if(this.displayOnForeground != null)
-            returnedObject.put(Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, this.autoCancel);
+            returnedObject.put(Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, this.displayOnForeground);
 
         if(this.displayOnBackground != null)
-            returnedObject.put(Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, this.autoCancel);
+            returnedObject.put(Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, this.displayOnBackground);
 
         if(this.color != null)
             returnedObject.put(Definitions.NOTIFICATION_COLOR, this.color);

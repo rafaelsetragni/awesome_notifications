@@ -34,7 +34,7 @@ public class SharedManager<T extends Model> {
             m.update(reference.getBytes(),0,reference.length());
             hashedReference = new BigInteger(1,m.digest()).toString(16);
 
-            Log.d(TAG, fileIdentifier+": file initialized = "+ hashedReference);
+            //Log.d(TAG, fileIdentifier+": file initialized = "+ hashedReference);
 
         } catch (Exception e) {
 

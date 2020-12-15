@@ -55,5 +55,5 @@ flutter {
     source '../..'
 }
 
-// UNCOMMENT THIS LINE TO ACTIVATE FIREBASE SERVICES
+// UNCOMMENT THIS LINE TO ACTIVATE FIREBASE SERVICES ON EXAMPLE APP
 // apply plugin: 'com.google.gms.google-services'

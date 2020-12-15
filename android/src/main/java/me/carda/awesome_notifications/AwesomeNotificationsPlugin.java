@@ -14,8 +14,8 @@ import io.flutter.Log;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -684,7 +684,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
     private void channelMethodIsFcmAvailable(MethodCall call, Result result) {
         try {
-            result.success(hasGooglePlayServices && firebaseEnabled && FirebaseInstanceId.getInstance().getInstanceId() != null);
+            result.success(hasGooglePlayServices && firebaseEnabled && FirebaseMessaging.getInstance() != null);
         } catch (Exception e) {
             Log.w(TAG, "FCM could not enabled for this project.", e);
             result.success(false );
@@ -704,24 +704,25 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                 throw new PushNotificationException("Firebase is not enabled for this project");
             }
 
-            FirebaseInstanceId
+            FirebaseMessaging
                     .getInstance()
-                    .getInstanceId()
-                    .addOnCompleteListener(
-                            new OnCompleteListener<InstanceIdResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                    .getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
 
-                                    if (!task.isSuccessful()) {
-                                        Exception e = task.getException();
-                                        Log.w(TAG, "getFirebaseToken could not fetch instanceID: ", e);
-                                        result.error("getFirebaseToken could not fetch instanceID", e.getMessage(), e);
-                                        return;
-                                    }
+                            if (!task.isSuccessful()) {
+                                Exception exception = task.getException();
+                                Log.w(TAG, "Fetching FCM registration token failed", exception);
+                                result.error(exception.getMessage() ,"Fetching FCM registration token failed", exception);
+                                return;
+                            }
 
-                                    result.success(task.getResult().getToken());
-                                }
-                            });
+                            // Get new FCM registration token
+                            String token = task.getResult();
+                            result.success(token);
+                        }
+                    });
 
         } catch (Exception e){
             result.error("Firebase service not available (check if you have google-services.json file)", e.getMessage(), e);

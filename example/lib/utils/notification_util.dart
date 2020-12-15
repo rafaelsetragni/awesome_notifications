@@ -40,7 +40,9 @@ Future<void> showBasicNotification(int id) async {
           id: id,
           channelKey: 'basic_channel',
           title: 'Simple Notification',
-          body: 'Simple body'));
+          body: 'Simple body'
+      )
+  );
 }
 
 Future<void> showEmojiNotification(int id) async {
@@ -1011,18 +1013,22 @@ Future<void> showNotificationAtScheduleCron(
     int id, DateTime scheduleTime) async {
 
   await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: id,
-          channelKey: 'schedule',
-          title: 'Just in time!',
-          body: 'This notification was schedule to shows at ' +
-              DateUtils.parseDateToString(scheduleTime.toLocal()) +
-          '('+DateUtils.parseDateToString(scheduleTime.toUtc())+' utc)',
-          notificationLayout: NotificationLayout.BigPicture,
-          bigPicture: 'asset://assets/images/delivery.jpeg',
-          payload: {'uuid': 'uuid-test'}),
-      schedule: NotificationSchedule(
-          crontabSchedule: CronHelper.instance.atDate(scheduleTime.toUtc(), initialSecond: 0)));
+    content: NotificationContent(
+      id: id,
+      channelKey: 'schedule',
+      title: 'Just in time!',
+      body: 'This notification was schedule to shows at ' +
+          DateUtil.parseDateToString(scheduleTime.toLocal()) +
+      '('+DateUtil.parseDateToString(scheduleTime.toUtc())+' utc)',
+      notificationLayout: NotificationLayout.BigPicture,
+      bigPicture: 'asset://assets/images/delivery.jpeg',
+      payload: {'uuid': 'uuid-test'},
+      autoCancel: false,
+    ),
+    schedule: NotificationSchedule(
+      crontabSchedule: CronHelper.instance.atDate(scheduleTime.toUtc(), initialSecond: 0)
+    )
+  );
 }
 
 Future<void> showScheduleAtWorkweekDay10AmLocal(int id) async {
@@ -1036,7 +1042,7 @@ Future<void> showScheduleAtWorkweekDay10AmLocal(int id) async {
       schedule: NotificationSchedule(
           crontabSchedule: CronHelper.instance.workweekDay(
               referenceUtcDate:
-                  DateUtils.parseStringToDate('10:00', format: 'HH:mm')
+                DateUtil.parseStringToDate('10:00', format: 'HH:mm')
                       .toUtc())));
 }
 
