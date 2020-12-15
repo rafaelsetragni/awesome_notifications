@@ -1,8 +1,7 @@
-
 // https://unicode.org/emoji/charts/full-emoji-list.html
 // ignore: non_constant_identifier_names
+/// List of ASCII emojis
 class Emojis {
-
   static const smille_grinning_face = '\u{1f600}';
   static const smille_grinning_face_with_big_eyes = '\u{1f603}';
   static const smille_grinning_face_with_smiling_eyes = '\u{1f604}';
@@ -261,7 +260,6 @@ class Emojis {
   static const person_older_person = '\u{1f9d3}';
   static const person_old_man = '\u{1f474}';
   static const person_old_woman = '\u{1f475}';
-
 
   static const person_gesture_person_frowning = '\u{1f64d}';
   static const person_gesture_man_frowning = '\u{fe0f}';
@@ -2090,9 +2088,12 @@ class Emojis {
   static const flag_Ukraine = '\u{1F1FA}\u{1F1E6}';
   static const flag_UnitedArabEmirates = '\u{1F1E6}\u{1F1EA}';
   static const flag_UnitedKingdom = '\u{1F1EC}\u{1F1E7}';
-  static const flag_England = '\u{1F3F4}\u{E0067}\u{E0062}\u{E0065}\u{E006E}\u{E0067}\u{E007F}';
-  static const flag_Scotland = '\u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}';
-  static const flag_Wales = '\u{1F3F4}\u{E0067}\u{E0062}\u{E0077}\u{E006C}\u{E0073}\u{E007F}';
+  static const flag_England =
+      '\u{1F3F4}\u{E0067}\u{E0062}\u{E0065}\u{E006E}\u{E0067}\u{E007F}';
+  static const flag_Scotland =
+      '\u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}';
+  static const flag_Wales =
+      '\u{1F3F4}\u{E0067}\u{E0062}\u{E0077}\u{E006C}\u{E0073}\u{E007F}';
   static const flag_UnitedStates = '\u{1F1FA}\u{1F1F8}';
   static const flag_Uruguay = '\u{1F1FA}\u{1F1FE}';
   static const flag_Uzbekistan = '\u{1F1FA}\u{1F1FF}';

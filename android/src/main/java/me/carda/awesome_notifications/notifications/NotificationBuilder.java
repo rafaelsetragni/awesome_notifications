@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
@@ -403,7 +404,12 @@ public class NotificationBuilder {
             PendingIntent actionPendingIntent = null;
 
             if(buttonProperties.enabled){
-                if(buttonProperties.buttonType == ActionButtonType.KeepOnTop) {
+                if(/*
+                        (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N
+                                && buttonProperties.buttonType == ActionButtonType.InputField)
+                            ||*/
+                        (buttonProperties.buttonType == ActionButtonType.KeepOnTop)
+                ){
 
                     actionPendingIntent = PendingIntent.getBroadcast(
                             context,

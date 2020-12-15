@@ -32,9 +32,9 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
     super.initState();
 
     displayedDate =
-        DateUtils.parseDateToString(
-            DateUtils.utcToLocal(
-                DateUtils.parseStringToDate(widget.receivedNotification.displayedDate)
+        DateUtil.parseDateToString(
+            DateUtil.utcToLocal(
+                DateUtil.parseStringToDate(widget.receivedNotification.displayedDate)
             ),
             format: 'dd/MM/yyyy HH:mm'
         );

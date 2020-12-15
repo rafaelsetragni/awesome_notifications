@@ -1,5 +1,10 @@
+## [0.0.5+3]
+* Internal firebase packages updated to the last Android and iOS version
+* Fixed auto cancel off for schedule notifications (Android)
+* DateUtils class name changed to "DateUtil" to avoid conflict with new DateUtils Flutter Material class
+* Improved documentation
 ## [0.0.5+2]
-* Included emojis to be sent on local and push notifications
+* Included emojis to be send on local and push notifications
 * Improved documentation
 ## [0.0.5+1]
 * Included canceling capability to notification push service in cases of invalid notification
