@@ -506,7 +506,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
           /* ******************************************************************** */
 
-          TextDivisor( title: 'Emojis ${Emojis.smille_alien}${Emojis.transport_air_rocket}' ),
+          TextDivisor( title: 'Emojis ${Emojis.smile_alien}${Emojis.transport_air_rocket}' ),
           TextNote(
               'To send local and push notifications with emojis, use the class Emoji concatenated with your text.\n\n'
                   'Attention: not all Emojis work with all platforms. Please, test the specific emoji before using it in production.'
@@ -518,6 +518,61 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
           SimpleButton(
             'Go to complete Emojis list (web)',
             onPressed: () => externalUrl('https://unicode.org/emoji/charts/full-emoji-list.html'),
+          ),
+
+          /* ******************************************************************** */
+
+          TextDivisor( title: 'Locked Notifications (onGoing - Android)' ),
+          TextNote(
+              'To send local or push locked notification, that users cannot dismiss it swiping it, set the "locked" property to true.\n\n'+
+                  "Attention: Notification's content locked property has priority over the Channel's one."
+          ),
+          SimpleButton(
+              'Send/Update the locked notification',
+              onPressed: () => showLockedNotification(2)
+          ),
+          SimpleButton(
+              'Send/Update the unlocked notification',
+              onPressed: () => showUnlockedNotification(2)
+          ),
+
+          /* ******************************************************************** */
+
+          TextDivisor( title: 'Notification Importance (Priority)' ),
+          TextNote(
+              'To change the importance level of notifications, please set the importance in the respective channel.\n\n'
+                  'The possible importance levels are the following:\n\n'
+                  'Max: Makes a sound and appears as a heads-up notification.\n'
+                  'Higher: shows everywhere, makes noise and peeks. May use full screen intents.\n'
+                  'Default: shows everywhere, makes noise, but does not visually intrude.\n'
+                  'Low: Shows in the shade, and potentially in the status bar (see shouldHideSilentStatusBarIcons()), but is not audibly intrusive\n.'
+                  'Min: only shows in the shade, below the fold.\n'
+                  'None: disable the channel\n\n'
+                  "Attention: Notification's channel importance can only be defined on first time."
+          ),
+          SimpleButton(
+              'Display notification with NotificationImportance.Max',
+              onPressed: () => showNotificationImportance(3, NotificationImportance.Max)
+          ),
+          SimpleButton(
+              'Display notification with NotificationImportance.High',
+              onPressed: () => showNotificationImportance(3, NotificationImportance.High)
+          ),
+          SimpleButton(
+              'Display notification with NotificationImportance.Default',
+              onPressed: () => showNotificationImportance(3, NotificationImportance.Default)
+          ),
+          SimpleButton(
+              'Display notification with NotificationImportance.Low',
+              onPressed: () => showNotificationImportance(3, NotificationImportance.Low)
+          ),
+          SimpleButton(
+              'Display notification with NotificationImportance.Min',
+              onPressed: () => showNotificationImportance(3, NotificationImportance.Min)
+          ),
+          SimpleButton(
+              'Display notification with NotificationImportance.None',
+              onPressed: () => showNotificationImportance(3, NotificationImportance.None)
           ),
 
           /* ******************************************************************** */

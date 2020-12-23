@@ -426,6 +426,24 @@ To know more about it, please visit [Shrink, obfuscate, and optimize your app](h
 
 <br>
 
+
+### Notification Importance (Android's channel)
+
+Defines the notification's importance level and how it should be displayed to the user.
+The possible importance levels are the following:
+
+- Max: Makes a sound and appears as a heads-up notification.
+- Higher: shows everywhere, makes noise and peeks. May use full screen intents.
+- Default: shows everywhere, makes noise, but does not visually intrude.
+- Low: Shows in the shade, and potentially in the status bar (see shouldHideSilentStatusBarIcons()), but is not audibly intrusive.
+- Min: only shows in the shade, below the fold.
+- None: disable the respective channel.
+
+OBS: Unfortunately, the channel's importance can only be defined on first time. After that, it cannot be changed.
+
+<br>
+
+
 ### Notification Action Button Types
 
 
@@ -557,25 +575,26 @@ You can download a example of how to send Push Notifications through FCM using "
 ### NotificationContent ("content" in Push data) - (required)
 <br>
 
-| Attribute          	| Required | Description                                                              | Type                  | Value Limits            | Default value             |
-| --------------------- | -------- | ------------------------------------------------------------------------ | --------------------- | ----------------------- | ------------------------- |
-| id 			     	|    YES   | Number that identifies a unique notification                             | int                   | 1 - 2.147.483.647       | -1                        |
-| channelKey 		 	|    YES   | String key that identifies a channel where not. will be displayed        | String                | channel must be enabled | basic_channel             |
-| title 			 	|     NO   | The title of notification                                                | String                | unlimited               |                           |
-| body 			 	    |     NO   | The body content of notification                                         | String                | unlimited               |                           |
-| summary 		 	    |     NO   | A summary to be displayed when the content is protected by privacy       | String                | unlimited               |                           |
-| showWhen 		 	    |     NO   | Hide/show the time elapsed since notification was displayed              | bool                  | true or false           | true                      |
-| largeIcon 		 	|     NO   | Large icon displayed at right middle of compact notification             | String                | unlimited               |                           |
-| bigPicture 		 	|     NO   | Big image displayed on expanded notification                             | String                | unlimited               |                           |
-| autoCancel 		 	|     NO   | Notification should auto cancel when gets tapped by the user             | bool                  | true or false           | true                      |
-| color 			 	|     NO   | Notification text color                                                  | Color                 | 0x00000000 to 0xFFFFFFFF| 0xFF000000 (Colors.black) |
-| backgroundColor  	    |     NO   | Notification background color                                            | Color                 | 0x00000000 to 0xFFFFFFFF| 0xFFFFFFFF (Colors.white) |
-| payload 		 	    |     NO   | Hidden payload content                                                   | Map<String, String>   | Only String for values  | null                      |
-| notificationLayout	|     NO   | Layout type of notification                                              | Enumerator            | NotificationLayout      | Default                   |
-| hideLargeIconOnExpand |     NO   | Hide/show the large icon when notification gets expanded                 | bool                  | true or false           | false                     |
-| locked 			    |     NO   | Blocks the user to dismiss the notification                              | bool                  | true or false           | false                     |
-| progress 			    |     NO   | Current value of progress bar (percentage). Null for indeterminate.      | int                   | 0 - 100                 | null                      |
-| ticker 			    |     NO   | Text to be displayed on top of the screen when a notification arrives    | String                | unlimited               |                           |
+| Attribute          	| Required | Description                                                              | Type                  | Value Limits             | Default value             |
+| --------------------- | -------- | ------------------------------------------------------------------------ | --------------------- | ------------------------ | ------------------------- |
+| id 			     	|    YES   | Number that identifies a unique notification                             | int                   | 1 - 2.147.483.647        | -1                        |
+| channelKey 		 	|    YES   | String key that identifies a channel where not. will be displayed        | String                | channel must be enabled  | basic_channel             |
+| title 			 	|     NO   | The title of notification                                                | String                | unlimited                |                           |
+| body 			 	    |     NO   | The body content of notification                                         | String                | unlimited                |                           |
+| summary 		 	    |     NO   | A summary to be displayed when the content is protected by privacy       | String                | unlimited                |                           |
+| showWhen 		 	    |     NO   | Hide/show the time elapsed since notification was displayed              | bool                  | true or false            | true                      |
+| icon 		            |     NO   | Small icon to be displayed on the top of notification (Android only)     | String                | must be a resource image |                           |
+| largeIcon 		 	|     NO   | Large icon displayed at right middle of compact notification             | String                | unlimited                |                           |
+| bigPicture 		 	|     NO   | Big image displayed on expanded notification                             | String                | unlimited                |                           |
+| autoCancel 		 	|     NO   | Notification should auto cancel when gets tapped by the user             | bool                  | true or false            | true                      |
+| color 			 	|     NO   | Notification text color                                                  | Color                 | 0x00000000 to 0xFFFFFFFF | 0xFF000000 (Colors.black) |
+| backgroundColor  	    |     NO   | Notification background color                                            | Color                 | 0x00000000 to 0xFFFFFFFF | 0xFFFFFFFF (Colors.white) |
+| payload 		 	    |     NO   | Hidden payload content                                                   | Map<String, String>   | Only String for values   | null                      |
+| notificationLayout	|     NO   | Layout type of notification                                              | Enumerator            | NotificationLayout       | Default                   |
+| hideLargeIconOnExpand |     NO   | Hide/show the large icon when notification gets expanded                 | bool                  | true or false            | false                     |
+| locked 			    |     NO   | Blocks the user to dismiss the notification                              | bool                  | true or false            | false                     |
+| progress 			    |     NO   | Current value of progress bar (percentage). Null for indeterminate.      | int                   | 0 - 100                  | null                      |
+| ticker 			    |     NO   | Text to be displayed on top of the screen when a notification arrives    | String                | unlimited                |                           |
 
 <br>
 <br>

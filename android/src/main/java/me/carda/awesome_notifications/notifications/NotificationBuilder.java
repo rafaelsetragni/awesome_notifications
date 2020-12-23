@@ -201,7 +201,7 @@ public class NotificationBuilder {
         setVibrationPattern(channel, builder);
         setLights(channel, builder);
 
-        setSmallIcon(context, channel, builder);
+        setSmallIcon(context, pushNotification, channel, builder);
         setLargeIcon(context, pushNotification, builder);
         setLayoutColor(context, pushNotification, channel, builder);
 
@@ -250,8 +250,16 @@ public class NotificationBuilder {
     }
 
     private void setLockedNotification(PushNotification pushNotification, NotificationChannelModel channel, NotificationCompat.Builder builder) {
-        Boolean lockedValue = BooleanUtils.getValue(pushNotification.content.locked) ? true : BooleanUtils.getValue(channel.locked);
-        builder.setOngoing(lockedValue);
+        Boolean contentLocked = BooleanUtils.getValue(pushNotification.content.locked);
+        Boolean channelLocked = BooleanUtils.getValue(channel.locked);
+
+        if(contentLocked){
+            builder.setOngoing(true);
+        }
+        else if(channelLocked){
+            Boolean lockedValue = BooleanUtils.getValueOrDefault(pushNotification.content.locked, true) && channelLocked;
+            builder.setOngoing(lockedValue);
+        }
     }
 
     private void setTicker(PushNotification pushNotification, NotificationCompat.Builder builder) {
@@ -464,8 +472,10 @@ public class NotificationBuilder {
         builder.setSound(uri);
     }
 
-    private void setSmallIcon(Context context, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
-        if (channelModel.icon != null) {
+    private void setSmallIcon(Context context, PushNotification pushNotification, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
+        if (!StringUtils.isNullOrEmpty(pushNotification.content.icon)) {
+            builder.setSmallIcon(BitmapUtils.getDrawableResourceId(context, pushNotification.content.icon));
+        } else if (!StringUtils.isNullOrEmpty(channelModel.icon)) {
             builder.setSmallIcon(BitmapUtils.getDrawableResourceId(context, channelModel.icon));
         } else {
             String defaultIcon = DefaultsManager.getDefaultIconByKey(context);

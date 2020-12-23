@@ -176,7 +176,7 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_LED_ON_MS, 300);
         put(Definitions.NOTIFICATION_PLAY_SOUND, true);
         put(Definitions.NOTIFICATION_AUTO_CANCEL, true);
-        put(Definitions.NOTIFICATION_LOCKED, false);
+        //put(Definitions.NOTIFICATION_LOCKED, false);
         put(Definitions.NOTIFICATION_TICKER, "ticker");
         put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, false);
         put(Definitions.NOTIFICATION_ONLY_ALERT_ONCE, false);

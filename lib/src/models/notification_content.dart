@@ -24,13 +24,14 @@ class NotificationContent extends BaseNotificationContent {
 
   bool locked;
 
-  NotificationContent(
-      {int id,
+  NotificationContent({
+      int id,
       String channelKey,
       String title,
       String body,
       String summary,
       bool showWhen,
+      String icon,
       String largeIcon,
       String bigPicture,
       bool autoCancel,
@@ -55,6 +56,7 @@ class NotificationContent extends BaseNotificationContent {
             summary: summary,
             showWhen: showWhen,
             payload: payload,
+            icon: icon,
             largeIcon: largeIcon,
             bigPicture: bigPicture,
             autoCancel: autoCancel,

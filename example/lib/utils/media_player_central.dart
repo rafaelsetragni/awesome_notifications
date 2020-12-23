@@ -40,7 +40,7 @@ class MediaPlayerCentral {
 
   static int _index = 0;
   static MediaLifeCycle _lifeCycle = MediaLifeCycle.Stopped;
-  static List<MediaModel> _playlist = List<MediaModel>();
+  static List<MediaModel> _playlist = [];
 
   static StreamController<MediaModel> _mediaBroadcaster = StreamController<MediaModel>.broadcast();
   static StreamController<Duration> _mediaProgress = StreamController<Duration>.broadcast();

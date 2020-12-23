@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications_example/routes.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';

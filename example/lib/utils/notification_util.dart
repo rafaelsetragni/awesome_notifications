@@ -43,7 +43,8 @@ Future<void> showBasicNotification(int id) async {
           id: id,
           channelKey: 'basic_channel',
           title: 'Simple Notification',
-          body: 'Simple body'
+          body: 'Simple body',
+          //icon: 'resource://drawable/res_power_ranger_thunder'
       )
   );
 }
@@ -53,7 +54,7 @@ Future<void> showEmojiNotification(int id) async {
       content: NotificationContent(
           id: id,
           channelKey: 'basic_channel',
-          title: 'Emojis are awesome too! '+ Emojis.smille_face_with_tongue + Emojis.smille_rolling_on_the_floor_laughing + Emojis.smille_smiling_face_with_heart_eyes,
+          title: 'Emojis are awesome too! '+ Emojis.smile_face_with_tongue + Emojis.smile_rolling_on_the_floor_laughing + Emojis.smile_smiling_face_with_heart_eyes,
           body: 'Simple body with a bunch of Emojis! ${Emojis.transport_police_car} ${Emojis.animals_dog} ${Emojis.flag_UnitedStates} ${Emojis.person_baby}',
           bigPicture: 'https://tecnoblog.net/wp-content/uploads/2019/09/emoji.jpg',
           notificationLayout: NotificationLayout.BigPicture,
@@ -207,34 +208,70 @@ Future<void> showNotificationWithActionButtonsAndReply(int id) async {
 
 Future<void> showLockedNotification(int id) async {
   AwesomeNotifications().setChannel(NotificationChannel(
-      channelKey: "locked_notification",
-      channelName: "Locked notification",
-      channelDescription: "Channel created on the fly with lock option",
+      channelKey: 'locked_notification',
+      channelName: 'Locked notification',
+      channelDescription: 'Channel created on the fly with lock option',
       locked: true));
 
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
-          channelKey: 'basic_channel',
+          channelKey: 'locked_notification',
           title: 'Locked notification',
           body: 'This notification is locked and cannot be dismissed',
-          payload: {'uuid': 'uuid-test'}));
+          payload: {'uuid': 'uuid-test'}
+      ));
 }
 
 Future<void> showUnlockedNotification(int id) async {
   AwesomeNotifications().setChannel(NotificationChannel(
-      channelKey: "locked_notification",
-      channelName: "Unlocked notification",
-      channelDescription: "Channel created on the fly with lock option",
-      locked: false));
+      channelKey: 'locked_notification',
+      channelName: 'Unlocked notification',
+      channelDescription: 'Channel created on the fly with lock option',
+      locked: true));
 
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
-          channelKey: 'basic_channel',
+          channelKey: 'locked_notification',
           title: 'Unlocked notification',
           body: 'This notification is not locked and can be dismissed',
-          payload: {'uuid': 'uuid-test'}));
+          payload: {'uuid': 'uuid-test'},
+          locked: false
+      ));
+}
+
+/* *********************************************
+    NOTIFICATION CHANNELS MANIPULATION
+************************************************ */
+
+Future<void> showNotificationImportance(int id, NotificationImportance importance) async {
+
+  String importanceKey = importance.toString().toLowerCase().split('.').last;
+  String channelKey = 'importance_'+importanceKey+'_channel';
+  String title = 'Importance levels ('+importanceKey+')';
+  String body = 'Test of importance levels to '+importanceKey;
+
+  await AwesomeNotifications().setChannel(
+      NotificationChannel(
+          channelKey: channelKey,
+          channelName: title,
+          channelDescription: body,
+          importance: importance,
+          defaultColor: Colors.red,
+          ledColor: Colors.red,
+          vibrationPattern: highVibrationPattern
+      )
+  );
+
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: id,
+          channelKey: channelKey,
+          title: title,
+          body: body,
+          payload: {'uuid': 'uuid-test'}
+      ));
 }
 
 /* *********************************************
@@ -1087,7 +1124,7 @@ Future<void> showProgressNotification(int id) async {
                 id: id,
                 channelKey: 'progress_bar',
                 title:
-                    'Downloading fake file in progress (${simulatedStep} of $maxStep)',
+                    'Downloading fake file in progress ($simulatedStep of $maxStep)',
                 body: 'filename.txt',
                 payload: {
                   'file': 'filename.txt',

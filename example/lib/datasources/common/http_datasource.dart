@@ -1,5 +1,3 @@
-import 'dart:collection';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' show Client, Response;
@@ -57,10 +55,10 @@ class HttpDataSource extends DataSource {
 
         printDebugData(response);
         return response;
-      } on HttpException catch (exception) {
+      } on HttpException catch (_) {
         tries--;
         sleep(Duration(milliseconds: 500));
-      } on Exception catch (exception) {
+      } on Exception catch (_) {
         tries--;
         sleep(Duration(milliseconds: 500));
       }

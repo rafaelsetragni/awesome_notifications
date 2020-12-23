@@ -1,3 +1,8 @@
+## [0.0.5+4]
+* Added the icon field inside notification content package to allow to change the small icon without need to use another channel
+* Included the example for locked notifications for Android and improved the locked priority behaviour
+* Added importance level for notifications (Android 8 and above)
+* Improved documentation
 ## [0.0.5+3]
 * Internal firebase packages updated to the last Android and iOS version
 * Fixed auto cancel off for schedule notifications (Android)

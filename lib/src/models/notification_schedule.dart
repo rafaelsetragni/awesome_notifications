@@ -28,7 +28,7 @@ class NotificationSchedule extends Model {
     if (dataMap['preciseSchedules'] != null &&
         dataMap['preciseSchedules'] is List) {
       List<String> schedules = List<String>.from(dataMap['preciseSchedules']);
-      preciseSchedules = List<DateTime>();
+      preciseSchedules = [];
 
       for (String schedule in schedules) {
         DateTime scheduleDate = DateUtils.parseStringToDate(schedule);

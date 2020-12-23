@@ -108,7 +108,7 @@ public class ChannelManager {
 
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationChannel newNotificationChannel = null;
-            newNotificationChannel = new NotificationChannel(newChannel.channelKey, newChannel.channelName, NotificationManager.IMPORTANCE_DEFAULT);
+            newNotificationChannel = new NotificationChannel(newChannel.channelKey, newChannel.channelName, newChannel.importance.ordinal());
 
             newNotificationChannel.setDescription(newChannel.channelDescription);
 

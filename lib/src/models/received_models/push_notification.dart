@@ -32,7 +32,7 @@ class PushNotification extends Model {
       }
 
       if (mapData.containsKey('actionButtons')) {
-        actionButtons = List<NotificationActionButton>();
+        actionButtons = [];
         List<Object> actionButtonsData =
             List<Object>.from(mapData['actionButtons']);
 

@@ -130,7 +130,7 @@ class AwesomeNotifications {
 
     _channel.setMethodCallHandler(_handleMethod);
 
-    List<dynamic> serializedChannels = List();
+    List<dynamic> serializedChannels = [];
     for (NotificationChannel channel in channels) {
       serializedChannels.add(channel.toMap());
     }
@@ -263,7 +263,7 @@ class AwesomeNotifications {
 
   /// List all active scheduled notifications.
   Future<List<PushNotification>> listScheduledNotifications() async {
-    List<PushNotification> scheduledNotifications = List<PushNotification>();
+    List<PushNotification> scheduledNotifications = [];
     List<Object> returned =
         await _channel.invokeListMethod(CHANNEL_METHOD_LIST_ALL_SCHEDULES);
     for (Object object in returned) {
@@ -273,7 +273,7 @@ class AwesomeNotifications {
               PushNotification().fromMap(Map<String, dynamic>.from(object));
           scheduledNotifications.add(pushNotification);
         } catch (e) {
-          return List<PushNotification>();
+          return [];
         }
       }
     }

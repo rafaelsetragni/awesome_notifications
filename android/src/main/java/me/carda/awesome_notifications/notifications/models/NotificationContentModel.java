@@ -8,6 +8,7 @@ import java.util.List;
 
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
+import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationLayout;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationPrivacy;
@@ -34,6 +35,7 @@ public class NotificationContentModel extends Model {
     public Map<String, String> payload;
     public Boolean playSound;
     public String customSound;
+    public String icon;
     public String largeIcon;
     public Boolean locked;
     public String bigPicture;
@@ -105,6 +107,7 @@ public class NotificationContentModel extends Model {
 
         privateMessage = getValueOrDefault(arguments, Definitions.NOTIFICATION_PRIVATE_MESSAGE, String.class);
 
+        icon  = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON, String.class);
         largeIcon  = getValueOrDefault(arguments, Definitions.NOTIFICATION_LARGE_ICON, String.class);
         bigPicture = getValueOrDefault(arguments, Definitions.NOTIFICATION_BIG_PICTURE, String.class);
 
@@ -173,8 +176,12 @@ public class NotificationContentModel extends Model {
         if(this.backgroundColor != null)
             returnedObject.put(Definitions.NOTIFICATION_BACKGROUND_COLOR, this.backgroundColor);
 
+        if(this.icon != null)
+            returnedObject.put(Definitions.NOTIFICATION_ICON, this.icon);
+
         if(this.largeIcon != null)
             returnedObject.put(Definitions.NOTIFICATION_LARGE_ICON, this.largeIcon);
+
         if(this.bigPicture != null)
             returnedObject.put(Definitions.NOTIFICATION_BIG_PICTURE, this.bigPicture);
 
@@ -210,6 +217,8 @@ public class NotificationContentModel extends Model {
         if(ChannelManager.getChannelByKey(context, channelKey) == null)
             throw new PushNotificationException("Notification channel '"+channelKey+"' does not exists.");
 
+        validateIcon(context);
+
         switch (notificationLayout){
 
             case Default:
@@ -232,6 +241,18 @@ public class NotificationContentModel extends Model {
         validateLargeIcon(context);
         validateSound(context);
 
+    }
+
+    private void validateIcon(Context context) throws PushNotificationException {
+
+        if(!StringUtils.isNullOrEmpty(icon)){
+            if(
+                BitmapUtils.getMediaSourceType(icon) != MediaSource.Resource ||
+                !BitmapUtils.isValidBitmap(context, icon)
+            ){
+                throw new PushNotificationException("Small icon ('"+icon+"') must be a valid media native resource type.");
+            }
+        }
     }
 
     private void validateBigPicture(Context context) throws PushNotificationException {

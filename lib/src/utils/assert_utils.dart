@@ -26,7 +26,7 @@ class AssertUtils {
   static List<Map<String, Object>> toListMap<T extends Model>(List<T> list) {
     if (list == null || list.length == 0) return null;
 
-    List<Map<String, Object>> returnList = List<Map<String, Object>>();
+    List<Map<String, Object>> returnList = [];
     list.forEach((element) {
       returnList.add(element.toMap());
     });
