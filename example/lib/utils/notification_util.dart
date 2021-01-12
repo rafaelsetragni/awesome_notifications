@@ -45,6 +45,7 @@ Future<void> showBasicNotification(int id) async {
           title: 'Simple Notification',
           body: 'Simple body',
           //icon: 'resource://drawable/res_power_ranger_thunder'
+          customSound: 'resource://raw/res_morph_power_rangers',
       )
   );
 }

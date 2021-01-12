@@ -34,6 +34,7 @@ class NotificationContent extends BaseNotificationContent {
       String icon,
       String largeIcon,
       String bigPicture,
+      String customSound,
       bool autoCancel,
       Color color,
       Color backgroundColor,
@@ -59,6 +60,7 @@ class NotificationContent extends BaseNotificationContent {
             icon: icon,
             largeIcon: largeIcon,
             bigPicture: bigPicture,
+            customSound: customSound,
             autoCancel: autoCancel,
             color: color,
             backgroundColor: backgroundColor);

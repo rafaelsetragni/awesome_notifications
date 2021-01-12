@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import androidx.core.app.RemoteInput;
 
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
+import me.carda.awesome_notifications.R;
 import me.carda.awesome_notifications.notifications.broadcastReceivers.DismissedNotificationReceiver;
 import me.carda.awesome_notifications.notifications.broadcastReceivers.KeepOnTopActionReceiver;
 import me.carda.awesome_notifications.notifications.enumeratos.ActionButtonType;
@@ -197,7 +199,7 @@ public class NotificationBuilder {
         setLockedNotification(pushNotification, channel, builder);
         setImportance(channel, builder);
 
-        setSound(context, channel, builder);
+        setSound(context, pushNotification, channel, builder);
         setVibrationPattern(channel, builder);
         setLights(channel, builder);
 
@@ -412,12 +414,8 @@ public class NotificationBuilder {
             PendingIntent actionPendingIntent = null;
 
             if(buttonProperties.enabled){
-                if(/*
-                        (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N
-                                && buttonProperties.buttonType == ActionButtonType.InputField)
-                            ||*/
-                        (buttonProperties.buttonType == ActionButtonType.KeepOnTop)
-                ){
+
+                if(buttonProperties.buttonType == ActionButtonType.KeepOnTop) {
 
                     actionPendingIntent = PendingIntent.getBroadcast(
                             context,
@@ -428,6 +426,13 @@ public class NotificationBuilder {
 
                 }
                 else {
+
+                    if(
+                        android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N
+                                && buttonProperties.buttonType == ActionButtonType.InputField
+                    ){
+                        //actionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    }
 
                     actionPendingIntent = PendingIntent.getActivity(
                             context,
@@ -452,7 +457,6 @@ public class NotificationBuilder {
                 NotificationCompat.Action replyAction = new NotificationCompat.Action.Builder(
                         iconResource, buttonProperties.label, actionPendingIntent)
                         .addRemoteInput(remoteInput)
-                        .setAllowGeneratedReplies(true)
                         .build();
 
                 builder.addAction( replyAction );
@@ -464,11 +468,21 @@ public class NotificationBuilder {
         }
     }
 
-    private void setSound(Context context, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
+    private void setSound(Context context, PushNotification pushNotification, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
         Uri uri = null;
+
         if (BooleanUtils.getValue(channelModel.playSound)) {
-            uri = ChannelManager.retrieveSoundResourceUri(context, channelModel);
+
+            if(!StringUtils.isNullOrEmpty(pushNotification.content.customSound)){
+                uri = ChannelManager.retrieveSoundResourceUri(context, pushNotification.content.customSound);
+                channelModel.soundSource = pushNotification.content.customSound;
+            }
+            else {
+                uri = ChannelManager.retrieveSoundResourceUri(context, channelModel.soundSource);
+            }
+            ChannelManager.setAndroidChannel(context, channelModel);
         }
+
         builder.setSound(uri);
     }
 

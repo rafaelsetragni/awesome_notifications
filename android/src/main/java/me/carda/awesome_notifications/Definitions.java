@@ -72,6 +72,7 @@ public interface Definitions {
     String CHANNEL_METHOD_LIST_ALL_SCHEDULES = "listAllSchedules";
 
     String DEFAULT_ICON = "defaultIcon";
+    String FIREBASE_ENABLED = "FIREBASE_ENABLED";
     String SELECT_NOTIFICATION = "SELECT_NOTIFICATION";
     String DISMISSED_NOTIFICATION = "DISMISSED_NOTIFICATION";
     String NOTIFICATION_BUTTON_ACTION_PREFIX = "ACTION_NOTIFICATION";
@@ -151,6 +152,7 @@ public interface Definitions {
     String NOTIFICATION_ALLOW_WHILE_IDLE = "allowWhileIdle";
 
     Map<String, Object> initialValues = new HashMap<String, Object>(){{
+        put(Definitions.FIREBASE_ENABLED, true);
         put(Definitions.NOTIFICATION_ID, 0);
         put(Definitions.NOTIFICATION_IMPORTANCE, NotificationImportance.Default);
         put(Definitions.NOTIFICATION_LAYOUT, NotificationLayout.Default);

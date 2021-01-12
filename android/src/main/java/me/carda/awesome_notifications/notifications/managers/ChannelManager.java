@@ -47,12 +47,12 @@ public class ChannelManager {
         return shared.get(context, Definitions.SHARED_CHANNELS, channelKey);
     }
 
-    public static Uri retrieveSoundResourceUri(Context context, NotificationChannelModel channelModel) {
+    public static Uri retrieveSoundResourceUri(Context context, String soundSource) {
         Uri uri = null;
-        if (StringUtils.isNullOrEmpty(channelModel.soundSource)) {
+        if (StringUtils.isNullOrEmpty(soundSource)) {
             uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         } else {
-            int soundResourceId = AudioUtils.getAudioResourceId(context, channelModel.soundSource);
+            int soundResourceId = AudioUtils.getAudioResourceId(context, soundSource);
             if(soundResourceId > 0){
                 uri = Uri.parse("android.resource://" + context.getPackageName() + "/" + soundResourceId);
             }
@@ -72,7 +72,7 @@ public class ChannelManager {
         }
     }
 
-    private static void setAndroidChannel(Context context, NotificationChannelModel newChannel) {
+    public static void setAndroidChannel(Context context, NotificationChannelModel newChannel) {
 
         if(newChannel.icon != null){
             if(MediaUtils.getMediaSourceType(newChannel.icon) != MediaSource.Resource){
@@ -114,11 +114,15 @@ public class ChannelManager {
 
             if (newChannel.playSound) {
 
-                /// TODO NEED TO IMPROVE AUDIO RESOURCES TO BE MORE VERSATILE, SUCH AS BITMAP ONES
-                AudioAttributes audioAttributes = null;
-                audioAttributes = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build();
-                Uri uri = retrieveSoundResourceUri(context, newChannel);
-                newNotificationChannel.setSound(uri, audioAttributes);
+                if(!StringUtils.isNullOrEmpty(newChannel.soundSource)){
+
+                    /// TODO NEED TO IMPROVE AUDIO RESOURCES TO BE MORE VERSATILE, SUCH AS BITMAP ONES
+                    AudioAttributes audioAttributes = null;
+                    audioAttributes = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build();
+
+                    Uri uri = retrieveSoundResourceUri(context, newChannel.soundSource);
+                    newNotificationChannel.setSound(uri, audioAttributes);
+                }
 
             } else {
                 newNotificationChannel.setSound(null, null);

@@ -623,20 +623,28 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
     }
 
     private void channelRequestNotification(MethodCall call, Result result){
-        final Intent intent = new Intent();
 
-        intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-        //for Android 5-7
-        intent.putExtra("app_package", applicationContext.getPackageName());
-        intent.putExtra("app_uid", applicationContext.getApplicationInfo().uid);
+            final Intent intent = new Intent();
 
-        // for Android 8 and above
-        intent.putExtra("android.provider.extra.APP_PACKAGE", applicationContext.getPackageName());
+            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
 
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //for Android 5-7
+            intent.putExtra("app_package", applicationContext.getPackageName());
+            intent.putExtra("app_uid", applicationContext.getApplicationInfo().uid);
 
-        applicationContext.startActivity(intent);
+            // for Android 8 and above
+            intent.putExtra("android.provider.extra.APP_PACKAGE", applicationContext.getPackageName());
+
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            applicationContext.startActivity(intent);
+            result.success(true);
+        }
+        else {
+            channelIsNotificationAllowed(call, result);
+        }
     }
 
     private void channelMethodCreateNotification(MethodCall call, Result result) {
@@ -763,11 +771,13 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             Map<String, Object> platformParameters = call.arguments();
 
             String defaultIconPath = (String) platformParameters.get(Definitions.DEFAULT_ICON);
+            Boolean firebaseEnabled = (Boolean) platformParameters.get(Definitions.FIREBASE_ENABLED);
             channelsData = (List<Object>) platformParameters.get(Definitions.INITIALIZE_CHANNELS);
 
             setDefaultConfigurations(
                 applicationContext,
                 defaultIconPath,
+                firebaseEnabled,
                 channelsData
             );
 
@@ -780,9 +790,9 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
     }
 
-    private boolean setDefaultConfigurations(Context context, String defaultIcon, List<Object> channelsData) throws PushNotificationException {
+    private boolean setDefaultConfigurations(Context context, String defaultIcon, Boolean firebaseEnabled, List<Object> channelsData) throws PushNotificationException {
 
-        setDefaultIcon(context, defaultIcon);
+        setDefaults(context, defaultIcon, firebaseEnabled);
 
         setChannels(context, channelsData);
 
@@ -820,7 +830,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         ChannelManager.commitChanges(context);
     }
 
-    private void setDefaultIcon(Context context, String defaultIcon) {
+    private void setDefaults(Context context, String defaultIcon, Boolean enabled) {
 
         if (MediaUtils.getMediaSourceType(defaultIcon) != MediaSource.Resource) {
             defaultIcon = null;
