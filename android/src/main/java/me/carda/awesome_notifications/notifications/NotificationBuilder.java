@@ -3,6 +3,7 @@ package me.carda.awesome_notifications.notifications;
 import android.app.Notification;
 import android.app.PendingIntent;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import com.github.arturogutierrez.BadgesNotSupportedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -30,6 +32,7 @@ import me.carda.awesome_notifications.R;
 import me.carda.awesome_notifications.notifications.broadcastReceivers.DismissedNotificationReceiver;
 import me.carda.awesome_notifications.notifications.broadcastReceivers.KeepOnTopActionReceiver;
 import me.carda.awesome_notifications.notifications.enumeratos.ActionButtonType;
+import me.carda.awesome_notifications.notifications.enumeratos.NotificationImportance;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationLayout;
 import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
 import me.carda.awesome_notifications.notifications.managers.ChannelManager;
@@ -210,6 +213,10 @@ public class NotificationBuilder {
         setBadge(context, channel, builder);
 
         applyGrouping(channel, builder);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setChannelId(channel.getChannelKey());
+        }
 
         builder.setContentIntent(pendingIntent);
         builder.setDeleteIntent(deleteIntent);
@@ -402,6 +409,7 @@ public class NotificationBuilder {
                 context,
                 Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX + "_" + buttonProperties.key,
                 pushNotification,
+                (buttonProperties.buttonType == ActionButtonType.DisabledAction) ? AwesomeNotificationsPlugin.class :
                 (buttonProperties.buttonType == ActionButtonType.KeepOnTop) ?
                         KeepOnTopActionReceiver.class : getNotificationTargetActivityClass(context)
             );
@@ -422,6 +430,16 @@ public class NotificationBuilder {
                             pushNotification.content.id,
                             actionIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+
+                }
+                else if(buttonProperties.buttonType == ActionButtonType.DisabledAction) {
+
+                    actionPendingIntent = PendingIntent.getActivity(
+                            context,
+                            pushNotification.content.id,
+                            actionIntent,
+                            0
                     );
 
                 }
@@ -471,19 +489,34 @@ public class NotificationBuilder {
     private void setSound(Context context, PushNotification pushNotification, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
         Uri uri = null;
 
-        if (BooleanUtils.getValue(channelModel.playSound)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            if(!StringUtils.isNullOrEmpty(pushNotification.content.customSound)){
-                uri = ChannelManager.retrieveSoundResourceUri(context, pushNotification.content.customSound);
-                channelModel.soundSource = pushNotification.content.customSound;
+            if (BooleanUtils.getValue(channelModel.playSound)) {
+
+                if (!StringUtils.isNullOrEmpty(pushNotification.content.customSound)) {
+                    channelModel.soundSource = pushNotification.content.customSound;
+                }
+                else {
+                    channelModel.soundSource = null;
+                }
+                ChannelManager.saveChannel(context, channelModel);
             }
-            else {
-                uri = ChannelManager.retrieveSoundResourceUri(context, channelModel.soundSource);
+
+        } else {
+
+            if (BooleanUtils.getValue(channelModel.playSound)) {
+
+                if (!StringUtils.isNullOrEmpty(pushNotification.content.customSound)) {
+                    uri = ChannelManager.retrieveSoundResourceUri(context, pushNotification.content.customSound);
+                } else {
+                    uri = ChannelManager.retrieveSoundResourceUri(context, channelModel.soundSource);
+                }
+                builder.setSound(uri);
+
+            } else {
+                builder.setSound(null);
             }
-            ChannelManager.setAndroidChannel(context, channelModel);
         }
-
-        builder.setSound(uri);
     }
 
     private void setSmallIcon(Context context, PushNotification pushNotification, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {

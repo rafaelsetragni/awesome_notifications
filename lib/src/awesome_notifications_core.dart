@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications/src/definitions.dart';
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
 import 'package:awesome_notifications/src/models/notification_button.dart';
@@ -315,6 +316,18 @@ class AwesomeNotifications {
   /// Resets the badge counter
   Future<void> resetGlobalBadge() async {
     await _channel.invokeListMethod(CHANNEL_METHOD_RESET_BADGE);
+  }
+
+  Future<DateTime> getNextDate(NotificationSchedule schedule, {DateTime fixedDate}) async {
+    Map parameters = {
+      NOTIFICATION_INITIAL_FIXED_DATE: DateUtils.parseDateToString(fixedDate),
+      PUSH_NOTIFICATION_SCHEDULE: schedule.toMap()
+    };
+
+    final String nextDate =
+      await _channel.invokeMethod(CHANNEL_METHOD_GET_NEXT_DATE, parameters);
+
+    return DateUtils.parseStringToDate(nextDate);
   }
 
   /// Cancel a single notification

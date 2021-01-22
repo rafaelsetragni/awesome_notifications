@@ -50,6 +50,7 @@ enum Definitions {
     static let  CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications"
     static let  CHANNEL_METHOD_GET_BADGE_COUNT = "getBadgeCount"
     static let  CHANNEL_METHOD_SET_BADGE_COUNT = "setBadgeCount"
+    static let  CHANNEL_METHOD_GET_NEXT_DATE = "getNextDate"
     static let  CHANNEL_METHOD_RESET_BADGE = "resetBadge"
     static let  CHANNEL_METHOD_CANCEL_NOTIFICATION = "cancelNotification"
     static let  CHANNEL_METHOD_CANCEL_SCHEDULE = "cancelSchedule"
@@ -99,6 +100,7 @@ enum Definitions {
     static let  NOTIFICATION_BUTTON_TYPE = "buttonType"
 
     static let  NOTIFICATION_PAYLOAD = "payload"
+    static let  NOTIFICATION_INITIAL_FIXED_DATE = "fixedDate"
     static let  NOTIFICATION_INITIAL_DATE_TIME = "initialDateTime"
     static let  NOTIFICATION_CRONTAB_SCHEDULE = "crontabSchedule"
     static let  NOTIFICATION_ENABLED = "enabled"

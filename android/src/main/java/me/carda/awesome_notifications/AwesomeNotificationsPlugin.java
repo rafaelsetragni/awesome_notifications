@@ -19,6 +19,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,7 @@ import android.app.Activity;
 
 import me.carda.awesome_notifications.notifications.BitmapResourceDecoder;
 import me.carda.awesome_notifications.notifications.models.DefaultsModel;
+import me.carda.awesome_notifications.notifications.models.NotificationScheduleModel;
 import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationLifeCycle;
@@ -63,6 +65,7 @@ import me.carda.awesome_notifications.notifications.models.returnedData.Notifica
 import me.carda.awesome_notifications.notifications.NotificationSender;
 import me.carda.awesome_notifications.notifications.NotificationScheduler;
 
+import me.carda.awesome_notifications.utils.CronUtils;
 import me.carda.awesome_notifications.utils.DateUtils;
 import me.carda.awesome_notifications.utils.JsonUtils;
 import me.carda.awesome_notifications.utils.ListUtils;
@@ -431,6 +434,10 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                 channelMethodListAllSchedules(call, result);
                 return;
 
+            case Definitions.CHANNEL_METHOD_GET_NEXT_DATE:
+                channelMethodGetNextDate(call, result);
+                return;
+
             case Definitions.CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL:
                 channelMethodSetChannel(call, result);
                 return;
@@ -496,6 +503,45 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
 
         result.success(serializeds);
+    }
+
+    private void channelMethodGetNextDate(MethodCall call, Result result) {
+        try {
+
+            @SuppressWarnings("unchecked")
+            Map<String, Object> data = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
+
+            @SuppressWarnings("unchecked")
+            Map<String, Object> scheduleData = (Map<String, Object>) data.get(Definitions.PUSH_NOTIFICATION_SCHEDULE);
+            String fixedDate = (String) data.get(Definitions.NOTIFICATION_INITIAL_FIXED_DATE);
+            NotificationScheduleModel scheduleModel = new NotificationScheduleModel().fromMap(scheduleData);
+
+            if(scheduleModel != null) {
+
+                if(!StringUtils.isNullOrEmpty(fixedDate)){
+                    CronUtils.fixedNowDate = DateUtils.parseDate(fixedDate);
+                }
+
+                Calendar nextValidDate = CronUtils.getNextCalendar(
+                        scheduleModel.initialDateTime,
+                        scheduleModel.crontabSchedule
+                );
+
+                CronUtils.fixedNowDate = null;
+
+                String convertedDate = DateUtils.dateToString(nextValidDate.getTime());
+                result.success(convertedDate);
+                return;
+            }
+
+        } catch (Exception e){
+            CronUtils.fixedNowDate = null;
+            e.printStackTrace();
+            result.error("Invalid schedule data", e.getMessage(), e);
+            return;
+        }
+
+        result.success(null);
     }
 
     private void channelMethodSetChannel(MethodCall call, Result result) {
@@ -751,15 +797,21 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             return false;
         }
 
+        NotificationChannelModel channelModel = ChannelManager.getChannelByKey(context, channelKey);
+
+        if(channelModel == null){
+            return false;
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             NotificationManagerCompat manager = NotificationManagerCompat.from(context);
-            NotificationChannel channel = manager.getNotificationChannel(channelKey);
+            NotificationChannel channel = manager.getNotificationChannel(channelModel.getChannelKey());
             return channel != null && channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
 
         }
 
-        return ChannelManager.getChannelByKey(context, channelKey) != null;
+        return true;
     }
 
     @SuppressWarnings("unchecked")

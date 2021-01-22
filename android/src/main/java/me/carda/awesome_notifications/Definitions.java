@@ -58,6 +58,7 @@ public interface Definitions {
     String CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications";
     String CHANNEL_METHOD_GET_BADGE_COUNT = "getBadgeCount";
     String CHANNEL_METHOD_SET_BADGE_COUNT = "setBadgeCount";
+    String CHANNEL_METHOD_GET_NEXT_DATE = "getNextDate";
     String CHANNEL_METHOD_RESET_BADGE = "resetBadge";
     String CHANNEL_METHOD_CANCEL_NOTIFICATION = "cancelNotification";
     String CHANNEL_METHOD_CANCEL_SCHEDULE = "cancelSchedule";
@@ -111,6 +112,7 @@ public interface Definitions {
     String NOTIFICATION_BUTTON_TYPE = "buttonType";
 
     String NOTIFICATION_PAYLOAD = "payload";
+    String NOTIFICATION_INITIAL_FIXED_DATE = "fixedDate";
     String NOTIFICATION_INITIAL_DATE_TIME = "initialDateTime";
     String NOTIFICATION_CRONTAB_SCHEDULE = "crontabSchedule";
     String NOTIFICATION_PRECISE_SCHEDULES = "preciseSchedules";

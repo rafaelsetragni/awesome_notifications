@@ -2,6 +2,9 @@ package me.carda.awesome_notifications.notifications.models;
 
 import android.content.Context;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +57,22 @@ public class NotificationChannelModel extends Model {
     public NotificationPrivacy defaultPrivacy;
 
     public NotificationChannelModel(){}
+
+    public String getChannelKey(){
+        String jsonData = toJson(), hashedReference = channelKey;
+
+        MessageDigest m = null;
+        try {
+            m = MessageDigest.getInstance("MD5");
+            m.update(jsonData.getBytes(),0,jsonData.length());
+            hashedReference = new BigInteger(1,m.digest()).toString(16);
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return hashedReference;
+    }
 
     @Override
     public boolean equals(@Nullable Object obj) {

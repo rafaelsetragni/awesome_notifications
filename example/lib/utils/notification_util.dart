@@ -38,10 +38,11 @@ Future<void> externalUrl(String url) async {
 ************************************************ */
 
 Future<void> showBasicNotification(int id) async {
+
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
-          channelKey: 'basic_channel',
+          channelKey: 'basic_channel',//'custom_sound',//
           title: 'Simple Notification',
           body: 'Simple body',
           //icon: 'resource://drawable/res_power_ranger_thunder'

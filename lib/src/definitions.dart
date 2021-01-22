@@ -64,6 +64,7 @@ const CHANNEL_METHOD_CANCEL_NOTIFICATION = 'cancelNotification';
 const CHANNEL_METHOD_CANCEL_SCHEDULE = 'cancelSchedule';
 const CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = 'cancelAllSchedules';
 const CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = 'cancelAllNotifications';
+const CHANNEL_METHOD_GET_NEXT_DATE = 'getNextDate';
 
 const DRAWABLE_RESOURCE_REFERENCE = 'drawable';
 const DEFAULT_ICON = 'defaultIcon';
@@ -115,6 +116,7 @@ const NOTIFICATION_BUTTON_TYPE = 'buttonType';
 const NOTIFICATION_ENABLED = "enabled";
 
 const NOTIFICATION_PAYLOAD = 'payload';
+const NOTIFICATION_INITIAL_FIXED_DATE = 'fixedDate';
 const NOTIFICATION_INITIAL_DATE_TIME = 'initialDateTime';
 const NOTIFICATION_CRONTAB_SCHEDULE = 'crontabSchedule';
 const NOTIFICATION_PRECISE_SCHEDULES = 'preciseSchedules';

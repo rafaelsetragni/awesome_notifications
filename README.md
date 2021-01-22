@@ -583,6 +583,8 @@ You can download a example of how to send Push Notifications through FCM using "
 | body 			 	    |     NO   | The body content of notification                                         | String                | unlimited                |                           |
 | summary 		 	    |     NO   | A summary to be displayed when the content is protected by privacy       | String                | unlimited                |                           |
 | showWhen 		 	    |     NO   | Hide/show the time elapsed since notification was displayed              | bool                  | true or false            | true                      |
+| displayOnForeground   |     NO   | Hide/show the notification if the app is in the Foreground (streams are preserved )              | bool                  | true or false            | true                      |
+| displayOnBackground   |     NO   | Hide/show the notification if the app is in the Background (streams are preserved )              | bool                  | true or false            | true                      |
 | icon 		            |     NO   | Small icon to be displayed on the top of notification (Android only)     | String                | must be a resource image |                           |
 | largeIcon 		 	|     NO   | Large icon displayed at right middle of compact notification             | String                | unlimited                |                           |
 | bigPicture 		 	|     NO   | Big image displayed on expanded notification                             | String                | unlimited                |                           |
