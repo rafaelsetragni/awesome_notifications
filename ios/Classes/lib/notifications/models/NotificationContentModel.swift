@@ -161,10 +161,10 @@ public class NotificationContentModel : AbstractModel {
 
         if(!StringUtils.isNullOrEmpty(icon)){
             if(
-                BitmapUtils.getMediaSourceType(icon) != MediaSource.Resource
+                BitmapUtils.getMediaSourceType(mediaPath:icon) != MediaSource.Resource
             ){
                 throw PushNotificationError.invalidRequiredFields(
-                    msg: "Small icon ('"+icon+"') must be a valid media native resource type.")
+                    msg: "Small icon ("+\(icon ?? "[invalid icon]")+") must be a valid media native resource type.")
             }
         }
         
