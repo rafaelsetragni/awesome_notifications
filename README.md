@@ -10,7 +10,14 @@
 
 Please, be sure to participate in this important decision. Your opinion can make a difference.
 <br>
+<br>
+Github discussion:
+<br>
 [Voting - Official deactivation of the push notification functionality #97](https://github.com/rafaelsetragni/awesome_notifications/issues/97)
+
+To vote, please access the link bellow:
+<br>
+[SurveyMonkey - Voting - Official deactivation of the push notification functionality](https://pt.surveymonkey.com/r/7QJ5K9J)
 
 # ******************************************************
 
