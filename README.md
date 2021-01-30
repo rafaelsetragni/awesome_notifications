@@ -4,6 +4,22 @@
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications.jpg)
 
 
+# ******************************************************
+
+# Voting - Official deactivation of the push notification functionality - SurveyMonkey
+
+Please, be sure to participate in this important decision. Your opinion can make a difference.
+<br>
+<br>
+Github discussion:
+<br>
+[Voting - Official deactivation of the push notification functionality #97](https://github.com/rafaelsetragni/awesome_notifications/issues/97)
+
+To vote, please access the link bellow:
+<br>
+[SurveyMonkey - Voting - Official deactivation of the push notification functionality](https://pt.surveymonkey.com/r/7QJ5K9J)
+
+# ******************************************************
 
 ### Features
 
@@ -421,6 +437,7 @@ Images can be defined using 4 prefix types:
 - Resource: images access through drawable native resources. On Android, those files are stored inside [project]/android/app/src/main/drawabe folder. **Example**: resource://drawable/res_image-asset.png
 
 OBS: Unfortunately, icons and sounds can be only resource media types.
+
 OBS 2: To protect your native resources on Android against minification, please include the prefix "res_" in your resource file names. The use of the tag `shrinkResources false` inside build.gradle or the command `flutter build apk --no-shrink` is not recommended.
 To know more about it, please visit [Shrink, obfuscate, and optimize your app](https://developer.android.com/studio/build/shrink-code)
 

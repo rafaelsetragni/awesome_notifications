@@ -166,7 +166,7 @@ public class NotificationContentModel : AbstractModel {
                 let iconError = icon ?? "[invalid icon]"
                 throw PushNotificationError.invalidRequiredFields(
                     msg: "Small icon +\(iconError)+ must be a valid media native resource type.")
-            }
+             }
         }
         
         if(notificationLayout == nil){
