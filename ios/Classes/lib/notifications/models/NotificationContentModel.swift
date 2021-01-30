@@ -63,7 +63,7 @@ public class NotificationContentModel : AbstractModel {
         self.hideLargeIconOnExpand = MapUtils<Bool>.getValueOrDefault(reference: "hideLargeIconOnExpand", arguments: arguments)
         self.autoCancel            = MapUtils<Bool>.getValueOrDefault(reference: "autoCancel", arguments: arguments)
         self.displayOnForeground   = MapUtils<Bool>.getValueOrDefault(reference: "displayOnForeground", arguments: arguments)
-        self.displayOnBackground   = MapUtils<Bool>.getValueOrDefault(reference: "displayOnBackground", arguments: arguments) 
+        self.displayOnBackground   = MapUtils<Bool>.getValueOrDefault(reference: "displayOnBackground", arguments: arguments)
         self.color                 = MapUtils<Int64>.getValueOrDefault(reference: "color", arguments: arguments)
         self.backgroundColor       = MapUtils<Int64>.getValueOrDefault(reference: "backgroundColor", arguments: arguments)
         self.progress              = MapUtils<Int>.getValueOrDefault(reference: "progress", arguments: arguments)
@@ -161,10 +161,11 @@ public class NotificationContentModel : AbstractModel {
 
         if(!StringUtils.isNullOrEmpty(icon)){
             if(
-                BitmapUtils.getMediaSourceType(icon) != MediaSource.Resource
+                BitmapUtils.getMediaSourceType(mediaPath:icon) != MediaSource.Resource
             ){
+                let iconError = icon ?? "[invalid icon]"
                 throw PushNotificationError.invalidRequiredFields(
-                    msg: "Small icon ('"+icon+"') must be a valid media native resource type.")
+                    msg: "Small icon +\(iconError)+ must be a valid media native resource type.")
             }
         }
         
