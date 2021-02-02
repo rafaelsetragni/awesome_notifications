@@ -159,7 +159,7 @@ public class NotificationContentModel : AbstractModel {
                 msg: "channelKey cannot be null or empty")
         }
 
-        if(!StringUtils.isNullOrEmpty(icon)){
+        if(!StringUtils.isNullOrEmpty(mediaPath: icon)){
             if(
                 BitmapUtils.getMediaSourceType(mediaPath:icon) != MediaSource.Resource
             ){
