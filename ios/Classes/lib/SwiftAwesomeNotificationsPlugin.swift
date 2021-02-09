@@ -133,7 +133,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         }
         
         receiveAction(
-            jsonData: response.notification.request.content.userInfo['content'] as? String,
+            jsonData: response.notification.request.content.userInfo[Definitions.PUSH_NOTIFICATION_CONTENT] as? String,
             actionKey: response.actionIdentifier,
             userText: userText
         )
