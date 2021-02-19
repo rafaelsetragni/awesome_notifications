@@ -45,7 +45,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 }
                 
                 if let buttonsJsonData:String = userInfo[Definitions.PUSH_NOTIFICATION_BUTTONS] as? String {
-                    mapData[Definitions.PUSH_NOTIFICATION_BUTTONS] = JsonUtils.fromJson(buttonsJsonData)
+                    mapData[Definitions.PUSH_NOTIFICATION_BUTTONS] = JsonUtils.fromJsonArr(buttonsJsonData)
                 }
                 
                 var pushSource:NotificationSource?

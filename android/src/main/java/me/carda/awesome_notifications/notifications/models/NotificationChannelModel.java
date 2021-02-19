@@ -10,6 +10,7 @@ import java.util.Map;
 
 import androidx.annotation.Nullable;
 import me.carda.awesome_notifications.Definitions;
+import me.carda.awesome_notifications.notifications.enumeratos.DefaultRingtoneType;
 import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
 import me.carda.awesome_notifications.notifications.enumeratos.GroupAlertBehaviour;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationImportance;
@@ -32,6 +33,7 @@ public class NotificationChannelModel extends Model {
 
     public Boolean playSound;
     public String soundSource;
+    public DefaultRingtoneType defaultRingtoneType;
 
     public Boolean enableVibration;
     public long[] vibrationPattern;
@@ -59,17 +61,9 @@ public class NotificationChannelModel extends Model {
     public NotificationChannelModel(){}
 
     public String getChannelKey(){
-        String jsonData = toJson(), hashedReference = channelKey;
 
-        MessageDigest m = null;
-        try {
-            m = MessageDigest.getInstance("MD5");
-            m.update(jsonData.getBytes(),0,jsonData.length());
-            hashedReference = new BigInteger(1,m.digest()).toString(16);
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        String jsonData = toJson();
+        String hashedReference = StringUtils.digestString(jsonData);
 
         return hashedReference;
     }
@@ -100,6 +94,7 @@ public class NotificationChannelModel extends Model {
             CompareUtils.assertEqualObjects(other.locked, this.locked) &&
             CompareUtils.assertEqualObjects(other.onlyAlertOnce, this.onlyAlertOnce) &&
             CompareUtils.assertEqualObjects(other.defaultPrivacy, this.defaultPrivacy) &&
+            CompareUtils.assertEqualObjects(other.defaultRingtoneType, this.defaultRingtoneType) &&
             CompareUtils.assertEqualObjects(other.setAsGroupSummary, this.setAsGroupSummary) &&
             CompareUtils.assertEqualObjects(other.groupAlertBehavior, this.groupAlertBehavior);
     }
@@ -142,6 +137,9 @@ public class NotificationChannelModel extends Model {
 
         defaultPrivacy =
                 getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_DEFAULT_PRIVACY, NotificationPrivacy.class, NotificationPrivacy.values());
+
+        defaultRingtoneType =
+                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, DefaultRingtoneType.class, DefaultRingtoneType.values());
 
         groupKey          = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_KEY, String.class);
         setAsGroupSummary = getValueOrDefault(arguments, Definitions.NOTIFICATION_SET_AS_GROUP_SUMMARY, Boolean.class);
@@ -203,6 +201,9 @@ public class NotificationChannelModel extends Model {
 
         if(this.defaultPrivacy != null)
             returnedObject.put(Definitions.NOTIFICATION_DEFAULT_PRIVACY, this.defaultPrivacy.toString());
+
+        if(this.defaultRingtoneType != null)
+            returnedObject.put(Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, this.defaultRingtoneType.toString());
 
         if(this.locked != null)
             returnedObject.put(Definitions.NOTIFICATION_LOCKED, this.locked);

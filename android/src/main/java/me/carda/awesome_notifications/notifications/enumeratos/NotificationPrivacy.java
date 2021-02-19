@@ -1,7 +1,20 @@
 package me.carda.awesome_notifications.notifications.enumeratos;
 
 public enum NotificationPrivacy {
-    Public,
+
+    /**
+     * Notification visibility: Do not reveal any part of this notification on a secure lockscreen.
+     */
     Secret,
-    Private
+
+    /**
+     * Notification visibility: Show this notification on all lockscreens, but conceal sensitive or
+     * private information on secure lockscreens.
+     */
+    Private,
+
+    /**
+     * Notification visibility: Show this notification on every lockscreens.
+     */
+    Public,
 }

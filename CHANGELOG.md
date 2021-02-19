@@ -1,3 +1,5 @@
+## [0.0.5+5]
+* Added the link to allows the community to remove or not the push notification functionality from Awesome Notifications plugin.
 ## [0.0.5+4]
 * Added the icon field inside notification content package to allow to change the small icon without need to use another channel
 * Included the example for locked notifications for Android and improved the locked priority behaviour

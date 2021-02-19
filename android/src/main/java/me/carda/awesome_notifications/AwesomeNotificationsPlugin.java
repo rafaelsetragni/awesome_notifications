@@ -65,6 +65,7 @@ import me.carda.awesome_notifications.notifications.models.returnedData.Notifica
 import me.carda.awesome_notifications.notifications.NotificationSender;
 import me.carda.awesome_notifications.notifications.NotificationScheduler;
 
+import me.carda.awesome_notifications.utils.BooleanUtils;
 import me.carda.awesome_notifications.utils.CronUtils;
 import me.carda.awesome_notifications.utils.DateUtils;
 import me.carda.awesome_notifications.utils.JsonUtils;
@@ -251,6 +252,10 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                 onBroadcastKeepOnTopActionNotification(intent);
                 return;
 
+            case Definitions.BROADCAST_MEDIA_BUTTON:
+                onBroadcastMediaButton(intent);
+                return;
+
             default:
                 Log.d(TAG, action);
                 return;
@@ -289,6 +294,17 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
             Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
             pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_RECEIVED_ACTION, serializable);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onBroadcastMediaButton(Intent intent) {
+        try {
+
+            Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
+            pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_MEDIA_BUTTON, serializable);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -550,11 +566,12 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             @SuppressWarnings("unchecked")
             Map<String, Object> channelData = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
             NotificationChannelModel channelModel = new NotificationChannelModel().fromMap(channelData);
+            Boolean forceUpdate = BooleanUtils.getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
 
             if(channelModel == null){
                 result.error("Invalid channel", "Channel is invalid", "null");
             } else {
-                ChannelManager.saveChannel(applicationContext, channelModel);
+                ChannelManager.saveChannel(applicationContext, channelModel, forceUpdate);
                 result.success(true);
 
                 ChannelManager.commitChanges(applicationContext);
@@ -860,12 +877,14 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         if(ListUtils.isNullOrEmpty(channelsData)) return;
 
         List<NotificationChannelModel> channels = new ArrayList<>();
+        Boolean forceUpdate = false;
 
         for(Object channelDataObject : channelsData){
             if(channelDataObject instanceof Map<?,?>){
                 @SuppressWarnings("unchecked")
                 Map<String, Object> channelData = (Map<String, Object>) channelDataObject;
                 NotificationChannelModel channelModel = new NotificationChannelModel().fromMap(channelData);
+                forceUpdate = BooleanUtils.getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
 
                 if(channelModel != null){
                     channels.add(channelModel);
@@ -876,7 +895,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
 
         for(NotificationChannelModel channelModel : channels){
-            ChannelManager.saveChannel(context, channelModel);
+            ChannelManager.saveChannel(context, channelModel, forceUpdate);
         }
 
         ChannelManager.commitChanges(context);

@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/src/enumerators/action_button_type.dart';
+import 'package:awesome_notifications/src/enumerators/default_ringtone_type.dart';
 import 'package:awesome_notifications/src/enumerators/group_alert_behaviour.dart';
 import 'package:awesome_notifications/src/enumerators/notification_importance.dart';
 import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
@@ -65,6 +66,7 @@ const CHANNEL_METHOD_CANCEL_SCHEDULE = 'cancelSchedule';
 const CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = 'cancelAllSchedules';
 const CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = 'cancelAllNotifications';
 const CHANNEL_METHOD_GET_NEXT_DATE = 'getNextDate';
+const CHANNEL_FORCE_UPDATE = "forceUpdate";
 
 const DRAWABLE_RESOURCE_REFERENCE = 'drawable';
 const DEFAULT_ICON = 'defaultIcon';
@@ -123,6 +125,7 @@ const NOTIFICATION_PRECISE_SCHEDULES = 'preciseSchedules';
 const NOTIFICATION_PLATFORM_CONFIGURATION = 'platformConfiguration';
 const NOTIFICATION_PRIVATE_MESSAGE = "privateMessage";
 const NOTIFICATION_DEFAULT_PRIVACY = "defaultPrivacy";
+const NOTIFICATION_DEFAULT_RINGTONE_TYPE = "defaultRingtoneType";
 const NOTIFICATION_PRIVACY = "privacy";
 const NOTIFICATION_AUTO_CANCEL = 'autoCancel';
 const NOTIFICATION_LOCKED = 'locked';
@@ -178,6 +181,7 @@ class Definitions {
     NOTIFICATION_DEFAULT_PRIVACY: NotificationPrivacy.Private,
     NOTIFICATION_BUTTON_TYPE: ActionButtonType.Default,
     NOTIFICATION_PRIVACY: NotificationPrivacy.Private,
+    NOTIFICATION_DEFAULT_RINGTONE_TYPE: DefaultRingtoneType.Notification,
     NOTIFICATION_CHANNEL_KEY: "miscellaneous",
     NOTIFICATION_CHANNEL_DESCRIPTION: "Notifications",
     NOTIFICATION_CHANNEL_NAME: "Notifications",

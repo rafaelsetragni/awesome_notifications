@@ -7,6 +7,7 @@ export 'src/enumerators/action_button_type.dart';
 export 'src/enumerators/group_alert_behaviour.dart';
 export 'src/enumerators/media_source.dart';
 export 'src/enumerators/emojis.dart';
+export 'src/enumerators/default_ringtone_type.dart';
 export 'src/enumerators/notification_importance.dart';
 export 'src/enumerators/notification_layout.dart';
 export 'src/enumerators/notification_life_cycle.dart';

@@ -34,6 +34,7 @@ import me.carda.awesome_notifications.notifications.broadcastReceivers.KeepOnTop
 import me.carda.awesome_notifications.notifications.enumeratos.ActionButtonType;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationImportance;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationLayout;
+import me.carda.awesome_notifications.notifications.enumeratos.NotificationPrivacy;
 import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
 import me.carda.awesome_notifications.notifications.managers.ChannelManager;
 import me.carda.awesome_notifications.notifications.managers.DefaultsManager;
@@ -320,13 +321,14 @@ public class NotificationBuilder {
     }
 
     private void setVisibility(Context context, PushNotification pushNotification, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
 
             Integer visibilityIndex;
             visibilityIndex = IntegerUtils.extractInteger(pushNotification.content.privacy, channelModel.defaultPrivacy.ordinal());
-            visibilityIndex = IntegerUtils.extractInteger(visibilityIndex, Notification.VISIBILITY_PUBLIC);
+            visibilityIndex = IntegerUtils.extractInteger(visibilityIndex, NotificationPrivacy.Public);
 
-            builder.setVisibility(visibilityIndex);
+            builder.setVisibility(visibilityIndex - 1);
         }
     }
 
@@ -487,36 +489,14 @@ public class NotificationBuilder {
     }
 
     private void setSound(Context context, PushNotification pushNotification, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
+
         Uri uri = null;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-            if (BooleanUtils.getValue(channelModel.playSound)) {
-
-                if (!StringUtils.isNullOrEmpty(pushNotification.content.customSound)) {
-                    channelModel.soundSource = pushNotification.content.customSound;
-                }
-                else {
-                    channelModel.soundSource = null;
-                }
-                ChannelManager.saveChannel(context, channelModel);
-            }
-
-        } else {
-
-            if (BooleanUtils.getValue(channelModel.playSound)) {
-
-                if (!StringUtils.isNullOrEmpty(pushNotification.content.customSound)) {
-                    uri = ChannelManager.retrieveSoundResourceUri(context, pushNotification.content.customSound);
-                } else {
-                    uri = ChannelManager.retrieveSoundResourceUri(context, channelModel.soundSource);
-                }
-                builder.setSound(uri);
-
-            } else {
-                builder.setSound(null);
-            }
+        if (BooleanUtils.getValue(channelModel.playSound)) {
+            uri = ChannelManager.retrieveSoundResourceUri(context, channelModel.defaultRingtoneType, channelModel.soundSource);
         }
+
+        builder.setSound(uri);
     }
 
     private void setSmallIcon(Context context, PushNotification pushNotification, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {

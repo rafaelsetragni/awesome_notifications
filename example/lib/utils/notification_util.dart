@@ -42,12 +42,13 @@ Future<void> showBasicNotification(int id) async {
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
-          channelKey: 'basic_channel',//'custom_sound',//
+          channelKey: 'ringtone_channel',//'basic_channel',//'custom_sound',//
           title: 'Simple Notification',
           body: 'Simple body',
-          //icon: 'resource://drawable/res_power_ranger_thunder'
-          customSound: 'resource://raw/res_morph_power_rangers',
-      )
+      )/*,
+      schedule: NotificationSchedule(
+          initialDateTime: DateTime.now().add(Duration(seconds: 5)).toUtc()
+      )*/
   );
 }
 
@@ -1011,7 +1012,7 @@ Future<void> repeatMinuteNotification(int id) async {
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
-          channelKey: 'schedule',
+          channelKey: 'scheduled',
           title: 'Notification at every single minute',
           body:
               'This notification was schedule to repeat at every single minute.',
@@ -1025,7 +1026,7 @@ Future<void> repeatPreciseThreeTimes(int id) async {
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
-          channelKey: 'schedule',
+          channelKey: 'scheduled',
           title: 'Notification scheduled to play precisely 3 times',
           body: 'This notification was schedule to repeat precisely 3 times.',
           notificationLayout: NotificationLayout.BigPicture,
@@ -1041,7 +1042,7 @@ Future<void> repeatMinuteNotificationOClock(int id) async {
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
-          channelKey: 'schedule',
+          channelKey: 'scheduled',
           title: 'Notification at exactly every single minute',
           body:
               'This notification was schedule to repeat at every single minute at clock.',
@@ -1057,7 +1058,7 @@ Future<void> showNotificationAtScheduleCron(
   await AwesomeNotifications().createNotification(
     content: NotificationContent(
       id: id,
-      channelKey: 'schedule',
+      channelKey: 'scheduled',
       title: 'Just in time!',
       body: 'This notification was schedule to shows at ' +
           Utils.DateUtils.parseDateToString(scheduleTime.toLocal()) +
@@ -1077,7 +1078,7 @@ Future<void> showScheduleAtWorkweekDay10AmLocal(int id) async {
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
-          channelKey: 'schedule',
+          channelKey: 'scheduled',
           title: 'Time to go work!',
           body: 'And the time is ticking...tic, tic, Wake up!',
           payload: {'uuid': 'uuid-test'}),

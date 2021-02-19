@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:awesome_notifications/src/enumerators/default_ringtone_type.dart';
 import 'package:awesome_notifications/src/enumerators/group_alert_behaviour.dart';
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
 import 'package:awesome_notifications/src/enumerators/notification_importance.dart';
@@ -22,6 +23,7 @@ class NotificationChannel extends Model {
 
   bool playSound;
   String soundSource;
+  DefaultRingtoneType defaultRingtoneType;
 
   bool enableVibration;
   Int64List vibrationPattern;
@@ -52,6 +54,7 @@ class NotificationChannel extends Model {
       this.importance,
       this.playSound,
       this.soundSource,
+      this.defaultRingtoneType,
       this.enableVibration,
       this.vibrationPattern,
       this.enableLights,
@@ -106,6 +109,8 @@ class NotificationChannel extends Model {
         'onlyAlertOnce', this.onlyAlertOnce, bool);
     this.defaultPrivacy = AssertUtils.getValueOrDefault(
         'defaultPrivacy', this.defaultPrivacy, NotificationPrivacy);
+    this.defaultRingtoneType = AssertUtils.getValueOrDefault(
+        'defaultRingtoneType', this.defaultRingtoneType, DefaultRingtoneType);
 
     // For small icons, it's only allowed resource media types
     assert(StringUtils.isNullOrEmpty(icon) ||
@@ -133,6 +138,7 @@ class NotificationChannel extends Model {
       'setAsGroupSummary': setAsGroupSummary,
       'groupAlertBehavior': AssertUtils.toSimpleEnumString(groupAlertBehavior),
       'defaultPrivacy': AssertUtils.toSimpleEnumString(defaultPrivacy),
+      'defaultRingtoneType': AssertUtils.toSimpleEnumString(defaultRingtoneType),
       'locked': locked,
       'onlyAlertOnce': onlyAlertOnce
     };
@@ -160,6 +166,8 @@ class NotificationChannel extends Model {
         dataMap, 'groupAlertBehavior', GroupAlertBehavior.values);
     this.defaultPrivacy = AssertUtils.extractEnum(
         dataMap, 'defaultPrivacy', NotificationPrivacy.values);
+    this.defaultRingtoneType = AssertUtils.extractEnum(
+        dataMap, 'defaultRingtoneType', DefaultRingtoneType.values);
     this.icon = AssertUtils.extractValue(dataMap, 'icon');
     this.locked = AssertUtils.extractValue(dataMap, 'locked');
     this.onlyAlertOnce = AssertUtils.extractValue(dataMap, 'onlyAlertOnce');

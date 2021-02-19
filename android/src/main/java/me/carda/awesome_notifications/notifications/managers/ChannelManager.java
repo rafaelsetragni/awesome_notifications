@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import androidx.core.app.NotificationManagerCompat;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
+import me.carda.awesome_notifications.notifications.enumeratos.DefaultRingtoneType;
 import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
 import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
 import me.carda.awesome_notifications.notifications.models.NotificationChannelModel;
@@ -36,7 +37,9 @@ public class ChannelManager {
 
         if(oldChannel == null) return true;
 
+        removeAndroidChannel(context, oldChannel.channelKey);
         removeAndroidChannel(context, oldChannel.getChannelKey());
+
         return shared.remove(context, Definitions.SHARED_CHANNELS, channelKey);
     }
 
@@ -44,24 +47,23 @@ public class ChannelManager {
         return shared.getAllObjects(context, Definitions.SHARED_CHANNELS);
     }
 
-    public static void saveChannel(Context context, NotificationChannelModel channelModel) {
+    public static void saveChannel(Context context, NotificationChannelModel channelModel, Boolean forceUpdate) {
 
         NotificationChannelModel oldChannel = getChannelByKey(context, channelModel.channelKey);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if(oldChannel != null){
-                removeAndroidChannel(context, oldChannel.channelKey);
 
                 String oldKey = oldChannel.getChannelKey();
-                if(!oldKey.equals(channelModel.getChannelKey())){
+
+                if(!oldKey.equals(channelModel.getChannelKey()) && forceUpdate){
+                    removeAndroidChannel(context, oldChannel.channelKey);
                     removeAndroidChannel(context, oldChannel.getChannelKey());
-                    setAndroidChannel(context, channelModel);
                 }
             }
-            else {
-                setAndroidChannel(context, channelModel);
-            }
         }
+
+        setAndroidChannel(context, channelModel);
 
         shared.set(context, Definitions.SHARED_CHANNELS, channelModel.channelKey, channelModel);
         shared.commit(context);
@@ -71,10 +73,28 @@ public class ChannelManager {
         return shared.get(context, Definitions.SHARED_CHANNELS, channelKey);
     }
 
-    public static Uri retrieveSoundResourceUri(Context context, String soundSource) {
+    public static Uri retrieveSoundResourceUri(Context context, DefaultRingtoneType ringtoneType, String soundSource) {
         Uri uri = null;
         if (StringUtils.isNullOrEmpty(soundSource)) {
-            uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+            int defaultRingtoneKey;
+            switch (ringtoneType){
+
+                case Ringtone:
+                    defaultRingtoneKey = RingtoneManager.TYPE_RINGTONE;
+                    break;
+
+                case Alarm:
+                    defaultRingtoneKey = RingtoneManager.TYPE_ALARM;
+                    break;
+
+                case Notification:
+                default:
+                    defaultRingtoneKey = RingtoneManager.TYPE_NOTIFICATION;
+                    break;
+            }
+            uri = RingtoneManager.getDefaultUri(defaultRingtoneKey);
+
         } else {
             int soundResourceId = AudioUtils.getAudioResourceId(context, soundSource);
             if(soundResourceId > 0){
@@ -134,18 +154,15 @@ public class ChannelManager {
 
             if (newChannel.playSound) {
 
-                if(!StringUtils.isNullOrEmpty(newChannel.soundSource)){
+                /// TODO NEED TO IMPROVE AUDIO RESOURCES TO BE MORE VERSATILE, SUCH AS BITMAP ONES
+                AudioAttributes audioAttributes = null;
+                audioAttributes = new AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                        .build();
 
-                    /// TODO NEED TO IMPROVE AUDIO RESOURCES TO BE MORE VERSATILE, SUCH AS BITMAP ONES
-                    AudioAttributes audioAttributes = null;
-                    audioAttributes = new AudioAttributes.Builder()
-                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                            .build();
-
-                    Uri uri = retrieveSoundResourceUri(context, newChannel.soundSource);
-                    newNotificationChannel.setSound(uri, audioAttributes);
-                }
+                Uri uri = retrieveSoundResourceUri(context, newChannel.defaultRingtoneType, newChannel.soundSource);
+                newNotificationChannel.setSound(uri, audioAttributes);
 
             } else {
                 newNotificationChannel.setSound(null, null);
