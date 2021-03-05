@@ -176,7 +176,7 @@ const NOTIFICATION_ALLOW_WHILE_IDLE = 'allowWhileIdle';
 class Definitions {
   static Map<String, Object> initialValues = {
     NOTIFICATION_ID: 0,
-    NOTIFICATION_GROUP_SORT: GroupSort.Asc,
+    NOTIFICATION_GROUP_SORT: GroupSort.Desc,
     NOTIFICATION_GROUP_ALERT_BEHAVIOR: GroupAlertBehavior.All,
     NOTIFICATION_IMPORTANCE: NotificationImportance.Default,
     NOTIFICATION_LAYOUT: NotificationLayout.Default,

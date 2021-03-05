@@ -41,7 +41,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 mapData[Definitions.PUSH_NOTIFICATION_CONTENT] = JsonUtils.fromJson(contentJsonData)
                 
                 if let scheduleJsonData:String = userInfo[Definitions.PUSH_NOTIFICATION_SCHEDULE] as? String {
-                    mapData[Definitions.PUSH_NOTIFICATION_SCHEDULE] = JsonUtils.fromJson(contentJsonData)
+                    mapData[Definitions.PUSH_NOTIFICATION_SCHEDULE] = JsonUtils.fromJson(scheduleJsonData)
                 }
                 
                 if let buttonsJsonData:String = userInfo[Definitions.PUSH_NOTIFICATION_BUTTONS] as? String {
@@ -655,8 +655,8 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         do {
             let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
             let fixedDate:String? = platformParameters[Definitions.NOTIFICATION_INITIAL_FIXED_DATE] as? String
-            let scheduleModel:NotificationScheduleModel =
-                NotificationScheduleModel().fromMap(arguments: platformParameters[Definitions.PUSH_NOTIFICATION_SCHEDULE]) as! NotificationScheduleModel
+            let scheduleModel:NotificationScheduleModel? =
+                NotificationScheduleModel().fromMap(arguments: platformParameters[Definitions.PUSH_NOTIFICATION_SCHEDULE] as? [String : Any?]) as? NotificationScheduleModel
 
             if(scheduleModel != nil) {
 
@@ -665,13 +665,13 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 }
 
                 let nextValidDate:Date? = CronUtils.getNextCalendar(
-                        scheduleModel.initialDateTime,
-                        scheduleModel.crontabSchedule
+                    initialDateTime: scheduleModel!.initialDateTime,
+                    crontabRule: scheduleModel!.crontabSchedule
                 );
 
                 CronUtils.fixedNowDate = nil
 
-                String convertedDate = DateUtils.dateToString(nextValidDate)
+                let convertedDate:String? = DateUtils.dateToString(nextValidDate)
                 result(convertedDate)
             }
             else {

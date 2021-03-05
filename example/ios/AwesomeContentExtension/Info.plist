@@ -25,17 +25,12 @@
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<key>UNNotificationExtensionCategory</key>
-			<array>
-				<string>PROGRESSBAR</string>
-				<string>INDETERMINATEDBAR</string>
-			</array>
-			<key>UNNotificationExtensionDefaultContentHidden</key>
-			<true/>
+			<string>myNotificationCategory</string>
 			<key>UNNotificationExtensionInitialContentSizeRatio</key>
-			<integer>0</integer>
+			<real>1</real>
 		</dict>
-		<key>NSExtensionPrincipalClass</key>
-		<string>AwesomeContentExtension.NotificationViewController</string>
+		<key>NSExtensionMainStoryboard</key>
+		<string>MainInterface</string>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.usernotifications.content-extension</string>
 	</dict>

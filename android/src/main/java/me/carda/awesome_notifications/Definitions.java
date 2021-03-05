@@ -166,7 +166,7 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_ID, 0);
         put(Definitions.NOTIFICATION_IMPORTANCE, NotificationImportance.Default);
         put(Definitions.NOTIFICATION_LAYOUT, NotificationLayout.Default);
-        put(Definitions.NOTIFICATION_GROUP_SORT, GroupSort.Asc);
+        put(Definitions.NOTIFICATION_GROUP_SORT, GroupSort.Desc);
         put(Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR, GroupAlertBehaviour.All);
         put(Definitions.NOTIFICATION_DEFAULT_PRIVACY, NotificationPrivacy.Private);
         //put(Definitions.NOTIFICATION_PRIVACY, NotificationPrivacy.Private);
