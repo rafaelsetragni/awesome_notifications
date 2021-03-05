@@ -14,6 +14,7 @@ export 'src/enumerators/notification_life_cycle.dart';
 export 'src/enumerators/notification_privacy.dart';
 export 'src/enumerators/notification_source.dart';
 export 'src/enumerators/time_and_date.dart';
+export 'src/enumerators/group_sort.dart';
 export 'src/extensions/extension_navigator_state.dart';
 export 'src/helpers/bitmap_helper.dart';
 export 'src/helpers/cron_helper.dart';

@@ -2,15 +2,13 @@ package me.carda.awesome_notifications.notifications.models;
 
 import android.content.Context;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.Nullable;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.enumeratos.DefaultRingtoneType;
+import me.carda.awesome_notifications.notifications.enumeratos.GroupSort;
 import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
 import me.carda.awesome_notifications.notifications.enumeratos.GroupAlertBehaviour;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationImportance;
@@ -44,7 +42,7 @@ public class NotificationChannelModel extends Model {
     public Integer ledOffMs;
 
     public String  groupKey;
-    public Boolean setAsGroupSummary;
+    public GroupSort groupSort;
     public GroupAlertBehaviour groupAlertBehavior;
 
     // Note: this is set on the Android to save details about the icon that should be used when re-hydrating delayed notifications when a device has been restarted.
@@ -95,7 +93,7 @@ public class NotificationChannelModel extends Model {
             CompareUtils.assertEqualObjects(other.onlyAlertOnce, this.onlyAlertOnce) &&
             CompareUtils.assertEqualObjects(other.defaultPrivacy, this.defaultPrivacy) &&
             CompareUtils.assertEqualObjects(other.defaultRingtoneType, this.defaultRingtoneType) &&
-            CompareUtils.assertEqualObjects(other.setAsGroupSummary, this.setAsGroupSummary) &&
+            CompareUtils.assertEqualObjects(other.groupSort, this.groupSort) &&
             CompareUtils.assertEqualObjects(other.groupAlertBehavior, this.groupAlertBehavior);
     }
 
@@ -132,6 +130,9 @@ public class NotificationChannelModel extends Model {
         importance =
                 getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_IMPORTANCE, NotificationImportance.class, NotificationImportance.values());
 
+        groupSort =
+                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_SORT, GroupSort.class, GroupSort.values());
+
         groupAlertBehavior =
                 getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR, GroupAlertBehaviour.class, GroupAlertBehaviour.values());
 
@@ -142,7 +143,6 @@ public class NotificationChannelModel extends Model {
                 getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, DefaultRingtoneType.class, DefaultRingtoneType.values());
 
         groupKey          = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_KEY, String.class);
-        setAsGroupSummary = getValueOrDefault(arguments, Definitions.NOTIFICATION_SET_AS_GROUP_SUMMARY, Boolean.class);
 
         locked = getValueOrDefault(arguments, Definitions.NOTIFICATION_LOCKED, Boolean.class);
         onlyAlertOnce = getValueOrDefault(arguments, Definitions.NOTIFICATION_ONLY_ALERT_ONCE, Boolean.class);
@@ -189,9 +189,9 @@ public class NotificationChannelModel extends Model {
 
         if(this.groupKey != null)
             returnedObject.put(Definitions.NOTIFICATION_GROUP_KEY, this.groupKey);
-        if(this.setAsGroupSummary != null)
-            returnedObject.put(Definitions.NOTIFICATION_SET_AS_GROUP_SUMMARY, this.setAsGroupSummary);
 
+        if(this.groupSort != null)
+            returnedObject.put(Definitions.NOTIFICATION_GROUP_SORT, this.groupSort.toString());
 
         if(this.importance != null)
             returnedObject.put(Definitions.NOTIFICATION_IMPORTANCE, this.importance.toString());

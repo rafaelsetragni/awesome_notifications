@@ -40,11 +40,12 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
         </receiver>
-        <receiver android:name=".notifications.broadcastReceivers.AwesomeMediaButtonReceiver" >
+        <receiver android:name="androidx.media.session.MediaButtonReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

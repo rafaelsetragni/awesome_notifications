@@ -6,6 +6,7 @@ import java.util.Map;
 import me.carda.awesome_notifications.notifications.enumeratos.ActionButtonType;
 import me.carda.awesome_notifications.notifications.enumeratos.DefaultRingtoneType;
 import me.carda.awesome_notifications.notifications.enumeratos.GroupAlertBehaviour;
+import me.carda.awesome_notifications.notifications.enumeratos.GroupSort;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationImportance;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationLayout;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationPrivacy;
@@ -14,6 +15,7 @@ public interface Definitions {
 
     String BROADCAST_FCM_TOKEN = "me.carda.awesome_notifications.services.firebase.TOKEN";
     String EXTRA_BROADCAST_FCM_TOKEN = "token";
+    String EXTRA_ANDROID_MEDIA_BUTTON = "android.intent.action.MEDIA_BUTTON";
 
     String MEDIA_VALID_NETWORK = "^https?:\\/\\/";//(www)?(\\.?[a-zA-Z0-9@:%.\\-_\\+~#=]{2,256}\\/?)+(\\?\\S+)$
     String MEDIA_VALID_FILE = "^file?:\\/\\/";
@@ -132,8 +134,8 @@ public interface Definitions {
     String NOTIFICATION_ENABLE_VIBRATION = "enableVibration";
     String NOTIFICATION_VIBRATION_PATTERN = "vibrationPattern";
     String NOTIFICATION_GROUP_KEY = "groupKey";
-    String NOTIFICATION_SET_AS_GROUP_SUMMARY = "setAsGroupSummary";
-    String NOTIFICATION_GROUP_ALERT_BEHAVIOR = "groupAlertBehaviour";
+    String NOTIFICATION_GROUP_SORT = "groupSort";
+    String NOTIFICATION_GROUP_ALERT_BEHAVIOR = "groupAlertBehavior";
     String NOTIFICATION_PRIVACY = "privacy";
     String NOTIFICATION_DEFAULT_PRIVACY = "defaultPrivacy";
     String NOTIFICATION_DEFAULT_RINGTONE_TYPE = "defaultRingtoneType";
@@ -164,6 +166,7 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_ID, 0);
         put(Definitions.NOTIFICATION_IMPORTANCE, NotificationImportance.Default);
         put(Definitions.NOTIFICATION_LAYOUT, NotificationLayout.Default);
+        put(Definitions.NOTIFICATION_GROUP_SORT, GroupSort.Asc);
         put(Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR, GroupAlertBehaviour.All);
         put(Definitions.NOTIFICATION_DEFAULT_PRIVACY, NotificationPrivacy.Private);
         //put(Definitions.NOTIFICATION_PRIVACY, NotificationPrivacy.Private);

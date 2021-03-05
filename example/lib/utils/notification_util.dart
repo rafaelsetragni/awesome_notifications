@@ -967,16 +967,28 @@ Future<void> showGroupedNotifications(id) async {
           id: 3,
           channelKey: 'grouped',
           title: 'Little Jhonny',
-          body: 'This push notifications plugin is amazing!'));
+          body: 'This push notifications plugin is amazing!'
+      ));
 
   sleep(Duration(seconds: 2));
 
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
-          id: 3,
+          id: 4,
           channelKey: 'grouped',
           title: 'Little Jhonny',
-          body: 'Its perfect!'));
+          body: 'Its perfect!'
+      ));
+
+  sleep(Duration(seconds: 2));
+
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: 5,
+          channelKey: 'grouped',
+          title: 'Little Jhonny',
+          body: 'I gonna contribute with the project! For sure!'
+      ));
 }
 
 /* *********************************************

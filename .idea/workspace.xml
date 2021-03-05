@@ -9,34 +9,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/AwesomeMediaButtonReceiver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/enumeratos/DefaultRingtoneType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/src/enumerators/default_ringtone_type.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/enumeratos/GroupSort.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/enumerators/group_sort.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/BroadcastSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/BroadcastSender.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/Definitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/Definitions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/enumeratos/NotificationPrivacy.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/enumeratos/NotificationPrivacy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/ChannelManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/ChannelManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/AwesomeMediaButtonReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/AwesomeMediaButtonReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/KeepOnTopActionReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/KeepOnTopActionReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/ScheduledNotificationReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/ScheduledNotificationReceiver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationChannelModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationChannelModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationContentModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationContentModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/returnedData/ActionReceived.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/returnedData/ActionReceived.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/MapUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/MapUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/StringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/StringUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationContentModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationContentModel.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/awesome_notifications.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/definitions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/definitions.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/enumerators/notification_privacy.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/enumerators/notification_privacy.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/enumerators/action_button_type.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/enumerators/action_button_type.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/enumerators/default_ringtone_type.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/enumerators/default_ringtone_type.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/enumerators/group_alert_behaviour.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/enumerators/group_alert_behaviour.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -132,39 +125,39 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="960" y="256" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1611269265377" />
-    <state x="92" y="92" width="2376" height="856" key="AVDManager" timestamp="1606745662066">
+    <state x="1498" y="226" key="#xdebugger.evaluate" timestamp="1614899259509">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="92" y="92" width="2376" height="856" key="AVDManager/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1606745662066" />
+    <state x="1498" y="226" key="#xdebugger.evaluate/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1614899259509" />
+    <state x="92" y="92" width="2376" height="856" key="AVDManager" timestamp="1614884706846">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="92" y="92" width="2376" height="856" key="AVDManager/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1614884706846" />
     <state x="92" y="92" width="2376" height="856" key="AVDManager/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1606261010735" />
-    <state x="784" y="290" width="412" height="525" key="AndroidProcessChooserDialog" timestamp="1613681950922">
+    <state x="784" y="290" width="412" height="525" key="AndroidProcessChooserDialog" timestamp="1614899766283">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="784" y="290" width="412" height="525" key="AndroidProcessChooserDialog/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1613681950922" />
+    <state x="784" y="290" width="412" height="525" key="AndroidProcessChooserDialog/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1614899766283" />
     <state x="828" y="285" key="AndroidProcessChooserDialog/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1606261271426" />
-    <state x="1060" y="275" key="FileChooserDialogImpl" timestamp="1605203403331">
+    <state width="1588" height="221" key="GridCell.Tab.0.bottom" timestamp="1614899863395">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="1060" y="275" key="FileChooserDialogImpl/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1605203403331" />
-    <state width="2517" height="221" key="GridCell.Tab.0.bottom" timestamp="1613682229531">
-      <screen x="0" y="0" width="2560" height="1040" />
-    </state>
-    <state width="2517" height="221" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1613682229531" />
+    <state width="1588" height="221" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1614899863395" />
     <state width="2516" height="227" key="GridCell.Tab.0.bottom/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1606318794101" />
-    <state width="2517" height="221" key="GridCell.Tab.0.center" timestamp="1613682229530">
+    <state width="1588" height="221" key="GridCell.Tab.0.center" timestamp="1614899863395">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="221" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1613682229530" />
+    <state width="1588" height="221" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1614899863395" />
     <state width="2516" height="227" key="GridCell.Tab.0.center/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1606318794101" />
-    <state width="2517" height="221" key="GridCell.Tab.0.left" timestamp="1613682229530">
+    <state width="1588" height="221" key="GridCell.Tab.0.left" timestamp="1614899863394">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="221" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1613682229530" />
+    <state width="1588" height="221" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1614899863394" />
     <state width="2516" height="227" key="GridCell.Tab.0.left/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1606318794101" />
-    <state width="2517" height="221" key="GridCell.Tab.0.right" timestamp="1613682229531">
+    <state width="1588" height="221" key="GridCell.Tab.0.right" timestamp="1614899863395">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state width="2517" height="221" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1613682229531" />
+    <state width="1588" height="221" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1614899863395" />
     <state width="2516" height="227" key="GridCell.Tab.0.right/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1606318794101" />
     <state x="359" y="186" key="SettingsEditor" timestamp="1606742798544">
       <screen x="0" y="0" width="2560" height="1040" />
@@ -174,10 +167,10 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="1288" height="528" key="XDebugger.FullValuePopup/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1608045184997" />
-    <state x="877" y="100" width="964" height="606" key="find.popup" timestamp="1613681654533">
+    <state x="881" y="304" width="964" height="606" key="find.popup" timestamp="1614900216564">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="877" y="100" width="964" height="606" key="find.popup/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1613681654533" />
+    <state x="881" y="304" width="964" height="606" key="find.popup/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1614900216564" />
     <state x="876" y="100" width="964" height="606" key="find.popup/451.-900.1600.860/0.0.2560.1040@0.0.2560.1040" timestamp="1606260660867" />
     <state x="1312" y="244" key="run.anything.popup" timestamp="1610493651330">
       <screen x="0" y="0" width="2560" height="1040" />
@@ -193,7 +186,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java</url>
-          <line>53</line>
+          <line>51</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
@@ -208,12 +201,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java</url>
-          <line>456</line>
+          <line>454</line>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java</url>
-          <line>479</line>
+          <line>477</line>
           <option name="timeStamp" value="41" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
@@ -222,19 +215,15 @@
           <option name="timeStamp" value="42" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/AwesomeMediaButtonReceiver.java</url>
+          <line>25</line>
+          <option name="timeStamp" value="61" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <condition expression="newChannel.channelKey.equals(&quot;groupded&quot;)" language="JAVA" />
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/ChannelManager.java</url>
           <line>150</line>
-          <option name="timeStamp" value="57" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
-          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/ChannelManager.java</url>
-          <line>77</line>
-          <option name="timeStamp" value="59" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
-          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java</url>
-          <line>492</line>
-          <option name="timeStamp" value="60" />
+          <option name="timeStamp" value="78" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
           <url>file://$PROJECT_DIR$/example/lib/utils/notification_util.dart</url>
@@ -256,7 +245,24 @@
           <line>435</line>
           <option name="timeStamp" value="45" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <condition expression="channelKey == &quot;grouped&quot;" language="JAVA" />
+          <url>file://$PROJECT_DIR$/lib/src/models/notification_channel.dart</url>
+          <line>165</line>
+          <option name="timeStamp" value="77" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/models/notification_channel.dart</url>
+          <line>163</line>
+          <option name="timeStamp" value="84" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Remote">
+        <watch expression="onlyAlertOnce" language="JAVA" />
+        <watch expression="groupKey" language="JAVA" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

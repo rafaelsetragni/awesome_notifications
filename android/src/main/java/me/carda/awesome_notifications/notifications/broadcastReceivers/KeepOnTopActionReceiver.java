@@ -14,7 +14,6 @@ import me.carda.awesome_notifications.notifications.models.returnedData.ActionRe
 
 public class KeepOnTopActionReceiver extends BroadcastReceiver {
 
-
     @Override
     public void onReceive(final Context context, Intent intent) {
         ActionReceived actionReceived = NotificationBuilder.buildNotificationActionFromIntent(context, intent);

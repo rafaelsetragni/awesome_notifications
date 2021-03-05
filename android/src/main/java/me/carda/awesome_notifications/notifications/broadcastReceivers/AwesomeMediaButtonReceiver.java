@@ -37,7 +37,6 @@ public class AwesomeMediaButtonReceiver extends MediaButtonReceiver {
                     KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE -> context.sendIntent(ACTION_PLAY_PAUSE)
                 }
             }
-            */
 
             ActionReceived actionReceived = NotificationBuilder.buildNotificationActionFromIntent(context, intent);
 
@@ -49,8 +48,8 @@ public class AwesomeMediaButtonReceiver extends MediaButtonReceiver {
                 try {
 
                     BroadcastSender.SendBroadcastMediaButton(
-                            context,
-                            actionReceived
+                        context,
+                        actionReceived
                     );
 
                     //Toast.makeText(context, "DismissedNotificationReceiver", Toast.LENGTH_SHORT).show();
@@ -59,6 +58,7 @@ public class AwesomeMediaButtonReceiver extends MediaButtonReceiver {
                     e.printStackTrace();
                 }
             }
+            */
         }
     }
 }

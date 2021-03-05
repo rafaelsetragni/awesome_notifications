@@ -165,6 +165,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         intentFilter.addAction(Definitions.BROADCAST_DISPLAYED_NOTIFICATION);
         intentFilter.addAction(Definitions.BROADCAST_DISMISSED_NOTIFICATION);
         intentFilter.addAction(Definitions.BROADCAST_KEEP_ON_TOP);
+        intentFilter.addAction(Definitions.BROADCAST_MEDIA_BUTTON);
 
         LocalBroadcastManager manager = LocalBroadcastManager.getInstance(applicationContext);
         manager.registerReceiver(this, intentFilter);

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.google.common.reflect.TypeToken;
+//import com.google.common.reflect.TypeToken;
 
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.models.PushNotification;

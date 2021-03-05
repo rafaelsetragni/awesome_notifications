@@ -1,3 +1,12 @@
+## [0.0.5+6]
+* Releasing of final version with push notifications enabled.
+* Added forceUpdate option on setChannel method, to allows to full update an channel on Android Oreo and above without need to reinstall the app, with the downside to close all current notifications.
+* Flutter version updated to 3.0, with nullsafety support.
+* Fixed privacy bugs
+* Fixed grouping functionality and added sort option
+* Fixed media button errors for Android 10 and above
+* Fixed media path errors for iOS
+* Added default sound options for Ringtone, Alarm and Notifications.
 ## [0.0.5+5]
 * Added the link to allows the community to remove or not the push notification functionality from Awesome Notifications plugin.
 ## [0.0.5+4]
