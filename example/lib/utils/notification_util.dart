@@ -954,13 +954,13 @@ Future<void> showGroupedNotifications(id) async {
           title: 'Little Jhonny',
           body: 'Hey dude! Look what i found!'));
 
-  sleep(Duration(microseconds: 700));
+  sleep(Duration(seconds: 2));
 
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: 2, channelKey: 'grouped', title: 'Cyclano', body: 'What?'));
 
-  sleep(Duration(seconds: 3));
+  sleep(Duration(seconds: 2));
 
   await AwesomeNotifications().createNotification(
       content: NotificationContent(

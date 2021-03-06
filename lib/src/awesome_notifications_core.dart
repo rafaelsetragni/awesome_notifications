@@ -282,7 +282,7 @@ class AwesomeNotifications {
   }
 
   /// Set a new notification channel or updates if already exists
-  /// Force update: completely updates the channel on Android Oreo and above, but cancels all current notifications.
+  /// [forceUpdate]: completely updates the channel on Android Oreo and above, but cancels all current notifications.
   Future<void> setChannel(NotificationChannel notificationChannel, {bool forceUpdate}) async {
 
     Map<String, dynamic> parameters =  notificationChannel.toMap();
