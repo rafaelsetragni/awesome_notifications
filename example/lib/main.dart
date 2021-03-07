@@ -25,12 +25,12 @@ void main() async {
           ledColor: Colors.yellow
       ),
       NotificationChannel(
-          icon: 'resource://drawable/schedule_icon',
-          channelKey: 'schedule',
-          channelName: 'Scheduled Notifications',
-          channelDescription: 'Notifications with schedule time',
+          channelKey: 'ringtone_channel',
+          channelName: 'Ringtone Channel',
+          channelDescription: 'Channel with default ringtone',
           defaultColor: Color(0xFF9D50DD),
-          ledColor: Colors.white
+          ledColor: Colors.white,
+          defaultRingtoneType: DefaultRingtoneType.Ringtone
       ),
       NotificationChannel(
           channelKey: 'updated_channel',
@@ -62,6 +62,16 @@ void main() async {
           defaultColor: Colors.red,
           ledColor: Colors.red,
           vibrationPattern: highVibrationPattern
+      ),
+      NotificationChannel(
+          channelKey: "private_channel",
+          channelName: "Privates notification channel",
+          channelDescription: "Privates notification from lock screen",
+          playSound: true,
+          defaultColor: Colors.red,
+          ledColor: Colors.red,
+          vibrationPattern: lowVibrationPattern,
+          defaultPrivacy: NotificationPrivacy.Private
       ),
       NotificationChannel(
           icon: 'resource://drawable/res_power_ranger_thunder',
@@ -125,6 +135,7 @@ void main() async {
           ledColor: Color(0xFF9D50DD),
           vibrationPattern: lowVibrationPattern,
           importance: NotificationImportance.High,
+          defaultRingtoneType: DefaultRingtoneType.Alarm
       ),
       NotificationChannel(
           icon: 'resource://drawable/res_download_icon',
@@ -141,7 +152,8 @@ void main() async {
           channelName: 'Grouped notifications',
           channelDescription: 'Notifications with group functionality',
           groupKey: 'grouped',
-          setAsGroupSummary: true,
+          groupSort: GroupSort.Desc,
+          groupAlertBehavior: GroupAlertBehavior.Children,
           defaultColor: Colors.lightGreen,
           ledColor: Colors.lightGreen,
           vibrationPattern: lowVibrationPattern,

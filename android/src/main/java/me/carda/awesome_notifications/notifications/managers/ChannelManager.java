@@ -12,10 +12,12 @@ import com.google.common.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.core.app.NotificationManagerCompat;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
+import me.carda.awesome_notifications.notifications.enumeratos.DefaultRingtoneType;
 import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
 import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
 import me.carda.awesome_notifications.notifications.models.NotificationChannelModel;
@@ -30,7 +32,14 @@ public class ChannelManager {
     private static final SharedManager<NotificationChannelModel> shared = new SharedManager<>("ChannelManager", NotificationChannelModel.class);
 
     public static Boolean removeChannel(Context context, String channelKey) {
-        removeAndroidChannel(context, channelKey);
+
+        NotificationChannelModel oldChannel = getChannelByKey(context, channelKey);
+
+        if(oldChannel == null) return true;
+
+        removeAndroidChannel(context, oldChannel.channelKey);
+        removeAndroidChannel(context, oldChannel.getChannelKey());
+
         return shared.remove(context, Definitions.SHARED_CHANNELS, channelKey);
     }
 
@@ -38,21 +47,56 @@ public class ChannelManager {
         return shared.getAllObjects(context, Definitions.SHARED_CHANNELS);
     }
 
-    public static void saveChannel(Context context, NotificationChannelModel channelModel) {
-        shared.set(context, Definitions.SHARED_CHANNELS, channelModel.channelKey, channelModel);
+    public static void saveChannel(Context context, NotificationChannelModel channelModel, Boolean forceUpdate) {
+
+        NotificationChannelModel oldChannel = getChannelByKey(context, channelModel.channelKey);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if(oldChannel != null){
+
+                String oldKey = oldChannel.getChannelKey();
+
+                if(!oldKey.equals(channelModel.getChannelKey()) && forceUpdate){
+                    removeAndroidChannel(context, oldChannel.channelKey);
+                    removeAndroidChannel(context, oldChannel.getChannelKey());
+                }
+            }
+        }
+
         setAndroidChannel(context, channelModel);
+
+        shared.set(context, Definitions.SHARED_CHANNELS, channelModel.channelKey, channelModel);
+        shared.commit(context);
     }
 
     public static NotificationChannelModel getChannelByKey(Context context, String channelKey){
         return shared.get(context, Definitions.SHARED_CHANNELS, channelKey);
     }
 
-    public static Uri retrieveSoundResourceUri(Context context, NotificationChannelModel channelModel) {
+    public static Uri retrieveSoundResourceUri(Context context, DefaultRingtoneType ringtoneType, String soundSource) {
         Uri uri = null;
-        if (StringUtils.isNullOrEmpty(channelModel.soundSource)) {
-            uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        if (StringUtils.isNullOrEmpty(soundSource)) {
+
+            int defaultRingtoneKey;
+            switch (ringtoneType){
+
+                case Ringtone:
+                    defaultRingtoneKey = RingtoneManager.TYPE_RINGTONE;
+                    break;
+
+                case Alarm:
+                    defaultRingtoneKey = RingtoneManager.TYPE_ALARM;
+                    break;
+
+                case Notification:
+                default:
+                    defaultRingtoneKey = RingtoneManager.TYPE_NOTIFICATION;
+                    break;
+            }
+            uri = RingtoneManager.getDefaultUri(defaultRingtoneKey);
+
         } else {
-            int soundResourceId = AudioUtils.getAudioResourceId(context, channelModel.soundSource);
+            int soundResourceId = AudioUtils.getAudioResourceId(context, soundSource);
             if(soundResourceId > 0){
                 uri = Uri.parse("android.resource://" + context.getPackageName() + "/" + soundResourceId);
             }
@@ -68,11 +112,14 @@ public class ChannelManager {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationManager.deleteNotificationChannel(channelKey);
+            try {
+                notificationManager.deleteNotificationChannel(channelKey);
+            } catch ( Exception ignored) {
+            }
         }
     }
 
-    private static void setAndroidChannel(Context context, NotificationChannelModel newChannel) {
+    public static void setAndroidChannel(Context context, NotificationChannelModel newChannel) {
 
         if(newChannel.icon != null){
             if(MediaUtils.getMediaSourceType(newChannel.icon) != MediaSource.Resource){
@@ -87,14 +134,7 @@ public class ChannelManager {
                 }
             }
         }
-/*
-        // TODO IMPROVE CHANNELS COMPARISION
-        NotificationChannelModel oldChannel = getChannelByKey(context, newChannel.channelKey);
 
-        if(isNotificationChannelActive(context, newChannel.channelKey) && oldChannel != null && oldChannel.equals(newChannel)){
-            return;
-        }
-*/
         try {
             newChannel.validate(context);
         } catch (PushNotificationException e) {
@@ -108,7 +148,7 @@ public class ChannelManager {
 
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationChannel newNotificationChannel = null;
-            newNotificationChannel = new NotificationChannel(newChannel.channelKey, newChannel.channelName, newChannel.importance.ordinal());
+            newNotificationChannel = new NotificationChannel(newChannel.getChannelKey(), newChannel.channelName, newChannel.importance.ordinal());
 
             newNotificationChannel.setDescription(newChannel.channelDescription);
 
@@ -116,8 +156,12 @@ public class ChannelManager {
 
                 /// TODO NEED TO IMPROVE AUDIO RESOURCES TO BE MORE VERSATILE, SUCH AS BITMAP ONES
                 AudioAttributes audioAttributes = null;
-                audioAttributes = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build();
-                Uri uri = retrieveSoundResourceUri(context, newChannel);
+                audioAttributes = new AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                        .build();
+
+                Uri uri = retrieveSoundResourceUri(context, newChannel.defaultRingtoneType, newChannel.soundSource);
                 newNotificationChannel.setSound(uri, audioAttributes);
 
             } else {
@@ -136,10 +180,8 @@ public class ChannelManager {
                 newNotificationChannel.setLightColor(newChannel.ledColor);
             }
 
-            // Ensures that the new rules are being updated
-            // removeAndroidChannel(context, newChannel.channelKey);
-
             newNotificationChannel.setShowBadge(BooleanUtils.getValue(newChannel.channelShowBadge));
+
             notificationManager.createNotificationChannel(newNotificationChannel);
         }
 

@@ -65,8 +65,9 @@ public class AudioUtils extends MediaUtils {
     public static int getAudioResourceId(Context context, String audioReference){
         audioReference = AudioUtils.cleanMediaPath(audioReference);
         String[] reference = audioReference.split("\\/");
+
         try {
-            int resId;
+            int resId = 0;
 
             String type = reference[0];
             String label = reference[1];

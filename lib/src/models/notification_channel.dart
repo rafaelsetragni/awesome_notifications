@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:awesome_notifications/src/enumerators/default_ringtone_type.dart';
 import 'package:awesome_notifications/src/enumerators/group_alert_behaviour.dart';
+import 'package:awesome_notifications/src/enumerators/group_sort.dart';
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
 import 'package:awesome_notifications/src/enumerators/notification_importance.dart';
 import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
@@ -22,6 +24,7 @@ class NotificationChannel extends Model {
 
   bool playSound;
   String soundSource;
+  DefaultRingtoneType defaultRingtoneType;
 
   bool enableVibration;
   Int64List vibrationPattern;
@@ -32,7 +35,7 @@ class NotificationChannel extends Model {
   int ledOffMs;
 
   String groupKey;
-  bool setAsGroupSummary;
+  GroupSort groupSort;
   GroupAlertBehavior groupAlertBehavior;
 
   NotificationPrivacy defaultPrivacy;
@@ -52,6 +55,7 @@ class NotificationChannel extends Model {
       this.importance,
       this.playSound,
       this.soundSource,
+      this.defaultRingtoneType,
       this.enableVibration,
       this.vibrationPattern,
       this.enableLights,
@@ -59,7 +63,7 @@ class NotificationChannel extends Model {
       this.ledOnMs,
       this.ledOffMs,
       this.groupKey,
-      this.setAsGroupSummary,
+      this.groupSort,
       this.groupAlertBehavior,
       this.icon,
       this.defaultColor,
@@ -93,9 +97,9 @@ class NotificationChannel extends Model {
     this.ledOffMs =
         AssertUtils.getValueOrDefault('ledOffMs', this.ledOffMs, int);
     this.groupKey =
-        AssertUtils.getValueOrDefault('groupKey', this.groupKey, bool);
-    this.setAsGroupSummary = AssertUtils.getValueOrDefault(
-        'setAsGroupSummary', this.setAsGroupSummary, bool);
+        AssertUtils.getValueOrDefault('groupKey', this.groupKey, String);
+    this.groupSort = AssertUtils.getValueOrDefault(
+        'groupSort', this.groupSort, GroupSort);
     this.groupAlertBehavior = AssertUtils.getValueOrDefault(
         'groupAlertBehavior', this.groupAlertBehavior, GroupAlertBehavior);
     this.icon = AssertUtils.getValueOrDefault('icon', this.icon, String);
@@ -106,6 +110,8 @@ class NotificationChannel extends Model {
         'onlyAlertOnce', this.onlyAlertOnce, bool);
     this.defaultPrivacy = AssertUtils.getValueOrDefault(
         'defaultPrivacy', this.defaultPrivacy, NotificationPrivacy);
+    this.defaultRingtoneType = AssertUtils.getValueOrDefault(
+        'defaultRingtoneType', this.defaultRingtoneType, DefaultRingtoneType);
 
     // For small icons, it's only allowed resource media types
     assert(StringUtils.isNullOrEmpty(icon) ||
@@ -130,9 +136,10 @@ class NotificationChannel extends Model {
       'ledOnMs': ledOnMs,
       'ledOffMs': ledOffMs,
       'groupKey': groupKey,
-      'setAsGroupSummary': setAsGroupSummary,
+      'groupSort': AssertUtils.toSimpleEnumString(groupSort),
       'groupAlertBehavior': AssertUtils.toSimpleEnumString(groupAlertBehavior),
       'defaultPrivacy': AssertUtils.toSimpleEnumString(defaultPrivacy),
+      'defaultRingtoneType': AssertUtils.toSimpleEnumString(defaultRingtoneType),
       'locked': locked,
       'onlyAlertOnce': onlyAlertOnce
     };
@@ -154,12 +161,14 @@ class NotificationChannel extends Model {
         AssertUtils.extractValue(dataMap, 'vibrationPattern');
     this.enableLights = AssertUtils.extractValue(dataMap, 'enableLights');
     this.groupKey = AssertUtils.extractValue(dataMap, 'groupKey');
-    this.setAsGroupSummary =
-        AssertUtils.extractValue(dataMap, 'setAsGroupSummary');
+    this.groupSort = AssertUtils.extractEnum(
+        dataMap, 'groupSort', GroupSort.values);
     this.groupAlertBehavior = AssertUtils.extractEnum(
         dataMap, 'groupAlertBehavior', GroupAlertBehavior.values);
     this.defaultPrivacy = AssertUtils.extractEnum(
         dataMap, 'defaultPrivacy', NotificationPrivacy.values);
+    this.defaultRingtoneType = AssertUtils.extractEnum(
+        dataMap, 'defaultRingtoneType', DefaultRingtoneType.values);
     this.icon = AssertUtils.extractValue(dataMap, 'icon');
     this.locked = AssertUtils.extractValue(dataMap, 'locked');
     this.onlyAlertOnce = AssertUtils.extractValue(dataMap, 'onlyAlertOnce');

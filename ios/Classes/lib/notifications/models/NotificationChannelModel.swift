@@ -18,6 +18,7 @@ public class NotificationChannelModel : AbstractModel {
 
     var playSound: Bool?
     var soundSource: String?
+    var defaultRingtoneType: DefaultRingtoneType?
 
     var enableVibration: Bool?
     
@@ -29,7 +30,7 @@ public class NotificationChannelModel : AbstractModel {
     var ledOffMs: Int?
 
     var groupKey: String?
-    var setAsGroupSummary: Bool?
+    var groupSort: GroupSort?
     var groupAlertBehavior: GroupAlertBehaviour?
     
     var locked: Bool?
@@ -55,12 +56,14 @@ public class NotificationChannelModel : AbstractModel {
         self.ledOffMs           = MapUtils<Int>.getValueOrDefault(reference: "ledOffMs", arguments: arguments)
         
         self.groupKey           = MapUtils<String>.getValueOrDefault(reference: "groupKey", arguments: arguments)
-        self.setAsGroupSummary  = MapUtils<Bool>.getValueOrDefault(reference: "setAsGroupSummary", arguments: arguments)
+        self.groupSort          = EnumUtils<GroupSort>.getEnumOrDefault(reference: "groupSort", arguments: arguments)
         
         self.locked         = MapUtils<Bool>.getValueOrDefault(reference: "locked", arguments: arguments)
         self.onlyAlertOnce  = MapUtils<Bool>.getValueOrDefault(reference: "onlyAlertOnce", arguments: arguments)
         
         self.groupAlertBehavior = EnumUtils<GroupAlertBehaviour>.getEnumOrDefault(reference: "groupAlertBehavior", arguments: arguments)
+        
+        self.defaultRingtoneType = EnumUtils<DefaultRingtoneType>.getEnumOrDefault(reference: "defaultRingtoneType", arguments: arguments)
         
         return self
     }
@@ -86,12 +89,14 @@ public class NotificationChannelModel : AbstractModel {
         if(ledOffMs != nil) {mapData["ledOffMs"] = self.ledOffMs}
         
         if(groupKey != nil) {mapData["groupKey"] = self.groupKey}
-        if(setAsGroupSummary != nil) {mapData["setAsGroupSummary"] = self.setAsGroupSummary}
+        if(groupSort != nil) {mapData["groupSort"] = self.groupSort?.rawValue}
         
         if(locked != nil) {mapData["locked"] = self.locked}
         if(onlyAlertOnce != nil) {mapData["onlyAlertOnce"] = self.onlyAlertOnce}
         
         if(groupAlertBehavior != nil) {mapData["groupAlertBehavior"] = self.groupAlertBehavior?.rawValue}
+        
+        if(defaultRingtoneType != nil) {mapData["defaultRingtoneType"] = self.defaultRingtoneType?.rawValue}
         
         return mapData
     }

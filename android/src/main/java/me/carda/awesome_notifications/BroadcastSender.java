@@ -127,4 +127,29 @@ public class BroadcastSender {
 
         return success;
     }
+
+    public static Boolean SendBroadcastMediaButton(Context context, ActionReceived actionReceived){
+
+        Boolean success = false;
+
+        Map<String, Object> data = actionReceived.toMap();
+
+        Intent intent = new Intent(Definitions.BROADCAST_MEDIA_BUTTON);
+        intent.putExtra(Definitions.EXTRA_BROADCAST_MESSAGE, (Serializable) data);
+
+        try {
+
+            LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(context);
+            success = broadcastManager.sendBroadcast(intent);
+
+            if(success){
+                //Log.d(TAG, "Sent dismissed to broadcast");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return success;
+    }
 }

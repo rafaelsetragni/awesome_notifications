@@ -161,12 +161,12 @@ public class NotificationContentModel : AbstractModel {
 
         if(!StringUtils.isNullOrEmpty(mediaPath: icon)){
             if(
-                BitmapUtils.getMediaSourceType(mediaPath:icon) != MediaSource.Resource
+                BitmapUtils.getMediaSourceType(mediaPath: icon) != MediaSource.Resource
             ){
                 let iconError = icon ?? "[invalid icon]"
                 throw PushNotificationError.invalidRequiredFields(
                     msg: "Small icon +\(iconError)+ must be a valid media native resource type.")
-             }
+            }
         }
         
         if(notificationLayout == nil){

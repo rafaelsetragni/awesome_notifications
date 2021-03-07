@@ -32,6 +32,11 @@ public class DefaultsManager {
         return (defaults != null) ? defaults.appIcon : null;
     }
 
+    public static Boolean isFirebaseEnabled(Context context){
+        DefaultsModel defaults = shared.get(context, Definitions.SHARED_DEFAULTS, "Defaults");
+        return (defaults != null) ? defaults.firebaseEnabled : true;
+    }
+
     public static void commitChanges(Context context){
         shared.commit(context);
     }

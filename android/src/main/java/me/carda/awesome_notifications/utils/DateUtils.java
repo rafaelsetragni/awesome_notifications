@@ -24,6 +24,12 @@ public class DateUtils {
         return null;
     }
 
+    public static String dateToString(Date dateTime){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Definitions.DATE_FORMAT, Locale.US);
+        simpleDateFormat.setTimeZone(utcTimeZone);
+        return simpleDateFormat.format(dateTime);
+    }
+
     public static String getUTCDate(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(utcTimeZone);

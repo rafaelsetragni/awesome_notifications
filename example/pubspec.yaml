@@ -34,7 +34,7 @@ dependencies:
 
   url_launcher: ^5.7.5
 
-  intl: ^0.16.1
+  intl: ^0.17.0
 
   progressive_image: ^1.0.1
 

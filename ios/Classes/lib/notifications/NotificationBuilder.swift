@@ -217,7 +217,7 @@ public class NotificationBuilder {
             
             createActionButtonsAndCategory(pushNotification: pushNotification, content: content)
                     
-            applyGrouping(channel: channel, content: content)
+            setGrouping(channel: channel, content: content)
             
             pushNotification.content!.displayedDate = nextDate?.toString() ?? now
             
@@ -472,7 +472,25 @@ public class NotificationBuilder {
                 return
             }
             
-            content.sound = UNNotificationSound.default
+            // TODO Get default iOS path sounds
+            switch channel.defaultRingtoneType {
+                
+                case .Ringtone:
+                    content.sound = UNNotificationSound.default
+                    return
+                    
+                case .Alarm:
+                    content.sound = UNNotificationSound.default
+                    return
+                
+                case .Notification:
+                    content.sound = UNNotificationSound.default
+                    return
+                    
+                case .none:
+                    content.sound = UNNotificationSound.default
+                    return
+            }
         }
         else {
             content.sound = nil
@@ -499,9 +517,9 @@ public class NotificationBuilder {
         // TODO
     }
 
-    private static func applyGrouping(channel:NotificationChannelModel, content:UNMutableNotificationContent){
+    private static func setGrouping(channel:NotificationChannelModel, content:UNMutableNotificationContent){
         
-        if((channel.setAsGroupSummary ?? false) && (!StringUtils.isNullOrEmpty(channel.groupKey))){
+        if(!StringUtils.isNullOrEmpty(channel.groupKey)){
             content.threadIdentifier = channel.groupKey!
         }
     }

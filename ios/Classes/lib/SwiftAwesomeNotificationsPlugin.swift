@@ -41,11 +41,11 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 mapData[Definitions.PUSH_NOTIFICATION_CONTENT] = JsonUtils.fromJson(contentJsonData)
                 
                 if let scheduleJsonData:String = userInfo[Definitions.PUSH_NOTIFICATION_SCHEDULE] as? String {
-                    mapData[Definitions.PUSH_NOTIFICATION_SCHEDULE] = JsonUtils.fromJson(contentJsonData)
+                    mapData[Definitions.PUSH_NOTIFICATION_SCHEDULE] = JsonUtils.fromJson(scheduleJsonData)
                 }
                 
                 if let buttonsJsonData:String = userInfo[Definitions.PUSH_NOTIFICATION_BUTTONS] as? String {
-                    mapData[Definitions.PUSH_NOTIFICATION_BUTTONS] = JsonUtils.fromJson(buttonsJsonData)
+                    mapData[Definitions.PUSH_NOTIFICATION_BUTTONS] = JsonUtils.fromJsonArr(buttonsJsonData)
                 }
                 
                 var pushSource:NotificationSource?
@@ -631,6 +631,10 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             case Definitions.CHANNEL_METHOD_CANCEL_ALL_SCHEDULES:
                 channelMethodCancelAllSchedules(call: call, result: result)
                 return
+
+            case Definitions.CHANNEL_METHOD_GET_NEXT_DATE:
+                channelMethodGetNextDate(call: call, result: result)
+                return
                 
             case Definitions.CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS:
                 channelMethodCancelAllNotifications(call: call, result: result)
@@ -646,7 +650,47 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         }
     }
     
-    
+    private func channelMethodGetNextDate(call: FlutterMethodCall, result: @escaping FlutterResult) {
+
+        do {
+            let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
+            let fixedDate:String? = platformParameters[Definitions.NOTIFICATION_INITIAL_FIXED_DATE] as? String
+            let scheduleModel:NotificationScheduleModel? =
+                NotificationScheduleModel().fromMap(arguments: platformParameters[Definitions.PUSH_NOTIFICATION_SCHEDULE] as? [String : Any?]) as? NotificationScheduleModel
+
+            if(scheduleModel != nil) {
+
+                if(!StringUtils.isNullOrEmpty(fixedDate)){
+                    CronUtils.fixedNowDate = DateUtils.parseDate(fixedDate)
+                }
+
+                let nextValidDate:Date? = CronUtils.getNextCalendar(
+                    initialDateTime: scheduleModel!.initialDateTime,
+                    crontabRule: scheduleModel!.crontabSchedule
+                );
+
+                CronUtils.fixedNowDate = nil
+
+                let convertedDate:String? = DateUtils.dateToString(nextValidDate)
+                result(convertedDate)
+            }
+            else {
+                result(nil)
+            }
+
+        } catch {
+
+            result(
+                FlutterError.init(
+                    code: "\(error)",
+                    message: "Invalid schedule data",
+                    details: error.localizedDescription
+                )
+            )
+
+            result(nil)
+        }
+    }
     
     private func channelMethodListAllSchedules(call: FlutterMethodCall, result: @escaping FlutterResult) {
         

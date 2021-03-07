@@ -23,6 +23,7 @@ public class ActionReceived extends NotificationContentModel {
     public NotificationLifeCycle dismissedLifeCycle;
     public String actionDate;
     public String dismissedDate;
+    public String mediaAction;
 
     public ActionReceived(){}
 
@@ -72,6 +73,7 @@ public class ActionReceived extends NotificationContentModel {
         returnedObject.put(Definitions.NOTIFICATION_ACTION_INPUT, this.actionInput);
         returnedObject.put(Definitions.NOTIFICATION_ACTION_DATE, this.actionDate);
         returnedObject.put(Definitions.NOTIFICATION_DISMISSED_DATE, this.dismissedDate);
+        returnedObject.put(Definitions.NOTIFICATION_MEDIA_ACTION, this.mediaAction);
 
         return returnedObject;
     }
@@ -84,6 +86,7 @@ public class ActionReceived extends NotificationContentModel {
         actionInput   = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_ACTION_INPUT, String.class).orNull();
         actionDate    = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_ACTION_DATE, String.class).orNull();
         dismissedDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_DISMISSED_DATE, String.class).orNull();
+        mediaAction   = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_MEDIA_ACTION, String.class).orNull();
 
         actionLifeCycle = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_ACTION_LIFECYCLE,
                 NotificationLifeCycle.class, NotificationLifeCycle.values());

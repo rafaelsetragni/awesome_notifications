@@ -1,20 +1,32 @@
+## [0.0.5+6]
+* Releasing of final version with push notifications enabled.
+* Added forceUpdate option on setChannel method, to allows to full update an channel on Android Oreo and above without need to reinstall the app, with the downside to close all current notifications.
+* Flutter version updated to 3.0, with nullsafety support.
+* Fixed privacy bugs
+* Fixed grouping functionality and added sort option (sort only works for Android)
+* Fixed media button errors for Android 10 and above
+* Fixed media path errors for iOS
+* Added default sound options for Ringtone, Alarm and Notifications.
+* Documentation improved
+## [0.0.5+5]
+* Added the link to allows the community to remove or not the push notification functionality from Awesome Notifications plugin.
 ## [0.0.5+4]
 * Added the icon field inside notification content package to allow to change the small icon without need to use another channel
 * Included the example for locked notifications for Android and improved the locked priority behaviour
 * Added importance level for notifications (Android 8 and above)
-* Improved documentation
+* Documentation improved
 ## [0.0.5+3]
 * Internal firebase packages updated to the last Android and iOS version
 * Fixed auto cancel off for schedule notifications (Android)
 * Fixed action buttons for push notifications (iOS)
 * Solution for DateUtils class conflict with the new Material "DateUtils" included on documentation
-* Improved documentation
+* Documentation improved
 ## [0.0.5+2]
-* Included emojis to be send on local and push notifications
-* Improved documentation
+* Included emojis to be used on local and push notifications
+* Documentation improved
 ## [0.0.5+1]
 * Included canceling capability to notification push service in cases of invalid notification
-* Improved iOS documentation
+* iOS documentation improved
 ## [0.0.5]
 * Finished FCM push messages for iOS 10 or higher
 * Decreased the implementation complexity to use NotificationServiceExtension and NotificationContentExtension targets (iOS)

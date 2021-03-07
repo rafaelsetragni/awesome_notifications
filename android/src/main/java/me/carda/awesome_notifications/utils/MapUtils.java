@@ -3,7 +3,13 @@ package me.carda.awesome_notifications.utils;
 import io.flutter.Log;
 
 import com.google.common.base.Optional;
+import com.google.common.primitives.Doubles;
+import com.google.common.primitives.Floats;
+import com.google.common.primitives.Longs;
+import com.google.common.primitives.Shorts;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class MapUtils {
@@ -50,6 +56,7 @@ public class MapUtils {
         return Optional.absent();
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> Optional<T> extractValue(Map map, String key, Class<T> expectedClass){
         if(MapUtils.isNullOrEmptyKey(map, key))
             return Optional.absent();
@@ -60,15 +67,27 @@ public class MapUtils {
 
             if(Number.class.isAssignableFrom(expectedClass)){
                 if(value instanceof Number){
-                    switch (expectedClass.getSimpleName()){
-                        case "Integer": value = ((Number)value).intValue();     break;
-                        case "Double":  value = ((Number)value).doubleValue();  break;
-                        case "Float":   value = ((Number)value).floatValue();   break;
-                        case "Long":    value = ((Number)value).longValue();    break;
-                        case "Short":   value = ((Number)value).shortValue();   break;
-                        case "Byte":    value = ((Number)value).byteValue();    break;
+                    switch (expectedClass.getSimpleName().toLowerCase()){
+                        case "integer": value = ((Number)value).intValue();     break;
+                        case "double":  value = ((Number)value).doubleValue();  break;
+                        case "float":   value = ((Number)value).floatValue();   break;
+                        case "long":    value = ((Number)value).longValue();    break;
+                        case "short":   value = ((Number)value).shortValue();   break;
+                        case "byte":    value = ((Number)value).byteValue();    break;
                     }
                 }
+            }
+
+            if(value instanceof List && expectedClass.isArray()){
+                switch (expectedClass.getComponentType().getSimpleName().toLowerCase()){
+                    case "double":  value = Doubles.toArray((List)value);  break;
+                    case "long":    value = Longs.toArray((List)value);   break;
+                    case "short":   value = Shorts.toArray((List)value);   break;
+                    case "integer":
+                    case "byte":
+                    case "float":   value = Floats.toArray((List)value);   break;
+                }
+                return Optional.of(expectedClass.cast(value));
             }
 
             if(expectedClass.isInstance(value)){

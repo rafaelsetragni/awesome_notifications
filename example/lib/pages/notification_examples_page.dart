@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:awesome_notifications_example/common_widgets/led_light.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide DateUtils;
+import 'package:flutter/material.dart' as Material show DateUtils;
 import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -419,6 +420,26 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
           SimpleButton(
               'Request permission',
               onPressed: () => requestUserPermission(notificationsAllowed)
+          ),
+
+          /* ******************************************************************** */
+
+          TextDivisor( title: 'Get Next Schedule Date' ),
+          TextNote(
+              'A simple and fast notification to fresh start.\n\n'
+                  'Tap on notification when it appears on your system tray to go to Details page.'
+          ),
+          SimpleButton(
+              'Get Next Date',
+              onPressed: () async {
+
+                DateTime referenceDate = DateUtils.parseStringToDate('2021-01-12 20:00:00');
+                DateTime expectedDate = DateUtils.parseStringToDate('2021-01-12 21:00:00');
+                NotificationSchedule schedule = NotificationSchedule(initialDateTime: expectedDate);
+
+                DateTime result = await AwesomeNotifications().getNextDate(schedule, fixedDate: referenceDate);
+                debugPrint(DateUtils.parseDateToString(result));
+              }
           ),
 
           /* ******************************************************************** */
