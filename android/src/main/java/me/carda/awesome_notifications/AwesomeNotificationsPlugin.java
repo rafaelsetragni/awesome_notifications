@@ -595,7 +595,15 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             result.success(false);
         } else {
             Boolean removed = ChannelManager.removeChannel(applicationContext, channelKey);
-            result.success(removed);
+
+            if (removed) {
+                Log.d(TAG, "Channel removed");
+                result.success(true);
+            }
+            else {
+                Log.d(TAG, "Channel '"+channelKey+"' not found");
+                result.success(false);
+            }
         }
 
         ChannelManager.commitChanges(applicationContext);
