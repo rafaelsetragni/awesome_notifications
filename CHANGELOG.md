@@ -1,5 +1,6 @@
 ## [0.0.5+7]
 * Added removeChannel method for iOS and error messages for Android removeChannel method.
+* ios project and example project recovered.
 ## [0.0.5+6]
 * Releasing of final version with push notifications enabled.
 * Added forceUpdate option on setChannel method, to allows to full update an channel on Android Oreo and above without need to reinstall the app, with the downside to close all current notifications.
