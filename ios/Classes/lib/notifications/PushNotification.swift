@@ -45,19 +45,19 @@ public class PushNotification : AbstractModel {
     }
     
     func extractNotificationContent(_ reference:String, _ arguments:[String:Any?]?) -> NotificationContentModel? {
-        guard let map:[String:Any?] = arguments as? [String:Any?] else { return nil }
+        guard let map:[String:Any?] = arguments?[reference] as? [String:Any?] else { return nil }
         if(map.isEmpty){ return nil }
         return NotificationContentModel().fromMap(arguments: map) as? NotificationContentModel
     }
     
     func extractNotificationSchedule(_ reference:String, _ arguments:[String:Any?]?) -> NotificationScheduleModel? {
-        guard let map:[String:Any?] = arguments![reference] as? [String:Any?] else { return nil }
+        guard let map:[String:Any?] = arguments?[reference] as? [String:Any?] else { return nil }
         if(map.isEmpty){ return nil }
         return NotificationScheduleModel().fromMap(arguments: map) as? NotificationScheduleModel
     }
     
     func extractNotificationButtons(_ reference:String, _ arguments:[String:Any?]?) -> [NotificationButtonModel]? {
-        guard let actionButtonsData:[[String:Any?]] = arguments![reference] as? [[String:Any?]] else { return nil }
+        guard let actionButtonsData:[[String:Any?]] = arguments?[reference] as? [[String:Any?]] else { return nil }
         if(actionButtonsData.isEmpty){ return nil }
         
         var actionButtons:[NotificationButtonModel] = []

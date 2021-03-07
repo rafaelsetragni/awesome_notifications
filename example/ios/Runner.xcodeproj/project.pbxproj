@@ -14,6 +14,7 @@
 		05C0EE5625F2DA0100DC0E72 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C0EE5525F2DA0100DC0E72 /* NotificationViewController.swift */; };
 		05C0EE5925F2DA0100DC0E72 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05C0EE5725F2DA0100DC0E72 /* MainInterface.storyboard */; };
 		05C0EE5D25F2DA0100DC0E72 /* AwesomeContentExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 05C0EE4E25F2DA0100DC0E72 /* AwesomeContentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		05C0EEC525F54F3E00DC0E72 /* res_morph_power_rangers.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 05C0EEC425F54F3E00DC0E72 /* res_morph_power_rangers.aiff */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -80,6 +81,7 @@
 		05C0EE8525F2DF0200DC0E72 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		05C0EE9425F2E07F00DC0E72 /* AwesomeServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AwesomeServiceExtension.entitlements; sourceTree = "<group>"; };
 		05C0EE9D25F2E0D500DC0E72 /* AwesomeContentExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AwesomeContentExtension.entitlements; sourceTree = "<group>"; };
+		05C0EEC425F54F3E00DC0E72 /* res_morph_power_rangers.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = res_morph_power_rangers.aiff; path = ../../../../../../Downloads/res_morph_power_rangers.aiff; sourceTree = "<group>"; };
 		09F7AEAEBBB69D10C560CA63 /* Pods_AwesomeServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AwesomeServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				05C0EEC425F54F3E00DC0E72 /* res_morph_power_rangers.aiff */,
 				05C0EE8525F2DF0200DC0E72 /* Runner.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -365,6 +368,7 @@
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
+				05C0EEC525F54F3E00DC0E72 /* res_morph_power_rangers.aiff in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -579,7 +583,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "me.carda.awesome-notifications-example.AwesomeServiceExtension";
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.awesomeNotificationsExample.AwesomeServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -613,7 +617,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "me.carda.awesome-notifications-example.AwesomeServiceExtension";
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.awesomeNotificationsExample.AwesomeServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -645,7 +649,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "me.carda.awesome-notifications-example.AwesomeServiceExtension";
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.awesomeNotificationsExample.AwesomeServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -678,7 +682,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "me.carda.awesome-notifications-example.AwesomeContentExtension";
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.awesomeNotificationsExample.AwesomeContentExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -712,7 +716,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "me.carda.awesome-notifications-example.AwesomeContentExtension";
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.awesomeNotificationsExample.AwesomeContentExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -744,7 +748,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "me.carda.awesome-notifications-example.AwesomeContentExtension";
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.awesomeNotificationsExample.AwesomeContentExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -819,7 +823,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "me.carda.awesome-notifications-example";
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.awesomeNotificationsExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -951,7 +955,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "me.carda.awesome-notifications-example";
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.awesomeNotificationsExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -977,7 +981,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "me.carda.awesome-notifications-example";
+				PRODUCT_BUNDLE_IDENTIFIER = me.carda.awesomeNotificationsExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

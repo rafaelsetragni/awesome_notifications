@@ -132,8 +132,16 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             userText =  textResponse.userText
         }
         
+        guard let jsonData:String = response.notification.request.content.userInfo[Definitions.NOTIFICATION_JSON] as? String else {
+                
+            print("Received an invalid notification content")
+            completionHandler()
+            return;
+            
+        }
+        
         receiveAction(
-            jsonData: response.notification.request.content.userInfo[Definitions.PUSH_NOTIFICATION_CONTENT] as? String,
+            jsonData: jsonData,
             actionKey: response.actionIdentifier,
             userText: userText
         )
