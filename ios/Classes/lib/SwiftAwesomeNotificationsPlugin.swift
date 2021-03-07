@@ -603,9 +603,13 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             case Definitions.CHANNEL_METHOD_CREATE_NOTIFICATION:
                 channelMethodCreateNotification(call: call, result: result)
                 return
-                    
+                
             case Definitions.CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL:
                 channelMethodSetChannel(call: call, result: result)
+                return
+                
+            case Definitions.CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL:
+                channelMethodRemoveChannel(call: call, result: result)
                 return
                 
             case Definitions.CHANNEL_METHOD_GET_BADGE_COUNT:
@@ -732,6 +736,52 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             
             Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Channel updated")
             result(true)
+/*
+        } catch {
+            
+            result(
+                FlutterError.init(
+                    code: "\(error)",
+                    message: "Invalid channel",
+                    details: error.localizedDescription
+                )
+            )
+        }
+        
+        result(false)*/
+    }
+    
+    private func channelMethodRemoveChannel(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        
+        //do {
+
+            let channelKey:String? = call.arguments as? String
+                    
+            if (channelKey == nil){
+                
+                result(
+                    FlutterError.init(
+                        code: "Empty channel key",
+                        message: "Empty channel key",
+                        details: channelKey
+                    )
+                )
+            }
+            else {
+                
+                let removed:Bool = ChannelManager.removeChannel(channelKey: channelKey!)
+             
+                if removed {
+                    
+                    Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Channel removed")
+                    result(removed)
+                }
+                else {
+                    
+                    Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Channel '\(channelKey!)' not found")
+                    result(removed)
+                }
+            }
 /*
         } catch {
             
