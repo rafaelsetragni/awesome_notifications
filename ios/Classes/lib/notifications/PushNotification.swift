@@ -45,7 +45,7 @@ public class PushNotification : AbstractModel {
     }
     
     func extractNotificationContent(_ reference:String, _ arguments:[String:Any?]?) -> NotificationContentModel? {
-        guard let map:[String:Any?] = arguments![reference] as? [String:Any?] else { return nil }
+        guard let map:[String:Any?] = arguments as? [String:Any?] else { return nil }
         if(map.isEmpty){ return nil }
         return NotificationContentModel().fromMap(arguments: map) as? NotificationContentModel
     }
