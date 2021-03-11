@@ -1,6 +1,8 @@
 import 'package:awesome_notifications/src/models/model.dart';
 import 'package:awesome_notifications/src/models/notification_button.dart';
+import 'package:awesome_notifications/src/models/notification_calendar.dart';
 import 'package:awesome_notifications/src/models/notification_content.dart';
+import 'package:awesome_notifications/src/models/notification_interval.dart';
 import 'package:awesome_notifications/src/models/notification_schedule.dart';
 
 /// Reference Model to create a new notification
@@ -27,7 +29,12 @@ class PushNotification extends Model {
         Map<String, dynamic> scheduleData =
             Map<String, dynamic>.from(mapData['schedule']);
 
-        schedule = NotificationSchedule().fromMap(scheduleData);
+        if(scheduleData.containsKey('interval')){
+          schedule = NotificationInterval().fromMap(scheduleData);
+        }
+        else {
+          schedule = NotificationCalendar().fromMap(scheduleData);
+        }
         schedule.validate();
       }
 

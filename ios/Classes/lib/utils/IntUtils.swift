@@ -8,7 +8,11 @@
 import Foundation
 
 class IntUtils {
-
+    
+    public static func isBetween(_ value:Int, min:Int, max:Int) -> Bool {
+        return value >= min && value <= max
+    }
+    
     public static func isNullOrEmpty(_ value:Int?) -> Bool {
         return value == nil
     }

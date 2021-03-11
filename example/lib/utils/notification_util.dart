@@ -42,13 +42,10 @@ Future<void> showBasicNotification(int id) async {
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
-          channelKey: 'ringtone_channel',//'basic_channel',//'custom_sound',//
+          channelKey: 'basic_channel',//'basic_channel',//'custom_sound',//
           title: 'Simple Notification',
           body: 'Simple body',
-      )/*,
-      schedule: NotificationSchedule(
-          initialDateTime: DateTime.now().add(Duration(seconds: 5)).toUtc()
-      )*/
+      )
   );
 }
 
@@ -112,9 +109,7 @@ Future<void> showBadgeNotification(int id) async {
           title: 'Badge test notification',
           body: 'This notification does activate badge indicator'
       ),
-      schedule: NotificationSchedule(
-          initialDateTime: DateTime.now().add(Duration(seconds: 5)).toUtc()
-      )
+      schedule: NotificationInterval(interval: 5)
   );
 }
 
@@ -126,9 +121,7 @@ Future<void> showWithoutBadgeNotification(int id) async {
           title: 'Badge test notification',
           body: 'This notification does not activate badge indicator'
       ),
-      schedule: NotificationSchedule(
-          initialDateTime: DateTime.now().add(Duration(seconds: 5)).toUtc()
-      )
+      schedule: NotificationInterval(interval: 5)
   );
 }
 
@@ -313,7 +306,6 @@ Future<void> removeTestChannel(String channelName) async {
 ************************************************ */
 
 Future<void> delayNotification(int id) async {
-  var fiveSecondsDelayed = DateTime.now().add(Duration(seconds: 5));
 
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
@@ -322,7 +314,8 @@ Future<void> delayNotification(int id) async {
           title: 'scheduled title',
           body: 'scheduled body',
           payload: {'uuid': 'uuid-test'}),
-      schedule: NotificationSchedule(initialDateTime: fiveSecondsDelayed));
+      schedule: NotificationInterval(interval: 5)
+  );
 }
 
 /* *********************************************
@@ -416,8 +409,7 @@ Future<void> redNotification(int id, bool delayLEDTests) async {
             key: 'ARCHIVE', label: 'Archive', autoCancel: true)
       ],
       schedule: delayLEDTests
-          ? NotificationSchedule(
-              initialDateTime: DateTime.now().add(Duration(seconds: 5)).toUtc())
+          ? NotificationInterval(interval: 5)
           : null);
 }
 
@@ -453,8 +445,7 @@ Future<void> blueNotification(int id, bool delayLEDTests) async {
             key: 'ARCHIVE', label: 'Archive', autoCancel: true)
       ],
       schedule: delayLEDTests
-          ? NotificationSchedule(
-              initialDateTime: DateTime.now().add(Duration(seconds: 5)).toUtc())
+          ? NotificationInterval(interval: 5)
           : null);
 }
 
@@ -488,8 +479,7 @@ Future<void> yellowNotification(int id, bool delayLEDTests) async {
             key: 'ARCHIVE', label: 'Archive', autoCancel: true)
       ],
       schedule: delayLEDTests
-          ? NotificationSchedule(
-              initialDateTime: DateTime.now().add(Duration(seconds: 5)).toUtc())
+          ? NotificationInterval(interval: 5)
           : null);
 }
 
@@ -525,8 +515,7 @@ Future<void> purpleNotification(int id, bool delayLEDTests) async {
             key: 'ARCHIVE', label: 'Archive', autoCancel: true)
       ],
       schedule: delayLEDTests
-          ? NotificationSchedule(
-              initialDateTime: DateTime.now().add(Duration(seconds: 5)).toUtc())
+          ? NotificationInterval(interval: 5)
           : null);
 }
 
@@ -562,8 +551,7 @@ Future<void> greenNotification(int id, bool delayLEDTests) async {
             key: 'ARCHIVE', label: 'Archive', autoCancel: true)
       ],
       schedule: delayLEDTests
-          ? NotificationSchedule(
-              initialDateTime: DateTime.now().add(Duration(seconds: 5)).toUtc())
+          ? NotificationInterval(interval: 5)
           : null);
 }
 
@@ -1000,7 +988,7 @@ Future<void> listScheduledNotifications(BuildContext context) async {
       await AwesomeNotifications().listScheduledNotifications();
   for (PushNotification schedule in activeSchedules) {
     debugPrint(
-        'pending notification: [id: ${schedule.content.id}, title: ${schedule.content.titleWithoutHtml}, initial: ${schedule.schedule.initialDateTime}, cron: ${schedule.schedule.crontabSchedule}]');
+        'pending notification: [id: ${schedule.content.id}, title: ${schedule.content.titleWithoutHtml}, schedule: ${schedule.schedule.toString()}]');
   }
   return showDialog<void>(
     context: context,
@@ -1008,7 +996,7 @@ Future<void> listScheduledNotifications(BuildContext context) async {
       return AlertDialog(
         content: Text('${activeSchedules.length} schedules founded'),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('OK'),
             onPressed: () {
               Navigator.of(context).pop();
@@ -1030,10 +1018,10 @@ Future<void> repeatMinuteNotification(int id) async {
               'This notification was schedule to repeat at every single minute.',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/melted-clock.png'),
-      schedule: NotificationSchedule(
-          crontabSchedule: CronHelper.instance.minutely()));
+      schedule: NotificationInterval(interval: 60)
+  );
 }
-
+/*
 Future<void> repeatPreciseThreeTimes(int id) async {
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
@@ -1048,7 +1036,7 @@ Future<void> repeatPreciseThreeTimes(int id) async {
         DateTime.now().add(Duration(seconds: 20)).toUtc(),
         DateTime.now().add(Duration(seconds: 30)).toUtc()
       ]));
-}
+}*/
 
 Future<void> repeatMinuteNotificationOClock(int id) async {
   await AwesomeNotifications().createNotification(
@@ -1060,8 +1048,11 @@ Future<void> repeatMinuteNotificationOClock(int id) async {
               'This notification was schedule to repeat at every single minute at clock.',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/melted-clock.png'),
-      schedule: NotificationSchedule(
-          crontabSchedule: CronHelper.instance.minutely(initialSecond: 0)));
+      schedule: NotificationCalendar(
+          second: 0,
+          repeats: true
+      )
+  );
 }
 
 Future<void> showNotificationAtScheduleCron(
@@ -1080,12 +1071,10 @@ Future<void> showNotificationAtScheduleCron(
       payload: {'uuid': 'uuid-test'},
       autoCancel: false,
     ),
-    schedule: NotificationSchedule(
-      crontabSchedule: CronHelper.instance.atDate(scheduleTime.toUtc(), initialSecond: 0)
-    )
+    schedule: NotificationCalendar.fromDate(date: scheduleTime.toUtc())
   );
 }
-
+/*
 Future<void> showScheduleAtWorkweekDay10AmLocal(int id) async {
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
@@ -1100,7 +1089,7 @@ Future<void> showScheduleAtWorkweekDay10AmLocal(int id) async {
                 Utils.DateUtils.parseStringToDate('10:00', format: 'HH:mm')
                       .toUtc())));
 }
-
+*/
 Future<void> showNotificationWithNoBadge(int id) async {
   AwesomeNotifications().setChannel(NotificationChannel(
       channelKey: 'no_badge',

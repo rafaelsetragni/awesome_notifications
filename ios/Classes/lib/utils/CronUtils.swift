@@ -9,11 +9,11 @@ import Foundation
 
 public final class CronUtils {
 
-    public static var fixedNowDate:Date?
+    public var fixedNowDate:Date?
 
-    public static let validDateFormat:String = Definitions.DATE_FORMAT
+    public let validDateFormat:String = Definitions.DATE_FORMAT
 
-    public static func getInitialCalendar() -> Calendar {
+    public func getInitialCalendar() -> Calendar {
         var calendar:Calendar = Calendar.current
         calendar.timeZone = DateUtils.utcTimeZone
         return calendar
@@ -21,7 +21,7 @@ public final class CronUtils {
     
     /// https://www.baeldung.com/cron-expressions
     /// <second> <minute> <hour> <day-of-month> <month> <day-of-week> <year>
-    public static func getNextCalendar(
+    public func getNextCalendar(
         initialDateTime:String?,
         crontabRule:String?
     ) -> Date? {
@@ -93,7 +93,7 @@ public final class CronUtils {
     }
 
     /// Processing time tolerance
-    public static func applyToleranceDate(_ initialScheduleDay: Date) -> Date {
+    public func applyToleranceDate(_ initialScheduleDay: Date) -> Date {
         let delayedScheduleDay:Date = initialScheduleDay.addingTimeInterval(TimeInterval(1))
         return delayedScheduleDay
     }

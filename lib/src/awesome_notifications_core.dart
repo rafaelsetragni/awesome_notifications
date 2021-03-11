@@ -204,22 +204,6 @@ class AwesomeNotifications {
     }
   }
 
-  /// FIREBASE METHODS *********************************************
-
-  /// Gets the firebase cloud messaging token
-  Future<String> get firebaseAppToken async {
-    final String token =
-        await _channel.invokeMethod(CHANNEL_METHOD_GET_FCM_TOKEN);
-    return token;
-  }
-
-  /// Check if firebase is fully available on the project
-  Future<bool> get isFirebaseAvailable async {
-    final bool isAvailable =
-        await _channel.invokeMethod(CHANNEL_METHOD_IS_FCM_AVAILABLE);
-    return isAvailable;
-  }
-
   /// LOCAL NOTIFICATION METHODS *********************************************
 
   /// Creates a new notification.

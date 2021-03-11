@@ -32,10 +32,11 @@ open class UNCrontabNotificationTrigger : UNCalendarNotificationTrigger {
     open override func nextTriggerDate() -> Date? {
         
         var nextValidDate:Date? = Date()
+        let cron:CronUtils = CronUtils()
         
         do {
 
-            nextValidDate = CronUtils.getNextCalendar(
+            nextValidDate = cron.getNextCalendar(
                 initialDateTime: fireDate?.toString(),
                 crontabRule: crontabRule
             )
@@ -49,7 +50,7 @@ open class UNCrontabNotificationTrigger : UNCalendarNotificationTrigger {
 
                     for nextFireDate in fireList! {
 
-                        let closestDate:Date? = CronUtils.getNextCalendar(
+                        let closestDate:Date? = cron.getNextCalendar(
                             initialDateTime: nextFireDate.toString(),
                             crontabRule: nil
                         )

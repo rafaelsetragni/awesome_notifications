@@ -300,7 +300,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
   Future<void> initializeFirebaseService() async {
     String firebaseAppToken;
     bool isFirebaseAvailable;
-
+    /*
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       isFirebaseAvailable = await AwesomeNotifications().isFirebaseAvailable;
@@ -323,7 +323,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
       isFirebaseAvailable = false;
       firebaseAppToken = 'Firebase is not available on this project';
     }
-
+    */
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
@@ -435,7 +435,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
                 DateTime referenceDate = DateUtils.parseStringToDate('2021-01-12 20:00:00');
                 DateTime expectedDate = DateUtils.parseStringToDate('2021-01-12 21:00:00');
-                NotificationSchedule schedule = NotificationSchedule(initialDateTime: expectedDate);
+                NotificationSchedule schedule = NotificationCalendar.fromDate(date: expectedDate);
 
                 DateTime result = await AwesomeNotifications().getNextDate(schedule, fixedDate: referenceDate);
                 debugPrint(DateUtils.parseDateToString(result));
@@ -836,18 +836,22 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             'Show notification at every single minute',
             onPressed: () => repeatMinuteNotification(8),
           ),
+          /*
           SimpleButton(
             'Show notification 3 times, spaced 10 seconds from each other',
             onPressed: () => repeatPreciseThreeTimes(8),
           ),
+          */
           SimpleButton(
             'Show notification at every single minute o\'clock',
             onPressed: () => repeatMinuteNotificationOClock(8),
           ),
+          /*
           SimpleButton(
             'Show notification only on workweek days\nat 10:00 am (local)',
             onPressed: () => showScheduleAtWorkweekDay10AmLocal(8),
           ),
+          */
           SimpleButton(
               'List all active schedules',
               onPressed: () => listScheduledNotifications(context)

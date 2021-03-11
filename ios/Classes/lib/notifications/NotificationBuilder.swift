@@ -227,7 +227,8 @@ public class NotificationBuilder {
                 return pushNotification
             }
             
-            let trigger:UNCalendarNotificationTrigger? = dateToCalendarTrigger(targetDate: nextDate)
+            //let trigger:UNCalendarNotificationTrigger? = dateToCalendarTrigger(targetDate: nextDate)
+            let trigger:UNNotificationTrigger? = pushNotification.schedule?.getUNNotificationTrigger()
             let request = UNNotificationRequest(identifier: pushNotification.content!.id!.description, content: content, trigger: trigger)
             
             UNUserNotificationCenter.current().add(request)
@@ -376,13 +377,34 @@ public class NotificationBuilder {
     private static func getNextScheduleDate(pushNotification:PushNotification?) -> Date? {
         
         if pushNotification?.schedule == nil { return nil }
-        var nextValidDate:Date? = Date()
         
-        //do {
+        switch true {
+            
+            case pushNotification!.schedule! is NotificationCalendarModel:
+                
+                let calendarModel:NotificationCalendarModel = pushNotification!.schedule! as! NotificationCalendarModel
+                guard let trigger:UNCalendarNotificationTrigger = calendarModel.getUNNotificationTrigger() as? UNCalendarNotificationTrigger else { return nil }
+                
+                return trigger.nextTriggerDate()
+                
+            case pushNotification!.schedule! is NotificationIntervalModel:
+                
+                let intervalModel:NotificationIntervalModel = pushNotification!.schedule! as! NotificationIntervalModel
+                guard let trigger:UNTimeIntervalNotificationTrigger = intervalModel.getUNNotificationTrigger() as? UNTimeIntervalNotificationTrigger else { return nil }
+                
+                return trigger.nextTriggerDate()
+                
+            default:
+                return nil
+        }
+        /*
+        let cron:CronUtils = CronUtils()
+        
+        do {
 
             if(pushNotification != nil){
 
-                nextValidDate = CronUtils.getNextCalendar(
+                nextValidDate = cron.getNextCalendar(
                     initialDateTime: pushNotification!.schedule!.initialDateTime,
                     crontabRule: pushNotification!.schedule!.crontabSchedule
                 )
@@ -397,7 +419,7 @@ public class NotificationBuilder {
 
                         for nextDateTime in pushNotification!.schedule!.preciseSchedules! {
 
-                            let closestDate:Date? = CronUtils.getNextCalendar(
+                            let closestDate:Date? = cron.getNextCalendar(
                                 initialDateTime: nextDateTime,
                                 crontabRule: nil
                             )
@@ -423,12 +445,11 @@ public class NotificationBuilder {
                     Log.d(TAG, "Date is not more valid. ("+DateUtils.getUTCDate()+")")
                 }
             }
-        /*
         } catch {
             debugPrint("\(error)")
         }
-        */
         return nil
+        */
     }
     
     private static func setVisibility(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
