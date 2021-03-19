@@ -30,10 +30,9 @@ class PushNotification extends Model {
         Map<String, dynamic> scheduleData =
             Map<String, dynamic>.from(mapData[PUSH_NOTIFICATION_SCHEDULE]);
 
-        if(scheduleData.containsKey(NOTIFICATION_SCHEDULE_INTERVAL)){
+        if (scheduleData.containsKey(NOTIFICATION_SCHEDULE_INTERVAL)) {
           schedule = NotificationInterval().fromMap(scheduleData);
-        }
-        else {
+        } else {
           schedule = NotificationCalendar().fromMap(scheduleData);
         }
         schedule.validate();

@@ -2,9 +2,9 @@ import 'package:awesome_notifications/src/models/notification_schedule.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
 class NotificationInterval extends NotificationSchedule {
-
   /// Field number for get and set indicating the amount of seconds between each repetition (greater than 0).
   int interval;
+
   /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
   bool repeats;
 
@@ -15,9 +15,8 @@ class NotificationInterval extends NotificationSchedule {
 
   @override
   NotificationSchedule fromMap(Map<String, dynamic> dataMap) {
-
     this.interval = AssertUtils.extractValue(dataMap, 'interval');
-    this.repeats  = AssertUtils.extractValue(dataMap, 'repeats');
+    this.repeats = AssertUtils.extractValue(dataMap, 'repeats');
 
     return this;
   }
@@ -38,6 +37,5 @@ class NotificationInterval extends NotificationSchedule {
   }
 
   @override
-  void validate() {
-  }
+  void validate() {}
 }

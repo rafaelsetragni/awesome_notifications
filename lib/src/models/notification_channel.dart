@@ -98,8 +98,8 @@ class NotificationChannel extends Model {
         AssertUtils.getValueOrDefault('ledOffMs', this.ledOffMs, int);
     this.groupKey =
         AssertUtils.getValueOrDefault('groupKey', this.groupKey, String);
-    this.groupSort = AssertUtils.getValueOrDefault(
-        'groupSort', this.groupSort, GroupSort);
+    this.groupSort =
+        AssertUtils.getValueOrDefault('groupSort', this.groupSort, GroupSort);
     this.groupAlertBehavior = AssertUtils.getValueOrDefault(
         'groupAlertBehavior', this.groupAlertBehavior, GroupAlertBehavior);
     this.icon = AssertUtils.getValueOrDefault('icon', this.icon, String);
@@ -139,7 +139,8 @@ class NotificationChannel extends Model {
       'groupSort': AssertUtils.toSimpleEnumString(groupSort),
       'groupAlertBehavior': AssertUtils.toSimpleEnumString(groupAlertBehavior),
       'defaultPrivacy': AssertUtils.toSimpleEnumString(defaultPrivacy),
-      'defaultRingtoneType': AssertUtils.toSimpleEnumString(defaultRingtoneType),
+      'defaultRingtoneType':
+          AssertUtils.toSimpleEnumString(defaultRingtoneType),
       'locked': locked,
       'onlyAlertOnce': onlyAlertOnce
     };
@@ -161,8 +162,8 @@ class NotificationChannel extends Model {
         AssertUtils.extractValue(dataMap, 'vibrationPattern');
     this.enableLights = AssertUtils.extractValue(dataMap, 'enableLights');
     this.groupKey = AssertUtils.extractValue(dataMap, 'groupKey');
-    this.groupSort = AssertUtils.extractEnum(
-        dataMap, 'groupSort', GroupSort.values);
+    this.groupSort =
+        AssertUtils.extractEnum(dataMap, 'groupSort', GroupSort.values);
     this.groupAlertBehavior = AssertUtils.extractEnum(
         dataMap, 'groupAlertBehavior', GroupAlertBehavior.values);
     this.defaultPrivacy = AssertUtils.extractEnum(

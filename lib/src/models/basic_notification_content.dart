@@ -22,22 +22,21 @@ class BaseNotificationContent extends Model {
   Color backgroundColor;
   NotificationPrivacy privacy;
 
-  BaseNotificationContent({
-    this.id,
-    this.channelKey,
-    this.title,
-    this.body,
-    this.summary,
-    this.showWhen,
-    this.icon,
-    this.largeIcon,
-    this.bigPicture,
-    this.autoCancel,
-    this.color,
-    this.backgroundColor,
-    this.payload,
-    this.customSound
-  });
+  BaseNotificationContent(
+      {this.id,
+      this.channelKey,
+      this.title,
+      this.body,
+      this.summary,
+      this.showWhen,
+      this.icon,
+      this.largeIcon,
+      this.bigPicture,
+      this.autoCancel,
+      this.color,
+      this.backgroundColor,
+      this.payload,
+      this.customSound});
 
   @override
   fromMap(Map<String, dynamic> mapData) {

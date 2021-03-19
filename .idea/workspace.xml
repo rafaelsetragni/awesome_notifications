@@ -9,37 +9,46 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationIntervalModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/Definitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/Definitions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/ScheduledNotificationReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/ScheduledNotificationReceiver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/ScheduleManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/ScheduleManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationScheduleModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationScheduleModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/PushNotification.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/PushNotification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/services/firebase/FCMService.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/services/firebase/FCMService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/IntegerUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/IntegerUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/common_widgets/simple_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/common_widgets/simple_button.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/datasources/common/datasource.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/datasources/common/datasource.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/datasources/common/http_datasource.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/datasources/common/http_datasource.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/datasources/firebase_datasource.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/datasources/firebase_datasource.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/pages/firebase_test_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/firebase_test_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/pages/media_details_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/media_details_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/pages/notification_details_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/notification_details_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/pages/notification_examples_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/notification_examples_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/Definitions.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/Definitions.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationCalendarModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationCalendarModel.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/routes.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/utils/common_functions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/common_functions.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/utils/media_player_central.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/media_player_central.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/utils/playback_timer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/playback_timer.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/definitions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/definitions.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/enumerators/action_button_type.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/enumerators/action_button_type.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/enumerators/default_ringtone_type.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/enumerators/default_ringtone_type.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/enumerators/emojis.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/enumerators/emojis.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/enumerators/group_alert_behaviour.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/enumerators/group_alert_behaviour.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/enumerators/group_sort.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/enumerators/group_sort.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/enumerators/notification_privacy.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/enumerators/notification_privacy.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/basic_notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/basic_notification_content.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_calendar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_calendar.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_content.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_interval.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_interval.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_schedule.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_schedule.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/models/received_models/push_notification.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/received_models/push_notification.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/utils/date_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/date_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/utils/html_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/html_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/utils/resource_image_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/resource_image_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/awesome_notifications_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/awesome_notifications_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Pixel_XL]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -66,7 +75,6 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHOW_ALL_PROCESSES" value="false" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
-    <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/example/android/app" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
@@ -248,23 +256,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
           <url>file://$PROJECT_DIR$/test/awesome_notifications_test.dart</url>
-          <line>15</line>
+          <line>14</line>
           <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
           <url>file://$PROJECT_DIR$/example/lib/pages/notification_examples_page.dart</url>
-          <line>468</line>
+          <line>444</line>
           <option name="timeStamp" value="45" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
           <condition expression="channelKey == &quot;grouped&quot;" language="JAVA" />
           <url>file://$PROJECT_DIR$/lib/src/models/notification_channel.dart</url>
-          <line>165</line>
+          <line>166</line>
           <option name="timeStamp" value="77" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
           <url>file://$PROJECT_DIR$/lib/src/models/notification_channel.dart</url>
-          <line>163</line>
+          <line>164</line>
           <option name="timeStamp" value="84" />
         </line-breakpoint>
       </breakpoints>

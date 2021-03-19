@@ -233,24 +233,25 @@ class AwesomeNotifications {
     return false;
   }
 
-  Future<bool> createNotificationFromJsonData(Map<String, dynamic> mapData){
+  Future<bool> createNotificationFromJsonData(Map<String, dynamic> mapData) {
+    if (mapData[PUSH_NOTIFICATION_CONTENT].runtimeType == String)
+      mapData[PUSH_NOTIFICATION_CONTENT] =
+          json.decode(mapData[PUSH_NOTIFICATION_CONTENT]);
 
-    if(mapData[PUSH_NOTIFICATION_CONTENT].runtimeType == String)
-      mapData[PUSH_NOTIFICATION_CONTENT] = json.decode(mapData[PUSH_NOTIFICATION_CONTENT]);
+    if (mapData[PUSH_NOTIFICATION_SCHEDULE].runtimeType == String)
+      mapData[PUSH_NOTIFICATION_SCHEDULE] =
+          json.decode(mapData[PUSH_NOTIFICATION_SCHEDULE]);
 
-    if(mapData[PUSH_NOTIFICATION_SCHEDULE].runtimeType == String)
-      mapData[PUSH_NOTIFICATION_SCHEDULE] = json.decode(mapData[PUSH_NOTIFICATION_SCHEDULE]);
-
-    if(mapData[PUSH_NOTIFICATION_BUTTONS].runtimeType == String)
-      mapData[PUSH_NOTIFICATION_BUTTONS] = json.decode(mapData[PUSH_NOTIFICATION_BUTTONS]);
+    if (mapData[PUSH_NOTIFICATION_BUTTONS].runtimeType == String)
+      mapData[PUSH_NOTIFICATION_BUTTONS] =
+          json.decode(mapData[PUSH_NOTIFICATION_BUTTONS]);
 
     PushNotification pushNotification = PushNotification().fromMap(mapData);
 
     return createNotification(
         content: pushNotification.content,
         schedule: pushNotification.schedule,
-        actionButtons: pushNotification.actionButtons
-    );
+        actionButtons: pushNotification.actionButtons);
   }
 
   /// Check if the notifications are permitted
@@ -288,16 +289,13 @@ class AwesomeNotifications {
 
   /// Set a new notification channel or updates if already exists
   /// [forceUpdate]: completely updates the channel on Android Oreo and above, but cancels all current notifications.
-  Future<void> setChannel(NotificationChannel notificationChannel, {bool forceUpdate}) async {
+  Future<void> setChannel(NotificationChannel notificationChannel,
+      {bool forceUpdate}) async {
+    Map<String, dynamic> parameters = notificationChannel.toMap();
+    parameters.addAll({CHANNEL_FORCE_UPDATE: forceUpdate});
 
-    Map<String, dynamic> parameters =  notificationChannel.toMap();
-    parameters.addAll(
-        {
-          CHANNEL_FORCE_UPDATE: forceUpdate
-        }
-    );
-
-    await _channel.invokeMethod( CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL, parameters );
+    await _channel.invokeMethod(
+        CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL, parameters);
   }
 
   /// Remove a notification channel
@@ -331,14 +329,15 @@ class AwesomeNotifications {
     await _channel.invokeListMethod(CHANNEL_METHOD_RESET_BADGE);
   }
 
-  Future<DateTime> getNextDate(NotificationSchedule schedule, {DateTime fixedDate}) async {
+  Future<DateTime> getNextDate(NotificationSchedule schedule,
+      {DateTime fixedDate}) async {
     Map parameters = {
       NOTIFICATION_INITIAL_FIXED_DATE: DateUtils.parseDateToString(fixedDate),
       PUSH_NOTIFICATION_SCHEDULE: schedule.toMap()
     };
 
     final String nextDate =
-      await _channel.invokeMethod(CHANNEL_METHOD_GET_NEXT_DATE, parameters);
+        await _channel.invokeMethod(CHANNEL_METHOD_GET_NEXT_DATE, parameters);
 
     return DateUtils.parseStringToDate(nextDate);
   }

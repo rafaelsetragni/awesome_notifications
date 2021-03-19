@@ -27,8 +27,8 @@ class NotificationContent extends BaseNotificationContent {
 
   bool locked;
 
-  NotificationContent({
-      int id,
+  NotificationContent(
+      {int id,
       String channelKey,
       String title,
       String body,
@@ -93,8 +93,10 @@ class NotificationContent extends BaseNotificationContent {
 
     this.createdDate = AssertUtils.extractValue<String>(mapData, 'createdDate');
 
-    this.displayOnForeground = AssertUtils.extractValue<bool>(mapData, 'displayOnForeground');
-    this.displayOnBackground = AssertUtils.extractValue<bool>(mapData, 'displayOnBackground');
+    this.displayOnForeground =
+        AssertUtils.extractValue<bool>(mapData, 'displayOnForeground');
+    this.displayOnBackground =
+        AssertUtils.extractValue<bool>(mapData, 'displayOnBackground');
 
     this.displayedDate =
         AssertUtils.extractValue<String>(mapData, 'displayedDate');

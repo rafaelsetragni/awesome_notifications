@@ -34,7 +34,7 @@ class HttpDataSource extends DataSource {
   Future<Response> fetchData(
       {String directory = '',
       Map<String, String> parameters,
-      Map<String, String> headers, // =
+      Map<String, String> headers = const {}, // =
       String body,
       int timeoutInMilliseconds = 5000}) async {
     int tries = 3;

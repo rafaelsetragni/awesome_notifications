@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:math';
 
@@ -12,25 +11,22 @@ enum MediaLifeCycle {
 }
 
 class MediaPlayerCentral {
+  static final PlaybackTimer _timer =
+      PlaybackTimer(onDone: (Duration duration) {
+    if (hasNextMedia) {
+      nextMedia();
+    } else {
+      stop();
+    }
+  }, onData: (Duration duration) {
+    _mediaProgress.add(_timer.now);
+  });
 
-  static final PlaybackTimer _timer = PlaybackTimer(
-      onDone: (Duration duration){
-        if(hasNextMedia) {
-          nextMedia();
-        } else {
-          stop();
-        }
-      },
-      onData: (Duration duration){
-        _mediaProgress.add(_timer.now);
-      }
-  );
+  static String getCloseCaption(Duration duration) {
+    if (currentMedia?.closeCaption?.isEmpty ?? true) return '';
 
-  static String getCloseCaption(Duration duration){
-    if( currentMedia?.closeCaption?.isEmpty ?? true ) return '';
-
-    for(CloseCaptionElement cc in currentMedia.closeCaption){
-      if(cc.start <= duration && cc.end >= duration) return cc.subtitle;
+    for (CloseCaptionElement cc in currentMedia.closeCaption) {
+      if (cc.start <= duration && cc.end >= duration) return cc.subtitle;
     }
 
     return '';
@@ -42,8 +38,11 @@ class MediaPlayerCentral {
   static MediaLifeCycle _lifeCycle = MediaLifeCycle.Stopped;
   static List<MediaModel> _playlist = [];
 
-  static StreamController<MediaModel> _mediaBroadcaster = StreamController<MediaModel>.broadcast();
-  static StreamController<Duration> _mediaProgress = StreamController<Duration>.broadcast();
+  // ignore: close_sinks
+  static StreamController<MediaModel> _mediaBroadcaster =
+      StreamController<MediaModel>.broadcast();
+  static StreamController<Duration> _mediaProgress =
+      StreamController<Duration>.broadcast();
 
   Stream<MediaModel> get mediaBroadcaster {
     return _mediaBroadcaster.stream;
@@ -54,7 +53,7 @@ class MediaPlayerCentral {
   }
 
   static int get index => _index;
-  static set index(int index){
+  static set index(int index) {
     _index = min(_playlist.length, max(0, index));
   }
 
@@ -71,7 +70,7 @@ class MediaPlayerCentral {
   }
 
   static bool get hasAnyMedia => _playlist.isNotEmpty;
-  static bool get hasNextMedia  => hasAnyMedia && index < _playlist.length - 1;
+  static bool get hasNextMedia => hasAnyMedia && index < _playlist.length - 1;
   static bool get hasPreviousMedia => hasAnyMedia && index > 0;
 
   static Stream get mediaStream => _mediaBroadcaster.stream;
@@ -79,29 +78,24 @@ class MediaPlayerCentral {
   static StreamSink get mediaSink => _mediaBroadcaster.sink;
   static StreamSink get progressSink => _mediaProgress.sink;
 
-  static void _broadcastChanges(){
-    _mediaBroadcaster.sink.add(
-        currentMedia
-    );
-    _mediaProgress.sink.add(
-        _timer.now
-    );
+  static void _broadcastChanges() {
+    _mediaBroadcaster.sink.add(currentMedia);
+    _mediaProgress.sink.add(_timer.now);
   }
 
-  static void add(MediaModel newMedia){
-    if(_playlist.contains(newMedia)){
-
+  static void add(MediaModel newMedia) {
+    if (_playlist.contains(newMedia)) {
     } else {
       _playlist.add(newMedia);
     }
   }
 
-  static void addAll(List<MediaModel> newMedias){
-      _playlist..addAll(newMedias);
+  static void addAll(List<MediaModel> newMedias) {
+    _playlist..addAll(newMedias);
   }
 
-  static void remove(MediaModel oldMedia){
-    if(currentMedia == oldMedia){
+  static void remove(MediaModel oldMedia) {
+    if (currentMedia == oldMedia) {
       _timer.stop();
       _playlist.remove(oldMedia);
       _broadcastChanges();
@@ -110,15 +104,13 @@ class MediaPlayerCentral {
     }
   }
 
-  static void clear(){
+  static void clear() {
     _playlist.clear();
     stop();
   }
 
-  static void playPause(){
-
-    switch(_lifeCycle){
-
+  static void playPause() {
+    switch (_lifeCycle) {
       case MediaLifeCycle.Stopped:
       case MediaLifeCycle.Paused:
         _lifeCycle = MediaLifeCycle.Playing;
@@ -132,28 +124,26 @@ class MediaPlayerCentral {
         _broadcastChanges();
         break;
     }
-
   }
 
-  static void stop(){
+  static void stop() {
     _lifeCycle = MediaLifeCycle.Stopped;
     _timer.stop();
     _broadcastChanges();
   }
 
-  static void goTo(Duration moment){
+  static void goTo(Duration moment) {
     _timer.goTo(moment);
     _lifeCycle = _timer.isPlaying ? MediaLifeCycle.Playing : _lifeCycle;
     _broadcastChanges();
   }
 
-  static void nextMedia(){
-    if(hasNextMedia) {
+  static void nextMedia() {
+    if (hasNextMedia) {
       _index++;
     }
 
-    switch(_lifeCycle){
-
+    switch (_lifeCycle) {
       case MediaLifeCycle.Stopped:
         _timer.stop();
         _lifeCycle = MediaLifeCycle.Stopped;
@@ -173,15 +163,14 @@ class MediaPlayerCentral {
     _broadcastChanges();
   }
 
-  static void previousMedia(){
-    if(hasPreviousMedia){
-      if(_timer.now < replayTolerance){
+  static void previousMedia() {
+    if (hasPreviousMedia) {
+      if (_timer.now < replayTolerance) {
         _index--;
       }
     }
 
-    switch(_lifeCycle){
-
+    switch (_lifeCycle) {
       case MediaLifeCycle.Playing:
         _timer.stop();
         _timer.playPause(currentMedia.trackSize);
@@ -200,7 +189,7 @@ class MediaPlayerCentral {
     _broadcastChanges();
   }
 
-  dispose(){
+  dispose() {
     _mediaBroadcaster.sink.close();
     _mediaProgress.sink.close();
   }

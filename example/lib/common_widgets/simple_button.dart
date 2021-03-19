@@ -14,7 +14,7 @@ class SimpleButton extends StatelessWidget {
     return Container(
         width: width,
         padding: EdgeInsets.symmetric(vertical: 5),
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             child: Text(label, textAlign: TextAlign.center,
@@ -23,8 +23,12 @@ class SimpleButton extends StatelessWidget {
               ),
             ),
           ),
-          color: backgroundColor,
-          textColor: labelColor,
+          style: ElevatedButton.styleFrom(
+            primary: backgroundColor,
+            textStyle: TextStyle(
+              color: labelColor
+            )
+          ),
           onPressed: onPressed
         )
     );
