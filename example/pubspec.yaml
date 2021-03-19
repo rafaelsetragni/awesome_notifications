@@ -27,12 +27,12 @@ dependencies:
   font_awesome_flutter: ^8.8.1
   fluttertoast: ^4.0.1
   http: ^0.12.0
-  path_provider: ^1.4.0
-  shared_preferences: ^0.5.12+2
+  path_provider: ^2.0.1
+  shared_preferences: ^2.0.5
   numberpicker: ^1.2.1
   giffy_dialog: ^1.8.0
 
-  url_launcher: ^5.7.5
+  url_launcher: ^6.0.2
 
   intl: ^0.17.0
 
@@ -43,6 +43,9 @@ dependencies:
   flutter_circular_slider: ^2.5.0
 
   flutter_statusbarcolor: ^0.2.3
+
+  firebase_messaging: ^9.0.0
+  firebase_core: ^1.0.1
 
 dev_dependencies:
   flutter_test:

@@ -11,11 +11,10 @@ import android.provider.Settings;
 import android.support.v4.media.session.MediaSessionCompat;
 import io.flutter.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.iid.InstanceIdResult;
-import com.google.firebase.messaging.FirebaseMessaging;
+//import com.google.android.gms.tasks.OnCompleteListener;
+//import com.google.android.gms.tasks.Task;
+//import com.google.firebase.FirebaseApp;
+//import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,6 +41,8 @@ import android.app.Activity;
 
 import me.carda.awesome_notifications.notifications.BitmapResourceDecoder;
 import me.carda.awesome_notifications.notifications.models.DefaultsModel;
+import me.carda.awesome_notifications.notifications.models.NotificationCalendarModel;
+import me.carda.awesome_notifications.notifications.models.NotificationIntervalModel;
 import me.carda.awesome_notifications.notifications.models.NotificationScheduleModel;
 import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
@@ -174,9 +175,9 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
         getApplicationLifeCycle();
 
-        enableFirebase(context);
+        //enableFirebase(context);
     }
-
+    /*
     private void enableFirebase(Context context){
 
         Integer resourceId = context.getResources().getIdentifier("google_api_key", "string", context.getPackageName());
@@ -192,6 +193,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         firebaseEnabled = true;
         Log.d(TAG, "Firebase enabled");
     }
+    */
 
     @Override
     public void onAttachedToActivity(ActivityPluginBinding activityPluginBinding) {
@@ -426,7 +428,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             case Definitions.CHANNEL_METHOD_GET_DRAWABLE_DATA:
                 channelMethodGetDrawableData(call, result);
                 return;
-
+            /*
             case Definitions.CHANNEL_METHOD_GET_FCM_TOKEN:
                 channelMethodGetFcmToken(call, result);
                 return;
@@ -434,6 +436,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             case Definitions.CHANNEL_METHOD_IS_FCM_AVAILABLE:
                 channelMethodIsFcmAvailable(call, result);
                 return;
+             */
 
             case Definitions.CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED:
                 channelIsNotificationAllowed(call, result);
@@ -531,9 +534,20 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             @SuppressWarnings("unchecked")
             Map<String, Object> scheduleData = (Map<String, Object>) data.get(Definitions.PUSH_NOTIFICATION_SCHEDULE);
             String fixedDate = (String) data.get(Definitions.NOTIFICATION_INITIAL_FIXED_DATE);
-            NotificationScheduleModel scheduleModel = new NotificationScheduleModel().fromMap(scheduleData);
+
+            NotificationScheduleModel scheduleModel;
+            if(scheduleData.containsKey(Definitions.NOTIFICATION_SCHEDULE_INTERVAL)){
+                scheduleModel = new NotificationIntervalModel().fromMap(scheduleData);
+            }
+            else {
+                scheduleModel = new NotificationCalendarModel().fromMap(scheduleData);
+            }
 
             if(scheduleModel != null) {
+
+                Calendar nextValidDate = scheduleModel.getNextValidDate();
+
+                /*
 
                 if(!StringUtils.isNullOrEmpty(fixedDate)){
                     CronUtils.fixedNowDate = DateUtils.parseDate(fixedDate);
@@ -544,7 +558,8 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                         scheduleModel.crontabSchedule
                 );
 
-                CronUtils.fixedNowDate = null;
+                CronUtils.fixedNowDate = null;'
+                */
 
                 String convertedDate = DateUtils.dateToString(nextValidDate.getTime());
                 result.success(convertedDate);
@@ -639,7 +654,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
             int notificationId = call.arguments();
 
-            NotificationScheduler.cancelNotification(applicationContext, notificationId);
+            NotificationScheduler.cancelScheduleNotification(applicationContext, notificationId);
 
             result.success(true);
 
@@ -666,7 +681,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
             int notificationId = call.arguments();
 
-            NotificationScheduler.cancelNotification(applicationContext, notificationId);
+            NotificationScheduler.cancelScheduleNotification(applicationContext, notificationId);
             NotificationSender.cancelNotification(applicationContext, notificationId);
 
             result.success(true);
@@ -762,6 +777,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
     }
 
+    /*
     private void channelMethodIsFcmAvailable(MethodCall call, Result result) {
         try {
             result.success(hasGooglePlayServices && firebaseEnabled && FirebaseMessaging.getInstance() != null);
@@ -808,6 +824,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             result.error("Firebase service not available (check if you have google-services.json file)", e.getMessage(), e);
         }
     }
+    */
 
     public static Boolean isNotificationEnabled(Context context){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

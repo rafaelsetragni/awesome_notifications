@@ -98,7 +98,7 @@ public class NotificationCalendarModel : NotificationScheduleModel {
             weekOfMonth == nil &&
             weekOfYear == nil
         ){
-            throw PushNotificationError.invalidRequiredFields(msg: "Calendar values are invalid")
+            throw PushNotificationError.invalidRequiredFields(msg: "At least one parameter is required")
         }
         
         if(!(

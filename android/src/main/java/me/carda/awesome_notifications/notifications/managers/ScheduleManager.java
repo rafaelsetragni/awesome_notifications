@@ -2,9 +2,6 @@ package me.carda.awesome_notifications.notifications.managers;
 
 import android.content.Context;
 
-import com.google.common.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.List;
 
 import me.carda.awesome_notifications.Definitions;
@@ -35,7 +32,7 @@ public class ScheduleManager {
         List<PushNotification> listSchedules = shared.getAllObjects(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS);
         if(listSchedules != null) {
             for (PushNotification pushNotification : listSchedules) {
-                NotificationScheduler.cancelNotification(context, pushNotification.content.id);
+                NotificationScheduler.cancelScheduleNotification(context, pushNotification.content.id);
             }
         }
     }

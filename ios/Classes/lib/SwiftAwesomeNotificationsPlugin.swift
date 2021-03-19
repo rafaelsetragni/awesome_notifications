@@ -687,7 +687,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             
             var convertedDate:String?
             
-            if(scheduleData[Definitions.SCHEDULE_INTERVAL] != nil){
+            if(scheduleData[Definitions.NOTIFICATION_SCHEDULE_INTERVAL] != nil){
                 
                 guard let scheduleModel:NotificationScheduleModel =
                     NotificationIntervalModel().fromMap(arguments: scheduleData) as? NotificationScheduleModel

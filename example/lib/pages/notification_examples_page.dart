@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:awesome_notifications_example/common_widgets/led_light.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide DateUtils;
 import 'package:flutter/material.dart' as Material show DateUtils;
 import 'package:flutter/services.dart';
@@ -298,9 +299,41 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initializeFirebaseService() async {
+
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    String firebaseAppToken = await messaging.getToken(
+      vapidKey: "BJOuTV9YiYVr5FPXQA4Hu1SJ7qC-q4tSIYLnbNHW4xpxqBRu6JXMtay0xzNUxkW_aApBBmOmASg-ClTkqAE53rk",
+    );
+
+    if (!mounted){
+      _firebaseAppToken = firebaseAppToken;
+      return;
+    }
+
+    setState(() {
+      _firebaseAppToken = firebaseAppToken;
+    });
+
+    print('Firebase token: $firebaseAppToken');
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+
+      AwesomeNotifications().createNotificationFromJsonData(message.data);
+    });
+  }
+
+  /*
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> old_initializeFirebaseService() async {
     String firebaseAppToken;
     bool isFirebaseAvailable;
-    /*
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       isFirebaseAvailable = await AwesomeNotifications().isFirebaseAvailable;
@@ -323,7 +356,6 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
       isFirebaseAvailable = false;
       firebaseAppToken = 'Firebase is not available on this project';
     }
-    */
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
@@ -336,6 +368,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
       _firebaseAppToken = firebaseAppToken;
     });
   }
+  */
 
   @override
   Widget build(BuildContext context) {

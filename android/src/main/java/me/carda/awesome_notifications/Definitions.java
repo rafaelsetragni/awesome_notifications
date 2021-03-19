@@ -91,6 +91,20 @@ public interface Definitions {
 
     String NOTIFICATION_ICON_RESOURCE_ID = "iconResourceId";
 
+    String NOTIFICATION_SCHEDULE_ERA = "era";
+    String NOTIFICATION_SCHEDULE_YEAR = "year";
+    String NOTIFICATION_SCHEDULE_MONTH = "month";
+    String NOTIFICATION_SCHEDULE_DAY = "day";
+    String NOTIFICATION_SCHEDULE_HOUR = "hour";
+    String NOTIFICATION_SCHEDULE_MINUTE = "minute";
+    String NOTIFICATION_SCHEDULE_SECOND = "second";
+    String NOTIFICATION_SCHEDULE_MILLISECOND = "millisecond";
+    String NOTIFICATION_SCHEDULE_WEEKDAY = "weekday";
+    String NOTIFICATION_SCHEDULE_WEEKOFMONTH = "weekOfMonth";
+    String NOTIFICATION_SCHEDULE_WEEKOFYEAR = "weekOfYear";
+    String NOTIFICATION_SCHEDULE_INTERVAL = "interval";
+    String NOTIFICATION_SCHEDULE_REPEATS = "repeats";
+
     String NOTIFICATION_CREATED_SOURCE = "createdSource";
     String NOTIFICATION_CREATED_LIFECYCLE = "createdLifeCycle";
     String NOTIFICATION_DISPLAYED_LIFECYCLE = "displayedLifeCycle";
@@ -163,6 +177,7 @@ public interface Definitions {
 
     Map<String, Object> initialValues = new HashMap<String, Object>(){{
         put(Definitions.FIREBASE_ENABLED, true);
+        put(Definitions.NOTIFICATION_SCHEDULE_REPEATS, true);
         put(Definitions.NOTIFICATION_ID, 0);
         put(Definitions.NOTIFICATION_IMPORTANCE, NotificationImportance.Default);
         put(Definitions.NOTIFICATION_LAYOUT, NotificationLayout.Default);

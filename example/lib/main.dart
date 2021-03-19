@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications_example/routes.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -5,6 +7,8 @@ import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/media_player_central.dart';
 
 void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
 
   AwesomeNotifications().initialize(
     'resource://drawable/res_app_icon',
@@ -162,12 +166,30 @@ void main() async {
     ]
   );
 
-  runApp(App());
+  // Create the initialization Future outside of `build`:
+  FirebaseApp firebaseApp = await Firebase.initializeApp();
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  runApp(App(firebaseApp));
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
+
+  AwesomeNotifications().createNotificationFromJsonData(message.data);
 }
 
 class App extends StatefulWidget {
 
+  App(this.firebaseApp);
+
   static final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
+  final FirebaseApp firebaseApp;
 
   static String name = 'Push Notifications - Example App';
   static Color mainColor = Color(0xFF9D50DD);

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'dart:convert';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications/src/definitions.dart';
@@ -230,6 +231,26 @@ class AwesomeNotifications {
       print(error);
     }
     return false;
+  }
+
+  Future<bool> createNotificationFromJsonData(Map<String, dynamic> mapData){
+
+    if(mapData[PUSH_NOTIFICATION_CONTENT].runtimeType == String)
+      mapData[PUSH_NOTIFICATION_CONTENT] = json.decode(mapData[PUSH_NOTIFICATION_CONTENT]);
+
+    if(mapData[PUSH_NOTIFICATION_SCHEDULE].runtimeType == String)
+      mapData[PUSH_NOTIFICATION_SCHEDULE] = json.decode(mapData[PUSH_NOTIFICATION_SCHEDULE]);
+
+    if(mapData[PUSH_NOTIFICATION_BUTTONS].runtimeType == String)
+      mapData[PUSH_NOTIFICATION_BUTTONS] = json.decode(mapData[PUSH_NOTIFICATION_BUTTONS]);
+
+    PushNotification pushNotification = PushNotification().fromMap(mapData);
+
+    return createNotification(
+        content: pushNotification.content,
+        schedule: pushNotification.schedule,
+        actionButtons: pushNotification.actionButtons
+    );
   }
 
   /// Check if the notifications are permitted

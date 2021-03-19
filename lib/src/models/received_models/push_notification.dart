@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/src/definitions.dart';
 import 'package:awesome_notifications/src/models/model.dart';
 import 'package:awesome_notifications/src/models/notification_button.dart';
 import 'package:awesome_notifications/src/models/notification_calendar.dart';
@@ -20,16 +21,16 @@ class PushNotification extends Model {
       assert(mapData.containsKey('content') && mapData['content'] is Map);
 
       Map<String, dynamic> contentData =
-          Map<String, dynamic>.from(mapData['content']);
+          Map<String, dynamic>.from(mapData[PUSH_NOTIFICATION_CONTENT]);
 
       content = NotificationContent().fromMap(contentData);
       content.validate();
 
-      if (mapData.containsKey('schedule')) {
+      if (mapData.containsKey(PUSH_NOTIFICATION_SCHEDULE)) {
         Map<String, dynamic> scheduleData =
-            Map<String, dynamic>.from(mapData['schedule']);
+            Map<String, dynamic>.from(mapData[PUSH_NOTIFICATION_SCHEDULE]);
 
-        if(scheduleData.containsKey('interval')){
+        if(scheduleData.containsKey(NOTIFICATION_SCHEDULE_INTERVAL)){
           schedule = NotificationInterval().fromMap(scheduleData);
         }
         else {
@@ -38,10 +39,10 @@ class PushNotification extends Model {
         schedule.validate();
       }
 
-      if (mapData.containsKey('actionButtons')) {
+      if (mapData.containsKey(PUSH_NOTIFICATION_BUTTONS)) {
         actionButtons = [];
         List<Object> actionButtonsData =
-            List<Object>.from(mapData['actionButtons']);
+            List<Object>.from(mapData[PUSH_NOTIFICATION_BUTTONS]);
 
         for (Object buttonData in actionButtonsData) {
           Map<String, dynamic> actionButtonData =
