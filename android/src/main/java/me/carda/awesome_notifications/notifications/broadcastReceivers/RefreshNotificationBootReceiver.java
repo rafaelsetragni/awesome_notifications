@@ -11,7 +11,11 @@ public class RefreshNotificationBootReceiver extends BroadcastReceiver
     @Override
     public void onReceive(final Context context, Intent intent) {
         String action = intent.getAction();
-        if (action != null && action.equals(Intent.ACTION_BOOT_COMPLETED)) {
+        if (action != null && (action.equals(android.content.Intent.ACTION_BOOT_COMPLETED)
+                    || action.equals(Intent.ACTION_LOCKED_BOOT_COMPLETED)
+                    || action.equals(Intent.ACTION_MY_PACKAGE_REPLACED)
+                    || action.equals("android.intent.action.QUICKBOOT_POWERON")
+                    || action.equals("com.htc.intent.action.QUICKBOOT_POWERON"))) {
             NotificationScheduler.refreshScheduleNotifications(context);
         }
     }
