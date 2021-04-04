@@ -132,7 +132,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
     // If you pretend to use the firebase service, you need to initialize it
     // getting a valid token
-    initializeFirebaseService();
+    // initializeFirebaseService();
 
     AwesomeNotifications().createdStream.listen(
             (receivedNotification) {
@@ -297,45 +297,45 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initializeFirebaseService() async {
-    String firebaseAppToken;
-    bool isFirebaseAvailable;
+  // Future<void> initializeFirebaseService() async {
+  //   String firebaseAppToken;
+  //   bool isFirebaseAvailable;
 
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      isFirebaseAvailable = await AwesomeNotifications().isFirebaseAvailable;
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   try {
+  //     isFirebaseAvailable = await AwesomeNotifications().isFirebaseAvailable;
 
-      if(isFirebaseAvailable){
-        try {
-          firebaseAppToken = await AwesomeNotifications().firebaseAppToken;
-          debugPrint('Firebase token: $firebaseAppToken');
-        } on PlatformException {
-          firebaseAppToken = null;
-          debugPrint('Firebase failed to get token');
-        }
-      }
-      else {
-        firebaseAppToken = null;
-        debugPrint('Firebase is not available on this project');
-      }
+  //     if(isFirebaseAvailable){
+  //       try {
+  //         firebaseAppToken = await AwesomeNotifications().firebaseAppToken;
+  //         debugPrint('Firebase token: $firebaseAppToken');
+  //       } on PlatformException {
+  //         firebaseAppToken = null;
+  //         debugPrint('Firebase failed to get token');
+  //       }
+  //     }
+  //     else {
+  //       firebaseAppToken = null;
+  //       debugPrint('Firebase is not available on this project');
+  //     }
 
-    } on PlatformException {
-      isFirebaseAvailable = false;
-      firebaseAppToken = 'Firebase is not available on this project';
-    }
+  //   } on PlatformException {
+  //     isFirebaseAvailable = false;
+  //     firebaseAppToken = 'Firebase is not available on this project';
+  //   }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted){
-      _firebaseAppToken = firebaseAppToken;
-      return;
-    }
+  //   // If the widget was removed from the tree while the asynchronous platform
+  //   // message was in flight, we want to discard the reply rather than calling
+  //   // setState to update our non-existent appearance.
+  //   if (!mounted){
+  //     _firebaseAppToken = firebaseAppToken;
+  //     return;
+  //   }
 
-    setState(() {
-      _firebaseAppToken = firebaseAppToken;
-    });
-  }
+  //   setState(() {
+  //     _firebaseAppToken = firebaseAppToken;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -6,21 +6,21 @@ import 'package:awesome_notifications/src/utils/html_utils.dart';
 import 'package:flutter/material.dart';
 
 class BaseNotificationContent extends Model {
-  int id;
-  String channelKey;
-  String title;
-  String body;
-  String summary;
-  bool showWhen;
-  Map<String, dynamic> payload;
-  String icon;
-  String largeIcon;
-  String bigPicture;
-  String customSound;
-  bool autoCancel;
-  Color color;
-  Color backgroundColor;
-  NotificationPrivacy privacy;
+  int? id;
+  String? channelKey;
+  String? title;
+  String? body;
+  String? summary;
+  bool? showWhen;
+  Map<String, dynamic>? payload;
+  String? icon;
+  String? largeIcon;
+  String? bigPicture;
+  String? customSound;
+  bool? autoCancel;
+  Color? color;
+  Color? backgroundColor;
+  NotificationPrivacy? privacy;
 
   BaseNotificationContent({
     this.id,
@@ -89,16 +89,16 @@ class BaseNotificationContent extends Model {
   }
 
   ImageProvider get bigPictureImage {
-    return BitmapUtils().getFromMediaPath(bigPicture);
+    return BitmapUtils().getFromMediaPath(bigPicture!);
   }
 
   ImageProvider get largeIconImage {
-    return BitmapUtils().getFromMediaPath(largeIcon);
+    return BitmapUtils().getFromMediaPath(largeIcon!);
   }
 
-  String get titleWithoutHtml => HtmlUtils.removeAllHtmlTags(title);
+  String get titleWithoutHtml => HtmlUtils.removeAllHtmlTags(title)!;
 
-  String get bodyWithoutHtml => HtmlUtils.removeAllHtmlTags(body);
+  String get bodyWithoutHtml => HtmlUtils.removeAllHtmlTags(body)!;
 
   @override
   void validate() {
