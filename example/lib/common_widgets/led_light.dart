@@ -4,7 +4,7 @@ class LedLight extends StatelessWidget {
 
   final bool isOn;
 
-  const LedLight(this.isOn, {Key key}) : super(key: key);
+  const LedLight(this.isOn, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
