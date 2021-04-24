@@ -22,11 +22,24 @@ class MediaPlayerCentral {
     _mediaProgress.add(_timer.now);
   });
 
-  static String getCloseCaption(Duration duration) {
-    if (currentMedia?.closeCaption?.isEmpty ?? true) return '';
+  static final PlaybackTimer _timer = PlaybackTimer(
+      onDone: (Duration duration){
+        if(hasNextMedia) {
+          nextMedia();
+        } else {
+          stop();
+        }
+      },
+      onData: (Duration duration){
+        _mediaProgress.add(_timer.now);
+      }
+  );
 
-    for (CloseCaptionElement cc in currentMedia.closeCaption) {
-      if (cc.start <= duration && cc.end >= duration) return cc.subtitle;
+  static String getCloseCaption(Duration duration){
+    if( currentMedia?.closeCaption.isEmpty ?? true ) return '';
+
+    for(CloseCaptionElement cc in currentMedia!.closeCaption){
+      if(cc.start <= duration && cc.end >= duration) return cc.subtitle;
     }
 
     return '';
@@ -65,7 +78,7 @@ class MediaPlayerCentral {
 
   static MediaLifeCycle get mediaLifeCycle => _lifeCycle;
 
-  static MediaModel get currentMedia {
+  static MediaModel? get currentMedia {
     return _playlist.length == 0 ? null : _playlist[_index];
   }
 
@@ -78,9 +91,13 @@ class MediaPlayerCentral {
   static StreamSink get mediaSink => _mediaBroadcaster.sink;
   static StreamSink get progressSink => _mediaProgress.sink;
 
-  static void _broadcastChanges() {
-    _mediaBroadcaster.sink.add(currentMedia);
-    _mediaProgress.sink.add(_timer.now);
+  static void _broadcastChanges(){
+    _mediaBroadcaster.sink.add(
+        currentMedia!
+    );
+    _mediaProgress.sink.add(
+        _timer.now
+    );
   }
 
   static void add(MediaModel newMedia) {
@@ -114,13 +131,13 @@ class MediaPlayerCentral {
       case MediaLifeCycle.Stopped:
       case MediaLifeCycle.Paused:
         _lifeCycle = MediaLifeCycle.Playing;
-        _timer.playPause(currentMedia.trackSize);
+        _timer.playPause(currentMedia!.trackSize);
         _broadcastChanges();
         break;
 
       case MediaLifeCycle.Playing:
         _lifeCycle = MediaLifeCycle.Paused;
-        _timer.playPause(currentMedia.trackSize);
+        _timer.playPause(currentMedia!.trackSize);
         _broadcastChanges();
         break;
     }
@@ -156,7 +173,7 @@ class MediaPlayerCentral {
 
       case MediaLifeCycle.Playing:
         _timer.stop();
-        _timer.playPause(currentMedia.trackSize);
+        _timer.playPause(currentMedia!.trackSize);
         _lifeCycle = MediaLifeCycle.Playing;
         break;
     }
@@ -173,7 +190,7 @@ class MediaPlayerCentral {
     switch (_lifeCycle) {
       case MediaLifeCycle.Playing:
         _timer.stop();
-        _timer.playPause(currentMedia.trackSize);
+        _timer.playPause(currentMedia!.trackSize);
         _lifeCycle = MediaLifeCycle.Playing;
         break;
 

@@ -5,10 +5,8 @@ import 'package:flutter/material.dart' hide DateUtils;
 import 'package:flutter/material.dart' as Material show DateUtils;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:progressive_image/progressive_image.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 class NotificationDetailsPage extends StatefulWidget {
@@ -25,7 +23,7 @@ class NotificationDetailsPage extends StatefulWidget {
 }
 
 class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
-  String displayedDate = '';
+  String? displayedDate = '';
 
   @override
   void initState() {
@@ -35,8 +33,6 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
         DateUtils.utcToLocal(DateUtils.parseStringToDate(
             widget.receivedNotification.displayedDate)),
         format: 'dd/MM/yyyy HH:mm');
-
-    Material.DateUtils.dateOnly(DateTime.now());
   }
 
   @override
@@ -47,13 +43,11 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
-
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     ThemeData themeData = Theme.of(context);
 
-    ImageProvider largeIcon = widget.receivedNotification.largeIconImage;
-    ImageProvider bigPicture = widget.receivedNotification.bigPictureImage;
+    ImageProvider? largeIcon = widget.receivedNotification.largeIconImage;
+    ImageProvider? bigPicture = widget.receivedNotification.bigPictureImage;
 
     if (largeIcon == bigPicture) largeIcon = null;
 
@@ -121,13 +115,13 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                         padding: const EdgeInsets.only(
                                             bottom:
                                                 2.0), // 2 pixels to avoid render error on ShaderMask while the users are sliding the page
-                                        child: ProgressiveImage(
-                                          placeholder: AssetImage(
-                                              'assets/images/placeholder.gif'),
-                                          thumbnail: AssetImage(
-                                              'assets/images/placeholder.gif'),
-                                          image: widget.receivedNotification
-                                              .bigPictureImage,
+                                        child: FadeInImage.assetNetwork(
+                                          placeholder:
+                                              'assets/images/placeholder.gif',
+                                          // thumbnail: AssetImage(
+                                          //     'assets/images/placeholder.gif'),
+                                          image: widget
+                                              .receivedNotification.bigPicture!,
                                           width: mediaQueryData.size.width,
                                           height: maxSize * 0.4 +
                                               mediaQueryData.padding.top -
@@ -152,13 +146,11 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                     radius: maxSize * 0.075,
                                     backgroundColor: Colors.white,
                                     child: ClipOval(
-                                      child: ProgressiveImage(
-                                        placeholder: AssetImage(
-                                            'assets/images/placeholder.gif'),
-                                        thumbnail: AssetImage(
-                                            'assets/images/placeholder.gif'),
-                                        image: widget.receivedNotification
-                                            .largeIconImage,
+                                      child: FadeInImage.assetNetwork(
+                                        placeholder:
+                                            'assets/images/placeholder.gif',
+                                        image: widget
+                                            .receivedNotification.largeIcon!,
                                         width: maxSize * 0.08 * 2,
                                         height: maxSize * 0.08 * 2,
                                         fit: BoxFit.cover,
@@ -197,9 +189,10 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold)),
                           TextSpan(
-                              text: '\n' + displayedDate,
-                              style: themeData.textTheme.subtitle2
-                                  .copyWith(color: Colors.black26))
+                            text: '\n$displayedDate',
+                            style: themeData.textTheme.subtitle2
+                                ?.copyWith(color: Colors.black26),
+                          )
                         ])),
                       )
                     ],
@@ -233,13 +226,17 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('ReceivedNotification details:',
-                              style: themeData.textTheme.subtitle1
-                                  .copyWith(color: themeData.hintColor)),
+                          Text(
+                            'ReceivedNotification details:',
+                            style: themeData.textTheme.subtitle1
+                                ?.copyWith(color: themeData.hintColor),
+                          ),
                           SizedBox(height: 20),
-                          Text(widget.results,
-                              style: themeData.textTheme.bodyText2
-                                  .copyWith(color: themeData.hintColor)),
+                          Text(
+                            widget.results,
+                            style: themeData.textTheme.bodyText2
+                                ?.copyWith(color: themeData.hintColor),
+                          ),
                         ],
                       )),
                 ],

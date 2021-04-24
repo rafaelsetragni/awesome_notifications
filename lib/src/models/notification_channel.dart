@@ -15,62 +15,61 @@ import 'package:flutter/material.dart';
 /// A representation of default settings that applies to all notifications with same channel key
 /// [soundSource] needs to be a native resource media type
 class NotificationChannel extends Model {
-  String channelKey;
-  String channelName;
-  String channelDescription;
-  bool channelShowBadge;
+  String? channelKey;
+  String? channelName;
+  String? channelDescription;
+  bool? channelShowBadge;
 
-  NotificationImportance importance;
+  NotificationImportance? importance;
 
-  bool playSound;
-  String soundSource;
-  DefaultRingtoneType defaultRingtoneType;
+  bool? playSound;
+  String? soundSource;
+  DefaultRingtoneType? defaultRingtoneType;
 
-  bool enableVibration;
-  Int64List vibrationPattern;
+  bool? enableVibration;
+  Int64List? vibrationPattern;
 
-  bool enableLights;
-  Color ledColor;
-  int ledOnMs;
-  int ledOffMs;
+  bool? enableLights;
+  Color? ledColor;
+  int? ledOnMs;
+  int? ledOffMs;
 
-  String groupKey;
-  GroupSort groupSort;
-  GroupAlertBehavior groupAlertBehavior;
+  String? groupKey;
+  GroupSort? groupSort;
+  GroupAlertBehavior? groupAlertBehavior;
 
-  NotificationPrivacy defaultPrivacy;
+  NotificationPrivacy? defaultPrivacy;
 
-  String icon;
-  Color defaultColor;
+  String? icon;
+  Color? defaultColor;
 
-  bool locked;
-  bool onlyAlertOnce;
+  bool? locked;
+  bool? onlyAlertOnce;
 
-  NotificationChannel(
-      {Key key,
-      this.channelKey,
-      this.channelName,
-      this.channelDescription,
-      this.channelShowBadge,
-      this.importance,
-      this.playSound,
-      this.soundSource,
-      this.defaultRingtoneType,
-      this.enableVibration,
-      this.vibrationPattern,
-      this.enableLights,
-      this.ledColor,
-      this.ledOnMs,
-      this.ledOffMs,
-      this.groupKey,
-      this.groupSort,
-      this.groupAlertBehavior,
-      this.icon,
-      this.defaultColor,
-      this.locked,
-      this.onlyAlertOnce,
-      this.defaultPrivacy})
-      : super() {
+  NotificationChannel({
+    this.channelKey,
+    this.channelName,
+    this.channelDescription,
+    this.channelShowBadge,
+    this.importance,
+    this.playSound,
+    this.soundSource,
+    this.defaultRingtoneType,
+    this.enableVibration,
+    this.vibrationPattern,
+    this.enableLights,
+    this.ledColor,
+    this.ledOnMs,
+    this.ledOffMs,
+    this.groupKey,
+    this.groupSort,
+    this.groupAlertBehavior,
+    this.icon,
+    this.defaultColor,
+    this.locked,
+    this.onlyAlertOnce,
+    this.defaultPrivacy,
+  }) : super() {
     this.channelKey =
         AssertUtils.getValueOrDefault('channelKey', this.channelKey, String);
     this.channelName =
@@ -115,7 +114,7 @@ class NotificationChannel extends Model {
 
     // For small icons, it's only allowed resource media types
     assert(StringUtils.isNullOrEmpty(icon) ||
-        BitmapUtils().getMediaSource(icon) == MediaSource.Resource);
+        BitmapUtils().getMediaSource(icon!) == MediaSource.Resource);
   }
 
   Map<String, dynamic> toMap() {

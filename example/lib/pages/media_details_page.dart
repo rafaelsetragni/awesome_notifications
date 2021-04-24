@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:progressive_image/progressive_image.dart';
 import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/media_player_central.dart';
 
@@ -17,22 +16,22 @@ class MediaDetailsPage extends StatefulWidget {
 }
 
 class _MediaDetailsPageState extends State<MediaDetailsPage> {
-  ImageProvider diskImage;
+  ImageProvider? diskImage;
 
   bool isDraggin = false;
   bool closeCaptionActivated = false;
   bool hasCloseCaption = false;
 
-  bool isLighten;
-  Color mainColor;
-  Color contrastColor;
+  bool? isLighten;
+  Color? mainColor;
+  Color? contrastColor;
 
-  String band;
-  String music;
-  Duration mediaLength;
-  Duration durationPlayed;
+  String? band;
+  String? music;
+  Duration? mediaLength;
+  Duration? durationPlayed;
 
-  String _printDuration(Duration duration) {
+  String _printDuration(Duration? duration) {
     if (duration == null) return '00:00';
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
@@ -92,13 +91,13 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
     */
   }
 
-  Future<void> _updatePlayer({MediaModel media}) async {
+  Future<void> _updatePlayer({MediaModel? media}) async {
     if (media != null) {
       diskImage = media.diskImage;
       band = media.bandName;
       music = media.trackName;
       mediaLength = media.trackSize;
-      hasCloseCaption = media.closeCaption?.isNotEmpty ?? false;
+      hasCloseCaption = media.closeCaption.isNotEmpty;
     } else {
       diskImage = null;
       band = null;
@@ -112,8 +111,8 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
     if (mounted) setState(() {});
   }
 
-  Future<void> _updatePaletteGenerator({MediaModel media}) async {
-    PaletteGenerator paletteGenerator;
+  Future<void> _updatePaletteGenerator({MediaModel? media}) async {
+    late PaletteGenerator paletteGenerator;
     if (media != null) {
       paletteGenerator = await PaletteGenerator.fromImageProvider(
           media.diskImage,
@@ -122,8 +121,8 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
     }
 
     if (media != null && paletteGenerator.paletteColors.length >= 1) {
-      mainColor = paletteGenerator.dominantColor.color;
-      contrastColor = getContrastColor(mainColor)
+      mainColor = paletteGenerator.dominantColor!.color;
+      contrastColor = getContrastColor(mainColor!)
           .withOpacity(0.85); //paletteGenerator.paletteColors.last.color;//
     } else {
       mainColor = null;
@@ -145,7 +144,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
     isLighten =
         isLighten ?? themeData.accentColorBrightness == Brightness.light;
     mainColor = mainColor ?? themeData.backgroundColor;
-    contrastColor = contrastColor ?? (isLighten ? Colors.black : Colors.white);
+    contrastColor = contrastColor ?? (isLighten! ? Colors.black : Colors.white);
 
     double maxSize = max(mediaQueryData.size.width, mediaQueryData.size.height);
 
@@ -157,7 +156,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
             primaryColor: mainColor,
             accentColor: contrastColor,
             scaffoldBackgroundColor: mainColor,
-            disabledColor: contrastColor.withOpacity(0.25),
+            disabledColor: contrastColor?.withOpacity(0.25),
             textTheme: Theme.of(context)
                 .textTheme
                 .copyWith(
@@ -173,20 +172,20 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                   decorationColor: contrastColor,
                   displayColor: contrastColor,
                 ),
-            colorScheme: ColorScheme.light(
-              primary: contrastColor,
-            ),
+            colorScheme: contrastColor != null
+                ? ColorScheme.light(primary: contrastColor!)
+                : null,
             buttonTheme: ButtonThemeData(
                 textTheme: ButtonTextTheme.accent,
-                disabledColor: contrastColor.withOpacity(0.25),
+                disabledColor: contrastColor?.withOpacity(0.25),
                 buttonColor: contrastColor),
             iconTheme: IconThemeData(color: contrastColor),
             sliderTheme: SliderThemeData(
                 trackHeight: 4.0,
                 activeTrackColor: contrastColor,
-                inactiveTrackColor: contrastColor.withOpacity(0.25),
-                disabledInactiveTrackColor: contrastColor.withOpacity(0.25),
-                disabledThumbColor: contrastColor.withOpacity(0.25),
+                inactiveTrackColor: contrastColor?.withOpacity(0.25),
+                disabledInactiveTrackColor: contrastColor?.withOpacity(0.25),
+                disabledThumbColor: contrastColor?.withOpacity(0.25),
                 thumbColor: contrastColor,
                 thumbShape: RoundSliderThumbShape(enabledThumbRadius: 15)),
             canvasColor: mainColor),
@@ -280,9 +279,9 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
 
   Widget mediaCloseCaption(ThemeData themeData, double imageHeight,
       double imageWidth, MediaQueryData mediaQueryData, double maxSize) {
-    TextStyle textStyle =
-        themeData.textTheme.headline6.copyWith(color: contrastColor);
-    String subtitle = MediaPlayerCentral.getCloseCaption(durationPlayed);
+    TextStyle? textStyle =
+        themeData.textTheme.headline6?.copyWith(color: contrastColor);
+    String subtitle = MediaPlayerCentral.getCloseCaption(durationPlayed!);
 
     return Container(
         width: mediaQueryData.size.width * 0.8,
@@ -309,7 +308,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
               icon: Icon(Icons.skip_previous),
               iconSize: maxSize * 0.05,
               onPressed: (durationPlayed == null ||
-                          durationPlayed <
+                          durationPlayed! <
                               MediaPlayerCentral.replayTolerance) &&
                       !MediaPlayerCentral.hasPreviousMedia
                   ? null
@@ -322,7 +321,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
               padding: EdgeInsets.all(5),
               margin: EdgeInsets.zero,
               decoration: BoxDecoration(
-                color: contrastColor.withOpacity(0.2),
+                color: contrastColor?.withOpacity(0.2),
                 shape: BoxShape.circle,
               ),
               child: MediaPlayerCentral.isPlaying
@@ -399,7 +398,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                   onChangeEnd: (value) {
                     isDraggin = false;
                     setState(() {
-                      MediaPlayerCentral.goTo(durationPlayed);
+                      MediaPlayerCentral.goTo(durationPlayed!);
                     });
                   })),
           SizedBox(height: 5),
@@ -417,7 +416,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                             size: 48,
                             color: closeCaptionActivated
                                 ? contrastColor
-                                : contrastColor.withOpacity(0.5)),
+                                : contrastColor?.withOpacity(0.5)),
                         onPressed: () =>
                             closeCaptionActivated = !closeCaptionActivated,
                       )
@@ -503,10 +502,10 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
       decoration: diskImage == null
           ? null
           : BoxDecoration(
-              image: DecorationImage(image: diskImage, fit: BoxFit.cover),
+              image: DecorationImage(image: diskImage!, fit: BoxFit.cover),
             ),
       child: Container(
-        decoration: BoxDecoration(color: mainColor.withOpacity(0.93)),
+        decoration: BoxDecoration(color: mainColor?.withOpacity(0.93)),
       ),
     );
   }

@@ -188,7 +188,7 @@ const NOTIFICATION_TICKER = 'ticker';
 const NOTIFICATION_ALLOW_WHILE_IDLE = 'allowWhileIdle';
 
 class Definitions {
-  static Map<String, Object> initialValues = {
+  static Map<String, Object?> initialValues = {
     NOTIFICATION_ID: 0,
     NOTIFICATION_SCHEDULE_REPEATS: false,
     NOTIFICATION_GROUP_SORT: GroupSort.Desc,

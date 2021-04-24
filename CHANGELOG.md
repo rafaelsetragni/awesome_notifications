@@ -1,3 +1,5 @@
+## [0.0.5+8]
+* FCM service with comments removed for iOS.
 ## [0.0.5+7]
 * Added removeChannel method for iOS and error messages for Android removeChannel method.
 * ios project and example project recovered.

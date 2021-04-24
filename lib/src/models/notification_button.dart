@@ -16,11 +16,11 @@ import 'package:awesome_notifications/src/utils/string_utils.dart';
 /// [ActionButtonType.DisabledAction]: after user taps, the notification bar is closed, but the respective action event is not fired.
 /// [ActionButtonType.KeepOnTop]: after user taps, the notification bar is not closed, but an action event is fired.
 class NotificationActionButton extends Model {
-  String key;
-  String label;
-  String icon;
-  bool enabled;
-  bool autoCancel;
+  String? key;
+  String? label;
+  String? icon;
+  bool? enabled;
+  bool? autoCancel;
   ActionButtonType buttonType;
 
   NotificationActionButton(
@@ -43,7 +43,7 @@ class NotificationActionButton extends Model {
 
     // For action buttons, it's only allowed resource media types
     assert(StringUtils.isNullOrEmpty(icon) ||
-        BitmapUtils().getMediaSource(icon) == MediaSource.Resource);
+        BitmapUtils().getMediaSource(icon!) == MediaSource.Resource);
 
     return this;
   }

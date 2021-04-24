@@ -45,12 +45,12 @@ class ResourceImage extends ImageProvider<ResourceImage> {
 
   Future<ui.Codec> _loadAsync(ResourceImage key, DecoderCallback decode) async {
     assert(key == this);
-    Uint8List bytes;
+    Uint8List? bytes;
 
     AwesomeNotifications awesomeNotifications = AwesomeNotifications();
     bytes = await awesomeNotifications.getDrawableData(this.drawablePath);
 
-    return decode(bytes);
+    return decode(bytes!);
   }
 
   @override

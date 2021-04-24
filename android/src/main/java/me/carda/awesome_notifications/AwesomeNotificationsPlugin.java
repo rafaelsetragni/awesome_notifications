@@ -110,7 +110,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }*/
 
         /// Firebase services depends on Google Play services
-        return true;
+        return false;
     }
 
     @Override
@@ -175,25 +175,24 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
         getApplicationLifeCycle();
 
-        //enableFirebase(context);
+        // enableFirebase(context);
     }
-    /*
-    private void enableFirebase(Context context){
 
-        Integer resourceId = context.getResources().getIdentifier("google_api_key", "string", context.getPackageName());
+    // private void enableFirebase(Context context){
 
-        if(resourceId == 0){
-            Log.d(TAG, "Firebase file not found.");
-            firebaseEnabled = false;
-            return;
-        }
+    //     Integer resourceId = context.getResources().getIdentifier("google_api_key", "string", context.getPackageName());
 
-        Log.d(TAG, "Enabling firebase for resource id "+resourceId.toString()+"...");
-        FirebaseApp.initializeApp(context);
-        firebaseEnabled = true;
-        Log.d(TAG, "Firebase enabled");
-    }
-    */
+    //     if(resourceId == 0){
+    //         Log.d(TAG, "Firebase file not found.");
+    //         firebaseEnabled = false;
+    //         return;
+    //     }
+
+    //     Log.d(TAG, "Enabling firebase for resource id "+resourceId.toString()+"...");
+    //     FirebaseApp.initializeApp(context);
+    //     firebaseEnabled = true;
+    //     Log.d(TAG, "Firebase enabled");
+    // }
 
     @Override
     public void onAttachedToActivity(ActivityPluginBinding activityPluginBinding) {
@@ -235,9 +234,9 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
         switch (action){
 
-            case Definitions.BROADCAST_FCM_TOKEN:
-                onBroadcastNewFcmToken(intent);
-                return;
+            // case Definitions.BROADCAST_FCM_TOKEN:
+            //     onBroadcastNewFcmToken(intent);
+            //     return;
 
             case Definitions.BROADCAST_CREATED_NOTIFICATION:
                 onBroadcastNotificationCreated(intent);
@@ -265,10 +264,10 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
     }
 
-    private void onBroadcastNewFcmToken(Intent intent) {
-        String token = intent.getStringExtra(Definitions.EXTRA_BROADCAST_FCM_TOKEN);
-        pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NEW_FCM_TOKEN, token);
-    }
+    // private void onBroadcastNewFcmToken(Intent intent) {
+    //     String token = intent.getStringExtra(Definitions.EXTRA_BROADCAST_FCM_TOKEN);
+    //     pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NEW_FCM_TOKEN, token);
+    // }
 
     private void onBroadcastNotificationCreated(Intent intent) {
 
@@ -430,11 +429,11 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                 return;
             /*
             case Definitions.CHANNEL_METHOD_GET_FCM_TOKEN:
-                channelMethodGetFcmToken(call, result);
+                // channelMethodGetFcmToken(call, result);
                 return;
 
             case Definitions.CHANNEL_METHOD_IS_FCM_AVAILABLE:
-                channelMethodIsFcmAvailable(call, result);
+                // channelMethodIsFcmAvailable(call, result);
                 return;
              */
 
@@ -777,54 +776,40 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
         }
     }
 
-    /*
-    private void channelMethodIsFcmAvailable(MethodCall call, Result result) {
-        try {
-            result.success(hasGooglePlayServices && firebaseEnabled && FirebaseMessaging.getInstance() != null);
-        } catch (Exception e) {
-            Log.w(TAG, "FCM could not enabled for this project.", e);
-            result.success(false );
-        }
-    }
 
-    private void channelMethodGetFcmToken(MethodCall call, final Result result) {
+    // private void channelMethodIsFcmAvailable(MethodCall call, Result result) {
+    //     try {
+    //         result.success(hasGooglePlayServices && firebaseEnabled && FirebaseMessaging.getInstance() != null);
+    //     } catch (Exception e) {
+    //         Log.w(TAG, "FCM could not enabled for this project.", e);
+    //         result.success(false );
+    //     }
+    // }
 
-        if(!hasGooglePlayServices){
-            result.notImplemented();
-            return;
-        }
+    // private void channelMethodGetFcmToken(MethodCall call, final Result result) {
 
-        try {
+    //     if(!hasGooglePlayServices){
+    //         result.notImplemented();
+    //         return;
+    //     }
 
-            if(!firebaseEnabled){
-                throw new PushNotificationException("Firebase is not enabled for this project");
-            }
+    //     try {
 
-            FirebaseMessaging
-                    .getInstance()
-                    .getToken()
-                    .addOnCompleteListener(new OnCompleteListener<String>() {
-                        @Override
-                        public void onComplete(@NonNull Task<String> task) {
+    //         if(!firebaseEnabled){
+    //             throw new PushNotificationException("Firebase is not enabled for this project");
+    //         }
 
-                            if (!task.isSuccessful()) {
-                                Exception exception = task.getException();
-                                Log.w(TAG, "Fetching FCM registration token failed", exception);
-                                result.error(exception.getMessage() ,"Fetching FCM registration token failed", exception);
-                                return;
-                            }
+    //         FirebaseMessaging
+    //                 .getInstance()
+    //                 .getToken()
+    //                 .addOnCompleteListener(new OnCompleteListener<String>() {
+    //                     @Override
+    //                     public void onComplete(@NonNull Task<String> task) {
 
-                            // Get new FCM registration token
-                            String token = task.getResult();
-                            result.success(token);
-                        }
-                    });
-
-        } catch (Exception e){
-            result.error("Firebase service not available (check if you have google-services.json file)", e.getMessage(), e);
-        }
-    }
-    */
+    //    } catch (Exception e){
+    //        result.error("Firebase service not available (check if you have google-services.json file)", e.getMessage(), e);
+    //    }
+    // }
 
     public static Boolean isNotificationEnabled(Context context){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -866,7 +851,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             Map<String, Object> platformParameters = call.arguments();
 
             String defaultIconPath = (String) platformParameters.get(Definitions.DEFAULT_ICON);
-            Boolean firebaseEnabled = (Boolean) platformParameters.get(Definitions.FIREBASE_ENABLED);
+            Boolean firebaseEnabled = false;
             channelsData = (List<Object>) platformParameters.get(Definitions.INITIALIZE_CHANNELS);
 
             setDefaultConfigurations(
@@ -876,7 +861,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
                 channelsData
             );
 
-            Log.d(TAG, "Push notification service initialized");
+            // Log.d(TAG, "Push notification service initialized");
             result.success(true);
 
         } catch (Exception e){

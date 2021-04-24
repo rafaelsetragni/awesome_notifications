@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 
 class SimpleButton extends StatelessWidget {
   final String label;
-  final Color labelColor;
-  final Color backgroundColor;
-  final double width;
-  final void Function() onPressed;
+  final Color? labelColor;
+  final Color? backgroundColor;
+  final double? width;
+  final void Function()? onPressed;
 
-  const SimpleButton(this.label, {Key key, this.labelColor, this.backgroundColor, this.width, this.onPressed}) : super(key: key);
+  const SimpleButton(
+    this.label, {
+    Key? key,
+    this.labelColor,
+    this.backgroundColor,
+    this.width,
+    this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

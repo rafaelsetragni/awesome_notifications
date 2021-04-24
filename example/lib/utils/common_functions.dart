@@ -26,8 +26,9 @@ Future<String> downloadAndSaveImageOnDisk(String url, String fileName) async {
   var filePath = '${directory.path}/$fileName';
   var file = File(filePath);
 
-  if (!await file.exists()) {
-    var response = await http.get(url);
+
+  if(!await file.exists()){
+    var response = await http.get(Uri.parse(url));
     await file.writeAsBytes(response.bodyBytes);
   }
 

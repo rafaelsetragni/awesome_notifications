@@ -235,8 +235,9 @@ class _AppState extends State<App> {
       //onGenerateRoute: generateRoute,
       routes: materialRoutes,
       builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child),
+        data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+        child: child ?? const SizedBox.shrink(),
+      ),
       theme: ThemeData(
         brightness: Brightness.light,
 

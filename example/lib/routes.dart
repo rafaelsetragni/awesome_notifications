@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications_example/pages/firebase_test_page.dart';
 
@@ -13,8 +14,9 @@ const String PAGE_FIREBASE_TESTS = '/firebase-tests';
 Map<String, WidgetBuilder> materialRoutes = {
   PAGE_HOME: (context) => NotificationExamplesPage(),
   PAGE_MEDIA_DETAILS: (context) => MediaDetailsPage(),
-  PAGE_NOTIFICATION_DETAILS: (context) =>
-      NotificationDetailsPage(ModalRoute.of(context).settings.arguments),
+  PAGE_NOTIFICATION_DETAILS: (context) => NotificationDetailsPage(
+        ModalRoute.of(context)!.settings.arguments as ReceivedNotification,
+      ),
   PAGE_FIREBASE_TESTS: (context) =>
-      FirebaseTestPage(ModalRoute.of(context).settings.arguments)
+      FirebaseTestPage(ModalRoute.of(context)!.settings.arguments as ReceivedNotification)
 };

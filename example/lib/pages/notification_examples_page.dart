@@ -5,7 +5,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide DateUtils;
 //import 'package:flutter/material.dart' as Material show DateUtils;
 import 'package:flutter/services.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
@@ -21,7 +20,6 @@ import 'package:awesome_notifications_example/common_widgets/simple_button.dart'
 import 'package:awesome_notifications_example/common_widgets/text_divisor.dart';
 import 'package:awesome_notifications_example/common_widgets/text_note.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:giffy_dialog/giffy_dialog.dart';
 
 class NotificationExamplesPage extends StatefulWidget {
   @override
@@ -33,19 +31,17 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
   String _firebaseAppToken = '';
   //String _oneSignalToken = '';
 
-  MediaQueryData mediaQuery;
-
   bool delayLEDTests = false;
-  DateTime _pickedDate;
-  TimeOfDay _pickedTime;
+  DateTime? _pickedDate;
+  TimeOfDay? _pickedTime;
 
   bool notificationsAllowed = false;
 
   String packageName = 'me.carda.awesome_notifications_example';
 
   Future<bool> pickScheduleDate(BuildContext context) async {
-    TimeOfDay timeOfDay;
-    DateTime newDate = await showDatePicker(
+    TimeOfDay? timeOfDay;
+    DateTime? newDate = await showDatePicker(
         context: context,
         initialDate: _pickedDate ?? DateTime.now(),
         firstDate: DateTime.now(),
@@ -62,7 +58,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
         setState(() {
           _pickedTime = timeOfDay;
           _pickedDate = DateTime(newDate.year, newDate.month, newDate.day,
-              timeOfDay.hour, timeOfDay.minute);
+              timeOfDay!.hour, timeOfDay.minute);
         });
         return true;
       }
@@ -71,39 +67,39 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
     return false;
   }
-
-  Future<int> pickBadgeCounter(BuildContext context) async {
-    int amount = 50;
-
-    AlertDialog alert = AlertDialog(
-      title: Text("Choose the new badge amount"),
-      content: NumberPicker.integer(
-          initialValue: amount,
-          minValue: 0,
-          maxValue: 999,
-          onChanged: (newValue) => amount = newValue),
-      actions: [
-        TextButton(
-          child: Text("Cancel"),
-          onPressed: () {
-            amount = null;
-            Navigator.of(context).pop();
-          },
-        ),
-        TextButton(
-          child: Text("OK"),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
-    );
-
+  
+  Future<int?> pickBadgeCounter(BuildContext context) async {
     // show the dialog
-    await showDialog(
-        context: context, builder: (BuildContext context) => alert);
+    return showDialog<int?>(
+      context: context,
+      builder: (BuildContext context) {
+        int amount = 50;
 
-    return amount;
+        return AlertDialog(
+          title: Text("Choose the new badge amount"),
+          content: NumberPicker(
+            value: amount,
+            minValue: 0,
+            maxValue: 999,
+            onChanged: (newValue) => amount = newValue,
+          ),
+          actions: [
+            FlatButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop(null);
+              },
+            ),
+            FlatButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop(amount);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -129,22 +125,22 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
     // If you pretend to use the firebase service, you need to initialize it
     // getting a valid token
-    initializeFirebaseService();
+    // initializeFirebaseService();
 
     AwesomeNotifications().createdStream.listen((receivedNotification) {
-      String createdSourceText =
+      String? createdSourceText =
           AssertUtils.toSimpleEnumString(receivedNotification.createdSource);
       Fluttertoast.showToast(msg: '$createdSourceText notification created');
     });
 
     AwesomeNotifications().displayedStream.listen((receivedNotification) {
-      String createdSourceText =
+      String? createdSourceText =
           AssertUtils.toSimpleEnumString(receivedNotification.createdSource);
       Fluttertoast.showToast(msg: '$createdSourceText notification displayed');
     });
 
     AwesomeNotifications().dismissedStream.listen((receivedNotification) {
-      String dismissedSourceText = AssertUtils.toSimpleEnumString(
+      String? dismissedSourceText = AssertUtils.toSimpleEnumString(
           receivedNotification.dismissedLifeCycle);
       Fluttertoast.showToast(
           msg: 'Notification dismissed on $dismissedSourceText');
@@ -175,45 +171,85 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
   void requestUserPermission(bool isAllowed) async {
     showDialog(
-        context: context,
-        builder: (_) => NetworkGiffyDialog(
-              buttonOkText:
-                  Text('Allow', style: TextStyle(color: Colors.white)),
-              buttonCancelText:
-                  Text('Later', style: TextStyle(color: Colors.white)),
-              buttonCancelColor: Colors.grey,
-              buttonOkColor: Colors.deepPurple,
-              buttonRadius: 0.0,
-              image: Image.asset("assets/images/animated-bell.gif",
-                  fit: BoxFit.cover),
-              title: Text('Get Notified!',
-                  textAlign: TextAlign.center,
-                  style:
-                      TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
-              description: Text(
-                'Allow Awesome Notifications to send you beautiful notifications!',
-                textAlign: TextAlign.center,
-              ),
-              entryAnimation: EntryAnimation.DEFAULT,
-              onCancelButtonPressed: () async {
-                Navigator.of(context).pop();
-                notificationsAllowed =
-                    await AwesomeNotifications().isNotificationAllowed();
-                setState(() {
-                  notificationsAllowed = notificationsAllowed;
-                });
-              },
-              onOkButtonPressed: () async {
-                Navigator.of(context).pop();
-                await AwesomeNotifications()
-                    .requestPermissionToSendNotifications();
-                notificationsAllowed =
-                    await AwesomeNotifications().isNotificationAllowed();
-                setState(() {
-                  notificationsAllowed = notificationsAllowed;
-                });
-              },
-            ));
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Get Notified!',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
+        content: Text(
+          'Allow Awesome Notifications to send you beautiful notifications!',
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          TextButton(
+            style: TextButton.styleFrom(backgroundColor: Colors.grey),
+            onPressed: () async {
+              Navigator.of(context).pop();
+              notificationsAllowed =
+                  await AwesomeNotifications().isNotificationAllowed();
+              setState(() {
+                notificationsAllowed = notificationsAllowed;
+              });
+            },
+            child: Text('Later', style: TextStyle(color: Colors.white)),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(backgroundColor: Colors.deepPurple),
+            onPressed: () async {
+              Navigator.of(context).pop();
+              await AwesomeNotifications()
+                  .requestPermissionToSendNotifications();
+              notificationsAllowed =
+                  await AwesomeNotifications().isNotificationAllowed();
+              setState(() {
+                notificationsAllowed = notificationsAllowed;
+              });
+            },
+            child: Text('Allow', style: TextStyle(color: Colors.white)),
+          )
+        ],
+      ),
+    );
+    // showDialog(
+    //     context: context,
+    //     builder: (_) => NetworkGiffyDialog(
+    //           buttonOkText:
+    //               Text('Allow', style: TextStyle(color: Colors.white)),
+    //           buttonCancelText:
+    //               Text('Later', style: TextStyle(color: Colors.white)),
+    //           buttonCancelColor: Colors.grey,
+    //           buttonOkColor: Colors.deepPurple,
+    //           buttonRadius: 0.0,
+    //           image: Image.asset("assets/images/animated-bell.gif",
+    //               fit: BoxFit.cover),
+    //           title: Text('Get Notified!',
+    //               textAlign: TextAlign.center,
+    //               style:
+    //                   TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
+    //           description: Text(
+    //             'Allow Awesome Notifications to send you beautiful notifications!',
+    //             textAlign: TextAlign.center,
+    //           ),
+    //           entryAnimation: EntryAnimation.DEFAULT,
+    //           onCancelButtonPressed: () async {
+    //             Navigator.of(context).pop();
+    //             notificationsAllowed =
+    //                 await AwesomeNotifications().isNotificationAllowed();
+    //             setState(() {
+    //               notificationsAllowed = notificationsAllowed;
+    //             });
+    //           },
+    //           onOkButtonPressed: () async {
+    //             Navigator.of(context).pop();
+    //             await AwesomeNotifications()
+    //                 .requestPermissionToSendNotifications();
+    //             notificationsAllowed =
+    //                 await AwesomeNotifications().isNotificationAllowed();
+    //             setState(() {
+    //               notificationsAllowed = notificationsAllowed;
+    //             });
+    //           },
+    //         ));
   }
 
   void processDefaultActionReceived(ReceivedAction receivedNotification) {
@@ -311,48 +347,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
       AwesomeNotifications().createNotificationFromJsonData(message.data);
     });
   }
-
-  /*
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> old_initializeFirebaseService() async {
-    String firebaseAppToken;
-    bool isFirebaseAvailable;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      isFirebaseAvailable = await AwesomeNotifications().isFirebaseAvailable;
-
-      if(isFirebaseAvailable){
-        try {
-          firebaseAppToken = await AwesomeNotifications().firebaseAppToken;
-          debugPrint('Firebase token: $firebaseAppToken');
-        } on PlatformException {
-          firebaseAppToken = null;
-          debugPrint('Firebase failed to get token');
-        }
-      }
-      else {
-        firebaseAppToken = null;
-        debugPrint('Firebase is not available on this project');
-      }
-
-    } on PlatformException {
-      isFirebaseAvailable = false;
-      firebaseAppToken = 'Firebase is not available on this project';
-    }
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted){
-      _firebaseAppToken = firebaseAppToken;
-      return;
-    }
-
-    setState(() {
-      _firebaseAppToken = firebaseAppToken;
-    });
-  }
-  */
-
+  
   @override
   Widget build(BuildContext context) {
     FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
@@ -436,11 +431,11 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
                 'Tap on notification when it appears on your system tray to go to Details page.'),
             SimpleButton('Get Next Date', onPressed: () async {
               DateTime referenceDate =
-                  DateUtils.parseStringToDate('2021-01-12 20:00:00');
+                  DateUtils.parseStringToDate('2021-01-12 20:00:00')!;
               DateTime expectedDate =
-                  DateUtils.parseStringToDate('2021-01-12 21:00:00');
+                  DateUtils.parseStringToDate('2021-01-12 21:00:00')!;
               NotificationSchedule schedule =
-                  NotificationCalendar.fromDate(date: expectedDate);
+                  NotificationSchedule(initialDateTime: expectedDate);
 
               DateTime result = await AwesomeNotifications()
                   .getNextDate(schedule, fixedDate: referenceDate);
@@ -628,7 +623,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             }),
             SimpleButton('Set manually the badge indicator',
                 onPressed: () async {
-              int amount = await pickBadgeCounter(context);
+              int? amount = await pickBadgeCounter(context);
               if (amount != null) {
                 setBadgeIndicator(amount);
               }
@@ -737,7 +732,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             TextDivisor(title: 'Scheduled Notifications'),
             SimpleButton('Schedule notification', onPressed: () async {
               if (await pickScheduleDate(context)) {
-                showNotificationAtScheduleCron(8, _pickedDate);
+                showNotificationAtScheduleCron(8, _pickedDate!);
               }
             }),
             SimpleButton(

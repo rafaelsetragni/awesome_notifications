@@ -594,8 +594,8 @@ Future<void> showBigPictureFileNotification(int id) async {
       'newTestImage.jpg');
 
   //String newFilePath = await saveImageOnDisk(AssetImage('assets/images/happy-dogs.jpg'),'newTestImage.jpg');
-  newFilePath = newFilePath?.replaceFirst('/', '');
-  String finalFilePath = 'file://' + (newFilePath ?? '');
+  newFilePath = newFilePath.replaceFirst('/', '');
+  String finalFilePath = 'file://' + (newFilePath);
 
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
@@ -1044,8 +1044,8 @@ Future<void> showScheduleAtWorkweekDay10AmLocal(int id) async {
       schedule: NotificationSchedule(
           crontabSchedule: CronHelper.instance.workweekDay(
               referenceUtcDate:
-                Utils.DateUtils.parseStringToDate('10:00', format: 'HH:mm')
-                      .toUtc())));
+                  Utils.DateUtils.parseStringToDate('10:00', format: 'HH:mm')
+                      ?.toUtc())));
 }
 */
 Future<void> showNotificationWithNoBadge(int id) async {

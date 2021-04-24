@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AssertUtils {
-  static String toSimpleEnumString<T>(T e) {
+  static String? toSimpleEnumString<T>(T e) {
     if (e == null) return null;
     return e.toString().split('.')[1];
   }
@@ -23,12 +23,12 @@ class AssertUtils {
     return false;
   }
 
-  static List<Map<String, Object>> toListMap<T extends Model>(List<T> list) {
+  static List<Map<String, Object>>? toListMap<T extends Model>(List<T>? list) {
     if (list == null || list.length == 0) return null;
 
     List<Map<String, Object>> returnList = [];
     list.forEach((element) {
-      returnList.add(element.toMap());
+      returnList.add(Map<String,Object>.from(element.toMap()));
     });
 
     return returnList;
@@ -69,7 +69,7 @@ class AssertUtils {
       return defaultValue;
 
     return values.firstWhere((e) {
-      return AssertUtils.toSimpleEnumString(e).toLowerCase() ==
+      return AssertUtils.toSimpleEnumString(e)!.toLowerCase() ==
           castedValue.toLowerCase();
     }, orElse: () => defaultValue);
   }
@@ -101,13 +101,13 @@ class AssertUtils {
     return defaultValue;
   }
 
-  static fromListMap<T extends Model>(Object mapData, Function newModel) {
+  static fromListMap<T extends Model>(Object? mapData, Function newModel) {
     if (mapData == null || mapData is List<Map<String, dynamic>>) return null;
 
-    List<Map<String, dynamic>> listMapData = mapData;
+    List<Map<String, dynamic>> listMapData = List.from(mapData as List);
     if (listMapData.length <= 0) return null;
 
-    List<T> actionButtons;
+    List<T> actionButtons = [];
     listMapData.forEach((actionButtonData) {
       return actionButtons.add(newModel().fromMap(actionButtonData));
     });

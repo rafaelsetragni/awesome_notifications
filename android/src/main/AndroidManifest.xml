@@ -12,9 +12,11 @@
     <uses-permission android:name="com.htc.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+  
     <application>
 
-        <service
+        <!-- <service
             android:name=".services.firebase.FCMService"
             android:exported="false">
             <intent-filter>
@@ -30,14 +32,19 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="me.carda.awesome_notifications.firebase.background_channel"/>
+            android:value="me.carda.awesome_notifications.firebase.background_channel"/> -->
 
         <receiver android:name=".notifications.broadcastReceivers.DismissedNotificationReceiver"/>
         <receiver android:name=".notifications.broadcastReceivers.ScheduledNotificationReceiver"/>
         <receiver android:name=".notifications.broadcastReceivers.KeepOnTopActionReceiver"/>
         <receiver android:name=".notifications.broadcastReceivers.RefreshNotificationBootReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
             </intent-filter>
         </receiver>
         <receiver android:name="androidx.media.session.MediaButtonReceiver" >
