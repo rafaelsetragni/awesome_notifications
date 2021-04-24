@@ -30,10 +30,15 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
     super.initState();
 
     displayedDate = DateUtils.parseDateToString(
-      DateUtils.parseStringToDate(widget.receivedNotification.displayedDate)
-          ?.toLocal(),
-      format: 'dd/MM/yyyy HH:mm',
-    );
+        DateUtils.utcToLocal(DateUtils.parseStringToDate(
+            widget.receivedNotification.displayedDate)),
+        format: 'dd/MM/yyyy HH:mm');
+  }
+
+  @override
+  void deactivate() {
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
+    super.deactivate();
   }
 
   @override

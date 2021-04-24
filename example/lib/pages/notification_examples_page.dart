@@ -1,8 +1,9 @@
 import 'dart:math';
 
 import 'package:awesome_notifications_example/common_widgets/led_light.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide DateUtils;
-import 'package:flutter/material.dart' as Material show DateUtils;
+//import 'package:flutter/material.dart' as Material show DateUtils;
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -66,7 +67,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
     return false;
   }
-
+  
   Future<int?> pickBadgeCounter(BuildContext context) async {
     // show the dialog
     return showDialog<int?>(
@@ -316,49 +317,42 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  // Future<void> initializeFirebaseService() async {
-  //   String firebaseAppToken;
-  //   bool isFirebaseAvailable;
+  Future<void> initializeFirebaseService() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  //   // Platform messages may fail, so we use a try/catch PlatformException.
-  //   try {
-  //     isFirebaseAvailable = await AwesomeNotifications().isFirebaseAvailable;
+    String firebaseAppToken = await messaging.getToken(
+      vapidKey:
+          "BJOuTV9YiYVr5FPXQA4Hu1SJ7qC-q4tSIYLnbNHW4xpxqBRu6JXMtay0xzNUxkW_aApBBmOmASg-ClTkqAE53rk",
+    );
 
-  //     if(isFirebaseAvailable){
-  //       try {
-  //         firebaseAppToken = await AwesomeNotifications().firebaseAppToken;
-  //         debugPrint('Firebase token: $firebaseAppToken');
-  //       } on PlatformException {
-  //         firebaseAppToken = null;
-  //         debugPrint('Firebase failed to get token');
-  //       }
-  //     }
-  //     else {
-  //       firebaseAppToken = null;
-  //       debugPrint('Firebase is not available on this project');
-  //     }
+    if (!mounted) {
+      _firebaseAppToken = firebaseAppToken;
+      return;
+    }
 
-  //   } on PlatformException {
-  //     isFirebaseAvailable = false;
-  //     firebaseAppToken = 'Firebase is not available on this project';
-  //   }
+    setState(() {
+      _firebaseAppToken = firebaseAppToken;
+    });
 
-  //   // If the widget was removed from the tree while the asynchronous platform
-  //   // message was in flight, we want to discard the reply rather than calling
-  //   // setState to update our non-existent appearance.
-  //   if (!mounted){
-  //     _firebaseAppToken = firebaseAppToken;
-  //     return;
-  //   }
+    print('Firebase token: $firebaseAppToken');
 
-  //   setState(() {
-  //     _firebaseAppToken = firebaseAppToken;
-  //   });
-  // }
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
 
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+
+      AwesomeNotifications().createNotificationFromJsonData(message.data);
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
+
+    mediaQuery = MediaQuery.of(context);
     ThemeData themeData = Theme.of(context);
 
     return Scaffold(
@@ -745,18 +739,22 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
               'Show notification at every single minute',
               onPressed: () => repeatMinuteNotification(8),
             ),
-            SimpleButton(
-              'Show notification 3 times, spaced 10 seconds from each other',
-              onPressed: () => repeatPreciseThreeTimes(8),
-            ),
+            /*
+          SimpleButton(
+            'Show notification 3 times, spaced 10 seconds from each other',
+            onPressed: () => repeatPreciseThreeTimes(8),
+          ),
+          */
             SimpleButton(
               'Show notification at every single minute o\'clock',
               onPressed: () => repeatMinuteNotificationOClock(8),
             ),
-            SimpleButton(
-              'Show notification only on workweek days\nat 10:00 am (local)',
-              onPressed: () => showScheduleAtWorkweekDay10AmLocal(8),
-            ),
+            /*
+          SimpleButton(
+            'Show notification only on workweek days\nat 10:00 am (local)',
+            onPressed: () => showScheduleAtWorkweekDay10AmLocal(8),
+          ),
+          */
             SimpleButton('List all active schedules',
                 onPressed: () => listScheduledNotifications(context)),
             SimpleButton('Cancel single active schedule',

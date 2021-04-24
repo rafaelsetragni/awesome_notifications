@@ -1,3 +1,4 @@
+/*
 package me.carda.awesome_notifications.services.firebase;
 
 import android.content.Context;
@@ -87,11 +88,11 @@ public class FCMService extends FirebaseMessagingService {
         super.handleIntent(intent);
     }
 
-    /**
-     * Called when message is received.
-     *
-     * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
-     */
+    ///
+    ///  Called when message is received.
+    ///
+    ///  @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
+    ///
     @Override
     public void onMessageReceived(final RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -165,3 +166,4 @@ public class FCMService extends FirebaseMessagingService {
         return list;
     }
 }
+*/

@@ -87,7 +87,12 @@ public class PushNotification extends Model {
         Map<String, Object> map = (Map<String, Object>) obj;
 
         if(map.isEmpty()) return null;
-        else return new NotificationScheduleModel().fromMap(map);
+
+        if(map.containsKey(Definitions.NOTIFICATION_SCHEDULE_INTERVAL)){
+            return new NotificationIntervalModel().fromMap(map);
+        }
+
+        return new NotificationCalendarModel().fromMap(map);
     }
 
     @SuppressWarnings("unchecked")

@@ -17,5 +17,6 @@ Map<String, WidgetBuilder> materialRoutes = {
   PAGE_NOTIFICATION_DETAILS: (context) => NotificationDetailsPage(
         ModalRoute.of(context)!.settings.arguments as ReceivedNotification,
       ),
-  // PAGE_FIREBASE_TESTS: (context) => FirebaseTestPage(ModalRoute.of(context).settings.arguments)
+  PAGE_FIREBASE_TESTS: (context) =>
+      FirebaseTestPage(ModalRoute.of(context)!.settings.arguments as ReceivedNotification)
 };

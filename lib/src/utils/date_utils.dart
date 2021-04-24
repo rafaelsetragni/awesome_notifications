@@ -27,5 +27,4 @@ class DateUtils {
         DateFormat(format).parse(parseDateToString(date)!);
     return parsedLocalDate.toUtc();
   }
-
 }

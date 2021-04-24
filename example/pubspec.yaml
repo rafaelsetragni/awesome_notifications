@@ -30,7 +30,7 @@ dependencies:
   path_provider: ^2.0.1
   shared_preferences: ^2.0.5
   numberpicker: ^2.0.1
-  # giffy_dialog: ^1.8.0
+  giffy_dialog: ^1.8.0
 
   url_launcher: ^6.0.3
 
@@ -43,6 +43,9 @@ dependencies:
   # flutter_circular_slider: ^2.5.0
 
   # flutter_statusbarcolor: ^0.2.3
+
+  firebase_messaging: ^9.0.0
+  firebase_core: ^1.0.1
 
 dev_dependencies:
   flutter_test:

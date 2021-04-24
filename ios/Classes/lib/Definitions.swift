@@ -33,6 +33,20 @@ enum Definitions {
     static let  SHARED_SCHEDULED_DISPLAYED = "scheduledDisplayed"
     static let  SHARED_SCHEDULED_DISPLAYED_REFERENCE = "pendingList"
 
+    static let  NOTIFICATION_SCHEDULE_ERA = "era"
+    static let  NOTIFICATION_SCHEDULE_YEAR = "year"
+    static let  NOTIFICATION_SCHEDULE_MONTH = "month"
+    static let  NOTIFICATION_SCHEDULE_DAY = "day"
+    static let  NOTIFICATION_SCHEDULE_HOUR = "hour"
+    static let  NOTIFICATION_SCHEDULE_MINUTE = "minute"
+    static let  NOTIFICATION_SCHEDULE_SECOND = "second"
+    static let  NOTIFICATION_SCHEDULE_MILLISECOND = "millisecond"
+    static let  NOTIFICATION_SCHEDULE_WEEKDAY = "weekday"
+    static let  NOTIFICATION_SCHEDULE_WEEKOFMONTH = "weekOfMonth"
+    static let  NOTIFICATION_SCHEDULE_WEEKOFYEAR = "weekOfYear"
+    static let  NOTIFICATION_SCHEDULE_INTERVAL = "interval"
+    static let  NOTIFICATION_SCHEDULE_REPEATS = "repeats"
+    
     static let  CHANNEL_FLUTTER_PLUGIN = "awesome_notifications"
 
     static let  CHANNEL_METHOD_INITIALIZE = "initialize"
@@ -142,6 +156,7 @@ enum Definitions {
 
     static let  initialValues = [
         Definitions.NOTIFICATION_ID: 0,
+        Definitions.NOTIFICATION_SCHEDULE_REPEATS: false,
         Definitions.NOTIFICATION_IMPORTANCE: NotificationImportance.Default,
         Definitions.NOTIFICATION_LAYOUT: NotificationLayout.Default,
         Definitions.NOTIFICATION_GROUP_SORT: GroupSort.Desc,

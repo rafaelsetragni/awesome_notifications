@@ -364,7 +364,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
   }
 
   Widget mediaTrackBar(double maxSize, MediaQueryData mediaQueryData) {
-    double maxValue = mediaLength?.inSeconds.toDouble() ?? 0.0;
+    double maxValue = mediaLength?.inSeconds?.toDouble() ?? 0.0;
 
     return Container(
       margin: EdgeInsets.zero,
@@ -386,7 +386,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                   min: 0.0,
                   max: maxValue,
                   value: min(
-                      maxValue, durationPlayed?.inSeconds.toDouble() ?? 0.0),
+                      maxValue, durationPlayed?.inSeconds?.toDouble() ?? 0.0),
                   onChangeStart: (value) {
                     isDraggin = true;
                   },
@@ -459,35 +459,39 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
       MediaQueryData mediaQueryData, double maxSize) {
     return Center(
       child: Container(
-        height: imageHeight,
-        width: imageWidth,
-        child: ShaderMask(
-            shaderCallback: (rect) {
-              return LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.black, Colors.black, Colors.transparent],
-                      stops: [0.0, 0.75, 0.98])
-                  .createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-            },
-            blendMode: BlendMode.dstIn,
-            child:
-                // diskImage == null
-                //     ?
-                Container(
-                    width: mediaQueryData.size.width,
-                    height: (maxSize - mediaQueryData.padding.top) * 0.45,
-                    color: contrastColor?.withOpacity(0.65))
-            // : ProgressiveImage(
-            //     placeholder: AssetImage('assets/images/placeholder.gif'),
-            //     thumbnail: AssetImage('assets/images/placeholder.gif'),
-            //     image: diskImage,
-            //     width: mediaQueryData.size.width,
-            //     height: (maxSize - mediaQueryData.padding.top) * 0.45,
-            //     fit: BoxFit.cover,
-            //   ),
-            ),
-      ),
+          height: imageHeight,
+          width: imageWidth,
+          child: ShaderMask(
+              shaderCallback: (rect) {
+                return LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                      Colors.black,
+                      Colors.black,
+                      Colors.transparent
+                    ],
+                        stops: [
+                      0.0,
+                      0.75,
+                      0.98
+                    ])
+                    .createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+              },
+              blendMode: BlendMode.dstIn,
+              child: diskImage == null
+                  ? Container(
+                      width: mediaQueryData.size.width,
+                      height: (maxSize - mediaQueryData.padding.top) * 0.45,
+                      color: contrastColor.withOpacity(0.65))
+                  : ProgressiveImage(
+                      placeholder: AssetImage('assets/images/placeholder.gif'),
+                      thumbnail: AssetImage('assets/images/placeholder.gif'),
+                      image: diskImage,
+                      width: mediaQueryData.size.width,
+                      height: (maxSize - mediaQueryData.padding.top) * 0.45,
+                      fit: BoxFit.cover,
+                    ))),
     );
   }
 

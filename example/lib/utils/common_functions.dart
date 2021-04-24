@@ -8,13 +8,12 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-
 Future<String> saveAssetOnDisk(ImageProvider image, String fileName) async {
   Directory directory = await getApplicationDocumentsDirectory();
   String filePath = '${directory.path}/$fileName';
   File newFile = File(filePath);
 
-  if(!await newFile.exists()) {
+  if (!await newFile.exists()) {
     BitmapHelper bitmapHelper = await BitmapHelper.fromProvider(image);
     await newFile.writeAsBytes(bitmapHelper.content);
   }
@@ -26,6 +25,7 @@ Future<String> downloadAndSaveImageOnDisk(String url, String fileName) async {
   var directory = await getApplicationDocumentsDirectory();
   var filePath = '${directory.path}/$fileName';
   var file = File(filePath);
+
 
   if(!await file.exists()){
     var response = await http.get(Uri.parse(url));
@@ -99,6 +99,7 @@ String fileSize(dynamic size, [int round = 2]) {
   }
 }
 
-Color getRandomColor(){
-  return Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0);
+Color getRandomColor() {
+  return Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0)
+      .withOpacity(1.0);
 }

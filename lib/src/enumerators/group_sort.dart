@@ -4,6 +4,7 @@
 enum GroupSort {
   /// Order the notifications inside grouping by ascending order
   Asc,
+
   /// Order the notifications inside grouping by descending order
   Desc
 }

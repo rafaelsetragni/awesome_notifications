@@ -32,11 +32,6 @@ class MapUtils<T: Any> {
         let defaultValue:T? = Definitions.initialValues[reference] as? T
         
         if(value == nil) { return defaultValue }
-        if(value is T) { return value as? T }
-        
-        if (value as AnyObject).isEmpty ?? false {
-            return defaultValue
-        }
         
         if(T.self == Int.self){
             return IntUtils.convertToInt(value: value) as? T
@@ -48,6 +43,12 @@ class MapUtils<T: Any> {
 
         if(T.self == Double.self){
             return DoubleUtils.convertToDouble(value: value) as? T
+        }
+        
+        if(value is T) { return value as? T }
+        
+        if (value as AnyObject).isEmpty ?? false {
+            return defaultValue
         }
         
         return defaultValue

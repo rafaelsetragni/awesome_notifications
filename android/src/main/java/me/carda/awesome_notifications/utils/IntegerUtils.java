@@ -28,6 +28,10 @@ public class IntegerUtils {
         return intValue;
     }
 
+    public static Boolean isBetween(Integer value, Integer min, Integer max){
+        return value >= min && value <= max;
+    }
+
     // Note: sometimes Json parser converts Integer into Double objects
     public static Integer extractInteger(Object value, Object defaultValue){
         if(value == null){

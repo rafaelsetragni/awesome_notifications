@@ -13,8 +13,8 @@ A complete solution to create Local Notifications and Push Notifications, throug
   s.source_files = 'Classes/**/*'
   s.static_framework = true
   s.dependency 'Flutter'
-  s.dependency 'Firebase'
-  s.dependency 'Firebase/Messaging'
+  #s.dependency 'Firebase'
+  #s.dependency 'Firebase/Messaging'
   s.platform = :ios, '10.0'
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
@@ -25,4 +25,5 @@ A complete solution to create Local Notifications and Push Notifications, throug
     'APPLICATION_EXTENSION_API_ONLY' => 'NO'
   }
   s.swift_version = '5.0'
+  
 end

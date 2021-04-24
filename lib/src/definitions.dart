@@ -103,6 +103,20 @@ const NOTIFICATION_CREATED_DATE = 'createdDate';
 const NOTIFICATION_DISPLAYED_DATE = 'displayedDate';
 const NOTIFICATION_ACTION_DATE = 'actionDate';
 
+const NOTIFICATION_SCHEDULE_ERA = 'era';
+const NOTIFICATION_SCHEDULE_YEAR = 'year';
+const NOTIFICATION_SCHEDULE_MONTH = 'month';
+const NOTIFICATION_SCHEDULE_DAY = 'day';
+const NOTIFICATION_SCHEDULE_HOUR = 'hour';
+const NOTIFICATION_SCHEDULE_MINUTE = 'minute';
+const NOTIFICATION_SCHEDULE_SECOND = 'second';
+const NOTIFICATION_SCHEDULE_MILLISECOND = 'millisecond';
+const NOTIFICATION_SCHEDULE_WEEKDAY = 'weekday';
+const NOTIFICATION_SCHEDULE_WEEKOFMONTH = 'weekOfMonth';
+const NOTIFICATION_SCHEDULE_WEEKOFYEAR = 'weekOfYear';
+const NOTIFICATION_SCHEDULE_INTERVAL = 'interval';
+const NOTIFICATION_SCHEDULE_REPEATS = 'repeats';
+
 const NOTIFICATION_TITLE = 'title';
 const NOTIFICATION_BODY = 'body';
 const NOTIFICATION_SUMMARY = 'summary';
@@ -176,6 +190,7 @@ const NOTIFICATION_ALLOW_WHILE_IDLE = 'allowWhileIdle';
 class Definitions {
   static Map<String, Object?> initialValues = {
     NOTIFICATION_ID: 0,
+    NOTIFICATION_SCHEDULE_REPEATS: false,
     NOTIFICATION_GROUP_SORT: GroupSort.Desc,
     NOTIFICATION_GROUP_ALERT_BEHAVIOR: GroupAlertBehavior.All,
     NOTIFICATION_IMPORTANCE: NotificationImportance.Default,

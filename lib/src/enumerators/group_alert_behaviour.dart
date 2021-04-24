@@ -5,8 +5,10 @@
 enum GroupAlertBehavior {
   /// All notifications in a group with sound or vibration ought to make sound or vibrate (respectively), so this notification will not be muted when it is in a group.
   All,
+
   /// All children notification in a group should be silenced (no sound or vibration) even if they would otherwise make sound or vibrate.
   Summary,
+
   /// The summary notification in a group should be silenced (no sound or vibration) even if they would otherwise make sound or vibrate
   Children
 }
