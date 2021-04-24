@@ -52,8 +52,8 @@ class BitmapHelper {
     stream.addListener(listener);
     final imageInfo = await completer.future;
     final ui.Image image = imageInfo.image;
-    final ByteData byteData = await image.toByteData();
-    final Uint8List listInt = byteData.buffer.asUint8List();
+    final ByteData? byteData = await image.toByteData();
+    final Uint8List listInt = byteData!.buffer.asUint8List();
 
     return BitmapHelper.fromHeadless(image.width, image.height, listInt);
   }
@@ -106,7 +106,7 @@ class RGBA32BitmapHeader {
     );
   }
 
-  Uint8List headerIntList;
+  late Uint8List headerIntList;
 
   int get fileLength => contentSize + RGBA32HeaderSize;
 }

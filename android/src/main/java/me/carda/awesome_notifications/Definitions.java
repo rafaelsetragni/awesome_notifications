@@ -162,7 +162,7 @@ public interface Definitions {
     String NOTIFICATION_ALLOW_WHILE_IDLE = "allowWhileIdle";
 
     Map<String, Object> initialValues = new HashMap<String, Object>(){{
-        put(Definitions.FIREBASE_ENABLED, true);
+        put(Definitions.FIREBASE_ENABLED, false);
         put(Definitions.NOTIFICATION_ID, 0);
         put(Definitions.NOTIFICATION_IMPORTANCE, NotificationImportance.Default);
         put(Definitions.NOTIFICATION_LAYOUT, NotificationLayout.Default);

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class RemarkableText extends StatelessWidget {
 
   final String text;
-  final Color color;
+  final Color? color;
 
-  const RemarkableText({Key key, this.text, this.color}) : super(key: key);
+  const RemarkableText({Key? key, required this.text, this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

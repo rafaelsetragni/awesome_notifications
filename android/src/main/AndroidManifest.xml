@@ -16,7 +16,7 @@
   
     <application>
 
-        <service
+        <!-- <service
             android:name=".services.firebase.FCMService"
             android:exported="false">
             <intent-filter>
@@ -32,7 +32,7 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="me.carda.awesome_notifications.firebase.background_channel"/>
+            android:value="me.carda.awesome_notifications.firebase.background_channel"/> -->
 
         <receiver android:name=".notifications.broadcastReceivers.DismissedNotificationReceiver"/>
         <receiver android:name=".notifications.broadcastReceivers.ScheduledNotificationReceiver"/>

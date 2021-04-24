@@ -7,7 +7,7 @@ description: Demonstrates how to use the awesome_notifications plugin.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -23,32 +23,32 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
-  font_awesome_flutter: ^8.8.1
-  fluttertoast: ^4.0.1
-  http: ^0.12.0
-  path_provider: ^1.4.0
-  shared_preferences: ^0.5.12+2
-  numberpicker: ^1.2.1
-  giffy_dialog: ^1.8.0
+  cupertino_icons: ^1.0.2
+  font_awesome_flutter: ^9.0.0
+  fluttertoast: ^8.0.3
+  http: ^0.13.1
+  path_provider: ^2.0.1
+  shared_preferences: ^2.0.5
+  numberpicker: ^2.0.1
+  # giffy_dialog: ^1.8.0
 
-  url_launcher: ^5.7.5
+  url_launcher: ^6.0.3
 
   intl: ^0.17.0
 
-  progressive_image: ^1.0.1
+  # progressive_image: ^1.0.1
 
-  palette_generator: ^0.2.3
+  palette_generator: ^0.3.0
 
-  flutter_circular_slider: ^2.5.0
+  # flutter_circular_slider: ^2.5.0
 
-  flutter_statusbarcolor: ^0.2.3
+  # flutter_statusbarcolor: ^0.2.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_launcher_icons: ^0.7.3
+  flutter_launcher_icons: ^0.9.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

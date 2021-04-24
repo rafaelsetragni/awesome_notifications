@@ -8,10 +8,10 @@ import 'package:awesome_notifications/src/utils/list_utils.dart';
 /// [crontabSchedule]: Crontab expression as repetition rule (with seconds precision), as described in https://www.baeldung.com/cron-expressions
 /// [allowWhileIdle]: Determines if notification will send, even when the device is in critical situation, such as low battery.
 class NotificationSchedule extends Model {
-  DateTime initialDateTime;
-  String crontabSchedule;
-  bool allowWhileIdle;
-  List<DateTime> preciseSchedules;
+  DateTime? initialDateTime;
+  String? crontabSchedule;
+  bool? allowWhileIdle;
+  List<DateTime>? preciseSchedules;
 
   NotificationSchedule(
       {this.initialDateTime,
@@ -27,13 +27,13 @@ class NotificationSchedule extends Model {
 
     if (dataMap['preciseSchedules'] != null &&
         dataMap['preciseSchedules'] is List) {
-      List<String> schedules = List<String>.from(dataMap['preciseSchedules']);
+      List<String?> schedules = List<String>.from(dataMap['preciseSchedules']);
       preciseSchedules = [];
 
-      for (String schedule in schedules) {
-        DateTime scheduleDate = DateUtils.parseStringToDate(schedule);
+      for (String? schedule in schedules) {
+        DateTime? scheduleDate = DateUtils.parseStringToDate(schedule);
         if (schedule != null) {
-          preciseSchedules.add(scheduleDate);
+          preciseSchedules!.add(scheduleDate!);
         }
       }
     }
@@ -52,9 +52,9 @@ class NotificationSchedule extends Model {
     if (!ListUtils.isNullOrEmpty(preciseSchedules)) {
       List<String> schedulesMap = [];
 
-      for (DateTime schedule in preciseSchedules) {
-        String scheduleDate = DateUtils.parseDateToString(schedule);
-        if (schedule != null) {
+      for (DateTime schedule in preciseSchedules!) {
+        String? scheduleDate = DateUtils.parseDateToString(schedule);
+        if (scheduleDate != null) {
           schedulesMap.add(scheduleDate);
         }
       }

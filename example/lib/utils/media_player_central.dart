@@ -27,9 +27,9 @@ class MediaPlayerCentral {
   );
 
   static String getCloseCaption(Duration duration){
-    if( currentMedia?.closeCaption?.isEmpty ?? true ) return '';
+    if( currentMedia?.closeCaption.isEmpty ?? true ) return '';
 
-    for(CloseCaptionElement cc in currentMedia.closeCaption){
+    for(CloseCaptionElement cc in currentMedia!.closeCaption){
       if(cc.start <= duration && cc.end >= duration) return cc.subtitle;
     }
 
@@ -66,7 +66,7 @@ class MediaPlayerCentral {
 
   static MediaLifeCycle get mediaLifeCycle => _lifeCycle;
 
-  static MediaModel get currentMedia {
+  static MediaModel? get currentMedia {
     return _playlist.length == 0 ? null : _playlist[_index];
   }
 
@@ -81,7 +81,7 @@ class MediaPlayerCentral {
 
   static void _broadcastChanges(){
     _mediaBroadcaster.sink.add(
-        currentMedia
+        currentMedia!
     );
     _mediaProgress.sink.add(
         _timer.now
@@ -122,13 +122,13 @@ class MediaPlayerCentral {
       case MediaLifeCycle.Stopped:
       case MediaLifeCycle.Paused:
         _lifeCycle = MediaLifeCycle.Playing;
-        _timer.playPause(currentMedia.trackSize);
+        _timer.playPause(currentMedia!.trackSize);
         _broadcastChanges();
         break;
 
       case MediaLifeCycle.Playing:
         _lifeCycle = MediaLifeCycle.Paused;
-        _timer.playPause(currentMedia.trackSize);
+        _timer.playPause(currentMedia!.trackSize);
         _broadcastChanges();
         break;
     }
@@ -166,7 +166,7 @@ class MediaPlayerCentral {
 
       case MediaLifeCycle.Playing:
         _timer.stop();
-        _timer.playPause(currentMedia.trackSize);
+        _timer.playPause(currentMedia!.trackSize);
         _lifeCycle = MediaLifeCycle.Playing;
         break;
     }
@@ -184,7 +184,7 @@ class MediaPlayerCentral {
 
       case MediaLifeCycle.Playing:
         _timer.stop();
-        _timer.playPause(currentMedia.trackSize);
+        _timer.playPause(currentMedia!.trackSize);
         _lifeCycle = MediaLifeCycle.Playing;
         break;
 

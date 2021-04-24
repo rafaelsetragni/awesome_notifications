@@ -18,7 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class AwesomeNotifications {
-  static String rootNativePath;
+  static String? rootNativePath;
 
   /// STREAM CREATION METHODS *********************************************
 
@@ -45,9 +45,9 @@ class AwesomeNotifications {
   /// STREAM METHODS *********************************************
 
   /// Stream to capture all FCM token updates. Could be changed at any time.
-  Stream<String> get fcmTokenStream {
-    return _tokenStreamController.stream;
-  }
+  // Stream<String> get fcmTokenStream {
+  //   return _tokenStreamController.stream;
+  // }
 
   /// Stream to capture all created notifications
   Stream<ReceivedNotification> get createdStream {
@@ -72,9 +72,9 @@ class AwesomeNotifications {
   /// SINK METHODS *********************************************
 
   /// Sink to dispose the stream, if you don't need it anymore.
-  Sink get fcmTokenSink {
-    return _tokenStreamController.sink;
-  }
+  // Sink get fcmTokenSink {
+  //   return _tokenStreamController.sink;
+  // }
 
   /// Sink to dispose the stream, if you don't need it anymore.
   Sink get createdSink {
@@ -126,7 +126,7 @@ class AwesomeNotifications {
   /// OBS: [defaultIcon] needs to be a Resource media type
   /// OBS 2: [channels] are updated if they already exists
   Future<bool> initialize(
-      String defaultIcon, List<NotificationChannel> channels) async {
+      String? defaultIcon, List<NotificationChannel> channels) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     _channel.setMethodCallHandler(_handleMethod);
@@ -136,10 +136,10 @@ class AwesomeNotifications {
       serializedChannels.add(channel.toMap());
     }
 
-    String defaultIconPath;
+    String? defaultIconPath;
     if (!AssertUtils.isNullOrEmptyOrInvalid<String>(defaultIcon, String)) {
       // To set a icon on top of notification, is mandatory to user a native resource
-      assert(BitmapUtils().getMediaSource(defaultIcon) == MediaSource.Resource);
+      assert(BitmapUtils().getMediaSource(defaultIcon!) == MediaSource.Resource);
       defaultIconPath = defaultIcon;
     }
 
@@ -154,7 +154,7 @@ class AwesomeNotifications {
   /// NATIVE MEDIA METHODS *********************************************
 
   /// Decode a drawable resource bytes into a Uint8List to be used in Flutter widgets
-  Future<Uint8List> getDrawableData(String drawablePath) async {
+  Future<Uint8List?> getDrawableData(String drawablePath) async {
     var result2 = await _channel.invokeMethod(
         CHANNEL_METHOD_GET_DRAWABLE_DATA, drawablePath);
 
@@ -167,10 +167,10 @@ class AwesomeNotifications {
     Map<String, dynamic> arguments = Map<String, dynamic>.from(call.arguments);
 
     switch (call.method) {
-      case CHANNEL_METHOD_NEW_FCM_TOKEN:
-        final String token = call.arguments;
-        _tokenStreamController.add(token);
-        return;
+      // case CHANNEL_METHOD_NEW_FCM_TOKEN:
+      //   final String token = call.arguments;
+      //   _tokenStreamController.add(token);
+      //   return;
 
       case CHANNEL_METHOD_NOTIFICATION_CREATED:
         _createdSubject.sink.add(ReceivedNotification().fromMap(arguments));
@@ -183,12 +183,14 @@ class AwesomeNotifications {
         return;
 
       case CHANNEL_METHOD_NOTIFICATION_DISMISSED:
-        _dismissedSubject.sink.add(ReceivedAction().fromMap(arguments));
+        _dismissedSubject.sink
+            .add(ReceivedAction().fromMap(arguments) as ReceivedAction);
         debugPrint('Notification dismissed');
         return;
 
       case CHANNEL_METHOD_ACTION_RECEIVED:
-        _actionSubject.sink.add(ReceivedAction().fromMap(arguments));
+        _actionSubject.sink
+            .add(ReceivedAction().fromMap(arguments) as ReceivedAction);
         debugPrint('Action received');
         return;
 
@@ -207,18 +209,18 @@ class AwesomeNotifications {
   /// FIREBASE METHODS *********************************************
 
   /// Gets the firebase cloud messaging token
-  Future<String> get firebaseAppToken async {
-    final String token =
-        await _channel.invokeMethod(CHANNEL_METHOD_GET_FCM_TOKEN);
-    return token;
-  }
+  // Future<String> get firebaseAppToken async {
+  //   final String token =
+  //       await _channel.invokeMethod(CHANNEL_METHOD_GET_FCM_TOKEN);
+  //   return token;
+  // }
 
   /// Check if firebase is fully available on the project
-  Future<bool> get isFirebaseAvailable async {
-    final bool isAvailable =
-        await _channel.invokeMethod(CHANNEL_METHOD_IS_FCM_AVAILABLE);
-    return isAvailable;
-  }
+  // Future<bool> get isFirebaseAvailable async {
+  //   final bool isAvailable =
+  //       await _channel.invokeMethod(CHANNEL_METHOD_IS_FCM_AVAILABLE);
+  //   return isAvailable;
+  // }
 
   /// LOCAL NOTIFICATION METHODS *********************************************
 
@@ -226,11 +228,11 @@ class AwesomeNotifications {
   /// If notification has no [body] or [title], it will only be created, but never displayed. (background notification)
   /// [schedule] and [actionButtons] are optional
   Future<bool> createNotification({
-    @required NotificationContent content,
-    NotificationSchedule schedule,
-    List<NotificationActionButton> actionButtons,
+    required NotificationContent content,
+    NotificationSchedule? schedule,
+    List<NotificationActionButton>? actionButtons,
   }) async {
-    _validateId(content.id);
+    _validateId(content.id!);
 
     try {
       final bool wasCreated = await _channel.invokeMethod(
@@ -265,16 +267,18 @@ class AwesomeNotifications {
   /// List all active scheduled notifications.
   Future<List<PushNotification>> listScheduledNotifications() async {
     List<PushNotification> scheduledNotifications = [];
-    List<Object> returned =
+    List<Object>? returned =
         await _channel.invokeListMethod(CHANNEL_METHOD_LIST_ALL_SCHEDULES);
-    for (Object object in returned) {
-      if (object is Map) {
-        try {
-          PushNotification pushNotification =
-              PushNotification().fromMap(Map<String, dynamic>.from(object));
-          scheduledNotifications.add(pushNotification);
-        } catch (e) {
-          return [];
+    if (returned != null) {
+      for (Object object in returned) {
+        if (object is Map) {
+          try {
+            PushNotification pushNotification =
+                PushNotification().fromMap(Map<String, dynamic>.from(object))!;
+            scheduledNotifications.add(pushNotification);
+          } catch (e) {
+            return [];
+          }
         }
       }
     }
@@ -283,16 +287,15 @@ class AwesomeNotifications {
 
   /// Set a new notification channel or updates if already exists
   /// [forceUpdate]: completely updates the channel on Android Oreo and above, but cancels all current notifications.
-  Future<void> setChannel(NotificationChannel notificationChannel, {bool forceUpdate}) async {
+  Future<void> setChannel(
+    NotificationChannel notificationChannel, {
+    bool? forceUpdate,
+  }) async {
+    Map<String, dynamic> parameters = notificationChannel.toMap();
+    parameters.addAll({CHANNEL_FORCE_UPDATE: forceUpdate});
 
-    Map<String, dynamic> parameters =  notificationChannel.toMap();
-    parameters.addAll(
-        {
-          CHANNEL_FORCE_UPDATE: forceUpdate
-        }
-    );
-
-    await _channel.invokeMethod( CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL, parameters );
+    await _channel.invokeMethod(
+        CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL, parameters);
   }
 
   /// Remove a notification channel
@@ -326,16 +329,19 @@ class AwesomeNotifications {
     await _channel.invokeListMethod(CHANNEL_METHOD_RESET_BADGE);
   }
 
-  Future<DateTime> getNextDate(NotificationSchedule schedule, {DateTime fixedDate}) async {
+  Future<DateTime> getNextDate(
+    NotificationSchedule schedule, {
+    required DateTime fixedDate,
+  }) async {
     Map parameters = {
       NOTIFICATION_INITIAL_FIXED_DATE: DateUtils.parseDateToString(fixedDate),
       PUSH_NOTIFICATION_SCHEDULE: schedule.toMap()
     };
 
     final String nextDate =
-      await _channel.invokeMethod(CHANNEL_METHOD_GET_NEXT_DATE, parameters);
+        await _channel.invokeMethod(CHANNEL_METHOD_GET_NEXT_DATE, parameters);
 
-    return DateUtils.parseStringToDate(nextDate);
+    return DateUtils.parseStringToDate(nextDate)!;
   }
 
   /// Cancel a single notification

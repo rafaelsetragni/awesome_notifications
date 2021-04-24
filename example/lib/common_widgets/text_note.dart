@@ -4,7 +4,7 @@ class TextNote extends StatelessWidget {
 
   final String text;
 
-  const TextNote(this.text, {Key key}) : super(key: key);
+  const TextNote(this.text, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

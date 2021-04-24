@@ -5,7 +5,7 @@ abstract class Model {
   Map<String, dynamic> toMap();
 
   /// Exports all content into a serializable object
-  Model fromMap(Map<String, dynamic> mapData);
+  Model? fromMap(Map<String, dynamic> mapData);
 
   @override
   String toString() {

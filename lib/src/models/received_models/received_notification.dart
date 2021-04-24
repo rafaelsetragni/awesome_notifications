@@ -6,13 +6,13 @@ import 'package:awesome_notifications/src/utils/assert_utils.dart';
 /// All received details of a notification created or displayed on the system
 /// The data field
 class ReceivedNotification extends BaseNotificationContent {
-  NotificationLifeCycle displayedLifeCycle;
+  NotificationLifeCycle? displayedLifeCycle;
 
-  NotificationSource createdSource;
-  NotificationLifeCycle createdLifeCycle;
+  NotificationSource? createdSource;
+  NotificationLifeCycle? createdLifeCycle;
 
-  String displayedDate;
-  String createdDate;
+  String? displayedDate;
+  String? createdDate;
 
   ReceivedNotification fromMap(Map<String, dynamic> dataMap) {
     super.fromMap(dataMap);

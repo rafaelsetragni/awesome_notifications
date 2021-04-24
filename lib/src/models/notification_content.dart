@@ -8,40 +8,40 @@ import 'package:flutter/material.dart';
 /// Main content of notification
 /// If notification has no [body] or [title], it will only be created, but not displayed to the user (background notification).
 class NotificationContent extends BaseNotificationContent {
-  bool hideLargeIconOnExpand;
-  int progress;
-  String ticker;
+  bool? hideLargeIconOnExpand;
+  int? progress;
+  String? ticker;
 
-  NotificationLifeCycle displayedLifeCycle;
+  NotificationLifeCycle? displayedLifeCycle;
 
-  NotificationSource createdSource;
-  NotificationLifeCycle createdLifeCycle;
+  NotificationSource? createdSource;
+  NotificationLifeCycle? createdLifeCycle;
 
-  NotificationLayout notificationLayout;
+  NotificationLayout? notificationLayout;
 
-  bool displayOnForeground;
-  bool displayOnBackground;
+  bool? displayOnForeground;
+  bool? displayOnBackground;
 
-  String createdDate;
-  String displayedDate;
+  String? createdDate;
+  String? displayedDate;
 
-  bool locked;
+  bool? locked;
 
   NotificationContent({
-      int id,
-      String channelKey,
-      String title,
-      String body,
-      String summary,
-      bool showWhen,
-      String icon,
-      String largeIcon,
-      String bigPicture,
-      String customSound,
-      bool autoCancel,
-      Color color,
-      Color backgroundColor,
-      Map<String, String> payload,
+      int? id,
+      String? channelKey,
+      String? title,
+      String? body,
+      String? summary,
+      bool? showWhen,
+      String? icon,
+      String? largeIcon,
+      String? bigPicture,
+      String? customSound,
+      bool? autoCancel,
+      Color? color,
+      Color? backgroundColor,
+      Map<String, String>? payload,
       this.notificationLayout,
       this.hideLargeIconOnExpand,
       this.locked,
