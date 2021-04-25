@@ -67,7 +67,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
     return false;
   }
-  
+
   Future<int?> pickBadgeCounter(BuildContext context) async {
     // show the dialog
     return showDialog<int?>(
@@ -106,7 +106,8 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
   void initState() {
     super.initState();
 
-    initializeFirebaseService();
+    // Uncomment those lines after activate google services inside example/android/build.gradle
+    // initializeFirebaseService();
 
     // this is not part of notification system, but media player simulator instead
     MediaPlayerCentral.mediaStream.listen((media) {
@@ -223,46 +224,6 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
         ],
       ),
     );
-    // showDialog(
-    //     context: context,
-    //     builder: (_) => NetworkGiffyDialog(
-    //           buttonOkText:
-    //               Text('Allow', style: TextStyle(color: Colors.white)),
-    //           buttonCancelText:
-    //               Text('Later', style: TextStyle(color: Colors.white)),
-    //           buttonCancelColor: Colors.grey,
-    //           buttonOkColor: Colors.deepPurple,
-    //           buttonRadius: 0.0,
-    //           image: Image.asset("assets/images/animated-bell.gif",
-    //               fit: BoxFit.cover),
-    //           title: Text('Get Notified!',
-    //               textAlign: TextAlign.center,
-    //               style:
-    //                   TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
-    //           description: Text(
-    //             'Allow Awesome Notifications to send you beautiful notifications!',
-    //             textAlign: TextAlign.center,
-    //           ),
-    //           entryAnimation: EntryAnimation.DEFAULT,
-    //           onCancelButtonPressed: () async {
-    //             Navigator.of(context).pop();
-    //             notificationsAllowed =
-    //                 await AwesomeNotifications().isNotificationAllowed();
-    //             setState(() {
-    //               notificationsAllowed = notificationsAllowed;
-    //             });
-    //           },
-    //           onOkButtonPressed: () async {
-    //             Navigator.of(context).pop();
-    //             await AwesomeNotifications()
-    //                 .requestPermissionToSendNotifications();
-    //             notificationsAllowed =
-    //                 await AwesomeNotifications().isNotificationAllowed();
-    //             setState(() {
-    //               notificationsAllowed = notificationsAllowed;
-    //             });
-    //           },
-    //         ));
   }
 
   void processDefaultActionReceived(ReceivedAction receivedNotification) {
@@ -334,17 +295,17 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
     String firebaseAppToken = await messaging.getToken(
-      // https://stackoverflow.com/questions/54996206/firebase-cloud-messaging-where-to-find-public-vapid-key
-      vapidKey: '',
-    ) ?? '';
+          // https://stackoverflow.com/questions/54996206/firebase-cloud-messaging-where-to-find-public-vapid-key
+          vapidKey: '',
+        ) ??
+        '';
 
-    if (StringUtils.isNullOrEmpty(firebaseAppToken, considerWhiteSpaceAsEmpty: true))
-      return;
+    if (StringUtils.isNullOrEmpty(firebaseAppToken,
+        considerWhiteSpaceAsEmpty: true)) return;
 
     if (!mounted) {
       _firebaseAppToken = firebaseAppToken;
-    }
-    else {
+    } else {
       setState(() {
         _firebaseAppToken = firebaseAppToken;
       });
@@ -357,17 +318,17 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
       print('Message data: ${message.data}');
 
       if (
-        // This step (if condition) is only necessary if you pretend to use the
-        // test page inside console.firebase.google.com
-        !StringUtils.isNullOrEmpty(message.notification?.title, considerWhiteSpaceAsEmpty: true) ||
-        !StringUtils.isNullOrEmpty(message.notification?.body, considerWhiteSpaceAsEmpty: true)
-      ) {
-
+          // This step (if condition) is only necessary if you pretend to use the
+          // test page inside console.firebase.google.com
+          !StringUtils.isNullOrEmpty(message.notification?.title,
+                  considerWhiteSpaceAsEmpty: true) ||
+              !StringUtils.isNullOrEmpty(message.notification?.body,
+                  considerWhiteSpaceAsEmpty: true)) {
         print('Message also contained a notification: ${message.notification}');
 
         String? imageUrl;
-          imageUrl ??= message.notification!.android?.imageUrl;
-          imageUrl ??= message.notification!.apple?.imageUrl;
+        imageUrl ??= message.notification!.android?.imageUrl;
+        imageUrl ??= message.notification!.apple?.imageUrl;
 
         // https://pub.dev/packages/awesome_notifications#notification-types-values-and-defaults
         Map<String, dynamic> notificationAdapter = {
@@ -376,24 +337,22 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             NOTIFICATION_CHANNEL_KEY: 'basic_channel',
             NOTIFICATION_TITLE: message.notification!.title,
             NOTIFICATION_BODY: message.notification!.body,
-            NOTIFICATION_LAYOUT: StringUtils.isNullOrEmpty(imageUrl) ?
-              'Default': 'BigPicture',
+            NOTIFICATION_LAYOUT:
+                StringUtils.isNullOrEmpty(imageUrl) ? 'Default' : 'BigPicture',
             NOTIFICATION_BIG_PICTURE: imageUrl
           }
         };
 
-        AwesomeNotifications().createNotificationFromJsonData(notificationAdapter);
-      }
-      else {
+        AwesomeNotifications()
+            .createNotificationFromJsonData(notificationAdapter);
+      } else {
         AwesomeNotifications().createNotificationFromJsonData(message.data);
       }
-
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
-
     MediaQueryData mediaQuery = MediaQuery.of(context);
     ThemeData themeData = Theme.of(context);
 
@@ -801,11 +760,11 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
                 'Tap on notification when it appears on your system tray to go to Details page.'),
             SimpleButton('Get Next Date', onPressed: () async {
               DateTime referenceDate =
-              DateUtils.parseStringToDate('2021-01-12 20:00:00')!;
+                  DateUtils.parseStringToDate('2021-01-12 20:00:00')!;
               DateTime expectedDate =
-              DateUtils.parseStringToDate('2021-01-12 21:00:00')!;
+                  DateUtils.parseStringToDate('2021-01-12 21:00:00')!;
               NotificationSchedule schedule =
-              NotificationCalendar.fromDate(date: expectedDate);
+                  NotificationCalendar.fromDate(date: expectedDate);
 
               DateTime result = await AwesomeNotifications()
                   .getNextDate(schedule, fixedDate: referenceDate);

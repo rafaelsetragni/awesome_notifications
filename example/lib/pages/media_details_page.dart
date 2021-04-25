@@ -484,7 +484,8 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                       width: mediaQueryData.size.width,
                       height: (maxSize - mediaQueryData.padding.top) * 0.45,
                       color: contrastColor?.withOpacity(0.65))
-                  : Image( //ProgressiveImage
+                  : Image(
+                      //ProgressiveImage
                       //placeholder: AssetImage('assets/images/placeholder.gif'),
                       //thumbnail: AssetImage('assets/images/placeholder.gif'),
                       image: diskImage!,

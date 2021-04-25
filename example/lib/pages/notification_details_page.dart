@@ -33,7 +33,8 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
     FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
 
     displayedDate = DateUtils.parseDateToString(
-        DateUtils.utcToLocal(DateUtils.parseStringToDate(widget.receivedNotification.displayedDate)!),
+        DateUtils.utcToLocal(DateUtils.parseStringToDate(
+            widget.receivedNotification.displayedDate)!),
         format: 'dd/MM/yyyy HH:mm');
   }
 
@@ -45,7 +46,6 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     ThemeData themeData = Theme.of(context);
 
@@ -115,18 +115,20 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                       },
                                       blendMode: BlendMode.dstIn,
                                       child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            bottom:
-                                                2.0), // 2 pixels to avoid render error on ShaderMask while the users are sliding the page
-                                        child: FadeInImage(
-                                          placeholder: AssetImage('assets/images/placeholder.gif'),
-                                          image: widget.receivedNotification.bigPictureImage!,
-                                          width: mediaQueryData.size.width,
-                                          height: maxSize * 0.4 +
-                                                 mediaQueryData.padding.top - 2,
-                                          fit: BoxFit.cover,
-                                        )
-                                      ))),
+                                          padding: const EdgeInsets.only(
+                                              bottom:
+                                                  2.0), // 2 pixels to avoid render error on ShaderMask while the users are sliding the page
+                                          child: FadeInImage(
+                                            placeholder: AssetImage(
+                                                'assets/images/placeholder.gif'),
+                                            image: widget.receivedNotification
+                                                .bigPictureImage!,
+                                            width: mediaQueryData.size.width,
+                                            height: maxSize * 0.4 +
+                                                mediaQueryData.padding.top -
+                                                2,
+                                            fit: BoxFit.cover,
+                                          )))),
                         ],
                       ),
                       largeIcon == null
@@ -145,14 +147,16 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                     backgroundColor: Colors.white,
                                     child: ClipOval(
                                       child: FadeInImage(
-                                        placeholder: AssetImage('assets/images/placeholder.gif'),
-                                        image: widget.receivedNotification.largeIconImage!,
+                                        placeholder: AssetImage(
+                                            'assets/images/placeholder.gif'),
+                                        image: widget.receivedNotification
+                                            .largeIconImage!,
                                         width: maxSize * 0.08 * 2,
                                         height: maxSize * 0.08 * 2,
                                         fit: BoxFit.cover,
                                       ),
                                     ) //widget.receivedNotification.largeIcon.image,
-                                  ),
+                                    ),
                               )),
                       Container(
                         width: mediaQueryData.size.width,
@@ -166,21 +170,22 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                         child: RichText(
                             text: TextSpan(children: [
                           TextSpan(
-                              text: widget.receivedNotification.titleWithoutHtml ??
-                                  (
-                                      (widget.receivedNotification.body?.isEmpty ?? true) ?
-                                      '' : widget.receivedNotification .bodyWithoutHtml
-                                  ),
-                              style:
-                                  TextStyle(
-                                      fontSize: (widget.receivedNotification
-                                                  .title?.isEmpty ??
-                                              true)
-                                          ? 22
-                                          : 32,
-                                      height: 1.2,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold)),
+                              text: widget
+                                      .receivedNotification.titleWithoutHtml ??
+                                  ((widget.receivedNotification.body?.isEmpty ??
+                                          true)
+                                      ? ''
+                                      : widget.receivedNotification
+                                          .bodyWithoutHtml),
+                              style: TextStyle(
+                                  fontSize: (widget.receivedNotification.title
+                                              ?.isEmpty ??
+                                          true)
+                                      ? 22
+                                      : 32,
+                                  height: 1.2,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
                           TextSpan(
                             text: '\n$displayedDate',
                             style: themeData.textTheme.subtitle2
@@ -199,7 +204,8 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                               padding: EdgeInsets.only(
                                   top: 10, left: 20, right: 20, bottom: 25),
                               child: Text(
-                                  widget.receivedNotification.bodyWithoutHtml ?? '',
+                                  widget.receivedNotification.bodyWithoutHtml ??
+                                      '',
                                   style: themeData.textTheme.bodyText2)),
                 ],
               ),

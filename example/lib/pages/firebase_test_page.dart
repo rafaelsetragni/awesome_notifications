@@ -66,7 +66,8 @@ class _FirebaseTestPageState extends State<FirebaseTestPage> {
               ));
             } else {
               String lastServerKey = snapshot.data ?? '';
-              _serverKeyTextController = TextEditingController(text: lastServerKey);
+              _serverKeyTextController =
+                  TextEditingController(text: lastServerKey);
               return ListView(
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                   children: <Widget>[

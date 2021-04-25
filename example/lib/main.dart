@@ -9,8 +9,7 @@ import 'package:awesome_notifications_example/utils/media_player_central.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  AwesomeNotifications().initialize(
-    'resource://drawable/res_app_icon', [
+  AwesomeNotifications().initialize('resource://drawable/res_app_icon', [
     NotificationChannel(
         channelKey: 'basic_channel',
         channelName: 'Basic notifications',
@@ -150,11 +149,12 @@ void main() async {
         importance: NotificationImportance.High)
   ]);
 
+  // Uncomment those lines after activate google services inside example/android/build.gradle
   // Create the initialization Future outside of `build`:
-  FirebaseApp firebaseApp = await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  //FirebaseApp firebaseApp = await Firebase.initializeApp();
+  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  runApp(App(firebaseApp));
+  runApp(App());
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -167,10 +167,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 class App extends StatefulWidget {
-  App(this.firebaseApp);
+  App();
 
   static final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
-  final FirebaseApp firebaseApp;
 
   static String name = 'Push Notifications - Example App';
   static Color mainColor = Color(0xFF9D50DD);
