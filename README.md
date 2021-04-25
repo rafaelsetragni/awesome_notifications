@@ -471,7 +471,7 @@ OBS 2: you should not implement any native code to use FCM with Awesome Notifica
                 "key": "REPLY",
                 "label": "Reply",
                 "autoCancel": true,
-                "buttonType":  "InputField",
+                "buttonType":  "InputField"
             },
             {
                 "key": "ARCHIVE",
@@ -483,7 +483,7 @@ OBS 2: you should not implement any native code to use FCM with Awesome Notifica
             "hour": "10",
             "minute": "0",
             "second": "0",
-            "allowWhileIdle": true
+            "allowWhileIdle": true,
             "repeat": true
         }
     }
