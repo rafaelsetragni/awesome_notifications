@@ -24,8 +24,8 @@ class AwesomeNotifications {
   /// STREAM CREATION METHODS *********************************************
 
   // Streams are created so that app can respond to notification-related events since the plugin is initialised in the `main` function
-  final StreamController<String> _tokenStreamController =
-      StreamController<String>();
+  // final StreamController<String> _tokenStreamController =
+  //   StreamController<String>();
 
   final StreamController<ReceivedNotification>
       // ignore: close_sinks
@@ -101,7 +101,7 @@ class AwesomeNotifications {
 
   /// Closes definitely all the streams.
   dispose() {
-    _tokenStreamController.close();
+    //_tokenStreamController.close();
     _createdSubject.close();
     _displayedSubject.close();
     _dismissedSubject.close();
