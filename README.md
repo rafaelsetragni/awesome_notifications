@@ -453,9 +453,6 @@ OBS 2: you should not implement any native code to use FCM with Awesome Notifica
 {
     "to" : "[YOUR APP TOKEN]",
     "mutable_content" : true,
-    "notification": {
-        "title": " "
-    },
     "data" : {
         "content": {
             "id": 100,
@@ -483,10 +480,11 @@ OBS 2: you should not implement any native code to use FCM with Awesome Notifica
             }
         ],
         "schedule": {
-            "initialDateTime": "2020-08-30 11:00:00",
-            "crontabSchedule": "5 38 20 ? * MON-FRI *",
-            "allowWhileIdle": true,
-            "preciseSchedules": []
+            "hour": "10",
+            "minute": "0",
+            "second": "0",
+            "allowWhileIdle": true
+            "repeat": true
         }
     }
 }
@@ -588,18 +586,38 @@ Main methods to manipulate a notification channel:
 <br>
 <br>
 
-### NotificationScheduleModel ("schedule" in Push data) - (optional)
+### NotificationInterval ("schedule" in Push data) - (optional)
+<br>
+
+| Attribute       	 | Required | Description                                                       | Type            | Value Limits            | Default value   |
+| ------------------ | -------- | ----------------------------------------------------------------- | ----------------| ----------------------- | --------------- |
+| interval           |   *YES   | Mandatory initial notification fire date                          | Int (seconds)   | Positive unlimited      |                 |
+| allowWhileIdle     |     NO   | Displays the notification, even when the device is low battery    | bool            | true or false           | false           |
+| repeats            |     NO   | List of precise notification fire dates                           | bool            | true or false           | false           |
+
+<br>
+
+### NotificationCalendar ("schedule" in Push data) - (optional)
 <br>
 
 * Is necessary at least one *required attribute
 * Cron expression must respect the format (with seconds precision) as described in [this article](https://www.baeldung.com/cron-expressions)
 
-| Attribute       	 | Required | Description                                                       | Type                               | Value Limits            | Default value   |
-| ------------------ | -------- | ----------------------------------------------------------------- | ---------------------------------- | ----------------------- | --------------- |
-| initialDateTime    |   *YES   | Mandatory initial notification fire date                          | String (YYYY-mm-dd HH:mi:ss)       | UTC valid date          |                 |
-| crontabSchedule    |   *YES   | Repetition cron rule expression                                   | Cron expression                    | valid cron expression   |                 |
-| allowWhileIdle     |     NO   | Displays the notification, even when the device is low battery    | bool                               | true or false           | false           |
-| preciseSchedule    |   *YES   | List of precise notification fire dates                           | List<String> (YYYY-mm-dd HH:mi:ss) | UTC valid dates         |                 |
+| Attribute       	 | Required | Description                                                       | Type       | Value Limits          | Default value   |
+| ------------------ | -------- | ----------------------------------------------------------------- | ---------- | --------------------- | --------------- |
+| era,               |   *YES   | Schedule era condition                                            | Integer    | Positive unlimited    |                 |
+| year,              |   *YES   | Schedule year condition                                           | Integer    | Positive unlimited    |                 |
+| month,             |   *YES   | Schedule month condition                                          | Integer    | Positive unlimited    |                 |
+| day,               |   *YES   | Schedule day condition                                            | Integer    | Positive unlimited    |                 |
+| hour,              |   *YES   | Schedule hour condition                                           | Integer    | Positive unlimited    |                 |
+| minute,            |   *YES   | Schedule minute condition                                         | Integer    | Positive unlimited    |                 |
+| second,            |   *YES   | Schedule second condition                                         | Integer    | Positive unlimited    |                 |
+| millisecond,       |   *YES   | Schedule millisecond condition                                    | Integer    | Positive unlimited    |                 |
+| weekday,           |   *YES   | Schedule weekday condition                                        | Integer    | Positive unlimited    |                 |
+| weekOfMonth,       |   *YES   | Schedule weekOfMonth condition                                    | Integer    | Positive unlimited    |                 |
+| weekOfYear,        |   *YES   | Schedule weekOfYear condition                                     | Integer    | Positive unlimited    |                 |
+| allowWhileIdle     |     NO   | Displays the notification, even when the device is low battery    | bool       | true or false         | false           |
+| repeats            |     NO   | List of precise notification fire dates                           | bool       | true or false         | false           |
 
 <br>
 <br>
@@ -620,20 +638,12 @@ Material.DateUtils.dateOnly(DateTime.now());
 
 ##
 
-**Issue:** Undefined symbols for architecture arm64/armv7
-
-**Fix:** XCode, to reduce the debug build time, only compiles for the current target architecure. For some reason, when you try to build on release and profile mode without clean your project, XCode tries to reuse those base libraries and fails because of their lack of other architectures.
-
-Try to clean up your project in XCode (⇧ + ⌘ + K) and try to clean up your flutter project (flutter clean) to ensure that all debug files are not reusable in other enviroments.
-<br>
-
-##
-
-**Issue:** So, because myApp depends on both awesome_notifications and intl from sdk, version solving failed. pub get failed
+**Issue:** So, because myApp depends on both awesome_notifications and "OtherPackageName" from sdk, version solving failed. pub get failed
 
 **Fix:** The awesome_notifications plugin must be limited to all other last plugin versions in the stable bracket, to be the most compatible as possible to any flutter application in production stage.
-Because of it, this issue could happen if you are creating a application using another bracket, such as beta one.
-But you can manually upgrade those dependencies into your local files. Just change the pubspec.yaml inside your awesome_notifications local folder and you should be ready to go.
+Sometimes, one of our dependencies getting older and need to be updated.
+Please, open a issue with this error on our GitHub community, and we gonna update it as fast as possible.
+But, case necessary, you can manually upgrade those dependencies into your local files. Just change the pubspec.yaml inside your awesome_notifications local folder and you should be ready to go.
 
 To see an example of how to solve it, please go to https://github.com/rafaelsetragni/awesome_notifications/issues/49
 <br>
@@ -652,13 +662,4 @@ To see more information about each type, please go to https://github.com/rafaels
 
 **Issue:** Undefined symbol: OBJC_CLASS$_FlutterStandardTypedData / OBJC_CLASS$_FlutterError / OBJC_CLASS$_FlutterMethodChannel
 
-**Fix:** That happens because your ios folder was created on a older flutter version, and now it will not work on new one. You unfortunately need to do the following steps:
-
- * Update your Cocoa Pod installation with `sudo gem install cocoapods`
- * Update your Flutter directory with `flutter upgrade`
- * **Save every** personal modification inside your iOS folder and **delete it**.
- * Recreate the iOS folder using the command `flutter create .`
- * Clean your project with `flutter clean`
- * Redo all the previous personal modification that you made inside your old iOS folder. To help you with this plugin, please follow the steps in [iOS Extra Configuration's Readme topic](https://github.com/rafaelsetragni/awesome_notifications#ios-extra-configurations)
-
- Yes, is pretty bad. But that happens often while we are working with iOS products, because they are "Apple" and they do "Apple things". They constantly keep the effort to make the "non native developers" lives worst, every day.
+**Fix:** Please, remove the old target extensions and update your awesome_notification plugin to the last version available

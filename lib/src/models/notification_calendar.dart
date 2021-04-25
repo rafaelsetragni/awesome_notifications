@@ -35,9 +35,6 @@ class NotificationCalendar extends NotificationSchedule {
   /// Field number for get and set indicating the weeks of the year.
   int? weekOfYear;
 
-  /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
-  late bool repeats;
-
   NotificationCalendar({
     this.era,
     this.year,
@@ -50,10 +47,11 @@ class NotificationCalendar extends NotificationSchedule {
     this.weekday,
     this.weekOfMonth,
     this.weekOfYear,
-    this.repeats = false,
-  });
+    bool allowWhileIdle = false,
+    bool repeats = false,
+  }) : super(allowWhileIdle: allowWhileIdle, repeats: repeats);
 
-  NotificationCalendar.fromDate({required DateTime date, this.repeats = false}) {
+  NotificationCalendar.fromDate({required DateTime date, bool allowWhileIdle = false, bool repeats = false}) {
     this.year = date.year;
     this.month = date.month;
     this.day = date.day;
@@ -61,6 +59,8 @@ class NotificationCalendar extends NotificationSchedule {
     this.minute = date.minute;
     this.second = date.second;
     this.millisecond = date.millisecond;
+    this.allowWhileIdle = allowWhileIdle;
+    this.repeats = repeats;
   }
 
   @override
@@ -76,6 +76,7 @@ class NotificationCalendar extends NotificationSchedule {
     this.weekday = AssertUtils.extractValue(dataMap, 'weekday');
     this.weekOfMonth = AssertUtils.extractValue(dataMap, 'weekOfMonth');
     this.weekOfYear = AssertUtils.extractValue(dataMap, 'weekOfYear');
+    this.allowWhileIdle = AssertUtils.extractValue(dataMap, 'allowWhileIdle') ?? false;
     this.repeats = AssertUtils.extractValue(dataMap, 'repeats') ?? false;
 
     try{
@@ -102,6 +103,7 @@ class NotificationCalendar extends NotificationSchedule {
       'weekday': this.weekday,
       'weekOfMonth': this.weekOfMonth,
       'weekOfYear': this.weekOfYear,
+      'allowWhileIdle': this.allowWhileIdle,
       'repeats': this.repeats
     };
 
@@ -127,6 +129,20 @@ class NotificationCalendar extends NotificationSchedule {
         this.weekday != null ||
         this.weekOfMonth != null ||
         this.weekOfYear != null
+    );
+
+    assert(
+        (this.era ?? 0) >= 0 &&
+        (this.year ?? 0) >= 0 &&
+        (this.month ?? 0) >= 0 &&
+        (this.day ?? 0) >= 0 &&
+        (this.hour ?? 0) >= 0 &&
+        (this.minute ?? 0) >= 0 &&
+        (this.second ?? 0) >= 0 &&
+        (this.millisecond ?? 0) >= 0 &&
+        (this.weekday ?? 0) >= 0 &&
+        (this.weekOfMonth ?? 0) >= 0 &&
+        (this.weekOfYear ?? 0) >= 0
     );
   }
 }
