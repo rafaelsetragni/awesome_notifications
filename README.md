@@ -492,7 +492,7 @@ OBS 2: you should not implement any native code to use FCM with Awesome Notifica
 }
 ```
 
-Using that standard, is possible to create a notification just calling the method bellow:
+Using this pattern, you can create a notification just by calling the method below:
 
 ```dart
 AwesomeNotifications().createNotificationFromJsonData(yourReceivedMapData);
