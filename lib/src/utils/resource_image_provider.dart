@@ -21,9 +21,7 @@ class ResourceImage extends ImageProvider<ResourceImage> {
   /// Creates an object that decodes a [Uint8List] buffer as an image.
   ///
   /// The arguments must not be null.
-  const ResourceImage(this.drawablePath, {this.scale = 1.0})
-      : assert(drawablePath != null),
-        assert(scale != null);
+  const ResourceImage(this.drawablePath, {this.scale = 1.0});
 
   final String drawablePath;
 

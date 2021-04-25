@@ -777,7 +777,7 @@ Future<void> showBigTextNotificationWithActionAndReply(int id) async {
     MEDIA CONTROLLER NOTIFICATIONS
 ************************************************ */
 
-void updateNotificationMediaPlayer(int id, MediaModel mediaNow) {
+void updateNotificationMediaPlayer(int id, MediaModel? mediaNow) {
   if (mediaNow == null) {
     cancelNotification(id);
     return;
@@ -950,7 +950,7 @@ Future<void> listScheduledNotifications(BuildContext context) async {
       await AwesomeNotifications().listScheduledNotifications();
   for (PushNotification schedule in activeSchedules) {
     debugPrint(
-        'pending notification: [id: ${schedule.content.id}, title: ${schedule.content.titleWithoutHtml}, schedule: ${schedule.schedule.toString()}]');
+        'pending notification: [id: ${schedule.content!.id}, title: ${schedule.content!.titleWithoutHtml}, schedule: ${schedule.schedule.toString()}]');
   }
   return showDialog<void>(
     context: context,
@@ -1020,9 +1020,9 @@ Future<void> showNotificationAtScheduleCron(
         channelKey: 'scheduled',
         title: 'Just in time!',
         body: 'This notification was schedule to shows at ' +
-            Utils.DateUtils.parseDateToString(scheduleTime.toLocal()) +
+            (Utils.DateUtils.parseDateToString(scheduleTime.toLocal()) ?? '?') +
             '(' +
-            Utils.DateUtils.parseDateToString(scheduleTime.toUtc()) +
+            (Utils.DateUtils.parseDateToString(scheduleTime.toUtc()) ?? '?') +
             ' utc)',
         notificationLayout: NotificationLayout.BigPicture,
         bigPicture: 'asset://assets/images/delivery.jpeg',

@@ -235,25 +235,32 @@ class AwesomeNotifications {
     return false;
   }
 
-  Future<bool> createNotificationFromJsonData(Map<String, dynamic> mapData) {
-    if (mapData[PUSH_NOTIFICATION_CONTENT].runtimeType == String)
-      mapData[PUSH_NOTIFICATION_CONTENT] =
-          json.decode(mapData[PUSH_NOTIFICATION_CONTENT]);
+  Future<bool> createNotificationFromJsonData(Map<String, dynamic> mapData) async {
+    try{
 
-    if (mapData[PUSH_NOTIFICATION_SCHEDULE].runtimeType == String)
-      mapData[PUSH_NOTIFICATION_SCHEDULE] =
-          json.decode(mapData[PUSH_NOTIFICATION_SCHEDULE]);
+      if (mapData[PUSH_NOTIFICATION_CONTENT].runtimeType == String)
+        mapData[PUSH_NOTIFICATION_CONTENT] =
+            json.decode(mapData[PUSH_NOTIFICATION_CONTENT]);
 
-    if (mapData[PUSH_NOTIFICATION_BUTTONS].runtimeType == String)
-      mapData[PUSH_NOTIFICATION_BUTTONS] =
-          json.decode(mapData[PUSH_NOTIFICATION_BUTTONS]);
+      if (mapData[PUSH_NOTIFICATION_SCHEDULE].runtimeType == String)
+        mapData[PUSH_NOTIFICATION_SCHEDULE] =
+            json.decode(mapData[PUSH_NOTIFICATION_SCHEDULE]);
 
-    PushNotification pushNotification = PushNotification().fromMap(mapData);
+      if (mapData[PUSH_NOTIFICATION_BUTTONS].runtimeType == String)
+        mapData[PUSH_NOTIFICATION_BUTTONS] =
+            json.decode(mapData[PUSH_NOTIFICATION_BUTTONS]);
 
-    return createNotification(
-        content: pushNotification.content,
-        schedule: pushNotification.schedule,
-        actionButtons: pushNotification.actionButtons);
+      PushNotification? pushNotification = PushNotification().fromMap(mapData);
+      if(pushNotification == null) return false;
+
+      return createNotification(
+          content: pushNotification.content!,
+          schedule: pushNotification.schedule,
+          actionButtons: pushNotification.actionButtons);
+
+    } catch(e){
+      return false;
+    }
   }
 
   /// Check if the notifications are permitted
@@ -312,7 +319,7 @@ class AwesomeNotifications {
   }
 
   /// Get badge counter (on Android is 0 or 1)
-  Future<void> setGlobalBadgeCounter(int amount) async {
+  Future<void> setGlobalBadgeCounter(int? amount) async {
     if (amount == null) {
       return;
     }
@@ -337,8 +344,9 @@ class AwesomeNotifications {
 
   Future<DateTime> getNextDate(
     NotificationSchedule schedule, {
-    DateTime fixedDate = DateTime.now().toUtc(),
+    DateTime? fixedDate,
   }) async {
+    fixedDate ??= DateTime.now().toUtc();
     Map parameters = {
       NOTIFICATION_INITIAL_FIXED_DATE: DateUtils.parseDateToString(fixedDate),
       PUSH_NOTIFICATION_SCHEDULE: schedule.toMap()

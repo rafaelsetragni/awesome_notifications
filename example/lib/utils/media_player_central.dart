@@ -11,16 +11,6 @@ enum MediaLifeCycle {
 }
 
 class MediaPlayerCentral {
-  static final PlaybackTimer _timer =
-      PlaybackTimer(onDone: (Duration duration) {
-    if (hasNextMedia) {
-      nextMedia();
-    } else {
-      stop();
-    }
-  }, onData: (Duration duration) {
-    _mediaProgress.add(_timer.now);
-  });
 
   static final PlaybackTimer _timer = PlaybackTimer(
       onDone: (Duration duration){

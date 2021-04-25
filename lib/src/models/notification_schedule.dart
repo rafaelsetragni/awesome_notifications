@@ -6,7 +6,9 @@ import 'package:awesome_notifications/src/models/model.dart';
 /// [allowWhileIdle]: Determines if notification will send, even when the device is in critical situation, such as low battery.
 
 abstract class NotificationSchedule extends Model {
-  NotificationSchedule fromMap(Map<String, dynamic> dataMap);
+  NotificationSchedule();
+
+  NotificationSchedule? fromMap(Map<String, dynamic> dataMap);
 
   Map<String, dynamic> toMap();
 

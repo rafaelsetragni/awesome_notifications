@@ -71,11 +71,12 @@ class NotificationContent extends BaseNotificationContent {
             backgroundColor: backgroundColor);
 
   @override
-  fromMap(Map<String, dynamic> mapData) {
+  NotificationContent? fromMap(Map<String, dynamic> mapData) {
     super.fromMap(mapData);
 
     this.hideLargeIconOnExpand =
         AssertUtils.extractValue(mapData, 'hideLargeIconOnExpand');
+
     this.progress = AssertUtils.extractValue(mapData, 'progress');
     this.ticker = AssertUtils.extractValue(mapData, 'ticker');
     this.locked = AssertUtils.extractValue(mapData, 'locked');
@@ -100,6 +101,12 @@ class NotificationContent extends BaseNotificationContent {
 
     this.displayedDate =
         AssertUtils.extractValue<String>(mapData, 'displayedDate');
+
+    try{
+      validate();
+    } catch(e){
+      return null;
+    }
 
     return this;
   }

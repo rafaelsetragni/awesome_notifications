@@ -22,5 +22,5 @@ public abstract class NotificationScheduleModel extends Model {
     public Boolean repeats;
     public Boolean allowWhileIdle;
 
-    public abstract Calendar getNextValidDate();
+    public abstract Calendar getNextValidDate(Date fixedNowDate);
 }

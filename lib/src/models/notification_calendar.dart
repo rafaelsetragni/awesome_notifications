@@ -3,40 +3,40 @@ import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
 class NotificationCalendar extends NotificationSchedule {
   /// Field number for get and set indicating the era, e.g., AD or BC in the Julian calendar
-  int era;
+  int? era;
 
   /// Field number for get and set indicating the year.
-  int year;
+  int? year;
 
   /// Field number for get and set indicating the month.
-  int month;
+  int? month;
 
   /// Field number for get and set indicating the day number within the current year (1-12).
-  int day;
+  int? day;
 
   /// Field number for get and set indicating the hour of the day (0-23).
-  int hour;
+  int? hour;
 
   /// Field number for get and set indicating the minute within the hour (0-59).
-  int minute;
+  int? minute;
 
   /// Field number for get and set indicating the second within the minute (0-59).
-  int second;
+  int? second;
 
   /// Field number for get and set indicating the millisecond within the second.
-  int millisecond;
+  int? millisecond;
 
   /// Field number for get and set indicating the day of the week.
-  int weekday;
+  int? weekday;
 
   /// Field number for get and set indicating the count of weeks of the month.
-  int weekOfMonth;
+  int? weekOfMonth;
 
   /// Field number for get and set indicating the weeks of the year.
-  int weekOfYear;
+  int? weekOfYear;
 
   /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
-  bool repeats;
+  late bool repeats;
 
   NotificationCalendar({
     this.era,
@@ -53,17 +53,18 @@ class NotificationCalendar extends NotificationSchedule {
     this.repeats = false,
   });
 
-  NotificationCalendar.fromDate({DateTime date, this.repeats = false}) {
+  NotificationCalendar.fromDate({required DateTime date, this.repeats = false}) {
     this.year = date.year;
     this.month = date.month;
     this.day = date.day;
+    this.hour = date.hour;
     this.minute = date.minute;
     this.second = date.second;
     this.millisecond = date.millisecond;
   }
 
   @override
-  NotificationSchedule fromMap(Map<String, dynamic> dataMap) {
+  NotificationCalendar? fromMap(Map<String, dynamic> dataMap) {
     this.era = AssertUtils.extractValue(dataMap, 'era');
     this.year = AssertUtils.extractValue(dataMap, 'year');
     this.month = AssertUtils.extractValue(dataMap, 'month');
@@ -75,7 +76,14 @@ class NotificationCalendar extends NotificationSchedule {
     this.weekday = AssertUtils.extractValue(dataMap, 'weekday');
     this.weekOfMonth = AssertUtils.extractValue(dataMap, 'weekOfMonth');
     this.weekOfYear = AssertUtils.extractValue(dataMap, 'weekOfYear');
-    this.repeats = AssertUtils.extractValue(dataMap, 'repeats');
+    this.repeats = AssertUtils.extractValue(dataMap, 'repeats') ?? false;
+
+    try{
+      validate();
+    }
+    catch(e){
+      return null;
+    }
 
     return this;
   }
@@ -106,5 +114,19 @@ class NotificationCalendar extends NotificationSchedule {
   }
 
   @override
-  void validate() {}
+  void validate() {
+    assert(
+        this.era != null ||
+        this.year != null ||
+        this.month != null ||
+        this.day != null ||
+        this.hour != null ||
+        this.minute != null ||
+        this.second != null ||
+        this.millisecond != null ||
+        this.weekday != null ||
+        this.weekOfMonth != null ||
+        this.weekOfYear != null
+    );
+  }
 }

@@ -16,7 +16,9 @@ class FirebaseTestPage extends StatefulWidget {
 
   FirebaseTestPage(this.firebaseAppToken);
 
-  final FirebaseDataSource firebaseDataSource = FirebaseDataSource();
+  final FirebaseDataSource firebaseDataSource = FirebaseDataSource(
+    serverSecret: ''
+  );
 
   @override
   _FirebaseTestPageState createState() => _FirebaseTestPageState();
@@ -24,14 +26,14 @@ class FirebaseTestPage extends StatefulWidget {
 
 class _FirebaseTestPageState extends State<FirebaseTestPage> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _serverKeyTextController;
+  late TextEditingController _serverKeyTextController;
 
   @override
   void initState() {
     super.initState();
   }
 
-  String serverKeyValidation(value) {
+  String? serverKeyValidation(value) {
     if (value.isEmpty) {
       return 'The FCM server key is required';
     }
@@ -65,9 +67,8 @@ class _FirebaseTestPageState extends State<FirebaseTestPage> {
                 valueColor: AlwaysStoppedAnimation<Color>(App.mainColor),
               ));
             } else {
-              String lastServerKey = snapshot.data;
-              _serverKeyTextController =
-                  TextEditingController(text: lastServerKey);
+              String lastServerKey = snapshot.data ?? '';
+              _serverKeyTextController = TextEditingController(text: lastServerKey);
               return ListView(
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                   children: <Widget>[
@@ -128,7 +129,7 @@ class _FirebaseTestPageState extends State<FirebaseTestPage> {
                         prefs.setString(
                             widget.sharedLastKeyReference, fcmServerKey);
 
-                        if (_formKey.currentState.validate()) {
+                        if (_formKey.currentState?.validate() ?? false) {
                           FocusScopeNode currentFocus = FocusScope.of(context);
                           if (!currentFocus.hasPrimaryFocus) {
                             currentFocus.unfocus();

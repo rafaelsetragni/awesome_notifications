@@ -19,6 +19,7 @@ import io.flutter.Log;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -532,7 +533,7 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
             @SuppressWarnings("unchecked")
             Map<String, Object> scheduleData = (Map<String, Object>) data.get(Definitions.PUSH_NOTIFICATION_SCHEDULE);
-            String fixedDate = (String) data.get(Definitions.NOTIFICATION_INITIAL_FIXED_DATE);
+            String fixedDateString = (String) data.get(Definitions.NOTIFICATION_INITIAL_FIXED_DATE);
 
             NotificationScheduleModel scheduleModel;
             if(scheduleData.containsKey(Definitions.NOTIFICATION_SCHEDULE_INTERVAL)){
@@ -544,29 +545,22 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
 
             if(scheduleModel != null) {
 
-                Calendar nextValidDate = scheduleModel.getNextValidDate();
+                Date fixedDate = null;
 
-                /*
+                if (!StringUtils.isNullOrEmpty(fixedDateString))
+                    fixedDate = DateUtils.parseDate(fixedDateString);
 
-                if(!StringUtils.isNullOrEmpty(fixedDate)){
-                    CronUtils.fixedNowDate = DateUtils.parseDate(fixedDate);
-                }
+                Calendar nextValidDate = scheduleModel.getNextValidDate(fixedDate);
 
-                Calendar nextValidDate = CronUtils.getNextCalendar(
-                        scheduleModel.initialDateTime,
-                        scheduleModel.crontabSchedule
-                );
+                String finalValidDateString = null;
+                if(nextValidDate != null)
+                    finalValidDateString = DateUtils.dateToString(nextValidDate.getTime());
 
-                CronUtils.fixedNowDate = null;'
-                */
-
-                String convertedDate = DateUtils.dateToString(nextValidDate.getTime());
-                result.success(convertedDate);
+                result.success(finalValidDateString);
                 return;
             }
 
         } catch (Exception e){
-            CronUtils.fixedNowDate = null;
             e.printStackTrace();
             result.error("Invalid schedule data", e.getMessage(), e);
             return;

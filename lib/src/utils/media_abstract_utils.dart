@@ -25,13 +25,13 @@ abstract class MediaUtils {
 
   String cleanMediaPath(String mediaPath) {
     if (RegExp(r'^file:\/\/').hasMatch(mediaPath)) {
-      return mediaPath.replaceAll('file:\/', '');
+      return mediaPath.replaceAll(RegExp(r'file:\/'), '');
     }
     if (RegExp(r'^asset:\/\/').hasMatch(mediaPath)) {
-      return mediaPath.replaceAll('asset:\/\/', '');
+      return mediaPath.replaceAll(RegExp(r'asset:\/\/'), '');
     }
     if (RegExp(r'^resource:\/\/').hasMatch(mediaPath)) {
-      return mediaPath.replaceAll('resource:\/\/', '');
+      return mediaPath.replaceAll(RegExp(r'resource:\/\/'), '');
     }
     return mediaPath;
   }

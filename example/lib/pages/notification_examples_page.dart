@@ -84,13 +84,13 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             onChanged: (newValue) => amount = newValue,
           ),
           actions: [
-            FlatButton(
+            TextButton(
               child: Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop(null);
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text("OK"),
               onPressed: () {
                 Navigator.of(context).pop(amount);
@@ -173,12 +173,23 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
+        backgroundColor: Color(0xfffbfbfb),
         title: Text('Get Notified!',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
-        content: Text(
-          'Allow Awesome Notifications to send you beautiful notifications!',
-          textAlign: TextAlign.center,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/images/animated-bell.gif',
+              height: 200,
+              fit: BoxFit.fitWidth,
+            ),
+            Text(
+              'Allow Awesome Notifications to send you beautiful notifications!',
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
         actions: [
           TextButton(
@@ -323,7 +334,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
     String firebaseAppToken = await messaging.getToken(
       vapidKey:
           "BJOuTV9YiYVr5FPXQA4Hu1SJ7qC-q4tSIYLnbNHW4xpxqBRu6JXMtay0xzNUxkW_aApBBmOmASg-ClTkqAE53rk",
-    );
+    ) ?? '';
 
     if (!mounted) {
       _firebaseAppToken = firebaseAppToken;
@@ -350,9 +361,9 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
   
   @override
   Widget build(BuildContext context) {
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
+    //FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
 
-    mediaQuery = MediaQuery.of(context);
+    MediaQueryData mediaQuery = MediaQuery.of(context);
     ThemeData themeData = Theme.of(context);
 
     return Scaffold(
@@ -423,24 +434,6 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
                 '* iOS: notifications are not enabled by default and you must explicitly request it to the user.'),
             SimpleButton('Request permission',
                 onPressed: () => requestUserPermission(notificationsAllowed)),
-
-            /* ******************************************************************** */
-
-            TextDivisor(title: 'Get Next Schedule Date'),
-            TextNote('A simple and fast notification to fresh start.\n\n'
-                'Tap on notification when it appears on your system tray to go to Details page.'),
-            SimpleButton('Get Next Date', onPressed: () async {
-              DateTime referenceDate =
-                  DateUtils.parseStringToDate('2021-01-12 20:00:00')!;
-              DateTime expectedDate =
-                  DateUtils.parseStringToDate('2021-01-12 21:00:00')!;
-              NotificationSchedule schedule =
-                  NotificationSchedule(initialDateTime: expectedDate);
-
-              DateTime result = await AwesomeNotifications()
-                  .getNextDate(schedule, fixedDate: referenceDate);
-              debugPrint(DateUtils.parseDateToString(result));
-            }),
 
             /* ******************************************************************** */
 
@@ -772,6 +765,24 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
             /* ******************************************************************** */
 
+            TextDivisor(title: 'Get Next Schedule Date'),
+            TextNote('A simple and fast notification to fresh start.\n\n'
+                'Tap on notification when it appears on your system tray to go to Details page.'),
+            SimpleButton('Get Next Date', onPressed: () async {
+              DateTime referenceDate =
+              DateUtils.parseStringToDate('2021-01-12 20:00:00')!;
+              DateTime expectedDate =
+              DateUtils.parseStringToDate('2021-01-12 21:00:00')!;
+              NotificationSchedule schedule =
+              NotificationCalendar.fromDate(date: expectedDate);
+
+              DateTime result = await AwesomeNotifications()
+                  .getNextDate(schedule, fixedDate: referenceDate);
+              debugPrint(DateUtils.parseDateToString(result));
+            }),
+
+            /* ******************************************************************** */
+
             TextDivisor(title: 'Media Player'),
             TextNote(
                 'The media player its just emulated and was built to help me to check if the notification media control contemplates the dev demands, such as sync state, etc.'
@@ -812,7 +823,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
                 onPressed: () => cancelNotification(10)),
 
             /* ******************************************************************** */
-
+            /*
             TextDivisor(title: 'Messaging Notifications'),
             SimpleButton('Show Messaging notification\n(Work in progress)',
                 onPressed: null // showMessagingNotification(11)
@@ -821,7 +832,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: () => cancelNotification(11)),
-
+            */
             /* ******************************************************************** */
 
             TextDivisor(title: 'Grouped Notifications'),

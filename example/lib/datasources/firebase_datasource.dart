@@ -1,8 +1,8 @@
-// import 'dart:async';
-// import 'dart:convert';
-// import 'package:http/http.dart' show Response;
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' show Response;
 
-// import 'common/http_datasource.dart';
+import 'common/http_datasource.dart';
 
 class FirebaseDataSource extends HttpDataSource {
   /// ************************************************************************************
@@ -11,15 +11,18 @@ class FirebaseDataSource extends HttpDataSource {
   ///
   /// ************************************************************************************
   ///
-  static FirebaseDataSource _instance;
-  factory FirebaseDataSource({String serverSecret}) {
+  static FirebaseDataSource? _instance;
+  factory FirebaseDataSource({required String serverSecret}) {
     _instance ??= FirebaseDataSource._internalConstructor();
-    return _instance;
+    return _instance!;
   }
 
   FirebaseDataSource._internalConstructor()
-      : super('fcm.googleapis.com',
-            isUsingHttps: true, isCertificateHttps: false);
+      : super(
+        baseAPI:'fcm.googleapis.com',
+        isUsingHttps: true,
+        isCertificateHttps: false
+      );
   
 //   /// ************************************************************************************
 //   ///
@@ -28,12 +31,12 @@ class FirebaseDataSource extends HttpDataSource {
 //   /// ************************************************************************************
 
   Future<String> _pushNotification(
-      {String firebaseServerKey, Map<String, dynamic> body = const {}}) async {
-    if ((firebaseServerKey ?? '').isEmpty) {
+      {required String firebaseServerKey, Map<String, dynamic> body = const {}}) async {
+    if (firebaseServerKey.isEmpty) {
       return 'Server Key not defined';
     }
 
-    Response response = await fetchData(
+    Response? response = await fetchData(
         directory: '/fcm/send',
         headers: {
           'Authorization': 'key=$firebaseServerKey',
@@ -41,26 +44,27 @@ class FirebaseDataSource extends HttpDataSource {
         },
         body: jsonEncode(body));
 
-    if (response.statusCode == 200) {
-      return response.bodyBytes.toString();
+    if (response?.statusCode == 200) {
+      return response!.bodyBytes.toString();
     }
 
-//     return '';
+    return '';
   }
 
-  Future<String> pushBasicNotification(
-      {String firebaseServerKey,
-      String firebaseAppToken,
-      int notificationId,
-      String title,
-      String body,
-      Map<String, String> payload = const {}}) async {
+  Future<String> pushBasicNotification({
+    required String firebaseServerKey,
+    required String firebaseAppToken,
+    required int notificationId,
+    required String title,
+    required String body,
+    Map<String, String> payload = const {}
+  }) async {
     return await _pushNotification(
         firebaseServerKey: firebaseServerKey,
         body: getFirebaseExampleContent(firebaseAppToken: firebaseAppToken));
   }
 
-  Map<String, dynamic> getFirebaseExampleContent({String firebaseAppToken}) {
+  Map<String, dynamic> getFirebaseExampleContent({required String firebaseAppToken}) {
     return {
       'collapse_key': 'type_a',
       'to': firebaseAppToken,

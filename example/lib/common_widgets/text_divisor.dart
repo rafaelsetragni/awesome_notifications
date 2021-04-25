@@ -11,7 +11,7 @@ class TextDivisor extends StatelessWidget {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     return Padding(
         padding: EdgeInsets.only(top: 20, bottom: 20),
-        child: title != null && title.isNotEmpty ?
+        child: title.isNotEmpty ?
         Row(
             children: <Widget>[
               Expanded(

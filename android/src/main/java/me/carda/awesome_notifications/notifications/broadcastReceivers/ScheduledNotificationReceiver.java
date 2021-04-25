@@ -41,10 +41,16 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
                     pushNotification
                 );
 
-                NotificationScheduler.schedule(
-                    context,
-                    pushNotification
-                );
+                if(pushNotification.schedule.repeats)
+                    NotificationScheduler.schedule(
+                        context,
+                        pushNotification
+                    );
+                else
+                    NotificationScheduler.cancelScheduleNotification(
+                        context,
+                        pushNotification.content.id
+                    );
 
             } catch (Exception e) {
                 e.printStackTrace();

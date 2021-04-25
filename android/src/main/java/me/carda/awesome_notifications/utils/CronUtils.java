@@ -8,15 +8,14 @@ import me.carda.awesome_notifications.externalLibs.CronExpression;
 
 public final class CronUtils {
 
-    public static Date fixedNowDate;
-
     public static String validDateFormat = "yyyy-MM-dd HH:mm:ss";
 
     /// https://www.baeldung.com/cron-expressions
     /// <second> <minute> <hour> <day-of-month> <month> <day-of-week> <year>
     public static Calendar getNextCalendar(
         String initialDateTime,
-        String crontabRule
+        String crontabRule,
+        Date fixedNowDate
     ){
 
         if(StringUtils.isNullOrEmpty(initialDateTime) && StringUtils.isNullOrEmpty(crontabRule))

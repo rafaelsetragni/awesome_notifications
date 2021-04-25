@@ -23,17 +23,18 @@ class SimpleButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 5),
         child: ElevatedButton(
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
             child: Text(label, textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 14
+                  fontSize: 14,
+                  color: labelColor ?? Colors.black87
               ),
             ),
           ),
           style: ElevatedButton.styleFrom(
-            primary: backgroundColor,
+            primary: backgroundColor ?? Colors.grey.shade200,
             textStyle: TextStyle(
-              color: labelColor
+              color: labelColor ?? Colors.black87
             )
           ),
           onPressed: onPressed

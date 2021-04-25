@@ -106,7 +106,7 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                     pushNotification.content.createdLifeCycle = appLifeCycle;
 
                 if(pushNotification.schedule != null)
-                    nextValidDate = pushNotification.schedule.getNextValidDate();
+                    nextValidDate = pushNotification.schedule.getNextValidDate(null);
 
                 /*
                 nextValidDate = CronUtils.getNextCalendar(

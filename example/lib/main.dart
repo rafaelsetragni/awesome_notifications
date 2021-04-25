@@ -243,7 +243,6 @@ class _AppState extends State<App> {
 
         primaryColor: App.mainColor,
         accentColor: Colors.blueGrey,
-        primarySwatch: Colors.blueGrey,
         canvasColor: Colors.white,
         focusColor: Colors.blueAccent,
         disabledColor: Colors.grey,

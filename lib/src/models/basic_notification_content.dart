@@ -39,7 +39,7 @@ class BaseNotificationContent extends Model {
       this.customSound});
 
   @override
-  fromMap(Map<String, dynamic> mapData) {
+  BaseNotificationContent? fromMap(Map<String, dynamic> mapData) {
     this.id = AssertUtils.extractValue<int>(mapData, 'id');
     this.channelKey = AssertUtils.extractValue<String>(mapData, 'channelKey');
     this.title = AssertUtils.extractValue<String>(mapData, 'title');
@@ -55,10 +55,10 @@ class BaseNotificationContent extends Model {
     this.privacy = AssertUtils.extractEnum<NotificationPrivacy>(
         mapData, 'privacy', NotificationPrivacy.values);
 
-    int colorValue = AssertUtils.extractValue<int>(mapData, 'color');
+    int? colorValue = AssertUtils.extractValue<int>(mapData, 'color');
     this.color = colorValue == null ? null : Color(colorValue);
 
-    int backgroundColorValue =
+    int? backgroundColorValue =
         AssertUtils.extractValue<int>(mapData, 'backgroundColor');
     this.backgroundColor =
         backgroundColorValue == null ? null : Color(backgroundColorValue);
@@ -87,17 +87,29 @@ class BaseNotificationContent extends Model {
     };
   }
 
-  ImageProvider get bigPictureImage {
+  ImageProvider? get bigPictureImage {
+    if(bigPicture?.isEmpty ?? true) return null;
     return BitmapUtils().getFromMediaPath(bigPicture!);
   }
 
-  ImageProvider get largeIconImage {
+  ImageProvider? get largeIconImage {
+    if(largeIcon?.isEmpty ?? true) return null;
     return BitmapUtils().getFromMediaPath(largeIcon!);
   }
 
-  String get titleWithoutHtml => HtmlUtils.removeAllHtmlTags(title)!;
+  String? get bigPicturePath {
+    if(bigPicture?.isEmpty ?? true) return null;
+    return BitmapUtils().cleanMediaPath(bigPicture!);
+  }
 
-  String get bodyWithoutHtml => HtmlUtils.removeAllHtmlTags(body)!;
+  String? get largeIconPath {
+    if(largeIcon?.isEmpty ?? true) return null;
+    return BitmapUtils().cleanMediaPath(largeIcon!);
+  }
+
+  String? get titleWithoutHtml => HtmlUtils.removeAllHtmlTags(title)!;
+
+  String? get bodyWithoutHtml => HtmlUtils.removeAllHtmlTags(body)!;
 
   @override
   void validate() {

@@ -34,9 +34,9 @@ class AssertUtils {
     return returnList;
   }
 
-  static extractValue<T>(Map dataMap, String reference) {
-    T defaultValue = _getDefaultValue(reference, T);
-    dynamic value = dataMap[reference];
+  static dynamic? extractValue<T>(Map dataMap, String reference) {
+    T? defaultValue = _getDefaultValue(reference, T);
+    dynamic? value = dataMap[reference];
 
     if (value == null || !(value is T)) return defaultValue;
 
@@ -44,7 +44,7 @@ class AssertUtils {
   }
 
   static extractMap<T, C>(Map dataMap, String reference) {
-    Map defaultValue = _getDefaultValue(reference, Map);
+    Map? defaultValue = _getDefaultValue(reference, Map);
     if (defaultValue != null && !(defaultValue is Map)) return defaultValue;
 
     dynamic value = dataMap[reference];
@@ -58,8 +58,8 @@ class AssertUtils {
     }
   }
 
-  static extractEnum<T>(Map dataMap, String reference, List<T> values) {
-    T defaultValue = _getDefaultValue(reference, T);
+  static T? extractEnum<T>(Map dataMap, String reference, List<T> values) {
+    T? defaultValue = _getDefaultValue(reference, T);
     dynamic value = dataMap[reference];
 
     if (value == null || !(value is String)) return defaultValue;
@@ -71,7 +71,7 @@ class AssertUtils {
     return values.firstWhere((e) {
       return AssertUtils.toSimpleEnumString(e)!.toLowerCase() ==
           castedValue.toLowerCase();
-    }, orElse: () => defaultValue);
+    }, orElse: () => defaultValue ?? values.first);
   }
 
   static getValueOrDefault(String reference, dynamic value, Type T) {
@@ -95,13 +95,14 @@ class AssertUtils {
     return _getDefaultValue(reference, T);
   }
 
-  static _getDefaultValue(String reference, Type T) {
-    dynamic defaultValue = Definitions.initialValues[reference];
-    if (defaultValue == null || defaultValue.runtimeType != T) return null;
+  static dynamic? _getDefaultValue(String reference, Type T) {
+    dynamic? defaultValue = Definitions.initialValues[reference];
+    if (defaultValue == null || defaultValue.runtimeType != T)
+      return null;
     return defaultValue;
   }
 
-  static fromListMap<T extends Model>(Object? mapData, Function newModel) {
+  static List<T>? fromListMap<T extends Model>(Object? mapData, Function newModel) {
     if (mapData == null || mapData is List<Map<String, dynamic>>) return null;
 
     List<Map<String, dynamic>> listMapData = List.from(mapData as List);

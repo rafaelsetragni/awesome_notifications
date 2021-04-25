@@ -141,17 +141,17 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
     }
 
     @Override
-    public Calendar getNextValidDate() {
+    public Calendar getNextValidDate(Date fixedNowDate) {
         String cronExpression =
-                (second == null ? "*" : second.toString()) +
-                (minute == null ? "*" : minute.toString()) +
-                (hour == null ? "*" : hour.toString()) +
-                (weekday != null ? "?" : (day == null ? "*" : day.toString())) +
-                (month == null ? "*" : month.toString()) +
-                (weekday == null ? "?" : weekday.toString()) +
+                (second == null ? "*" : second.toString()) + " " +
+                (minute == null ? "*" : minute.toString()) + " " +
+                (hour == null ? "*" : hour.toString()) + " " +
+                (weekday != null ? "?" : (day == null ? "*" : day.toString())) + " " +
+                (month == null ? "*" : month.toString()) + " " +
+                (weekday == null ? "?" : weekday.toString()) + " " +
                 (year == null ? "*" : year.toString());
 
-        return CronUtils.getNextCalendar(null, cronExpression );
+        return CronUtils.getNextCalendar(null, cronExpression, fixedNowDate );
     }
 }
 

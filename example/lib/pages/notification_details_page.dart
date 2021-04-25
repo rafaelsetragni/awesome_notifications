@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide DateUtils;
-import 'package:flutter/material.dart' as Material show DateUtils;
+//import 'package:flutter/material.dart' as Material show DateUtils;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -30,14 +30,13 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
     super.initState();
 
     displayedDate = DateUtils.parseDateToString(
-        DateUtils.utcToLocal(DateUtils.parseStringToDate(
-            widget.receivedNotification.displayedDate)),
+        DateUtils.utcToLocal(DateUtils.parseStringToDate(widget.receivedNotification.displayedDate)!),
         format: 'dd/MM/yyyy HH:mm');
   }
 
   @override
   void deactivate() {
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
+    //FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
     super.deactivate();
   }
 
@@ -115,19 +114,14 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                         padding: const EdgeInsets.only(
                                             bottom:
                                                 2.0), // 2 pixels to avoid render error on ShaderMask while the users are sliding the page
-                                        child: FadeInImage.assetNetwork(
-                                          placeholder:
-                                              'assets/images/placeholder.gif',
-                                          // thumbnail: AssetImage(
-                                          //     'assets/images/placeholder.gif'),
-                                          image: widget
-                                              .receivedNotification.bigPicture!,
+                                        child: FadeInImage(
+                                          placeholder: AssetImage('assets/images/placeholder.gif'),
+                                          image: widget.receivedNotification.bigPictureImage!,
                                           width: mediaQueryData.size.width,
                                           height: maxSize * 0.4 +
-                                              mediaQueryData.padding.top -
-                                              2,
+                                                 mediaQueryData.padding.top - 2,
                                           fit: BoxFit.cover,
-                                        ),
+                                        )
                                       ))),
                         ],
                       ),
@@ -146,17 +140,15 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                     radius: maxSize * 0.075,
                                     backgroundColor: Colors.white,
                                     child: ClipOval(
-                                      child: FadeInImage.assetNetwork(
-                                        placeholder:
-                                            'assets/images/placeholder.gif',
-                                        image: widget
-                                            .receivedNotification.largeIcon!,
+                                      child: FadeInImage(
+                                        placeholder: AssetImage('assets/images/placeholder.gif'),
+                                        image: widget.receivedNotification.largeIconImage!,
                                         width: maxSize * 0.08 * 2,
                                         height: maxSize * 0.08 * 2,
                                         fit: BoxFit.cover,
                                       ),
                                     ) //widget.receivedNotification.largeIcon.image,
-                                    ),
+                                  ),
                               )),
                       Container(
                         width: mediaQueryData.size.width,
@@ -170,18 +162,15 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                         child: RichText(
                             text: TextSpan(children: [
                           TextSpan(
-                              text: widget
-                                      .receivedNotification?.titleWithoutHtml ??
-                                  ((widget.receivedNotification?.body
-                                              ?.isEmpty ??
-                                          true)
-                                      ? ''
-                                      : widget.receivedNotification
-                                          .bodyWithoutHtml),
+                              text: widget.receivedNotification.titleWithoutHtml ??
+                                  (
+                                      (widget.receivedNotification.body?.isEmpty ?? true) ?
+                                      '' : widget.receivedNotification .bodyWithoutHtml
+                                  ),
                               style:
                                   TextStyle(
                                       fontSize: (widget.receivedNotification
-                                                  ?.title?.isEmpty ??
+                                                  .title?.isEmpty ??
                                               true)
                                           ? 22
                                           : 32,
@@ -197,16 +186,16 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                       )
                     ],
                   ),
-                  (widget.receivedNotification?.title?.isEmpty ?? true)
+                  (widget.receivedNotification.title?.isEmpty ?? true)
                       ? SizedBox.shrink()
-                      : (widget.receivedNotification?.body?.isEmpty ?? true)
+                      : (widget.receivedNotification.body?.isEmpty ?? true)
                           ? SizedBox.shrink()
                           : Container(
                               width: mediaQueryData.size.width,
                               padding: EdgeInsets.only(
                                   top: 10, left: 20, right: 20, bottom: 25),
                               child: Text(
-                                  widget.receivedNotification.bodyWithoutHtml,
+                                  widget.receivedNotification.bodyWithoutHtml ?? '',
                                   style: themeData.textTheme.bodyText2)),
                 ],
               ),

@@ -55,14 +55,22 @@ public class NotificationIntervalModel extends NotificationScheduleModel {
     }
 
     @Override
-    public Calendar getNextValidDate() {
-        Date currentDate = DateUtils.getUTCDateTime();
+    public Calendar getNextValidDate(Date fixedNowDate) {
+        Date currentDate;
+
+        if(fixedNowDate == null)
+            currentDate = DateUtils.getUTCDateTime();
+        else
+            currentDate = fixedNowDate;
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
         calendar.add(Calendar.SECOND, interval);
 
-        return calendar;
+        if(currentDate.compareTo(calendar.getTime()) <= 0)
+            return calendar;
+
+        return null;
     }
 
 }

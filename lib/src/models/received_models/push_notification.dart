@@ -23,9 +23,10 @@ class PushNotification extends Model {
       Map<String, dynamic> contentData =
           Map<String, dynamic>.from(mapData[PUSH_NOTIFICATION_CONTENT]);
 
-      content =
-          NotificationContent().fromMap(contentData) as NotificationContent;
-      content!.validate();
+      this.content = NotificationContent().fromMap(contentData);
+      if(content == null) return null;
+
+      this.content!.validate();
 
       if (mapData.containsKey(PUSH_NOTIFICATION_SCHEDULE)) {
         Map<String, dynamic> scheduleData =

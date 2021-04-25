@@ -9,15 +9,17 @@ class NotificationInterval extends NotificationSchedule {
   bool repeats;
 
   NotificationInterval({
-    this.interval,
-    this.repeats,
+    this.interval = 0,
+    this.repeats = false,
   });
 
   @override
-  NotificationSchedule fromMap(Map<String, dynamic> dataMap) {
-    this.interval = AssertUtils.extractValue(dataMap, 'interval');
-    this.repeats = AssertUtils.extractValue(dataMap, 'repeats');
+  NotificationInterval? fromMap(Map<String, dynamic> dataMap){
+    int? interval = AssertUtils.extractValue(dataMap, 'interval')!;
+    this.repeats = AssertUtils.extractValue(dataMap, 'repeats') ?? false;
 
+    if (interval != null)
+      return null;
     return this;
   }
 
