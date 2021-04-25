@@ -24,7 +24,7 @@ class PushNotification extends Model {
           Map<String, dynamic>.from(mapData[PUSH_NOTIFICATION_CONTENT]);
 
       this.content = NotificationContent().fromMap(contentData);
-      if(content == null) return null;
+      if (content == null) return null;
 
       this.content!.validate();
 

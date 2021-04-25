@@ -27,8 +27,8 @@ class NotificationContent extends BaseNotificationContent {
 
   bool? locked;
 
-  NotificationContent({
-      int? id,
+  NotificationContent(
+      {int? id,
       String? channelKey,
       String? title,
       String? body,
@@ -102,9 +102,9 @@ class NotificationContent extends BaseNotificationContent {
     this.displayedDate =
         AssertUtils.extractValue<String>(mapData, 'displayedDate');
 
-    try{
+    try {
       validate();
-    } catch(e){
+    } catch (e) {
       return null;
     }
 

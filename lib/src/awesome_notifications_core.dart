@@ -140,7 +140,8 @@ class AwesomeNotifications {
     String? defaultIconPath;
     if (!AssertUtils.isNullOrEmptyOrInvalid<String>(defaultIcon, String)) {
       // To set a icon on top of notification, is mandatory to user a native resource
-      assert(BitmapUtils().getMediaSource(defaultIcon!) == MediaSource.Resource);
+      assert(
+          BitmapUtils().getMediaSource(defaultIcon!) == MediaSource.Resource);
       defaultIconPath = defaultIcon;
     }
 
@@ -235,9 +236,9 @@ class AwesomeNotifications {
     return false;
   }
 
-  Future<bool> createNotificationFromJsonData(Map<String, dynamic> mapData) async {
-    try{
-
+  Future<bool> createNotificationFromJsonData(
+      Map<String, dynamic> mapData) async {
+    try {
       if (mapData[PUSH_NOTIFICATION_CONTENT].runtimeType == String)
         mapData[PUSH_NOTIFICATION_CONTENT] =
             json.decode(mapData[PUSH_NOTIFICATION_CONTENT]);
@@ -252,7 +253,7 @@ class AwesomeNotifications {
 
       // Invalid Notification
       PushNotification? pushNotification = PushNotification().fromMap(mapData);
-      if(pushNotification == null) {
+      if (pushNotification == null) {
         throw Exception('Notification map data is invalid');
       }
 
@@ -260,8 +261,7 @@ class AwesomeNotifications {
           content: pushNotification.content!,
           schedule: pushNotification.schedule,
           actionButtons: pushNotification.actionButtons);
-
-    } catch(e){
+    } catch (e) {
       return false;
     }
   }

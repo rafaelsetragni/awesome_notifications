@@ -38,10 +38,9 @@ class NotificationActionButton extends Model {
     label = AssertUtils.extractValue(dataMap, 'label');
     enabled = AssertUtils.extractValue(dataMap, 'enabled');
     autoCancel = AssertUtils.extractValue(dataMap, 'autoCancel');
-    buttonType =
-        AssertUtils.extractEnum(dataMap, 'buttonType', ActionButtonType.values) ??
-            ActionButtonType.Default;
-
+    buttonType = AssertUtils.extractEnum(
+            dataMap, 'buttonType', ActionButtonType.values) ??
+        ActionButtonType.Default;
 
     return this;
   }

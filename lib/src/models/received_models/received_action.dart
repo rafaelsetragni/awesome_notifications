@@ -26,8 +26,10 @@ class ReceivedAction extends ReceivedNotification {
     actionDate = AssertUtils.extractValue<String>(dataMap, 'actionDate');
     dismissedDate = AssertUtils.extractValue<String>(dataMap, 'dismissedDate');
 
-    buttonKeyPressed = AssertUtils.extractValue<String>(dataMap, 'actionKey') ?? '';
-    buttonKeyInput = AssertUtils.extractValue<String>(dataMap, 'actionInput') ?? '';
+    buttonKeyPressed =
+        AssertUtils.extractValue<String>(dataMap, 'actionKey') ?? '';
+    buttonKeyInput =
+        AssertUtils.extractValue<String>(dataMap, 'actionInput') ?? '';
 
     return this;
   }

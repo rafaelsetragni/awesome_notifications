@@ -51,7 +51,10 @@ class NotificationCalendar extends NotificationSchedule {
     bool repeats = false,
   }) : super(allowWhileIdle: allowWhileIdle, repeats: repeats);
 
-  NotificationCalendar.fromDate({required DateTime date, bool allowWhileIdle = false, bool repeats = false}) {
+  NotificationCalendar.fromDate(
+      {required DateTime date,
+      bool allowWhileIdle = false,
+      bool repeats = false}) {
     this.year = date.year;
     this.month = date.month;
     this.day = date.day;
@@ -76,13 +79,13 @@ class NotificationCalendar extends NotificationSchedule {
     this.weekday = AssertUtils.extractValue(dataMap, 'weekday');
     this.weekOfMonth = AssertUtils.extractValue(dataMap, 'weekOfMonth');
     this.weekOfYear = AssertUtils.extractValue(dataMap, 'weekOfYear');
-    this.allowWhileIdle = AssertUtils.extractValue(dataMap, 'allowWhileIdle') ?? false;
+    this.allowWhileIdle =
+        AssertUtils.extractValue(dataMap, 'allowWhileIdle') ?? false;
     this.repeats = AssertUtils.extractValue(dataMap, 'repeats') ?? false;
 
-    try{
+    try {
       validate();
-    }
-    catch(e){
+    } catch (e) {
       return null;
     }
 
@@ -117,8 +120,7 @@ class NotificationCalendar extends NotificationSchedule {
 
   @override
   void validate() {
-    assert(
-        this.era != null ||
+    assert(this.era != null ||
         this.year != null ||
         this.month != null ||
         this.day != null ||
@@ -128,11 +130,9 @@ class NotificationCalendar extends NotificationSchedule {
         this.millisecond != null ||
         this.weekday != null ||
         this.weekOfMonth != null ||
-        this.weekOfYear != null
-    );
+        this.weekOfYear != null);
 
-    assert(
-        (this.era ?? 0) >= 0 &&
+    assert((this.era ?? 0) >= 0 &&
         (this.year ?? 0) >= 0 &&
         (this.month ?? 0) >= 0 &&
         (this.day ?? 0) >= 0 &&
@@ -142,7 +142,6 @@ class NotificationCalendar extends NotificationSchedule {
         (this.millisecond ?? 0) >= 0 &&
         (this.weekday ?? 0) >= 0 &&
         (this.weekOfMonth ?? 0) >= 0 &&
-        (this.weekOfYear ?? 0) >= 0
-    );
+        (this.weekOfYear ?? 0) >= 0);
   }
 }

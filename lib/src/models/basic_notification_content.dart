@@ -88,22 +88,22 @@ class BaseNotificationContent extends Model {
   }
 
   ImageProvider? get bigPictureImage {
-    if(bigPicture?.isEmpty ?? true) return null;
+    if (bigPicture?.isEmpty ?? true) return null;
     return BitmapUtils().getFromMediaPath(bigPicture!);
   }
 
   ImageProvider? get largeIconImage {
-    if(largeIcon?.isEmpty ?? true) return null;
+    if (largeIcon?.isEmpty ?? true) return null;
     return BitmapUtils().getFromMediaPath(largeIcon!);
   }
 
   String? get bigPicturePath {
-    if(bigPicture?.isEmpty ?? true) return null;
+    if (bigPicture?.isEmpty ?? true) return null;
     return BitmapUtils().cleanMediaPath(bigPicture!);
   }
 
   String? get largeIconPath {
-    if(largeIcon?.isEmpty ?? true) return null;
+    if (largeIcon?.isEmpty ?? true) return null;
     return BitmapUtils().cleanMediaPath(largeIcon!);
   }
 

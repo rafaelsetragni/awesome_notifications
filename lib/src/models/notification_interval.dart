@@ -12,16 +12,14 @@ class NotificationInterval extends NotificationSchedule {
   }) : super(allowWhileIdle: allowWhileIdle, repeats: repeats);
 
   @override
-  NotificationInterval? fromMap(Map<String, dynamic> dataMap){
-
+  NotificationInterval? fromMap(Map<String, dynamic> dataMap) {
     this.interval = AssertUtils.extractValue(dataMap, 'interval');
     this.repeats = AssertUtils.extractValue(dataMap, 'repeats') ?? false;
     this.allowWhileIdle = AssertUtils.extractValue(dataMap, 'repeats') ?? false;
 
-    try{
+    try {
       validate();
-    }
-    catch(e){
+    } catch (e) {
       return null;
     }
 

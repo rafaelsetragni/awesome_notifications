@@ -28,7 +28,7 @@ class AssertUtils {
 
     List<Map<String, Object>> returnList = [];
     list.forEach((element) {
-      returnList.add(Map<String,Object>.from(element.toMap()));
+      returnList.add(Map<String, Object>.from(element.toMap()));
     });
 
     return returnList;
@@ -97,12 +97,12 @@ class AssertUtils {
 
   static dynamic? _getDefaultValue(String reference, Type T) {
     dynamic? defaultValue = Definitions.initialValues[reference];
-    if (defaultValue == null || defaultValue.runtimeType != T)
-      return null;
+    if (defaultValue == null || defaultValue.runtimeType != T) return null;
     return defaultValue;
   }
 
-  static List<T>? fromListMap<T extends Model>(Object? mapData, Function newModel) {
+  static List<T>? fromListMap<T extends Model>(
+      Object? mapData, Function newModel) {
     if (mapData == null || mapData is List<Map<String, dynamic>>) return null;
 
     List<Map<String, dynamic>> listMapData = List.from(mapData as List);
