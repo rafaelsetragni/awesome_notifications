@@ -33,6 +33,7 @@ export 'src/utils/date_utils.dart';
 export 'src/utils/map_utils.dart';
 export 'src/utils/resource_image_provider.dart';
 export 'src/utils/string_utils.dart';
+export 'src/definitions.dart';
 
 // Pause and Play vibration sequences
 Int64List lowVibrationPattern = Int64List.fromList([0, 200, 200, 200]);

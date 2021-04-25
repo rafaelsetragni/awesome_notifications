@@ -1,3 +1,10 @@
+## [0.0.6]
+* Plugin upgraded to support dart Null Safety
+* FCM service native support removed for iOS and Android.
+* iOS awesome extensions removed.
+* Schedule feature downgraded due to iOS official developer's incapacity and SO limitations (could be reactivated manually).
+* Added an example to how to integrate awesome_notification with firebase_messaging plugin.
+* Documentation improved
 ## [0.0.5+8]
 * FCM service with comments removed for iOS.
 ## [0.0.5+7]

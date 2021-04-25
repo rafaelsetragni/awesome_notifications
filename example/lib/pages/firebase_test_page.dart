@@ -16,9 +16,7 @@ class FirebaseTestPage extends StatefulWidget {
 
   FirebaseTestPage(this.firebaseAppToken);
 
-  final FirebaseDataSource firebaseDataSource = FirebaseDataSource(
-    serverSecret: ''
-  );
+  final FirebaseDataSource firebaseDataSource = FirebaseDataSource();
 
   @override
   _FirebaseTestPageState createState() => _FirebaseTestPageState();

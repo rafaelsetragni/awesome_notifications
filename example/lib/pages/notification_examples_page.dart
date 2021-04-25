@@ -106,6 +106,8 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
   void initState() {
     super.initState();
 
+    initializeFirebaseService();
+
     // this is not part of notification system, but media player simulator instead
     MediaPlayerCentral.mediaStream.listen((media) {
       switch (MediaPlayerCentral.mediaLifeCycle) {
@@ -332,18 +334,21 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
     String firebaseAppToken = await messaging.getToken(
-      vapidKey:
-          "BJOuTV9YiYVr5FPXQA4Hu1SJ7qC-q4tSIYLnbNHW4xpxqBRu6JXMtay0xzNUxkW_aApBBmOmASg-ClTkqAE53rk",
+      // https://stackoverflow.com/questions/54996206/firebase-cloud-messaging-where-to-find-public-vapid-key
+      vapidKey: '',
     ) ?? '';
+
+    if (StringUtils.isNullOrEmpty(firebaseAppToken, considerWhiteSpaceAsEmpty: true))
+      return;
 
     if (!mounted) {
       _firebaseAppToken = firebaseAppToken;
-      return;
     }
-
-    setState(() {
-      _firebaseAppToken = firebaseAppToken;
-    });
+    else {
+      setState(() {
+        _firebaseAppToken = firebaseAppToken;
+      });
+    }
 
     print('Firebase token: $firebaseAppToken');
 
@@ -351,17 +356,43 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
       print('Got a message whilst in the foreground!');
       print('Message data: ${message.data}');
 
-      if (message.notification != null) {
+      if (
+        // This step (if condition) is only necessary if you pretend to use the
+        // test page inside console.firebase.google.com
+        !StringUtils.isNullOrEmpty(message.notification?.title, considerWhiteSpaceAsEmpty: true) ||
+        !StringUtils.isNullOrEmpty(message.notification?.body, considerWhiteSpaceAsEmpty: true)
+      ) {
+
         print('Message also contained a notification: ${message.notification}');
+
+        String? imageUrl;
+          imageUrl ??= message.notification!.android?.imageUrl;
+          imageUrl ??= message.notification!.apple?.imageUrl;
+
+        // https://pub.dev/packages/awesome_notifications#notification-types-values-and-defaults
+        Map<String, dynamic> notificationAdapter = {
+          PUSH_NOTIFICATION_CONTENT: {
+            NOTIFICATION_ID: Random().nextInt(2147483647),
+            NOTIFICATION_CHANNEL_KEY: 'basic_channel',
+            NOTIFICATION_TITLE: message.notification!.title,
+            NOTIFICATION_BODY: message.notification!.body,
+            NOTIFICATION_LAYOUT: StringUtils.isNullOrEmpty(imageUrl) ?
+              'Default': 'BigPicture',
+            NOTIFICATION_BIG_PICTURE: imageUrl
+          }
+        };
+
+        AwesomeNotifications().createNotificationFromJsonData(notificationAdapter);
+      }
+      else {
+        AwesomeNotifications().createNotificationFromJsonData(message.data);
       }
 
-      AwesomeNotifications().createNotificationFromJsonData(message.data);
     });
   }
   
   @override
   Widget build(BuildContext context) {
-    //FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
 
     MediaQueryData mediaQuery = MediaQuery.of(context);
     ThemeData themeData = Theme.of(context);

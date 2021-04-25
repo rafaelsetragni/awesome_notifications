@@ -10,9 +10,9 @@ class FirebaseDataSource extends HttpDataSource {
   /// SINGLETON CONSTRUCTOR PATTERN
   ///
   /// ************************************************************************************
-  ///
+
   static FirebaseDataSource? _instance;
-  factory FirebaseDataSource({required String serverSecret}) {
+  factory FirebaseDataSource() {
     _instance ??= FirebaseDataSource._internalConstructor();
     return _instance!;
   }

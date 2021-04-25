@@ -92,7 +92,7 @@ const INVALID_RAW_RESOURCE_ERROR_MESSAGE =
 const NOTIFICATION_SYSTEM_ID = 'id';
 const NOTIFICATION_ICON_RESOURCE_ID = 'iconResourceId';
 
-const NOTIFICATION_ID = 'notificationId';
+const NOTIFICATION_ID = 'id';
 const NOTIFICATION_LAYOUT = 'notificationLayout';
 
 const NOTIFICATION_CREATED_SOURCE = 'createdSource';

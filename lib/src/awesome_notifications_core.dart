@@ -250,8 +250,11 @@ class AwesomeNotifications {
         mapData[PUSH_NOTIFICATION_BUTTONS] =
             json.decode(mapData[PUSH_NOTIFICATION_BUTTONS]);
 
+      // Invalid Notification
       PushNotification? pushNotification = PushNotification().fromMap(mapData);
-      if(pushNotification == null) return false;
+      if(pushNotification == null) {
+        throw Exception('Notification map data is invalid');
+      }
 
       return createNotification(
           content: pushNotification.content!,

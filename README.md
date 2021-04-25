@@ -8,14 +8,13 @@
 ### Features
 
 - Create **Local Notifications** on Android, iOS and Web using Flutter.
-- Create **Push notifications** using services as **Firebase** or any another one, **simultaneously**;
+- Easy to integrate with **Push notification's service** as **Firebase Messaging** or any another one;
 - Easy to use and highly customizable.
 - Add **images**, **sounds**, **emoticons**, **buttons** and different layouts on your notifications.
 - Notifications could be created at **any moment** (on Foreground, Background or even when the application is terminated/killed).
 - **High trustworthy** on receive notifications in any Application lifecycle.
-- High quality **data analytics** about when the notification was created, where it came from and when the user taps on it. Ideal for applying **AB tests** approaches, etc, increasing the users engagement.
 - Notifications are received on **Flutter level code** when they are created, displayed, dismissed or even tapped by the user.
-- Notifications could be **scheduled** repeatedly using a list or precise dates or even **Cron rules**, such linux does, with seconds precision.
+- Notifications could be **scheduled** repeatedly or not, with seconds precision.
 <br>
 
 *Some **android** notification examples:*
@@ -53,12 +52,12 @@ All notifications could be created locally or via Firebase services, with all th
 ### Next steps
 
 - Include Firebase Cloud Message support for iOS (Finished)
-- Finish notifications layouts for iOS (In construction)
-- Finish notifications schedules for iOS (In construction)
-- Expiration date for notifications (not done yet due to iOS limitations) (https://github.com/rafaelsetragni/awesome_notifications/issues/7)
+- Finish notifications layouts for iOS (Finished)
+- Finish notifications schedules for iOS (Finished)
+- Expiration date for notifications (not accomplished due to iOS limitations) (https://github.com/rafaelsetragni/awesome_notifications/issues/7)
 - Add an option to choose if a notification action should bring the app to foreground or not.
 - Include Web support
-- Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
+- Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc) (Finished)
 - Video layout for notifications
 - Carousel layout for notifications
 - Increase the tolerance in the json deserialization process, to accept different types and convert them to the expected.
@@ -82,7 +81,7 @@ This way, your Application will receive **all notifications at Flutter level cod
 
 <br>
 
-1. Add *awesome_notifications* as a dependency in your pubspec.yaml file.
+1. Add *awesome_notifications* as a dependency in your `pubspec.yaml` file.
 
 ```yaml
 awesome_notifications: any # Any attribute updates automatically your source to the last version
@@ -180,138 +179,21 @@ To run the examples, follow the steps bellow:
 
 <br>
 
-## iOS Limitations
+## Schedule Limitations
 
 Due to the way that background task and notification schedules works on iOS, wasn't possible yet to enable all the schedule features on iOS while the app is in Background and even when the app is terminated (Killed).
-
-On Foreground, all notification schedules should work as expected. `InitialDate` parameter should work as expected at any circunstance.
+Thanks to this, the scheduling for android has also regressed to the iOS limitations level, to ensure for the developer the same behaviour in any platform. But it could be manually reactivated in java native code.
 
 A support ticket was opened for Apple in order to resolve this issue. You can follow the progress of the process [here](https://github.com/rafaelsetragni/awesome_notifications/issues/16).
 
 <br>
 <br>
 
-## iOS Extra Configurations
-
-To activate all the features on iOS, is necessary to include two target extensions in your project:
-
-- **Notification Content Extension**: allows to use alternative layouts, such as Big text, Progress Bar and Inbox Messages.
-- **Notification Service Extension**: allows to receive push notifications using all Awesome Notifications Features.
-
-OBS: Is not necessary to include both extensions if you pretend to use just one of the features. Just include what you need.
-
-<br>
-
-### *Including Notification Target Extensions in your project*
-<br>
-
-1- Open your project directly on XCode, opening the file "/{path-to-your-project}/ios/Runner.xcworkspace"
-
-2- Create a new target for Notification Service Extension with **File > New > Target** and select **Notification Service Extension**. Name the extension as **AwesomeServiceExtension**.
-<br>
-
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/add-notification-service-extension.jpg)
-
-3- Create a new target for Notification Content Extension with **File > New > Target** and select **Notification Content Extension**. Name the extension as **AwesomeContentExtension**.
-<br>
-
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/add-notification-content-extension.jpg)
-
-4- Edit your Podfile in XCode and insert the code bellow at the bottom of the file:
-<br>
-*This step will compile the framework awesome_notifications to be used on your target extensions*
-
-<br>
-
-```pod
-
-target 'AwesomeServiceExtension' do
-  use_frameworks!
-  use_modular_headers!
-
-  pod 'awesome_notifications', :path => '.symlinks/plugins/awesome_notifications/ios'
-end
-
-target 'AwesomeContentExtension' do
-  use_frameworks!
-  use_modular_headers!
-
-  pod 'awesome_notifications', :path => '.symlinks/plugins/awesome_notifications/ios'
-end
-
-```
-
-<br>
-
-5- Go to the terminal, navigate to "/{path-to-your-project}/ios" folder and run `pod install` to compile the dependencies.
-
-<br>
-
-6- Replace the file content in NotificationService.swift by the code bellow:
-
-<br>
-
-```swift
-import awesome_notifications
-
-@available(iOS 10.0, *)
-class NotificationService: AwesomeServiceExtension {
-
-}
-```
-<br>
-
-7- Replace the file content in NotificationContent.swift by the code bellow:
-
-<br>
-
-```swift
-import awesome_notifications
-
-@available(iOS 10.0, *)
-class NotificationViewController: AwesomeContentExtension {
-
-}
-```
-<br>
-
-8- Using XCode, inside the ios folder open your project file `Runner.xcworkspace`. Than go to *Runner > Signing & Capabilities* and add **App Groups**, **Push Notifications** and **Background Modes**, with `Background fetch`, `Remote notifications` and `Background processing` checked.
-
-<br>
-
-9- For **Runner**, **AwesomeServiceExtension** and **AwesomeContentExtension** Targets, go to *Signing & Capabilities > App Groups* and add the group "group.AwesomeNotifications.*your.bundle.domain.appName*"
-<br>
-
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/xcode-signing-and-capabilities.jpg)
-
-
-OBS: the App Group identifier is case sensitive and MUST be exactely the same as your app bundle. In every plugin initialization on iOS, your app group is debug printed in your terminal with the text: 
-
-> "Awesome Notifications - App Group : group.AwesomeNotifications.*your.bundle.domain.appName*"
-
-<br>
-
-You can manage your app groups as show in the tutorial bellow:
-<br>
-https://www.appcoda.com/app-group-macos-ios-communication/
-
-<br>
-
-10- Go to **Runner > Build Settings** and certifies to disable `Enable Bitcode` and `Require Only App-Extension-Safe API`, setting it to `'NO'` in both extensions.
-<br>
-
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/disable-bitcode.jpg)
-
-<br>
-
-ATTENTION: WORK IN PROGRESS FOR NOTIFICATION CONTENT EXTENSION
-
-<br>
-<br>
-
 ## Using Firebase Services (Optional)
 
-To activate the Firebase Cloud Messaging service, please follow these steps:
+The service used for this tutorial is Firebase Messaging, but you could use any other of your choice.
+
+ 1 - To activate the Firebase Cloud Messaging service, please follow the respective step for your desired platform:
 
 ### *Android*
 
@@ -346,22 +228,68 @@ apply plugin: 'com.google.gms.google-services'
 
 Go to "Cloud Messaging" option and add an "iOS app", put the packge name of your project (**certifies to put the correct one**) to generate the file ***GoogleService-info.plist***.
 
-Download the file and place it inside your [app]/ios/Runner/ folder using XCode. (Do not use Finder to copy and paste the file)
+Download the file and place it inside your [app]/ios/Runner/ folder using XCode. (Do not use Finder to copy and paste the file, use the XCode)
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/google-plist-path.jpg)
 
-After, in your Google Console, go to **General (Gear icon) -> Cloud Messaging -> iOS configuration** and send your **APNs key** and include your **iOS Team ID**. To generate your APNs keys, follow the tutorial bellow:
+After that, in your Google Console, go to **General (Gear icon) -> Cloud Messaging -> iOS configuration** and send your **APNs key** and include your **iOS Team ID**. To generate your APNs keys, follow the tutorial bellow:
 
 https://docs.oracle.com/en/cloud/saas/marketing/responsys-develop-mobile/ios/auth-key/
 
 
 <br>
 
-## Firebase Token
+### Enabling Push Notifications in your Dart/Flutter code
 
-The firebase token is necessary to your sever send Push Notifications to the remote device. The token could eventually change and is created to every device installation on each application.
+(those steps are based on [](https://firebase.flutter.dev/docs/messaging/overview/) instructions)
 
-Every token created could be captured on Flutter by this plugin listen to `tokenStream`.
+2 - Add the `firebase_core` and `firebase_messaging` dependency to your `pubspec.yaml` file.
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: "^1.0.4"
+  firebase_messaging: "^9.1.2"
+```
+
+3 - Download the dependencies with `$ flutter pub get`.
+
+4 - Inside your `main.dart` file, add the follow lines:
+
+```dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  AwesomeNotifications().initialize(
+    'resource://drawable/res_app_icon',
+    [
+        // Your notification channels go here
+    ]
+  );
+
+  // Create the initialization for your desired push service here
+  FirebaseApp firebaseApp = await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  runApp(App());
+}
+
+// Declared as global, outside of any class
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
+
+  // Use this method to automatically convert the push data, in case you gonna use our data standard
+  AwesomeNotifications().createNotificationFromJsonData(message.data);
+}
+```
+
+Now, firebase messaging should work at any application lifecycle, for any supported platform.
 
 <br>
 

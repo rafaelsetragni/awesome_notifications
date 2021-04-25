@@ -9,7 +9,8 @@ import 'package:awesome_notifications_example/utils/media_player_central.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  AwesomeNotifications().initialize('resource://drawable/res_app_icon', [
+  AwesomeNotifications().initialize(
+    'resource://drawable/res_app_icon', [
     NotificationChannel(
         channelKey: 'basic_channel',
         channelName: 'Basic notifications',
@@ -151,7 +152,6 @@ void main() async {
 
   // Create the initialization Future outside of `build`:
   FirebaseApp firebaseApp = await Firebase.initializeApp();
-
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(App(firebaseApp));
@@ -163,7 +163,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 
   print("Handling a background message: ${message.messageId}");
-
   AwesomeNotifications().createNotificationFromJsonData(message.data);
 }
 
