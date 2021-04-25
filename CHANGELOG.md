@@ -1,3 +1,5 @@
+## [0.0.6+1]
+* Flutter version fixed, according to pub.dev warnings
 ## [0.0.6]
 * Plugin upgraded to support dart Null Safety
 * FCM service native support removed for iOS and Android.

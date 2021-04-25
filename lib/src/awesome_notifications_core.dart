@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:convert';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications/src/definitions.dart';
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
 import 'package:awesome_notifications/src/models/notification_button.dart';
@@ -14,6 +13,7 @@ import 'package:awesome_notifications/src/models/received_models/received_action
 import 'package:awesome_notifications/src/models/received_models/received_notification.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
+import 'package:awesome_notifications/src/utils/date_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
