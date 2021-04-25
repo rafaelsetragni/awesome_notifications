@@ -1,32 +1,39 @@
 {
 	"info": {
-		"_postman_id": "88f76358-35b6-4e06-8f17-42867cbd2644",
-		"name": "Firebase FMC Example",
+		"_postman_id": "c501f74f-d05b-4344-8f51-c64f4d69d8a9",
+		"name": "AwesomeNotifications Example",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "Firebase Cloud Message Example - Awesome Notifications (Flutter)",
 			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "key={{server_key}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
 					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "key=[SERVER_SECRET]"
-					},
-					{
 						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
+						"value": "application/json",
+						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"to\" : \"[APP_TOKEN]\",\r\n    \"mutable_content\" : true,\r\n    \"notification\": {\r\n        \"title\": \" \"\r\n    },\r\n    \"data\" : {\r\n        \"content\": {\r\n            \"id\": 100,\r\n            \"channelKey\": \"basic_channel\",\r\n            \"title\": \"Huston! The eagle has landed!\",\r\n            \"body\": \"A small step for a man, but a giant leap to Flutter's community!\",\r\n            \"notificationLayout\": \"BigPicture\",\r\n            \"largeIcon\": \"https://avidabloga.files.wordpress.com/2012/08/emmemc3b3riadeneilarmstrong3.jpg\",\r\n            \"bigPicture\": \"https://www.dw.com/image/49519617_303.jpg\",\r\n            \"showWhen\": true,\r\n            \"autoCancel\": true,\r\n            \"privacy\": \"Private\",\r\n            \"payload\": {\r\n                \"secret\": \"Awesome Notifications Rocks!\"\r\n            }\r\n        }\r\n    }\r\n}",
-					"options": {
-						"raw": {}
-					}
+					"raw": "{\r\n    \"to\" : \"{{fcm_token}}\",\r\n    \"mutable_content\" : true,\r\n    \"data\" : {\r\n        \"content\": {\r\n            \"id\": 100,\r\n            \"channelKey\": \"big_picture\",\r\n            \"title\": \"Huston!\\nThe eagle has landed!\",\r\n            \"body\": \"A small step for a man, but a giant leap to Flutter's community!\",\r\n            \"notificationLayout\": \"BigPicture\",\r\n            \"largeIcon\": \"https://media.fstatic.com/kdNpUx4VBicwDuRBnhBrNmVsaKU=/full-fit-in/290x478/media/artists/avatar/2013/08/neil-i-armstrong_a39978.jpeg\",\r\n            \"bigPicture\": \"https://www.dw.com/image/49519617_303.jpg\",\r\n            \"showWhen\": true,\r\n            \"autoCancel\": true,\r\n            \"privacy\": \"Private\"\r\n        },\r\n        \"actionButtons\": [\r\n            {\r\n                \"key\": \"REPLY\",\r\n                \"label\": \"Reply\",\r\n                \"autoCancel\": true,\r\n                \"buttonType\":  \"InputField\"\r\n            },\r\n            {\r\n                \"key\": \"ARCHIVE\",\r\n                \"label\": \"Archive\",\r\n                \"autoCancel\": true\r\n            }\r\n        ]\r\n    }\r\n}"
 				},
 				"url": {
 					"raw": "https://fcm.googleapis.com/fcm/send",
@@ -40,11 +47,9 @@
 						"fcm",
 						"send"
 					]
-				},
-				"description": "Firebase Message example, using Flutter Awesome Notifications"
+				}
 			},
 			"response": []
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

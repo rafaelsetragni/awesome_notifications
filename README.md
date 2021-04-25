@@ -226,7 +226,9 @@ apply plugin: 'com.google.gms.google-services'
 
 ### *iOS*
 
-Go to "Cloud Messaging" option and add an "iOS app", put the packge name of your project (**certifies to put the correct one**) to generate the file ***GoogleService-info.plist***.
+Based on [https://firebase.flutter.dev/docs/messaging/apple-integration](https://firebase.flutter.dev/docs/messaging/apple-integration)
+
+Go to "Cloud Messaging" option and add an "iOS app", put the package name of your project (**certifies to put the correct one**) to generate the file ***GoogleService-info.plist***.
 
 Download the file and place it inside your [app]/ios/Runner/ folder using XCode. (Do not use Finder to copy and paste the file, use the XCode)
 
@@ -241,7 +243,7 @@ https://docs.oracle.com/en/cloud/saas/marketing/responsys-develop-mobile/ios/aut
 
 ### Enabling Push Notifications in your Dart/Flutter code
 
-(those steps are based on [](https://firebase.flutter.dev/docs/messaging/overview/) instructions)
+(those steps are based on [https://firebase.flutter.dev/docs/messaging/overview/](https://firebase.flutter.dev/docs/messaging/overview/) instructions)
 
 2 - Add the `firebase_core` and `firebase_messaging` dependency to your `pubspec.yaml` file.
 
@@ -488,6 +490,12 @@ OBS 2: you should not implement any native code to use FCM with Awesome Notifica
         }
     }
 }
+```
+
+Using that standard, is possible to create a notification just calling the method bellow:
+
+```dart
+AwesomeNotifications().createNotificationFromJsonData(yourReceivedMapData);
 ```
 
 You can download a example of how to send Push Notifications through FCM using "Postman" [here](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/Firebase_FCM_Example.postman_collection.json)
