@@ -407,15 +407,15 @@ If the app is terminated (killed):
 
 ### Scheduling a notification
 
+Notifications could be scheduled into two exclusive types:
 
-Notifications could be scheduled as you wish using two main options:
+- Interval: represents a interval of seconds that the notification should wait to be displayed
+- Calendar: represents a simple set of date rules that the notification should obey to be displayed
 
-- initialDate: (YYYY-MM-DD hh:mm:ss) The initial date that schedule should be called by first time. This option has the highest priority  among other options.
-- crontabSchedule: Crontab expression as repetition rule (with seconds precision), as described in [this article](https://www.baeldung.com/cron-expressions)
+Also, both of then could be configured using:
+
 - allowWhileIdle: Determines if notification will send, even when the device is in critical situation, such as low battery.
-- preciseSchedule: List of precise dates to schedule a notification multiple times. This option has the lowest priority  among other options.
-
-OBS: All dates are set to use UTC timezone.
+- repeats: Determines if the schedule should be repeat after be displayed. If there is no more valid date compatible with the schedule rules, the notification is automatically canceled.
 
 <br>
 
