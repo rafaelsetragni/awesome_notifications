@@ -38,6 +38,19 @@ class AssertUtils {
     T? defaultValue = _getDefaultValue(reference, T);
     dynamic? value = dataMap[reference];
 
+    // Color hexadecimal representation
+    if (T == int && value != null && value is String){
+      String valueCasted = value;
+      final RegExpMatch? match = RegExp(r'^0x(\w{2})?(\w{6,6})$').firstMatch(valueCasted);
+      if(match != null){
+        String? hex = match.group(2);
+        if(hex != null){
+          final colorValue = int.parse(hex, radix: 16);
+          return colorValue;
+        }
+      }
+    }
+
     if (value == null || !(value is T)) return defaultValue;
 
     return value;

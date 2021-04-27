@@ -1,3 +1,6 @@
+## [0.0.6+3]
+* Fixed Android canceling for a grouped notification set as summary behaviour
+* Added color hexadecimal representation for json content
 ## [0.0.6+2]
 * Fixed Android first grouped message as summary behaviour.
 ## [0.0.6+1]

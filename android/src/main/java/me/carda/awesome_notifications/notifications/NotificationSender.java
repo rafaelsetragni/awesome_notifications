@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.service.notification.StatusBarNotification;
 
 import java.util.Random;
 
@@ -218,13 +219,6 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                 }
                 else {
                     NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
-
-                    if(pushNotification.groupSummary){
-                        PushNotification pushSummary = _buildSummaryGroupNotification(pushNotification);
-                        Notification summaryNotification = notificationBuilder.createNotification(context, pushSummary);
-                        notificationManagerCompat.notify(pushSummary.content.id.toString(), pushSummary.content.id, summaryNotification);
-                    }
-
                     notificationManagerCompat.notify(pushNotification.content.id.toString(), pushNotification.content.id, notification);
                 }
             }
@@ -243,8 +237,37 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
     public static void cancelNotification(Context context, Integer id) {
         if(context != null){
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationManagerCompat notificationManager = getNotificationManager(context);
+
+                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
+
+                // fix to canceling a automatic generated summary notification
+                // https://github.com/rafaelsetragni/awesome_notifications/issues/69
+                for (StatusBarNotification activeNotification : currentActiveNotifications) {
+                    if(activeNotification.getId() == id){
+                        String groupKey = activeNotification.getGroupKey();
+                        if(!StringUtils.isNullOrEmpty(groupKey)) {
+                            Integer otherId = 0, count = 0;
+                            for (StatusBarNotification otherNotification : currentActiveNotifications) {
+                                if(otherNotification.getGroupKey().equals(groupKey)) {
+                                    count++;
+                                    if(otherNotification.getId() != id)
+                                        otherId = otherNotification.getId();
+                                }
+                            }
+                            if(count <= 2){
+                                notificationManager.cancel(otherId.toString(), otherId);
+                                notificationManager.cancel(otherId);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+
                 notificationManager.cancel(id.toString(), id);
                 notificationManager.cancel(id);
             }

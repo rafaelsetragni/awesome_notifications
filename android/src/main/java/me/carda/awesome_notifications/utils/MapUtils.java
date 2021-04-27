@@ -11,6 +11,8 @@ import com.google.common.primitives.Shorts;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MapUtils {
 
@@ -66,8 +68,26 @@ public class MapUtils {
             Object value = map.get(key);
 
             if(Number.class.isAssignableFrom(expectedClass)){
+                String expectedClassName = expectedClass.getSimpleName().toLowerCase();
+
+                // Hexadecimal color conversion
+                if(expectedClassName.equals("long") && value instanceof String){
+                    Pattern pattern = Pattern.compile("0x\\w{2}?(\\w{6})", Pattern.CASE_INSENSITIVE);
+                    Matcher matcher = pattern.matcher((String) value);
+
+                    // 0x000000 hexadecimal color conversion
+                    if(matcher.find()) {
+                        String textValue = matcher.group(0);
+                        Long finalValue = 0L;
+                        if(!StringUtils.isNullOrEmpty(textValue)){
+                            finalValue += Long.parseLong(textValue, 16);
+                        }
+                        return Optional.of(expectedClass.cast(finalValue));
+                    }
+                }
+
                 if(value instanceof Number){
-                    switch (expectedClass.getSimpleName().toLowerCase()){
+                    switch (expectedClassName){
                         case "integer": value = ((Number)value).intValue();     break;
                         case "double":  value = ((Number)value).doubleValue();  break;
                         case "float":   value = ((Number)value).floatValue();   break;

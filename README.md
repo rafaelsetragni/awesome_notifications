@@ -553,7 +553,7 @@ Main methods to manipulate a notification channel:
 
 | Attribute          	| Required | Description                                                              | Type                  | Value Limits             | Default value             |
 | --------------------- | -------- | ------------------------------------------------------------------------ | --------------------- | ------------------------ | ------------------------- |
-| id 			     	|    YES   | Number that identifies a unique notification                             | int                   | 1 - 2.147.483.647        | -1                        |
+| id 			     	|    YES   | Number that identifies a unique notification                             | int                   | 1 - 2.147.483.647        |                           |
 | channelKey 		 	|    YES   | String key that identifies a channel where not. will be displayed        | String                | channel must be enabled  | basic_channel             |
 | title 			 	|     NO   | The title of notification                                                | String                | unlimited                |                           |
 | body 			 	    |     NO   | The body content of notification                                         | String                | unlimited                |                           |
