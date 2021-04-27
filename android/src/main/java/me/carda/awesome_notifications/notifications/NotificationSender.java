@@ -6,12 +6,16 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
+
+import java.util.Random;
+
 import io.flutter.Log;
 
 import androidx.core.app.NotificationManagerCompat;
 
 import me.carda.awesome_notifications.BroadcastSender;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
+import me.carda.awesome_notifications.notifications.enumeratos.NotificationLayout;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationSource;
 import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
@@ -176,6 +180,18 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
     /// AsyncTask METHODS END *********************************
 
+    private PushNotification _buildSummaryGroupNotification(PushNotification original){
+
+        PushNotification pushSummary = pushNotification.ClonePush();
+        pushSummary.content.id = new Random().nextInt((2147483647 - 2147483000) + 1) + 2147483000;
+        pushSummary.content.notificationLayout = NotificationLayout.Default;
+        pushSummary.content.largeIcon = null;
+        pushSummary.content.bigPicture = null;
+        pushSummary.groupSummary = true;
+
+        return  pushSummary;
+    }
+
     public PushNotification showNotification(Context context, PushNotification pushNotification) {
 
         try {
@@ -191,10 +207,24 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+                    if(pushNotification.groupSummary){
+                        PushNotification pushSummary = _buildSummaryGroupNotification(pushNotification);
+                        Notification summaryNotification = notificationBuilder.createNotification(context, pushSummary);
+                        notificationManager.notify(pushSummary.content.id, summaryNotification);
+                    }
+
                     notificationManager.notify(pushNotification.content.id, notification);
                 }
                 else {
                     NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
+
+                    if(pushNotification.groupSummary){
+                        PushNotification pushSummary = _buildSummaryGroupNotification(pushNotification);
+                        Notification summaryNotification = notificationBuilder.createNotification(context, pushSummary);
+                        notificationManagerCompat.notify(pushSummary.content.id.toString(), pushSummary.content.id, summaryNotification);
+                    }
+
                     notificationManagerCompat.notify(pushNotification.content.id.toString(), pushNotification.content.id, notification);
                 }
             }

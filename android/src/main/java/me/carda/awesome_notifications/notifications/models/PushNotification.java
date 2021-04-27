@@ -12,11 +12,18 @@ import me.carda.awesome_notifications.notifications.exceptions.PushNotificationE
 
 public class PushNotification extends Model {
 
+    public boolean groupSummary = false;
     public NotificationContentModel content;
     public NotificationScheduleModel schedule;
     public List<NotificationButtonModel> actionButtons;
 
     public PushNotification(){}
+
+    public PushNotification ClonePush(){
+        PushNotification newPush = new PushNotification();
+        newPush.fromMap(this.toMap());
+        return newPush;
+    }
 
     @Override
     public PushNotification fromMap(Map<String, Object> parameters){

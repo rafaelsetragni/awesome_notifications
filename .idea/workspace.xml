@@ -10,10 +10,13 @@
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_calendar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_calendar.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_interval.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_interval.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_schedule.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_schedule.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/PushNotification.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/PushNotification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/test/widget_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/test/widget_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/awesome_notifications_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/awesome_notifications_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,19 +57,19 @@
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\plugins\awesome_notifications\lib\src\enumerators" />
-      <recent name="E:\plugins\awesome_notifications\example\android\app" />
-      <recent name="E:\plugins\awesome_notifications\example\assets\readme" />
-      <recent name="E:\plugins\awesome_notifications\lib\src\helpers" />
-      <recent name="E:\plugins\awesome_notifications\lib\src\extensions" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\plugins\awesome_notifications\android\src\main" />
       <recent name="E:\plugins\awesome_notifications\example\android\app" />
       <recent name="E:\plugins\awesome_notifications\android\src\main\test\java\me\carda\awesome_notifications" />
       <recent name="E:\plugins\awesome_notifications\lib\src\utils" />
       <recent name="E:\plugins\awesome_notifications\example\assets\readme" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\plugins\awesome_notifications\lib\src\enumerators" />
+      <recent name="E:\plugins\awesome_notifications\example\android\app" />
+      <recent name="E:\plugins\awesome_notifications\example\assets\readme" />
+      <recent name="E:\plugins\awesome_notifications\lib\src\helpers" />
+      <recent name="E:\plugins\awesome_notifications\lib\src\extensions" />
     </key>
   </component>
   <component name="RunManager" selected="Flutter.example/lib/main.dart">
@@ -75,8 +78,14 @@
       <option name="testFile" value="$PROJECT_DIR$/test/awesome_notifications_test.dart" />
       <method v="2" />
     </configuration>
+    <configuration name="jsonConversion" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testName" value="jsonConversion" />
+      <option name="testFile" value="$PROJECT_DIR$/test/awesome_notifications_test.dart" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Flutter Test.jsonConversion" />
         <item itemvalue="Flutter Test.getPlatformVersion" />
       </list>
     </recent_temporary>
@@ -133,35 +142,35 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="714" height="438" key="DebuggerActiveHint/0.0.2560.1040@0.0.2560.1040" timestamp="1619311006208" />
-    <state width="1298" height="207" key="GridCell.Tab.0.bottom" timestamp="1619366203392">
+    <state width="1425" height="231" key="GridCell.Tab.0.bottom" timestamp="1619481922359">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="2517" height="221" key="GridCell.Tab.0.bottom/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1616032926015" />
-    <state width="1298" height="207" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1619366203392" />
+    <state width="1425" height="231" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1619481922359" />
     <state width="1840" height="252" key="GridCell.Tab.0.bottom/0.25.1280.943@0.25.1280.943" timestamp="1615310363198" />
     <state width="1510" height="251" key="GridCell.Tab.0.bottom/0.25.1552.943@0.25.1552.943" timestamp="1615333823121" />
     <state width="1840" height="252" key="GridCell.Tab.0.bottom/0.25.1920.959@0.25.1920.959" timestamp="1615307684400" />
-    <state width="1298" height="207" key="GridCell.Tab.0.center" timestamp="1619366203392">
+    <state width="1425" height="231" key="GridCell.Tab.0.center" timestamp="1619481922358">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="2517" height="221" key="GridCell.Tab.0.center/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1616032926015" />
-    <state width="1298" height="207" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1619366203392" />
+    <state width="1425" height="231" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1619481922358" />
     <state width="1840" height="252" key="GridCell.Tab.0.center/0.25.1280.943@0.25.1280.943" timestamp="1615310363195" />
     <state width="1510" height="251" key="GridCell.Tab.0.center/0.25.1552.943@0.25.1552.943" timestamp="1615333823115" />
     <state width="1840" height="252" key="GridCell.Tab.0.center/0.25.1920.959@0.25.1920.959" timestamp="1615307684399" />
-    <state width="1298" height="207" key="GridCell.Tab.0.left" timestamp="1619366203392">
+    <state width="1425" height="231" key="GridCell.Tab.0.left" timestamp="1619481922358">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="2517" height="221" key="GridCell.Tab.0.left/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1616032926015" />
-    <state width="1298" height="207" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1619366203392" />
+    <state width="1425" height="231" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1619481922358" />
     <state width="1840" height="252" key="GridCell.Tab.0.left/0.25.1280.943@0.25.1280.943" timestamp="1615310363192" />
     <state width="1510" height="251" key="GridCell.Tab.0.left/0.25.1552.943@0.25.1552.943" timestamp="1615333823114" />
     <state width="1840" height="252" key="GridCell.Tab.0.left/0.25.1920.959@0.25.1920.959" timestamp="1615307684398" />
-    <state width="1298" height="207" key="GridCell.Tab.0.right" timestamp="1619366203392">
+    <state width="1425" height="231" key="GridCell.Tab.0.right" timestamp="1619481922359">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="2517" height="221" key="GridCell.Tab.0.right/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1616032926015" />
-    <state width="1298" height="207" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1619366203392" />
+    <state width="1425" height="231" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1619481922359" />
     <state width="1840" height="252" key="GridCell.Tab.0.right/0.25.1280.943@0.25.1280.943" timestamp="1615310363196" />
     <state width="1510" height="251" key="GridCell.Tab.0.right/0.25.1552.943@0.25.1552.943" timestamp="1615333823115" />
     <state width="1840" height="252" key="GridCell.Tab.0.right/0.25.1920.959@0.25.1920.959" timestamp="1615307684400" />
@@ -173,11 +182,11 @@
       <screen x="0" y="25" width="1552" height="943" />
     </state>
     <state x="233" y="208" width="1097" height="647" key="dock-window-1/0.25.1552.943@0.25.1552.943" timestamp="1615329722992" />
-    <state x="625" y="108" width="964" height="606" key="find.popup" timestamp="1619358028299">
+    <state x="1286" y="174" width="964" height="606" key="find.popup" timestamp="1619478409050">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="881" y="304" width="964" height="606" key="find.popup/0.0.2560.1040/451.-900.1600.900@0.0.2560.1040" timestamp="1615522635501" />
-    <state x="625" y="108" width="964" height="606" key="find.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1619358028299" />
+    <state x="1286" y="174" width="964" height="606" key="find.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1619478409050" />
     <state x="661" y="301" width="723" height="550" key="find.popup/0.25.1920.943@0.25.1920.943" timestamp="1614978540238" />
     <state x="661" y="306" width="1078" height="560" key="find.popup/0.25.1920.959@0.25.1920.959" timestamp="1615153580889" />
     <state x="936" y="172" width="672" height="676" key="search.everywhere.popup" timestamp="1619366376321">
@@ -255,7 +264,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
           <url>file://$PROJECT_DIR$/test/awesome_notifications_test.dart</url>
-          <line>12</line>
+          <line>15</line>
           <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
@@ -268,6 +277,16 @@
           <url>file://$PROJECT_DIR$/lib/src/models/notification_channel.dart</url>
           <line>163</line>
           <option name="timeStamp" value="84" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/test/awesome_notifications_test.dart</url>
+          <line>38</line>
+          <option name="timeStamp" value="111" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/test/awesome_notifications_test.dart</url>
+          <line>34</line>
+          <option name="timeStamp" value="114" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

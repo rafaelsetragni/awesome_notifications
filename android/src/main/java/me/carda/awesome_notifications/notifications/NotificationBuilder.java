@@ -537,22 +537,27 @@ public class NotificationBuilder {
         if (!StringUtils.isNullOrEmpty(channelModel.groupKey)) {
             builder.setGroup(channelModel.groupKey);
 
-            boolean grouped = true;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if(pushNotification.groupSummary) {
+                builder.setGroupSummary(true);
+            }
+            else {
+                boolean grouped = true;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
 
-                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
+                    NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
 
-                for (StatusBarNotification activeNotification : currentActiveNotifications) {
-                    if (activeNotification.getGroupKey().contains("g:"+channelModel.groupKey)) {
-                        grouped = false;
-                        break;
+                    for (StatusBarNotification activeNotification : currentActiveNotifications) {
+                        if (activeNotification.getGroupKey().contains("g:"+channelModel.groupKey)) {
+                            grouped = false;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (grouped) {
-                builder.setGroupSummary(true);
+                if (grouped) {
+                    pushNotification.groupSummary = true;
+                }
             }
 
             String idText = pushNotification.content.id.toString();
