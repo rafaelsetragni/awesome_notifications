@@ -1,3 +1,5 @@
+## [0.0.6+2]
+* Fixed Android first grouped message as summary behaviour.
 ## [0.0.6+1]
 * Flutter version fixed, according to pub.dev warnings
 ## [0.0.6]
