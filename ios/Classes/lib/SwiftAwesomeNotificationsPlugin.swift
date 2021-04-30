@@ -275,7 +275,11 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     @available(iOS 10.0, *)
     private func receiveNotification(content:UNNotificationContent, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void){
         
-        let jsonData:String? = content.userInfo[Definitions.NOTIFICATION_JSON] as? String
+        let jsonData:String? = JsonUtils.toJson([
+            "content": JsonUtils.fromJson(content.userInfo["content"] as? String),
+            "actionButtons": JsonUtils.fromJson(content.userInfo["actionButtons"] as? String),
+            "schedule": JsonUtils.fromJson(content.userInfo["schedule"] as? String)
+        ])
         
         guard let pushNotification:PushNotification = NotificationBuilder.jsonToPushNotification(jsonData: jsonData)
         else {
