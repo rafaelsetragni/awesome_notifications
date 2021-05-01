@@ -275,11 +275,30 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     @available(iOS 10.0, *)
     private func receiveNotification(content:UNNotificationContent, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void){
         
-        let jsonData:String? = content.userInfo[Definitions.NOTIFICATION_JSON] as? String
-        
-        guard let pushNotification:PushNotification = NotificationBuilder.jsonToPushNotification(jsonData: jsonData)
+        var arguments:[String : Any?]
+        if(content.userInfo[Definitions.NOTIFICATION_JSON] != nil){
+            let jsonData:String = content.userInfo[Definitions.NOTIFICATION_JSON] as! String
+            arguments = JsonUtils.fromJson(jsonData) ?? [:]
+        }
         else {
-            Log.d("receiveNotification","notification discarted")
+            arguments = content.userInfo as! [String : Any?]
+            
+            if(arguments[Definitions.PUSH_NOTIFICATION_CONTENT] is String){
+                arguments[Definitions.PUSH_NOTIFICATION_CONTENT] = JsonUtils.fromJson(arguments[Definitions.PUSH_NOTIFICATION_CONTENT] as? String)
+            }
+            
+            if(arguments[Definitions.PUSH_NOTIFICATION_BUTTONS] is String){
+                arguments[Definitions.PUSH_NOTIFICATION_BUTTONS] = JsonUtils.fromJson(arguments[Definitions.PUSH_NOTIFICATION_BUTTONS] as? String)
+            }
+            
+            if(arguments[Definitions.PUSH_NOTIFICATION_SCHEDULE] is String){
+                arguments[Definitions.PUSH_NOTIFICATION_SCHEDULE] = JsonUtils.fromJson(arguments[Definitions.PUSH_NOTIFICATION_SCHEDULE] as? String)
+            }
+        }
+        
+        guard let pushNotification:PushNotification = NotificationBuilder.jsonDataToPushNotification(jsonData: arguments)
+        else {
+            Log.d("receiveNotification","notification data invalid")
             completionHandler([])
             return
         }

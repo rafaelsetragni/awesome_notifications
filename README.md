@@ -450,11 +450,15 @@ OBS: `actionButtons` and `schedule` are **optional**
 <br>
 OBS 2: you should not implement any native code to use FCM with Awesome Notifications. All of then was already implemented inside the plugin.
 <br>
+OBS 3: data only messages are classed as "low priority". Devices can throttle and ignore these messages if your application is in the background, terminated, or a variety of other conditions such as low battery or currently high CPU usage. To help improve delivery, you can bump the priority of messages. Note; this does still not guarantee delivery. More info [here](https://firebase.flutter.dev/docs/messaging/usage/#low-priority-messages)
+<br>
 
 ```json
 {
     "to" : "[YOUR APP TOKEN]",
     "mutable_content" : true,
+    "content_available": true,
+    "priority": "high",
     "data" : {
         "content": {
             "id": 100,
