@@ -39,12 +39,13 @@ class AssertUtils {
     dynamic? value = dataMap[reference];
 
     // Color hexadecimal representation
-    if (T == int && value != null && value is String){
+    if (T == int && value != null && value is String) {
       String valueCasted = value;
-      final RegExpMatch? match = RegExp(r'^0x(\w{2})?(\w{6,6})$').firstMatch(valueCasted);
-      if(match != null){
+      final RegExpMatch? match =
+          RegExp(r'^0x(\w{2})?(\w{6,6})$').firstMatch(valueCasted);
+      if (match != null) {
         String? hex = match.group(2);
-        if(hex != null){
+        if (hex != null) {
           final colorValue = int.parse(hex, radix: 16);
           return colorValue;
         }

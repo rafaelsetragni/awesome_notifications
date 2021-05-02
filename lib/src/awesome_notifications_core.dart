@@ -358,7 +358,7 @@ class AwesomeNotifications {
     final String? nextDate =
         await _channel.invokeMethod(CHANNEL_METHOD_GET_NEXT_DATE, parameters);
 
-    if(nextDate == null) return null;
+    if (nextDate == null) return null;
 
     return DateUtils.parseStringToDate(nextDate)!;
   }
