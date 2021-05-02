@@ -15,7 +15,7 @@ public class NotificationCalendarModel : NotificationScheduleModel {
     var year:Int?
     /// Field number for get and set indicating the month.
     var month:Int?
-    /// Field number for get and set indicating the day number within the current year (1-12).
+    /// Field number for get and set indicating the day number of the month (1-31).
     var day:Int?
     /// Field number for get and set indicating the hour of the day (0-23).
     var hour:Int?
@@ -23,11 +23,11 @@ public class NotificationCalendarModel : NotificationScheduleModel {
     var minute:Int?
     /// Field number for get and set indicating the second within the minute (0-59).
     var second:Int?
-    /// Field number for get and set indicating the millisecond within the second (0-59).
+    /// Field number for get and set indicating the millisecond within the second (0-999).
     var millisecond:Int?
-    /// Field number for get and set indicating the day of the week (0-999).
+    /// Field number for get and set indicating the day of the week (1-7).
     var weekday:Int?
-    /// Field number for get and set indicating the count of weeks of the month (0-999).
+    /// Field number for get and set indicating the count of weeks of the month (0-53).
     var weekOfMonth:Int?
     /// Field number for get and set indicating the weeks of the year.
     var weekOfYear:Int?
@@ -62,12 +62,17 @@ public class NotificationCalendarModel : NotificationScheduleModel {
         if (self.weekOfMonth ?? 0) < 0 { self.weekOfMonth = nil }
         if (self.weekOfYear ?? 0) < 0 { self.weekOfYear = nil }
         
+        // https://github.com/rafaelsetragni/awesome_notifications/issues/153#issuecomment-830732722
+        if(self.weekday != nil){
+            self.weekday = self.weekday == 7 ? 1 : (self.weekday! + 1)
+        }
+
         return self
     }
-    
+
     public func toMap() -> [String : Any?] {
         var mapData:[String: Any?] = [:]
-        
+
         if(era != nil) {mapData["era"]  = self.era}
         if(year != nil) {mapData["year"]  = self.year}
         if(month != nil) {mapData["month"]  = self.month}
@@ -76,14 +81,14 @@ public class NotificationCalendarModel : NotificationScheduleModel {
         if(minute != nil) {mapData["minute"]  = self.minute}
         if(second != nil) {mapData["second"]  = self.second}
         if(millisecond != nil) {mapData["millisecond"]  = self.millisecond}
-        if(weekday != nil) {mapData["weekday"]  = self.weekday}
+        if(weekday != nil) {mapData["weekday"]  = self.weekday == 1 ? 7 : (self.weekday! - 1)}
         if(weekOfMonth != nil) {mapData["weekOfMonth"]  = self.weekOfMonth}
         if(weekOfYear != nil) {mapData["weekOfYear"]  = self.weekOfYear}
         if(repeats != nil) {mapData["repeats"]  = self.repeats}
-        
+
         return mapData
     }
-    
+
     public func validate() throws {
         if(
             era == nil &&
@@ -100,7 +105,7 @@ public class NotificationCalendarModel : NotificationScheduleModel {
         ){
             throw PushNotificationError.invalidRequiredFields(msg: "At least one parameter is required")
         }
-        
+
         if(!(
             IntUtils.isBetween(self.era ?? 0, min: 0, max: 99999) &&
             IntUtils.isBetween(self.year ?? 0, min: 0, max: 99999) &&
@@ -117,25 +122,32 @@ public class NotificationCalendarModel : NotificationScheduleModel {
             throw PushNotificationError.invalidRequiredFields(msg: "Calendar values are invalid")
         }
     }
-    
+
+    public func toDateComponents() -> DateComponents {
+        return DateComponents(
+            era: era,
+            year: year,
+            month: month,
+            day: day,
+            hour: hour,
+            minute: minute,
+            second: second,
+            nanosecond: millisecond == nil ? nil : millisecond! * 1000,
+            weekday: weekday,
+            weekOfMonth: weekOfMonth,
+            weekOfYear: weekOfYear
+        );
+    }
+
     public func getUNNotificationTrigger() -> UNNotificationTrigger? {
-        
+
         do {
             try validate();
-            
-            let trigger = UNCalendarNotificationTrigger( dateMatching: DateComponents(
-                era: era,
-                year: year,
-                month: month,
-                day: day,
-                hour: hour,
-                minute: minute,
-                second: second,
-                nanosecond: millisecond == nil ? nil : millisecond! * 1000,
-                weekday: weekday,
-                weekOfMonth: weekOfMonth,
-                weekOfYear: weekOfYear
-            ), repeats: repeats! )
+
+            let trigger = UNCalendarNotificationTrigger(
+                dateMatching: toDateComponents(),
+                repeats: repeats!
+            )
             
             return trigger
             

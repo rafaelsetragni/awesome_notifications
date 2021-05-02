@@ -11,7 +11,7 @@ class NotificationCalendar extends NotificationSchedule {
   /// Field number for get and set indicating the month of the year (1-12).
   int? month;
 
-  /// Field number for get and set indicating the day number of the month (1-31).
+  /// Field number for get and set indicating the day of the month (1-31).
   int? day;
 
   /// Field number for get and set indicating the hour of the day (0-23).
@@ -26,7 +26,7 @@ class NotificationCalendar extends NotificationSchedule {
   /// Field number for get and set indicating the millisecond within the second.
   int? millisecond;
 
-  /// Field number for get and set indicating the day of the week .
+  /// Field number for get and set indicating the day of the week (1 = Monday).
   int? weekday;
 
   /// Field number for get and set indicating the count of weeks of the month.

@@ -345,7 +345,7 @@ class AwesomeNotifications {
     await _channel.invokeListMethod(CHANNEL_METHOD_RESET_BADGE);
   }
 
-  Future<DateTime> getNextDate(
+  Future<DateTime?> getNextDate(
     NotificationSchedule schedule, {
     DateTime? fixedDate,
   }) async {
@@ -355,8 +355,10 @@ class AwesomeNotifications {
       PUSH_NOTIFICATION_SCHEDULE: schedule.toMap()
     };
 
-    final String nextDate =
+    final String? nextDate =
         await _channel.invokeMethod(CHANNEL_METHOD_GET_NEXT_DATE, parameters);
+
+    if(nextDate == null) return null;
 
     return DateUtils.parseStringToDate(nextDate)!;
   }

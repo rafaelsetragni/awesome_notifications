@@ -71,6 +71,9 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
         if(weekOfMonth != null && weekOfMonth < 0){ weekOfMonth = null; }
         if(weekOfYear != null && weekOfYear < 0){ weekOfYear = null; }
 
+        if(weekday != null)
+            weekday = weekday == 7 ? 1 : (weekday + 1);
+
         return this;
     }
 
@@ -86,9 +89,10 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_MINUTE, minute);
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_SECOND, second);
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_MILLISECOND, millisecond);
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_WEEKDAY, weekday);
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_WEEKOFMONTH, weekOfMonth);
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_WEEKOFYEAR, weekOfYear);
+
+        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_WEEKDAY, weekday == null ? null : (weekday == 1 ? 7 : (weekday - 1)));
 
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_REPEATS, repeats);
         returnedObject.put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, allowWhileIdle);

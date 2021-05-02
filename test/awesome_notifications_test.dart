@@ -15,7 +15,7 @@ void main() {
     DateTime expectedDate = DateUtils.parseStringToDate('2021-01-12 21:00:00')!;
     NotificationSchedule schedule = NotificationCalendar.fromDate(date: expectedDate);
 
-    DateTime result = await AwesomeNotifications()
+    DateTime? result = await AwesomeNotifications()
         .getNextDate(schedule, fixedDate: referenceDate);
     expect(result, expectedDate);
   });

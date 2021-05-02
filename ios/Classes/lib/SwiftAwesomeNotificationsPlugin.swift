@@ -697,47 +697,69 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     
     private func channelMethodGetNextDate(call: FlutterMethodCall, result: @escaping FlutterResult) {
 
-        do {
+        //do {
             let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
-            //let fixedDate:String? = platformParameters[Definitions.NOTIFICATION_INITIAL_FIXED_DATE] as? String
-            
+            let fixedDate:String? = platformParameters[Definitions.NOTIFICATION_INITIAL_FIXED_DATE] as? String
+
             guard let scheduleData:[String : Any?] = platformParameters[Definitions.PUSH_NOTIFICATION_SCHEDULE] as? [String : Any?]
             else { result(nil); return }
-            
+
             var convertedDate:String?
-            
+            var nextValidDate:Date?
             if(scheduleData[Definitions.NOTIFICATION_SCHEDULE_INTERVAL] != nil){
-                
-                guard let scheduleModel:NotificationScheduleModel =
-                    NotificationIntervalModel().fromMap(arguments: scheduleData) as? NotificationScheduleModel
-                else { result(nil); return }
-                    
-                guard let trigger:UNTimeIntervalNotificationTrigger = scheduleModel.getUNNotificationTrigger() as? UNTimeIntervalNotificationTrigger
-                else { result(nil); return }
-                
-                guard let nextValidDate:Date = trigger.nextTriggerDate()
+
+                guard let scheduleModel:NotificationIntervalModel =
+                        NotificationIntervalModel().fromMap(arguments: scheduleData) as? NotificationIntervalModel
                 else { result(nil); return }
 
-                convertedDate = DateUtils.dateToString(nextValidDate)
+                if(fixedDate == nil){
+
+                    guard let trigger:UNTimeIntervalNotificationTrigger = scheduleModel.getUNNotificationTrigger() as? UNTimeIntervalNotificationTrigger
+                    else { result(nil); return }
+
+                    nextValidDate = trigger.nextTriggerDate()
+
+                } else {
+
+                    guard let fixedDateTime:Date = DateUtils.parseDate(fixedDate)
+                    else { result(nil); return }
+
+                    let calendar = Calendar.current
+                    nextValidDate = calendar.date(byAdding: .second, value: scheduleModel.interval!, to: fixedDateTime)
+
+                }
+
             }
             else {
-                
-                guard let scheduleModel:NotificationScheduleModel =
-                    NotificationCalendarModel().fromMap(arguments: scheduleData) as? NotificationScheduleModel
+
+                guard let scheduleModel:NotificationCalendarModel =
+                    NotificationCalendarModel().fromMap(arguments: scheduleData) as? NotificationCalendarModel
                 else { result(nil); return }
-                    
-                guard let trigger:UNCalendarNotificationTrigger = scheduleModel.getUNNotificationTrigger() as? UNCalendarNotificationTrigger
-                else { result(nil); return }
-                
-                guard let nextValidDate:Date = trigger.nextTriggerDate()
-                else { result(nil); return }
-                
-                convertedDate = DateUtils.dateToString(nextValidDate)
+
+                if(fixedDate == nil){
+
+                    guard let trigger:UNCalendarNotificationTrigger = scheduleModel.getUNNotificationTrigger() as? UNCalendarNotificationTrigger
+                    else { result(nil); return }
+
+                    nextValidDate = trigger.nextTriggerDate()
+
+                } else {
+
+                    guard let fixedDateTime:Date = DateUtils.parseDate(fixedDate)
+                    else { result(nil); return }
+
+                    let calendar = Calendar.current
+                    nextValidDate = calendar.nextDate(after: fixedDateTime, matching: scheduleModel.toDateComponents(), matchingPolicy: .nextTime)
+
+                }
             }
-            
+
+            if(nextValidDate == nil){ result(nil); return }
+            convertedDate = DateUtils.dateToString(nextValidDate)
+
             result(convertedDate)
 
-        } catch {
+        /*} catch {
 
             result(
                 FlutterError.init(
@@ -748,7 +770,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             )
 
             result(nil)
-        }
+        }*/
     }
     
     private func channelMethodListAllSchedules(call: FlutterMethodCall, result: @escaping FlutterResult) {

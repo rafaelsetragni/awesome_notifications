@@ -32,40 +32,31 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
   //String _oneSignalToken = '';
 
   bool delayLEDTests = false;
-  DateTime? _pickedDate;
-  TimeOfDay? _pickedTime;
 
   bool notificationsAllowed = false;
 
   String packageName = 'me.carda.awesome_notifications_example';
 
-  Future<bool> pickScheduleDate(BuildContext context) async {
+  Future<DateTime?> pickScheduleDate(BuildContext context) async {
     TimeOfDay? timeOfDay;
     DateTime? newDate = await showDatePicker(
         context: context,
-        initialDate: _pickedDate ?? DateTime.now(),
+        initialDate: DateTime.now(),
         firstDate: DateTime.now(),
         lastDate: DateTime.now().add(Duration(days: 365)));
 
     if (newDate != null) {
       timeOfDay = await showTimePicker(
         context: context,
-        initialTime: _pickedTime ?? TimeOfDay.now(),
+        initialTime: TimeOfDay.now(),
       );
 
-      if (timeOfDay != null &&
-          (_pickedDate != newDate || _pickedTime != timeOfDay)) {
-        setState(() {
-          _pickedTime = timeOfDay;
-          _pickedDate = DateTime(newDate.year, newDate.month, newDate.day,
-              timeOfDay!.hour, timeOfDay.minute);
-        });
-        return true;
+      if (timeOfDay != null) {
+        return DateTime(newDate.year, newDate.month, newDate.day,
+            timeOfDay.hour, timeOfDay.minute);
       }
-      return false;
     }
-
-    return false;
+    return null;
   }
 
   Future<int?> pickBadgeCounter(BuildContext context) async {
@@ -714,8 +705,9 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
             TextDivisor(title: 'Scheduled Notifications'),
             SimpleButton('Schedule notification', onPressed: () async {
-              if (await pickScheduleDate(context)) {
-                showNotificationAtScheduleCron(8, _pickedDate!);
+              DateTime? pickedDate = await pickScheduleDate(context);
+              if (pickedDate != null) {
+                showNotificationAtScheduleCron(8, pickedDate);
               }
             }),
             SimpleButton(
@@ -756,19 +748,42 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Get Next Schedule Date'),
-            TextNote('A simple and fast notification to fresh start.\n\n'
-                'Tap on notification when it appears on your system tray to go to Details page.'),
-            SimpleButton('Get Next Date', onPressed: () async {
-              DateTime referenceDate =
-                  DateUtils.parseStringToDate('2021-01-12 20:00:00')!;
-              DateTime expectedDate =
-                  DateUtils.parseStringToDate('2021-01-12 21:00:00')!;
-              NotificationSchedule schedule =
-                  NotificationCalendar.fromDate(date: expectedDate);
+            TextNote('This is a simple example to show how to query the next valid schedule date. The date components follow the ISO 8601 standard.'),
+            SimpleButton('Get next Monday after date', onPressed: () async {
+              DateTime? referenceDate = await pickScheduleDate(context);
 
-              DateTime result = await AwesomeNotifications()
-                  .getNextDate(schedule, fixedDate: referenceDate);
-              debugPrint(DateUtils.parseDateToString(result));
+                NotificationSchedule schedule =
+                    NotificationCalendar(weekday: DateTime.monday, hour: 0, minute: 0, second: 0);
+                    //NotificationCalendar.fromDate(date: expectedDate);
+
+                DateTime? nextValidDate = await AwesomeNotifications()
+                    .getNextDate(schedule, fixedDate: referenceDate);
+
+                late String response;
+                if(nextValidDate == null)
+                  response = 'There is no more valid date for this schedule';
+                else
+                  response = DateUtils.parseDateToString(nextValidDate.toUtc(), format: 'dd/MM/yyyy')!;
+
+
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: Text("Next valid schedule"),
+                  content: SizedBox(
+                      height: 50,
+                      child: Center(child: Text(response))
+                  ),
+                  actions: [
+                    TextButton(
+                      child: Text("OK"),
+                      onPressed: () {
+                        Navigator.of(context).pop(null);
+                      },
+                    )
+                  ],
+                )
+              );
             }),
 
             /* ******************************************************************** */

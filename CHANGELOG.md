@@ -1,3 +1,7 @@
+## [0.0.6+4]
+* Added native firebase handling for willpresent notification method
+* Added fixedDate to getNextDate on iOS
+* Adjust weekday to work with ISO 8601
 ## [0.0.6+3]
 * Fixed Android canceling for a grouped notification set as summary behaviour
 * Added color hexadecimal representation for json content
