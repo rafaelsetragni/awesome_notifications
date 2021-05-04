@@ -103,7 +103,7 @@ public class NotificationCalendarModel : NotificationScheduleModel {
             weekOfMonth == nil &&
             weekOfYear == nil
         ){
-            throw PushNotificationError.invalidRequiredFields(msg: "At least one parameter is required")
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "At least one parameter is required")
         }
 
         if(!(
@@ -119,7 +119,7 @@ public class NotificationCalendarModel : NotificationScheduleModel {
             IntUtils.isBetween(self.weekOfMonth ?? 1, min: 1, max: 6) &&
             IntUtils.isBetween(self.weekOfYear ?? 1, min: 1, max: 53)
         )){
-            throw PushNotificationError.invalidRequiredFields(msg: "Calendar values are invalid")
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Calendar values are invalid")
         }
     }
 

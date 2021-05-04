@@ -93,7 +93,7 @@ public class NotificationContentModel : AbstractModel {
                     
                     let buttonData:[String:Any?]? = data as? [String:Any?]
                     if(buttonData == nil){
-                        throw PushNotificationError.invalidRequiredFields(msg: "actionButtons are invalid")
+                        throw AwesomeNotificationsException.invalidRequiredFields(msg: "actionButtons are invalid")
                     }
                     
                     self.actionButtons?.append(NotificationButtonModel().fromMap(arguments: buttonData) as! NotificationButtonModel)
@@ -150,12 +150,12 @@ public class NotificationContentModel : AbstractModel {
     public func validate() throws {
 
         if(IntUtils.isNullOrEmpty(id)){
-            throw PushNotificationError.invalidRequiredFields(
+            throw AwesomeNotificationsException.invalidRequiredFields(
                 msg: "id cannot be null or empty")
         }
         
         if(StringUtils.isNullOrEmpty(channelKey)){
-            throw PushNotificationError.invalidRequiredFields(
+            throw AwesomeNotificationsException.invalidRequiredFields(
                 msg: "channelKey cannot be null or empty")
         }
 
@@ -164,13 +164,13 @@ public class NotificationContentModel : AbstractModel {
                 BitmapUtils.getMediaSourceType(mediaPath: icon) != MediaSource.Resource
             ){
                 let iconError = icon ?? "[invalid icon]"
-                throw PushNotificationError.invalidRequiredFields(
+                throw AwesomeNotificationsException.invalidRequiredFields(
                     msg: "Small icon +\(iconError)+ must be a valid media native resource type.")
             }
         }
         
         if(notificationLayout == nil){
-            throw PushNotificationError.invalidRequiredFields(
+            throw AwesomeNotificationsException.invalidRequiredFields(
                 msg: "notificationLayout cannot be null or empty")
         }
         
@@ -182,7 +182,7 @@ public class NotificationContentModel : AbstractModel {
             case .BigPicture:
             
                 if(bigPicture == nil && largeIcon == nil){
-                    throw PushNotificationError.invalidRequiredFields(
+                    throw AwesomeNotificationsException.invalidRequiredFields(
                         msg: "bigPicture or largeIcon needs to be not empty")
                 }
                 try validateBigPicture()
@@ -212,13 +212,13 @@ public class NotificationContentModel : AbstractModel {
     
     private func validateBigPicture() throws {
         if(bigPicture != nil && !BitmapUtils.isValidBitmap(bigPicture)){
-            throw PushNotificationError.invalidRequiredFields(msg: "invalid bigPicture")
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "invalid bigPicture")
         }
     }
     
     private func validateLargeIcon() throws {
         if(largeIcon != nil && !BitmapUtils.isValidBitmap(largeIcon)){
-            throw PushNotificationError.invalidRequiredFields(msg: "invalid largeIcon")
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "invalid largeIcon")
         }
     }
 }

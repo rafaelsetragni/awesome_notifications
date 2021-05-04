@@ -45,7 +45,7 @@ class NotificationSenderAndScheduler {
         self.completion = completion
 
         if (pushNotification == nil){
-            throw PushNotificationError.invalidRequiredFields(msg: "PushNotification not valid")
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "PushNotification not valid")
         }
 
         NotificationBuilder.isNotificationAllowed(completion: { (allowed) in
@@ -64,7 +64,7 @@ class NotificationSenderAndScheduler {
                     self.execute()
                 }
                 else {
-                    throw PushNotificationError.notificationNotAuthorized
+                    throw AwesomeNotificationsException.notificationNotAuthorized
                 }
             } catch {
                 completion(false, nil, error)

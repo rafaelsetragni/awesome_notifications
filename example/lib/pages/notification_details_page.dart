@@ -83,13 +83,13 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                           begin: Alignment.topCenter,
                                           end: Alignment.bottomCenter,
                                           colors: [
-                                        Colors.black12,
-                                        Colors.transparent
-                                      ],
+                                            Colors.white12,
+                                            Colors.transparent
+                                          ],
                                           stops: [
-                                        0.0,
-                                        1.0
-                                      ])),
+                                            0.0,
+                                            1.0
+                                          ])),
                                 )
                               : Container(
                                   height: maxSize * 0.4 +
@@ -101,8 +101,8 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                             begin: Alignment.topCenter,
                                             end: Alignment.bottomCenter,
                                             colors: [
-                                              Colors.black,
-                                              Colors.black,
+                                              Colors.white,
+                                              Colors.white,
                                               Colors.transparent
                                             ],
                                             stops: [

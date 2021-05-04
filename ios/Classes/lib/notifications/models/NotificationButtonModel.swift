@@ -47,12 +47,12 @@ public class NotificationButtonModel : AbstractModel {
     public func validate() throws {
         
         if(StringUtils.isNullOrEmpty(key)){
-            throw PushNotificationError.invalidRequiredFields(
+            throw AwesomeNotificationsException.invalidRequiredFields(
                 msg: "Button action key cannot be null or empty")
         }
 
         if(StringUtils.isNullOrEmpty(label)){
-            throw PushNotificationError.invalidRequiredFields(
+            throw AwesomeNotificationsException.invalidRequiredFields(
                 msg: "Button label cannot be null or empty")
         }
     }

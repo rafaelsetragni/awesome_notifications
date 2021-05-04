@@ -184,7 +184,7 @@ public class NotificationBuilder {
     public static func createNotification(_ pushNotification:PushNotification, content:UNMutableNotificationContent?, now:String) throws -> PushNotification? {
         
         guard let channel = ChannelManager.getChannelByKey(channelKey: pushNotification.content!.channelKey!) else {
-            throw PushNotificationError.invalidRequiredFields(msg: "Channel '\(pushNotification.content!.channelKey!)' does not exist or is disabled")
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Channel '\(pushNotification.content!.channelKey!)' does not exist or is disabled")
         }
         
         let nextDate:Date? = getNextScheduleDate(pushNotification: pushNotification)
@@ -326,20 +326,29 @@ public class NotificationBuilder {
             for button in pushNotification.actionButtons! {
                 
                 let action:UNNotificationAction?
-                
+                                
                 switch button.buttonType {
                     
                     case .InputField:
                         action = UNTextInputNotificationAction(
                             identifier: button.key!,
-                            title: button.label!
+                            title: button.label!,
+                            options: []
                         )
                         break
+                        
+                    case .Default:
+                        action = UNNotificationAction(
+                            identifier: button.key!,
+                            title: button.label!,
+                            options: [.foreground]
+                        )
                     
                     default:
                         action = UNNotificationAction(
                             identifier: button.key!,
-                            title: button.label!
+                            title: button.label!,
+                            options: []
                         )
                         break
                 }
@@ -355,8 +364,10 @@ public class NotificationBuilder {
         }
         
         categoryIdentifier = categoryIdentifier.uppercased()
-        
-        print("Notification category identifier: " + categoryIdentifier)
+
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            print("Notification category identifier: " + categoryIdentifier)
+        }
         content.categoryIdentifier = categoryIdentifier
         
         dynamicLabels.append(contentsOf: dynamicCategory)
