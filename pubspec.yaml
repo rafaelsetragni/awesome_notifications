@@ -10,9 +10,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  #flutter_web_plugins:
+  #  sdk: flutter
 
-  platform: ^3.0.0
-  intl: ^0.17.0
+  #js: ^0.6.3
+  #meta: ^1.3.0
+
+  platform: any
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -36,6 +41,9 @@ flutter:
         pluginClass: AwesomeNotificationsPlugin
       ios:
         pluginClass: AwesomeNotificationsPlugin
+      #web:
+      #  pluginClass: AwesomeNotifications
+      #  fileName: awesome_notifications.dart
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

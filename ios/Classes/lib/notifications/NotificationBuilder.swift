@@ -124,6 +124,13 @@ public class NotificationBuilder {
         
         //return UIApplication.shared.isRegisteredForRemoteNotifications
     }
+
+    public static func jsonDataToPushNotification(jsonData:[String : Any?]?) -> PushNotification? {
+        if(jsonData?.isEmpty ?? true){ return nil }
+
+        let pushNotification:PushNotification? = PushNotification().fromMap(arguments: jsonData!) as? PushNotification
+        return pushNotification
+    }
     
     public static func jsonToPushNotification(jsonData:String?) -> PushNotification? {
         if(StringUtils.isNullOrEmpty(jsonData)){ return nil }

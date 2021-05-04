@@ -2,18 +2,13 @@ package me.carda.awesome_notifications.notifications;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.os.AsyncTask;
-import android.view.Display;
-import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
-import java.util.concurrent.ExecutionException;
 
 import io.flutter.plugin.common.MethodChannel;
-import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
+import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.utils.BitmapUtils;
 
 public class BitmapResourceDecoder extends AsyncTask<Void, Void, byte[]> {
@@ -43,7 +38,7 @@ public class BitmapResourceDecoder extends AsyncTask<Void, Void, byte[]> {
             if(context != null) {
                 Bitmap bitmap = BitmapUtils.getBitmapFromResource(context, bitmapReference);
 
-                if(bitmap == null) throw new PushNotificationException("File '"+bitmapReference+"' not found or invalid");
+                if(bitmap == null) throw new AwesomeNotificationException("File '"+bitmapReference+"' not found or invalid");
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);

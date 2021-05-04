@@ -41,27 +41,28 @@ Future<void> externalUrl(String url) async {
 
 Future<void> showBasicNotification(int id) async {
   await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-    id: id,
-    channelKey: 'basic_channel', //'basic_channel',//'custom_sound',//
-    title: 'Simple Notification',
-    body: 'Simple body',
-  ));
+    content: NotificationContent(
+      id: id,
+      channelKey: 'basic_channel',
+      title: 'Simple Notification',
+      body: 'Simple body',
+    )
+  );
 }
 
 Future<void> showEmojiNotification(int id) async {
   await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-    id: id,
-    channelKey: 'basic_channel',
-    title: 'Emojis are awesome too! ' +
-        Emojis.smile_face_with_tongue +
-        Emojis.smile_rolling_on_the_floor_laughing +
-        Emojis.smile_smiling_face_with_heart_eyes,
-    body:
-        'Simple body with a bunch of Emojis! ${Emojis.transport_police_car} ${Emojis.animals_dog} ${Emojis.flag_UnitedStates} ${Emojis.person_baby}',
-    bigPicture: 'https://tecnoblog.net/wp-content/uploads/2019/09/emoji.jpg',
-    notificationLayout: NotificationLayout.BigPicture,
+    content: NotificationContent(
+      id: id,
+      channelKey: 'basic_channel',
+      title: 'Emojis are awesome too! ' +
+          Emojis.smile_face_with_tongue +
+          Emojis.smile_rolling_on_the_floor_laughing +
+          Emojis.smile_smiling_face_with_heart_eyes,
+      body:
+          'Simple body with a bunch of Emojis! ${Emojis.transport_police_car} ${Emojis.animals_dog} ${Emojis.flag_UnitedStates} ${Emojis.person_baby}',
+      bigPicture: 'https://tecnoblog.net/wp-content/uploads/2019/09/emoji.jpg',
+      notificationLayout: NotificationLayout.BigPicture,
   ));
 }
 

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.carda.awesome_notifications.Definitions;
-import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
+import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 
 public class PushNotification extends Model {
 
@@ -127,9 +127,9 @@ public class PushNotification extends Model {
         return actionButtons;
     }
 
-    public void validate(Context context) throws PushNotificationException {
+    public void validate(Context context) throws AwesomeNotificationException {
         if(this.content == null)
-            throw new PushNotificationException("Push Notification content cannot be null or empty");
+            throw new AwesomeNotificationException("Push Notification content cannot be null or empty");
 
         this.content.validate(context);
 

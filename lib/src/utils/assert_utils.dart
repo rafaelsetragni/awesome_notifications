@@ -9,7 +9,7 @@ class AssertUtils {
     return e.toString().split('.')[1];
   }
 
-  static bool isNullOrEmptyOrInvalid<T>(dynamic value, Type T) {
+  static bool isNullOrEmptyOrInvalid(dynamic value, Type T) {
     if (value == null) return true;
     if (value.runtimeType != T) return true;
 

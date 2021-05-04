@@ -5,7 +5,7 @@ import 'package:flutter/material.dart' hide DateUtils;
 //import 'package:flutter/material.dart' as Material show DateUtils;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+//import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -29,7 +29,7 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
   @override
   void initState() {
     super.initState();
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
+    //FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
 
     displayedDate = DateUtils.parseDateToString(
         DateUtils.utcToLocal(DateUtils.parseStringToDate(
@@ -39,7 +39,7 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
 
   @override
   void deactivate() {
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
+    //FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
     super.deactivate();
   }
 

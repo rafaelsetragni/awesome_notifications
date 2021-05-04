@@ -8,9 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.carda.awesome_notifications.Definitions;
-import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
+import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.utils.CronUtils;
-import me.carda.awesome_notifications.utils.DateUtils;
 import me.carda.awesome_notifications.utils.IntegerUtils;
 
 public class NotificationCalendarModel extends NotificationScheduleModel {
@@ -111,7 +110,7 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
     }
 
     @Override
-    public void validate(Context context) throws PushNotificationException {
+    public void validate(Context context) throws AwesomeNotificationException {
 
         if(
             era != null &&
@@ -126,7 +125,7 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
             weekOfMonth != null &&
             weekOfYear != null
         )
-            throw new PushNotificationException("At least one parameter is required");
+            throw new AwesomeNotificationException("At least one parameter is required");
 
         if(!(
             (era == null || IntegerUtils.isBetween(era, 0, 99999)) &&
@@ -141,7 +140,7 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
             (weekOfMonth == null || IntegerUtils.isBetween(weekOfMonth, 1, 6)) &&
             (weekOfYear == null || IntegerUtils.isBetween(weekOfYear, 1, 53))
         ))
-            throw new PushNotificationException("Calendar values are invalid");
+            throw new AwesomeNotificationException("Calendar values are invalid");
     }
 
     @Override

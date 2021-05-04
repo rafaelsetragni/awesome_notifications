@@ -8,18 +8,13 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 
-import com.google.common.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import androidx.core.app.NotificationManagerCompat;
-import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.enumeratos.DefaultRingtoneType;
 import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
-import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
+import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.notifications.models.NotificationChannelModel;
 import me.carda.awesome_notifications.utils.AudioUtils;
 import me.carda.awesome_notifications.utils.BitmapUtils;
@@ -137,7 +132,7 @@ public class ChannelManager {
 
         try {
             newChannel.validate(context);
-        } catch (PushNotificationException e) {
+        } catch (AwesomeNotificationException e) {
             e.printStackTrace();
             return;
         }

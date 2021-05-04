@@ -17,7 +17,7 @@ import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.notifications.broadcastReceivers.ScheduledNotificationReceiver;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationSource;
-import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
+import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.notifications.managers.ScheduleManager;
 import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
@@ -38,7 +38,7 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
     public static void schedule(
             Context context,
             PushNotification pushNotification
-    ) throws PushNotificationException {
+    ) throws AwesomeNotificationException {
 
         NotificationScheduler.schedule(
             context,
@@ -51,10 +51,10 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
         Context context,
         NotificationSource createdSource,
         PushNotification pushNotification
-    ) throws PushNotificationException {
+    ) throws AwesomeNotificationException {
 
         if (pushNotification == null){
-            throw new PushNotificationException("Invalid notification content");
+            throw new AwesomeNotificationException("Invalid notification content");
         }
 
         NotificationLifeCycle appLifeCycle;
@@ -245,7 +245,7 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
         for (PushNotification pushNotification : pushNotifications) {
             try {
                 schedule(context, pushNotification);
-            } catch (PushNotificationException e) {
+            } catch (AwesomeNotificationException e) {
                 e.printStackTrace();
             }
         }

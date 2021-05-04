@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.carda.awesome_notifications.Definitions;
-import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
+import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 
 public class DefaultsModel extends Model {
 
@@ -47,7 +47,7 @@ public class DefaultsModel extends Model {
     }
 
     @Override
-    public void validate(Context context) throws PushNotificationException {
+    public void validate(Context context) throws AwesomeNotificationException {
 
     }
 }

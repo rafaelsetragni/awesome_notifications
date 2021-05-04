@@ -13,7 +13,7 @@ import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
 import me.carda.awesome_notifications.notifications.enumeratos.GroupAlertBehaviour;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationImportance;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationPrivacy;
-import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
+import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.utils.AudioUtils;
 import me.carda.awesome_notifications.utils.BooleanUtils;
 import me.carda.awesome_notifications.utils.CompareUtils;
@@ -224,25 +224,25 @@ public class NotificationChannelModel extends Model {
     }
 
     @Override
-    public void validate(Context context) throws PushNotificationException {
+    public void validate(Context context) throws AwesomeNotificationException {
         if(StringUtils.isNullOrEmpty(channelKey))
-            throw new PushNotificationException("Channel name cannot be null or empty");
+            throw new AwesomeNotificationException("Channel name cannot be null or empty");
 
         if(StringUtils.isNullOrEmpty(channelName))
-            throw new PushNotificationException("Channel name cannot be null or empty");
+            throw new AwesomeNotificationException("Channel name cannot be null or empty");
 
         if(StringUtils.isNullOrEmpty(channelDescription))
-            throw new PushNotificationException("Channel description cannot be null or empty");
+            throw new AwesomeNotificationException("Channel description cannot be null or empty");
 
         if(playSound == null)
-            throw new PushNotificationException("Play sound selector cannot be null or empty");
+            throw new AwesomeNotificationException("Play sound selector cannot be null or empty");
 
         if (ledColor != null && (ledOnMs == null || ledOffMs == null)) {
-            throw new PushNotificationException("Standard led on and off times cannot be null or empty");
+            throw new AwesomeNotificationException("Standard led on and off times cannot be null or empty");
         }
 
         if(BooleanUtils.getValue(playSound) && !StringUtils.isNullOrEmpty(soundSource))
             if(!AudioUtils.isValidAudio(context, soundSource))
-                throw new PushNotificationException("Audio media is not valid");
+                throw new AwesomeNotificationException("Audio media is not valid");
     }
 }
