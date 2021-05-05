@@ -204,7 +204,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             ){
                 Notification notification = notificationBuilder.createNotification(context, pushNotification);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                     if(pushNotification.groupSummary){

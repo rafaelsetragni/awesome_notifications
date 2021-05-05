@@ -83,7 +83,7 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                           begin: Alignment.topCenter,
                                           end: Alignment.bottomCenter,
                                           colors: [
-                                            Colors.white12,
+                                            Colors.black12,
                                             Colors.transparent
                                           ],
                                           stops: [
@@ -101,8 +101,8 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                             begin: Alignment.topCenter,
                                             end: Alignment.bottomCenter,
                                             colors: [
-                                              Colors.white,
-                                              Colors.white,
+                                              Colors.black,
+                                              Colors.black,
                                               Colors.transparent
                                             ],
                                             stops: [
@@ -249,23 +249,23 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                 left: 0,
                 child: Container(
                   width: mediaQueryData.size.width,
-                  height: mediaQueryData.padding.top + 10,
+                  height: mediaQueryData.padding.top + 6,
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                        Colors.black54,
-                        Colors.black38,
-                        Colors.black12,
-                        Colors.transparent
-                      ],
-                          stops: [
-                        0.2,
-                        0.45,
-                        0.75,
-                        0.9
-                      ])),
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black54,//Colors.white54,//
+                          Colors.black38,//Colors.white38,//
+                          Colors.black12,//Colors.white12,//
+                          Colors.transparent
+                        ],
+                        stops: [
+                          0.2,
+                          0.45,
+                          0.75,
+                          0.9
+                        ])),
                 )),
         Positioned(
           top: mediaQueryData.padding.top + 10,

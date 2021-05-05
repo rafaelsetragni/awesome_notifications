@@ -1,3 +1,7 @@
+## [0.0.6+5]
+* Added the behavior of bringing to the foreground for action buttons on iOS
+* Added debug option on initialize method to lower the debug verbose if not necessary
+* Leveled error messages and error handling for iOS and Android platforms
 ## [0.0.6+4]
 * Added native firebase handling for willpresent notification method
 * Added fixedDate to getNextDate on iOS
