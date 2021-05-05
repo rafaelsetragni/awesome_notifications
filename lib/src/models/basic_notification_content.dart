@@ -12,7 +12,7 @@ class BaseNotificationContent extends Model {
   String? body;
   String? summary;
   bool? showWhen;
-  Map<String, dynamic>? payload;
+  Map<String, String>? payload;
   String? icon;
   String? largeIcon;
   String? bigPicture;
@@ -46,7 +46,7 @@ class BaseNotificationContent extends Model {
     this.body = AssertUtils.extractValue<String>(mapData, 'body');
     this.summary = AssertUtils.extractValue<String>(mapData, 'summary');
     this.showWhen = AssertUtils.extractValue<bool>(mapData, 'showWhen');
-    this.payload = AssertUtils.extractMap<String, dynamic>(mapData, 'payload');
+    this.payload = AssertUtils.extractMap<String, String>(mapData, 'payload');
     this.icon = AssertUtils.extractValue<String>(mapData, 'icon');
     this.largeIcon = AssertUtils.extractValue<String>(mapData, 'largeIcon');
     this.bigPicture = AssertUtils.extractValue<String>(mapData, 'bigPicture');

@@ -5,7 +5,7 @@ import android.content.Context;
 import java.util.Map;
 
 import me.carda.awesome_notifications.Definitions;
-import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
+import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.utils.JsonUtils;
 import me.carda.awesome_notifications.utils.MapUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
@@ -63,6 +63,6 @@ public abstract class Model {
         return defaultValue;
     }
 
-    public abstract void validate(Context context) throws PushNotificationException ;
+    public abstract void validate(Context context) throws AwesomeNotificationException;
 
 }

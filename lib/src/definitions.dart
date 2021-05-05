@@ -16,6 +16,7 @@ const BROADCAST_MESSAGE =
     'me.carda.awesome_notifications.services.firebase.NOTIFICATION';
 const EXTRA_BROADCAST_MESSAGE = 'notification';
 
+const INITIALIZE_DEBUG_MODE = "debug";
 const INITIALIZE_DEFAULT_ICON = "defaultIcon";
 const INITIALIZE_CHANNELS = "initializeChannels";
 

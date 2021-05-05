@@ -7,7 +7,7 @@ import java.util.Map;
 
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.enumeratos.ActionButtonType;
-import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
+import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.utils.StringUtils;
 
 public class NotificationButtonModel extends Model {
@@ -65,11 +65,11 @@ public class NotificationButtonModel extends Model {
     }
 
     @Override
-    public void validate(Context context) throws PushNotificationException {
+    public void validate(Context context) throws AwesomeNotificationException {
         if(StringUtils.isNullOrEmpty(key))
-            throw new PushNotificationException("Button action key cannot be null or empty");
+            throw new AwesomeNotificationException("Button action key cannot be null or empty");
 
         if(StringUtils.isNullOrEmpty(label))
-            throw new PushNotificationException("Button label cannot be null or empty");
+            throw new AwesomeNotificationException("Button label cannot be null or empty");
     }
 }

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.carda.awesome_notifications.Definitions;
-import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
+import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.utils.DateUtils;
 
 public class NotificationIntervalModel extends NotificationScheduleModel {
@@ -48,10 +48,10 @@ public class NotificationIntervalModel extends NotificationScheduleModel {
     }
 
     @Override
-    public void validate(Context context) throws PushNotificationException {
+    public void validate(Context context) throws AwesomeNotificationException {
 
         if(interval == null || interval < 0)
-            throw new PushNotificationException("Interval is required and must be greater than zero");
+            throw new AwesomeNotificationException("Interval is required and must be greater than zero");
     }
 
     @Override

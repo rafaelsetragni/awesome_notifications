@@ -1,6 +1,16 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:convert';
+import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+
+// In order to *not* need this ignore, consider extracting the "web" version
+// of your plugin as a separate package, instead of inlining it in the same
+// package as the core of your plugin.
+// ignore: avoid_web_libraries_in_flutter
+//import 'dart:html' as html;
+//import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'package:awesome_notifications/src/definitions.dart';
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
@@ -14,13 +24,22 @@ import 'package:awesome_notifications/src/models/received_models/received_notifi
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
 import 'package:awesome_notifications/src/utils/date_utils.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 class AwesomeNotifications {
   static String? rootNativePath;
 
+  /// WEB SUPPORT METHODS *********************************************
+/*
+  static void registerWith(Registrar registrar) {
+  }
+
+  /// Handles method calls over the MethodChannel of this plugin.
+  /// Note: Check the "federated" architecture for a new way of doing this:
+  /// https://flutter.dev/go/federated-plugins
+  Future<dynamic> handleMethodCall(MethodCall call) async {
+    _handleWebMethodCall(call);
+  }
+*/
   /// STREAM CREATION METHODS *********************************************
 
   // Streams are created so that app can respond to notification-related events since the plugin is initialised in the `main` function
@@ -127,7 +146,8 @@ class AwesomeNotifications {
   /// OBS: [defaultIcon] needs to be a Resource media type
   /// OBS 2: [channels] are updated if they already exists
   Future<bool> initialize(
-      String? defaultIcon, List<NotificationChannel> channels) async {
+      String? defaultIcon, List<NotificationChannel> channels,
+      {bool debug = false}) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     _channel.setMethodCallHandler(_handleMethod);
@@ -138,14 +158,18 @@ class AwesomeNotifications {
     }
 
     String? defaultIconPath;
-    if (!AssertUtils.isNullOrEmptyOrInvalid<String>(defaultIcon, String)) {
-      // To set a icon on top of notification, is mandatory to user a native resource
-      assert(
-          BitmapUtils().getMediaSource(defaultIcon!) == MediaSource.Resource);
-      defaultIconPath = defaultIcon;
+    if (kIsWeb) {
+    } else {
+      if (!AssertUtils.isNullOrEmptyOrInvalid(defaultIcon, String)) {
+        // To set a icon on top of notification, is mandatory to user a native resource
+        assert(
+            BitmapUtils().getMediaSource(defaultIcon!) == MediaSource.Resource);
+        defaultIconPath = defaultIcon;
+      }
     }
 
     var result = await _channel.invokeMethod(CHANNEL_METHOD_INITIALIZE, {
+      INITIALIZE_DEBUG_MODE: debug,
       INITIALIZE_DEFAULT_ICON: defaultIconPath,
       INITIALIZE_CHANNELS: serializedChannels
     });
@@ -176,24 +200,20 @@ class AwesomeNotifications {
 
       case CHANNEL_METHOD_NOTIFICATION_CREATED:
         _createdSubject.sink.add(ReceivedNotification().fromMap(arguments));
-        debugPrint('Notification created');
         return;
 
       case CHANNEL_METHOD_NOTIFICATION_DISPLAYED:
         _displayedSubject.sink.add(ReceivedNotification().fromMap(arguments));
-        debugPrint('Notification displayed');
         return;
 
       case CHANNEL_METHOD_NOTIFICATION_DISMISSED:
         _dismissedSubject.sink
             .add(ReceivedAction().fromMap(arguments) as ReceivedAction);
-        debugPrint('Notification dismissed');
         return;
 
       case CHANNEL_METHOD_ACTION_RECEIVED:
         _actionSubject.sink
             .add(ReceivedAction().fromMap(arguments) as ReceivedAction);
-        debugPrint('Action received');
         return;
 
       default:

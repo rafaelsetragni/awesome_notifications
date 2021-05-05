@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
 import com.github.arturogutierrez.BadgesNotSupportedException;
@@ -21,7 +20,6 @@ import com.github.arturogutierrez.BadgesNotSupportedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -35,7 +33,7 @@ import me.carda.awesome_notifications.notifications.enumeratos.ActionButtonType;
 import me.carda.awesome_notifications.notifications.enumeratos.GroupSort;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationLayout;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationPrivacy;
-import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
+import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.notifications.managers.ChannelManager;
 import me.carda.awesome_notifications.notifications.managers.DefaultsManager;
 import me.carda.awesome_notifications.notifications.models.NotificationButtonModel;
@@ -58,7 +56,7 @@ public class NotificationBuilder {
 
     public static String TAG = "NotificationBuilder";
 
-    public Notification createNotification(Context context, PushNotification pushNotification) throws PushNotificationException {
+    public Notification createNotification(Context context, PushNotification pushNotification) throws AwesomeNotificationException {
 
         Intent intent = buildNotificationIntentFromModel(
             context,
@@ -178,11 +176,11 @@ public class NotificationBuilder {
         return null;
     }
 
-    private NotificationCompat.Builder getNotificationBuilderFromModel(Context context, PushNotification pushNotification, PendingIntent pendingIntent, PendingIntent deleteIntent) throws PushNotificationException {
+    private NotificationCompat.Builder getNotificationBuilderFromModel(Context context, PushNotification pushNotification, PendingIntent pendingIntent, PendingIntent deleteIntent) throws AwesomeNotificationException {
 
         NotificationChannelModel channel = ChannelManager.getChannelByKey(context, pushNotification.content.channelKey);
 
-        if(channel == null) throw new PushNotificationException("Channel '"+pushNotification.content.channelKey+"' does not exist or is disabled");
+        if(channel == null) throw new AwesomeNotificationException("Channel '"+pushNotification.content.channelKey+"' does not exist or is disabled");
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, pushNotification.content.channelKey);
 

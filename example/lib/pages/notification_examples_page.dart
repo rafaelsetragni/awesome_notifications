@@ -313,8 +313,10 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
           // test page inside console.firebase.google.com
           !StringUtils.isNullOrEmpty(message.notification?.title,
                   considerWhiteSpaceAsEmpty: true) ||
-              !StringUtils.isNullOrEmpty(message.notification?.body,
-                  considerWhiteSpaceAsEmpty: true)) {
+          !StringUtils.isNullOrEmpty(message.notification?.body,
+              considerWhiteSpaceAsEmpty: true)
+      ){
+
         print('Message also contained a notification: ${message.notification}');
 
         String? imageUrl;

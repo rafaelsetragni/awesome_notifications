@@ -32,7 +32,7 @@ public class NotificationIntervalModel : NotificationScheduleModel {
     public func validate() throws {
         
         if(IntUtils.isNullOrEmpty(interval) || interval! <= 0){
-            throw PushNotificationError.invalidRequiredFields(msg: "Interval cannot be null, empty or zero")
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Interval cannot be null, empty or zero")
         }
     }
     

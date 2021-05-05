@@ -26,7 +26,7 @@ public class DismissedNotificationReceiver extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.d(TAG, "notification dismissed");
+        //Log.d(TAG, "notification dismissed");
         String action = intent.getAction();
 
         if (action != null && action.equals(Definitions.DISMISSED_NOTIFICATION)) {

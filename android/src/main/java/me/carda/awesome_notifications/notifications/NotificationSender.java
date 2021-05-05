@@ -10,8 +10,6 @@ import android.service.notification.StatusBarNotification;
 
 import java.util.Random;
 
-import io.flutter.Log;
-
 import androidx.core.app.NotificationManagerCompat;
 
 import me.carda.awesome_notifications.BroadcastSender;
@@ -19,7 +17,7 @@ import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationLayout;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationSource;
-import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
+import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.notifications.managers.CreatedManager;
 import me.carda.awesome_notifications.notifications.managers.DisplayedManager;
 import me.carda.awesome_notifications.notifications.models.PushNotification;
@@ -45,7 +43,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
     public static void send(
             Context context,
             PushNotification pushNotification
-    ) throws PushNotificationException {
+    ) throws AwesomeNotificationException {
 
         NotificationSender.send(
                 context,
@@ -58,10 +56,10 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
         Context context,
         NotificationSource createdSource,
         PushNotification pushNotification
-    ) throws PushNotificationException {
+    ) throws AwesomeNotificationException {
 
         if (pushNotification == null ){
-            throw new PushNotificationException("Notification cannot be empty or null");
+            throw new AwesomeNotificationException("Notification cannot be empty or null");
         }
 
         NotificationLifeCycle appLifeCycle;
@@ -152,7 +150,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
     @Override
     protected void onPostExecute(NotificationReceived receivedNotification) {
-        Log.d(TAG, "Notification created");
+        //Log.d(TAG, "Notification created");
 
         // Only broadcast if pushNotification is valid
         if(pushNotification != null){
@@ -206,7 +204,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             ){
                 Notification notification = notificationBuilder.createNotification(context, pushNotification);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                     if(pushNotification.groupSummary){

@@ -1,4 +1,4 @@
-enum PushNotificationError: Error {
+enum AwesomeNotificationsException: Error {
     case exception
     case notificationNotAuthorized
     case exceptionMsg(msg:String)

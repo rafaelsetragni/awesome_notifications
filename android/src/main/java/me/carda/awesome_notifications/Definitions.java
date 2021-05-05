@@ -22,6 +22,7 @@ public interface Definitions {
     String MEDIA_VALID_ASSET = "^asset?:\\/\\/";
     String MEDIA_VALID_RESOURCE = "^resource?:\\/\\/";
 
+    String INITIALIZE_DEBUG_MODE = "debug";
     String INITIALIZE_CHANNELS = "initializeChannels";
     String INITIALIZE_DEFAULT_ICON = "defaultIcon";
     String INITIALIZE_REQUIRE_PERMISSION = "requirePermission";
@@ -78,7 +79,6 @@ public interface Definitions {
     String CHANNEL_METHOD_LIST_ALL_SCHEDULES = "listAllSchedules";
     String CHANNEL_FORCE_UPDATE = "forceUpdate";
 
-    String DEFAULT_ICON = "defaultIcon";
     String FIREBASE_ENABLED = "FIREBASE_ENABLED";
     String SELECT_NOTIFICATION = "SELECT_NOTIFICATION";
     String DISMISSED_NOTIFICATION = "DISMISSED_NOTIFICATION";

@@ -43,7 +43,7 @@ dependencies:
   # flutter_circular_slider: ^2.5.0
 
   # flutter_statusbarcolor: ^0.2.3
-  flutter_statusbarcolor_ns: ^0.3.0-nullsafety
+  # flutter_statusbarcolor_ns: ^0.3.0-nullsafety
 
   firebase_core: ^1.0.1
   firebase_messaging: ^9.1.2

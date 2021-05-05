@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.carda.awesome_notifications.Definitions;
-import me.carda.awesome_notifications.notifications.exceptions.PushNotificationException;
+import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.notifications.models.Model;
 import me.carda.awesome_notifications.utils.StringUtils;
 
@@ -45,7 +45,7 @@ public class SharedManager<T extends Model> {
         }
     }
 
-    private SharedPreferences getSharedInstance(Context context) throws PushNotificationException {
+    private SharedPreferences getSharedInstance(Context context) throws AwesomeNotificationException {
 
         SharedPreferences preferences = context.getSharedPreferences(
                 context.getPackageName() + "." + (hashedReference == null ? reference : hashedReference),
@@ -53,7 +53,7 @@ public class SharedManager<T extends Model> {
         );
 
         if(preferences == null){
-            throw new PushNotificationException("SharedPreferences.getSharedPreferences return null");
+            throw new AwesomeNotificationException("SharedPreferences.getSharedPreferences return null");
         }
 
         return preferences;
@@ -125,7 +125,7 @@ public class SharedManager<T extends Model> {
 
             return returnedObject;
 
-        } catch (PushNotificationException e) {
+        } catch (AwesomeNotificationException e) {
             e.printStackTrace();
             Log.e(TAG, e.toString());
         } catch (Exception e) {
@@ -152,7 +152,7 @@ public class SharedManager<T extends Model> {
 
             return true;
 
-        } catch (PushNotificationException e) {
+        } catch (AwesomeNotificationException e) {
             e.printStackTrace();
             Log.e(TAG, e.toString());
         }
@@ -175,7 +175,7 @@ public class SharedManager<T extends Model> {
 
             return true;
 
-        } catch (PushNotificationException e) {
+        } catch (AwesomeNotificationException e) {
             e.printStackTrace();
             Log.e(TAG, e.toString());
         }

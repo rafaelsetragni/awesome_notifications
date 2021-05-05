@@ -5,7 +5,7 @@ import 'package:flutter/material.dart' hide DateUtils;
 //import 'package:flutter/material.dart' as Material show DateUtils;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+//import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -29,7 +29,7 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
   @override
   void initState() {
     super.initState();
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
+    //FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
 
     displayedDate = DateUtils.parseDateToString(
         DateUtils.utcToLocal(DateUtils.parseStringToDate(
@@ -39,7 +39,7 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
 
   @override
   void deactivate() {
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
+    //FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
     super.deactivate();
   }
 
@@ -83,13 +83,13 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                           begin: Alignment.topCenter,
                                           end: Alignment.bottomCenter,
                                           colors: [
-                                        Colors.black12,
-                                        Colors.transparent
-                                      ],
+                                            Colors.black12,
+                                            Colors.transparent
+                                          ],
                                           stops: [
-                                        0.0,
-                                        1.0
-                                      ])),
+                                            0.0,
+                                            1.0
+                                          ])),
                                 )
                               : Container(
                                   height: maxSize * 0.4 +
@@ -249,23 +249,23 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                 left: 0,
                 child: Container(
                   width: mediaQueryData.size.width,
-                  height: mediaQueryData.padding.top + 10,
+                  height: mediaQueryData.padding.top + 6,
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                        Colors.black54,
-                        Colors.black38,
-                        Colors.black12,
-                        Colors.transparent
-                      ],
-                          stops: [
-                        0.2,
-                        0.45,
-                        0.75,
-                        0.9
-                      ])),
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black54,//Colors.white54,//
+                          Colors.black38,//Colors.white38,//
+                          Colors.black12,//Colors.white12,//
+                          Colors.transparent
+                        ],
+                        stops: [
+                          0.2,
+                          0.45,
+                          0.75,
+                          0.9
+                        ])),
                 )),
         Positioned(
           top: mediaQueryData.padding.top + 10,

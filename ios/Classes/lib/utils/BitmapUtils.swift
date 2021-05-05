@@ -75,7 +75,7 @@ public class BitmapUtils : MediaUtils {
                 // from EXC_RESOURCE_RESOURCE_TYPE_MEMORY fatal exception
                 
                 if SwiftUtils.isRunningOnExtension() && imageData.count > 1048576 {
-                    throw PushNotificationError.exceptionMsg(msg:
+                    throw AwesomeNotificationsException.exceptionMsg(msg:
                     "Notification image '\( String(describing: bitmapUri))' exceeds 1Mb"
                     )
                 }

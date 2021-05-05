@@ -104,17 +104,17 @@ public class NotificationChannelModel : AbstractModel {
     public func validate() throws {
         
         if(StringUtils.isNullOrEmpty(channelKey)){
-            throw PushNotificationError.invalidRequiredFields(
+            throw AwesomeNotificationsException.invalidRequiredFields(
                 msg: "channelKey cannot be null or empty")
         }
 
         if(StringUtils.isNullOrEmpty(channelName)){
-            throw PushNotificationError.invalidRequiredFields(
+            throw AwesomeNotificationsException.invalidRequiredFields(
                 msg: "channelName cannot be null or empty")
         }
 
         if(StringUtils.isNullOrEmpty(channelDescription)){
-            throw PushNotificationError.invalidRequiredFields(
+            throw AwesomeNotificationsException.invalidRequiredFields(
                 msg: "channelDescription cannot be null or empty")
         }
         
@@ -124,7 +124,7 @@ public class NotificationChannelModel : AbstractModel {
         ){
             if #available(iOS 10.0, *) {
                 if(!AudioUtils.isValidSound(soundSource)){
-                    throw PushNotificationError.invalidRequiredFields(msg: "Audio media is not valid")
+                    throw AwesomeNotificationsException.invalidRequiredFields(msg: "Audio media is not valid")
                 }
             } else {
                 // Fallback on earlier versions
