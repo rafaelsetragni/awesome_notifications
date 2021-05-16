@@ -28,6 +28,9 @@ import 'package:awesome_notifications/src/utils/date_utils.dart';
 class AwesomeNotifications {
   static String? rootNativePath;
 
+  static String utcTimeZoneIdentifier = "UTC";
+  static String localTimeZoneIdentifier = "UTC";
+
   /// WEB SUPPORT METHODS *********************************************
 /*
   static void registerWith(Registrar registrar) {
@@ -173,6 +176,11 @@ class AwesomeNotifications {
       INITIALIZE_DEFAULT_ICON: defaultIconPath,
       INITIALIZE_CHANNELS: serializedChannels
     });
+
+    localTimeZoneIdentifier = await _channel
+        .invokeMethod(CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER);
+    utcTimeZoneIdentifier =
+        await _channel.invokeMethod(CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER);
 
     return result;
   }
@@ -365,8 +373,12 @@ class AwesomeNotifications {
     await _channel.invokeListMethod(CHANNEL_METHOD_RESET_BADGE);
   }
 
+  /// Get the next valid date for a notification schedule
   Future<DateTime?> getNextDate(
+    /// A valid Notification schedule model
     NotificationSchedule schedule, {
+
+    /// reference date to simulate a schedule in different time. If null, the reference date will be now
     DateTime? fixedDate,
   }) async {
     fixedDate ??= DateTime.now().toUtc();
@@ -381,6 +393,20 @@ class AwesomeNotifications {
     if (nextDate == null) return null;
 
     return DateUtils.parseStringToDate(nextDate)!;
+  }
+
+  /// Get the current UTC time zone identifier
+  Future<String> getUtcTimeZoneIdentifier() async {
+    final String utcIdentifier =
+        await _channel.invokeMethod(CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER);
+    return utcIdentifier;
+  }
+
+  /// Get the current Local time zone identifier
+  Future<String> getLocalTimeZoneIdentifier() async {
+    final String localIdentifier = await _channel
+        .invokeMethod(CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER);
+    return localIdentifier;
   }
 
   /// Cancel a single notification

@@ -41,7 +41,7 @@ public final class CronUtils {
             initialScheduleDay = now
         }
         else {
-            initialScheduleDay = DateUtils.parseDate(initialDateTime)
+            initialScheduleDay = DateUtils.stringToDate(initialDateTime, timeZone: DateUtils.localTimeZone.identifier)
         }
 
         // if initial date is a future one, show in future. Otherwise, show now

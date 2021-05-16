@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications/src/models/notification_schedule.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
@@ -35,6 +36,8 @@ class NotificationCalendar extends NotificationSchedule {
   /// Field number for get and set indicating the weeks of the year.
   int? weekOfYear;
 
+  /// Notification Schedule based on calendar components. At least one date parameter is required.
+  /// [timeZone] time zone identifier as reference of this schedule date. (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
   NotificationCalendar({
     this.era,
     this.year,
@@ -47,14 +50,27 @@ class NotificationCalendar extends NotificationSchedule {
     this.weekday,
     this.weekOfMonth,
     this.weekOfYear,
+    String? timeZone,
     bool allowWhileIdle = false,
     bool repeats = false,
-  }) : super(allowWhileIdle: allowWhileIdle, repeats: repeats);
+  }) : super(
+            timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
+            allowWhileIdle: allowWhileIdle,
+            repeats: repeats);
 
+  /// Initialize a notification schedule calendar based on a date object
   NotificationCalendar.fromDate(
       {required DateTime date,
+      String? timeZoneIdentifier,
       bool allowWhileIdle = false,
-      bool repeats = false}) {
+      bool repeats = false})
+      : super(
+            timeZone: timeZoneIdentifier ??
+                (date.isUtc
+                    ? AwesomeNotifications.utcTimeZoneIdentifier
+                    : AwesomeNotifications.localTimeZoneIdentifier),
+            allowWhileIdle: allowWhileIdle,
+            repeats: repeats) {
     this.year = date.year;
     this.month = date.month;
     this.day = date.day;
@@ -62,8 +78,6 @@ class NotificationCalendar extends NotificationSchedule {
     this.minute = date.minute;
     this.second = date.second;
     this.millisecond = date.millisecond;
-    this.allowWhileIdle = allowWhileIdle;
-    this.repeats = repeats;
   }
 
   @override

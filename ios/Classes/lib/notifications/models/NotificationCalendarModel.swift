@@ -9,8 +9,23 @@ import Foundation
 
 public class NotificationCalendarModel : NotificationScheduleModel {
     
-    /// Field number for get and set indicating the era, e.g., AD or BC in the Julian calendar
-    var era:Int?
+    var _createdDate:String?
+    var _timeZone:String?
+    
+    /// Initial reference date from schedule
+    public var createdDate:String? { get{
+        return _createdDate
+    } set(newValue){
+        _createdDate = newValue
+    }}
+    
+    /// Initial reference date from schedule
+    public var timeZone:String? { get{
+        return _timeZone
+    } set(newValue){
+        _timeZone = newValue
+    }}
+    
     /// Field number for get and set indicating the year.
     var year:Int?
     /// Field number for get and set indicating the month.
@@ -36,21 +51,19 @@ public class NotificationCalendarModel : NotificationScheduleModel {
     
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         
-        self.era = MapUtils<Int>.getValueOrDefault(reference: "era", arguments: arguments)
-        self.year = MapUtils<Int>.getValueOrDefault(reference: "year", arguments: arguments)
-        self.month = MapUtils<Int>.getValueOrDefault(reference: "month", arguments: arguments)
-        self.day = MapUtils<Int>.getValueOrDefault(reference: "day", arguments: arguments)
-        self.hour = MapUtils<Int>.getValueOrDefault(reference: "hour", arguments: arguments)
-        self.minute = MapUtils<Int>.getValueOrDefault(reference: "minute", arguments: arguments)
-        self.second = MapUtils<Int>.getValueOrDefault(reference: "second", arguments: arguments)
-        self.millisecond = MapUtils<Int>.getValueOrDefault(reference: "millisecond", arguments: arguments)
-        self.weekday = MapUtils<Int>.getValueOrDefault(reference: "weekday", arguments: arguments)
-        self.weekOfMonth = MapUtils<Int>.getValueOrDefault(reference: "weekOfMonth", arguments: arguments)
-        self.weekOfYear = MapUtils<Int>.getValueOrDefault(reference: "weekOfYear", arguments: arguments)
+        self.year = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_YEAR, arguments: arguments)
+        self.month = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_MONTH, arguments: arguments)
+        self.day = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_DAY, arguments: arguments)
+        self.hour = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_HOUR, arguments: arguments)
+        self.minute = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_MINUTE, arguments: arguments)
+        self.second = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_SECOND, arguments: arguments)
+        self.millisecond = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_MILLISECOND, arguments: arguments)
+        self.weekday = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_WEEKDAY, arguments: arguments)
+        self.weekOfMonth = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_WEEKOFMONTH, arguments: arguments)
+        self.weekOfYear = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_WEEKOFYEAR, arguments: arguments)
         
-        self.repeats = MapUtils<Bool>.getValueOrDefault(reference: "repeats", arguments: arguments)
+        self.repeats = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_REPEATS, arguments: arguments)
         
-        if (self.era ?? 0) < 0 { self.era = nil }
         if (self.year ?? 0) < 0 { self.year = nil }
         if (self.month ?? 0) < 0 { self.month = nil }
         if (self.day ?? 0) < 0 { self.day = nil }
@@ -73,25 +86,23 @@ public class NotificationCalendarModel : NotificationScheduleModel {
     public func toMap() -> [String : Any?] {
         var mapData:[String: Any?] = [:]
 
-        if(era != nil) {mapData["era"]  = self.era}
-        if(year != nil) {mapData["year"]  = self.year}
-        if(month != nil) {mapData["month"]  = self.month}
-        if(day != nil) {mapData["day"]  = self.day}
-        if(hour != nil) {mapData["hour"]  = self.hour}
-        if(minute != nil) {mapData["minute"]  = self.minute}
-        if(second != nil) {mapData["second"]  = self.second}
-        if(millisecond != nil) {mapData["millisecond"]  = self.millisecond}
-        if(weekday != nil) {mapData["weekday"]  = self.weekday == 1 ? 7 : (self.weekday! - 1)}
-        if(weekOfMonth != nil) {mapData["weekOfMonth"]  = self.weekOfMonth}
-        if(weekOfYear != nil) {mapData["weekOfYear"]  = self.weekOfYear}
-        if(repeats != nil) {mapData["repeats"]  = self.repeats}
+        if(year != nil)   {mapData[Definitions.NOTIFICATION_SCHEDULE_YEAR]   = self.year}
+        if(month != nil)  {mapData[Definitions.NOTIFICATION_SCHEDULE_MONTH] = self.month}
+        if(day != nil)    {mapData[Definitions.NOTIFICATION_SCHEDULE_DAY]   = self.day}
+        if(hour != nil)   {mapData[Definitions.NOTIFICATION_SCHEDULE_HOUR]   = self.hour}
+        if(minute != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_MINUTE] = self.minute}
+        if(second != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_SECOND] = self.second}
+        if(millisecond != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_MILLISECOND] = self.millisecond}
+        if(weekday != nil)     {mapData[Definitions.NOTIFICATION_SCHEDULE_WEEKDAY]     = self.weekday == 1 ? 7 : (self.weekday! - 1)}
+        if(weekOfMonth != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_WEEKOFMONTH] = self.weekOfMonth}
+        if(weekOfYear != nil)  {mapData[Definitions.NOTIFICATION_SCHEDULE_WEEKOFYEAR]  = self.weekOfYear}
+        if(repeats != nil)     {mapData[Definitions.NOTIFICATION_SCHEDULE_REPEATS]  = self.repeats}
 
         return mapData
     }
 
     public func validate() throws {
         if(
-            era == nil &&
             year == nil &&
             month == nil &&
             day == nil &&
@@ -107,7 +118,6 @@ public class NotificationCalendarModel : NotificationScheduleModel {
         }
 
         if(!(
-            IntUtils.isBetween(self.era ?? 0, min: 0, max: 99999) &&
             IntUtils.isBetween(self.year ?? 0, min: 0, max: 99999) &&
             IntUtils.isBetween(self.month ?? 1, min: 1, max: 12) &&
             IntUtils.isBetween(self.day ?? 1, min: 1, max: 31) &&
@@ -124,8 +134,8 @@ public class NotificationCalendarModel : NotificationScheduleModel {
     }
 
     public func toDateComponents() -> DateComponents {
-        return DateComponents(
-            era: era,
+        let dateComponents:DateComponents = DateComponents(
+            timeZone: TimeZone(identifier: timeZone ?? DateUtils.localTimeZone.identifier),
             year: year,
             month: month,
             day: day,
@@ -136,7 +146,27 @@ public class NotificationCalendarModel : NotificationScheduleModel {
             weekday: weekday,
             weekOfMonth: weekOfMonth,
             weekOfYear: weekOfYear
-        );
+        )
+        return dateComponents
+    }
+    
+    public func hasNextValidDate() -> Bool {
+        
+        let timeZone:String = self.timeZone ?? DateUtils.localTimeZone.identifier
+        let nowDate:Date? = DateUtils.getLocalDateTime(fromTimeZone: timeZone)
+        
+        let nextValidDate:Date? = DateUtils.getNextValidDate(
+            scheduleModel: self,
+            fixedDate: (self.repeats ?? true) ?
+                DateUtils.getLocalTextDate(fromTimeZone: timeZone) :
+                createdDate,
+            timeZone: timeZone
+        )
+        
+        return
+            nil != nextValidDate &&
+            nil != nowDate &&
+            nextValidDate! > nowDate!
     }
 
     public func getUNNotificationTrigger() -> UNNotificationTrigger? {

@@ -9,6 +9,10 @@ import Foundation
 
 extension Date {
     
+    public static func localTimeZone() -> TimeZone {
+        return TimeZone.autoupdatingCurrent
+    }
+    
     public func getTime() -> Int64 {
         return Int64((self.timeIntervalSince1970 * 1000.0).rounded())
     }
@@ -45,6 +49,41 @@ extension Date {
         return Formatter.preciseGMTTime.string(for: self) ?? ""
     }
     
+    func toDateComponents() -> DateComponents {
+        let calendar = Calendar.current
+        return DateComponents(
+            timeZone: self.getTimeZone(),
+            year: calendar.component(.year, from: self),
+            month: calendar.component(.month, from: self),
+            day: calendar.component(.day, from: self),
+            hour: calendar.component(.hour, from: self),
+            minute: calendar.component(.minute, from: self),
+            second: calendar.component(.second, from: self),
+            nanosecond: calendar.component(.nanosecond, from: self),
+            weekday: calendar.component(.weekday, from: self),
+            weekOfMonth: calendar.component(.weekOfMonth, from: self),
+            weekOfYear: calendar.component(.weekOfYear, from: self)
+        )
+    }
+    
+    func convertToTimezone(fromTimeZone timeZoneIdentifier: String) -> Date? {
+        if let timeZone = TimeZone(identifier: timeZoneIdentifier) {
+            let targetOffset = TimeInterval(timeZone.secondsFromGMT(for: self))
+            let localOffeset = TimeInterval(TimeZone.autoupdatingCurrent.secondsFromGMT(for: self))
+
+            // just add seconds to date object, but dont change his internal time zone identifier
+            let dephasedDate:Date = self.addingTimeInterval(targetOffset - localOffeset)
+            
+            var dateComponents = dephasedDate.toDateComponents()
+            dateComponents.timeZone = TimeZone(identifier: timeZone.identifier)
+            
+            // generate a new Date object with the correct time zone identifier
+            return dateComponents.date
+        }
+
+        return nil
+    }
+    
     var dateComponents: DateComponents {
         let calendar = Calendar.current
         var components:DateComponents = DateComponents()
@@ -58,6 +97,17 @@ extension Date {
     }
     
     public func toString() -> String? {
-        return DateUtils.dateToString(self)
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = self.getTimeZone()
+        dateFormatter.dateFormat = Definitions.DATE_FORMAT
+        return dateFormatter.string(from: self)
+    }
+    
+    public func getTimeZone() -> TimeZone? {
+        return TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT(for: self))
+    }
+    
+    public func getLocalDate(fromTimeZone timeZone:String?) -> Date {
+        return Date().convertToTimezone(fromTimeZone: timeZone ?? Date.localTimeZone().identifier)!
     }
 }

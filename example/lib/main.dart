@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -164,9 +166,36 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
-
   print("Handling a background message: ${message.messageId}");
-  AwesomeNotifications().createNotificationFromJsonData(message.data);
+
+  if(
+    StringUtils.isNullOrEmpty(message.notification?.title, considerWhiteSpaceAsEmpty: true) ||
+    StringUtils.isNullOrEmpty(message.notification?.body, considerWhiteSpaceAsEmpty: true)
+  ){
+    print('message also contained a notification: ${message.notification}');
+
+    String? imageUrl;
+    imageUrl ??= message.notification!.android?.imageUrl;
+    imageUrl ??= message.notification!.apple?.imageUrl;
+
+    Map<String, dynamic> notificationAdapter = {
+      NOTIFICATION_ID:
+            message.data[PUSH_NOTIFICATION_CONTENT]?[NOTIFICATION_ID] ??
+            message.messageId ??
+            Random().nextInt(2147483647),
+      NOTIFICATION_CHANNEL_KEY: 'basic_channel',
+      NOTIFICATION_TITLE: message.notification!.title,
+      NOTIFICATION_BODY: message.notification!.body,
+      NOTIFICATION_LAYOUT:
+          StringUtils.isNullOrEmpty(imageUrl) ? 'Default' : 'BigPicture',
+      NOTIFICATION_BIG_PICTURE: imageUrl
+    };
+
+    AwesomeNotifications().createNotificationFromJsonData(notificationAdapter);
+  }
+  else {
+    AwesomeNotifications().createNotificationFromJsonData(message.data);
+  }
 }
 
 class App extends StatefulWidget {

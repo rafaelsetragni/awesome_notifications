@@ -158,18 +158,18 @@ public class NotificationBuilder {
                 actionReceived.actionKey = nil
                 actionReceived.actionInput = nil
                 actionReceived.dismissedLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
-                actionReceived.dismissedDate = DateUtils.getUTCDate()
+                actionReceived.dismissedDate = DateUtils.getUTCTextDate()
                 
             default:
                 let defaultIOSAction = UNNotificationDefaultActionIdentifier.description
                 actionReceived.actionKey = actionKey == defaultIOSAction ? nil : actionKey
                 actionReceived.actionInput = userText
                 actionReceived.actionLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
-                actionReceived.actionDate = DateUtils.getUTCDate()
+                actionReceived.actionDate = DateUtils.getUTCTextDate()
         }
         
         if(StringUtils.isNullOrEmpty(actionReceived.displayedDate)){
-            actionReceived.displayedDate = DateUtils.getUTCDate()
+            actionReceived.displayedDate = DateUtils.getUTCTextDate()
             actionReceived.displayedLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
         }
         else {
@@ -235,6 +235,11 @@ public class NotificationBuilder {
             }
             
             //let trigger:UNCalendarNotificationTrigger? = dateToCalendarTrigger(targetDate: nextDate)
+            
+            if(!(pushNotification.schedule?.hasNextValidDate() ?? true)){
+                throw AwesomeNotificationsException.notificationExpired
+            }
+            
             let trigger:UNNotificationTrigger? = pushNotification.schedule?.getUNNotificationTrigger()
             let request = UNNotificationRequest(identifier: pushNotification.content!.id!.description, content: content, trigger: trigger)
             
@@ -247,6 +252,12 @@ public class NotificationBuilder {
                 }
                 else {
                     if(pushNotification.schedule != nil){
+                        
+                        pushNotification.schedule!.timeZone =
+                            pushNotification.schedule!.timeZone ?? DateUtils.localTimeZone.identifier
+                        pushNotification.schedule!.createdDate =
+                            DateUtils.getLocalTextDate(fromTimeZone: pushNotification.schedule!.timeZone!)
+                        
                         if (nextDate != nil){
                             ScheduleManager.saveSchedule(notification: pushNotification, nextDate: nextDate!)
                         } else {
@@ -423,7 +434,7 @@ public class NotificationBuilder {
             if(pushNotification != nil){
 
                 nextValidDate = cron.getNextCalendar(
-                    initialDateTime: pushNotification!.schedule!.initialDateTime,
+                    initialDateTime: pushNotification!.schedule!.createdDateTime,
                     crontabRule: pushNotification!.schedule!.crontabSchedule
                 )
 

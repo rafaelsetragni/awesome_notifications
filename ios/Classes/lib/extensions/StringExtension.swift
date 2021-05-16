@@ -95,7 +95,7 @@ extension String {
         return converted
     }
     
-    public func toDate(_ format: String = "yyyy-MM-dd HH:mm:ss", with timeZone: TimeZone = TimeZone(abbreviation: "UTC")!)-> Date?{
+    public func toDate(_ format: String = "yyyy-MM-dd HH:mm:ss", with timeZone: TimeZone = TimeZone(identifier: "UTC")!)-> Date?{
 
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = timeZone

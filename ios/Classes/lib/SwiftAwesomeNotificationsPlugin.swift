@@ -156,7 +156,8 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         UNUserNotificationCenter.current().delegate = self
         
         //enableFirebase(application)
-        enableScheduler(application)
+        //enableScheduler(application)
+        rescheduleLostNotifications()
 		
         if(SwiftAwesomeNotificationsPlugin.debug){
 			Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications attached for iOS")
@@ -184,7 +185,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         return nil
     }
     */
-    
+    /*
     private func enableScheduler(_ application: UIApplication){
         if !SwiftUtils.isRunningOnExtension() {
             if #available(iOS 13.0, *) {
@@ -235,7 +236,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             }
         }
     }
-    
+ 
     @available(iOS 13.0, *)
     private func handleAppSchedules(task: BGAppRefreshTask){
         
@@ -260,7 +261,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         rescheduleLostNotifications()
         SwiftAwesomeNotificationsPlugin.rescheduleBackgroundTask()
     }
-/*
+     
     private func enableFirebase(_ application: UIApplication){
         guard let firebaseConfigPath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist") else {
             return
@@ -539,14 +540,14 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 			)
 		}
         
-        startBackgroundScheduler()
+        //startBackgroundScheduler()
     }
     
     public func applicationWillEnterForeground(_ application: UIApplication) {
 	
         SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Background
         
-        stopBackgroundScheduler()
+        //stopBackgroundScheduler()
         rescheduleLostNotifications()
 		
         if(SwiftAwesomeNotificationsPlugin.debug){
@@ -562,7 +563,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         
         SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.AppKilled
         
-        SwiftAwesomeNotificationsPlugin.rescheduleBackgroundTask()
+        //SwiftAwesomeNotificationsPlugin.rescheduleBackgroundTask()
 		
         if(SwiftAwesomeNotificationsPlugin.debug){
 			Log.d(
@@ -592,6 +593,11 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         for pushNotification in lostSchedules {
             
             do {
+                let hasNextValidDate:Bool = (pushNotification.schedule?.hasNextValidDate() ?? false)
+                if  pushNotification.schedule?.createdDate == nil || !hasNextValidDate {
+                    throw AwesomeNotificationsException.notificationExpired
+                }
+                
                 if #available(iOS 10.0, *) {
                     try NotificationSenderAndScheduler().send(
                         createdSource: pushNotification.content!.createdSource!,
@@ -601,7 +607,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                     )
                 }
             } catch {
-                // Fallback on earlier versions
+                let _ = ScheduleManager.removeSchedule(id: pushNotification.content!.id!)
             }
         }
     }
@@ -735,10 +741,18 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 				case Definitions.CHANNEL_METHOD_CANCEL_ALL_SCHEDULES:
                     try channelMethodCancelAllSchedules(call: call, result: result)
 					return
-
-				case Definitions.CHANNEL_METHOD_GET_NEXT_DATE:
-					try channelMethodGetNextDate(call: call, result: result)
-					return
+                    
+                case Definitions.CHANNEL_METHOD_GET_NEXT_DATE:
+                    try channelMethodGetNextDate(call: call, result: result)
+                    return
+                    
+                case Definitions.CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER:
+                    try channelMethodGetUTCTimeZoneIdentifier(call: call, result: result)
+                    return
+                    
+                case Definitions.CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER:
+                    try channelMethodGetLocalTimeZoneIdentifier(call: call, result: result)
+                    return
 					
 				case Definitions.CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS:
                     try channelMethodCancelAllNotifications(call: call, result: result)
@@ -771,64 +785,35 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 
 		let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
 		let fixedDate:String? = platformParameters[Definitions.NOTIFICATION_INITIAL_FIXED_DATE] as? String
-
+        
+        let timezone:String =
+            (platformParameters[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] as? String) ?? DateUtils.localTimeZone.identifier
+        
 		guard let scheduleData:[String : Any?] = platformParameters[Definitions.PUSH_NOTIFICATION_SCHEDULE] as? [String : Any?]
 		else { result(nil); return }
-
-		var convertedDate:String?
-		var nextValidDate:Date?
-		if(scheduleData[Definitions.NOTIFICATION_SCHEDULE_INTERVAL] != nil){
-
-			guard let scheduleModel:NotificationIntervalModel =
-					NotificationIntervalModel().fromMap(arguments: scheduleData) as? NotificationIntervalModel
-			else { result(nil); return }
-
-			if(fixedDate == nil){
-
-				guard let trigger:UNTimeIntervalNotificationTrigger = scheduleModel.getUNNotificationTrigger() as? UNTimeIntervalNotificationTrigger
-				else { result(nil); return }
-
-				nextValidDate = trigger.nextTriggerDate()
-
-			} else {
-
-				guard let fixedDateTime:Date = DateUtils.parseDate(fixedDate)
-				else { result(nil); return }
-
-				let calendar = Calendar.current
-				nextValidDate = calendar.date(byAdding: .second, value: scheduleModel.interval!, to: fixedDateTime)
-
-			}
-
-		}
-		else {
-
-			guard let scheduleModel:NotificationCalendarModel =
-				NotificationCalendarModel().fromMap(arguments: scheduleData) as? NotificationCalendarModel
-			else { result(nil); return }
-
-			if(fixedDate == nil){
-
-				guard let trigger:UNCalendarNotificationTrigger = scheduleModel.getUNNotificationTrigger() as? UNCalendarNotificationTrigger
-				else { result(nil); return }
-
-				nextValidDate = trigger.nextTriggerDate()
-
-			} else {
-
-				guard let fixedDateTime:Date = DateUtils.parseDate(fixedDate)
-				else { result(nil); return }
-
-				let calendar = Calendar.current
-				nextValidDate = calendar.nextDate(after: fixedDateTime, matching: scheduleModel.toDateComponents(), matchingPolicy: .nextTime)
-
-			}
-		}
+        
+        var scheduleModel:NotificationScheduleModel?
+        if(scheduleData[Definitions.NOTIFICATION_SCHEDULE_INTERVAL] != nil){
+            scheduleModel = NotificationIntervalModel().fromMap(arguments: scheduleData) as? NotificationScheduleModel
+        } else {
+            scheduleModel = NotificationCalendarModel().fromMap(arguments: scheduleData) as? NotificationScheduleModel
+        }
+        if(scheduleModel == nil){ result(nil); return }
+        
+        let nextValidDate:Date? = DateUtils.getNextValidDate(scheduleModel: scheduleModel!, fixedDate: fixedDate, timeZone: timezone)
 
 		if(nextValidDate == nil){ result(nil); return }
-		convertedDate = DateUtils.dateToString(nextValidDate)
+        let convertedDate:String? = DateUtils.dateToString(nextValidDate, timeZone: timezone)
 
 		result(convertedDate)
+    }
+    
+    private func channelMethodGetUTCTimeZoneIdentifier(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        result(DateUtils.utcTimeZone.identifier)
+    }
+    
+    private func channelMethodGetLocalTimeZoneIdentifier(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        result(DateUtils.localTimeZone.identifier)
     }
     
     private func channelMethodListAllSchedules(call: FlutterMethodCall, result: @escaping FlutterResult) throws {

@@ -8,7 +8,14 @@
 import Foundation
 
 public protocol NotificationScheduleModel : AbstractModel {
-     
+    
+    /// Initial reference date from schedule
+    var createdDate:String? { get set }
+    /// Initial reference date from schedule
+    var timeZone:String? { get set }
+    
     func getUNNotificationTrigger() -> UNNotificationTrigger?
+    
+    func hasNextValidDate() -> Bool
     
 }

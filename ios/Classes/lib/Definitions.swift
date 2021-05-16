@@ -33,6 +33,8 @@ enum Definitions {
     static let  SHARED_SCHEDULED_DISPLAYED = "scheduledDisplayed"
     static let  SHARED_SCHEDULED_DISPLAYED_REFERENCE = "pendingList"
 
+    static let  NOTIFICATION_SCHEDULE_INITIAL_DATE = "createdDate"
+    static let  NOTIFICATION_SCHEDULE_TIMEZONE = "timeZone"
     static let  NOTIFICATION_SCHEDULE_ERA = "era"
     static let  NOTIFICATION_SCHEDULE_YEAR = "year"
     static let  NOTIFICATION_SCHEDULE_MONTH = "month"
@@ -75,7 +77,10 @@ enum Definitions {
     static let  CHANNEL_METHOD_NOTIFICATION_DISPLAYED = "notificationDisplayed"
     static let  CHANNEL_METHOD_NOTIFICATION_DISMISSED = "notificationDismissed"
     static let  CHANNEL_METHOD_RECEIVED_ACTION = "receivedAction"
-
+    
+    static let  CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER = "getUtcTimeZoneIdentifier"
+    static let  CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER = "getLocalTimeZoneIdentifier"
+    
     static let  CHANNEL_METHOD_LIST_ALL_SCHEDULES = "listAllSchedules"
 
     static let  DEFAULT_ICON = "defaultIcon"
@@ -83,8 +88,10 @@ enum Definitions {
     static let  NOTIFICATION_BUTTON_ACTION_PREFIX = "ACTION_NOTIFICATION"
 
     static let  SHARED_PREFERENCES_CHANNEL_MANAGER = "channel_manager"
-
+    
     static let  DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
+    
+    static let  DATE_FORMAT_TIMEZONE = "yyyy-MM-dd HH:mm:ss ZZZZ"
 
     static let  NOTIFICATION_ICON_RESOURCE_ID = "iconResourceId"
 
@@ -115,7 +122,7 @@ enum Definitions {
 
     static let  NOTIFICATION_PAYLOAD = "payload"
     static let  NOTIFICATION_INITIAL_FIXED_DATE = "fixedDate"
-    static let  NOTIFICATION_INITIAL_DATE_TIME = "initialDateTime"
+    static let  NOTIFICATION_INITIAL_DATE_TIME = "createdDateTime"
     static let  NOTIFICATION_CRONTAB_SCHEDULE = "crontabSchedule"
     static let  NOTIFICATION_ENABLED = "enabled"
     static let  NOTIFICATION_AUTO_CANCEL = "autoCancel"

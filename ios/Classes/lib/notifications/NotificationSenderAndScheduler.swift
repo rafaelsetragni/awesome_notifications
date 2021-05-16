@@ -45,7 +45,7 @@ class NotificationSenderAndScheduler {
         self.completion = completion
 
         if (pushNotification == nil){
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "PushNotification not valid")
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Notification is not valid")
         }
 
         NotificationBuilder.isNotificationAllowed(completion: { (allowed) in
@@ -55,6 +55,14 @@ class NotificationSenderAndScheduler {
                     self.appLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
 
                     try pushNotification!.validate()
+                    
+                    if pushNotification!.schedule != nil &&
+                        StringUtils.isNullOrEmpty(pushNotification!.schedule!.createdDate
+                    ){
+                        let timeZone:String = pushNotification!.schedule!.timeZone ?? DateUtils.localTimeZone.identifier
+                        pushNotification!.schedule!.timeZone = timeZone
+                        pushNotification!.schedule!.createdDate = DateUtils.getLocalTextDate(fromTimeZone: timeZone)
+                    }
 
                     // Keep this way to future thread running
                     self.createdSource = createdSource
@@ -87,11 +95,11 @@ class NotificationSenderAndScheduler {
 
     private func doInBackground() -> NotificationReceived? {
         
-        let now = DateUtils.getUTCDate()
+        let now = DateUtils.getUTCTextDate()
         
         do {
 
-            //if (pushNotification != nil){
+            if (pushNotification != nil){
 
                 var receivedNotification: NotificationReceived? = nil
 
@@ -106,7 +114,7 @@ class NotificationSenderAndScheduler {
                     !StringUtils.isNullOrEmpty(pushNotification!.content!.title) ||
                     !StringUtils.isNullOrEmpty(pushNotification!.content!.body)
                 ){
-                    pushNotification = showNotification(pushNotification!, now: now)
+                    pushNotification = try showNotification(pushNotification!, now: now)
 
                     // Only save DisplayedMethods if pushNotification was created and displayed successfully
                     if(pushNotification != nil){
@@ -136,13 +144,13 @@ class NotificationSenderAndScheduler {
 
                 return receivedNotification;
             }
-/*
+
         } catch {
             completion?(false, nil, error)
         }
 
         pushNotification = nil
-        return nil*/
+        return nil
     }
 
     private func onPostExecute(receivedNotification:NotificationReceived?) {
@@ -171,17 +179,9 @@ class NotificationSenderAndScheduler {
 
     /// AsyncTask METHODS END *********************************
 
-    public func showNotification(_ pushNotification:PushNotification, now:String) -> PushNotification? {
-
-        do {
-            
-            return try NotificationBuilder.createNotification(pushNotification, content: content, now: now)
-
-        } catch {
-            
-        }
+    public func showNotification(_ pushNotification:PushNotification, now:String) throws -> PushNotification? {
         
-        return nil
+        return try NotificationBuilder.createNotification(pushNotification, content: content, now: now)
     }
 
     public static func cancelNotification(id:Int) -> Bool {

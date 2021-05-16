@@ -70,6 +70,10 @@ const CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = 'cancelAllNotifications';
 const CHANNEL_METHOD_GET_NEXT_DATE = 'getNextDate';
 const CHANNEL_FORCE_UPDATE = "forceUpdate";
 
+const CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER = 'getUtcTimeZoneIdentifier';
+const CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER =
+    'getLocalTimeZoneIdentifier';
+
 const DRAWABLE_RESOURCE_REFERENCE = 'drawable';
 const DEFAULT_ICON = 'defaultIcon';
 const SELECT_NOTIFICATION = 'SELECT_NOTIFICATION';

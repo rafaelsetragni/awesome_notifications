@@ -113,7 +113,8 @@ Future<void> showBadgeNotification(int id) async {
           channelKey: 'badge_channel',
           title: 'Badge test notification',
           body: 'This notification does activate badge indicator'),
-      schedule: NotificationInterval(interval: 5));
+      schedule: NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier())
+  );
 }
 
 Future<void> showWithoutBadgeNotification(int id) async {
@@ -123,7 +124,8 @@ Future<void> showWithoutBadgeNotification(int id) async {
           channelKey: 'basic_channel',
           title: 'Badge test notification',
           body: 'This notification does not activate badge indicator'),
-      schedule: NotificationInterval(interval: 5));
+      schedule: NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier())
+  );
 }
 
 // ON BADGE METHODS, NULL CHANNEL SETS THE GLOBAL COUNTER
@@ -301,7 +303,8 @@ Future<void> delayNotification(int id) async {
           title: 'scheduled title',
           body: 'scheduled body',
           payload: {'uuid': 'uuid-test'}),
-      schedule: NotificationInterval(interval: 5));
+      schedule: NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier())
+  );
 }
 
 /* *********************************************
@@ -392,7 +395,7 @@ Future<void> redNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
             key: 'ARCHIVE', label: 'Archive', autoCancel: true)
       ],
-      schedule: delayLEDTests ? NotificationInterval(interval: 5) : null);
+      schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null);
 }
 
 Future<void> blueNotification(int id, bool delayLEDTests) async {
@@ -424,7 +427,7 @@ Future<void> blueNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
             key: 'ARCHIVE', label: 'Archive', autoCancel: true)
       ],
-      schedule: delayLEDTests ? NotificationInterval(interval: 5) : null);
+      schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null);
 }
 
 Future<void> yellowNotification(int id, bool delayLEDTests) async {
@@ -456,7 +459,7 @@ Future<void> yellowNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
             key: 'ARCHIVE', label: 'Archive', autoCancel: true)
       ],
-      schedule: delayLEDTests ? NotificationInterval(interval: 5) : null);
+      schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null);
 }
 
 Future<void> purpleNotification(int id, bool delayLEDTests) async {
@@ -488,7 +491,7 @@ Future<void> purpleNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
             key: 'ARCHIVE', label: 'Archive', autoCancel: true)
       ],
-      schedule: delayLEDTests ? NotificationInterval(interval: 5) : null);
+      schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null);
 }
 
 Future<void> greenNotification(int id, bool delayLEDTests) async {
@@ -520,7 +523,8 @@ Future<void> greenNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
             key: 'ARCHIVE', label: 'Archive', autoCancel: true)
       ],
-      schedule: delayLEDTests ? NotificationInterval(interval: 5) : null);
+      schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null
+  );
 }
 
 /* *********************************************
@@ -951,7 +955,11 @@ Future<void> listScheduledNotifications(BuildContext context) async {
       await AwesomeNotifications().listScheduledNotifications();
   for (PushNotification schedule in activeSchedules) {
     debugPrint(
-        'pending notification: [id: ${schedule.content!.id}, title: ${schedule.content!.titleWithoutHtml}, schedule: ${schedule.schedule.toString()}]');
+        'pending notification: ['
+            'id: ${schedule.content!.id}, '
+            'title: ${schedule.content!.titleWithoutHtml}, '
+            'schedule: ${schedule.schedule.toString()}'
+        ']');
   }
   return showDialog<void>(
     context: context,
@@ -981,24 +989,8 @@ Future<void> repeatMinuteNotification(int id) async {
               'This notification was schedule to repeat at every single minute.',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/melted-clock.png'),
-      schedule: NotificationInterval(interval: 60));
+      schedule: NotificationInterval(interval: 60, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()));
 }
-/*
-Future<void> repeatPreciseThreeTimes(int id) async {
-  await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: id,
-          channelKey: 'scheduled',
-          title: 'Notification scheduled to play precisely 3 times',
-          body: 'This notification was schedule to repeat precisely 3 times.',
-          notificationLayout: NotificationLayout.BigPicture,
-          bigPicture: 'asset://assets/images/melted-clock.png'),
-      schedule: NotificationSchedule(preciseSchedules: [
-        DateTime.now().add(Duration(seconds: 10)).toUtc(),
-        DateTime.now().add(Duration(seconds: 20)).toUtc(),
-        DateTime.now().add(Duration(seconds: 30)).toUtc()
-      ]));
-}*/
 
 Future<void> repeatMinuteNotificationOClock(int id) async {
   await AwesomeNotifications().createNotification(
@@ -1010,11 +1002,12 @@ Future<void> repeatMinuteNotificationOClock(int id) async {
               'This notification was schedule to repeat at every single minute at clock.',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/melted-clock.png'),
-      schedule: NotificationCalendar(second: 0, repeats: true));
+      schedule: NotificationCalendar(second: 0, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier(), repeats: true));
 }
 
 Future<void> showNotificationAtScheduleCron(
     int id, DateTime scheduleTime) async {
+  String timeZoneIdentifier = await AwesomeNotifications().getLocalTimeZoneIdentifier();
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: id,
@@ -1022,7 +1015,7 @@ Future<void> showNotificationAtScheduleCron(
         title: 'Just in time!',
         body: 'This notification was schedule to shows at ' +
             (Utils.DateUtils.parseDateToString(scheduleTime.toLocal()) ?? '?') +
-            '(' +
+            ' $timeZoneIdentifier (' +
             (Utils.DateUtils.parseDateToString(scheduleTime.toUtc()) ?? '?') +
             ' utc)',
         notificationLayout: NotificationLayout.BigPicture,
@@ -1030,25 +1023,12 @@ Future<void> showNotificationAtScheduleCron(
         payload: {'uuid': 'uuid-test'},
         autoCancel: false,
       ),
-      schedule: NotificationCalendar.fromDate(date: scheduleTime.toUtc()));
+      schedule: NotificationCalendar.fromDate(date: scheduleTime, timeZoneIdentifier: timeZoneIdentifier));
+  NotificationCalendar(
+    hour:11, minute:15, second:0, millisecond:0, repeats: true
+  );
 }
 
-/*
-Future<void> showScheduleAtWorkweekDay10AmLocal(int id) async {
-  await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: id,
-          channelKey: 'scheduled',
-          title: 'Time to go work!',
-          body: 'And the time is ticking...tic, tic, Wake up!',
-          payload: {'uuid': 'uuid-test'}),
-      schedule: NotificationSchedule(
-          crontabSchedule: CronHelper.instance.workweekDay(
-              referenceUtcDate:
-                  Utils.DateUtils.parseStringToDate('10:00', format: 'HH:mm')
-                      ?.toUtc())));
-}
-*/
 Future<void> showNotificationWithNoBadge(int id) async {
   AwesomeNotifications().setChannel(NotificationChannel(
       channelKey: 'no_badge',

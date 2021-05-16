@@ -11,7 +11,9 @@ import Foundation
 class Log {
     
     public static func d(_ tag:String, _ message:String){
-        debugPrint(tag+": "+message)
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            debugPrint(tag+": "+message)
+        }
     }
     
 }
