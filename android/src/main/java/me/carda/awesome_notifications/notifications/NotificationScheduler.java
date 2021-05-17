@@ -105,7 +105,7 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                 if(pushNotification.schedule == null) return null;
 
                 if(pushNotification.schedule.createdDate == null){
-                    pushNotification.content.createdDate = DateUtils.getLocalDate(pushNotification.schedule.timeZone);
+                    pushNotification.content.createdDate = DateUtils.getUTCDate();
                     scheduled = true;
                 }
 
