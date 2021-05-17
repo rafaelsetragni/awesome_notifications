@@ -53,19 +53,19 @@ class DateUtils {
     }
     
     public static func getLocalDateTime(fromTimeZone timeZone: String?) -> Date? {
-        return Date().convertToTimezone(fromTimeZone: timeZone ?? DateUtils.localTimeZone.identifier)
+        return Date() // there is no true timezone component into Dates in swift
     }
     
     public static func getNextValidDate(
         scheduleModel:NotificationScheduleModel,
         fixedDate:String?,
-        timeZone:String = DateUtils.localTimeZone.identifier) -> Date? {
+        timeZone:String = DateUtils.utcTimeZone.identifier) -> Date? {
         
-        let calendar = Calendar.current
-        //calendar.timeZone = TimeZone(identifier: timezone)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: timeZone)!
         
         let fixedDateTime:Date =
-            DateUtils.stringToDate(fixedDate, timeZone: timeZone) ??
+            fixedDate?.toDate(fromTimeZone: timeZone) ??
             DateUtils.getLocalDateTime(fromTimeZone: timeZone) ??
             DateUtils.getUTCDateTime()
         
@@ -80,5 +80,31 @@ class DateUtils {
         }
 
         return nextValidDate
+    }
+    
+    public static func getLastValidDate(
+        scheduleModel:NotificationScheduleModel,
+        fixedDate:String?,
+        timeZone:String = DateUtils.localTimeZone.identifier) -> Date? {
+        
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: timeZone)!
+        
+        let fixedDateTime:Date =
+            fixedDate?.toDate(fromTimeZone: timeZone) ??
+            DateUtils.getLocalDateTime(fromTimeZone: timeZone) ??
+            DateUtils.getUTCDateTime()
+        
+        var lastValidDate:Date?
+        if scheduleModel is NotificationIntervalModel {
+            let scheduleInterval:NotificationIntervalModel = scheduleModel as! NotificationIntervalModel
+            lastValidDate = calendar.date(byAdding: .second, value: -scheduleInterval.interval!, to: fixedDateTime)
+        } else
+        if scheduleModel is NotificationCalendarModel {
+            let scheduleCalendar:NotificationCalendarModel = scheduleModel as! NotificationCalendarModel
+            lastValidDate = calendar.nextDate(after: fixedDateTime, matching: scheduleCalendar.toDateComponents(), matchingPolicy: .previousTimePreservingSmallerComponents)
+        }
+
+        return lastValidDate
     }
 }

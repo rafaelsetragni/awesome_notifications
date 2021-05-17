@@ -181,7 +181,7 @@ public class NotificationBuilder {
         return actionReceived
     }
     
-    public static func createNotification(_ pushNotification:PushNotification, content:UNMutableNotificationContent?, now:String) throws -> PushNotification? {
+    public static func createNotification(_ pushNotification:PushNotification, content:UNMutableNotificationContent?) throws -> PushNotification? {
         
         guard let channel = ChannelManager.getChannelByKey(channelKey: pushNotification.content!.channelKey!) else {
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "Channel '\(pushNotification.content!.channelKey!)' does not exist or is disabled")
@@ -226,8 +226,6 @@ public class NotificationBuilder {
                     
             setGrouping(channel: channel, content: content)
             
-            pushNotification.content!.displayedDate = nextDate?.toString() ?? now
-            
             setUserInfoContent(pushNotification: pushNotification, content: content)
             
             if SwiftUtils.isRunningOnExtension() {                
@@ -236,11 +234,9 @@ public class NotificationBuilder {
             
             //let trigger:UNCalendarNotificationTrigger? = dateToCalendarTrigger(targetDate: nextDate)
             
-            if(!(pushNotification.schedule?.hasNextValidDate() ?? true)){
-                throw AwesomeNotificationsException.notificationExpired
-            }
+            pushNotification.content!.displayedDate = nextDate?.toString(toTimeZone: "UTC") ?? DateUtils.getUTCTextDate()
             
-            let trigger:UNNotificationTrigger? = pushNotification.schedule?.getUNNotificationTrigger()
+            let trigger:UNNotificationTrigger? = nextDate == nil ? nil : pushNotification.schedule?.getUNNotificationTrigger()
             let request = UNNotificationRequest(identifier: pushNotification.content!.id!.description, content: content, trigger: trigger)
             
             UNUserNotificationCenter.current().add(request)
@@ -698,12 +694,11 @@ public class NotificationBuilder {
         content.categoryIdentifier = "Default"
     }
     
-    public static func cancelNotification(id:Int){
+    public static func dismissNotification(id:Int){
         let referenceKey:String = String(id)
             
         let center = UNUserNotificationCenter.current()
         center.removeDeliveredNotifications(withIdentifiers: [referenceKey])
-        center.removePendingNotificationRequests(withIdentifiers: [referenceKey])
     }
     
     public static func cancelScheduledNotification(id:Int){
@@ -713,17 +708,31 @@ public class NotificationBuilder {
         center.removePendingNotificationRequests(withIdentifiers: [referenceKey])
     }
     
-    public static func cancellAllNotifications(){
+    public static func cancelNotification(id:Int){
+        let referenceKey:String = String(id)
             
         let center = UNUserNotificationCenter.current()
-        center.removeAllDeliveredNotifications()
-        center.removeAllPendingNotificationRequests()
+        center.removeDeliveredNotifications(withIdentifiers: [referenceKey])
+        center.removePendingNotificationRequests(withIdentifiers: [referenceKey])
     }
     
     public static func cancellAllScheduledNotifications(){
             
         let center = UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()        
+    }
+    
+    public static func dismissAllNotifications(){
+            
+        let center = UNUserNotificationCenter.current()
+        center.removeAllDeliveredNotifications()
+    }
+    
+    public static func cancellAllNotifications(){
+            
+        let center = UNUserNotificationCenter.current()
+        center.removeAllDeliveredNotifications()
+        center.removeAllPendingNotificationRequests()
     }
     
 }

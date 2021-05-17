@@ -586,6 +586,33 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         return true
     }
     
+    public func clearDeactivatedSchedules(){
+        
+        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { activeSchedules in
+            
+            if activeSchedules.count > 0 {
+                let schedules = ScheduleManager.listSchedules()
+                
+                if(!ListUtils.isEmptyLists(schedules)){
+                    for pushNotification in schedules {
+                        var founded = false
+                        for activeSchedule in activeSchedules {
+                            if activeSchedule.identifier != String(pushNotification.content!.id!) {
+                                founded = true
+                                break;
+                            }
+                        }
+                        if(!founded){
+                            ScheduleManager.cancelScheduled(id: pushNotification.content!.id!)
+                        }
+                    }
+                }
+            } else {
+                ScheduleManager.cancelAllSchedules();
+            }
+        })
+    }
+    
     public func rescheduleLostNotifications(){
         let referenceDate = Date()
         
@@ -610,6 +637,8 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 let _ = ScheduleManager.removeSchedule(id: pushNotification.content!.id!)
             }
         }
+        
+        clearDeactivatedSchedules();
     }
 
     public func fireBackgroundLostEvents(){
@@ -729,18 +758,30 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 				case Definitions.CHANNEL_METHOD_RESET_BADGE:
                     try channelMethodResetBadge(call: call, result: result)
 					return
-					
-				case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATION:
-                    try channelMethodCancelNotification(call: call, result: result)
-					return
-							
-				case Definitions.CHANNEL_METHOD_CANCEL_SCHEDULE:
+                    
+                case Definitions.CHANNEL_METHOD_DISMISS_NOTIFICATION:
+                    try channelMethodDismissNotification(call: call, result: result)
+                    return
+                    
+                case Definitions.CHANNEL_METHOD_CANCEL_SCHEDULE:
                     try channelMethodCancelSchedule(call: call, result: result)
-					return
+                    return
+                    
+                case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATION:
+                    try channelMethodCancelNotification(call: call, result: result)
+                    return
+                    
+                case Definitions.CHANNEL_METHOD_DISMISS_ALL_NOTIFICATIONS:
+                    try channelMethodDismissAllNotifications(call: call, result: result)
+                    return
 					
 				case Definitions.CHANNEL_METHOD_CANCEL_ALL_SCHEDULES:
                     try channelMethodCancelAllSchedules(call: call, result: result)
 					return
+                    
+                case Definitions.CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS:
+                    try channelMethodCancelAllNotifications(call: call, result: result)
+                    return
                     
                 case Definitions.CHANNEL_METHOD_GET_NEXT_DATE:
                     try channelMethodGetNextDate(call: call, result: result)
@@ -753,10 +794,6 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 case Definitions.CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER:
                     try channelMethodGetLocalTimeZoneIdentifier(call: call, result: result)
                     return
-					
-				case Definitions.CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS:
-                    try channelMethodCancelAllNotifications(call: call, result: result)
-					return
 					
 				case Definitions.CHANNEL_METHOD_LIST_ALL_SCHEDULES:
 					try channelMethodListAllSchedules(call: call, result: result)
@@ -787,7 +824,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 		let fixedDate:String? = platformParameters[Definitions.NOTIFICATION_INITIAL_FIXED_DATE] as? String
         
         let timezone:String =
-            (platformParameters[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] as? String) ?? DateUtils.localTimeZone.identifier
+            (platformParameters[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] as? String) ?? DateUtils.utcTimeZone.identifier
         
 		guard let scheduleData:[String : Any?] = platformParameters[Definitions.PUSH_NOTIFICATION_SCHEDULE] as? [String : Any?]
 		else { result(nil); return }
@@ -818,17 +855,34 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     
     private func channelMethodListAllSchedules(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         
-		let schedules = ScheduleManager.listSchedules()
-		var serializeds:[[String:Any?]]  = []
+        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { activeSchedules in
+            
+            var serializeds:[[String:Any?]]  = []
+            if activeSchedules.count > 0 {
+                let schedules = ScheduleManager.listSchedules()
+                
+                if(!ListUtils.isEmptyLists(schedules)){
+                    for pushNotification in schedules {
+                        var founded = false
+                        for activeSchedule in activeSchedules {
+                            if activeSchedule.identifier == String(pushNotification.content!.id!) {
+                                founded = true
+                                let serialized:[String:Any?] = pushNotification.toMap()
+                                serializeds.append(serialized)
+                                break;
+                            }
+                        }
+                        if(!founded){
+                            ScheduleManager.cancelScheduled(id: pushNotification.content!.id!)
+                        }
+                    }
+                }
+            } else {
+                ScheduleManager.cancelAllSchedules();
+            }
 
-		if(!ListUtils.isEmptyLists(schedules)){
-			for pushNotification in schedules {
-				let serialized:[String:Any?] = pushNotification.toMap()
-				serializeds.append(serialized)
-			}
-		}
-
-		result(serializeds)
+            result(serializeds)
+        })
     }
     
     private func channelMethodSetChannel(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
@@ -982,14 +1036,14 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         }
         result(nil)
     }
-
-    private func channelMethodCancelNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+    
+    private func channelMethodDismissNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let notificationId:Int = call.arguments as? Int else {
             result(false); return
         }
         
         if #available(iOS 10.0, *) {
-            result(NotificationSenderAndScheduler.cancelNotification(id: notificationId))
+            result(NotificationSenderAndScheduler.dismissNotification(id: notificationId))
             return
         } else {
             // Fallback on earlier versions
@@ -1005,6 +1059,33 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         
         if #available(iOS 10.0, *) {
             result(NotificationSenderAndScheduler.cancelSchedule(id: notificationId))
+            return
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        result(false)
+    }
+    
+    private func channelMethodCancelNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        guard let notificationId:Int = call.arguments as? Int else {
+            result(false); return
+        }
+        
+        if #available(iOS 10.0, *) {
+            result(NotificationSenderAndScheduler.cancelNotification(id: notificationId))
+            return
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        result(false)
+    }
+    
+    private func channelMethodDismissAllNotifications(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        
+        if #available(iOS 10.0, *) {
+            result(NotificationSenderAndScheduler.dismissAllNotifications())
             return
         } else {
             // Fallback on earlier versions
@@ -1050,10 +1131,6 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 					pushNotification: pushNotification,
 					completion: { sent, content, error in
 					
-						//if sent {
-						//    Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification sent")
-						//}
-						
 						if error != nil {
 							let flutterError:FlutterError?
 							if let notificationError = error as? AwesomeNotificationsException {
@@ -1098,7 +1175,6 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 			} else {
 				// Fallback on earlier versions
 				
-				//Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification sent");
 				result(true)
 				return
 			}

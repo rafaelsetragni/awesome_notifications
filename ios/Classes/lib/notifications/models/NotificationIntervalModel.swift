@@ -33,7 +33,7 @@ public class NotificationIntervalModel : NotificationScheduleModel {
     
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         
-        self.timeZone = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, arguments: arguments)
+        self._timeZone = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, arguments: arguments)
         self.createdDate = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_INITIAL_DATE, arguments: arguments)
         self.interval = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_INTERVAL, arguments: arguments)
         self.repeats  = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_REPEATS, arguments: arguments)
@@ -44,7 +44,7 @@ public class NotificationIntervalModel : NotificationScheduleModel {
     public func toMap() -> [String : Any?] {
         var mapData:[String: Any?] = [:]
         
-        if(timeZone != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] = self.timeZone}
+        if(_timeZone != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] = self._timeZone}
         if(createdDate != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_INITIAL_DATE] = self.createdDate}
         if(interval != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_INTERVAL] = self.interval}
         if(repeats != nil)  {mapData[Definitions.NOTIFICATION_SCHEDULE_REPEATS]  = self.repeats}
@@ -73,18 +73,24 @@ public class NotificationIntervalModel : NotificationScheduleModel {
         return nil
     }
     
-    public func hasNextValidDate() -> Bool {
-        
+    public func getNextValidDate() -> Date? {
         let timeZone:String = self.timeZone ?? DateUtils.localTimeZone.identifier
-        let nowDate:Date? = DateUtils.getLocalDateTime(fromTimeZone: timeZone)
         
-        let nextValidDate:Date? = DateUtils.getNextValidDate(
+        return DateUtils.getNextValidDate(
             scheduleModel: self,
             fixedDate: (self.repeats ?? true) ?
                 DateUtils.getLocalTextDate(fromTimeZone: timeZone ) :
                 createdDate,
             timeZone: timeZone
         )
+    }
+    
+    public func hasNextValidDate() -> Bool {
+        
+        let timeZone:String = self.timeZone ?? DateUtils.localTimeZone.identifier
+        let nowDate:Date? = DateUtils.getLocalDateTime(fromTimeZone: timeZone)
+        
+        let nextValidDate:Date? = getNextValidDate()
         
         return
             nil != nextValidDate &&

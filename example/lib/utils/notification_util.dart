@@ -1016,7 +1016,8 @@ Future<void> repeatMinuteNotificationOClock(int id) async {
 }
 
 Future<void> showNotificationAtScheduleCron(
-    int id, DateTime scheduleTime, String timeZoneIdentifier) async {
+    int id, DateTime scheduleTime) async {
+  String timeZoneIdentifier = AwesomeNotifications.localTimeZoneIdentifier;
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: id,
@@ -1032,7 +1033,7 @@ Future<void> showNotificationAtScheduleCron(
         payload: {'uuid': 'uuid-test'},
         autoCancel: false,
       ),
-      schedule: NotificationCalendar.fromDate(date: scheduleTime, timeZoneIdentifier: timeZoneIdentifier));
+      schedule: NotificationCalendar.fromDate(date: scheduleTime));
 }
 
 Future<void> showNotificationWithNoBadge(int id) async {

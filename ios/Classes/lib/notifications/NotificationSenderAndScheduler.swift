@@ -114,17 +114,18 @@ class NotificationSenderAndScheduler {
                     !StringUtils.isNullOrEmpty(pushNotification!.content!.title) ||
                     !StringUtils.isNullOrEmpty(pushNotification!.content!.body)
                 ){
-                    pushNotification = try showNotification(pushNotification!, now: now)
+                    pushNotification = try showNotification(pushNotification!)
 
                     // Only save DisplayedMethods if pushNotification was created and displayed successfully
                     if(pushNotification != nil){
                         
-                        let displayedDate = pushNotification!.content!.displayedDate!.toDate()!
+                        let now = DateUtils.getUTCDateTime()
+                        let displayedDate = pushNotification!.content!.displayedDate?.toDate(fromTimeZone: "UTC") ?? now
                         
-                        if displayedDate.toString() == pushNotification!.content!.createdDate! {
+                        if displayedDate.toString(toTimeZone: "UTC") == pushNotification!.content!.createdDate! {
                             pushNotification!.content!.displayedLifeCycle = pushNotification!.content!.createdLifeCycle
                         }
-                        else if displayedDate <= Date() {
+                        else if displayedDate <= now {
                             pushNotification!.content!.displayedLifeCycle = self.appLifeCycle
                         }
                         else {
@@ -179,28 +180,55 @@ class NotificationSenderAndScheduler {
 
     /// AsyncTask METHODS END *********************************
 
-    public func showNotification(_ pushNotification:PushNotification, now:String) throws -> PushNotification? {
+    public func showNotification(_ pushNotification:PushNotification) throws -> PushNotification? {
         
-        return try NotificationBuilder.createNotification(pushNotification, content: content, now: now)
+        return try NotificationBuilder.createNotification(pushNotification, content: content)
     }
-
-    public static func cancelNotification(id:Int) -> Bool {
-        NotificationBuilder.cancelNotification(id: id)
-        debugPrint("Notification cancelled")
+    
+    public static func dismissNotification(id:Int) -> Bool {
+        NotificationBuilder.dismissNotification(id: id)
+                
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(NotificationSenderAndScheduler.TAG, "Notification id "+String(id)+" dismissed")
+        }
         return true
     }
     
     public static func cancelSchedule(id:Int) -> Bool {
         NotificationBuilder.cancelScheduledNotification(id: id)
         ScheduleManager.cancelScheduled(id: id)
-        debugPrint("Schedule cancelled")
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(NotificationSenderAndScheduler.TAG, "Schedule id "+String(id)+" cancelled")
+        }
+        return true
+    }
+    
+    public static func cancelNotification(id:Int) -> Bool {
+        NotificationBuilder.cancelNotification(id: id)
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(NotificationSenderAndScheduler.TAG, "Notification id "+String(id)+" cancelled")
+        }
+        return true
+    }
+    
+    public static func dismissAllNotifications() -> Bool {
+        NotificationBuilder.dismissAllNotifications()
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(NotificationSenderAndScheduler.TAG, "All notifications was dismissed")
+        }
         return true
     }
     
     public static func cancelAllSchedules() -> Bool {
         NotificationBuilder.cancellAllScheduledNotifications()
         ScheduleManager.cancelAllSchedules()
-        debugPrint("All notifications scheduled was cancelled")
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(NotificationSenderAndScheduler.TAG, "All schedules was cancelled")
+        }
         return true
     }
 
@@ -208,7 +236,10 @@ class NotificationSenderAndScheduler {
         NotificationBuilder.cancellAllScheduledNotifications()
         NotificationBuilder.cancellAllNotifications()
         ScheduleManager.cancelAllSchedules()
-        debugPrint("All notifications was cancelled")
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(NotificationSenderAndScheduler.TAG, "All notifications was cancelled")
+        }
         return true
     }
 

@@ -66,24 +66,6 @@ extension Date {
         )
     }
     
-    func convertToTimezone(fromTimeZone timeZoneIdentifier: String) -> Date? {
-        if let timeZone = TimeZone(identifier: timeZoneIdentifier) {
-            let targetOffset = TimeInterval(timeZone.secondsFromGMT(for: self))
-            let localOffeset = TimeInterval(TimeZone.autoupdatingCurrent.secondsFromGMT(for: self))
-
-            // just add seconds to date object, but dont change his internal time zone identifier
-            let dephasedDate:Date = self.addingTimeInterval(targetOffset - localOffeset)
-            
-            var dateComponents = dephasedDate.toDateComponents()
-            dateComponents.timeZone = TimeZone(identifier: timeZone.identifier)
-            
-            // generate a new Date object with the correct time zone identifier
-            return dateComponents.date
-        }
-
-        return nil
-    }
-    
     var dateComponents: DateComponents {
         let calendar = Calendar.current
         var components:DateComponents = DateComponents()
@@ -96,10 +78,15 @@ extension Date {
         return components
     }
     
-    public func toString() -> String? {
+    public func toString(toTimeZone timeZone:String?) -> String? {
+        
         let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = self.getTimeZone()
+        guard let timeZone:TimeZone = timeZone == nil ? TimeZone.autoupdatingCurrent : TimeZone(identifier: timeZone!)
+        else { return nil }
+        
+        dateFormatter.timeZone = timeZone
         dateFormatter.dateFormat = Definitions.DATE_FORMAT
+
         return dateFormatter.string(from: self)
     }
     
@@ -108,6 +95,6 @@ extension Date {
     }
     
     public func getLocalDate(fromTimeZone timeZone:String?) -> Date {
-        return Date().convertToTimezone(fromTimeZone: timeZone ?? Date.localTimeZone().identifier)!
+        return Date() // there is no timezone component into dates in swift
     }
 }

@@ -37,23 +37,25 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
   String packageName = 'me.carda.awesome_notifications_example';
 
-  Future<DateTime?> pickScheduleDate(BuildContext context) async {
+  Future<DateTime?> pickScheduleDate(BuildContext context, {required bool isUtc}) async {
     TimeOfDay? timeOfDay;
+    DateTime now = isUtc ? DateTime.now().toUtc() : DateTime.now();
     DateTime? newDate = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
-        lastDate: DateTime.now().add(Duration(days: 365)));
+        initialDate: now,
+        firstDate: now,
+        lastDate: now.add(Duration(days: 365)));
 
     if (newDate != null) {
       timeOfDay = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay.fromDateTime(DateTime.now().add(Duration(minutes: 1))),
+        initialTime: TimeOfDay.fromDateTime(now.add(Duration(minutes: 1))),
       );
 
       if (timeOfDay != null) {
-        return DateTime(newDate.year, newDate.month, newDate.day,
-            timeOfDay.hour, timeOfDay.minute);
+        return isUtc ?
+          DateTime.utc(newDate.year, newDate.month, newDate.day, timeOfDay.hour, timeOfDay.minute) :
+          DateTime(newDate.year, newDate.month, newDate.day, timeOfDay.hour, timeOfDay.minute);
       }
     }
     return null;
@@ -707,17 +709,15 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
             TextDivisor(title: 'Scheduled Notifications'),
             SimpleButton('Schedule notification with local time zone', onPressed: () async {
-              DateTime? pickedDate = await pickScheduleDate(context);
+              DateTime? pickedDate = await pickScheduleDate(context, isUtc: false);
               if (pickedDate != null) {
-                String timeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
-                showNotificationAtScheduleCron(8, pickedDate, timeZone);
+                showNotificationAtScheduleCron(8, pickedDate);
               }
             }),
             SimpleButton('Schedule notification with utc time zone', onPressed: () async {
-              DateTime? pickedDate = await pickScheduleDate(context);
-              String timeZone = await AwesomeNotifications().getUtcTimeZoneIdentifier();
+              DateTime? pickedDate = await pickScheduleDate(context, isUtc: true);
               if (pickedDate != null) {
-                showNotificationAtScheduleCron(8, pickedDate, timeZone);
+                showNotificationAtScheduleCron(8, pickedDate);
               }
             }),
             SimpleButton(
@@ -806,7 +806,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             TextDivisor(title: 'Get Next Schedule Date'),
             TextNote('This is a simple example to show how to query the next valid schedule date. The date components follow the ISO 8601 standard.'),
             SimpleButton('Get next Monday after date', onPressed: () async {
-              DateTime? referenceDate = await pickScheduleDate(context);
+              DateTime? referenceDate = await pickScheduleDate(context, isUtc: false);
 
                 NotificationSchedule schedule =
                     NotificationCalendar(weekday: DateTime.monday, hour: 0, minute: 0, second: 0);

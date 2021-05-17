@@ -51,7 +51,7 @@ public class DisplayedManager {
     
     public static func saveScheduledToDisplay(received:NotificationReceived) {
         let referenceKey = String(received.id!)
-        let epoch:String = ( received.displayedDate?.toDate() ?? Date() ).secondsSince1970.description
+        let epoch:String = ( received.displayedDate?.toDate(fromTimeZone: "UTC") ?? Date() ).secondsSince1970.description
         let dataMap = received.toMap()
         
         if(pendingSchedulesDisplayed[epoch] == nil){

@@ -61,14 +61,12 @@ class NotificationCalendar extends NotificationSchedule {
   /// Initialize a notification schedule calendar based on a date object
   NotificationCalendar.fromDate(
       {required DateTime date,
-      String? timeZoneIdentifier,
       bool allowWhileIdle = false,
       bool repeats = false})
       : super(
-            timeZone: timeZoneIdentifier ??
-                (date.isUtc
+            timeZone: date.isUtc
                     ? AwesomeNotifications.utcTimeZoneIdentifier
-                    : AwesomeNotifications.localTimeZoneIdentifier),
+                    : AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
             repeats: repeats) {
     this.year = date.year;

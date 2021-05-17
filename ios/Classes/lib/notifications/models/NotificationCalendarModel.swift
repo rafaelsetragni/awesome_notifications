@@ -51,6 +51,9 @@ public class NotificationCalendarModel : NotificationScheduleModel {
     
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         
+        self._timeZone =
+            MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, arguments: arguments)
+        
         self.year = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_YEAR, arguments: arguments)
         self.month = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_MONTH, arguments: arguments)
         self.day = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_DAY, arguments: arguments)
@@ -85,18 +88,20 @@ public class NotificationCalendarModel : NotificationScheduleModel {
 
     public func toMap() -> [String : Any?] {
         var mapData:[String: Any?] = [:]
+        
+        if(_timeZone != nil)   {mapData[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] = self._timeZone}
 
-        if(year != nil)   {mapData[Definitions.NOTIFICATION_SCHEDULE_YEAR]   = self.year}
-        if(month != nil)  {mapData[Definitions.NOTIFICATION_SCHEDULE_MONTH] = self.month}
-        if(day != nil)    {mapData[Definitions.NOTIFICATION_SCHEDULE_DAY]   = self.day}
-        if(hour != nil)   {mapData[Definitions.NOTIFICATION_SCHEDULE_HOUR]   = self.hour}
-        if(minute != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_MINUTE] = self.minute}
-        if(second != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_SECOND] = self.second}
+        if(year != nil)        {mapData[Definitions.NOTIFICATION_SCHEDULE_YEAR]   = self.year}
+        if(month != nil)       {mapData[Definitions.NOTIFICATION_SCHEDULE_MONTH]  = self.month}
+        if(day != nil)         {mapData[Definitions.NOTIFICATION_SCHEDULE_DAY]    = self.day}
+        if(hour != nil)        {mapData[Definitions.NOTIFICATION_SCHEDULE_HOUR]   = self.hour}
+        if(minute != nil)      {mapData[Definitions.NOTIFICATION_SCHEDULE_MINUTE] = self.minute}
+        if(second != nil)      {mapData[Definitions.NOTIFICATION_SCHEDULE_SECOND] = self.second}
         if(millisecond != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_MILLISECOND] = self.millisecond}
         if(weekday != nil)     {mapData[Definitions.NOTIFICATION_SCHEDULE_WEEKDAY]     = self.weekday == 1 ? 7 : (self.weekday! - 1)}
         if(weekOfMonth != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_WEEKOFMONTH] = self.weekOfMonth}
         if(weekOfYear != nil)  {mapData[Definitions.NOTIFICATION_SCHEDULE_WEEKOFYEAR]  = self.weekOfYear}
-        if(repeats != nil)     {mapData[Definitions.NOTIFICATION_SCHEDULE_REPEATS]  = self.repeats}
+        if(repeats != nil)     {mapData[Definitions.NOTIFICATION_SCHEDULE_REPEATS] = self.repeats}
 
         return mapData
     }
@@ -150,18 +155,25 @@ public class NotificationCalendarModel : NotificationScheduleModel {
         return dateComponents
     }
     
-    public func hasNextValidDate() -> Bool {
+    public func getNextValidDate() -> Date? {
         
         let timeZone:String = self.timeZone ?? DateUtils.localTimeZone.identifier
-        let nowDate:Date? = DateUtils.getLocalDateTime(fromTimeZone: timeZone)
         
-        let nextValidDate:Date? = DateUtils.getNextValidDate(
+        return DateUtils.getNextValidDate(
             scheduleModel: self,
             fixedDate: (self.repeats ?? true) ?
                 DateUtils.getLocalTextDate(fromTimeZone: timeZone) :
                 createdDate,
             timeZone: timeZone
         )
+    }
+    
+    public func hasNextValidDate() -> Bool {
+        
+        let timeZone:String = self.timeZone ?? DateUtils.localTimeZone.identifier
+        let nowDate:Date? = DateUtils.getLocalDateTime(fromTimeZone: timeZone)
+        
+        let nextValidDate:Date? = getNextValidDate()
         
         return
             nil != nextValidDate &&
