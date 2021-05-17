@@ -1,10 +1,14 @@
+## [0.0.6+6]
+* Added time zones for scheduled notifications
+* Added foreground behavior for input button
+* Added dismiss option to dismiss notifications without cancel the respective schedule
 ## [0.0.6+5]
 * Added the behavior of bringing to the foreground for action buttons on iOS
 * Added debug option on initialize method to lower the debug verbose if not necessary
 * Leveled error messages and error handling for iOS and Android platforms
 ## [0.0.6+4]
 * Added native firebase handling for willpresent notification method
-* Added fixedDate to getNextDate on iOS
+* Added fixedDate to getNextDate on iOSaiff file with more quality
 * Adjust weekday to work with ISO 8601
 ## [0.0.6+3]
 * Fixed Android canceling for a grouped notification set as summary behaviour

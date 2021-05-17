@@ -535,12 +535,20 @@ public class AwesomeNotificationsPlugin
                     channelMethodResetBadge(call, result);
                     return;
 
+                case Definitions.CHANNEL_METHOD_DISMISS_NOTIFICATION:
+                    channelMethodDismissNotification(call, result);
+                    return;
+
                 case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATION:
                     channelMethodCancelNotification(call, result);
                     return;
 
                 case Definitions.CHANNEL_METHOD_CANCEL_SCHEDULE:
                     channelMethodCancelSchedule(call, result);
+                    return;
+
+                case Definitions.CHANNEL_METHOD_DISMISS_ALL_NOTIFICATIONS:
+                    channelMethodDismissAllNotifications(call, result);
                     return;
 
                 case Definitions.CHANNEL_METHOD_CANCEL_ALL_SCHEDULES:
@@ -721,18 +729,34 @@ public class AwesomeNotificationsPlugin
         if(notificationId == null || notificationId < 0)
             throw new AwesomeNotificationException("Invalid notification id");
 
-        NotificationScheduler.cancelScheduleNotification(applicationContext, notificationId);
+        NotificationScheduler.cancelSchedule(applicationContext, notificationId);
 
         if(AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Schedule cancelled");
+            Log.d(TAG, "Schedule id "+notificationId+" cancelled");
 
         result.success(true);
     }
 
     private void channelMethodCancelAllSchedules(MethodCall call, Result result) throws Exception {
 
-        NotificationScheduler.cancelAllNotifications(applicationContext);
-        Log.d(TAG, "All notifications scheduled was cancelled");
+        NotificationScheduler.cancelAllSchedules(applicationContext);
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "All notifications scheduled was cancelled");
+
+        result.success(true);
+    }
+
+    private void channelMethodDismissNotification(MethodCall call, Result result) throws Exception {
+
+        Integer notificationId = call.arguments();
+        if(notificationId == null || notificationId < 0)
+            throw new AwesomeNotificationException("Invalid notification id");
+
+        NotificationSender.dismissNotification(applicationContext, notificationId);
+
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "Notification id "+notificationId+" dismissed");
+
         result.success(true);
     }
 
@@ -742,18 +766,33 @@ public class AwesomeNotificationsPlugin
         if(notificationId == null || notificationId < 0)
             throw new AwesomeNotificationException("Invalid notification id");
 
-        NotificationScheduler.cancelScheduleNotification(applicationContext, notificationId);
-        NotificationSender.cancelNotification(applicationContext, notificationId);
+        NotificationScheduler.cancelSchedule(applicationContext, notificationId);
+        NotificationSender.dismissNotification(applicationContext, notificationId);
 
-        Log.d(TAG, "Notification cancelled");
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "Notification id "+notificationId+" cancelled");
+
         result.success(true);
     }
 
+    private void channelMethodDismissAllNotifications(MethodCall call, Result result) throws Exception {
+
+        NotificationSender.dismissAllNotifications(applicationContext);
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "All notifications was dismissed");
+
+        result.success(true);
+    }
+
+
     private void channelMethodCancelAllNotifications(MethodCall call, Result result) throws Exception {
 
-        NotificationScheduler.cancelAllNotifications(applicationContext);
-        NotificationSender.cancelAllNotifications(applicationContext);
-        Log.d(TAG, "All notifications was cancelled");
+        NotificationScheduler.cancelAllSchedules(applicationContext);
+        NotificationSender.dismissAllNotifications(applicationContext);
+
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "All notifications was cancelled");
+
         result.success(true);
     }
 
@@ -763,11 +802,15 @@ public class AwesomeNotificationsPlugin
 
     private void channelRequestNotification(MethodCall call, Result result) throws Exception {
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             final Intent intent = new Intent();
 
-            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            } else {
+                intent.setAction(Settings.ACTION_APPLICATION_SETTINGS);
+            }
 
             //for Android 5-7
             intent.putExtra("app_package", applicationContext.getPackageName());
@@ -883,7 +926,6 @@ public class AwesomeNotificationsPlugin
             NotificationManagerCompat manager = NotificationManagerCompat.from(context);
             NotificationChannel channel = manager.getNotificationChannel(channelModel.getChannelKey());
             return channel != null && channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
-
         }
 
         return true;
@@ -895,7 +937,6 @@ public class AwesomeNotificationsPlugin
 
         Map<String, Object> platformParameters = call.arguments();
 
-        Boolean firebaseEnabled = false;
         debug = (Boolean) platformParameters.get(Definitions.INITIALIZE_DEBUG_MODE);
         debug = debug == null ? false : debug;
 
@@ -905,7 +946,6 @@ public class AwesomeNotificationsPlugin
         setDefaultConfigurations(
             applicationContext,
             defaultIconPath,
-            firebaseEnabled,
             channelsData
         );
 
@@ -915,9 +955,9 @@ public class AwesomeNotificationsPlugin
         result.success(true);
     }
 
-    private boolean setDefaultConfigurations(Context context, String defaultIcon, Boolean firebaseEnabled, List<Object> channelsData) throws Exception {
+    private boolean setDefaultConfigurations(Context context, String defaultIcon, List<Object> channelsData) throws Exception {
 
-        setDefaults(context, defaultIcon, firebaseEnabled);
+        setDefaults(context, defaultIcon);
 
         setChannels(context, channelsData);
 
@@ -957,7 +997,7 @@ public class AwesomeNotificationsPlugin
         ChannelManager.commitChanges(context);
     }
 
-    private void setDefaults(Context context, String defaultIcon, Boolean enabled) {
+    private void setDefaults(Context context, String defaultIcon) {
 
         if (MediaUtils.getMediaSourceType(defaultIcon) != MediaSource.Resource) {
             defaultIcon = null;

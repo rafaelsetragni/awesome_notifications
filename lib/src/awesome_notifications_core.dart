@@ -409,24 +409,36 @@ class AwesomeNotifications {
     return localIdentifier;
   }
 
-  /// Cancel a single notification
+  /// Cancel a single notification and its respective schedule
   Future<void> cancel(int id) async {
     _validateId(id);
     await _channel.invokeMethod(CHANNEL_METHOD_CANCEL_NOTIFICATION, id);
   }
 
-  /// Cancel a single scheduled notification
+  /// Dismiss a single notification, without cancel its schedule
+  Future<void> dismiss(int id) async {
+    _validateId(id);
+    await _channel.invokeMethod(CHANNEL_METHOD_DISMISS_NOTIFICATION, id);
+  }
+
+
+  /// Cancel a single scheduled notification, without dismiss the active notification
   Future<void> cancelSchedule(int id) async {
     _validateId(id);
     await _channel.invokeMethod(CHANNEL_METHOD_CANCEL_SCHEDULE, id);
   }
 
-  /// Cancel all active notification schedules
+  /// Dismiss all active notifications, without cancel the active respective schedules
+  Future<void> dismissAllNotifications() async {
+    await _channel.invokeMethod(CHANNEL_METHOD_DISMISS_ALL_NOTIFICATIONS);
+  }
+
+  /// Cancel all active notification schedules without dismiss the respective notifications
   Future<void> cancelAllSchedules() async {
     await _channel.invokeMethod(CHANNEL_METHOD_CANCEL_ALL_SCHEDULES);
   }
 
-  /// Cancel all notifications and active schedules
+  /// Cancel and dismiss all notifications and the active schedules
   Future<void> cancelAll() async {
     await _channel.invokeMethod(CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS);
   }

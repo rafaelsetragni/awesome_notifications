@@ -3,17 +3,13 @@ package me.carda.awesome_notifications.notifications.broadcastReceivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 //import com.google.common.reflect.TypeToken;
-
-import java.util.Calendar;
 
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.NotificationScheduler;
 import me.carda.awesome_notifications.notifications.NotificationSender;
-import me.carda.awesome_notifications.utils.JsonUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
 /**
@@ -47,7 +43,7 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
                         pushNotification
                     );
                 else
-                    NotificationScheduler.cancelScheduleNotification(
+                    NotificationScheduler.cancelSchedule(
                         context,
                         pushNotification.content.id
                     );

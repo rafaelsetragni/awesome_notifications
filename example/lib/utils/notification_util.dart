@@ -1130,8 +1130,16 @@ Future<void> cancelAllSchedules() async {
   await AwesomeNotifications().cancelAllSchedules();
 }
 
+Future<void> dismissAllNotifications() async {
+  await AwesomeNotifications().dismissAllNotifications();
+}
+
 Future<void> cancelNotification(int id) async {
   await AwesomeNotifications().cancel(id);
+}
+
+Future<void> dismissNotification(int id) async {
+  await AwesomeNotifications().dismiss(id);
 }
 
 Future<void> cancelAllNotifications() async {
