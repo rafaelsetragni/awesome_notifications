@@ -102,11 +102,17 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                     scheduled = true;
                 }
 
+                if(pushNotification.schedule == null) return null;
+
+                if(pushNotification.schedule.createdDate == null){
+                    pushNotification.content.createdDate = DateUtils.getLocalDate(pushNotification.schedule.timeZone);
+                    scheduled = true;
+                }
+
                 if(pushNotification.content.createdLifeCycle == null)
                     pushNotification.content.createdLifeCycle = appLifeCycle;
 
-                if(pushNotification.schedule != null)
-                    nextValidDate = pushNotification.schedule.getNextValidDate(null);
+                nextValidDate = pushNotification.schedule.getNextValidDate(null);
 
                 /*
                 nextValidDate = CronUtils.getNextCalendar(
@@ -244,8 +250,13 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
 
         for (PushNotification pushNotification : pushNotifications) {
             try {
-                schedule(context, pushNotification);
-            } catch (AwesomeNotificationException e) {
+                if(pushNotification.schedule.hasNextValidDate()){
+                    schedule(context, pushNotification);
+                }
+                else {
+                    ScheduleManager.cancelSchedule(context, pushNotification.content.id);
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

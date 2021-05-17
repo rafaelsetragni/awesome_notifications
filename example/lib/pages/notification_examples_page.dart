@@ -48,7 +48,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
     if (newDate != null) {
       timeOfDay = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay.now(),
+        initialTime: TimeOfDay.fromDateTime(DateTime.now().add(Duration(minutes: 1))),
       );
 
       if (timeOfDay != null) {
@@ -706,10 +706,18 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Scheduled Notifications'),
-            SimpleButton('Schedule notification', onPressed: () async {
+            SimpleButton('Schedule notification with local time zone', onPressed: () async {
               DateTime? pickedDate = await pickScheduleDate(context);
               if (pickedDate != null) {
-                showNotificationAtScheduleCron(8, pickedDate);
+                String timeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
+                showNotificationAtScheduleCron(8, pickedDate, timeZone);
+              }
+            }),
+            SimpleButton('Schedule notification with utc time zone', onPressed: () async {
+              DateTime? pickedDate = await pickScheduleDate(context);
+              String timeZone = await AwesomeNotifications().getUtcTimeZoneIdentifier();
+              if (pickedDate != null) {
+                showNotificationAtScheduleCron(8, pickedDate, timeZone);
               }
             }),
             SimpleButton(
@@ -732,6 +740,40 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             onPressed: () => showScheduleAtWorkweekDay10AmLocal(8),
           ),
           */
+            SimpleButton(
+              'Get current time zone reference name',
+              onPressed: () =>
+                  getCurrentTimeZone().then((timeZone) => showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                          backgroundColor: Color(0xfffbfbfb),
+                          title: Center(child: Text('Current Time Zone')),
+                          content: SizedBox( height: 80.0, child: Center(child: Column(
+                            children: [
+                              Text(DateUtils.parseDateToString(DateTime.now())!),
+                              Text(timeZone),
+                            ],
+                          )))
+                      )
+                  ))
+            ),
+            SimpleButton(
+              'Get utc time zone reference name',
+              onPressed: () =>
+                  getUtcTimeZone().then((timeZone) => showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                          backgroundColor: Color(0xfffbfbfb),
+                          title: Center(child: Text('UTC Time Zone')),
+                          content: SizedBox( height: 80.0, child: Center(child: Column(
+                            children: [
+                              Text(DateUtils.parseDateToString(DateTime.now().toUtc())!),
+                              Text(timeZone),
+                            ],
+                          )))
+                      )
+                  ))
+            ),
             SimpleButton('List all active schedules',
                 onPressed: () => listScheduledNotifications(context)),
             SimpleButton('Cancel single active schedule',

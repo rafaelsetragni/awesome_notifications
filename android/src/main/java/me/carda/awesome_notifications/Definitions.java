@@ -52,6 +52,9 @@ public interface Definitions {
     String CHANNEL_METHOD_GET_DRAWABLE_DATA = "getDrawableData";
     String CHANNEL_METHOD_CREATE_NOTIFICATION = "createNewNotification";
 
+    String CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER = "getUtcTimeZoneIdentifier";
+    String CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER = "getLocalTimeZoneIdentifier";
+
     String CHANNEL_METHOD_GET_FCM_TOKEN = "getFirebaseToken";
     String CHANNEL_METHOD_NEW_FCM_TOKEN = "newTokenReceived";
     String CHANNEL_METHOD_IS_FCM_AVAILABLE = "isFirebaseAvailable";
@@ -91,7 +94,9 @@ public interface Definitions {
 
     String NOTIFICATION_ICON_RESOURCE_ID = "iconResourceId";
 
+    String NOTIFICATION_SCHEDULE_CREATED_DATE = "createdDate";
     String NOTIFICATION_SCHEDULE_ERA = "era";
+    String NOTIFICATION_SCHEDULE_TIMEZONE = "timeZone";
     String NOTIFICATION_SCHEDULE_YEAR = "year";
     String NOTIFICATION_SCHEDULE_MONTH = "month";
     String NOTIFICATION_SCHEDULE_DAY = "day";

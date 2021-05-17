@@ -6,11 +6,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.utils.CronUtils;
+import me.carda.awesome_notifications.utils.DateUtils;
 import me.carda.awesome_notifications.utils.IntegerUtils;
+import me.carda.awesome_notifications.utils.StringUtils;
 
 public class NotificationCalendarModel extends NotificationScheduleModel {
 
@@ -42,6 +45,8 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
     @Override
     @SuppressWarnings("unchecked")
     public NotificationCalendarModel fromMap(Map<String, Object> arguments) {
+
+        timeZone = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, String.class);
 
         era = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_ERA, Integer.class);
         year = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_YEAR, Integer.class);
@@ -80,6 +85,7 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
     public Map<String, Object> toMap(){
         Map<String, Object> returnedObject = new HashMap<>();
 
+        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, timeZone);
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_ERA, era);
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_YEAR, year);
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_MONTH, month);
@@ -144,7 +150,7 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
     }
 
     @Override
-    public Calendar getNextValidDate(Date fixedNowDate) {
+    public Calendar getNextValidDate(Date fixedNowDate) throws AwesomeNotificationException {
         String cronExpression =
                 (second == null ? "*" : second.toString()) + " " +
                 (minute == null ? "*" : minute.toString()) + " " +
@@ -154,7 +160,14 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
                 (weekday == null ? "?" : weekday.toString()) + " " +
                 (year == null ? "*" : year.toString());
 
-        return CronUtils.getNextCalendar(null, cronExpression, fixedNowDate );
+        TimeZone timeZone = StringUtils.isNullOrEmpty(this.timeZone) ?
+                DateUtils.localTimeZone :
+                TimeZone.getTimeZone(this.timeZone);
+
+        if (timeZone == null)
+            throw new AwesomeNotificationException("Invalid time zone");
+
+        return CronUtils.getNextCalendar(null, cronExpression, fixedNowDate, timeZone );
     }
 }
 

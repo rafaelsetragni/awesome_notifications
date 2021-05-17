@@ -178,6 +178,7 @@ public class AwesomeNotificationsPlugin
         if(AwesomeNotificationsPlugin.debug)
             Log.d(TAG, "Awesome Notifications attached for Android "+Build.VERSION.SDK_INT);
 
+        NotificationScheduler.refreshScheduleNotifications(context);
         // enableFirebase(context);
     }
 
@@ -506,6 +507,14 @@ public class AwesomeNotificationsPlugin
                     channelMethodGetNextDate(call, result);
                     return;
 
+                case Definitions.CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER:
+                    channelMethodGetLocalTimeZone(call, result);
+                    return;
+
+                case Definitions.CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER:
+                    channelMethodGetUtcTimeZone(call, result);
+                    return;
+
                 case Definitions.CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL:
                     channelMethodSetChannel(call, result);
                     return;
@@ -587,10 +596,13 @@ public class AwesomeNotificationsPlugin
         @SuppressWarnings("unchecked")
         Map<String, Object> data = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
 
+        assert data != null;
+
         @SuppressWarnings("unchecked")
         Map<String, Object> scheduleData = (Map<String, Object>) data.get(Definitions.PUSH_NOTIFICATION_SCHEDULE);
         String fixedDateString = (String) data.get(Definitions.NOTIFICATION_INITIAL_FIXED_DATE);
 
+        assert scheduleData != null;
         NotificationScheduleModel scheduleModel;
         if(scheduleData.containsKey(Definitions.NOTIFICATION_SCHEDULE_INTERVAL)){
             scheduleModel = new NotificationIntervalModel().fromMap(scheduleData);
@@ -604,13 +616,13 @@ public class AwesomeNotificationsPlugin
             Date fixedDate = null;
 
             if (!StringUtils.isNullOrEmpty(fixedDateString))
-                fixedDate = DateUtils.parseDate(fixedDateString);
+                fixedDate = DateUtils.stringToDate(fixedDateString, scheduleModel.timeZone);
 
             Calendar nextValidDate = scheduleModel.getNextValidDate(fixedDate);
 
             String finalValidDateString = null;
             if (nextValidDate != null)
-                finalValidDateString = DateUtils.dateToString(nextValidDate.getTime());
+                finalValidDateString = DateUtils.dateToString(nextValidDate.getTime(), scheduleModel.timeZone);
 
             result.success(finalValidDateString);
             return;
@@ -619,10 +631,20 @@ public class AwesomeNotificationsPlugin
         result.success(null);
     }
 
+    private void channelMethodGetLocalTimeZone(MethodCall call, Result result) throws Exception {
+        result.success(DateUtils.localTimeZone.getID());
+    }
+
+    private void channelMethodGetUtcTimeZone(MethodCall call, Result result) throws Exception {
+        result.success(DateUtils.utcTimeZone.getID());
+    }
+
     private void channelMethodSetChannel(MethodCall call, Result result) throws Exception {
 
         @SuppressWarnings("unchecked")
         Map<String, Object> channelData = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
+        assert channelData != null;
+
         NotificationChannelModel channelModel = new NotificationChannelModel().fromMap(channelData);
         Boolean forceUpdate = BooleanUtils.getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
 

@@ -20,10 +20,10 @@ class NotificationInterval extends NotificationSchedule {
 
   @override
   NotificationInterval? fromMap(Map<String, dynamic> dataMap) {
-    this.timeZone = AssertUtils.extractValue(dataMap, 'timeZone');
-    this.interval = AssertUtils.extractValue(dataMap, 'interval');
-    this.repeats = AssertUtils.extractValue(dataMap, 'repeats') ?? false;
-    this.allowWhileIdle = AssertUtils.extractValue(dataMap, 'repeats') ?? false;
+    this.timeZone = AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_TIMEZONE);
+    this.interval = AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_INTERVAL);
+    this.repeats = AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_REPEATS) ?? false;
+    this.allowWhileIdle = AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_ALLOW_WHILE_IDLE) ?? false;
 
     try {
       validate();
@@ -37,8 +37,10 @@ class NotificationInterval extends NotificationSchedule {
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> dataMap = {
-      'interval': this.interval,
-      'repeats': this.repeats
+      NOTIFICATION_SCHEDULE_TIMEZONE: this.timeZone,
+      NOTIFICATION_SCHEDULE_ALLOW_WHILE_IDLE: this.allowWhileIdle,
+      NOTIFICATION_SCHEDULE_INTERVAL: this.interval,
+      NOTIFICATION_SCHEDULE_REPEATS: this.repeats
     };
 
     return dataMap;

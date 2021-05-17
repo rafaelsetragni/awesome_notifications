@@ -979,7 +979,16 @@ Future<void> listScheduledNotifications(BuildContext context) async {
   );
 }
 
+Future<String> getCurrentTimeZone(){
+  return AwesomeNotifications().getLocalTimeZoneIdentifier();
+}
+
+Future<String> getUtcTimeZone(){
+  return AwesomeNotifications().getUtcTimeZoneIdentifier();
+}
+
 Future<void> repeatMinuteNotification(int id) async {
+  String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
@@ -989,10 +998,11 @@ Future<void> repeatMinuteNotification(int id) async {
               'This notification was schedule to repeat at every single minute.',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/melted-clock.png'),
-      schedule: NotificationInterval(interval: 60, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()));
+      schedule: NotificationInterval(interval: 60, timeZone: localTimeZone, repeats: true));
 }
 
 Future<void> repeatMinuteNotificationOClock(int id) async {
+  String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
@@ -1002,12 +1012,11 @@ Future<void> repeatMinuteNotificationOClock(int id) async {
               'This notification was schedule to repeat at every single minute at clock.',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/melted-clock.png'),
-      schedule: NotificationCalendar(second: 0, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier(), repeats: true));
+      schedule: NotificationCalendar(second: 0, millisecond: 0, timeZone: localTimeZone, repeats: true));
 }
 
 Future<void> showNotificationAtScheduleCron(
-    int id, DateTime scheduleTime) async {
-  String timeZoneIdentifier = await AwesomeNotifications().getLocalTimeZoneIdentifier();
+    int id, DateTime scheduleTime, String timeZoneIdentifier) async {
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: id,
@@ -1024,9 +1033,6 @@ Future<void> showNotificationAtScheduleCron(
         autoCancel: false,
       ),
       schedule: NotificationCalendar.fromDate(date: scheduleTime, timeZoneIdentifier: timeZoneIdentifier));
-  NotificationCalendar(
-    hour:11, minute:15, second:0, millisecond:0, repeats: true
-  );
 }
 
 Future<void> showNotificationWithNoBadge(int id) async {
