@@ -339,12 +339,12 @@ public class NotificationBuilder {
                 let action:UNNotificationAction?
                                 
                 switch button.buttonType {
-                    
+                
                     case .InputField:
                         action = UNTextInputNotificationAction(
                             identifier: button.key!,
                             title: button.label!,
-                            options: []
+                            options: [.foreground]
                         )
                         break
                         
@@ -354,12 +354,19 @@ public class NotificationBuilder {
                             title: button.label!,
                             options: [.foreground]
                         )
+                        
+                    case .DisabledAction:
+                        action = UNNotificationAction(
+                            identifier: button.key!,
+                            title: button.label!,
+                            options: []
+                        )
                     
                     default:
                         action = UNNotificationAction(
                             identifier: button.key!,
                             title: button.label!,
-                            options: []
+                            options: [.foreground]
                         )
                         break
                 }
