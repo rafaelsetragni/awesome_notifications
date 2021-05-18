@@ -66,22 +66,24 @@ class FirebaseDataSource extends HttpDataSource {
 
   Map<String, dynamic> getFirebaseExampleContent({required String firebaseAppToken}) {
     return {
-      'collapse_key': 'type_a',
       'to': firebaseAppToken,
+      'mutable_content' : true,
+      'content_available': true,
+      'priority': 'high',
       'data': {
-        "content": {
-          "id": 100,
-          "channelKey": "big_picture",
-          "title": "Huston!\nThe eagle has landed!",
-          "body":
+        'content': {
+          'id': 100,
+          'channelKey': 'big_picture',
+          'title': "Huston!\nThe eagle has landed!",
+          'body':
               "A small step for a man, but a giant leap to Flutter's community!",
-          "notificationLayout": "BigPicture",
-          "largeIcon":
+          'notificationLayout': 'BigPicture',
+          'largeIcon':
               "https://avidabloga.files.wordpress.com/2012/08/emmemc3b3riadeneilarmstrong3.jpg",
-          "bigPicture": "https://www.dw.com/image/49519617_303.jpg",
-          "showWhen": true,
-          "autoCancel": true,
-          "privacy": "Private"
+          'bigPicture': "https://www.dw.com/image/49519617_303.jpg",
+          'showWhen': true,
+          'autoCancel': true,
+          'privacy': 'Private'
         }
       }
     };

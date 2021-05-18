@@ -164,9 +164,6 @@ With the examples bellow, you can check all the features and how to use the Awes
 https://github.com/rafaelsetragni/awesome_notifications <br>
 Complete example with all the features available
 
-https://github.com/bayuramadeza/Awesome-Notification-FCM <br>
-An simple but excellent app example of how to implement FCM with Awesome Notifications, created by [bayuramadeza](https://github.com/bayuramadeza/Awesome-Notification-FCM/commits?author=bayuramadeza)
-
 To run the examples, follow the steps bellow:
 
 1. Install GitHub software in your local machine. I strongly recommend to use [GitHub Desktop](https://desktop.github.com/).
@@ -412,13 +409,13 @@ Also, both of then could be configured using:
 - allowWhileIdle: Determines if notification will send, even when the device is in critical situation, such as low battery.
 - repeats: Determines if the schedule should be repeat after be displayed. If there is no more valid date compatible with the schedule rules, the notification is automatically canceled.
 
-For time zones, please take in consideration that:
+For time zones, please note that:
 
-- Dates with UTC timezones are fired at same time in every part of the planet and are not affected by daylight rules.
-- Dates with local time zones, defined as "GMT-07:00" are not affected by daylight rules.
-- Dates with local time zones, defined as "Europe/Lisbon" are affected by daylight rules, specially when scheduled based on a calendar filter.
+- Dates with UTC time zones are triggered at the same time in all parts of the planet and are not affected by daylight rules.
+- Dates with local time zones, defined such "GMT-07: 00", are not affected by daylight rules.
+- Dates with local time zones, defined such "Europe / Lisbon", are affected by daylight rules, especially when scheduled based on a calendar filter.
 
-Here's some pratical dart examples of how to create a notification scheduled:
+Here are some practical examples of how to create a notification scheduled:
 
 ```Dart
   String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
@@ -440,9 +437,9 @@ Here's some pratical dart examples of how to create a notification scheduled:
 await AwesomeNotifications().createNotification(
   content: NotificationContent(
       id: id,
-      channelKey: "basic_channel",
-      title: "wait 5 seconds to show",
-      body: "now is 5 seconds later"
+      channelKey: 'scheduled',
+      title: 'wait 5 seconds to show',
+      body: 'now is 5 seconds later'
   ),
   schedule: NotificationInterval(
       interval: 5,
@@ -483,7 +480,7 @@ await AwesomeNotifications().createNotification(
 
 <br>
 
-## Old schedule Cron rules
+## Old schedule Cron rules (For versions older than 0.0.6)
 
 Due to the way that background task and notification schedules works on iOS, wasn't possible yet to enable officialy all the old Cron features on iOS while the app is in Background and even when the app is terminated (Killed).
 Thanks to this, the scheduling for android has also regressed to the iOS limitations level, to ensure for the developer the same behavior in any platform. But it could be manually reactivated in java native code.
@@ -521,11 +518,11 @@ Due to limitations on Android and iOS, you should send a empty **notification** 
 
 OBS: `actionButtons` and `schedule` are **optional**
 <br>
-OBS 2: you should not implement any native code to use FCM with Awesome Notifications. All of then was already implemented inside the plugin.
+OBS 2: ensure to read all the documentation inside [FlutterFire Overview Documentation](https://firebase.flutter.dev/docs/overview)
 <br>
 OBS 3: data only messages are classed as "low priority". Devices can throttle and ignore these messages if your application is in the background, terminated, or a variety of other conditions such as low battery or currently high CPU usage. To help improve delivery, you can bump the priority of messages. Note; this does still not guarantee delivery. More info [here](https://firebase.flutter.dev/docs/messaging/usage/#low-priority-messages)
 <br>
-OBS 4: The background message method of the `firebase_messaging` plug-in runs in the background mode, which falls under iOS background execution rules and can suspend all of your background executions for an indefinite period of time, for various reasons . Unfortunately, this is a known behavior of iOS and there is nothing to do about it. 15 minutes of delay is the smaller period between each execution. Consider that the background method of `firebase_messaging` may not be executed at all or even run entirely out of the expected time.
+OBS 4: Again, the background message method of the `firebase_messaging` plug-in runs in the background mode (which falls under iOS background execution rules) that can suspend all of your background executions for an indefinite period of time, for various reasons. Unfortunately, this is a known behavior of iOS and there is nothing to do about it. 15 minutes of delay is the smaller period of time possible between each execution. So, consider that the background method of `firebase_messaging` may not be executed at all or even run entirely out of the expected time.
 <br>
 
 ```json
@@ -724,6 +721,14 @@ import 'package:flutter/material.dart' as Material show DateUtils;
 DateUtils.utcToLocal(DateTime.now());
 Material.DateUtils.dateOnly(DateTime.now());
 ```
+
+##
+
+**Issue:** While my app is in background mode or terminated, my push notifications are successfully sent by `firebase_messaging`, but nothing happens in my background messaging handle
+
+**Fix:** The background message method of the `firebase_messaging` plug-in runs in the background mode (which falls under iOS background execution rules) that can suspend all of your background executions for an indefinite period of time, for various reasons. Unfortunately, this is a known behavior of iOS and there is nothing to do about it. 15 minutes of delay is the smaller period of time possible between each execution. So, consider that the background method of `firebase_messaging` may not be executed at all or even run entirely out of the expected time.
+
+<br>
 
 ##
 

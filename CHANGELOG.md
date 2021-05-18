@@ -1,3 +1,6 @@
+## [0.0.6+7]
+* Documentation improved
+* Push notifications from example app updated
 ## [0.0.6+6]
 * Added time zones for scheduled notifications
 * Added foreground behavior for input button

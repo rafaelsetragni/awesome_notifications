@@ -162,15 +162,16 @@ void main() async {
   runApp(App());
 }
 
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
-  print("Handling a background message: ${message.messageId}");
+  print('Handling a background message: ${message.messageId}');
 
   if(
-    StringUtils.isNullOrEmpty(message.notification?.title, considerWhiteSpaceAsEmpty: true) ||
-    StringUtils.isNullOrEmpty(message.notification?.body, considerWhiteSpaceAsEmpty: true)
+    !StringUtils.isNullOrEmpty(message.notification?.title, considerWhiteSpaceAsEmpty: true) ||
+    !StringUtils.isNullOrEmpty(message.notification?.body, considerWhiteSpaceAsEmpty: true)
   ){
     print('message also contained a notification: ${message.notification}');
 
@@ -179,13 +180,17 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     imageUrl ??= message.notification!.apple?.imageUrl;
 
     Map<String, dynamic> notificationAdapter = {
+      NOTIFICATION_CHANNEL_KEY: 'basic_channel',
       NOTIFICATION_ID:
-            message.data[PUSH_NOTIFICATION_CONTENT]?[NOTIFICATION_ID] ??
+            message.data[NOTIFICATION_CONTENT]?[NOTIFICATION_ID] ??
             message.messageId ??
             Random().nextInt(2147483647),
-      NOTIFICATION_CHANNEL_KEY: 'basic_channel',
-      NOTIFICATION_TITLE: message.notification!.title,
-      NOTIFICATION_BODY: message.notification!.body,
+      NOTIFICATION_TITLE:
+            message.data[NOTIFICATION_CONTENT]?[NOTIFICATION_TITLE] ??
+            message.notification?.title,
+      NOTIFICATION_BODY:
+            message.data[NOTIFICATION_CONTENT]?[NOTIFICATION_BODY] ??
+            message.notification?.body ,
       NOTIFICATION_LAYOUT:
           StringUtils.isNullOrEmpty(imageUrl) ? 'Default' : 'BigPicture',
       NOTIFICATION_BIG_PICTURE: imageUrl
@@ -203,7 +208,7 @@ class App extends StatefulWidget {
 
   static final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 
-  static String name = 'Push Notifications - Example App';
+  static String name = 'Awesome Notifications - Example App';
   static Color mainColor = Color(0xFF9D50DD);
 
   @override

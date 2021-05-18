@@ -21,16 +21,16 @@ class PushNotification extends Model {
       assert(mapData.containsKey('content') && mapData['content'] is Map);
 
       Map<String, dynamic> contentData =
-          Map<String, dynamic>.from(mapData[PUSH_NOTIFICATION_CONTENT]);
+          Map<String, dynamic>.from(mapData[NOTIFICATION_CONTENT]);
 
       this.content = NotificationContent().fromMap(contentData);
       if (content == null) return null;
 
       this.content!.validate();
 
-      if (mapData.containsKey(PUSH_NOTIFICATION_SCHEDULE)) {
+      if (mapData.containsKey(NOTIFICATION_SCHEDULE)) {
         Map<String, dynamic> scheduleData =
-            Map<String, dynamic>.from(mapData[PUSH_NOTIFICATION_SCHEDULE]);
+            Map<String, dynamic>.from(mapData[NOTIFICATION_SCHEDULE]);
 
         if (scheduleData.containsKey(NOTIFICATION_SCHEDULE_INTERVAL)) {
           schedule = NotificationInterval().fromMap(scheduleData);
@@ -40,10 +40,10 @@ class PushNotification extends Model {
         schedule?.validate();
       }
 
-      if (mapData.containsKey(PUSH_NOTIFICATION_BUTTONS)) {
+      if (mapData.containsKey(NOTIFICATION_BUTTONS)) {
         actionButtons = [];
         List<dynamic> actionButtonsData =
-            List<dynamic>.from(mapData[PUSH_NOTIFICATION_BUTTONS]);
+            List<dynamic>.from(mapData[NOTIFICATION_BUTTONS]);
 
         for (dynamic buttonData in actionButtonsData) {
           Map<String, dynamic> actionButtonData =

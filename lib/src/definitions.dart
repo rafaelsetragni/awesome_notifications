@@ -20,9 +20,9 @@ const INITIALIZE_DEBUG_MODE = "debug";
 const INITIALIZE_DEFAULT_ICON = "defaultIcon";
 const INITIALIZE_CHANNELS = "initializeChannels";
 
-const PUSH_NOTIFICATION_CONTENT = "content";
-const PUSH_NOTIFICATION_SCHEDULE = "schedule";
-const PUSH_NOTIFICATION_BUTTONS = "actionButtons";
+const NOTIFICATION_CONTENT = "content";
+const NOTIFICATION_SCHEDULE = "schedule";
+const NOTIFICATION_BUTTONS = "actionButtons";
 
 const APP_LIFECYCLE_FOREGROUND = 'FOREGROUND';
 const APP_LIFECYCLE_BACKGROUND = 'BACKGROUND';

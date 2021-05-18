@@ -327,7 +327,7 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
         // https://pub.dev/packages/awesome_notifications#notification-types-values-and-defaults
         Map<String, dynamic> notificationAdapter = {
-          PUSH_NOTIFICATION_CONTENT: {
+          NOTIFICATION_CONTENT: {
             NOTIFICATION_ID: Random().nextInt(2147483647),
             NOTIFICATION_CHANNEL_KEY: 'basic_channel',
             NOTIFICATION_TITLE: message.notification!.title,

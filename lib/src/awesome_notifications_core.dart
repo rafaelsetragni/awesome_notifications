@@ -267,17 +267,17 @@ class AwesomeNotifications {
   Future<bool> createNotificationFromJsonData(
       Map<String, dynamic> mapData) async {
     try {
-      if (mapData[PUSH_NOTIFICATION_CONTENT].runtimeType == String)
-        mapData[PUSH_NOTIFICATION_CONTENT] =
-            json.decode(mapData[PUSH_NOTIFICATION_CONTENT]);
+      if (mapData[NOTIFICATION_CONTENT].runtimeType == String)
+        mapData[NOTIFICATION_CONTENT] =
+            json.decode(mapData[NOTIFICATION_CONTENT]);
 
-      if (mapData[PUSH_NOTIFICATION_SCHEDULE].runtimeType == String)
-        mapData[PUSH_NOTIFICATION_SCHEDULE] =
-            json.decode(mapData[PUSH_NOTIFICATION_SCHEDULE]);
+      if (mapData[NOTIFICATION_SCHEDULE].runtimeType == String)
+        mapData[NOTIFICATION_SCHEDULE] =
+            json.decode(mapData[NOTIFICATION_SCHEDULE]);
 
-      if (mapData[PUSH_NOTIFICATION_BUTTONS].runtimeType == String)
-        mapData[PUSH_NOTIFICATION_BUTTONS] =
-            json.decode(mapData[PUSH_NOTIFICATION_BUTTONS]);
+      if (mapData[NOTIFICATION_BUTTONS].runtimeType == String)
+        mapData[NOTIFICATION_BUTTONS] =
+            json.decode(mapData[NOTIFICATION_BUTTONS]);
 
       // Invalid Notification
       PushNotification? pushNotification = PushNotification().fromMap(mapData);
@@ -384,7 +384,7 @@ class AwesomeNotifications {
     fixedDate ??= DateTime.now().toUtc();
     Map parameters = {
       NOTIFICATION_INITIAL_FIXED_DATE: DateUtils.parseDateToString(fixedDate),
-      PUSH_NOTIFICATION_SCHEDULE: schedule.toMap()
+      NOTIFICATION_SCHEDULE: schedule.toMap()
     };
 
     final String? nextDate =
