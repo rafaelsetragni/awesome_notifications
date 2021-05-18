@@ -32,7 +32,7 @@ public class ScheduleManager {
         List<PushNotification> listSchedules = shared.getAllObjects(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS);
         if(listSchedules != null) {
             for (PushNotification pushNotification : listSchedules) {
-                NotificationScheduler.cancelScheduleNotification(context, pushNotification.content.id);
+                NotificationScheduler.cancelSchedule(context, pushNotification.content.id);
             }
         }
     }

@@ -1,3 +1,7 @@
+## [0.0.6+6]
+* Added time zones for scheduled notifications
+* Added foreground behavior for input button
+* Added dismiss methods to dismiss the notifications without cancel their respective schedules
 ## [0.0.6+5]
 * Added the behavior of bringing to the foreground for action buttons on iOS
 * Added debug option on initialize method to lower the debug verbose if not necessary
@@ -5,6 +9,7 @@
 ## [0.0.6+4]
 * Added native firebase handling for willpresent notification method
 * Added fixedDate to getNextDate on iOS
+* Added .aiff example files with more quality
 * Adjust weekday to work with ISO 8601
 ## [0.0.6+3]
 * Fixed Android canceling for a grouped notification set as summary behaviour
@@ -28,7 +33,7 @@
 ## [0.0.5+6]
 * Releasing of final version with push notifications enabled.
 * Added forceUpdate option on setChannel method, to allows to full update an channel on Android Oreo and above without need to reinstall the app, with the downside to close all current notifications.
-* Flutter version updated to 3.0, with nullsafety support.
+* Flutter version updated to 3.0, with null safety support.
 * Fixed privacy bugs
 * Fixed grouping functionality and added sort option (sort only works for Android)
 * Fixed media button errors for Android 10 and above

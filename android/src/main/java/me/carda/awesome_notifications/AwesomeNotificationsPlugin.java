@@ -178,6 +178,7 @@ public class AwesomeNotificationsPlugin
         if(AwesomeNotificationsPlugin.debug)
             Log.d(TAG, "Awesome Notifications attached for Android "+Build.VERSION.SDK_INT);
 
+        NotificationScheduler.refreshScheduleNotifications(context);
         // enableFirebase(context);
     }
 
@@ -506,6 +507,14 @@ public class AwesomeNotificationsPlugin
                     channelMethodGetNextDate(call, result);
                     return;
 
+                case Definitions.CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER:
+                    channelMethodGetLocalTimeZone(call, result);
+                    return;
+
+                case Definitions.CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER:
+                    channelMethodGetUtcTimeZone(call, result);
+                    return;
+
                 case Definitions.CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL:
                     channelMethodSetChannel(call, result);
                     return;
@@ -526,12 +535,20 @@ public class AwesomeNotificationsPlugin
                     channelMethodResetBadge(call, result);
                     return;
 
+                case Definitions.CHANNEL_METHOD_DISMISS_NOTIFICATION:
+                    channelMethodDismissNotification(call, result);
+                    return;
+
                 case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATION:
                     channelMethodCancelNotification(call, result);
                     return;
 
                 case Definitions.CHANNEL_METHOD_CANCEL_SCHEDULE:
                     channelMethodCancelSchedule(call, result);
+                    return;
+
+                case Definitions.CHANNEL_METHOD_DISMISS_ALL_NOTIFICATIONS:
+                    channelMethodDismissAllNotifications(call, result);
                     return;
 
                 case Definitions.CHANNEL_METHOD_CANCEL_ALL_SCHEDULES:
@@ -587,10 +604,13 @@ public class AwesomeNotificationsPlugin
         @SuppressWarnings("unchecked")
         Map<String, Object> data = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
 
+        assert data != null;
+
         @SuppressWarnings("unchecked")
         Map<String, Object> scheduleData = (Map<String, Object>) data.get(Definitions.PUSH_NOTIFICATION_SCHEDULE);
         String fixedDateString = (String) data.get(Definitions.NOTIFICATION_INITIAL_FIXED_DATE);
 
+        assert scheduleData != null;
         NotificationScheduleModel scheduleModel;
         if(scheduleData.containsKey(Definitions.NOTIFICATION_SCHEDULE_INTERVAL)){
             scheduleModel = new NotificationIntervalModel().fromMap(scheduleData);
@@ -604,13 +624,13 @@ public class AwesomeNotificationsPlugin
             Date fixedDate = null;
 
             if (!StringUtils.isNullOrEmpty(fixedDateString))
-                fixedDate = DateUtils.parseDate(fixedDateString);
+                fixedDate = DateUtils.stringToDate(fixedDateString, scheduleModel.timeZone);
 
             Calendar nextValidDate = scheduleModel.getNextValidDate(fixedDate);
 
             String finalValidDateString = null;
             if (nextValidDate != null)
-                finalValidDateString = DateUtils.dateToString(nextValidDate.getTime());
+                finalValidDateString = DateUtils.dateToString(nextValidDate.getTime(), scheduleModel.timeZone);
 
             result.success(finalValidDateString);
             return;
@@ -619,10 +639,20 @@ public class AwesomeNotificationsPlugin
         result.success(null);
     }
 
+    private void channelMethodGetLocalTimeZone(MethodCall call, Result result) throws Exception {
+        result.success(DateUtils.localTimeZone.getID());
+    }
+
+    private void channelMethodGetUtcTimeZone(MethodCall call, Result result) throws Exception {
+        result.success(DateUtils.utcTimeZone.getID());
+    }
+
     private void channelMethodSetChannel(MethodCall call, Result result) throws Exception {
 
         @SuppressWarnings("unchecked")
         Map<String, Object> channelData = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
+        assert channelData != null;
+
         NotificationChannelModel channelModel = new NotificationChannelModel().fromMap(channelData);
         Boolean forceUpdate = BooleanUtils.getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
 
@@ -699,18 +729,34 @@ public class AwesomeNotificationsPlugin
         if(notificationId == null || notificationId < 0)
             throw new AwesomeNotificationException("Invalid notification id");
 
-        NotificationScheduler.cancelScheduleNotification(applicationContext, notificationId);
+        NotificationScheduler.cancelSchedule(applicationContext, notificationId);
 
         if(AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Schedule cancelled");
+            Log.d(TAG, "Schedule id "+notificationId+" cancelled");
 
         result.success(true);
     }
 
     private void channelMethodCancelAllSchedules(MethodCall call, Result result) throws Exception {
 
-        NotificationScheduler.cancelAllNotifications(applicationContext);
-        Log.d(TAG, "All notifications scheduled was cancelled");
+        NotificationScheduler.cancelAllSchedules(applicationContext);
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "All notifications scheduled was cancelled");
+
+        result.success(true);
+    }
+
+    private void channelMethodDismissNotification(MethodCall call, Result result) throws Exception {
+
+        Integer notificationId = call.arguments();
+        if(notificationId == null || notificationId < 0)
+            throw new AwesomeNotificationException("Invalid notification id");
+
+        NotificationSender.dismissNotification(applicationContext, notificationId);
+
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "Notification id "+notificationId+" dismissed");
+
         result.success(true);
     }
 
@@ -720,18 +766,33 @@ public class AwesomeNotificationsPlugin
         if(notificationId == null || notificationId < 0)
             throw new AwesomeNotificationException("Invalid notification id");
 
-        NotificationScheduler.cancelScheduleNotification(applicationContext, notificationId);
-        NotificationSender.cancelNotification(applicationContext, notificationId);
+        NotificationScheduler.cancelSchedule(applicationContext, notificationId);
+        NotificationSender.dismissNotification(applicationContext, notificationId);
 
-        Log.d(TAG, "Notification cancelled");
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "Notification id "+notificationId+" cancelled");
+
         result.success(true);
     }
 
+    private void channelMethodDismissAllNotifications(MethodCall call, Result result) throws Exception {
+
+        NotificationSender.dismissAllNotifications(applicationContext);
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "All notifications was dismissed");
+
+        result.success(true);
+    }
+
+
     private void channelMethodCancelAllNotifications(MethodCall call, Result result) throws Exception {
 
-        NotificationScheduler.cancelAllNotifications(applicationContext);
-        NotificationSender.cancelAllNotifications(applicationContext);
-        Log.d(TAG, "All notifications was cancelled");
+        NotificationScheduler.cancelAllSchedules(applicationContext);
+        NotificationSender.dismissAllNotifications(applicationContext);
+
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "All notifications was cancelled");
+
         result.success(true);
     }
 
@@ -741,11 +802,15 @@ public class AwesomeNotificationsPlugin
 
     private void channelRequestNotification(MethodCall call, Result result) throws Exception {
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             final Intent intent = new Intent();
 
-            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            } else {
+                intent.setAction(Settings.ACTION_APPLICATION_SETTINGS);
+            }
 
             //for Android 5-7
             intent.putExtra("app_package", applicationContext.getPackageName());
@@ -861,7 +926,6 @@ public class AwesomeNotificationsPlugin
             NotificationManagerCompat manager = NotificationManagerCompat.from(context);
             NotificationChannel channel = manager.getNotificationChannel(channelModel.getChannelKey());
             return channel != null && channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
-
         }
 
         return true;
@@ -873,7 +937,6 @@ public class AwesomeNotificationsPlugin
 
         Map<String, Object> platformParameters = call.arguments();
 
-        Boolean firebaseEnabled = false;
         debug = (Boolean) platformParameters.get(Definitions.INITIALIZE_DEBUG_MODE);
         debug = debug == null ? false : debug;
 
@@ -883,7 +946,6 @@ public class AwesomeNotificationsPlugin
         setDefaultConfigurations(
             applicationContext,
             defaultIconPath,
-            firebaseEnabled,
             channelsData
         );
 
@@ -893,9 +955,9 @@ public class AwesomeNotificationsPlugin
         result.success(true);
     }
 
-    private boolean setDefaultConfigurations(Context context, String defaultIcon, Boolean firebaseEnabled, List<Object> channelsData) throws Exception {
+    private boolean setDefaultConfigurations(Context context, String defaultIcon, List<Object> channelsData) throws Exception {
 
-        setDefaults(context, defaultIcon, firebaseEnabled);
+        setDefaults(context, defaultIcon);
 
         setChannels(context, channelsData);
 
@@ -935,7 +997,7 @@ public class AwesomeNotificationsPlugin
         ChannelManager.commitChanges(context);
     }
 
-    private void setDefaults(Context context, String defaultIcon, Boolean enabled) {
+    private void setDefaults(Context context, String defaultIcon) {
 
         if (MediaUtils.getMediaSourceType(defaultIcon) != MediaSource.Resource) {
             defaultIcon = null;

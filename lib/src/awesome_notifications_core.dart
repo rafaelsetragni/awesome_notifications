@@ -28,6 +28,9 @@ import 'package:awesome_notifications/src/utils/date_utils.dart';
 class AwesomeNotifications {
   static String? rootNativePath;
 
+  static String utcTimeZoneIdentifier = "UTC";
+  static String localTimeZoneIdentifier = "UTC";
+
   /// WEB SUPPORT METHODS *********************************************
 /*
   static void registerWith(Registrar registrar) {
@@ -173,6 +176,11 @@ class AwesomeNotifications {
       INITIALIZE_DEFAULT_ICON: defaultIconPath,
       INITIALIZE_CHANNELS: serializedChannels
     });
+
+    localTimeZoneIdentifier = await _channel
+        .invokeMethod(CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER);
+    utcTimeZoneIdentifier =
+        await _channel.invokeMethod(CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER);
 
     return result;
   }
@@ -365,8 +373,12 @@ class AwesomeNotifications {
     await _channel.invokeListMethod(CHANNEL_METHOD_RESET_BADGE);
   }
 
+  /// Get the next valid date for a notification schedule
   Future<DateTime?> getNextDate(
+    /// A valid Notification schedule model
     NotificationSchedule schedule, {
+
+    /// reference date to simulate a schedule in different time. If null, the reference date will be now
     DateTime? fixedDate,
   }) async {
     fixedDate ??= DateTime.now().toUtc();
@@ -383,24 +395,49 @@ class AwesomeNotifications {
     return DateUtils.parseStringToDate(nextDate)!;
   }
 
-  /// Cancel a single notification
+  /// Get the current UTC time zone identifier
+  Future<String> getUtcTimeZoneIdentifier() async {
+    final String utcIdentifier =
+        await _channel.invokeMethod(CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER);
+    return utcIdentifier;
+  }
+
+  /// Get the current Local time zone identifier
+  Future<String> getLocalTimeZoneIdentifier() async {
+    final String localIdentifier = await _channel
+        .invokeMethod(CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER);
+    return localIdentifier;
+  }
+
+  /// Cancel a single notification and its respective schedule
   Future<void> cancel(int id) async {
     _validateId(id);
     await _channel.invokeMethod(CHANNEL_METHOD_CANCEL_NOTIFICATION, id);
   }
 
-  /// Cancel a single scheduled notification
+  /// Dismiss a single notification, without cancel its schedule
+  Future<void> dismiss(int id) async {
+    _validateId(id);
+    await _channel.invokeMethod(CHANNEL_METHOD_DISMISS_NOTIFICATION, id);
+  }
+
+  /// Cancel a single scheduled notification, without dismiss the active notification
   Future<void> cancelSchedule(int id) async {
     _validateId(id);
     await _channel.invokeMethod(CHANNEL_METHOD_CANCEL_SCHEDULE, id);
   }
 
-  /// Cancel all active notification schedules
+  /// Dismiss all active notifications, without cancel the active respective schedules
+  Future<void> dismissAllNotifications() async {
+    await _channel.invokeMethod(CHANNEL_METHOD_DISMISS_ALL_NOTIFICATIONS);
+  }
+
+  /// Cancel all active notification schedules without dismiss the respective notifications
   Future<void> cancelAllSchedules() async {
     await _channel.invokeMethod(CHANNEL_METHOD_CANCEL_ALL_SCHEDULES);
   }
 
-  /// Cancel all notifications and active schedules
+  /// Cancel and dismiss all notifications and the active schedules
   Future<void> cancelAll() async {
     await _channel.invokeMethod(CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS);
   }

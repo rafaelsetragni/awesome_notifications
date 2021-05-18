@@ -15,6 +15,7 @@ import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.BroadcastSender;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.NotificationBuilder;
+import me.carda.awesome_notifications.notifications.NotificationSender;
 import me.carda.awesome_notifications.notifications.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.utils.DateUtils;
 
@@ -26,31 +27,11 @@ public class DismissedNotificationReceiver extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        //Log.d(TAG, "notification dismissed");
         String action = intent.getAction();
 
         if (action != null && action.equals(Definitions.DISMISSED_NOTIFICATION)) {
-
             ActionReceived actionReceived = NotificationBuilder.buildNotificationActionFromIntent(context, intent);
-
-            if (actionReceived != null) {
-
-                actionReceived.dismissedLifeCycle = AwesomeNotificationsPlugin.getApplicationLifeCycle();
-                actionReceived.dismissedDate = DateUtils.getUTCDate();
-
-                try {
-
-                    BroadcastSender.SendBroadcastNotificationDismissed(
-                        context,
-                        actionReceived
-                    );
-
-                    //Toast.makeText(context, "DismissedNotificationReceiver", Toast.LENGTH_SHORT).show();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            NotificationSender.sendDismissedNotification(context, actionReceived);
         }
     }
 }

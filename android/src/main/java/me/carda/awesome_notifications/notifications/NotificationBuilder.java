@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
 
 import com.github.arturogutierrez.BadgesNotSupportedException;
 
@@ -129,27 +130,27 @@ public class NotificationBuilder {
 
             if (isButtonAction){
                 actionModel.actionKey = intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_KEY);
-                if(intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_TYPE).equals(ActionButtonType.InputField.toString()))
+                if(intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_TYPE).equals(ActionButtonType.InputField.toString())){
                     actionModel.actionInput = getButtonInputText(intent, intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_KEY));
+                }
             }
 
             if (intent.getBooleanExtra(Definitions.NOTIFICATION_AUTO_CANCEL, notificationId >= 0)) {
 
-                /* "IT WORKS", but is not the correct way to do
+                // "IT WORKS" to cancel notification remote inputs since Android 9, but is not the correct way to do
                 // https://stackoverflow.com/questions/54219914/cancel-notification-with-remoteinput-not-working/56867575#56867575
                 if(!StringUtils.isNullOrEmpty(actionModel.actionInput) && Build.VERSION.SDK_INT >= 28){
-                    pushNotification.actionButtons = null;
-                    pushNotification.content.notificationLayout = NotificationLayout.Default;
                     try {
                         NotificationSender.send(context, pushNotification);
-                        Thread.sleep(500);
+                        Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+                        context.sendBroadcast(it);
+                        Thread.sleep(200);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-                */
 
-                NotificationSender.cancelNotification(context, notificationId);
+                NotificationSender.dismissNotification(context, notificationId);
             }
 
             if(StringUtils.isNullOrEmpty(actionModel.displayedDate)){
@@ -160,8 +161,6 @@ public class NotificationBuilder {
             if (isButtonAction && intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_TYPE).equals(ActionButtonType.DisabledAction.toString())){
                 return null;
             }
-
-            //Log.d(TAG, "Notification action received java: "+returnObject.toString());
 
             return actionModel;
         }
@@ -449,7 +448,8 @@ public class NotificationBuilder {
                         android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N
                                 && buttonProperties.buttonType == ActionButtonType.InputField
                     ){
-                        //actionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        actionIntent.setAction(Intent.ACTION_MAIN);
+                        actionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     }
 
                     actionPendingIntent = PendingIntent.getActivity(

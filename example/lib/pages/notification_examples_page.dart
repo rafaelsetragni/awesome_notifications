@@ -37,23 +37,25 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
   String packageName = 'me.carda.awesome_notifications_example';
 
-  Future<DateTime?> pickScheduleDate(BuildContext context) async {
+  Future<DateTime?> pickScheduleDate(BuildContext context, {required bool isUtc}) async {
     TimeOfDay? timeOfDay;
+    DateTime now = isUtc ? DateTime.now().toUtc() : DateTime.now();
     DateTime? newDate = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
-        lastDate: DateTime.now().add(Duration(days: 365)));
+        initialDate: now,
+        firstDate: now,
+        lastDate: now.add(Duration(days: 365)));
 
     if (newDate != null) {
       timeOfDay = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay.now(),
+        initialTime: TimeOfDay.fromDateTime(now.add(Duration(minutes: 1))),
       );
 
       if (timeOfDay != null) {
-        return DateTime(newDate.year, newDate.month, newDate.day,
-            timeOfDay.hour, timeOfDay.minute);
+        return isUtc ?
+          DateTime.utc(newDate.year, newDate.month, newDate.day, timeOfDay.hour, timeOfDay.minute) :
+          DateTime(newDate.year, newDate.month, newDate.day, timeOfDay.hour, timeOfDay.minute);
       }
     }
     return null;
@@ -706,8 +708,14 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Scheduled Notifications'),
-            SimpleButton('Schedule notification', onPressed: () async {
-              DateTime? pickedDate = await pickScheduleDate(context);
+            SimpleButton('Schedule notification with local time zone', onPressed: () async {
+              DateTime? pickedDate = await pickScheduleDate(context, isUtc: false);
+              if (pickedDate != null) {
+                showNotificationAtScheduleCron(8, pickedDate);
+              }
+            }),
+            SimpleButton('Schedule notification with utc time zone', onPressed: () async {
+              DateTime? pickedDate = await pickScheduleDate(context, isUtc: true);
               if (pickedDate != null) {
                 showNotificationAtScheduleCron(8, pickedDate);
               }
@@ -732,27 +740,73 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             onPressed: () => showScheduleAtWorkweekDay10AmLocal(8),
           ),
           */
+            SimpleButton(
+              'Get current time zone reference name',
+              onPressed: () =>
+                  getCurrentTimeZone().then((timeZone) => showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                          backgroundColor: Color(0xfffbfbfb),
+                          title: Center(child: Text('Current Time Zone')),
+                          content: SizedBox( height: 80.0, child: Center(child: Column(
+                            children: [
+                              Text(DateUtils.parseDateToString(DateTime.now())!),
+                              Text(timeZone),
+                            ],
+                          )))
+                      )
+                  ))
+            ),
+            SimpleButton(
+              'Get utc time zone reference name',
+              onPressed: () =>
+                  getUtcTimeZone().then((timeZone) => showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                          backgroundColor: Color(0xfffbfbfb),
+                          title: Center(child: Text('UTC Time Zone')),
+                          content: SizedBox( height: 80.0, child: Center(child: Column(
+                            children: [
+                              Text(DateUtils.parseDateToString(DateTime.now().toUtc())!),
+                              Text(timeZone),
+                            ],
+                          )))
+                      )
+                  ))
+            ),
             SimpleButton('List all active schedules',
                 onPressed: () => listScheduledNotifications(context)),
-            SimpleButton('Cancel single active schedule',
-                backgroundColor: Colors.red,
-                labelColor: Colors.white,
-                onPressed: () => cancelSchedule(8)),
-            SimpleButton('Cancel all active schedules',
-                backgroundColor: Colors.red,
-                labelColor: Colors.white,
-                onPressed: cancelAllSchedules),
-            SimpleButton('Cancel notification',
+            SimpleButton('Cancel the notification and its schedule',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: () => cancelNotification(8)),
+            SimpleButton('Dismiss the active notification without cancel its schedule',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () => dismissNotification(8)),
+            SimpleButton('Cancel the active schedule without dismiss the active notification',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () => cancelSchedule(8)),
+            SimpleButton('Cancel all active schedules without dismiss the active notification',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: cancelAllSchedules),
+            SimpleButton('Dismiss all active notifications',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: dismissAllNotifications),
+            SimpleButton('Cancel All notifications and schedules',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: cancelAllNotifications),
 
             /* ******************************************************************** */
 
             TextDivisor(title: 'Get Next Schedule Date'),
             TextNote('This is a simple example to show how to query the next valid schedule date. The date components follow the ISO 8601 standard.'),
             SimpleButton('Get next Monday after date', onPressed: () async {
-              DateTime? referenceDate = await pickScheduleDate(context);
+              DateTime? referenceDate = await pickScheduleDate(context, isUtc: false);
 
                 NotificationSchedule schedule =
                     NotificationCalendar(weekday: DateTime.monday, hour: 0, minute: 0, second: 0);
@@ -852,11 +906,15 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
             /* ******************************************************************** */
             TextDivisor(),
+            SimpleButton('Dismiss all notifications',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: dismissAllNotifications),
             SimpleButton('Cancel all active schedules',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: cancelAllSchedules),
-            SimpleButton('Cancel all notifications',
+            SimpleButton('Cancel all notifications and schedules',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: cancelAllNotifications),

@@ -63,12 +63,19 @@ const CHANNEL_METHOD_LIST_ALL_SCHEDULES = 'listAllSchedules';
 const CHANNEL_METHOD_GET_BADGE_COUNT = 'getBadgeCount';
 const CHANNEL_METHOD_SET_BADGE_COUNT = 'setBadgeCount';
 const CHANNEL_METHOD_RESET_BADGE = 'resetBadge';
+
+const CHANNEL_METHOD_DISMISS_NOTIFICATION = 'dismissNotification';
 const CHANNEL_METHOD_CANCEL_NOTIFICATION = 'cancelNotification';
 const CHANNEL_METHOD_CANCEL_SCHEDULE = 'cancelSchedule';
 const CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = 'cancelAllSchedules';
+const CHANNEL_METHOD_DISMISS_ALL_NOTIFICATIONS = 'dismissAllNotifications';
 const CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = 'cancelAllNotifications';
 const CHANNEL_METHOD_GET_NEXT_DATE = 'getNextDate';
 const CHANNEL_FORCE_UPDATE = "forceUpdate";
+
+const CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER = 'getUtcTimeZoneIdentifier';
+const CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER =
+    'getLocalTimeZoneIdentifier';
 
 const DRAWABLE_RESOURCE_REFERENCE = 'drawable';
 const DEFAULT_ICON = 'defaultIcon';
@@ -104,6 +111,7 @@ const NOTIFICATION_CREATED_DATE = 'createdDate';
 const NOTIFICATION_DISPLAYED_DATE = 'displayedDate';
 const NOTIFICATION_ACTION_DATE = 'actionDate';
 
+const NOTIFICATION_SCHEDULE_TIMEZONE = 'timeZone';
 const NOTIFICATION_SCHEDULE_ERA = 'era';
 const NOTIFICATION_SCHEDULE_YEAR = 'year';
 const NOTIFICATION_SCHEDULE_MONTH = 'month';
@@ -116,6 +124,7 @@ const NOTIFICATION_SCHEDULE_WEEKDAY = 'weekday';
 const NOTIFICATION_SCHEDULE_WEEKOFMONTH = 'weekOfMonth';
 const NOTIFICATION_SCHEDULE_WEEKOFYEAR = 'weekOfYear';
 const NOTIFICATION_SCHEDULE_INTERVAL = 'interval';
+const NOTIFICATION_SCHEDULE_ALLOW_WHILE_IDLE = 'allowWhileIdle';
 const NOTIFICATION_SCHEDULE_REPEATS = 'repeats';
 
 const NOTIFICATION_TITLE = 'title';

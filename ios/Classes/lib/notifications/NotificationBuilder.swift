@@ -158,18 +158,18 @@ public class NotificationBuilder {
                 actionReceived.actionKey = nil
                 actionReceived.actionInput = nil
                 actionReceived.dismissedLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
-                actionReceived.dismissedDate = DateUtils.getUTCDate()
+                actionReceived.dismissedDate = DateUtils.getUTCTextDate()
                 
             default:
                 let defaultIOSAction = UNNotificationDefaultActionIdentifier.description
                 actionReceived.actionKey = actionKey == defaultIOSAction ? nil : actionKey
                 actionReceived.actionInput = userText
                 actionReceived.actionLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
-                actionReceived.actionDate = DateUtils.getUTCDate()
+                actionReceived.actionDate = DateUtils.getUTCTextDate()
         }
         
         if(StringUtils.isNullOrEmpty(actionReceived.displayedDate)){
-            actionReceived.displayedDate = DateUtils.getUTCDate()
+            actionReceived.displayedDate = DateUtils.getUTCTextDate()
             actionReceived.displayedLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
         }
         else {
@@ -181,7 +181,7 @@ public class NotificationBuilder {
         return actionReceived
     }
     
-    public static func createNotification(_ pushNotification:PushNotification, content:UNMutableNotificationContent?, now:String) throws -> PushNotification? {
+    public static func createNotification(_ pushNotification:PushNotification, content:UNMutableNotificationContent?) throws -> PushNotification? {
         
         guard let channel = ChannelManager.getChannelByKey(channelKey: pushNotification.content!.channelKey!) else {
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "Channel '\(pushNotification.content!.channelKey!)' does not exist or is disabled")
@@ -226,8 +226,6 @@ public class NotificationBuilder {
                     
             setGrouping(channel: channel, content: content)
             
-            pushNotification.content!.displayedDate = nextDate?.toString() ?? now
-            
             setUserInfoContent(pushNotification: pushNotification, content: content)
             
             if SwiftUtils.isRunningOnExtension() {                
@@ -235,7 +233,10 @@ public class NotificationBuilder {
             }
             
             //let trigger:UNCalendarNotificationTrigger? = dateToCalendarTrigger(targetDate: nextDate)
-            let trigger:UNNotificationTrigger? = pushNotification.schedule?.getUNNotificationTrigger()
+            
+            pushNotification.content!.displayedDate = nextDate?.toString(toTimeZone: "UTC") ?? DateUtils.getUTCTextDate()
+            
+            let trigger:UNNotificationTrigger? = nextDate == nil ? nil : pushNotification.schedule?.getUNNotificationTrigger()
             let request = UNNotificationRequest(identifier: pushNotification.content!.id!.description, content: content, trigger: trigger)
             
             UNUserNotificationCenter.current().add(request)
@@ -247,6 +248,12 @@ public class NotificationBuilder {
                 }
                 else {
                     if(pushNotification.schedule != nil){
+                        
+                        pushNotification.schedule!.timeZone =
+                            pushNotification.schedule!.timeZone ?? DateUtils.localTimeZone.identifier
+                        pushNotification.schedule!.createdDate =
+                            DateUtils.getLocalTextDate(fromTimeZone: pushNotification.schedule!.timeZone!)
+                        
                         if (nextDate != nil){
                             ScheduleManager.saveSchedule(notification: pushNotification, nextDate: nextDate!)
                         } else {
@@ -328,12 +335,12 @@ public class NotificationBuilder {
                 let action:UNNotificationAction?
                                 
                 switch button.buttonType {
-                    
+                
                     case .InputField:
                         action = UNTextInputNotificationAction(
                             identifier: button.key!,
                             title: button.label!,
-                            options: []
+                            options: [.foreground]
                         )
                         break
                         
@@ -343,12 +350,19 @@ public class NotificationBuilder {
                             title: button.label!,
                             options: [.foreground]
                         )
+                        
+                    case .DisabledAction:
+                        action = UNNotificationAction(
+                            identifier: button.key!,
+                            title: button.label!,
+                            options: []
+                        )
                     
                     default:
                         action = UNNotificationAction(
                             identifier: button.key!,
                             title: button.label!,
-                            options: []
+                            options: [.foreground]
                         )
                         break
                 }
@@ -423,7 +437,7 @@ public class NotificationBuilder {
             if(pushNotification != nil){
 
                 nextValidDate = cron.getNextCalendar(
-                    initialDateTime: pushNotification!.schedule!.initialDateTime,
+                    initialDateTime: pushNotification!.schedule!.createdDateTime,
                     crontabRule: pushNotification!.schedule!.crontabSchedule
                 )
 
@@ -680,12 +694,11 @@ public class NotificationBuilder {
         content.categoryIdentifier = "Default"
     }
     
-    public static func cancelNotification(id:Int){
+    public static func dismissNotification(id:Int){
         let referenceKey:String = String(id)
             
         let center = UNUserNotificationCenter.current()
         center.removeDeliveredNotifications(withIdentifiers: [referenceKey])
-        center.removePendingNotificationRequests(withIdentifiers: [referenceKey])
     }
     
     public static func cancelScheduledNotification(id:Int){
@@ -695,17 +708,31 @@ public class NotificationBuilder {
         center.removePendingNotificationRequests(withIdentifiers: [referenceKey])
     }
     
-    public static func cancellAllNotifications(){
+    public static func cancelNotification(id:Int){
+        let referenceKey:String = String(id)
             
         let center = UNUserNotificationCenter.current()
-        center.removeAllDeliveredNotifications()
-        center.removeAllPendingNotificationRequests()
+        center.removeDeliveredNotifications(withIdentifiers: [referenceKey])
+        center.removePendingNotificationRequests(withIdentifiers: [referenceKey])
     }
     
     public static func cancellAllScheduledNotifications(){
             
         let center = UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()        
+    }
+    
+    public static func dismissAllNotifications(){
+            
+        let center = UNUserNotificationCenter.current()
+        center.removeAllDeliveredNotifications()
+    }
+    
+    public static func cancellAllNotifications(){
+            
+        let center = UNUserNotificationCenter.current()
+        center.removeAllDeliveredNotifications()
+        center.removeAllPendingNotificationRequests()
     }
     
 }

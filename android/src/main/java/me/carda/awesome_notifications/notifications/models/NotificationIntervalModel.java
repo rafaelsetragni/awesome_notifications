@@ -6,10 +6,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.utils.DateUtils;
+import me.carda.awesome_notifications.utils.StringUtils;
 
 public class NotificationIntervalModel extends NotificationScheduleModel {
 
@@ -19,6 +21,7 @@ public class NotificationIntervalModel extends NotificationScheduleModel {
     @SuppressWarnings("unchecked")
     public NotificationIntervalModel fromMap(Map<String, Object> arguments) {
 
+        timeZone = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, String.class);
         interval = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_INTERVAL, Integer.class);
         repeats = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_REPEATS, Boolean.class);
         allowWhileIdle = getValueOrDefault(arguments, Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, Boolean.class);
@@ -30,6 +33,7 @@ public class NotificationIntervalModel extends NotificationScheduleModel {
     public Map<String, Object> toMap(){
         Map<String, Object> returnedObject = new HashMap<>();
 
+        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, timeZone);
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_INTERVAL, interval);
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_REPEATS, repeats);
         returnedObject.put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, allowWhileIdle);
@@ -55,15 +59,23 @@ public class NotificationIntervalModel extends NotificationScheduleModel {
     }
 
     @Override
-    public Calendar getNextValidDate(Date fixedNowDate) {
+    public Calendar getNextValidDate(Date fixedNowDate) throws Exception {
         Date currentDate;
 
+        TimeZone timeZone = StringUtils.isNullOrEmpty(this.timeZone) ?
+                DateUtils.localTimeZone :
+                TimeZone.getTimeZone(this.timeZone);
+
+        if (timeZone == null)
+            throw new AwesomeNotificationException("Invalid time zone");
+
         if(fixedNowDate == null)
-            currentDate = DateUtils.getUTCDateTime();
+            currentDate = DateUtils.getLocalDateTime(this.timeZone);
         else
             currentDate = fixedNowDate;
 
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(timeZone);
         calendar.setTime(currentDate);
         calendar.add(Calendar.SECOND, interval);
 

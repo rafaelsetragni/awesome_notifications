@@ -9,6 +9,10 @@ import Foundation
 
 extension Date {
     
+    public static func localTimeZone() -> TimeZone {
+        return TimeZone.autoupdatingCurrent
+    }
+    
     public func getTime() -> Int64 {
         return Int64((self.timeIntervalSince1970 * 1000.0).rounded())
     }
@@ -45,6 +49,23 @@ extension Date {
         return Formatter.preciseGMTTime.string(for: self) ?? ""
     }
     
+    func toDateComponents() -> DateComponents {
+        let calendar = Calendar.current
+        return DateComponents(
+            timeZone: self.getTimeZone(),
+            year: calendar.component(.year, from: self),
+            month: calendar.component(.month, from: self),
+            day: calendar.component(.day, from: self),
+            hour: calendar.component(.hour, from: self),
+            minute: calendar.component(.minute, from: self),
+            second: calendar.component(.second, from: self),
+            nanosecond: calendar.component(.nanosecond, from: self),
+            weekday: calendar.component(.weekday, from: self),
+            weekOfMonth: calendar.component(.weekOfMonth, from: self),
+            weekOfYear: calendar.component(.weekOfYear, from: self)
+        )
+    }
+    
     var dateComponents: DateComponents {
         let calendar = Calendar.current
         var components:DateComponents = DateComponents()
@@ -57,7 +78,23 @@ extension Date {
         return components
     }
     
-    public func toString() -> String? {
-        return DateUtils.dateToString(self)
+    public func toString(toTimeZone timeZone:String?) -> String? {
+        
+        let dateFormatter = DateFormatter()
+        guard let timeZone:TimeZone = timeZone == nil ? TimeZone.autoupdatingCurrent : TimeZone(identifier: timeZone!)
+        else { return nil }
+        
+        dateFormatter.timeZone = timeZone
+        dateFormatter.dateFormat = Definitions.DATE_FORMAT
+
+        return dateFormatter.string(from: self)
+    }
+    
+    public func getTimeZone() -> TimeZone? {
+        return TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT(for: self))
+    }
+    
+    public func getLocalDate(fromTimeZone timeZone:String?) -> Date {
+        return Date() // there is no timezone component into dates in swift
     }
 }

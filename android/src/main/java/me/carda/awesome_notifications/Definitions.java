@@ -52,6 +52,9 @@ public interface Definitions {
     String CHANNEL_METHOD_GET_DRAWABLE_DATA = "getDrawableData";
     String CHANNEL_METHOD_CREATE_NOTIFICATION = "createNewNotification";
 
+    String CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER = "getUtcTimeZoneIdentifier";
+    String CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER = "getLocalTimeZoneIdentifier";
+
     String CHANNEL_METHOD_GET_FCM_TOKEN = "getFirebaseToken";
     String CHANNEL_METHOD_NEW_FCM_TOKEN = "newTokenReceived";
     String CHANNEL_METHOD_IS_FCM_AVAILABLE = "isFirebaseAvailable";
@@ -65,8 +68,10 @@ public interface Definitions {
     String CHANNEL_METHOD_SET_BADGE_COUNT = "setBadgeCount";
     String CHANNEL_METHOD_GET_NEXT_DATE = "getNextDate";
     String CHANNEL_METHOD_RESET_BADGE = "resetBadge";
+    String CHANNEL_METHOD_DISMISS_NOTIFICATION = "dismissNotification";
     String CHANNEL_METHOD_CANCEL_NOTIFICATION = "cancelNotification";
     String CHANNEL_METHOD_CANCEL_SCHEDULE = "cancelSchedule";
+    String CHANNEL_METHOD_DISMISS_ALL_NOTIFICATIONS = "dismissAllNotifications";
     String CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = "cancelAllSchedules";
     String CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = "cancelAllNotifications";
 
@@ -91,7 +96,9 @@ public interface Definitions {
 
     String NOTIFICATION_ICON_RESOURCE_ID = "iconResourceId";
 
+    String NOTIFICATION_SCHEDULE_CREATED_DATE = "createdDate";
     String NOTIFICATION_SCHEDULE_ERA = "era";
+    String NOTIFICATION_SCHEDULE_TIMEZONE = "timeZone";
     String NOTIFICATION_SCHEDULE_YEAR = "year";
     String NOTIFICATION_SCHEDULE_MONTH = "month";
     String NOTIFICATION_SCHEDULE_DAY = "day";

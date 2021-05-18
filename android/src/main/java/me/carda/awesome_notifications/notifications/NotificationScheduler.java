@@ -102,11 +102,17 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                     scheduled = true;
                 }
 
+                if(pushNotification.schedule == null) return null;
+
+                if(pushNotification.schedule.createdDate == null){
+                    pushNotification.content.createdDate = DateUtils.getUTCDate();
+                    scheduled = true;
+                }
+
                 if(pushNotification.content.createdLifeCycle == null)
                     pushNotification.content.createdLifeCycle = appLifeCycle;
 
-                if(pushNotification.schedule != null)
-                    nextValidDate = pushNotification.schedule.getNextValidDate(null);
+                nextValidDate = pushNotification.schedule.getNextValidDate(null);
 
                 /*
                 nextValidDate = CronUtils.getNextCalendar(
@@ -162,7 +168,7 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                     }
                     */
 
-                    cancelScheduleNotification(context, pushNotification.content.id);
+                    cancelSchedule(context, pushNotification.content.id);
 
                     String msg = "Date is not more valid. ("+DateUtils.getUTCDate()+")";
                     Log.d(TAG, msg);
@@ -244,14 +250,19 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
 
         for (PushNotification pushNotification : pushNotifications) {
             try {
-                schedule(context, pushNotification);
-            } catch (AwesomeNotificationException e) {
+                if(pushNotification.schedule.hasNextValidDate()){
+                    schedule(context, pushNotification);
+                }
+                else {
+                    ScheduleManager.cancelSchedule(context, pushNotification.content.id);
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public static void cancelScheduleNotification(Context context, Integer id) {
+    public static void cancelSchedule(Context context, Integer id) {
         if(context != null){
             _removeFromAlarm(context, id);
             ScheduleManager.cancelSchedule(context, id);
@@ -259,10 +270,14 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
         }
     }
 
-    public static boolean cancelAllNotifications(Context context) {
-        ScheduleManager.cancelAllSchedules(context);
-        ScheduleManager.commitChanges(context);
-        return true;
+    public static boolean cancelAllSchedules(Context context) {
+        if(context != null){
+            _removeAllFromAlarm(context);
+            ScheduleManager.cancelAllSchedules(context);
+            ScheduleManager.commitChanges(context);
+            return true;
+        }
+        return false;
     }
 
     private static void _removeFromAlarm(Context context, int id) {
@@ -272,6 +287,15 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = getAlarmManager(context);
             alarmManager.cancel(pendingIntent);
+        }
+    }
+
+    private static void _removeAllFromAlarm(Context context) {
+        if(context != null){
+            List<PushNotification> schedules = ScheduleManager.listSchedules(context);
+            for(PushNotification schedule : schedules){
+                _removeFromAlarm(context, schedule.content.id);
+            }
         }
     }
 

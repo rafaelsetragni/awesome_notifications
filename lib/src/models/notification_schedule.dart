@@ -1,12 +1,23 @@
 import 'package:awesome_notifications/src/models/model.dart';
 
 /// Notification schedule configuration
-/// [initialDate]: (YYYY-MM-DD hh:mm:ss) The initial date that schedule should be called by first time
+/// [timeZone]: time zone reference to this schedule
 /// [crontabSchedule]: Crontab expression as repetition rule (with seconds precision), as described in https://www.baeldung.com/cron-expressions
 /// [allowWhileIdle]: Determines if notification will send, even when the device is in critical situation, such as low battery.
 
 abstract class NotificationSchedule extends Model {
-  NotificationSchedule({this.allowWhileIdle = false, this.repeats = false});
+  NotificationSchedule(
+      {required this.timeZone,
+      this.allowWhileIdle = false,
+      this.repeats = false});
+
+  String? _createdDate;
+
+  /// Reference
+  String? get createdDate => _createdDate;
+
+  /// Full time zone identifier to schedule a notification, in english (ex: America/Sao_Paulo, America/New_York, Europe/Helsinki or GMT-07:00)
+  String timeZone;
 
   /// Displays the notification, even when the device is low battery
   bool allowWhileIdle;

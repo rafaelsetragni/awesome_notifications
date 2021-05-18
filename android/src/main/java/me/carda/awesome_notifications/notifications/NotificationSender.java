@@ -10,6 +10,7 @@ import android.service.notification.StatusBarNotification;
 
 import java.util.Random;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationManagerCompat;
 
 import me.carda.awesome_notifications.BroadcastSender;
@@ -19,8 +20,10 @@ import me.carda.awesome_notifications.notifications.enumeratos.NotificationLifeC
 import me.carda.awesome_notifications.notifications.enumeratos.NotificationSource;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.notifications.managers.CreatedManager;
+import me.carda.awesome_notifications.notifications.managers.DismissedManager;
 import me.carda.awesome_notifications.notifications.managers.DisplayedManager;
 import me.carda.awesome_notifications.notifications.models.PushNotification;
+import me.carda.awesome_notifications.notifications.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
 import me.carda.awesome_notifications.utils.DateUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
@@ -150,7 +153,6 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
     @Override
     protected void onPostExecute(NotificationReceived receivedNotification) {
-        //Log.d(TAG, "Notification created");
 
         // Only broadcast if pushNotification is valid
         if(pushNotification != null){
@@ -233,38 +235,13 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
         return NotificationManagerCompat.from(context);
     }
 
-    public static void cancelNotification(Context context, Integer id) {
+    public static void dismissNotification(Context context, Integer id) {
         if(context != null){
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationManagerCompat notificationManager = getNotificationManager(context);
 
-                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
-
-                // fix to canceling a automatic generated summary notification
-                // https://github.com/rafaelsetragni/awesome_notifications/issues/69
-                for (StatusBarNotification activeNotification : currentActiveNotifications) {
-                    if(activeNotification.getId() == id){
-                        String groupKey = activeNotification.getGroupKey();
-                        if(!StringUtils.isNullOrEmpty(groupKey)) {
-                            Integer otherId = 0, count = 0;
-                            for (StatusBarNotification otherNotification : currentActiveNotifications) {
-                                if(otherNotification.getGroupKey().equals(groupKey)) {
-                                    count++;
-                                    if(otherNotification.getId() != id)
-                                        otherId = otherNotification.getId();
-                                }
-                            }
-                            if(count <= 2){
-                                notificationManager.cancel(otherId.toString(), otherId);
-                                notificationManager.cancel(otherId);
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
+                dismissOrphanGroupDescription(context, notificationManager, id);
 
                 notificationManager.cancel(id.toString(), id);
                 notificationManager.cancel(id);
@@ -273,17 +250,10 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(id.toString(), id);
             notificationManager.cancel(id);
-
-
-            CreatedManager.cancelCreated(context, id);
-            DisplayedManager.cancelDisplayed(context, id);
-
-            CreatedManager.commitChanges(context);
-            DisplayedManager.commitChanges(context);
         }
     }
 
-    public static boolean cancelAllNotifications(Context context) {
+    public static boolean dismissAllNotifications(Context context) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManagerCompat notificationManager = getNotificationManager(context);
@@ -294,13 +264,62 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             notificationManager.cancelAll();
         }
 
-        CreatedManager.cancelAllCreated(context);
-        DisplayedManager.cancelAllDisplayed(context);
-
-        CreatedManager.commitChanges(context);
-        DisplayedManager.commitChanges(context);
-
         return true;
+    }
+
+    public static void sendDismissedNotification(Context context, ActionReceived actionReceived){
+
+        if (actionReceived != null){
+
+            actionReceived.dismissedLifeCycle = AwesomeNotificationsPlugin.getApplicationLifeCycle();
+            actionReceived.dismissedDate = DateUtils.getUTCDate();
+
+            DismissedManager.saveDismissed(context, actionReceived);
+            DismissedManager.commitChanges(context);
+
+            try {
+
+                BroadcastSender.SendBroadcastNotificationDismissed(
+                    context,
+                    actionReceived
+                );
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /// fix to canceling a automatic generated summary notification
+    /// https://github.com/rafaelsetragni/awesome_notifications/issues/69
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private static void dismissOrphanGroupDescription(Context context, NotificationManagerCompat notificationManager, int id){
+
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
+
+        if(currentActiveNotifications != null)
+            for (StatusBarNotification activeNotification : currentActiveNotifications) {
+                if(activeNotification.getId() == id){
+                    String groupKey = activeNotification.getGroupKey();
+                    if(!StringUtils.isNullOrEmpty(groupKey)) {
+                        Integer otherId = 0, count = 0;
+                        for (StatusBarNotification otherNotification : currentActiveNotifications) {
+                            if(otherNotification.getGroupKey().equals(groupKey)) {
+                                count++;
+                                if(otherNotification.getId() != id)
+                                    otherId = otherNotification.getId();
+                            }
+                        }
+                        if(count <= 2){
+                            notificationManager.cancel(otherId.toString(), otherId);
+                            notificationManager.cancel(otherId);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
     }
 
 }

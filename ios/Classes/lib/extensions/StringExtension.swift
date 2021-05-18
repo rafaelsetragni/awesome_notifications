@@ -95,15 +95,16 @@ extension String {
         return converted
     }
     
-    public func toDate(_ format: String = "yyyy-MM-dd HH:mm:ss", with timeZone: TimeZone = TimeZone(abbreviation: "UTC")!)-> Date?{
-
+    public func toDate(_ format: String = "yyyy-MM-dd HH:mm:ss", fromTimeZone timeZone:String?)-> Date? {
+        
         let dateFormatter = DateFormatter()
+        guard let timeZone:TimeZone = timeZone == nil ? TimeZone.autoupdatingCurrent : TimeZone(identifier: timeZone!)
+        else { return nil }
+        
         dateFormatter.timeZone = timeZone
-        dateFormatter.calendar = Calendar(identifier: .gregorian)
-        dateFormatter.dateFormat = format
-        let date = dateFormatter.date(from: self)
+        dateFormatter.dateFormat = Definitions.DATE_FORMAT
 
-        return date
+        return dateFormatter.date(from: self)
     }
 
     public func split(regex pattern: String) -> [String] {
