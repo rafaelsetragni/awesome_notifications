@@ -178,15 +178,6 @@ To run the examples, follow the steps bellow:
 7. Debug the application with a real device or emulator
 
 <br>
-
-## Schedule Limitations
-
-Due to the way that background task and notification schedules works on iOS, wasn't possible yet to enable all the schedule features on iOS while the app is in Background and even when the app is terminated (Killed).
-Thanks to this, the scheduling for android has also regressed to the iOS limitations level, to ensure for the developer the same behaviour in any platform. But it could be manually reactivated in java native code.
-
-A support ticket was opened for Apple in order to resolve this issue. You can follow the progress of the process [here](https://github.com/rafaelsetragni/awesome_notifications/issues/16).
-
-<br>
 <br>
 
 ## Using Firebase Services (Optional)
@@ -405,7 +396,10 @@ If the app is terminated (killed):
 <br>
 
 
-### Scheduling a notification
+## Scheduling a notification
+
+Schedules could be created from a UTC or local time zone, and specifying a time interval or setting a calendar filter. Notifications could be scheduled even remotely.
+Atention: for iOS, is not possible to define the correct `displayedDate`, because is not possible to run exactely at same time with the notification schedules when it arives in the user status bar.
 
 Notifications could be scheduled into two exclusive types:
 
@@ -414,8 +408,87 @@ Notifications could be scheduled into two exclusive types:
 
 Also, both of then could be configured using:
 
+- timeZone: describe wich time zone that schedule is based (valid examples: America/Sao_Paulo, America/Los_Angeles, GMT+01:00, Europe/London, UTC)
 - allowWhileIdle: Determines if notification will send, even when the device is in critical situation, such as low battery.
 - repeats: Determines if the schedule should be repeat after be displayed. If there is no more valid date compatible with the schedule rules, the notification is automatically canceled.
+
+For time zones, please take in consideration that:
+
+- Dates with UTC timezones are fired at same time in every part of the planet and are not affected by daylight rules.
+- Dates with local time zones, defined as "GMT-07:00" are not affected by daylight rules.
+- Dates with local time zones, defined as "Europe/Lisbon" are affected by daylight rules, specially when scheduled based on a calendar filter.
+
+Here's some pratical dart examples of how to create a notification scheduled:
+
+```Dart
+  String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
+  String utcTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
+  
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: id,
+          channelKey: 'scheduled',
+          title: 'Notification at every single minute',
+          body:
+              'This notification was schedule to repeat at every single minute.',
+          notificationLayout: NotificationLayout.BigPicture,
+          bigPicture: 'asset://assets/images/melted-clock.png'),
+      schedule: NotificationInterval(interval: 60, timeZone: localTimeZone, repeats: true));
+```
+
+```Dart
+await AwesomeNotifications().createNotification(
+  content: NotificationContent(
+      id: id,
+      channelKey: "basic_channel",
+      title: "wait 5 seconds to show",
+      body: "now is 5 seconds later"
+  ),
+  schedule: NotificationInterval(
+      interval: 5,
+      timeZone: localTimeZone
+  );  
+```
+
+```Dart
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: id,
+          channelKey: 'scheduled',
+          title: 'Notification at exactly every single minute',
+          body: 'This notification was schedule to repeat at every single minute at clock.',
+          notificationLayout: NotificationLayout.BigPicture,
+          bigPicture: 'asset://assets/images/melted-clock.png'),
+      schedule: NotificationCalendar(second: 0, millisecond: 0, timeZone: localTimeZone, repeats: true));
+```
+
+```Dart
+ await AwesomeNotifications().createNotification(
+  content: NotificationContent(
+    id: id,
+    channelKey: 'scheduled',
+    title: 'Just in time!',
+    body: 'This notification was schedule to shows at ' +
+        (Utils.DateUtils.parseDateToString(scheduleTime.toLocal()) ?? '?') +
+        ' $timeZoneIdentifier (' +
+        (Utils.DateUtils.parseDateToString(scheduleTime.toUtc()) ?? '?') +
+        ' utc)',
+    notificationLayout: NotificationLayout.BigPicture,
+    bigPicture: 'asset://assets/images/delivery.jpeg',
+    payload: {'uuid': 'uuid-test'},
+    autoCancel: false,
+  ),
+  schedule: NotificationCalendar.fromDate(date: scheduleTime));
+```
+
+<br>
+
+## Old schedule Cron rules
+
+Due to the way that background task and notification schedules works on iOS, wasn't possible yet to enable officialy all the old Cron features on iOS while the app is in Background and even when the app is terminated (Killed).
+Thanks to this, the scheduling for android has also regressed to the iOS limitations level, to ensure for the developer the same behavior in any platform. But it could be manually reactivated in java native code.
+
+A support ticket was opened for Apple in order to resolve this issue, but they dont even care about. You can follow the progress of the process [here](https://github.com/rafaelsetragni/awesome_notifications/issues/16).
 
 <br>
 
@@ -441,7 +514,7 @@ OBS: not all emojis work with all platforms. Please, test the specific emoji bef
 <br>
 
 
-## How to send Push Notifications using Firebase Cloud Messaging (FCM)
+## How to send Push Notifications using Firebase Cloud Messaging plugin (FCM)
 
 To send a notification using Awesome Notifications and FCM Services, you need to send a POST request to the address https://fcm.googleapis.com/fcm/send.
 Due to limitations on Android and iOS, you should send a empty **notification** field and use only the **data** field to send your data, as bellow:
@@ -451,6 +524,8 @@ OBS: `actionButtons` and `schedule` are **optional**
 OBS 2: you should not implement any native code to use FCM with Awesome Notifications. All of then was already implemented inside the plugin.
 <br>
 OBS 3: data only messages are classed as "low priority". Devices can throttle and ignore these messages if your application is in the background, terminated, or a variety of other conditions such as low battery or currently high CPU usage. To help improve delivery, you can bump the priority of messages. Note; this does still not guarantee delivery. More info [here](https://firebase.flutter.dev/docs/messaging/usage/#low-priority-messages)
+<br>
+OBS 4: The background message method of the `firebase_messaging` plug-in runs in the background mode, which falls under iOS background execution rules and can suspend all of your background executions for an indefinite period of time, for various reasons . Unfortunately, this is a known behavior of iOS and there is nothing to do about it. 15 minutes of delay is the smaller period between each execution. Consider that the background method of `firebase_messaging` may not be executed at all or even run entirely out of the expected time.
 <br>
 
 ```json
@@ -486,9 +561,11 @@ OBS 3: data only messages are classed as "low priority". Devices can throttle an
             }
         ],
         "schedule": {
+            "timeZone": "America/New_York",
             "hour": "10",
             "minute": "0",
             "second": "0",
+            "millisecond": "0",
             "allowWhileIdle": true,
             "repeat": true
         }
