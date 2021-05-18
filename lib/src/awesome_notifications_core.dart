@@ -421,7 +421,6 @@ class AwesomeNotifications {
     await _channel.invokeMethod(CHANNEL_METHOD_DISMISS_NOTIFICATION, id);
   }
 
-
   /// Cancel a single scheduled notification, without dismiss the active notification
   Future<void> cancelSchedule(int id) async {
     _validateId(id);

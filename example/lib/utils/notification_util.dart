@@ -395,7 +395,9 @@ Future<void> redNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
             key: 'ARCHIVE', label: 'Archive', autoCancel: true)
       ],
-      schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null);
+      schedule: delayLEDTests ? NotificationInterval(
+          interval: 5,
+          timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null);
 }
 
 Future<void> blueNotification(int id, bool delayLEDTests) async {
