@@ -60,30 +60,30 @@ public class NotificationBuilder {
     public Notification createNotification(Context context, PushNotification pushNotification) throws AwesomeNotificationException {
 
         Intent intent = buildNotificationIntentFromModel(
-            context,
-            Definitions.SELECT_NOTIFICATION,
-            pushNotification
+                context,
+                Definitions.SELECT_NOTIFICATION,
+                pushNotification
         );
 
         Intent deleteIntent = buildNotificationIntentFromModel(
-            context,
-            Definitions.DISMISSED_NOTIFICATION,
-            pushNotification,
-            DismissedNotificationReceiver.class
+                context,
+                Definitions.DISMISSED_NOTIFICATION,
+                pushNotification,
+                DismissedNotificationReceiver.class
         );
 
         PendingIntent pendingIntent = PendingIntent.getActivity(
-            context,
-            pushNotification.content.id,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+                context,
+                pushNotification.content.id,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
         );
 
         PendingIntent pendingDeleteIntent = PendingIntent.getBroadcast(
-            context,
-            pushNotification.content.id,
-            deleteIntent,
-            PendingIntent.FLAG_CANCEL_CURRENT
+                context,
+                pushNotification.content.id,
+                deleteIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT
         );
 
         NotificationCompat.Builder builder = getNotificationBuilderFromModel(context, pushNotification, pendingIntent, pendingDeleteIntent);
@@ -91,11 +91,11 @@ public class NotificationBuilder {
         return builder.build();
     }
 
-    public Intent buildNotificationIntentFromModel(Context context, String ActionReference, PushNotification pushNotification){
+    public Intent buildNotificationIntentFromModel(Context context, String ActionReference, PushNotification pushNotification) {
         return buildNotificationIntentFromModel(context, ActionReference, pushNotification, getNotificationTargetActivityClass(context));
     }
 
-    public Intent buildNotificationIntentFromModel(Context context, String ActionReference, PushNotification pushNotification, Class<?> targetAction){
+    public Intent buildNotificationIntentFromModel(Context context, String ActionReference, PushNotification pushNotification, Class<?> targetAction) {
         Intent intent = new Intent(context, targetAction);
 
         intent.setAction(ActionReference);
@@ -108,29 +108,29 @@ public class NotificationBuilder {
         return intent;
     }
 
-    public static ActionReceived buildNotificationActionFromIntent(Context context, Intent intent){
+    public static ActionReceived buildNotificationActionFromIntent(Context context, Intent intent) {
         String actionKey = intent.getAction();
 
-        if(actionKey == null) return null;
+        if (actionKey == null) return null;
 
         Boolean isNormalAction = Definitions.SELECT_NOTIFICATION.equals(actionKey) || Definitions.DISMISSED_NOTIFICATION.equals(actionKey);
         Boolean isButtonAction = actionKey.startsWith(Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX);
 
-        if (isNormalAction || isButtonAction){
+        if (isNormalAction || isButtonAction) {
 
             Integer notificationId = intent.getIntExtra(Definitions.NOTIFICATION_ID, -1);
             String notificationJson = intent.getStringExtra(Definitions.NOTIFICATION_JSON);
 
             PushNotification pushNotification = new PushNotification().fromJson(notificationJson);
-            if(pushNotification == null) return null;
+            if (pushNotification == null) return null;
 
             ActionReceived actionModel = new ActionReceived(pushNotification.content);
 
             actionModel.actionLifeCycle = AwesomeNotificationsPlugin.appLifeCycle;
 
-            if (isButtonAction){
+            if (isButtonAction) {
                 actionModel.actionKey = intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_KEY);
-                if(intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_TYPE).equals(ActionButtonType.InputField.toString())){
+                if (intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_TYPE).equals(ActionButtonType.InputField.toString())) {
                     actionModel.actionInput = getButtonInputText(intent, intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_KEY));
                 }
             }
@@ -139,7 +139,7 @@ public class NotificationBuilder {
 
                 // "IT WORKS" to cancel notification remote inputs since Android 9, but is not the correct way to do
                 // https://stackoverflow.com/questions/54219914/cancel-notification-with-remoteinput-not-working/56867575#56867575
-                if(!StringUtils.isNullOrEmpty(actionModel.actionInput) && Build.VERSION.SDK_INT >= 28){
+                if (!StringUtils.isNullOrEmpty(actionModel.actionInput) && Build.VERSION.SDK_INT >= 28) {
                     try {
                         NotificationSender.send(context, pushNotification);
                         Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
@@ -153,12 +153,12 @@ public class NotificationBuilder {
                 NotificationSender.dismissNotification(context, notificationId);
             }
 
-            if(StringUtils.isNullOrEmpty(actionModel.displayedDate)){
+            if (StringUtils.isNullOrEmpty(actionModel.displayedDate)) {
                 actionModel.displayedDate = DateUtils.getUTCDate();
             }
             actionModel.actionDate = DateUtils.getUTCDate();
 
-            if (isButtonAction && intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_TYPE).equals(ActionButtonType.DisabledAction.toString())){
+            if (isButtonAction && intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_TYPE).equals(ActionButtonType.DisabledAction.toString())) {
                 return null;
             }
 
@@ -179,7 +179,8 @@ public class NotificationBuilder {
 
         NotificationChannelModel channel = ChannelManager.getChannelByKey(context, pushNotification.content.channelKey);
 
-        if(channel == null) throw new AwesomeNotificationException("Channel '"+pushNotification.content.channelKey+"' does not exist or is disabled");
+        if (channel == null)
+            throw new AwesomeNotificationException("Channel '" + pushNotification.content.channelKey + "' does not exist or is disabled");
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, pushNotification.content.channelKey);
 
@@ -226,19 +227,18 @@ public class NotificationBuilder {
         builder.setShowWhen(BooleanUtils.getValueOrDefault(pushNotification.content.showWhen, true));
     }
 
-    private Integer getBackgroundColor(PushNotification pushNotification, NotificationChannelModel channel, NotificationCompat.Builder builder){
+    private Integer getBackgroundColor(PushNotification pushNotification, NotificationChannelModel channel, NotificationCompat.Builder builder) {
         Integer bgColorValue;
         bgColorValue = IntegerUtils.extractInteger(pushNotification.content.backgroundColor, null);
-        if(bgColorValue != null){
+        if (bgColorValue != null) {
             builder.setColorized(true);
-        }
-        else {
+        } else {
             bgColorValue = getLayoutColor(pushNotification, channel);
         }
         return bgColorValue;
     }
 
-    private Integer getLayoutColor(PushNotification pushNotification, NotificationChannelModel channel){
+    private Integer getLayoutColor(PushNotification pushNotification, NotificationChannelModel channel) {
         Integer layoutColorValue;
         layoutColorValue = IntegerUtils.extractInteger(pushNotification.content.color, channel.defaultColor);
         layoutColorValue = IntegerUtils.extractInteger(layoutColorValue, Color.BLACK);
@@ -247,7 +247,7 @@ public class NotificationBuilder {
 
     private void setImportance(NotificationChannelModel channel, NotificationCompat.Builder builder) {
         // Conversion to Priority
-        int priorityValue = Math.min(Math.max(IntegerUtils.extractInteger(channel.importance) -2,-2),2);
+        int priorityValue = Math.min(Math.max(IntegerUtils.extractInteger(channel.importance) - 2, -2), 2);
         builder.setPriority(priorityValue);
     }
 
@@ -260,10 +260,9 @@ public class NotificationBuilder {
         Boolean contentLocked = BooleanUtils.getValue(pushNotification.content.locked);
         Boolean channelLocked = BooleanUtils.getValue(channel.locked);
 
-        if(contentLocked){
+        if (contentLocked) {
             builder.setOngoing(true);
-        }
-        else if(channelLocked){
+        } else if (channelLocked) {
             Boolean lockedValue = BooleanUtils.getValueOrDefault(pushNotification.content.locked, true) && channelLocked;
             builder.setOngoing(lockedValue);
         }
@@ -277,8 +276,8 @@ public class NotificationBuilder {
         builder.setTicker(tickerValue);
     }
 
-    private void setBadge(Context context, NotificationChannelModel channelModel, NotificationCompat.Builder builder){
-        if(BooleanUtils.getValue(channelModel.channelShowBadge)){
+    private void setBadge(Context context, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
+        if (BooleanUtils.getValue(channelModel.channelShowBadge)) {
             incrementGlobalBadgeCounter(context, channelModel);
             builder.setNumber(1);
         }
@@ -293,7 +292,7 @@ public class NotificationBuilder {
     }
 
     private void setTitle(PushNotification pushNotification, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
-        if(pushNotification.content.title != null){
+        if (pushNotification.content.title != null) {
             builder.setContentTitle(HtmlUtils.fromHtml(pushNotification.content.title));
         }
     }
@@ -331,7 +330,7 @@ public class NotificationBuilder {
 
     private void setLayoutColor(Context context, PushNotification pushNotification, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
 
-        if(pushNotification.content.backgroundColor == null){
+        if (pushNotification.content.backgroundColor == null) {
             builder.setColor(getLayoutColor(pushNotification, channelModel));
         } else {
             builder.setColor(getBackgroundColor(pushNotification, channelModel, builder));
@@ -341,24 +340,24 @@ public class NotificationBuilder {
     private void setLargeIcon(Context context, PushNotification pushNotification, NotificationCompat.Builder builder) {
         if (!StringUtils.isNullOrEmpty(pushNotification.content.largeIcon)) {
             Bitmap largeIcon = BitmapUtils.getBitmapFromSource(context, pushNotification.content.largeIcon);
-            if(largeIcon != null){
+            if (largeIcon != null) {
                 builder.setLargeIcon(largeIcon);
             }
         }
     }
 
-    public static String getBadgeKey(Context context, String channelKey){
-        return "count_key"+(channelKey == null ? "_total" : channelKey);
+    public static String getBadgeKey(Context context, String channelKey) {
+        return "count_key" + (channelKey == null ? "_total" : channelKey);
     }
 
-    public static int getGlobalBadgeCounter(Context context, String channelKey){
+    public static int getGlobalBadgeCounter(Context context, String channelKey) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         // Read previous value. If not found, use 0 as default value.
         return prefs.getInt(getBadgeKey(context, channelKey), 0);
     }
 
-    public static void setGlobalBadgeCounter(Context context, String channelKey, int count){
+    public static void setGlobalBadgeCounter(Context context, String channelKey, int count) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -373,11 +372,11 @@ public class NotificationBuilder {
         editor.apply();
     }
 
-    public static void resetGlobalBadgeCounter(Context context, String channelKey){
-        setGlobalBadgeCounter(context, channelKey, 0 );
+    public static void resetGlobalBadgeCounter(Context context, String channelKey) {
+        setGlobalBadgeCounter(context, channelKey, 0);
     }
 
-    public static int incrementGlobalBadgeCounter(Context context, NotificationChannelModel channelModel){
+    public static int incrementGlobalBadgeCounter(Context context, NotificationChannelModel channelModel) {
 
         int totalAmount = getGlobalBadgeCounter(context, null);
         setGlobalBadgeCounter(context, null, ++totalAmount);
@@ -388,7 +387,7 @@ public class NotificationBuilder {
     public Class getNotificationTargetActivityClass(Context context) {
         String packageName = context.getPackageName();
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-        String className = launchIntent.getComponent().getClassName();
+        String className = launchIntent != null ? AwesomeNotificationsPlugin.getMainTargetClassName() : launchIntent.getComponent().getClassName();
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
@@ -400,17 +399,17 @@ public class NotificationBuilder {
     @NonNull
     public void createActionButtons(Context context, PushNotification pushNotification, NotificationCompat.Builder builder) {
 
-        if(ListUtils.isNullOrEmpty(pushNotification.actionButtons)) return;
+        if (ListUtils.isNullOrEmpty(pushNotification.actionButtons)) return;
 
-        for(NotificationButtonModel buttonProperties : pushNotification.actionButtons) {
+        for (NotificationButtonModel buttonProperties : pushNotification.actionButtons) {
 
             Intent actionIntent = buildNotificationIntentFromModel(
-                context,
-                Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX + "_" + buttonProperties.key,
-                pushNotification,
-                (buttonProperties.buttonType == ActionButtonType.DisabledAction) ? AwesomeNotificationsPlugin.class :
-                (buttonProperties.buttonType == ActionButtonType.KeepOnTop) ?
-                        KeepOnTopActionReceiver.class : getNotificationTargetActivityClass(context)
+                    context,
+                    Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX + "_" + buttonProperties.key,
+                    pushNotification,
+                    (buttonProperties.buttonType == ActionButtonType.DisabledAction) ? AwesomeNotificationsPlugin.class :
+                            (buttonProperties.buttonType == ActionButtonType.KeepOnTop) ?
+                                    KeepOnTopActionReceiver.class : getNotificationTargetActivityClass(context)
             );
 
             actionIntent.putExtra(Definitions.NOTIFICATION_AUTO_CANCEL, buttonProperties.autoCancel);
@@ -420,9 +419,9 @@ public class NotificationBuilder {
 
             PendingIntent actionPendingIntent = null;
 
-            if(buttonProperties.enabled){
+            if (buttonProperties.enabled) {
 
-                if(buttonProperties.buttonType == ActionButtonType.KeepOnTop) {
+                if (buttonProperties.buttonType == ActionButtonType.KeepOnTop) {
 
                     actionPendingIntent = PendingIntent.getBroadcast(
                             context,
@@ -431,8 +430,7 @@ public class NotificationBuilder {
                             PendingIntent.FLAG_UPDATE_CURRENT
                     );
 
-                }
-                else if(buttonProperties.buttonType == ActionButtonType.DisabledAction) {
+                } else if (buttonProperties.buttonType == ActionButtonType.DisabledAction) {
 
                     actionPendingIntent = PendingIntent.getActivity(
                             context,
@@ -441,13 +439,12 @@ public class NotificationBuilder {
                             0
                     );
 
-                }
-                else {
+                } else {
 
-                    if(
-                        android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N
-                                && buttonProperties.buttonType == ActionButtonType.InputField
-                    ){
+                    if (
+                            android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N
+                                    && buttonProperties.buttonType == ActionButtonType.InputField
+                    ) {
                         actionIntent.setAction(Intent.ACTION_MAIN);
                         actionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     }
@@ -462,11 +459,11 @@ public class NotificationBuilder {
             }
 
             int iconResource = 0;
-            if(!StringUtils.isNullOrEmpty(buttonProperties.icon)){
+            if (!StringUtils.isNullOrEmpty(buttonProperties.icon)) {
                 iconResource = BitmapUtils.getDrawableResourceId(context, buttonProperties.icon);
             }
 
-            if(buttonProperties.buttonType == ActionButtonType.InputField) {
+            if (buttonProperties.buttonType == ActionButtonType.InputField) {
 
                 RemoteInput remoteInput = new RemoteInput.Builder(buttonProperties.key)
                         .setLabel(buttonProperties.label)
@@ -477,7 +474,7 @@ public class NotificationBuilder {
                         .addRemoteInput(remoteInput)
                         .build();
 
-                builder.addAction( replyAction );
+                builder.addAction(replyAction);
 
             } else {
 
@@ -517,13 +514,13 @@ public class NotificationBuilder {
                             context.getPackageName()
                     );
 
-                    if(defaultResource > 0){
+                    if (defaultResource > 0) {
                         builder.setSmallIcon(defaultResource);
                     }
                 }
             } else {
                 int resourceIndex = BitmapUtils.getDrawableResourceId(context, defaultIcon);
-                if(resourceIndex > 0){
+                if (resourceIndex > 0) {
                     builder.setSmallIcon(resourceIndex);
                 }
             }
@@ -535,10 +532,9 @@ public class NotificationBuilder {
         if (!StringUtils.isNullOrEmpty(channelModel.groupKey)) {
             builder.setGroup(channelModel.groupKey);
 
-            if(pushNotification.groupSummary) {
+            if (pushNotification.groupSummary) {
                 builder.setGroupSummary(true);
-            }
-            else {
+            } else {
                 boolean grouped = true;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
 
@@ -546,7 +542,7 @@ public class NotificationBuilder {
                     StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
 
                     for (StatusBarNotification activeNotification : currentActiveNotifications) {
-                        if (activeNotification.getGroupKey().contains("g:"+channelModel.groupKey)) {
+                        if (activeNotification.getGroupKey().contains("g:" + channelModel.groupKey)) {
                             grouped = false;
                             break;
                         }
@@ -560,7 +556,7 @@ public class NotificationBuilder {
 
             String idText = pushNotification.content.id.toString();
             String sortKey = Long.toString(
-                (channelModel.groupSort == GroupSort.Asc ? System.currentTimeMillis() : Long.MAX_VALUE - System.currentTimeMillis())
+                    (channelModel.groupSort == GroupSort.Asc ? System.currentTimeMillis() : Long.MAX_VALUE - System.currentTimeMillis())
             );
 
             builder.setSortKey(sortKey + idText);
@@ -574,23 +570,23 @@ public class NotificationBuilder {
         switch (pushNotification.content.notificationLayout) {
 
             case BigPicture:
-                if(setBigPictureLayout(context, pushNotification.content, builder)) return;
+                if (setBigPictureLayout(context, pushNotification.content, builder)) return;
                 break;
 
             case BigText:
-                if(setBigTextStyle(context, pushNotification.content, builder)) return;
+                if (setBigTextStyle(context, pushNotification.content, builder)) return;
                 break;
 
             case Inbox:
-                if(setInboxLayout(context, pushNotification.content, builder)) return;
+                if (setInboxLayout(context, pushNotification.content, builder)) return;
                 break;
 
             case Messaging:
-                if(setMessagingLayout(context, pushNotification.content, builder)) return;
+                if (setMessagingLayout(context, pushNotification.content, builder)) return;
                 break;
 
             case MediaPlayer:
-                if(setMediaPlayerLayout(context, pushNotification.content, builder)) return;
+                if (setMediaPlayerLayout(context, pushNotification.content, builder)) return;
                 break;
 
             case ProgressBar:
@@ -615,7 +611,7 @@ public class NotificationBuilder {
             bigPicture = BitmapUtils.getBitmapFromSource(context, contentModel.bigPicture);
         }
 
-        if(bigPicture == null) {
+        if (bigPicture == null) {
             return false;
         }
 
@@ -673,13 +669,12 @@ public class NotificationBuilder {
 
         List<String> lines = new ArrayList<>(Arrays.asList(contentModel.body.split("\\r?\\n")));
 
-        if(ListUtils.isNullOrEmpty(lines)) return false;
+        if (ListUtils.isNullOrEmpty(lines)) return false;
 
         CharSequence summary;
         if (StringUtils.isNullOrEmpty(contentModel.summary)) {
-            summary = "+ "+lines.size()+" more";
-        }
-        else {
+            summary = "+ " + lines.size() + " more";
+        } else {
             summary = HtmlUtils.fromHtml(contentModel.body);
         }
         inboxStyle.setSummaryText(summary);
@@ -710,13 +705,13 @@ public class NotificationBuilder {
     private Boolean setMediaPlayerLayout(Context context, NotificationContentModel contentModel, NotificationCompat.Builder builder) {
 
         builder.setStyle(
-            new androidx.media.app.NotificationCompat.MediaStyle()
-                .setShowActionsInCompactView(1,2,3)
-                .setShowCancelButton(true)
-                .setMediaSession(AwesomeNotificationsPlugin.mediaSession.getSessionToken())
+                new androidx.media.app.NotificationCompat.MediaStyle()
+                        .setShowActionsInCompactView(1, 2, 3)
+                        .setShowCancelButton(true)
+                        .setMediaSession(AwesomeNotificationsPlugin.mediaSession.getSessionToken())
         );
 
-        if(!StringUtils.isNullOrEmpty(contentModel.summary)){
+        if (!StringUtils.isNullOrEmpty(contentModel.summary)) {
             builder.setSubText(contentModel.summary);
         }
 

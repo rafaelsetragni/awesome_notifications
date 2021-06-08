@@ -75,6 +75,9 @@ import me.carda.awesome_notifications.utils.MapUtils;
 import me.carda.awesome_notifications.utils.MediaUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
+
+
+
 /** AwesomeNotificationsPlugin **/
 public class AwesomeNotificationsPlugin
         extends BroadcastReceiver
@@ -82,7 +85,7 @@ public class AwesomeNotificationsPlugin
 
     public static Boolean debug = false;
     public static Boolean hasGooglePlayServices;
-
+    private static String mainTargetClassName;
     public static NotificationLifeCycle appLifeCycle = NotificationLifeCycle.AppKilled;
 
     private static final String TAG = "AwesomeNotificationsPlugin";
@@ -92,6 +95,11 @@ public class AwesomeNotificationsPlugin
     private Context applicationContext;
 
     public static MediaSessionCompat mediaSession;
+
+    public static String getMainTargetClassName(){
+        return mainTargetClassName;
+    }
+
 
     private boolean checkGooglePlayServices() {
         // TODO MISSING IMPLEMENTATION. FIREBASE SERVICES DEMANDS GOOGLE PLAY SERVICES.
@@ -198,11 +206,16 @@ public class AwesomeNotificationsPlugin
     //     Log.d(TAG, "Firebase enabled");
     // }
 
+
+
     @Override
     public void onAttachedToActivity(ActivityPluginBinding activityPluginBinding) {
         initialActivity = activityPluginBinding.getActivity();
         activityPluginBinding.addOnNewIntentListener(this);
         getApplicationLifeCycle();
+
+        Intent intent = initialActivity.getIntent();
+        mainTargetClassName = intent.getComponent().getClassName();
 
         if(AwesomeNotificationsPlugin.debug)
             Log.d(TAG, "Notification Lifecycle: (onAttachedToActivity)" + appLifeCycle.toString());
