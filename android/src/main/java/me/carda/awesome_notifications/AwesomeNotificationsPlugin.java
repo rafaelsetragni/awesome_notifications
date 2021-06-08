@@ -1,5 +1,7 @@
 package me.carda.awesome_notifications;
 
+import android.app.Application;
+import android.app.Application.ActivityLifecycleCallbacks;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -7,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.media.session.MediaSessionCompat;
 import io.flutter.Log;
@@ -81,7 +84,7 @@ import me.carda.awesome_notifications.utils.StringUtils;
 /** AwesomeNotificationsPlugin **/
 public class AwesomeNotificationsPlugin
         extends BroadcastReceiver
-        implements FlutterPlugin, MethodCallHandler, PluginRegistry.NewIntentListener, ActivityAware {
+        implements FlutterPlugin, MethodCallHandler, PluginRegistry.NewIntentListener, ActivityAware, ActivityLifecycleCallbacks {
 
     public static Boolean debug = false;
     public static Boolean hasGooglePlayServices;
@@ -213,6 +216,9 @@ public class AwesomeNotificationsPlugin
         initialActivity = activityPluginBinding.getActivity();
         activityPluginBinding.addOnNewIntentListener(this);
         getApplicationLifeCycle();
+
+        Application application = initialActivity.getApplication();
+        application.registerActivityLifecycleCallbacks(this);
 
         Intent intent = initialActivity.getIntent();
         mainTargetClassName = intent.getComponent().getClassName();
@@ -1078,4 +1084,38 @@ public class AwesomeNotificationsPlugin
         return true;
     }
 
+    @Override
+    public void onActivityCreated(Activity activity, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityPaused(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
+
+    }
 }
