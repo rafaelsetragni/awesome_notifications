@@ -1,3 +1,5 @@
+## [0.0.6+9]
+* Fixed null reference for main class inside NotificationBuilder.java
 ## [0.0.6+8]
 * Fixed null reference for main class
 ## [0.0.6+7]

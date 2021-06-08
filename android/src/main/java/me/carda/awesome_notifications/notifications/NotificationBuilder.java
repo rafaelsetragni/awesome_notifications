@@ -384,10 +384,14 @@ public class NotificationBuilder {
         return totalAmount;
     }
 
+    // https://github.com/rafaelsetragni/awesome_notifications/issues/191
     public Class getNotificationTargetActivityClass(Context context) {
         String packageName = context.getPackageName();
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-        String className = launchIntent != null ? AwesomeNotificationsPlugin.getMainTargetClassName() : launchIntent.getComponent().getClassName();
+        String className =
+                launchIntent == null ?
+                        AwesomeNotificationsPlugin.getMainTargetClassName() :
+                        launchIntent.getComponent().getClassName();
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
