@@ -9,22 +9,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/android/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/pages/notification_examples_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/notification_examples_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/Definitions.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/Definitions.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/extensions/DateExtension.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/extensions/DateExtension.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/extensions/StringExtension.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/extensions/StringExtension.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationBuilder.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationBuilder.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationSenderAndScheduler.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationSenderAndScheduler.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/DisplayedManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/DisplayedManager.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationCalendarModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationCalendarModel.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationIntervalModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationIntervalModel.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationScheduleModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationScheduleModel.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/utils/DateUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/utils/DateUtils.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_calendar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_calendar.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/awesome_notifications.iml" beforeDir="false" afterPath="$PROJECT_DIR$/awesome_notifications.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,14 +47,15 @@
     <property name="DEBUGGABLE_DEVICE" value="Pixel_XL [emulator-5554]" />
     <property name="DEBUGGABLE_PROCESS" value="me.carda.awesome_notifications_example" />
     <property name="DEBUGGER_ID" value="Java" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHOW_ALL_PROCESSES" value="false" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/android/src/main" />
-    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="flutter.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
@@ -97,6 +92,7 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -109,6 +105,17 @@
       <updated>1598452289782</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
@@ -141,10 +148,11 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state width="714" height="438" key="DebuggerActiveHint/0.0.2560.1040@0.0.2560.1040" timestamp="1621195359692" />
-    <state x="420" y="278" key="FileChooserDialogImpl" timestamp="1619994918986">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state x="420" y="374" key="FileChooserDialogImpl" timestamp="1623192655995">
+      <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="420" y="278" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1619994918986" />
+    <state x="420" y="374" key="FileChooserDialogImpl/0.0.2560.1400/2560.0.2560.1400@0.0.2560.1400" timestamp="1623192655995" />
     <state width="1878" height="308" key="GridCell.Tab.0.bottom" timestamp="1621285816668">
       <screen x="0" y="25" width="1920" height="943" />
     </state>
@@ -189,6 +197,10 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="454" y="226" key="RollbackChangesDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1619348513196" />
+    <state x="518" y="348" width="1160" height="710" key="SettingsEditor" timestamp="1623192659225">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="518" y="348" width="1160" height="710" key="SettingsEditor/0.0.2560.1400/2560.0.2560.1400@0.0.2560.1400" timestamp="1623192659225" />
     <state x="233" y="208" width="1097" height="647" key="dock-window-1" timestamp="1615329722992">
       <screen x="0" y="25" width="1552" height="943" />
     </state>

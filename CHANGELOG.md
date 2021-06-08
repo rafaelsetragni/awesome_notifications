@@ -1,3 +1,5 @@
+## [0.0.6+8]
+* Fixed null reference for main class
 ## [0.0.6+7]
 * Documentation improved
 * Push notifications from example app updated
