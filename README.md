@@ -80,13 +80,23 @@ This way, your Application will receive **all notifications at Flutter level cod
 
 <br>
 
-Before you use Awesome Notifications, You need to Configure this setting in the `android\app\src\main\AndroidManifest.xml` in order to not get errors in the generated APK(release), such as, Not getting Icons, and Custom Sounds not sounding, etc. 
+Before you use Awesome Notifications, You need to Configure this setting in the activity of `android\app\src\main\AndroidManifest.xml` in order to not get errors in the generated APK(release), such as, Not getting Icons, and Custom Sounds not sounding, etc. 
 <br>
 In Order to enjoy the best, use,
 <br>
 `android:showWhenLocked="true"
  android:turnScreenOn="true">`   
-            
+ It is Kind of Something like this, 
+ ```
+ <activity
+    ...
+    ..      
+    android:showWhenLocked="true"
+    android:turnScreenOn="true">
+    ...
+       </activity>
+ ```
+
 ## How to show Local Notifications
 
 <br>
