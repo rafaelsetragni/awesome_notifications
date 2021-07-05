@@ -81,6 +81,9 @@ public interface Definitions {
     String CHANNEL_METHOD_RECEIVED_ACTION = "receivedAction";
     String CHANNEL_METHOD_MEDIA_BUTTON = "mediaButton";
 
+    String CHANNEL_METHOD_START_FOREGROUND = "startForeground";
+    String CHANNEL_METHOD_STOP_FOREGROUND = "stopForeground";
+
     String CHANNEL_METHOD_LIST_ALL_SCHEDULES = "listAllSchedules";
     String CHANNEL_FORCE_UPDATE = "forceUpdate";
 

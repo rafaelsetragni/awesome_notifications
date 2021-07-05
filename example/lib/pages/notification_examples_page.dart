@@ -7,6 +7,7 @@ import 'package:flutter/material.dart' hide DateUtils;
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/android_foreground_service.dart';
 
 import 'package:awesome_notifications_example/main.dart';
 import 'package:awesome_notifications_example/routes.dart';
@@ -37,7 +38,8 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
   String packageName = 'me.carda.awesome_notifications_example';
 
-  Future<DateTime?> pickScheduleDate(BuildContext context, {required bool isUtc}) async {
+  Future<DateTime?> pickScheduleDate(BuildContext context,
+      {required bool isUtc}) async {
     TimeOfDay? timeOfDay;
     DateTime now = isUtc ? DateTime.now().toUtc() : DateTime.now();
     DateTime? newDate = await showDatePicker(
@@ -53,9 +55,11 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
       );
 
       if (timeOfDay != null) {
-        return isUtc ?
-          DateTime.utc(newDate.year, newDate.month, newDate.day, timeOfDay.hour, timeOfDay.minute) :
-          DateTime(newDate.year, newDate.month, newDate.day, timeOfDay.hour, timeOfDay.minute);
+        return isUtc
+            ? DateTime.utc(newDate.year, newDate.month, newDate.day,
+                timeOfDay.hour, timeOfDay.minute)
+            : DateTime(newDate.year, newDate.month, newDate.day, timeOfDay.hour,
+                timeOfDay.minute);
       }
     }
     return null;
@@ -315,10 +319,8 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
           // test page inside console.firebase.google.com
           !StringUtils.isNullOrEmpty(message.notification?.title,
                   considerWhiteSpaceAsEmpty: true) ||
-          !StringUtils.isNullOrEmpty(message.notification?.body,
-              considerWhiteSpaceAsEmpty: true)
-      ){
-
+              !StringUtils.isNullOrEmpty(message.notification?.body,
+                  considerWhiteSpaceAsEmpty: true)) {
         print('Message also contained a notification: ${message.notification}');
 
         String? imageUrl;
@@ -708,14 +710,18 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Scheduled Notifications'),
-            SimpleButton('Schedule notification with local time zone', onPressed: () async {
-              DateTime? pickedDate = await pickScheduleDate(context, isUtc: false);
+            SimpleButton('Schedule notification with local time zone',
+                onPressed: () async {
+              DateTime? pickedDate =
+                  await pickScheduleDate(context, isUtc: false);
               if (pickedDate != null) {
                 showNotificationAtScheduleCron(8, pickedDate);
               }
             }),
-            SimpleButton('Schedule notification with utc time zone', onPressed: () async {
-              DateTime? pickedDate = await pickScheduleDate(context, isUtc: true);
+            SimpleButton('Schedule notification with utc time zone',
+                onPressed: () async {
+              DateTime? pickedDate =
+                  await pickScheduleDate(context, isUtc: true);
               if (pickedDate != null) {
                 showNotificationAtScheduleCron(8, pickedDate);
               }
@@ -740,55 +746,57 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             onPressed: () => showScheduleAtWorkweekDay10AmLocal(8),
           ),
           */
-            SimpleButton(
-              'Get current time zone reference name',
-              onPressed: () =>
-                  getCurrentTimeZone().then((timeZone) => showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                          backgroundColor: Color(0xfffbfbfb),
-                          title: Center(child: Text('Current Time Zone')),
-                          content: SizedBox( height: 80.0, child: Center(child: Column(
-                            children: [
-                              Text(DateUtils.parseDateToString(DateTime.now())!),
-                              Text(timeZone),
-                            ],
-                          )))
-                      )
-                  ))
-            ),
-            SimpleButton(
-              'Get utc time zone reference name',
-              onPressed: () =>
-                  getUtcTimeZone().then((timeZone) => showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                          backgroundColor: Color(0xfffbfbfb),
-                          title: Center(child: Text('UTC Time Zone')),
-                          content: SizedBox( height: 80.0, child: Center(child: Column(
-                            children: [
-                              Text(DateUtils.parseDateToString(DateTime.now().toUtc())!),
-                              Text(timeZone),
-                            ],
-                          )))
-                      )
-                  ))
-            ),
+            SimpleButton('Get current time zone reference name',
+                onPressed: () =>
+                    getCurrentTimeZone().then((timeZone) => showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                            backgroundColor: Color(0xfffbfbfb),
+                            title: Center(child: Text('Current Time Zone')),
+                            content: SizedBox(
+                                height: 80.0,
+                                child: Center(
+                                    child: Column(
+                                  children: [
+                                    Text(DateUtils.parseDateToString(
+                                        DateTime.now())!),
+                                    Text(timeZone),
+                                  ],
+                                ))))))),
+            SimpleButton('Get utc time zone reference name',
+                onPressed: () => getUtcTimeZone().then((timeZone) => showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                        backgroundColor: Color(0xfffbfbfb),
+                        title: Center(child: Text('UTC Time Zone')),
+                        content: SizedBox(
+                            height: 80.0,
+                            child: Center(
+                                child: Column(
+                              children: [
+                                Text(DateUtils.parseDateToString(
+                                    DateTime.now().toUtc())!),
+                                Text(timeZone),
+                              ],
+                            ))))))),
             SimpleButton('List all active schedules',
                 onPressed: () => listScheduledNotifications(context)),
             SimpleButton('Cancel the notification and its schedule',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: () => cancelNotification(8)),
-            SimpleButton('Dismiss the active notification without cancel its schedule',
+            SimpleButton(
+                'Dismiss the active notification without cancel its schedule',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: () => dismissNotification(8)),
-            SimpleButton('Cancel the active schedule without dismiss the active notification',
+            SimpleButton(
+                'Cancel the active schedule without dismiss the active notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: () => cancelSchedule(8)),
-            SimpleButton('Cancel all active schedules without dismiss the active notification',
+            SimpleButton(
+                'Cancel all active schedules without dismiss the active notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: cancelAllSchedules),
@@ -804,42 +812,41 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Get Next Schedule Date'),
-            TextNote('This is a simple example to show how to query the next valid schedule date. The date components follow the ISO 8601 standard.'),
+            TextNote(
+                'This is a simple example to show how to query the next valid schedule date. The date components follow the ISO 8601 standard.'),
             SimpleButton('Get next Monday after date', onPressed: () async {
-              DateTime? referenceDate = await pickScheduleDate(context, isUtc: false);
+              DateTime? referenceDate =
+                  await pickScheduleDate(context, isUtc: false);
 
-                NotificationSchedule schedule =
-                    NotificationCalendar(weekday: DateTime.monday, hour: 0, minute: 0, second: 0);
-                    //NotificationCalendar.fromDate(date: expectedDate);
+              NotificationSchedule schedule = NotificationCalendar(
+                  weekday: DateTime.monday, hour: 0, minute: 0, second: 0);
+              //NotificationCalendar.fromDate(date: expectedDate);
 
-                DateTime? nextValidDate = await AwesomeNotifications()
-                    .getNextDate(schedule, fixedDate: referenceDate);
+              DateTime? nextValidDate = await AwesomeNotifications()
+                  .getNextDate(schedule, fixedDate: referenceDate);
 
-                late String response;
-                if(nextValidDate == null)
-                  response = 'There is no more valid date for this schedule';
-                else
-                  response = DateUtils.parseDateToString(nextValidDate.toUtc(), format: 'dd/MM/yyyy')!;
-
+              late String response;
+              if (nextValidDate == null)
+                response = 'There is no more valid date for this schedule';
+              else
+                response = DateUtils.parseDateToString(nextValidDate.toUtc(),
+                    format: 'dd/MM/yyyy')!;
 
               showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  title: Text("Next valid schedule"),
-                  content: SizedBox(
-                      height: 50,
-                      child: Center(child: Text(response))
-                  ),
-                  actions: [
-                    TextButton(
-                      child: Text("OK"),
-                      onPressed: () {
-                        Navigator.of(context).pop(null);
-                      },
-                    )
-                  ],
-                )
-              );
+                  context: context,
+                  builder: (_) => AlertDialog(
+                        title: Text("Next valid schedule"),
+                        content: SizedBox(
+                            height: 50, child: Center(child: Text(response))),
+                        actions: [
+                          TextButton(
+                            child: Text("OK"),
+                            onPressed: () {
+                              Navigator.of(context).pop(null);
+                            },
+                          )
+                        ],
+                      ));
             }),
 
             /* ******************************************************************** */
@@ -918,6 +925,22 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: cancelAllNotifications),
+
+            /* ******************************************************************** */
+
+            TextDivisor(title: 'Android Foreground Service'),
+            TextNote(
+                'On any platform other then Android, these buttons do nothing.'),
+            SimpleButton('Start foreground service',
+                onPressed: () => AndroidForegroundService.startForeground(
+                    notification: new PushNotification(
+                        content: new NotificationContent(
+                            id: 2341234,
+                            body: 'Service running!',
+                            title: 'Android Foreground Service',
+                            channelKey: 'basic_channel')))),
+            SimpleButton('Stop foreground service',
+                onPressed: () => AndroidForegroundService.stopForeground()),
           ],
         ));
   }
