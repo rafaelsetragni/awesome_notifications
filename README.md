@@ -757,3 +757,33 @@ To see more information about each type, please go to https://github.com/rafaels
 **Issue:** Undefined symbol: OBJC_CLASS$_FlutterStandardTypedData / OBJC_CLASS$_FlutterError / OBJC_CLASS$_FlutterMethodChannel
 
 **Fix:** Please, remove the old target extensions and update your awesome_notification plugin to the last version available
+
+<br>
+
+## Android Foreground Services
+This is an optional feature to enable you to start an Android freground service with a notification from this plugin. Since it is optional it was moved to a second library you can import as follows:
+```dart
+import 'package:awesome_notifications/android_foreground_service.dart';
+```
+
+The [foreground service permission](https://developer.android.com/reference/android/Manifest.permission#FOREGROUND_SERVICE) is NOT automatically added by this plugin, and you only need to add it if you want to use Android foreground services.
+In your `AndroidManifest.xml` inside the `<manifest>` tag add:
+```xml
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+```
+Next, you have to add the `<service>` tag to your `AndroidManifest.xml`. Inside your `<application>` tag add
+```xml
+ <service   android:name="me.carda.awesome_notifications.services.ForegroundService"
+            android:enabled="true"            
+            android:exported="false"
+            android:stopWithTask="true"
+            android:foregroundServiceType=As you like
+></service>
+```
+While the `android:name` must exactly match this value, you can configure the other parameters as you like, although it is recommended to copy the values for `android:enabled`, `android:exported` and `android:stopWithTask`. Suitable values for `foregroundServiceType` can be found [here](https://developer.android.com/reference/android/app/Service#startForeground(int,%20android.app.Notification,%20int)).
+
+### IMPORTANT
+If the icon of the notification is not set or not valid, the notification will appear, but will look very strange. Make sure to always specify an valid icon. If you need help with this, take a look at [the examples](https://github.com/rafaelsetragni/awesome_notifications/tree/master/example).
+
+### Behaviour on platforms other than Android
+On any platform other then Android, all methods in this plugin are no-ops (they do nothing when called), so you don't need to do a platform check before calling them.
