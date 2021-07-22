@@ -77,6 +77,9 @@ const CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER = 'getUtcTimeZoneIdentifier';
 const CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER =
     'getLocalTimeZoneIdentifier';
 
+const CHANNEL_METHOD_START_FOREGROUND = 'startForeground';
+const CHANNEL_METHOD_STOP_FOREGROUND = 'stopForeground';
+
 const DRAWABLE_RESOURCE_REFERENCE = 'drawable';
 const DEFAULT_ICON = 'defaultIcon';
 const SELECT_NOTIFICATION = 'SELECT_NOTIFICATION';
