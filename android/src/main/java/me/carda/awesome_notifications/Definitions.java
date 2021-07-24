@@ -131,7 +131,7 @@ public interface Definitions {
     String NOTIFICATION_TITLE = "title";
     String NOTIFICATION_BODY = "body";
     String NOTIFICATION_SUMMARY = "summary";
-    String NOTIFICATION_SHOW_WHEN = "showWen";
+    String NOTIFICATION_SHOW_WHEN = "showWhen";
     String NOTIFICATION_ACTION_KEY = "actionKey";
     String NOTIFICATION_ACTION_INPUT = "actionInput";
     String NOTIFICATION_JSON = "notificationJson";
