@@ -1,3 +1,6 @@
+## [0.0.6+10]
+* Added foreground services for Android
+* Fixed android reference for guava package
 ## [0.0.6+9]
 * Fixed null reference for main class inside NotificationBuilder.java
 ## [0.0.6+8]

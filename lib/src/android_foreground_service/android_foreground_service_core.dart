@@ -1,12 +1,20 @@
 import 'dart:io' show Platform;
 
+import 'package:awesome_notifications/src/models/notification_button.dart';
 import 'package:flutter/services.dart';
-import 'android_foreground_service_constants.dart';
+import '../enumerators/android_foreground_service_constants.dart';
 import '../definitions.dart'
     show
         CHANNEL_FLUTTER_PLUGIN,
         CHANNEL_METHOD_START_FOREGROUND,
-        CHANNEL_METHOD_STOP_FOREGROUND;
+        CHANNEL_METHOD_STOP_FOREGROUND,
+        FOREGROUND_HAS_FOREGROUND,
+        FOREGROUND_NOTIFICATION_DATA,
+        FOREGROUND_SERVICE_TYPE,
+        FOREGROUND_START_TYPE,
+        NOTIFICATION_ACTION_BUTTONS,
+        NOTIFICATION_BUTTONS,
+        NOTIFICATION_CONTENT;
 import '../models/notification_content.dart';
 import '../models/received_models/push_notification.dart';
 
@@ -38,22 +46,19 @@ class AndroidForegroundService {
   ///
   /// On any platform other than Android, this is a no-op and does nothing, so it is safe to call it without a platform check.
   static Future<void> startForeground(
-      {required PushNotification notification,
+      {required NotificationContent content,
+      List<NotificationActionButton>? actionButtons,
       int startType = AndroidForegroundServiceConstants.startSticky,
       int? foregroundServiceType}) async {
     if (Platform.isAndroid) {
-      NotificationContent? content = notification.content;
-      if (content == null) {
-        throw new ArgumentError(
-            'The content of notification must not be null!');
-      }
-      notification.schedule = null;
       content.locked = true;
       await _channel.invokeMethod(CHANNEL_METHOD_START_FOREGROUND, {
-        'notificationData': notification.toMap(),
-        'startType': startType,
-        'hasForegroundServiceType': foregroundServiceType != null,
-        'foregroundServiceType': foregroundServiceType ?? 0
+        FOREGROUND_NOTIFICATION_DATA:
+            PushNotification(content: content, actionButtons: actionButtons)
+                .toMap(),
+        FOREGROUND_START_TYPE: startType,
+        FOREGROUND_HAS_FOREGROUND: foregroundServiceType != null,
+        FOREGROUND_SERVICE_TYPE: foregroundServiceType ?? 0
       });
     }
   }

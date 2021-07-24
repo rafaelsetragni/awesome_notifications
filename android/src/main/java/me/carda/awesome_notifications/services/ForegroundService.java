@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
+import me.carda.awesome_notifications.notifications.models.NotificationContentModel;
 import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.NotificationBuilder;
 
@@ -29,8 +30,10 @@ public class ForegroundService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         StartParameter parameter = (StartParameter) intent.getSerializableExtra(StartParameter.EXTRA);
         PushNotification pushNotification = new PushNotification().fromMap(parameter.notificationData);
+
         int notificationId = pushNotification.content.id;
         Notification notification;
+
         try {
             notification = builder.createNotification(this, pushNotification);
         } catch (AwesomeNotificationException e) {

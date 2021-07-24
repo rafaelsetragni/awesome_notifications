@@ -1,4 +1,6 @@
-import 'android_foreground_service_constants.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+
+import '../enumerators/android_foreground_service_constants.dart';
 import '../models/received_models/push_notification.dart';
 
 /// Static helper class that provides methods to start and stop a foreground service.
@@ -26,7 +28,8 @@ class AndroidForegroundService {
   ///
   /// On any platform other than Android, this is a no-op and does nothing, so it is safe to call it without a platform check.
   static Future<void> startForeground(
-      {required PushNotification notification,
+      {required NotificationContent content,
+      List<NotificationActionButton>? actionButtons,
       int startType = AndroidForegroundServiceConstants.startSticky,
       int? foregroundServiceType}) async {
     //no-op on web

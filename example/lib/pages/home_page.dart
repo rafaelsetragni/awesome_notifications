@@ -22,13 +22,13 @@ import 'package:awesome_notifications_example/common_widgets/text_divisor.dart';
 import 'package:awesome_notifications_example/common_widgets/text_note.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-class NotificationExamplesPage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  _NotificationExamplesPageState createState() =>
-      _NotificationExamplesPageState();
+  _HomePageState createState() =>
+      _HomePageState();
 }
 
-class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
+class _HomePageState extends State<HomePage> {
   String _firebaseAppToken = '';
   //String _oneSignalToken = '';
 
@@ -508,6 +508,31 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
 
             /* ******************************************************************** */
 
+            TextDivisor(title: 'Android Foreground Service'),
+            TextNote(
+                'This feature is only available for Android devices.'),
+            SimpleButton('Start foreground service',
+                onPressed: () => AndroidForegroundService.startForeground(
+                    content: NotificationContent(
+                        id: 2341234,
+                        body: 'Service is running!',
+                        title: 'Android Foreground Service',
+                        channelKey: 'basic_channel',
+                        bigPicture: 'asset://assets/images/android-bg-worker.jpg',
+                        notificationLayout: NotificationLayout.BigPicture,
+                    ),
+                    actionButtons: [
+                      NotificationActionButton(
+                        key: 'SHOW_SERVICE_DETAILS',
+                        label: 'Show details'
+                      )
+                    ]
+                )),
+            SimpleButton('Stop foreground service',
+                onPressed: () => AndroidForegroundService.stopForeground()),
+
+            /* ******************************************************************** */
+
             TextDivisor(title: 'Notification Importance (Priority)'),
             TextNote(
                 'To change the importance level of notifications, please set the importance in the respective channel.\n\n'
@@ -925,22 +950,6 @@ class _NotificationExamplesPageState extends State<NotificationExamplesPage> {
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: cancelAllNotifications),
-
-            /* ******************************************************************** */
-
-            TextDivisor(title: 'Android Foreground Service'),
-            TextNote(
-                'On any platform other then Android, these buttons do nothing.'),
-            SimpleButton('Start foreground service',
-                onPressed: () => AndroidForegroundService.startForeground(
-                    notification: new PushNotification(
-                        content: new NotificationContent(
-                            id: 2341234,
-                            body: 'Service running!',
-                            title: 'Android Foreground Service',
-                            channelKey: 'basic_channel')))),
-            SimpleButton('Stop foreground service',
-                onPressed: () => AndroidForegroundService.stopForeground()),
           ],
         ));
   }

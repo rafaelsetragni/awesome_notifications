@@ -24,6 +24,11 @@ const NOTIFICATION_CONTENT = "content";
 const NOTIFICATION_SCHEDULE = "schedule";
 const NOTIFICATION_BUTTONS = "actionButtons";
 
+const FOREGROUND_NOTIFICATION_DATA = "notificationData";
+const FOREGROUND_START_TYPE = "startType";
+const FOREGROUND_HAS_FOREGROUND = "hasForegroundServiceType";
+const FOREGROUND_SERVICE_TYPE = "foregroundServiceType";
+
 const APP_LIFECYCLE_FOREGROUND = 'FOREGROUND';
 const APP_LIFECYCLE_BACKGROUND = 'BACKGROUND';
 const APP_LIFECYCLE_APP_KILLED = 'APP_KILLED';
