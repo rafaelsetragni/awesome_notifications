@@ -8,6 +8,8 @@ import java.util.Map;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import io.flutter.Log;
+import me.carda.awesome_notifications.background.AwesomeNotificationMessagingBackgroundService;
+import me.carda.awesome_notifications.notifications.enumeratos.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.managers.DismissedManager;
 import me.carda.awesome_notifications.notifications.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
@@ -55,9 +57,12 @@ public class BroadcastSender {
 
     public static Boolean SendBroadcastKeepOnTopAction(Context context, ActionReceived actionReceived){
 
-        Boolean success = false;
+//        actionIntent = new Intent(context, AwesomeNotificationMessagingBackgroundService.class);
 
-        Intent intent = new Intent(Definitions.BROADCAST_KEEP_ON_TOP);
+        Boolean success = false;
+        NotificationLifeCycle lifeCycle = AwesomeNotificationsPlugin.appLifeCycle;
+        String nameIntent = lifeCycle == NotificationLifeCycle.Background ? Definitions.BROADCAST_KEEP_ON_TOP_BACKGROUND : Definitions.BROADCAST_KEEP_ON_TOP;
+        Intent intent = new Intent(nameIntent);
         intent.putExtra(Definitions.EXTRA_BROADCAST_MESSAGE, (Serializable) actionReceived.toMap());
 
         try {

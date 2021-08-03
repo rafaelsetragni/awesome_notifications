@@ -32,6 +32,7 @@ public interface Definitions {
     String BROADCAST_DISMISSED_NOTIFICATION = "broadcast.awesome_notifications.DISMISSED_NOTIFICATION";
     String BROADCAST_MEDIA_BUTTON = "broadcast.awesome_notifications.MEDIA_BUTTON";
     String BROADCAST_KEEP_ON_TOP ="broadcast.awesome_notifications.KEEP_ON_TOP";
+    String BROADCAST_KEEP_ON_TOP_BACKGROUND ="broadcast.awesome_notifications.KEEP_ON_TOP_BACKGROUND";
     String EXTRA_BROADCAST_MESSAGE = "notification";
 
     String PUSH_NOTIFICATION_CONTENT = "content";
@@ -47,10 +48,18 @@ public interface Definitions {
     String SHARED_SCHEDULED_NOTIFICATIONS = "schedules";
 
     String CHANNEL_FLUTTER_PLUGIN = "awesome_notifications";
+    String CHANNEL_FLUTTER_BACKGROUND_PLUGIN = "awesome_notifications_background";
+
 
     String CHANNEL_METHOD_INITIALIZE = "initialize";
     String CHANNEL_METHOD_GET_DRAWABLE_DATA = "getDrawableData";
     String CHANNEL_METHOD_CREATE_NOTIFICATION = "createNewNotification";
+
+    String ARGUMENT_BACKGROUND_ACTION_RECEIVED = "argumentBackgroundReceivedAction";
+    String CHANNEL_METHOD_START_BACKGROUND = "startBackground";
+    String CHANNEL_METHOD_INIT_BACKGROUND = "initBackground";
+    String CHANNEL_METHOD_ACTION_RECEIVED_BACKGROUND = "receivedActionBackground";
+    String ACTION_BACKGROUND_HANDLE = "receivedActionCallbackHandle";
 
     String CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER = "getUtcTimeZoneIdentifier";
     String CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER = "getLocalTimeZoneIdentifier";

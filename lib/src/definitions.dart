@@ -35,6 +35,7 @@ const PUSH_SOURCE_LOCAL_NOTIFICATION = 'Local';
 const SHARED_PREFERENCES_KEY = 'notification_plugin_cache';
 
 const CHANNEL_FLUTTER_PLUGIN = 'awesome_notifications';
+const CHANNEL_FLUTTER_BACKGROUND_PLUGIN = 'awesome_notifications_background';
 
 const CHANNEL_METHOD_INITIALIZE = 'initialize';
 const CHANNEL_METHOD_GET_DRAWABLE_DATA = 'getDrawableData';
@@ -55,6 +56,12 @@ const CHANNEL_METHOD_NOTIFICATION_CREATED = 'notificationCreated';
 const CHANNEL_METHOD_NOTIFICATION_DISPLAYED = 'notificationDisplayed';
 const CHANNEL_METHOD_NOTIFICATION_DISMISSED = 'notificationDismissed';
 const CHANNEL_METHOD_ACTION_RECEIVED = 'receivedAction';
+
+const ARGUMENT_BACKGROUND_ACTION_RECEIVED = "argumentBackgroundReceivedAction";
+const CHANNEL_METHOD_START_BACKGROUND = 'startBackground';
+const CHANNEL_METHOD_ACTION_RECEIVED_BACKGROUND = 'receivedActionBackground';
+const ACTION_BACKGROUND_HANDLE = 'receivedActionCallbackHandle';
+const CHANNEL_METHOD_INIT_BACKGROUND = 'initBackground';
 
 const CHANNEL_METHOD_NOTIFICATION_AT_LAUNCH = 'notificationAtLaunch';
 

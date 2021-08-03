@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:convert';
+import 'package:awesome_notifications/backgroundhandler/awsome_notification_background_handler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -24,6 +25,8 @@ import 'package:awesome_notifications/src/models/received_models/received_notifi
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
 import 'package:awesome_notifications/src/utils/date_utils.dart';
+
+import '../awesome_notifications.dart';
 
 class AwesomeNotifications {
   static String? rootNativePath;
@@ -134,6 +137,7 @@ class AwesomeNotifications {
 
   final MethodChannel _channel;
 
+
   factory AwesomeNotifications() => _instance;
 
   @visibleForTesting
@@ -149,8 +153,13 @@ class AwesomeNotifications {
   /// OBS: [defaultIcon] needs to be a Resource media type
   /// OBS 2: [channels] are updated if they already exists
   Future<bool> initialize(
-      String? defaultIcon, List<NotificationChannel> channels,
-      {bool debug = false}) async {
+      String? defaultIcon,
+      List<NotificationChannel> channels,
+      {bool debug = false,Function(ReceivedAction action)? backgroundClickAction}) async {
+
+    //Init Background action handler
+    AwesomeNotificationsBackgroundActionHandler(_channel,backgroundClickAction);
+
     WidgetsFlutterBinding.ensureInitialized();
 
     _channel.setMethodCallHandler(_handleMethod);
@@ -220,8 +229,7 @@ class AwesomeNotifications {
         return;
 
       case CHANNEL_METHOD_ACTION_RECEIVED:
-        _actionSubject.sink
-            .add(ReceivedAction().fromMap(arguments) as ReceivedAction);
+        _actionSubject.sink.add(ReceivedAction().fromMap(arguments) as ReceivedAction);
         return;
 
       default:

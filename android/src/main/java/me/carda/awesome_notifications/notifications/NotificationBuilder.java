@@ -3,7 +3,6 @@ package me.carda.awesome_notifications.notifications;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,17 +13,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.service.notification.StatusBarNotification;
-import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.RemoteInput;
+
+import com.github.arturogutierrez.Badges;
 import com.github.arturogutierrez.BadgesNotSupportedException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.RemoteInput;
 
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
@@ -49,9 +48,6 @@ import me.carda.awesome_notifications.utils.HtmlUtils;
 import me.carda.awesome_notifications.utils.IntegerUtils;
 import me.carda.awesome_notifications.utils.ListUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
-
-//badges
-import com.github.arturogutierrez.Badges;
 
 public class NotificationBuilder {
 
@@ -399,22 +395,35 @@ public class NotificationBuilder {
             return null;
         }
     }
+    // public Intent buildNotificationIntentFromModel(Context context, String ActionReference, PushNotification pushNotification, Class<?> targetAction) {
+    //        Intent intent = new Intent(context, targetAction);
+    //
+    //        intent.setAction(ActionReference);
+    //
+    //        intent.putExtra(Definitions.NOTIFICATION_ID, pushNotification.content.id);
+    //        String jsonData = pushNotification.toJson();
+    //        intent.putExtra(Definitions.NOTIFICATION_JSON, jsonData);
+    //        intent.putExtra(Definitions.NOTIFICATION_AUTO_CANCEL, pushNotification.content.autoCancel);
+    //
+    //        return intent;
+    //    }
 
     @NonNull
     public void createActionButtons(Context context, PushNotification pushNotification, NotificationCompat.Builder builder) {
 
+
         if (ListUtils.isNullOrEmpty(pushNotification.actionButtons)) return;
 
         for (NotificationButtonModel buttonProperties : pushNotification.actionButtons) {
-
             Intent actionIntent = buildNotificationIntentFromModel(
-                    context,
-                    Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX + "_" + buttonProperties.key,
-                    pushNotification,
-                    (buttonProperties.buttonType == ActionButtonType.DisabledAction) ? AwesomeNotificationsPlugin.class :
-                            (buttonProperties.buttonType == ActionButtonType.KeepOnTop) ?
-                                    KeepOnTopActionReceiver.class : getNotificationTargetActivityClass(context)
-            );
+                        context,
+                        Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX + "_" + buttonProperties.key,
+                        pushNotification,
+                        (buttonProperties.buttonType == ActionButtonType.DisabledAction)
+                                ? AwesomeNotificationsPlugin.class : (buttonProperties.buttonType == ActionButtonType.KeepOnTop)
+                                ? KeepOnTopActionReceiver.class : getNotificationTargetActivityClass(context)
+                );
+
 
             actionIntent.putExtra(Definitions.NOTIFICATION_AUTO_CANCEL, buttonProperties.autoCancel);
             actionIntent.putExtra(Definitions.NOTIFICATION_ENABLED, buttonProperties.enabled);
@@ -426,13 +435,12 @@ public class NotificationBuilder {
             if (buttonProperties.enabled) {
 
                 if (buttonProperties.buttonType == ActionButtonType.KeepOnTop) {
-
-                    actionPendingIntent = PendingIntent.getBroadcast(
-                            context,
-                            pushNotification.content.id,
-                            actionIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    );
+                        actionPendingIntent = PendingIntent.getBroadcast(
+                                context,
+                                pushNotification.content.id,
+                                actionIntent,
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                        );
 
                 } else if (buttonProperties.buttonType == ActionButtonType.DisabledAction) {
 
