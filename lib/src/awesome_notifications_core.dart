@@ -5,6 +5,7 @@ import 'package:awesome_notifications/backgroundhandler/awsome_notification_back
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'dart:io' show Platform;
 
 // In order to *not* need this ignore, consider extracting the "web" version
 // of your plugin as a separate package, instead of inlining it in the same
@@ -158,7 +159,7 @@ class AwesomeNotifications {
       {bool debug = false,Function(ReceivedAction action)? backgroundClickAction}) async {
 
     //Init Background action handler
-    AwesomeNotificationsBackgroundActionHandler(_channel,backgroundClickAction);
+    if(Platform.isAndroid) AwesomeNotificationsBackgroundActionHandler(_channel,backgroundClickAction);
 
     WidgetsFlutterBinding.ensureInitialized();
 
