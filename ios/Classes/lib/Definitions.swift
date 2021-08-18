@@ -1,3 +1,4 @@
+import Foundation
 
 enum Definitions {
     
@@ -115,6 +116,8 @@ enum Definitions {
     static let  NOTIFICATION_ACTION_KEY = "actionKey"
     static let  NOTIFICATION_ACTION_INPUT = "actionInput"
     static let  NOTIFICATION_JSON = "notificationJson"
+    static let  NOTIFICATION_JSON_DATA = "data"
+
 
     static let  NOTIFICATION_ACTION_BUTTONS = "actionButtons"
     static let  NOTIFICATION_BUTTON_KEY = "key"
@@ -162,6 +165,16 @@ enum Definitions {
     static let  NOTIFICATION_LED_OFF_MS = "ledOffMs"
     static let  NOTIFICATION_TICKER = "ticker"
     static let  NOTIFICATION_ALLOW_WHILE_IDLE = "allowWhileIdle"
+    
+    
+    //Background config notifcation action
+    static let METHOD_CONFIG_BUTTON_NOTIFICATION_ACTION_BACKGROUND = "METHOD_CONFIG_BUTTON_NOTIFICATION_ACTION_BACKGROUND"
+    //Method for calling click button when app in background
+    static let CHANNEL_METHOD_ACTION_RECEIVED_BACKGROUND_IOS = "CHANNEL_METHOD_ACTION_RECEIVED_BACKGROUND_IOS"
+    //Background Argument
+    static let ARGUMENT_BACKGROUND_ACTION_RECEIVED = "argumentBackgroundReceivedAction"
+    
+    static let METHOD_RECEIVED_OTHER_NOTIFICATION = "METHOD_RECEIVED_OTHER_NOTIFICATION"
 
     static let  initialValues = [
         Definitions.NOTIFICATION_ID: 0,

@@ -1,4 +1,5 @@
 
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -19,8 +20,14 @@ class AwesomeNotificationsBackgroundActionHandler  {
     _onBackgroundMessageHandler = handler;
   }
 
+  static BackgroundMessageHandler? get onBackgroundMessage {
+    return _onBackgroundMessageHandler;
+  }
+
   AwesomeNotificationsBackgroundActionHandler(MethodChannel channel,BackgroundMessageHandler? handler){
     onBackgroundMessage = handler;
+
+    if(!Platform.isAndroid) return;
 
     if(handler!= null)
       _registerHandler(channel, _onBackgroundMessageHandler!);

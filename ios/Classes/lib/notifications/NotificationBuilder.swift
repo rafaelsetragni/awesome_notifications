@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 @available(iOS 10.0, *)
 public class NotificationBuilder {
@@ -143,7 +144,7 @@ public class NotificationBuilder {
     }
     
     public static func buildNotificationFromJson(jsonData:String?) -> PushNotification? {
-        return  jsonToPushNotification(jsonData: jsonData)
+        return jsonToPushNotification(jsonData: jsonData)
     }
     
     public static func buildNotificationActionFromJson(jsonData:String?, actionKey:String?, userText:String?) -> ActionReceived? {

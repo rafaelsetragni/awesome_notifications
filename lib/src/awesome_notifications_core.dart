@@ -28,6 +28,7 @@ import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
 import 'package:awesome_notifications/src/utils/date_utils.dart';
 
 import '../awesome_notifications.dart';
+import 'models/notification_ios_group_button_configuration.dart';
 
 class AwesomeNotifications {
   static String? rootNativePath;
@@ -69,6 +70,9 @@ class AwesomeNotifications {
       // ignore: close_sinks
       _dismissedSubject = StreamController<ReceivedAction>();
 
+  final StreamController<Map<String,dynamic>>
+      _otherNotificationTypeSubject = StreamController<Map<String,dynamic>>();
+
   /// STREAM METHODS *********************************************
 
   /// Stream to capture all FCM token updates. Could be changed at any time.
@@ -94,6 +98,11 @@ class AwesomeNotifications {
   /// Stream to capture all actions (tap) over notifications
   Stream<ReceivedAction> get actionStream {
     return _actionSubject.stream;
+  }
+
+  /// Stream to capture all actions (tap) over notifications
+  Stream<Map<String,dynamic>> get otherNotificationTypeSubject {
+    return _otherNotificationTypeSubject.stream;
   }
 
   /// SINK METHODS *********************************************
@@ -132,6 +141,7 @@ class AwesomeNotifications {
     _displayedSubject.close();
     _dismissedSubject.close();
     _actionSubject.close();
+    _otherNotificationTypeSubject.close();
   }
 
   /// SINGLETON METHODS *********************************************
@@ -159,7 +169,7 @@ class AwesomeNotifications {
       {bool debug = false,Function(ReceivedAction action)? backgroundClickAction}) async {
 
     //Init Background action handler
-    if(Platform.isAndroid) AwesomeNotificationsBackgroundActionHandler(_channel,backgroundClickAction);
+    AwesomeNotificationsBackgroundActionHandler(_channel,backgroundClickAction);
 
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -232,7 +242,14 @@ class AwesomeNotifications {
       case CHANNEL_METHOD_ACTION_RECEIVED:
         _actionSubject.sink.add(ReceivedAction().fromMap(arguments) as ReceivedAction);
         return;
-
+      case CHANNEL_METHOD_ACTION_RECEIVED_BACKGROUND_IOS:
+        print("CHANNEL_METHOD_ACTION_RECEIVED_BACKGROUND_IOS CALLED!!");
+        print("onBackgroundMessage is null: ${AwesomeNotificationsBackgroundActionHandler.onBackgroundMessage == null}");
+        AwesomeNotificationsBackgroundActionHandler.onBackgroundMessage?.call(ReceivedAction().fromMap(arguments) as ReceivedAction);
+        return;
+      case METHOD_RECEIVED_OTHER_NOTIFICATION_IOS:
+        _otherNotificationTypeSubject.add(arguments);
+        return;
       default:
         throw UnsupportedError('Unrecognized JSON message');
     }
@@ -301,6 +318,13 @@ class AwesomeNotifications {
     } catch (e) {
       return false;
     }
+  }
+  
+  ///Config IOS button group when app is killed
+  Future<void> configIOSButtonGroupWhenAppIsKilled(List<NotificationIOSGroupButtonConfiguration> config) async{
+    if(!Platform.isIOS) return;
+    return Future(()=> Stream.fromIterable(config).map((item) => item.toMap()).toList())
+        .then((data) => _channel.invokeMethod(METHOD_CONFIG_BUTTON_NOTIFICATION_ACTION_BACKGROUND,data));
   }
 
   /// Check if the notifications are permitted
