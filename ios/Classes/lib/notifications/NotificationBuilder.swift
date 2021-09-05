@@ -402,7 +402,7 @@ public class NotificationBuilder {
                 intentIdentifiers: [],
                 options: .customDismissAction
             )
-            // UNUserNotificationCenter.current().setNotificationCategories([categoryObject])
+            
             UNUserNotificationCenter.current().getNotificationCategories(completionHandler: { results in
                 UNUserNotificationCenter.current().setNotificationCategories(results.union([categoryObject]))
             })
