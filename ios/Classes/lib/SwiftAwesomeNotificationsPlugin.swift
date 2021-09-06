@@ -132,7 +132,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         if let textResponse =  response as? UNTextInputNotificationResponse {
             userText =  textResponse.userText
         }
-        
+
         if let jsonData:String = response.notification.request.content.userInfo[Definitions.NOTIFICATION_JSON] as? String {
             receiveAction(
                   jsonData: jsonData,
@@ -143,22 +143,18 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             print("Received an invalid notification content")
         }
 
-        if _originalNotificationCenterDelegate?.responds(to: Selector("userNotificationCenter:didReceive:withCompletionHandler:")) == true {
-            _originalNotificationCenterDelegate!.userNotificationCenter?(center, didReceive: response, withCompletionHandler: completionHandler)
-        } else {
+        if _originalNotificationCenterDelegate?.userNotificationCenter?(center, didReceive: response, withCompletionHandler: completionHandler) == nil {
             completionHandler()
         }
     }
-    
+
     @available(iOS 10.0, *)
     public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         if !receiveNotification(content: notification.request.content, withCompletionHandler: completionHandler) {
             // completionHandler was *not* called, so maybe this notification is for another plugin:
 
-            if _originalNotificationCenterDelegate?.responds(to: Selector("userNotificationCenter:willPresent:withCompletionHandler:")) == true {
-                _originalNotificationCenterDelegate!.userNotificationCenter?(center, willPresent: notification, withCompletionHandler: completionHandler)
-            } else {
-                // TODO(tek): Absorb notifications like this?  Or present them by default?
+            if _originalNotificationCenterDelegate?.userNotificationCenter?(center, willPresent: notification, withCompletionHandler: completionHandler) == nil {
+                // TODO(tek08): Absorb notifications like this?  Or present them by default?
                 print("Was going to present a notification, but no plugin wanted to handle it.")
                 completionHandler([])
             }
