@@ -37,7 +37,9 @@
         <receiver android:name=".notifications.broadcastReceivers.DismissedNotificationReceiver"/>
         <receiver android:name=".notifications.broadcastReceivers.ScheduledNotificationReceiver"/>
         <receiver android:name=".notifications.broadcastReceivers.KeepOnTopActionReceiver"/>
-        <receiver android:name=".notifications.broadcastReceivers.RefreshNotificationBootReceiver">
+        <receiver
+            android:name=".notifications.broadcastReceivers.RefreshNotificationBootReceiver"
+            android:exported="false">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -47,7 +49,9 @@
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
             </intent-filter>
         </receiver>
-        <receiver android:name="androidx.media.session.MediaButtonReceiver" >
+        <receiver
+            android:name="androidx.media.session.MediaButtonReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
