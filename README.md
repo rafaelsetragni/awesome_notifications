@@ -129,7 +129,7 @@ AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
 AwesomeNotifications().actionStream.listen(
     (receivedNotification){
 
-        Navigator.of(context).pushName(context,
+        Navigator.of(context).pushNamed(
             '/NotificationPage',
             arguments: { id: receivedNotification.id } // your page params. I recommend to you to pass all *receivedNotification* object
         );
