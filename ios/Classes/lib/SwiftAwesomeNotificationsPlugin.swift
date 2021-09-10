@@ -10,7 +10,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     
     private static var _instance:SwiftAwesomeNotificationsPlugin?
     
-	static var debug = false
+    static var debug = false
     static let TAG = "AwesomeNotificationsPlugin"
     static var registrar:FlutterPluginRegistrar?
     
@@ -23,6 +23,10 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     }
 
     var flutterChannel:FlutterMethodChannel?
+    
+    // If somebody already layed claim to UNNotificationCenterDelegate, rather than clobbering
+    // them, we forward on any delegate calls that we receive.
+    private var _originalNotificationCenterDelegate: UNUserNotificationCenterDelegate?
     
     public static var instance:SwiftAwesomeNotificationsPlugin? {
         get { return _instance }
@@ -128,32 +132,41 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         if let textResponse =  response as? UNTextInputNotificationResponse {
             userText =  textResponse.userText
         }
-        
-        guard let jsonData:String = response.notification.request.content.userInfo[Definitions.NOTIFICATION_JSON] as? String else {
-                
+
+        if let jsonData:String = response.notification.request.content.userInfo[Definitions.NOTIFICATION_JSON] as? String {
+            receiveAction(
+                  jsonData: jsonData,
+                  actionKey: response.actionIdentifier,
+                  userText: userText
+              )
+        } else {
             print("Received an invalid notification content")
-            completionHandler()
-            return;
-            
         }
-        
-        receiveAction(
-            jsonData: jsonData,
-            actionKey: response.actionIdentifier,
-            userText: userText
-        )
-        
-        completionHandler()
+
+        if _originalNotificationCenterDelegate?.userNotificationCenter?(center, didReceive: response, withCompletionHandler: completionHandler) == nil {
+            completionHandler()
+        }
     }
-    
+
     @available(iOS 10.0, *)
     public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        receiveNotification(content: notification.request.content, withCompletionHandler: completionHandler)
+        if !receiveNotification(content: notification.request.content, withCompletionHandler: completionHandler) {
+            // completionHandler was *not* called, so maybe this notification is for another plugin:
+
+            if _originalNotificationCenterDelegate?.userNotificationCenter?(center, willPresent: notification, withCompletionHandler: completionHandler) == nil {
+                // TODO(tek08): Absorb notifications like this?  Or present them by default?
+                print("Was going to present a notification, but no plugin wanted to handle it.")
+                completionHandler([])
+            }
+        }
     }
     
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable : Any] = [:]) -> Bool {
         
-        UNUserNotificationCenter.current().delegate = self
+        // Set ourselves as the UNUserNotificationCenter delegate, but also preserve any existing delegate...
+        let notificationCenter = UNUserNotificationCenter.current()
+        _originalNotificationCenterDelegate = notificationCenter.delegate
+        notificationCenter.delegate = self
         
         //enableFirebase(application)
         //enableScheduler(application)
@@ -277,9 +290,10 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         }
     }
     */
-    
+
+    /// - Returns: True if completionHandler was called (aka if correct notificationJson was present and processed)
     @available(iOS 10.0, *)
-    private func receiveNotification(content:UNNotificationContent, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void){
+    private func receiveNotification(content:UNNotificationContent, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) -> Bool {
         
         var arguments:[String : Any?]
         if(content.userInfo[Definitions.NOTIFICATION_JSON] != nil){
@@ -305,8 +319,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         guard let pushNotification:PushNotification = NotificationBuilder.jsonDataToPushNotification(jsonData: arguments)
         else {
             Log.d("receiveNotification","notification data invalid")
-            completionHandler([])
-            return
+            return false
         }
         
         /*
@@ -357,7 +370,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             DisplayedManager.reloadLostSchedulesDisplayed(referenceDate: Date())
             
             SwiftAwesomeNotificationsPlugin.displayEvent(notificationReceived: notificationReceived!)
-            
+
             /*
             if(pushNotification.schedule != nil){
                                 
@@ -374,7 +387,11 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 }
             }
             */
+
+            // Completion handler was called in alertOnlyOnceNotification(...) / its subcalls.
+            return true;
         }
+        return false;
     }
     
     @available(iOS 10.0, *)
@@ -673,6 +690,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         SwiftAwesomeNotificationsPlugin.registrar = registrar
         
         /*
+        // TODO(?): If this is ever uncommented, remember delegate forwarding (_originalNotificationCenterDelegate)!
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = self
             if(SwiftAwesomeNotificationsPlugin.firebaseEnabled){
