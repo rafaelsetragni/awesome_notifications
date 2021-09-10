@@ -711,7 +711,10 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 intentIdentifiers: [],
                 options: .customDismissAction
             )
-            UNUserNotificationCenter.current().setNotificationCategories([categoryObject])
+
+            UNUserNotificationCenter.current().getNotificationCategories(completionHandler: { results in
+                UNUserNotificationCenter.current().setNotificationCategories(results.union([categoryObject]))
+            })
         }
         
         SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.AppKilled
