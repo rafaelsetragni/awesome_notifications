@@ -82,28 +82,6 @@ And all notifications sent while the app was killed are registered and delivered
 
 This way, your Application will receive **all notifications at Flutter level code**.
 
-
-## Before Using Awesome Notifications
-
-<br>
-
-Before you use Awesome Notifications, You need to Configure this setting in the activity of `android\app\src\main\AndroidManifest.xml` in order to not get errors in the generated APK(release), such as, Not getting Icons, and Custom Sounds not sounding, etc. 
-<br>
-In Order to enjoy the best, use,
-<br>
-`android:showWhenLocked="true"
- android:turnScreenOn="true">`   
- It is Kind of Something like this, 
- ```
- <activity
-    ...
-    ..      
-    android:showWhenLocked="true"
-    android:turnScreenOn="true">
-    ...
-       </activity>
- ```
-
 ## How to show Local Notifications
 
 <br>
@@ -736,6 +714,26 @@ Main methods to manipulate a notification channel:
 <br>
 
 ## Common Known Issues
+
+**Issue:** awesome_notifications is not working on release mode on Android with custom sound or icon.
+
+**Fix:** You need to protect your android resource files against minification and obfuscation. You can
+achieve it by two ways:
+    
+1 - Please include the prefix "res_" in your native resource file names. The use of the tag `shrinkResources false` inside build.gradle or the command `flutter build apk --no-shrink` is not recommended. To know more about it, please visit [Shrink, obfuscate, and optimize your app](https://developer.android.com/studio/build/shrink-code)
+
+2 - Create a keep.xml file and add the following content:
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/*,@raw/slow_spring_board" />
+```
+
+To know more about it, please visit [Customize which resources to keep](https://developer.android.com/studio/build/shrink-code#keep-resources)
+
+
+##
 
 **Issue:** The name 'DateUtils' is defined in the libraries 'package:awesome_notifications/src/utils/date_utils.dart (via package:awesome_notifications/awesome_notifications.dart)' and 'package:flutter/src/material/date.dart (via package:flutter/material.dart)'.
 
