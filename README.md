@@ -717,8 +717,7 @@ Main methods to manipulate a notification channel:
 
 **Issue:** awesome_notifications is not working on release mode on Android with custom sound or icon.
 
-**Fix:** You need to protect your android resource files against minification and obfuscation. You can
-achieve it by two ways:
+**Fix:** You need to protect your Android resource files from being minimized and obfuscated. You can achieve this in two ways:
     
 1 - Please include the prefix "res_" in your native resource file names. The use of the tag `shrinkResources false` inside build.gradle or the command `flutter build apk --no-shrink` is not recommended. To know more about it, please visit [Shrink, obfuscate, and optimize your app](https://developer.android.com/studio/build/shrink-code)
 
