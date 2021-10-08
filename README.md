@@ -82,7 +82,27 @@ And all notifications sent while the app was killed are registered and delivered
 
 This way, your Application will receive **all notifications at Flutter level code**.
 
+
+## Before Using Awesome Notifications
+
 <br>
+
+Before you use Awesome Notifications, You need to Configure this setting in the activity of `android\app\src\main\AndroidManifest.xml` in order to not get errors in the generated APK(release), such as, Not getting Icons, and Custom Sounds not sounding, etc. 
+<br>
+In Order to enjoy the best, use,
+<br>
+`android:showWhenLocked="true"
+ android:turnScreenOn="true">`   
+ It is Kind of Something like this, 
+ ```
+ <activity
+    ...
+    ..      
+    android:showWhenLocked="true"
+    android:turnScreenOn="true">
+    ...
+       </activity>
+ ```
 
 ## How to show Local Notifications
 
