@@ -3,7 +3,7 @@ package me.carda.awesome_notifications.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
+import me.carda.awesome_notifications.notifications.enumerators.MediaSource;
 
 import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_ASSET;
 import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_FILE;

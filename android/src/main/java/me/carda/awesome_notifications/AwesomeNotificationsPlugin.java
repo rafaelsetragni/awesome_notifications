@@ -50,9 +50,9 @@ import me.carda.awesome_notifications.notifications.models.NotificationCalendarM
 import me.carda.awesome_notifications.notifications.models.NotificationIntervalModel;
 import me.carda.awesome_notifications.notifications.models.NotificationScheduleModel;
 import me.carda.awesome_notifications.notifications.models.PushNotification;
-import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
-import me.carda.awesome_notifications.notifications.enumeratos.NotificationLifeCycle;
-import me.carda.awesome_notifications.notifications.enumeratos.NotificationSource;
+import me.carda.awesome_notifications.notifications.enumerators.MediaSource;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationLifeCycle;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationSource;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 
 import me.carda.awesome_notifications.notifications.NotificationBuilder;
@@ -974,11 +974,9 @@ public class AwesomeNotificationsPlugin
             return false;
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-            NotificationManagerCompat manager = NotificationManagerCompat.from(context);
-            NotificationChannel channel = manager.getNotificationChannel(channelModel.getChannelKey());
-            return channel != null && channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
+            NotificationChannel androidChannel = ChannelManager.getAndroidChannel(context, channelModel);
+            return (androidChannel != null && androidChannel.getImportance() != NotificationManager.IMPORTANCE_NONE);
         }
 
         return true;
@@ -991,7 +989,7 @@ public class AwesomeNotificationsPlugin
         Map<String, Object> platformParameters = call.arguments();
 
         debug = (Boolean) platformParameters.get(Definitions.INITIALIZE_DEBUG_MODE);
-        debug = debug == null ? false : debug;
+        debug = debug != null && debug;
 
         String defaultIconPath = (String) platformParameters.get(Definitions.INITIALIZE_DEFAULT_ICON);
         channelsData = (List<Object>) platformParameters.get(Definitions.INITIALIZE_CHANNELS);
@@ -1026,7 +1024,7 @@ public class AwesomeNotificationsPlugin
         if (ListUtils.isNullOrEmpty(channelsData)) return;
 
         List<NotificationChannelModel> channels = new ArrayList<>();
-        Boolean forceUpdate = false;
+        boolean forceUpdate = false;
 
         for (Object channelDataObject : channelsData) {
             if (channelDataObject instanceof Map<?, ?>) {

@@ -20,23 +20,18 @@ public class NotificationIntervalModel extends NotificationScheduleModel {
     @Override
     @SuppressWarnings("unchecked")
     public NotificationIntervalModel fromMap(Map<String, Object> arguments) {
+        super.fromMap(arguments);
 
-        timeZone = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, String.class);
         interval = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_INTERVAL, Integer.class);
-        repeats = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_REPEATS, Boolean.class);
-        allowWhileIdle = getValueOrDefault(arguments, Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, Boolean.class);
 
         return this;
     }
 
     @Override
     public Map<String, Object> toMap(){
-        Map<String, Object> returnedObject = new HashMap<>();
+        Map<String, Object> returnedObject = super.toMap();
 
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, timeZone);
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_INTERVAL, interval);
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_REPEATS, repeats);
-        returnedObject.put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, allowWhileIdle);
 
         return returnedObject;
     }

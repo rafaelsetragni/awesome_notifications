@@ -14,7 +14,11 @@ import me.carda.awesome_notifications.notifications.models.returnedData.ActionRe
 
 public class DismissedManager {
 
-    private static final SharedManager<ActionReceived> shared = new SharedManager<>("DismissedManager", ActionReceived.class);
+    private static final SharedManager<ActionReceived> shared
+            = new SharedManager<>(
+                    "DismissedManager",
+                    ActionReceived.class,
+                    "ActionReceived");
 
     public static Boolean removeDismissed(Context context, Integer id) {
         return shared.remove(context, Definitions.SHARED_DISMISSED, id.toString());

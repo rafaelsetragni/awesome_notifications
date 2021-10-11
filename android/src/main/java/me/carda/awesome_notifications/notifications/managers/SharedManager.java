@@ -20,14 +20,16 @@ import me.carda.awesome_notifications.utils.StringUtils;
 
 public class SharedManager<T extends Model> {
     private Class<T> clazz;
+    private String className;
 
     private static String TAG = "SharedManager";
     private String reference;
     private String hashedReference = "default";
 
-    public SharedManager(String fileIdentifier, Class<T> targetClass){
-        clazz = targetClass;
-        reference = Definitions.SHARED_MANAGER +"."+ fileIdentifier +"."+ clazz.getName();
+    public SharedManager(String fileIdentifier, Class<T> targetClass, String className){
+        this.clazz = targetClass;
+        this.className = className;
+        this.reference = Definitions.SHARED_MANAGER +"."+ fileIdentifier +"."+ className;
         try {
 
             MessageDigest m = MessageDigest.getInstance("MD5");
@@ -38,7 +40,7 @@ public class SharedManager<T extends Model> {
 
         } catch (Exception e) {
 
-            this.reference = fileIdentifier;
+            this.hashedReference = reference;
 
             Log.e(TAG, "SharedManager could not be initialized: "+ e.getMessage());
             e.printStackTrace();
@@ -48,7 +50,7 @@ public class SharedManager<T extends Model> {
     private SharedPreferences getSharedInstance(Context context) throws AwesomeNotificationException {
 
         SharedPreferences preferences = context.getSharedPreferences(
-                context.getPackageName() + "." + (hashedReference == null ? reference : hashedReference),
+                context.getPackageName() + "." + hashedReference,
                 Context.MODE_PRIVATE
         );
 

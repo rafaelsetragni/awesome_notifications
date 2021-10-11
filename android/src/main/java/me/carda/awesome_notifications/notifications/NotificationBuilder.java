@@ -1,6 +1,7 @@
 package me.carda.awesome_notifications.notifications;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 
@@ -30,10 +31,10 @@ import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.broadcastReceivers.DismissedNotificationReceiver;
 import me.carda.awesome_notifications.notifications.broadcastReceivers.KeepOnTopActionReceiver;
-import me.carda.awesome_notifications.notifications.enumeratos.ActionButtonType;
-import me.carda.awesome_notifications.notifications.enumeratos.GroupSort;
-import me.carda.awesome_notifications.notifications.enumeratos.NotificationLayout;
-import me.carda.awesome_notifications.notifications.enumeratos.NotificationPrivacy;
+import me.carda.awesome_notifications.notifications.enumerators.ActionButtonType;
+import me.carda.awesome_notifications.notifications.enumerators.GroupSort;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationLayout;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.notifications.managers.ChannelManager;
 import me.carda.awesome_notifications.notifications.managers.DefaultsManager;
@@ -184,6 +185,19 @@ public class NotificationBuilder {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, pushNotification.content.channelKey);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/){
+            NotificationChannel androidChannel = ChannelManager.getAndroidChannel(context, channel);
+            if(androidChannel == null){
+                throw new AwesomeNotificationException("The notification channel '"+channel.channelKey+"' does not exist or is disabled");
+            }
+            builder.setChannelId(androidChannel.getId());
+        }
+
+        setSmallIcon(context, pushNotification, channel, builder);
+
+        // Crashing on Android 11+
+        //setRemoteHistory(notificationModel, builder);
+
         setGrouping(context, pushNotification, channel, builder);
 
         setVisibility(context, pushNotification, channel, builder);
@@ -212,10 +226,6 @@ public class NotificationBuilder {
         setLayoutColor(context, pushNotification, channel, builder);
 
         setBadge(context, channel, builder);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId(channel.getChannelKey());
-        }
 
         builder.setContentIntent(pendingIntent);
         builder.setDeleteIntent(deleteIntent);

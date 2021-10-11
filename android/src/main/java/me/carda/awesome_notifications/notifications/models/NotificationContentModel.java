@@ -8,11 +8,11 @@ import java.util.List;
 
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
-import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
-import me.carda.awesome_notifications.notifications.enumeratos.NotificationLayout;
-import me.carda.awesome_notifications.notifications.enumeratos.NotificationLifeCycle;
-import me.carda.awesome_notifications.notifications.enumeratos.NotificationPrivacy;
-import me.carda.awesome_notifications.notifications.enumeratos.NotificationSource;
+import me.carda.awesome_notifications.notifications.enumerators.MediaSource;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationLayout;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationLifeCycle;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationSource;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.notifications.managers.ChannelManager;
 import me.carda.awesome_notifications.utils.BitmapUtils;
@@ -29,7 +29,6 @@ public class NotificationContentModel extends Model {
     public String body;
     public String summary;
     public Boolean showWhen;
-    public List<Object> actionButtons;
     public Map<String, String> payload;
     public Boolean playSound;
     public String icon;
@@ -58,8 +57,17 @@ public class NotificationContentModel extends Model {
 
     public NotificationContentModel(){}
 
+    public void generateNextRandomId() {
+        int max = 2147483646;
+        long tsLong = System.currentTimeMillis();
+        id = (int) (tsLong % max + 1);
+    }
+
     @Override
     public NotificationContentModel fromMap(Map<String, Object> arguments) {
+
+        id = getValueOrDefault(arguments, Definitions.NOTIFICATION_ID, Integer.class);
+        if(id < 0) generateNextRandomId();
 
         createdDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_CREATED_DATE, String.class)
                             .or(DateUtils.getUTCDate());
@@ -80,7 +88,7 @@ public class NotificationContentModel extends Model {
         color = getValueOrDefault(arguments, Definitions.NOTIFICATION_COLOR, Long.class);
         backgroundColor = getValueOrDefault(arguments, Definitions.NOTIFICATION_BACKGROUND_COLOR, Long.class);
 
-        id    = getValueOrDefault(arguments, Definitions.NOTIFICATION_ID, Integer.class);
+
         title = getValueOrDefault(arguments, Definitions.NOTIFICATION_TITLE, String.class);
         body  = getValueOrDefault(arguments, Definitions.NOTIFICATION_BODY, String.class);
         summary = getValueOrDefault(arguments, Definitions.NOTIFICATION_SUMMARY, String.class);
@@ -106,8 +114,6 @@ public class NotificationContentModel extends Model {
         icon  = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON, String.class);
         largeIcon  = getValueOrDefault(arguments, Definitions.NOTIFICATION_LARGE_ICON, String.class);
         bigPicture = getValueOrDefault(arguments, Definitions.NOTIFICATION_BIG_PICTURE, String.class);
-
-        actionButtons = getValueOrDefault(arguments, Definitions.NOTIFICATION_ACTION_BUTTONS, List.class);
 
         payload = getValueOrDefault(arguments, Definitions.NOTIFICATION_PAYLOAD, Map.class);
 
@@ -154,8 +160,7 @@ public class NotificationContentModel extends Model {
         returnedObject.put(Definitions.NOTIFICATION_DISPLAYED_DATE, this.displayedDate);
         returnedObject.put(Definitions.NOTIFICATION_CREATED_DATE, this.createdDate);
 
-        if(this.actionButtons != null)
-            returnedObject.put(Definitions.NOTIFICATION_ACTION_BUTTONS, this.actionButtons);
+        returnedObject.put(Definitions.NOTIFICATION_CHANNEL_KEY, this.channelKey);
 
         if(this.autoCancel != null)
             returnedObject.put(Definitions.NOTIFICATION_AUTO_CANCEL, this.autoCancel);
@@ -182,9 +187,6 @@ public class NotificationContentModel extends Model {
 
         if(this.progress != null)
             returnedObject.put(Definitions.NOTIFICATION_PROGRESS, this.progress);
-
-        if(this.channelKey != null)
-            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_KEY, this.channelKey);
 
         if(this.privacy != null)
             returnedObject.put(Definitions.NOTIFICATION_PRIVACY,

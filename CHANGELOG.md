@@ -1,3 +1,6 @@
+## [0.0.6+11]
+* Fix Android reschedules on startup process (issue #285)
+* Improved Android channels to manage another package channels and convert then to the new standard, using channelKey as hashKey produced from digest channel content
 ## [0.0.6+10]
 * Added foreground services for Android
 * Fixed android reference for guava package

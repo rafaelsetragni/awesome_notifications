@@ -19,7 +19,7 @@ import java.util.Map;
 
 import me.carda.awesome_notifications.BroadcastSender;
 import me.carda.awesome_notifications.notifications.models.PushNotification;
-import me.carda.awesome_notifications.notifications.enumeratos.NotificationSource;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationSource;
 import me.carda.awesome_notifications.notifications.NotificationSender;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.utils.ListUtils;

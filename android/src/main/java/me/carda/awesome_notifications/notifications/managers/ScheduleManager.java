@@ -10,7 +10,11 @@ import me.carda.awesome_notifications.notifications.models.PushNotification;
 
 public class ScheduleManager {
 
-    private static final SharedManager<PushNotification> shared = new SharedManager<>("ScheduleManager", PushNotification.class);
+    private static final SharedManager<PushNotification> shared
+            = new SharedManager<>(
+                    "ScheduleManager",
+                    PushNotification.class,
+                    "PushNotification");
 
     public static Boolean removeSchedule(Context context, PushNotification received) {
         return shared.remove(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS, received.content.id.toString());

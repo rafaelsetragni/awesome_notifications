@@ -13,7 +13,11 @@ import me.carda.awesome_notifications.notifications.models.returnedData.Notifica
 
 public class CreatedManager {
 
-    private static final SharedManager<NotificationReceived> shared = new SharedManager<>("CreatedManager", NotificationReceived.class);
+    private static final SharedManager<NotificationReceived> shared
+            = new SharedManager<>(
+                    "CreatedManager",
+                    NotificationReceived.class,
+                    "NotificationReceived");
 
     public static Boolean removeCreated(Context context, Integer id) {
         return shared.remove(context, Definitions.SHARED_CREATED, id.toString());

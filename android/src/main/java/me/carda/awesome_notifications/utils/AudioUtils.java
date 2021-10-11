@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import me.carda.awesome_notifications.notifications.enumeratos.MediaSource;
+import me.carda.awesome_notifications.notifications.enumerators.MediaSource;
 
 import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_ASSET;
 import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_FILE;
