@@ -21,6 +21,7 @@ class NotificationActionButton extends Model {
   String? icon;
   bool? enabled;
   bool? autoCancel;
+  bool? showInCompactView;
   ActionButtonType buttonType;
 
   NotificationActionButton(
@@ -29,6 +30,7 @@ class NotificationActionButton extends Model {
       this.label,
       this.enabled,
       this.autoCancel,
+      this.showInCompactView,
       this.buttonType = ActionButtonType.Default});
 
   @override
@@ -38,6 +40,7 @@ class NotificationActionButton extends Model {
     label = AssertUtils.extractValue(dataMap, 'label');
     enabled = AssertUtils.extractValue(dataMap, 'enabled');
     autoCancel = AssertUtils.extractValue(dataMap, 'autoCancel');
+    showInCompactView = AssertUtils.extractValue(dataMap, 'showInCompactView');
     buttonType = AssertUtils.extractEnum(
             dataMap, 'buttonType', ActionButtonType.values) ??
         ActionButtonType.Default;
@@ -53,6 +56,7 @@ class NotificationActionButton extends Model {
       'label': label,
       'enabled': enabled,
       'autoCancel': autoCancel,
+      'showInCompactView': showInCompactView,
       'buttonType': AssertUtils.toSimpleEnumString(buttonType)
     };
   }
@@ -62,6 +66,7 @@ class NotificationActionButton extends Model {
     assert(!AssertUtils.isNullOrEmptyOrInvalid(key, String));
     assert(!AssertUtils.isNullOrEmptyOrInvalid(label, String));
     assert(!AssertUtils.isNullOrEmptyOrInvalid(autoCancel, bool));
+    assert(!AssertUtils.isNullOrEmptyOrInvalid(showInCompactView, bool));
 
     // For action buttons, it's only allowed resource media types
     assert(StringUtils.isNullOrEmpty(icon) ||
