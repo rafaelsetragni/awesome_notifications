@@ -17,6 +17,7 @@ public class NotificationButtonModel extends Model {
     public String label;
     public Boolean enabled;
     public Boolean autoCancel;
+    public Boolean showInCompactView;
     public ActionButtonType buttonType;
 
     public NotificationButtonModel(){}
@@ -33,6 +34,7 @@ public class NotificationButtonModel extends Model {
 
         enabled = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLED, Boolean.class);
         autoCancel = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_CANCEL, Boolean.class);
+        showInCompactView = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, Boolean.class);
 
         return this;
     }
@@ -50,6 +52,7 @@ public class NotificationButtonModel extends Model {
 
         returnedObject.put(Definitions.NOTIFICATION_ENABLED, enabled);
         returnedObject.put(Definitions.NOTIFICATION_AUTO_CANCEL, autoCancel);
+        returnedObject.put(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, showInCompactView);
 
         return returnedObject;
     }

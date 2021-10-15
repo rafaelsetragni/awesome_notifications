@@ -149,6 +149,7 @@ public interface Definitions {
     String NOTIFICATION_PRECISE_SCHEDULES = "preciseSchedules";
     String NOTIFICATION_ENABLED = "enabled";
     String NOTIFICATION_AUTO_CANCEL = "autoCancel";
+    String NOTIFICATION_SHOW_IN_COMPACT_VIEW = "showInCompactView";
     String NOTIFICATION_LOCKED = "locked";
     String NOTIFICATION_DISPLAY_ON_FOREGROUND = "displayOnForeground";
     String NOTIFICATION_DISPLAY_ON_BACKGROUND = "displayOnBackground";
