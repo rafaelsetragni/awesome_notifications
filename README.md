@@ -672,6 +672,7 @@ Main methods to manipulate a notification channel:
 | icon 		    |   *YES   | Icon to be displayed inside the button                                        | String                | must be a resource image |                         |
 | enabled 	    |     NO   | On Android, deactivates the button. On iOS, the button disappear              | bool                  | true or false            | true                    |
 | autoCancel    |     NO   | Notification should auto cancel when gets tapped by the user                  | bool                  | true or false            | true                    |
+| showInCompactView    |     NO   | For MediaPlayer notifications on Android, sets the button as visible in compact view | bool                  | true or false            | true                    |
 | buttonType 	|     NO   | Button action response type                                                   | Enumerator            | ActionButtonType         | Default                 |
 
 <br>
