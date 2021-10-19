@@ -22,6 +22,7 @@ import com.github.arturogutierrez.BadgesNotSupportedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -427,6 +428,7 @@ public class NotificationBuilder {
             );
 
             actionIntent.putExtra(Definitions.NOTIFICATION_AUTO_CANCEL, buttonProperties.autoCancel);
+            actionIntent.putExtra(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, buttonProperties.showInCompactView);
             actionIntent.putExtra(Definitions.NOTIFICATION_ENABLED, buttonProperties.enabled);
             actionIntent.putExtra(Definitions.NOTIFICATION_BUTTON_TYPE, buttonProperties.buttonType.toString());
             actionIntent.putExtra(Definitions.NOTIFICATION_BUTTON_KEY, buttonProperties.key);
@@ -600,7 +602,7 @@ public class NotificationBuilder {
                 break;
 
             case MediaPlayer:
-                if (setMediaPlayerLayout(context, pushNotification.content, builder)) return;
+                if (setMediaPlayerLayout(context, pushNotification.content, pushNotification.actionButtons, builder)) return;
                 break;
 
             case ProgressBar:
@@ -716,11 +718,19 @@ public class NotificationBuilder {
         return true;
     }
 
-    private Boolean setMediaPlayerLayout(Context context, NotificationContentModel contentModel, NotificationCompat.Builder builder) {
+    private Boolean setMediaPlayerLayout(Context context, NotificationContentModel contentModel, List<NotificationButtonModel> actionButtons, NotificationCompat.Builder builder) {
+
+        ArrayList<Integer> indexes = new ArrayList<>();
+        for (int i = 0; i < actionButtons.size(); i++) {
+            NotificationButtonModel b = actionButtons.get(i);
+            if (b.showInCompactView) indexes.add(i);
+        }
+
+        int[] showInCompactView = toIntArray(indexes);
 
         builder.setStyle(
                 new androidx.media.app.NotificationCompat.MediaStyle()
-                        .setShowActionsInCompactView(1, 2, 3)
+                        .setShowActionsInCompactView(showInCompactView)
                         .setShowCancelButton(true)
                         .setMediaSession(AwesomeNotificationsPlugin.mediaSession.getSessionToken())
         );
@@ -742,4 +752,14 @@ public class NotificationBuilder {
         );
     }
 
+    private int[] toIntArray(ArrayList<Integer> list) {
+        if (list == null || list.size() <= 0) return new int[0];
+
+        int[] result = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            result[i] = list.get(i);
+        }
+
+        return result;
+    }
 }

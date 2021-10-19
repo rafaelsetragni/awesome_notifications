@@ -161,6 +161,7 @@ const NOTIFICATION_DEFAULT_PRIVACY = "defaultPrivacy";
 const NOTIFICATION_DEFAULT_RINGTONE_TYPE = "defaultRingtoneType";
 const NOTIFICATION_PRIVACY = "privacy";
 const NOTIFICATION_AUTO_CANCEL = 'autoCancel';
+const NOTIFICATION_SHOW_IN_COMPACT_VIEW = 'showInCompactView';
 const NOTIFICATION_LOCKED = 'locked';
 const NOTIFICATION_ICON = 'icon';
 const NOTIFICATION_PLAY_SOUND = 'playSound';
@@ -235,6 +236,7 @@ class Definitions {
     NOTIFICATION_LOCKED: false,
     NOTIFICATION_TICKER: "ticker",
     NOTIFICATION_ALLOW_WHILE_IDLE: false,
-    NOTIFICATION_ONLY_ALERT_ONCE: false
+    NOTIFICATION_ONLY_ALERT_ONCE: false,
+    NOTIFICATION_SHOW_IN_COMPACT_VIEW: true
   };
 }
