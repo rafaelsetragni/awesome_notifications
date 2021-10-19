@@ -775,6 +775,14 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 				case Definitions.CHANNEL_METHOD_SET_BADGE_COUNT:
                     try channelMethodSetBadgeCounter(call: call, result: result)
 					return
+
+				case Definitions.CHANNEL_METHOD_INCREMENT_BADGE_COUNT:
+                    try channelMethodIncrementBadgeCounter(call: call, result: result)
+					return
+
+				case Definitions.CHANNEL_METHOD_DECREMENT_BADGE_COUNT:
+                    try channelMethodDecrementBadgeCounter(call: call, result: result)
+					return
 					
 				case Definitions.CHANNEL_METHOD_RESET_BADGE:
                     try channelMethodResetBadge(call: call, result: result)
@@ -1040,13 +1048,32 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     }
     
     private func channelMethodSetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+
+		let count:Int? = call.arguments as? Int
+
+        if (count == nil || count < 0)
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Invalid Badge value")
         
-        let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
-        let value:Int? = platformParameters[Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE] as? Int
-        //let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
-        
-        if #available(iOS 10.0, *), value != nil {
-            NotificationBuilder.setBadge(value!)
+        if #available(iOS 10.0, *) {
+            NotificationBuilder.setBadge(count!)
+        }
+        result(nil)
+    }
+
+    private func channelMethodIncrementBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        if #available(iOS 10.0, *) {
+            let actualValue:NSNumber = NotificationBuilder.incrementBadge()
+            result(actualValue.intValue)
+            return
+        }
+        result(nil)
+    }
+
+    private func channelMethodDecrementBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        if #available(iOS 10.0, *) {
+            let actualValue:NSNumber = NotificationBuilder.decrementBadge()
+            result(actualValue.intValue)
+            return
         }
         result(nil)
     }

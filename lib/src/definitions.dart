@@ -67,6 +67,8 @@ const CHANNEL_METHOD_LIST_ALL_SCHEDULES = 'listAllSchedules';
 
 const CHANNEL_METHOD_GET_BADGE_COUNT = 'getBadgeCount';
 const CHANNEL_METHOD_SET_BADGE_COUNT = 'setBadgeCount';
+const CHANNEL_METHOD_INCREMENT_BADGE_COUNT = 'incBadgeCount';
+const CHANNEL_METHOD_DECREMENT_BADGE_COUNT = 'decBadgeCount';
 const CHANNEL_METHOD_RESET_BADGE = 'resetBadge';
 
 const CHANNEL_METHOD_DISMISS_NOTIFICATION = 'dismissNotification';

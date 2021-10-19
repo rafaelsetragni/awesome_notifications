@@ -14,8 +14,16 @@ public class NotificationBuilder {
     
     private static var badgeAmount:NSNumber = 0
         
-    public static func incrementBadge(){
-        NotificationBuilder.setBadge(NotificationBuilder.getBadge().intValue + 1)
+    public static func incrementBadge() -> NSNumber {
+        let count:Int = NotificationBuilder.getBadge().intValue + 1
+        NotificationBuilder.setBadge(count)
+        return NSNumber(value: count)
+    }
+
+    public static func decrementBadge() -> NSNumber {
+        let count:Int = max(NotificationBuilder.getBadge().intValue - 1, 0)
+        NotificationBuilder.setBadge(count)
+        return NSNumber(value: count)
     }
     
     public static func resetBadge(){
@@ -28,7 +36,7 @@ public class NotificationBuilder {
         }
         else{
             let userDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)
-            let badgeCount:Int = userDefaults!.integer(forKey: "badgeCount")
+            let badgeCount:Int = userDefaults!.integer(forKey: Definitions.BADGE_COUNT)
             NotificationBuilder.badgeAmount = NSNumber(value: badgeCount)
         }
         return NotificationBuilder.badgeAmount
@@ -45,7 +53,7 @@ public class NotificationBuilder {
         }
         
         let userDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)
-        userDefaults!.set(count, forKey: "badgeCount")
+        userDefaults!.set(count, forKey: Definitions.BADGE_COUNT)
     }
     
     public static func requestPermissions(completion: @escaping (Bool) -> ()){
@@ -310,8 +318,7 @@ public class NotificationBuilder {
     
     private static func setBadgeIndicator(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
         if(channel.channelShowBadge!){
-            NotificationBuilder.incrementBadge()
-            content.badge = NotificationBuilder.getBadge()
+            content.badge = NotificationBuilder.incrementBadge()
         }
     }
     

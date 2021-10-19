@@ -139,6 +139,14 @@ Future<void> setBadgeIndicator(int amount) async {
   await AwesomeNotifications().setGlobalBadgeCounter(amount);
 }
 
+Future<int> incrementBadgeIndicator() async {
+  return await AwesomeNotifications().incrementGlobalBadgeCounter();
+}
+
+Future<int> decrementBadgeIndicator() async {
+  return await AwesomeNotifications().decrementGlobalBadgeCounter();
+}
+
 Future<void> resetBadgeIndicator() async {
   await AwesomeNotifications().resetGlobalBadge();
 }

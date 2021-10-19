@@ -65,37 +65,41 @@ class _HomePageState extends State<HomePage> {
     return null;
   }
 
-  Future<int?> pickBadgeCounter(BuildContext context) async {
+  int _pickAmount = 50;
+  Future<int?> pickBadgeCounter(BuildContext context, int initialAmount) async {
+    setState(() => _pickAmount = initialAmount);
+
     // show the dialog
     return showDialog<int?>(
       context: context,
-      builder: (BuildContext context) {
-        int amount = 50;
-
-        return AlertDialog(
-          title: Text("Choose the new badge amount"),
-          content: NumberPicker(
-            value: amount,
-            minValue: 0,
-            maxValue: 999,
-            onChanged: (newValue) => amount = newValue,
-          ),
-          actions: [
-            TextButton(
-              child: Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop(null);
-              },
-            ),
-            TextButton(
-              child: Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop(amount);
-              },
-            ),
-          ],
-        );
-      },
+      builder: (BuildContext context) =>
+        StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) =>
+            AlertDialog(
+              title: Text("Choose the new badge amount"),
+              content: NumberPicker(
+                value: _pickAmount,
+                minValue: 0,
+                maxValue: 9999,
+                onChanged: (newValue) =>
+                  setModalState(() => _pickAmount = newValue)
+              ),
+              actions: [
+                TextButton(
+                  child: Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop(null);
+                  },
+                ),
+                TextButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context).pop(_pickAmount);
+                  },
+                ),
+              ],
+            )
+        )
     );
   }
 
@@ -622,13 +626,21 @@ class _HomePageState extends State<HomePage> {
                 'Shows a notification with a badge indicator channel deactivate',
                 onPressed: () =>
                     showWithoutBadgeNotification(Random().nextInt(100))),
-            SimpleButton('Read the badge indicator count', onPressed: () async {
+            SimpleButton('Read the badge indicator', onPressed: () async {
               int amount = await getBadgeIndicator();
+              Fluttertoast.showToast(msg: 'Badge count: $amount');
+            }),
+            SimpleButton('Increment the badge indicator', onPressed: () async {
+              int amount = await incrementBadgeIndicator();
+              Fluttertoast.showToast(msg: 'Badge count: $amount');
+            }),
+            SimpleButton('Decrement the badge indicator', onPressed: () async {
+              int amount = await decrementBadgeIndicator();
               Fluttertoast.showToast(msg: 'Badge count: $amount');
             }),
             SimpleButton('Set manually the badge indicator',
                 onPressed: () async {
-              int? amount = await pickBadgeCounter(context);
+              int? amount = await pickBadgeCounter(context, await getBadgeIndicator());
               if (amount != null) {
                 setBadgeIndicator(amount);
               }

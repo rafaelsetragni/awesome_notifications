@@ -17,7 +17,6 @@ import android.preference.PreferenceManager;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
-import com.github.arturogutierrez.BadgesNotSupportedException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +52,7 @@ import me.carda.awesome_notifications.utils.ListUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
 //badges
-import com.github.arturogutierrez.Badges;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class NotificationBuilder {
 
@@ -289,8 +288,8 @@ public class NotificationBuilder {
 
     private void setBadge(Context context, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
         if (BooleanUtils.getValue(channelModel.channelShowBadge)) {
-            incrementGlobalBadgeCounter(context, channelModel);
-            builder.setNumber(1);
+            incrementGlobalBadgeCounter(context);
+            //builder.setNumber(1);
         }
     }
 
@@ -357,46 +356,43 @@ public class NotificationBuilder {
         }
     }
 
-    public static String getBadgeKey(Context context, String channelKey) {
-        return "count_key" + (channelKey == null ? "_total" : channelKey);
-    }
-
-    public static int getGlobalBadgeCounter(Context context, String channelKey) {
+    public static int getGlobalBadgeCounter(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
         // Read previous value. If not found, use 0 as default value.
-        return prefs.getInt(getBadgeKey(context, channelKey), 0);
+        return prefs.getInt(Definitions.BADGE_COUNT, 0);
     }
 
-    public static void setGlobalBadgeCounter(Context context, String channelKey, int count) {
+    public static void setGlobalBadgeCounter(Context context, int count) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
 
-        try {
-
-            editor.putInt(getBadgeKey(context, channelKey), count);
-            Badges.setBadge(context, count);
-
-        } catch (BadgesNotSupportedException ignored) {
-        }
+        editor.putInt(Definitions.BADGE_COUNT, count);
+        ShortcutBadger.applyCount(context, count);
 
         editor.apply();
     }
 
-    public static void resetGlobalBadgeCounter(Context context, String channelKey) {
-        setGlobalBadgeCounter(context, channelKey, 0);
+    public static void resetGlobalBadgeCounter(Context context) {
+        setGlobalBadgeCounter(context, 0);
     }
 
-    public static int incrementGlobalBadgeCounter(Context context, NotificationChannelModel channelModel) {
+    public static int incrementGlobalBadgeCounter(Context context) {
 
-        int totalAmount = getGlobalBadgeCounter(context, null);
-        setGlobalBadgeCounter(context, null, ++totalAmount);
+        int totalAmount = getGlobalBadgeCounter(context);
+        setGlobalBadgeCounter(context, ++totalAmount);
+        return totalAmount;
+    }
 
+    public static int decrementGlobalBadgeCounter(Context context) {
+
+        int totalAmount = Math.max(getGlobalBadgeCounter(context)-1, 0);
+        setGlobalBadgeCounter(context, totalAmount);
         return totalAmount;
     }
 
     // https://github.com/rafaelsetragni/awesome_notifications/issues/191
     public Class getNotificationTargetActivityClass(Context context) {
+
         String packageName = context.getPackageName();
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
         String className =
