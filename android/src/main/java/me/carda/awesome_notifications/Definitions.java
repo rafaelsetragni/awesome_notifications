@@ -220,5 +220,6 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_TICKER, "ticker");
         put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, false);
         put(Definitions.NOTIFICATION_ONLY_ALERT_ONCE, false);
+        put(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, true);
     }};
 }
