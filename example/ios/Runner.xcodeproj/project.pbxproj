@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		05380B5A25F678EE001D5D0A /* res_morph_power_rangers.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 05380B5925F678EE001D5D0A /* res_morph_power_rangers.aiff */; };
+		05B7232F2724599300D18725 /* res_morph_power_rangers.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 05B7232E2724599300D18725 /* res_morph_power_rangers.aiff */; };
 		06133C53BCB23C8EE09E7525 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05380AFC25F5C29A001D5D0A /* Pods_Runner.framework */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
@@ -38,8 +38,8 @@
 		05380B1A25F5C324001D5D0A /* awesome_notifications.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = awesome_notifications.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05380B1F25F5C438001D5D0A /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05380B2325F5C441001D5D0A /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		05380B5925F678EE001D5D0A /* res_morph_power_rangers.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = res_morph_power_rangers.aiff; path = ../../../../../../AndroidStudioProjects/awesome_notifications/example/ios/Runner/res_morph_power_rangers.aiff; sourceTree = "<group>"; };
 		05865CAC264DAB890057AE97 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		05B7232E2724599300D18725 /* res_morph_power_rangers.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = res_morph_power_rangers.aiff; path = ../../../../../../Downloads/res_morph_power_rangers.aiff; sourceTree = "<group>"; };
 		05C0EE5025F2DA0100DC0E72 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		05C0EE5225F2DA0100DC0E72 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
 		05C0EE8525F2DF0200DC0E72 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
@@ -124,7 +124,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
-				05380B5925F678EE001D5D0A /* res_morph_power_rangers.aiff */,
+				05B7232E2724599300D18725 /* res_morph_power_rangers.aiff */,
 				05C0EE8525F2DF0200DC0E72 /* Runner.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -215,8 +215,8 @@
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
+				05B7232F2724599300D18725 /* res_morph_power_rangers.aiff in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
-				05380B5A25F678EE001D5D0A /* res_morph_power_rangers.aiff in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

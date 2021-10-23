@@ -1049,13 +1049,14 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     
     private func channelMethodSetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
 
-		let count:Int? = call.arguments as? Int
+		let count:Int = call.arguments as? Int ?? -1
 
-        if (count == nil || count < 0)
+        if (count < 0) {
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "Invalid Badge value")
+        }
         
         if #available(iOS 10.0, *) {
-            NotificationBuilder.setBadge(count!)
+            NotificationBuilder.setBadge(count)
         }
         result(nil)
     }
