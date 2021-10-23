@@ -95,6 +95,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.11.0"
+  platform:
+    dependency: "direct main"
+    description:
+      name: platform
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.2"
+  rxdart:
+    dependency: "direct main"
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.27.2"
   sky_engine:
     dependency: transitive
     description: flutter

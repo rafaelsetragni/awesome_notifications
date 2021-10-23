@@ -14,7 +14,7 @@ class ReceivedAction extends ReceivedNotification {
   ReceivedAction();
 
   /// Imports data from a serializable object
-  ReceivedNotification fromMap(Map<String, dynamic> dataMap) {
+  ReceivedAction fromMap(Map<String, dynamic> dataMap) {
     super.fromMap(dataMap);
 
     actionLifeCycle = AssertUtils.extractEnum<NotificationLifeCycle>(

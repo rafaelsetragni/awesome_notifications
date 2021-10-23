@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:convert';
+import 'dart:ui';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -24,6 +26,7 @@ import 'package:awesome_notifications/src/models/received_models/received_notifi
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
 import 'package:awesome_notifications/src/utils/date_utils.dart';
+import 'package:rxdart/rxdart.dart' show BehaviorSubject;
 
 class AwesomeNotifications {
   static String? rootNativePath;
@@ -45,59 +48,45 @@ class AwesomeNotifications {
 */
   /// STREAM CREATION METHODS *********************************************
 
-  // Streams are created so that app can respond to notification-related events since the plugin is initialised in the `main` function
-  // final StreamController<String> _tokenStreamController =
-  //   StreamController<String>();
-
-  final StreamController<ReceivedNotification>
+  final BehaviorSubject<ReceivedNotification>
       // ignore: close_sinks
-      _createdSubject = StreamController<ReceivedNotification>();
+      _createdSubject = BehaviorSubject<ReceivedNotification>();
 
-  final StreamController<ReceivedNotification>
+  final BehaviorSubject<ReceivedNotification>
       // ignore: close_sinks
-      _displayedSubject = StreamController<ReceivedNotification>();
+      _displayedSubject = BehaviorSubject<ReceivedNotification>();
 
-  final StreamController<ReceivedAction>
+  final BehaviorSubject<ReceivedAction>
       // ignore: close_sinks
-      _actionSubject = StreamController<ReceivedAction>();
+      _actionSubject = BehaviorSubject<ReceivedAction>();
 
-  final StreamController<ReceivedAction>
+  final BehaviorSubject<ReceivedAction>
       // ignore: close_sinks
-      _dismissedSubject = StreamController<ReceivedAction>();
+      _dismissedSubject = BehaviorSubject<ReceivedAction>();
 
   /// STREAM METHODS *********************************************
 
-  /// Stream to capture all FCM token updates. Could be changed at any time.
-  // Stream<String> get fcmTokenStream {
-  //   return _tokenStreamController.stream;
-  // }
-
   /// Stream to capture all created notifications
   Stream<ReceivedNotification> get createdStream {
-    return _createdSubject.stream;
+    return _createdSubject;
   }
 
   /// Stream to capture all notifications displayed on user's screen.
   Stream<ReceivedNotification> get displayedStream {
-    return _displayedSubject.stream;
+    return _displayedSubject;
   }
 
   /// Stream to capture all notifications dismissed by the user.
   Stream<ReceivedAction> get dismissedStream {
-    return _dismissedSubject.stream;
+    return _dismissedSubject;
   }
 
   /// Stream to capture all actions (tap) over notifications
   Stream<ReceivedAction> get actionStream {
-    return _actionSubject.stream;
+    return _actionSubject;
   }
 
   /// SINK METHODS *********************************************
-
-  /// Sink to dispose the stream, if you don't need it anymore.
-  // Sink get fcmTokenSink {
-  //   return _tokenStreamController.sink;
-  // }
 
   /// Sink to dispose the stream, if you don't need it anymore.
   Sink get createdSink {
@@ -123,7 +112,6 @@ class AwesomeNotifications {
 
   /// Closes definitely all the streams.
   dispose() {
-    //_tokenStreamController.close();
     _createdSubject.close();
     _displayedSubject.close();
     _dismissedSubject.close();
@@ -162,6 +150,7 @@ class AwesomeNotifications {
 
     String? defaultIconPath;
     if (kIsWeb) {
+      // For web release
     } else {
       if (!AssertUtils.isNullOrEmptyOrInvalid(defaultIcon, String)) {
         // To set a icon on top of notification, is mandatory to user a native resource
@@ -198,14 +187,10 @@ class AwesomeNotifications {
   }
 
   Future<dynamic> _handleMethod(MethodCall call) async {
-    Map<String, dynamic> arguments = Map<String, dynamic>.from(call.arguments);
+    Map<String, dynamic> arguments =
+        (call.arguments as Map).cast<String, dynamic>();
 
     switch (call.method) {
-      // case CHANNEL_METHOD_NEW_FCM_TOKEN:
-      //   final String token = call.arguments;
-      //   _tokenStreamController.add(token);
-      //   return;
-
       case CHANNEL_METHOD_NOTIFICATION_CREATED:
         _createdSubject.sink.add(ReceivedNotification().fromMap(arguments));
         return;
@@ -215,13 +200,11 @@ class AwesomeNotifications {
         return;
 
       case CHANNEL_METHOD_NOTIFICATION_DISMISSED:
-        _dismissedSubject.sink
-            .add(ReceivedAction().fromMap(arguments) as ReceivedAction);
+        _dismissedSubject.sink.add(ReceivedAction().fromMap(arguments));
         return;
 
       case CHANNEL_METHOD_ACTION_RECEIVED:
-        _actionSubject.sink
-            .add(ReceivedAction().fromMap(arguments) as ReceivedAction);
+        _actionSubject.sink.add(ReceivedAction().fromMap(arguments));
         return;
 
       default:
@@ -352,7 +335,7 @@ class AwesomeNotifications {
   /// Get badge counter
   Future<int> getGlobalBadgeCounter() async {
     final int badgeCount =
-    await _channel.invokeMethod(CHANNEL_METHOD_GET_BADGE_COUNT);
+        await _channel.invokeMethod(CHANNEL_METHOD_GET_BADGE_COUNT);
     return badgeCount;
   }
 
@@ -364,14 +347,14 @@ class AwesomeNotifications {
   /// Decrement the badge counter
   Future<int> incrementGlobalBadgeCounter() async {
     final int badgeCount =
-    await _channel.invokeMethod(CHANNEL_METHOD_INCREMENT_BADGE_COUNT);
+        await _channel.invokeMethod(CHANNEL_METHOD_INCREMENT_BADGE_COUNT);
     return badgeCount;
   }
 
   /// Increment the badge counter
   Future<int> decrementGlobalBadgeCounter() async {
     final int badgeCount =
-    await _channel.invokeMethod(CHANNEL_METHOD_DECREMENT_BADGE_COUNT);
+        await _channel.invokeMethod(CHANNEL_METHOD_DECREMENT_BADGE_COUNT);
     return badgeCount;
   }
 

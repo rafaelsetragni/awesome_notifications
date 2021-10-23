@@ -1,5 +1,6 @@
 ## [0.0.6+12]
 * Added showInCompactView property for MediaPlayer buttons
+* Added support to multiple subscriptions on created, displayed, action and dissmissed stream
 * Removed channel key from Android Badge methods, because the segregation in channel keys was never used (now is all global)
 * Added increment and decrement badge methods (more performatic)
 ## [0.0.6+11]
