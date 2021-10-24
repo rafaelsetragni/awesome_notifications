@@ -10,8 +10,7 @@ class AssertUtils {
   }
 
   static bool isNullOrEmptyOrInvalid(dynamic value, Type T) {
-    if (value == null) return true;
-    if (value.runtimeType != T) return true;
+    if (value?.runtimeType != T) return true;
 
     switch (value.runtimeType) {
       case String:
@@ -103,15 +102,14 @@ class AssertUtils {
         break;
     }
 
-    if (value == null) return _getDefaultValue(reference, T);
-    if (value.runtimeType.toString() == T.toString()) return value;
+    if (value?.runtimeType == T) return value;
 
     return _getDefaultValue(reference, T);
   }
 
-  static dynamic? _getDefaultValue(String reference, Type T) {
-    dynamic? defaultValue = Definitions.initialValues[reference];
-    if (defaultValue == null || defaultValue.runtimeType != T) return null;
+  static dynamic _getDefaultValue(String reference, Type T) {
+    dynamic defaultValue = Definitions.initialValues[reference];
+    if (defaultValue?.runtimeType != T) return null;
     return defaultValue;
   }
 

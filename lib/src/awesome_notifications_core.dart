@@ -250,15 +250,15 @@ class AwesomeNotifications {
   Future<bool> createNotificationFromJsonData(
       Map<String, dynamic> mapData) async {
     try {
-      if (mapData[NOTIFICATION_CONTENT].runtimeType == String)
+      if (mapData[NOTIFICATION_CONTENT] is String)
         mapData[NOTIFICATION_CONTENT] =
             json.decode(mapData[NOTIFICATION_CONTENT]);
 
-      if (mapData[NOTIFICATION_SCHEDULE].runtimeType == String)
+      if (mapData[NOTIFICATION_SCHEDULE] is String)
         mapData[NOTIFICATION_SCHEDULE] =
             json.decode(mapData[NOTIFICATION_SCHEDULE]);
 
-      if (mapData[NOTIFICATION_BUTTONS].runtimeType == String)
+      if (mapData[NOTIFICATION_BUTTONS] is String)
         mapData[NOTIFICATION_BUTTONS] =
             json.decode(mapData[NOTIFICATION_BUTTONS]);
 
