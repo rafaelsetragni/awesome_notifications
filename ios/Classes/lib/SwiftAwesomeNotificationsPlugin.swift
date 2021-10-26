@@ -1223,16 +1223,14 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 				)
 			} else {
 				// Fallback on earlier versions
-				
 				result(true)
 				return
 			}
 		}
 		else {
+            result(false)
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "Notification content is invalid")
 		}
-        
-        result(false)
     }
 
     private func setDefaultConfigurations(_ defaultIconPath:String?, _ channelsData:[Any]) throws {
