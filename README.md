@@ -98,7 +98,7 @@ awesome_notifications: any # Any attribute updates automatically your source to 
 import 'package:awesome_notifications/awesome_notifications.dart';
 ```
 
-3. Initialize the plugin on main.dart, with at least one native icon and one channel
+3. Initialize the plugin on main.dart, before MaterialApp widget (preferentially inside main() method), with at least one native icon and one channel
 
 ```dart
 AwesomeNotifications().initialize(
@@ -128,7 +128,7 @@ AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
 });
 ```
 
-5. On your main page, starts to listen the notification actions (to detect tap)
+5. On your main page, before MaterialApp widget, starts to listen the notification actions (to detect tap)
 
 ```dart
 AwesomeNotifications().actionStream.listen(
@@ -158,6 +158,16 @@ AwesomeNotifications().createNotification(
 
 **THATS IT! CONGRATZ MY FRIEND!!!**
 
+<br>
+
+## Video Tutorial
+
+<br>
+
+Check out this incredible tutorial made by Ashley Novik, from [ResoCoder team](https://resocoder.com). This tutorial cover the most common features available for Awesome Notifications.
+
+[![Awesome Notifications Video Tutorial](https://img.youtube.com/vi/JAq9fVn3X7U/0.jpg)](https://www.youtube.com/watch?v=JAq9fVn3X7U)
+    
 <br>
 
 ## Example Apps
@@ -647,7 +657,7 @@ Main methods to manipulate a notification channel:
 | icon 		            |     NO   | Small icon to be displayed on the top of notification (Android only)     | String                | must be a resource image |                           |
 | largeIcon 		 	|     NO   | Large icon displayed at right middle of compact notification             | String                | unlimited                |                           |
 | bigPicture 		 	|     NO   | Big image displayed on expanded notification                             | String                | unlimited                |                           |
-| autoDismissable 		 	|     NO   | Notification should auto cancel when gets tapped by the user             | bool                  | true or false            | true                      |
+| autoDismissable 		 	|     NO   | Notification should auto dismiss when gets tapped by the user (has no effect for reply actions on Android)            | bool                  | true or false            | true                      |
 | color 			 	|     NO   | Notification text color                                                  | Color                 | 0x00000000 to 0xFFFFFFFF | 0xFF000000 (Colors.black) |
 | backgroundColor  	    |     NO   | Notification background color                                            | Color                 | 0x00000000 to 0xFFFFFFFF | 0xFFFFFFFF (Colors.white) |
 | payload 		 	    |     NO   | Hidden payload content                                                   | Map<String, String>   | Only String for values   | null                      |
