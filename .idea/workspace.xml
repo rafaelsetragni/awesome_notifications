@@ -9,56 +9,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationMessageModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/android/awesome_notifications_core/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/android/awesome_notifications_core/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/android/awesome_notifications_core/consumer-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/android/awesome_notifications_core/proguard-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/android/awesome_notifications_core/src/androidTest/java/me/carda/awesome_notifications_core/ExampleInstrumentedTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/android/awesome_notifications_core/src/main/AndroidManifest.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/android/awesome_notifications_core/src/test/java/me/carda/awesome_notifications_core/ExampleUnitTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/Definitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/Definitions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationSender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/enumerators/NotificationLayout.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/enumerators/NotificationLayout.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/ChannelManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/ChannelManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/ScheduleManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/ScheduleManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationChannelModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationChannelModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationButtonModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationButtonModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationContentModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/NotificationContentModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/PushNotification.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/PushNotification.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/returnedData/ActionReceived.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/returnedData/ActionReceived.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/returnedData/NotificationReceived.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/models/returnedData/NotificationReceived.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/MapUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/MapUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/StringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/StringUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/pages/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/home_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/assets/readme/Firebase_FCM_Example.postman_collection.json" beforeDir="false" afterPath="$PROJECT_DIR$/example/assets/readme/Firebase_FCM_Example.postman_collection.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/datasources/firebase_datasource.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/datasources/firebase_datasource.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Classes/lib/Definitions.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/Definitions.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationBuilder.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationBuilder.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationSenderAndScheduler.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationSenderAndScheduler.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/ReturnedObjects/ActionReceived.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/ReturnedObjects/ActionReceived.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationButtonModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationButtonModel.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationContentModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/NotificationContentModel.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/ReturnedObjects/NotificationReceived.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/models/ReturnedObjects/NotificationReceived.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/definitions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/definitions.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/enumerators/notification_layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/enumerators/notification_layout.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/models/basic_notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/basic_notification_content.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/models/notification_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_button.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_calendar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_calendar.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/models/notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_content.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_interval.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_interval.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/received_models/push_notification.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/received_models/push_notification.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/received_models/received_action.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/received_models/received_action.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/received_models/received_notification.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/received_models/received_notification.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

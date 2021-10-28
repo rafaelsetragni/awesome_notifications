@@ -31,7 +31,7 @@ public class ActionReceived extends NotificationContentModel {
         this.largeIcon = contentModel.largeIcon;
         this.bigPicture = contentModel.bigPicture;
         this.hideLargeIconOnExpand = contentModel.hideLargeIconOnExpand;
-        this.autoCancel = contentModel.autoCancel;
+        this.autoDismissable = contentModel.autoDismissable;
         this.color = contentModel.color;
         this.backgroundColor = contentModel.backgroundColor;
         this.progress = contentModel.progress;

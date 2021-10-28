@@ -2,6 +2,7 @@
 * Version numbering changed to translate better the development stage and future releases.
 * Added messaging layout and messaging group layout
 * Added new cancelation methods (dismiss, cancel shedules and cancel all) based on group key or channel key
+* Property "autoCancel" changed to "autoDismissable", to match the new cancelation methods naming principles
 * Added android internal group key based on ID, to prevent auto grouping with 4+ notification from same channel when group key was not specified
 * Android channels refactored to keep the original channel key at maximum as possible, maximizing the compatibliti with another plugins.
 * Models refactored to follow the native standards and transformations from map data

@@ -183,7 +183,7 @@ public class NotificationBuilder {
         extras.putInt(Definitions.NOTIFICATION_ID, pushNotification.content.id);
         extras.putString(Definitions.NOTIFICATION_CHANNEL_KEY, StringUtils.digestString(pushNotification.content.channelKey));
         extras.putString(Definitions.NOTIFICATION_GROUP_KEY, StringUtils.digestString(groupKey));
-        extras.putBoolean(Definitions.NOTIFICATION_AUTO_CANCEL, pushNotification.content.autoCancel);
+        extras.putBoolean(Definitions.NOTIFICATION_AUTO_DISMISSABLE, pushNotification.content.autoDismissable);
     }
 
     public static ActionReceived buildNotificationActionFromIntent(Context context, Intent intent) {
@@ -223,7 +223,7 @@ public class NotificationBuilder {
                 }
             }
 
-            if (intent.getBooleanExtra(Definitions.NOTIFICATION_AUTO_CANCEL, notificationId >= 0)) {
+            if (intent.getBooleanExtra(Definitions.NOTIFICATION_AUTO_DISMISSABLE, notificationId >= 0)) {
                 NotificationSender.dismissNotification(context, notificationId);
             }
 
@@ -447,7 +447,7 @@ public class NotificationBuilder {
     }
 
     private void setAutoCancel(PushNotification pushNotification, NotificationCompat.Builder builder) {
-        builder.setAutoCancel(BooleanUtils.getValueOrDefault(pushNotification.content.autoCancel, true));
+        builder.setAutoCancel(BooleanUtils.getValueOrDefault(pushNotification.content.autoDismissable, true));
     }
 
     private void setBody(PushNotification pushNotification, NotificationCompat.Builder builder) {
@@ -585,7 +585,7 @@ public class NotificationBuilder {
                                     KeepOnTopActionReceiver.class : getNotificationTargetActivityClass(context)
             );
 
-            actionIntent.putExtra(Definitions.NOTIFICATION_AUTO_CANCEL, buttonProperties.autoCancel);
+            actionIntent.putExtra(Definitions.NOTIFICATION_AUTO_DISMISSABLE, buttonProperties.autoDismissable);
             actionIntent.putExtra(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, buttonProperties.showInCompactView);
             actionIntent.putExtra(Definitions.NOTIFICATION_ENABLED, buttonProperties.enabled);
             actionIntent.putExtra(Definitions.NOTIFICATION_BUTTON_TYPE, buttonProperties.buttonType.toString());

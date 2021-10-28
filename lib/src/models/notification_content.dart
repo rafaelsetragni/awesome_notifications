@@ -40,7 +40,7 @@ class NotificationContent extends BaseNotificationContent {
       String? largeIcon,
       String? bigPicture,
       String? customSound,
-      bool? autoCancel,
+      bool? autoDismissable,
       Color? color,
       Color? backgroundColor,
       Map<String, String>? payload,
@@ -69,7 +69,7 @@ class NotificationContent extends BaseNotificationContent {
             largeIcon: largeIcon,
             bigPicture: bigPicture,
             customSound: customSound,
-            autoCancel: autoCancel,
+            autoDismissable: autoDismissable,
             color: color,
             backgroundColor: backgroundColor);
 

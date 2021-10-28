@@ -82,7 +82,7 @@ class FirebaseDataSource extends HttpDataSource {
               "https://avidabloga.files.wordpress.com/2012/08/emmemc3b3riadeneilarmstrong3.jpg",
           'bigPicture': "https://www.dw.com/image/49519617_303.jpg",
           'showWhen': true,
-          'autoCancel': true,
+          'autoDismissable': true,
           'privacy': 'Private'
         }
       }

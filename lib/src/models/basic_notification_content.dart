@@ -20,10 +20,13 @@ class BaseNotificationContent extends Model {
   String? largeIcon;
   String? bigPicture;
   String? customSound;
-  bool? autoCancel;
+  bool? autoDismissable;
   Color? color;
   Color? backgroundColor;
   NotificationPrivacy? privacy;
+
+  @Deprecated('property name autoCancel is deprecated. Use autoDismissable instead.')
+  bool? get autoCancel => autoDismissable;
 
   BaseNotificationContent({
       required this.id,
@@ -36,11 +39,14 @@ class BaseNotificationContent extends Model {
       this.icon,
       this.largeIcon,
       this.bigPicture,
-      this.autoCancel,
+      this.autoDismissable,
       this.color,
       this.backgroundColor,
       this.payload,
-      this.customSound});
+      this.customSound,
+      bool? autoCancel}) {
+        this.autoDismissable = this.autoDismissable != null ? this.autoDismissable : autoCancel;
+  }
 
   @override
   BaseNotificationContent? fromMap(Map<String, dynamic> mapData) {
@@ -65,8 +71,8 @@ class BaseNotificationContent extends Model {
         NOTIFICATION_BIG_PICTURE, mapData, String);
     this.customSound = AssertUtils.extractValue(
         NOTIFICATION_CUSTOM_SOUND, mapData, String);
-    this.autoCancel =
-        AssertUtils.extractValue(NOTIFICATION_AUTO_CANCEL, mapData, bool);
+    this.autoDismissable =
+        AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSABLE, mapData, bool);
 
     this.privacy = AssertUtils.extractEnum<NotificationPrivacy>(
         NOTIFICATION_PRIVACY, mapData, NotificationPrivacy.values);
@@ -101,7 +107,7 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_LARGE_ICON: largeIcon,
       NOTIFICATION_BIG_PICTURE: bigPicture,
       NOTIFICATION_CUSTOM_SOUND: customSound,
-      NOTIFICATION_AUTO_CANCEL: autoCancel,
+      NOTIFICATION_AUTO_DISMISSABLE: autoDismissable,
       NOTIFICATION_PRIVACY: AssertUtils.toSimpleEnumString(privacy),
       NOTIFICATION_COLOR: color?.value,
       NOTIFICATION_BACKGROUND_COLOR: backgroundColor?.value

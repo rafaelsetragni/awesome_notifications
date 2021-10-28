@@ -42,7 +42,7 @@ public class NotificationContentModel extends Model {
     public Boolean locked;
     public String bigPicture;
     public Boolean hideLargeIconOnExpand;
-    public Boolean autoCancel;
+    public Boolean autoDismissable;
     public Boolean displayOnForeground;
     public Boolean displayOnBackground;
     public Long color;
@@ -123,7 +123,7 @@ public class NotificationContentModel extends Model {
 
         payload = getValueOrDefault(arguments, Definitions.NOTIFICATION_PAYLOAD, Map.class);
 
-        autoCancel = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_CANCEL, Boolean.class);
+        autoDismissable = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSABLE, Boolean.class);
 
         progress    = getValueOrDefault(arguments, Definitions.NOTIFICATION_PROGRESS, Integer.class);
 
@@ -153,7 +153,7 @@ public class NotificationContentModel extends Model {
 
         returnedObject.put(Definitions.NOTIFICATION_TICKER, this.ticker);
         returnedObject.put(Definitions.NOTIFICATION_PAYLOAD, this.payload);
-        returnedObject.put(Definitions.NOTIFICATION_AUTO_CANCEL, this.autoCancel);
+        returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSABLE, this.autoDismissable);
 
         returnedObject.put(Definitions.NOTIFICATION_LAYOUT,
                 this.notificationLayout != null ? this.notificationLayout.toString() : "Default");
@@ -172,8 +172,8 @@ public class NotificationContentModel extends Model {
 
         returnedObject.put(Definitions.NOTIFICATION_CHANNEL_KEY, this.channelKey);
 
-        if(this.autoCancel != null)
-            returnedObject.put(Definitions.NOTIFICATION_AUTO_CANCEL, this.autoCancel);
+        if(this.autoDismissable != null)
+            returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSABLE, this.autoDismissable);
 
         if(this.displayOnForeground != null)
             returnedObject.put(Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, this.displayOnForeground);

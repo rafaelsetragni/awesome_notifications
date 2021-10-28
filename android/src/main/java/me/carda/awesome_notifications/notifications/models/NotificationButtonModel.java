@@ -16,7 +16,7 @@ public class NotificationButtonModel extends Model {
     public String icon;
     public String label;
     public Boolean enabled;
-    public Boolean autoCancel;
+    public Boolean autoDismissable;
     public Boolean showInCompactView;
     public ActionButtonType buttonType;
 
@@ -33,7 +33,7 @@ public class NotificationButtonModel extends Model {
                 ActionButtonType.class, ActionButtonType.values());
 
         enabled = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLED, Boolean.class);
-        autoCancel = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_CANCEL, Boolean.class);
+        autoDismissable = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSABLE, Boolean.class);
         showInCompactView = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, Boolean.class);
 
         return this;
@@ -51,7 +51,7 @@ public class NotificationButtonModel extends Model {
                 this.buttonType != null ? this.buttonType.toString() : ActionButtonType.Default.toString());
 
         returnedObject.put(Definitions.NOTIFICATION_ENABLED, enabled);
-        returnedObject.put(Definitions.NOTIFICATION_AUTO_CANCEL, autoCancel);
+        returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSABLE, autoDismissable);
         returnedObject.put(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, showInCompactView);
 
         return returnedObject;

@@ -46,7 +46,7 @@ int createUniqueID(int maxValue){
 
 Future<void> showBasicNotification(int id) async {
   Map<String, dynamic> data = {
-    "actionButtons": [{"key": "OPEN", "label": "Öffnen", "autoCancel": true}],
+    "actionButtons": [{"key": "OPEN", "label": "Öffnen", "autoDismissable": true}],
     "content": {"id": -1, "channelKey": "basic_channel", "title": "hallo people?",
       "body": "this is a test", "notificationLayout": "Inbox", "largeIcon": "",
       "backgroundColor": "#ED5338",
@@ -177,9 +177,9 @@ Future<void> showNotificationWithActionButtons(int id) async {
           payload: {'uuid': 'user-profile-uuid'}),
       actionButtons: [
         NotificationActionButton(
-            key: 'READ', label: 'Mark as read', autoCancel: true),
+            key: 'READ', label: 'Mark as read', autoDismissable: true),
         NotificationActionButton(
-            key: 'PROFILE', label: 'Profile', autoCancel: true, enabled: false)
+            key: 'PROFILE', label: 'Profile', autoDismissable: true, enabled: false)
       ]);
 }
 
@@ -193,9 +193,9 @@ Future<void> showNotificationWithIconsAndActionButtons(int id) async {
           payload: {'uuid': 'user-profile-uuid'}),
       actionButtons: [
         NotificationActionButton(
-            key: 'READ', label: 'Mark as read', autoCancel: true),
+            key: 'READ', label: 'Mark as read', autoDismissable: true),
         NotificationActionButton(
-            key: 'PROFILE', label: 'Profile', autoCancel: true)
+            key: 'PROFILE', label: 'Profile', autoDismissable: true)
       ]);
 }
 
@@ -211,13 +211,13 @@ Future<void> showNotificationWithActionButtonsAndReply(int id) async {
         NotificationActionButton(
           key: 'REPLY',
           label: 'Reply',
-          autoCancel: true,
+          autoDismissable: true,
           buttonType: ActionButtonType.InputField,
         ),
         NotificationActionButton(
-            key: 'READ', label: 'Mark as read', autoCancel: true),
+            key: 'READ', label: 'Mark as read', autoDismissable: true),
         NotificationActionButton(
-            key: 'ARCHIVE', label: 'Archive', autoCancel: true)
+            key: 'ARCHIVE', label: 'Archive', autoDismissable: true)
       ]);
 }
 
@@ -409,11 +409,11 @@ Future<void> redNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
           key: 'REPLY',
           label: 'Reply',
-          autoCancel: true,
+          autoDismissable: true,
           buttonType: ActionButtonType.InputField,
         ),
         NotificationActionButton(
-            key: 'ARCHIVE', label: 'Archive', autoCancel: true)
+            key: 'ARCHIVE', label: 'Archive', autoDismissable: true)
       ],
       schedule: delayLEDTests ? NotificationInterval(
           interval: 5,
@@ -443,11 +443,11 @@ Future<void> blueNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
           key: 'REPLY',
           label: 'Reply',
-          autoCancel: true,
+          autoDismissable: true,
           buttonType: ActionButtonType.InputField,
         ),
         NotificationActionButton(
-            key: 'ARCHIVE', label: 'Archive', autoCancel: true)
+            key: 'ARCHIVE', label: 'Archive', autoDismissable: true)
       ],
       schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null);
 }
@@ -475,11 +475,11 @@ Future<void> yellowNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
           key: 'REPLY',
           label: 'Reply',
-          autoCancel: true,
+          autoDismissable: true,
           buttonType: ActionButtonType.InputField,
         ),
         NotificationActionButton(
-            key: 'ARCHIVE', label: 'Archive', autoCancel: true)
+            key: 'ARCHIVE', label: 'Archive', autoDismissable: true)
       ],
       schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null);
 }
@@ -507,11 +507,11 @@ Future<void> purpleNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
           key: 'REPLY',
           label: 'Reply',
-          autoCancel: true,
+          autoDismissable: true,
           buttonType: ActionButtonType.InputField,
         ),
         NotificationActionButton(
-            key: 'ARCHIVE', label: 'Archive', autoCancel: true)
+            key: 'ARCHIVE', label: 'Archive', autoDismissable: true)
       ],
       schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null);
 }
@@ -539,11 +539,11 @@ Future<void> greenNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
           key: 'REPLY',
           label: 'Reply',
-          autoCancel: true,
+          autoDismissable: true,
           buttonType: ActionButtonType.InputField,
         ),
         NotificationActionButton(
-            key: 'ARCHIVE', label: 'Archive', autoCancel: true)
+            key: 'ARCHIVE', label: 'Archive', autoDismissable: true)
       ],
       schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null
   );
@@ -691,9 +691,9 @@ Future<void> showBigPictureNotificationActionButtons(int id) async {
           payload: {'uuid': 'uuid-test'}),
       actionButtons: [
         NotificationActionButton(
-            key: 'READ', label: 'Mark as read', autoCancel: true),
+            key: 'READ', label: 'Mark as read', autoDismissable: true),
         NotificationActionButton(
-            key: 'REMEMBER', label: 'Remember-me later', autoCancel: false)
+            key: 'REMEMBER', label: 'Remember-me later', autoDismissable: false)
       ]);
 }
 
@@ -715,10 +715,10 @@ Future<void> showBigPictureNotificationActionButtonsAndReply(int id) async {
         NotificationActionButton(
             key: 'REPLY',
             label: 'Reply',
-            autoCancel: true,
+            autoDismissable: true,
             buttonType: ActionButtonType.InputField),
         NotificationActionButton(
-            key: 'REMEMBER', label: 'Remember-me later', autoCancel: true)
+            key: 'REMEMBER', label: 'Remember-me later', autoDismissable: true)
       ]);
 }
 
@@ -793,10 +793,10 @@ Future<void> showBigTextNotificationWithActionAndReply(int id) async {
         NotificationActionButton(
             key: 'REPLY',
             label: 'Reply',
-            autoCancel: true,
+            autoDismissable: true,
             buttonType: ActionButtonType.InputField),
         NotificationActionButton(
-            key: 'REMEMBER', label: 'Remember-me later', autoCancel: true)
+            key: 'REMEMBER', label: 'Remember-me later', autoDismissable: true)
       ]);
 }
 
@@ -820,7 +820,7 @@ void updateNotificationMediaPlayer(int id, MediaModel? mediaNow) {
           notificationLayout: NotificationLayout.MediaPlayer,
           largeIcon: mediaNow.diskImagePath,
           color: Colors.purple.shade700,
-          autoCancel: false,
+          autoDismissable: false,
           showWhen: false),
       actionButtons: [
         NotificationActionButton(
@@ -828,7 +828,7 @@ void updateNotificationMediaPlayer(int id, MediaModel? mediaNow) {
             icon: 'resource://drawable/res_ic_prev' +
                 (MediaPlayerCentral.hasPreviousMedia ? '' : '_disabled'),
             label: 'Previous',
-            autoCancel: false,
+            autoDismissable: false,
             showInCompactView: false,
             enabled: MediaPlayerCentral.hasPreviousMedia,
             buttonType: ActionButtonType.KeepOnTop),
@@ -837,7 +837,7 @@ void updateNotificationMediaPlayer(int id, MediaModel? mediaNow) {
                 key: 'MEDIA_PAUSE',
                 icon: 'resource://drawable/res_ic_pause',
                 label: 'Pause',
-                autoCancel: false,
+                autoDismissable: false,
                 showInCompactView: true,
                 buttonType: ActionButtonType.KeepOnTop)
             : NotificationActionButton(
@@ -845,7 +845,7 @@ void updateNotificationMediaPlayer(int id, MediaModel? mediaNow) {
                 icon: 'resource://drawable/res_ic_play' +
                     (MediaPlayerCentral.hasAnyMedia ? '' : '_disabled'),
                 label: 'Play',
-                autoCancel: false,
+                autoDismissable: false,
                 showInCompactView: true,
                 enabled: MediaPlayerCentral.hasAnyMedia,
                 buttonType: ActionButtonType.KeepOnTop),
@@ -861,7 +861,7 @@ void updateNotificationMediaPlayer(int id, MediaModel? mediaNow) {
             key: 'MEDIA_CLOSE',
             icon: 'resource://drawable/res_ic_close',
             label: 'Close',
-            autoCancel: true,
+            autoDismissable: true,
             showInCompactView: true,
             buttonType: ActionButtonType.KeepOnTop)
       ]);
@@ -914,12 +914,12 @@ Future<void> createMessagingNotification({
             key: 'REPLY',
             label: 'Reply',
             buttonType: ActionButtonType.InputField,
-            autoCancel: false,
+            autoDismissable: false,
           ),
           NotificationActionButton(
             key: 'READ',
             label: 'Mark as Read',
-            autoCancel: true,
+            autoDismissable: true,
             buttonType: ActionButtonType.InputField,
           )
         ]
@@ -975,12 +975,12 @@ Future<void> showInboxNotification(int id) async {
             key: 'DISMISS',
             label: 'Dismiss',
             buttonType: ActionButtonType.DisabledAction,
-            autoCancel: true,
+            autoDismissable: true,
             icon: 'resource://drawable/res_ic_close'),
         NotificationActionButton(
           key: 'READ',
           label: 'Mark as read',
-          autoCancel: true,
+          autoDismissable: true,
           //icon: 'resources://drawable/res_ic_close'
         )
       ]);
@@ -1117,7 +1117,7 @@ Future<void> showNotificationAtScheduleCron(
         notificationLayout: NotificationLayout.BigPicture,
         bigPicture: 'asset://assets/images/delivery.jpeg',
         payload: {'uuid': 'uuid-test'},
-        autoCancel: false,
+        autoDismissable: false,
       ),
       schedule: NotificationCalendar.fromDate(date: scheduleTime));
 }

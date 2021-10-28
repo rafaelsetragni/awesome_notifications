@@ -131,7 +131,7 @@ enum Definitions {
     static let  NOTIFICATION_INITIAL_DATE_TIME = "createdDateTime"
     static let  NOTIFICATION_CRONTAB_SCHEDULE = "crontabSchedule"
     static let  NOTIFICATION_ENABLED = "enabled"
-    static let  NOTIFICATION_AUTO_CANCEL = "autoCancel"
+    static let  NOTIFICATION_AUTO_DISMISSABLE = "autoDismissable"
     static let  NOTIFICATION_LOCKED = "locked"
     static let  NOTIFICATION_DISPLAY_ON_FOREGROUND = "displayOnForeground"
     static let  NOTIFICATION_DISPLAY_ON_BACKGROUND = "displayOnBackground"
@@ -198,7 +198,7 @@ enum Definitions {
         Definitions.NOTIFICATION_LED_OFF_MS: 700,
         Definitions.NOTIFICATION_LED_ON_MS: 300,
         Definitions.NOTIFICATION_PLAY_SOUND: true,
-        Definitions.NOTIFICATION_AUTO_CANCEL: true,
+        Definitions.NOTIFICATION_AUTO_DISMISSABLE: true,
         Definitions.NOTIFICATION_LOCKED: false,
         Definitions.NOTIFICATION_TICKER: "ticker",
         Definitions.NOTIFICATION_ALLOW_WHILE_IDLE: false,

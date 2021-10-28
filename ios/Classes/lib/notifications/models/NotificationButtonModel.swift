@@ -13,7 +13,7 @@ public class NotificationButtonModel : AbstractModel {
     var icon:String?
     var label:String?
     var enabled:Bool?
-    var autoCancel:Bool?
+    var autoDismissable:Bool?
     var buttonType:ActionButtonType?
     
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
@@ -23,7 +23,7 @@ public class NotificationButtonModel : AbstractModel {
         self.icon       = MapUtils<String>.getValueOrDefault(reference: "icon", arguments: arguments)
         self.label      = MapUtils<String>.getValueOrDefault(reference: "label", arguments: arguments)
         self.enabled    = MapUtils<Bool>.getValueOrDefault(reference: "enabled", arguments: arguments)
-        self.autoCancel = MapUtils<Bool>.getValueOrDefault(reference: "autoCancel", arguments: arguments)
+        self.autoDismissable = MapUtils<Bool>.getValueOrDefault(reference: "autoDismissable", arguments: arguments)
         
         self.buttonType = EnumUtils<ActionButtonType>.getEnumOrDefault(reference: "buttonType", arguments: arguments)
         
@@ -37,7 +37,7 @@ public class NotificationButtonModel : AbstractModel {
         if(icon != nil) {mapData["icon"] = self.icon}
         if(label != nil) {mapData["label"] = self.label}
         if(enabled != nil) {mapData["enabled"] = self.enabled}
-        if(autoCancel != nil) {mapData["autoCancel"] = self.autoCancel}
+        if(autoDismissable != nil) {mapData["autoDismissable"] = self.autoDismissable}
         
         if(buttonType != nil) {mapData["buttonType"] = self.buttonType?.rawValue}
         

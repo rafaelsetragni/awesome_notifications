@@ -26,7 +26,7 @@ public class NotificationContentModel : AbstractModel {
     var largeIcon: String?
     var bigPicture: String?
     var hideLargeIconOnExpand: Bool?
-    var autoCancel: Bool?
+    var autoDismissable: Bool?
     var displayOnForeground: Bool?
     var displayOnBackground: Bool?
     var color: Int64?
@@ -61,7 +61,7 @@ public class NotificationContentModel : AbstractModel {
         self.largeIcon             = MapUtils<String>.getValueOrDefault(reference: "largeIcon", arguments: arguments)
         self.bigPicture            = MapUtils<String>.getValueOrDefault(reference: "bigPicture", arguments: arguments)
         self.hideLargeIconOnExpand = MapUtils<Bool>.getValueOrDefault(reference: "hideLargeIconOnExpand", arguments: arguments)
-        self.autoCancel            = MapUtils<Bool>.getValueOrDefault(reference: "autoCancel", arguments: arguments)
+        self.autoDismissable            = MapUtils<Bool>.getValueOrDefault(reference: "autoDismissable", arguments: arguments)
         self.displayOnForeground   = MapUtils<Bool>.getValueOrDefault(reference: "displayOnForeground", arguments: arguments)
         self.displayOnBackground   = MapUtils<Bool>.getValueOrDefault(reference: "displayOnBackground", arguments: arguments)
         self.color                 = MapUtils<Int64>.getValueOrDefault(reference: "color", arguments: arguments)
@@ -127,7 +127,7 @@ public class NotificationContentModel : AbstractModel {
         if(self.locked != nil){ mapData["locked"] = self.locked }
         if(self.bigPicture != nil){ mapData["bigPicture"] = self.bigPicture }
         if(self.hideLargeIconOnExpand != nil){ mapData["hideLargeIconOnExpand"] = self.hideLargeIconOnExpand }
-        if(self.autoCancel != nil){ mapData["autoCancel"] = self.autoCancel }
+        if(self.autoDismissable != nil){ mapData["autoDismissable"] = self.autoDismissable }
         if(self.displayOnForeground != nil){ mapData["displayOnForeground"] = self.displayOnForeground }
         if(self.displayOnBackground != nil){ mapData["displayOnBackground"] = self.displayOnBackground }
         if(self.color != nil){ mapData["color"] = self.color }

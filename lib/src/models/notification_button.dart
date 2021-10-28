@@ -21,7 +21,7 @@ class NotificationActionButton extends Model {
   String? label;
   String? icon;
   bool? enabled;
-  bool? autoCancel;
+  bool? autoDismissable;
   bool? showInCompactView;
   ActionButtonType? buttonType;
 
@@ -30,7 +30,7 @@ class NotificationActionButton extends Model {
       required this.label,
       this.icon,
       this.enabled,
-      this.autoCancel,
+      this.autoDismissable,
       this.showInCompactView,
       this.buttonType = ActionButtonType.Default});
 
@@ -42,8 +42,8 @@ class NotificationActionButton extends Model {
         NOTIFICATION_BUTTON_LABEL, dataMap, String);
     enabled =
         AssertUtils.extractValue(NOTIFICATION_ENABLED, dataMap, bool);
-    autoCancel =
-        AssertUtils.extractValue(NOTIFICATION_AUTO_CANCEL, dataMap, bool);
+    autoDismissable =
+        AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSABLE, dataMap, bool);
     showInCompactView = AssertUtils.extractValue(
         NOTIFICATION_SHOW_IN_COMPACT_VIEW, dataMap, bool);
     buttonType = AssertUtils.extractEnum(
@@ -59,7 +59,7 @@ class NotificationActionButton extends Model {
       NOTIFICATION_ICON: icon,
       NOTIFICATION_BUTTON_LABEL: label,
       NOTIFICATION_ENABLED: enabled,
-      NOTIFICATION_AUTO_CANCEL: autoCancel,
+      NOTIFICATION_AUTO_DISMISSABLE: autoDismissable,
       NOTIFICATION_SHOW_IN_COMPACT_VIEW: showInCompactView,
       NOTIFICATION_BUTTON_TYPE: AssertUtils.toSimpleEnumString(buttonType)
     };
@@ -69,7 +69,7 @@ class NotificationActionButton extends Model {
   void validate() {
     assert(!AssertUtils.isNullOrEmptyOrInvalid(key, String));
     assert(!AssertUtils.isNullOrEmptyOrInvalid(label, String));
-    assert(!AssertUtils.isNullOrEmptyOrInvalid(autoCancel, bool));
+    assert(!AssertUtils.isNullOrEmptyOrInvalid(autoDismissable, bool));
     assert(!AssertUtils.isNullOrEmptyOrInvalid(showInCompactView, bool));
 
     // For action buttons, it's only allowed resource media types

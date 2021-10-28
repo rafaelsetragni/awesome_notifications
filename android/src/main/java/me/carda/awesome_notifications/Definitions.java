@@ -159,7 +159,7 @@ public interface Definitions {
     String NOTIFICATION_CRONTAB_SCHEDULE = "crontabSchedule";
     String NOTIFICATION_PRECISE_SCHEDULES = "preciseSchedules";
     String NOTIFICATION_ENABLED = "enabled";
-    String NOTIFICATION_AUTO_CANCEL = "autoCancel";
+    String NOTIFICATION_AUTO_DISMISSABLE = "autoDismissable";
     String NOTIFICATION_SHOW_IN_COMPACT_VIEW = "showInCompactView";
     String NOTIFICATION_LOCKED = "locked";
     String NOTIFICATION_DISPLAY_ON_FOREGROUND = "displayOnForeground";
@@ -225,7 +225,7 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_LED_OFF_MS, 700);
         put(Definitions.NOTIFICATION_LED_ON_MS, 300);
         put(Definitions.NOTIFICATION_PLAY_SOUND, true);
-        put(Definitions.NOTIFICATION_AUTO_CANCEL, true);
+        put(Definitions.NOTIFICATION_AUTO_DISMISSABLE, true);
         put(Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, DefaultRingtoneType.Notification);
         //put(Definitions.NOTIFICATION_LOCKED, false);
         put(Definitions.NOTIFICATION_TICKER, "ticker");
