@@ -154,24 +154,24 @@ public class NotificationBuilder {
         return  jsonToPushNotification(jsonData: jsonData)
     }
     
-    public static func buildNotificationActionFromJson(jsonData:String?, actionKey:String?, userText:String?) -> ActionReceived? {
+    public static func buildNotificationActionFromJson(jsonData:String?, buttonKeyPressed:String?, userText:String?) -> ActionReceived? {
         
         let pushNotification:PushNotification? = buildNotificationFromJson(jsonData: jsonData)
         if(pushNotification == nil){ return nil }
         let actionReceived:ActionReceived = ActionReceived(pushNotification!.content)
         
-        switch actionKey {
+        switch buttonKeyPressed {
         
             case UNNotificationDismissActionIdentifier.description:
-                actionReceived.actionKey = nil
-                actionReceived.actionInput = nil
+                actionReceived.buttonKeyPressed = nil
+                actionReceived.buttonKeyInput = nil
                 actionReceived.dismissedLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
                 actionReceived.dismissedDate = DateUtils.getUTCTextDate()
                 
             default:
                 let defaultIOSAction = UNNotificationDefaultActionIdentifier.description
-                actionReceived.actionKey = actionKey == defaultIOSAction ? nil : actionKey
-                actionReceived.actionInput = userText
+                actionReceived.buttonKeyPressed = buttonKeyPressed == defaultIOSAction ? nil : buttonKeyPressed
+                actionReceived.buttonKeyInput = userText
                 actionReceived.actionLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
                 actionReceived.actionDate = DateUtils.getUTCTextDate()
         }

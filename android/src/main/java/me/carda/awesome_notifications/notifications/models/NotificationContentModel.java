@@ -2,6 +2,7 @@ package me.carda.awesome_notifications.notifications.models;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -17,11 +18,14 @@ import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificati
 import me.carda.awesome_notifications.notifications.managers.ChannelManager;
 import me.carda.awesome_notifications.utils.BitmapUtils;
 import me.carda.awesome_notifications.utils.DateUtils;
+import me.carda.awesome_notifications.utils.ListUtils;
 import me.carda.awesome_notifications.utils.MapUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
 @SuppressWarnings("unchecked")
 public class NotificationContentModel extends Model {
+
+    public boolean isRefreshNotification = false;
 
     public Integer id;
     public String channelKey;
@@ -29,7 +33,9 @@ public class NotificationContentModel extends Model {
     public String body;
     public String summary;
     public Boolean showWhen;
+    public List<NotificationMessageModel> messages;
     public Map<String, String> payload;
+    public String groupKey;
     public Boolean playSound;
     public String icon;
     public String largeIcon;
@@ -121,7 +127,11 @@ public class NotificationContentModel extends Model {
 
         progress    = getValueOrDefault(arguments, Definitions.NOTIFICATION_PROGRESS, Integer.class);
 
+        groupKey = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_KEY, String.class);
+
         ticker = getValueOrDefault(arguments, Definitions.NOTIFICATION_TICKER, String.class);
+
+        messages = mapToMessages(getValueOrDefault(arguments, Definitions.NOTIFICATION_MESSAGES, List.class));
 
         return this;
     }
@@ -188,6 +198,9 @@ public class NotificationContentModel extends Model {
         if(this.progress != null)
             returnedObject.put(Definitions.NOTIFICATION_PROGRESS, this.progress);
 
+        if(this.groupKey != null)
+            returnedObject.put(Definitions.NOTIFICATION_GROUP_KEY, this.groupKey);
+
         if(this.privacy != null)
             returnedObject.put(Definitions.NOTIFICATION_PRIVACY,
                     this.privacy != null ? this.privacy.toString() : null);
@@ -195,7 +208,31 @@ public class NotificationContentModel extends Model {
         if(this.privateMessage != null)
             returnedObject.put(Definitions.NOTIFICATION_PRIVATE_MESSAGE, this.privateMessage);
 
+        if(this.messages != null)
+            returnedObject.put(Definitions.NOTIFICATION_MESSAGES, messagesToMap(this.messages));
+
         return returnedObject;
+    }
+
+    public static List<Map> messagesToMap(List<NotificationMessageModel> messages){
+        List<Map> returnedMessages = new ArrayList<>();
+        if(!ListUtils.isNullOrEmpty(messages)){
+            for (NotificationMessageModel messageModel : messages) {
+                returnedMessages.add(messageModel.toMap());
+            }
+        }
+        return returnedMessages;
+    }
+
+    public static List<NotificationMessageModel> mapToMessages(List<Map> messagesData){
+        List<NotificationMessageModel> messages = new ArrayList<>();
+        if(!ListUtils.isNullOrEmpty(messagesData))
+            for(Map<String, Object> messageData : messagesData){
+                NotificationMessageModel messageModel =
+                        new NotificationMessageModel().fromMap(messageData);
+                messages.add(messageModel);
+            }
+        return messages;
     }
 
     @Override

@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/src/definitions.dart';
 import 'package:awesome_notifications/src/enumerators/action_button_type.dart';
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
 import 'package:awesome_notifications/src/models/model.dart';
@@ -22,12 +23,12 @@ class NotificationActionButton extends Model {
   bool? enabled;
   bool? autoCancel;
   bool? showInCompactView;
-  ActionButtonType buttonType;
+  ActionButtonType? buttonType;
 
-  NotificationActionButton(
-      {this.key,
+  NotificationActionButton({
+      required this.key,
+      required this.label,
       this.icon,
-      this.label,
       this.enabled,
       this.autoCancel,
       this.showInCompactView,
@@ -35,15 +36,18 @@ class NotificationActionButton extends Model {
 
   @override
   NotificationActionButton? fromMap(Map<String, dynamic> dataMap) {
-    key = AssertUtils.extractValue(dataMap, 'key');
-    icon = AssertUtils.extractValue(dataMap, 'icon');
-    label = AssertUtils.extractValue(dataMap, 'label');
-    enabled = AssertUtils.extractValue(dataMap, 'enabled');
-    autoCancel = AssertUtils.extractValue(dataMap, 'autoCancel');
-    showInCompactView = AssertUtils.extractValue(dataMap, 'showInCompactView');
+    key = AssertUtils.extractValue(NOTIFICATION_KEY, dataMap, String);
+    icon = AssertUtils.extractValue(NOTIFICATION_ICON, dataMap, String);
+    label = AssertUtils.extractValue(
+        NOTIFICATION_BUTTON_LABEL, dataMap, String);
+    enabled =
+        AssertUtils.extractValue(NOTIFICATION_ENABLED, dataMap, bool);
+    autoCancel =
+        AssertUtils.extractValue(NOTIFICATION_AUTO_CANCEL, dataMap, bool);
+    showInCompactView = AssertUtils.extractValue(
+        NOTIFICATION_SHOW_IN_COMPACT_VIEW, dataMap, bool);
     buttonType = AssertUtils.extractEnum(
-            dataMap, 'buttonType', ActionButtonType.values) ??
-        ActionButtonType.Default;
+        NOTIFICATION_BUTTON_TYPE, dataMap, ActionButtonType.values);
 
     return this;
   }
@@ -51,13 +55,13 @@ class NotificationActionButton extends Model {
   @override
   Map<String, dynamic> toMap() {
     return {
-      'key': key,
-      'icon': icon,
-      'label': label,
-      'enabled': enabled,
-      'autoCancel': autoCancel,
-      'showInCompactView': showInCompactView,
-      'buttonType': AssertUtils.toSimpleEnumString(buttonType)
+      NOTIFICATION_KEY: key,
+      NOTIFICATION_ICON: icon,
+      NOTIFICATION_BUTTON_LABEL: label,
+      NOTIFICATION_ENABLED: enabled,
+      NOTIFICATION_AUTO_CANCEL: autoCancel,
+      NOTIFICATION_SHOW_IN_COMPACT_VIEW: showInCompactView,
+      NOTIFICATION_BUTTON_TYPE: AssertUtils.toSimpleEnumString(buttonType)
     };
   }
 

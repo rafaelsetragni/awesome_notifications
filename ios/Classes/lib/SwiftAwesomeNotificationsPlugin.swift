@@ -136,7 +136,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         if let jsonData:String = response.notification.request.content.userInfo[Definitions.NOTIFICATION_JSON] as? String {
             receiveAction(
                   jsonData: jsonData,
-                  actionKey: response.actionIdentifier,
+                  buttonKeyPressed: response.actionIdentifier,
                   userText: userText
               )
         } else {
@@ -438,14 +438,14 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         completionHandler([])
     }
     
-    private func receiveAction(jsonData: String?, actionKey:String?, userText:String?){
+    private func receiveAction(jsonData: String?, buttonKeyPressed:String?, userText:String?){
 		
         if(SwiftAwesomeNotificationsPlugin.appLifeCycle == .AppKilled){
             fireBackgroundLostEvents()
         }
         
         if #available(iOS 10.0, *) {
-            let actionReceived:ActionReceived? = NotificationBuilder.buildNotificationActionFromJson(jsonData: jsonData, actionKey: actionKey, userText: userText)
+            let actionReceived:ActionReceived? = NotificationBuilder.buildNotificationActionFromJson(jsonData: jsonData, buttonKeyPressed: buttonKeyPressed, userText: userText)
             
             if actionReceived?.dismissedDate == nil {
 

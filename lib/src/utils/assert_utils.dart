@@ -33,25 +33,59 @@ class AssertUtils {
     return returnList;
   }
 
-  static dynamic? extractValue<T>(Map dataMap, String reference) {
-    T? defaultValue = _getDefaultValue(reference, T);
-    dynamic? value = dataMap[reference];
+  static getValueOrDefault(String reference, dynamic value, Type T) {
+    switch (value.runtimeType) {
+      case MaterialColor:
+        value = (value as MaterialColor).shade500;
+        break;
+
+      case MaterialAccentColor:
+        value = Color((value as MaterialAccentColor).value);
+        break;
+
+      case CupertinoDynamicColor:
+        value = Color((value as CupertinoDynamicColor).value);
+        break;
+    }
+
+    if (value?.runtimeType == T) return value;
+
+    return _getDefaultValue(reference, T);
+  }
+
+  static extractValue<T>(String reference, Map dataMap, Type T) {
+    dynamic defaultValue = _getDefaultValue(reference, T);
+    dynamic value = dataMap[reference];
 
     // Color hexadecimal representation
     if (T == int && value != null && value is String) {
       String valueCasted = value;
+
       final RegExpMatch? match =
-          RegExp(r'^0x(\w{2})?(\w{6,6})$').firstMatch(valueCasted);
+          RegExp(r'^(0x|#)(\w{2})?(\w{6,6})$').firstMatch(valueCasted);
       if (match != null) {
-        String? hex = match.group(2);
-        if (hex != null) {
-          final colorValue = int.parse(hex, radix: 16);
-          return colorValue;
-        }
+        String hex = (match.group(2) ?? 'FF') + match.group(3)!;
+        final int colorValue = int.parse(hex, radix: 16);
+        return colorValue;
       }
     }
 
-    if (value == null || !(value is T)) return defaultValue;
+    switch (value.runtimeType) {
+
+      case MaterialColor:
+        value = (value as MaterialColor).shade500;
+        break;
+
+      case MaterialAccentColor:
+        value = Color((value as MaterialAccentColor).value);
+        break;
+
+      case CupertinoDynamicColor:
+        value = Color((value as CupertinoDynamicColor).value);
+        break;
+    }
+
+    if (value == null || !(value.runtimeType == T)) return defaultValue;
 
     return value;
   }
@@ -71,7 +105,7 @@ class AssertUtils {
     }
   }
 
-  static T? extractEnum<T>(Map dataMap, String reference, List<T> values) {
+  static T? extractEnum<T>(String reference, Map dataMap, List<T> values) {
     T? defaultValue = _getDefaultValue(reference, T);
     dynamic value = dataMap[reference];
 
@@ -85,26 +119,6 @@ class AssertUtils {
       return AssertUtils.toSimpleEnumString(e)!.toLowerCase() ==
           castedValue.toLowerCase();
     }, orElse: () => defaultValue ?? values.first);
-  }
-
-  static getValueOrDefault(String reference, dynamic value, Type T) {
-    switch (value.runtimeType) {
-      case MaterialColor:
-        value = (value as MaterialColor).shade500;
-        break;
-
-      case MaterialAccentColor:
-        value = Color((value as MaterialAccentColor).value);
-        break;
-
-      case CupertinoDynamicColor:
-        value = Color((value as CupertinoDynamicColor).value);
-        break;
-    }
-
-    if (value?.runtimeType == T) return value;
-
-    return _getDefaultValue(reference, T);
   }
 
   static dynamic _getDefaultValue(String reference, Type T) {

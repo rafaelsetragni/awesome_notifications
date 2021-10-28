@@ -9,21 +9,19 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationManagerCompat;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.enumerators.DefaultRingtoneType;
-import me.carda.awesome_notifications.notifications.enumerators.MediaSource;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationImportance;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.notifications.models.NotificationChannelModel;
 import me.carda.awesome_notifications.utils.AudioUtils;
-import me.carda.awesome_notifications.utils.BitmapUtils;
 import me.carda.awesome_notifications.utils.BooleanUtils;
-import me.carda.awesome_notifications.utils.MediaUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
 public class ChannelManager {
@@ -38,59 +36,13 @@ public class ChannelManager {
 
     public static Boolean removeChannel(Context context, String channelKey) {
 
-        NotificationChannelModel oldChannel = getChannelByKey(context, channelKey);
-
-        if(oldChannel == null) return true;
-
-        // Ensures the removal of any possible standard
-        removeAndroidChannel(context, oldChannel.channelKey);
-        removeAndroidChannel(context, oldChannel.getChannelHashKey(context, false));
-        removeAndroidChannel(context, oldChannel.getChannelHashKey(context, true));
-
-        return shared.remove(context, Definitions.SHARED_CHANNELS, channelKey);
-    }
-
-    public static List<NotificationChannelModel> listChannels(Context context) {
-        return shared.getAllObjects(context, Definitions.SHARED_CHANNELS);
-    }
-
-    public static void saveChannel(Context context, NotificationChannelModel channelModel, Boolean forceUpdate) {
-
-        channelModel.refreshIconResource(context);
+        NotificationChannelModel channelModel = getChannelByKey(context, channelKey);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
-
-            NotificationChannel androidChannel = getAndroidChannel(context, channelModel);
-            if(androidChannel != null){
-
-                String currentChannelKey = androidChannel.getId();
-
-                if(currentChannelKey != null)
-                    if(currentChannelKey.equals(channelModel.channelKey)){
-                        eraseOldAndroidChannels(context, channelModel);
-                        if(AwesomeNotificationsPlugin.debug)
-                            Log.d(TAG, "Incompatible notification channel "+currentChannelKey+" erased");
-                    }
-                    else {
-                        String newHashKey = channelModel.getChannelHashKey(context, false);
-                        if(!currentChannelKey.equals(newHashKey) && forceUpdate) {
-                            // Ensures the removal of previous channel to enable force update
-                            eraseOldAndroidChannels(context, channelModel);
-                            if(AwesomeNotificationsPlugin.debug)
-                                Log.d(TAG, "Notification channel "+channelModel.channelName+" updated with forceUpdate");
-                        }
-                    }
-            }
-            setAndroidChannel(context, channelModel);
-
-            if(AwesomeNotificationsPlugin.debug)
-                Log.d(TAG, "Notification channel "+channelModel.channelName+
-                        " ("+channelModel.channelKey+") "+
-                        ( (androidChannel != null) ? "updated" : "created"));
+            removeAndroidChannel(context, channelKey, channelModel != null ? channelModel.getChannelHashKey(context, false) : null);
         }
 
-        shared.set(context, Definitions.SHARED_CHANNELS, channelModel.channelKey, channelModel);
-        shared.commit(context);
+        return shared.remove(context, Definitions.SHARED_CHANNELS, channelKey);
     }
 
     public static NotificationChannelModel getChannelByKey(Context context, String channelKey){
@@ -101,6 +53,154 @@ public class ChannelManager {
         }
 
         return channelModel;
+    }
+
+    public static List<NotificationChannelModel> listChannels(Context context) {
+        return shared.getAllObjects(context, Definitions.SHARED_CHANNELS);
+    }
+
+    public static void commitChanges(Context context){
+        shared.commit(context);
+    }
+
+    public static boolean isChannelEnabled(Context context, String channelKey){
+
+        if (StringUtils.isNullOrEmpty(channelKey)) return false;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
+
+            NotificationChannel firstAndroidChannel = ChannelManager.getAndroidChannel(context, channelKey);
+            if (firstAndroidChannel != null){
+                return firstAndroidChannel.getImportance() != NotificationManager.IMPORTANCE_NONE;
+            }
+
+            NotificationChannelModel channelModel = getChannelByKey(context, channelKey);
+            String awesomeHashKey = channelModel.getChannelHashKey(context, false);
+
+            NotificationChannel forcedAndroidChannel = ChannelManager.getAndroidChannel(context, null, awesomeHashKey);
+            return (forcedAndroidChannel != null && forcedAndroidChannel.getImportance() != NotificationManager.IMPORTANCE_NONE);
+
+        } else {
+
+            NotificationChannelModel channelModel = ChannelManager.getChannelByKey(context, channelKey);
+            return channelModel != null && channelModel.isChannelEnabled();
+        }
+    }
+
+    public static void saveChannel(Context context, NotificationChannelModel newChannel, Boolean forceUpdate) throws AwesomeNotificationException {
+
+        newChannel.refreshIconResource(context);
+        newChannel.validate(context);
+
+        NotificationChannelModel oldChannelModel = ChannelManager.getChannelByKey(context, newChannel.channelKey);
+
+        // Android Channels are only available on Android Oreo and beyond.
+        // On older versions, channel models are only used to organize notifications
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O /*Android 8*/) {
+
+            // If nothing has changed, so there is nothing to do
+            if(oldChannelModel != null && oldChannelModel.equals(newChannel)) return;
+
+            // Save into shared manager
+            shared.set(context, Definitions.SHARED_CHANNELS, newChannel.channelKey, newChannel);
+            shared.commit(context);
+
+            if(AwesomeNotificationsPlugin.debug)
+                Log.d(TAG, "Notification channel "+newChannel.channelName+
+                    (oldChannelModel == null ? " created" : " updated"));
+        }
+        else {
+
+            // Save into shared manager
+            shared.set(context, Definitions.SHARED_CHANNELS, newChannel.channelKey, newChannel);
+            shared.commit(context);
+
+            saveAndroidChannel(context, oldChannelModel, newChannel, forceUpdate);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O /*Android 8*/)
+    private static void saveAndroidChannel(Context context, NotificationChannelModel oldChannelModel, NotificationChannelModel newChannel, Boolean forceUpdate) {
+
+        String newHashKey = newChannel.getChannelHashKey(context, false);
+
+        NotificationChannel actualAndroidChannel = getAndroidChannel(
+                context,
+                newChannel.channelKey,
+                newHashKey);
+
+        // created
+        if(actualAndroidChannel == null){
+
+            if(oldChannelModel != null){
+                // Ensure that the previous standards will be updated
+                removeOldAndroidChannelStandards(context, oldChannelModel.channelKey, oldChannelModel.channelName);
+            }
+
+            setAndroidChannel(context, newChannel, true);
+            if(AwesomeNotificationsPlugin.debug)
+                Log.d(TAG, "Notification channel "+ newChannel.channelName+" created");
+        }
+        // updated
+        else {
+            String currentChannelKey = actualAndroidChannel.getId();
+
+            // Only first channels have the channel key equals to the originals
+            if(newChannel.channelKey.equals(currentChannelKey)){
+
+                if(forceUpdate && androidChannelNeedsForceUpdate(newChannel, actualAndroidChannel)){
+
+                    // From this point on, the android channel needs to be slight different from the originals
+                    removeAndroidChannel(context, currentChannelKey, null);
+                    setAndroidChannel(context, newChannel, false);
+                    if(AwesomeNotificationsPlugin.debug)
+                        Log.d(TAG, "Notification channel "+ newChannel.channelName+" updated with forceUpdate");
+                }
+                else
+                    if(androidChannelNeedsUpdate(newChannel, actualAndroidChannel)){
+                        setAndroidChannel(context, newChannel, true);
+                        if(AwesomeNotificationsPlugin.debug)
+                            Log.d(TAG, "Notification channel "+ newChannel.channelName+" updated");
+                    }
+            }
+            // For cases where forceUpdated was applied
+            else {
+                if(!currentChannelKey.equals(newHashKey) && forceUpdate){
+                    removeAndroidChannel(context, currentChannelKey, newHashKey);
+                    setAndroidChannel(context, newChannel, false);
+                    if(AwesomeNotificationsPlugin.debug)
+                        Log.d(TAG, "Notification channel "+ newChannel.channelName+" updated with forceUpdate");
+                }
+                else
+                    if(androidChannelNeedsUpdate(newChannel, actualAndroidChannel)){
+                        setAndroidChannel(context, newChannel, false);
+                        if(AwesomeNotificationsPlugin.debug)
+                            Log.d(TAG, "Notification channel "+ newChannel.channelName+" updated");
+                    }
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O /*Android 8*/)
+    private static boolean androidChannelNeedsUpdate(NotificationChannelModel channelModel, NotificationChannel androidChannel){
+        return !(
+            androidChannel.getName().equals(channelModel.channelName) &&
+            androidChannel.getDescription().equals(channelModel.channelDescription)
+        );
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O /*Android 8*/)
+    private static boolean androidChannelNeedsForceUpdate(NotificationChannelModel channelModel, NotificationChannel androidChannel){
+        Uri uriSound = androidChannel.getSound();
+        return !(
+            (Arrays.equals(channelModel.vibrationPattern, androidChannel.getVibrationPattern())) &&
+            java.util.Objects.equals(channelModel.groupKey, androidChannel.getGroup()) &&
+            (channelModel.channelShowBadge == androidChannel.canShowBadge()) &&
+            (channelModel.ledColor == null || channelModel.ledColor == androidChannel.getLightColor()) &&
+            (channelModel.defaultPrivacy == NotificationPrivacy.values()[androidChannel.getLockscreenVisibility()]) &&
+            (channelModel.importance == NotificationImportance.values()[androidChannel.getImportance()]) &&
+            (!channelModel.playSound && uriSound == null || uriSound.getPath().contains(channelModel.soundSource))
+        );
     }
 
     public static Uri retrieveSoundResourceUri(Context context, DefaultRingtoneType ringtoneType, String soundSource) {
@@ -134,176 +234,100 @@ public class ChannelManager {
         return uri;
     }
 
-    public static void commitChanges(Context context){
-        shared.commit(context);
+    @RequiresApi(api = Build.VERSION_CODES.O /*Android 8*/)
+    public static NotificationChannel getAndroidChannel(Context context, String channelKey){
+        return getAndroidChannel(context, channelKey, null);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O /*Android 8*/)
-    public static NotificationChannel getAndroidChannel(Context context, NotificationChannelModel referenceChannel){
+    public static NotificationChannel getAndroidChannel(Context context, String channelKey, String awesomeChannelHashKey){
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Returns channel from another packages with same name
-        NotificationChannel standardAndroidChannel = notificationManager.getNotificationChannel(referenceChannel.channelKey);
-        if(standardAndroidChannel != null){
-            return standardAndroidChannel;
+        // Returns channel from another packages with same name43
+        if(channelKey != null){
+            NotificationChannel standardAndroidChannel = notificationManager.getNotificationChannel(channelKey);
+            if(standardAndroidChannel != null){
+                return standardAndroidChannel;
+            }
         }
 
-        String newAwesomeChannelKey = referenceChannel.getChannelHashKey(context, false);
-        NotificationChannel forceUpdatedAndroidChannel = null;
+        // If hash key was not defined, so there is nothing more to do
+        if(awesomeChannelHashKey == null) return null;
+        return notificationManager.getNotificationChannel(awesomeChannelHashKey);
+    }
 
-        // Search by channel name, preferentially previous versions
+    @RequiresApi(api =  Build.VERSION_CODES.O /*Android 8*/)
+    public static void removeOldAndroidChannelStandards(Context context, String channelKey, String channelName){
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
         List<NotificationChannel> notificationChannels = notificationManager.getNotificationChannels();
         for(NotificationChannel currentAndroidChannel : notificationChannels){
-            CharSequence channelName = currentAndroidChannel.getName();
-            if(channelName != null && channelName.toString().equals(referenceChannel.channelName)){
-                String channelKey = currentAndroidChannel.getId();
-                if(newAwesomeChannelKey.equals(channelKey))
-                    forceUpdatedAndroidChannel = currentAndroidChannel;
-                else
-                    return currentAndroidChannel;
-            }
-        }
-
-        // Returns forceUpdate standard
-        return forceUpdatedAndroidChannel;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O /*Android 8*/)
-    public static void eraseOldAndroidChannels(Context context, NotificationChannelModel referenceChannel){
-
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        String newAwesomeChannelKey = referenceChannel.getChannelHashKey(context, false);
-
-        // Search by channel name
-        List<NotificationChannel> notificationChannels = notificationManager.getNotificationChannels();
-        for(NotificationChannel currentAndroidChannel : notificationChannels){
-            CharSequence channelName = currentAndroidChannel.getName();
-            if(channelName != null && channelName.toString().equals(referenceChannel.channelName)) {
-                String channelKey = currentAndroidChannel.getId();
-                if (channelKey.equals(newAwesomeChannelKey)) {
-                    notificationManager.deleteNotificationChannel(channelKey);
-                    if(AwesomeNotificationsPlugin.debug)
-                        Log.d(TAG, "Old notification channel "+channelName+" ("+channelKey+") erased");
-                }
+            String androidChannelKey = currentAndroidChannel.getId();
+            if( // delete channels with older standards
+                (!androidChannelKey.equals(channelKey)) &&
+                (androidChannelKey.length() == 32) &&
+                (currentAndroidChannel.getName().equals(channelName))
+            ){
+                notificationManager.deleteNotificationChannel(androidChannelKey);
             }
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static NotificationChannel getAndroidChannel(Context context, NotificationChannelModel referenceChannel, boolean eraseOldChannels){
+    @RequiresApi(api =  Build.VERSION_CODES.O /*Android 8*/)
+    public static void setAndroidChannel(Context context, NotificationChannelModel newChannel, boolean firstChannel) {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Returns channel from another packages with same name
-        NotificationChannel standardAndroidChannel = notificationManager.getNotificationChannel(referenceChannel.channelKey);
-        if(standardAndroidChannel != null){
-            return standardAndroidChannel;
-        }
+        NotificationChannel newAndroidNotificationChannel = new NotificationChannel(
+                firstChannel ?
+                        newChannel.channelKey :
+                        newChannel.getChannelHashKey(context, false),
+                newChannel.channelName,
+                newChannel.importance.ordinal()
+        );
 
-        String newAwesomeChannelKey = referenceChannel.getChannelHashKey(context, false);
+        newAndroidNotificationChannel.setDescription(newChannel.channelDescription);
 
-        // Search by channel name
-        List<NotificationChannel> notificationChannels = notificationManager.getNotificationChannels();
-        for(NotificationChannel currentAndroidChannel : notificationChannels){
-            CharSequence channelName = currentAndroidChannel.getName();
-            if(channelName != null && channelName.toString().equals(referenceChannel.channelName)){
-                if(eraseOldChannels){
+        if (newChannel.playSound) {
 
-                }
-                else {
-                    return currentAndroidChannel;
-                }
-            }
-        }
+            /// TODO NEED TO IMPROVE AUDIO RESOURCES TO BE MORE VERSATILE, SUCH AS BITMAP ONES
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .build();
 
-        // Returns forceUpdate standard
-        return notificationManager.getNotificationChannel(newAwesomeChannelKey);
-    }
+            Uri uri = retrieveSoundResourceUri(context, newChannel.defaultRingtoneType, newChannel.soundSource);
+            newAndroidNotificationChannel.setSound(uri, audioAttributes);
 
-    private static void removeAndroidChannel(Context context, String channelId) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
-            try {
-                notificationManager.deleteNotificationChannel(channelId);
-            } catch ( Exception ignored) {
-            }
-        }
-    }
-
-    public static void setAndroidChannel(Context context, NotificationChannelModel newChannel) {
-
-        newChannel.refreshIconResource(context);
-
-        try {
-            newChannel.validate(context);
-        } catch (AwesomeNotificationException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        // Channels are only available on Android Oreo and beyond.
-        // On older versions, channel models are only used to organize notifications
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
-
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-            NotificationChannel newNotificationChannel = new NotificationChannel(newChannel.getChannelHashKey(context, false), newChannel.channelName, newChannel.importance.ordinal());
-            newNotificationChannel.setDescription(newChannel.channelDescription);
-
-            if (newChannel.playSound) {
-
-                /// TODO NEED TO IMPROVE AUDIO RESOURCES TO BE MORE VERSATILE, SUCH AS BITMAP ONES
-                AudioAttributes audioAttributes = null;
-                audioAttributes = new AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                        .build();
-
-                Uri uri = retrieveSoundResourceUri(context, newChannel.defaultRingtoneType, newChannel.soundSource);
-                newNotificationChannel.setSound(uri, audioAttributes);
-
-            } else {
-                newNotificationChannel.setSound(null, null);
-            }
-
-            newNotificationChannel.enableVibration(BooleanUtils.getValue(newChannel.enableVibration));
-            if (newChannel.vibrationPattern != null && newChannel.vibrationPattern.length > 0) {
-                newNotificationChannel.setVibrationPattern(newChannel.vibrationPattern);
-            }
-
-            boolean enableLights = BooleanUtils.getValue(newChannel.enableLights);
-            newNotificationChannel.enableLights(enableLights);
-
-            if (enableLights && newChannel.ledColor != null) {
-                newNotificationChannel.setLightColor(newChannel.ledColor);
-            }
-
-            newNotificationChannel.setShowBadge(BooleanUtils.getValue(newChannel.channelShowBadge));
-
-            // Removes the old standard before apply the new one
-            String oldAwesomeChannelKey = newChannel.getChannelHashKey(context, true);
-            NotificationChannel oldAwesomeAndroidChannel = notificationManager.getNotificationChannel(oldAwesomeChannelKey);
-            if(oldAwesomeAndroidChannel != null){
-                notificationManager.deleteNotificationChannel(oldAwesomeAndroidChannel.getId());
-            }
-
-            notificationManager.createNotificationChannel(newNotificationChannel);
-        }
-
-    }
-
-    public static boolean isNotificationChannelActive(Context context, String channelId){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
-            if(!StringUtils.isNullOrEmpty(channelId)) {
-                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                NotificationChannel channel = manager.getNotificationChannel(channelId);
-                return channel != null && channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
-            }
-            return false;
         } else {
-            return NotificationManagerCompat.from(context).areNotificationsEnabled();
+            newAndroidNotificationChannel.setSound(null, null);
         }
+
+        newAndroidNotificationChannel.enableVibration(BooleanUtils.getValue(newChannel.enableVibration));
+        if (newChannel.vibrationPattern != null && newChannel.vibrationPattern.length > 0) {
+            newAndroidNotificationChannel.setVibrationPattern(newChannel.vibrationPattern);
+        }
+
+        boolean enableLights = BooleanUtils.getValue(newChannel.enableLights);
+        newAndroidNotificationChannel.enableLights(enableLights);
+
+        if (enableLights && newChannel.ledColor != null) {
+            newAndroidNotificationChannel.setLightColor(newChannel.ledColor);
+        }
+
+        newAndroidNotificationChannel.setShowBadge(BooleanUtils.getValue(newChannel.channelShowBadge));
+
+        notificationManager.createNotificationChannel(newAndroidNotificationChannel);
+    }
+
+    @RequiresApi(api =  Build.VERSION_CODES.O /*Android 8*/)
+    private static void removeAndroidChannel(Context context, String channelKey, String newHashKey) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.deleteNotificationChannel(channelKey);
+
+        if(!StringUtils.isNullOrEmpty(newHashKey))
+            notificationManager.deleteNotificationChannel(newHashKey);
     }
 }

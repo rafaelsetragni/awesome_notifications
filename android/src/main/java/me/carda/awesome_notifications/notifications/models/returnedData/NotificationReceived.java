@@ -21,6 +21,7 @@ public class NotificationReceived extends NotificationContentModel {
         */
         this.id = contentModel.id;
         this.channelKey = contentModel.channelKey;
+        this.groupKey = contentModel.groupKey;
         this.title = contentModel.title;
         this.body = contentModel.body;
         this.summary = contentModel.summary;
@@ -31,6 +32,7 @@ public class NotificationReceived extends NotificationContentModel {
         this.hideLargeIconOnExpand = contentModel.hideLargeIconOnExpand;
         this.autoCancel = contentModel.autoCancel;
         this.color = contentModel.color;
+        this.backgroundColor = contentModel.backgroundColor;
         this.progress = contentModel.progress;
         this.ticker = contentModel.ticker;
         this.locked = contentModel.locked;

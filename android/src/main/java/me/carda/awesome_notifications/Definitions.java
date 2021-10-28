@@ -76,6 +76,12 @@ public interface Definitions {
     String CHANNEL_METHOD_DISMISS_NOTIFICATION = "dismissNotification";
     String CHANNEL_METHOD_CANCEL_NOTIFICATION = "cancelNotification";
     String CHANNEL_METHOD_CANCEL_SCHEDULE = "cancelSchedule";
+    String CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_CHANNEL_KEY = "dismissNotificationsByChannelKey";
+    String CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_CHANNEL_KEY = "cancelNotificationsByChannelKey";
+    String CHANNEL_METHOD_CANCEL_SCHEDULES_BY_CHANNEL_KEY = "cancelSchedulesByChannelKey";
+    String CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_GROUP_KEY = "dismissNotificationsByGroupKey";
+    String CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_GROUP_KEY = "cancelNotificationsByGroupKey";
+    String CHANNEL_METHOD_CANCEL_SCHEDULES_BY_GROUP_KEY = "cancelSchedulesByGroupKey";
     String CHANNEL_METHOD_DISMISS_ALL_NOTIFICATIONS = "dismissAllNotifications";
     String CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = "cancelAllSchedules";
     String CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = "cancelAllNotifications";
@@ -129,19 +135,19 @@ public interface Definitions {
     String NOTIFICATION_ACTION_DATE = "actionDate";
     String NOTIFICATION_DISPLAYED_DATE = "displayedDate";
     String NOTIFICATION_DISMISSED_DATE = "dismissedDate";
-    String NOTIFICATION_MEDIA_ACTION = "mediaAction";
 
     String NOTIFICATION_ID = "id";
     String NOTIFICATION_LAYOUT = "notificationLayout";
     String NOTIFICATION_TITLE = "title";
     String NOTIFICATION_BODY = "body";
+    String NOTIFICATION_TIMESTAMP = "timestamp";
     String NOTIFICATION_SUMMARY = "summary";
     String NOTIFICATION_SHOW_WHEN = "showWhen";
-    String NOTIFICATION_ACTION_KEY = "actionKey";
-    String NOTIFICATION_ACTION_INPUT = "actionInput";
+    String NOTIFICATION_BUTTON_KEY_PRESSED = "buttonKeyPressed";
+    String NOTIFICATION_BUTTON_KEY_INPUT = "buttonKeyInput";
     String NOTIFICATION_JSON = "notificationJson";
 
-    String NOTIFICATION_ACTION_BUTTONS = "actionButtons";
+    String NOTIFICATION_MESSAGES = "messages";
     String NOTIFICATION_BUTTON_KEY = "key";
     String NOTIFICATION_BUTTON_ICON = "icon";
     String NOTIFICATION_BUTTON_LABEL = "label";

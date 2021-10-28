@@ -9,8 +9,8 @@ import Foundation
 
 public class ActionReceived : NotificationReceived {
     
-    var actionKey: String?
-    var actionInput: String?
+    var buttonKeyPressed: String?
+    var buttonKeyInput: String?
 
     var actionLifeCycle: NotificationLifeCycle?
     var dismissedLifeCycle: NotificationLifeCycle?
@@ -26,8 +26,8 @@ public class ActionReceived : NotificationReceived {
     override public func fromMap(arguments: [String : Any?]?) -> AbstractModel {
         _ = super.fromMap(arguments: arguments)
         
-        self.actionKey       = MapUtils<String>.getValueOrDefault(reference: "actionKey", arguments: arguments)
-        self.actionInput     = MapUtils<String>.getValueOrDefault(reference: "actionInput", arguments: arguments)
+        self.buttonKeyPressed       = MapUtils<String>.getValueOrDefault(reference: "buttonKeyPressed", arguments: arguments)
+        self.buttonKeyInput     = MapUtils<String>.getValueOrDefault(reference: "buttonKeyInput", arguments: arguments)
         
         self.actionDate      = MapUtils<String>.getValueOrDefault(reference: "actionDate", arguments: arguments)
         self.dismissedDate   = MapUtils<String>.getValueOrDefault(reference: "dismissedDate", arguments: arguments)
@@ -41,8 +41,8 @@ public class ActionReceived : NotificationReceived {
     override public func toMap() -> [String : Any?] {
         var dataMap:[String : Any?] = super.toMap()
                 
-        if(actionKey != nil) {dataMap["actionKey"] = self.actionKey}
-        if(actionInput != nil) {dataMap["actionInput"] = self.actionInput}
+        if(buttonKeyPressed != nil) {dataMap["buttonKeyPressed"] = self.buttonKeyPressed}
+        if(buttonKeyInput != nil) {dataMap["buttonKeyInput"] = self.buttonKeyInput}
         
         if(actionLifeCycle != nil) {dataMap["actionLifeCycle"] = self.actionLifeCycle?.rawValue}
         if(dismissedLifeCycle != nil) {dataMap["dismissedLifeCycle"] = self.dismissedLifeCycle?.rawValue}

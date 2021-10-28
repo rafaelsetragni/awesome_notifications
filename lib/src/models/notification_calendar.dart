@@ -80,31 +80,34 @@ class NotificationCalendar extends NotificationSchedule {
 
   @override
   NotificationCalendar? fromMap(Map<String, dynamic> dataMap) {
-    this.timeZone =
-        AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_TIMEZONE);
-    this.era = AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_ERA);
-    this.year = AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_YEAR);
-    this.month = AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_MONTH);
-    this.day = AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_DAY);
-    this.hour = AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_HOUR);
-    this.minute =
-        AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_MINUTE);
-    this.second =
-        AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_SECOND);
-    this.millisecond =
-        AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_MILLISECOND);
-    this.weekday =
-        AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_WEEKDAY);
-    this.weekOfMonth =
-        AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_WEEKOFMONTH);
-    this.weekOfYear =
-        AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_WEEKOFYEAR);
-    this.allowWhileIdle =
-        AssertUtils.extractValue(dataMap, NOTIFICATION_ALLOW_WHILE_IDLE) ??
-            false;
-    this.repeats =
-        AssertUtils.extractValue(dataMap, NOTIFICATION_SCHEDULE_REPEATS) ??
-            false;
+    this.era =
+        AssertUtils.extractValue(NOTIFICATION_SCHEDULE_ERA, dataMap, int);
+    this.year =
+        AssertUtils.extractValue(NOTIFICATION_SCHEDULE_YEAR, dataMap, int);
+    this.month = AssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_MONTH, dataMap, int);
+    this.day =
+        AssertUtils.extractValue(NOTIFICATION_SCHEDULE_DAY, dataMap, int);
+    this.hour =
+        AssertUtils.extractValue(NOTIFICATION_SCHEDULE_HOUR, dataMap, int);
+    this.minute = AssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_MINUTE, dataMap, int);
+    this.second = AssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_SECOND, dataMap, int);
+    this.millisecond = AssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_MILLISECOND, dataMap, int);
+    this.weekday = AssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_WEEKDAY, dataMap, int);
+    this.weekOfMonth = AssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_WEEKOFMONTH, dataMap, int);
+    this.weekOfYear = AssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_WEEKOFYEAR, dataMap, int);
+    this.allowWhileIdle = AssertUtils.extractValue(
+            NOTIFICATION_ALLOW_WHILE_IDLE, dataMap, bool) ??
+        false;
+    this.repeats = AssertUtils.extractValue(
+            NOTIFICATION_SCHEDULE_REPEATS, dataMap, bool) ??
+        false;
 
     try {
       validate();

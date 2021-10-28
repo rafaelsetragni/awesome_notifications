@@ -1,3 +1,12 @@
+## [0.6.13]
+* Version numbering changed to translate better the development stage and future releases.
+* Added messaging layout and messaging group layout
+* Added new cancelation methods (dismiss, cancel shedules and cancel all) based on group key or channel key
+* Added android internal group key based on ID, to prevent auto grouping with 4+ notification from same channel when group key was not specified
+* Android channels refactored to keep the original channel key at maximum as possible, maximizing the compatibliti with another plugins.
+* Models refactored to follow the native standards and transformations from map data
+* Added error handling for image assets (iOS)
+* Added video tutorial into README file
 ## [0.0.6+12]
 * Added showInCompactView property for MediaPlayer buttons
 * Added support to multiple subscriptions on created, displayed, action and dissmissed stream

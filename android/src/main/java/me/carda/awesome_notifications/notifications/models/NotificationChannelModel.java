@@ -73,6 +73,10 @@ public class NotificationChannelModel extends Model {
         }
     }
 
+    public boolean isChannelEnabled(){
+        return importance != null && importance != NotificationImportance.None;
+    }
+
     public String getChannelHashKey(Context context, boolean fullHashObject){
 
         refreshIconResource(context);
@@ -87,7 +91,7 @@ public class NotificationChannelModel extends Model {
         channelCopied.channelDescription = "";
 
         String jsonData = channelCopied.toJson();
-        return StringUtils.digestString(jsonData);
+        return channelKey + "_" + StringUtils.digestString(jsonData);
     }
 
     @Override
@@ -246,7 +250,7 @@ public class NotificationChannelModel extends Model {
     @Override
     public void validate(Context context) throws AwesomeNotificationException {
         if(StringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationException("Channel name cannot be null or empty");
+            throw new AwesomeNotificationException("Channel key cannot be null or empty");
 
         if(StringUtils.isNullOrEmpty(channelName))
             throw new AwesomeNotificationException("Channel name cannot be null or empty");

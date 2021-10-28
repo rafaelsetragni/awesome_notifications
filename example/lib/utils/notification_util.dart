@@ -35,19 +35,31 @@ Future<void> externalUrl(String url) async {
   }
 }
 
+int createUniqueID(int maxValue){
+  Random random = new Random();
+  return random.nextInt(maxValue);
+}
+
 /* *********************************************
     BASIC NOTIFICATIONS
 ************************************************ */
 
 Future<void> showBasicNotification(int id) async {
-  await AwesomeNotifications().createNotification(
+  Map<String, dynamic> data = {
+    "actionButtons": [{"key": "OPEN", "label": "Öffnen", "autoCancel": true}],
+    "content": {"id": -1, "channelKey": "basic_channel", "title": "hallo people?",
+      "body": "this is a test", "notificationLayout": "Inbox", "largeIcon": "",
+      "backgroundColor": "#ED5338",
+      "payload": {"articleId": "BNN_1130568"}}};
+  await AwesomeNotifications().createNotificationFromJsonData(data);
+  /*await AwesomeNotifications().createNotification(
     content: NotificationContent(
       id: id,
       channelKey: 'basic_channel',
       title: 'Simple Notification',
       body: 'Simple body',
     )
-  );
+  );*/
 }
 
 Future<void> showEmojiNotification(int id) async {
@@ -855,6 +867,65 @@ void updateNotificationMediaPlayer(int id, MediaModel? mediaNow) {
       ]);
 }
 
+int _messageIncrement = 0;
+Future<void> simulateChatConversation({required String groupKey}) async {
+  _messageIncrement++ % 4 < 2 ?
+    createMessagingNotification(
+      channelKey: 'chats',
+      groupKey: groupKey,
+      chatName: 'Jhonny\'s Group',
+      username: 'Jhonny',
+      largeIcon: 'asset://assets/images/80s-disc.jpg',
+      message: 'Jhonny\'s message $_messageIncrement',
+    ):
+    createMessagingNotification(
+      channelKey: 'chats',
+      groupKey: 'jhonny_group',
+      chatName: 'Michael\'s Group',
+      username: 'Michael',
+      largeIcon: 'asset://assets/images/dj-disc.jpg',
+      message: 'Michael\'s message $_messageIncrement',
+    );
+}
+
+Future<void> createMessagingNotification({
+  required String channelKey,
+  required String groupKey,
+  required String chatName,
+  required String username,
+  required String message,
+  String? largeIcon,
+  bool checkPermission = true
+}) async {
+    await AwesomeNotifications().createNotification(
+        content:
+        NotificationContent(
+            id: createUniqueID(AwesomeNotifications.maxID),
+            groupKey: groupKey,
+            channelKey: channelKey,
+            summary: chatName,
+            title: username,
+            body: message,
+            largeIcon: largeIcon,
+            notificationLayout: NotificationLayout.Messaging
+        ),
+        actionButtons: [
+          NotificationActionButton(
+            key: 'REPLY',
+            label: 'Reply',
+            buttonType: ActionButtonType.InputField,
+            autoCancel: false,
+          ),
+          NotificationActionButton(
+            key: 'READ',
+            label: 'Mark as Read',
+            autoCancel: true,
+            buttonType: ActionButtonType.InputField,
+          )
+        ]
+    );
+}
+
 /* *********************************************
     INBOX NOTIFICATIONS
 ************************************************ */
@@ -1152,6 +1223,30 @@ Future<void> dismissAllNotifications() async {
 
 Future<void> cancelNotification(int id) async {
   await AwesomeNotifications().cancel(id);
+}
+
+Future<void> dismissNotificationsByChannelKey(String channelKey) async {
+  await AwesomeNotifications().dismissNotificationsByChannelKey(channelKey);
+}
+
+Future<void> dismissNotificationsByGroupKey(String groupKey) async {
+  await AwesomeNotifications().dismissNotificationsByGroupKey(groupKey);
+}
+
+Future<void> cancelSchedulesByChannelKey(String channelKey) async {
+  await AwesomeNotifications().cancelSchedulesByChannelKey(channelKey);
+}
+
+Future<void> cancelSchedulesByGroupKey(String groupKey) async {
+  await AwesomeNotifications().cancelSchedulesByGroupKey(groupKey);
+}
+
+Future<void> cancelNotificationsByChannelKey(String channelKey) async {
+  await AwesomeNotifications().cancelNotificationsByChannelKey(channelKey);
+}
+
+Future<void> cancelNotificationsByGroupKey(String groupKey) async {
+  await AwesomeNotifications().cancelNotificationsByGroupKey(groupKey);
 }
 
 Future<void> dismissNotification(int id) async {

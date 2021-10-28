@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
 
+import java.util.List;
 import java.util.Random;
 
 import androidx.annotation.RequiresApi;
@@ -15,6 +16,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import me.carda.awesome_notifications.BroadcastSender;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
+import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLayout;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationSource;
@@ -211,7 +213,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
                     if(pushNotification.groupSummary){
                         PushNotification pushSummary = _buildSummaryGroupNotification(pushNotification);
-                        Notification summaryNotification = notificationBuilder.createNotification(context, pushSummary);
+                        Notification summaryNotification = notificationBuilder.createNotification(context, pushSummary, true);
                         notificationManager.notify(pushSummary.content.id, summaryNotification);
                     }
 
@@ -238,7 +240,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
     public static void dismissNotification(Context context, Integer id) {
         if(context != null){
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O /*Android 8*/) {
                 NotificationManagerCompat notificationManager = getNotificationManager(context);
 
                 dismissOrphanGroupDescription(context, notificationManager, id);
@@ -253,9 +255,27 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
         }
     }
 
+    public static void dismissNotificationsByChannelKey(Context context, String channelKey) {
+        List<Notification> notificationList = NotificationBuilder.getAllAndroidActiveNotificationsByChannelKey(context, channelKey);
+
+        for(Notification notification : notificationList){
+            int id = notification.extras.getInt(Definitions.NOTIFICATION_ID);
+            NotificationSender.dismissNotification(context, id);
+        }
+    }
+
+    public static void dismissNotificationsByGroupKey(Context context, String groupKey) {
+        List<Notification> notificationList = NotificationBuilder.getAllAndroidActiveNotificationsByGroupKey(context, groupKey);
+
+        for(Notification notification : notificationList){
+            int id = notification.extras.getInt(Definitions.NOTIFICATION_ID);
+            NotificationSender.dismissNotification(context, id);
+        }
+    }
+
     public static boolean dismissAllNotifications(Context context) {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O /*Android 8*/) {
             NotificationManagerCompat notificationManager = getNotificationManager(context);
             notificationManager.cancelAll();
         }

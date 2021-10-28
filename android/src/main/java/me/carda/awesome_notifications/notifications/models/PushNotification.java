@@ -13,6 +13,8 @@ import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificati
 public class PushNotification extends Model {
 
     public boolean groupSummary = false;
+    public String remoteHistory;
+
     public NotificationContentModel content;
     public NotificationScheduleModel schedule;
     public List<NotificationButtonModel> actionButtons;

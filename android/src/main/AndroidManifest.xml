@@ -34,9 +34,12 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="me.carda.awesome_notifications.firebase.background_channel"/> -->
 
-        <receiver android:name=".notifications.broadcastReceivers.DismissedNotificationReceiver"/>
-        <receiver android:name=".notifications.broadcastReceivers.ScheduledNotificationReceiver"/>
-        <receiver android:name=".notifications.broadcastReceivers.KeepOnTopActionReceiver"/>
+        <receiver android:name=".notifications.broadcastReceivers.DismissedNotificationReceiver"
+            android:exported="false"/>
+        <receiver android:name=".notifications.broadcastReceivers.ScheduledNotificationReceiver"
+            android:exported="false"/>
+        <receiver android:name=".notifications.broadcastReceivers.KeepOnTopActionReceiver"
+            android:exported="false"/>
         <receiver
             android:name=".notifications.broadcastReceivers.RefreshNotificationBootReceiver"
             android:exported="false">

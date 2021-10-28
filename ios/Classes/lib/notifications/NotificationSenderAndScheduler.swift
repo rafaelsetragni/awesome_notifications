@@ -171,7 +171,7 @@ class NotificationSenderAndScheduler {
                 DisplayedManager.saveScheduledToDisplay(received: receivedNotification!)
             }
             
-            completion!(true, content, nil)
+            completion?(true, content, nil)
         }
         else {
             completion?(false, nil, nil)

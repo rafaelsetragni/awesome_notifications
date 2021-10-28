@@ -18,6 +18,7 @@ import me.carda.awesome_notifications.notifications.broadcastReceivers.Scheduled
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationSource;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
+import me.carda.awesome_notifications.notifications.managers.ChannelManager;
 import me.carda.awesome_notifications.notifications.managers.ScheduleManager;
 import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
@@ -96,6 +97,10 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
             Calendar nextValidDate = null;
 
             if(pushNotification != null){
+
+                if (!ChannelManager.isChannelEnabled(context, pushNotification.content.channelKey)) {
+                    throw new AwesomeNotificationException("Channel '" + pushNotification.content.channelKey + "' do not exist or is disabled");
+                }
 
                 if(pushNotification.content.createdSource == null){
                     pushNotification.content.createdSource = createdSource;
@@ -268,6 +273,16 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
             ScheduleManager.cancelSchedule(context, id);
             ScheduleManager.commitChanges(context);
         }
+    }
+
+    public static void cancelSchedulesByChannelKey(Context context, String channelKey) {
+        ScheduleManager.cancelSchedulesByChannelKey(context, channelKey);
+        ScheduleManager.commitChanges(context);
+    }
+
+    public static void cancelSchedulesByGroupKey(Context context, String groupKey) {
+        ScheduleManager.cancelSchedulesByGroupKey(context, groupKey);
+        ScheduleManager.commitChanges(context);
     }
 
     public static boolean cancelAllSchedules(Context context) {

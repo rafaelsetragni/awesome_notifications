@@ -72,12 +72,13 @@ public class MapUtils {
 
                 // Hexadecimal color conversion
                 if(expectedClassName.equals("long") && value instanceof String){
-                    Pattern pattern = Pattern.compile("0x\\w{2}?(\\w{6})", Pattern.CASE_INSENSITIVE);
+                    Pattern pattern = Pattern.compile("(0x|#)(\\w{2})?(\\w{6})", Pattern.CASE_INSENSITIVE);
                     Matcher matcher = pattern.matcher((String) value);
 
                     // 0x000000 hexadecimal color conversion
                     if(matcher.find()) {
-                        String textValue = matcher.group(0);
+                        String transparency = matcher.group(1);
+                        String textValue = (transparency == null ? "FF" : transparency) + matcher.group(2);
                         Long finalValue = 0L;
                         if(!StringUtils.isNullOrEmpty(textValue)){
                             finalValue += Long.parseLong(textValue, 16);

@@ -116,8 +116,8 @@ enum Definitions {
     static let  NOTIFICATION_SUMMARY = "summary"
     static let  NOTIFICATION_CUSTOM_SOUND = "customSound"
     static let  NOTIFICATION_SHOW_WHEN = "showWen"
-    static let  NOTIFICATION_ACTION_KEY = "actionKey"
-    static let  NOTIFICATION_ACTION_INPUT = "actionInput"
+    static let  NOTIFICATION_BUTTON_KEY_PRESSED = "buttonKeyPressed"
+    static let  NOTIFICATION_BUTTON_KEY_INPUT = "buttonKeyInput"
     static let  NOTIFICATION_JSON = "notificationJson"
 
     static let  NOTIFICATION_ACTION_BUTTONS = "actionButtons"

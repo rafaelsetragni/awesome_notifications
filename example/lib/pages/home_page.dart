@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:awesome_notifications_example/common_widgets/led_light.dart';
@@ -247,6 +248,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void processInputTextReceived(ReceivedAction receivedNotification) {
+    sleep(Duration(seconds: 2)); // To give time to show
     Fluttertoast.showToast(
         msg: 'Msg: ' + receivedNotification.buttonKeyInput,
         backgroundColor: App.mainColor,
@@ -615,10 +617,8 @@ class _HomePageState extends State<HomePage> {
                 'as possible and even let a shortcut menu with this option outside your app, similar to "mark as read" on e-mail. The amount counter '
                 'is automatically managed by this plugin for each individual installation, and incremented for every notification sent to channels '
                 'with "badge" set to TRUE.\n\n'
-                'OBS: Some Android distributions provide badge counter over the app icon, similar to iOS (LG, Samsung, HTC, Sony, etc) .\n\n'
-                'OBS2: Android has 2 badge counters. One global and other for each channel. You can only manipulate the global counter. The channels badge are automatically'
-                'managed by the system and is reset when all notifications are cleared or tapped.\n\n'
-                'OBS3: Badge channels for native Android only works on version 8.0 (API level 26) and beyond.'),
+                'OBS: Some Android distributions provide badge counter over the app icon, similar to iOS (LG, Samsung, HTC, Sony, etc).'
+            ),
             SimpleButton(
                 'Shows a notification with a badge indicator channel activate',
                 onPressed: () => showBadgeNotification(Random().nextInt(100))),
@@ -928,16 +928,16 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () => cancelNotification(10)),
 
             /* ******************************************************************** */
-            /*
+
             TextDivisor(title: 'Messaging Notifications'),
-            SimpleButton('Show Messaging notification\n(Work in progress)',
-                onPressed: null // showMessagingNotification(11)
-                ),
-            SimpleButton('Cancel notification',
+            SimpleButton('Simulate Chat Messaging notification',
+                onPressed: () => simulateChatConversation(groupKey: 'jhonny_group')
+              ),
+            SimpleButton('Cancel Chat notification by group key',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotification(11)),
-            */
+                onPressed: () => cancelNotificationsByGroupKey('jhonny_group')),
+
             /* ******************************************************************** */
 
             TextDivisor(title: 'Grouped Notifications'),
@@ -950,6 +950,30 @@ class _HomePageState extends State<HomePage> {
 
             /* ******************************************************************** */
             TextDivisor(),
+            SimpleButton('Dismiss all notifications by channel key',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () => dismissNotificationsByChannelKey('scheduled')),
+            SimpleButton('Dismiss all notifications by group key',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () => dismissNotificationsByGroupKey('grouped')),
+            SimpleButton('Cancel all schedules by channel key',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () => cancelSchedulesByChannelKey('scheduled')),
+            SimpleButton('Cancel all schedules by group key',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () => cancelSchedulesByGroupKey('grouped')),
+            SimpleButton('Cancel all notifications by channel key',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () => cancelNotificationsByChannelKey('scheduled')),
+            SimpleButton('Cancel all notifications by group key',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () => cancelNotificationsByGroupKey('grouped')),
             SimpleButton('Dismiss all notifications',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,

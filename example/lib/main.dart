@@ -41,6 +41,15 @@ void main() async {
           defaultColor: Color(0xFF9D50DD),
           ledColor: Colors.white),
       NotificationChannel(
+          channelKey: 'chats',
+          channelName: 'Chat groups',
+          channelDescription: 'This is a simple example channel of a chat group',
+          channelShowBadge: true,
+          importance: NotificationImportance.Max,
+          ledColor: Colors.white,
+          defaultColor: Color(0xFF9D50DD),
+      ),
+      NotificationChannel(
           channelKey: 'low_intensity',
           channelName: 'Low intensity notifications',
           channelDescription:

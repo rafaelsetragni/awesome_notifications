@@ -7,5 +7,6 @@ enum NotificationLayout {
   Inbox,
   ProgressBar,
   Messaging,
+  MessagingGroup,
   MediaPlayer
 }
