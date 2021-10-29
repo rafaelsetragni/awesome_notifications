@@ -1,11 +1,11 @@
 ## [0.6.13]
 * Added messaging layout and messaging group layout
 * Added method showNotificationPage to programmatically redirect the user to O.S. notifications permission page
-* Minimun Android requirements increased to SDK 21 (Android 5.0 Lolipop) due to new cancelation methods
-* Added new cancelation methods (dismiss, cancel shedules and cancel all (dismiss and schedules at same time))) based on group key or channel key
-* Property "autoCancel" changed to "autoDismissable", to match the new cancelation methods naming principles
+* Minimum Android requirements increased to SDK 21 (Android 5.0 Lollipop) due to new cancellation methods
+* Added new cancellation methods (dismiss, cancel schedules and cancel all (dismiss and schedules at same time))) based on group key or channel key
+* Property "autoCancel" changed to "autoDismissable", to match the new cancellation methods naming principles
 * Added internal group key based on ID, to prevent Android auto grouping with 4+ notification from same channel when group key was not specified
-* Android channels refactored to keep the original channel key at maximum as possible, maximizing the compatibliti with another plugins.
+* Android channels refactored to keep the original channel key at maximum as possible, maximizing the compatibility with another plugins.
 * Models refactored to follow the native standards and transformations from map data
 * Calendar precision has been deprecated, due devices do not provide or ignore such precision.
 * Added error handling for image assets (iOS)
