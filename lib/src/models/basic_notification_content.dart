@@ -25,11 +25,12 @@ class BaseNotificationContent extends Model {
   Color? backgroundColor;
   NotificationPrivacy? privacy;
 
-  @Deprecated('property name autoCancel is deprecated. Use autoDismissable instead.')
+  @Deprecated(
+      'property name autoCancel is deprecated. Use autoDismissable instead.')
   bool? get autoCancel => autoDismissable;
 
-  BaseNotificationContent({
-      required this.id,
+  BaseNotificationContent(
+      {required this.id,
       required this.channelKey,
       this.groupKey,
       this.title,
@@ -45,32 +46,30 @@ class BaseNotificationContent extends Model {
       this.payload,
       this.customSound,
       bool? autoCancel}) {
-        this.autoDismissable = this.autoDismissable != null ? this.autoDismissable : autoCancel;
+    this.autoDismissable =
+        this.autoDismissable != null ? this.autoDismissable : autoCancel;
   }
 
   @override
   BaseNotificationContent? fromMap(Map<String, dynamic> mapData) {
     this.id = AssertUtils.extractValue(NOTIFICATION_ID, mapData, int);
-    this.channelKey = AssertUtils.extractValue(
-        NOTIFICATION_CHANNEL_KEY, mapData, String);
+    this.channelKey =
+        AssertUtils.extractValue(NOTIFICATION_CHANNEL_KEY, mapData, String);
     this.groupKey =
         AssertUtils.extractValue(NOTIFICATION_GROUP_KEY, mapData, String);
-    this.title =
-        AssertUtils.extractValue(NOTIFICATION_TITLE, mapData, String);
-    this.body =
-        AssertUtils.extractValue(NOTIFICATION_BODY, mapData, String);
+    this.title = AssertUtils.extractValue(NOTIFICATION_TITLE, mapData, String);
+    this.body = AssertUtils.extractValue(NOTIFICATION_BODY, mapData, String);
     this.summary =
         AssertUtils.extractValue(NOTIFICATION_SUMMARY, mapData, String);
     this.showWhen =
         AssertUtils.extractValue(NOTIFICATION_SHOW_WHEN, mapData, bool);
-    this.icon =
-        AssertUtils.extractValue(NOTIFICATION_ICON, mapData, String);
+    this.icon = AssertUtils.extractValue(NOTIFICATION_ICON, mapData, String);
     this.largeIcon =
         AssertUtils.extractValue(NOTIFICATION_LARGE_ICON, mapData, String);
-    this.bigPicture = AssertUtils.extractValue(
-        NOTIFICATION_BIG_PICTURE, mapData, String);
-    this.customSound = AssertUtils.extractValue(
-        NOTIFICATION_CUSTOM_SOUND, mapData, String);
+    this.bigPicture =
+        AssertUtils.extractValue(NOTIFICATION_BIG_PICTURE, mapData, String);
+    this.customSound =
+        AssertUtils.extractValue(NOTIFICATION_CUSTOM_SOUND, mapData, String);
     this.autoDismissable =
         AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSABLE, mapData, bool);
 
@@ -81,8 +80,8 @@ class BaseNotificationContent extends Model {
         AssertUtils.extractValue(NOTIFICATION_COLOR, mapData, int);
     this.color = colorValue == null ? null : Color(colorValue);
 
-    int? backgroundColorValue = AssertUtils.extractValue(
-        NOTIFICATION_BACKGROUND_COLOR, mapData, int);
+    int? backgroundColorValue =
+        AssertUtils.extractValue(NOTIFICATION_BACKGROUND_COLOR, mapData, int);
     this.backgroundColor =
         backgroundColorValue == null ? null : Color(backgroundColorValue);
 

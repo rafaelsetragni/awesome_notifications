@@ -22,18 +22,20 @@ class ReceivedAction extends ReceivedNotification {
         NOTIFICATION_ACTION_LIFECYCLE, dataMap, NotificationLifeCycle.values);
 
     dismissedLifeCycle = AssertUtils.extractEnum(
-        NOTIFICATION_DISMISSED_LIFE_CYCLE, dataMap, NotificationLifeCycle.values);
+        NOTIFICATION_DISMISSED_LIFE_CYCLE,
+        dataMap,
+        NotificationLifeCycle.values);
 
-    actionDate = AssertUtils.extractValue(
-        NOTIFICATION_ACTION_DATE, dataMap, String);
-    dismissedDate = AssertUtils.extractValue(
-        NOTIFICATION_DISMISSED_DATE, dataMap, String);
+    actionDate =
+        AssertUtils.extractValue(NOTIFICATION_ACTION_DATE, dataMap, String);
+    dismissedDate =
+        AssertUtils.extractValue(NOTIFICATION_DISMISSED_DATE, dataMap, String);
 
     buttonKeyPressed = AssertUtils.extractValue(
-      NOTIFICATION_BUTTON_KEY_PRESSED, dataMap, String);
+        NOTIFICATION_BUTTON_KEY_PRESSED, dataMap, String);
 
     buttonKeyInput = AssertUtils.extractValue(
-            NOTIFICATION_BUTTON_KEY_INPUT, dataMap, String);
+        NOTIFICATION_BUTTON_KEY_INPUT, dataMap, String);
 
     return this;
   }

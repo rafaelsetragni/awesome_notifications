@@ -481,6 +481,10 @@ public class AwesomeNotificationsPlugin
                     channelIsNotificationAllowed(call, result);
                     return;
 
+                case Definitions.CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE:
+                    channelShowNotificationPage(call, result);
+                    return;
+
                 case Definitions.CHANNEL_METHOD_REQUEST_NOTIFICATIONS:
                     channelRequestNotification(call, result);
                     return;
@@ -939,50 +943,30 @@ public class AwesomeNotificationsPlugin
     }
 
     private void channelIsNotificationAllowed(MethodCall call, Result result) throws Exception {
-        result.success(isNotificationEnabled(applicationContext));
+        result.success(NotificationBuilder.isNotificationEnabled(applicationContext));
     }
 
     private void channelShowNotificationPage(MethodCall call, @NonNull Result result) throws Exception {
-        showNotificationConfigPage();
-        result.success(null);
-    }
-
-    private void showNotificationConfigPage(){
-
-        final Intent intent = new Intent();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
-            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
-            intent.putExtra(Settings.EXTRA_APP_PACKAGE, applicationContext.getPackageName());
-        } else
-            // Android 5 (LOLLIPOP) is now the minimum required
-            /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)*/{
-            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
-            intent.putExtra("app_package", applicationContext.getPackageName());
-            intent.putExtra("app_uid", applicationContext.getApplicationInfo().uid);
-        } /*else {
-            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            intent.addCategory(Intent.CATEGORY_DEFAULT);
-            intent.setData(Uri.parse("package:" + applicationContext.getPackageName()));
-        }*/
-
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        applicationContext.startActivity(intent);
+        NotificationBuilder.showNotificationConfigPage(applicationContext);
+        saveReturnPageParameters(result);
     }
 
     private void channelRequestNotification(MethodCall call, Result result) throws Exception {
 
-        if (isNotificationEnabled(applicationContext)){
+        if (NotificationBuilder.isNotificationEnabled(applicationContext)){
             result.success(true);
             return;
         }
         else {
-            // Necessary to return the call only after the app goes to foreground on next time
-            pendingAuthorizationReturn = result;
-            hasGoneToAuthorizationPage = true;
-
-            showNotificationConfigPage();
+            saveReturnPageParameters(result);
+            NotificationBuilder.showNotificationConfigPage(applicationContext);
         }
+    }
+
+    private void saveReturnPageParameters(Result result){
+        // Necessary to return the call only after the app goes to foreground on next time
+        pendingAuthorizationReturn = result;
+        hasGoneToAuthorizationPage = true;
     }
 
     private void channelMethodCreateNotification(MethodCall call, Result result) throws Exception {
@@ -994,7 +978,7 @@ public class AwesomeNotificationsPlugin
             throw new AwesomeNotificationException("Invalid parameters");
         }
 
-        if (!isNotificationEnabled(applicationContext)) {
+        if (!NotificationBuilder.isNotificationEnabled(applicationContext)) {
             throw new AwesomeNotificationException("Notifications are disabled");
         }
 
@@ -1015,14 +999,6 @@ public class AwesomeNotificationsPlugin
         }
 
         result.success(true);
-    }
-
-    public static Boolean isNotificationEnabled(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            NotificationManagerCompat manager = NotificationManagerCompat.from(context);
-            return manager.areNotificationsEnabled();
-        }
-        return true;
     }
 
     @SuppressWarnings("unchecked")
@@ -1177,7 +1153,7 @@ public class AwesomeNotificationsPlugin
         if(hasGoneToAuthorizationPage){
             hasGoneToAuthorizationPage = false;
             pendingAuthorizationReturn.success(
-                    isNotificationEnabled(applicationContext));
+                    NotificationBuilder.isNotificationEnabled(applicationContext));
         }
     }
 

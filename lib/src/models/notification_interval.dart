@@ -24,8 +24,8 @@ class NotificationInterval extends NotificationSchedule {
         NOTIFICATION_SCHEDULE_TIMEZONE, dataMap, String);
     this.interval = AssertUtils.extractValue(
         NOTIFICATION_SCHEDULE_INTERVAL, dataMap, String);
-    this.repeats = AssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_REPEATS, dataMap, bool);
+    this.repeats =
+        AssertUtils.extractValue(NOTIFICATION_SCHEDULE_REPEATS, dataMap, bool);
     this.allowWhileIdle = AssertUtils.extractValue(
         NOTIFICATION_SCHEDULE_ALLOW_WHILE_IDLE, dataMap, bool);
 

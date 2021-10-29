@@ -1,30 +1,28 @@
 
 import UIKit
 import Flutter
-//import FirebaseCore
-//import FirebaseMessaging
-import BackgroundTasks
+//import BackgroundTasks
 import UserNotifications
 
-public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNotificationCenterDelegate/*, MessagingDelegate*/ {
+public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNotificationCenterDelegate {
     
     private static var _instance:SwiftAwesomeNotificationsPlugin?
     
     static var debug = false
     static let TAG = "AwesomeNotificationsPlugin"
-    static var registrar:FlutterPluginRegistrar?
     
     static var firebaseEnabled:Bool = false
     static var firebaseDeviceToken:String?
     
-    static var appLifeCycle:NotificationLifeCycle {
+    public static var appLifeCycle:NotificationLifeCycle {
         get { return LifeCycleManager.getLifeCycle(referenceKey: "currentlifeCycle") }
         set (newValue) { LifeCycleManager.setLifeCycle(referenceKey: "currentlifeCycle", lifeCycle: newValue) }
     }
 
+#if !ACTION_EXTENSION
+    static var registrar:FlutterPluginRegistrar?
     var flutterChannel:FlutterMethodChannel?
-    
-    // If somebody already layed claim to UNNotificationCenterDelegate, rather than clobbering
+#endif
     // them, we forward on any delegate calls that we receive.
     private var _originalNotificationCenterDelegate: UNUserNotificationCenterDelegate?
     
@@ -438,6 +436,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         completionHandler([])
     }
     
+#if !ACTION_EXTENSION
     private func receiveAction(jsonData: String?, buttonKeyPressed:String?, userText:String?){
 		
         if(SwiftAwesomeNotificationsPlugin.appLifeCycle == .AppKilled){
@@ -465,6 +464,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             // Fallback on earlier versions
         }
     }
+#endif
     
     @available(iOS 10.0, *)
     public static func processNotificationContent(_ notification: UNNotification) -> UNNotification{
@@ -514,6 +514,13 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             fireBackgroundLostEvents()
         }
         SwiftAwesomeNotificationsPlugin.didIRealyGoneBackground = false
+		
+        /*if(SwiftAwesomeNotificationsPlugin.hasGoneToAuthorizationPage){
+            SwiftAwesomeNotificationsPlugin.hasGoneToAuthorizationPage = false
+            
+            SwiftAwesomeNotificationsPlugin.pendingAuthorizationReturn() = result
+            SwiftAwesomeNotificationsPlugin.lastChannelKeyRequested = channelKey
+        }*/
 		
         if(SwiftAwesomeNotificationsPlugin.debug){
 			Log.d(
@@ -689,16 +696,6 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 
         SwiftAwesomeNotificationsPlugin.registrar = registrar
         
-        /*
-        // TODO(?): If this is ever uncommented, remember delegate forwarding (_originalNotificationCenterDelegate)!
-        if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().delegate = self
-            if(SwiftAwesomeNotificationsPlugin.firebaseEnabled){
-                Messaging.messaging().delegate = self
-            }
-        }
-        */
-        
         if !SwiftUtils.isRunningOnExtension() {
             UIApplication.shared.registerForRemoteNotifications()
         }
@@ -726,6 +723,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         
     }
     
+#if !ACTION_EXTENSION
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
 		
 		do {
@@ -739,18 +737,14 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 				case Definitions.CHANNEL_METHOD_GET_DRAWABLE_DATA:
                     try channelMethodGetDrawableData(call: call, result: result)
 					return;
-				/*
-				case Definitions.CHANNEL_METHOD_IS_FCM_AVAILABLE:
-                    try channelMethodIsFcmAvailable(call: call, result: result)
-					return
-			  
-				case Definitions.CHANNEL_METHOD_GET_FCM_TOKEN:
-                    try channelMethodGetFcmToken(call: call, result: result)
-					return
-				*/
+
 				case Definitions.CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED:
                     try channelMethodIsNotificationAllowed(call: call, result: result)
 					return
+
+                case Definitions.CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE:
+                    try channelMethodShowNotificationConfigPage(call: call, result: result)
+                    return
 
 				case Definitions.CHANNEL_METHOD_REQUEST_NOTIFICATIONS:
                     try channelMethodRequestNotification(call: call, result: result)
@@ -798,6 +792,30 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                     
                 case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATION:
                     try channelMethodCancelNotification(call: call, result: result)
+                    return
+                    
+                case Definitions.CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_CHANNEL_KEY:
+                    try channelMethodDismissNotificationsByChannelKey(call: call, result: result)
+                    return
+                    
+                case Definitions.CHANNEL_METHOD_CANCEL_SCHEDULES_BY_CHANNEL_KEY:
+                    try channelMethodCancelSchedulesByChannelKey(call: call, result: result)
+                    return
+                    
+                case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_CHANNEL_KEY:
+                    try channelMethodCancelNotificationsByChannelKey(call: call, result: result)
+                    return
+
+                case Definitions.CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_GROUP_KEY:
+                    try channelMethodDismissNotificationsByGroupKey(call: call, result: result)
+                    return
+
+                case Definitions.CHANNEL_METHOD_CANCEL_SCHEDULES_BY_GROUP_KEY:
+                    try channelMethodCancelSchedulesByGroupKey(call: call, result: result)
+                    return
+
+                case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_GROUP_KEY:
+                    try channelMethodCancelNotificationsByGroupKey(call: call, result: result)
                     return
                     
                 case Definitions.CHANNEL_METHOD_DISMISS_ALL_NOTIFICATIONS:
@@ -990,31 +1008,13 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 		}
     }
     
-    /*private func channelMethodGetFcmToken(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        
-        result(FlutterError.init(
-            code: "Method deprecated",
-            message: "Method deprecated",
-            details: "channelMethodGetFcmToken"
-        ))
-         
-        let token = requestFirebaseToken()
-        result(token)
-        
-        result(nil)
+    private func isChannelEnabled(channelKey:String) -> Bool {
+        let channel:NotificationChannelModel? = ChannelManager.getChannelByKey(channelKey: channelKey)
+        return
+            channel?.importance == nil ?
+                false :
+                channel?.importance != NotificationImportance.None
     }
-		
-    private func channelMethodIsFcmAvailable(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        result(FlutterError.init(
-            code: "Method deprecated",
-            message: "Method deprecated",
-            details: "channelMethodGetFcmToken"
-        ))
-        
-        let token = requestFirebaseToken()
-        result(!StringUtils.isNullOrEmpty(token))
-         
-    }*/
     
     private func channelMethodIsNotificationAllowed(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         if #available(iOS 10.0, *) {
@@ -1024,6 +1024,12 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         }
         else {
             result(nil)
+        }
+    }
+
+    private func channelMethodShowNotificationConfigPage(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        NotificationBuilder.showNotificationConfigPage { (allowed) in
+            result(allowed)
         }
     }
 
@@ -1128,6 +1134,96 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             // Fallback on earlier versions
         }
         
+        result(false)
+    }
+
+    private func channelMethodDismissNotificationsByChannelKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        guard let channelKey:String = call.arguments as? String else {
+            result(false); return
+        }
+        
+        if #available(iOS 10.0, *) {
+            result(NotificationSenderAndScheduler.dismissNotificationsByChannelKey(channelKey: channelKey))
+            return
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        result(false)
+    }
+
+    private func channelMethodCancelSchedulesByChannelKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        guard let channelKey:String = call.arguments as? String else {
+            result(false); return
+        }
+        
+        if #available(iOS 10.0, *) {
+            result(NotificationSenderAndScheduler.cancelSchedulesByChannelKey(channelKey: channelKey))
+            return
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        result(false)
+    }
+
+    private func channelMethodCancelNotificationsByChannelKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        guard let channelKey:String = call.arguments as? String else {
+            result(false); return
+        }
+        
+        if #available(iOS 10.0, *) {
+            result(NotificationSenderAndScheduler.cancelNotificationsByChannelKey(channelKey: channelKey))
+            return
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        result(false)
+    }
+
+    private func channelMethodDismissNotificationsByGroupKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        guard let groupKey:String = call.arguments as? String else {
+            result(false); return
+        }
+
+        if #available(iOS 10.0, *) {
+            result(NotificationSenderAndScheduler.dismissNotificationsByGroupKey(groupKey: groupKey))
+            return
+        } else {
+            // Fallback on earlier versions
+        }
+
+        result(false)
+    }
+
+    private func channelMethodCancelSchedulesByGroupKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        guard let groupKey:String = call.arguments as? String else {
+            result(false); return
+        }
+
+        if #available(iOS 10.0, *) {
+            result(NotificationSenderAndScheduler.cancelSchedulesByGroupKey(groupKey: groupKey))
+            return
+        } else {
+            // Fallback on earlier versions
+        }
+
+        result(false)
+    }
+
+    private func channelMethodCancelNotificationsByGroupKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        guard let groupKey:String = call.arguments as? String else {
+            result(false); return
+        }
+
+        if #available(iOS 10.0, *) {
+            result(NotificationSenderAndScheduler.cancelNotificationsByGroupKey(groupKey: groupKey))
+            return
+        } else {
+            // Fallback on earlier versions
+        }
+
         result(false)
     }
     

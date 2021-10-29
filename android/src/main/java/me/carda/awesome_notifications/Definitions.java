@@ -63,6 +63,7 @@ public interface Definitions {
     String CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL = "setNotificationChannel";
     String CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL = "removeNotificationChannel";
 
+    String CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = "showNotificationPage";
     String CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed";
     String CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications";
 

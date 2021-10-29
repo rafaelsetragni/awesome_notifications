@@ -71,11 +71,18 @@ enum Definitions {
 
     static let  CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed"
     static let  CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications"
+
     static let  CHANNEL_METHOD_DISMISS_NOTIFICATION = "dismissNotification"
-    static let  CHANNEL_METHOD_CANCEL_NOTIFICATION = "cancelNotification"
     static let  CHANNEL_METHOD_CANCEL_SCHEDULE = "cancelSchedule"
-    static let  CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = "cancelAllSchedules"
+    static let  CHANNEL_METHOD_CANCEL_NOTIFICATION = "cancelNotification"
+    static let  CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_CHANNEL_KEY = "dismissNotificationsByChannelKey"
+    static let  CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_CHANNEL_KEY = "cancelNotificationsByChannelKey"
+    static let  CHANNEL_METHOD_CANCEL_SCHEDULES_BY_CHANNEL_KEY = "cancelSchedulesByChannelKey"
+    static let  CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_GROUP_KEY = "dismissNotificationsByGroupKey"
+    static let  CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_GROUP_KEY = "cancelNotificationsByGroupKey"
+    static let  CHANNEL_METHOD_CANCEL_SCHEDULES_BY_GROUP_KEY = "cancelSchedulesByGroupKey"
     static let  CHANNEL_METHOD_DISMISS_ALL_NOTIFICATIONS = "dismissAllNotifications"
+    static let  CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = "cancelAllSchedules"
     static let  CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = "cancelAllNotifications"
 
     static let  CHANNEL_METHOD_NOTIFICATION_CREATED = "notificationCreated"

@@ -144,88 +144,34 @@ class _HomePageState extends State<HomePage> {
       Fluttertoast.showToast(msg: '$createdSourceText notification displayed');
     });
 
-    AwesomeNotifications().dismissedStream.listen((receivedNotification) {
+    AwesomeNotifications().dismissedStream.listen((receivedAction) {
       String? dismissedSourceText = AssertUtils.toSimpleEnumString(
-          receivedNotification.dismissedLifeCycle);
+          receivedAction.dismissedLifeCycle);
       Fluttertoast.showToast(
           msg: 'Notification dismissed on $dismissedSourceText');
     });
 
-    AwesomeNotifications().actionStream.listen((receivedNotification) {
-      if (!StringUtils.isNullOrEmpty(receivedNotification.buttonKeyInput)) {
-        processInputTextReceived(receivedNotification);
+    AwesomeNotifications().actionStream.listen((receivedAction) {
+      if (!StringUtils.isNullOrEmpty(receivedAction.buttonKeyInput)) {
+        processInputTextReceived(receivedAction);
       } else if (!StringUtils.isNullOrEmpty(
-              receivedNotification.buttonKeyPressed) &&
-          receivedNotification.buttonKeyPressed.startsWith('MEDIA_')) {
-        processMediaControls(receivedNotification);
+              receivedAction.buttonKeyPressed) &&
+          receivedAction.buttonKeyPressed.startsWith('MEDIA_')) {
+        processMediaControls(receivedAction);
       } else {
-        processDefaultActionReceived(receivedNotification);
+        processDefaultActionReceived(receivedAction);
       }
     });
 
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) async {
       setState(() {
         notificationsAllowed = isAllowed;
       });
 
       if (!isAllowed) {
-        requestUserPermission(isAllowed);
+        isAllowed = await requestPermissionToSendNotifications(context);
       }
     });
-  }
-
-  void requestUserPermission(bool isAllowed) async {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        backgroundColor: Color(0xfffbfbfb),
-        title: Text('Get Notified!',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'assets/images/animated-bell.gif',
-              height: 200,
-              fit: BoxFit.fitWidth,
-            ),
-            Text(
-              'Allow Awesome Notifications to send you beautiful notifications!',
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            style: TextButton.styleFrom(backgroundColor: Colors.grey),
-            onPressed: () async {
-              Navigator.of(context).pop();
-              notificationsAllowed =
-                  await AwesomeNotifications().isNotificationAllowed();
-              setState(() {
-                notificationsAllowed = notificationsAllowed;
-              });
-            },
-            child: Text('Later', style: TextStyle(color: Colors.white)),
-          ),
-          TextButton(
-            style: TextButton.styleFrom(backgroundColor: Colors.deepPurple),
-            onPressed: () async {
-              Navigator.of(context).pop();
-              await AwesomeNotifications()
-                  .requestPermissionToSendNotifications();
-              notificationsAllowed =
-                  await AwesomeNotifications().isNotificationAllowed();
-              setState(() {
-                notificationsAllowed = notificationsAllowed;
-              });
-            },
-            child: Text('Allow', style: TextStyle(color: Colors.white)),
-          )
-        ],
-      ),
-    );
   }
 
   void processDefaultActionReceived(ReceivedAction receivedNotification) {
@@ -247,10 +193,16 @@ class _HomePageState extends State<HomePage> {
         arguments: receivedNotification);
   }
 
-  void processInputTextReceived(ReceivedAction receivedNotification) {
+  void processInputTextReceived(ReceivedAction receivedAction) {
+    if(receivedAction.channelKey == 'chats')
+      simulateSendResponseChatConversation(
+          msg: receivedAction.buttonKeyInput,
+          groupKey: 'jhonny_group'
+      );
+
     sleep(Duration(seconds: 2)); // To give time to show
     Fluttertoast.showToast(
-        msg: 'Msg: ' + receivedNotification.buttonKeyInput,
+        msg: 'Msg: ' + receivedAction.buttonKeyInput,
         backgroundColor: App.mainColor,
         textColor: Colors.white);
   }
@@ -426,7 +378,21 @@ class _HomePageState extends State<HomePage> {
                 '* Android: notifications are enabled by default and are considered not dangerous.\n'
                 '* iOS: notifications are not enabled by default and you must explicitly request it to the user.'),
             SimpleButton('Request permission',
-                onPressed: () => requestUserPermission(notificationsAllowed)),
+                onPressed: () => requestPermissionToSendNotifications(context).then(
+                    (isAllowed) =>
+                      setState(() {
+                        notificationsAllowed = isAllowed;
+                      })
+                )
+            ),
+            SimpleButton('Open notifications permission page',
+                onPressed: () => redirectToPermissionsPage().then(
+                    (isAllowed) =>
+                      setState(() {
+                        notificationsAllowed = isAllowed;
+                      })
+                )
+            ),
 
             /* ******************************************************************** */
 
