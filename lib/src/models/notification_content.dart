@@ -84,8 +84,7 @@ class NotificationContent extends BaseNotificationContent {
         AssertUtils.extractValue(NOTIFICATION_PROGRESS, mapData, int);
     this.ticker =
         AssertUtils.extractValue(NOTIFICATION_TICKER, mapData, String);
-    this.locked =
-        AssertUtils.extractValue(NOTIFICATION_LOCKED, mapData, bool);
+    this.locked = AssertUtils.extractValue(NOTIFICATION_LOCKED, mapData, bool);
 
     this.notificationLayout = AssertUtils.extractEnum(
         NOTIFICATION_LAYOUT, mapData, NotificationLayout.values);
@@ -100,16 +99,16 @@ class NotificationContent extends BaseNotificationContent {
     this.createdLifeCycle = AssertUtils.extractEnum(
         NOTIFICATION_CREATED_LIFECYCLE, mapData, NotificationLifeCycle.values);
 
-    this.createdDate = AssertUtils.extractValue(
-        NOTIFICATION_CREATED_DATE, mapData, String);
+    this.createdDate =
+        AssertUtils.extractValue(NOTIFICATION_CREATED_DATE, mapData, String);
 
     this.displayOnForeground = AssertUtils.extractValue(
         NOTIFICATION_DISPLAY_ON_FOREGROUND, mapData, bool);
     this.displayOnBackground = AssertUtils.extractValue(
         NOTIFICATION_DISPLAY_ON_BACKGROUND, mapData, bool);
 
-    this.displayedDate = AssertUtils.extractValue(
-        NOTIFICATION_DISPLAYED_DATE, mapData, String);
+    this.displayedDate =
+        AssertUtils.extractValue(NOTIFICATION_DISPLAYED_DATE, mapData, String);
 
     try {
       validate();

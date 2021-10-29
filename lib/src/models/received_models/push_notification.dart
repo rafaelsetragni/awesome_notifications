@@ -49,8 +49,9 @@ class PushNotification extends Model {
           Map<String, dynamic> actionButtonData =
               Map<String, dynamic>.from(buttonData);
 
-          NotificationActionButton button = NotificationActionButton(label: null, key: null)
-              .fromMap(actionButtonData) as NotificationActionButton;
+          NotificationActionButton button =
+              NotificationActionButton(label: null, key: null)
+                  .fromMap(actionButtonData) as NotificationActionButton;
           button.validate();
 
           actionButtons!.add(button);

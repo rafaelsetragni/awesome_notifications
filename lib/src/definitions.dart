@@ -44,6 +44,7 @@ const CHANNEL_FLUTTER_PLUGIN = 'awesome_notifications';
 const CHANNEL_METHOD_INITIALIZE = 'initialize';
 const CHANNEL_METHOD_GET_DRAWABLE_DATA = 'getDrawableData';
 
+const CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = 'showNotificationPage';
 const CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = 'isNotificationAllowed';
 const CHANNEL_METHOD_REQUEST_NOTIFICATIONS = 'requestNotifications';
 
@@ -74,12 +75,18 @@ const CHANNEL_METHOD_RESET_BADGE = 'resetBadge';
 const CHANNEL_METHOD_DISMISS_NOTIFICATION = 'dismissNotification';
 const CHANNEL_METHOD_CANCEL_NOTIFICATION = 'cancelNotification';
 const CHANNEL_METHOD_CANCEL_SCHEDULE = 'cancelSchedule';
-const CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_CHANNEL_KEY = 'dismissNotificationsByChannelKey';
-const CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_CHANNEL_KEY = 'cancelNotificationsByChannelKey';
-const CHANNEL_METHOD_CANCEL_SCHEDULES_BY_CHANNEL_KEY = 'cancelSchedulesByChannelKey';
-const CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_GROUP_KEY = 'dismissNotificationsByGroupKey';
-const CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_GROUP_KEY = 'cancelNotificationsByGroupKey';
-const CHANNEL_METHOD_CANCEL_SCHEDULES_BY_GROUP_KEY = 'cancelSchedulesByGroupKey';
+const CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_CHANNEL_KEY =
+    'dismissNotificationsByChannelKey';
+const CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_CHANNEL_KEY =
+    'cancelNotificationsByChannelKey';
+const CHANNEL_METHOD_CANCEL_SCHEDULES_BY_CHANNEL_KEY =
+    'cancelSchedulesByChannelKey';
+const CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_GROUP_KEY =
+    'dismissNotificationsByGroupKey';
+const CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_GROUP_KEY =
+    'cancelNotificationsByGroupKey';
+const CHANNEL_METHOD_CANCEL_SCHEDULES_BY_GROUP_KEY =
+    'cancelSchedulesByGroupKey';
 const CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = 'cancelAllSchedules';
 const CHANNEL_METHOD_DISMISS_ALL_NOTIFICATIONS = 'dismissAllNotifications';
 const CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = 'cancelAllNotifications';
@@ -234,7 +241,6 @@ class Definitions {
     NOTIFICATION_BUTTON_TYPE: ActionButtonType.Default,
     NOTIFICATION_PRIVACY: NotificationPrivacy.Private,
     NOTIFICATION_DEFAULT_RINGTONE_TYPE: DefaultRingtoneType.Notification,
-
     NOTIFICATION_CHANNEL_DESCRIPTION: 'Notifications',
     NOTIFICATION_CHANNEL_NAME: 'Notifications',
     NOTIFICATION_SHOW_WHEN: true,
@@ -255,7 +261,6 @@ class Definitions {
     NOTIFICATION_ONLY_ALERT_ONCE: false,
     NOTIFICATION_SHOW_IN_COMPACT_VIEW: true,
     NOTIFICATION_SCHEDULE_REPEATS: false,
-
     NOTIFICATION_BUTTON_KEY_PRESSED: '',
     NOTIFICATION_BUTTON_KEY_INPUT: ''
   };

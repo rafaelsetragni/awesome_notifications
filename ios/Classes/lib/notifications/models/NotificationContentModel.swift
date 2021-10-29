@@ -11,6 +11,7 @@ public class NotificationContentModel : AbstractModel {
 
     var id: Int?
     var channelKey: String?
+    var groupKey: String?
     var title: String?
     var body: String?
     var summary: String?
@@ -49,6 +50,7 @@ public class NotificationContentModel : AbstractModel {
                 
         self.id             = MapUtils<Int>.getValueOrDefault(reference: "id", arguments: arguments)
         self.channelKey     = MapUtils<String>.getValueOrDefault(reference: "channelKey", arguments: arguments)
+        self.groupKey       = MapUtils<String>.getValueOrDefault(reference: "groupKey", arguments: arguments)
         self.title          = MapUtils<String>.getValueOrDefault(reference: "title", arguments: arguments)
         self.body           = MapUtils<String>.getValueOrDefault(reference: "body", arguments: arguments)
         self.summary        = MapUtils<String>.getValueOrDefault(reference: "summary", arguments: arguments)
@@ -116,6 +118,7 @@ public class NotificationContentModel : AbstractModel {
         
         if(self.id != nil) {mapData["id"] = self.id}
         if(self.channelKey != nil) {mapData["channelKey"] = self.channelKey}
+        if(self.groupKey != nil) {mapData["groupKey"] = self.groupKey}
         if(self.title != nil){ mapData["title"] = self.title }
         if(self.body != nil){ mapData["body"] = self.body }
         if(self.summary != nil){ mapData["summary"] = self.summary }

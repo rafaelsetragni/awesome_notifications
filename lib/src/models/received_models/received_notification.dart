@@ -25,11 +25,13 @@ class ReceivedNotification extends BaseNotificationContent {
     createdLifeCycle = AssertUtils.extractEnum(
         NOTIFICATION_CREATED_LIFECYCLE, dataMap, NotificationLifeCycle.values);
     displayedLifeCycle = AssertUtils.extractEnum(
-        NOTIFICATION_DISPLAYED_LIFECYCLE, dataMap, NotificationLifeCycle.values);
-    displayedDate = AssertUtils.extractValue(
-        NOTIFICATION_DISPLAYED_DATE, dataMap, String);
-    createdDate = AssertUtils.extractValue(
-        NOTIFICATION_CREATED_DATE, dataMap, String);
+        NOTIFICATION_DISPLAYED_LIFECYCLE,
+        dataMap,
+        NotificationLifeCycle.values);
+    displayedDate =
+        AssertUtils.extractValue(NOTIFICATION_DISPLAYED_DATE, dataMap, String);
+    createdDate =
+        AssertUtils.extractValue(NOTIFICATION_CREATED_DATE, dataMap, String);
 
     return this;
   }

@@ -213,6 +213,60 @@ class NotificationSenderAndScheduler {
         return true
     }
     
+    public static func dismissNotificationsByChannelKey(channelKey: String) -> Bool {
+        NotificationBuilder.dismissNotificationsByChannelKey(channelKey: channelKey)
+                
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(NotificationSenderAndScheduler.TAG, "Notifications from channel "+channelKey+" dismissed")
+        }
+        return true
+    }
+    
+    public static func cancelSchedulesByChannelKey(channelKey: String) -> Bool {
+        NotificationBuilder.cancelSchedulesByChannelKey(channelKey: channelKey)
+                
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(NotificationSenderAndScheduler.TAG, "Scheduled notifications from channel "+channelKey+" canceled")
+        }
+        return true
+    }
+    
+    public static func cancelNotificationsByChannelKey(channelKey: String) -> Bool {
+        NotificationBuilder.cancelNotificationsByChannelKey(channelKey: channelKey)
+                
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(NotificationSenderAndScheduler.TAG, "Notifications and schedules from channel "+channelKey+" canceled")
+        }
+        return true
+    }
+    
+    public static func dismissNotificationsByGroupKey(groupKey: String) -> Bool {
+        NotificationBuilder.dismissNotificationsByGroupKey(groupKey: groupKey)
+                
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(NotificationSenderAndScheduler.TAG, "Notifications from group "+groupKey+" dismissed")
+        }
+        return true
+    }
+    
+    public static func cancelSchedulesByGroupKey(groupKey: String) -> Bool {
+        NotificationBuilder.cancelSchedulesByGroupKey(groupKey: groupKey)
+                
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(NotificationSenderAndScheduler.TAG, "Scheduled notifications from group "+groupKey+" canceled")
+        }
+        return true
+    }
+    
+    public static func cancelNotificationsByGroupKey(groupKey: String) -> Bool {
+        NotificationBuilder.cancelNotificationsByGroupKey(groupKey: groupKey)
+                
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(NotificationSenderAndScheduler.TAG, "Notifications and schedules from group "+groupKey+" canceled")
+        }
+        return true
+    }
+    
     public static func dismissAllNotifications() -> Bool {
         NotificationBuilder.dismissAllNotifications()
         

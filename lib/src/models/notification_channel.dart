@@ -156,24 +156,24 @@ class NotificationChannel extends Model {
   }
 
   NotificationChannel fromMap(Map<String, dynamic> dataMap) {
-
     this.channelKey =
         AssertUtils.extractValue(NOTIFICATION_CHANNEL_KEY, dataMap, String);
     this.channelName =
         AssertUtils.extractValue(NOTIFICATION_CHANNEL_NAME, dataMap, String);
-    this.channelDescription =
-        AssertUtils.extractValue(NOTIFICATION_CHANNEL_DESCRIPTION, dataMap, String);
-    this.channelShowBadge =
-        AssertUtils.extractValue(NOTIFICATION_CHANNEL_SHOW_BADGE, dataMap, bool);
+    this.channelDescription = AssertUtils.extractValue(
+        NOTIFICATION_CHANNEL_DESCRIPTION, dataMap, String);
+    this.channelShowBadge = AssertUtils.extractValue(
+        NOTIFICATION_CHANNEL_SHOW_BADGE, dataMap, bool);
 
-    this.playSound = AssertUtils.extractValue(NOTIFICATION_PLAY_SOUND, dataMap, bool);
+    this.playSound =
+        AssertUtils.extractValue(NOTIFICATION_PLAY_SOUND, dataMap, bool);
     this.soundSource =
         AssertUtils.extractValue(NOTIFICATION_SOUND_SOURCE, dataMap, String);
 
     this.enableVibration =
         AssertUtils.extractValue(NOTIFICATION_ENABLE_VIBRATION, dataMap, bool);
-    this.vibrationPattern =
-        AssertUtils.extractValue(NOTIFICATION_VIBRATION_PATTERN, dataMap, Int64List);
+    this.vibrationPattern = AssertUtils.extractValue(
+        NOTIFICATION_VIBRATION_PATTERN, dataMap, Int64List);
     this.enableLights =
         AssertUtils.extractValue(NOTIFICATION_ENABLE_LIGHTS, dataMap, bool);
 
@@ -182,9 +182,12 @@ class NotificationChannel extends Model {
     this.defaultPrivacy = AssertUtils.extractEnum(
         NOTIFICATION_DEFAULT_PRIVACY, dataMap, NotificationPrivacy.values);
     this.defaultRingtoneType = AssertUtils.extractEnum(
-        NOTIFICATION_DEFAULT_RINGTONE_TYPE, dataMap, DefaultRingtoneType.values);
+        NOTIFICATION_DEFAULT_RINGTONE_TYPE,
+        dataMap,
+        DefaultRingtoneType.values);
 
-    this.groupKey = AssertUtils.extractValue(NOTIFICATION_GROUP_KEY, dataMap, String);
+    this.groupKey =
+        AssertUtils.extractValue(NOTIFICATION_GROUP_KEY, dataMap, String);
     this.groupSort = AssertUtils.extractEnum(
         NOTIFICATION_GROUP_SORT, dataMap, GroupSort.values);
     this.groupAlertBehavior = AssertUtils.extractEnum(
@@ -196,15 +199,17 @@ class NotificationChannel extends Model {
         AssertUtils.extractValue(NOTIFICATION_ONLY_ALERT_ONCE, dataMap, bool);
 
     int defaultColorValue =
-    AssertUtils.extractValue(NOTIFICATION_DEFAULT_COLOR, dataMap, int);
+        AssertUtils.extractValue(NOTIFICATION_DEFAULT_COLOR, dataMap, int);
     this.defaultColor = defaultColor == null ? null : Color(defaultColorValue);
 
     int ledColorValue =
-    AssertUtils.extractValue(NOTIFICATION_LED_COLOR, dataMap, int);
+        AssertUtils.extractValue(NOTIFICATION_LED_COLOR, dataMap, int);
     this.ledColor = defaultColor == null ? null : Color(ledColorValue);
 
-    this.ledOnMs = AssertUtils.extractValue(NOTIFICATION_LED_ON_MS, dataMap, int);
-    this.ledOffMs = AssertUtils.extractValue(NOTIFICATION_LED_OFF_MS, dataMap, int);
+    this.ledOnMs =
+        AssertUtils.extractValue(NOTIFICATION_LED_ON_MS, dataMap, int);
+    this.ledOffMs =
+        AssertUtils.extractValue(NOTIFICATION_LED_OFF_MS, dataMap, int);
 
     return this;
   }

@@ -25,8 +25,8 @@ class NotificationActionButton extends Model {
   bool? showInCompactView;
   ActionButtonType? buttonType;
 
-  NotificationActionButton({
-      required this.key,
+  NotificationActionButton(
+      {required this.key,
       required this.label,
       this.icon,
       this.enabled,
@@ -38,10 +38,9 @@ class NotificationActionButton extends Model {
   NotificationActionButton? fromMap(Map<String, dynamic> dataMap) {
     key = AssertUtils.extractValue(NOTIFICATION_KEY, dataMap, String);
     icon = AssertUtils.extractValue(NOTIFICATION_ICON, dataMap, String);
-    label = AssertUtils.extractValue(
-        NOTIFICATION_BUTTON_LABEL, dataMap, String);
-    enabled =
-        AssertUtils.extractValue(NOTIFICATION_ENABLED, dataMap, bool);
+    label =
+        AssertUtils.extractValue(NOTIFICATION_BUTTON_LABEL, dataMap, String);
+    enabled = AssertUtils.extractValue(NOTIFICATION_ENABLED, dataMap, bool);
     autoDismissable =
         AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSABLE, dataMap, bool);
     showInCompactView = AssertUtils.extractValue(

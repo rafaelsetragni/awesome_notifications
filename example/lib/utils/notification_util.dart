@@ -41,25 +41,76 @@ int createUniqueID(int maxValue){
 }
 
 /* *********************************************
+    PERMISSIONS
+************************************************ */
+
+Future<bool> redirectToPermissionsPage() async {
+  await AwesomeNotifications().showNotificationConfigPage();
+  return await AwesomeNotifications().isNotificationAllowed();
+}
+
+Future<bool> requestPermissionToSendNotifications(BuildContext context) async {
+  bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+  if(!isAllowed){
+    await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: Color(0xfffbfbfb),
+          title: Text('Get Notified!',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/animated-bell.gif',
+                height: 200,
+                fit: BoxFit.fitWidth,
+              ),
+              Text(
+                'Allow Awesome Notifications to send you beautiful notifications!',
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+                onPressed: (){ Navigator.pop(context); },
+                child: Text(
+                  'Later',
+                  style: TextStyle(color: Colors.grey, fontSize: 18),
+                )
+            ),
+            TextButton(
+              onPressed: () async {
+                isAllowed = await AwesomeNotifications().requestPermissionToSendNotifications();
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Allow',
+                style: TextStyle(color: Colors.deepPurple, fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        )
+    );
+  }
+  return isAllowed;
+}
+
+/* *********************************************
     BASIC NOTIFICATIONS
 ************************************************ */
 
 Future<void> showBasicNotification(int id) async {
-  Map<String, dynamic> data = {
-    "actionButtons": [{"key": "OPEN", "label": "Öffnen", "autoDismissable": true}],
-    "content": {"id": -1, "channelKey": "basic_channel", "title": "hallo people?",
-      "body": "this is a test", "notificationLayout": "Inbox", "largeIcon": "",
-      "backgroundColor": "#ED5338",
-      "payload": {"articleId": "BNN_1130568"}}};
-  await AwesomeNotifications().createNotificationFromJsonData(data);
-  /*await AwesomeNotifications().createNotification(
+  await AwesomeNotifications().createNotification(
     content: NotificationContent(
       id: id,
       channelKey: 'basic_channel',
       title: 'Simple Notification',
       body: 'Simple body',
     )
-  );*/
+  );
 }
 
 Future<void> showEmojiNotification(int id) async {
@@ -886,6 +937,17 @@ Future<void> simulateChatConversation({required String groupKey}) async {
       largeIcon: 'asset://assets/images/dj-disc.jpg',
       message: 'Michael\'s message $_messageIncrement',
     );
+}
+
+Future<void> simulateSendResponseChatConversation({required String msg, required String groupKey}) async {
+  createMessagingNotification(
+    channelKey: 'chats',
+    groupKey: groupKey,
+    chatName: 'Jhonny\'s Group',
+    username: 'you',
+    largeIcon: 'asset://assets/images/rock-disc.jpg',
+    message: msg,
+  );
 }
 
 Future<void> createMessagingNotification({

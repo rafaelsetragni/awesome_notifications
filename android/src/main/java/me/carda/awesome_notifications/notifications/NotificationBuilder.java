@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 
 
@@ -62,6 +63,37 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 public class NotificationBuilder {
 
     public static String TAG = "NotificationBuilder";
+
+    public static Boolean isNotificationEnabled(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            NotificationManagerCompat manager = NotificationManagerCompat.from(context);
+            return manager.areNotificationsEnabled();
+        }
+        return true;
+    }
+
+    public static void showNotificationConfigPage(Context context){
+
+        final Intent intent = new Intent();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
+            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
+        } else
+            // Android 5 (LOLLIPOP) is now the minimum required
+            /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)*/{
+            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+            intent.putExtra("app_package", context.getPackageName());
+            intent.putExtra("app_uid", context.getApplicationInfo().uid);
+        } /*else {
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.setData(Uri.parse("package:" + applicationContext.getPackageName()));
+        }*/
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
 
     public Notification createNotification(Context context, PushNotification pushNotification) throws AwesomeNotificationException {
         return createNotification(context, pushNotification, false);

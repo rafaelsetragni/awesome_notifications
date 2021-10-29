@@ -13,6 +13,52 @@ public class NotificationBuilder {
     private static let TAG = "NotificationBuilder"
     
     private static var badgeAmount:NSNumber = 0
+
+    public static func showNotificationConfigPage(completion: @escaping (Bool) -> ()){
+
+        guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+            return
+        }
+
+        if UIApplication.shared.canOpenURL(settingsUrl) {
+            UIApplication.shared.open(settingsUrl, completionHandler: { (isAllowed) in
+                completion(isAllowed)
+            })
+        } else {
+            isNotificationAllowed(completion)
+        }
+    }
+    
+    public static func isNotificationAllowed(completion: @escaping (Bool) -> ()) {
+             
+        // Extension targets are always authorized
+        if SwiftUtils.isRunningOnExtension() {
+            completion(true)
+            return
+        }
+        
+        let current = UNUserNotificationCenter.current()
+        current.getNotificationSettings(completionHandler: { (settings) in
+            
+            if settings.authorizationStatus == .notDetermined {
+                // The user hasnt decided yet if he authorizes or not
+                completion(false)
+                return
+                
+            } else if settings.authorizationStatus == .denied {
+                // Notification permission was previously denied, go to settings & privacy to re-enable
+                completion(false)
+                return
+                
+            } else if settings.authorizationStatus == .authorized {
+                // Notification permission was already granted
+                completion(true)
+                return
+            }
+        })
+        
+        //return UIApplication.shared.isRegisteredForRemoteNotifications
+    }
         
     public static func incrementBadge() -> NSNumber {
         let count:Int = NotificationBuilder.getBadge().intValue + 1
@@ -90,9 +136,10 @@ public class NotificationBuilder {
                 }
                 else {
                     DispatchQueue.main.async {
-                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                        showNotificationConfigPage { (isAllowed) in
+                            completion(isAllowed)
+                        }
                     }
-                    completion(isAllowed)
                 }
             }
             
@@ -100,37 +147,6 @@ public class NotificationBuilder {
             // For Extensions, the notification is always enabled
             completion(true)
         }
-    }
-    
-    public static func isNotificationAllowed(completion: @escaping (Bool) -> ()) {
-             
-        // Extension targets are always authorized
-        if SwiftUtils.isRunningOnExtension() {
-            completion(true)
-            return
-        }
-        
-        let current = UNUserNotificationCenter.current()
-        current.getNotificationSettings(completionHandler: { (settings) in
-            
-            if settings.authorizationStatus == .notDetermined {
-                // The user hasnt decided yet if he authorizes or not
-                completion(false)
-                return
-                
-            } else if settings.authorizationStatus == .denied {
-                // Notification permission was previously denied, go to settings & privacy to re-enable
-                completion(false)
-                return
-                
-            } else if settings.authorizationStatus == .authorized {
-                // Notification permission was already granted
-                completion(true)
-                return
-            }
-        })
-        
-        //return UIApplication.shared.isRegisteredForRemoteNotifications
     }
 
     public static func jsonDataToPushNotification(jsonData:[String : Any?]?) -> PushNotification? {
@@ -165,6 +181,8 @@ public class NotificationBuilder {
             case UNNotificationDismissActionIdentifier.description:
                 actionReceived.buttonKeyPressed = nil
                 actionReceived.buttonKeyInput = nil
+                actionReceived.actionLifeCycle = nil
+                actionReceived.actionDate = nil
                 actionReceived.dismissedLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
                 actionReceived.dismissedDate = DateUtils.getUTCTextDate()
                 
@@ -174,6 +192,15 @@ public class NotificationBuilder {
                 actionReceived.buttonKeyInput = userText
                 actionReceived.actionLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
                 actionReceived.actionDate = DateUtils.getUTCTextDate()
+                actionReceived.dismissedLifeCycle = nil
+                actionReceived.dismissedDate = nil
+                
+                for button:NotificationButtonModel in notificationModel.actionButtons! {
+                    if button.key == buttonKeyPressed {
+                        actionReceived.autoDismissible = button.autoDismissible
+                        break
+                    }
+                }
         }
         
         if(StringUtils.isNullOrEmpty(actionReceived.displayedDate)){
@@ -194,7 +221,9 @@ public class NotificationBuilder {
         guard let channel = ChannelManager.getChannelByKey(channelKey: pushNotification.content!.channelKey!) else {
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "Channel '\(pushNotification.content!.channelKey!)' does not exist or is disabled")
         }
-        
+
+        pushNotification.content!.groupKey = getGroupKey(pushNotification: pushNotification, channel: channel)
+
         let nextDate:Date? = getNextScheduleDate(pushNotification: pushNotification)
         
         if(pushNotification.schedule == nil || nextDate != nil){
@@ -204,7 +233,8 @@ public class NotificationBuilder {
             setTitle(pushNotification: pushNotification, channel: channel, content: content)
             setBody(pushNotification: pushNotification, content: content)
             setSummary(pushNotification: pushNotification, content: content)
-            
+
+            setGrouping(pushNotification: pushNotification, channel: channel, content: content)
             
             setVisibility(pushNotification: pushNotification, channel: channel, content: content)
             setShowWhen(pushNotification: pushNotification, content: content)
@@ -231,8 +261,6 @@ public class NotificationBuilder {
             setLayout(pushNotification: pushNotification, content: content)
             
             createActionButtonsAndCategory(pushNotification: pushNotification, content: content)
-                    
-            setGrouping(channel: channel, content: content)
             
             setUserInfoContent(pushNotification: pushNotification, content: content)
             
@@ -298,8 +326,11 @@ public class NotificationBuilder {
         
         let pushData = pushNotification.toMap()
         let jsonData = JsonUtils.toJson(pushData)
+
         content.userInfo[Definitions.NOTIFICATION_JSON] = jsonData
         content.userInfo[Definitions.NOTIFICATION_ID] = pushNotification.content!.id!
+        content.userInfo[Definitions.NOTIFICATION_CHANNEL_KEY] = notificationModel.content!.channelKey!
+        content.userInfo[Definitions.NOTIFICATION_GROUP_KEY] = notificationModel.content!.groupKey!
     }
 
     private static func setTitle(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
@@ -580,11 +611,16 @@ public class NotificationBuilder {
         // TODO
     }
 
-    private static func setGrouping(channel:NotificationChannelModel, content:UNMutableNotificationContent){
-        
-        if(!StringUtils.isNullOrEmpty(channel.groupKey)){
-            content.threadIdentifier = channel.groupKey!
+    private static func setGrouping(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+
+        let groupKey:String = getGroupKey(pushNotification: pushNotification, channel: channel)
+        if(!StringUtils.isNullOrEmpty(groupKey)){
+            content.threadIdentifier = groupKey!
         }
+    }
+
+    private static func getGroupKey(pushNotification:PushNotification, channel:NotificationChannelModel) -> String? {
+        return pushNotification.content!.groupKey ?? channel.groupKey
     }
 
     private static func setLayout(pushNotification:PushNotification, content:UNMutableNotificationContent){
@@ -608,7 +644,11 @@ public class NotificationBuilder {
                 return
                 
             case .Messaging:
-                setMessagingLayout(pushNotification: pushNotification, content: content)
+                setMessagingLayout(pushNotification: pushNotification, content: content, isGrouping: false)
+                return
+                
+            case .MessagingGroup:
+                setMessagingLayout(pushNotification: pushNotification, content: content, isGrouping: true)
                 return
                         
             case .ProgressBar:
@@ -698,6 +738,8 @@ public class NotificationBuilder {
     
     private static func setMessagingLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "Messaging"
+        
+        content.threadIdentifier = (isGrouping ? "MessagingGR." : "Messaging.")+notificationModel.content!.channelKey!
     }
     
     private static func setDefaultLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
@@ -709,6 +751,70 @@ public class NotificationBuilder {
             
         let center = UNUserNotificationCenter.current()
         center.removeDeliveredNotifications(withIdentifiers: [referenceKey])
+    }
+    
+    public static func dismissNotificationsByChannelKey(channelKey: String){
+        
+        let center = UNUserNotificationCenter.current()
+        center.getDeliveredNotifications(completionHandler: { (notificationRequest) in
+            for notification in notificationRequest {
+                if channelKey == notification.request.content.userInfo[Definitions.NOTIFICATION_CHANNEL_KEY] as? String {
+                    center.removeDeliveredNotifications(withIdentifiers: [notification.request.identifier])
+                }
+            }
+        })
+    }
+    
+    public static func cancelSchedulesByChannelKey(channelKey: String){
+        
+        let center = UNUserNotificationCenter.current()
+        center.getPendingNotificationRequests(completionHandler: { (notificationRequest) in
+            for notification in notificationRequest {
+                if channelKey == notification.content.userInfo[Definitions.NOTIFICATION_CHANNEL_KEY] as? String {
+                    if let id:String = notification.content.userInfo[Definitions.NOTIFICATION_ID] as? String {
+                        center.removePendingNotificationRequests(withIdentifiers: [id])
+                    }
+                }
+            }
+        })
+    }
+    
+    public static func cancelNotificationsByChannelKey(channelKey: String){
+        
+        dismissNotificationsByChannelKey(channelKey: channelKey)
+        cancelSchedulesByChannelKey(channelKey: channelKey)
+    }
+
+    public static func dismissNotificationsByGroupKey(groupKey: String){
+
+        let center = UNUserNotificationCenter.current()
+        center.getDeliveredNotifications(completionHandler: { (notificationRequest) in
+            for notification in notificationRequest {
+                if groupKey == notification.request.content.userInfo[Definitions.NOTIFICATION_GROUP_KEY] as? String {
+                    center.removeDeliveredNotifications(withIdentifiers: [notification.request.identifier])
+                }
+            }
+        })
+    }
+
+    public static func cancelSchedulesByGroupKey(groupKey: String){
+
+        let center = UNUserNotificationCenter.current()
+        center.getPendingNotificationRequests(completionHandler: { (notificationRequest) in
+            for notification in notificationRequest {
+                if groupKey == notification.content.userInfo[Definitions.NOTIFICATION_GROUP_KEY] as? String {
+                    if let id:String = notification.content.userInfo[Definitions.NOTIFICATION_ID] as? String {
+                        center.removePendingNotificationRequests(withIdentifiers: [id])
+                    }
+                }
+            }
+        })
+    }
+
+    public static func cancelNotificationsByGroupKey(groupKey: String){
+
+        dismissNotificationsByGroupKey(groupKey: groupKey)
+        cancelSchedulesByGroupKey(groupKey: groupKey)
     }
     
     public static func cancelScheduledNotification(id:Int){

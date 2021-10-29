@@ -71,7 +71,6 @@ class AssertUtils {
     }
 
     switch (value.runtimeType) {
-
       case MaterialColor:
         value = (value as MaterialColor).shade500;
         break;

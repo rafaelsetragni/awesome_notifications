@@ -84,20 +84,20 @@ class NotificationCalendar extends NotificationSchedule {
         AssertUtils.extractValue(NOTIFICATION_SCHEDULE_ERA, dataMap, int);
     this.year =
         AssertUtils.extractValue(NOTIFICATION_SCHEDULE_YEAR, dataMap, int);
-    this.month = AssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_MONTH, dataMap, int);
+    this.month =
+        AssertUtils.extractValue(NOTIFICATION_SCHEDULE_MONTH, dataMap, int);
     this.day =
         AssertUtils.extractValue(NOTIFICATION_SCHEDULE_DAY, dataMap, int);
     this.hour =
         AssertUtils.extractValue(NOTIFICATION_SCHEDULE_HOUR, dataMap, int);
-    this.minute = AssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_MINUTE, dataMap, int);
-    this.second = AssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_SECOND, dataMap, int);
+    this.minute =
+        AssertUtils.extractValue(NOTIFICATION_SCHEDULE_MINUTE, dataMap, int);
+    this.second =
+        AssertUtils.extractValue(NOTIFICATION_SCHEDULE_SECOND, dataMap, int);
     this.millisecond = AssertUtils.extractValue(
         NOTIFICATION_SCHEDULE_MILLISECOND, dataMap, int);
-    this.weekday = AssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_WEEKDAY, dataMap, int);
+    this.weekday =
+        AssertUtils.extractValue(NOTIFICATION_SCHEDULE_WEEKDAY, dataMap, int);
     this.weekOfMonth = AssertUtils.extractValue(
         NOTIFICATION_SCHEDULE_WEEKOFMONTH, dataMap, int);
     this.weekOfYear = AssertUtils.extractValue(
