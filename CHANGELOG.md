@@ -7,7 +7,7 @@
 * Added internal group key based on ID, to prevent Android auto grouping with 4+ notification from same channel when group key was not specified
 * Android channels refactored to keep the original channel key at maximum as possible, maximizing the compatibility with another plugins.
 * Models refactored to follow the native standards and transformations from map data
-* Calendar precision has been deprecated, due devices do not provide or ignore such precision.
+* Calendar millisecond precision has been deprecated, due devices do not provide or ignore such precision.
 * Added error handling for image assets (iOS)
 * Added video tutorial into README file
 * Version numbering has changed to better translate the stage of development for future releases.
