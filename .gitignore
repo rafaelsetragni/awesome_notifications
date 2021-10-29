@@ -13,3 +13,5 @@ example/ios/Flutter/.last_build_id
 
 
 doc/api/
+.idea/libraries/Dart_SDK.xml
+.idea/workspace.xml
