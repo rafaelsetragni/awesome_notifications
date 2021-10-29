@@ -6,6 +6,7 @@ enum NotificationLayout : String, CaseIterable {
   case Inbox = "Inbox"
   case ProgressBar = "ProgressBar"
   case Messaging = "Messaging"
+  case MessagingGroup = "MessagingGroup"
   case MediaPlayer = "MediaPlayer"
   
 }

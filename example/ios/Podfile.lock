@@ -1,5 +1,5 @@
 PODS:
-  - awesome_notifications (0.0.2):
+  - awesome_notifications (0.0.3):
     - Flutter
   - Firebase/CoreOnly (7.11.0):
     - FirebaseCore (= 7.11.0)
@@ -122,7 +122,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher/ios"
 
 SPEC CHECKSUMS:
-  awesome_notifications: 74462bc8e68b11f8235d78422266886759e9da61
+  awesome_notifications: 04530aafec8dac4635244ed4b4072f4aea6cc938
   Firebase: c121feb35e4126c0b355e3313fa9b487d47319fd
   firebase_core: 84dcd80ac6d29c3d1039071b7306ee99688eb9c7
   firebase_messaging: 7aecb08eada5e5cde85b10875141706a8d18b818

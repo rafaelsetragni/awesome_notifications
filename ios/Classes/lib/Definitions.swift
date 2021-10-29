@@ -68,7 +68,8 @@ enum Definitions {
     static let  CHANNEL_METHOD_DECREMENT_BADGE_COUNT = "decBadgeCount"
     static let  CHANNEL_METHOD_GET_NEXT_DATE = "getNextDate"
     static let  CHANNEL_METHOD_RESET_BADGE = "resetBadge"
-
+    
+    static let  CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = "showNotificationPage"
     static let  CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed"
     static let  CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications"
 

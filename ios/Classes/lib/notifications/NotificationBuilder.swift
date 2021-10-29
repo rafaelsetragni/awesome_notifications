@@ -25,7 +25,7 @@ public class NotificationBuilder {
                 completion(isAllowed)
             })
         } else {
-            isNotificationAllowed(completion)
+            isNotificationAllowed(completion: completion)
         }
     }
     
@@ -195,10 +195,12 @@ public class NotificationBuilder {
                 actionReceived.dismissedLifeCycle = nil
                 actionReceived.dismissedDate = nil
                 
-                for button:NotificationButtonModel in notificationModel.actionButtons! {
-                    if button.key == buttonKeyPressed {
-                        actionReceived.autoDismissible = button.autoDismissible
-                        break
+                if(pushNotification!.actionButtons != nil) {
+                    for button:NotificationButtonModel in pushNotification!.actionButtons! {
+                        if button.key == buttonKeyPressed {
+                            actionReceived.autoDismissable = button.autoDismissable
+                            break
+                        }
                     }
                 }
         }
@@ -329,8 +331,8 @@ public class NotificationBuilder {
 
         content.userInfo[Definitions.NOTIFICATION_JSON] = jsonData
         content.userInfo[Definitions.NOTIFICATION_ID] = pushNotification.content!.id!
-        content.userInfo[Definitions.NOTIFICATION_CHANNEL_KEY] = notificationModel.content!.channelKey!
-        content.userInfo[Definitions.NOTIFICATION_GROUP_KEY] = notificationModel.content!.groupKey!
+        content.userInfo[Definitions.NOTIFICATION_CHANNEL_KEY] = pushNotification.content!.channelKey!
+        content.userInfo[Definitions.NOTIFICATION_GROUP_KEY] = pushNotification.content!.groupKey
     }
 
     private static func setTitle(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
@@ -613,7 +615,7 @@ public class NotificationBuilder {
 
     private static func setGrouping(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
 
-        let groupKey:String = getGroupKey(pushNotification: pushNotification, channel: channel)
+        let groupKey:String? = getGroupKey(pushNotification: pushNotification, channel: channel)
         if(!StringUtils.isNullOrEmpty(groupKey)){
             content.threadIdentifier = groupKey!
         }
@@ -736,10 +738,10 @@ public class NotificationBuilder {
         content.categoryIdentifier = "Inbox"
     }
     
-    private static func setMessagingLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
+    private static func setMessagingLayout(pushNotification:PushNotification, content:UNMutableNotificationContent, isGrouping:Bool) {
         content.categoryIdentifier = "Messaging"
         
-        content.threadIdentifier = (isGrouping ? "MessagingGR." : "Messaging.")+notificationModel.content!.channelKey!
+        content.threadIdentifier = (isGrouping ? "MessagingGR." : "Messaging.")+pushNotification.content!.channelKey!
     }
     
     private static func setDefaultLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
