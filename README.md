@@ -60,16 +60,13 @@ All notifications could be created locally or via Firebase services, with all th
 
 ### Next steps
 
-- Include Firebase Cloud Message support for iOS (Finished)
-- Finish notifications layouts for iOS (Finished)
-- Finish notifications schedules for iOS (Finished)
-- Expiration date for notifications (not accomplished due to iOS limitations) (https://github.com/rafaelsetragni/awesome_notifications/issues/7)
-- Add an option to choose if a notification action should bring the app to foreground or not.
 - Include Web support
-- Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc) (Finished)
-- Video layout for notifications
+- Finish the companion plugin to enable Firebase Cloud Message with all the awesome features available.
+- Add an option to choose if a notification action should bring the app to foreground or not.
+- Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
+- Video layout and gifs for notifications
 - Carousel layout for notifications
-- Increase the tolerance in the json deserialization process, to accept different types and convert them to the expected.
+    
 <br>
 
 ## Main Philosophy
