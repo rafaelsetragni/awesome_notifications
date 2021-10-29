@@ -349,7 +349,8 @@ Layouts can be defined using 4 prefix types:
 - BigText: Is the layout that shows more than 2 lines of text.
 - Inbox: Is the layout who lists messages or items separated by lines
 - ProgressBar: Is the layout that shows a progress bar, such as download progress bar
-- Messaging: (in construction)
+- Messaging: Shows each notification as a chat conversation with one person
+- Messaging Group: Shows each notification as a chat conversation with more than one person (Groups)
 - MediaPlayer: Is the layout that shows a media controller with action buttons, that allows the user to send commands without brings the application to foreground.
 
 <br>
