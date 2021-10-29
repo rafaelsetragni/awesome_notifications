@@ -726,7 +726,6 @@ Main methods to manipulate a notification channel:
 | hour,              |   *YES   | Schedule hour condition                                           | Integer    | Positive unlimited    |                 |
 | minute,            |   *YES   | Schedule minute condition                                         | Integer    | Positive unlimited    |                 |
 | second,            |   *YES   | Schedule second condition                                         | Integer    | Positive unlimited    |                 |
-| millisecond,       |   *YES   | Schedule millisecond condition                                    | Integer    | Positive unlimited    |                 |
 | weekday,           |   *YES   | Schedule weekday condition                                        | Integer    | Positive unlimited    |                 |
 | weekOfMonth,       |   *YES   | Schedule weekOfMonth condition                                    | Integer    | Positive unlimited    |                 |
 | weekOfYear,        |   *YES   | Schedule weekOfYear condition                                     | Integer    | Positive unlimited    |                 |
