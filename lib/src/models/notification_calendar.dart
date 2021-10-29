@@ -25,6 +25,7 @@ class NotificationCalendar extends NotificationSchedule {
   int? second;
 
   /// Field number for get and set indicating the millisecond within the second.
+  @Deprecated('Millisecond precision was deprecated, due devices do not provide or ignore such precision. The value will be ignored')
   int? millisecond;
 
   /// Field number for get and set indicating the day of the week (1 = Monday).
@@ -75,7 +76,6 @@ class NotificationCalendar extends NotificationSchedule {
     this.hour = date.hour;
     this.minute = date.minute;
     this.second = date.second;
-    this.millisecond = date.millisecond;
   }
 
   @override
@@ -94,8 +94,6 @@ class NotificationCalendar extends NotificationSchedule {
         AssertUtils.extractValue(NOTIFICATION_SCHEDULE_MINUTE, dataMap, int);
     this.second =
         AssertUtils.extractValue(NOTIFICATION_SCHEDULE_SECOND, dataMap, int);
-    this.millisecond = AssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_MILLISECOND, dataMap, int);
     this.weekday =
         AssertUtils.extractValue(NOTIFICATION_SCHEDULE_WEEKDAY, dataMap, int);
     this.weekOfMonth = AssertUtils.extractValue(
@@ -129,7 +127,6 @@ class NotificationCalendar extends NotificationSchedule {
       NOTIFICATION_SCHEDULE_HOUR: this.hour,
       NOTIFICATION_SCHEDULE_MINUTE: this.minute,
       NOTIFICATION_SCHEDULE_SECOND: this.second,
-      NOTIFICATION_SCHEDULE_MILLISECOND: this.millisecond,
       NOTIFICATION_SCHEDULE_WEEKDAY: this.weekday,
       NOTIFICATION_SCHEDULE_WEEKOFMONTH: this.weekOfMonth,
       NOTIFICATION_SCHEDULE_WEEKOFYEAR: this.weekOfYear,
@@ -154,7 +151,6 @@ class NotificationCalendar extends NotificationSchedule {
         this.hour != null ||
         this.minute != null ||
         this.second != null ||
-        this.millisecond != null ||
         this.weekday != null ||
         this.weekOfMonth != null ||
         this.weekOfYear != null);
@@ -166,7 +162,6 @@ class NotificationCalendar extends NotificationSchedule {
         (this.hour ?? 0) >= 0 &&
         (this.minute ?? 0) >= 0 &&
         (this.second ?? 0) >= 0 &&
-        (this.millisecond ?? 0) >= 0 &&
         (this.weekday ?? 0) >= 0 &&
         (this.weekOfMonth ?? 0) >= 0 &&
         (this.weekOfYear ?? 0) >= 0);
