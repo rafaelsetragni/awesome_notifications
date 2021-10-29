@@ -25,7 +25,8 @@ class NotificationCalendar extends NotificationSchedule {
   int? second;
 
   /// Field number for get and set indicating the millisecond within the second.
-  @Deprecated('Millisecond precision was deprecated, due devices do not provide or ignore such precision. The value will be ignored')
+  @Deprecated(
+      'Millisecond precision was deprecated, due devices do not provide or ignore such precision. The value will be ignored')
   int? millisecond;
 
   /// Field number for get and set indicating the day of the week (1 = Monday).
