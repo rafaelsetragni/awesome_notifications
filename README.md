@@ -344,14 +344,14 @@ To show any images on notification, at any place, you need to include the respec
 
 Layouts can be defined using 4 prefix types:
 
-- Default: The default layout. Also is the layout used in case of any failure found on other ones
-- BigPicture: Is the layout that shows a big picture and/or a small image.
-- BigText: Is the layout that shows more than 2 lines of text.
-- Inbox: Is the layout who lists messages or items separated by lines
-- ProgressBar: Is the layout that shows a progress bar, such as download progress bar
-- Messaging: Shows each notification as a chat conversation with one person
-- Messaging Group: Shows each notification as a chat conversation with more than one person (Groups)
-- MediaPlayer: Is the layout that shows a media controller with action buttons, that allows the user to send commands without brings the application to foreground.
+- Default: The default notification layout. Also, is the layout choosen in case of any failure found on other layouts
+- BigPicture: Shows a big picture and/or a small image attached to the notification.
+- BigText: Shows more than 2 lines of text.
+- Inbox: Lists messages or items separated by lines
+- ProgressBar: Shows an progress bar, such as download progress bar
+- Messaging: Shows each notification as an chat conversation with one person
+- Messaging Group: Shows each notification as an chat conversation with more than one person (Groups)
+- MediaPlayer: Shows an media controller with action buttons, that allows the user to send commands without brings the application to foreground.
 
 <br>
 
