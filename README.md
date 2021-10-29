@@ -81,6 +81,19 @@ Also, the Notification Channels follows the same rule. If there is no channel se
 And all notifications sent while the app was killed are registered and delivered as soon as possible to the Application, after the plugin initialization, respecting the delivery order.
 
 This way, your Application will receive **all notifications at Flutter level code**.
+<br>
+<br>
+
+## Initial Requirements
+
+<br>
+    
+Bellow are the obligatory requirements that your app must meet to use awesome_notifications:
+
+* Android: is required the minimum android SDK to 21 (Android 5.0 Lollipop). You can change the minSdkVersion to 21, inside the file build.gradle in "android/app" folder.
+* iOS: is required the minimum iOS version to 10. You can change the minimum app version through xCode, Project Runner (clicking on the app icon) > Info > Deployment Target  and changing the option "ios minimum deployment target" to 10.0
+
+<br>
 
 ## How to show Local Notifications
 
