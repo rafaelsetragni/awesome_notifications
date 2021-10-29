@@ -39,6 +39,8 @@
 - Media notification
 - Big Text notification
 - Inbox notification
+- Messaging notification
+- Messaging Group notification
 - Notifications with action buttons
 - Grouped notifications
 - Progress bar notifications
