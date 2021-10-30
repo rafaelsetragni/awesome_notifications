@@ -38,8 +38,6 @@ public class NotificationCalendarModel : NotificationScheduleModel {
     var minute:Int?
     /// Field number for get and set indicating the second within the minute (0-59).
     var second:Int?
-    /// Field number for get and set indicating the millisecond within the second (0-999).
-    var millisecond:Int?
     /// Field number for get and set indicating the day of the week (1-7).
     var weekday:Int?
     /// Field number for get and set indicating the count of weeks of the month (0-53).
@@ -60,7 +58,6 @@ public class NotificationCalendarModel : NotificationScheduleModel {
         self.hour = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_HOUR, arguments: arguments)
         self.minute = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_MINUTE, arguments: arguments)
         self.second = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_SECOND, arguments: arguments)
-        self.millisecond = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_MILLISECOND, arguments: arguments)
         self.weekday = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_WEEKDAY, arguments: arguments)
         self.weekOfMonth = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_WEEKOFMONTH, arguments: arguments)
         self.weekOfYear = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_WEEKOFYEAR, arguments: arguments)
@@ -73,7 +70,6 @@ public class NotificationCalendarModel : NotificationScheduleModel {
         if (self.hour ?? 0) < 0 { self.hour = nil }
         if (self.minute ?? 0) < 0 { self.minute = nil }
         if (self.second ?? 0) < 0 { self.second = nil }
-        if (self.millisecond ?? 0) < 0 { self.millisecond = nil }
         if (self.weekday ?? 0) < 0 { self.weekday = nil }
         if (self.weekOfMonth ?? 0) < 0 { self.weekOfMonth = nil }
         if (self.weekOfYear ?? 0) < 0 { self.weekOfYear = nil }
@@ -97,7 +93,6 @@ public class NotificationCalendarModel : NotificationScheduleModel {
         if(hour != nil)        {mapData[Definitions.NOTIFICATION_SCHEDULE_HOUR]   = self.hour}
         if(minute != nil)      {mapData[Definitions.NOTIFICATION_SCHEDULE_MINUTE] = self.minute}
         if(second != nil)      {mapData[Definitions.NOTIFICATION_SCHEDULE_SECOND] = self.second}
-        if(millisecond != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_MILLISECOND] = self.millisecond}
         if(weekday != nil)     {mapData[Definitions.NOTIFICATION_SCHEDULE_WEEKDAY]     = self.weekday == 1 ? 7 : (self.weekday! - 1)}
         if(weekOfMonth != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_WEEKOFMONTH] = self.weekOfMonth}
         if(weekOfYear != nil)  {mapData[Definitions.NOTIFICATION_SCHEDULE_WEEKOFYEAR]  = self.weekOfYear}
@@ -114,7 +109,6 @@ public class NotificationCalendarModel : NotificationScheduleModel {
             hour == nil &&
             minute == nil &&
             second == nil &&
-            millisecond == nil &&
             weekday == nil &&
             weekOfMonth == nil &&
             weekOfYear == nil
@@ -129,7 +123,6 @@ public class NotificationCalendarModel : NotificationScheduleModel {
             IntUtils.isBetween(self.hour ?? 0, min: 0, max: 23) &&
             IntUtils.isBetween(self.minute ?? 0, min: 0, max: 59) &&
             IntUtils.isBetween(self.second ?? 0, min: 0, max: 59) &&
-            IntUtils.isBetween(self.millisecond ?? 0, min: 0, max: 999) &&
             IntUtils.isBetween(self.weekday ?? 1, min: 1, max: 7) &&
             IntUtils.isBetween(self.weekOfMonth ?? 1, min: 1, max: 6) &&
             IntUtils.isBetween(self.weekOfYear ?? 1, min: 1, max: 53)
@@ -147,7 +140,6 @@ public class NotificationCalendarModel : NotificationScheduleModel {
             hour: hour,
             minute: minute,
             second: second,
-            nanosecond: millisecond == nil ? nil : millisecond! * 1000,
             weekday: weekday,
             weekOfMonth: weekOfMonth,
             weekOfYear: weekOfYear

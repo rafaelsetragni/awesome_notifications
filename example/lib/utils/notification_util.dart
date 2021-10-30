@@ -1149,6 +1149,18 @@ Future<void> repeatMinuteNotification(int id) async {
       schedule: NotificationInterval(interval: 60, timeZone: localTimeZone, repeats: true));
 }
 
+Future<void> repeatPreciseInterval(int id) async {
+  String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: id,
+          channelKey: 'scheduled',
+          title: 'Notification at every single minute',
+          body:
+          'This notification was schedule to repeat at every 5 seconds.'),
+      schedule: NotificationInterval(interval: 5, timeZone: localTimeZone, repeats: true));
+}
+
 Future<void> repeatMinuteNotificationOClock(int id) async {
   String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
   await AwesomeNotifications().createNotification(

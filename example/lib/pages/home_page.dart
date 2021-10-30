@@ -733,22 +733,14 @@ class _HomePageState extends State<HomePage> {
               'Show notification at every single minute',
               onPressed: () => repeatMinuteNotification(8),
             ),
-            /*
-          SimpleButton(
-            'Show notification 3 times, spaced 10 seconds from each other',
-            onPressed: () => repeatPreciseThreeTimes(8),
-          ),
-          */
+            SimpleButton(
+              'Show notifications repeatedly, spaced 5 seconds from each other',
+              onPressed: () => repeatPreciseInterval(8),
+            ),
             SimpleButton(
               'Show notification at every single minute o\'clock',
               onPressed: () => repeatMinuteNotificationOClock(8),
             ),
-            /*
-          SimpleButton(
-            'Show notification only on workweek days\nat 10:00 am (local)',
-            onPressed: () => showScheduleAtWorkweekDay10AmLocal(8),
-          ),
-          */
             SimpleButton('Get current time zone reference name',
                 onPressed: () =>
                     getCurrentTimeZone().then((timeZone) => showDialog(
