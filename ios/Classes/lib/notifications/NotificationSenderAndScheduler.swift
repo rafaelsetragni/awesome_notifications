@@ -100,6 +100,10 @@ class NotificationSenderAndScheduler {
         do {
 
             if (pushNotification != nil){
+                
+                if ((pushNotification!.content!.id ?? -1) < 0){
+                    pushNotification!.content!.id = IntUtils.generateNextRandomId();
+                }
 
                 var receivedNotification: NotificationReceived? = nil
 

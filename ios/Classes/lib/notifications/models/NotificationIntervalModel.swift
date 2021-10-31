@@ -59,7 +59,7 @@ public class NotificationIntervalModel : NotificationScheduleModel {
         }
 
         if((repeats ?? false) && interval! < 60){
-            throw AwesomeNotificationException.invalidRequiredFields(msg: "time interval must be at least 60 if repeating");
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "time interval must be at least 60 if repeating");
         }
     }
     
