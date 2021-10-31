@@ -3,9 +3,11 @@ package me.carda.awesome_notifications.notifications.broadcastReceivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 //import com.google.common.reflect.TypeToken;
 
+import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.NotificationScheduler;
@@ -18,6 +20,7 @@ import me.carda.awesome_notifications.utils.StringUtils;
 
 public class ScheduledNotificationReceiver extends BroadcastReceiver {
 
+    static String TAG = "ScheduledNotificationReceiver";
 
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -42,11 +45,18 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
                         context,
                         pushNotification
                     );
-                else
+                else {
+
+                    if(AwesomeNotificationsPlugin.debug)
+                        Log.d(TAG,
+                            "Schedule "+ pushNotification.content.id.toString() +
+                                    " finished since repeat option is off");
+
                     NotificationScheduler.cancelSchedule(
-                        context,
-                        pushNotification.content.id
+                            context,
+                            pushNotification.content.id
                     );
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();

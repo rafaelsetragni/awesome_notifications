@@ -18,6 +18,7 @@ import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificati
 import me.carda.awesome_notifications.notifications.managers.ChannelManager;
 import me.carda.awesome_notifications.utils.BitmapUtils;
 import me.carda.awesome_notifications.utils.DateUtils;
+import me.carda.awesome_notifications.utils.IntegerUtils;
 import me.carda.awesome_notifications.utils.ListUtils;
 import me.carda.awesome_notifications.utils.MapUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
@@ -26,6 +27,7 @@ import me.carda.awesome_notifications.utils.StringUtils;
 public class NotificationContentModel extends Model {
 
     public boolean isRefreshNotification = false;
+    public boolean isRandomId = false;
 
     public Integer id;
     public String channelKey;
@@ -63,17 +65,17 @@ public class NotificationContentModel extends Model {
 
     public NotificationContentModel(){}
 
-    public void generateNextRandomId() {
-        int max = 2147483646;
-        long tsLong = System.currentTimeMillis();
-        id = (int) (tsLong % max + 1);
-    }
-
     @Override
     public NotificationContentModel fromMap(Map<String, Object> arguments) {
 
         id = getValueOrDefault(arguments, Definitions.NOTIFICATION_ID, Integer.class);
-        if(id < 0) generateNextRandomId();
+        isRandomId = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_RANDOM_ID, Boolean.class)
+                .or(false);
+
+        if(id == -1) {
+            isRandomId = true;
+            id = IntegerUtils.generateNextRandomId();
+        }
 
         createdDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_CREATED_DATE, String.class)
                             .or(DateUtils.getUTCDate());
@@ -141,6 +143,7 @@ public class NotificationContentModel extends Model {
         Map<String, Object> returnedObject = new HashMap<>();
 
         returnedObject.put(Definitions.NOTIFICATION_ID, this.id);
+        returnedObject.put(Definitions.NOTIFICATION_RANDOM_ID, this.isRandomId);
         returnedObject.put(Definitions.NOTIFICATION_TITLE, this.title);
         returnedObject.put(Definitions.NOTIFICATION_BODY, this.body);
         returnedObject.put(Definitions.NOTIFICATION_SUMMARY, this.summary);

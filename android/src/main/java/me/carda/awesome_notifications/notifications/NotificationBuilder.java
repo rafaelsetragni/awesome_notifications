@@ -106,6 +106,9 @@ public class NotificationBuilder {
         if(channelModel == null)
             throw new AwesomeNotificationException("Channel '"+ pushNotification.content.channelKey +"' does not exist or is disabled");
 
+        if (pushNotification.content.isRandomId || pushNotification.content.id < 0)
+            pushNotification.content.id = IntegerUtils.generateNextRandomId();
+
         pushNotification.content.groupKey = getGroupKey(pushNotification.content, channelModel);
 
         Intent intent = buildNotificationIntentFromModel(

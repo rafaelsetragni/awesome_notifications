@@ -1,3 +1,6 @@
+## [0.6.14]
+* Added validation to prevent scheduling with repeating intervals smaller than 60 seconds (iOS restriction)
+* Added crontab schedule to allow complex schedules based on initial and expiration date, a list of precise dates, or a crontab expression (only for Android)
 ## [0.6.13]
 * Added messaging layout and messaging group layout
 * Added method showNotificationPage to programmatically redirect the user to O.S. notifications permission page

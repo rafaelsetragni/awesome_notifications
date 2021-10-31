@@ -1135,11 +1135,11 @@ Future<String> getUtcTimeZone(){
   return AwesomeNotifications().getUtcTimeZoneIdentifier();
 }
 
-Future<void> repeatMinuteNotification(int id) async {
+Future<void> repeatMinuteNotification() async {
   String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
-          id: id,
+          id: -1,
           channelKey: 'scheduled',
           title: 'Notification at every single minute',
           body:
@@ -1149,23 +1149,45 @@ Future<void> repeatMinuteNotification(int id) async {
       schedule: NotificationInterval(interval: 60, timeZone: localTimeZone, repeats: true));
 }
 
-Future<void> repeatPreciseInterval(int id) async {
+Future<void> repeatMultiple5Crontab() async {
   String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
-          id: id,
+          id: -1,
           channelKey: 'scheduled',
-          title: 'Notification at every single minute',
+          title: 'Notification at every 5 seconds for 1 minute',
           body:
           'This notification was schedule to repeat at every 5 seconds.'),
-      schedule: NotificationInterval(interval: 5, timeZone: localTimeZone, repeats: true));
+      schedule: NotificationAndroidCrontab(
+          initialDateTime: DateTime.now().add(Duration(seconds: 10)).toUtc(),
+          expirationDateTime: DateTime.now().add(Duration(seconds: 10, minutes: 1)).toUtc(),
+          crontabExpression: '/5 * * * * ? *',
+          timeZone: localTimeZone,
+          repeats: true));
 }
 
-Future<void> repeatMinuteNotificationOClock(int id) async {
+Future<void> repeatPreciseThreeTimes() async {
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: -1,
+          channelKey: 'scheduled',
+          title: 'Notification scheduled to play precisely 3 times',
+          body: 'This notification was schedule to play precisely 3 times.',
+          notificationLayout: NotificationLayout.BigPicture,
+          bigPicture: 'asset://assets/images/melted-clock.png'),
+      schedule: NotificationAndroidCrontab(preciseSchedules: [
+            DateTime.now().add(Duration(seconds: 10)).toUtc(),
+            DateTime.now().add(Duration(seconds: 25)).toUtc(),
+            DateTime.now().add(Duration(seconds: 45)).toUtc()
+          ],
+          repeats: true));
+}
+
+Future<void> repeatMinuteNotificationOClock() async {
   String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
-          id: id,
+          id: -1,
           channelKey: 'scheduled',
           title: 'Notification at exactly every single minute',
           body:
@@ -1176,11 +1198,11 @@ Future<void> repeatMinuteNotificationOClock(int id) async {
 }
 
 Future<void> showNotificationAtScheduleCron(
-    int id, DateTime scheduleTime) async {
+    DateTime scheduleTime) async {
   String timeZoneIdentifier = AwesomeNotifications.localTimeZoneIdentifier;
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: id,
+        id: -1,
         channelKey: 'scheduled',
         title: 'Just in time!',
         body: 'This notification was schedule to shows at ' +

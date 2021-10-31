@@ -51,6 +51,9 @@ public class NotificationIntervalModel extends NotificationScheduleModel {
 
         if(interval == null || interval < 0)
             throw new AwesomeNotificationException("Interval is required and must be greater than zero");
+
+        if(repeats && interval < 60)
+            throw new AwesomeNotificationException("time interval must be at least 60 if repeating");
     }
 
     @Override

@@ -91,7 +91,7 @@ public class DateUtils {
         return calendar.getTime();
     }
 
-    public static Date getLocalDateTime(String fromTimeZone) throws Exception {
+    public static Date getLocalDateTime(String fromTimeZone) throws AwesomeNotificationException {
         TimeZone timeZone;
 
         if(fromTimeZone == null)

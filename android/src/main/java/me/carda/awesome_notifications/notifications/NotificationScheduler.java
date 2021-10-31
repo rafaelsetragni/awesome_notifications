@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import androidx.core.app.AlarmManagerCompat;
+
 import me.carda.awesome_notifications.BroadcastSender;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
@@ -22,8 +23,10 @@ import me.carda.awesome_notifications.notifications.managers.ChannelManager;
 import me.carda.awesome_notifications.notifications.managers.ScheduleManager;
 import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
+
 import me.carda.awesome_notifications.utils.BooleanUtils;
 import me.carda.awesome_notifications.utils.DateUtils;
+import me.carda.awesome_notifications.utils.IntegerUtils;
 
 public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
 
@@ -118,13 +121,6 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                     pushNotification.content.createdLifeCycle = appLifeCycle;
 
                 nextValidDate = pushNotification.schedule.getNextValidDate(null);
-
-                /*
-                nextValidDate = CronUtils.getNextCalendar(
-                    pushNotification.schedule.initialDateTime,
-                    pushNotification.schedule.crontabSchedule
-                );
-                */
 
                 if(nextValidDate != null){
 
@@ -225,6 +221,10 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
 
             String notificationDetailsJson = pushNotification.toJson();
             Intent notificationIntent = new Intent(context, ScheduledNotificationReceiver.class);
+
+            // Only generate randomly for first time to avoid collisions
+            if(pushNotification.content.id == -1)
+                pushNotification.content.id = IntegerUtils.generateNextRandomId();
 
             notificationIntent.putExtra(Definitions.NOTIFICATION_ID, pushNotification.content.id);
             notificationIntent.putExtra(Definitions.NOTIFICATION_JSON, notificationDetailsJson);

@@ -137,7 +137,7 @@ enum Definitions {
     static let  NOTIFICATION_PAYLOAD = "payload"
     static let  NOTIFICATION_INITIAL_FIXED_DATE = "fixedDate"
     static let  NOTIFICATION_INITIAL_DATE_TIME = "createdDateTime"
-    static let  NOTIFICATION_CRONTAB_SCHEDULE = "crontabSchedule"
+    static let  NOTIFICATION_CRONTAB_EXPRESSION = "crontabExpression"
     static let  NOTIFICATION_ENABLED = "enabled"
     static let  NOTIFICATION_AUTO_DISMISSABLE = "autoDismissable"
     static let  NOTIFICATION_LOCKED = "locked"

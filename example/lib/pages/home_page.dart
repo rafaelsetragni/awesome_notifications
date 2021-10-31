@@ -718,7 +718,7 @@ class _HomePageState extends State<HomePage> {
               DateTime? pickedDate =
                   await pickScheduleDate(context, isUtc: false);
               if (pickedDate != null) {
-                showNotificationAtScheduleCron(8, pickedDate);
+                showNotificationAtScheduleCron(pickedDate);
               }
             }),
             SimpleButton('Schedule notification with utc time zone',
@@ -726,20 +726,24 @@ class _HomePageState extends State<HomePage> {
               DateTime? pickedDate =
                   await pickScheduleDate(context, isUtc: true);
               if (pickedDate != null) {
-                showNotificationAtScheduleCron(8, pickedDate);
+                showNotificationAtScheduleCron(pickedDate);
               }
             }),
             SimpleButton(
               'Show notification at every single minute',
-              onPressed: () => repeatMinuteNotification(8),
+              onPressed: () => repeatMinuteNotification(),
             ),
             SimpleButton(
-              'Show notifications repeatedly, spaced 5 seconds from each other',
-              onPressed: () => repeatPreciseInterval(8),
+              'Show notifications repeatedly in 10 sec, spaced 5 sec from each other for 1 minute (only for Android)',
+              onPressed: () => repeatMultiple5Crontab(),
+            ),
+            SimpleButton(
+              'Show notification with 3 precise times (only for Android)',
+              onPressed: () => repeatPreciseThreeTimes(),
             ),
             SimpleButton(
               'Show notification at every single minute o\'clock',
-              onPressed: () => repeatMinuteNotificationOClock(8),
+              onPressed: () => repeatMinuteNotificationOClock(),
             ),
             SimpleButton('Get current time zone reference name',
                 onPressed: () =>
@@ -776,33 +780,20 @@ class _HomePageState extends State<HomePage> {
                             ))))))),
             SimpleButton('List all active schedules',
                 onPressed: () => listScheduledNotifications(context)),
-            SimpleButton('Cancel the notification and its schedule',
-                backgroundColor: Colors.red,
-                labelColor: Colors.white,
-                onPressed: () => cancelNotification(8)),
             SimpleButton(
-                'Dismiss the active notification without cancel its schedule',
+                'Dismiss the displayed scheduled notifications without cancel the respective schedules',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => dismissNotification(8)),
+                onPressed: () => dismissNotificationsByChannelKey('scheduled')),
             SimpleButton(
-                'Cancel the active schedule without dismiss the active notification',
+                'Cancel the active schedules without dismiss the displayed notifications',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelSchedule(8)),
-            SimpleButton(
-                'Cancel all active schedules without dismiss the active notification',
+                onPressed: () => cancelSchedulesByChannelKey('scheduled')),
+            SimpleButton('Cancel all schedules and dismiss the respective displayed notifications',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: cancelAllSchedules),
-            SimpleButton('Dismiss all active notifications',
-                backgroundColor: Colors.red,
-                labelColor: Colors.white,
-                onPressed: dismissAllNotifications),
-            SimpleButton('Cancel All notifications and schedules',
-                backgroundColor: Colors.red,
-                labelColor: Colors.white,
-                onPressed: cancelAllNotifications),
+                onPressed: () => cancelNotificationsByChannelKey('scheduled')),
 
             /* ******************************************************************** */
 

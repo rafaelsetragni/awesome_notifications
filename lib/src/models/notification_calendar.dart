@@ -81,6 +81,7 @@ class NotificationCalendar extends NotificationSchedule {
 
   @override
   NotificationCalendar? fromMap(Map<String, dynamic> dataMap) {
+
     this.era =
         AssertUtils.extractValue(NOTIFICATION_SCHEDULE_ERA, dataMap, int);
     this.year =
@@ -101,12 +102,8 @@ class NotificationCalendar extends NotificationSchedule {
         NOTIFICATION_SCHEDULE_WEEKOFMONTH, dataMap, int);
     this.weekOfYear = AssertUtils.extractValue(
         NOTIFICATION_SCHEDULE_WEEKOFYEAR, dataMap, int);
-    this.allowWhileIdle = AssertUtils.extractValue(
-            NOTIFICATION_ALLOW_WHILE_IDLE, dataMap, bool) ??
-        false;
-    this.repeats = AssertUtils.extractValue(
-            NOTIFICATION_SCHEDULE_REPEATS, dataMap, bool) ??
-        false;
+
+    super.fromMap(dataMap);
 
     try {
       validate();
@@ -119,21 +116,20 @@ class NotificationCalendar extends NotificationSchedule {
 
   @override
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> dataMap = {
-      NOTIFICATION_SCHEDULE_TIMEZONE: this.timeZone,
-      NOTIFICATION_SCHEDULE_ERA: this.era,
-      NOTIFICATION_SCHEDULE_YEAR: this.year,
-      NOTIFICATION_SCHEDULE_MONTH: this.month,
-      NOTIFICATION_SCHEDULE_DAY: this.day,
-      NOTIFICATION_SCHEDULE_HOUR: this.hour,
-      NOTIFICATION_SCHEDULE_MINUTE: this.minute,
-      NOTIFICATION_SCHEDULE_SECOND: this.second,
-      NOTIFICATION_SCHEDULE_WEEKDAY: this.weekday,
-      NOTIFICATION_SCHEDULE_WEEKOFMONTH: this.weekOfMonth,
-      NOTIFICATION_SCHEDULE_WEEKOFYEAR: this.weekOfYear,
-      NOTIFICATION_ALLOW_WHILE_IDLE: this.allowWhileIdle,
-      NOTIFICATION_SCHEDULE_REPEATS: this.repeats
-    };
+    Map<String, dynamic> dataMap =
+      super.toMap()
+        ..addAll({
+        NOTIFICATION_SCHEDULE_ERA: this.era,
+        NOTIFICATION_SCHEDULE_YEAR: this.year,
+        NOTIFICATION_SCHEDULE_MONTH: this.month,
+        NOTIFICATION_SCHEDULE_DAY: this.day,
+        NOTIFICATION_SCHEDULE_HOUR: this.hour,
+        NOTIFICATION_SCHEDULE_MINUTE: this.minute,
+        NOTIFICATION_SCHEDULE_SECOND: this.second,
+        NOTIFICATION_SCHEDULE_WEEKDAY: this.weekday,
+        NOTIFICATION_SCHEDULE_WEEKOFMONTH: this.weekOfMonth,
+        NOTIFICATION_SCHEDULE_WEEKOFYEAR: this.weekOfYear
+      });
 
     return dataMap;
   }

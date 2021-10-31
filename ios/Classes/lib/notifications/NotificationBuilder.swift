@@ -481,7 +481,7 @@ public class NotificationBuilder {
 
                 nextValidDate = cron.getNextCalendar(
                     initialDateTime: pushNotification!.schedule!.createdDateTime,
-                    crontabRule: pushNotification!.schedule!.crontabSchedule
+                    crontabRule: pushNotification!.schedule!.crontabExpression
                 )
 
                 if(nextValidDate != nil){

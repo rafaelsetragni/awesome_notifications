@@ -36,69 +36,58 @@ class CronHelper {
   }
 
   /// Generates a Cron expression to be played at only exact time
-  String atDate(DateTime? referenceUtcDate, {int? initialSecond}) {
-    if (initialSecond != null && initialSecond >= 0 && initialSecond <= 60) {
-      if (initialSecond == 60) initialSecond = 0;
-      return DateFormat('$initialSecond m H d M ? y')
-          .format(referenceUtcDate ?? _getNow().toUtc());
-    }
+  String atDate({required DateTime referenceDateTime}) {
     return DateFormat('s m H d M ? y')
-        .format(referenceUtcDate ?? _getNow().toUtc());
+        .format(referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at year from now
-  String yearly({DateTime? referenceUtcDate}) {
+  String yearly({required DateTime referenceDateTime}) {
     return DateFormat('s m H d M ? *')
-        .format(referenceUtcDate ?? _getNow().toUtc());
+        .format(referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at month from now
-  String monthly({DateTime? referenceUtcDate}) {
+  String monthly({required DateTime referenceDateTime}) {
     return DateFormat('s m H d * ? *')
-        .format(referenceUtcDate ?? _getNow().toUtc());
+        .format(referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at week from now
-  String weekly({DateTime? referenceUtcDate}) {
+  String weekly({required DateTime referenceDateTime}) {
     return DateFormat('s m H ? M E *')
-        .format(referenceUtcDate ?? _getNow().toUtc())
+        .format(referenceDateTime)
         .toUpperCase();
   }
 
   /// Generates a Cron expression to be played only once at day from now
-  String daily({DateTime? referenceUtcDate}) {
+  String daily({required DateTime referenceDateTime}) {
     return DateFormat('s m H * * ? *')
-        .format(referenceUtcDate ?? _getNow().toUtc());
+        .format(referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at hour from now
-  String hourly({DateTime? referenceUtcDate}) {
+  String hourly({required DateTime referenceDateTime}) {
     return DateFormat('s m * * * ? *')
-        .format(referenceUtcDate ?? _getNow().toUtc());
+        .format(referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at every minute from now
-  String minutely({DateTime? referenceUtcDate, int? initialSecond}) {
-    if (initialSecond != null && initialSecond >= 0 && initialSecond <= 60) {
-      if (initialSecond == 60) initialSecond = 0;
-      return DateFormat('$initialSecond * * * * ? *')
-          .format(referenceUtcDate ?? _getNow().toUtc());
-    }
-    return DateFormat('s * * * * ? *')
-        .format(referenceUtcDate ?? _getNow().toUtc());
+  String minutely({required int initialSecond}) {
+    return '$initialSecond * * * * ? *';
   }
 
   /// Generates a Cron expression to be played only on workweek days from now
-  String workweekDay({DateTime? referenceUtcDate}) {
+  String workweekDay({required DateTime referenceDateTime}) {
     return DateFormat('s m H ? * ')
-            .format(referenceUtcDate ?? _getNow().toUtc()) +
+            .format(referenceDateTime) +
         '$MON-$FRI *';
   }
 
   /// Generates a Cron expression to be played only on weekend days from now
-  String weekendDay({DateTime? referenceUtcDate}) {
+  String weekendDay({required DateTime referenceDateTime}) {
     return DateFormat('s m H ? * ')
-            .format(referenceUtcDate ?? _getNow().toUtc()) +
+            .format(referenceDateTime) +
         '$SAT,$SUN *';
   }
 }

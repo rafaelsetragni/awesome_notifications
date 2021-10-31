@@ -1,8 +1,11 @@
 import 'package:awesome_notifications/src/models/model.dart';
+import 'package:awesome_notifications/src/utils/assert_utils.dart';
+
+import '../definitions.dart';
 
 /// Notification schedule configuration
 /// [timeZone]: time zone reference to this schedule
-/// [crontabSchedule]: Crontab expression as repetition rule (with seconds precision), as described in https://www.baeldung.com/cron-expressions
+/// [crontabExpression]: Crontab expression as repetition rule (with seconds precision), as described in https://www.baeldung.com/cron-expressions
 /// [allowWhileIdle]: Determines if notification will send, even when the device is in critical situation, such as low battery.
 
 abstract class NotificationSchedule extends Model {
@@ -25,9 +28,26 @@ abstract class NotificationSchedule extends Model {
   /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
   bool repeats;
 
-  NotificationSchedule? fromMap(Map<String, dynamic> dataMap);
+  NotificationSchedule? fromMap(Map<String, dynamic> dataMap){
+    this.allowWhileIdle = AssertUtils.extractValue(
+        NOTIFICATION_ALLOW_WHILE_IDLE, dataMap, bool) ??
+        false;
+    this.repeats = AssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_REPEATS, dataMap, bool) ??
+        false;
 
-  Map<String, dynamic> toMap();
+    return this;
+  }
+
+  Map<String, dynamic> toMap(){
+    Map<String, dynamic> dataMap = {
+      NOTIFICATION_SCHEDULE_TIMEZONE: this.timeZone,
+      NOTIFICATION_ALLOW_WHILE_IDLE: this.allowWhileIdle,
+      NOTIFICATION_SCHEDULE_REPEATS: this.repeats
+    };
+
+    return dataMap;
+  }
 
   @override
   String toString() {

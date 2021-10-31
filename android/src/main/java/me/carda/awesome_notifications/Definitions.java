@@ -10,6 +10,7 @@ import me.carda.awesome_notifications.notifications.enumerators.GroupSort;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationImportance;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLayout;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
+import me.carda.awesome_notifications.utils.DateUtils;
 
 public interface Definitions {
 
@@ -138,6 +139,7 @@ public interface Definitions {
     String NOTIFICATION_DISMISSED_DATE = "dismissedDate";
 
     String NOTIFICATION_ID = "id";
+    String NOTIFICATION_RANDOM_ID = "randomId";
     String NOTIFICATION_LAYOUT = "notificationLayout";
     String NOTIFICATION_TITLE = "title";
     String NOTIFICATION_BODY = "body";
@@ -157,7 +159,8 @@ public interface Definitions {
     String NOTIFICATION_PAYLOAD = "payload";
     String NOTIFICATION_INITIAL_FIXED_DATE = "fixedDate";
     String NOTIFICATION_INITIAL_DATE_TIME = "initialDateTime";
-    String NOTIFICATION_CRONTAB_SCHEDULE = "crontabSchedule";
+    String NOTIFICATION_EXPIRATION_DATE_TIME = "expirationDateTime";
+    String NOTIFICATION_CRONTAB_EXPRESSION = "crontabExpression";
     String NOTIFICATION_PRECISE_SCHEDULES = "preciseSchedules";
     String NOTIFICATION_ENABLED = "enabled";
     String NOTIFICATION_AUTO_DISMISSABLE = "autoDismissable";
@@ -228,7 +231,7 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_PLAY_SOUND, true);
         put(Definitions.NOTIFICATION_AUTO_DISMISSABLE, true);
         put(Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, DefaultRingtoneType.Notification);
-        //put(Definitions.NOTIFICATION_LOCKED, false);
+        put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, DateUtils.localTimeZone.toString());
         put(Definitions.NOTIFICATION_TICKER, "ticker");
         put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, false);
         put(Definitions.NOTIFICATION_ONLY_ALERT_ONCE, false);

@@ -97,6 +97,14 @@ public class PushNotification extends Model {
 
         if(map.isEmpty()) return null;
 
+        if(
+            map.containsKey(Definitions.NOTIFICATION_CRONTAB_EXPRESSION) ||
+            map.containsKey(Definitions.NOTIFICATION_PRECISE_SCHEDULES) ||
+            map.containsKey(Definitions.NOTIFICATION_EXPIRATION_DATE_TIME)
+        ){
+            return new NotificationCrontab().fromMap(map);
+        }
+
         if(map.containsKey(Definitions.NOTIFICATION_SCHEDULE_INTERVAL)){
             return new NotificationIntervalModel().fromMap(map);
         }

@@ -39,4 +39,10 @@ public class IntegerUtils {
         }
         return convertToInt(value);
     }
+
+    public static int generateNextRandomId() {
+        int max = 2147483646;
+        long tsLong = System.currentTimeMillis();
+        return (int) (tsLong % max + 1);
+    }
 }
