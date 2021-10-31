@@ -15,15 +15,23 @@ public class PushNotification : AbstractModel {
     
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         
-        self.content = extractNotificationContent(Definitions.PUSH_NOTIFICATION_CONTENT, arguments)
+        do {
+            self.content = extractNotificationContent(Definitions.PUSH_NOTIFICATION_CONTENT, arguments)
+            
+            // required
+            if(self.content == nil){ return nil }
+            
+            self.schedule = try extractNotificationSchedule(Definitions.PUSH_NOTIFICATION_SCHEDULE, arguments)
+            self.actionButtons = extractNotificationButtons(Definitions.PUSH_NOTIFICATION_BUTTONS, arguments)
+            
+            return self
         
-        // required
-        if(self.content == nil){ return nil }
-        
-        self.schedule = extractNotificationSchedule(Definitions.PUSH_NOTIFICATION_SCHEDULE, arguments)
-        self.actionButtons = extractNotificationButtons(Definitions.PUSH_NOTIFICATION_BUTTONS, arguments)
-        
-        return self
+        }
+        catch {
+            print("error " + error.localizedDescription)
+        }
+            
+        return nil
     }
     
     public func toMap() -> [String : Any?] {
@@ -50,9 +58,18 @@ public class PushNotification : AbstractModel {
         return NotificationContentModel().fromMap(arguments: map) as? NotificationContentModel
     }
     
-    func extractNotificationSchedule(_ reference:String, _ arguments:[String:Any?]?) -> NotificationScheduleModel? {
+    func extractNotificationSchedule(_ reference:String, _ arguments:[String:Any?]?) throws -> NotificationScheduleModel? {
         guard let map:[String:Any?] = arguments?[reference] as? [String:Any?] else { return nil }
         if(map.isEmpty){ return nil }
+        
+        if(
+            map[Definitions.NOTIFICATION_CRONTAB_EXPRESSION] != nil ||
+            map[Definitions.NOTIFICATION_PRECISE_SCHEDULES] != nil ||
+            map[Definitions.NOTIFICATION_INITIAL_DATE_TIME] != nil ||
+            map[Definitions.NOTIFICATION_EXPIRATION_DATE_TIME] != nil
+        ){
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Crontab schedules are not available for iOS")
+        }
         
         if map["interval"] != nil {
             return NotificationIntervalModel().fromMap(arguments: map) as? NotificationScheduleModel

@@ -69,11 +69,7 @@ public class NotificationContentModel extends Model {
     public NotificationContentModel fromMap(Map<String, Object> arguments) {
 
         id = getValueOrDefault(arguments, Definitions.NOTIFICATION_ID, Integer.class);
-        isRandomId = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_RANDOM_ID, Boolean.class)
-                .or(false);
-
-        if(id == -1) {
-            isRandomId = true;
+        if(id < 0) {
             id = IntegerUtils.generateNextRandomId();
         }
 

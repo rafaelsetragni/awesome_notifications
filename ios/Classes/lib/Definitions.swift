@@ -49,6 +49,11 @@ enum Definitions {
     static let  NOTIFICATION_SCHEDULE_INTERVAL = "interval"
     static let  NOTIFICATION_SCHEDULE_REPEATS = "repeats"
     
+    static let  NOTIFICATION_CRONTAB_EXPRESSION = "crontabExpression"
+    static let  NOTIFICATION_PRECISE_SCHEDULES = "preciseSchedules"
+    static let  NOTIFICATION_INITIAL_DATE_TIME = "initialDateTime"
+    static let  NOTIFICATION_EXPIRATION_DATE_TIME = "expirationDateTime"
+    
     static let  CHANNEL_FLUTTER_PLUGIN = "awesome_notifications"
 
     static let  CHANNEL_METHOD_INITIALIZE = "initialize"
@@ -136,8 +141,7 @@ enum Definitions {
 
     static let  NOTIFICATION_PAYLOAD = "payload"
     static let  NOTIFICATION_INITIAL_FIXED_DATE = "fixedDate"
-    static let  NOTIFICATION_INITIAL_DATE_TIME = "createdDateTime"
-    static let  NOTIFICATION_CRONTAB_EXPRESSION = "crontabExpression"
+    static let  NOTIFICATION_CREATED_DATE_TIME = "createdDateTime"
     static let  NOTIFICATION_ENABLED = "enabled"
     static let  NOTIFICATION_AUTO_DISMISSABLE = "autoDismissable"
     static let  NOTIFICATION_LOCKED = "locked"

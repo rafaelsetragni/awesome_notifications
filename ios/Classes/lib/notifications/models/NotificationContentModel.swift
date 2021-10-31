@@ -10,6 +10,7 @@ import Foundation
 public class NotificationContentModel : AbstractModel {
 
     var id: Int?
+    var isRandomId: Bool = false
     var channelKey: String?
     var groupKey: String?
     var title: String?
@@ -49,6 +50,12 @@ public class NotificationContentModel : AbstractModel {
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
                 
         self.id             = MapUtils<Int>.getValueOrDefault(reference: "id", arguments: arguments)
+        self.isRandomId     = MapUtils<Bool>.getValueOrDefault(reference: "isRandom", arguments: arguments) ?? false
+        if(id == -1) {
+            self.isRandomId = true;
+            id = IntUtils.generateNextRandomId();
+        }
+        
         self.channelKey     = MapUtils<String>.getValueOrDefault(reference: "channelKey", arguments: arguments)
         self.groupKey       = MapUtils<String>.getValueOrDefault(reference: "groupKey", arguments: arguments)
         self.title          = MapUtils<String>.getValueOrDefault(reference: "title", arguments: arguments)
@@ -63,7 +70,7 @@ public class NotificationContentModel : AbstractModel {
         self.largeIcon             = MapUtils<String>.getValueOrDefault(reference: "largeIcon", arguments: arguments)
         self.bigPicture            = MapUtils<String>.getValueOrDefault(reference: "bigPicture", arguments: arguments)
         self.hideLargeIconOnExpand = MapUtils<Bool>.getValueOrDefault(reference: "hideLargeIconOnExpand", arguments: arguments)
-        self.autoDismissable            = MapUtils<Bool>.getValueOrDefault(reference: "autoDismissable", arguments: arguments)
+        self.autoDismissable       = MapUtils<Bool>.getValueOrDefault(reference: "autoDismissable", arguments: arguments)
         self.displayOnForeground   = MapUtils<Bool>.getValueOrDefault(reference: "displayOnForeground", arguments: arguments)
         self.displayOnBackground   = MapUtils<Bool>.getValueOrDefault(reference: "displayOnBackground", arguments: arguments)
         self.color                 = MapUtils<Int64>.getValueOrDefault(reference: "color", arguments: arguments)

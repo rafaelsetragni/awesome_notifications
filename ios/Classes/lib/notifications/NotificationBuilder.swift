@@ -773,8 +773,16 @@ public class NotificationBuilder {
         center.getPendingNotificationRequests(completionHandler: { (notificationRequest) in
             for notification in notificationRequest {
                 if channelKey == notification.content.userInfo[Definitions.NOTIFICATION_CHANNEL_KEY] as? String {
-                    if let id:String = notification.content.userInfo[Definitions.NOTIFICATION_ID] as? String {
-                        center.removePendingNotificationRequests(withIdentifiers: [id])
+                    if notification.content.userInfo[Definitions.NOTIFICATION_ID] != nil {
+                        
+                        if let id:String = notification.content.userInfo[Definitions.NOTIFICATION_ID] as? String {
+                            center.removePendingNotificationRequests(withIdentifiers: [id])
+                        }
+                        else {
+                            if let id:Int64 = notification.content.userInfo[Definitions.NOTIFICATION_ID] as? Int64 {
+                                center.removePendingNotificationRequests(withIdentifiers: [String(id)])
+                            }
+                        }
                     }
                 }
             }
@@ -805,8 +813,16 @@ public class NotificationBuilder {
         center.getPendingNotificationRequests(completionHandler: { (notificationRequest) in
             for notification in notificationRequest {
                 if groupKey == notification.content.userInfo[Definitions.NOTIFICATION_GROUP_KEY] as? String {
-                    if let id:String = notification.content.userInfo[Definitions.NOTIFICATION_ID] as? String {
-                        center.removePendingNotificationRequests(withIdentifiers: [id])
+                    if notification.content.userInfo[Definitions.NOTIFICATION_ID] != nil {
+                        
+                        if let id:String = notification.content.userInfo[Definitions.NOTIFICATION_ID] as? String {
+                            center.removePendingNotificationRequests(withIdentifiers: [id])
+                        }
+                        else {
+                            if let id:Int64 = notification.content.userInfo[Definitions.NOTIFICATION_ID] as? Int64 {
+                                center.removePendingNotificationRequests(withIdentifiers: [String(id)])
+                            }
+                        }
                     }
                 }
             }

@@ -46,4 +46,8 @@ class IntUtils {
         }
         return intValue;
     }
+    
+    public static func generateNextRandomId() -> Int{
+        return Int.random(in: 0 ... 2147483647)
+    }
 }

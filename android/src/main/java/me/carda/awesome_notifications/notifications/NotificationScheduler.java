@@ -223,7 +223,7 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
             Intent notificationIntent = new Intent(context, ScheduledNotificationReceiver.class);
 
             // Only generate randomly for first time to avoid collisions
-            if(pushNotification.content.id == -1)
+            if(pushNotification.content.id  == null || pushNotification.content.id < 0)
                 pushNotification.content.id = IntegerUtils.generateNextRandomId();
 
             notificationIntent.putExtra(Definitions.NOTIFICATION_ID, pushNotification.content.id);
