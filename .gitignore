@@ -15,3 +15,12 @@ example/ios/Flutter/.last_build_id
 doc/api/
 .idea/libraries/Dart_SDK.xml
 .idea/workspace.xml
+example/android/app/.settings/org.eclipse.buildship.core.prefs
+example/android/app/.project
+example/android/app/.classpath
+example/android/.settings/org.eclipse.buildship.core.prefs
+example/android/.project
+android/.settings/org.eclipse.buildship.core.prefs
+android/.project
+android/.classpath
+.idea/workspace.xml
