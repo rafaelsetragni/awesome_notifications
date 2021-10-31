@@ -39,7 +39,7 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
                     pushNotification = PushNotification()
                     pushNotification!.content = NotificationContentModel()
                     
-                    pushNotification!.content!.id = Int.random(in: 1..<2147483647)
+                    pushNotification!.content!.id = IntUtils.generateNextRandomId();
                     pushNotification!.content!.channelKey = "basic_channel"
                     pushNotification!.content!.title = title
                     pushNotification!.content!.body = body

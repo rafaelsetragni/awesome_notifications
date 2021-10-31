@@ -186,7 +186,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
     private PushNotification _buildSummaryGroupNotification(PushNotification original){
 
         PushNotification pushSummary = pushNotification.ClonePush();
-        pushSummary.content.id = new Random().nextInt((2147483647 - 2147483000) + 1) + 2147483000;
+        pushSummary.content.id = IntegerUtils.generateNextRandomId();
         pushSummary.content.notificationLayout = NotificationLayout.Default;
         pushSummary.content.largeIcon = null;
         pushSummary.content.bigPicture = null;

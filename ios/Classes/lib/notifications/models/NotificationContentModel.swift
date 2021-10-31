@@ -10,7 +10,6 @@ import Foundation
 public class NotificationContentModel : AbstractModel {
 
     var id: Int?
-    var isRandomId: Bool = false
     var channelKey: String?
     var groupKey: String?
     var title: String?
@@ -49,73 +48,46 @@ public class NotificationContentModel : AbstractModel {
     
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
                 
-        self.id             = MapUtils<Int>.getValueOrDefault(reference: "id", arguments: arguments)
-        self.isRandomId     = MapUtils<Bool>.getValueOrDefault(reference: "isRandom", arguments: arguments) ?? false
-        if(id == -1) {
-            self.isRandomId = true;
+        self.id = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_ID, arguments: arguments)
+        if((id ?? -1) < 0) {
             id = IntUtils.generateNextRandomId();
         }
         
-        self.channelKey     = MapUtils<String>.getValueOrDefault(reference: "channelKey", arguments: arguments)
-        self.groupKey       = MapUtils<String>.getValueOrDefault(reference: "groupKey", arguments: arguments)
-        self.title          = MapUtils<String>.getValueOrDefault(reference: "title", arguments: arguments)
-        self.body           = MapUtils<String>.getValueOrDefault(reference: "body", arguments: arguments)
-        self.summary        = MapUtils<String>.getValueOrDefault(reference: "summary", arguments: arguments)
-        self.showWhen       = MapUtils<Bool>.getValueOrDefault(reference: "showWhen", arguments: arguments)
+        self.channelKey     = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_CHANNEL_KEY, arguments: arguments)
+        self.groupKey       = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_GROUP_KEY, arguments: arguments)
+        self.title          = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_TITLE, arguments: arguments)
+        self.body           = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BODY, arguments: arguments)
+        self.summary        = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_SUMMARY, arguments: arguments)
+        self.showWhen       = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_SHOW_WHEN, arguments: arguments)
         
-        self.playSound             = MapUtils<Bool>.getValueOrDefault(reference: "playSound", arguments: arguments)
-        self.customSound           = MapUtils<String>.getValueOrDefault(reference: "customSound", arguments: arguments)
-        self.locked                = MapUtils<Bool>.getValueOrDefault(reference: "locked", arguments: arguments)
-        self.icon                  = MapUtils<String>.getValueOrDefault(reference: "icon", arguments: arguments)
-        self.largeIcon             = MapUtils<String>.getValueOrDefault(reference: "largeIcon", arguments: arguments)
-        self.bigPicture            = MapUtils<String>.getValueOrDefault(reference: "bigPicture", arguments: arguments)
-        self.hideLargeIconOnExpand = MapUtils<Bool>.getValueOrDefault(reference: "hideLargeIconOnExpand", arguments: arguments)
-        self.autoDismissable       = MapUtils<Bool>.getValueOrDefault(reference: "autoDismissable", arguments: arguments)
-        self.displayOnForeground   = MapUtils<Bool>.getValueOrDefault(reference: "displayOnForeground", arguments: arguments)
-        self.displayOnBackground   = MapUtils<Bool>.getValueOrDefault(reference: "displayOnBackground", arguments: arguments)
-        self.color                 = MapUtils<Int64>.getValueOrDefault(reference: "color", arguments: arguments)
-        self.backgroundColor       = MapUtils<Int64>.getValueOrDefault(reference: "backgroundColor", arguments: arguments)
-        self.progress              = MapUtils<Int>.getValueOrDefault(reference: "progress", arguments: arguments)
-        self.ticker                = MapUtils<String>.getValueOrDefault(reference: "ticker", arguments: arguments)
+        self.playSound             = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_PLAY_SOUND, arguments: arguments)
+        self.customSound           = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_CUSTOM_SOUND, arguments: arguments)
+        
+        self.locked                = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_LOCKED, arguments: arguments)
+        self.icon                  = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_ICON, arguments: arguments)
+        self.largeIcon             = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_LARGE_ICON, arguments: arguments)
+        self.bigPicture            = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BIG_PICTURE, arguments: arguments)
+        self.hideLargeIconOnExpand = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND, arguments: arguments)
+        self.autoDismissable       = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_AUTO_DISMISSABLE, arguments: arguments)
+        self.displayOnForeground   = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, arguments: arguments)
+        self.displayOnBackground   = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, arguments: arguments)
+        self.color                 = MapUtils<Int64>.getValueOrDefault(reference: Definitions.NOTIFICATION_COLOR, arguments: arguments)
+        self.backgroundColor       = MapUtils<Int64>.getValueOrDefault(reference: Definitions.NOTIFICATION_BACKGROUND_COLOR, arguments: arguments)
+        self.progress              = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_PROGRESS, arguments: arguments)
+        self.ticker                = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_TICKER, arguments: arguments)
 
-        self.privacy            = EnumUtils<NotificationPrivacy>.getEnumOrDefault(reference: "privacy", arguments: arguments)
-        self.privateMessage     = MapUtils<String>.getValueOrDefault(reference: "privateMessage", arguments: arguments)
+        self.privacy            = EnumUtils<NotificationPrivacy>.getEnumOrDefault(reference: Definitions.NOTIFICATION_PRIVACY, arguments: arguments)
+        self.privateMessage     = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_PRIVATE_MESSAGE, arguments: arguments)
         
-        self.notificationLayout = EnumUtils<NotificationLayout>.getEnumOrDefault(reference: "notificationLayout", arguments: arguments)
+        self.notificationLayout = EnumUtils<NotificationLayout>.getEnumOrDefault(reference: Definitions.NOTIFICATION_LAYOUT, arguments: arguments)
         
-        self.createdSource      = EnumUtils<NotificationSource>.getEnumOrDefault(reference: "createdSource", arguments: arguments)
-        self.createdLifeCycle   = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: "createdLifeCycle", arguments: arguments)
-        self.displayedLifeCycle = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: "displayedLifeCycle", arguments: arguments)
-        self.createdDate        = MapUtils<String>.getValueOrDefault(reference: "createdDate", arguments: arguments)
-        self.displayedDate      = MapUtils<String>.getValueOrDefault(reference: "displayedDate", arguments: arguments)
+        self.createdSource      = EnumUtils<NotificationSource>.getEnumOrDefault(reference: Definitions.NOTIFICATION_CREATED_SOURCE, arguments: arguments)
+        self.createdLifeCycle   = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: efinitions.NOTIFICATION_CREATED_LIFECYCLE, arguments: arguments)
+        self.displayedLifeCycle = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE, arguments: arguments)
+        self.createdDate        = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_CREATED_DATE, arguments: arguments)
+        self.displayedDate      = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_DISPLAYED_DATE, arguments: arguments)
         
-        self.payload  = MapUtils<[String:String?]>.getValueOrDefault(reference: "payload", arguments: arguments)
-        
-        if(arguments?["actionButtons"] != nil){
-            
-            do {
-                
-                self.actionButtons = [NotificationButtonModel]()
-                let listData = arguments?["actionButtons"] as? [Any] ?? []
-                
-                for data in listData {
-                    
-                    let buttonData:[String:Any?]? = data as? [String:Any?]
-                    if(buttonData == nil){
-                        throw AwesomeNotificationsException.invalidRequiredFields(msg: "actionButtons are invalid")
-                    }
-                    
-                    self.actionButtons?.append(NotificationButtonModel().fromMap(arguments: buttonData) as! NotificationButtonModel)
-                }
-                
-            } catch {
-                self.actionButtons = nil
-            }
-            
-            if(self.actionButtons?.isEmpty ?? true){
-                self.actionButtons = nil
-            }
-        }
+        self.payload  = MapUtils<[String:String?]>.getValueOrDefault(reference: Definitions.NOTIFICATION_PAYLOAD, arguments: arguments)
         
         return self
     }
@@ -123,36 +95,36 @@ public class NotificationContentModel : AbstractModel {
     public func toMap() -> [String : Any?] {
         var mapData:[String: Any?] = [:]
         
-        if(self.id != nil) {mapData["id"] = self.id}
-        if(self.channelKey != nil) {mapData["channelKey"] = self.channelKey}
-        if(self.groupKey != nil) {mapData["groupKey"] = self.groupKey}
-        if(self.title != nil){ mapData["title"] = self.title }
-        if(self.body != nil){ mapData["body"] = self.body }
-        if(self.summary != nil){ mapData["summary"] = self.summary }
-        if(self.showWhen != nil){ mapData["showWhen"] = self.showWhen }
-        if(self.playSound != nil){ mapData["playSound"] = self.playSound }
-        if(self.customSound != nil){ mapData["customSound"] = self.customSound }
-        if(self.icon != nil){ mapData["icon"] = self.icon }
-        if(self.largeIcon != nil){ mapData["largeIcon"] = self.largeIcon }
-        if(self.locked != nil){ mapData["locked"] = self.locked }
-        if(self.bigPicture != nil){ mapData["bigPicture"] = self.bigPicture }
-        if(self.hideLargeIconOnExpand != nil){ mapData["hideLargeIconOnExpand"] = self.hideLargeIconOnExpand }
-        if(self.autoDismissable != nil){ mapData["autoDismissable"] = self.autoDismissable }
-        if(self.displayOnForeground != nil){ mapData["displayOnForeground"] = self.displayOnForeground }
-        if(self.displayOnBackground != nil){ mapData["displayOnBackground"] = self.displayOnBackground }
-        if(self.color != nil){ mapData["color"] = self.color }
-        if(self.backgroundColor != nil){ mapData["backgroundColor"] = self.backgroundColor }
-        if(self.progress != nil){ mapData["progress"] = self.progress }
-        if(self.ticker != nil){ mapData["ticker"] = self.ticker }
-        if(self.privacy != nil){ mapData["privacy"] = self.privacy?.rawValue }
-        if(self.privateMessage != nil){ mapData["privateMessage"] = self.privateMessage }
-        if(self.notificationLayout != nil){ mapData["notificationLayout"] = self.notificationLayout?.rawValue }
-        if(self.createdSource != nil){ mapData["createdSource"] = self.createdSource?.rawValue }
-        if(self.createdLifeCycle != nil){ mapData["createdLifeCycle"] = self.createdLifeCycle?.rawValue }
-        if(self.displayedLifeCycle != nil){ mapData["displayedLifeCycle"] = self.displayedLifeCycle?.rawValue }
-        if(self.createdDate != nil){ mapData["createdDate"] = self.createdDate }
-        if(self.displayedDate != nil){ mapData["displayedDate"] = self.displayedDate }
-        if(self.payload != nil){ mapData["payload"] = self.payload }
+        if(self.id != nil) {mapData[Definitions.NOTIFICATION_ID] = self.id}
+        if(self.channelKey != nil) {mapData[Definitions.NOTIFICATION_CHANNEL_KEY] = self.channelKey}
+        if(self.groupKey != nil) {mapData[Definitions.NOTIFICATION_GROUP_KEY] = self.groupKey}
+        if(self.title != nil){ mapData[Definitions.NOTIFICATION_TITLE] = self.title }
+        if(self.body != nil){ mapData[Definitions.NOTIFICATION_BODY] = self.body }
+        if(self.summary != nil){ mapData[Definitions.NOTIFICATION_SUMMARY] = self.summary }
+        if(self.showWhen != nil){ mapData[Definitions.NOTIFICATION_SHOW_WHEN] = self.showWhen }
+        if(self.playSound != nil){ mapData[Definitions.NOTIFICATION_PLAY_SOUND] = self.playSound }
+        if(self.customSound != nil){ mapData[Definitions.NOTIFICATION_CUSTOM_SOUND] = self.customSound }
+        if(self.icon != nil){ mapData[Definitions.NOTIFICATION_ICON] = self.icon }
+        if(self.largeIcon != nil){ mapData[Definitions.NOTIFICATION_LARGE_ICON] = self.largeIcon }
+        if(self.locked != nil){ mapData[Definitions.NOTIFICATION_LOCKED] = self.locked }
+        if(self.bigPicture != nil){ mapData[Definitions.NOTIFICATION_BIG_PICTURE] = self.bigPicture }
+        if(self.hideLargeIconOnExpand != nil){ mapData[Definitions.NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND] = self.hideLargeIconOnExpand }
+        if(self.autoDismissable != nil){ mapData[Definitions.NOTIFICATION_AUTO_DISMISSABLE] = self.autoDismissable }
+        if(self.displayOnForeground != nil){ mapData[Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND] = self.displayOnForeground }
+        if(self.displayOnBackground != nil){ mapData[Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND] = self.displayOnBackground }
+        if(self.color != nil){ mapData[Definitions.NOTIFICATION_COLOR] = self.color }
+        if(self.backgroundColor != nil){ mapData[Definitions.NOTIFICATION_BACKGROUND_COLOR] = self.backgroundColor }
+        if(self.progress != nil){ mapData[Definitions.NOTIFICATION_PROGRESS] = self.progress }
+        if(self.ticker != nil){ mapData[Definitions.NOTIFICATION_TICKER] = self.ticker }
+        if(self.privacy != nil){ mapData[Definitions.NOTIFICATION_PRIVACY] = self.privacy?.rawValue }
+        if(self.privateMessage != nil){ mapData[Definitions.NOTIFICATION_PRIVATE_MESSAGE] = self.privateMessage }
+        if(self.notificationLayout != nil){ mapData[Definitions.NOTIFICATION_LAYOUT] = self.notificationLayout?.rawValue }
+        if(self.createdSource != nil){ mapData[Definitions.NOTIFICATION_CREATED_SOURCE] = self.createdSource?.rawValue }
+        if(self.createdLifeCycle != nil){ mapData[efinitions.NOTIFICATION_CREATED_LIFECYCLE] = self.createdLifeCycle?.rawValue }
+        if(self.displayedLifeCycle != nil){ mapData[Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE] = self.displayedLifeCycle?.rawValue }
+        if(self.createdDate != nil){ mapData[Definitions.NOTIFICATION_CREATED_DATE] = self.createdDate }
+        if(self.displayedDate != nil){ mapData[Definitions.NOTIFICATION_DISPLAYED_DATE] = self.displayedDate }
+        if(self.payload != nil){ mapData[Definitions.NOTIFICATION_PAYLOAD] = self.payload }
 
         return mapData
     }

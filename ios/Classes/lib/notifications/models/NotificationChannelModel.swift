@@ -20,8 +20,7 @@ public class NotificationChannelModel : AbstractModel {
     var soundSource: String?
     var defaultRingtoneType: DefaultRingtoneType?
 
-    var enableVibration: Bool?
-    
+    var enableVibration: Bool?    
     var vibrationPattern:[Int]?
 
     var enableLights: Bool?
@@ -38,32 +37,33 @@ public class NotificationChannelModel : AbstractModel {
     
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         
-        self.channelKey         = MapUtils<String>.getValueOrDefault(reference: "channelKey", arguments: arguments)
-        self.channelName        = MapUtils<String>.getValueOrDefault(reference: "channelName", arguments: arguments)
-        self.channelDescription = MapUtils<String>.getValueOrDefault(reference: "channelDescription", arguments: arguments)
-        self.channelShowBadge   = MapUtils<Bool>.getValueOrDefault(reference: "channelShowBadge", arguments: arguments)
+        self.channelKey         = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_CHANNEL_KEY, arguments: arguments)
+        self.channelName        = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_CHANNEL_NAME, arguments: arguments)
+        self.channelDescription = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_CHANNEL_DESCRIPTION, arguments: arguments)
+        self.channelShowBadge   = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE, arguments: arguments)
         
-        self.importance         = EnumUtils<NotificationImportance>.getEnumOrDefault(reference: "importance", arguments: arguments)
+        self.playSound          = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_PLAY_SOUND, arguments: arguments)
+        self.soundSource        = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_SOUND_SOURCE, arguments: arguments)
         
-        self.playSound          = MapUtils<Bool>.getValueOrDefault(reference: "playSound", arguments: arguments)
-        self.soundSource        = MapUtils<String>.getValueOrDefault(reference: "soundSource", arguments: arguments)
+        self.enableVibration    = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_ENABLE_VIBRATION, arguments: arguments)
+        self.vibrationPattern   = MapUtils<[Int]>.getValueOrDefault(reference: Definitions.NOTIFICATION_VIBRATION_PATTERN, arguments: arguments)
         
-        self.enableVibration    = MapUtils<Bool>.getValueOrDefault(reference: "enableVibration", arguments: arguments)
+        self.enableLights       = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_ENABLE_LIGHTS, arguments: arguments)
+        self.ledColor           = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_LED_COLOR, arguments: arguments)
+        self.ledOnMs            = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_LED_ON_MS, arguments: arguments)
+        self.ledOffMs           = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_LED_OFF_MS, arguments: arguments)
         
-        self.enableLights       = MapUtils<Bool>.getValueOrDefault(reference: "enableLights", arguments: arguments)
-        self.ledColor           = MapUtils<Int>.getValueOrDefault(reference: "ledColor", arguments: arguments)
-        self.ledOnMs            = MapUtils<Int>.getValueOrDefault(reference: "ledOnMs", arguments: arguments)
-        self.ledOffMs           = MapUtils<Int>.getValueOrDefault(reference: "ledOffMs", arguments: arguments)
+        self.importance         = EnumUtils<NotificationImportance>.getEnumOrDefault(reference: Definitions.NOTIFICATION_IMPORTANCE, arguments: arguments)
         
-        self.groupKey           = MapUtils<String>.getValueOrDefault(reference: "groupKey", arguments: arguments)
-        self.groupSort          = EnumUtils<GroupSort>.getEnumOrDefault(reference: "groupSort", arguments: arguments)
+        self.groupSort          = EnumUtils<GroupSort>.getEnumOrDefault(reference: Definitions.NOTIFICATION_GROUP_SORT, arguments: arguments)
+        self.groupKey           = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_GROUP_KEY, arguments: arguments)
         
-        self.locked         = MapUtils<Bool>.getValueOrDefault(reference: "locked", arguments: arguments)
-        self.onlyAlertOnce  = MapUtils<Bool>.getValueOrDefault(reference: "onlyAlertOnce", arguments: arguments)
+        self.locked         = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_LOCKED, arguments: arguments)
+        self.onlyAlertOnce  = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_ONLY_ALERT_ONCE, arguments: arguments)
         
-        self.groupAlertBehavior = EnumUtils<GroupAlertBehaviour>.getEnumOrDefault(reference: "groupAlertBehavior", arguments: arguments)
+        self.groupAlertBehavior = EnumUtils<GroupAlertBehaviour>.getEnumOrDefault(reference: Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR, arguments: arguments)
         
-        self.defaultRingtoneType = EnumUtils<DefaultRingtoneType>.getEnumOrDefault(reference: "defaultRingtoneType", arguments: arguments)
+        self.defaultRingtoneType = EnumUtils<DefaultRingtoneType>.getEnumOrDefault(reference: Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, arguments: arguments)
         
         return self
     }
@@ -71,32 +71,33 @@ public class NotificationChannelModel : AbstractModel {
     public func toMap() -> [String : Any?] {
         var mapData:[String: Any?] = [:]
         
-        if(channelKey != nil) {mapData["channelKey"] = self.channelKey}
-        if(channelName != nil) {mapData["channelName"] = self.channelName}
-        if(channelDescription != nil) {mapData["channelDescription"] = self.channelDescription}
-        if(channelShowBadge != nil) {mapData["channelShowBadge"] = self.channelShowBadge}
+        if(channelKey != nil) {mapData[Definitions.NOTIFICATION_CHANNEL_KEY] = self.channelKey}
+        if(channelName != nil) {mapData[Definitions.NOTIFICATION_CHANNEL_NAME] = self.channelName}
+        if(channelDescription != nil) {mapData[Definitions.NOTIFICATION_CHANNEL_DESCRIPTION] = self.channelDescription}
+        if(channelShowBadge != nil) {mapData[Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE] = self.channelShowBadge}
         
-        if(importance != nil) {mapData["importance"] = self.importance?.rawValue}
+        if(importance != nil) {mapData[Definitions.NOTIFICATION_IMPORTANCE] = self.importance?.rawValue}
         
-        if(playSound != nil) {mapData["playSound"] = self.playSound}
-        if(soundSource != nil) {mapData["soundSource"] = self.soundSource}
+        if(playSound != nil) {mapData[Definitions.NOTIFICATION_PLAY_SOUND] = self.playSound}
+        if(soundSource != nil) {mapData[Definitions.NOTIFICATION_SOUND_SOURCE] = self.soundSource}
         
-        if(enableVibration != nil) {mapData["enableVibration"] = self.enableVibration}
+        if(enableVibration != nil) {mapData[Definitions.NOTIFICATION_ENABLE_VIBRATION] = self.enableVibration}
+        if(vibrationPattern != nil) {mapData[Definitions.NOTIFICATION_VIBRATION_PATTERN] = self.vibrationPattern}
         
-        if(enableLights != nil) {mapData["enableLights"] = self.enableLights}
-        if(ledColor != nil) {mapData["ledColor"] = self.ledColor}
-        if(ledOnMs != nil) {mapData["ledOnMs"] = self.ledOnMs}
-        if(ledOffMs != nil) {mapData["ledOffMs"] = self.ledOffMs}
+        if(enableLights != nil) {mapData[Definitions.NOTIFICATION_ENABLE_LIGHTS] = self.enableLights}
+        if(ledColor != nil) {mapData[Definitions.NOTIFICATION_LED_COLOR] = self.ledColor}
+        if(ledOnMs != nil) {mapData[Definitions.NOTIFICATION_LED_ON_MS] = self.ledOnMs}
+        if(ledOffMs != nil) {mapData[Definitions.NOTIFICATION_LED_OFF_MS] = self.ledOffMs}
         
-        if(groupKey != nil) {mapData["groupKey"] = self.groupKey}
-        if(groupSort != nil) {mapData["groupSort"] = self.groupSort?.rawValue}
+        if(groupKey != nil) {mapData[Definitions.NOTIFICATION_GROUP_KEY] = self.groupKey}
+        if(groupSort != nil) {mapData[Definitions.NOTIFICATION_GROUP_SORT] = self.groupSort?.rawValue}
         
-        if(locked != nil) {mapData["locked"] = self.locked}
-        if(onlyAlertOnce != nil) {mapData["onlyAlertOnce"] = self.onlyAlertOnce}
+        if(locked != nil) {mapData[Definitions.NOTIFICATION_LOCKED] = self.locked}
+        if(onlyAlertOnce != nil) {mapData[Definitions.NOTIFICATION_ONLY_ALERT_ONCE] = self.onlyAlertOnce}
         
-        if(groupAlertBehavior != nil) {mapData["groupAlertBehavior"] = self.groupAlertBehavior?.rawValue}
+        if(groupAlertBehavior != nil) {mapData[Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR] = self.groupAlertBehavior?.rawValue}
         
-        if(defaultRingtoneType != nil) {mapData["defaultRingtoneType"] = self.defaultRingtoneType?.rawValue}
+        if(defaultRingtoneType != nil) {mapData[Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE] = self.defaultRingtoneType?.rawValue}
         
         return mapData
     }
