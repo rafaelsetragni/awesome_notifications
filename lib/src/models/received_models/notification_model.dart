@@ -13,7 +13,7 @@ class NotificationModel extends Model {
   NotificationSchedule? schedule;
   List<NotificationActionButton>? actionButtons;
 
-  NotificationModel({this.content, this.schedule, this.actionButtons});
+  NotificationModel({required this.content, this.schedule, this.actionButtons});
 
   /// Imports data from a serializable object
   NotificationModel? fromMap(Map<String, dynamic> mapData) {
