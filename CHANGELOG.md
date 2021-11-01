@@ -1,6 +1,8 @@
 ## [0.6.14]
 * Added validation to prevent scheduling with repeating intervals smaller than 60 seconds (iOS restriction)
-* Added crontab schedule to allow complex schedules based on initial and expiration date, a list of precise dates, or a crontab expression (only for Android)
+* Added crontab schedule to allow complex schedules based on initial and expiration date, a list of precise dates, or a crontab expression, and all four options can be combined together (only for Android)
+* Defined the final standard to replace negative IDs by random values
+* Minimum Android requirements increased to SDK 23 (Android 6.0 Marshmallow) due to new cancellation methods with unsecure procedures on API prior 23
 ## [0.6.13]
 * Added messaging layout and messaging group layout
 * Added method showNotificationPage to programmatically redirect the user to O.S. notifications permission page

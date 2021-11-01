@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
 
@@ -277,7 +278,7 @@ public class NotificationBuilder {
     }
 
     public static Notification getAndroidNotificationById(Context context, int id){
-        if(context != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M){
+        if(context != null){
 
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
@@ -295,7 +296,7 @@ public class NotificationBuilder {
 
     public static List<Notification> getAllAndroidActiveNotificationsByChannelKey(Context context, String channelKey){
         List<Notification> notifications = new ArrayList<>();
-        if(context != null && !StringUtils.isNullOrEmpty(channelKey) && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M){
+        if(context != null && !StringUtils.isNullOrEmpty(channelKey)){
 
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
@@ -321,7 +322,7 @@ public class NotificationBuilder {
 
     public static List<Notification> getAllAndroidActiveNotificationsByGroupKey(Context context, String groupKey){
         List<Notification> notifications = new ArrayList<>();
-        if(context != null && !StringUtils.isNullOrEmpty(groupKey) && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M){
+        if(context != null && !StringUtils.isNullOrEmpty(groupKey)){
 
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
@@ -732,13 +733,11 @@ public class NotificationBuilder {
 
     private void setGrouping(Context context, PushNotification pushNotification, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
 
-        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M){
-            if( // Grouping key is reserved to arrange messaging and messaging group layouts
-                    pushNotification.content.notificationLayout == NotificationLayout.Messaging ||
-                            pushNotification.content.notificationLayout == NotificationLayout.MessagingGroup
-            ){
-                return;
-            }
+        if( // Grouping key is reserved to arrange messaging and messaging group layouts
+            pushNotification.content.notificationLayout == NotificationLayout.Messaging ||
+            pushNotification.content.notificationLayout == NotificationLayout.MessagingGroup
+        ){
+            return;
         }
 
         String groupKey = getGroupKey(pushNotification.content, channelModel);
@@ -751,16 +750,14 @@ public class NotificationBuilder {
             }
             else {
                 boolean grouped = true;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
 
-                    NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
+                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
 
-                    for (StatusBarNotification activeNotification : currentActiveNotifications) {
-                        if (activeNotification.getGroupKey().contains("g:"+groupKey)) {
-                            grouped = false;
-                            break;
-                        }
+                for (StatusBarNotification activeNotification : currentActiveNotifications) {
+                    if (activeNotification.getGroupKey().contains("g:"+groupKey)) {
+                        grouped = false;
+                        break;
                     }
                 }
 
@@ -931,7 +928,7 @@ public class NotificationBuilder {
     private static Boolean setMessagingLayout(Context context, boolean isGrouping, NotificationContentModel contentModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) throws AwesomeNotificationException {
         String groupKey = getGroupKey(contentModel, channelModel);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N /*Android 7*/) {
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M /*Android 6*/) {
 
             Notification currentNotification = null;
             if(!contentModel.isRefreshNotification){
@@ -1031,12 +1028,12 @@ public class NotificationBuilder {
             }
 
             builder.setStyle((NotificationCompat.Style) messagingStyle);
-        }
+        /*}
         else {
             if(StringUtils.isNullOrEmpty(groupKey)){
                 builder.setGroup("Messaging."+groupKey);
             }
-        }
+        }*/
 
         return true;
     }

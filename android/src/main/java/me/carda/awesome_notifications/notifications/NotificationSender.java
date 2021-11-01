@@ -28,6 +28,7 @@ import me.carda.awesome_notifications.notifications.models.PushNotification;
 import me.carda.awesome_notifications.notifications.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
 import me.carda.awesome_notifications.utils.DateUtils;
+import me.carda.awesome_notifications.utils.IntegerUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
 public class NotificationSender extends AsyncTask<String, Void, NotificationReceived> {
