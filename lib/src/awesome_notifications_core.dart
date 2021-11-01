@@ -265,7 +265,8 @@ class AwesomeNotifications {
             json.decode(mapData[NOTIFICATION_BUTTONS]);
 
       // Invalid Notification
-      NotificationModel? notificationModel = NotificationModel(content: null).fromMap(mapData);
+      NotificationModel? notificationModel =
+          NotificationModel(content: null).fromMap(mapData);
       if (notificationModel == null) {
         throw Exception('Notification map data is invalid');
       }
@@ -308,7 +309,8 @@ class AwesomeNotifications {
         if (object is Map) {
           try {
             NotificationModel notificationModel =
-                NotificationModel(content: null).fromMap(Map<String, dynamic>.from(object))!;
+                NotificationModel(content: null)
+                    .fromMap(Map<String, dynamic>.from(object))!;
             scheduledNotifications.add(notificationModel);
           } catch (e) {
             return [];
