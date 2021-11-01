@@ -28,18 +28,18 @@ abstract class NotificationSchedule extends Model {
   /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
   bool repeats;
 
-  NotificationSchedule? fromMap(Map<String, dynamic> dataMap){
+  NotificationSchedule? fromMap(Map<String, dynamic> dataMap) {
     this.allowWhileIdle = AssertUtils.extractValue(
-        NOTIFICATION_ALLOW_WHILE_IDLE, dataMap, bool) ??
+            NOTIFICATION_ALLOW_WHILE_IDLE, dataMap, bool) ??
         false;
     this.repeats = AssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_REPEATS, dataMap, bool) ??
+            NOTIFICATION_SCHEDULE_REPEATS, dataMap, bool) ??
         false;
 
     return this;
   }
 
-  Map<String, dynamic> toMap(){
+  Map<String, dynamic> toMap() {
     Map<String, dynamic> dataMap = {
       NOTIFICATION_SCHEDULE_TIMEZONE: this.timeZone,
       NOTIFICATION_ALLOW_WHILE_IDLE: this.allowWhileIdle,

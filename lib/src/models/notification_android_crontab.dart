@@ -56,118 +56,120 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   NotificationAndroidCrontab.yearly(
       {required DateTime referenceDateTime, bool allowWhileIdle = false})
       : super(
-      timeZone: referenceDateTime.isUtc
-          ? AwesomeNotifications.utcTimeZoneIdentifier
-          : AwesomeNotifications.localTimeZoneIdentifier,
-      allowWhileIdle: allowWhileIdle,
-      repeats: false) {
-    this.crontabExpression = CronHelper().yearly(referenceDateTime: referenceDateTime);
+            timeZone: referenceDateTime.isUtc
+                ? AwesomeNotifications.utcTimeZoneIdentifier
+                : AwesomeNotifications.localTimeZoneIdentifier,
+            allowWhileIdle: allowWhileIdle,
+            repeats: false) {
+    this.crontabExpression =
+        CronHelper().yearly(referenceDateTime: referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at month based on a date reference
   NotificationAndroidCrontab.monthly(
-      {required DateTime referenceDateTime,
-       bool allowWhileIdle = false})
+      {required DateTime referenceDateTime, bool allowWhileIdle = false})
       : super(
-      timeZone: referenceDateTime.isUtc
-          ? AwesomeNotifications.utcTimeZoneIdentifier
-          : AwesomeNotifications.localTimeZoneIdentifier,
-      allowWhileIdle: allowWhileIdle,
-      repeats: false) {
-    this.crontabExpression = CronHelper().monthly(referenceDateTime: referenceDateTime);
+            timeZone: referenceDateTime.isUtc
+                ? AwesomeNotifications.utcTimeZoneIdentifier
+                : AwesomeNotifications.localTimeZoneIdentifier,
+            allowWhileIdle: allowWhileIdle,
+            repeats: false) {
+    this.crontabExpression =
+        CronHelper().monthly(referenceDateTime: referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at week based on a date reference
   NotificationAndroidCrontab.weekly(
-      {required DateTime referenceDateTime,
-        bool allowWhileIdle = false})
+      {required DateTime referenceDateTime, bool allowWhileIdle = false})
       : super(
-      timeZone: referenceDateTime.isUtc
-          ? AwesomeNotifications.utcTimeZoneIdentifier
-          : AwesomeNotifications.localTimeZoneIdentifier,
-      allowWhileIdle: allowWhileIdle,
-      repeats: false) {
-    this.crontabExpression = CronHelper().monthly(referenceDateTime: referenceDateTime);
+            timeZone: referenceDateTime.isUtc
+                ? AwesomeNotifications.utcTimeZoneIdentifier
+                : AwesomeNotifications.localTimeZoneIdentifier,
+            allowWhileIdle: allowWhileIdle,
+            repeats: false) {
+    this.crontabExpression =
+        CronHelper().monthly(referenceDateTime: referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at day based on a date reference
   NotificationAndroidCrontab.daily(
-      {required DateTime referenceDateTime,
-        bool allowWhileIdle = false})
+      {required DateTime referenceDateTime, bool allowWhileIdle = false})
       : super(
-      timeZone: referenceDateTime.isUtc
-          ? AwesomeNotifications.utcTimeZoneIdentifier
-          : AwesomeNotifications.localTimeZoneIdentifier,
-      allowWhileIdle: allowWhileIdle,
-      repeats: false) {
-    this.crontabExpression = CronHelper().monthly(referenceDateTime: referenceDateTime);
+            timeZone: referenceDateTime.isUtc
+                ? AwesomeNotifications.utcTimeZoneIdentifier
+                : AwesomeNotifications.localTimeZoneIdentifier,
+            allowWhileIdle: allowWhileIdle,
+            repeats: false) {
+    this.crontabExpression =
+        CronHelper().monthly(referenceDateTime: referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at hour based on a date reference
   NotificationAndroidCrontab.hourly(
-      {required DateTime referenceDateTime,
-        bool allowWhileIdle = false})
+      {required DateTime referenceDateTime, bool allowWhileIdle = false})
       : super(
-      timeZone: referenceDateTime.isUtc
-          ? AwesomeNotifications.utcTimeZoneIdentifier
-          : AwesomeNotifications.localTimeZoneIdentifier,
-      allowWhileIdle: allowWhileIdle,
-      repeats: false) {
-    this.crontabExpression = CronHelper().monthly(referenceDateTime: referenceDateTime);
+            timeZone: referenceDateTime.isUtc
+                ? AwesomeNotifications.utcTimeZoneIdentifier
+                : AwesomeNotifications.localTimeZoneIdentifier,
+            allowWhileIdle: allowWhileIdle,
+            repeats: false) {
+    this.crontabExpression =
+        CronHelper().monthly(referenceDateTime: referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at every minute based on a date reference
   NotificationAndroidCrontab.minutely(
-      {required DateTime referenceDateTime,
-        bool allowWhileIdle = false})
+      {required DateTime referenceDateTime, bool allowWhileIdle = false})
       : super(
-      timeZone: referenceDateTime.isUtc
-          ? AwesomeNotifications.utcTimeZoneIdentifier
-          : AwesomeNotifications.localTimeZoneIdentifier,
-      allowWhileIdle: allowWhileIdle,
-      repeats: false) {
-    this.crontabExpression = CronHelper().minutely(initialSecond: referenceDateTime.second);
+            timeZone: referenceDateTime.isUtc
+                ? AwesomeNotifications.utcTimeZoneIdentifier
+                : AwesomeNotifications.localTimeZoneIdentifier,
+            allowWhileIdle: allowWhileIdle,
+            repeats: false) {
+    this.crontabExpression =
+        CronHelper().minutely(initialSecond: referenceDateTime.second);
   }
 
   /// Generates a Cron expression to be played only on workweek days based on a date reference
   NotificationAndroidCrontab.workweekDay(
-      {required DateTime referenceDateTime,
-        bool allowWhileIdle = false})
+      {required DateTime referenceDateTime, bool allowWhileIdle = false})
       : super(
-      timeZone: referenceDateTime.isUtc
-          ? AwesomeNotifications.utcTimeZoneIdentifier
-          : AwesomeNotifications.localTimeZoneIdentifier,
-      allowWhileIdle: allowWhileIdle,
-      repeats: false) {
-    this.crontabExpression = CronHelper().monthly(referenceDateTime: referenceDateTime);
+            timeZone: referenceDateTime.isUtc
+                ? AwesomeNotifications.utcTimeZoneIdentifier
+                : AwesomeNotifications.localTimeZoneIdentifier,
+            allowWhileIdle: allowWhileIdle,
+            repeats: false) {
+    this.crontabExpression =
+        CronHelper().monthly(referenceDateTime: referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only on weekend days based on a date reference
   NotificationAndroidCrontab.weekendDay(
-      {required DateTime referenceDateTime,
-        bool allowWhileIdle = false})
+      {required DateTime referenceDateTime, bool allowWhileIdle = false})
       : super(
-      timeZone: referenceDateTime.isUtc
-          ? AwesomeNotifications.utcTimeZoneIdentifier
-          : AwesomeNotifications.localTimeZoneIdentifier,
-      allowWhileIdle: allowWhileIdle,
-      repeats: false) {
-    this.crontabExpression = CronHelper().monthly(referenceDateTime: referenceDateTime);
+            timeZone: referenceDateTime.isUtc
+                ? AwesomeNotifications.utcTimeZoneIdentifier
+                : AwesomeNotifications.localTimeZoneIdentifier,
+            allowWhileIdle: allowWhileIdle,
+            repeats: false) {
+    this.crontabExpression =
+        CronHelper().monthly(referenceDateTime: referenceDateTime);
   }
 
   @override
   NotificationAndroidCrontab? fromMap(Map<String, dynamic> dataMap) {
     super.fromMap(dataMap);
 
-    this.crontabExpression =
-        AssertUtils.extractValue(NOTIFICATION_CRONTAB_EXPRESSION, dataMap, DateTime);
-    this.initialDateTime =
-        AssertUtils.extractValue(NOTIFICATION_INITIAL_DATE_TIME, dataMap, DateTime);
-    this.expirationDateTime =
-        AssertUtils.extractValue(NOTIFICATION_EXPIRATION_DATE_TIME, dataMap, DateTime);
+    this.crontabExpression = AssertUtils.extractValue(
+        NOTIFICATION_CRONTAB_EXPRESSION, dataMap, DateTime);
+    this.initialDateTime = AssertUtils.extractValue(
+        NOTIFICATION_INITIAL_DATE_TIME, dataMap, DateTime);
+    this.expirationDateTime = AssertUtils.extractValue(
+        NOTIFICATION_EXPIRATION_DATE_TIME, dataMap, DateTime);
 
     if (dataMap[NOTIFICATION_PRECISE_SCHEDULES] is List) {
-      List<String> schedules = List<String>.from(dataMap[NOTIFICATION_PRECISE_SCHEDULES]);
+      List<String> schedules =
+          List<String>.from(dataMap[NOTIFICATION_PRECISE_SCHEDULES]);
       preciseSchedules = [];
 
       for (String schedule in schedules) {
@@ -189,14 +191,15 @@ class NotificationAndroidCrontab extends NotificationSchedule {
 
   @override
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> dataMap =
-    super.toMap()
+    Map<String, dynamic> dataMap = super.toMap()
       ..addAll({
-      NOTIFICATION_CRONTAB_EXPRESSION: this.crontabExpression,
-      NOTIFICATION_INITIAL_DATE_TIME: DateUtils.parseDateToString(this.initialDateTime),
-      NOTIFICATION_EXPIRATION_DATE_TIME: DateUtils.parseDateToString(this.expirationDateTime),
-      NOTIFICATION_PRECISE_SCHEDULES: null
-    });
+        NOTIFICATION_CRONTAB_EXPRESSION: this.crontabExpression,
+        NOTIFICATION_INITIAL_DATE_TIME:
+            DateUtils.parseDateToString(this.initialDateTime),
+        NOTIFICATION_EXPIRATION_DATE_TIME:
+            DateUtils.parseDateToString(this.expirationDateTime),
+        NOTIFICATION_PRECISE_SCHEDULES: null
+      });
 
     if (!ListUtils.isNullOrEmpty(preciseSchedules)) {
       List<String> schedulesMap = [];

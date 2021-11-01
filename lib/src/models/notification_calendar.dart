@@ -81,7 +81,6 @@ class NotificationCalendar extends NotificationSchedule {
 
   @override
   NotificationCalendar? fromMap(Map<String, dynamic> dataMap) {
-
     this.era =
         AssertUtils.extractValue(NOTIFICATION_SCHEDULE_ERA, dataMap, int);
     this.year =
@@ -116,9 +115,8 @@ class NotificationCalendar extends NotificationSchedule {
 
   @override
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> dataMap =
-      super.toMap()
-        ..addAll({
+    Map<String, dynamic> dataMap = super.toMap()
+      ..addAll({
         NOTIFICATION_SCHEDULE_ERA: this.era,
         NOTIFICATION_SCHEDULE_YEAR: this.year,
         NOTIFICATION_SCHEDULE_MONTH: this.month,

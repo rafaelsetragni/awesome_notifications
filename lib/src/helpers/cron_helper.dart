@@ -37,39 +37,32 @@ class CronHelper {
 
   /// Generates a Cron expression to be played at only exact time
   String atDate({required DateTime referenceDateTime}) {
-    return DateFormat('s m H d M ? y')
-        .format(referenceDateTime);
+    return DateFormat('s m H d M ? y').format(referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at year from now
   String yearly({required DateTime referenceDateTime}) {
-    return DateFormat('s m H d M ? *')
-        .format(referenceDateTime);
+    return DateFormat('s m H d M ? *').format(referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at month from now
   String monthly({required DateTime referenceDateTime}) {
-    return DateFormat('s m H d * ? *')
-        .format(referenceDateTime);
+    return DateFormat('s m H d * ? *').format(referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at week from now
   String weekly({required DateTime referenceDateTime}) {
-    return DateFormat('s m H ? M E *')
-        .format(referenceDateTime)
-        .toUpperCase();
+    return DateFormat('s m H ? M E *').format(referenceDateTime).toUpperCase();
   }
 
   /// Generates a Cron expression to be played only once at day from now
   String daily({required DateTime referenceDateTime}) {
-    return DateFormat('s m H * * ? *')
-        .format(referenceDateTime);
+    return DateFormat('s m H * * ? *').format(referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at hour from now
   String hourly({required DateTime referenceDateTime}) {
-    return DateFormat('s m * * * ? *')
-        .format(referenceDateTime);
+    return DateFormat('s m * * * ? *').format(referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at every minute from now
@@ -79,15 +72,11 @@ class CronHelper {
 
   /// Generates a Cron expression to be played only on workweek days from now
   String workweekDay({required DateTime referenceDateTime}) {
-    return DateFormat('s m H ? * ')
-            .format(referenceDateTime) +
-        '$MON-$FRI *';
+    return DateFormat('s m H ? * ').format(referenceDateTime) + '$MON-$FRI *';
   }
 
   /// Generates a Cron expression to be played only on weekend days from now
   String weekendDay({required DateTime referenceDateTime}) {
-    return DateFormat('s m H ? * ')
-            .format(referenceDateTime) +
-        '$SAT,$SUN *';
+    return DateFormat('s m H ? * ').format(referenceDateTime) + '$SAT,$SUN *';
   }
 }

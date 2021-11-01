@@ -59,10 +59,7 @@ class NotificationInterval extends NotificationSchedule {
   void validate() {
     assert((this.interval ?? -1) >= 0);
 
-    assert(
-        this.repeats &&
-        (this.interval ?? 0) >= 60,
-        'time interval must be at least 60 if repeating'
-    );
+    assert(this.repeats && (this.interval ?? 0) >= 60,
+        'time interval must be at least 60 if repeating');
   }
 }
