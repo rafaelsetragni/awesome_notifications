@@ -388,7 +388,7 @@ public class NotificationBuilder {
                         action = UNNotificationAction(
                             identifier: button.key!,
                             title: button.label!,
-                            options: button.isDangerousOption ?
+                            options: (button.isDangerousOption ?? false) ?
                                 [.destructive, .foreground] : [.foreground]
                         )
                         
@@ -396,7 +396,7 @@ public class NotificationBuilder {
                         action = UNNotificationAction(
                             identifier: button.key!,
                             title: button.label!,
-                            options: button.isDangerousOption ?
+                            options: (button.isDangerousOption ?? false) ?
                                 [.destructive] : []
                         )
                     
@@ -404,7 +404,7 @@ public class NotificationBuilder {
                         action = UNNotificationAction(
                             identifier: button.key!,
                             title: button.label!,
-                            options: button.isDangerousOption ?
+                            options: (button.isDangerousOption ?? false) ?
                                 [.destructive, .foreground] : [.foreground]
                         )
                         break

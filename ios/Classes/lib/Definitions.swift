@@ -138,6 +138,7 @@ enum Definitions {
     static let  NOTIFICATION_BUTTON_ICON = "icon"
     static let  NOTIFICATION_BUTTON_LABEL = "label"
     static let  NOTIFICATION_BUTTON_TYPE = "buttonType"
+    static let  NOTIFICATION_SHOW_IN_COMPACT_VIEW = "showInCompactView"
     static let  NOTIFICATION_IS_DANGEROUS_OPTION = "isDangerousOption"
 
     static let  NOTIFICATION_PAYLOAD = "payload"
