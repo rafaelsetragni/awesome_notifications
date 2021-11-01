@@ -49,7 +49,7 @@ import me.carda.awesome_notifications.notifications.models.DefaultsModel;
 import me.carda.awesome_notifications.notifications.models.NotificationCalendarModel;
 import me.carda.awesome_notifications.notifications.models.NotificationIntervalModel;
 import me.carda.awesome_notifications.notifications.models.NotificationScheduleModel;
-import me.carda.awesome_notifications.notifications.models.PushNotification;
+import me.carda.awesome_notifications.notifications.models.NotificationModel;
 import me.carda.awesome_notifications.notifications.enumerators.MediaSource;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationSource;
@@ -648,12 +648,12 @@ public class AwesomeNotificationsPlugin
     }
 
     private void channelMethodListAllSchedules(MethodCall call, Result result) throws Exception {
-        List<PushNotification> activeSchedules = ScheduleManager.listSchedules(applicationContext);
+        List<NotificationModel> activeSchedules = ScheduleManager.listSchedules(applicationContext);
         List<Map<String, Object>> listSerialized = new ArrayList<>();
 
         if (activeSchedules != null) {
-            for (PushNotification pushNotification : activeSchedules) {
-                Map<String, Object> serialized = pushNotification.toMap();
+            for (NotificationModel notificationModel : activeSchedules) {
+                Map<String, Object> serialized = notificationModel.toMap();
                 listSerialized.add(serialized);
             }
         }
@@ -669,7 +669,7 @@ public class AwesomeNotificationsPlugin
         assert data != null;
 
         @SuppressWarnings("unchecked")
-        Map<String, Object> scheduleData = (Map<String, Object>) data.get(Definitions.PUSH_NOTIFICATION_SCHEDULE);
+        Map<String, Object> scheduleData = (Map<String, Object>) data.get(Definitions.NOTIFICATION_MODEL_SCHEDULE);
         String fixedDateString = (String) data.get(Definitions.NOTIFICATION_INITIAL_FIXED_DATE);
 
         assert scheduleData != null;
@@ -972,9 +972,9 @@ public class AwesomeNotificationsPlugin
     private void channelMethodCreateNotification(MethodCall call, Result result) throws Exception {
 
         Map<String, Object> pushData = call.arguments();
-        PushNotification pushNotification = new PushNotification().fromMap(pushData);
+        NotificationModel notificationModel = new NotificationModel().fromMap(pushData);
 
-        if (pushNotification == null) {
+        if (notificationModel == null) {
             throw new AwesomeNotificationException("Invalid parameters");
         }
 
@@ -982,19 +982,19 @@ public class AwesomeNotificationsPlugin
             throw new AwesomeNotificationException("Notifications are disabled");
         }
 
-        if (pushNotification.schedule == null) {
+        if (notificationModel.schedule == null) {
 
             NotificationSender.send(
                     applicationContext,
                     NotificationSource.Local,
-                    pushNotification
+                    notificationModel
             );
         } else {
 
             NotificationScheduler.schedule(
                     applicationContext,
                     NotificationSource.Schedule,
-                    pushNotification
+                    notificationModel
             );
         }
 

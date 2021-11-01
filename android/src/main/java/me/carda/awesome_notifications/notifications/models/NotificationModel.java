@@ -10,7 +10,7 @@ import java.util.Map;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 
-public class PushNotification extends Model {
+public class NotificationModel extends Model {
 
     public boolean groupSummary = false;
     public String remoteHistory;
@@ -19,24 +19,24 @@ public class PushNotification extends Model {
     public NotificationScheduleModel schedule;
     public List<NotificationButtonModel> actionButtons;
 
-    public PushNotification(){}
+    public NotificationModel(){}
 
-    public PushNotification ClonePush(){
-        PushNotification newPush = new PushNotification();
+    public NotificationModel ClonePush(){
+        NotificationModel newPush = new NotificationModel();
         newPush.fromMap(this.toMap());
         return newPush;
     }
 
     @Override
-    public PushNotification fromMap(Map<String, Object> parameters){
+    public NotificationModel fromMap(Map<String, Object> parameters){
 
-        content = extractNotificationContent(Definitions.PUSH_NOTIFICATION_CONTENT, parameters);
+        content = extractNotificationContent(Definitions.NOTIFICATION_MODEL_CONTENT, parameters);
 
         // required
         if(content == null) return null;
 
-        schedule = extractNotificationSchedule(Definitions.PUSH_NOTIFICATION_SCHEDULE, parameters);
-        actionButtons = extractNotificationButtons(Definitions.PUSH_NOTIFICATION_BUTTONS, parameters);
+        schedule = extractNotificationSchedule(Definitions.NOTIFICATION_MODEL_SCHEDULE, parameters);
+        actionButtons = extractNotificationButtons(Definitions.NOTIFICATION_MODEL_BUTTONS, parameters);
 
         return this;
     }
@@ -47,17 +47,17 @@ public class PushNotification extends Model {
         if(content == null) return null;
         Map<String, Object> dataMap = new HashMap<String, Object>();
 
-        dataMap.put(Definitions.PUSH_NOTIFICATION_CONTENT, content.toMap());
+        dataMap.put(Definitions.NOTIFICATION_MODEL_CONTENT, content.toMap());
 
         if(schedule != null)
-            dataMap.put(Definitions.PUSH_NOTIFICATION_SCHEDULE, schedule.toMap());
+            dataMap.put(Definitions.NOTIFICATION_MODEL_SCHEDULE, schedule.toMap());
 
         if(actionButtons != null && !actionButtons.isEmpty()){
             List<Object> buttonsData = new ArrayList<>();
             for(NotificationButtonModel button : actionButtons){
                 buttonsData.add(button.toMap());
             }
-            dataMap.put(Definitions.PUSH_NOTIFICATION_BUTTONS, buttonsData);
+            dataMap.put(Definitions.NOTIFICATION_MODEL_BUTTONS, buttonsData);
         }
 
         return dataMap;
@@ -69,8 +69,8 @@ public class PushNotification extends Model {
     }
 
     @Override
-    public PushNotification fromJson(String json){
-        return (PushNotification) super.templateFromJson(json);
+    public NotificationModel fromJson(String json){
+        return (NotificationModel) super.templateFromJson(json);
     }
 
     private static NotificationContentModel extractNotificationContent(String reference, Map<String, Object> parameters) {

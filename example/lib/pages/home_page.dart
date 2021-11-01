@@ -622,11 +622,11 @@ class _HomePageState extends State<HomePage> {
 
             TextDivisor(title: 'Vibration Patterns'),
             TextNote(
-                'The PushNotification plugin has 3 vibration patters as example, but you perfectly can create your own patter.'
+                'The NotificationModel plugin has 3 vibration patters as example, but you perfectly can create your own patter.'
                 '\n'
                 'The patter is made by a list of big integer, separated between ON and OFF duration in milliseconds.'),
             TextNote(
-                'A vibration pattern pre-configured in a channel could be updated at any time using the method PushNotification.setChannel'),
+                'A vibration pattern pre-configured in a channel could be updated at any time using the method NotificationModel.setChannel'),
             SimpleButton('Show plain notification with low vibration pattern',
                 onPressed: () => showLowVibrationNotification(4)),
             SimpleButton(

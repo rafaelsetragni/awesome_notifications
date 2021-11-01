@@ -11,7 +11,7 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
     var contentHandler: ((UNNotificationContent) -> Void)?
     var content: UNMutableNotificationContent?
     //var fcmService: FCMService?
-    var pushNotification: PushNotification?
+    var notificationModel: NotificationModel?
     
 
     public override func didReceive(
@@ -34,56 +34,56 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
                     image = options["image"] as? String
                 }
                 
-                if content.userInfo[Definitions.PUSH_NOTIFICATION_CONTENT] == nil {
+                if content.userInfo[Definitions.NOTIFICATION_MODEL_CONTENT] == nil {
                     
-                    pushNotification = PushNotification()
-                    pushNotification!.content = NotificationContentModel()
+                    notificationModel = NotificationModel()
+                    notificationModel!.content = NotificationContentModel()
                     
-                    pushNotification!.content!.id = IntUtils.generateNextRandomId();
-                    pushNotification!.content!.channelKey = "basic_channel"
-                    pushNotification!.content!.title = title
-                    pushNotification!.content!.body = body
-                    pushNotification!.content!.playSound = true
+                    notificationModel!.content!.id = IntUtils.generateNextRandomId();
+                    notificationModel!.content!.channelKey = "basic_channel"
+                    notificationModel!.content!.title = title
+                    notificationModel!.content!.body = body
+                    notificationModel!.content!.playSound = true
                     
                     if !StringUtils.isNullOrEmpty(image) {
-                        pushNotification!.content!.notificationLayout = NotificationLayout.BigPicture
-                        pushNotification!.content!.bigPicture = image
+                        notificationModel!.content!.notificationLayout = NotificationLayout.BigPicture
+                        notificationModel!.content!.bigPicture = image
                     }
                     else {
-                        pushNotification!.content!.notificationLayout = NotificationLayout.Default
+                        notificationModel!.content!.notificationLayout = NotificationLayout.Default
                     }
                 }
                 else {
                     
                     var mapData:[String:Any?] = [:]
                     
-                    mapData[Definitions.PUSH_NOTIFICATION_CONTENT]  = JsonUtils.fromJson(content.userInfo[Definitions.PUSH_NOTIFICATION_CONTENT] as? String)
-                    mapData[Definitions.PUSH_NOTIFICATION_SCHEDULE] = JsonUtils.fromJson(content.userInfo[Definitions.PUSH_NOTIFICATION_SCHEDULE] as? String)
-                    mapData[Definitions.PUSH_NOTIFICATION_BUTTONS]  = JsonUtils.fromJsonArr(content.userInfo[Definitions.PUSH_NOTIFICATION_BUTTONS] as? String)
+                    mapData[Definitions.NOTIFICATION_MODEL_CONTENT]  = JsonUtils.fromJson(content.userInfo[Definitions.NOTIFICATION_MODEL_CONTENT] as? String)
+                    mapData[Definitions.NOTIFICATION_MODEL_SCHEDULE] = JsonUtils.fromJson(content.userInfo[Definitions.NOTIFICATION_MODEL_SCHEDULE] as? String)
+                    mapData[Definitions.NOTIFICATION_MODEL_BUTTONS]  = JsonUtils.fromJsonArr(content.userInfo[Definitions.NOTIFICATION_MODEL_BUTTONS] as? String)
                     
-                    pushNotification = PushNotification().fromMap(arguments: mapData) as? PushNotification
+                    notificationModel = NotificationModel().fromMap(arguments: mapData) as? NotificationModel
                     
                 }
                 
-                NotificationBuilder.setUserInfoContent(pushNotification: pushNotification!, content: content)
+                NotificationBuilder.setUserInfoContent(notificationModel: notificationModel!, content: content)
                 
                 if StringUtils.isNullOrEmpty(title) {
-                    content.title = pushNotification?.content?.title ?? ""
+                    content.title = notificationModel?.content?.title ?? ""
                 }
                 
                 if StringUtils.isNullOrEmpty(body) {
-                    content.body = pushNotification?.content?.body ?? ""
+                    content.body = notificationModel?.content?.body ?? ""
                 }
                 
                 content.categoryIdentifier = Definitions.DEFAULT_CATEGORY_IDENTIFIER
                 //contentHandler(content)
                 //return
                 
-                if let pushNotification = pushNotification {
+                if let notificationModel = notificationModel {
                     do {
                         try NotificationSenderAndScheduler().send(
                             createdSource: NotificationSource.Firebase,
-                            pushNotification: pushNotification,
+                            notificationModel: notificationModel,
                             content: content,
                             completion: { sent, newContent ,error  in
                                 

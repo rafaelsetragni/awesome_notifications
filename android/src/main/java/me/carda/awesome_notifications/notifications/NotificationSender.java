@@ -24,7 +24,7 @@ import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificati
 import me.carda.awesome_notifications.notifications.managers.CreatedManager;
 import me.carda.awesome_notifications.notifications.managers.DismissedManager;
 import me.carda.awesome_notifications.notifications.managers.DisplayedManager;
-import me.carda.awesome_notifications.notifications.models.PushNotification;
+import me.carda.awesome_notifications.notifications.models.NotificationModel;
 import me.carda.awesome_notifications.notifications.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
 import me.carda.awesome_notifications.utils.DateUtils;
@@ -39,7 +39,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
     private Context context;
     private NotificationSource createdSource;
     private NotificationLifeCycle appLifeCycle;
-    private PushNotification pushNotification;
+    private NotificationModel notificationModel;
 
     private Boolean created = false;
     private Boolean displayed = false;
@@ -48,23 +48,23 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
     public static void send(
             Context context,
-            PushNotification pushNotification
+            NotificationModel notificationModel
     ) throws AwesomeNotificationException {
 
         NotificationSender.send(
                 context,
-                pushNotification.content.createdSource,
-                pushNotification
+                notificationModel.content.createdSource,
+                notificationModel
         );
     }
 
     public static void send(
         Context context,
         NotificationSource createdSource,
-        PushNotification pushNotification
+        NotificationModel notificationModel
     ) throws AwesomeNotificationException {
 
-        if (pushNotification == null ){
+        if (notificationModel == null ){
             throw new AwesomeNotificationException("Notification cannot be empty or null");
         }
 
@@ -76,13 +76,13 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             appLifeCycle = NotificationLifeCycle.AppKilled;
         }
 
-        pushNotification.validate(context);
+        notificationModel.validate(context);
 
         new NotificationSender(
             context,
             appLifeCycle,
             createdSource,
-            pushNotification
+            notificationModel
         ).execute();
     }
 
@@ -90,12 +90,12 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             Context context,
             NotificationLifeCycle appLifeCycle,
             NotificationSource createdSource,
-            PushNotification pushNotification
+            NotificationModel notificationModel
     ){
         this.context = context;
         this.createdSource = createdSource;
         this.appLifeCycle = appLifeCycle;
-        this.pushNotification = pushNotification;
+        this.notificationModel = notificationModel;
     }
 
     /// AsyncTask METHODS BEGIN *********************************
@@ -105,42 +105,42 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
         try {
 
-            if (pushNotification != null){
+            if (notificationModel != null){
 
                 NotificationReceived receivedNotification = null;
 
-                if(pushNotification.content.createdSource == null){
-                    pushNotification.content.createdSource = createdSource;
+                if(notificationModel.content.createdSource == null){
+                    notificationModel.content.createdSource = createdSource;
                     created = true;
                 }
 
-                if(pushNotification.content.createdLifeCycle == null)
-                    pushNotification.content.createdLifeCycle = appLifeCycle;
+                if(notificationModel.content.createdLifeCycle == null)
+                    notificationModel.content.createdLifeCycle = appLifeCycle;
 
                 if (
-                    !StringUtils.isNullOrEmpty(pushNotification.content.title) ||
-                    !StringUtils.isNullOrEmpty(pushNotification.content.body)
+                    !StringUtils.isNullOrEmpty(notificationModel.content.title) ||
+                    !StringUtils.isNullOrEmpty(notificationModel.content.body)
                 ){
 
-                    if(pushNotification.content.displayedLifeCycle == null)
-                        pushNotification.content.displayedLifeCycle = appLifeCycle;
+                    if(notificationModel.content.displayedLifeCycle == null)
+                        notificationModel.content.displayedLifeCycle = appLifeCycle;
 
-                    pushNotification.content.displayedDate = DateUtils.getUTCDate();
+                    notificationModel.content.displayedDate = DateUtils.getUTCDate();
 
-                    pushNotification = showNotification(context, pushNotification);
+                    notificationModel = showNotification(context, notificationModel);
 
-                    // Only save DisplayedMethods if pushNotification was created and displayed successfully
-                    if(pushNotification != null){
+                    // Only save DisplayedMethods if notificationModel was created and displayed successfully
+                    if(notificationModel != null){
                         displayed = true;
 
-                        receivedNotification = new NotificationReceived(pushNotification.content);
+                        receivedNotification = new NotificationReceived(notificationModel.content);
 
                         receivedNotification.displayedLifeCycle = receivedNotification.displayedLifeCycle == null ?
                                 appLifeCycle : receivedNotification.displayedLifeCycle;
                     }
 
                 } else {
-                    receivedNotification = new NotificationReceived(pushNotification.content);
+                    receivedNotification = new NotificationReceived(notificationModel.content);
                 }
 
                 return receivedNotification;
@@ -150,15 +150,15 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             e.printStackTrace();
         }
 
-        pushNotification = null;
+        notificationModel = null;
         return null;
     }
 
     @Override
     protected void onPostExecute(NotificationReceived receivedNotification) {
 
-        // Only broadcast if pushNotification is valid
-        if(pushNotification != null){
+        // Only broadcast if notificationModel is valid
+        if(notificationModel != null){
 
             if(created){
                 CreatedManager.saveCreated(context, receivedNotification);
@@ -184,9 +184,9 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
     /// AsyncTask METHODS END *********************************
 
-    private PushNotification _buildSummaryGroupNotification(PushNotification original){
+    private NotificationModel _buildSummaryGroupNotification(NotificationModel original){
 
-        PushNotification pushSummary = pushNotification.ClonePush();
+        NotificationModel pushSummary = notificationModel.ClonePush();
         pushSummary.content.id = IntegerUtils.generateNextRandomId();
         pushSummary.content.notificationLayout = NotificationLayout.Default;
         pushSummary.content.largeIcon = null;
@@ -196,7 +196,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
         return  pushSummary;
     }
 
-    public PushNotification showNotification(Context context, PushNotification pushNotification) {
+    public NotificationModel showNotification(Context context, NotificationModel notificationModel) {
 
         try {
 
@@ -204,29 +204,29 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
             if(
                 (lifeCycle == NotificationLifeCycle.AppKilled) ||
-                (lifeCycle == NotificationLifeCycle.Foreground && pushNotification.content.displayOnForeground) ||
-                (lifeCycle == NotificationLifeCycle.Background && pushNotification.content.displayOnBackground)
+                (lifeCycle == NotificationLifeCycle.Foreground && notificationModel.content.displayOnForeground) ||
+                (lifeCycle == NotificationLifeCycle.Background && notificationModel.content.displayOnBackground)
             ){
-                Notification notification = notificationBuilder.createNotification(context, pushNotification);
+                Notification notification = notificationBuilder.createNotification(context, notificationModel);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-                    if(pushNotification.groupSummary){
-                        PushNotification pushSummary = _buildSummaryGroupNotification(pushNotification);
+                    if(notificationModel.groupSummary){
+                        NotificationModel pushSummary = _buildSummaryGroupNotification(notificationModel);
                         Notification summaryNotification = notificationBuilder.createNotification(context, pushSummary, true);
                         notificationManager.notify(pushSummary.content.id, summaryNotification);
                     }
 
-                    notificationManager.notify(pushNotification.content.id, notification);
+                    notificationManager.notify(notificationModel.content.id, notification);
                 }
                 else {
                     NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
-                    notificationManagerCompat.notify(pushNotification.content.id.toString(), pushNotification.content.id, notification);
+                    notificationManagerCompat.notify(notificationModel.content.id.toString(), notificationModel.content.id, notification);
                 }
             }
 
-            return pushNotification;
+            return notificationModel;
 
         } catch (Exception e) {
             e.printStackTrace();

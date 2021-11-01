@@ -246,7 +246,9 @@ Future<void> showNotificationWithIconsAndActionButtons(int id) async {
         NotificationActionButton(
             key: 'READ', label: 'Mark as read', autoDismissable: true),
         NotificationActionButton(
-            key: 'PROFILE', label: 'Profile', autoDismissable: true)
+            key: 'PROFILE', label: 'Profile', autoDismissable: true),
+        NotificationActionButton(
+            key: 'DISMISS', label: 'Dismiss', autoDismissable: true, isDangerousOption: true)
       ]);
 }
 
@@ -1099,9 +1101,9 @@ Future<void> showGroupedNotifications(id) async {
 ************************************************ */
 
 Future<void> listScheduledNotifications(BuildContext context) async {
-  List<PushNotification> activeSchedules =
+  List<NotificationModel> activeSchedules =
       await AwesomeNotifications().listScheduledNotifications();
-  for (PushNotification schedule in activeSchedules) {
+  for (NotificationModel schedule in activeSchedules) {
     debugPrint(
         'pending notification: ['
             'id: ${schedule.content!.id}, '

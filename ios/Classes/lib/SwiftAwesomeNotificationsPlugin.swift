@@ -187,20 +187,20 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         else {
             arguments = content.userInfo as! [String : Any?]
             
-            if(arguments[Definitions.PUSH_NOTIFICATION_CONTENT] is String){
-                arguments[Definitions.PUSH_NOTIFICATION_CONTENT] = JsonUtils.fromJson(arguments[Definitions.PUSH_NOTIFICATION_CONTENT] as? String)
+            if(arguments[Definitions.NOTIFICATION_MODEL_CONTENT] is String){
+                arguments[Definitions.NOTIFICATION_MODEL_CONTENT] = JsonUtils.fromJson(arguments[Definitions.NOTIFICATION_MODEL_CONTENT] as? String)
             }
             
-            if(arguments[Definitions.PUSH_NOTIFICATION_BUTTONS] is String){
-                arguments[Definitions.PUSH_NOTIFICATION_BUTTONS] = JsonUtils.fromJson(arguments[Definitions.PUSH_NOTIFICATION_BUTTONS] as? String)
+            if(arguments[Definitions.NOTIFICATION_MODEL_BUTTONS] is String){
+                arguments[Definitions.NOTIFICATION_MODEL_BUTTONS] = JsonUtils.fromJson(arguments[Definitions.NOTIFICATION_MODEL_BUTTONS] as? String)
             }
             
-            if(arguments[Definitions.PUSH_NOTIFICATION_SCHEDULE] is String){
-                arguments[Definitions.PUSH_NOTIFICATION_SCHEDULE] = JsonUtils.fromJson(arguments[Definitions.PUSH_NOTIFICATION_SCHEDULE] as? String)
+            if(arguments[Definitions.NOTIFICATION_MODEL_SCHEDULE] is String){
+                arguments[Definitions.NOTIFICATION_MODEL_SCHEDULE] = JsonUtils.fromJson(arguments[Definitions.NOTIFICATION_MODEL_SCHEDULE] as? String)
             }
         }
         
-        guard let pushNotification:PushNotification = NotificationBuilder.jsonDataToPushNotification(jsonData: arguments)
+        guard let notificationModel:NotificationModel = NotificationBuilder.jsonDataToNotificationModel(jsonData: arguments)
         else {
             Log.d("receiveNotification","notification data invalid")
             return false
@@ -209,7 +209,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         /*
         if(content.userInfo["updated"] == nil){
             
-            let pushData = pushNotification.toMap()
+            let pushData = notificationModel.toMap()
             let updatedJsonData = JsonUtils.toJson(pushData)
             
             let content:UNMutableNotificationContent =
@@ -218,7 +218,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             content.userInfo[Definitions.NOTIFICATION_JSON] = updatedJsonData
             content.userInfo["updated"] = true
             
-            let request = UNNotificationRequest(identifier: pushNotification!.content!.id!.description, content: content, trigger: nil)
+            let request = UNNotificationRequest(identifier: notificationModel!.content!.id!.description, content: content, trigger: nil)
             
             UNUserNotificationCenter.current().add(request)
             {
@@ -234,12 +234,12 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         }
         */
     
-        let notificationReceived:NotificationReceived? = NotificationReceived(pushNotification.content)
+        let notificationReceived:NotificationReceived? = NotificationReceived(notificationModel.content)
         if(notificationReceived != nil){
             
-            pushNotification.content!.displayedLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
+            notificationModel.content!.displayedLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
                         
-            let channel:NotificationChannelModel? = ChannelManager.getChannelByKey(channelKey: pushNotification.content!.channelKey!)
+            let channel:NotificationChannelModel? = ChannelManager.getChannelByKey(channelKey: notificationModel.content!.channelKey!)
             
             alertOnlyOnceNotification(
                 channel?.onlyAlertOnce,
@@ -256,12 +256,12 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             SwiftAwesomeNotificationsPlugin.displayEvent(notificationReceived: notificationReceived!)
 
             /*
-            if(pushNotification.schedule != nil){
+            if(notificationModel.schedule != nil){
                                 
                 do {
                     try NotificationSenderAndScheduler().send(
-                        createdSource: pushNotification.content!.createdSource!,
-                        pushNotification: pushNotification,
+                        createdSource: notificationModel.content!.createdSource!,
+                        notificationModel: notificationModel,
                         completion: { sent, content, error in
                         
                         }
@@ -505,16 +505,16 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 let schedules = ScheduleManager.listSchedules()
                 
                 if(!ListUtils.isEmptyLists(schedules)){
-                    for pushNotification in schedules {
+                    for notificationModel in schedules {
                         var founded = false
                         for activeSchedule in activeSchedules {
-                            if activeSchedule.identifier != String(pushNotification.content!.id!) {
+                            if activeSchedule.identifier != String(notificationModel.content!.id!) {
                                 founded = true
                                 break;
                             }
                         }
                         if(!founded){
-                            ScheduleManager.cancelScheduled(id: pushNotification.content!.id!)
+                            ScheduleManager.cancelScheduled(id: notificationModel.content!.id!)
                         }
                     }
                 }
@@ -528,22 +528,22 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         let referenceDate = Date()
         
         let lostSchedules = ScheduleManager.listPendingSchedules(referenceDate: referenceDate)
-        for pushNotification in lostSchedules {
+        for notificationModel in lostSchedules {
             
             do {
-                let hasNextValidDate:Bool = (pushNotification.schedule?.hasNextValidDate() ?? false)
-                if  pushNotification.schedule?.createdDate == nil || !hasNextValidDate {
+                let hasNextValidDate:Bool = (notificationModel.schedule?.hasNextValidDate() ?? false)
+                if  notificationModel.schedule?.createdDate == nil || !hasNextValidDate {
                     throw AwesomeNotificationsException.notificationExpired
                 }
                 
                 try NotificationSenderAndScheduler().send(
-                    createdSource: pushNotification.content!.createdSource!,
-                    pushNotification: pushNotification,
+                    createdSource: notificationModel.content!.createdSource!,
+                    notificationModel: notificationModel,
                     completion: { sent, content, error in
                     }
                 )
             } catch {
-                let _ = ScheduleManager.removeSchedule(id: pushNotification.content!.id!)
+                let _ = ScheduleManager.removeSchedule(id: notificationModel.content!.id!)
             }
         }
         
@@ -754,7 +754,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         let timezone:String =
             (platformParameters[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] as? String) ?? DateUtils.utcTimeZone.identifier
         
-		guard let scheduleData:[String : Any?] = platformParameters[Definitions.PUSH_NOTIFICATION_SCHEDULE] as? [String : Any?]
+		guard let scheduleData:[String : Any?] = platformParameters[Definitions.NOTIFICATION_MODEL_SCHEDULE] as? [String : Any?]
 		else { result(nil); return }
         
         var scheduleModel:NotificationScheduleModel?
@@ -790,18 +790,18 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 let schedules = ScheduleManager.listSchedules()
                 
                 if(!ListUtils.isEmptyLists(schedules)){
-                    for pushNotification in schedules {
+                    for notificationModel in schedules {
                         var founded = false
                         for activeSchedule in activeSchedules {
-                            if activeSchedule.identifier == String(pushNotification.content!.id!) {
+                            if activeSchedule.identifier == String(notificationModel.content!.id!) {
                                 founded = true
-                                let serialized:[String:Any?] = pushNotification.toMap()
+                                let serialized:[String:Any?] = notificationModel.toMap()
                                 serializeds.append(serialized)
                                 break;
                             }
                         }
                         if(!founded){
-                            ScheduleManager.cancelScheduled(id: pushNotification.content!.id!)
+                            ScheduleManager.cancelScheduled(id: notificationModel.content!.id!)
                         }
                     }
                 }
@@ -1056,13 +1056,13 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     private func channelMethodCreateNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         
 		let pushData:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
-		let pushNotification:PushNotification? = PushNotification().fromMap(arguments: pushData) as? PushNotification
+		let notificationModel:NotificationModel? = NotificationModel().fromMap(arguments: pushData) as? NotificationModel
 		
-		if(pushNotification != nil){
+		if(notificationModel != nil){
 				
             try NotificationSenderAndScheduler().send(
                 createdSource: NotificationSource.Local,
-                pushNotification: pushNotification,
+                notificationModel: notificationModel,
                 completion: { sent, content, error in
                 
                     if error != nil {

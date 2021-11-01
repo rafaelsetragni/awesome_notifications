@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.carda.awesome_notifications.BroadcastSender;
-import me.carda.awesome_notifications.notifications.models.PushNotification;
+import me.carda.awesome_notifications.notifications.models.NotificationModel;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationSource;
 import me.carda.awesome_notifications.notifications.NotificationSender;
 import me.carda.awesome_notifications.Definitions;
@@ -104,31 +104,31 @@ public class FCMService extends FirebaseMessagingService {
             // FCM frame is discarded, only data is processed
             Map<String, String> remoteData = remoteMessage.getData();
 
-            Map<String, Object> parsedNotificationContent = extractNotificationData(Definitions.PUSH_NOTIFICATION_CONTENT, remoteData);
+            Map<String, Object> parsedNotificationContent = extractNotificationData(Definitions.NOTIFICATION_MODEL_CONTENT, remoteData);
             if(MapUtils.isNullOrEmpty(parsedNotificationContent)){
                 Log.d(TAG, "Invalid notification content");
                 return;
             }
 
-            Map<String, Object> parsedSchedule = extractNotificationData(Definitions.PUSH_NOTIFICATION_SCHEDULE, remoteData);
-            List<Map<String, Object>> parsedActionButtons = extractNotificationDataList(Definitions.PUSH_NOTIFICATION_BUTTONS, remoteData);
+            Map<String, Object> parsedSchedule = extractNotificationData(Definitions.NOTIFICATION_MODEL_SCHEDULE, remoteData);
+            List<Map<String, Object>> parsedActionButtons = extractNotificationDataList(Definitions.NOTIFICATION_MODEL_BUTTONS, remoteData);
 
             HashMap<String, Object> parsedRemoteMessage = new HashMap<>();
-            parsedRemoteMessage.put(Definitions.PUSH_NOTIFICATION_CONTENT, parsedNotificationContent);
+            parsedRemoteMessage.put(Definitions.NOTIFICATION_MODEL_CONTENT, parsedNotificationContent);
 
             if(!MapUtils.isNullOrEmpty(parsedSchedule))
-                parsedRemoteMessage.put(Definitions.PUSH_NOTIFICATION_SCHEDULE, parsedSchedule);
+                parsedRemoteMessage.put(Definitions.NOTIFICATION_MODEL_SCHEDULE, parsedSchedule);
 
             if(!ListUtils.isNullOrEmpty(parsedActionButtons))
-                parsedRemoteMessage.put(Definitions.PUSH_NOTIFICATION_BUTTONS, parsedActionButtons);
+                parsedRemoteMessage.put(Definitions.NOTIFICATION_MODEL_BUTTONS, parsedActionButtons);
 
-            PushNotification pushNotification = new PushNotification().fromMap(parsedRemoteMessage);
-            //pushNotification.validate(applicationContext);
+            NotificationModel notificationModel = new NotificationModel().fromMap(parsedRemoteMessage);
+            //notificationModel.validate(applicationContext);
 
             NotificationSender.send(
                 applicationContext,
                 NotificationSource.Firebase,
-                pushNotification
+                notificationModel
             );
 
         } catch (Exception e) {

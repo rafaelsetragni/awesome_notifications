@@ -14,7 +14,7 @@ import java.util.Map;
 
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.notifications.models.NotificationContentModel;
-import me.carda.awesome_notifications.notifications.models.PushNotification;
+import me.carda.awesome_notifications.notifications.models.NotificationModel;
 import me.carda.awesome_notifications.notifications.NotificationBuilder;
 
 public class ForegroundService extends Service {
@@ -29,13 +29,13 @@ public class ForegroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         StartParameter parameter = (StartParameter) intent.getSerializableExtra(StartParameter.EXTRA);
-        PushNotification pushNotification = new PushNotification().fromMap(parameter.notificationData);
+        NotificationModel notificationModel = new NotificationModel().fromMap(parameter.notificationData);
 
-        int notificationId = pushNotification.content.id;
+        int notificationId = notificationModel.content.id;
         Notification notification;
 
         try {
-            notification = builder.createNotification(this, pushNotification);
+            notification = builder.createNotification(this, notificationModel);
         } catch (AwesomeNotificationException e) {
             throw new RuntimeException(e);
         }

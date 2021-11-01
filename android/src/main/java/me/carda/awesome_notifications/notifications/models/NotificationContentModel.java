@@ -38,6 +38,7 @@ public class NotificationContentModel extends Model {
     public List<NotificationMessageModel> messages;
     public Map<String, String> payload;
     public String groupKey;
+    public String customSound;
     public Boolean playSound;
     public String icon;
     public String largeIcon;
@@ -98,6 +99,7 @@ public class NotificationContentModel extends Model {
         summary = getValueOrDefault(arguments, Definitions.NOTIFICATION_SUMMARY, String.class);
 
         playSound = getValueOrDefault(arguments, Definitions.NOTIFICATION_PLAY_SOUND, Boolean.class);
+        customSound = getValueOrDefault(arguments, Definitions.NOTIFICATION_CUSTOM_SOUND, String.class);
 
         showWhen = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_WHEN, Boolean.class);
         locked = getValueOrDefault(arguments, Definitions.NOTIFICATION_LOCKED, Boolean.class);
@@ -149,6 +151,7 @@ public class NotificationContentModel extends Model {
         returnedObject.put(Definitions.NOTIFICATION_LOCKED, this.locked);
 
         returnedObject.put(Definitions.NOTIFICATION_PLAY_SOUND, this.playSound);
+        returnedObject.put(Definitions.NOTIFICATION_CUSTOM_SOUND, this.customSound);
 
         returnedObject.put(Definitions.NOTIFICATION_TICKER, this.ticker);
         returnedObject.put(Definitions.NOTIFICATION_PAYLOAD, this.payload);

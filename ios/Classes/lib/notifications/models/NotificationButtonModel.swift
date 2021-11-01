@@ -13,8 +13,10 @@ public class NotificationButtonModel : AbstractModel {
     var icon:String?
     var label:String?
     var enabled:Bool?
+    var color: Int64?
     var autoDismissable:Bool?
     var showInCompactView:Bool?
+    var isDangerousOption:Bool?
     var buttonType:ActionButtonType?
     
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
@@ -23,12 +25,14 @@ public class NotificationButtonModel : AbstractModel {
         self.key        = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_KEY, arguments: arguments)
         self.icon       = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_ICON, arguments: arguments)
         self.label      = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_LABEL, arguments: arguments)
+        self.color      = MapUtils<Int64>.getValueOrDefault(reference: Definitions.NOTIFICATION_COLOR, arguments: arguments)
         
         self.buttonType = EnumUtils<ActionButtonType>.getEnumOrDefault(reference: Definitions.NOTIFICATION_BUTTON_TYPE, arguments: arguments)
         
         self.enabled    = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_ENABLED, arguments: arguments)
         self.autoDismissable = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_AUTO_DISMISSABLE, arguments: arguments)
         self.showInCompactView = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, arguments: arguments)
+        self.isDangerousOption = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, arguments: arguments)
 
         return self
     }
@@ -39,12 +43,14 @@ public class NotificationButtonModel : AbstractModel {
         if(key != nil) {mapData[Definitions.NOTIFICATION_BUTTON_KEY] = self.key}
         if(icon != nil) {mapData[Definitions.NOTIFICATION_BUTTON_ICON] = self.icon}
         if(label != nil) {mapData[Definitions.NOTIFICATION_BUTTON_LABEL] = self.label}
+        if(color != nil){ mapData[Definitions.NOTIFICATION_COLOR] = self.color }
         
         if(buttonType != nil) {mapData[Definitions.NOTIFICATION_BUTTON_TYPE] = self.buttonType?.rawValue}
 
         if(enabled != nil) {mapData[Definitions.NOTIFICATION_ENABLED] = self.enabled}
         if(autoDismissable != nil) {mapData[Definitions.NOTIFICATION_AUTO_DISMISSABLE] = self.autoDismissable}
         if(showInCompactView != nil) {mapData[Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW] = self.showInCompactView}
+        if(isDangerousOption != nil) {mapData[Definitions.NOTIFICATION_IS_DANGEROUS_OPTION] = self.isDangerousOption}
         
         return mapData
     }

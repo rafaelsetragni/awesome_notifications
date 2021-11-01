@@ -36,9 +36,9 @@ public interface Definitions {
     String BROADCAST_KEEP_ON_TOP ="broadcast.awesome_notifications.KEEP_ON_TOP";
     String EXTRA_BROADCAST_MESSAGE = "notification";
 
-    String PUSH_NOTIFICATION_CONTENT = "content";
-    String PUSH_NOTIFICATION_SCHEDULE = "schedule";
-    String PUSH_NOTIFICATION_BUTTONS = "actionButtons";
+    String NOTIFICATION_MODEL_CONTENT = "content";
+    String NOTIFICATION_MODEL_SCHEDULE = "schedule";
+    String NOTIFICATION_MODEL_BUTTONS = "actionButtons";
 
     String SHARED_DEFAULTS = "defaults";
     String SHARED_MANAGER = "sharedManager";
@@ -158,12 +158,15 @@ public interface Definitions {
 
     String NOTIFICATION_PAYLOAD = "payload";
     String NOTIFICATION_INITIAL_FIXED_DATE = "fixedDate";
+
     String NOTIFICATION_INITIAL_DATE_TIME = "initialDateTime";
     String NOTIFICATION_EXPIRATION_DATE_TIME = "expirationDateTime";
     String NOTIFICATION_CRONTAB_EXPRESSION = "crontabExpression";
     String NOTIFICATION_PRECISE_SCHEDULES = "preciseSchedules";
     String NOTIFICATION_ENABLED = "enabled";
     String NOTIFICATION_AUTO_DISMISSABLE = "autoDismissable";
+    String NOTIFICATION_IS_DANGEROUS_OPTION = "isDangerousOption";
+
     String NOTIFICATION_SHOW_IN_COMPACT_VIEW = "showInCompactView";
     String NOTIFICATION_LOCKED = "locked";
     String NOTIFICATION_DISPLAY_ON_FOREGROUND = "displayOnForeground";
@@ -177,6 +180,7 @@ public interface Definitions {
     String NOTIFICATION_GROUP_SORT = "groupSort";
     String NOTIFICATION_GROUP_ALERT_BEHAVIOR = "groupAlertBehavior";
     String NOTIFICATION_PRIVACY = "privacy";
+    String NOTIFICATION_CUSTOM_SOUND = "customSound";
     String NOTIFICATION_DEFAULT_PRIVACY = "defaultPrivacy";
     String NOTIFICATION_DEFAULT_RINGTONE_TYPE = "defaultRingtoneType";
     String NOTIFICATION_PRIVATE_MESSAGE = "privateMessage";
@@ -236,5 +240,6 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, false);
         put(Definitions.NOTIFICATION_ONLY_ALERT_ONCE, false);
         put(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, true);
+        put(Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, false);
     }};
 }

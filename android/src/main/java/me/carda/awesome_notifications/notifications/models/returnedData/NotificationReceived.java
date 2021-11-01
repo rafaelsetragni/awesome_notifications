@@ -7,7 +7,7 @@ import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.models.Model;
 import me.carda.awesome_notifications.notifications.models.NotificationContentModel;
-import me.carda.awesome_notifications.notifications.models.PushNotification;
+import me.carda.awesome_notifications.notifications.models.NotificationModel;
 
 // Just created because of Json process
 public class NotificationReceived extends NotificationContentModel {
@@ -17,7 +17,7 @@ public class NotificationReceived extends NotificationContentModel {
     public NotificationReceived(NotificationContentModel contentModel){
         /*
         if(contentModel == null)
-            throw new PushNotificationException("Notification Received was lost");
+            throw new NotificationModelException("Notification Received was lost");
         */
         this.id = contentModel.id;
         this.channelKey = contentModel.channelKey;

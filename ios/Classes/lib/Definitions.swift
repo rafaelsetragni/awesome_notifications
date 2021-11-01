@@ -20,9 +20,9 @@ enum Definitions {
     static let  BROADCAST_KEEP_ON_TOP = "broadcast.awesome_notifications.KEEP_ON_TOP"
     static let  EXTRA_BROADCAST_MESSAGE = "notification"
 
-    static let  PUSH_NOTIFICATION_CONTENT = "content"
-    static let  PUSH_NOTIFICATION_SCHEDULE = "schedule"
-    static let  PUSH_NOTIFICATION_BUTTONS = "actionButtons"
+    static let  NOTIFICATION_MODEL_CONTENT = "content"
+    static let  NOTIFICATION_MODEL_SCHEDULE = "schedule"
+    static let  NOTIFICATION_MODEL_BUTTONS = "actionButtons"
 
     static let  SHARED_DEFAULTS = "defaults"
     static let  SHARED_MANAGER = "sharedManager"
@@ -138,6 +138,7 @@ enum Definitions {
     static let  NOTIFICATION_BUTTON_ICON = "icon"
     static let  NOTIFICATION_BUTTON_LABEL = "label"
     static let  NOTIFICATION_BUTTON_TYPE = "buttonType"
+    static let  NOTIFICATION_IS_DANGEROUS_OPTION = "isDangerousOption"
 
     static let  NOTIFICATION_PAYLOAD = "payload"
     static let  NOTIFICATION_INITIAL_FIXED_DATE = "fixedDate"
@@ -214,6 +215,7 @@ enum Definitions {
         Definitions.NOTIFICATION_LOCKED: false,
         Definitions.NOTIFICATION_TICKER: "ticker",
         Definitions.NOTIFICATION_ALLOW_WHILE_IDLE: false,
-        Definitions.NOTIFICATION_ONLY_ALERT_ONCE: false
+        Definitions.NOTIFICATION_ONLY_ALERT_ONCE: false,
+        Definitions.NOTIFICATION_IS_DANGEROUS_OPTION: false
     ] as [String : Any?]
 }

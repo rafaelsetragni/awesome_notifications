@@ -30,7 +30,7 @@ class FirebaseDataSource extends HttpDataSource {
 //   ///
 //   /// ************************************************************************************
 
-  Future<String> _pushNotification(
+  Future<String> _notificationModel(
       {required String firebaseServerKey, Map<String, dynamic> body = const {}}) async {
     if (firebaseServerKey.isEmpty) {
       return 'Server Key not defined';
@@ -59,7 +59,7 @@ class FirebaseDataSource extends HttpDataSource {
     required String body,
     Map<String, String> payload = const {}
   }) async {
-    return await _pushNotification(
+    return await _notificationModel(
         firebaseServerKey: firebaseServerKey,
         body: getFirebaseExampleContent(firebaseAppToken: firebaseAppToken));
   }

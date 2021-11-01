@@ -1,3 +1,7 @@
+## [0.6.15]
+* PushNotification class deprecated, as all push features are being moved to the new companion plugin. Instead, use NotificationModel.
+* Added isDangerousOption for action buttons, to color the text in red to indicate a dangerous option for the user.
+* Added color option for action buttons, to color the text in Android 8.0 Oreo and beyond (has no effect on iOS).
 ## [0.6.14]
 * Added validation to prevent scheduling with repeating intervals smaller than 60 seconds (iOS restriction)
 * Added crontab schedule to allow complex schedules based on initial and expiration date, a list of precise dates, or a crontab expression, and all four options can be combined together (only for Android)

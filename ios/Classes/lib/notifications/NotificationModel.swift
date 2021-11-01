@@ -1,5 +1,5 @@
 //
-//  PushNotification.swift
+//  NotificationModel.swift
 //  awesome_notifications
 //
 //  Created by Rafael Setragni on 05/09/20.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class PushNotification : AbstractModel {
+public class NotificationModel : AbstractModel {
         
     var content:NotificationContentModel?
     var actionButtons:[NotificationButtonModel]?
@@ -16,13 +16,13 @@ public class PushNotification : AbstractModel {
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         
         do {
-            self.content = extractNotificationContent(Definitions.PUSH_NOTIFICATION_CONTENT, arguments)
+            self.content = extractNotificationContent(Definitions.NOTIFICATION_MODEL_CONTENT, arguments)
             
             // required
             if(self.content == nil){ return nil }
             
-            self.schedule = try extractNotificationSchedule(Definitions.PUSH_NOTIFICATION_SCHEDULE, arguments)
-            self.actionButtons = extractNotificationButtons(Definitions.PUSH_NOTIFICATION_BUTTONS, arguments)
+            self.schedule = try extractNotificationSchedule(Definitions.NOTIFICATION_MODEL_SCHEDULE, arguments)
+            self.actionButtons = extractNotificationButtons(Definitions.NOTIFICATION_MODEL_BUTTONS, arguments)
             
             return self
         

@@ -1,6 +1,7 @@
 package me.carda.awesome_notifications.notifications.models;
 
 import android.content.Context;
+import android.content.Intent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Map;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.enumerators.ActionButtonType;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
+import me.carda.awesome_notifications.utils.IntegerUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
 public class NotificationButtonModel extends Model {
@@ -15,9 +17,11 @@ public class NotificationButtonModel extends Model {
     public String key;
     public String icon;
     public String label;
+    public Integer color;
     public Boolean enabled;
     public Boolean autoDismissable;
     public Boolean showInCompactView;
+    public Boolean isDangerousOption;
     public ActionButtonType buttonType;
 
     public NotificationButtonModel(){}
@@ -28,12 +32,14 @@ public class NotificationButtonModel extends Model {
         key        = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_KEY, String.class);
         icon       = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_ICON, String.class);
         label      = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_LABEL, String.class);
+        color      = getValueOrDefault(arguments, Definitions.NOTIFICATION_COLOR, Integer.class);
 
         buttonType = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_TYPE,
                 ActionButtonType.class, ActionButtonType.values());
 
-        enabled = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLED, Boolean.class);
-        autoDismissable = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSABLE, Boolean.class);
+        enabled    = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLED, Boolean.class);
+        isDangerousOption = getValueOrDefault(arguments, Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, Boolean.class);
+        autoDismissable   = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSABLE, Boolean.class);
         showInCompactView = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, Boolean.class);
 
         return this;
@@ -46,6 +52,7 @@ public class NotificationButtonModel extends Model {
         returnedObject.put(Definitions.NOTIFICATION_BUTTON_KEY, key);
         returnedObject.put(Definitions.NOTIFICATION_BUTTON_ICON, icon);
         returnedObject.put(Definitions.NOTIFICATION_BUTTON_LABEL, label);
+        returnedObject.put(Definitions.NOTIFICATION_COLOR, color);
 
         returnedObject.put(Definitions.NOTIFICATION_BUTTON_TYPE,
                 this.buttonType != null ? this.buttonType.toString() : ActionButtonType.Default.toString());
@@ -53,6 +60,7 @@ public class NotificationButtonModel extends Model {
         returnedObject.put(Definitions.NOTIFICATION_ENABLED, enabled);
         returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSABLE, autoDismissable);
         returnedObject.put(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, showInCompactView);
+        returnedObject.put(Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, isDangerousOption);
 
         return returnedObject;
     }

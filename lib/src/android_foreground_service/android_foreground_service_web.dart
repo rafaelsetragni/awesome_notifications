@@ -1,7 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 import '../enumerators/android_foreground_service_constants.dart';
-import '../models/received_models/push_notification.dart';
+import '../models/received_models/notification_model.dart';
 
 /// Static helper class that provides methods to start and stop a foreground service.
 ///
@@ -17,7 +17,7 @@ class AndroidForegroundService {
   ///
   /// The [`notifcation.content.locked`](https://pub.dev/documentation/awesome_notifications/latest/awesome_notifications/NotificationContent/locked.html)
   /// property will be forced to `true` to achive an ongoing
-  /// notificaiton suitable for a foreground service. Also, [`notification.schedule`](https://pub.dev/documentation/awesome_notifications/latest/awesome_notifications/PushNotification/schedule.html)
+  /// notificaiton suitable for a foreground service. Also, [`notification.schedule`](https://pub.dev/documentation/awesome_notifications/latest/awesome_notifications/NotificationModel/schedule.html)
   /// will be cleared, since the notifcation needs to be shown right away when the foreground service is started.
   ///
   /// If `foregroundServiceType` is set, [`Service.startForeground(int id, Notification notification, int foregroundServiceType)`](https://developer.android.com/reference/android/app/Service#startForeground(int,%20android.app.Notification,%20int))

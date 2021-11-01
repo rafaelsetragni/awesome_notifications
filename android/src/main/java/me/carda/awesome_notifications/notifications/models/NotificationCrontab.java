@@ -168,21 +168,12 @@ public class NotificationCrontab extends NotificationScheduleModel {
                 }
 
                 if(earlierDate != null){
-                    preciseCalendar = Calendar.getInstance();
-                    preciseCalendar.setTimeZone(timeZone);
-                    preciseCalendar.setTime(earlierDate);
+                    preciseCalendar = createCalendarFromDate(earlierDate, timeZone);
                 }
             }
 
             if(!StringUtils.isNullOrEmpty(crontabExpression))
                 crontabCalendar = CronUtils.getNextCalendar( initialDateTime, crontabExpression, fixedNowDate, timeZone );
-
-            if ((initialDate != null) && (crontabCalendar == null) && (preciseCalendar == null)) {
-                preciseCalendar = Calendar.getInstance();
-                preciseCalendar.setTimeZone(timeZone);
-                preciseCalendar.setTime(initialDate);
-                return preciseCalendar;
-            }
 
             if (preciseCalendar == null)
                 return crontabCalendar;
@@ -200,5 +191,12 @@ public class NotificationCrontab extends NotificationScheduleModel {
         } catch (Exception e){
             throw new AwesomeNotificationException("Schedule time is invalid");
         }
+    }
+
+    private Calendar createCalendarFromDate(Date date, TimeZone timeZone){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(timeZone);
+        calendar.setTime(date);
+        return calendar;
     }
 }

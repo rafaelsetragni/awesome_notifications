@@ -26,6 +26,7 @@ export 'src/models/notification_calendar.dart';
 export 'src/models/notification_interval.dart';
 export 'src/models/notification_android_crontab.dart';
 export 'src/models/received_models/push_notification.dart';
+export 'src/models/received_models/notification_model.dart';
 export 'src/models/received_models/received_action.dart';
 export 'src/models/received_models/received_notification.dart';
 export 'src/utils/assert_utils.dart';

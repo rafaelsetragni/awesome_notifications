@@ -25,27 +25,27 @@ public class ScheduleManager {
         return shared.remove(referenceKey: referenceKey)
     }
     
-    public static func listSchedules() -> [PushNotification] {
-        var returnedList:[PushNotification] = []
+    public static func listSchedules() -> [NotificationModel] {
+        var returnedList:[NotificationModel] = []
         let dataList = shared.getAllObjects()
         
         for data in dataList {
-            let channel:PushNotification = PushNotification().fromMap(arguments: data) as! PushNotification
+            let channel:NotificationModel = NotificationModel().fromMap(arguments: data) as! NotificationModel
             returnedList.append(channel)
         }
         
         return returnedList
     }
     
-    public static func listPendingSchedules(referenceDate:Date) -> [PushNotification] {
-        var returnedList:[PushNotification] = []
+    public static func listPendingSchedules(referenceDate:Date) -> [NotificationModel] {
+        var returnedList:[NotificationModel] = []
         let referenceEpoch = referenceDate.timeIntervalSince1970.description
         
         for (epoch, id) in pendingSchedules {
             if epoch <= referenceEpoch {
-                let pushNotification = getScheduleByKey(id: Int(id)!)
-                if pushNotification != nil{
-                    returnedList.append(pushNotification!)
+                let notificationModel = getScheduleByKey(id: Int(id)!)
+                if notificationModel != nil{
+                    returnedList.append(notificationModel!)
                 }
             }
         }
@@ -53,7 +53,7 @@ public class ScheduleManager {
         return returnedList
     }
     
-    public static func saveSchedule(notification:PushNotification, nextDate:Date){
+    public static func saveSchedule(notification:NotificationModel, nextDate:Date){
         let referenceKey =  String(notification.content!.id!)
         let epoch =  nextDate.secondsSince1970.description
         
@@ -84,11 +84,11 @@ public class ScheduleManager {
         return smallestDate
     }
     
-    public static func getScheduleByKey( id:Int ) -> PushNotification? {
+    public static func getScheduleByKey( id:Int ) -> NotificationModel? {
         guard let data:[String:Any?] = shared.get(referenceKey: String(id)) else {
           return nil
         }
-        return PushNotification().fromMap(arguments: data) as? PushNotification
+        return NotificationModel().fromMap(arguments: data) as? NotificationModel
     }
     
     public static func isNotificationScheduleActive( channelKey:String ) -> Bool {

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.carda.push_notifications.Definitions;
-import me.carda.push_notifications.notifications.PushNotification;
+import me.carda.push_notifications.notifications.NotificationModel;
 import me.carda.push_notifications.utils.JsonUtils;
 
 import static org.junit.Assert.*;
@@ -17,8 +17,8 @@ public class NotificationContentModelTest {
 
     @Test
     public void fromJson() {
-        assertNull(JsonUtils.fromJson(new TypeToken<PushNotification>(){}.getType(),null));
-        assertNull(JsonUtils.fromJson(new TypeToken<PushNotification>(){}.getType(),""));
+        assertNull(JsonUtils.fromJson(new TypeToken<NotificationModel>(){}.getType(),null));
+        assertNull(JsonUtils.fromJson(new TypeToken<NotificationModel>(){}.getType(),""));
     }
 
     @Test

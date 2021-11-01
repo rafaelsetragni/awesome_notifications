@@ -149,32 +149,32 @@ public class NotificationBuilder {
         }
     }
 
-    public static func jsonDataToPushNotification(jsonData:[String : Any?]?) -> PushNotification? {
+    public static func jsonDataToNotificationModel(jsonData:[String : Any?]?) -> NotificationModel? {
         if(jsonData?.isEmpty ?? true){ return nil }
 
-        let pushNotification:PushNotification? = PushNotification().fromMap(arguments: jsonData!) as? PushNotification
-        return pushNotification
+        let notificationModel:NotificationModel? = NotificationModel().fromMap(arguments: jsonData!) as? NotificationModel
+        return notificationModel
     }
     
-    public static func jsonToPushNotification(jsonData:String?) -> PushNotification? {
+    public static func jsonToNotificationModel(jsonData:String?) -> NotificationModel? {
         if(StringUtils.isNullOrEmpty(jsonData)){ return nil }
         
         let data:[String:Any?]? = JsonUtils.fromJson(jsonData)
         if(data == nil){ return nil }
         
-        let pushNotification:PushNotification? = PushNotification().fromMap(arguments: data!) as? PushNotification
-        return pushNotification        
+        let notificationModel:NotificationModel? = NotificationModel().fromMap(arguments: data!) as? NotificationModel
+        return notificationModel
     }
     
-    public static func buildNotificationFromJson(jsonData:String?) -> PushNotification? {
-        return  jsonToPushNotification(jsonData: jsonData)
+    public static func buildNotificationFromJson(jsonData:String?) -> NotificationModel? {
+        return  jsonToNotificationModel(jsonData: jsonData)
     }
     
     public static func buildNotificationActionFromJson(jsonData:String?, buttonKeyPressed:String?, userText:String?) -> ActionReceived? {
         
-        let pushNotification:PushNotification? = buildNotificationFromJson(jsonData: jsonData)
-        if(pushNotification == nil){ return nil }
-        let actionReceived:ActionReceived = ActionReceived(pushNotification!.content)
+        let notificationModel:NotificationModel? = buildNotificationFromJson(jsonData: jsonData)
+        if(notificationModel == nil){ return nil }
+        let actionReceived:ActionReceived = ActionReceived(notificationModel!.content)
         
         switch buttonKeyPressed {
         
@@ -195,8 +195,8 @@ public class NotificationBuilder {
                 actionReceived.dismissedLifeCycle = nil
                 actionReceived.dismissedDate = nil
                 
-                if(pushNotification!.actionButtons != nil) {
-                    for button:NotificationButtonModel in pushNotification!.actionButtons! {
+                if(notificationModel!.actionButtons != nil) {
+                    for button:NotificationButtonModel in notificationModel!.actionButtons! {
                         if button.key == buttonKeyPressed {
                             actionReceived.autoDismissable = button.autoDismissable
                             break
@@ -218,64 +218,64 @@ public class NotificationBuilder {
         return actionReceived
     }
     
-    public static func createNotification(_ pushNotification:PushNotification, content:UNMutableNotificationContent?) throws -> PushNotification? {
+    public static func createNotification(_ notificationModel:NotificationModel, content:UNMutableNotificationContent?) throws -> NotificationModel? {
         
-        guard let channel = ChannelManager.getChannelByKey(channelKey: pushNotification.content!.channelKey!) else {
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Channel '\(pushNotification.content!.channelKey!)' does not exist or is disabled")
+        guard let channel = ChannelManager.getChannelByKey(channelKey: notificationModel.content!.channelKey!) else {
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Channel '\(notificationModel.content!.channelKey!)' does not exist or is disabled")
         }
 
-        pushNotification.content!.groupKey = getGroupKey(pushNotification: pushNotification, channel: channel)
+        notificationModel.content!.groupKey = getGroupKey(notificationModel: notificationModel, channel: channel)
 
-        let nextDate:Date? = getNextScheduleDate(pushNotification: pushNotification)
+        let nextDate:Date? = getNextScheduleDate(notificationModel: notificationModel)
         
-        if(pushNotification.schedule == nil || nextDate != nil){
+        if(notificationModel.schedule == nil || nextDate != nil){
             
-            let content = content ?? buildNotificationContentFromModel(pushNotification: pushNotification)
+            let content = content ?? buildNotificationContentFromModel(notificationModel: notificationModel)
             
-            setTitle(pushNotification: pushNotification, channel: channel, content: content)
-            setBody(pushNotification: pushNotification, content: content)
-            setSummary(pushNotification: pushNotification, content: content)
+            setTitle(notificationModel: notificationModel, channel: channel, content: content)
+            setBody(notificationModel: notificationModel, content: content)
+            setSummary(notificationModel: notificationModel, content: content)
 
-            setGrouping(pushNotification: pushNotification, channel: channel, content: content)
+            setGrouping(notificationModel: notificationModel, channel: channel, content: content)
             
-            setVisibility(pushNotification: pushNotification, channel: channel, content: content)
-            setShowWhen(pushNotification: pushNotification, content: content)
-            setBadgeIndicator(pushNotification: pushNotification, channel: channel, content: content)
+            setVisibility(notificationModel: notificationModel, channel: channel, content: content)
+            setShowWhen(notificationModel: notificationModel, content: content)
+            setBadgeIndicator(notificationModel: notificationModel, channel: channel, content: content)
             
-            setAutoCancel(pushNotification: pushNotification, content: content)
-            setTicker(pushNotification: pushNotification, content: content)
+            setAutoCancel(notificationModel: notificationModel, content: content)
+            setTicker(notificationModel: notificationModel, content: content)
             
-            setOnlyAlertOnce(pushNotification: pushNotification, channel: channel, content: content)
+            setOnlyAlertOnce(notificationModel: notificationModel, channel: channel, content: content)
             
-            setLockedNotification(pushNotification: pushNotification, channel: channel, content: content)
+            setLockedNotification(notificationModel: notificationModel, channel: channel, content: content)
             setImportance(channel: channel, content: content)
             
-            setSound(pushNotification: pushNotification, channel: channel, content: content)
+            setSound(notificationModel: notificationModel, channel: channel, content: content)
             setVibrationPattern(channel: channel, content: content)
             
             setLights(channel: channel, content: content)
             
             setSmallIcon(channel: channel, content: content)
-            setLargeIcon(pushNotification: pushNotification, content: content)
+            setLargeIcon(notificationModel: notificationModel, content: content)
             
-            setLayoutColor(pushNotification: pushNotification, channel: channel, content: content)
+            setLayoutColor(notificationModel: notificationModel, channel: channel, content: content)
             
-            setLayout(pushNotification: pushNotification, content: content)
+            setLayout(notificationModel: notificationModel, content: content)
             
-            createActionButtonsAndCategory(pushNotification: pushNotification, content: content)
+            createActionButtonsAndCategory(notificationModel: notificationModel, content: content)
             
-            setUserInfoContent(pushNotification: pushNotification, content: content)
+            setUserInfoContent(notificationModel: notificationModel, content: content)
             
             if SwiftUtils.isRunningOnExtension() {                
-                return pushNotification
+                return notificationModel
             }
             
             //let trigger:UNCalendarNotificationTrigger? = dateToCalendarTrigger(targetDate: nextDate)
             
-            pushNotification.content!.displayedDate = nextDate?.toString(toTimeZone: "UTC") ?? DateUtils.getUTCTextDate()
+            notificationModel.content!.displayedDate = nextDate?.toString(toTimeZone: "UTC") ?? DateUtils.getUTCTextDate()
             
-            let trigger:UNNotificationTrigger? = nextDate == nil ? nil : pushNotification.schedule?.getUNNotificationTrigger()
-            let request = UNNotificationRequest(identifier: pushNotification.content!.id!.description, content: content, trigger: trigger)
+            let trigger:UNNotificationTrigger? = nextDate == nil ? nil : notificationModel.schedule?.getUNNotificationTrigger()
+            let request = UNNotificationRequest(identifier: notificationModel.content!.id!.description, content: content, trigger: trigger)
             
             UNUserNotificationCenter.current().add(request)
             {
@@ -285,26 +285,26 @@ public class NotificationBuilder {
                     debugPrint("Error: \(error.debugDescription)")
                 }
                 else {
-                    if(pushNotification.schedule != nil){
+                    if(notificationModel.schedule != nil){
                         
-                        pushNotification.schedule!.timeZone =
-                            pushNotification.schedule!.timeZone ?? DateUtils.localTimeZone.identifier
-                        pushNotification.schedule!.createdDate =
-                            DateUtils.getLocalTextDate(fromTimeZone: pushNotification.schedule!.timeZone!)
+                        notificationModel.schedule!.timeZone =
+                            notificationModel.schedule!.timeZone ?? DateUtils.localTimeZone.identifier
+                        notificationModel.schedule!.createdDate =
+                            DateUtils.getLocalTextDate(fromTimeZone: notificationModel.schedule!.timeZone!)
                         
                         if (nextDate != nil){
-                            ScheduleManager.saveSchedule(notification: pushNotification, nextDate: nextDate!)
+                            ScheduleManager.saveSchedule(notification: notificationModel, nextDate: nextDate!)
                         } else {
-                            _ = ScheduleManager.removeSchedule(id: pushNotification.content!.id!)
+                            _ = ScheduleManager.removeSchedule(id: notificationModel.content!.id!)
                         }
                     }
                 }
             }
-            return pushNotification
+            return notificationModel
         }
         else {
-            if(pushNotification.schedule != nil){
-                _ = ScheduleManager.removeSchedule(id: pushNotification.content!.id!)
+            if(notificationModel.schedule != nil){
+                _ = ScheduleManager.removeSchedule(id: notificationModel.content!.id!)
             }
         }
         
@@ -319,43 +319,43 @@ public class NotificationBuilder {
         return trigger
     }
     
-    private static func buildNotificationContentFromModel(pushNotification:PushNotification) -> UNMutableNotificationContent {
+    private static func buildNotificationContentFromModel(notificationModel:NotificationModel) -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
         return content
     }
     
-    public static func setUserInfoContent(pushNotification:PushNotification, content:UNMutableNotificationContent) {
+    public static func setUserInfoContent(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         
-        let pushData = pushNotification.toMap()
+        let pushData = notificationModel.toMap()
         let jsonData = JsonUtils.toJson(pushData)
 
         content.userInfo[Definitions.NOTIFICATION_JSON] = jsonData
-        content.userInfo[Definitions.NOTIFICATION_ID] = pushNotification.content!.id!
-        content.userInfo[Definitions.NOTIFICATION_CHANNEL_KEY] = pushNotification.content!.channelKey!
-        content.userInfo[Definitions.NOTIFICATION_GROUP_KEY] = pushNotification.content!.groupKey
+        content.userInfo[Definitions.NOTIFICATION_ID] = notificationModel.content!.id!
+        content.userInfo[Definitions.NOTIFICATION_CHANNEL_KEY] = notificationModel.content!.channelKey!
+        content.userInfo[Definitions.NOTIFICATION_GROUP_KEY] = notificationModel.content!.groupKey
     }
 
-    private static func setTitle(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
-        content.title = pushNotification.content!.title?.withoutHtmlTags() ?? ""
+    private static func setTitle(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        content.title = notificationModel.content!.title?.withoutHtmlTags() ?? ""
     }
     
-    private static func setBody(pushNotification:PushNotification, content:UNMutableNotificationContent){
-        content.body = pushNotification.content!.body?.withoutHtmlTags() ?? ""
+    private static func setBody(notificationModel:NotificationModel, content:UNMutableNotificationContent){
+        content.body = notificationModel.content!.body?.withoutHtmlTags() ?? ""
     }
     
-    private static func setSummary(pushNotification:PushNotification, content:UNMutableNotificationContent){
+    private static func setSummary(notificationModel:NotificationModel, content:UNMutableNotificationContent){
         if #available(iOS 12.0, *) {
-            content.summaryArgument = pushNotification.content!.summary?.withoutHtmlTags() ?? ""
+            content.summaryArgument = notificationModel.content!.summary?.withoutHtmlTags() ?? ""
         }
     }
     
-    private static func setBadgeIndicator(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+    private static func setBadgeIndicator(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){
         if(channel.channelShowBadge!){
             content.badge = NotificationBuilder.incrementBadge()
         }
     }
     
-    private static func createActionButtonsAndCategory(pushNotification:PushNotification, content:UNMutableNotificationContent){
+    private static func createActionButtonsAndCategory(notificationModel:NotificationModel, content:UNMutableNotificationContent){
         
         var categoryIdentifier:String = StringUtils.isNullOrEmpty(content.categoryIdentifier) ?
             Definitions.DEFAULT_CATEGORY_IDENTIFIER : content.categoryIdentifier
@@ -364,13 +364,13 @@ public class NotificationBuilder {
         var dynamicCategory:[String] = []
         var dynamicLabels:[String] = []
         
-        if(pushNotification.actionButtons != nil){
+        if(notificationModel.actionButtons != nil){
             
             var temporaryCategory:[String] = []
             
             dynamicCategory.append(content.categoryIdentifier)
             
-            for button in pushNotification.actionButtons! {
+            for button in notificationModel.actionButtons! {
                 
                 let action:UNNotificationAction?
                                 
@@ -388,21 +388,24 @@ public class NotificationBuilder {
                         action = UNNotificationAction(
                             identifier: button.key!,
                             title: button.label!,
-                            options: [.foreground]
+                            options: button.isDangerousOption ?
+                                [.destructive, .foreground] : [.foreground]
                         )
                         
                     case .DisabledAction:
                         action = UNNotificationAction(
                             identifier: button.key!,
                             title: button.label!,
-                            options: []
+                            options: button.isDangerousOption ?
+                                [.destructive] : []
                         )
                     
                     default:
                         action = UNNotificationAction(
                             identifier: button.key!,
                             title: button.label!,
-                            options: [.foreground]
+                            options: button.isDangerousOption ?
+                                [.destructive, .foreground] : [.foreground]
                         )
                         break
                 }
@@ -449,22 +452,22 @@ public class NotificationBuilder {
         }
     }
     
-    private static func getNextScheduleDate(pushNotification:PushNotification?) -> Date? {
+    private static func getNextScheduleDate(notificationModel:NotificationModel?) -> Date? {
         
-        if pushNotification?.schedule == nil { return nil }
+        if notificationModel?.schedule == nil { return nil }
         
         switch true {
             
-            case pushNotification!.schedule! is NotificationCalendarModel:
+            case notificationModel!.schedule! is NotificationCalendarModel:
                 
-                let calendarModel:NotificationCalendarModel = pushNotification!.schedule! as! NotificationCalendarModel
+                let calendarModel:NotificationCalendarModel = notificationModel!.schedule! as! NotificationCalendarModel
                 guard let trigger:UNCalendarNotificationTrigger = calendarModel.getUNNotificationTrigger() as? UNCalendarNotificationTrigger else { return nil }
                 
                 return trigger.nextTriggerDate()
                 
-            case pushNotification!.schedule! is NotificationIntervalModel:
+            case notificationModel!.schedule! is NotificationIntervalModel:
                 
-                let intervalModel:NotificationIntervalModel = pushNotification!.schedule! as! NotificationIntervalModel
+                let intervalModel:NotificationIntervalModel = notificationModel!.schedule! as! NotificationIntervalModel
                 guard let trigger:UNTimeIntervalNotificationTrigger = intervalModel.getUNNotificationTrigger() as? UNTimeIntervalNotificationTrigger else { return nil }
                 
                 return trigger.nextTriggerDate()
@@ -477,11 +480,11 @@ public class NotificationBuilder {
         
         do {
 
-            if(pushNotification != nil){
+            if(notificationModel != nil){
 
                 nextValidDate = cron.getNextCalendar(
-                    initialDateTime: pushNotification!.schedule!.createdDateTime,
-                    crontabRule: pushNotification!.schedule!.crontabExpression
+                    initialDateTime: notificationModel!.schedule!.createdDateTime,
+                    crontabRule: notificationModel!.schedule!.crontabExpression
                 )
 
                 if(nextValidDate != nil){
@@ -490,9 +493,9 @@ public class NotificationBuilder {
                 }
                 else {
 
-                    if(!(ListUtils.isEmptyLists(pushNotification!.schedule!.preciseSchedules as [AnyObject]?))){
+                    if(!(ListUtils.isEmptyLists(notificationModel!.schedule!.preciseSchedules as [AnyObject]?))){
 
-                        for nextDateTime in pushNotification!.schedule!.preciseSchedules! {
+                        for nextDateTime in notificationModel!.schedule!.preciseSchedules! {
 
                             let closestDate:Date? = cron.getNextCalendar(
                                 initialDateTime: nextDateTime,
@@ -516,7 +519,7 @@ public class NotificationBuilder {
                         }
                     }
 
-                    _ = NotificationSenderAndScheduler.cancelNotification(id: pushNotification!.content!.id!)
+                    _ = NotificationSenderAndScheduler.cancelNotification(id: notificationModel!.content!.id!)
                     Log.d(TAG, "Date is not more valid. ("+DateUtils.getUTCDate()+")")
                 }
             }
@@ -527,27 +530,27 @@ public class NotificationBuilder {
         */
     }
     
-    private static func setVisibility(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+    private static func setVisibility(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){
         // TODO
     }
     
-    private static func setShowWhen(pushNotification:PushNotification, content:UNMutableNotificationContent){
+    private static func setShowWhen(notificationModel:NotificationModel, content:UNMutableNotificationContent){
         // TODO
     }
 
-    private static func setAutoCancel(pushNotification:PushNotification, content:UNMutableNotificationContent){
+    private static func setAutoCancel(notificationModel:NotificationModel, content:UNMutableNotificationContent){
         // TODO
     }
     
-    private static func setTicker(pushNotification:PushNotification, content:UNMutableNotificationContent){
+    private static func setTicker(notificationModel:NotificationModel, content:UNMutableNotificationContent){
         // TODO
     }
     
-    private static func setOnlyAlertOnce(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+    private static func setOnlyAlertOnce(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){
         // TODO
     }
 
-    private static func setLockedNotification(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+    private static func setLockedNotification(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){
         // TODO
     }
     
@@ -555,11 +558,11 @@ public class NotificationBuilder {
         // TODO
     }
 
-    private static func setSound(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
-        if (pushNotification.content!.playSound ?? false) && (channel.playSound ?? false) {
+    private static func setSound(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        if (notificationModel.content!.playSound ?? false) && (channel.playSound ?? false) {
             
-            if(!StringUtils.isNullOrEmpty(pushNotification.content!.customSound)){
-                content.sound = AudioUtils.getSoundFromSource(SoundPath: pushNotification.content!.customSound!)
+            if(!StringUtils.isNullOrEmpty(notificationModel.content!.customSound)){
+                content.sound = AudioUtils.getSoundFromSource(SoundPath: notificationModel.content!.customSound!)
                 return
             }
             
@@ -605,64 +608,64 @@ public class NotificationBuilder {
         // TODO
     }
     
-    private static func setLargeIcon(pushNotification:PushNotification, content:UNMutableNotificationContent){
+    private static func setLargeIcon(notificationModel:NotificationModel, content:UNMutableNotificationContent){
         // TODO
     }
     
-    private static func setLayoutColor(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+    private static func setLayoutColor(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){
         // TODO
     }
 
-    private static func setGrouping(pushNotification:PushNotification, channel:NotificationChannelModel, content:UNMutableNotificationContent){
+    private static func setGrouping(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){
 
-        let groupKey:String? = getGroupKey(pushNotification: pushNotification, channel: channel)
+        let groupKey:String? = getGroupKey(notificationModel: notificationModel, channel: channel)
         if(!StringUtils.isNullOrEmpty(groupKey)){
             content.threadIdentifier = groupKey!
         }
     }
 
-    private static func getGroupKey(pushNotification:PushNotification, channel:NotificationChannelModel) -> String? {
-        return pushNotification.content!.groupKey ?? channel.groupKey
+    private static func getGroupKey(notificationModel:NotificationModel, channel:NotificationChannelModel) -> String? {
+        return notificationModel.content!.groupKey ?? channel.groupKey
     }
 
-    private static func setLayout(pushNotification:PushNotification, content:UNMutableNotificationContent){
+    private static func setLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent){
         
-        switch pushNotification.content!.notificationLayout {
+        switch notificationModel.content!.notificationLayout {
             
             case .BigPicture:
-                setBigPictureLayout(pushNotification: pushNotification, content: content)
+                setBigPictureLayout(notificationModel: notificationModel, content: content)
                 return
                 
             case .BigText:
-                setBigTextLayout(pushNotification: pushNotification, content: content)
+                setBigTextLayout(notificationModel: notificationModel, content: content)
                 return
                 
             case .Inbox:
-                setInboxLayout(pushNotification: pushNotification, content: content)
+                setInboxLayout(notificationModel: notificationModel, content: content)
                 return
                 
             case .MediaPlayer:
-                setMediaPlayerLayout(pushNotification: pushNotification, content: content)
+                setMediaPlayerLayout(notificationModel: notificationModel, content: content)
                 return
                 
             case .Messaging:
-                setMessagingLayout(pushNotification: pushNotification, content: content, isGrouping: false)
+                setMessagingLayout(notificationModel: notificationModel, content: content, isGrouping: false)
                 return
                 
             case .MessagingGroup:
-                setMessagingLayout(pushNotification: pushNotification, content: content, isGrouping: true)
+                setMessagingLayout(notificationModel: notificationModel, content: content, isGrouping: true)
                 return
                         
             case .ProgressBar:
-                setProgressBarLayout(pushNotification: pushNotification, content: content)
+                setProgressBarLayout(notificationModel: notificationModel, content: content)
                 return
                             
             case .Default:
-                setDefaultLayout(pushNotification: pushNotification, content: content)
+                setDefaultLayout(notificationModel: notificationModel, content: content)
                 return
             
             default:
-                setDefaultLayout(pushNotification: pushNotification, content: content)
+                setDefaultLayout(notificationModel: notificationModel, content: content)
                 return
         }
     }
@@ -699,52 +702,52 @@ public class NotificationBuilder {
         return nil
     }
     
-    private static func setBigPictureLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
+    private static func setBigPictureLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "BigPicture"
         
-        if(!StringUtils.isNullOrEmpty(pushNotification.content?.bigPicture)){
+        if(!StringUtils.isNullOrEmpty(notificationModel.content?.bigPicture)){
             
-            if let attachment:UNNotificationAttachment = getAttatchmentFromBitmapSource(pushNotification.content?.bigPicture) {
+            if let attachment:UNNotificationAttachment = getAttatchmentFromBitmapSource(notificationModel.content?.bigPicture) {
                 content.attachments.append(attachment)
                 return
             }
         }
         
-        if(!StringUtils.isNullOrEmpty(pushNotification.content?.largeIcon)){
+        if(!StringUtils.isNullOrEmpty(notificationModel.content?.largeIcon)){
             
-            if let attachment:UNNotificationAttachment = getAttatchmentFromBitmapSource(pushNotification.content?.largeIcon) {
+            if let attachment:UNNotificationAttachment = getAttatchmentFromBitmapSource(notificationModel.content?.largeIcon) {
                 content.attachments.append(attachment)
             }
         }
     }
     
-    private static func setBigTextLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
+    private static func setBigTextLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "BigText"
     }
     
-    private static func setProgressBarLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
+    private static func setProgressBarLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "ProgressBar"
     }
     
-    private static func setIndeterminateBarLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
+    private static func setIndeterminateBarLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "IndeterminateBar"
     }
     
-    private static func setMediaPlayerLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
+    private static func setMediaPlayerLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "MediaPlayer"
     }
     
-    private static func setInboxLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
+    private static func setInboxLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "Inbox"
     }
     
-    private static func setMessagingLayout(pushNotification:PushNotification, content:UNMutableNotificationContent, isGrouping:Bool) {
+    private static func setMessagingLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent, isGrouping:Bool) {
         content.categoryIdentifier = "Messaging"
         
-        content.threadIdentifier = (isGrouping ? "MessagingGR." : "Messaging.")+pushNotification.content!.channelKey!
+        content.threadIdentifier = (isGrouping ? "MessagingGR." : "Messaging.")+notificationModel.content!.channelKey!
     }
     
-    private static func setDefaultLayout(pushNotification:PushNotification, content:UNMutableNotificationContent) {
+    private static func setDefaultLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "Default"
     }
     

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:awesome_notifications/src/definitions.dart';
 import 'package:awesome_notifications/src/enumerators/action_button_type.dart';
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
@@ -23,6 +25,8 @@ class NotificationActionButton extends Model {
   bool? enabled;
   bool? autoDismissable;
   bool? showInCompactView;
+  bool? isDangerousOption;
+  Color? color;
   ActionButtonType? buttonType;
 
   NotificationActionButton(
@@ -32,6 +36,8 @@ class NotificationActionButton extends Model {
       this.enabled,
       this.autoDismissable,
       this.showInCompactView,
+      this.isDangerousOption,
+      this.color,
       this.buttonType = ActionButtonType.Default});
 
   @override
@@ -45,8 +51,14 @@ class NotificationActionButton extends Model {
         AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSABLE, dataMap, bool);
     showInCompactView = AssertUtils.extractValue(
         NOTIFICATION_SHOW_IN_COMPACT_VIEW, dataMap, bool);
+    isDangerousOption = AssertUtils.extractValue(
+        NOTIFICATION_IS_DANGEROUS_OPTION, dataMap, bool);
     buttonType = AssertUtils.extractEnum(
         NOTIFICATION_BUTTON_TYPE, dataMap, ActionButtonType.values);
+
+    int? colorValue =
+      AssertUtils.extractValue(NOTIFICATION_COLOR, dataMap, int);
+    this.color = colorValue == null ? null : Color(colorValue);
 
     return this;
   }
@@ -60,7 +72,9 @@ class NotificationActionButton extends Model {
       NOTIFICATION_ENABLED: enabled,
       NOTIFICATION_AUTO_DISMISSABLE: autoDismissable,
       NOTIFICATION_SHOW_IN_COMPACT_VIEW: showInCompactView,
-      NOTIFICATION_BUTTON_TYPE: AssertUtils.toSimpleEnumString(buttonType)
+      NOTIFICATION_IS_DANGEROUS_OPTION: isDangerousOption,
+      NOTIFICATION_BUTTON_TYPE: AssertUtils.toSimpleEnumString(buttonType),
+      NOTIFICATION_COLOR: color?.value
     };
   }
 

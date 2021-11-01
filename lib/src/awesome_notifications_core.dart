@@ -20,7 +20,7 @@ import 'package:awesome_notifications/src/models/notification_button.dart';
 import 'package:awesome_notifications/src/models/notification_channel.dart';
 import 'package:awesome_notifications/src/models/notification_content.dart';
 import 'package:awesome_notifications/src/models/notification_schedule.dart';
-import 'package:awesome_notifications/src/models/received_models/push_notification.dart';
+import 'package:awesome_notifications/src/models/received_models/notification_model.dart';
 import 'package:awesome_notifications/src/models/received_models/received_action.dart';
 import 'package:awesome_notifications/src/models/received_models/received_notification.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
@@ -236,7 +236,7 @@ class AwesomeNotifications {
     try {
       final bool wasCreated = await _channel.invokeMethod(
           CHANNEL_METHOD_CREATE_NOTIFICATION,
-          PushNotification(
+          NotificationModel(
                   content: content,
                   schedule: schedule,
                   actionButtons: actionButtons)
@@ -265,15 +265,15 @@ class AwesomeNotifications {
             json.decode(mapData[NOTIFICATION_BUTTONS]);
 
       // Invalid Notification
-      PushNotification? pushNotification = PushNotification().fromMap(mapData);
-      if (pushNotification == null) {
+      NotificationModel? notificationModel = NotificationModel().fromMap(mapData);
+      if (notificationModel == null) {
         throw Exception('Notification map data is invalid');
       }
 
       return createNotification(
-          content: pushNotification.content!,
-          schedule: pushNotification.schedule,
-          actionButtons: pushNotification.actionButtons);
+          content: notificationModel.content!,
+          schedule: notificationModel.schedule,
+          actionButtons: notificationModel.actionButtons);
     } catch (e) {
       return false;
     }
@@ -299,17 +299,17 @@ class AwesomeNotifications {
   }
 
   /// List all active scheduled notifications.
-  Future<List<PushNotification>> listScheduledNotifications() async {
-    List<PushNotification> scheduledNotifications = [];
+  Future<List<NotificationModel>> listScheduledNotifications() async {
+    List<NotificationModel> scheduledNotifications = [];
     List<Object>? returned =
         await _channel.invokeListMethod(CHANNEL_METHOD_LIST_ALL_SCHEDULES);
     if (returned != null) {
       for (Object object in returned) {
         if (object is Map) {
           try {
-            PushNotification pushNotification =
-                PushNotification().fromMap(Map<String, dynamic>.from(object))!;
-            scheduledNotifications.add(pushNotification);
+            NotificationModel notificationModel =
+                NotificationModel().fromMap(Map<String, dynamic>.from(object))!;
+            scheduledNotifications.add(notificationModel);
           } catch (e) {
             return [];
           }
