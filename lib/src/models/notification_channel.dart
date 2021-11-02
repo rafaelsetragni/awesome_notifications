@@ -48,9 +48,9 @@ class NotificationChannel extends Model {
   bool? onlyAlertOnce;
 
   NotificationChannel({
-    this.channelKey,
-    this.channelName,
-    this.channelDescription,
+    required String channelKey,
+    required String channelName,
+    required String channelDescription,
     this.channelShowBadge,
     this.importance,
     this.playSound,
@@ -71,6 +71,10 @@ class NotificationChannel extends Model {
     this.onlyAlertOnce,
     this.defaultPrivacy,
   }) : super() {
+    this.channelKey = channelKey;
+    this.channelName = channelName;
+    this.channelDescription = channelDescription;
+
     this.channelKey = AssertUtils.getValueOrDefault(
         NOTIFICATION_CHANNEL_KEY, this.channelKey, String);
     this.channelName = AssertUtils.getValueOrDefault(

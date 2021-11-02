@@ -30,15 +30,18 @@ class NotificationActionButton extends Model {
   ActionButtonType? buttonType;
 
   NotificationActionButton(
-      {required this.key,
-      required this.label,
+      {required String key,
+      required String label,
       this.icon,
       this.enabled,
       this.autoDismissable,
       this.showInCompactView,
       this.isDangerousOption,
       this.color,
-      this.buttonType = ActionButtonType.Default});
+      this.buttonType = ActionButtonType.Default}) {
+    this.key = key;
+    this.label = label;
+  }
 
   @override
   NotificationActionButton? fromMap(Map<String, dynamic> dataMap) {

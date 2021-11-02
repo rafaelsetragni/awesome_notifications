@@ -805,7 +805,8 @@ class _HomePageState extends State<HomePage> {
                   await pickScheduleDate(context, isUtc: false);
 
               NotificationSchedule schedule = NotificationCalendar(
-                  weekday: DateTime.monday, hour: 0, minute: 0, second: 0);
+                  weekday: DateTime.monday, hour: 0, minute: 0, second: 0,
+                  timeZone: AwesomeNotifications.localTimeZoneIdentifier);
               //NotificationCalendar.fromDate(date: expectedDate);
 
               DateTime? nextValidDate = await AwesomeNotifications()

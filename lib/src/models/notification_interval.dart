@@ -7,16 +7,21 @@ class NotificationInterval extends NotificationSchedule {
   int? interval;
 
   /// Notification Schedule based on calendar components. At least one date parameter is required.
+  /// [interval] Time interval between each notification (minimum of 60 sec case repeating)
+  /// [allowWhileIdle] Displays the notification, even when the device is low battery
+  /// [repeats] Defines if the notification should play only once or keeps repeating
   /// [timeZone] time zone identifier as reference of this schedule date. (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
   NotificationInterval({
-    this.interval,
+    required int interval,
     String? timeZone,
     bool allowWhileIdle = false,
     bool repeats = false,
   }) : super(
             timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
-            repeats: repeats);
+            repeats: repeats) {
+    this.interval = interval;
+  }
 
   @override
   NotificationInterval? fromMap(Map<String, dynamic> dataMap) {

@@ -582,7 +582,8 @@ OBS 4: Again, the background message method of the `firebase_messaging` plug-in 
             {
                 "key": "ARCHIVE",
                 "label": "Archive",
-                "autoDismissable": true
+                "autoDismissable": true,
+                "isDangerousOption": true
             }
         ],
         "schedule": {
@@ -590,7 +591,6 @@ OBS 4: Again, the background message method of the `firebase_messaging` plug-in 
             "hour": "10",
             "minute": "0",
             "second": "0",
-            "millisecond": "0",
             "allowWhileIdle": true,
             "repeat": true
         }
@@ -670,7 +670,7 @@ Main methods to manipulate a notification channel:
 | icon 		            |     NO   | Small icon to be displayed on the top of notification (Android only)     | String                | must be a resource image |                           |
 | largeIcon 		 	|     NO   | Large icon displayed at right middle of compact notification             | String                | unlimited                |                           |
 | bigPicture 		 	|     NO   | Big image displayed on expanded notification                             | String                | unlimited                |                           |
-| autoDismissable 		 	|     NO   | Notification should auto dismiss when gets tapped by the user (has no effect for reply actions on Android)   | bool  | true or false    | true      |
+| autoDismissable 		|     NO   | Notification should auto dismiss when gets tapped by the user (has no effect for reply actions on Android)   | bool  | true or false    | true      |
 | color 			 	|     NO   | Notification text color                                                  | Color                 | 0x000000 to 0xFFFFFF     | 0x000000 (Colors.black)   |
 | backgroundColor  	    |     NO   | Notification background color                                            | Color                 | 0x000000 to 0xFFFFFF     | 0xFFFFFF (Colors.white)   |
 | payload 		 	    |     NO   | Hidden payload content                                                   | Map<String, String>   | Only String for values   | null                      |
@@ -706,11 +706,12 @@ Main methods to manipulate a notification channel:
 ### NotificationInterval ("schedule" in Push data) - (optional)
 <br>
 
-| Attribute       	 | Required | Description                                                       | Type            | Value Limits            | Default value   |
-| ------------------ | -------- | ----------------------------------------------------------------- | ----------------| ----------------------- | --------------- |
-| interval           |   *YES   | Mandatory initial notification fire date                          | Int (seconds)   | Positive unlimited      |                 |
-| allowWhileIdle     |     NO   | Displays the notification, even when the device is low battery    | bool            | true or false           | false           |
-| repeats            |     NO   | List of precise notification fire dates                           | bool            | true or false           | false           |
+| Attribute       | Required | Description                                                                | Type            | Value Limits / Format | Default value   |
+| --------------- | -------- | -------------------------------------------------------------------------- | --------------- | --------------------- | --------------- |
+| interval        |    YES   | Time interval between each notification (minimum of 60 sec case repeating) | Int (seconds)   | Positive unlimited    |                 |
+| allowWhileIdle  |     NO   | Displays the notification, even when the device is low battery             | bool            | true or false         | false           |
+| repeats         |     NO   | Defines if the notification should play only once or keeps repeating       | bool            | true or false         | false           |
+| timeZone        |     NO   | Time zone identifier (ISO 8601)                                            | String          | "America/Sao_Paulo", "GMT-08:00" or "UTC" | "UTC" |
 
 <br>
 
@@ -718,22 +719,41 @@ Main methods to manipulate a notification channel:
 <br>
 
 * Is necessary at least one *required attribute
+* If the calendar time condition is not defined, then any value is considered valid in the filtering process for the respective time component
+
+| Attribute       	 | Required | Description                                                          | Type       | Value Limits / Format | Default value   |
+| ------------------ | -------- | -------------------------------------------------------------------- | ---------- | --------------------- | --------------- |
+| era,               |   *YES   | Schedule era condition                                               | Integer    | 0 - 99999             |                 |
+| year,              |   *YES   | Schedule year condition                                              | Integer    | 0 - 99999             |                 |
+| month,             |   *YES   | Schedule month condition                                             | Integer    | 1 - 12                |                 |
+| day,               |   *YES   | Schedule day condition                                               | Integer    | 1 - 31                |                 |
+| hour,              |   *YES   | Schedule hour condition                                              | Integer    | 0 - 23                |                 |
+| minute,            |   *YES   | Schedule minute condition                                            | Integer    | 0 - 59                |                 |
+| second,            |   *YES   | Schedule second condition                                            | Integer    | 0 - 59                |                 |
+| weekday,           |   *YES   | Schedule weekday condition                                           | Integer    | 1 - 7                 |                 |
+| weekOfMonth,       |   *YES   | Schedule weekOfMonth condition                                       | Integer    | 1 - 6                 |                 |
+| weekOfYear,        |   *YES   | Schedule weekOfYear condition                                        | Integer    | 1 - 53                |                 |
+| allowWhileIdle     |     NO   | Displays the notification, even when the device is low battery       | bool       | true or false         | false           |
+| repeats            |     NO   | Defines if the notification should play only once or keeps repeating | bool       | true or false         | false           |
+| timeZone           |     NO   | Time zone identifier (ISO 8601)                                      | String     | "America/Sao_Paulo", "GMT-08:00" or "UTC" | "UTC" |
+
+<br>
+
+### NotificationAndroidCrontab (Only for Android)("schedule" in Push data) - (optional)
+<br>
+
+* Is necessary at least one *required attribute
 * Cron expression must respect the format (with seconds precision) as described in [this article](https://www.baeldung.com/cron-expressions)
 
-| Attribute       	 | Required | Description                                                       | Type       | Value Limits          | Default value   |
-| ------------------ | -------- | ----------------------------------------------------------------- | ---------- | --------------------- | --------------- |
-| era,               |   *YES   | Schedule era condition                                            | Integer    | Positive unlimited    |                 |
-| year,              |   *YES   | Schedule year condition                                           | Integer    | Positive unlimited    |                 |
-| month,             |   *YES   | Schedule month condition                                          | Integer    | Positive unlimited    |                 |
-| day,               |   *YES   | Schedule day condition                                            | Integer    | Positive unlimited    |                 |
-| hour,              |   *YES   | Schedule hour condition                                           | Integer    | Positive unlimited    |                 |
-| minute,            |   *YES   | Schedule minute condition                                         | Integer    | Positive unlimited    |                 |
-| second,            |   *YES   | Schedule second condition                                         | Integer    | Positive unlimited    |                 |
-| weekday,           |   *YES   | Schedule weekday condition                                        | Integer    | Positive unlimited    |                 |
-| weekOfMonth,       |   *YES   | Schedule weekOfMonth condition                                    | Integer    | Positive unlimited    |                 |
-| weekOfYear,        |   *YES   | Schedule weekOfYear condition                                     | Integer    | Positive unlimited    |                 |
-| allowWhileIdle     |     NO   | Displays the notification, even when the device is low battery    | bool       | true or false         | false           |
-| repeats            |     NO   | List of precise notification fire dates                           | bool       | true or false         | false           |
+| Attribute       	 | Required | Description                                                          | Type             | Value Limits / Format | Default value   |
+| ------------------ | -------- | -------------------------------------------------------------------- | ---------------- | --------------------- | --------------- |
+| initialDateTime    |     NO   | Initial limit date of valid dates (does not fire any notification)   | String           | YYYY-MM-DD hh:mm:ss   |                 |
+| expirationDateTime |     NO   | Final limit date of valid dates (does not fire any notification)     | String           | YYYY-MM-DD hh:mm:ss   |                 |
+| crontabExpression  |   *YES   | Crontab rule to generate new valid dates (with seconds precision)    | bool             | true or false         | false           |
+| preciseSchedules   |   *YES   | List of precise valid dates to fire                                  | bool             | true or false         | false           |
+| allowWhileIdle     |     NO   | Displays the notification, even when the device is low battery       | bool             | true or false         | false           |
+| repeats            |     NO   | Defines if the notification should play only once or keeps repeating | bool             | true or false         | false           |
+| timeZone           |     NO   | Time zone identifier (ISO 8601)                                      | String     | "America/Sao_Paulo", "GMT-08:00" or "UTC" | "UTC" |
 
 <br>
 <br>

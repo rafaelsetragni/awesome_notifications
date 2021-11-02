@@ -1,3 +1,6 @@
+## [0.6.16]
+* Media button receiver removed from AndroidManifest.xml due incompatibility with some Galaxy models and another plugins (#81 and #320)
+* Documentation on scheduling notifications has been improved
 ## [0.6.15]
 * PushNotification class deprecated, as all push features are being moved to the new companion plugin. Instead, use NotificationModel.
 * Added isDangerousOption for action buttons, to color the text in red to indicate a dangerous option for the user.

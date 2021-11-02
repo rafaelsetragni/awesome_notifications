@@ -672,32 +672,27 @@ public class AwesomeNotificationsPlugin
         Map<String, Object> scheduleData = (Map<String, Object>) data.get(Definitions.NOTIFICATION_MODEL_SCHEDULE);
         String fixedDateString = (String) data.get(Definitions.NOTIFICATION_INITIAL_FIXED_DATE);
 
-        assert scheduleData != null;
-        NotificationScheduleModel scheduleModel;
-        if (scheduleData.containsKey(Definitions.NOTIFICATION_SCHEDULE_INTERVAL)) {
-            scheduleModel = new NotificationIntervalModel().fromMap(scheduleData);
-        } else {
-            scheduleModel = new NotificationCalendarModel().fromMap(scheduleData);
-        }
+        if (scheduleData == null)
+            throw new AwesomeNotificationException("Schedule data is invalid");
 
-        if (scheduleModel != null) {
+        NotificationScheduleModel scheduleModel = NotificationScheduleModel.getScheduleModelFromMap(scheduleData);
 
-            Date fixedDate = null;
+        if (scheduleModel == null)
+            throw new AwesomeNotificationException("Schedule data is invalid");
 
-            if (!StringUtils.isNullOrEmpty(fixedDateString))
-                fixedDate = DateUtils.stringToDate(fixedDateString, scheduleModel.timeZone);
+        Date fixedDate = null;
 
-            Calendar nextValidDate = scheduleModel.getNextValidDate(fixedDate);
+        if (!StringUtils.isNullOrEmpty(fixedDateString))
+            fixedDate = DateUtils.stringToDate(fixedDateString, scheduleModel.timeZone);
 
-            String finalValidDateString = null;
-            if (nextValidDate != null)
-                finalValidDateString = DateUtils.dateToString(nextValidDate.getTime(), scheduleModel.timeZone);
+        Calendar nextValidDate = scheduleModel.getNextValidDate(fixedDate);
 
-            result.success(finalValidDateString);
-            return;
-        }
+        String finalValidDateString = null;
+        if (nextValidDate != null)
+            finalValidDateString = DateUtils.dateToString(nextValidDate.getTime(), scheduleModel.timeZone);
 
-        result.success(null);
+        result.success(finalValidDateString);
+        return;
     }
 
     private void channelMethodGetLocalTimeZone(MethodCall call, Result result) throws Exception {

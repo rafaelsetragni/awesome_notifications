@@ -39,6 +39,20 @@ class NotificationCalendar extends NotificationSchedule {
   int? weekOfYear;
 
   /// Notification Schedule based on calendar components. At least one date parameter is required.
+  /// [era] Schedule era condition
+  /// [year] Schedule year condition
+  /// [month] Schedule month condition
+  /// [day] Schedule day condition
+  /// [hour] Schedule hour condition
+  /// [minute] Schedule minute condition
+  /// [second] Schedule second condition
+  /// [millisecond] Schedule millisecond condition
+  /// [weekday] Schedule weekday condition
+  /// [weekOfMonth] Schedule weekOfMonth condition
+  /// [weekOfMonth] Schedule weekOfMonth condition
+  /// [weekOfYear] Schedule weekOfYear condition
+  /// [allowWhileIdle] Displays the notification, even when the device is low battery
+  /// [repeats] Defines if the notification should play only once or keeps repeating
   /// [timeZone] time zone identifier as reference of this schedule date. (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
   NotificationCalendar({
     this.era,

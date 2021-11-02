@@ -18,7 +18,8 @@ class NotificationModel extends Model {
   /// Imports data from a serializable object
   NotificationModel? fromMap(Map<String, dynamic> mapData) {
     try {
-      assert(mapData.containsKey('content') && mapData['content'] is Map);
+      assert(mapData.containsKey(NOTIFICATION_CONTENT) &&
+          mapData[NOTIFICATION_CONTENT] is Map);
 
       Map<String, dynamic> contentData =
           Map<String, dynamic>.from(mapData[NOTIFICATION_CONTENT]);
@@ -34,7 +35,7 @@ class NotificationModel extends Model {
             Map<String, dynamic>.from(mapData[NOTIFICATION_SCHEDULE]);
 
         if (scheduleData.containsKey(NOTIFICATION_SCHEDULE_INTERVAL)) {
-          schedule = NotificationInterval().fromMap(scheduleData);
+          schedule = NotificationInterval(interval: 0).fromMap(scheduleData);
         } else {
           schedule = NotificationCalendar().fromMap(scheduleData);
         }
@@ -51,7 +52,7 @@ class NotificationModel extends Model {
               Map<String, dynamic>.from(buttonData);
 
           NotificationActionButton button =
-              NotificationActionButton(label: null, key: null)
+              NotificationActionButton(label: '', key: '')
                   .fromMap(actionButtonData) as NotificationActionButton;
           button.validate();
 

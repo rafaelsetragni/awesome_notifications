@@ -4,26 +4,26 @@ import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/list_utils.dart';
 
 class NotificationAndroidCrontab extends NotificationSchedule {
-  /// Field number for get and set indicating the era, e.g., AD or BC in the Julian calendar
+  ///  The initial limit date that an schedule is considered valid (YYYY-MM-DD hh:mm:ss)
   DateTime? initialDateTime;
 
-  /// Field number for get and set indicating the year.
+  /// The final limit date that an schedule is considered valid (YYYY-MM-DD hh:mm:ss)
   DateTime? expirationDateTime;
 
-  /// Field number for get and set indicating the year.
+  /// List of precise valid schedule dates
   List<DateTime>? preciseSchedules;
 
-  /// Field number for get and set indicating the month of the year (1-12).
+  /// Crontab expression as repetition rule (with seconds precision), as described in https://www.baeldung.com/cron-expressions
   String? crontabExpression;
 
   /// Notification Schedule based on calendar components. At least one date parameter is required.
-  /// [initialDate]: (YYYY-MM-DD hh:mm:ss) The initial date that schedule should be called by first time
-  /// [expirationDate]: (YYYY-MM-DD hh:mm:ss) The initial date that schedule should be called by first time
+  /// [initialDate]: The initial limit date that an schedule is considered valid (YYYY-MM-DD hh:mm:ss)
+  /// [expirationDate]: The final limit date that an schedule is considered valid (YYYY-MM-DD hh:mm:ss)
   /// [crontabExpression]: Crontab expression as repetition rule (with seconds precision), as described in https://www.baeldung.com/cron-expressions
-  /// [preciseSchedules]: Crontab expression as repetition rule (with seconds precision), as described in https://www.baeldung.com/cron-expressions
-  /// [timeZone] time zone identifier as reference of this schedule date. (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+  /// [preciseSchedules]: List of precise valid schedule dates
   /// [allowWhileIdle]: Determines if notification will send, even when the device is in critical situation, such as low battery.
   /// [repeats]: Determines if notification will send, even when the device is in critical situation, such as low battery.
+  /// [timeZone] time zone identifier as reference of this schedule date. (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
   NotificationAndroidCrontab({
     this.initialDateTime,
     this.expirationDateTime,

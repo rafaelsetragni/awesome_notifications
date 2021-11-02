@@ -22,11 +22,8 @@ public final class CronUtils {
         TimeZone timeZone
     ) throws AwesomeNotificationException {
 
-        if(StringUtils.isNullOrEmpty(initialDateTime) && StringUtils.isNullOrEmpty(crontabRule))
+        if(StringUtils.isNullOrEmpty(crontabRule))
             return null;
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(timeZone);
 
         Date now, delayedNow;
         if(fixedNowDate == null){
@@ -35,57 +32,50 @@ public final class CronUtils {
             now = fixedNowDate;
         }
 
-        Date initialScheduleDay;
-        if (initialDateTime == null) {
-            initialScheduleDay = now;
-        }
-        else {
-            initialScheduleDay = DateUtils.stringToDate(initialDateTime, timeZone.getID());
-        }
+        if(!StringUtils.isNullOrEmpty(initialDateTime))
+        {
+            Date initialScheduleDay = DateUtils.stringToDate(initialDateTime, timeZone.getID());
 
-        // if initial date is a future one, show in future. Otherwise, show now
-        switch (initialScheduleDay.compareTo(now)){
+            // if initial date is a future one, show in future. Otherwise, show now
+            switch (initialScheduleDay.compareTo(now)){
 
-            case -1: // if initial date is not a repetition and is in the past, do not show
-                if(StringUtils.isNullOrEmpty(crontabRule))
-                    return null;
-                calendar.setTime(now);
-                break;
+                case 0: // if initial date is right now or
+                case -1: // if initial date is in the past, do not change now
+                    break;
 
-            case 1: // if initial date is in future, shows in future
-            case 0: // if initial date is right now, shows now
-            default:
-                calendar.setTime(initialScheduleDay);
-                break;
+                case 1: // if initial date is in future, shows in future
+                default:
+                    now = initialScheduleDay;
+                    break;
+            }
         }
 
         delayedNow = applyToleranceDate(now, timeZone);
 
-        if (!StringUtils.isNullOrEmpty(crontabRule)) {
+        if(CronExpression.isValidExpression(crontabRule)) {
+            try {
+                CronExpression cronExpression = new CronExpression(crontabRule);
+                cronExpression.setTimeZone(timeZone);
+                Date nextSchedule = cronExpression.getNextValidTimeAfter(now);
 
-            if(CronExpression.isValidExpression(crontabRule)) {
-                try {
-                    CronExpression cronExpression = new CronExpression(crontabRule);
-                    cronExpression.setTimeZone(timeZone);
-                    Date nextSchedule = cronExpression.getNextValidTimeAfter(now);
+                if (nextSchedule != null && nextSchedule.compareTo(delayedNow) > 0) {
 
-                    if (nextSchedule != null && nextSchedule.compareTo(delayedNow) > 0) {
-                        calendar.setTime(nextSchedule);
-                        return calendar;
-                    } else {
-                        // if there is no more valid dates, remove the repetitions
-                        return null;
-                    }
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeZone(timeZone);
+                    calendar.setTime(nextSchedule);
+                    return calendar;
 
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                } else {
+                    // if there is no more valid dates, remove the repetitions
+                    return null;
                 }
-            }
 
-            return null;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
-        return calendar;
+        return null;
     }
 
     /// Processing time tolerance

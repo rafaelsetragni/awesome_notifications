@@ -246,7 +246,7 @@ Future<void> showNotificationWithIconsAndActionButtons(int id) async {
         NotificationActionButton(
             key: 'READ', label: 'Mark as read', autoDismissable: true),
         NotificationActionButton(
-            key: 'PROFILE', label: 'Profile', autoDismissable: true),
+            key: 'PROFILE', label: 'Profile', autoDismissable: true, color: Colors.green),
         NotificationActionButton(
             key: 'DISMISS', label: 'Dismiss', autoDismissable: true, isDangerousOption: true)
       ]);

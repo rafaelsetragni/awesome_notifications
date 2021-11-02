@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.carda.awesome_notifications.Definitions;
+import me.carda.awesome_notifications.notifications.broadcastReceivers.ScheduledNotificationReceiver;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 
 public class NotificationModel extends Model {
@@ -95,21 +96,7 @@ public class NotificationModel extends Model {
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) obj;
 
-        if(map.isEmpty()) return null;
-
-        if(
-            map.containsKey(Definitions.NOTIFICATION_CRONTAB_EXPRESSION) ||
-            map.containsKey(Definitions.NOTIFICATION_PRECISE_SCHEDULES) ||
-            map.containsKey(Definitions.NOTIFICATION_EXPIRATION_DATE_TIME)
-        ){
-            return new NotificationCrontab().fromMap(map);
-        }
-
-        if(map.containsKey(Definitions.NOTIFICATION_SCHEDULE_INTERVAL)){
-            return new NotificationIntervalModel().fromMap(map);
-        }
-
-        return new NotificationCalendarModel().fromMap(map);
+        return NotificationScheduleModel.getScheduleModelFromMap(map);
     }
 
     @SuppressWarnings("unchecked")

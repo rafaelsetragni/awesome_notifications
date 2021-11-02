@@ -71,4 +71,39 @@ public abstract class NotificationScheduleModel extends Model {
         Date nextValidDate = nextSchedule.getTime();
         return nextValidDate != null && nextValidDate.compareTo(DateUtils.getLocalDateTime(this.timeZone)) >= 0;
     }
+
+    public static NotificationScheduleModel getScheduleModelFromMap(Map<String, Object> map){
+
+        if(map == null || map.isEmpty()) return null;
+
+        if(
+            map.containsKey(Definitions.NOTIFICATION_CRONTAB_EXPRESSION) ||
+            map.containsKey(Definitions.NOTIFICATION_PRECISE_SCHEDULES) ||
+            map.containsKey(Definitions.NOTIFICATION_EXPIRATION_DATE_TIME)
+        ){
+            return new NotificationCrontab().fromMap(map);
+        }
+
+        if(
+            map.containsKey(Definitions.NOTIFICATION_SCHEDULE_SECOND) ||
+            map.containsKey(Definitions.NOTIFICATION_SCHEDULE_MINUTE) ||
+            map.containsKey(Definitions.NOTIFICATION_SCHEDULE_HOUR) ||
+            map.containsKey(Definitions.NOTIFICATION_SCHEDULE_DAY) ||
+            map.containsKey(Definitions.NOTIFICATION_SCHEDULE_MONTH) ||
+            map.containsKey(Definitions.NOTIFICATION_SCHEDULE_YEAR) ||
+            map.containsKey(Definitions.NOTIFICATION_SCHEDULE_ERA) ||
+            map.containsKey(Definitions.NOTIFICATION_SCHEDULE_MILLISECOND) ||
+            map.containsKey(Definitions.NOTIFICATION_SCHEDULE_WEEKDAY) ||
+            map.containsKey(Definitions.NOTIFICATION_SCHEDULE_WEEKOFMONTH) ||
+            map.containsKey(Definitions.NOTIFICATION_SCHEDULE_WEEKOFYEAR)
+        ){
+            return new NotificationCalendarModel().fromMap(map);
+        }
+
+        if(map.containsKey(Definitions.NOTIFICATION_SCHEDULE_INTERVAL)){
+            return new NotificationIntervalModel().fromMap(map);
+        }
+
+        return null;
+    }
 }
