@@ -486,16 +486,6 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 			)
 		}
     }
-
-    private static func requestPermissions() -> Bool {
-        NotificationBuilder.requestPermissions(completion: { authorized in
-            if(debug){
-                Log.d(SwiftAwesomeNotificationsPlugin.TAG,
-                authorized ? "Notifications authorized" : "Notifications not authorized")
-            }
-        })
-        return true
-    }
     
     public func clearDeactivatedSchedules(){
         
@@ -911,10 +901,10 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 
     private func channelMethodRequestNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         
-		let permissions:[String] = call.arguments as? [String]
+		let permissions:[String]? = call.arguments as? [String]
         NotificationBuilder.requestPermissions(permissions, completion: { (allowed) in
             self.saveReturnPageParameters(result)
-        }
+        })
     }
     
     private func saveReturnPageParameters(_ result: @escaping FlutterResult){

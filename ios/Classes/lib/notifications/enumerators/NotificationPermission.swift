@@ -7,7 +7,7 @@ public enum NotificationPermission : String, CaseIterable {
     case Provisional = "Provisional"
     case Car = "Car"
         
-    static func fromString(_ label: String) -> MyCode? {
+    static func fromString(_ label: String) -> NotificationPermission? {
         return self.allCases.first{ "\($0)" == label }
     }
 }

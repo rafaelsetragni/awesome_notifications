@@ -102,37 +102,41 @@ public class NotificationBuilder {
         userDefaults!.set(count, forKey: Definitions.BADGE_COUNT)
     }
     
-    public static func requestPermissions(_ permissions:[String], completion: @escaping (Bool) -> ()){
+    public static func requestPermissions(_ permissions:[String]?, completion: @escaping (Bool) -> ()){
         
         var iOSpermissions:UNAuthorizationOptions = permissions == nil ? 
             [.sound,.alert,.badge] : []
 
         if permissions != nil {
-            for permission in permissions {        
+            for permission in permissions! {
                 switch NotificationPermission.fromString(permission) {
                     
                     case .Alert:
-                        iOSpermissions.append(.Alert)
+                        iOSpermissions.insert(.alert)
                         break
                         
                     case .Sound:
-                        iOSpermissions.append(.Sound)
+                        iOSpermissions.insert(.sound)
                         break
                         
                     case .Badge:
-                        iOSpermissions.append(.Badge)
+                        iOSpermissions.insert(.badge)
                         break
                         
                     case .Car:
-                        iOSpermissions.append(.Car)
+                        iOSpermissions.insert(.carPlay)
                         break
                     
                     case .CriticalAlert:
-                        iOSpermissions.append(.CriticalAlert)
+                        if #available(iOS 12.0, *) {
+                            iOSpermissions.insert(.criticalAlert)
+                        }
                         break
                             
                     case .Provisional:
-                        iOSpermissions.append(.Provisional)
+                        if #available(iOS 12.0, *) {
+                            iOSpermissions.insert(.provisional)
+                        }
                         break
 
                     default:

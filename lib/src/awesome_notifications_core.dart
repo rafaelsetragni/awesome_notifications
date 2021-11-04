@@ -297,8 +297,16 @@ class AwesomeNotifications {
   /// Prompts the user to enabled notifications
   Future<bool> requestPermissionToSendNotifications({List<NotificationPermission> permissions = const [
     NotificationPermission.Badge, NotificationPermission.Alert, NotificationPermission.Sound]}) async {
+
+    final List<String> permissionList = [];
+    for (final permission in permissions){
+      String? permissionValue = AssertUtils.toSimpleEnumString(permission);
+      if (permissionValue != null)
+        permissionList.add(permissionValue);
+    }
+
     final bool isAllowed =
-        await _channel.invokeMethod(CHANNEL_METHOD_REQUEST_NOTIFICATIONS, permissions);
+        await _channel.invokeMethod(CHANNEL_METHOD_REQUEST_NOTIFICATIONS, permissionList);
     return isAllowed;
   }
 
