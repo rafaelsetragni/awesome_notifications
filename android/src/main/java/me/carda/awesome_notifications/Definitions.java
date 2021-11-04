@@ -172,6 +172,7 @@ public interface Definitions {
     String NOTIFICATION_DISPLAY_ON_FOREGROUND = "displayOnForeground";
     String NOTIFICATION_DISPLAY_ON_BACKGROUND = "displayOnBackground";
     String NOTIFICATION_ICON = "icon";
+    String NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen";
     String NOTIFICATION_PLAY_SOUND = "playSound";
     String NOTIFICATION_SOUND_SOURCE = "soundSource";
     String NOTIFICATION_ENABLE_VIBRATION = "enableVibration";
@@ -241,5 +242,6 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_ONLY_ALERT_ONCE, false);
         put(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, true);
         put(Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, false);
+        put(Definitions.NOTIFICATION_WAKE_UP_SCREEN, false);
     }};
 }

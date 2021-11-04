@@ -622,6 +622,25 @@ Future<void> showCustomSoundNotification(int id) async {
 }
 
 /* *********************************************
+    WAKE UP LOCK SCREEN NOTIFICATIONS
+************************************************ */
+
+Future<void> showNotificationWithWakeUp(int id) async {
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: id,
+          channelKey: 'basic_channel',
+          title: 'Hey! Wake up!!',
+          body: 'Its time to wake up!',
+          wakeUpScreen: true,
+          notificationLayout: NotificationLayout.BigPicture,
+          bigPicture:
+          'https://media.tenor.com/images/5591f440176598f96050b09c943052c0/tenor.png',
+          color: Colors.blueGrey),
+      schedule: NotificationInterval(interval: 5));
+}
+
+/* *********************************************
     SILENCED NOTIFICATIONS
 ************************************************ */
 
@@ -634,7 +653,7 @@ Future<void> showNotificationWithNoSound(int id) async {
           body: 'Shhhhhh!!!',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture:
-              'https://image.freepik.com/fotos-gratis/medico-serio-mostrando-o-gesto-de-silencio_1262-17188.jpg',
+          'https://image.freepik.com/fotos-gratis/medico-serio-mostrando-o-gesto-de-silencio_1262-17188.jpg',
           color: Colors.blueGrey,
           payload: {'advice': 'shhhhhhh'}));
 }

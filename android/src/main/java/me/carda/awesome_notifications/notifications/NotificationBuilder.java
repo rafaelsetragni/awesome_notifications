@@ -8,11 +8,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.service.notification.NotificationListenerService;
@@ -347,6 +349,34 @@ public class NotificationBuilder {
         return notifications;
     }
 
+    public static String getAppName(Context context){
+        ApplicationInfo applicationInfo = context.getApplicationInfo();
+        int stringId = applicationInfo.labelRes;
+        return stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : context.getString(stringId);
+    }
+
+    public static void wakeUpScreen(Context context){
+
+        PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOn = pm.isInteractive();
+        if(!isScreenOn)
+        {
+            String appName = NotificationBuilder.getAppName(context);
+
+            PowerManager.WakeLock wl = pm.newWakeLock(
+                    PowerManager.FULL_WAKE_LOCK |
+                    PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                    PowerManager.ON_AFTER_RELEASE,
+                    appName+":"+TAG+":WakeupLock");
+            wl.acquire(10000);
+
+            PowerManager.WakeLock wl_cpu = pm.newWakeLock(
+                    PowerManager.PARTIAL_WAKE_LOCK,
+                    appName+":"+TAG+":WakeupCpuLock");
+            wl_cpu.acquire(10000);
+        }
+    }
+
     private static String getButtonInputText(Intent intent, String buttonKey) {
         Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
         if (remoteInput != null) {
@@ -414,7 +444,14 @@ public class NotificationBuilder {
 
         updateTrackingExtras(notificationModel, channel, androidNotification.extras);
 
+        setWakeUpScreen(context, notificationModel);
+
         return androidNotification;
+    }
+
+    private void setWakeUpScreen(Context context, NotificationModel notificationModel) {
+        if (notificationModel.content.wakeUpScreen)
+            wakeUpScreen(context);
     }
 
     private void setShowWhen(NotificationModel notificationModel, NotificationCompat.Builder builder) {

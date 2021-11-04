@@ -28,6 +28,8 @@ import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
 import 'package:awesome_notifications/src/utils/date_utils.dart';
 import 'package:rxdart/rxdart.dart' show BehaviorSubject;
 
+import 'enumerators/notification_permission.dart';
+
 class AwesomeNotifications {
   static String? rootNativePath;
 
@@ -293,9 +295,10 @@ class AwesomeNotifications {
   }
 
   /// Prompts the user to enabled notifications
-  Future<bool> requestPermissionToSendNotifications() async {
+  Future<bool> requestPermissionToSendNotifications({List<NotificationPermission> permissions = const [
+    NotificationPermission.Badge, NotificationPermission.Alert, NotificationPermission.Sound]}) async {
     final bool isAllowed =
-        await _channel.invokeMethod(CHANNEL_METHOD_REQUEST_NOTIFICATIONS);
+        await _channel.invokeMethod(CHANNEL_METHOD_REQUEST_NOTIFICATIONS, permissions);
     return isAllowed;
   }
 

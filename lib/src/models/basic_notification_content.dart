@@ -21,6 +21,7 @@ class BaseNotificationContent extends Model {
   String? bigPicture;
   String? customSound;
   bool? autoDismissable;
+  bool? wakeUpScreen;
   Color? color;
   Color? backgroundColor;
   NotificationPrivacy? privacy;
@@ -40,6 +41,7 @@ class BaseNotificationContent extends Model {
       this.icon,
       this.largeIcon,
       this.bigPicture,
+      this.wakeUpScreen,
       this.autoDismissable,
       this.color,
       this.backgroundColor,
@@ -70,6 +72,8 @@ class BaseNotificationContent extends Model {
         AssertUtils.extractValue(NOTIFICATION_BIG_PICTURE, mapData, String);
     this.customSound =
         AssertUtils.extractValue(NOTIFICATION_CUSTOM_SOUND, mapData, String);
+    this.wakeUpScreen =
+        AssertUtils.extractValue(NOTIFICATION_WAKE_UP_SCREEN, mapData, bool);
     this.autoDismissable =
         AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSABLE, mapData, bool);
 
@@ -109,7 +113,8 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_AUTO_DISMISSABLE: autoDismissable,
       NOTIFICATION_PRIVACY: AssertUtils.toSimpleEnumString(privacy),
       NOTIFICATION_COLOR: color?.value,
-      NOTIFICATION_BACKGROUND_COLOR: backgroundColor?.value
+      NOTIFICATION_BACKGROUND_COLOR: backgroundColor?.value,
+      NOTIFICATION_WAKE_UP_SCREEN: wakeUpScreen
     };
   }
 

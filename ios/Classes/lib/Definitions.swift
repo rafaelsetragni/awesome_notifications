@@ -127,6 +127,7 @@ enum Definitions {
     static let  NOTIFICATION_TITLE = "title"
     static let  NOTIFICATION_BODY = "body"
     static let  NOTIFICATION_SUMMARY = "summary"
+    static let  NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen"
     static let  NOTIFICATION_CUSTOM_SOUND = "customSound"
     static let  NOTIFICATION_SHOW_WHEN = "showWen"
     static let  NOTIFICATION_BUTTON_KEY_PRESSED = "buttonKeyPressed"
@@ -217,6 +218,7 @@ enum Definitions {
         Definitions.NOTIFICATION_TICKER: "ticker",
         Definitions.NOTIFICATION_ALLOW_WHILE_IDLE: false,
         Definitions.NOTIFICATION_ONLY_ALERT_ONCE: false,
-        Definitions.NOTIFICATION_IS_DANGEROUS_OPTION: false
+        Definitions.NOTIFICATION_IS_DANGEROUS_OPTION: false,
+        Definitions.NOTIFICATION_WAKE_UP_SCREEN: false
     ] as [String : Any?]
 }

@@ -102,8 +102,45 @@ public class NotificationBuilder {
         userDefaults!.set(count, forKey: Definitions.BADGE_COUNT)
     }
     
-    public static func requestPermissions(completion: @escaping (Bool) -> ()){
+    public static func requestPermissions(_ permissions:[String], completion: @escaping (Bool) -> ()){
         
+        var iOSpermissions:UNAuthorizationOptions = permissions == nil ? 
+            [.sound,.alert,.badge] : []
+
+        if permissions != nil {
+            for permission in permissions {        
+                switch NotificationPermission.fromString(permission) {
+                    
+                    case .Alert:
+                        iOSpermissions.append(.Alert)
+                        break
+                        
+                    case .Sound:
+                        iOSpermissions.append(.Sound)
+                        break
+                        
+                    case .Badge:
+                        iOSpermissions.append(.Badge)
+                        break
+                        
+                    case .Car:
+                        iOSpermissions.append(.Car)
+                        break
+                    
+                    case .CriticalAlert:
+                        iOSpermissions.append(.CriticalAlert)
+                        break
+                            
+                    case .Provisional:
+                        iOSpermissions.append(.Provisional)
+                        break
+
+                    default:
+                        break
+                }
+            }
+        }
+
         if !SwiftUtils.isRunningOnExtension() {
             
             let notificationCenter = UNUserNotificationCenter.current()
@@ -121,7 +158,7 @@ public class NotificationBuilder {
 
                 if !isAllowed && settings.authorizationStatus == .notDetermined {
                     
-                    notificationCenter.requestAuthorization(options: [.sound,.alert,.badge]) { (granted, error) in
+                    notificationCenter.requestAuthorization(options: iOSpermissions) { (granted, error) in
                         if granted {
                             DispatchQueue.main.async {
                                 UIApplication.shared.registerForRemoteNotifications()

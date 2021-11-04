@@ -20,6 +20,7 @@ public class NotificationContentModel : AbstractModel {
     var actionButtons:[NotificationButtonModel]?
     var payload:[String:String?]?
     
+    var wakeUpScreen: Bool?
     var playSound: Bool?
     var customSound: String?
     var locked: Bool?
@@ -63,6 +64,7 @@ public class NotificationContentModel : AbstractModel {
         self.playSound             = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_PLAY_SOUND, arguments: arguments)
         self.customSound           = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_CUSTOM_SOUND, arguments: arguments)
         
+        self.wakeUpScreen          = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_WAKE_UP_SCREEN, arguments: arguments)
         self.locked                = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_LOCKED, arguments: arguments)
         self.icon                  = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_ICON, arguments: arguments)
         self.largeIcon             = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_LARGE_ICON, arguments: arguments)
@@ -101,6 +103,7 @@ public class NotificationContentModel : AbstractModel {
         if(self.title != nil){ mapData[Definitions.NOTIFICATION_TITLE] = self.title }
         if(self.body != nil){ mapData[Definitions.NOTIFICATION_BODY] = self.body }
         if(self.summary != nil){ mapData[Definitions.NOTIFICATION_SUMMARY] = self.summary }
+        if(self.wakeUpScreen != nil){ mapData[Definitions.NOTIFICATION_WAKE_UP_SCREEN] = self.wakeUpScreen }
         if(self.showWhen != nil){ mapData[Definitions.NOTIFICATION_SHOW_WHEN] = self.showWhen }
         if(self.playSound != nil){ mapData[Definitions.NOTIFICATION_PLAY_SOUND] = self.playSound }
         if(self.customSound != nil){ mapData[Definitions.NOTIFICATION_CUSTOM_SOUND] = self.customSound }

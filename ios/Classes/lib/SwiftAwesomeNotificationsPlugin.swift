@@ -910,7 +910,9 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     }
 
     private func channelMethodRequestNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        NotificationBuilder.requestPermissions { (allowed) in
+        
+		let permissions:[String] = call.arguments as? [String]
+        NotificationBuilder.requestPermissions(permissions, completion: { (allowed) in
             self.saveReturnPageParameters(result)
         }
     }
