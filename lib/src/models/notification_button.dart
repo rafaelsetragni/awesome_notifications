@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:awesome_notifications/src/definitions.dart';
 import 'package:awesome_notifications/src/enumerators/action_button_type.dart';
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
+import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
 import 'package:awesome_notifications/src/models/model.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
@@ -83,13 +84,22 @@ class NotificationActionButton extends Model {
 
   @override
   void validate() {
-    assert(!AssertUtils.isNullOrEmptyOrInvalid(key, String));
-    assert(!AssertUtils.isNullOrEmptyOrInvalid(label, String));
-    assert(!AssertUtils.isNullOrEmptyOrInvalid(autoDismissable, bool));
-    assert(!AssertUtils.isNullOrEmptyOrInvalid(showInCompactView, bool));
+    if (AssertUtils.isNullOrEmptyOrInvalid(key, String))
+      throw AwesomeNotificationsException(message: 'key id is requried');
+    if (AssertUtils.isNullOrEmptyOrInvalid(label, String))
+      throw AwesomeNotificationsException(message: 'label id is requried');
+    if (AssertUtils.isNullOrEmptyOrInvalid(autoDismissable, bool))
+      throw AwesomeNotificationsException(
+          message: 'autoDismissable id is requried');
+    if (AssertUtils.isNullOrEmptyOrInvalid(showInCompactView, bool))
+      throw AwesomeNotificationsException(
+          message: 'showInCompactView id is requried');
 
     // For action buttons, it's only allowed resource media types
-    assert(StringUtils.isNullOrEmpty(icon) ||
-        BitmapUtils().getMediaSource(icon!) == MediaSource.Resource);
+    if (!StringUtils.isNullOrEmpty(icon) &&
+        BitmapUtils().getMediaSource(icon!) != MediaSource.Resource)
+      throw AwesomeNotificationsException(
+          message:
+              'icons for action buttons must be a native resource media type');
   }
 }

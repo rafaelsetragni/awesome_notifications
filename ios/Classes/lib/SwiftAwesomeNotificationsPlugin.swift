@@ -899,6 +899,21 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         }
     }
 
+    private func channelMethodCheckPermissions(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        
+		guard let permissions:[String] = call.arguments as [String] else {
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
+        }
+
+        if(permissions.isEmpty){
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
+        }
+
+        NotificationBuilder.checkPermissions(permissions, completion: { (allowedPermissions) in
+            result(allowedPermissions)
+        })
+    }
+
     private func channelMethodRequestNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         
 		let permissions:[String]? = call.arguments as? [String]

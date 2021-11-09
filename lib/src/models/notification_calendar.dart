@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
 import 'package:awesome_notifications/src/models/notification_schedule.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
@@ -153,26 +154,31 @@ class NotificationCalendar extends NotificationSchedule {
 
   @override
   void validate() {
-    assert(this.era != null ||
-        this.year != null ||
-        this.month != null ||
-        this.day != null ||
-        this.hour != null ||
-        this.minute != null ||
-        this.second != null ||
-        this.weekday != null ||
-        this.weekOfMonth != null ||
-        this.weekOfYear != null);
+    if (this.era == null &&
+        this.year == null &&
+        this.month == null &&
+        this.day == null &&
+        this.hour == null &&
+        this.minute == null &&
+        this.second == null &&
+        this.weekday == null &&
+        this.weekOfMonth == null &&
+        this.weekOfYear == null)
+      throw AwesomeNotificationsException(
+          message: 'At least one shedule time condition is required.');
 
-    assert((this.era ?? 0) >= 0 &&
-        (this.year ?? 0) >= 0 &&
-        (this.month ?? 0) >= 0 &&
-        (this.day ?? 0) >= 0 &&
-        (this.hour ?? 0) >= 0 &&
-        (this.minute ?? 0) >= 0 &&
-        (this.second ?? 0) >= 0 &&
-        (this.weekday ?? 0) >= 0 &&
-        (this.weekOfMonth ?? 0) >= 0 &&
-        (this.weekOfYear ?? 0) >= 0);
+    if ((this.era ?? 0) < 0 &&
+        (this.year ?? 0) < 0 &&
+        (this.month ?? 0) < 0 &&
+        (this.day ?? 0) < 0 &&
+        (this.hour ?? 0) < 0 &&
+        (this.minute ?? 0) < 0 &&
+        (this.second ?? 0) < 0 &&
+        (this.weekday ?? 0) < 0 &&
+        (this.weekOfMonth ?? 0) < 0 &&
+        (this.weekOfYear ?? 0) < 0)
+      throw AwesomeNotificationsException(
+          message:
+              'A shedule time condition must be greater or equal to zero.');
   }
 }

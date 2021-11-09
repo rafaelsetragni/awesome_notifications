@@ -67,6 +67,7 @@ public interface Definitions {
     String CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = "showNotificationPage";
     String CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed";
     String CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications";
+    String CHANNEL_METHOD_CHECK_PERMISSIONS = "checkPermissions";
 
     String CHANNEL_METHOD_GET_BADGE_COUNT = "getBadgeCount";
     String CHANNEL_METHOD_SET_BADGE_COUNT = "setBadgeCount";
@@ -166,6 +167,7 @@ public interface Definitions {
     String NOTIFICATION_ENABLED = "enabled";
     String NOTIFICATION_AUTO_DISMISSABLE = "autoDismissable";
     String NOTIFICATION_IS_DANGEROUS_OPTION = "isDangerousOption";
+    String NOTIFICATION_PERMISSIONS = "permissions";
 
     String NOTIFICATION_SHOW_IN_COMPACT_VIEW = "showInCompactView";
     String NOTIFICATION_LOCKED = "locked";
@@ -173,6 +175,7 @@ public interface Definitions {
     String NOTIFICATION_DISPLAY_ON_BACKGROUND = "displayOnBackground";
     String NOTIFICATION_ICON = "icon";
     String NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen";
+    String NOTIFICATION_CRITICAL_ALERT = "criticalAlert";
     String NOTIFICATION_PLAY_SOUND = "playSound";
     String NOTIFICATION_SOUND_SOURCE = "soundSource";
     String NOTIFICATION_ENABLE_VIBRATION = "enableVibration";
@@ -243,5 +246,6 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, true);
         put(Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, false);
         put(Definitions.NOTIFICATION_WAKE_UP_SCREEN, false);
+        put(Definitions.NOTIFICATION_CRITICAL_ALERT, false);
     }};
 }

@@ -7,6 +7,7 @@ import 'package:awesome_notifications/src/enumerators/group_sort.dart';
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
 import 'package:awesome_notifications/src/enumerators/notification_importance.dart';
 import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
+import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
 import 'package:awesome_notifications/src/models/model.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
@@ -220,8 +221,14 @@ class NotificationChannel extends Model {
 
   @override
   void validate() {
-    assert(!AssertUtils.isNullOrEmptyOrInvalid(channelKey, String));
-    assert(!AssertUtils.isNullOrEmptyOrInvalid(channelName, String));
-    assert(!AssertUtils.isNullOrEmptyOrInvalid(channelDescription, String));
+    if (AssertUtils.isNullOrEmptyOrInvalid(channelKey, String))
+      throw AwesomeNotificationsException(
+          message: 'Property channelKey is requried');
+    if (AssertUtils.isNullOrEmptyOrInvalid(channelName, String))
+      throw AwesomeNotificationsException(
+          message: 'Property channelName is requried');
+    if (AssertUtils.isNullOrEmptyOrInvalid(channelDescription, String))
+      throw AwesomeNotificationsException(
+          message: 'Property channelDescription is requried');
   }
 }

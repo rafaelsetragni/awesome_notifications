@@ -76,6 +76,7 @@ enum Definitions {
     
     static let  CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = "showNotificationPage"
     static let  CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed"
+    static let  CHANNEL_METHOD_CHECK_PERMISSIONS = "checkPermissions"
     static let  CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications"
 
     static let  CHANNEL_METHOD_DISMISS_NOTIFICATION = "dismissNotification"

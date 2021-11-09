@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
 import 'package:awesome_notifications/src/models/notification_schedule.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
@@ -62,9 +63,12 @@ class NotificationInterval extends NotificationSchedule {
 
   @override
   void validate() {
-    assert((this.interval ?? -1) >= 0);
+    if ((this.interval ?? -1) < 0)
+      throw AwesomeNotificationsException(
+          message: 'interval must be greater or equal to zero.');
 
-    assert(this.repeats && (this.interval ?? 0) >= 60,
-        'time interval must be at least 60 if repeating');
+    if (this.repeats && (this.interval ?? 0) < 60)
+      throw AwesomeNotificationsException(
+          message: 'time interval must be greater or equal to 60 if repeating');
   }
 }

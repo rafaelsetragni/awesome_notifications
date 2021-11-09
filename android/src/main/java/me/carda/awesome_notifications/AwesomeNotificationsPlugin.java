@@ -45,6 +45,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import android.app.Activity;
 
 import me.carda.awesome_notifications.notifications.BitmapResourceDecoder;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationPermission;
 import me.carda.awesome_notifications.notifications.models.DefaultsModel;
 import me.carda.awesome_notifications.notifications.models.NotificationCalendarModel;
 import me.carda.awesome_notifications.notifications.models.NotificationIntervalModel;
@@ -329,7 +330,6 @@ public class AwesomeNotificationsPlugin
 
     private void onBroadcastMediaButton(Intent intent) {
         try {
-
             Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
             pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_MEDIA_BUTTON, serializable);
 
@@ -483,6 +483,10 @@ public class AwesomeNotificationsPlugin
 
                 case Definitions.CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE:
                     channelShowNotificationPage(call, result);
+                    return;
+
+                case Definitions.CHANNEL_METHOD_CHECK_PERMISSIONS:
+                    channelMethodCheckPermissions(call, result);
                     return;
 
                 case Definitions.CHANNEL_METHOD_REQUEST_NOTIFICATIONS:
@@ -946,8 +950,34 @@ public class AwesomeNotificationsPlugin
         saveReturnPageParameters(result);
     }
 
+    @SuppressWarnings("unchecked")
+    private void channelMethodCheckPermissions(MethodCall call, Result result) throws Exception {
+
+        Map<String, Object> parameters = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
+        if(parameters == null)
+            throw new AwesomeNotificationException("Parameters are required");
+
+        String channelKey = (String) parameters.get(Definitions.NOTIFICATION_CHANNEL_KEY);
+        List<String> permissions = (List<String>) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);
+
+        if(channelKey == null)
+            throw new AwesomeNotificationException("Channel key is required");
+
+        if(permissions == null)
+            throw new AwesomeNotificationException("Permission list is required");
+
+        if(permissions.isEmpty())
+            throw new AwesomeNotificationException("Permission list cannot be empty");
+
+        permissions = NotificationBuilder.isPermissionsAllowed(
+                applicationContext, channelKey, permissions);
+
+        result.success(permissions);
+    }
+
     private void channelRequestNotification(MethodCall call, Result result) throws Exception {
 
+        List<String> permissions = call.arguments();
         if (NotificationBuilder.isNotificationEnabled(applicationContext)){
             result.success(true);
             return;

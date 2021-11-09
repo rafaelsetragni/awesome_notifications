@@ -287,7 +287,7 @@ class AwesomeNotifications {
     await _channel.invokeMethod(CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE);
   }
 
-  /// Check if the notifications are permitted
+  /// Check if the notifications are globally permitted
   Future<bool> isNotificationAllowed() async {
     final bool isAllowed =
         await _channel.invokeMethod(CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED);
@@ -295,19 +295,48 @@ class AwesomeNotifications {
   }
 
   /// Prompts the user to enabled notifications
-  Future<bool> requestPermissionToSendNotifications({List<NotificationPermission> permissions = const [
-    NotificationPermission.Badge, NotificationPermission.Alert, NotificationPermission.Sound]}) async {
-
+  Future<bool> requestPermissionToSendNotifications(
+      {List<NotificationPermission> permissions = const [
+        NotificationPermission.Badge,
+        NotificationPermission.Alert,
+        NotificationPermission.Sound
+      ]}) async {
     final List<String> permissionList = [];
-    for (final permission in permissions){
+    for (final permission in permissions) {
       String? permissionValue = AssertUtils.toSimpleEnumString(permission);
-      if (permissionValue != null)
-        permissionList.add(permissionValue);
+      if (permissionValue != null) permissionList.add(permissionValue);
     }
 
-    final bool isAllowed =
-        await _channel.invokeMethod(CHANNEL_METHOD_REQUEST_NOTIFICATIONS, permissionList);
+    final bool isAllowed = await _channel.invokeMethod(
+        CHANNEL_METHOD_REQUEST_NOTIFICATIONS, permissionList);
     return isAllowed;
+  }
+
+  /// Check each individual permission to send notifications and returns only the allowed permissions
+  Future<List<NotificationPermission>> checkPermissionList(
+      {List<NotificationPermission> permissions = const [
+        NotificationPermission.Badge,
+        NotificationPermission.Alert,
+        NotificationPermission.Sound
+      ]}) async {
+    List<String> permissionList = [];
+    for (final permission in permissions) {
+      String? permissionValue = AssertUtils.toSimpleEnumString(permission);
+      if (permissionValue != null) permissionList.add(permissionValue);
+    }
+
+    permissionList = await _channel.invokeMethod(
+        CHANNEL_METHOD_REQUEST_NOTIFICATIONS, permissionList);
+
+    List<NotificationPermission> allowed = [];
+    for (final permission in permissionList) {
+      NotificationPermission? permissionValue =
+          AssertUtils.enumToString<NotificationPermission>(
+              permission, NotificationPermission.values, null);
+      if (permissionValue != null) allowed.add(permissionValue);
+    }
+
+    return allowed;
   }
 
   /// List all active scheduled notifications.

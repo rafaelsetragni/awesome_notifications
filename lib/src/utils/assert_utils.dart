@@ -114,10 +114,15 @@ class AssertUtils {
     if (AssertUtils.isNullOrEmptyOrInvalid(castedValue, String))
       return defaultValue;
 
-    return values.firstWhere((e) {
-      return AssertUtils.toSimpleEnumString(e)!.toLowerCase() ==
-          castedValue.toLowerCase();
-    }, orElse: () => defaultValue ?? values.first);
+    return enumToString<T>(castedValue, values, defaultValue ?? values.first);
+  }
+
+  static T? enumToString<T>(String enumValue, List<T> values, T? defaultValue) {
+    for (final enumerator in values) {
+      if (AssertUtils.toSimpleEnumString(enumerator)!.toLowerCase() ==
+          enumValue.toLowerCase()) return enumerator;
+    }
+    return defaultValue;
   }
 
   static dynamic _getDefaultValue(String reference, Type T) {

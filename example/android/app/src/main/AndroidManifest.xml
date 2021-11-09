@@ -7,6 +7,7 @@
            FlutterApplication and put your custom class here. -->
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
         android:name="io.flutter.app.FlutterApplication"
@@ -50,6 +51,7 @@
             android:exported="false"
             android:foregroundServiceType="microphone|mediaPlayback"
             android:stopWithTask="true"></service>
+
     </application>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 </manifest>

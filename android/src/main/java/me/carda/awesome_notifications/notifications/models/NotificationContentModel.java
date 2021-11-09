@@ -45,6 +45,7 @@ public class NotificationContentModel extends Model {
     public Boolean locked;
     public String bigPicture;
     public Boolean wakeUpScreen;
+    public Boolean criticalAlert;
     public Boolean hideLargeIconOnExpand;
     public Boolean autoDismissable;
     public Boolean displayOnForeground;
@@ -103,6 +104,7 @@ public class NotificationContentModel extends Model {
         customSound = getValueOrDefault(arguments, Definitions.NOTIFICATION_CUSTOM_SOUND, String.class);
 
         wakeUpScreen = getValueOrDefault(arguments, Definitions.NOTIFICATION_WAKE_UP_SCREEN, Boolean.class);
+        criticalAlert = getValueOrDefault(arguments, Definitions.NOTIFICATION_CRITICAL_ALERT, Boolean.class);
 
         showWhen = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_WHEN, Boolean.class);
         locked = getValueOrDefault(arguments, Definitions.NOTIFICATION_LOCKED, Boolean.class);
@@ -150,6 +152,7 @@ public class NotificationContentModel extends Model {
         returnedObject.put(Definitions.NOTIFICATION_SUMMARY, this.summary);
 
         returnedObject.put(Definitions.NOTIFICATION_WAKE_UP_SCREEN, this.wakeUpScreen);
+        returnedObject.put(Definitions.NOTIFICATION_CRITICAL_ALERT, this.criticalAlert);
         returnedObject.put(Definitions.NOTIFICATION_SHOW_WHEN, this.showWhen);
 
         returnedObject.put(Definitions.NOTIFICATION_LOCKED, this.locked);

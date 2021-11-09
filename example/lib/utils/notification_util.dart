@@ -633,6 +633,7 @@ Future<void> showNotificationWithWakeUp(int id) async {
           title: 'Hey! Wake up!!',
           body: 'Its time to wake up!',
           wakeUpScreen: true,
+          criticalAlert: true,
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture:
           'https://media.tenor.com/images/5591f440176598f96050b09c943052c0/tenor.png',
