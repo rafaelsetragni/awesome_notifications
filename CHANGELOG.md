@@ -1,3 +1,7 @@
+## [0.6.17]
+* Added wakeUpScreen option in notification content to wake up screen when a notification is displayed (Requires to add WAKE_LOCK permission into AndroidManifest.xml).
+* Added custom permissions for method requestPermissionToSendNotifications (has no effect on Android).
+* Documentation has been improved with wakeUpScreen option
 ## [0.6.16]
 * Media button receiver removed from AndroidManifest.xml due incompatibility with some Galaxy models and another plugins (#81 and #320)
 * Documentation on scheduling notifications has been improved

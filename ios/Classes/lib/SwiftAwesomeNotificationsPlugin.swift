@@ -486,16 +486,6 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 			)
 		}
     }
-
-    private static func requestPermissions() -> Bool {
-        NotificationBuilder.requestPermissions(completion: { authorized in
-            if(debug){
-                Log.d(SwiftAwesomeNotificationsPlugin.TAG,
-                authorized ? "Notifications authorized" : "Notifications not authorized")
-            }
-        })
-        return true
-    }
     
     public func clearDeactivatedSchedules(){
         
@@ -909,10 +899,35 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         }
     }
 
-    private func channelMethodRequestNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        NotificationBuilder.requestPermissions { (allowed) in
-            self.saveReturnPageParameters(result)
+    private func channelMethodCheckPermissions(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        
+        let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
+        
+        let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
+        
+        guard let permissions:[String] = platformParameters[Definitions.NOTIFICATION_PERMISSIONS] as? [String] else {
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
         }
+
+        if(permissions.isEmpty){
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
+        }
+
+        NotificationBuilder.checkPermissions(permissions, channel: channelKey, completion: { (allowedPermissions) in
+            result(allowedPermissions)
+        })
+    }
+
+    private func channelMethodRequestNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        
+        
+        guard let permissions:[String] = call.arguments as? [String] else {
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
+        }
+        
+        NotificationBuilder.requestPermissions(permissions, completion: { (allowed) in
+            self.saveReturnPageParameters(result)
+        })
     }
     
     private func saveReturnPageParameters(_ result: @escaping FlutterResult){

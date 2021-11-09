@@ -102,8 +102,84 @@ public class NotificationBuilder {
         userDefaults!.set(count, forKey: Definitions.BADGE_COUNT)
     }
     
-    public static func requestPermissions(completion: @escaping (Bool) -> ()){
+    public static func checkPermissions(_ permissions:[String], channel:String?, completion: @escaping ([String]) -> ()){
+
+        var permissionList:UNAuthorizationOptions = 
+            permissionListToEnum(permissions)
+
+        var allowed:[String] = []
+        UNUserNotificationCenter.current().getNotificationSettings(completionHandler: { iOSpermissions in
+            
+            // (Settings != .Disabled == .Enabled & .NotSupported /*Emulator limitations*/)
+            for permission in permissions {
+                switch NotificationPermission.fromString(permission) {
+                    
+                    case .Alert:
+                    if(iOSpermissions.alertSetting != .disabled){
+                                allowed.append(NotificationPermission.Alert.rawValue)
+                        }
+                        break
+                    case .Sound:
+                    if(iOSpermissions.soundSetting != .disabled){
+                            allowed.append(NotificationPermission.Sound.rawValue)
+                    }
+                        break
+                        
+                    case .Badge:
+                    if(iOSpermissions.badgeSetting != .disabled){
+                            allowed.append(NotificationPermission.Badge.rawValue)
+                    }
+                            break
+                        
+                    case .Car:
+                    if(iOSpermissions.carPlaySetting != .disabled){
+                            allowed.append(NotificationPermission.Car.rawValue)
+                    }
+                        break
+                    
+                    case .CriticalAlert:
+                        if #available(iOS 12.0, *) {
+                            if(iOSpermissions.criticalAlertSetting != .disabled){
+                                allowed.append(NotificationPermission.CriticalAlert.rawValue)
+                            }
+                        }
+                        else {
+                            allowed.append(NotificationPermission.CriticalAlert.rawValue)
+                        }
+                        break
+                            
+                    case .Provisional:
+                        if #available(iOS 12.0, *) {
+                            if(iOSpermissions.authorizationStatus == .provisional){
+                                allowed.append(NotificationPermission.Provisional.rawValue)
+                            }
+                        }
+                        else {
+                            allowed.append(NotificationPermission.Provisional.rawValue)
+                        }
+                        break
+
+                    default:
+                        break
+                }
+            }
+
+            completion(allowed)
+        })
+    }
+
+    public static func requestPermissions(_ permissions:[String], completion: @escaping (Bool) -> ()){
         
+        var iOSpermissions:UNAuthorizationOptions = 
+            permissionListToEnum(
+                !permissions.isEmpty ? permissions :
+                [
+                    NotificationPermission.Alert.rawValue,
+                    NotificationPermission.Sound.rawValue,
+                    NotificationPermission.Badge.rawValue
+                ]
+            )
+
         if !SwiftUtils.isRunningOnExtension() {
             
             let notificationCenter = UNUserNotificationCenter.current()
@@ -121,7 +197,7 @@ public class NotificationBuilder {
 
                 if !isAllowed && settings.authorizationStatus == .notDetermined {
                     
-                    notificationCenter.requestAuthorization(options: [.sound,.alert,.badge]) { (granted, error) in
+                    notificationCenter.requestAuthorization(options: iOSpermissions) { (granted, error) in
                         if granted {
                             DispatchQueue.main.async {
                                 UIApplication.shared.registerForRemoteNotifications()
@@ -147,6 +223,49 @@ public class NotificationBuilder {
             // For Extensions, the notification is always enabled
             completion(true)
         }
+    }
+
+    private static func permissionListToEnum(_ permissions:[String]) -> UNAuthorizationOptions {
+        
+        var iOSpermissions:UNAuthorizationOptions = []
+
+        for permission in permissions {
+            switch NotificationPermission.fromString(permission) {
+                
+                case .Alert:
+                    iOSpermissions.insert(.alert)
+                    break
+                    
+                case .Sound:
+                    iOSpermissions.insert(.sound)
+                    break
+                    
+                case .Badge:
+                    iOSpermissions.insert(.badge)
+                    break
+                    
+                case .Car:
+                    iOSpermissions.insert(.carPlay)
+                    break
+                
+                case .CriticalAlert:
+                    if #available(iOS 12.0, *) {
+                        iOSpermissions.insert(.criticalAlert)
+                    }
+                    break
+                        
+                case .Provisional:
+                    if #available(iOS 12.0, *) {
+                        iOSpermissions.insert(.provisional)
+                    }
+                    break
+
+                default:
+                    break
+            }
+        }
+
+        return iOSpermissions;
     }
 
     public static func jsonDataToNotificationModel(jsonData:[String : Any?]?) -> NotificationModel? {

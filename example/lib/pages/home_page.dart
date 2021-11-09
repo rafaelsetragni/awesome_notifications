@@ -692,6 +692,18 @@ class _HomePageState extends State<HomePage> {
 
             /* ******************************************************************** */
 
+            TextDivisor(title: 'Wake Up Locked Screen Notifications'),
+            TextNote(
+                'To enable this feature on Android, is necessary to add the WAKE_LOCK permission into your AndroidManifest.xml file. For iOS, this is the default behavior.'),
+            SimpleButton('Show notification with wake up locked screen option',
+                onPressed: () => showNotificationWithWakeUp(27)),
+            SimpleButton('Cancel notification',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () => cancelNotification(27)),
+
+            /* ******************************************************************** */
+
             TextDivisor(title: 'Notification Sound'),
             SimpleButton('Show notification with custom sound',
                 onPressed: () => showCustomSoundNotification(6)),

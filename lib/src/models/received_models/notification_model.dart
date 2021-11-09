@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/src/definitions.dart';
+import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
 import 'package:awesome_notifications/src/models/model.dart';
 import 'package:awesome_notifications/src/models/notification_button.dart';
 import 'package:awesome_notifications/src/models/notification_calendar.dart';
@@ -87,6 +88,7 @@ class NotificationModel extends Model {
 
   /// Validates if the models has all the requirements to be considerated valid
   void validate() {
-    assert(content != null);
+    if (content == null)
+      throw AwesomeNotificationsException(message: 'content is required.');
   }
 }

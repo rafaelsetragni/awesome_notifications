@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
+import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
 import 'package:awesome_notifications/src/models/model.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
@@ -21,6 +22,8 @@ class BaseNotificationContent extends Model {
   String? bigPicture;
   String? customSound;
   bool? autoDismissable;
+  bool? wakeUpScreen;
+  //bool? criticalAlert;
   Color? color;
   Color? backgroundColor;
   NotificationPrivacy? privacy;
@@ -40,6 +43,8 @@ class BaseNotificationContent extends Model {
       this.icon,
       this.largeIcon,
       this.bigPicture,
+      this.wakeUpScreen,
+      //this.criticalAlert,
       this.autoDismissable,
       this.color,
       this.backgroundColor,
@@ -70,6 +75,10 @@ class BaseNotificationContent extends Model {
         AssertUtils.extractValue(NOTIFICATION_BIG_PICTURE, mapData, String);
     this.customSound =
         AssertUtils.extractValue(NOTIFICATION_CUSTOM_SOUND, mapData, String);
+    this.wakeUpScreen =
+        AssertUtils.extractValue(NOTIFICATION_WAKE_UP_SCREEN, mapData, bool);
+    // this.criticalAlert =
+    //     AssertUtils.extractValue(NOTIFICATION_CRITICAL_ALERT, mapData, bool);
     this.autoDismissable =
         AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSABLE, mapData, bool);
 
@@ -109,7 +118,9 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_AUTO_DISMISSABLE: autoDismissable,
       NOTIFICATION_PRIVACY: AssertUtils.toSimpleEnumString(privacy),
       NOTIFICATION_COLOR: color?.value,
-      NOTIFICATION_BACKGROUND_COLOR: backgroundColor?.value
+      NOTIFICATION_BACKGROUND_COLOR: backgroundColor?.value,
+      NOTIFICATION_WAKE_UP_SCREEN: wakeUpScreen,
+      // NOTIFICATION_CRITICAL_ALERT: criticalAlert
     };
   }
 
@@ -139,7 +150,9 @@ class BaseNotificationContent extends Model {
 
   @override
   void validate() {
-    assert(!AssertUtils.isNullOrEmptyOrInvalid(id, int));
-    assert(!AssertUtils.isNullOrEmptyOrInvalid(channelKey, String));
+    if (AssertUtils.isNullOrEmptyOrInvalid(id, int))
+      throw AwesomeNotificationsException(message: 'Property id is requried');
+    if (AssertUtils.isNullOrEmptyOrInvalid(channelKey, String))
+      throw AwesomeNotificationsException(message: 'channelKey id is requried');
   }
 }

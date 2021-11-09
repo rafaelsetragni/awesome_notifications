@@ -76,6 +76,7 @@ enum Definitions {
     
     static let  CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = "showNotificationPage"
     static let  CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed"
+    static let  CHANNEL_METHOD_CHECK_PERMISSIONS = "checkPermissions"
     static let  CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications"
 
     static let  CHANNEL_METHOD_DISMISS_NOTIFICATION = "dismissNotification"
@@ -127,6 +128,7 @@ enum Definitions {
     static let  NOTIFICATION_TITLE = "title"
     static let  NOTIFICATION_BODY = "body"
     static let  NOTIFICATION_SUMMARY = "summary"
+    static let  NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen"
     static let  NOTIFICATION_CUSTOM_SOUND = "customSound"
     static let  NOTIFICATION_SHOW_WHEN = "showWen"
     static let  NOTIFICATION_BUTTON_KEY_PRESSED = "buttonKeyPressed"
@@ -140,6 +142,7 @@ enum Definitions {
     static let  NOTIFICATION_BUTTON_TYPE = "buttonType"
     static let  NOTIFICATION_SHOW_IN_COMPACT_VIEW = "showInCompactView"
     static let  NOTIFICATION_IS_DANGEROUS_OPTION = "isDangerousOption"
+    static let  NOTIFICATION_PERMISSIONS = "permissions"
 
     static let  NOTIFICATION_PAYLOAD = "payload"
     static let  NOTIFICATION_INITIAL_FIXED_DATE = "fixedDate"
@@ -217,6 +220,7 @@ enum Definitions {
         Definitions.NOTIFICATION_TICKER: "ticker",
         Definitions.NOTIFICATION_ALLOW_WHILE_IDLE: false,
         Definitions.NOTIFICATION_ONLY_ALERT_ONCE: false,
-        Definitions.NOTIFICATION_IS_DANGEROUS_OPTION: false
+        Definitions.NOTIFICATION_IS_DANGEROUS_OPTION: false,
+        Definitions.NOTIFICATION_WAKE_UP_SCREEN: false
     ] as [String : Any?]
 }

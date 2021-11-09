@@ -1,5 +1,6 @@
 package me.carda.awesome_notifications.notifications;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,14 +9,15 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
 
@@ -40,8 +42,10 @@ import me.carda.awesome_notifications.notifications.broadcastReceivers.Dismissed
 import me.carda.awesome_notifications.notifications.broadcastReceivers.KeepOnTopActionReceiver;
 import me.carda.awesome_notifications.notifications.enumerators.ActionButtonType;
 import me.carda.awesome_notifications.notifications.enumerators.GroupSort;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationImportance;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLayout;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationPermission;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.notifications.managers.ChannelManager;
 import me.carda.awesome_notifications.notifications.managers.DefaultsManager;
@@ -62,6 +66,9 @@ import me.carda.awesome_notifications.utils.StringUtils;
 //badges
 import me.leolin.shortcutbadger.ShortcutBadger;
 
+import static android.app.NotificationManager.Policy.PRIORITY_CATEGORY_ALARMS;
+import static android.content.Context.NOTIFICATION_SERVICE;
+
 public class NotificationBuilder {
 
     public static String TAG = "NotificationBuilder";
@@ -72,6 +79,64 @@ public class NotificationBuilder {
             return manager.areNotificationsEnabled();
         }
         return true;
+    }
+
+    public static List<String> isPermissionsAllowed(Context context, String channelKey, List<String> permissions) throws AwesomeNotificationException {
+        List<String> allowedPermissions = new ArrayList<>();
+
+        if(isNotificationEnabled(context)) {
+
+            NotificationChannel channel = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+                channel = ChannelManager.getAndroidChannel(context, channelKey);
+                if(channel == null)
+                    throw new AwesomeNotificationException("Channel "+channelKey+" does not exists.");
+
+                if(channel.getImportance() != NotificationManager.IMPORTANCE_NONE){
+
+                    for (String permission : permissions) {
+
+                        NotificationPermission permissionEnum =
+                                StringUtils.getEnumFromString(NotificationPermission.class, permission);
+
+                        switch (permissionEnum){
+                            case Sound:
+                                if(channel.getSound() == null)
+                                    continue;
+
+                            case CriticalAlert:
+                                // TODO implement critical alerts for Android
+                        }
+
+                        allowedPermissions.add(permission);
+                    }
+                }
+            } else {
+                NotificationChannelModel channelModel = ChannelManager.getChannelByKey(context, channelKey);
+                if (channelModel.importance != NotificationImportance.None){
+
+                    for (String permission : permissions) {
+
+                        NotificationPermission permissionEnum =
+                                StringUtils.getEnumFromString(NotificationPermission.class, permission);
+
+                        switch (permissionEnum){
+                            case Sound:
+                                if(!channelModel.playSound)
+                                    continue;
+
+                            case CriticalAlert:
+                                // TODO implement critical alerts for Android
+                        }
+
+                        allowedPermissions.add(permission);
+                    }
+                }
+            }
+        }
+
+        return allowedPermissions;
     }
 
     public static void showNotificationConfigPage(Context context){
@@ -281,7 +346,7 @@ public class NotificationBuilder {
     public static Notification getAndroidNotificationById(Context context, int id){
         if(context != null){
 
-            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
 
             if(currentActiveNotifications != null){
@@ -299,7 +364,7 @@ public class NotificationBuilder {
         List<Notification> notifications = new ArrayList<>();
         if(context != null && !StringUtils.isNullOrEmpty(channelKey)){
 
-            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
 
             String hashedKey = StringUtils.digestString(channelKey);
@@ -325,7 +390,7 @@ public class NotificationBuilder {
         List<Notification> notifications = new ArrayList<>();
         if(context != null && !StringUtils.isNullOrEmpty(groupKey)){
 
-            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
 
             String hashedKey = StringUtils.digestString(groupKey);
@@ -345,6 +410,61 @@ public class NotificationBuilder {
             }
         }
         return notifications;
+    }
+
+    public static String getAppName(Context context){
+        ApplicationInfo applicationInfo = context.getApplicationInfo();
+        int stringId = applicationInfo.labelRes;
+        return stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : context.getString(stringId);
+    }
+
+    public static void wakeUpScreen(Context context){
+
+        PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOn = pm.isInteractive();
+        if(!isScreenOn)
+        {
+            String appName = NotificationBuilder.getAppName(context);
+
+            PowerManager.WakeLock wl = pm.newWakeLock(
+                    PowerManager.FULL_WAKE_LOCK |
+                    PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                    PowerManager.ON_AFTER_RELEASE,
+                    appName+":"+TAG+":WakeupLock");
+            wl.acquire(10000);
+
+            PowerManager.WakeLock wl_cpu = pm.newWakeLock(
+                    PowerManager.PARTIAL_WAKE_LOCK,
+                    appName+":"+TAG+":WakeupCpuLock");
+            wl_cpu.acquire(10000);
+        }
+    }
+
+    public static void activateCritialAlert(Context context) throws AwesomeNotificationException {
+
+        // TODO implement critical alerts for Android
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        if (notificationManager.isNotificationPolicyAccessGranted()) {
+            notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P /*Android 9*/) {
+                NotificationManager.Policy policy = new NotificationManager.Policy(PRIORITY_CATEGORY_ALARMS, 0, 0);
+                notificationManager.setNotificationPolicy(policy);
+            }
+        } else {
+            throw new AwesomeNotificationException("Critical Alert mode is not enable");
+        }
+    }
+
+    public static void requestCriticalAlerts(Context context){
+
+        // TODO implement critical alerts for Android
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+
+        if (!notificationManager.isNotificationPolicyAccessGranted()) {
+            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+            Activity activity = (Activity) context;
+            activity.startActivity(intent);
+        }
     }
 
     private static String getButtonInputText(Intent intent, String buttonKey) {
@@ -414,7 +534,20 @@ public class NotificationBuilder {
 
         updateTrackingExtras(notificationModel, channel, androidNotification.extras);
 
+        setWakeUpScreen(context, notificationModel);
+        setCritialAlert(context, notificationModel);
+
         return androidNotification;
+    }
+
+    private void setWakeUpScreen(Context context, NotificationModel notificationModel) {
+        if (notificationModel.content.wakeUpScreen)
+            wakeUpScreen(context);
+    }
+
+    private void setCritialAlert(Context context, NotificationModel notificationModel) throws AwesomeNotificationException {
+        if (notificationModel.content.criticalAlert)
+            activateCritialAlert(context);
     }
 
     private void setShowWhen(NotificationModel notificationModel, NotificationCompat.Builder builder) {
@@ -764,7 +897,7 @@ public class NotificationBuilder {
             else {
                 boolean grouped = true;
 
-                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
                 StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
 
                 for (StatusBarNotification activeNotification : currentActiveNotifications) {
