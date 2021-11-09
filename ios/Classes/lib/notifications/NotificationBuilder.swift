@@ -102,55 +102,60 @@ public class NotificationBuilder {
         userDefaults!.set(count, forKey: Definitions.BADGE_COUNT)
     }
     
-    public static func checkPermissions(_ permissionsToCheck:[String], channel:String?, completion: @escaping ([String]) -> ()){
+    public static func checkPermissions(_ permissions:[String], channel:String?, completion: @escaping ([String]) -> ()){
 
         var permissionList:UNAuthorizationOptions = 
             permissionListToEnum(permissions)
 
-        let allowed:[String] = []
-        current.getNotificationSettings(completionHandler: { iOSpermissions in
+        var allowed:[String] = []
+        UNUserNotificationCenter.current().getNotificationSettings(completionHandler: { iOSpermissions in
             
             // (Settings != .Disabled == .Enabled & .NotSupported /*Emulator limitations*/)
-            for permission in permissionsToCheck {
+            for permission in permissions {
                 switch NotificationPermission.fromString(permission) {
                     
                     case .Alert:
-                        if(iOSpermissions.AlertSetting != .Disabled)
-                            allowed.insert(NotificationPermission.Alert.rawValue)
+                    if(iOSpermissions.alertSetting != .disabled){
+                                allowed.append(NotificationPermission.Alert.rawValue)
+                        }
                         break
-                        
                     case .Sound:
-                        if(iOSpermissions.SoundSetting != .Disabled)
-                            allowed.insert(NotificationPermission.Sound.rawValue)
+                    if(iOSpermissions.soundSetting != .disabled){
+                            allowed.append(NotificationPermission.Sound.rawValue)
+                    }
                         break
                         
                     case .Badge:
-                        if(iOSpermissions.BadgeSetting != .Disabled)
-                            allowed.insert(NotificationPermission.Badge.rawValue)
+                    if(iOSpermissions.badgeSetting != .disabled){
+                            allowed.append(NotificationPermission.Badge.rawValue)
+                    }
                             break
                         
                     case .Car:
-                        if(iOSpermissions.CarPlaySetting != .Disabled)
-                            allowed.insert(NotificationPermission.CarPlay.rawValue)
+                    if(iOSpermissions.carPlaySetting != .disabled){
+                            allowed.append(NotificationPermission.Car.rawValue)
+                    }
                         break
                     
                     case .CriticalAlert:
                         if #available(iOS 12.0, *) {
-                            if(iOSpermissions.SoundSetting != .Disabled)
-                                allowed.insert(NotificationPermission.CriticalAlert.rawValue)
+                            if(iOSpermissions.criticalAlertSetting != .disabled){
+                                allowed.append(NotificationPermission.CriticalAlert.rawValue)
+                            }
                         }
                         else {
-                            allowed.insert(NotificationPermission.CriticalAlert.rawValue)
+                            allowed.append(NotificationPermission.CriticalAlert.rawValue)
                         }
                         break
                             
                     case .Provisional:
                         if #available(iOS 12.0, *) {
-                            if(iOSpermissions.SoundSetting != .Disabled)
-                                allowed.insert(NotificationPermission.Provisional)
+                            if(iOSpermissions.authorizationStatus == .provisional){
+                                allowed.append(NotificationPermission.Provisional.rawValue)
+                            }
                         }
                         else {
-                            allowed.insert(NotificationPermission.Provisional.rawValue)
+                            allowed.append(NotificationPermission.Provisional.rawValue)
                         }
                         break
 
@@ -163,11 +168,11 @@ public class NotificationBuilder {
         })
     }
 
-    public static func requestPermissions(_ permissions:[String]?, completion: @escaping (Bool) -> ()){
+    public static func requestPermissions(_ permissions:[String], completion: @escaping (Bool) -> ()){
         
         var iOSpermissions:UNAuthorizationOptions = 
             permissionListToEnum(
-                permissions != nil ? : permissions
+                !permissions.isEmpty ? permissions :
                 [
                     NotificationPermission.Alert.rawValue,
                     NotificationPermission.Sound.rawValue,
@@ -222,7 +227,7 @@ public class NotificationBuilder {
 
     private static func permissionListToEnum(_ permissions:[String]) -> UNAuthorizationOptions {
         
-        let iOSpermissions:UNAuthorizationOptions = []
+        var iOSpermissions:UNAuthorizationOptions = []
 
         for permission in permissions {
             switch NotificationPermission.fromString(permission) {
