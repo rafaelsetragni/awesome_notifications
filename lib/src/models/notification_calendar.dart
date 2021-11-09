@@ -167,15 +167,15 @@ class NotificationCalendar extends NotificationSchedule {
       throw AwesomeNotificationsException(
           message: 'At least one shedule time condition is required.');
 
-    if ((this.era ?? 0) < 0 &&
-        (this.year ?? 0) < 0 &&
-        (this.month ?? 0) < 0 &&
-        (this.day ?? 0) < 0 &&
-        (this.hour ?? 0) < 0 &&
-        (this.minute ?? 0) < 0 &&
-        (this.second ?? 0) < 0 &&
-        (this.weekday ?? 0) < 0 &&
-        (this.weekOfMonth ?? 0) < 0 &&
+    if ((this.era ?? 0) < 0 ||
+        (this.year ?? 0) < 0 ||
+        (this.month ?? 0) < 0 ||
+        (this.day ?? 0) < 0 ||
+        (this.hour ?? 0) < 0 ||
+        (this.minute ?? 0) < 0 ||
+        (this.second ?? 0) < 0 ||
+        (this.weekday ?? 0) < 0 ||
+        (this.weekOfMonth ?? 0) < 0 ||
         (this.weekOfYear ?? 0) < 0)
       throw AwesomeNotificationsException(
           message:
