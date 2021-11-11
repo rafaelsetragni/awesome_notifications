@@ -108,14 +108,14 @@ public class NotificationBuilder {
                 context,
                 notificationModel.content.id,
                 intent,
-                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
         );
 
         PendingIntent pendingDeleteIntent = PendingIntent.getBroadcast(
                 context,
                 notificationModel.content.id,
                 deleteIntent,
-                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
         );
 
         Notification finalNotification = getNotificationBuilderFromModel(context, notificationModel, pendingIntent, pendingDeleteIntent, isSummary);
@@ -468,7 +468,7 @@ public class NotificationBuilder {
 
             Intent fullScreenIntent = new Intent(context, AwesomeNotificationsPlugin.class);
             PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(context, 0,
-                    fullScreenIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                    fullScreenIntent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
             builder.setFullScreenIntent(fullScreenPendingIntent, true);
         }
@@ -695,7 +695,7 @@ public class NotificationBuilder {
                             context,
                             notificationModel.content.id,
                             actionIntent,
-                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
                     );
 
                 } else if (buttonProperties.buttonType == ActionButtonType.DisabledAction) {
@@ -713,7 +713,7 @@ public class NotificationBuilder {
                             context,
                             notificationModel.content.id,
                             actionIntent,
-                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
                     );
                 }
             }

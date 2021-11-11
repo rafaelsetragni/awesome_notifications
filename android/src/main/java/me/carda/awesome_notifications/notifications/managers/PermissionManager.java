@@ -10,6 +10,7 @@ import android.provider.Settings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,9 +19,11 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import me.carda.awesome_notifications.AwesomePermissionHandler;
 import me.carda.awesome_notifications.notifications.handlers.ActivityCompletionHandler;
 import me.carda.awesome_notifications.notifications.handlers.PermissionCompletionHandler;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationImportance;
@@ -50,7 +53,7 @@ public class PermissionManager {
             NotificationPermission permissionEnum = StringUtils.getEnumFromString(NotificationPermission.class, permission);
             if(
                 permissionEnum != null &&
-                isSpecifiedPermissionGloballyAllowed(activity, permissionEnum) &&
+                isSpecifiedPermissionGloballyAllowed(context, permissionEnum) &&
                 (channelKey == null || isSpecifiedChannelPermissionAllowed(context, channelKey, permissionEnum))
             )
                 permissionsAllowed.add(permission);
@@ -67,13 +70,13 @@ public class PermissionManager {
         return true;
     }
 
-    public static boolean isSpecifiedPermissionGloballyAllowed(Activity activity, NotificationPermission permission){
+    public static boolean isSpecifiedPermissionGloballyAllowed(Context context, NotificationPermission permission){
         String permissionCode = getManifestPermission(permission);
 
         if(permissionCode == null)
             return true;
 
-        return ContextCompat.checkSelfPermission(activity, permissionCode) == PackageManager.PERMISSION_DENIED;
+        return ContextCompat.checkSelfPermission(context, permissionCode) != PackageManager.PERMISSION_DENIED;
     }
 
     public static boolean isSpecifiedChannelPermissionAllowed(Context context, String channelKey, NotificationPermission permissionEnum) throws AwesomeNotificationException {
@@ -141,6 +144,8 @@ public class PermissionManager {
                     NotificationPermission permissionEnum = StringUtils.getEnumFromString(NotificationPermission.class, permissionNeeded);
                     String permissionCode = getManifestPermission(permissionEnum);
                     if(permissionCode != null){
+                        if(activity.shouldShowRequestPermissionRationale(permissionCode))
+                            throw new AwesomeNotificationException("The Requests is not granted and the app must prompt a ratinale user dialog");
                         manifestPermissions.add(permissionCode);
                     }
                 }
@@ -152,8 +157,8 @@ public class PermissionManager {
                         gotoAndroidChannelPage(context, channelKey);
                 }
                 else {
-                    if(manifestPermissions.contains(getManifestPermission(NotificationPermission.PreciseAlarms)))
-                        gotoPreciseAlarmPage(context);
+                    /*if(manifestPermissions.contains(getManifestPermission(NotificationPermission.PreciseAlarms)))
+                        gotoPreciseAlarmPage(context);*/
                     activity.requestPermissions(manifestPermissions.toArray(new String[0]), REQUEST_CODE);
                 }
             }
@@ -161,7 +166,18 @@ public class PermissionManager {
         }
         else gotoAndroidNotificationConfigPage(context);
 
-        activityQueue.add(() -> permissionCompletionHandler.handle(permissions));
+        activityQueue.add(new ActivityCompletionHandler() {
+            @Override
+            public void handle() {
+                try {
+                    List<String> permissionsAllowed = arePermissionsAllowed(activity, context, channelKey, permissions);
+                    permissionCompletionHandler.handle(permissionsAllowed);
+                } catch (AwesomeNotificationException e) {
+                    e.printStackTrace();
+                    permissionCompletionHandler.handle(permissions);
+                }
+            }
+        });
     }
 
     private static String getManifestPermission(NotificationPermission permission){
@@ -277,14 +293,20 @@ public class PermissionManager {
         context.startActivity(intent);
     }
 
-    public static boolean handlePermissionResult() {
+    public static boolean handlePermissionResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
+        if(requestCode != REQUEST_CODE)
+            return false;
+
         fireActivityCompletionHandle();
         return true;
     }
 
-    public static boolean handleActivityResult() {
+    public static boolean handleActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode != REQUEST_CODE)
+            return false;
+
         fireActivityCompletionHandle();
-        return true;
+        return false;
     }
 
     private static void fireActivityCompletionHandle(){

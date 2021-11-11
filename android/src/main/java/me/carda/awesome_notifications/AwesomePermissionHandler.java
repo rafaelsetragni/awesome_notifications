@@ -25,15 +25,11 @@ public class AwesomePermissionHandler implements
 
     @Override
     public boolean onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
-        if(requestCode == PermissionManager.REQUEST_CODE)
-            return PermissionManager.handlePermissionResult();
-        return false;
+        return PermissionManager.handlePermissionResult(requestCode, permissions, grantResults);
     }
 
     @Override
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == PermissionManager.REQUEST_CODE)
-            return PermissionManager.handleActivityResult();
-        return false;
+        return PermissionManager.handleActivityResult(requestCode, resultCode, data);
     }
 }

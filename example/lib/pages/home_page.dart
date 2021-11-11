@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
 
   bool basicNotificationsAllowed = false;
   bool fullIntentNotificationsAllowed = false;
-  bool preciseAlarmsNotificationsAllowed = false;
+  bool preciseAlarmsAllowed = false;
 
   String packageName = 'me.carda.awesome_notifications_example';
 
@@ -174,6 +174,15 @@ class _HomePageState extends State<HomePage> {
         isAllowed = await requestBasicPermissionsToSendNotifications(context);
       }
     });
+
+    AwesomeNotifications().checkPermissionList( permissions:[
+      NotificationPermission.FullScreenIntent,
+      NotificationPermission.PreciseAlarms
+    ]).then((List<NotificationPermission> permissionsAllowed) =>
+        setState(() {
+          fullIntentNotificationsAllowed = permissionsAllowed.contains(NotificationPermission.FullScreenIntent);
+          preciseAlarmsAllowed = permissionsAllowed.contains(NotificationPermission.PreciseAlarms);
+        }));
   }
 
   void processDefaultActionReceived(ReceivedAction receivedNotification) {
@@ -424,12 +433,12 @@ class _HomePageState extends State<HomePage> {
                   Column(
                     children: [
                       Text('Precise Alarms'),
-                      Text(preciseAlarmsNotificationsAllowed ? 'Allowed' : 'Not allowed',
+                      Text(preciseAlarmsAllowed ? 'Allowed' : 'Not allowed',
                           style: TextStyle(
-                              color: preciseAlarmsNotificationsAllowed
+                              color: preciseAlarmsAllowed
                                   ? Colors.green
                                   : Colors.red)),
-                      LedLight(preciseAlarmsNotificationsAllowed)
+                      LedLight(preciseAlarmsAllowed)
                     ],
                   )
                 ]),
@@ -449,7 +458,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () => requestPreciseAlarmPermission(context).then(
                         (isAllowed) =>
                         setState(() {
-                          preciseAlarmsNotificationsAllowed = isAllowed;
+                          preciseAlarmsAllowed = isAllowed;
                         })
                 )
             ),

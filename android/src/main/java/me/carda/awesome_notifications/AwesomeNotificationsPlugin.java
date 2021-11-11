@@ -1177,7 +1177,7 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onActivityResumed(Activity activity) {
-        PermissionManager.handlePermissionResult();
+        //PermissionManager.handlePermissionResult(0, String[], Integer[]);
     }
 
     @Override
