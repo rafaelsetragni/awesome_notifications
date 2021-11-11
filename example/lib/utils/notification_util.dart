@@ -49,7 +49,15 @@ Future<bool> redirectToPermissionsPage() async {
   return await AwesomeNotifications().isNotificationAllowed();
 }
 
-Future<bool> requestPermissionToSendNotifications(BuildContext context) async {
+Future<void> redirectToBasicChannelPage() async {
+  await AwesomeNotifications().showNotificationConfigPage(channelKey: 'basic_channel');
+}
+
+Future<void> redirectToAlarmPage() async {
+  await AwesomeNotifications().showAlarmPage();
+}
+
+Future<bool> requestBasicPermissionsToSendNotifications(BuildContext context) async {
   bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
   if(!isAllowed){
     await showDialog(
@@ -96,6 +104,138 @@ Future<bool> requestPermissionToSendNotifications(BuildContext context) async {
     );
   }
   return isAllowed;
+}
+
+Future<bool> requestFullIntentPermission(BuildContext context) async {
+
+  if(!await requestBasicPermissionsToSendNotifications(context))
+    return false;
+
+  List<NotificationPermission> permissionList = [
+    NotificationPermission.FullScreenIntent
+  ];
+
+  List<NotificationPermission> permissionsAllowed = await AwesomeNotifications().checkPermissionList(
+      permissions: permissionList
+  );
+
+  bool isFullIntentAllowed = permissionsAllowed.isNotEmpty;
+  if(!isFullIntentAllowed){
+
+    List<NotificationPermission> permissionsNeeded =
+    permissionList.toSet().difference(permissionsAllowed.toSet()).toList();
+
+    await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: Color(0xfffbfbfb),
+          title: Text('Full Screen Notifications',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/animated-bell.gif',
+                height: 200,
+                fit: BoxFit.fitWidth,
+              ),
+              Text(
+                'Allow Awesome Notifications to send you full intent screen notifications!',
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+                onPressed: (){ Navigator.pop(context); },
+                child: Text(
+                  'Later',
+                  style: TextStyle(color: Colors.grey, fontSize: 18),
+                )
+            ),
+            TextButton(
+              onPressed: () async {
+                isFullIntentAllowed = await AwesomeNotifications().requestPermissionToSendNotifications(
+                    permissions: permissionsNeeded);
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Allow',
+                style: TextStyle(color: Colors.deepPurple, fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        )
+    );
+  }
+  return isFullIntentAllowed;
+}
+
+Future<bool> requestPreciseAlarmPermission(BuildContext context) async {
+
+  if(!await requestBasicPermissionsToSendNotifications(context))
+    return false;
+
+  List<NotificationPermission> permissionList = [
+    NotificationPermission.PreciseAlarms
+  ];
+
+  List<NotificationPermission> permissionsAllowed = await AwesomeNotifications().checkPermissionList(
+      permissions: permissionList
+  );
+
+  bool isPreciseAlarmsAllowed = permissionsAllowed.isNotEmpty;
+  if(!isPreciseAlarmsAllowed){
+
+    List<NotificationPermission> permissionsNeeded =
+    permissionList.toSet().difference(permissionsAllowed.toSet()).toList();
+
+    await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: Color(0xfffbfbfb),
+          title: Text('Precise Scheduled Notifications',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/animated-clock.gif',
+                height: 200,
+                fit: BoxFit.fitWidth,
+              ),
+              Text(
+                'Allow Awesome Notifications to send you precise scheduled notifications!',
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+                onPressed: (){ Navigator.pop(context); },
+                child: Text(
+                  'Later',
+                  style: TextStyle(color: Colors.grey, fontSize: 18),
+                )
+            ),
+            TextButton(
+              onPressed: () async {
+                isPreciseAlarmsAllowed = await AwesomeNotifications().requestPermissionToSendNotifications(
+                    permissions: permissionsNeeded);
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Allow',
+                style: TextStyle(color: Colors.deepPurple, fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        )
+    );
+  }
+  return isPreciseAlarmsAllowed;
 }
 
 /* *********************************************
@@ -228,9 +368,9 @@ Future<void> showNotificationWithActionButtons(int id) async {
           payload: {'uuid': 'user-profile-uuid'}),
       actionButtons: [
         NotificationActionButton(
-            key: 'READ', label: 'Mark as read', autoDismissable: true),
+            key: 'READ', label: 'Mark as read', autoDismissible: true),
         NotificationActionButton(
-            key: 'PROFILE', label: 'Profile', autoDismissable: true, enabled: false)
+            key: 'PROFILE', label: 'Profile', autoDismissible: true, enabled: false)
       ]);
 }
 
@@ -244,11 +384,11 @@ Future<void> showNotificationWithIconsAndActionButtons(int id) async {
           payload: {'uuid': 'user-profile-uuid'}),
       actionButtons: [
         NotificationActionButton(
-            key: 'READ', label: 'Mark as read', autoDismissable: true),
+            key: 'READ', label: 'Mark as read', autoDismissible: true),
         NotificationActionButton(
-            key: 'PROFILE', label: 'Profile', autoDismissable: true, color: Colors.green),
+            key: 'PROFILE', label: 'Profile', autoDismissible: true, color: Colors.green),
         NotificationActionButton(
-            key: 'DISMISS', label: 'Dismiss', autoDismissable: true, isDangerousOption: true)
+            key: 'DISMISS', label: 'Dismiss', autoDismissible: true, isDangerousOption: true)
       ]);
 }
 
@@ -264,13 +404,13 @@ Future<void> showNotificationWithActionButtonsAndReply(int id) async {
         NotificationActionButton(
           key: 'REPLY',
           label: 'Reply',
-          autoDismissable: true,
+          autoDismissible: true,
           buttonType: ActionButtonType.InputField,
         ),
         NotificationActionButton(
-            key: 'READ', label: 'Mark as read', autoDismissable: true),
+            key: 'READ', label: 'Mark as read', autoDismissible: true),
         NotificationActionButton(
-            key: 'ARCHIVE', label: 'Archive', autoDismissable: true)
+            key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
       ]);
 }
 
@@ -462,11 +602,11 @@ Future<void> redNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
           key: 'REPLY',
           label: 'Reply',
-          autoDismissable: true,
+          autoDismissible: true,
           buttonType: ActionButtonType.InputField,
         ),
         NotificationActionButton(
-            key: 'ARCHIVE', label: 'Archive', autoDismissable: true)
+            key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
       ],
       schedule: delayLEDTests ? NotificationInterval(
           interval: 5,
@@ -496,11 +636,11 @@ Future<void> blueNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
           key: 'REPLY',
           label: 'Reply',
-          autoDismissable: true,
+          autoDismissible: true,
           buttonType: ActionButtonType.InputField,
         ),
         NotificationActionButton(
-            key: 'ARCHIVE', label: 'Archive', autoDismissable: true)
+            key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
       ],
       schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null);
 }
@@ -528,11 +668,11 @@ Future<void> yellowNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
           key: 'REPLY',
           label: 'Reply',
-          autoDismissable: true,
+          autoDismissible: true,
           buttonType: ActionButtonType.InputField,
         ),
         NotificationActionButton(
-            key: 'ARCHIVE', label: 'Archive', autoDismissable: true)
+            key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
       ],
       schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null);
 }
@@ -560,11 +700,11 @@ Future<void> purpleNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
           key: 'REPLY',
           label: 'Reply',
-          autoDismissable: true,
+          autoDismissible: true,
           buttonType: ActionButtonType.InputField,
         ),
         NotificationActionButton(
-            key: 'ARCHIVE', label: 'Archive', autoDismissable: true)
+            key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
       ],
       schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null);
 }
@@ -592,11 +732,11 @@ Future<void> greenNotification(int id, bool delayLEDTests) async {
         NotificationActionButton(
           key: 'REPLY',
           label: 'Reply',
-          autoDismissable: true,
+          autoDismissible: true,
           buttonType: ActionButtonType.InputField,
         ),
         NotificationActionButton(
-            key: 'ARCHIVE', label: 'Archive', autoDismissable: true)
+            key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
       ],
       schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null
   );
@@ -625,7 +765,7 @@ Future<void> showCustomSoundNotification(int id) async {
     WAKE UP LOCK SCREEN NOTIFICATIONS
 ************************************************ */
 
-Future<void> showNotificationWithWakeUp(int id) async {
+Future<void> scheduleNotificationWithWakeUp(int id) async {
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
@@ -633,7 +773,25 @@ Future<void> showNotificationWithWakeUp(int id) async {
           title: 'Hey! Wake up!!',
           body: 'Its time to wake up!',
           wakeUpScreen: true,
-          criticalAlert: true,
+          notificationLayout: NotificationLayout.BigPicture,
+          bigPicture:
+          'https://media.tenor.com/images/5591f440176598f96050b09c943052c0/tenor.png',
+          color: Colors.blueGrey),
+      schedule: NotificationInterval(interval: 5));
+}
+
+/* *********************************************
+    FULL SCREEEN INTENT NOTIFICATIONS
+************************************************ */
+
+Future<void> scheduleFullScrenNotification(int id) async {
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: id,
+          channelKey: 'basic_channel',
+          title: 'Hey! Wake up!!',
+          body: 'Its time to wake up!',
+          fullScreenIntent: true,
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture:
           'https://media.tenor.com/images/5591f440176598f96050b09c943052c0/tenor.png',
@@ -764,9 +922,9 @@ Future<void> showBigPictureNotificationActionButtons(int id) async {
           payload: {'uuid': 'uuid-test'}),
       actionButtons: [
         NotificationActionButton(
-            key: 'READ', label: 'Mark as read', autoDismissable: true),
+            key: 'READ', label: 'Mark as read', autoDismissible: true),
         NotificationActionButton(
-            key: 'REMEMBER', label: 'Remember-me later', autoDismissable: false)
+            key: 'REMEMBER', label: 'Remember-me later', autoDismissible: false)
       ]);
 }
 
@@ -788,10 +946,10 @@ Future<void> showBigPictureNotificationActionButtonsAndReply(int id) async {
         NotificationActionButton(
             key: 'REPLY',
             label: 'Reply',
-            autoDismissable: true,
+            autoDismissible: true,
             buttonType: ActionButtonType.InputField),
         NotificationActionButton(
-            key: 'REMEMBER', label: 'Remember-me later', autoDismissable: true)
+            key: 'REMEMBER', label: 'Remember-me later', autoDismissible: true)
       ]);
 }
 
@@ -866,10 +1024,10 @@ Future<void> showBigTextNotificationWithActionAndReply(int id) async {
         NotificationActionButton(
             key: 'REPLY',
             label: 'Reply',
-            autoDismissable: true,
+            autoDismissible: true,
             buttonType: ActionButtonType.InputField),
         NotificationActionButton(
-            key: 'REMEMBER', label: 'Remember-me later', autoDismissable: true)
+            key: 'REMEMBER', label: 'Remember-me later', autoDismissible: true)
       ]);
 }
 
@@ -893,7 +1051,7 @@ void updateNotificationMediaPlayer(int id, MediaModel? mediaNow) {
           notificationLayout: NotificationLayout.MediaPlayer,
           largeIcon: mediaNow.diskImagePath,
           color: Colors.purple.shade700,
-          autoDismissable: false,
+          autoDismissible: false,
           showWhen: false),
       actionButtons: [
         NotificationActionButton(
@@ -901,7 +1059,7 @@ void updateNotificationMediaPlayer(int id, MediaModel? mediaNow) {
             icon: 'resource://drawable/res_ic_prev' +
                 (MediaPlayerCentral.hasPreviousMedia ? '' : '_disabled'),
             label: 'Previous',
-            autoDismissable: false,
+            autoDismissible: false,
             showInCompactView: false,
             enabled: MediaPlayerCentral.hasPreviousMedia,
             buttonType: ActionButtonType.KeepOnTop),
@@ -910,7 +1068,7 @@ void updateNotificationMediaPlayer(int id, MediaModel? mediaNow) {
                 key: 'MEDIA_PAUSE',
                 icon: 'resource://drawable/res_ic_pause',
                 label: 'Pause',
-                autoDismissable: false,
+                autoDismissible: false,
                 showInCompactView: true,
                 buttonType: ActionButtonType.KeepOnTop)
             : NotificationActionButton(
@@ -918,7 +1076,7 @@ void updateNotificationMediaPlayer(int id, MediaModel? mediaNow) {
                 icon: 'resource://drawable/res_ic_play' +
                     (MediaPlayerCentral.hasAnyMedia ? '' : '_disabled'),
                 label: 'Play',
-                autoDismissable: false,
+                autoDismissible: false,
                 showInCompactView: true,
                 enabled: MediaPlayerCentral.hasAnyMedia,
                 buttonType: ActionButtonType.KeepOnTop),
@@ -934,7 +1092,7 @@ void updateNotificationMediaPlayer(int id, MediaModel? mediaNow) {
             key: 'MEDIA_CLOSE',
             icon: 'resource://drawable/res_ic_close',
             label: 'Close',
-            autoDismissable: true,
+            autoDismissible: true,
             showInCompactView: true,
             buttonType: ActionButtonType.KeepOnTop)
       ]);
@@ -998,12 +1156,12 @@ Future<void> createMessagingNotification({
             key: 'REPLY',
             label: 'Reply',
             buttonType: ActionButtonType.InputField,
-            autoDismissable: false,
+            autoDismissible: false,
           ),
           NotificationActionButton(
             key: 'READ',
             label: 'Mark as Read',
-            autoDismissable: true,
+            autoDismissible: true,
             buttonType: ActionButtonType.InputField,
           )
         ]
@@ -1059,12 +1217,12 @@ Future<void> showInboxNotification(int id) async {
             key: 'DISMISS',
             label: 'Dismiss',
             buttonType: ActionButtonType.DisabledAction,
-            autoDismissable: true,
+            autoDismissible: true,
             icon: 'resource://drawable/res_ic_close'),
         NotificationActionButton(
           key: 'READ',
           label: 'Mark as read',
-          autoDismissable: true,
+          autoDismissible: true,
           //icon: 'resources://drawable/res_ic_close'
         )
       ]);
@@ -1168,7 +1326,7 @@ Future<void> repeatMinuteNotification() async {
               'This notification was schedule to repeat at every single minute.',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/melted-clock.png'),
-      schedule: NotificationInterval(interval: 60, timeZone: localTimeZone, repeats: true));
+      schedule: NotificationInterval(interval: 60, timeZone: localTimeZone, repeats: true, preciseAlarm: true));
 }
 
 Future<void> repeatMultiple5Crontab() async {
@@ -1235,7 +1393,7 @@ Future<void> showNotificationAtScheduleCron(
         notificationLayout: NotificationLayout.BigPicture,
         bigPicture: 'asset://assets/images/delivery.jpeg',
         payload: {'uuid': 'uuid-test'},
-        autoDismissable: false,
+        autoDismissible: false,
       ),
       schedule: NotificationCalendar.fromDate(date: scheduleTime));
 }

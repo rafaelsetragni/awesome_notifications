@@ -317,7 +317,7 @@ public class NotificationBuilder {
                 if(notificationModel!.actionButtons != nil) {
                     for button:NotificationButtonModel in notificationModel!.actionButtons! {
                         if button.key == buttonKeyPressed {
-                            actionReceived.autoDismissable = button.autoDismissable
+                            actionReceived.autoDismissible = button.autoDismissible
                             break
                         }
                     }

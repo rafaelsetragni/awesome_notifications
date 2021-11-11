@@ -14,7 +14,7 @@ public class NotificationButtonModel : AbstractModel {
     var label:String?
     var enabled:Bool?
     var color: Int64?
-    var autoDismissable:Bool?
+    var autoDismissible:Bool?
     var showInCompactView:Bool?
     var isDangerousOption:Bool?
     var buttonType:ActionButtonType?
@@ -30,7 +30,7 @@ public class NotificationButtonModel : AbstractModel {
         self.buttonType = EnumUtils<ActionButtonType>.getEnumOrDefault(reference: Definitions.NOTIFICATION_BUTTON_TYPE, arguments: arguments)
         
         self.enabled    = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_ENABLED, arguments: arguments)
-        self.autoDismissable = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_AUTO_DISMISSABLE, arguments: arguments)
+        self.autoDismissible = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_AUTO_DISMISSIBLE, arguments: arguments)
         self.showInCompactView = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, arguments: arguments)
         self.isDangerousOption = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, arguments: arguments)
 
@@ -48,7 +48,7 @@ public class NotificationButtonModel : AbstractModel {
         if(buttonType != nil) {mapData[Definitions.NOTIFICATION_BUTTON_TYPE] = self.buttonType?.rawValue}
 
         if(enabled != nil) {mapData[Definitions.NOTIFICATION_ENABLED] = self.enabled}
-        if(autoDismissable != nil) {mapData[Definitions.NOTIFICATION_AUTO_DISMISSABLE] = self.autoDismissable}
+        if(autoDismissible != nil) {mapData[Definitions.NOTIFICATION_AUTO_DISMISSIBLE] = self.autoDismissible}
         if(showInCompactView != nil) {mapData[Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW] = self.showInCompactView}
         if(isDangerousOption != nil) {mapData[Definitions.NOTIFICATION_IS_DANGEROUS_OPTION] = self.isDangerousOption}
         

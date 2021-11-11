@@ -2,23 +2,15 @@ package me.carda.awesome_notifications;
 
 import android.app.Application;
 import android.app.Application.ActivityLifecycleCallbacks;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.media.session.MediaSessionCompat;
 
 import io.flutter.Log;
-
-//import com.google.android.gms.tasks.OnCompleteListener;
-//import com.google.android.gms.tasks.Task;
-//import com.google.firebase.FirebaseApp;
-//import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.*;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -45,12 +36,10 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import android.app.Activity;
 
 import me.carda.awesome_notifications.notifications.BitmapResourceDecoder;
-import me.carda.awesome_notifications.notifications.enumerators.NotificationPermission;
 import me.carda.awesome_notifications.notifications.models.DefaultsModel;
-import me.carda.awesome_notifications.notifications.models.NotificationCalendarModel;
-import me.carda.awesome_notifications.notifications.models.NotificationIntervalModel;
-import me.carda.awesome_notifications.notifications.models.NotificationScheduleModel;
 import me.carda.awesome_notifications.notifications.models.NotificationModel;
+import me.carda.awesome_notifications.notifications.models.NotificationScheduleModel;
+import me.carda.awesome_notifications.notifications.managers.PermissionManager;
 import me.carda.awesome_notifications.notifications.enumerators.MediaSource;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationSource;
@@ -92,15 +81,12 @@ public class AwesomeNotificationsPlugin
 
     public static Boolean debug = false;
 
-    public static Result pendingAuthorizationReturn;
-    public static Boolean hasGoneToAuthorizationPage = false;
-
-    public static Boolean hasGooglePlayServices;
     private static String mainTargetClassName;
     public static NotificationLifeCycle appLifeCycle = NotificationLifeCycle.AppKilled;
 
     private static final String TAG = "AwesomeNotificationsPlugin";
 
+    private ActivityPluginBinding activityBinding;
     private Activity initialActivity;
     private MethodChannel pluginChannel;
     private Context applicationContext;
@@ -109,29 +95,6 @@ public class AwesomeNotificationsPlugin
 
     public static String getMainTargetClassName() {
         return mainTargetClassName;
-    }
-
-
-    private boolean checkGooglePlayServices() {
-        // TODO MISSING IMPLEMENTATION. FIREBASE SERVICES DEMANDS GOOGLE PLAY SERVICES.
-        /*
-        final int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (status != ConnectionResult.SUCCESS) {
-            Log.e(TAG, GooglePlayServicesUtil.getErrorString(status));
-
-            // ask user to update google play services.
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, this, 1);
-
-            return false;
-        } else {
-            Log.i(TAG, GooglePlayServicesUtil.getErrorString(status));
-            // google play services is updated.
-            //your code goes here...
-            return true;
-        }*/
-
-        /// Firebase services depends on Google Play services
-        return false;
     }
 
     @Override
@@ -172,11 +135,9 @@ public class AwesomeNotificationsPlugin
     private void AttachAwesomeNotificationsPlugin(Context context, MethodChannel channel) {
 
         this.applicationContext = context;
+
         pluginChannel = channel;
-
         pluginChannel.setMethodCallHandler(this);
-
-        hasGooglePlayServices = checkGooglePlayServices();
 
         IntentFilter intentFilter = new IntentFilter();
 
@@ -204,8 +165,11 @@ public class AwesomeNotificationsPlugin
     @Override
     public void onAttachedToActivity(ActivityPluginBinding activityPluginBinding) {
         initialActivity = activityPluginBinding.getActivity();
-        activityPluginBinding.addOnNewIntentListener(this);
+        activityBinding = activityPluginBinding;
+        startListeningPermissions();
         getApplicationLifeCycle();
+
+        activityPluginBinding.addOnNewIntentListener(this);
 
         Application application = initialActivity.getApplication();
         application.registerActivityLifecycleCallbacks(this);
@@ -228,6 +192,7 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
+        stopListeningPermissions();
         getApplicationLifeCycle();
 
         if (AwesomeNotificationsPlugin.debug)
@@ -236,6 +201,8 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onReattachedToActivityForConfigChanges(ActivityPluginBinding activityPluginBinding) {
+        activityBinding = activityPluginBinding;
+        startListeningPermissions();
         getApplicationLifeCycle();
 
         if (AwesomeNotificationsPlugin.debug)
@@ -244,6 +211,7 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onDetachedFromActivity() {
+        stopListeningPermissions();
         getApplicationLifeCycle();
 
         if (AwesomeNotificationsPlugin.debug)
@@ -483,6 +451,10 @@ public class AwesomeNotificationsPlugin
 
                 case Definitions.CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE:
                     channelShowNotificationPage(call, result);
+                    return;
+
+                case Definitions.CHANNEL_METHOD_SHOW_ALARM_PAGE:
+                    channelShowAlarmPage(call, result);
                     return;
 
                 case Definitions.CHANNEL_METHOD_CHECK_PERMISSIONS:
@@ -942,12 +914,26 @@ public class AwesomeNotificationsPlugin
     }
 
     private void channelIsNotificationAllowed(MethodCall call, Result result) throws Exception {
-        result.success(NotificationBuilder.isNotificationEnabled(applicationContext));
+        result.success(PermissionManager.areNotificationsGloballyAllowed(applicationContext));
     }
 
     private void channelShowNotificationPage(MethodCall call, @NonNull Result result) throws Exception {
-        NotificationBuilder.showNotificationConfigPage(applicationContext);
-        saveReturnPageParameters(result);
+        String channelKey = call.arguments();
+        if(StringUtils.isNullOrEmpty(channelKey))
+            PermissionManager.showNotificationConfigPage(
+                    applicationContext,
+                    result::success);
+        else
+            PermissionManager.showChannelConfigPage(
+                    applicationContext,
+                    channelKey,
+                    result::success);
+    }
+
+    private void channelShowAlarmPage(MethodCall call, @NonNull Result result) throws Exception {
+            PermissionManager.showPreciseAlarmPage(
+                    applicationContext,
+                    result::success);
     }
 
     @SuppressWarnings("unchecked")
@@ -960,38 +946,41 @@ public class AwesomeNotificationsPlugin
         String channelKey = (String) parameters.get(Definitions.NOTIFICATION_CHANNEL_KEY);
         List<String> permissions = (List<String>) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);
 
-        if(channelKey == null)
-            throw new AwesomeNotificationException("Channel key is required");
-
         if(permissions == null)
             throw new AwesomeNotificationException("Permission list is required");
 
         if(permissions.isEmpty())
             throw new AwesomeNotificationException("Permission list cannot be empty");
 
-        permissions = NotificationBuilder.isPermissionsAllowed(
-                applicationContext, channelKey, permissions);
+        permissions = PermissionManager.arePermissionsAllowed(
+                activityBinding.getActivity(), applicationContext, channelKey, permissions);
 
         result.success(permissions);
     }
 
+    @SuppressWarnings("unchecked")
     private void channelRequestNotification(MethodCall call, Result result) throws Exception {
 
-        List<String> permissions = call.arguments();
-        if (NotificationBuilder.isNotificationEnabled(applicationContext)){
-            result.success(true);
-            return;
-        }
-        else {
-            saveReturnPageParameters(result);
-            NotificationBuilder.showNotificationConfigPage(applicationContext);
-        }
-    }
+        Map<String, Object> parameters = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
+        if(parameters == null)
+            throw new AwesomeNotificationException("Parameters are required");
 
-    private void saveReturnPageParameters(Result result){
-        // Necessary to return the call only after the app goes to foreground on next time
-        pendingAuthorizationReturn = result;
-        hasGoneToAuthorizationPage = true;
+        if(!parameters.containsKey(Definitions.NOTIFICATION_PERMISSIONS))
+            throw new AwesomeNotificationException("Permission list is required");
+
+        String channelKey = (String) parameters.get(Definitions.NOTIFICATION_CHANNEL_KEY);
+        List<String> permissions = (List<String>) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);
+
+        if(ListUtils.isNullOrEmpty(permissions))
+            throw new AwesomeNotificationException("Permission list is required");
+        assert permissions != null;
+
+        PermissionManager.requestUserPermissions(
+                activityBinding.getActivity(),
+                applicationContext,
+                channelKey,
+                permissions,
+                result::success);
     }
 
     private void channelMethodCreateNotification(MethodCall call, Result result) throws Exception {
@@ -1003,7 +992,7 @@ public class AwesomeNotificationsPlugin
             throw new AwesomeNotificationException("Invalid parameters");
         }
 
-        if (!NotificationBuilder.isNotificationEnabled(applicationContext)) {
+        if (!PermissionManager.areNotificationsGloballyAllowed(applicationContext)) {
             throw new AwesomeNotificationException("Notifications are disabled");
         }
 
@@ -1050,7 +1039,7 @@ public class AwesomeNotificationsPlugin
         result.success(true);
     }
 
-    private boolean setDefaultConfigurations(Context context, String defaultIcon, List<Object> channelsData) throws Exception {
+    private void setDefaultConfigurations(Context context, String defaultIcon, List<Object> channelsData) throws Exception {
 
         setDefaults(context, defaultIcon);
 
@@ -1061,7 +1050,6 @@ public class AwesomeNotificationsPlugin
         recoverNotificationDismissed(context);
 
         captureNotificationActionOnLaunch();
-        return true;
     }
 
     private void setChannels(Context context, List<Object> channelsData) throws Exception {
@@ -1163,6 +1151,20 @@ public class AwesomeNotificationsPlugin
         return true;
     }
 
+    private void startListeningPermissions(){
+        if(activityBinding != null){
+            initialActivity = activityBinding.getActivity();
+            activityBinding.addRequestPermissionsResultListener(AwesomePermissionHandler.getInstance());
+            activityBinding.addActivityResultListener(AwesomePermissionHandler.getInstance());
+        }
+    }
+
+    private void stopListeningPermissions(){
+        activityBinding.removeRequestPermissionsResultListener(AwesomePermissionHandler.getInstance());
+        activityBinding.removeActivityResultListener(AwesomePermissionHandler.getInstance());
+        activityBinding = null;
+    }
+
     @Override
     public void onActivityCreated(Activity activity, Bundle bundle) {
 
@@ -1175,11 +1177,7 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onActivityResumed(Activity activity) {
-        if(hasGoneToAuthorizationPage){
-            hasGoneToAuthorizationPage = false;
-            pendingAuthorizationReturn.success(
-                    NotificationBuilder.isNotificationEnabled(applicationContext));
-        }
+        PermissionManager.handlePermissionResult();
     }
 
     @Override

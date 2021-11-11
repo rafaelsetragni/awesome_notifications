@@ -46,8 +46,9 @@ public class NotificationContentModel extends Model {
     public String bigPicture;
     public Boolean wakeUpScreen;
     public Boolean criticalAlert;
+    public Boolean fullScreenIntent;
     public Boolean hideLargeIconOnExpand;
-    public Boolean autoDismissable;
+    public Boolean autoDismissible;
     public Boolean displayOnForeground;
     public Boolean displayOnBackground;
     public Long color;
@@ -128,7 +129,7 @@ public class NotificationContentModel extends Model {
 
         payload = getValueOrDefault(arguments, Definitions.NOTIFICATION_PAYLOAD, Map.class);
 
-        autoDismissable = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSABLE, Boolean.class);
+        autoDismissible = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSIBLE, Boolean.class);
 
         progress    = getValueOrDefault(arguments, Definitions.NOTIFICATION_PROGRESS, Integer.class);
 
@@ -162,7 +163,7 @@ public class NotificationContentModel extends Model {
 
         returnedObject.put(Definitions.NOTIFICATION_TICKER, this.ticker);
         returnedObject.put(Definitions.NOTIFICATION_PAYLOAD, this.payload);
-        returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSABLE, this.autoDismissable);
+        returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, this.autoDismissible);
 
         returnedObject.put(Definitions.NOTIFICATION_LAYOUT,
                 this.notificationLayout != null ? this.notificationLayout.toString() : "Default");
@@ -181,8 +182,8 @@ public class NotificationContentModel extends Model {
 
         returnedObject.put(Definitions.NOTIFICATION_CHANNEL_KEY, this.channelKey);
 
-        if(this.autoDismissable != null)
-            returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSABLE, this.autoDismissable);
+        if(this.autoDismissible != null)
+            returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, this.autoDismissible);
 
         if(this.displayOnForeground != null)
             returnedObject.put(Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, this.displayOnForeground);
@@ -212,7 +213,7 @@ public class NotificationContentModel extends Model {
 
         if(this.privacy != null)
             returnedObject.put(Definitions.NOTIFICATION_PRIVACY,
-                    this.privacy != null ? this.privacy.toString() : null);
+                    this.privacy.toString());
 
         if(this.privateMessage != null)
             returnedObject.put(Definitions.NOTIFICATION_PRIVATE_MESSAGE, this.privateMessage);

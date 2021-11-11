@@ -30,7 +30,7 @@ public class NotificationReceived extends NotificationContentModel {
         this.largeIcon = contentModel.largeIcon;
         this.bigPicture = contentModel.bigPicture;
         this.hideLargeIconOnExpand = contentModel.hideLargeIconOnExpand;
-        this.autoDismissable = contentModel.autoDismissable;
+        this.autoDismissible = contentModel.autoDismissible;
         this.color = contentModel.color;
         this.backgroundColor = contentModel.backgroundColor;
         this.progress = contentModel.progress;

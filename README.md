@@ -501,7 +501,7 @@ await AwesomeNotifications().createNotification(
     notificationLayout: NotificationLayout.BigPicture,
     bigPicture: 'asset://assets/images/delivery.jpeg',
     payload: {'uuid': 'uuid-test'},
-    autoDismissable: false,
+    autoDismissible: false,
   ),
   schedule: NotificationCalendar.fromDate(date: scheduleTime));
 ```
@@ -588,20 +588,20 @@ OBS 4: Again, the background message method of the `firebase_messaging` plug-in 
             "largeIcon": "https://media.fstatic.com/kdNpUx4VBicwDuRBnhBrNmVsaKU=/full-fit-in/290x478/media/artists/avatar/2013/08/neil-i-armstrong_a39978.jpeg",
             "bigPicture": "https://www.dw.com/image/49519617_303.jpg",
             "showWhen": true,
-            "autoDismissable": true,
+            "autoDismissible": true,
             "privacy": "Private"
         },
         "actionButtons": [
             {
                 "key": "REPLY",
                 "label": "Reply",
-                "autoDismissable": true,
+                "autoDismissible": true,
                 "buttonType":  "InputField"
             },
             {
                 "key": "ARCHIVE",
                 "label": "Archive",
-                "autoDismissable": true,
+                "autoDismissible": true,
                 "isDangerousOption": true
             }
         ],
@@ -689,7 +689,7 @@ Main methods to manipulate a notification channel:
 | icon 		            |     NO   | Small icon to be displayed on the top of notification (Android only)     | String                | must be a resource image |                           |
 | largeIcon 		 	|     NO   | Large icon displayed at right middle of compact notification             | String                | unlimited                |                           |
 | bigPicture 		 	|     NO   | Big image displayed on expanded notification                             | String                | unlimited                |                           |
-| autoDismissable 		|     NO   | Notification should auto dismiss when gets tapped by the user (has no effect for reply actions on Android)   | bool  | true or false    | true      |
+| autoDismissible 		|     NO   | Notification should auto dismiss when gets tapped by the user (has no effect for reply actions on Android)   | bool  | true or false    | true      |
 | color 			 	|     NO   | Notification text color                                                  | Color                 | 0x000000 to 0xFFFFFF     | 0x000000 (Colors.black)   |
 | backgroundColor  	    |     NO   | Notification background color                                            | Color                 | 0x000000 to 0xFFFFFF     | 0xFFFFFF (Colors.white)   |
 | payload 		 	    |     NO   | Hidden payload content                                                   | Map<String, String>   | Only String for values   | null                      |
@@ -714,7 +714,7 @@ Main methods to manipulate a notification channel:
 | icon 		    |   *YES   | Icon to be displayed inside the button                                        | String                | must be a resource image |                         |
 | color 		|     NO   | Label text color (only for Android)                                           | Color                 | 0x000000 to 0xFFFFFF     |                         |
 | enabled 	    |     NO   | On Android, deactivates the button. On iOS, the button disappear              | bool                  | true or false            | true                    |
-| autoDismissable    | NO  | Notification should auto cancel when gets tapped by the user                  | bool                  | true or false            | true                    |
+| autoDismissible    | NO  | Notification should auto cancel when gets tapped by the user                  | bool                  | true or false            | true                    |
 | showInCompactView  | NO  | For MediaPlayer notifications on Android, sets the button as visible in compact view | bool           | true or false            | true                    |
 | isDangerousOption  | NO  | Mark the button as a dangerous option, displaing the text in red              | bool                  | true or false            | false                   |
 | buttonType 	|     NO   | Button action response type                                                   | Enumerator            | ActionButtonType         | Default                 |

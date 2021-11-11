@@ -35,7 +35,9 @@ class _HomePageState extends State<HomePage> {
 
   bool delayLEDTests = false;
 
-  bool notificationsAllowed = false;
+  bool basicNotificationsAllowed = false;
+  bool fullIntentNotificationsAllowed = false;
+  bool preciseAlarmsNotificationsAllowed = false;
 
   String packageName = 'me.carda.awesome_notifications_example';
 
@@ -165,11 +167,11 @@ class _HomePageState extends State<HomePage> {
 
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) async {
       setState(() {
-        notificationsAllowed = isAllowed;
+        basicNotificationsAllowed = isAllowed;
       });
 
       if (!isAllowed) {
-        isAllowed = await requestPermissionToSendNotifications(context);
+        isAllowed = await requestBasicPermissionsToSendNotifications(context);
       }
     });
   }
@@ -364,12 +366,12 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   Column(
                     children: [
-                      Text(notificationsAllowed ? 'Allowed' : 'Not allowed',
+                      Text(basicNotificationsAllowed ? 'Allowed' : 'Not allowed',
                           style: TextStyle(
-                              color: notificationsAllowed
+                              color: basicNotificationsAllowed
                                   ? Colors.green
                                   : Colors.red)),
-                      LedLight(notificationsAllowed)
+                      LedLight(basicNotificationsAllowed)
                     ],
                   )
                 ]),
@@ -378,19 +380,77 @@ class _HomePageState extends State<HomePage> {
                 '* Android: notifications are enabled by default and are considered not dangerous.\n'
                 '* iOS: notifications are not enabled by default and you must explicitly request it to the user.'),
             SimpleButton('Request permission',
-                onPressed: () => requestPermissionToSendNotifications(context).then(
+                onPressed: () => requestBasicPermissionsToSendNotifications(context).then(
                     (isAllowed) =>
                       setState(() {
-                        notificationsAllowed = isAllowed;
+                        basicNotificationsAllowed = isAllowed;
                       })
                 )
             ),
             SimpleButton('Open notifications permission page',
                 onPressed: () => redirectToPermissionsPage().then(
-                    (isAllowed) =>
-                      setState(() {
-                        notificationsAllowed = isAllowed;
-                      })
+                        (isAllowed) =>
+                        setState(() {
+                          basicNotificationsAllowed = isAllowed;
+                        })
+                )
+            ),
+            SimpleButton('Open basic channel permission page',
+                onPressed: () => redirectToBasicChannelPage()
+            ),
+            SimpleButton('Open alarms permission page',
+                onPressed: () => redirectToAlarmPage().then(
+                  (isAllowed) =>print('returned')
+                )
+            ),
+
+            /* ******************************************************************** */
+
+            TextDivisor(title: 'Dangerous Permissions'),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Column(
+                    children: [
+                      Text('Full Intent Notifications'),
+                      Text(fullIntentNotificationsAllowed ? 'Allowed' : 'Not allowed',
+                          style: TextStyle(
+                              color: fullIntentNotificationsAllowed
+                                  ? Colors.green
+                                  : Colors.red)),
+                      LedLight(fullIntentNotificationsAllowed)
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text('Precise Alarms'),
+                      Text(preciseAlarmsNotificationsAllowed ? 'Allowed' : 'Not allowed',
+                          style: TextStyle(
+                              color: preciseAlarmsNotificationsAllowed
+                                  ? Colors.green
+                                  : Colors.red)),
+                      LedLight(preciseAlarmsNotificationsAllowed)
+                    ],
+                  )
+                ]),
+            TextNote(
+                'To send local and push notifications, it is necessary to obtain the user\'s consent. Keep in mind that he user consent can be revoked at any time.\n\n'
+                    '* Android: notifications are enabled by default and are considered not dangerous.\n'
+                    '* iOS: notifications are not enabled by default and you must explicitly request it to the user.'),
+            SimpleButton('Request full intent notifications',
+                onPressed: () => requestFullIntentPermission(context).then(
+                        (isAllowed) =>
+                        setState(() {
+                          fullIntentNotificationsAllowed = isAllowed;
+                        })
+                )
+            ),
+            SimpleButton('Request precise alarms',
+                onPressed: () => requestPreciseAlarmPermission(context).then(
+                        (isAllowed) =>
+                        setState(() {
+                          preciseAlarmsNotificationsAllowed = isAllowed;
+                        })
                 )
             ),
 
@@ -694,9 +754,23 @@ class _HomePageState extends State<HomePage> {
 
             TextDivisor(title: 'Wake Up Locked Screen Notifications'),
             TextNote(
-                'To enable this feature on Android, is necessary to add the WAKE_LOCK permission into your AndroidManifest.xml file. For iOS, this is the default behavior.'),
-            SimpleButton('Show notification with wake up locked screen option',
-                onPressed: () => showNotificationWithWakeUp(27)),
+                'Wake Up Locked Screen notifications are notifications that can wake up the device screen to call the user attention, if the device is on lock screen.\n\n'
+                'To enable this feature on Android, is necessary to add the WAKE_LOCK permission into your AndroidManifest.xml file. For iOS, this is the default behavior for high priority channels.'),
+            SimpleButton('Schedule notification with wake up locked screen option',
+                onPressed: () => scheduleNotificationWithWakeUp(27)),
+            SimpleButton('Cancel notification',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () => cancelNotification(27)),
+
+            /* ******************************************************************** */
+
+            TextDivisor(title: 'Full Screen Intent Notifications'),
+            TextNote(
+                'Full-Screen Intents are notifications that can launch in full-screen mode. They are indicate since Android 9 to receiving calls and alarm features.\n\n'
+                'To enable this feature on Android, is necessary to add the USE_FULL_SCREEN_INTENT permission into your AndroidManifest.xml file and explicity request the user permission since Android 11. For iOS, this option has no effect.'),
+            SimpleButton('Schedule notification with wake up locked screen option',
+                onPressed: () => scheduleFullScrenNotification(27)),
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,

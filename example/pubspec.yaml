@@ -81,6 +81,7 @@ flutter:
     - assets/images/awesome-notifications-logo-black.png
     - assets/images/awesome-notifications-logo-white.png
     - assets/images/animated-bell.gif
+    - assets/images/animated-clock.gif
     - assets/images/placeholder.gif
     - assets/images/happy-dogs.jpg
     - assets/images/balloons-in-sky.jpg

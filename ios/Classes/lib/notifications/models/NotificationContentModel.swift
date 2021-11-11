@@ -28,7 +28,7 @@ public class NotificationContentModel : AbstractModel {
     var largeIcon: String?
     var bigPicture: String?
     var hideLargeIconOnExpand: Bool?
-    var autoDismissable: Bool?
+    var autoDismissible: Bool?
     var displayOnForeground: Bool?
     var displayOnBackground: Bool?
     var color: Int64?
@@ -70,7 +70,7 @@ public class NotificationContentModel : AbstractModel {
         self.largeIcon             = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_LARGE_ICON, arguments: arguments)
         self.bigPicture            = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BIG_PICTURE, arguments: arguments)
         self.hideLargeIconOnExpand = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND, arguments: arguments)
-        self.autoDismissable       = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_AUTO_DISMISSABLE, arguments: arguments)
+        self.autoDismissible       = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_AUTO_DISMISSIBLE, arguments: arguments)
         self.displayOnForeground   = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, arguments: arguments)
         self.displayOnBackground   = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, arguments: arguments)
         self.color                 = MapUtils<Int64>.getValueOrDefault(reference: Definitions.NOTIFICATION_COLOR, arguments: arguments)
@@ -112,7 +112,7 @@ public class NotificationContentModel : AbstractModel {
         if(self.locked != nil){ mapData[Definitions.NOTIFICATION_LOCKED] = self.locked }
         if(self.bigPicture != nil){ mapData[Definitions.NOTIFICATION_BIG_PICTURE] = self.bigPicture }
         if(self.hideLargeIconOnExpand != nil){ mapData[Definitions.NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND] = self.hideLargeIconOnExpand }
-        if(self.autoDismissable != nil){ mapData[Definitions.NOTIFICATION_AUTO_DISMISSABLE] = self.autoDismissable }
+        if(self.autoDismissible != nil){ mapData[Definitions.NOTIFICATION_AUTO_DISMISSIBLE] = self.autoDismissible }
         if(self.displayOnForeground != nil){ mapData[Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND] = self.displayOnForeground }
         if(self.displayOnBackground != nil){ mapData[Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND] = self.displayOnBackground }
         if(self.color != nil){ mapData[Definitions.NOTIFICATION_COLOR] = self.color }

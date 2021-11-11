@@ -20,6 +20,7 @@ public abstract class NotificationScheduleModel extends Model {
     /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
     public Boolean repeats;
     public Boolean allowWhileIdle;
+    public Boolean preciseAlarm;
 
     public NotificationScheduleModel fromMap(Map<String, Object> arguments) {
         timeZone = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, String.class);

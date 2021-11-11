@@ -133,42 +133,6 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                     return nextValidDate;
                 }
                 else {
-
-                    /*
-                    if(!ListUtils.isNullOrEmpty(notificationModel.schedule.preciseSchedules)){
-
-                        for (String nextDateTime: notificationModel.schedule.preciseSchedules) {
-
-                            Calendar closestDate = CronUtils.getNextCalendar(
-                                nextDateTime,
-                                null
-                            );
-
-                            if(closestDate != null){
-                                if(nextValidDate == null){
-                                    nextValidDate = closestDate;
-                                }
-                                else {
-                                    if(closestDate.compareTo(nextValidDate) < 0){
-                                        nextValidDate = closestDate;
-                                    }
-                                }
-                            }
-                        }
-
-                        if(nextValidDate != null){
-
-                            notificationModel = scheduleNotification(context, notificationModel, nextValidDate);
-
-                            if(notificationModel != null){
-                                scheduled = true;
-                            }
-
-                            return nextValidDate;
-                        }
-                    }
-                    */
-
                     cancelSchedule(context, notificationModel.content.id);
 
                     String msg = "Date is not more valid. ("+DateUtils.getUTCDate()+")";
@@ -233,20 +197,61 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                     context,
                     notificationModel.content.id,
                     notificationIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
             );
 
-            AlarmManager alarmManager = getAlarmManager(context);
-
-            if (BooleanUtils.getValue(notificationModel.schedule.allowWhileIdle)) {
-                AlarmManagerCompat.setExactAndAllowWhileIdle(alarmManager, AlarmManager.RTC_WAKEUP, nextValidDate.getTimeInMillis(), pendingIntent);
-            } else {
-                AlarmManagerCompat.setExact(alarmManager, AlarmManager.RTC_WAKEUP, nextValidDate.getTimeInMillis(), pendingIntent);
-            }
+            //scheduleNotificationWithWorkManager(context, notificationModel, nextValidDate);
+            scheduleNotificationWithAlarmManager(context, notificationModel, nextValidDate, pendingIntent);
 
             return notificationModel;
         }
         return null;
+    }
+
+    // WorkManager does not not meet the requirements of the scheduling process
+    /*private void scheduleNotificationWithWorkManager(Context context, NotificationModel notificationModel, Calendar nextValidDate) {
+        Constraints myConstraints = new Constraints.Builder()
+                .setRequiresDeviceIdle(!notificationModel.schedule.allowWhileIdle)
+                .setRequiresBatteryNotLow(!notificationModel.schedule.allowWhileIdle)
+                .setRequiresStorageNotLow(false)
+                .build();
+
+        OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(ScheduleWorker.class)
+                .setInitialDelay(calculateDelay(nextValidDate), TimeUnit.MILLISECONDS)
+                .addTag(notificationModel.content.id.toString())
+                .setConstraints(myConstraints)
+                .build();
+
+        WorkManager.getInstance(context).enqueue(notificationWork);
+    }*/
+
+    private void scheduleNotificationWithAlarmManager(Context context, NotificationModel notificationModel, Calendar nextValidDate, PendingIntent pendingIntent) {
+        AlarmManager alarmManager = getAlarmManager(context);
+        long timeMillis = nextValidDate.getTimeInMillis();
+
+        if (BooleanUtils.getValue(notificationModel.schedule.preciseAlarm) && isPreciseAlarmEnable(alarmManager)) {
+            AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(timeMillis, pendingIntent);
+            alarmManager.setAlarmClock(info, pendingIntent);
+            return;
+        }
+
+        if (BooleanUtils.getValue(notificationModel.schedule.allowWhileIdle)) {
+            AlarmManagerCompat.setExactAndAllowWhileIdle(alarmManager, AlarmManager.RTC_WAKEUP, timeMillis, pendingIntent);
+            return;
+        }
+
+        AlarmManagerCompat.setExact(alarmManager, AlarmManager.RTC_WAKEUP, timeMillis, pendingIntent);
+    }
+
+    public static boolean isPreciseAlarmEnable(Context context){
+        AlarmManager alarmManager = getAlarmManager(context);
+        return isPreciseAlarmEnable(alarmManager);
+    }
+
+    public static boolean isPreciseAlarmEnable(AlarmManager alarmManager){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S /*Android 12*/)
+            return alarmManager.canScheduleExactAlarms();
+        return true;
     }
 
     public static void refreshScheduleNotifications(Context context) {
@@ -285,21 +290,22 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
         ScheduleManager.commitChanges(context);
     }
 
-    public static boolean cancelAllSchedules(Context context) {
+    public static void cancelAllSchedules(Context context) {
         if(context != null){
             _removeAllFromAlarm(context);
             ScheduleManager.cancelAllSchedules(context);
             ScheduleManager.commitChanges(context);
-            return true;
         }
-        return false;
     }
 
     private static void _removeFromAlarm(Context context, int id) {
         if(context != null){
             Intent intent = new Intent(context, ScheduledNotificationReceiver.class);
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    context, id, intent,
+                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT );
+
             AlarmManager alarmManager = getAlarmManager(context);
             alarmManager.cancel(pendingIntent);
         }

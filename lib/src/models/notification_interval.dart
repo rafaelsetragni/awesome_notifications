@@ -11,16 +11,19 @@ class NotificationInterval extends NotificationSchedule {
   /// [interval] Time interval between each notification (minimum of 60 sec case repeating)
   /// [allowWhileIdle] Displays the notification, even when the device is low battery
   /// [repeats] Defines if the notification should play only once or keeps repeating
+  /// [preciseAlarm] Requires maximum precision to schedule notifications at exact time, but may use more battery. Requires the explicit user consent for Android 12 and beyond.
   /// [timeZone] time zone identifier as reference of this schedule date. (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
-  NotificationInterval({
-    required int interval,
-    String? timeZone,
-    bool allowWhileIdle = false,
-    bool repeats = false,
-  }) : super(
+  NotificationInterval(
+      {required int interval,
+      String? timeZone,
+      bool allowWhileIdle = false,
+      bool repeats = false,
+      bool preciseAlarm = false})
+      : super(
             timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
-            repeats: repeats) {
+            repeats: repeats,
+            preciseAlarm: preciseAlarm) {
     this.interval = interval;
   }
 

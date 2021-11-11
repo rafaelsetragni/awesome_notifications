@@ -65,6 +65,7 @@ public interface Definitions {
     String CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL = "removeNotificationChannel";
 
     String CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = "showNotificationPage";
+    String CHANNEL_METHOD_SHOW_ALARM_PAGE = "showAlarmPage";
     String CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed";
     String CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications";
     String CHANNEL_METHOD_CHECK_PERMISSIONS = "checkPermissions";
@@ -116,6 +117,7 @@ public interface Definitions {
     String NOTIFICATION_SCHEDULE_CREATED_DATE = "createdDate";
     String NOTIFICATION_SCHEDULE_ERA = "era";
     String NOTIFICATION_SCHEDULE_TIMEZONE = "timeZone";
+    String NOTIFICATION_SCHEDULE_PRECISE_ALARM = "preciseAlarm";
     String NOTIFICATION_SCHEDULE_YEAR = "year";
     String NOTIFICATION_SCHEDULE_MONTH = "month";
     String NOTIFICATION_SCHEDULE_DAY = "day";
@@ -165,7 +167,7 @@ public interface Definitions {
     String NOTIFICATION_CRONTAB_EXPRESSION = "crontabExpression";
     String NOTIFICATION_PRECISE_SCHEDULES = "preciseSchedules";
     String NOTIFICATION_ENABLED = "enabled";
-    String NOTIFICATION_AUTO_DISMISSABLE = "autoDismissable";
+    String NOTIFICATION_AUTO_DISMISSIBLE = "autoDismissible";
     String NOTIFICATION_IS_DANGEROUS_OPTION = "isDangerousOption";
     String NOTIFICATION_PERMISSIONS = "permissions";
 
@@ -174,6 +176,7 @@ public interface Definitions {
     String NOTIFICATION_DISPLAY_ON_FOREGROUND = "displayOnForeground";
     String NOTIFICATION_DISPLAY_ON_BACKGROUND = "displayOnBackground";
     String NOTIFICATION_ICON = "icon";
+    String NOTIFICATION_FULL_SCREEN_INTENT = "fullScreenIntent";
     String NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen";
     String NOTIFICATION_CRITICAL_ALERT = "criticalAlert";
     String NOTIFICATION_PLAY_SOUND = "playSound";
@@ -237,7 +240,7 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_LED_OFF_MS, 700);
         put(Definitions.NOTIFICATION_LED_ON_MS, 300);
         put(Definitions.NOTIFICATION_PLAY_SOUND, true);
-        put(Definitions.NOTIFICATION_AUTO_DISMISSABLE, true);
+        put(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, true);
         put(Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, DefaultRingtoneType.Notification);
         put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, DateUtils.localTimeZone.toString());
         put(Definitions.NOTIFICATION_TICKER, "ticker");

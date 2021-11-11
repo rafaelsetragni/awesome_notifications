@@ -24,7 +24,7 @@ class NotificationActionButton extends Model {
   String? label;
   String? icon;
   bool? enabled;
-  bool? autoDismissable;
+  bool? autoDismissible;
   bool? showInCompactView;
   bool? isDangerousOption;
   Color? color;
@@ -35,7 +35,7 @@ class NotificationActionButton extends Model {
       required String label,
       this.icon,
       this.enabled,
-      this.autoDismissable,
+      this.autoDismissible,
       this.showInCompactView,
       this.isDangerousOption,
       this.color,
@@ -51,8 +51,8 @@ class NotificationActionButton extends Model {
     label =
         AssertUtils.extractValue(NOTIFICATION_BUTTON_LABEL, dataMap, String);
     enabled = AssertUtils.extractValue(NOTIFICATION_ENABLED, dataMap, bool);
-    autoDismissable =
-        AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSABLE, dataMap, bool);
+    autoDismissible =
+        AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, dataMap, bool);
     showInCompactView = AssertUtils.extractValue(
         NOTIFICATION_SHOW_IN_COMPACT_VIEW, dataMap, bool);
     isDangerousOption = AssertUtils.extractValue(
@@ -74,7 +74,7 @@ class NotificationActionButton extends Model {
       NOTIFICATION_ICON: icon,
       NOTIFICATION_BUTTON_LABEL: label,
       NOTIFICATION_ENABLED: enabled,
-      NOTIFICATION_AUTO_DISMISSABLE: autoDismissable,
+      NOTIFICATION_AUTO_DISMISSIBLE: autoDismissible,
       NOTIFICATION_SHOW_IN_COMPACT_VIEW: showInCompactView,
       NOTIFICATION_IS_DANGEROUS_OPTION: isDangerousOption,
       NOTIFICATION_BUTTON_TYPE: AssertUtils.toSimpleEnumString(buttonType),
@@ -88,9 +88,9 @@ class NotificationActionButton extends Model {
       throw AwesomeNotificationsException(message: 'key id is requried');
     if (AssertUtils.isNullOrEmptyOrInvalid(label, String))
       throw AwesomeNotificationsException(message: 'label id is requried');
-    if (AssertUtils.isNullOrEmptyOrInvalid(autoDismissable, bool))
+    if (AssertUtils.isNullOrEmptyOrInvalid(autoDismissible, bool))
       throw AwesomeNotificationsException(
-          message: 'autoDismissable id is requried');
+          message: 'autoDismissible id is requried');
     if (AssertUtils.isNullOrEmptyOrInvalid(showInCompactView, bool))
       throw AwesomeNotificationsException(
           message: 'showInCompactView id is requried');

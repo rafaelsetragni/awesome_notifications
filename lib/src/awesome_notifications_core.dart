@@ -283,8 +283,13 @@ class AwesomeNotifications {
   }
 
   /// Opens the app notifications page
-  Future<void> showNotificationConfigPage() async {
-    await _channel.invokeMethod(CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE);
+  Future<void> showNotificationConfigPage({String? channelKey}) async {
+    await _channel.invokeMethod(CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE, channelKey);
+  }
+
+  /// Opens the app notifications page
+  Future<void> showAlarmPage() async {
+    await _channel.invokeMethod(CHANNEL_METHOD_SHOW_ALARM_PAGE);
   }
 
   /// Check if the notifications are globally permitted
@@ -296,43 +301,54 @@ class AwesomeNotifications {
 
   /// Prompts the user to enabled notifications
   Future<bool> requestPermissionToSendNotifications(
-      {List<NotificationPermission> permissions = const [
-        NotificationPermission.Badge,
-        NotificationPermission.Alert,
-        NotificationPermission.Sound
-      ]}) async {
+      {
+        String? channelKey,
+        List<NotificationPermission> permissions = const [
+          NotificationPermission.Badge,
+          NotificationPermission.Alert,
+          NotificationPermission.Sound
+        ]
+      }) async {
     final List<String> permissionList = [];
     for (final permission in permissions) {
       String? permissionValue = AssertUtils.toSimpleEnumString(permission);
       if (permissionValue != null) permissionList.add(permissionValue);
     }
 
-    final bool isAllowed = await _channel.invokeMethod(
-        CHANNEL_METHOD_REQUEST_NOTIFICATIONS, permissionList);
-    return isAllowed;
+    final List<Object?>? missingPermissions = await _channel.invokeMethod(
+      CHANNEL_METHOD_REQUEST_NOTIFICATIONS, {
+        NOTIFICATION_CHANNEL_KEY: channelKey,
+        NOTIFICATION_PERMISSIONS: permissionList
+      });
+
+    return missingPermissions?.isEmpty ?? false;
   }
 
   /// Check each individual permission to send notifications and returns only the allowed permissions
-  Future<List<NotificationPermission>> checkPermissionList(
-      {List<NotificationPermission> permissions = const [
-        NotificationPermission.Badge,
-        NotificationPermission.Alert,
-        NotificationPermission.Sound
-      ]}) async {
-    List<String> permissionList = [];
+  Future<List<NotificationPermission>> checkPermissionList({
+        String? channelKey,
+        List<NotificationPermission> permissions = const [
+          NotificationPermission.Badge,
+          NotificationPermission.Alert,
+          NotificationPermission.Sound
+        ]}) async {
+    List<Object?> permissionList = [];
     for (final permission in permissions) {
       String? permissionValue = AssertUtils.toSimpleEnumString(permission);
       if (permissionValue != null) permissionList.add(permissionValue);
     }
 
     permissionList = await _channel.invokeMethod(
-        CHANNEL_METHOD_REQUEST_NOTIFICATIONS, permissionList);
+      CHANNEL_METHOD_CHECK_PERMISSIONS, {
+        NOTIFICATION_CHANNEL_KEY: channelKey,
+        NOTIFICATION_PERMISSIONS: permissionList
+      });
 
     List<NotificationPermission> allowed = [];
     for (final permission in permissionList) {
       NotificationPermission? permissionValue =
-          AssertUtils.enumToString<NotificationPermission>(
-              permission, NotificationPermission.values, null);
+      AssertUtils.enumToString<NotificationPermission>(
+          permission.toString(), NotificationPermission.values, null);
       if (permissionValue != null) allowed.add(permissionValue);
     }
 

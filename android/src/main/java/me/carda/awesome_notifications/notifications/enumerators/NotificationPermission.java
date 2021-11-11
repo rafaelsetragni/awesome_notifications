@@ -27,6 +27,8 @@ public enum NotificationPermission {
      */
     Provisional,
 
+    PreciseAlarms,
+    FullScreenIntent,
     /**
      * [Car] The ability to display notifications in a CarPlay environment.
      */
