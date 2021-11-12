@@ -17,7 +17,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   /// Crontab expression as repetition rule (with seconds precision), as described in https://www.baeldung.com/cron-expressions
   String? crontabExpression;
 
-  /// Notification Schedule based on calendar components. At least one date parameter is required.
+  /// Notification Schedule based on crontab rules or a list of valid dates.
   /// [initialDate]: The initial limit date that an schedule is considered valid (YYYY-MM-DD hh:mm:ss)
   /// [expirationDate]: The final limit date that an schedule is considered valid (YYYY-MM-DD hh:mm:ss)
   /// [crontabExpression]: Crontab expression as repetition rule (with seconds precision), as described in https://www.baeldung.com/cron-expressions

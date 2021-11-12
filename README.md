@@ -666,6 +666,8 @@ To enable this property, you need to add the `USE_FULL_SCREEN_INTENT` permission
 </manifest>
 ```
 
+On Android, for versions greater or equal than 11, you need to explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications`.
+
 <br>
 
 

@@ -86,7 +86,7 @@ public abstract class NotificationScheduleModel extends Model {
             map.containsKey(Definitions.NOTIFICATION_PRECISE_SCHEDULES) ||
             map.containsKey(Definitions.NOTIFICATION_EXPIRATION_DATE_TIME)
         ){
-            return new NotificationCrontab().fromMap(map);
+            return new NotificationCrontabModel().fromMap(map);
         }
 
         if(
