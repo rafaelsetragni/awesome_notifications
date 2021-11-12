@@ -36,7 +36,9 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import android.app.Activity;
 
 import me.carda.awesome_notifications.notifications.BitmapResourceDecoder;
+import me.carda.awesome_notifications.notifications.managers.ChannelGroupManager;
 import me.carda.awesome_notifications.notifications.models.DefaultsModel;
+import me.carda.awesome_notifications.notifications.models.NotificationChannelGroupModel;
 import me.carda.awesome_notifications.notifications.models.NotificationModel;
 import me.carda.awesome_notifications.notifications.models.NotificationScheduleModel;
 import me.carda.awesome_notifications.notifications.managers.PermissionManager;
@@ -1017,7 +1019,7 @@ public class AwesomeNotificationsPlugin
 
     @SuppressWarnings("unchecked")
     private void channelMethodInitialize(MethodCall call, Result result) throws Exception {
-        List<Object> channelsData;
+        List<Object> channelsData, channelGroupsData;
 
         Map<String, Object> platformParameters = call.arguments();
 
@@ -1026,11 +1028,13 @@ public class AwesomeNotificationsPlugin
 
         String defaultIconPath = (String) platformParameters.get(Definitions.INITIALIZE_DEFAULT_ICON);
         channelsData = (List<Object>) platformParameters.get(Definitions.INITIALIZE_CHANNELS);
+        channelGroupsData = (List<Object>) platformParameters.get(Definitions.INITIALIZE_CHANNEL_GROUPS);
 
         setDefaultConfigurations(
-                applicationContext,
-                defaultIconPath,
-                channelsData
+            applicationContext,
+            defaultIconPath,
+            channelsData,
+            channelGroupsData
         );
 
         if (AwesomeNotificationsPlugin.debug)
@@ -1039,10 +1043,11 @@ public class AwesomeNotificationsPlugin
         result.success(true);
     }
 
-    private void setDefaultConfigurations(Context context, String defaultIcon, List<Object> channelsData) throws Exception {
+    private void setDefaultConfigurations(Context context, String defaultIcon, List<Object> channelsData, List<Object> channelGroupsData) throws Exception {
 
         setDefaults(context, defaultIcon);
 
+        setChannelGroups(context, channelGroupsData);
         setChannels(context, channelsData);
 
         recoverNotificationCreated(context);
@@ -1050,6 +1055,32 @@ public class AwesomeNotificationsPlugin
         recoverNotificationDismissed(context);
 
         captureNotificationActionOnLaunch();
+    }
+
+    private void setChannelGroups(Context context, List<Object> channelGroupsData) throws Exception {
+        if (ListUtils.isNullOrEmpty(channelGroupsData)) return;
+
+        List<NotificationChannelGroupModel> channelGroups = new ArrayList<>();
+
+        for (Object channelDataObject : channelGroupsData) {
+            if (channelDataObject instanceof Map<?, ?>) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> channelData = (Map<String, Object>) channelDataObject;
+                NotificationChannelGroupModel channelGroup = new NotificationChannelGroupModel().fromMap(channelData);
+
+                if (channelGroup != null) {
+                    channelGroups.add(channelGroup);
+                } else {
+                    throw new AwesomeNotificationException("Invalid channel group: " + JsonUtils.toJson(channelData));
+                }
+            }
+        }
+
+        for (NotificationChannelGroupModel channelGroupModel : channelGroups) {
+            ChannelGroupManager.saveChannelGroup(context, channelGroupModel);
+        }
+
+        ChannelManager.commitChanges(context);
     }
 
     private void setChannels(Context context, List<Object> channelsData) throws Exception {
@@ -1177,7 +1208,7 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onActivityResumed(Activity activity) {
-        //PermissionManager.handlePermissionResult(0, String[], Integer[]);
+        PermissionManager.handlePermissionResult(PermissionManager.REQUEST_CODE, new String[0], new int[0]);
     }
 
     @Override

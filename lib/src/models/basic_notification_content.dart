@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
 import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
 import 'package:awesome_notifications/src/models/model.dart';
@@ -28,6 +29,7 @@ class BaseNotificationContent extends Model {
   Color? color;
   Color? backgroundColor;
   NotificationPrivacy? privacy;
+  NotificationCategory? category;
 
   @Deprecated(
       'property name autoCancel is deprecated. Use autoDismissible instead.')
@@ -51,6 +53,7 @@ class BaseNotificationContent extends Model {
       this.wakeUpScreen,
       this.fullScreenIntent,
       //this.criticalAlert,
+      this.category,
       this.autoDismissible,
       this.color,
       this.backgroundColor,
@@ -93,6 +96,9 @@ class BaseNotificationContent extends Model {
     this.privacy = AssertUtils.extractEnum<NotificationPrivacy>(
         NOTIFICATION_PRIVACY, mapData, NotificationPrivacy.values);
 
+    this.category = AssertUtils.extractEnum<NotificationCategory>(
+        NOTIFICATION_CATEGORY, mapData, NotificationCategory.values);
+
     int? colorValue =
         AssertUtils.extractValue(NOTIFICATION_COLOR, mapData, int);
     this.color = colorValue == null ? null : Color(colorValue);
@@ -125,6 +131,7 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_CUSTOM_SOUND: customSound,
       NOTIFICATION_AUTO_DISMISSIBLE: autoDismissible,
       NOTIFICATION_PRIVACY: AssertUtils.toSimpleEnumString(privacy),
+      NOTIFICATION_CATEGORY: AssertUtils.toSimpleEnumString(category),
       NOTIFICATION_COLOR: color?.value,
       NOTIFICATION_BACKGROUND_COLOR: backgroundColor?.value,
       NOTIFICATION_WAKE_UP_SCREEN: wakeUpScreen,

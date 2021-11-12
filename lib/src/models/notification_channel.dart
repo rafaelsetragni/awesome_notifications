@@ -22,6 +22,8 @@ class NotificationChannel extends Model {
   String? channelDescription;
   bool? channelShowBadge;
 
+  String? channelGroupKey;
+
   NotificationImportance? importance;
 
   bool? playSound;
@@ -48,10 +50,13 @@ class NotificationChannel extends Model {
   bool? locked;
   bool? onlyAlertOnce;
 
+  bool? criticalAlerts;
+
   NotificationChannel({
     required String channelKey,
     required String channelName,
     required String channelDescription,
+    this.channelGroupKey,
     this.channelShowBadge,
     this.importance,
     this.playSound,
@@ -71,6 +76,7 @@ class NotificationChannel extends Model {
     this.locked,
     this.onlyAlertOnce,
     this.defaultPrivacy,
+    this.criticalAlerts
   }) : super() {
     this.channelKey = channelKey;
     this.channelName = channelName;
@@ -84,10 +90,16 @@ class NotificationChannel extends Model {
         NOTIFICATION_CHANNEL_DESCRIPTION, this.channelDescription, String);
     this.channelShowBadge = AssertUtils.getValueOrDefault(
         NOTIFICATION_CHANNEL_SHOW_BADGE, this.channelShowBadge, bool);
+
+    this.channelGroupKey = AssertUtils.getValueOrDefault(
+        NOTIFICATION_CHANNEL_GROUP_KEY, this.channelGroupKey, String);
+
     this.importance = AssertUtils.getValueOrDefault(
         NOTIFICATION_IMPORTANCE, this.importance, NotificationImportance);
     this.playSound = AssertUtils.getValueOrDefault(
         NOTIFICATION_PLAY_SOUND, this.playSound, bool);
+    this.criticalAlerts = AssertUtils.getValueOrDefault(
+        NOTIFICATION_CRITICAL_ALERTS, this.criticalAlerts, bool);
     this.soundSource = AssertUtils.getValueOrDefault(
         NOTIFICATION_SOUND_SOURCE, this.soundSource, String);
     this.enableVibration = AssertUtils.getValueOrDefault(
@@ -136,6 +148,7 @@ class NotificationChannel extends Model {
       NOTIFICATION_CHANNEL_KEY: channelKey,
       NOTIFICATION_CHANNEL_NAME: channelName,
       NOTIFICATION_CHANNEL_DESCRIPTION: channelDescription,
+      NOTIFICATION_CHANNEL_GROUP_KEY: channelGroupKey,
       NOTIFICATION_CHANNEL_SHOW_BADGE: channelShowBadge,
       NOTIFICATION_PLAY_SOUND: playSound,
       NOTIFICATION_SOUND_SOURCE: soundSource,
@@ -156,6 +169,7 @@ class NotificationChannel extends Model {
       NOTIFICATION_DEFAULT_RINGTONE_TYPE:
           AssertUtils.toSimpleEnumString(defaultRingtoneType),
       NOTIFICATION_LOCKED: locked,
+      NOTIFICATION_CRITICAL_ALERTS: criticalAlerts,
       NOTIFICATION_ONLY_ALERT_ONCE: onlyAlertOnce
     };
   }
@@ -169,6 +183,9 @@ class NotificationChannel extends Model {
         NOTIFICATION_CHANNEL_DESCRIPTION, dataMap, String);
     this.channelShowBadge = AssertUtils.extractValue(
         NOTIFICATION_CHANNEL_SHOW_BADGE, dataMap, bool);
+
+    this.channelGroupKey = AssertUtils.extractValue(
+        NOTIFICATION_CHANNEL_GROUP_KEY, dataMap, String);
 
     this.playSound =
         AssertUtils.extractValue(NOTIFICATION_PLAY_SOUND, dataMap, bool);
@@ -215,6 +232,9 @@ class NotificationChannel extends Model {
         AssertUtils.extractValue(NOTIFICATION_LED_ON_MS, dataMap, int);
     this.ledOffMs =
         AssertUtils.extractValue(NOTIFICATION_LED_OFF_MS, dataMap, int);
+
+    this.criticalAlerts =
+        AssertUtils.extractValue(NOTIFICATION_CRITICAL_ALERTS, dataMap, bool);
 
     return this;
   }

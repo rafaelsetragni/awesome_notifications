@@ -11,10 +11,7 @@ import '../definitions.dart'
         FOREGROUND_HAS_FOREGROUND,
         FOREGROUND_NOTIFICATION_DATA,
         FOREGROUND_SERVICE_TYPE,
-        FOREGROUND_START_TYPE,
-        NOTIFICATION_ACTION_BUTTONS,
-        NOTIFICATION_BUTTONS,
-        NOTIFICATION_CONTENT;
+        FOREGROUND_START_TYPE;
 import '../models/notification_content.dart';
 import '../models/received_models/notification_model.dart';
 

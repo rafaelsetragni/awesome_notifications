@@ -1,8 +1,11 @@
 package me.carda.awesome_notifications.notifications.managers;
 
+import android.Manifest;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -13,12 +16,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.enumerators.DefaultRingtoneType;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationImportance;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationPermission;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
+import me.carda.awesome_notifications.notifications.models.NotificationChannelGroupModel;
 import me.carda.awesome_notifications.notifications.models.NotificationChannelModel;
 import me.carda.awesome_notifications.utils.AudioUtils;
 import me.carda.awesome_notifications.utils.BooleanUtils;
@@ -289,6 +296,19 @@ public class ChannelManager {
 
         newAndroidNotificationChannel.setDescription(newChannel.channelDescription);
 
+        NotificationChannelGroupModel channelGroup = null;
+        if(!StringUtils.isNullOrEmpty(newChannel.channelGroupKey)){
+            channelGroup = ChannelGroupManager.getChannelGroupByKey(context, newChannel.channelGroupKey);
+
+            if(channelGroup != null)
+                newAndroidNotificationChannel.setGroup(newChannel.channelGroupKey);
+            else
+                Log.e(TAG, "Channel group "+newChannel.channelGroupKey+" does not exist.");
+        }
+
+        if(channelGroup != null)
+            newAndroidNotificationChannel.setGroup(newChannel.channelGroupKey);
+
         if (newChannel.playSound) {
 
             /// TODO NEED TO IMPROVE AUDIO RESOURCES TO BE MORE VERSATILE, SUCH AS BITMAP ONES
@@ -314,6 +334,17 @@ public class ChannelManager {
 
         if (enableLights && newChannel.ledColor != null) {
             newAndroidNotificationChannel.setLightColor(newChannel.ledColor);
+        }
+
+        if(newChannel.criticalAlerts) {
+            if(PermissionManager.isSpecifiedPermissionGloballyAllowed(context, NotificationPermission.CriticalAlert)){
+                try {
+                    notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
+                } catch (Exception e){
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+            newAndroidNotificationChannel.setBypassDnd(true);
         }
 
         newAndroidNotificationChannel.setShowBadge(BooleanUtils.getValue(newChannel.channelShowBadge));

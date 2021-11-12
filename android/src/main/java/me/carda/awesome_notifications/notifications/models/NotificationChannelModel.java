@@ -28,6 +28,8 @@ public class NotificationChannelModel extends Model {
     public String channelDescription;
     public Boolean channelShowBadge;
 
+    public String channelGroupKey;
+
     public NotificationImportance importance;
 
     public Boolean playSound;
@@ -54,6 +56,8 @@ public class NotificationChannelModel extends Model {
 
     public Boolean locked;
     public Boolean onlyAlertOnce;
+
+    public Boolean criticalAlerts;
 
     public NotificationPrivacy defaultPrivacy;
 
@@ -89,6 +93,7 @@ public class NotificationChannelModel extends Model {
         NotificationChannelModel channelCopied = this.clone();
         channelCopied.channelName = "";
         channelCopied.channelDescription = "";
+        channelCopied.groupKey = null;
 
         String jsonData = channelCopied.toJson();
         return channelKey + "_" + StringUtils.digestString(jsonData);
@@ -118,6 +123,7 @@ public class NotificationChannelModel extends Model {
             CompareUtils.assertEqualObjects(other.ledOffMs, this.ledOffMs) &&
             CompareUtils.assertEqualObjects(other.groupKey, this.groupKey) &&
             CompareUtils.assertEqualObjects(other.locked, this.locked) &&
+            CompareUtils.assertEqualObjects(other.criticalAlerts, this.criticalAlerts) &&
             CompareUtils.assertEqualObjects(other.onlyAlertOnce, this.onlyAlertOnce) &&
             CompareUtils.assertEqualObjects(other.defaultPrivacy, this.defaultPrivacy) &&
             CompareUtils.assertEqualObjects(other.defaultRingtoneType, this.defaultRingtoneType) &&
@@ -144,8 +150,12 @@ public class NotificationChannelModel extends Model {
         channelDescription = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_DESCRIPTION, String.class);
         channelShowBadge   = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE, Boolean.class);
 
+        channelGroupKey    = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_GROUP_KEY, String.class);
+
         playSound = getValueOrDefault(arguments, Definitions.NOTIFICATION_PLAY_SOUND, Boolean.class);
         soundSource = getValueOrDefault(arguments, Definitions.NOTIFICATION_SOUND_SOURCE, String.class);
+
+        criticalAlerts   = getValueOrDefault(arguments, Definitions.NOTIFICATION_CRITICAL_ALERTS, Boolean.class);
 
         enableVibration  = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLE_VIBRATION, Boolean.class);
         vibrationPattern = getValueOrDefault(arguments, Definitions.NOTIFICATION_VIBRATION_PATTERN, long[].class);
@@ -192,6 +202,9 @@ public class NotificationChannelModel extends Model {
         if(this.channelShowBadge != null)
             returnedObject.put(Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE, this.channelShowBadge);
 
+        if(this.channelGroupKey != null)
+            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_GROUP_KEY, this.channelGroupKey);
+
         if(this.playSound != null)
             returnedObject.put(Definitions.NOTIFICATION_PLAY_SOUND, this.playSound);
         if(this.soundSource != null)
@@ -233,6 +246,9 @@ public class NotificationChannelModel extends Model {
             returnedObject.put(Definitions.NOTIFICATION_LOCKED, this.locked);
         if(this.onlyAlertOnce != null)
             returnedObject.put(Definitions.NOTIFICATION_ONLY_ALERT_ONCE, this.onlyAlertOnce);
+
+        if(this.criticalAlerts != null && this.criticalAlerts)
+            returnedObject.put(Definitions.NOTIFICATION_CRITICAL_ALERTS, this.criticalAlerts);
 
         return returnedObject;
     }
@@ -295,6 +311,7 @@ public class NotificationChannelModel extends Model {
         cloned.defaultRingtoneType = this.defaultRingtoneType;
         cloned.groupSort = this.groupSort;
         cloned.groupAlertBehavior = this.groupAlertBehavior;
+        cloned.criticalAlerts = this.criticalAlerts;
 
         return cloned;
     }

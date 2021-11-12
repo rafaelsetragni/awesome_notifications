@@ -31,6 +31,8 @@ public abstract class NotificationScheduleModel extends Model {
         repeats = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_REPEATS, Boolean.class);
         allowWhileIdle = getValueOrDefault(arguments, Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, Boolean.class);
 
+        preciseAlarm = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_PRECISE_ALARM, Boolean.class);
+
         return this;
     }
 
@@ -43,6 +45,8 @@ public abstract class NotificationScheduleModel extends Model {
 
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_REPEATS, repeats);
         returnedObject.put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, allowWhileIdle);
+
+        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_PRECISE_ALARM, preciseAlarm);
 
         return returnedObject;
     }

@@ -1,5 +1,6 @@
 package me.carda.awesome_notifications.notifications.managers;
 
+import android.app.AlarmManager;
 import android.content.Context;
 
 import java.util.List;
@@ -69,6 +70,21 @@ public class ScheduleManager {
                 NotificationScheduler.cancelSchedule(context, notificationModel.content.id);
             }
         }
+    }
+
+    public static AlarmManager getAlarmManager(Context context) {
+        return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    }
+
+    public static boolean isPreciseAlarmEnable(Context context){
+        AlarmManager alarmManager = getAlarmManager(context);
+        return isPreciseAlarmEnable(alarmManager);
+    }
+
+    public static boolean isPreciseAlarmEnable(AlarmManager alarmManager){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S /*Android 12*/)
+            return alarmManager.canScheduleExactAlarms();
+        return true;
     }
 
     public static void commitChanges(Context context){

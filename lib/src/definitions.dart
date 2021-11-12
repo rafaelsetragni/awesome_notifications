@@ -19,6 +19,7 @@ const EXTRA_BROADCAST_MESSAGE = 'notification';
 const INITIALIZE_DEBUG_MODE = "debug";
 const INITIALIZE_DEFAULT_ICON = "defaultIcon";
 const INITIALIZE_CHANNELS = "initializeChannels";
+const INITIALIZE_CHANNELS_GROUPS = "initializeChannelGroups";
 
 const NOTIFICATION_CONTENT = "content";
 const NOTIFICATION_SCHEDULE = "schedule";
@@ -158,6 +159,9 @@ const NOTIFICATION_SCHEDULE_INTERVAL = 'interval';
 const NOTIFICATION_SCHEDULE_ALLOW_WHILE_IDLE = 'allowWhileIdle';
 const NOTIFICATION_SCHEDULE_REPEATS = 'repeats';
 
+const NOTIFICATION_CHANNEL_GROUP_KEY = 'channelGroupKey';
+const NOTIFICATION_CHANNEL_GROUP_NAME = 'channelGroupName';
+
 const NOTIFICATION_TITLE = 'title';
 const NOTIFICATION_BODY = 'body';
 const NOTIFICATION_SUMMARY = 'summary';
@@ -186,7 +190,8 @@ const NOTIFICATION_PLATFORM_CONFIGURATION = 'platformConfiguration';
 const NOTIFICATION_PRIVATE_MESSAGE = "privateMessage";
 const NOTIFICATION_DEFAULT_PRIVACY = "defaultPrivacy";
 const NOTIFICATION_DEFAULT_RINGTONE_TYPE = "defaultRingtoneType";
-const NOTIFICATION_PRIVACY = "privacy";
+const NOTIFICATION_PRIVACY = 'privacy';
+const NOTIFICATION_CATEGORY = 'category';
 const NOTIFICATION_AUTO_DISMISSIBLE = 'autoDismissible';
 const NOTIFICATION_SHOW_IN_COMPACT_VIEW = 'showInCompactView';
 const NOTIFICATION_LOCKED = 'locked';
@@ -194,6 +199,7 @@ const NOTIFICATION_ICON = 'icon';
 const NOTIFICATION_WAKE_UP_SCREEN = 'wakeUpScreen';
 const NOTIFICATION_FULL_SCREEN_INTENT = 'fullScreenIntent';
 const NOTIFICATION_CRITICAL_ALERT = 'criticalAlert';
+const NOTIFICATION_CRITICAL_ALERTS = 'criticalAlerts';
 const NOTIFICATION_PLAY_SOUND = 'playSound';
 const NOTIFICATION_SOUND_SOURCE = 'soundSource';
 const NOTIFICATION_ENABLE_VIBRATION = 'enableVibration';
@@ -274,6 +280,7 @@ class Definitions {
     NOTIFICATION_BUTTON_KEY_INPUT: '',
     NOTIFICATION_IS_DANGEROUS_OPTION: false,
     NOTIFICATION_WAKE_UP_SCREEN: false,
-    NOTIFICATION_CRITICAL_ALERT: false
+    NOTIFICATION_CRITICAL_ALERT: false,
+    NOTIFICATION_CRITICAL_ALERTS: false
   };
 }

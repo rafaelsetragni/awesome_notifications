@@ -423,6 +423,7 @@ public class NotificationBuilder {
 
         setLockedNotification(notificationModel, channel, builder);
         setImportance(channel, builder);
+        setCategory(notificationModel, builder);
 
         setSound(context, notificationModel, channel, builder);
         setVibrationPattern(channel, builder);
@@ -495,6 +496,11 @@ public class NotificationBuilder {
         // Conversion to Priority
         int priorityValue = Math.min(Math.max(IntegerUtils.extractInteger(channel.importance) - 2, -2), 2);
         builder.setPriority(priorityValue);
+    }
+
+    private void setCategory(NotificationModel notificationModel, NotificationCompat.Builder builder){
+        if(notificationModel.content.category != null)
+            builder.setCategory(notificationModel.content.category.rawValue);
     }
 
     private void setOnlyAlertOnce(NotificationModel notificationModel, NotificationChannelModel channel, NotificationCompat.Builder builder) {

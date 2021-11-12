@@ -226,10 +226,10 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
     }*/
 
     private void scheduleNotificationWithAlarmManager(Context context, NotificationModel notificationModel, Calendar nextValidDate, PendingIntent pendingIntent) {
-        AlarmManager alarmManager = getAlarmManager(context);
+        AlarmManager alarmManager = ScheduleManager.getAlarmManager(context);
         long timeMillis = nextValidDate.getTimeInMillis();
 
-        if (BooleanUtils.getValue(notificationModel.schedule.preciseAlarm) && isPreciseAlarmEnable(alarmManager)) {
+        if (BooleanUtils.getValue(notificationModel.schedule.preciseAlarm) && ScheduleManager.isPreciseAlarmEnable(alarmManager)) {
             AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(timeMillis, pendingIntent);
             alarmManager.setAlarmClock(info, pendingIntent);
             return;
@@ -241,17 +241,6 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
         }
 
         AlarmManagerCompat.setExact(alarmManager, AlarmManager.RTC_WAKEUP, timeMillis, pendingIntent);
-    }
-
-    public static boolean isPreciseAlarmEnable(Context context){
-        AlarmManager alarmManager = getAlarmManager(context);
-        return isPreciseAlarmEnable(alarmManager);
-    }
-
-    public static boolean isPreciseAlarmEnable(AlarmManager alarmManager){
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S /*Android 12*/)
-            return alarmManager.canScheduleExactAlarms();
-        return true;
     }
 
     public static void refreshScheduleNotifications(Context context) {
@@ -306,7 +295,7 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                     context, id, intent,
                     PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT );
 
-            AlarmManager alarmManager = getAlarmManager(context);
+            AlarmManager alarmManager = ScheduleManager.getAlarmManager(context);
             alarmManager.cancel(pendingIntent);
         }
     }
@@ -318,9 +307,5 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                 _removeFromAlarm(context, schedule.content.id);
             }
         }
-    }
-
-    private static AlarmManager getAlarmManager(Context context) {
-        return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 }

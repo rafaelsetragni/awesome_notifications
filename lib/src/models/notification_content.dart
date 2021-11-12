@@ -58,7 +58,7 @@ class NotificationContent extends BaseNotificationContent {
       this.createdDate,
       this.displayOnForeground,
       this.displayOnBackground,
-      this.displayedDate})
+      this.displayedDate, category})
       : super(
             id: id,
             channelKey: channelKey,

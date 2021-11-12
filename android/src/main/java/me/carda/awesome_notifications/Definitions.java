@@ -25,9 +25,9 @@ public interface Definitions {
 
     String BADGE_COUNT = "badgeCount";
     String INITIALIZE_DEBUG_MODE = "debug";
-    String INITIALIZE_CHANNELS = "initializeChannels";
     String INITIALIZE_DEFAULT_ICON = "defaultIcon";
-    String INITIALIZE_REQUIRE_PERMISSION = "requirePermission";
+    String INITIALIZE_CHANNELS = "initializeChannels";
+    String INITIALIZE_CHANNEL_GROUPS = "initializeChannelGroups";
 
     String BROADCAST_CREATED_NOTIFICATION   = "broadcast.awesome_notifications.CREATED_NOTIFICATION";
     String BROADCAST_DISPLAYED_NOTIFICATION = "broadcast.awesome_notifications.DISPLAYED_NOTIFICATION";
@@ -44,6 +44,7 @@ public interface Definitions {
     String SHARED_MANAGER = "sharedManager";
     String SHARED_CHANNELS = "channels";
     String SHARED_CREATED = "created";
+    String SHARED_CHANNEL_GROUP = "channelGroup";
     String SHARED_DISPLAYED = "displayed";
     String SHARED_DISMISSED = "dismissed";
     String SHARED_SCHEDULED_NOTIFICATIONS = "schedules";
@@ -179,6 +180,7 @@ public interface Definitions {
     String NOTIFICATION_FULL_SCREEN_INTENT = "fullScreenIntent";
     String NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen";
     String NOTIFICATION_CRITICAL_ALERT = "criticalAlert";
+    String NOTIFICATION_CRITICAL_ALERTS = "criticalAlerts";
     String NOTIFICATION_PLAY_SOUND = "playSound";
     String NOTIFICATION_SOUND_SOURCE = "soundSource";
     String NOTIFICATION_ENABLE_VIBRATION = "enableVibration";
@@ -187,6 +189,7 @@ public interface Definitions {
     String NOTIFICATION_GROUP_SORT = "groupSort";
     String NOTIFICATION_GROUP_ALERT_BEHAVIOR = "groupAlertBehavior";
     String NOTIFICATION_PRIVACY = "privacy";
+    String NOTIFICATION_CATEGORY = "category";
     String NOTIFICATION_CUSTOM_SOUND = "customSound";
     String NOTIFICATION_DEFAULT_PRIVACY = "defaultPrivacy";
     String NOTIFICATION_DEFAULT_RINGTONE_TYPE = "defaultRingtoneType";
@@ -196,6 +199,8 @@ public interface Definitions {
     String NOTIFICATION_CHANNEL_NAME = "channelName";
     String NOTIFICATION_CHANNEL_DESCRIPTION = "channelDescription";
     String NOTIFICATION_CHANNEL_SHOW_BADGE = "channelShowBadge";
+    String NOTIFICATION_CHANNEL_GROUP_NAME = "channelGroupName";
+    String NOTIFICATION_CHANNEL_GROUP_KEY = "channelGroupKey";
     String NOTIFICATION_IMPORTANCE = "importance";
     String NOTIFICATION_COLOR = "color";
     String NOTIFICATION_BACKGROUND_COLOR = "backgroundColor";
@@ -250,5 +255,6 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, false);
         put(Definitions.NOTIFICATION_WAKE_UP_SCREEN, false);
         put(Definitions.NOTIFICATION_CRITICAL_ALERT, false);
+        put(Definitions.NOTIFICATION_CRITICAL_ALERTS, false);
     }};
 }

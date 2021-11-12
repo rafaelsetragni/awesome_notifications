@@ -10,6 +10,7 @@ import java.util.List;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.notifications.enumerators.MediaSource;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationCategory;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLayout;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
@@ -61,9 +62,13 @@ public class NotificationContentModel extends Model {
 
     public NotificationLayout notificationLayout;
 
+    public NotificationCategory notificationCategory;
+
     public NotificationSource createdSource;
     public NotificationLifeCycle createdLifeCycle;
     public NotificationLifeCycle displayedLifeCycle;
+    public NotificationCategory category;
+
     public String createdDate;
     public String displayedDate;
 
@@ -121,6 +126,9 @@ public class NotificationContentModel extends Model {
 
         privacy =
                 getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_PRIVACY, NotificationPrivacy.class, NotificationPrivacy.values());
+
+        category =
+                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_CATEGORY, NotificationCategory.class, NotificationCategory.values());
 
         privateMessage = getValueOrDefault(arguments, Definitions.NOTIFICATION_PRIVATE_MESSAGE, String.class);
 
@@ -184,6 +192,10 @@ public class NotificationContentModel extends Model {
         returnedObject.put(Definitions.NOTIFICATION_CREATED_DATE, this.createdDate);
 
         returnedObject.put(Definitions.NOTIFICATION_CHANNEL_KEY, this.channelKey);
+
+        if(this.category != null)
+            returnedObject.put(Definitions.NOTIFICATION_CATEGORY,
+                    this.category.toString());
 
         if(this.autoDismissible != null)
             returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, this.autoDismissible);
@@ -262,7 +274,7 @@ public class NotificationContentModel extends Model {
     public void validate(Context context) throws AwesomeNotificationException {
 
         if(ChannelManager.getChannelByKey(context, channelKey) == null)
-            throw new AwesomeNotificationException("Notification channel '"+channelKey+"' does not exists.");
+            throw new AwesomeNotificationException("Notification channel '"+channelKey+"' does not exist.");
 
         validateIcon(context);
 

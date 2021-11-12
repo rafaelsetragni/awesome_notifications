@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
@@ -29,6 +28,7 @@ import 'package:awesome_notifications/src/utils/date_utils.dart';
 import 'package:rxdart/rxdart.dart' show BehaviorSubject;
 
 import 'enumerators/notification_permission.dart';
+import 'models/notification_channel_group.dart';
 
 class AwesomeNotifications {
   static String? rootNativePath;
@@ -140,7 +140,7 @@ class AwesomeNotifications {
   /// OBS 2: [channels] are updated if they already exists
   Future<bool> initialize(
       String? defaultIcon, List<NotificationChannel> channels,
-      {bool debug = false}) async {
+      {List<NotificationChannelGroup>? channelGroups, bool debug = false}) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     _channel.setMethodCallHandler(_handleMethod);
@@ -149,6 +149,12 @@ class AwesomeNotifications {
     for (NotificationChannel channel in channels) {
       serializedChannels.add(channel.toMap());
     }
+
+    List<dynamic> serializedChannelGroups = [];
+    if(channelGroups != null)
+      for (NotificationChannelGroup channelGroup in channelGroups) {
+        serializedChannelGroups.add(channelGroup.toMap());
+      }
 
     String? defaultIconPath;
     if (kIsWeb) {
@@ -165,7 +171,8 @@ class AwesomeNotifications {
     var result = await _channel.invokeMethod(CHANNEL_METHOD_INITIALIZE, {
       INITIALIZE_DEBUG_MODE: debug,
       INITIALIZE_DEFAULT_ICON: defaultIconPath,
-      INITIALIZE_CHANNELS: serializedChannels
+      INITIALIZE_CHANNELS: serializedChannels,
+      INITIALIZE_CHANNELS_GROUPS: serializedChannelGroups
     });
 
     localTimeZoneIdentifier = await _channel

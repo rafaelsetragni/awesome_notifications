@@ -118,12 +118,18 @@ AwesomeNotifications().initialize(
     'resource://drawable/res_app_icon',
     [
         NotificationChannel(
+            channelGroupKey: 'basic_channel_group',
             channelKey: 'basic_channel',
             channelName: 'Basic notifications',
             channelDescription: 'Notification channel for basic tests',
             defaultColor: Color(0xFF9D50DD),
             ledColor: Colors.white
-        )
+        ),
+        // Channel groups are only visual and are not required
+        channelGroups: [
+          NotificationChannelGroup(channelGroupkey: 'basic_channel_group', channelGroupName: 'Basic group')
+        ],
+        debug: true
     ]
 );
 ```
@@ -316,7 +322,29 @@ Notifications are received by local code or Push service using native code, so t
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/notification-life-cycle.png)
 
-<br>
+## Notification's Category
+
+Notification's category is a group of predefined categories that best describes the notification nature and may be used by some systems for ranking, delay or filter the notifications. Its recommended to categorize correctly your notifications.
+
+ * NotificationCategory.Alarm: Alarm or timer.
+ * NotificationCategory.Call: incoming call (voice or video) or similar synchronous communication request
+ * NotificationCategory.Email: asynchronous bulk message (email).
+ * NotificationCategory.Error: error in background operation or authentication status.
+ * NotificationCategory.Event: calendar event.
+ * NotificationCategory.LocalSharing: temporarily sharing location.
+ * NotificationCategory.Message: incoming direct message (SMS, instant message, etc.).
+ * NotificationCategory.MissedCall: incoming call (voice or video) or similar synchronous communication request
+ * NotificationCategory.Navigation: map turn-by-turn navigation.
+ * NotificationCategory.Progress: progress of a long-running background operation.
+ * NotificationCategory.Promo: promotion or advertisement.
+ * NotificationCategory.Recommendation: a specific, timely recommendation for a single thing. For example, a news app might want to recommend a news story it believes the user will want to read next.
+ * NotificationCategory.Reminder: user-scheduled reminder.
+ * NotificationCategory.Service: indication of running background service.
+ * NotificationCategory.Social: social network or sharing update.
+ * NotificationCategory.Status: ongoing information about device or contextual status.
+ * NotificationCategory.StopWatch: running stopwatch.
+ * NotificationCategory.Transport: media transport control for playback.
+ * NotificationCategory.Workout: tracking a user's workout.
 
 ## Flutter Streams
 
@@ -868,6 +896,29 @@ Next, you have to add the `<service>` tag to your `AndroidManifest.xml`. Inside 
             android:foregroundServiceType=As you like
 ></service>
 ```
+
+And finally, to create the notification as foreground service, use the method startForeground and set the notification category to Service:
+
+```Dart
+    AndroidForegroundService.startForeground(
+      content: NotificationContent(
+          id: 2341234,
+          body: 'Service is running!',
+          title: 'Android Foreground Service',
+          channelKey: 'basic_channel',
+          bigPicture: 'asset://assets/images/android-bg-worker.jpg',
+          notificationLayout: NotificationLayout.BigPicture,
+          category: NotificationCategory.Service
+      ),
+      actionButtons: [
+        NotificationActionButton(
+            key: 'SHOW_SERVICE_DETAILS',
+            label: 'Show details'
+        )
+      ]
+    );
+```
+
 While the `android:name` must exactly match this value, you can configure the other parameters as you like, although it is recommended to copy the values for `android:enabled`, `android:exported` and `android:stopWithTask`. Suitable values for `foregroundServiceType` can be found [here](https://developer.android.com/reference/android/app/Service#startForeground(int,%20android.app.Notification,%20int)).
 
 ### IMPORTANT
