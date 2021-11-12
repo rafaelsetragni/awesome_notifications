@@ -778,7 +778,7 @@ class _HomePageState extends State<HomePage> {
             TextNote(
                 'Full-Screen Intents are notifications that can launch in full-screen mode. They are indicate since Android 9 to receiving calls and alarm features.\n\n'
                 'To enable this feature on Android, is necessary to add the USE_FULL_SCREEN_INTENT permission into your AndroidManifest.xml file and explicity request the user permission since Android 11. For iOS, this option has no effect.'),
-            SimpleButton('Schedule notification with wake up locked screen option',
+            SimpleButton('Schedule notification with full screen locked screen option',
                 onPressed: () => scheduleFullScrenNotification(27)),
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,

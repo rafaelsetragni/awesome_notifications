@@ -784,7 +784,7 @@ Future<void> scheduleNotificationWithWakeUp(int id) async {
     FULL SCREEEN INTENT NOTIFICATIONS
 ************************************************ */
 
-Future<void> scheduleFullScrenNotification(int id) async {
+/*Future<void> scheduleFullScrenNotification(int id) async {
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
@@ -796,6 +796,22 @@ Future<void> scheduleFullScrenNotification(int id) async {
           bigPicture:
           'https://media.tenor.com/images/5591f440176598f96050b09c943052c0/tenor.png',
           color: Colors.blueGrey),
+      schedule: NotificationInterval(interval: 5));
+}*/
+
+Future<void> scheduleFullScrenNotification(int id) async {
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: id,
+        channelKey: 'scheduled',
+        title: 'Hey! Wake up!!',
+        body: 'Its time to wake up!',
+        fullScreenIntent: true,
+        notificationLayout: NotificationLayout.BigPicture,
+        bigPicture: 'asset://assets/images/delivery.jpeg',
+        payload: {'uuid': 'uuid-test'},
+        autoDismissible: false,
+      ),
       schedule: NotificationInterval(interval: 5));
 }
 

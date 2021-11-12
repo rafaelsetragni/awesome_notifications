@@ -106,6 +106,7 @@ public class NotificationContentModel extends Model {
 
         wakeUpScreen = getValueOrDefault(arguments, Definitions.NOTIFICATION_WAKE_UP_SCREEN, Boolean.class);
         criticalAlert = getValueOrDefault(arguments, Definitions.NOTIFICATION_CRITICAL_ALERT, Boolean.class);
+        fullScreenIntent = getValueOrDefault(arguments, Definitions.NOTIFICATION_FULL_SCREEN_INTENT, Boolean.class);
 
         showWhen = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_WHEN, Boolean.class);
         locked = getValueOrDefault(arguments, Definitions.NOTIFICATION_LOCKED, Boolean.class);
@@ -155,6 +156,8 @@ public class NotificationContentModel extends Model {
         returnedObject.put(Definitions.NOTIFICATION_WAKE_UP_SCREEN, this.wakeUpScreen);
         returnedObject.put(Definitions.NOTIFICATION_CRITICAL_ALERT, this.criticalAlert);
         returnedObject.put(Definitions.NOTIFICATION_SHOW_WHEN, this.showWhen);
+        returnedObject.put(Definitions.NOTIFICATION_FULL_SCREEN_INTENT, this.fullScreenIntent);
+
 
         returnedObject.put(Definitions.NOTIFICATION_LOCKED, this.locked);
 
