@@ -432,7 +432,7 @@ public class NotificationBuilder {
         setLargeIcon(context, notificationModel, builder);
         setLayoutColor(context, notificationModel, channel, builder);
 
-        setFullScreenIntent(context, notificationModel, builder);
+        setFullScreenIntent(context, pendingIntent, notificationModel, builder);
 
         if(!isSummary)
             setBadge(context, channel, builder);
@@ -463,14 +463,9 @@ public class NotificationBuilder {
             activateCritialAlert(context);
     }
 
-    private void setFullScreenIntent(Context context, NotificationModel notificationModel, NotificationCompat.Builder builder) {
+    private void setFullScreenIntent(Context context, PendingIntent pendingIntent, NotificationModel notificationModel, NotificationCompat.Builder builder) {
         if (BooleanUtils.getValue(notificationModel.content.fullScreenIntent)) {
-
-            Intent fullScreenIntent = new Intent(context, AwesomeNotificationsPlugin.class);
-            PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(context, 0,
-                    fullScreenIntent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-            builder.setFullScreenIntent(fullScreenPendingIntent, true);
+            builder.setFullScreenIntent(pendingIntent, true);
         }
     }
 
