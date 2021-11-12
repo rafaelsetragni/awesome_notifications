@@ -127,7 +127,10 @@ AwesomeNotifications().initialize(
         ),
         // Channel groups are only visual and are not required
         channelGroups: [
-          NotificationChannelGroup(channelGroupkey: 'basic_channel_group', channelGroupName: 'Basic group')
+          NotificationChannelGroup(
+            channelGroupkey: 'basic_channel_group',
+            channelGroupName: 'Basic group'
+          )
         ],
         debug: true
     ]
