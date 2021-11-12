@@ -452,17 +452,18 @@ If the app is terminated (killed):
 <br>
 
 
-## Scheduling a notification
+## Scheduling a Notification
 
 Schedules could be created from a UTC or local time zone, and specifying a time interval or setting a calendar filter. Notifications could be scheduled even remotely.
 Atention: for iOS, is not possible to define the correct `displayedDate`, because is not possible to run exactely at same time with the notification schedules when it arives in the user status bar.
 
-Notifications could be scheduled into two exclusive types:
+To send notifications schedules, you need to instantiate one of the classes bellow in the notificaiton property 'schedule':
+    
+    * NotificationCalendar: Creates a notification scheduled to be displayed when the setted date components matchs the current date. If a time component is setted to null, so any value is considered valid to produce the next valid date. Only one value is allowed by each component.
+    * NotificationInterval: Creates a notification scheduled to be displayed at each interval time, starting from the next valid interval.
+    * NotificationAndroidCrontab: Creates a notification scheduled to be displayed based on a list of precise dates or a crontab rule, with seconds precision. To know more about how to create a valid crontab rule, take a look at [this article](https://www.baeldung.com/cron-expressions).
 
-- Interval: represents a interval of seconds that the notification should wait to be displayed
-- Calendar: represents a simple set of date rules that the notification should obey to be displayed
-
-Also, both of then could be configured using:
+Also, all of then could be configured using:
 
 - timeZone: describe wich time zone that schedule is based (valid examples: America/Sao_Paulo, America/Los_Angeles, GMT+01:00, Europe/London, UTC)
 - allowWhileIdle: Determines if notification will send, even when the device is in critical situation, such as low battery.
@@ -473,7 +474,7 @@ For time zones, please note that:
 - Dates with UTC time zones are triggered at the same time in all parts of the planet and are not affected by daylight rules.
 - Dates with local time zones, defined such "GMT-07: 00", are not affected by daylight rules.
 - Dates with local time zones, defined such "Europe / Lisbon", are affected by daylight rules, especially when scheduled based on a calendar filter.
-
+    
 Here are some practical examples of how to create a notification scheduled:
 
 ```Dart
@@ -498,11 +499,15 @@ await AwesomeNotifications().createNotification(
       id: id,
       channelKey: 'scheduled',
       title: 'wait 5 seconds to show',
-      body: 'now is 5 seconds later'
+      body: 'now is 5 seconds later',
+      wakeUpScreen: true,
+      category: NotificationCategory.Alarm,
   ),
   schedule: NotificationInterval(
       interval: 5,
-      timeZone: localTimeZone
+      timeZone: localTimeZone,
+      preciseAlarm: true,
+      timezone: await AwesomeNotifications().getLocalTimeZoneIdentifier()
   );  
 ```
 
@@ -515,7 +520,7 @@ await AwesomeNotifications().createNotification(
           body: 'This notification was schedule to repeat at every single minute at clock.',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/melted-clock.png'),
-      schedule: NotificationCalendar(second: 0, millisecond: 0, timeZone: localTimeZone, repeats: true));
+      schedule: NotificationCalendar(second: 0, timeZone: localTimeZone, repeats: true));
 ```
 
 ```Dart
@@ -529,6 +534,8 @@ await AwesomeNotifications().createNotification(
         ' $timeZoneIdentifier (' +
         (Utils.DateUtils.parseDateToString(scheduleTime.toUtc()) ?? '?') +
         ' utc)',
+    wakeUpScreen: true,
+    category: NotificationCategory.Reminder,
     notificationLayout: NotificationLayout.BigPicture,
     bigPicture: 'asset://assets/images/delivery.jpeg',
     payload: {'uuid': 'uuid-test'},
@@ -536,6 +543,45 @@ await AwesomeNotifications().createNotification(
   ),
   schedule: NotificationCalendar.fromDate(date: scheduleTime));
 ```
+    
+## Notification Scheduling Precision 
+    
+It's important to keep in mind that some Android distributions could ignore or delay the schedule execution, if their algorithms judge it necessary to save the battery life, etc, and this intervention is even more common for repeating schedules. Im most cases this behavior is recommended, since a battery hunger app could denigrate the application and the manufacture image. So, you need to consider this fact into your business logic.
+    
+But, for some cases where the schedules precision is a MUST requirement, you can use some features to ensure the execution in the correct time:
+    
+* Set the notification's category to a critical category, such as Alarm, Reminder or Call.
+* Set the `preciseAlarm` property to true. For Android versions greater or equal than 12, you need to request explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications` or take the user to the permission page calling `showAlarmPage`.
+* Set `criticalAlerts` channel property and notification content property to true. This feature allows you to show notification and play sounds even when the device is on silent / Do not Disturbe mode. Because of it, this feature is considerer highly sensitive and you must request Apple special permissions to use it. On Android, for versions greater or equal than 11, you need to request explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications`.
+    
+    
+To enable precise alarms, you need to add the `SCHEDULE_EXACT_ALARM` permission to your `AndroidManifest.xml` file, inside the `Android/app/src/main/` folder
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+   package="com.example">
+   <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+   <application>
+       ...
+   </application>
+</manifest>
+```
+    
+To enable critical alerts, you need to add the `ACCESS_NOTIFICATION_POLICY` permission to your `AndroidManifest.xml` file, inside the `Android/app/src/main/` folder
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+   package="com.example">
+   <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+   <application>
+       ...
+   </application>
+</manifest>
+```
+    
+For iOS, you must submit a request to Apple to enable it, as described [in this post](https://medium.com/@shashidharyamsani/implementing-ios-critical-alerts-7d82b4bb5026).
+    
+OBS: **Critical alerts still in development and should not be used in production mode.**
 
 <br>
 
@@ -768,51 +814,7 @@ Main methods to manipulate a notification channel:
 <br>
 <br>
 
-## Schedules
-
-To send notifications schedules, you need to instantiate one of the classes bellow in the notificaiton property 'schedule':
-    
-    * NotificationCalendar: Creates a notification scheduled to be displayed when the setted date components matchs the current date. If a time component is setted to null, so any value is considered valid to produce the next valid date. Only one value is allowed by each component.
-    * NotificationInterval: Creates a notification scheduled to be displayed at each interval time, starting from the next valid interval.
-    * NotificationAndroidCrontab: Creates a notification scheduled to be displayed based on a list of precise dates or a crontab rule, with seconds precision. To know more about how to create a valid crontab rule, take a look at [this article](https://www.baeldung.com/cron-expressions).
-    
-It's important to keep in mind that some Android distributions could ignore or delay the schedule execution, if their algorithms judge it necessary to save the battery life, etc. Im most cases this behavior is recommended, since a battery hunger app could denigrate the application and the manufacture image. So, you need to consider this fact into your business logic.
-    
-But, for cases where the schedules precision is a MUST requirement, you can use some features to ensure the execution in the correct time:
-    
-    * Set the notification's category to a critical category, such as Alarm, Reminder or Call.
-    * Set the `preciseAlarm` property to true. For Android versions greater or equal than 12, you need to request explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications` or take the user to the permission page calling `showAlarmPage`.
-    * Set `criticalAlerts` channel property and notification content property to true. This feature allows you to show notification and play sounds even when the device is on silent / Do not Disturbe mode. Because of it, this feature is considerer highly sensitive and you must request Apple special permissions to use it. On Android, for versions greater or equal than 11, you need to request explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications`.
-    
-    
-To enable precise alarms, you need to add the `SCHEDULE_EXACT_ALARM` permission to your `AndroidManifest.xml` file, inside the `Android/app/src/main/` folder
-
-```xml
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-   package="com.example">
-   <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
-   <application>
-       ...
-   </application>
-</manifest>
-```
-    
-To enable critical alerts, you need to add the `ACCESS_NOTIFICATION_POLICY` permission to your `AndroidManifest.xml` file, inside the `Android/app/src/main/` folder
-
-```xml
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-   package="com.example">
-   <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
-   <application>
-       ...
-   </application>
-</manifest>
-```
-    
-For iOS, you must submit a request to Apple to enable it, as described [in this post](https://medium.com/@shashidharyamsani/implementing-ios-critical-alerts-7d82b4bb5026).
-    
-OBS: Critical alerts still in development and should not be used in production mode.
-    
+## Schedules    
     
 <br>
 
