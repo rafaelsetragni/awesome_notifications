@@ -329,25 +329,25 @@ Notifications are received by local code or Push service using native code, so t
 
 Notification's category is a group of predefined categories that best describes the notification nature and may be used by some systems for ranking, delay or filter the notifications. Its recommended to categorize correctly your notifications.
 
- * NotificationCategory.Alarm: Alarm or timer.
- * NotificationCategory.Call: incoming call (voice or video) or similar synchronous communication request
- * NotificationCategory.Email: asynchronous bulk message (email).
- * NotificationCategory.Error: error in background operation or authentication status.
- * NotificationCategory.Event: calendar event.
- * NotificationCategory.LocalSharing: temporarily sharing location.
- * NotificationCategory.Message: incoming direct message (SMS, instant message, etc.).
- * NotificationCategory.MissedCall: incoming call (voice or video) or similar synchronous communication request
- * NotificationCategory.Navigation: map turn-by-turn navigation.
- * NotificationCategory.Progress: progress of a long-running background operation.
- * NotificationCategory.Promo: promotion or advertisement.
- * NotificationCategory.Recommendation: a specific, timely recommendation for a single thing. For example, a news app might want to recommend a news story it believes the user will want to read next.
- * NotificationCategory.Reminder: user-scheduled reminder.
- * NotificationCategory.Service: indication of running background service.
- * NotificationCategory.Social: social network or sharing update.
- * NotificationCategory.Status: ongoing information about device or contextual status.
- * NotificationCategory.StopWatch: running stopwatch.
- * NotificationCategory.Transport: media transport control for playback.
- * NotificationCategory.Workout: tracking a user's workout.
+ * Alarm: Alarm or timer.
+ * Call: incoming call (voice or video) or similar synchronous communication request
+ * Email: asynchronous bulk message (email).
+ * Error: error in background operation or authentication status.
+ * Event: calendar event.
+ * LocalSharing: temporarily sharing location.
+ * Message: incoming direct message (SMS, instant message, etc.).
+ * MissedCall: incoming call (voice or video) or similar synchronous communication request
+ * Navigation: map turn-by-turn navigation.
+ * Progress: progress of a long-running background operation.
+ * Promo: promotion or advertisement.
+ * Recommendation: a specific, timely recommendation for a single thing. For example, a news app might want to recommend a news story it believes the user will want to read next.
+ * Reminder: user-scheduled reminder.
+ * Service: indication of running background service.
+ * Social: social network or sharing update.
+ * Status: ongoing information about device or contextual status.
+ * StopWatch: running stopwatch.
+ * Transport: media transport control for playback.
+ * Workout: tracking a user's workout.
 
 ## Flutter Streams
 
