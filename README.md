@@ -542,7 +542,7 @@ await AwesomeNotifications().createNotification(
 ## Old schedule Cron rules (For versions older than 0.0.6)
 
 Due to the way that background task and notification schedules works on iOS, wasn't possible yet to enable officialy all the old Cron features on iOS while the app is in Background and even when the app is terminated (Killed).
-Thanks to this, the scheduling for android has also regressed to the iOS limitations level, to ensure for the developer the same behavior in any platform. But it could be manually reactivated in java native code.
+Thanks to this, the complex schedules based on cron tab rules are only available on Android by the class `NotificationAndroidCrontab`.
 
 A support ticket was opened for Apple in order to resolve this issue, but they dont even care about. You can follow the progress of the process [here](https://github.com/rafaelsetragni/awesome_notifications/issues/16).
 
