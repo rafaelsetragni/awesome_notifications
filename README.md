@@ -651,7 +651,7 @@ To enable this property on Android, you need to add the `WAKE_LOCK` permission a
 
 <br>
 
-## Full Intent Notifications (only for Android)
+## Full Screen Intent Notifications (only for Android)
 
 To send notifications in full screen mode, even when it is locked, you can set the `fullScreenIntent` property to true.
 To enable this property, you need to add the `USE_FULL_SCREEN_INTENT` permission to your `AndroidManifest.xml` file, inside the `Android/app/src/main/` folder
@@ -747,6 +747,9 @@ You can download a example of how to send Push Notifications through FCM using "
 Notification channels are means by which notifications are send, defining the characteristics that will be common among all notifications on that same channel.
 A notification can be created, deleted and updated at any time in the application, however it is required that at least one exists during the initialization of this plugin. If a notification is created using a invalid channel key, the notification is discarded.
 After a notification being created, especially for Android Oreo devices and above, most of his definitions cannot be updated any more. To update all channel's definitions, it is necessary to use the ´forceUpdate´ option, which has the negative effect of automatically closing all active notifications on that channel.
+
+Its possible to organize visualy the channel's in you app channel page using `NotificationChannelGroup` in the `AwesomeNotifications().initialize` method and the property `channelGroupKey` in the respective channels.
+The channel group name can be updated at any time, but an channel only can be defined into a group when is created.
 
 Main methods to manipulate a notification channel:
 
