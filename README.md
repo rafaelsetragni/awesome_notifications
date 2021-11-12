@@ -459,9 +459,9 @@ Atention: for iOS, is not possible to define the correct `displayedDate`, becaus
 
 To send notifications schedules, you need to instantiate one of the classes bellow in the notificaiton property 'schedule':
     
-    * NotificationCalendar: Creates a notification scheduled to be displayed when the setted date components matchs the current date. If a time component is setted to null, so any value is considered valid to produce the next valid date. Only one value is allowed by each component.
-    * NotificationInterval: Creates a notification scheduled to be displayed at each interval time, starting from the next valid interval.
-    * NotificationAndroidCrontab: Creates a notification scheduled to be displayed based on a list of precise dates or a crontab rule, with seconds precision. To know more about how to create a valid crontab rule, take a look at [this article](https://www.baeldung.com/cron-expressions).
+- NotificationCalendar: Creates a notification scheduled to be displayed when the setted date components matchs the current date. If a time component is setted to null, so any value is considered valid to produce the next valid date. Only one value is allowed by each component.
+- NotificationInterval: Creates a notification scheduled to be displayed at each interval time, starting from the next valid interval.
+- NotificationAndroidCrontab: Creates a notification scheduled to be displayed based on a list of precise dates or a crontab rule, with seconds precision. To know more about how to create a valid crontab rule, take a look at [this article](https://www.baeldung.com/cron-expressions).
 
 Also, all of then could be configured using:
 
@@ -543,16 +543,19 @@ await AwesomeNotifications().createNotification(
   ),
   schedule: NotificationCalendar.fromDate(date: scheduleTime));
 ```
+
+<br>
     
-## Notification Scheduling Precision 
+    
+## Schedule Precision
     
 It's important to keep in mind that some Android distributions could ignore or delay the schedule execution, if their algorithms judge it necessary to save the battery life, etc, and this intervention is even more common for repeating schedules. Im most cases this behavior is recommended, since a battery hunger app could denigrate the application and the manufacture image. So, you need to consider this fact into your business logic.
     
 But, for some cases where the schedules precision is a MUST requirement, you can use some features to ensure the execution in the correct time:
     
-* Set the notification's category to a critical category, such as Alarm, Reminder or Call.
-* Set the `preciseAlarm` property to true. For Android versions greater or equal than 12, you need to request explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications` or take the user to the permission page calling `showAlarmPage`.
-* Set `criticalAlerts` channel property and notification content property to true. This feature allows you to show notification and play sounds even when the device is on silent / Do not Disturbe mode. Because of it, this feature is considerer highly sensitive and you must request Apple special permissions to use it. On Android, for versions greater or equal than 11, you need to request explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications`.
+- Set the notification's category to a critical category, such as Alarm, Reminder or Call.
+- Set the `preciseAlarm` property to true. For Android versions greater or equal than 12, you need to explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications` or take the user to the permission page calling `showAlarmPage`.
+- Set `criticalAlerts` channel property and notification content property to true. This feature allows you to show notification and play sounds even when the device is on silent / Do not Disturbe mode. Because of it, this feature is considered highly sensitive and you must request Apple a special authorization to use it. On Android, for versions greater or equal than 11, you need to explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications`.
     
     
 To enable precise alarms, you need to add the `SCHEDULE_EXACT_ALARM` permission to your `AndroidManifest.xml` file, inside the `Android/app/src/main/` folder
@@ -579,9 +582,9 @@ To enable critical alerts, you need to add the `ACCESS_NOTIFICATION_POLICY` perm
 </manifest>
 ```
     
-For iOS, you must submit a request to Apple to enable it, as described [in this post](https://medium.com/@shashidharyamsani/implementing-ios-critical-alerts-7d82b4bb5026).
+For iOS, you must submit a request authorization to Apple to enable it, as described [in this post](https://medium.com/@shashidharyamsani/implementing-ios-critical-alerts-7d82b4bb5026).
     
-OBS: **Critical alerts still in development and should not be used in production mode.**
+**OBS**: Critical alerts still in development and should not be used in production mode.
 
 <br>
 
