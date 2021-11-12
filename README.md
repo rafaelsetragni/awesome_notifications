@@ -549,7 +549,7 @@ await AwesomeNotifications().createNotification(
     
 ## Schedule Precision
     
-It's important to keep in mind that some Android distributions could ignore or delay the schedule execution, if their algorithms judge it necessary to save the battery life, etc, and this intervention is even more common for repeating schedules. Im most cases this behavior is recommended, since a battery hunger app could denigrate the application and the manufacture image. So, you need to consider this fact into your business logic.
+It's important to keep in mind that some Android distributions could ignore or delay the schedule execution, if their algorithms judge it necessary to save the battery life, etc, and this intervention is even more common for repeating schedules. Im most cases this behavior is recommended, since as a battery-hungry app can denigrate the app and the manufacturer's image. Therefore, you need to consider this fact in your business logic.
     
 But, for some cases where the schedules precision is a MUST requirement, you can use some features to ensure the execution in the correct time:
     
