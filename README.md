@@ -558,7 +558,7 @@ But, for some cases where the schedules precision is a MUST requirement, you can
 - Set `criticalAlerts` channel property and notification content property to true. This feature allows you to show notification and play sounds even when the device is on silent / Do not Disturbe mode. Because of it, this feature is considered highly sensitive and you must request Apple a special authorization to use it. On Android, for versions greater or equal than 11, you need to explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications`.
     
     
-To enable precise alarms, you need to add the `SCHEDULE_EXACT_ALARM` permission to your `AndroidManifest.xml` file, inside the `Android/app/src/main/` folder
+To enable precise alarms, you need to add the `SCHEDULE_EXACT_ALARM` permission into your `AndroidManifest.xml` file, inside the `Android/app/src/main/` folder
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -570,7 +570,7 @@ To enable precise alarms, you need to add the `SCHEDULE_EXACT_ALARM` permission 
 </manifest>
 ```
     
-To enable critical alerts, you need to add the `ACCESS_NOTIFICATION_POLICY` permission to your `AndroidManifest.xml` file, inside the `Android/app/src/main/` folder
+To enable critical alerts, you need to add the `ACCESS_NOTIFICATION_POLICY` permission into your `AndroidManifest.xml` file, inside the `Android/app/src/main/` folder
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
