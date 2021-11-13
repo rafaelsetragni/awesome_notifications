@@ -14,6 +14,7 @@ import android.os.Build;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -208,12 +209,14 @@ public class PermissionManager {
             @Override
             public void handle() {
                 try {
-                    List<String> permissionsAllowed = arePermissionsAllowed(activity, context, channelKey, permissions);
-                    permissionCompletionHandler.handle(permissionsAllowed);
+                    if(!permissions.isEmpty()) {
+                        List<String> allowedPermissions = arePermissionsAllowed(activity, context, channelKey, permissions);
+                        permissions.removeAll(allowedPermissions);
+                    }
                 } catch (AwesomeNotificationException e) {
                     e.printStackTrace();
-                    permissionCompletionHandler.handle(permissions);
                 }
+                permissionCompletionHandler.handle(permissions);
             }
         });
     }
