@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.Settings;
 import android.content.Context;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.prefs.Preferences;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -36,6 +38,9 @@ import me.carda.awesome_notifications.utils.StringUtils;
 public class PermissionManager {
 
     public static final int REQUEST_CODE = 101;
+    static final int ON = 1;
+    static final int OFF = 0;
+
     private final static String TAG = "PermissionManager";
 
     private static final BlockingQueue<ActivityCompletionHandler> activityQueue
@@ -64,7 +69,7 @@ public class PermissionManager {
     }
 
     public static Boolean areNotificationsGloballyAllowed(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N /*Android 7*/) {
             NotificationManagerCompat manager = NotificationManagerCompat.from(context);
             return manager.areNotificationsEnabled();
         }
@@ -78,11 +83,16 @@ public class PermissionManager {
             case CriticalAlert:
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 return notificationManager.isNotificationPolicyAccessGranted();
+
+            case Badge:
+                return checkBadgePermission(context);
+
             case PreciseAlarms:
-                return ScheduleManager.isPreciseAlarmEnable(context);
+                //return ScheduleManager.isPreciseAlarmEnable(context);
+
             case Alert:
             case Sound:
-            case Badge:
+
             case Provisional:
             case FullScreenIntent:
             case Car:
@@ -97,9 +107,17 @@ public class PermissionManager {
         return ContextCompat.checkSelfPermission(context, permissionCode) == PackageManager.PERMISSION_GRANTED;
     }
 
+    private static boolean checkBadgePermission(Context context){
+        try {
+            return Settings.Secure.getInt(context.getContentResolver(), "notification_badging") == ON;
+        } catch (Settings.SettingNotFoundException e) {
+            return true;
+        }
+    }
+
     public static boolean isSpecifiedChannelPermissionAllowed(Context context, String channelKey, NotificationPermission permissionEnum) throws AwesomeNotificationException {
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O /*Android 8*/) {
             NotificationChannel channel = ChannelManager.getAndroidChannel(context, channelKey);
             if(channel == null)
                 throw new AwesomeNotificationException("Channel "+channelKey+" does not exist.");
@@ -162,8 +180,8 @@ public class PermissionManager {
                     NotificationPermission permissionEnum = StringUtils.getEnumFromString(NotificationPermission.class, permissionNeeded);
                     String permissionCode = getManifestPermission(permissionEnum);
                     if(permissionCode != null){
-                        if(activity.shouldShowRequestPermissionRationale(permissionCode))
-                            throw new AwesomeNotificationException("The Requests is not granted and the app must prompt a ratinale user dialog");
+//                        if(activity.shouldShowRequestPermissionRationale(permissionCode))
+//                            throw new AwesomeNotificationException("The Requests is not granted and the app must prompt a rationale user dialog");
                         manifestPermissions.add(permissionCode);
                     }
                 }
@@ -175,10 +193,10 @@ public class PermissionManager {
                         gotoAndroidChannelPage(context, channelKey);
                 }
                 else {
-                    if(manifestPermissions.contains(getManifestPermission(NotificationPermission.PreciseAlarms))){
+                    /*if(manifestPermissions.contains(getManifestPermission(NotificationPermission.PreciseAlarms))){
                         gotoPreciseAlarmPage(context);
                     }
-                    else
+                    else*/
                         activity.requestPermissions(manifestPermissions.toArray(new String[0]), REQUEST_CODE);
                 }
             }
@@ -205,23 +223,22 @@ public class PermissionManager {
         switch (permission){
 
             case FullScreenIntent:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q /*Android 10*/)
                     return Manifest.permission.USE_FULL_SCREEN_INTENT;
                 return null;
 
             case PreciseAlarms:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                    return Manifest.permission.SCHEDULE_EXACT_ALARM;
-                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M)
-                    return "android.permission.ACCESS_NOTIFICATION_POLICY";
-                return null;
-
-            case Alert:
-            case Sound:
-            case Badge:
+                return Manifest.permission.READ_EXTERNAL_STORAGE;
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S /*Android 12*/)
+//                    return Manifest.permission.SCHEDULE_EXACT_ALARM;
+//                return null;
 
             case CriticalAlert:
                 return Manifest.permission.ACCESS_NOTIFICATION_POLICY;
+
+            case Badge:
+            case Alert:
+            case Sound:
 
             case Provisional:
             case Car:

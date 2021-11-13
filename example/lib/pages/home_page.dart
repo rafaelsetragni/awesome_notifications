@@ -176,7 +176,8 @@ class _HomePageState extends State<HomePage> {
 
     AwesomeNotifications().checkPermissionList( permissions:[
       NotificationPermission.FullScreenIntent,
-      NotificationPermission.PreciseAlarms
+      NotificationPermission.PreciseAlarms,
+      NotificationPermission.Badge
     ]).then((List<NotificationPermission> permissionsAllowed) =>
         setState(() {
           fullIntentNotificationsAllowed = permissionsAllowed.contains(NotificationPermission.FullScreenIntent);

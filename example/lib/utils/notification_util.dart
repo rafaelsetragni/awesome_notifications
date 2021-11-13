@@ -1532,17 +1532,13 @@ class NotificationUtils {
   static Future<void> removeChannel() async {
     AwesomeNotifications().removeChannel('updated_channel');
   }
-  
+
+  static Future<void> dismissNotification(int id) async {
+    await AwesomeNotifications().dismiss(id);
+  }
+
   static Future<void> cancelSchedule(int id) async {
     await AwesomeNotifications().cancelSchedule(id);
-  }
-  
-  static Future<void> cancelAllSchedules() async {
-    await AwesomeNotifications().cancelAllSchedules();
-  }
-  
-  static Future<void> dismissAllNotifications() async {
-    await AwesomeNotifications().dismissAllNotifications();
   }
   
   static Future<void> cancelNotification(int id) async {
@@ -1572,9 +1568,13 @@ class NotificationUtils {
   static Future<void> cancelNotificationsByGroupKey(String groupKey) async {
     await AwesomeNotifications().cancelNotificationsByGroupKey(groupKey);
   }
-  
-  static Future<void> dismissNotification(int id) async {
-    await AwesomeNotifications().dismiss(id);
+
+  static Future<void> dismissAllNotifications() async {
+    await AwesomeNotifications().dismissAllNotifications();
+  }
+
+  static Future<void> cancelAllSchedules() async {
+    await AwesomeNotifications().cancelAllSchedules();
   }
   
   static Future<void> cancelAllNotifications() async {
