@@ -25,11 +25,19 @@ class BaseNotificationContent extends Model {
   bool? autoDismissible;
   bool? wakeUpScreen;
   bool? fullScreenIntent;
-  //bool? criticalAlert;
+  bool? criticalAlert;
   Color? color;
   Color? backgroundColor;
   NotificationPrivacy? privacy;
   NotificationCategory? category;
+
+  String? displayedDate;
+  String? createdDate;
+
+  NotificationSource? createdSource;
+
+  NotificationLifeCycle? createdLifeCycle;
+  NotificationLifeCycle? displayedLifeCycle;
 
   @Deprecated(
       'property name autoCancel is deprecated. Use autoDismissible instead.')
@@ -52,7 +60,7 @@ class BaseNotificationContent extends Model {
       this.bigPicture,
       this.wakeUpScreen,
       this.fullScreenIntent,
-      //this.criticalAlert,
+      this.criticalAlert,
       this.category,
       this.autoDismissible,
       this.color,
@@ -88,8 +96,8 @@ class BaseNotificationContent extends Model {
         AssertUtils.extractValue(NOTIFICATION_WAKE_UP_SCREEN, mapData, bool);
     this.fullScreenIntent = AssertUtils.extractValue(
         NOTIFICATION_FULL_SCREEN_INTENT, mapData, bool);
-    // this.criticalAlert =
-    //     AssertUtils.extractValue(NOTIFICATION_CRITICAL_ALERT, mapData, bool);
+    this.criticalAlert =
+        AssertUtils.extractValue(NOTIFICATION_CRITICAL_ALERT, mapData, bool);
     this.autoDismissible =
         AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, mapData, bool);
 
@@ -136,7 +144,7 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_BACKGROUND_COLOR: backgroundColor?.value,
       NOTIFICATION_WAKE_UP_SCREEN: wakeUpScreen,
       NOTIFICATION_FULL_SCREEN_INTENT: fullScreenIntent,
-      // NOTIFICATION_CRITICAL_ALERT: criticalAlert
+      NOTIFICATION_CRITICAL_ALERT: criticalAlert
     };
   }
 

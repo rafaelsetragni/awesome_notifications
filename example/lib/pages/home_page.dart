@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:awesome_notifications_example/common_widgets/led_light.dart';
+import 'package:awesome_notifications_example/common_widgets/seconds_slider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide DateUtils;
 //import 'package:flutter/material.dart' as Material show DateUtils;
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   //String _oneSignalToken = '';
 
   bool delayLEDTests = false;
+  double _secondsToWakeUp = 5;
 
   bool basicNotificationsAllowed = false;
   bool fullIntentNotificationsAllowed = false;
@@ -748,8 +750,9 @@ class _HomePageState extends State<HomePage> {
             TextNote(
                 'Wake Up Locked Screen notifications are notifications that can wake up the device screen to call the user attention, if the device is on lock screen.\n\n'
                 'To enable this feature on Android, is necessary to add the WAKE_LOCK permission into your AndroidManifest.xml file. For iOS, this is the default behavior for high priority channels.'),
+            SecondsSlider(steps: 11, onChanged: (newValue){ setState(() => _secondsToWakeUp = newValue ); }),
             SimpleButton('Schedule notification with wake up locked screen option',
-                onPressed: () => NotificationUtils.scheduleNotificationWithWakeUp(27)),
+                onPressed: () => NotificationUtils.scheduleNotificationWithWakeUp(27, _secondsToWakeUp.toInt())),
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,

@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.provider.Settings;
 import android.content.Context;
@@ -14,20 +13,14 @@ import android.os.Build;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.prefs.Preferences;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import me.carda.awesome_notifications.AwesomePermissionHandler;
-import me.carda.awesome_notifications.notifications.NotificationScheduler;
 import me.carda.awesome_notifications.notifications.handlers.ActivityCompletionHandler;
 import me.carda.awesome_notifications.notifications.handlers.PermissionCompletionHandler;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationImportance;
@@ -89,7 +82,7 @@ public class PermissionManager {
                 return checkBadgePermission(context);
 
             case PreciseAlarms:
-                //return ScheduleManager.isPreciseAlarmEnable(context);
+                return ScheduleManager.isPreciseAlarmEnable(context);
 
             case Alert:
             case Sound:
@@ -168,6 +161,7 @@ public class PermissionManager {
             PermissionCompletionHandler permissionCompletionHandler
     ) throws AwesomeNotificationException {
 
+        boolean success = false;
         if(!permissions.isEmpty()){
 
             if(areNotificationsGloballyAllowed(context)) {
@@ -189,36 +183,51 @@ public class PermissionManager {
 
                 if(manifestPermissions.isEmpty()){
                     if(StringUtils.isNullOrEmpty(channelKey))
-                        gotoAndroidNotificationConfigPage(context);
+                        success = gotoAndroidNotificationConfigPage(context);
                     else
-                        gotoAndroidChannelPage(context, channelKey);
+                        success = gotoAndroidChannelPage(context, channelKey);
                 }
                 else {
                     /*if(manifestPermissions.contains(getManifestPermission(NotificationPermission.PreciseAlarms))){
                         gotoPreciseAlarmPage(context);
                     }
-                    else*/
+                    else {*/
                         activity.requestPermissions(manifestPermissions.toArray(new String[0]), REQUEST_CODE);
+                        success = true;
+                    //}
                 }
             }
-            else gotoAndroidNotificationConfigPage(context);
+            else success = gotoAndroidNotificationConfigPage(context);
         }
-        else gotoAndroidNotificationConfigPage(context);
+        else success = gotoAndroidNotificationConfigPage(context);
 
-        activityQueue.add(new ActivityCompletionHandler() {
-            @Override
-            public void handle() {
-                try {
-                    if(!permissions.isEmpty()) {
-                        List<String> allowedPermissions = arePermissionsAllowed(activity, context, channelKey, permissions);
-                        permissions.removeAll(allowedPermissions);
-                    }
-                } catch (AwesomeNotificationException e) {
-                    e.printStackTrace();
+        if(success)
+            activityQueue.add(new ActivityCompletionHandler() {
+                @Override
+                public void handle() {
+                    refreshReturnedPermissions(activity, context, channelKey, permissions, permissionCompletionHandler);
                 }
-                permissionCompletionHandler.handle(permissions);
+            });
+        else
+            refreshReturnedPermissions(activity, context, channelKey, permissions, permissionCompletionHandler);
+    }
+
+    private static void refreshReturnedPermissions(
+            Activity activity,
+            Context context,
+            String channelKey,
+            List<String> permissions,
+            PermissionCompletionHandler permissionCompletionHandler
+    ) throws AwesomeNotificationException {
+        try {
+            if(!permissions.isEmpty()) {
+                List<String> allowedPermissions = arePermissionsAllowed(activity, context, channelKey, permissions);
+                permissions.removeAll(allowedPermissions);
             }
-        });
+        } catch (AwesomeNotificationException e) {
+            e.printStackTrace();
+        }
+        permissionCompletionHandler.handle(permissions);
     }
 
     private static String getManifestPermission(NotificationPermission permission){
@@ -231,10 +240,9 @@ public class PermissionManager {
                 return null;
 
             case PreciseAlarms:
-                return Manifest.permission.READ_EXTERNAL_STORAGE;
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S /*Android 12*/)
-//                    return Manifest.permission.SCHEDULE_EXACT_ALARM;
-//                return null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S /*Android 12*/)
+                    return Manifest.permission.SCHEDULE_EXACT_ALARM;
+                return null;
 
             case CriticalAlert:
                 return Manifest.permission.ACCESS_NOTIFICATION_POLICY;
@@ -252,31 +260,34 @@ public class PermissionManager {
     }
 
     public static void showNotificationConfigPage(Context context, PermissionCompletionHandler permissionCompletionHandler){
-        gotoAndroidNotificationConfigPage(context);
-        activityQueue.add(() -> permissionCompletionHandler.handle(new ArrayList<>()));
+        if (gotoAndroidNotificationConfigPage(context))
+            activityQueue.add(() -> permissionCompletionHandler.handle(new ArrayList<>()));
+        else permissionCompletionHandler.handle(new ArrayList<>());
     }
 
     public static void showChannelConfigPage(Context context, String channelKey, PermissionCompletionHandler permissionCompletionHandler){
-        gotoAndroidChannelPage(context, channelKey);
-        activityQueue.add(() -> permissionCompletionHandler.handle(new ArrayList<>()));
+        if (gotoAndroidChannelPage(context, channelKey))
+            activityQueue.add(() -> permissionCompletionHandler.handle(new ArrayList<>()));
+        else permissionCompletionHandler.handle(new ArrayList<>());
     }
 
     public static void showPreciseAlarmPage(Context context, PermissionCompletionHandler permissionCompletionHandler){
-        gotoPreciseAlarmPage(context);
-        activityQueue.add(() -> permissionCompletionHandler.handle(new ArrayList<>()));
+        if (gotoPreciseAlarmPage(context))
+            activityQueue.add(() -> permissionCompletionHandler.handle(new ArrayList<>()));
+        else permissionCompletionHandler.handle(new ArrayList<>());
     }
 
-    private static void gotoAndroidConfigPage(Context context){
+    private static boolean gotoAndroidConfigPage(Context context){
         final Intent intent = new Intent();
 
         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.parse("package:" + context.getPackageName()));
 
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        return startTestedActivity(context, intent);
     }
 
-    private static void gotoAndroidNotificationConfigPage(Context context){
+    private static boolean gotoAndroidNotificationConfigPage(Context context){
         final Intent intent = new Intent();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
             intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
@@ -294,10 +305,10 @@ public class PermissionManager {
         //intent.setData(Uri.parse("package:" + context.getPackageName()));
 
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        return startTestedActivity(context, intent);
     }
 
-    private static void gotoAndroidChannelPage(Context context, String channelKey){
+    private static boolean gotoAndroidChannelPage(Context context, String channelKey){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = ChannelManager.getAndroidChannel(context, channelKey);
 
@@ -306,12 +317,12 @@ public class PermissionManager {
                     .putExtra(Settings.EXTRA_CHANNEL_ID, channel.getId());
 
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+            return startTestedActivity(context, intent);
         }
-        else gotoAndroidNotificationConfigPage(context);
+        else return gotoAndroidNotificationConfigPage(context);
     }
 
-    private static void gotoPreciseAlarmPage(Context context){
+    private static boolean gotoPreciseAlarmPage(Context context){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S /*Android 12*/) {
             final Intent intent = new Intent();
 
@@ -320,13 +331,12 @@ public class PermissionManager {
             intent.setData(Uri.parse("package:" + context.getPackageName()));
 
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-            return;
+            return startTestedActivity(context, intent);
         }
-        gotoAndroidNotificationConfigPage(context);
+        return gotoAndroidNotificationConfigPage(context);
     }
 
-    private static void gotoBadgePage(Context context, PermissionCompletionHandler permissionCompletionHandler){
+    private static boolean gotoBadgePage(Context context, PermissionCompletionHandler permissionCompletionHandler){
         final Intent intent = new Intent();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
             intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
@@ -344,7 +354,7 @@ public class PermissionManager {
         //intent.setData(Uri.parse("package:" + context.getPackageName()));
 
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        return startTestedActivity(context, intent);
     }
 
     public static boolean handlePermissionResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
@@ -371,6 +381,17 @@ public class PermissionManager {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private static boolean startTestedActivity(Context context, Intent intent){
+        PackageManager packageManager = context.getPackageManager();
+        if (intent.resolveActivity(packageManager) != null) {
+            context.startActivity(intent);
+            return true;
+        } else {
+            Log.e(TAG, "Activity permission action '"+intent.getAction()+"' not found!");
+            return false;
         }
     }
 }

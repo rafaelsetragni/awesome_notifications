@@ -797,7 +797,7 @@ class NotificationUtils {
       WAKE UP LOCK SCREEN NOTIFICATIONS
   ************************************************ */
   
-  static Future<void> scheduleNotificationWithWakeUp(int id) async {
+  static Future<void> scheduleNotificationWithWakeUp(int id, int seconds) async {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: id,
@@ -806,11 +806,11 @@ class NotificationUtils {
             body: 'Its time to wake up!',
             wakeUpScreen: true,
             notificationLayout: NotificationLayout.BigPicture,
-            bigPicture: 'asset://assets/images/delivery.jpeg',
+            bigPicture: 'asset://assets/images/melted-clock.png',
             color: Colors.blueGrey,
             category: NotificationCategory.Alarm,
         ),
-        schedule: NotificationInterval(interval: 5, preciseAlarm: true));
+        schedule: NotificationInterval(interval: seconds, preciseAlarm: true));
   }
   
   /* *********************************************

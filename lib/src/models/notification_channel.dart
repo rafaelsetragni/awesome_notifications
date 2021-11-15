@@ -99,7 +99,7 @@ class NotificationChannel extends Model {
     this.playSound = AssertUtils.getValueOrDefault(
         NOTIFICATION_PLAY_SOUND, this.playSound, bool);
     this.criticalAlerts = AssertUtils.getValueOrDefault(
-        NOTIFICATION_CRITICAL_ALERTS, this.criticalAlerts, bool);
+        NOTIFICATION_CHANNEL_CRITICAL_ALERTS, this.criticalAlerts, bool);
     this.soundSource = AssertUtils.getValueOrDefault(
         NOTIFICATION_SOUND_SOURCE, this.soundSource, String);
     this.enableVibration = AssertUtils.getValueOrDefault(
@@ -169,7 +169,7 @@ class NotificationChannel extends Model {
       NOTIFICATION_DEFAULT_RINGTONE_TYPE:
           AssertUtils.toSimpleEnumString(defaultRingtoneType),
       NOTIFICATION_LOCKED: locked,
-      NOTIFICATION_CRITICAL_ALERTS: criticalAlerts,
+      NOTIFICATION_CHANNEL_CRITICAL_ALERTS: criticalAlerts,
       NOTIFICATION_ONLY_ALERT_ONCE: onlyAlertOnce
     };
   }
@@ -234,7 +234,7 @@ class NotificationChannel extends Model {
         AssertUtils.extractValue(NOTIFICATION_LED_OFF_MS, dataMap, int);
 
     this.criticalAlerts =
-        AssertUtils.extractValue(NOTIFICATION_CRITICAL_ALERTS, dataMap, bool);
+        AssertUtils.extractValue(NOTIFICATION_CHANNEL_CRITICAL_ALERTS, dataMap, bool);
 
     return this;
   }

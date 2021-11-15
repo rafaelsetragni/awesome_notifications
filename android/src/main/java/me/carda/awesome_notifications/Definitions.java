@@ -180,7 +180,7 @@ public interface Definitions {
     String NOTIFICATION_FULL_SCREEN_INTENT = "fullScreenIntent";
     String NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen";
     String NOTIFICATION_CRITICAL_ALERT = "criticalAlert";
-    String NOTIFICATION_CRITICAL_ALERTS = "criticalAlerts";
+    String NOTIFICATION_CHANNEL_CRITICAL_ALERTS = "criticalAlerts";
     String NOTIFICATION_PLAY_SOUND = "playSound";
     String NOTIFICATION_SOUND_SOURCE = "soundSource";
     String NOTIFICATION_ENABLE_VIBRATION = "enableVibration";
@@ -255,6 +255,6 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, false);
         put(Definitions.NOTIFICATION_WAKE_UP_SCREEN, false);
         put(Definitions.NOTIFICATION_CRITICAL_ALERT, false);
-        put(Definitions.NOTIFICATION_CRITICAL_ALERTS, false);
+        put(Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS, false);
     }};
 }

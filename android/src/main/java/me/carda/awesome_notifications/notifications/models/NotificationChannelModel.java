@@ -155,7 +155,7 @@ public class NotificationChannelModel extends Model {
         playSound = getValueOrDefault(arguments, Definitions.NOTIFICATION_PLAY_SOUND, Boolean.class);
         soundSource = getValueOrDefault(arguments, Definitions.NOTIFICATION_SOUND_SOURCE, String.class);
 
-        criticalAlerts   = getValueOrDefault(arguments, Definitions.NOTIFICATION_CRITICAL_ALERTS, Boolean.class);
+        criticalAlerts   = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS, Boolean.class);
 
         enableVibration  = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLE_VIBRATION, Boolean.class);
         vibrationPattern = getValueOrDefault(arguments, Definitions.NOTIFICATION_VIBRATION_PATTERN, long[].class);
@@ -248,7 +248,7 @@ public class NotificationChannelModel extends Model {
             returnedObject.put(Definitions.NOTIFICATION_ONLY_ALERT_ONCE, this.onlyAlertOnce);
 
         if(this.criticalAlerts != null && this.criticalAlerts)
-            returnedObject.put(Definitions.NOTIFICATION_CRITICAL_ALERTS, this.criticalAlerts);
+            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS, this.criticalAlerts);
 
         return returnedObject;
     }

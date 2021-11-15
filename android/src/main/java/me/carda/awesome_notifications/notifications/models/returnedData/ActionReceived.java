@@ -7,7 +7,7 @@ import me.carda.awesome_notifications.notifications.enumerators.NotificationLife
 import me.carda.awesome_notifications.notifications.models.NotificationContentModel;
 import me.carda.awesome_notifications.utils.MapUtils;
 
-public class ActionReceived extends NotificationContentModel {
+public class ActionReceived extends NotificationReceived {
 
     public String buttonKeyPressed;
     public String buttonKeyInput;
@@ -40,6 +40,7 @@ public class ActionReceived extends NotificationContentModel {
 
         this.fullScreenIntent = contentModel.fullScreenIntent;
         this.wakeUpScreen = contentModel.wakeUpScreen;
+        this.category = contentModel.category;
 
         this.notificationLayout = contentModel.notificationLayout;
 

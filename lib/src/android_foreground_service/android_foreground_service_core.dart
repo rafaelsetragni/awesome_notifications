@@ -13,7 +13,7 @@ import '../definitions.dart'
         FOREGROUND_SERVICE_TYPE,
         FOREGROUND_START_TYPE;
 import '../models/notification_content.dart';
-import '../models/received_models/notification_model.dart';
+import '../models/notification_model.dart';
 
 /// Static helper class that provides methods to start and stop a foreground service.
 ///

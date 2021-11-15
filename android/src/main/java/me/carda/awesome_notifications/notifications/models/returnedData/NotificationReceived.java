@@ -37,6 +37,10 @@ public class NotificationReceived extends NotificationContentModel {
         this.ticker = contentModel.ticker;
         this.locked = contentModel.locked;
 
+        this.fullScreenIntent = contentModel.fullScreenIntent;
+        this.wakeUpScreen = contentModel.wakeUpScreen;
+        this.category = contentModel.category;
+
         this.notificationLayout = contentModel.notificationLayout;
 
         this.displayedLifeCycle = contentModel.displayedLifeCycle;
