@@ -67,6 +67,7 @@ public interface Definitions {
 
     String CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = "showNotificationPage";
     String CHANNEL_METHOD_SHOW_ALARM_PAGE = "showAlarmPage";
+    String CHANNEL_METHOD_SHOW_GLOBAL_DND_PAGE = "showGlobalDndPage";
     String CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed";
     String CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications";
     String CHANNEL_METHOD_CHECK_PERMISSIONS = "checkPermissions";
@@ -179,7 +180,6 @@ public interface Definitions {
     String NOTIFICATION_ICON = "icon";
     String NOTIFICATION_FULL_SCREEN_INTENT = "fullScreenIntent";
     String NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen";
-    String NOTIFICATION_CRITICAL_ALERT = "criticalAlert";
     String NOTIFICATION_CHANNEL_CRITICAL_ALERTS = "criticalAlerts";
     String NOTIFICATION_PLAY_SOUND = "playSound";
     String NOTIFICATION_SOUND_SOURCE = "soundSource";
@@ -254,7 +254,6 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, true);
         put(Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, false);
         put(Definitions.NOTIFICATION_WAKE_UP_SCREEN, false);
-        put(Definitions.NOTIFICATION_CRITICAL_ALERT, false);
         put(Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS, false);
     }};
 }

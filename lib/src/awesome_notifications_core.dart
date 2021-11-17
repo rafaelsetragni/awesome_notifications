@@ -299,6 +299,11 @@ class AwesomeNotifications {
     await _channel.invokeMethod(CHANNEL_METHOD_SHOW_ALARM_PAGE);
   }
 
+  /// Opens the app page to allows to override device DnD
+  Future<void> showGlobalDndOverridePage() async {
+    await _channel.invokeMethod(CHANNEL_METHOD_SHOW_GLOBAL_DND_PAGE);
+  }
+
   /// Check if the notifications are globally permitted
   Future<bool> isNotificationAllowed() async {
     final bool isAllowed =
@@ -311,9 +316,11 @@ class AwesomeNotifications {
       {
         String? channelKey,
         List<NotificationPermission> permissions = const [
-          NotificationPermission.Badge,
           NotificationPermission.Alert,
-          NotificationPermission.Sound
+          NotificationPermission.Sound,
+          NotificationPermission.Badge,
+          NotificationPermission.Vibration,
+          NotificationPermission.Light,
         ]
       }) async {
     final List<String> permissionList = [];

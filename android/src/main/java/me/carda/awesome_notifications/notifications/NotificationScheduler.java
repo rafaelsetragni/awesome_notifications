@@ -229,7 +229,7 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
         AlarmManager alarmManager = ScheduleManager.getAlarmManager(context);
         long timeMillis = nextValidDate.getTimeInMillis();
 
-        if (BooleanUtils.getValue(notificationModel.schedule.preciseAlarm) && ScheduleManager.isPreciseAlarmEnable(alarmManager)) {
+        if (BooleanUtils.getValue(notificationModel.schedule.preciseAlarm) && ScheduleManager.isPreciseAlarmGloballyAllowed(alarmManager)) {
             AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(timeMillis, pendingIntent);
             alarmManager.setAlarmClock(info, pendingIntent);
             return;

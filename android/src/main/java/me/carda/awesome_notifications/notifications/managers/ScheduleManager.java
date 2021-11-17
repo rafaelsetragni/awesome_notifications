@@ -76,12 +76,12 @@ public class ScheduleManager {
         return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    public static boolean isPreciseAlarmEnable(Context context){
+    public static boolean isPreciseAlarmGloballyAllowed(Context context){
         AlarmManager alarmManager = getAlarmManager(context);
-        return isPreciseAlarmEnable(alarmManager);
+        return isPreciseAlarmGloballyAllowed(alarmManager);
     }
 
-    public static boolean isPreciseAlarmEnable(AlarmManager alarmManager){
+    public static boolean isPreciseAlarmGloballyAllowed(AlarmManager alarmManager){
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S /*Android 12*/)
             return alarmManager.canScheduleExactAlarms();
         return true;

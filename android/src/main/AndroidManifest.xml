@@ -13,6 +13,8 @@
     <uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT"/>
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <uses-permission android:name="android.permission.VIBRATE"/>
   
     <application>
 
@@ -23,7 +25,7 @@
         <receiver android:name=".notifications.broadcastReceivers.KeepOnTopActionReceiver"
             android:exported="false"/>
         <receiver
-            android:name=".notifications.broadcastReceivers.RefreshNotificationBootReceiver"
+            android:name=".notifications.broadcastReceivers.RefreshSchedulesReceiver"
             android:exported="false">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -32,6 +34,7 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED"/>
             </intent-filter>
         </receiver>
 

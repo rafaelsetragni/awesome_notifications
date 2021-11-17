@@ -59,6 +59,14 @@ class NotificationUtils {
   static Future<void> redirectToAlarmPage() async {
     await AwesomeNotifications().showAlarmPage();
   }
+
+  static Future<void> redirectToScheduledChannelsPage() async {
+    await AwesomeNotifications().showNotificationConfigPage(channelKey: 'scheduled');
+  }
+
+  static Future<void> redirectToOverrideDndsPage() async {
+    await AwesomeNotifications().showGlobalDndOverridePage();
+  }
   
   static Future<bool> requestBasicPermissionsToSendNotifications(BuildContext context) async {
     bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
@@ -108,7 +116,76 @@ class NotificationUtils {
     }
     return isAllowed;
   }
-  
+
+  static Future<bool> requestCriticalAlertsPermission(BuildContext context) async {
+
+    if(!await requestBasicPermissionsToSendNotifications(context))
+      return false;
+
+    List<NotificationPermission> permissionList = [
+      NotificationPermission.CriticalAlert
+    ];
+
+    List<NotificationPermission> permissionsAllowed = await AwesomeNotifications().checkPermissionList(
+        channelKey: 'scheduled',
+        permissions: permissionList
+    );
+
+    bool isFullIntentAllowed = permissionsAllowed.isNotEmpty;
+    if(!isFullIntentAllowed){
+
+      List<NotificationPermission> permissionsNeeded =
+      permissionList.toSet().difference(permissionsAllowed.toSet()).toList();
+
+      await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: Color(0xfffbfbfb),
+            title: Text('Critical Alerts Notifications',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/images/animated-bell.gif',
+                  height: 200,
+                  fit: BoxFit.fitWidth,
+                ),
+                Text(
+                  'Allow Awesome Notifications to send you critical alerts and override Do Not Disturbe mode.',
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: (){ Navigator.pop(context); },
+                  child: Text(
+                    'Later',
+                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                  )
+              ),
+              TextButton(
+                onPressed: () async {
+                  isFullIntentAllowed = await AwesomeNotifications().requestPermissionToSendNotifications(
+                      channelKey: 'scheduled',
+                      permissions: permissionsNeeded
+                  );
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Allow',
+                  style: TextStyle(color: Colors.deepPurple, fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          )
+      );
+    }
+    return isFullIntentAllowed;
+  }
+
   static Future<bool> requestFullIntentPermission(BuildContext context) async {
   
     if(!await requestBasicPermissionsToSendNotifications(context))
@@ -240,7 +317,73 @@ class NotificationUtils {
     }
     return isPreciseAlarmsAllowed;
   }
-  
+
+  static Future<bool> requestOverrideDndPermission(BuildContext context) async {
+
+    if(!await requestBasicPermissionsToSendNotifications(context))
+      return false;
+
+    List<NotificationPermission> permissionList = [
+      NotificationPermission.OverrideDnD
+    ];
+
+    List<NotificationPermission> permissionsAllowed = await AwesomeNotifications().checkPermissionList(
+        permissions: permissionList
+    );
+
+    bool isPreciseAlarmsAllowed = permissionsAllowed.isNotEmpty;
+    if(!isPreciseAlarmsAllowed){
+
+      List<NotificationPermission> permissionsNeeded =
+      permissionList.toSet().difference(permissionsAllowed.toSet()).toList();
+
+      await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: Color(0xfffbfbfb),
+            title: Text('Override\nDo not Disturbe Mode',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/images/animated-warning.gif',
+                  height: 200,
+                  fit: BoxFit.fitWidth,
+                ),
+                Text(
+                  'Allow Awesome Notifications to deactivate Do not Disturbe mode (DnD) only when is necessary to send you critical notifications!',
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: (){ Navigator.pop(context); },
+                  child: Text(
+                    'Later',
+                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                  )
+              ),
+              TextButton(
+                onPressed: () async {
+                  await AwesomeNotifications().requestPermissionToSendNotifications(
+                      permissions: permissionsNeeded);
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Allow',
+                  style: TextStyle(color: Colors.deepPurple, fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          )
+      );
+    }
+    return isPreciseAlarmsAllowed;
+  }
+
   /* *********************************************
       BASIC NOTIFICATIONS
   ************************************************ */

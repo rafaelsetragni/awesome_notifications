@@ -1,6 +1,5 @@
 package me.carda.awesome_notifications.notifications;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,7 +7,6 @@ import android.app.PendingIntent;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -16,9 +14,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
 
 
 import java.io.Serializable;
@@ -29,8 +27,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.Person;
 import androidx.core.app.RemoteInput;
 
@@ -42,13 +40,14 @@ import me.carda.awesome_notifications.notifications.broadcastReceivers.Dismissed
 import me.carda.awesome_notifications.notifications.broadcastReceivers.KeepOnTopActionReceiver;
 import me.carda.awesome_notifications.notifications.enumerators.ActionButtonType;
 import me.carda.awesome_notifications.notifications.enumerators.GroupSort;
-import me.carda.awesome_notifications.notifications.enumerators.NotificationImportance;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLayout;
-import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationPermission;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
+import me.carda.awesome_notifications.notifications.managers.BadgeManager;
 import me.carda.awesome_notifications.notifications.managers.ChannelManager;
 import me.carda.awesome_notifications.notifications.managers.DefaultsManager;
+import me.carda.awesome_notifications.notifications.managers.PermissionManager;
 import me.carda.awesome_notifications.notifications.models.NotificationButtonModel;
 import me.carda.awesome_notifications.notifications.models.NotificationChannelModel;
 import me.carda.awesome_notifications.notifications.models.NotificationContentModel;
@@ -64,7 +63,6 @@ import me.carda.awesome_notifications.utils.ListUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
 //badges
-import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static android.app.NotificationManager.Policy.PRIORITY_CATEGORY_ALARMS;
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -351,31 +349,48 @@ public class NotificationBuilder {
         }
     }
 
-    public static void activateCritialAlert(Context context) throws AwesomeNotificationException {
-
-        // TODO implement critical alerts for Android
+    public static void ensureCriticalAlert(Context context) throws AwesomeNotificationException {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        if (notificationManager.isNotificationPolicyAccessGranted()) {
-            notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P /*Android 9*/) {
-                NotificationManager.Policy policy = new NotificationManager.Policy(PRIORITY_CATEGORY_ALARMS, 0, 0);
-                notificationManager.setNotificationPolicy(policy);
+        if (isDndOverrideAllowed(context, notificationManager)) {
+            if (!PermissionManager.isSpecifiedPermissionGloballyAllowed(context, NotificationPermission.CriticalAlert)){
+                notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P /*Android 9*/) {
+                    NotificationManager.Policy policy = new NotificationManager.Policy(PRIORITY_CATEGORY_ALARMS, 0, 0);
+                    notificationManager.setNotificationPolicy(policy);
+                }
             }
-        } else {
-            throw new AwesomeNotificationException("Critical Alert mode is not enable");
         }
     }
 
-    public static void requestCriticalAlerts(Context context){
+    public static NotificationManager getAndroidNotificationManager(Context context){
+        return  (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    }
 
-        // TODO implement critical alerts for Android
+    public static boolean isDndOverrideAllowed(Context context){
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        return isDndOverrideAllowed(context, notificationManager);
+    }
 
-        if (!notificationManager.isNotificationPolicyAccessGranted()) {
-            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-            Activity activity = (Activity) context;
-            activity.startActivity(intent);
+    public static boolean isCriticalAlertsGloballyAllowed(Context context){
+        NotificationManager notificationManager = getAndroidNotificationManager(context);
+        // Critical alerts on Android 6 are "Treat as priority" or "Priority"
+        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M /*Android 6*/){
+//            return (notificationManager.getNotificationPolicy().state
+//                    & NotificationManager.Policy.STATE_CHANNELS_BYPASSING_DND) == 1;
+            // TODO read "Treat as priority" or "Priority" property on notifications page
         }
+        return notificationManager.getCurrentInterruptionFilter() != NotificationManager.INTERRUPTION_FILTER_NONE;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static boolean isNotificationSoundGloballyAllowed(Context context){
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        int importance = manager.getImportance();
+        return importance < 0 || importance >= NotificationManager.IMPORTANCE_DEFAULT;
+    }
+
+    public static boolean isDndOverrideAllowed(Context context, NotificationManager notificationManager){
+        return notificationManager.isNotificationPolicyAccessGranted();
     }
 
     private static String getButtonInputText(Intent intent, String buttonKey) {
@@ -449,7 +464,7 @@ public class NotificationBuilder {
         updateTrackingExtras(notificationModel, channel, androidNotification.extras);
 
         setWakeUpScreen(context, notificationModel);
-        setCriticalAlert(context, notificationModel);
+        setCriticalAlert(context, channel);
 
         return androidNotification;
     }
@@ -459,9 +474,9 @@ public class NotificationBuilder {
             wakeUpScreen(context);
     }
 
-    private void setCriticalAlert(Context context, NotificationModel notificationModel) throws AwesomeNotificationException {
-        if (notificationModel.content.criticalAlert)
-            activateCritialAlert(context);
+    private void setCriticalAlert(Context context, NotificationChannelModel channel) throws AwesomeNotificationException {
+        if (channel.criticalAlerts)
+            ensureCriticalAlert(context);
     }
 
     private void setFullScreenIntent(Context context, PendingIntent pendingIntent, NotificationModel notificationModel, NotificationCompat.Builder builder) {
@@ -536,7 +551,7 @@ public class NotificationBuilder {
 
     private void setBadge(Context context, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
         if (BooleanUtils.getValue(channelModel.channelShowBadge)) {
-            incrementGlobalBadgeCounter(context);
+            BadgeManager.incrementGlobalBadgeCounter(context);
             builder.setNumber(1);
         }
     }
@@ -602,40 +617,6 @@ public class NotificationBuilder {
                 builder.setLargeIcon(largeIcon);
             }
         }
-    }
-
-    public static int getGlobalBadgeCounter(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        // Read previous value. If not found, use 0 as default value.
-        return prefs.getInt(Definitions.BADGE_COUNT, 0);
-    }
-
-    public static void setGlobalBadgeCounter(Context context, int count) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-
-        editor.putInt(Definitions.BADGE_COUNT, count);
-        ShortcutBadger.applyCount(context, count);
-
-        editor.apply();
-    }
-
-    public static void resetGlobalBadgeCounter(Context context) {
-        setGlobalBadgeCounter(context, 0);
-    }
-
-    public static int incrementGlobalBadgeCounter(Context context) {
-
-        int totalAmount = getGlobalBadgeCounter(context);
-        setGlobalBadgeCounter(context, ++totalAmount);
-        return totalAmount;
-    }
-
-    public static int decrementGlobalBadgeCounter(Context context) {
-
-        int totalAmount = Math.max(getGlobalBadgeCounter(context)-1, 0);
-        setGlobalBadgeCounter(context, totalAmount);
-        return totalAmount;
     }
 
     // https://github.com/rafaelsetragni/awesome_notifications/issues/191
@@ -951,8 +932,6 @@ public class NotificationBuilder {
     }
 
     private Boolean setInboxLayout(Context context, NotificationContentModel contentModel, NotificationCompat.Builder builder) {
-
-        // TODO THIS LAYOUT NEEDS TO BE IMPROVED
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 

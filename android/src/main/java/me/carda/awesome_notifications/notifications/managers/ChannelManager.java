@@ -1,6 +1,7 @@
 package me.carda.awesome_notifications.notifications.managers;
 
 import android.Manifest;
+import android.app.AutomaticZenRule;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,12 +15,14 @@ import android.util.Log;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
+import me.carda.awesome_notifications.notifications.NotificationBuilder;
 import me.carda.awesome_notifications.notifications.enumerators.DefaultRingtoneType;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationImportance;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationPermission;
@@ -249,7 +252,7 @@ public class ChannelManager {
     @RequiresApi(api = Build.VERSION_CODES.O /*Android 8*/)
     public static NotificationChannel getAndroidChannel(Context context, String channelKey, String awesomeChannelHashKey){
 
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = NotificationBuilder.getAndroidNotificationManager(context);
 
         // Returns channel from another packages with same name43
         if(channelKey != null){
@@ -266,7 +269,7 @@ public class ChannelManager {
 
     @RequiresApi(api =  Build.VERSION_CODES.O /*Android 8*/)
     public static void removeOldAndroidChannelStandards(Context context, String channelKey, String channelName){
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = NotificationBuilder.getAndroidNotificationManager(context);
 
         List<NotificationChannel> notificationChannels = notificationManager.getNotificationChannels();
         for(NotificationChannel currentAndroidChannel : notificationChannels){
@@ -284,7 +287,7 @@ public class ChannelManager {
     @RequiresApi(api =  Build.VERSION_CODES.O /*Android 8*/)
     public static void setAndroidChannel(Context context, NotificationChannelModel newChannel, boolean firstChannel) {
 
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = NotificationBuilder.getAndroidNotificationManager(context);
 
         NotificationChannel newAndroidNotificationChannel = new NotificationChannel(
                 firstChannel ?
@@ -337,13 +340,6 @@ public class ChannelManager {
         }
 
         if(newChannel.criticalAlerts) {
-            if(PermissionManager.isSpecifiedPermissionGloballyAllowed(context, NotificationPermission.CriticalAlert)){
-                try {
-                    notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
-                } catch (Exception e){
-                    Log.e(TAG, e.getMessage());
-                }
-            }
             newAndroidNotificationChannel.setBypassDnd(true);
         }
 
@@ -354,7 +350,7 @@ public class ChannelManager {
 
     @RequiresApi(api =  Build.VERSION_CODES.O /*Android 8*/)
     private static void removeAndroidChannel(Context context, String channelKey, String newHashKey) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = NotificationBuilder.getAndroidNotificationManager(context);
 
         notificationManager.deleteNotificationChannel(channelKey);
 

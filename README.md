@@ -153,11 +153,15 @@ AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
 
 ```dart
 AwesomeNotifications().actionStream.listen(
-    (receivedNotification){
+    (ReceivedNotification receivedNotification){
 
         Navigator.of(context).pushNamed(
             '/NotificationPage',
-            arguments: { id: receivedNotification.id } // your page params. I recommend to you to pass all *receivedNotification* object
+            arguments: {
+                // your page params. I recommend you to pass the
+                // entire *receivedNotification* object
+                id: receivedNotification.id
+            }
         );
 
     }
@@ -1015,6 +1019,3 @@ While the `android:name` must exactly match this value, you can configure the ot
 
 ### IMPORTANT
 If the icon of the notification is not set or not valid, the notification will appear, but will look very strange. Make sure to always specify an valid icon. If you need help with this, take a look at [the examples](https://github.com/rafaelsetragni/awesome_notifications/tree/master/example).
-
-### Behaviour on platforms other than Android
-On any platform other then Android, all methods in this plugin are no-ops (they do nothing when called), so you don't need to do a platform check before calling them.

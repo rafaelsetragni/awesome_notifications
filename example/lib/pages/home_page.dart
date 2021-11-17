@@ -36,9 +36,25 @@ class _HomePageState extends State<HomePage> {
   bool delayLEDTests = false;
   double _secondsToWakeUp = 5;
 
-  bool basicNotificationsAllowed = false;
-  bool fullIntentNotificationsAllowed = false;
-  bool preciseAlarmsAllowed = false;
+  bool globalNotificationsAllowed = false;
+  Map<NotificationPermission, bool> scheduleChannelPermissions = {};
+  Map<NotificationPermission, bool> dangerousPermissionsStatus = {};
+
+  List<NotificationPermission> channelPermissions = [
+    NotificationPermission.Alert,
+    NotificationPermission.Sound,
+    NotificationPermission.Badge,
+    NotificationPermission.Light,
+    NotificationPermission.Vibration,
+    NotificationPermission.CriticalAlert,
+    NotificationPermission.FullScreenIntent
+  ];
+
+  List<NotificationPermission> dangerousPermissions = [
+    NotificationPermission.CriticalAlert,
+    NotificationPermission.OverrideDnD,
+    NotificationPermission.PreciseAlarms,
+  ];
 
   String packageName = 'me.carda.awesome_notifications_example';
 
@@ -111,6 +127,14 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
+    for(NotificationPermission permission in channelPermissions){
+      scheduleChannelPermissions[permission] = false;
+    }
+
+    for(NotificationPermission permission in dangerousPermissions){
+      dangerousPermissionsStatus[permission] = false;
+    }
+
     // Uncomment those lines after activate google services inside example/android/build.gradle
     // initializeFirebaseService();
 
@@ -168,7 +192,7 @@ class _HomePageState extends State<HomePage> {
 
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) async {
       setState(() {
-        basicNotificationsAllowed = isAllowed;
+        globalNotificationsAllowed = isAllowed;
       });
 
       if (!isAllowed) {
@@ -176,15 +200,37 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
-    AwesomeNotifications().checkPermissionList( permissions:[
-      NotificationPermission.FullScreenIntent,
-      NotificationPermission.PreciseAlarms,
-      NotificationPermission.Badge
-    ]).then((List<NotificationPermission> permissionsAllowed) =>
+    refreshDetailedPagePermissions();
+  }
+
+  Future<void> refreshDetailedPagePermissions() async {
+    refreshScheduleChannelPermissions();
+    refreshDangerousChannelPermissions();
+  }
+
+  void refreshScheduleChannelPermissions(){
+    AwesomeNotifications().checkPermissionList(
+        channelKey: 'scheduled',
+        permissions: channelPermissions
+    ).then((List<NotificationPermission> permissionsAllowed) =>
         setState(() {
-          fullIntentNotificationsAllowed = permissionsAllowed.contains(NotificationPermission.FullScreenIntent);
-          preciseAlarmsAllowed = permissionsAllowed.contains(NotificationPermission.PreciseAlarms);
-        }));
+          for(NotificationPermission permission in channelPermissions){
+            scheduleChannelPermissions[permission] = permissionsAllowed.contains(permission);
+          }
+        })
+    );
+  }
+
+  void refreshDangerousChannelPermissions(){
+    AwesomeNotifications().checkPermissionList(
+        permissions: dangerousPermissions
+    ).then((List<NotificationPermission> permissionsAllowed) =>
+        setState(() {
+          for(NotificationPermission permission in dangerousPermissions){
+            dangerousPermissionsStatus[permission] = permissionsAllowed.contains(permission);
+          }
+        })
+    );
   }
 
   void processDefaultActionReceived(ReceivedAction receivedNotification) {
@@ -222,6 +268,7 @@ class _HomePageState extends State<HomePage> {
 
   void processMediaControls(actionReceived) {
     switch (actionReceived.buttonKeyPressed) {
+
       case 'MEDIA_CLOSE':
         MediaPlayerCentral.stop();
         break;
@@ -356,14 +403,6 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () => Navigator.pushNamed(
                         context, PAGE_FIREBASE_TESTS,
                         arguments: _firebaseAppToken)),
-                /*
-              /// TODO MISSING IMPLEMENTATION FOR ONE SIGNAL
-              ServiceControlPanel(
-                  'One Signal',
-                  _oneSignalToken.isNotEmpty,
-                  themeData
-              ),
-              */
               ],
             ),
             TextNote(
@@ -371,21 +410,8 @@ class _HomePageState extends State<HomePage> {
 
             /* ******************************************************************** */
 
-            TextDivisor(title: 'Permission to send Notifications'),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Column(
-                    children: [
-                      Text(basicNotificationsAllowed ? 'Allowed' : 'Not allowed',
-                          style: TextStyle(
-                              color: basicNotificationsAllowed
-                                  ? Colors.green
-                                  : Colors.red)),
-                      LedLight(basicNotificationsAllowed)
-                    ],
-                  )
-                ]),
+            TextDivisor(title: 'Global Permission to send Notifications'),
+            PermissionIndicator(name: null, allowed: globalNotificationsAllowed),
             TextNote(
                 'To send local and push notifications, it is necessary to obtain the user\'s consent. Keep in mind that he user consent can be revoked at any time.\n\n'
                 '* Android: notifications are enabled by default and are considered not dangerous.\n'
@@ -394,7 +420,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () => NotificationUtils.requestBasicPermissionsToSendNotifications(context).then(
                     (isAllowed) =>
                       setState(() {
-                        basicNotificationsAllowed = isAllowed;
+                        refreshDetailedPagePermissions();
                       })
                 )
             ),
@@ -402,64 +428,76 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () => NotificationUtils.redirectToPermissionsPage().then(
                         (isAllowed) =>
                         setState(() {
-                          basicNotificationsAllowed = isAllowed;
+                          globalNotificationsAllowed = isAllowed;
+                          refreshDetailedPagePermissions();
                         })
                 )
             ),
             SimpleButton('Open basic channel permission page',
                 onPressed: () => NotificationUtils.redirectToBasicChannelPage()
             ),
-            SimpleButton('Open alarms permission page',
-                onPressed: () => NotificationUtils.redirectToAlarmPage()
+
+            /* ******************************************************************** */
+
+            TextDivisor(title: 'Channel\'s Permissions'),
+            Wrap(
+              alignment: WrapAlignment.center,
+                children: <Widget>[
+                  PermissionIndicator(name: 'Alerts', allowed: scheduleChannelPermissions[NotificationPermission.Alert]!),
+                  PermissionIndicator(name: 'Sounds', allowed: scheduleChannelPermissions[NotificationPermission.Sound]!),
+                  PermissionIndicator(name: 'Badges', allowed: scheduleChannelPermissions[NotificationPermission.Badge]!),
+                  PermissionIndicator(name: 'Vibrations', allowed: scheduleChannelPermissions[NotificationPermission.Vibration]!),
+                  PermissionIndicator(name: 'Lights', allowed: scheduleChannelPermissions[NotificationPermission.Light]!),
+                  PermissionIndicator(name: 'Full Intents', allowed: scheduleChannelPermissions[NotificationPermission.FullScreenIntent]!),
+                  PermissionIndicator(name: 'Critical Alerts', allowed: scheduleChannelPermissions[NotificationPermission.CriticalAlert]!),
+                ]),
+            TextNote(
+                'To send local and push notifications, it is necessary to obtain the user\'s consent. Keep in mind that he user consent can be revoked at any time.\n\n'
+                    '* OBS: if the feature is not available on device, it will be considered enabled by default.\n'),
+            SimpleButton('Open Schedule channel\'s permission page',
+                onPressed: () => NotificationUtils.redirectToScheduledChannelsPage().then(
+                      (_)=> refreshDetailedPagePermissions()
+                )
             ),
 
             /* ******************************************************************** */
 
-            TextDivisor(title: 'Dangerous Permissions'),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+            TextDivisor(title: 'Global Dangerous Permissions'),
+            Wrap(
+                alignment: WrapAlignment.center,
                 children: <Widget>[
-                  Column(
-                    children: [
-                      Text('Full Intent Notifications'),
-                      Text(fullIntentNotificationsAllowed ? 'Allowed' : 'Not allowed',
-                          style: TextStyle(
-                              color: fullIntentNotificationsAllowed
-                                  ? Colors.green
-                                  : Colors.red)),
-                      LedLight(fullIntentNotificationsAllowed)
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Text('Precise Alarms'),
-                      Text(preciseAlarmsAllowed ? 'Allowed' : 'Not allowed',
-                          style: TextStyle(
-                              color: preciseAlarmsAllowed
-                                  ? Colors.green
-                                  : Colors.red)),
-                      LedLight(preciseAlarmsAllowed)
-                    ],
-                  )
+                  PermissionIndicator(name: 'Critical Alerts', allowed: dangerousPermissionsStatus[NotificationPermission.CriticalAlert]!),
+                  PermissionIndicator(name: 'Precise Alarms', allowed: dangerousPermissionsStatus[NotificationPermission.PreciseAlarms]!),
+                  PermissionIndicator(name: 'Override DnD', allowed: dangerousPermissionsStatus[NotificationPermission.OverrideDnD]!),
                 ]),
             TextNote(
-                'To send local and push notifications, it is necessary to obtain the user\'s consent. Keep in mind that he user consent can be revoked at any time.\n\n'
-                    '* Android: notifications are enabled by default and are considered not dangerous.\n'
-                    '* iOS: notifications are not enabled by default and you must explicitly request it to the user.'),
-            SimpleButton('Request full intent notifications',
-                onPressed: () => NotificationUtils.requestFullIntentPermission(context).then(
-                        (isAllowed) =>
-                        setState(() {
-                          fullIntentNotificationsAllowed = isAllowed;
-                        })
-                )
-            ),
-            SimpleButton('Request precise alarms',
+                'Dangerous permissions are permissions that can be disabled by default and you must obtain the user\'s consent explicity to enable. Keep in mind that he user consent can be revoked at any time.\n\n'
+                    '* Android: override DnD mode is disabled by default. When the permission is granted, the DnD device state is downgraded every time when a new critical notification is displayed and all notifications are being fully supressed by DnD.\n'
+                    '* iOS: override DnD is automatically enabled with Critical Alert\'s permission.'),
+            SimpleButton('Request Precise Alarms mode',
                 onPressed: () => NotificationUtils.requestPreciseAlarmPermission(context).then(
                         (isAllowed) =>
                         setState(() {
-                          preciseAlarmsAllowed = isAllowed;
+                          refreshDetailedPagePermissions();
                         })
+                )
+            ),
+            SimpleButton('Request to Override Do not Disturbe mode (Android)',
+                onPressed: () => NotificationUtils.requestOverrideDndPermission(context).then(
+                        (isAllowed) =>
+                        setState(() {
+                          refreshDetailedPagePermissions();
+                        })
+                )
+            ),
+            SimpleButton('Open Precise Alarm\'s permission page',
+                onPressed: () => NotificationUtils.redirectToAlarmPage().then(
+                        (_)=> refreshDetailedPagePermissions()
+                )
+            ),
+            SimpleButton('Open DnD\'s permission page',
+                onPressed: () => NotificationUtils.redirectToOverrideDndsPage().then(
+                        (_)=> refreshDetailedPagePermissions()
                 )
             ),
 
@@ -1019,5 +1057,35 @@ class _HomePageState extends State<HomePage> {
                 onPressed: NotificationUtils.cancelAllNotifications),
           ],
         ));
+  }
+}
+
+class PermissionIndicator extends StatelessWidget {
+  const PermissionIndicator({
+    Key? key,
+    required this.name,
+    required this.allowed
+  }) : super(key: key);
+
+  final String? name;
+  final bool allowed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      width: 125,
+      child: Column(
+        children: [
+          (name != null) ? Text(name!+':', textAlign: TextAlign.center) : SizedBox(),
+          Text(allowed ? 'Allowed' : 'Not allowed',
+              style: TextStyle(
+                  color: allowed
+                      ? Colors.green
+                      : Colors.red)),
+          LedLight(allowed)
+        ],
+      ),
+    );
   }
 }

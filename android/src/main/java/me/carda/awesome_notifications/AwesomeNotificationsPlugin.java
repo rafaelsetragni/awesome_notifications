@@ -36,6 +36,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import android.app.Activity;
 
 import me.carda.awesome_notifications.notifications.BitmapResourceDecoder;
+import me.carda.awesome_notifications.notifications.managers.BadgeManager;
 import me.carda.awesome_notifications.notifications.managers.ChannelGroupManager;
 import me.carda.awesome_notifications.notifications.models.DefaultsModel;
 import me.carda.awesome_notifications.notifications.models.NotificationChannelGroupModel;
@@ -202,7 +203,7 @@ public class AwesomeNotificationsPlugin
     }
 
     @Override
-    public void onReattachedToActivityForConfigChanges(ActivityPluginBinding activityPluginBinding) {
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding activityPluginBinding) {
         activityBinding = activityPluginBinding;
         startListeningPermissions();
         getApplicationLifeCycle();
@@ -224,65 +225,64 @@ public class AwesomeNotificationsPlugin
     @Override
     public void onReceive(Context context, Intent intent) {
         getApplicationLifeCycle();
-
-        String action = intent.getAction();
-        switch (action) {
-
-            case Definitions.BROADCAST_CREATED_NOTIFICATION:
-                onBroadcastNotificationCreated(intent);
-                return;
-
-            case Definitions.BROADCAST_DISPLAYED_NOTIFICATION:
-                onBroadcastNotificationDisplayed(intent);
-                return;
-
-            case Definitions.BROADCAST_DISMISSED_NOTIFICATION:
-                onBroadcastNotificationDismissed(intent);
-                return;
-
-            case Definitions.BROADCAST_KEEP_ON_TOP:
-                onBroadcastKeepOnTopActionNotification(intent);
-                return;
-
-            case Definitions.BROADCAST_MEDIA_BUTTON:
-                onBroadcastMediaButton(intent);
-                return;
-
-            default:
-                if (AwesomeNotificationsPlugin.debug)
-                    Log.d(TAG, "Received unknown action: " + (
-                            StringUtils.isNullOrEmpty(action) ? "empty" : action));
-        }
-    }
-
-    private void onBroadcastNotificationCreated(Intent intent) {
-
         try {
-            Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
+            String action = intent.getAction();
+            switch (action) {
 
-            @SuppressWarnings("unchecked")
-            Map<String, Object> content = (serializable instanceof Map ? (Map<String, Object>) serializable : null);
-            if (content == null) return;
+                case Definitions.BROADCAST_CREATED_NOTIFICATION:
+                    onBroadcastNotificationCreated(intent);
+                    return;
 
-            NotificationReceived received = new NotificationReceived().fromMap(content);
-            received.validate(applicationContext);
+                case Definitions.BROADCAST_DISPLAYED_NOTIFICATION:
+                    onBroadcastNotificationDisplayed(intent);
+                    return;
 
-            CreatedManager.removeCreated(applicationContext, received.id);
-            CreatedManager.commitChanges(applicationContext);
+                case Definitions.BROADCAST_DISMISSED_NOTIFICATION:
+                    onBroadcastNotificationDismissed(intent);
+                    return;
 
-            pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED, content);
+                case Definitions.BROADCAST_KEEP_ON_TOP:
+                    onBroadcastKeepOnTopActionNotification(intent);
+                    return;
 
-            if (AwesomeNotificationsPlugin.debug)
-                Log.d(TAG, "Notification created");
+                case Definitions.BROADCAST_MEDIA_BUTTON:
+                    onBroadcastMediaButton(intent);
+                    return;
 
+                default:
+                    if (AwesomeNotificationsPlugin.debug)
+                        Log.d(TAG, "Received unknown action: " + (
+                                StringUtils.isNullOrEmpty(action) ? "empty" : action));
+
+            }
         } catch (Exception e) {
             if (AwesomeNotificationsPlugin.debug)
-                Log.d(TAG, e.getMessage());
+                Log.d(TAG, String.format("%s", e.getMessage()));
             e.printStackTrace();
         }
     }
 
-    private void onBroadcastKeepOnTopActionNotification(Intent intent) {
+    private void onBroadcastNotificationCreated(Intent intent) throws AwesomeNotificationException {
+
+        Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> content = (serializable instanceof Map ? (Map<String, Object>) serializable : null);
+        if (content == null) return;
+
+        NotificationReceived received = new NotificationReceived().fromMap(content);
+        received.validate(applicationContext);
+
+        CreatedManager.removeCreated(applicationContext, received.id);
+        CreatedManager.commitChanges(applicationContext);
+
+        pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED, content);
+
+        if (AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "Notification created");
+    }
+
+    private void onBroadcastKeepOnTopActionNotification(Intent intent) throws AwesomeNotificationException {
         try {
 
             Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
@@ -292,13 +292,11 @@ public class AwesomeNotificationsPlugin
                 Log.d(TAG, "Notification action received");
 
         } catch (Exception e) {
-            if (AwesomeNotificationsPlugin.debug)
-                Log.d(TAG, e.getMessage());
-            e.printStackTrace();
+            throw new AwesomeNotificationException(e.getMessage());
         }
     }
 
-    private void onBroadcastMediaButton(Intent intent) {
+    private void onBroadcastMediaButton(Intent intent) throws AwesomeNotificationException {
         try {
             Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
             pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_MEDIA_BUTTON, serializable);
@@ -307,13 +305,11 @@ public class AwesomeNotificationsPlugin
                 Log.d(TAG, "Notification action received");
 
         } catch (Exception e) {
-            if (AwesomeNotificationsPlugin.debug)
-                Log.d(TAG, e.getMessage());
-            e.printStackTrace();
+            throw new AwesomeNotificationException(e.getMessage());
         }
     }
 
-    private void onBroadcastNotificationDisplayed(Intent intent) {
+    private void onBroadcastNotificationDisplayed(Intent intent) throws AwesomeNotificationException {
         try {
 
             Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
@@ -334,13 +330,11 @@ public class AwesomeNotificationsPlugin
                 Log.d(TAG, "Notification displayed");
 
         } catch (Exception e) {
-            if (AwesomeNotificationsPlugin.debug)
-                Log.d(TAG, e.getMessage());
-            e.printStackTrace();
+            throw new AwesomeNotificationException(e.getMessage());
         }
     }
 
-    private void onBroadcastNotificationDismissed(Intent intent) {
+    private void onBroadcastNotificationDismissed(Intent intent) throws AwesomeNotificationException {
         try {
 
             Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
@@ -361,9 +355,7 @@ public class AwesomeNotificationsPlugin
                 Log.d(TAG, "Notification dismissed");
 
         } catch (Exception e) {
-            if (AwesomeNotificationsPlugin.debug)
-                Log.d(TAG, e.getMessage());
-            e.printStackTrace();
+            throw new AwesomeNotificationException(e.getMessage());
         }
     }
 
@@ -381,7 +373,7 @@ public class AwesomeNotificationsPlugin
 
                 } catch (AwesomeNotificationException e) {
                     if (AwesomeNotificationsPlugin.debug)
-                        Log.d(TAG, e.getMessage());
+                        Log.d(TAG, String.format("%s", e.getMessage()));
                     e.printStackTrace();
                 }
             }
@@ -402,7 +394,7 @@ public class AwesomeNotificationsPlugin
 
                 } catch (AwesomeNotificationException e) {
                     if (AwesomeNotificationsPlugin.debug)
-                        Log.d(TAG, e.getMessage());
+                        Log.d(TAG, String.format("%s", e.getMessage()));
                     e.printStackTrace();
                 }
             }
@@ -423,7 +415,7 @@ public class AwesomeNotificationsPlugin
 
                 } catch (AwesomeNotificationException e) {
                     if (AwesomeNotificationsPlugin.debug)
-                        Log.d(TAG, e.getMessage());
+                        Log.d(TAG, String.format("%s", e.getMessage()));
                     e.printStackTrace();
                 }
             }
@@ -431,7 +423,7 @@ public class AwesomeNotificationsPlugin
     }
 
     @Override
-    public void onMethodCall(final MethodCall call, final Result result) {
+    public void onMethodCall(@NonNull final MethodCall call, @NonNull final Result result) {
 
         getApplicationLifeCycle();
 
@@ -457,6 +449,10 @@ public class AwesomeNotificationsPlugin
 
                 case Definitions.CHANNEL_METHOD_SHOW_ALARM_PAGE:
                     channelShowAlarmPage(call, result);
+                    return;
+
+                case Definitions.CHANNEL_METHOD_SHOW_GLOBAL_DND_PAGE:
+                    channelShowGlobalDndPage(call, result);
                     return;
 
                 case Definitions.CHANNEL_METHOD_CHECK_PERMISSIONS:
@@ -577,7 +573,7 @@ public class AwesomeNotificationsPlugin
 
         } catch (Exception e) {
             if (AwesomeNotificationsPlugin.debug)
-                Log.d(TAG, e.getMessage());
+                Log.d(TAG, String.format("%s", e.getMessage()));
 
             result.error(call.method, e.getMessage(), e);
             e.printStackTrace();
@@ -670,7 +666,6 @@ public class AwesomeNotificationsPlugin
             finalValidDateString = DateUtils.dateToString(nextValidDate.getTime(), scheduleModel.timeZone);
 
         result.success(finalValidDateString);
-        return;
     }
 
     private void channelMethodGetLocalTimeZone(MethodCall call, Result result) throws Exception {
@@ -724,7 +719,7 @@ public class AwesomeNotificationsPlugin
     }
 
     private void channelMethodGetBadgeCounter(MethodCall call, Result result) throws Exception {
-        Integer badgeCount = NotificationBuilder.getGlobalBadgeCounter(applicationContext);
+        Integer badgeCount = BadgeManager.getGlobalBadgeCounter(applicationContext);
         // Android resets badges automatically when all notifications are cleared
         result.success(badgeCount);
     }
@@ -737,22 +732,22 @@ public class AwesomeNotificationsPlugin
             throw new AwesomeNotificationException("Invalid Badge value");
 
         // Android resets badges automatically when all notifications are cleared
-        NotificationBuilder.setGlobalBadgeCounter(applicationContext, count);
+        BadgeManager.setGlobalBadgeCounter(applicationContext, count);
         result.success(true);
     }
 
     private void channelMethodResetBadge(MethodCall call, Result result) throws Exception {
-        NotificationBuilder.resetGlobalBadgeCounter(applicationContext);
+        BadgeManager.resetGlobalBadgeCounter(applicationContext);
         result.success(null);
     }
 
     private void channelMethodIncrementBadge(MethodCall call, Result result) throws Exception {
-        Integer badgeCount = NotificationBuilder.incrementGlobalBadgeCounter(applicationContext);
+        Integer badgeCount = BadgeManager.incrementGlobalBadgeCounter(applicationContext);
         result.success(badgeCount);
     }
 
     private void channelMethodDecrementBadge(MethodCall call, Result result) throws Exception {
-        Integer badgeCount = NotificationBuilder.decrementGlobalBadgeCounter(applicationContext);
+        Integer badgeCount = BadgeManager.decrementGlobalBadgeCounter(applicationContext);
         result.success(badgeCount);
     }
 
@@ -933,9 +928,15 @@ public class AwesomeNotificationsPlugin
     }
 
     private void channelShowAlarmPage(MethodCall call, @NonNull Result result) throws Exception {
-            PermissionManager.showPreciseAlarmPage(
-                    applicationContext,
-                    result::success);
+        PermissionManager.showPreciseAlarmPage(
+                applicationContext,
+                result::success);
+    }
+
+    private void channelShowGlobalDndPage(MethodCall call, @NonNull Result result) throws Exception {
+        PermissionManager.showDnDGlobalOverridingPage(
+                applicationContext,
+                result::success);
     }
 
     @SuppressWarnings("unchecked")
