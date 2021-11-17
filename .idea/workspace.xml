@@ -104,13 +104,11 @@
     <configuration name="getPlatformVersion" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
       <option name="testName" value="getPlatformVersion" />
       <option name="testFile" value="$PROJECT_DIR$/test/awesome_notifications_test.dart" />
-      <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
     <configuration name="jsonConversion" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
       <option name="testName" value="jsonConversion" />
       <option name="testFile" value="$PROJECT_DIR$/test/awesome_notifications_test.dart" />
-      <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
     <recent_temporary>
