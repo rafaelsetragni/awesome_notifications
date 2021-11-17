@@ -12,7 +12,7 @@ import me.carda.awesome_notifications.utils.DateUtils;
 import me.carda.awesome_notifications.utils.MapUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
-public abstract class NotificationScheduleModel extends Model {
+public abstract class NotificationScheduleModel extends AbstractModel {
 
     public String timeZone;
     public String createdDate;

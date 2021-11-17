@@ -1,7 +1,6 @@
 package me.carda.awesome_notifications.notifications.models;
 
 import android.content.Context;
-import android.content.Intent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,10 +8,9 @@ import java.util.Map;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.enumerators.ActionButtonType;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
-import me.carda.awesome_notifications.utils.IntegerUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
-public class NotificationButtonModel extends Model {
+public class NotificationButtonModel extends AbstractModel {
 
     public String key;
     public String icon;

@@ -9,7 +9,6 @@ import android.os.Build;
 import android.service.notification.StatusBarNotification;
 
 import java.util.List;
-import java.util.Random;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationManagerCompat;

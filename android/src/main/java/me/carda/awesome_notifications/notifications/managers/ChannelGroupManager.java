@@ -1,13 +1,9 @@
 package me.carda.awesome_notifications.notifications.managers;
 
-import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.media.AudioAttributes;
-import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 
 import java.util.List;
 
@@ -15,9 +11,6 @@ import androidx.annotation.RequiresApi;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.notifications.models.NotificationChannelGroupModel;
-import me.carda.awesome_notifications.notifications.models.NotificationChannelModel;
-import me.carda.awesome_notifications.utils.BooleanUtils;
-import me.carda.awesome_notifications.utils.StringUtils;
 
 public class ChannelGroupManager {
 

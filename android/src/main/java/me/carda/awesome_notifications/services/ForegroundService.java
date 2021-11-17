@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
-import me.carda.awesome_notifications.notifications.models.NotificationContentModel;
 import me.carda.awesome_notifications.notifications.models.NotificationModel;
 import me.carda.awesome_notifications.notifications.NotificationBuilder;
 

@@ -15,10 +15,10 @@ import java.util.Map;
 
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
-import me.carda.awesome_notifications.notifications.models.Model;
+import me.carda.awesome_notifications.notifications.models.AbstractModel;
 import me.carda.awesome_notifications.utils.StringUtils;
 
-public class SharedManager<T extends Model> {
+public class SharedManager<T extends AbstractModel> {
     private Class<T> clazz;
     private String className;
 
@@ -119,7 +119,7 @@ public class SharedManager<T extends Model> {
             if (!StringUtils.isNullOrEmpty(json)) {
                 T genericModel = clazz.newInstance();
 
-                Model parsedModel = genericModel.fromJson(json);
+                AbstractModel parsedModel = genericModel.fromJson(json);
                 if(parsedModel != null){
                     returnedObject = (T) parsedModel;
                 }

@@ -8,7 +8,7 @@ import java.util.Map;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 
-public class NotificationMessageModel extends Model {
+public class NotificationMessageModel extends AbstractModel {
 
     public String title;
     public String message;

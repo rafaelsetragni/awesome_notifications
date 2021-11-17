@@ -8,10 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import me.carda.awesome_notifications.Definitions;
-import me.carda.awesome_notifications.notifications.broadcastReceivers.ScheduledNotificationReceiver;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 
-public class NotificationModel extends Model {
+public class NotificationModel extends AbstractModel {
 
     public boolean groupSummary = false;
     public String remoteHistory;

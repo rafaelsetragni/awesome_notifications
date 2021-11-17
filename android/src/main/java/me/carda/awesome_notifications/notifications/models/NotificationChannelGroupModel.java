@@ -5,23 +5,11 @@ import android.content.Context;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.Nullable;
 import me.carda.awesome_notifications.Definitions;
-import me.carda.awesome_notifications.notifications.enumerators.DefaultRingtoneType;
-import me.carda.awesome_notifications.notifications.enumerators.GroupAlertBehaviour;
-import me.carda.awesome_notifications.notifications.enumerators.GroupSort;
-import me.carda.awesome_notifications.notifications.enumerators.MediaSource;
-import me.carda.awesome_notifications.notifications.enumerators.NotificationImportance;
-import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
-import me.carda.awesome_notifications.utils.AudioUtils;
-import me.carda.awesome_notifications.utils.BitmapUtils;
-import me.carda.awesome_notifications.utils.BooleanUtils;
-import me.carda.awesome_notifications.utils.CompareUtils;
-import me.carda.awesome_notifications.utils.MediaUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
-public class NotificationChannelGroupModel extends Model {
+public class NotificationChannelGroupModel extends AbstractModel {
     public String channelGroupName;
     public String channelGroupKey;
 

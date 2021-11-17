@@ -2,12 +2,6 @@ package me.carda.awesome_notifications.notifications.managers;
 
 import android.content.Context;
 
-import com.google.common.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.util.List;
-
-import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.models.DefaultsModel;
 
