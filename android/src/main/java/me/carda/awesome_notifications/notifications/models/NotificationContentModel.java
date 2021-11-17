@@ -25,7 +25,7 @@ import me.carda.awesome_notifications.utils.MapUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
 @SuppressWarnings("unchecked")
-public class NotificationContentModel extends Model {
+public class NotificationContentModel extends AbstractModel {
 
     public boolean isRefreshNotification = false;
     public boolean isRandomId = false;

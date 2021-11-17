@@ -10,25 +10,25 @@ import me.carda.awesome_notifications.utils.JsonUtils;
 import me.carda.awesome_notifications.utils.MapUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
-public abstract class Model {
+public abstract class AbstractModel {
 
-    public abstract Model fromMap(Map<String, Object> arguments);
+    public abstract AbstractModel fromMap(Map<String, Object> arguments);
     public abstract Map<String, Object> toMap();
 
     public abstract String toJson();
-    public abstract Model fromJson(String json);
+    public abstract AbstractModel fromJson(String json);
 
     protected String templateToJson(){
         return JsonUtils.toJson(this.toMap());
     }
 
-    protected Model templateFromJson(String json) {
+    protected AbstractModel templateFromJson(String json) {
         if(StringUtils.isNullOrEmpty(json)) return null;
         Map<String, Object> map = JsonUtils.fromJson(json);
         return this.fromMap(map);
     }
 
-    public Model onlyFromValidMap(Context context, Map<String, Object> arguments){
+    public AbstractModel onlyFromValidMap(Context context, Map<String, Object> arguments){
 
         // Set default values
         fromMap(arguments);

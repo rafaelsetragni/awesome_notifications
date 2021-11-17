@@ -1,12 +1,8 @@
 package me.carda.awesome_notifications.notifications.managers;
 
-import android.Manifest;
-import android.app.AutomaticZenRule;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -15,17 +11,13 @@ import android.util.Log;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.NotificationBuilder;
 import me.carda.awesome_notifications.notifications.enumerators.DefaultRingtoneType;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationImportance;
-import me.carda.awesome_notifications.notifications.enumerators.NotificationPermission;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.notifications.models.NotificationChannelGroupModel;

@@ -21,7 +21,7 @@ import me.carda.awesome_notifications.utils.CompareUtils;
 import me.carda.awesome_notifications.utils.MediaUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
-public class NotificationChannelModel extends Model {
+public class NotificationChannelModel extends AbstractModel {
 
     public String channelKey;
     public String channelName;

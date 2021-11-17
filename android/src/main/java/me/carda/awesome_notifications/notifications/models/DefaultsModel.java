@@ -8,7 +8,7 @@ import java.util.Map;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 
-public class DefaultsModel extends Model {
+public class DefaultsModel extends AbstractModel {
 
     public String appIcon;
     public Boolean firebaseEnabled;
@@ -20,7 +20,7 @@ public class DefaultsModel extends Model {
     }
 
     @Override
-    public Model fromMap(Map<String, Object> arguments) {
+    public AbstractModel fromMap(Map<String, Object> arguments) {
         appIcon  = getValueOrDefault(arguments, Definitions.NOTIFICATION_APP_ICON, String.class);
         firebaseEnabled  = getValueOrDefault(arguments, Definitions.FIREBASE_ENABLED, Boolean.class);
 
