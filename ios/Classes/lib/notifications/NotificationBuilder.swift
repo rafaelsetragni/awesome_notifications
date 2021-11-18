@@ -12,23 +12,6 @@ public class NotificationBuilder {
     
     private static let TAG = "NotificationBuilder"
     
-    private static var badgeAmount:NSNumber = 0
-
-    public static func showNotificationConfigPage(completion: @escaping (Bool) -> ()){
-
-        guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
-            return
-        }
-
-        if UIApplication.shared.canOpenURL(settingsUrl) {
-            UIApplication.shared.open(settingsUrl, completionHandler: { (isAllowed) in
-                completion(isAllowed)
-            })
-        } else {
-            isNotificationAllowed(completion: completion)
-        }
-    }
-    
     public static func isNotificationAllowed(completion: @escaping (Bool) -> ()) {
              
         // Extension targets are always authorized
@@ -59,48 +42,6 @@ public class NotificationBuilder {
         
         //return UIApplication.shared.isRegisteredForRemoteNotifications
     }
-        
-    public static func incrementBadge() -> NSNumber {
-        let count:Int = NotificationBuilder.getBadge().intValue + 1
-        NotificationBuilder.setBadge(count)
-        return NSNumber(value: count)
-    }
-
-    public static func decrementBadge() -> NSNumber {
-        let count:Int = max(NotificationBuilder.getBadge().intValue - 1, 0)
-        NotificationBuilder.setBadge(count)
-        return NSNumber(value: count)
-    }
-    
-    public static func resetBadge(){
-        setBadge(0)
-    }
-    
-    public static func getBadge() -> NSNumber {
-        if !SwiftUtils.isRunningOnExtension() && Thread.isMainThread {
-            NotificationBuilder.badgeAmount = NSNumber(value: UIApplication.shared.applicationIconBadgeNumber)
-        }
-        else{
-            let userDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)
-            let badgeCount:Int = userDefaults!.integer(forKey: Definitions.BADGE_COUNT)
-            NotificationBuilder.badgeAmount = NSNumber(value: badgeCount)
-        }
-        return NotificationBuilder.badgeAmount
-    }
-    
-    public static func setBadge(_ count:Int) {
-        NotificationBuilder.badgeAmount = NSNumber(value: count)
-        
-        if !SwiftUtils.isRunningOnExtension() && Thread.isMainThread {
-            UIApplication.shared.applicationIconBadgeNumber = count
-        }
-        else{
-            NotificationBuilder.badgeAmount = NSNumber(value: count)
-        }
-        
-        let userDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)
-        userDefaults!.set(count, forKey: Definitions.BADGE_COUNT)
-    }
     
     public static func checkPermissions(_ permissions:[String], channel:String?, completion: @escaping ([String]) -> ()){
 
@@ -115,51 +56,52 @@ public class NotificationBuilder {
                 switch NotificationPermission.fromString(permission) {
                     
                     case .Alert:
-                    if(iOSpermissions.alertSetting != .disabled){
-                                allowed.append(NotificationPermission.Alert.rawValue)
+                        if(iOSpermissions.alertSetting != .disabled){
+                            allowed.append(permission)
                         }
                         break
                     case .Sound:
-                    if(iOSpermissions.soundSetting != .disabled){
-                            allowed.append(NotificationPermission.Sound.rawValue)
-                    }
+                        if(iOSpermissions.soundSetting != .disabled){
+                            allowed.append(permission)
+                        }   
                         break
                         
                     case .Badge:
-                    if(iOSpermissions.badgeSetting != .disabled){
-                            allowed.append(NotificationPermission.Badge.rawValue)
-                    }
-                            break
+                        if(iOSpermissions.badgeSetting != .disabled){
+                            allowed.append(permission)
+                        }
+                        break
                         
                     case .Car:
-                    if(iOSpermissions.carPlaySetting != .disabled){
-                            allowed.append(NotificationPermission.Car.rawValue)
-                    }
+                        if(iOSpermissions.carPlaySetting != .disabled){
+                            allowed.append(permission)
+                        }
                         break
                     
                     case .CriticalAlert:
                         if #available(iOS 12.0, *) {
                             if(iOSpermissions.criticalAlertSetting != .disabled){
-                                allowed.append(NotificationPermission.CriticalAlert.rawValue)
+                                allowed.append(permission)
                             }
                         }
                         else {
-                            allowed.append(NotificationPermission.CriticalAlert.rawValue)
+                            allowed.append(permission)
                         }
                         break
                             
                     case .Provisional:
                         if #available(iOS 12.0, *) {
                             if(iOSpermissions.authorizationStatus == .provisional){
-                                allowed.append(NotificationPermission.Provisional.rawValue)
+                                allowed.append(permission)
                             }
                         }
                         else {
-                            allowed.append(NotificationPermission.Provisional.rawValue)
+                            allowed.append(permission)
                         }
                         break
 
                     default:
+                        allowed.append(permission)
                         break
                 }
             }
@@ -176,7 +118,9 @@ public class NotificationBuilder {
                 [
                     NotificationPermission.Alert.rawValue,
                     NotificationPermission.Sound.rawValue,
-                    NotificationPermission.Badge.rawValue
+                    NotificationPermission.Badge.rawValue,
+                    NotificationPermission.Vibration.rawValue,
+                    NotificationPermission.Light.rawValue
                 ]
             )
 
@@ -470,7 +414,7 @@ public class NotificationBuilder {
     
     private static func setBadgeIndicator(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){
         if(channel.channelShowBadge!){
-            content.badge = NotificationBuilder.incrementBadge()
+            content.badge = BadgeManager.incrementGlobalBadgeCounter()
         }
     }
     

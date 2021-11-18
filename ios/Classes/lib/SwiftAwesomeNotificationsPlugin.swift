@@ -459,9 +459,8 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     public func applicationWillEnterForeground(_ application: UIApplication) {
 	
         SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Background
-        
-        //stopBackgroundScheduler()
-        rescheduleLostNotifications()
+
+        PermissionManager.handlePermissionResult()
 		
         if(SwiftAwesomeNotificationsPlugin.debug){
 			Log.d(

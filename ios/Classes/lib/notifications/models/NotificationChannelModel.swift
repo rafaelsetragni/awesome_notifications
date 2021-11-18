@@ -31,9 +31,16 @@ public class NotificationChannelModel : AbstractModel {
     var groupKey: String?
     var groupSort: GroupSort?
     var groupAlertBehavior: GroupAlertBehaviour?
+
+    var icon: String?
+    var defaultColor: Int?
     
     var locked: Bool?
     var onlyAlertOnce: Bool?
+
+    var criticalAlerts: Bool?
+
+    var defaultPrivacy: NotificationPrivacy?
     
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         
@@ -53,14 +60,21 @@ public class NotificationChannelModel : AbstractModel {
         self.ledOnMs            = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_LED_ON_MS, arguments: arguments)
         self.ledOffMs           = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_LED_OFF_MS, arguments: arguments)
         
+        self.icon               = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_ICON, arguments: arguments)
+        self.defaultColor       = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_DEFAULT_COLOR, arguments: arguments)
+        
         self.importance         = EnumUtils<NotificationImportance>.getEnumOrDefault(reference: Definitions.NOTIFICATION_IMPORTANCE, arguments: arguments)
         
         self.groupSort          = EnumUtils<GroupSort>.getEnumOrDefault(reference: Definitions.NOTIFICATION_GROUP_SORT, arguments: arguments)
         self.groupKey           = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_GROUP_KEY, arguments: arguments)
         
-        self.locked         = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_LOCKED, arguments: arguments)
-        self.onlyAlertOnce  = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_ONLY_ALERT_ONCE, arguments: arguments)
-        
+        self.locked             = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_LOCKED, arguments: arguments)
+        self.onlyAlertOnce      = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_ONLY_ALERT_ONCE, arguments: arguments)
+
+        self.criticalAlerts     = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS, arguments: arguments)
+
+        self.defaultPrivacy     = EnumUtils<NotificationPrivacy>.getEnumOrDefault(reference: Definitions.NOTIFICATION_DEFAULT_PRIVACY, arguments: arguments)
+
         self.groupAlertBehavior = EnumUtils<GroupAlertBehaviour>.getEnumOrDefault(reference: Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR, arguments: arguments)
         
         self.defaultRingtoneType = EnumUtils<DefaultRingtoneType>.getEnumOrDefault(reference: Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, arguments: arguments)
@@ -91,9 +105,16 @@ public class NotificationChannelModel : AbstractModel {
         
         if(groupKey != nil) {mapData[Definitions.NOTIFICATION_GROUP_KEY] = self.groupKey}
         if(groupSort != nil) {mapData[Definitions.NOTIFICATION_GROUP_SORT] = self.groupSort?.rawValue}
+
+        if(icon != nil) {mapData[Definitions.NOTIFICATION_ICON] = self.icon}
+        if(defaultColor != nil) {mapData[Definitions.NOTIFICATION_DEFAULT_COLOR] = self.defaultColor}
         
         if(locked != nil) {mapData[Definitions.NOTIFICATION_LOCKED] = self.locked}
         if(onlyAlertOnce != nil) {mapData[Definitions.NOTIFICATION_ONLY_ALERT_ONCE] = self.onlyAlertOnce}
+        
+        if(criticalAlerts != nil) {mapData[Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS] = self.locked}
+
+        if(defaultPrivacy != nil) {mapData[Definitions.NOTIFICATION_DEFAULT_PRIVACY] = self.defaultPrivacy?.rawValue}
         
         if(groupAlertBehavior != nil) {mapData[Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR] = self.groupAlertBehavior?.rawValue}
         

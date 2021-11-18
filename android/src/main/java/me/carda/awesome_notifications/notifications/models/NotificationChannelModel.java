@@ -180,7 +180,7 @@ public class NotificationChannelModel extends AbstractModel {
         defaultRingtoneType =
                 getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, DefaultRingtoneType.class, DefaultRingtoneType.values());
 
-        groupKey          = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_KEY, String.class);
+        groupKey = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_KEY, String.class);
 
         locked = getValueOrDefault(arguments, Definitions.NOTIFICATION_LOCKED, Boolean.class);
         onlyAlertOnce = getValueOrDefault(arguments, Definitions.NOTIFICATION_ONLY_ALERT_ONCE, Boolean.class);
