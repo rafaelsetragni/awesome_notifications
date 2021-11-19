@@ -20,7 +20,7 @@ public class BadgeManager {
             let badgeCount:Int = userDefaults!.integer(forKey: Definitions.BADGE_COUNT)
             BadgeManager.badgeAmount = NSNumber(value: badgeCount)
         }
-        return BadgeManager.badgeAmount
+        return BadgeManager.badgeAmount.intValue
     }
 
     public static func setGlobalBadgeCounter(_ count:Int) {
@@ -42,15 +42,15 @@ public class BadgeManager {
     }
 
     public static func incrementGlobalBadgeCounter() -> Int {
-        let count:Int = NotificationBuilder.getBadge().intValue + 1
-        NotificationBuilder.setBadge(count)
-        return NSNumber(value: count)
+        let count:Int = BadgeManager.getGlobalBadgeCounter() + 1
+        BadgeManager.setGlobalBadgeCounter(count)
+        return count
     }
 
     public static func decrementGlobalBadgeCounter() -> Int {
-        let count:Int = max(NotificationBuilder.getBadge().intValue - 1, 0)
-        NotificationBuilder.setBadge(count)
-        return NSNumber(value: count)
+        let count:Int = max(BadgeManager.getGlobalBadgeCounter() - 1, 0)
+        BadgeManager.setGlobalBadgeCounter(count)
+        return count
     }
 
 }

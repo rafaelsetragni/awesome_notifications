@@ -912,8 +912,8 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
         }
 
-        NotificationBuilder.checkPermissions(permissions, channel: channelKey, completion: { (allowedPermissions) in
-            result(allowedPermissions)
+        PermissionManager.arePermissionsAllowed(permissions, channelKey: channelKey, completion: { (permissionsAllowed) in
+            result(permissionsAllowed)
         })
     }
 
@@ -924,7 +924,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
         }
         
-        NotificationBuilder.requestPermissions(permissions, completion: { (allowed) in
+        PermissionManager.requestPermissions(permissions, completion: { (allowed) in
             self.saveReturnPageParameters(result)
         })
     }
@@ -935,7 +935,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     }
     
     private func channelMethodGetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        result(NotificationBuilder.getBadge().intValue)
+        result(BadgeManager.getGlobalBadgeCounter())
     }
     
     private func channelMethodSetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
@@ -946,25 +946,25 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "Invalid Badge value")
         }
         
-        NotificationBuilder.setBadge(count)
+        BadgeManager.setGlobalBadgeCounter(count)
         result(nil)
     }
 
     private func channelMethodIncrementBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        let actualValue:NSNumber = NotificationBuilder.incrementBadge()
-        result(actualValue.intValue)
+        let actualValue:Int = BadgeManager.incrementGlobalBadgeCounter()
+        result(actualValue)
         return
     }
 
     private func channelMethodDecrementBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         
-        let actualValue:NSNumber = NotificationBuilder.decrementBadge()
-        result(actualValue.intValue)
+        let actualValue:Int = BadgeManager.decrementGlobalBadgeCounter()
+        result(actualValue)
         return
     }
     
     private func channelMethodResetBadge(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        NotificationBuilder.resetBadge()
+        BadgeManager.resetGlobalBadgeCounter()
         result(nil)
     }
     

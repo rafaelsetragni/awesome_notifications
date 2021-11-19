@@ -96,77 +96,78 @@ public class PermissionManager {
             
             // (Settings != .Disabled == .Enabled & .NotSupported /*Emulator limitations*/)
             for permission in permissions {
-                let permissionEnum:NotificationPermission = NotificationPermission.fromString(permission)
-                switch permissionEnum {
-                    
-                    case .Alert:
-                        if(iOSpermissions.alertSetting != .disabled){
-                            if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey, permissionEnum: permissionEnum)){
-                                allowed.append(NotificationPermission.Alert.rawValue)
-                            }
-                        }
-                        break
-                    case .Sound:
-                        if(iOSpermissions.soundSetting != .disabled){
-                            if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey, permissionEnum: permissionEnum)){
-                                allowed.append(NotificationPermission.Sound.rawValue)
-                            }
-                        }
-                        break
+                if let permissionEnum:NotificationPermission = NotificationPermission.fromString(permission) {
+                    switch permissionEnum {
                         
-                    case .Badge:
-                        if(iOSpermissions.badgeSetting != .disabled){
-                            if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey, permissionEnum: permissionEnum)){
-                                allowed.append(NotificationPermission.Badge.rawValue)
+                        case .Alert:
+                            if(iOSpermissions.alertSetting != .disabled){
+                                if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey!, permissionEnum: permissionEnum)){
+                                    allowed.append(NotificationPermission.Alert.rawValue)
+                                }
                             }
-                        }
-                        break
+                            break
+                        case .Sound:
+                            if(iOSpermissions.soundSetting != .disabled){
+                                if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey!, permissionEnum: permissionEnum)){
+                                    allowed.append(NotificationPermission.Sound.rawValue)
+                                }
+                            }
+                            break
+                            
+                        case .Badge:
+                            if(iOSpermissions.badgeSetting != .disabled){
+                                if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey!, permissionEnum: permissionEnum)){
+                                    allowed.append(NotificationPermission.Badge.rawValue)
+                                }
+                            }
+                            break
+                            
+                        case .Car:
+                            if(iOSpermissions.carPlaySetting != .disabled){
+                                if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey!, permissionEnum: permissionEnum)){
+                                    allowed.append(NotificationPermission.Car.rawValue)
+                                }
+                            }
+                            break
                         
-                    case .Car:
-                        if(iOSpermissions.carPlaySetting != .disabled){
-                            if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey, permissionEnum: permissionEnum)){
-                                allowed.append(NotificationPermission.Car.rawValue)
+                        case .OverrideDnD: fallthrough
+                        case .CriticalAlert:
+                            if #available(iOS 12.0, *) {
+                                if(iOSpermissions.criticalAlertSetting != .disabled){
+                                    if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey!, permissionEnum: permissionEnum)){
+                                        allowed.append(NotificationPermission.CriticalAlert.rawValue)
+                                    }
+                                }
                             }
-                        }
-                        break
-                    
-                    case .OverrideDnD:
-                    case .CriticalAlert:
-                        if #available(iOS 12.0, *) {
-                            if(iOSpermissions.criticalAlertSetting != .disabled){
-                                if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey, permissionEnum: permissionEnum)){
+                            else {
+                                if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey!, permissionEnum: permissionEnum)){
                                     allowed.append(NotificationPermission.CriticalAlert.rawValue)
                                 }
                             }
-                        }
-                        else {
-                            if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey, permissionEnum: permissionEnum)){
-                                allowed.append(NotificationPermission.CriticalAlert.rawValue)
+                            break
+                                
+                        case .Provisional:
+                            if #available(iOS 12.0, *) {
+                                if(iOSpermissions.authorizationStatus == .provisional){
+                                    if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey!, permissionEnum: permissionEnum)){
+                                        allowed.append(NotificationPermission.Provisional.rawValue)
+                                    }
+                                }
                             }
-                        }
-                        break
-                            
-                    case .Provisional:
-                        if #available(iOS 12.0, *) {
-                            if(iOSpermissions.authorizationStatus == .provisional){
-                                if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey, permissionEnum: permissionEnum)){
+                            else {
+                                if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey!, permissionEnum: permissionEnum)){
                                     allowed.append(NotificationPermission.Provisional.rawValue)
                                 }
                             }
-                        }
-                        else {
-                            if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey, permissionEnum: permissionEnum)){
-                                allowed.append(NotificationPermission.Provisional.rawValue)
-                            }
-                        }
-                        break
+                            break
 
-                    default:
-                        // Android only permissions are considered globally allowed on iOS
-                        if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey, permissionEnum: permissionEnum)){
-                            allowed.append(permission)
-                        }
-                        break
+                        default:
+                            // Android only permissions are considered globally allowed on iOS
+                            if(channelKey == nil || isSpecifiedChannelPermissionAllowed(channelKey: channelKey!, permissionEnum: permissionEnum)){
+                                allowed.append(permission)
+                            }
+                            break
+                    }
                 }
             }
 
@@ -174,7 +175,7 @@ public class PermissionManager {
         })
     }
 
-    public static func isSpecifiedPermissionGloballyAllowed(_ permission:[String], channel:String?, completion: @escaping ([String]) -> ()){
+    public static func isSpecifiedPermissionGloballyAllowed(_ permission:String, channel:String?, completion: @escaping (Bool) -> ()){
 
         UNUserNotificationCenter.current().getNotificationSettings(completionHandler: { iOSpermissions in
             
@@ -197,7 +198,7 @@ public class PermissionManager {
                     completion(iOSpermissions.carPlaySetting != .disabled)
                     break
                 
-                case .OverrideDnD:
+                case .OverrideDnD: fallthrough
                 case .CriticalAlert:
                     if #available(iOS 12.0, *) {
                         completion(iOSpermissions.criticalAlertSetting != .disabled)
@@ -224,50 +225,49 @@ public class PermissionManager {
         })
     }
 
-    public static isSpecifiedChannelPermissionAllowed(
-        channelKey:String, permissionEnum:NotificationPermission) throws -> Bool {
+    public static func isSpecifiedChannelPermissionAllowed(
+        channelKey:String, permissionEnum:NotificationPermission) -> Bool {
 
-        guard let channelModel = ChannelManager.getChannelByKey(channelKey: notificationModel.content!.channelKey!) else {
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: 
-                "Channel '\(notificationModel.content!.channelKey!)' does not exist or is disabled")
+        guard let channelModel = ChannelManager.getChannelByKey(channelKey: channelKey) else {
+            return false
         }
 
         if(channelModel.importance != NotificationImportance.None){
 
             switch (permissionEnum){
 
-                case Alert:
-                    return channelModel.importance.ordinal() >= NotificationImportance.High.ordinal();
+                case .Alert:
+                    return channelModel.importance == NotificationImportance.High ||
+                           channelModel.importance == NotificationImportance.Max;
 
-                case Sound:
-                    return channelModel.playSound;
+                case .Sound:
+                    return channelModel.playSound ?? false;
 
-                case Light:
-                    return channelModel.enableLights;
+                case .Light:
+                    return channelModel.enableLights ?? false;
 
-                case Vibration:
-                    return channelModel.enableVibration;
+                case .Vibration:
+                    return channelModel.enableVibration ?? false;
 
-                case Badge:
-                    return channelModel.channelShowBadge;
+                case .Badge:
+                    return channelModel.channelShowBadge ?? false;
 
-                case CriticalAlert:
-                    return channelModel.criticalAlerts;
+                case .CriticalAlert:
+                    return channelModel.criticalAlerts ?? false;
 
-                case PreciseAlarms:
                 default:
                     return true;
             }
 
         }
-        return false;
+        return false
     }
 
     public static func requestUserPermissions(
         permissions:[String],
         channelKey:String?,
         permissionCompletion: @escaping ([String]) -> ()
-    ) throws AwesomeNotificationException {
+    ) throws {
 
         if SwiftUtils.isRunningOnExtension() {
             // On Extensions, permissions are never requested
@@ -277,7 +277,7 @@ public class PermissionManager {
         }
             
         let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.getNotificationSettings { settings in
+        notificationCenter.getNotificationSettings { (settings) in
             
             var isAllowed:Bool = false
             if #available(iOS 12.0, *) {
@@ -289,6 +289,7 @@ public class PermissionManager {
                     (settings.authorizationStatus == .authorized)
             }
 
+            
             if !isAllowed && settings.authorizationStatus == .notDetermined {
                 shouldShowRequestDialog(
                     channelKey: channelKey,
@@ -305,13 +306,13 @@ public class PermissionManager {
     }
 
     private static func shouldShowRequestDialog(
-        permissions:[String],
         channelKey:String?,
+        permissions:[String],
         permissionCompletion: @escaping ([String]) -> ()
-    ) throws AwesomeNotificationException {
-
-        let permissionList:UNAuthorizationOptions = getIosPermissionsCode(permissions)                    
-        notificationCenter.requestAuthorization(options: iOSpermissions) { (granted, error) in
+    ) {
+        
+        let iOSpermissions:UNAuthorizationOptions = getIosPermissionsCode(permissions)
+        UNUserNotificationCenter.current().requestAuthorization(options: iOSpermissions) { (granted, error) in
 
             if granted {
                 print("Permissions enabled successfully")
@@ -330,10 +331,10 @@ public class PermissionManager {
     }
 
     private static func shouldShowRationalePage(
-        permissions:[String],
         channelKey:String?,
+        permissions:[String],
         permissionCompletion: @escaping ([String]) -> ()
-    ) throws AwesomeNotificationException {
+    ) {
 
         if(showNotificationConfigPage()) {
             actionQueue.append({
@@ -352,23 +353,23 @@ public class PermissionManager {
     }
 
     private static func refreshReturnedPermissions(
-        permissions:[String],
         channelKey:String?,
+        permissions:[String],
         permissionCompletion: @escaping ([String]) -> ()
     ){
         arePermissionsAllowed(
+            permissions,
             channelKey: channelKey,
-            permissions: permissions,
-            permissionCompletion: { permissionsAllowed:[String] in     
+            completion: { (permissionsAllowed:[String]) in
 
                 if(channelKey != nil){
                     
-                    ChannelManager.updateChannelModelThroughPermissions(
-                        channelKey: channelKey,
+                    PermissionManager.updateChannelModelThroughPermissions(
+                        channelKey: channelKey!,
                         permissions: permissionsAllowed)
                 }
 
-                completion(permissions.filter { !permissionsAllowed.contains($0) })
+                permissionCompletion(permissions.filter { !permissionsAllowed.contains($0) })
             })
     }
     
@@ -378,7 +379,7 @@ public class PermissionManager {
             return
         }
 
-        guard var channelModel:NotificationChannelModel = ChannelManager.getChannelByKey(String) else {
+        guard let channelModel:NotificationChannelModel = ChannelManager.getChannelByKey(channelKey: channelKey) else {
             return
         }
 
@@ -409,6 +410,9 @@ public class PermissionManager {
                 case .CriticalAlert:
                     channelModel.criticalAlerts = true
                     break
+                
+                default:
+                    break
             }
         }
 
@@ -416,10 +420,10 @@ public class PermissionManager {
     }
 
     public static func showNotificationConfigPage() -> Bool {
-        return startTestedActivity(UIApplication.openSettingsURLString))
+        return startTestedActivity(UIApplication.openSettingsURLString)
     }
 
-    public static func startTestedActivity(_ url:String)) -> Bool {
+    public static func startTestedActivity(_ url:String) -> Bool {
 
         guard let settingsUrl = URL(string: url) else {
             return false
@@ -427,7 +431,7 @@ public class PermissionManager {
 
         if UIApplication.shared.canOpenURL(settingsUrl) {
             DispatchQueue.main.async {
-                UIApplication.shared.open(settingsUrl, completionHandler: {})
+                UIApplication.shared.open(settingsUrl, completionHandler: {_ in })
             }
             return true
         }
