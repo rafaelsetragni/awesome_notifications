@@ -47,7 +47,6 @@ class NotificationCalendar extends NotificationSchedule {
   /// [hour] Schedule hour condition
   /// [minute] Schedule minute condition
   /// [second] Schedule second condition
-  /// [millisecond] Schedule millisecond condition
   /// [weekday] Schedule weekday condition
   /// [weekOfMonth] Schedule weekOfMonth condition
   /// [weekOfMonth] Schedule weekOfMonth condition

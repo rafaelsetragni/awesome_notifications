@@ -346,11 +346,8 @@ class AwesomeNotifications {
           NotificationPermission.Alert,
           NotificationPermission.Sound
         ]}) async {
-    List<Object?> permissionList = [];
-    for (final permission in permissions) {
-      String? permissionValue = AssertUtils.toSimpleEnumString(permission);
-      if (permissionValue != null) permissionList.add(permissionValue);
-    }
+
+    List<Object?> permissionList = _listPermissionToListString(permissions);
 
     permissionList = await _channel.invokeMethod(
       CHANNEL_METHOD_CHECK_PERMISSIONS, {
@@ -358,15 +355,48 @@ class AwesomeNotifications {
         NOTIFICATION_PERMISSIONS: permissionList
       });
 
-    List<NotificationPermission> allowed = [];
+    return _listStringToListPermission(permissionList);
+  }
+
+  /// Check if the app must show some rationale before request the user's consent. Returns the
+  /// list of permissions that can only be changed with the user's intervention.
+  Future<List<NotificationPermission>> shouldShowRationaleToRequest({
+    String? channelKey,
+    List<NotificationPermission> permissions = const [
+      NotificationPermission.Badge,
+      NotificationPermission.Alert,
+      NotificationPermission.Sound
+    ]}) async {
+
+    List<Object?> permissionList = _listPermissionToListString(permissions);
+
+    permissionList = await _channel.invokeMethod(
+        CHANNEL_METHOD_SHOULD_SHOW_RATIONALE, {
+      NOTIFICATION_CHANNEL_KEY: channelKey,
+      NOTIFICATION_PERMISSIONS: permissionList
+    });
+
+    return _listStringToListPermission(permissionList);
+  }
+
+  List<Object?> _listPermissionToListString(List<NotificationPermission> permissions){
+    List<Object?> permissionList = [];
+    for (final permission in permissions) {
+      String? permissionValue = AssertUtils.toSimpleEnumString(permission);
+      if (permissionValue != null) permissionList.add(permissionValue);
+    }
+    return permissionList;
+  }
+
+  List<NotificationPermission> _listStringToListPermission(List<Object?> permissionList){
+    List<NotificationPermission> lockedPermissions = [];
     for (final permission in permissionList) {
       NotificationPermission? permissionValue =
       AssertUtils.enumToString<NotificationPermission>(
           permission.toString(), NotificationPermission.values, null);
-      if (permissionValue != null) allowed.add(permissionValue);
+      if (permissionValue != null) lockedPermissions.add(permissionValue);
     }
-
-    return allowed;
+    return lockedPermissions;
   }
 
   /// List all active scheduled notifications.

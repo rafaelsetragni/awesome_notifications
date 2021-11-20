@@ -6,6 +6,7 @@ class SimpleButton extends StatelessWidget {
   final Color? backgroundColor;
   final double? width;
   final void Function()? onPressed;
+  final bool enabled;
 
   const SimpleButton(
     this.label, {
@@ -14,6 +15,7 @@ class SimpleButton extends StatelessWidget {
     this.backgroundColor,
     this.width,
     this.onPressed,
+    this.enabled = true
   }) : super(key: key);
 
   @override
@@ -27,7 +29,7 @@ class SimpleButton extends StatelessWidget {
             child: Text(label, textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 14,
-                  color: labelColor ?? Colors.black87
+                  color: (labelColor ?? Colors.black87).withAlpha( enabled ? 255 : 60 )
               ),
             ),
           ),
@@ -37,7 +39,7 @@ class SimpleButton extends StatelessWidget {
               color: labelColor ?? Colors.black87
             )
           ),
-          onPressed: onPressed
+          onPressed: enabled ? onPressed : null
         )
     );
   }

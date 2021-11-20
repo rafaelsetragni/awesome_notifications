@@ -3,7 +3,6 @@ import 'package:awesome_notifications/src/enumerators/notification_life_cycle.da
 import 'package:awesome_notifications/src/enumerators/notification_source.dart';
 import 'package:awesome_notifications/src/models/base_notification_content.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
-import 'package:intl/intl.dart';
 
 /// All received details of a notification created or displayed on the system
 /// The data field

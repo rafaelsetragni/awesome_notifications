@@ -204,6 +204,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> refreshDetailedPagePermissions() async {
+
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) async {
+      setState(() {
+        globalNotificationsAllowed = isAllowed;
+      });
+    });
     refreshScheduleChannelPermissions();
     refreshDangerousChannelPermissions();
   }
@@ -417,9 +423,11 @@ class _HomePageState extends State<HomePage> {
                 '* Android: notifications are enabled by default and are considered not dangerous.\n'
                 '* iOS: notifications are not enabled by default and you must explicitly request it to the user.'),
             SimpleButton('Request permission',
+                enabled: !globalNotificationsAllowed,
                 onPressed: () => NotificationUtils.requestBasicPermissionsToSendNotifications(context).then(
                     (isAllowed) =>
                       setState(() {
+                        globalNotificationsAllowed = isAllowed;
                         refreshDetailedPagePermissions();
                       })
                 )
@@ -434,6 +442,7 @@ class _HomePageState extends State<HomePage> {
                 )
             ),
             SimpleButton('Open basic channel permission page',
+                enabled: !Platform.isIOS,
                 onPressed: () => NotificationUtils.redirectToBasicChannelPage()
             ),
 
@@ -455,8 +464,15 @@ class _HomePageState extends State<HomePage> {
                 'To send local and push notifications, it is necessary to obtain the user\'s consent. Keep in mind that he user consent can be revoked at any time.\n\n'
                     '* OBS: if the feature is not available on device, it will be considered enabled by default.\n'),
             SimpleButton('Open Schedule channel\'s permission page',
+                enabled: !Platform.isIOS,
                 onPressed: () => NotificationUtils.redirectToScheduledChannelsPage().then(
-                      (_)=> refreshDetailedPagePermissions()
+                    (_)=> refreshDetailedPagePermissions()
+                )
+            ),
+            SimpleButton('Request full permissons for Schedule\'s channel',
+                enabled: scheduleChannelPermissions.isNotEmpty,
+                onPressed: () => NotificationUtils.requestFullScheduleChannelPermissions(context).then(
+                    (_)=> refreshDetailedPagePermissions()
                 )
             ),
 
@@ -475,29 +491,41 @@ class _HomePageState extends State<HomePage> {
                     '* Android: override DnD mode is disabled by default. When the permission is granted, the DnD device state is downgraded every time when a new critical notification is displayed and all notifications are being fully supressed by DnD.\n'
                     '* iOS: override DnD is automatically enabled with Critical Alert\'s permission.'),
             SimpleButton('Request Precise Alarms mode',
+                enabled: !Platform.isIOS,
                 onPressed: () => NotificationUtils.requestPreciseAlarmPermission(context).then(
-                        (isAllowed) =>
-                        setState(() {
-                          refreshDetailedPagePermissions();
-                        })
+                    (isAllowed) =>
+                    setState(() {
+                      refreshDetailedPagePermissions();
+                    })
+                )
+            ),
+            SimpleButton('Request Critical Alerts mode',
+                onPressed: () => NotificationUtils.requestCriticalAlertsPermission(context).then(
+                    (isAllowed) =>
+                    setState(() {
+                      refreshDetailedPagePermissions();
+                    })
                 )
             ),
             SimpleButton('Request to Override Do not Disturbe mode (Android)',
+                enabled: !Platform.isIOS,
                 onPressed: () => NotificationUtils.requestOverrideDndPermission(context).then(
-                        (isAllowed) =>
-                        setState(() {
-                          refreshDetailedPagePermissions();
-                        })
+                    (isAllowed) =>
+                    setState(() {
+                      refreshDetailedPagePermissions();
+                    })
                 )
             ),
             SimpleButton('Open Precise Alarm\'s permission page',
+                enabled: !Platform.isIOS,
                 onPressed: () => NotificationUtils.redirectToAlarmPage().then(
-                        (_)=> refreshDetailedPagePermissions()
+                    (_)=> refreshDetailedPagePermissions()
                 )
             ),
             SimpleButton('Open DnD\'s permission page',
+                enabled: !Platform.isIOS,
                 onPressed: () => NotificationUtils.redirectToOverrideDndsPage().then(
-                        (_)=> refreshDetailedPagePermissions()
+                    (_)=> refreshDetailedPagePermissions()
                 )
             ),
 
