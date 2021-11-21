@@ -434,13 +434,15 @@ class _HomePageState extends State<HomePage> {
                 '* iOS: notifications are not enabled by default and you must explicitly request it to the user.'),
             SimpleButton('Request permission',
                 enabled: !globalNotificationsAllowed,
-                onPressed: () => NotificationUtils.requestBasicPermissionsToSendNotifications(context).then(
+                onPressed: (){
+                  NotificationUtils.requestBasicPermissionsToSendNotifications(context).then(
                     (isAllowed) =>
-                      setState(() {
-                        globalNotificationsAllowed = isAllowed;
-                        refreshDetailedPagePermissions();
-                      })
-                )
+                        setState(() {
+                          globalNotificationsAllowed = isAllowed;
+                          refreshDetailedPagePermissions();
+                        })
+                  );
+                }
             ),
             SimpleButton('Open notifications permission page',
                 onPressed: () => NotificationUtils.redirectToPermissionsPage().then(

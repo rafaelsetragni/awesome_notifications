@@ -76,7 +76,7 @@ class NotificationUtils {
           context: context,
           builder: (context) => AlertDialog(
             backgroundColor: Color(0xfffbfbfb),
-            title: AutoSizeText(
+            title: Text(
                 'Get Notified!',
                 maxLines: 2,
                 textAlign: TextAlign.center,
@@ -89,7 +89,7 @@ class NotificationUtils {
                   height: MediaQuery.of(context).size.height * 0.3,
                   fit: BoxFit.fitWidth,
                 ),
-                AutoSizeText(
+                Text(
                   'Allow Awesome Notifications to send you beautiful notifications!',
                   maxLines: 4,
                   textAlign: TextAlign.center,
@@ -179,7 +179,7 @@ class NotificationUtils {
           context: context,
           builder: (context) => AlertDialog(
             backgroundColor: Color(0xfffbfbfb),
-            title: AutoSizeText('Awesome Notificaitons needs your permission to continue',
+            title: Text('Awesome Notificaitons needs your permission to continue',
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
@@ -192,7 +192,7 @@ class NotificationUtils {
                   height: MediaQuery.of(context).size.height * 0.3,
                   fit: BoxFit.fitWidth,
                 ),
-                AutoSizeText(
+                Text(
                   'To proceede, you need to enable the permissions above'+
                       (channelKey?.isEmpty ?? true ? '' : ' on channel $channelKey')+':',
                   maxLines: 2,

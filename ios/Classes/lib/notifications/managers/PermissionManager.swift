@@ -397,47 +397,63 @@ public class PermissionManager {
                         return
                     }
 
-                    if permissionsRequested.count == 1 {
-                        guard let permissionEnum = NotificationPermission.fromString(permissionsNeeded.first!) else {
-                            permissionCompletion(permissionsNeeded)
+                    shouldShowRationale(permissionsRequested, channelKey: channelKey, completion: { listToShowRationale in
+                        
+                        if listToShowRationale.count < 1 {
+                            // There is no need for user intervention
+                            refreshReturnedPermissions(
+                                channelKey: channelKey,
+                                permissions: permissionsNeeded,
+                                permissionCompletion: permissionCompletion)
                             return
                         }
                         
-                        switch permissionEnum {
+                        if listToShowRationale.count == 1 {
                             
-                            case .OverrideDnD: fallthrough
-                            case .CriticalAlert:
-                                if #available(iOS 12.0, *) {
-                                    if(settings.criticalAlertSetting == .disabled){
-                                        showRequestDialog(
-                                            channelKey: channelKey,
-                                            permissionsNeeded: permissionsNeeded,
-                                            permissionsToRequest: permissionsRequested,
-                                            permissionCompletion: permissionCompletion)
-                                        return
-                                    }
-                                }
-                                break
+                            guard let permissionEnum = NotificationPermission.fromString(permissionsNeeded.first!) else {
+                                refreshReturnedPermissions(
+                                    channelKey: channelKey,
+                                    permissions: permissionsNeeded,
+                                    permissionCompletion: permissionCompletion)
+                                return
+                            }
+                            
+                            switch permissionEnum {
                                 
-                            default:
-                                break
+                                case .OverrideDnD: fallthrough
+                                case .CriticalAlert:
+                                    if #available(iOS 12.0, *) {
+                                        if(settings.criticalAlertSetting == .disabled){
+                                            showRequestDialog(
+                                                channelKey: channelKey,
+                                                permissionsNeeded: permissionsNeeded,
+                                                permissionsToRequest: listToShowRationale,
+                                                permissionCompletion: permissionCompletion)
+                                            return
+                                        }
+                                    }
+                                    break
+                                    
+                                default:
+                                    break
+                            }
+                            
                         }
                         
-                    }
-                    
-                    if !isAllowed && settings.authorizationStatus == .notDetermined {
-                        showRequestDialog(
-                            channelKey: channelKey,
-                            permissionsNeeded: permissionsNeeded,
-                            permissionsToRequest: permissionsRequested,
-                            permissionCompletion: permissionCompletion)
-                    }
-                    else {
-                        showRationalePage(
-                            channelKey: channelKey,
-                            permissionsNeeded: permissionsNeeded,
-                            permissionCompletion: permissionCompletion)
-                    }
+                        if !isAllowed && settings.authorizationStatus == .notDetermined {
+                            showRequestDialog(
+                                channelKey: channelKey,
+                                permissionsNeeded: permissionsNeeded,
+                                permissionsToRequest: listToShowRationale,
+                                permissionCompletion: permissionCompletion)
+                        }
+                        else {
+                            showRationalePage(
+                                channelKey: channelKey,
+                                permissionsNeeded: permissionsNeeded,
+                                permissionCompletion: permissionCompletion)
+                        }
+                    })
                 }
             }
         }
@@ -498,7 +514,7 @@ public class PermissionManager {
     ){
         arePermissionsAllowed(
             permissions,
-            channelKey: channelKey,
+            channelKey: nil,
             completion: { (permissionsAllowed:[String]) in
 
                 if(channelKey != nil){
