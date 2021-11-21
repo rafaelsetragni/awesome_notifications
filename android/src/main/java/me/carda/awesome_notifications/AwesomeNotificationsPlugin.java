@@ -459,6 +459,10 @@ public class AwesomeNotificationsPlugin
                     channelMethodCheckPermissions(call, result);
                     return;
 
+                case Definitions.CHANNEL_METHOD_SHOULD_SHOW_RATIONALE:
+                    channelMethodShouldShowRationale(call, result);
+                    return;
+
                 case Definitions.CHANNEL_METHOD_REQUEST_NOTIFICATIONS:
                     channelRequestNotification(call, result);
                     return;
@@ -955,8 +959,28 @@ public class AwesomeNotificationsPlugin
         if(permissions.isEmpty())
             throw new AwesomeNotificationException("Permission list cannot be empty");
 
-        permissions = PermissionManager.arePermissionsAllowed(
-                activityBinding.getActivity(), applicationContext, channelKey, permissions);
+        permissions = PermissionManager.arePermissionsAllowed(applicationContext, channelKey, permissions);
+
+        result.success(permissions);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void channelMethodShouldShowRationale(MethodCall call, Result result) throws Exception {
+
+        Map<String, Object> parameters = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
+        if(parameters == null)
+            throw new AwesomeNotificationException("Parameters are required");
+
+        String channelKey = (String) parameters.get(Definitions.NOTIFICATION_CHANNEL_KEY);
+        List<String> permissions = (List<String>) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);
+
+        if(permissions == null)
+            throw new AwesomeNotificationException("Permission list is required");
+
+        if(permissions.isEmpty())
+            throw new AwesomeNotificationException("Permission list cannot be empty");
+
+        permissions = PermissionManager.shouldShowRationale(applicationContext, channelKey, permissions);
 
         result.success(permissions);
     }
@@ -1106,7 +1130,7 @@ public class AwesomeNotificationsPlugin
         }
 
         for (NotificationChannelModel channelModel : channels) {
-            ChannelManager.saveChannel(context, channelModel, forceUpdate);
+            ChannelManager.saveChannel(context, channelModel, false, forceUpdate);
         }
 
         ChannelManager.commitChanges(context);

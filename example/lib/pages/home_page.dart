@@ -37,6 +37,11 @@ class _HomePageState extends State<HomePage> {
   double _secondsToWakeUp = 5;
 
   bool globalNotificationsAllowed = false;
+  bool schedulesFullControl = false;
+  bool isCriticalAlertsEnabled = false;
+  bool isPreciseAlarmEnabled = false;
+  bool isOverrideDnDEnabled = false;
+
   Map<NotificationPermission, bool> scheduleChannelPermissions = {};
   Map<NotificationPermission, bool> dangerousPermissionsStatus = {};
 
@@ -220,8 +225,10 @@ class _HomePageState extends State<HomePage> {
         permissions: channelPermissions
     ).then((List<NotificationPermission> permissionsAllowed) =>
         setState(() {
+          schedulesFullControl = true;
           for(NotificationPermission permission in channelPermissions){
             scheduleChannelPermissions[permission] = permissionsAllowed.contains(permission);
+            schedulesFullControl = schedulesFullControl && scheduleChannelPermissions[permission]!;
           }
         })
     );
@@ -235,6 +242,9 @@ class _HomePageState extends State<HomePage> {
           for(NotificationPermission permission in dangerousPermissions){
             dangerousPermissionsStatus[permission] = permissionsAllowed.contains(permission);
           }
+          isCriticalAlertsEnabled = dangerousPermissionsStatus[NotificationPermission.CriticalAlert]!;
+          isPreciseAlarmEnabled = dangerousPermissionsStatus[NotificationPermission.PreciseAlarms]!;
+          isOverrideDnDEnabled = dangerousPermissionsStatus[NotificationPermission.OverrideDnD]!;
         })
     );
   }
@@ -470,7 +480,7 @@ class _HomePageState extends State<HomePage> {
                 )
             ),
             SimpleButton('Request full permissons for Schedule\'s channel',
-                enabled: scheduleChannelPermissions.isNotEmpty,
+                enabled: !schedulesFullControl,
                 onPressed: () => NotificationUtils.requestFullScheduleChannelPermissions(context).then(
                     (_)=> refreshDetailedPagePermissions()
                 )
@@ -482,16 +492,16 @@ class _HomePageState extends State<HomePage> {
             Wrap(
                 alignment: WrapAlignment.center,
                 children: <Widget>[
-                  PermissionIndicator(name: 'Critical Alerts', allowed: dangerousPermissionsStatus[NotificationPermission.CriticalAlert]!),
-                  PermissionIndicator(name: 'Precise Alarms', allowed: dangerousPermissionsStatus[NotificationPermission.PreciseAlarms]!),
-                  PermissionIndicator(name: 'Override DnD', allowed: dangerousPermissionsStatus[NotificationPermission.OverrideDnD]!),
+                  PermissionIndicator(name: 'Critical Alerts', allowed: isCriticalAlertsEnabled),
+                  PermissionIndicator(name: 'Precise Alarms', allowed: isPreciseAlarmEnabled),
+                  PermissionIndicator(name: 'Override DnD', allowed: isOverrideDnDEnabled),
                 ]),
             TextNote(
                 'Dangerous permissions are permissions that can be disabled by default and you must obtain the user\'s consent explicity to enable. Keep in mind that he user consent can be revoked at any time.\n\n'
                     '* Android: override DnD mode is disabled by default. When the permission is granted, the DnD device state is downgraded every time when a new critical notification is displayed and all notifications are being fully supressed by DnD.\n'
                     '* iOS: override DnD is automatically enabled with Critical Alert\'s permission.'),
             SimpleButton('Request Precise Alarms mode',
-                enabled: !Platform.isIOS,
+                enabled: !isPreciseAlarmEnabled,
                 onPressed: () => NotificationUtils.requestPreciseAlarmPermission(context).then(
                     (isAllowed) =>
                     setState(() {
@@ -500,6 +510,7 @@ class _HomePageState extends State<HomePage> {
                 )
             ),
             SimpleButton('Request Critical Alerts mode',
+                enabled: !isCriticalAlertsEnabled,
                 onPressed: () => NotificationUtils.requestCriticalAlertsPermission(context).then(
                     (isAllowed) =>
                     setState(() {
@@ -508,7 +519,7 @@ class _HomePageState extends State<HomePage> {
                 )
             ),
             SimpleButton('Request to Override Do not Disturbe mode (Android)',
-                enabled: !Platform.isIOS,
+                enabled: !isOverrideDnDEnabled,
                 onPressed: () => NotificationUtils.requestOverrideDndPermission(context).then(
                     (isAllowed) =>
                     setState(() {

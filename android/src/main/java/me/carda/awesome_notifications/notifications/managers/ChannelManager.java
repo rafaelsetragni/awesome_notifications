@@ -49,12 +49,32 @@ public class ChannelManager {
 
     public static NotificationChannelModel getChannelByKey(Context context, String channelKey){
 
+        if(StringUtils.isNullOrEmpty(channelKey))
+            return null;
+
         NotificationChannelModel channelModel = shared.get(context, Definitions.SHARED_CHANNELS, channelKey);
-        if(channelModel != null){
-            channelModel.refreshIconResource(context);
+        if(channelModel == null) return null;
+
+        channelModel.refreshIconResource(context);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/){
+
+            NotificationChannel androidChannel = getAndroidChannel(context, channelKey);
+            if(androidChannel == null) return null;
+            updateChannelModelThroughAndroidChannel(channelModel, androidChannel);
         }
 
         return channelModel;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private static void updateChannelModelThroughAndroidChannel(NotificationChannelModel channelModel, NotificationChannel androidChannel){
+        channelModel.channelName = String.valueOf(androidChannel.getName());
+        channelModel.channelDescription = androidChannel.getDescription();
+        channelModel.channelShowBadge = androidChannel.canShowBadge();
+        channelModel.playSound = androidChannel.canShowBadge();
+        channelModel.enableLights = androidChannel.shouldShowLights();
+        channelModel.enableVibration = androidChannel.shouldVibrate();
+        channelModel.importance = NotificationImportance.fromAndroidImportance(androidChannel.getImportance());
     }
 
     public static List<NotificationChannelModel> listChannels(Context context) {
@@ -90,11 +110,19 @@ public class ChannelManager {
     }
 
     public static void saveChannel(Context context, NotificationChannelModel newChannel, Boolean forceUpdate) throws AwesomeNotificationException {
+        saveChannel(context, newChannel, true, forceUpdate);
+    }
+
+    public static void saveChannel(Context context, NotificationChannelModel newChannel, Boolean allowUpdates, Boolean forceUpdate) throws AwesomeNotificationException {
 
         newChannel.refreshIconResource(context);
         newChannel.validate(context);
 
         NotificationChannelModel oldChannelModel = ChannelManager.getChannelByKey(context, newChannel.channelKey);
+
+        // If nothing has changed, so there is nothing to do
+        if(!allowUpdates && oldChannelModel != null && !oldChannelModel.equals(newChannel))
+            return;
 
         // Android Channels are only available on Android Oreo and beyond.
         // On older versions, channel models are only used to organize notifications

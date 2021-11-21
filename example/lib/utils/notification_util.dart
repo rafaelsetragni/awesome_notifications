@@ -16,6 +16,7 @@ import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart';
 import 'package:awesome_notifications_example/utils/media_player_central.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 /* *********************************************
     LARGE TEXT FOR OUR NOTIFICATIONS TESTS
@@ -75,7 +76,9 @@ class NotificationUtils {
           context: context,
           builder: (context) => AlertDialog(
             backgroundColor: Color(0xfffbfbfb),
-            title: Text('Get Notified!',
+            title: AutoSizeText(
+                'Get Notified!',
+                maxLines: 2,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
             content: Column(
@@ -83,11 +86,12 @@ class NotificationUtils {
               children: [
                 Image.asset(
                   'assets/images/animated-bell.gif',
-                  height: 200,
+                  height: MediaQuery.of(context).size.height * 0.3,
                   fit: BoxFit.fitWidth,
                 ),
-                Text(
+                AutoSizeText(
                   'Allow Awesome Notifications to send you beautiful notifications!',
+                  maxLines: 4,
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -117,7 +121,8 @@ class NotificationUtils {
     return isAllowed;
   }
 
-  static Future<bool> requestFullScheduleChannelPermissions(BuildContext context) async {
+  static Future<void> requestFullScheduleChannelPermissions(BuildContext context) async {
+    String channelKey = 'scheduled';
     List<NotificationPermission> requestedPermissions = [
       NotificationPermission.Alert,
       NotificationPermission.Sound,
@@ -129,232 +134,76 @@ class NotificationUtils {
       NotificationPermission.PreciseAlarms
     ];
 
-    List<NotificationPermission> notificationsAllowed = await AwesomeNotifications().shouldShowRationaleToRequest(permissions: requestedPermissions);
-
-    if(notificationsAllowed.length < requestedPermissions.length){
-
-      if(await AwesomeNotifications().shouldShowRationaleToRequest()){
-        await showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              backgroundColor: Color(0xfffbfbfb),
-              title: Text('Get Notified!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.asset(
-                    'assets/images/animated-bell.gif',
-                    height: 200,
-                    fit: BoxFit.fitWidth,
-                  ),
-                  Text(
-                    'Please, you need to turn on all permissions in notification\'s Channel to proceede!',
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                    onPressed: (){ Navigator.pop(context); },
-                    child: Text(
-                      'Later',
-                      style: TextStyle(color: Colors.grey, fontSize: 18),
-                    )
-                ),
-                TextButton(
-                  onPressed: () async {
-                    isAllowed = await AwesomeNotifications().requestPermissionToSendNotifications();
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'Allow',
-                    style: TextStyle(color: Colors.deepPurple, fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            )
-        );
-      }
-
-
-    }
-    return isAllowed;
+    await requestUserPermissions(context, channelKey: channelKey, permissionList: requestedPermissions);
   }
 
-  static Future<bool> requestCriticalAlertsPermission(BuildContext context) async {
+  static Future<List<NotificationPermission>> requestUserPermissions(
+      BuildContext context,{
+      required String? channelKey,
+      required List<NotificationPermission> permissionList}
+    ) async {
 
     if(!await requestBasicPermissionsToSendNotifications(context))
-      return false;
-
-    List<NotificationPermission> permissionList = [
-      NotificationPermission.CriticalAlert
-    ];
+      return [];
 
     List<NotificationPermission> permissionsAllowed = await AwesomeNotifications().checkPermissionList(
-        channelKey: 'scheduled',
+        channelKey: channelKey,
         permissions: permissionList
     );
 
-    bool isFullIntentAllowed = permissionsAllowed.isNotEmpty;
-    if(!isFullIntentAllowed){
+    if(permissionsAllowed.length == permissionList.length)
+      return permissionsAllowed;
 
-      List<NotificationPermission> permissionsNeeded =
+    List<NotificationPermission> permissionsNeeded =
       permissionList.toSet().difference(permissionsAllowed.toSet()).toList();
 
-      await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            backgroundColor: Color(0xfffbfbfb),
-            title: Text('Critical Alerts Notifications',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  'assets/images/animated-warning.gif',
-                  height: 200,
-                  fit: BoxFit.fitWidth,
-                ),
-                Text(
-                  'Allow Awesome Notifications to send you critical alerts and override Do Not Disturbe mode.',
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: (){ Navigator.pop(context); },
-                  child: Text(
-                    'Later',
-                    style: TextStyle(color: Colors.grey, fontSize: 18),
-                  )
-              ),
-              TextButton(
-                onPressed: () async {
-                  isFullIntentAllowed = await AwesomeNotifications().requestPermissionToSendNotifications(
-                      channelKey: 'scheduled',
-                      permissions: permissionsNeeded
-                  );
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Allow',
-                  style: TextStyle(color: Colors.deepPurple, fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-          )
+    List<NotificationPermission> lockedPermissions = await AwesomeNotifications().shouldShowRationaleToRequest(
+        channelKey: channelKey,
+        permissions: permissionsNeeded
+    );
+
+    // If there is some permitions independing of user's intervention, request it directly
+    if(lockedPermissions.length != permissionsNeeded.length){
+
+      List<NotificationPermission> permissionsNeeded =
+        permissionList.toSet().difference(permissionsAllowed.toSet()).toList();
+
+      await AwesomeNotifications().requestPermissionToSendNotifications(
+          channelKey: channelKey,
+          permissions: permissionsNeeded
       );
     }
-    return isFullIntentAllowed;
-  }
 
-  static Future<bool> requestFullIntentPermission(BuildContext context) async {
-  
-    if(!await requestBasicPermissionsToSendNotifications(context))
-      return false;
-  
-    List<NotificationPermission> permissionList = [
-      NotificationPermission.FullScreenIntent
-    ];
-  
-    List<NotificationPermission> permissionsAllowed = await AwesomeNotifications().checkPermissionList(
-        permissions: permissionList
-    );
-  
-    bool isFullIntentAllowed = permissionsAllowed.isNotEmpty;
-    if(!isFullIntentAllowed){
-  
-      List<NotificationPermission> permissionsNeeded =
-      permissionList.toSet().difference(permissionsAllowed.toSet()).toList();
-  
+    if(lockedPermissions.isNotEmpty)
       await showDialog(
           context: context,
           builder: (context) => AlertDialog(
             backgroundColor: Color(0xfffbfbfb),
-            title: Text('Full Screen Notifications',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  'assets/images/animated-bell.gif',
-                  height: 200,
-                  fit: BoxFit.fitWidth,
-                ),
-                Text(
-                  'Allow Awesome Notifications to send you full intent screen notifications!',
+            title: AutoSizeText('Awesome Notificaitons needs your permission to continue',
                   textAlign: TextAlign.center,
-                ),
-              ],
+                  maxLines: 2,
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
             ),
-            actions: [
-              TextButton(
-                  onPressed: (){ Navigator.pop(context); },
-                  child: Text(
-                    'Later',
-                    style: TextStyle(color: Colors.grey, fontSize: 18),
-                  )
-              ),
-              TextButton(
-                onPressed: () async {
-                  isFullIntentAllowed = await AwesomeNotifications().requestPermissionToSendNotifications(
-                      permissions: permissionsNeeded);
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Allow',
-                  style: TextStyle(color: Colors.deepPurple, fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-          )
-      );
-    }
-    return isFullIntentAllowed;
-  }
-
-  static Future<bool> requestPreciseAlarmPermission(BuildContext context) async {
-
-    if(!await requestBasicPermissionsToSendNotifications(context))
-      return false;
-
-    List<NotificationPermission> permissionList = [
-      NotificationPermission.PreciseAlarms
-    ];
-
-    List<NotificationPermission> permissionsAllowed = await AwesomeNotifications().checkPermissionList(
-        permissions: permissionList
-    );
-
-    bool isPreciseAlarmsAllowed = permissionsAllowed.isNotEmpty;
-    if(!isPreciseAlarmsAllowed){
-
-      List<NotificationPermission> permissionsNeeded =
-      permissionList.toSet().difference(permissionsAllowed.toSet()).toList();
-
-      await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            backgroundColor: Color(0xfffbfbfb),
-            title: Text('Precise Scheduled Notifications',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(
                   'assets/images/animated-clock.gif',
-                  height: 200,
+                  height: MediaQuery.of(context).size.height * 0.3,
                   fit: BoxFit.fitWidth,
                 ),
-                Text(
-                  'Allow Awesome Notifications to send you precise scheduled notifications!',
+                AutoSizeText(
+                  'To proceede, you need to enable the permissions above'+
+                      (channelKey?.isEmpty ?? true ? '' : ' on channel $channelKey')+':',
+                  maxLines: 2,
                   textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 5),
+                Text(
+                  lockedPermissions.join(', ').replaceAll('NotificationPermission.', ''),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -362,14 +211,24 @@ class NotificationUtils {
               TextButton(
                   onPressed: (){ Navigator.pop(context); },
                   child: Text(
-                    'Later',
-                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                    'Deny',
+                    style: TextStyle(color: Colors.red, fontSize: 18),
                   )
               ),
               TextButton(
                 onPressed: () async {
-                  isPreciseAlarmsAllowed = await AwesomeNotifications().requestPermissionToSendNotifications(
-                      permissions: permissionsNeeded);
+
+                  // After the user come back, check if he has successfully enabled then
+                  await AwesomeNotifications().requestPermissionToSendNotifications(
+                      channelKey: channelKey,
+                      permissions: lockedPermissions
+                  );
+
+                  permissionsAllowed = await AwesomeNotifications().checkPermissionList(
+                      channelKey: channelKey,
+                      permissions: lockedPermissions
+                  );
+
                   Navigator.pop(context);
                 },
                 child: Text(
@@ -380,74 +239,68 @@ class NotificationUtils {
             ],
           )
       );
-    }
-    return isPreciseAlarmsAllowed;
+
+    return permissionsAllowed;
+  }
+
+  static Future<bool> requestCriticalAlertsPermission(BuildContext context) async {
+
+    List<NotificationPermission> requestedPermissions = [
+      NotificationPermission.CriticalAlert
+    ];
+
+    List<NotificationPermission> permissionsAllowed =
+    await requestUserPermissions(
+        context,
+        channelKey: null,
+        permissionList: requestedPermissions);
+
+    return permissionsAllowed.isNotEmpty;
+  }
+
+  static Future<bool> requestFullIntentPermission(BuildContext context) async {
+
+    List<NotificationPermission> requestedPermissions = [
+      NotificationPermission.CriticalAlert
+    ];
+
+    List<NotificationPermission> permissionsAllowed =
+    await requestUserPermissions(
+        context,
+        channelKey: null,
+        permissionList: requestedPermissions);
+
+    return permissionsAllowed.isNotEmpty;
+  }
+
+  static Future<bool> requestPreciseAlarmPermission(BuildContext context) async {
+
+    List<NotificationPermission> requestedPermissions = [
+      NotificationPermission.PreciseAlarms
+    ];
+
+    List<NotificationPermission> permissionsAllowed =
+    await requestUserPermissions(
+        context,
+        channelKey: null,
+        permissionList: requestedPermissions);
+
+    return permissionsAllowed.isNotEmpty;
   }
 
   static Future<bool> requestOverrideDndPermission(BuildContext context) async {
 
-    if(!await requestBasicPermissionsToSendNotifications(context))
-      return false;
-
-    List<NotificationPermission> permissionList = [
+    List<NotificationPermission> requestedPermissions = [
       NotificationPermission.OverrideDnD
     ];
 
-    List<NotificationPermission> permissionsAllowed = await AwesomeNotifications().checkPermissionList(
-        permissions: permissionList
-    );
+    List<NotificationPermission> permissionsAllowed =
+    await requestUserPermissions(
+        context,
+        channelKey: null,
+        permissionList: requestedPermissions);
 
-    bool isPreciseAlarmsAllowed = permissionsAllowed.isNotEmpty;
-    if(!isPreciseAlarmsAllowed){
-
-      List<NotificationPermission> permissionsNeeded =
-      permissionList.toSet().difference(permissionsAllowed.toSet()).toList();
-
-      await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            backgroundColor: Color(0xfffbfbfb),
-            title: Text('Override\nDo not Disturbe Mode',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  'assets/images/animated-warning.gif',
-                  height: 200,
-                  fit: BoxFit.fitWidth,
-                ),
-                Text(
-                  'Allow Awesome Notifications to deactivate Do not Disturbe mode (DnD) only when is necessary to send you critical notifications!',
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: (){ Navigator.pop(context); },
-                  child: Text(
-                    'Later',
-                    style: TextStyle(color: Colors.grey, fontSize: 18),
-                  )
-              ),
-              TextButton(
-                onPressed: () async {
-                  await AwesomeNotifications().requestPermissionToSendNotifications(
-                      permissions: permissionsNeeded);
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Allow',
-                  style: TextStyle(color: Colors.deepPurple, fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-          )
-      );
-    }
-    return isPreciseAlarmsAllowed;
+    return permissionsAllowed.isNotEmpty;
   }
 
   /* *********************************************

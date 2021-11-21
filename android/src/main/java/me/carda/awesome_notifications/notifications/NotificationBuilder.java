@@ -38,6 +38,7 @@ import me.carda.awesome_notifications.notifications.broadcastReceivers.Dismissed
 import me.carda.awesome_notifications.notifications.broadcastReceivers.KeepOnTopActionReceiver;
 import me.carda.awesome_notifications.notifications.enumerators.ActionButtonType;
 import me.carda.awesome_notifications.notifications.enumerators.GroupSort;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationImportance;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLayout;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationPermission;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
@@ -371,8 +372,8 @@ public class NotificationBuilder {
 
     public static boolean isCriticalAlertsGloballyAllowed(Context context){
         NotificationManager notificationManager = getAndroidNotificationManager(context);
-        // Critical alerts on Android 6 are "Treat as priority" or "Priority"
-        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M /*Android 6*/){
+        // Critical alerts until Android 7 are "Treat as priority" or "Priority"
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O /*Android 8*/){
 //            return (notificationManager.getNotificationPolicy().state
 //                    & NotificationManager.Policy.STATE_CHANNELS_BYPASSING_DND) == 1;
             // TODO read "Treat as priority" or "Priority" property on notifications page
@@ -506,9 +507,7 @@ public class NotificationBuilder {
     }
 
     private void setImportance(NotificationChannelModel channel, NotificationCompat.Builder builder) {
-        // Conversion to Priority
-        int priorityValue = Math.min(Math.max(IntegerUtils.extractInteger(channel.importance) - 2, -2), 2);
-        builder.setPriority(priorityValue);
+        builder.setPriority(NotificationImportance.toAndroidPriority(channel.importance));
     }
 
     private void setCategory(NotificationModel notificationModel, NotificationCompat.Builder builder){
@@ -517,7 +516,7 @@ public class NotificationBuilder {
     }
 
     private void setOnlyAlertOnce(NotificationModel notificationModel, NotificationChannelModel channel, NotificationCompat.Builder builder) {
-        Boolean onlyAlertOnceValue = BooleanUtils.getValue(notificationModel.content.notificationLayout == NotificationLayout.ProgressBar ? true : channel.onlyAlertOnce);
+        boolean onlyAlertOnceValue = BooleanUtils.getValue(notificationModel.content.notificationLayout == NotificationLayout.ProgressBar || channel.onlyAlertOnce);
         builder.setOnlyAlertOnce(onlyAlertOnceValue);
     }
 

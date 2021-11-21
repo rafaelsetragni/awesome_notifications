@@ -71,6 +71,7 @@ public interface Definitions {
     String CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed";
     String CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications";
     String CHANNEL_METHOD_CHECK_PERMISSIONS = "checkPermissions";
+    String CHANNEL_METHOD_SHOULD_SHOW_RATIONALE = "shouldShowRationale";
 
     String CHANNEL_METHOD_GET_BADGE_COUNT = "getBadgeCount";
     String CHANNEL_METHOD_SET_BADGE_COUNT = "setBadgeCount";
@@ -180,7 +181,6 @@ public interface Definitions {
     String NOTIFICATION_ICON = "icon";
     String NOTIFICATION_FULL_SCREEN_INTENT = "fullScreenIntent";
     String NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen";
-    String NOTIFICATION_CHANNEL_CRITICAL_ALERTS = "criticalAlerts";
     String NOTIFICATION_PLAY_SOUND = "playSound";
     String NOTIFICATION_SOUND_SOURCE = "soundSource";
     String NOTIFICATION_ENABLE_VIBRATION = "enableVibration";
@@ -201,6 +201,7 @@ public interface Definitions {
     String NOTIFICATION_CHANNEL_SHOW_BADGE = "channelShowBadge";
     String NOTIFICATION_CHANNEL_GROUP_NAME = "channelGroupName";
     String NOTIFICATION_CHANNEL_GROUP_KEY = "channelGroupKey";
+    String NOTIFICATION_CHANNEL_CRITICAL_ALERTS = "criticalAlerts";
     String NOTIFICATION_IMPORTANCE = "importance";
     String NOTIFICATION_COLOR = "color";
     String NOTIFICATION_BACKGROUND_COLOR = "backgroundColor";

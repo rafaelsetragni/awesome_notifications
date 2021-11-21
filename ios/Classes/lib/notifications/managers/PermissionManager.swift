@@ -313,17 +313,17 @@ public class PermissionManager {
             switch (permissionEnum){
 
                 case .Alert:
-                    return channelModel.importance == NotificationImportance.High ||
-                           channelModel.importance == NotificationImportance.Max;
+                    return channelModel.importance == NotificationImportance.Max ||
+                           channelModel.importance == NotificationImportance.High;
 
                 case .Sound:
                     return channelModel.playSound ?? false;
 
-                case .Light:
-                    return channelModel.enableLights ?? false;
-
                 case .Vibration:
                     return channelModel.enableVibration ?? false;
+
+                case .Light:
+                    return channelModel.enableLights ?? false;
 
                 case .Badge:
                     return channelModel.channelShowBadge ?? false;

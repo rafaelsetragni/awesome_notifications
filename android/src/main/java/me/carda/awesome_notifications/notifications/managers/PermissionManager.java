@@ -19,9 +19,11 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 import javax.annotation.Nullable;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.NotificationBuilder;
 import me.carda.awesome_notifications.notifications.handlers.ActivityCompletionHandler;
 import me.carda.awesome_notifications.notifications.handlers.PermissionCompletionHandler;
@@ -50,13 +52,10 @@ public class PermissionManager {
         return true;
     }
 
-    public static List<String> arePermissionsAllowed(Activity activity, Context context, String channelKey, List<String> permissions) throws AwesomeNotificationException {
+    public static List<String> arePermissionsAllowed(Context context, String channelKey, List<String> permissions) throws AwesomeNotificationException {
         List<String> permissionsAllowed = new ArrayList<>();
 
         if(!areNotificationsGloballyAllowed(context))
-            return  permissionsAllowed;
-
-        if(activity == null)
             return  permissionsAllowed;
 
         for (String permission : permissions) {
@@ -71,6 +70,36 @@ public class PermissionManager {
         }
 
         return permissionsAllowed;
+    }
+
+    private static List<String> oldAndroidShouldShowRationale = new ArrayList<String>(){{
+        add(NotificationPermission.Sound.toString());
+        add(NotificationPermission.CriticalAlert.toString());
+    }};
+
+    private static List<String> newAndroidShouldntShowRationale = new ArrayList<String>(){{
+        add(NotificationPermission.FullScreenIntent.toString());
+        add(NotificationPermission.Provisional.toString());
+    }};
+
+    public static List<String> shouldShowRationale(Context context, String channelKey, List<String> permissions) throws AwesomeNotificationException {
+
+        if(!areNotificationsGloballyAllowed(context))
+            return permissions;
+
+        // Channel's permission under Android 8 special condition
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/){
+            permissions.removeAll(newAndroidShouldntShowRationale);
+            List<String> allowedPermissions = arePermissionsAllowed(context, channelKey, permissions);
+            permissions.removeAll(allowedPermissions);
+        }
+        else {
+            permissions.stream().filter(permission -> oldAndroidShouldShowRationale.contains(permission));
+            List<String> allowedGlobalPermissions = arePermissionsAllowed(context, null, permissions);
+            permissions.removeAll(allowedGlobalPermissions);
+        }
+
+        return permissions;
     }
 
     public static boolean isSpecifiedPermissionGloballyAllowed(Context context, NotificationPermission permission){
@@ -130,13 +159,13 @@ public class PermissionManager {
                         return channel.getImportance() >= NotificationManager.IMPORTANCE_HIGH;
 
                     case Sound:
-                        return (channel.getSound() != null);
+                        return channel.getImportance() >= NotificationManager.IMPORTANCE_DEFAULT && (channel.getSound() != null);
+
+                    case Vibration:
+                        return channel.getImportance() >= NotificationManager.IMPORTANCE_DEFAULT && channel.shouldVibrate();
 
                     case Light:
                         return channel.shouldShowLights();
-
-                    case Vibration:
-                        return channel.shouldVibrate();
 
                     case Badge:
                         return channel.canShowBadge();
@@ -164,13 +193,13 @@ public class PermissionManager {
                         return channelModel.importance.ordinal() >= NotificationImportance.High.ordinal();
 
                     case Sound:
-                        return channelModel.playSound;
+                        return channelModel.importance.ordinal() >= NotificationImportance.Default.ordinal() && channelModel.playSound;
+
+                    case Vibration:
+                        return channelModel.importance.ordinal() >= NotificationImportance.Default.ordinal() && channelModel.enableVibration;
 
                     case Light:
                         return channelModel.enableLights;
-
-                    case Vibration:
-                        return channelModel.enableVibration;
 
                     case Badge:
                         return channelModel.channelShowBadge;
@@ -205,16 +234,18 @@ public class PermissionManager {
                         channelKey,
                         null,
                         permissions,
+                        new ArrayList<>(),
                         permissionCompletionHandler);
                 return;
             }
 
-            List<String> allowedPermissions = arePermissionsAllowed(activity, context, channelKey, permissions);
+            List<String> allowedPermissions = arePermissionsAllowed(context, channelKey, permissions);
 
             permissions.removeAll(allowedPermissions);
-            List<String> manifestPermissions = new ArrayList<>();
+            List<String> permissionsNeedingRationale = shouldShowRationale(context, channelKey, permissions);
 
-            for (String permissionNeeded : permissions) {
+            List<String> manifestPermissions = new ArrayList<>();
+            for (String permissionNeeded : permissionsNeedingRationale) {
                 NotificationPermission permissionEnum = StringUtils.getEnumFromString(NotificationPermission.class, permissionNeeded);
                 String permissionCode = getManifestPermissionCode(permissionEnum);
 
@@ -225,6 +256,7 @@ public class PermissionManager {
                             channelKey,
                             permissionEnum,
                             permissions,
+                            allowedPermissions,
                             permissionCompletionHandler);
                     return;
                 }
@@ -271,6 +303,7 @@ public class PermissionManager {
             String channelKey,
             @Nullable NotificationPermission permissionEnum,
             List<String> permissions,
+            List<String> permissionsAllowed,
             PermissionCompletionHandler permissionCompletionHandler
     ) throws AwesomeNotificationException {
 
@@ -319,18 +352,86 @@ public class PermissionManager {
             Activity activity,
             Context context,
             String channelKey,
-            List<String> permissions,
+            List<String> permissionsNeeded,
             PermissionCompletionHandler permissionCompletionHandler
     ){
         try {
-            if(!permissions.isEmpty()) {
-                List<String> allowedPermissions = arePermissionsAllowed(activity, context, channelKey, permissions);
-                permissions.removeAll(allowedPermissions);
+            if(!permissionsNeeded.isEmpty()) {
+                List<String> allowedPermissions = arePermissionsAllowed(context, channelKey, permissionsNeeded);
+                permissionsNeeded.removeAll(allowedPermissions);
+
+                if (!StringUtils.isNullOrEmpty(channelKey))
+                    updateChannelModelThroughPermissions(context, channelKey, permissionsNeeded);
             }
         } catch (AwesomeNotificationException e) {
             e.printStackTrace();
         }
-        permissionCompletionHandler.handle(permissions);
+        permissionCompletionHandler.handle(permissionsNeeded);
+    }
+
+    private static void updateChannelModelThroughPermissions(Context context, @NonNull String channelKey, @NonNull List<String> permissionsNeeded) {
+
+        // For Android 8 and above, channels are updated at every load process
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/)
+            return;
+
+        NotificationChannelModel channelModel = ChannelManager.getChannelByKey(context, channelKey);
+        if(channelModel == null) return;
+
+        for (String permission : permissionsNeeded) {
+            boolean isAllowed = isSpecifiedPermissionGloballyAllowed(context, StringUtils.getEnumFromString(NotificationPermission.class, permission));
+            NotificationPermission permissionEnum = StringUtils.getEnumFromString(NotificationPermission.class, permission);
+            setChannelPropertyThroughPermission(channelModel, permissionEnum, isAllowed);
+        }
+
+        try {
+            ChannelManager.saveChannel(context, channelModel, false);
+        } catch (AwesomeNotificationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void setChannelPropertyThroughPermission(NotificationChannelModel channelModel, NotificationPermission permission, boolean allowed){
+        switch (permission) {
+
+            case Alert:
+                if (allowed) {
+                    if (channelModel.importance.ordinal() < NotificationImportance.High.ordinal())
+                        channelModel.importance = NotificationImportance.High;
+                }
+                else {
+                    if (channelModel.importance.ordinal() >= NotificationImportance.High.ordinal())
+                        channelModel.importance = NotificationImportance.Default;
+                }
+                break;
+
+            case Sound:
+                channelModel.playSound = allowed;
+                break;
+
+            case Badge:
+                channelModel.channelShowBadge = allowed;
+                break;
+
+            case Vibration:
+                channelModel.enableVibration = allowed;
+                break;
+
+            case Light:
+                channelModel.enableLights = allowed;
+                break;
+
+            case CriticalAlert:
+                channelModel.criticalAlerts = allowed;
+                break;
+
+            case OverrideDnD:
+            case Provisional:
+            case PreciseAlarms:
+            case FullScreenIntent:
+            case Car:
+                break;
+        }
     }
 
     private static String getManifestPermissionCode(NotificationPermission permission){

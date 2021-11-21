@@ -344,7 +344,9 @@ class AwesomeNotifications {
         List<NotificationPermission> permissions = const [
           NotificationPermission.Badge,
           NotificationPermission.Alert,
-          NotificationPermission.Sound
+          NotificationPermission.Sound,
+          NotificationPermission.Vibration,
+          NotificationPermission.Light
         ]}) async {
 
     List<Object?> permissionList = _listPermissionToListString(permissions);
@@ -359,13 +361,15 @@ class AwesomeNotifications {
   }
 
   /// Check if the app must show some rationale before request the user's consent. Returns the
-  /// list of permissions that can only be changed with the user's intervention.
+  /// list of permissions that can only be changed via user's intervention.
   Future<List<NotificationPermission>> shouldShowRationaleToRequest({
     String? channelKey,
     List<NotificationPermission> permissions = const [
       NotificationPermission.Badge,
       NotificationPermission.Alert,
-      NotificationPermission.Sound
+      NotificationPermission.Sound,
+      NotificationPermission.Vibration,
+      NotificationPermission.Light
     ]}) async {
 
     List<Object?> permissionList = _listPermissionToListString(permissions);

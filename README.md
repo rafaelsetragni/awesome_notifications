@@ -142,7 +142,8 @@ AwesomeNotifications().initialize(
 ```dart
 AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
   if (!isAllowed) {
-    // Insert here your friendly dialog box before call the request method
+    // This is just a basic example. For real apps, you must show some
+    // friendly dialog box before call the request method
     // This is very important to not harm the user experience
     AwesomeNotifications().requestPermissionToSendNotifications();
   }
@@ -1019,3 +1020,6 @@ While the `android:name` must exactly match this value, you can configure the ot
 
 ### IMPORTANT
 If the icon of the notification is not set or not valid, the notification will appear, but will look very strange. Make sure to always specify an valid icon. If you need help with this, take a look at [the examples](https://github.com/rafaelsetragni/awesome_notifications/tree/master/example).
+
+### Foreground Services behaviour on platforms other than Android
+On any platform other then Android, all foreground service methods are no-ops (they do nothing when called), so you don't need to do a platform check before calling them.
