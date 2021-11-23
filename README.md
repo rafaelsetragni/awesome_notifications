@@ -215,12 +215,16 @@ To run the examples, follow the steps bellow:
 6. On iOS, run `pod install` to sync the native dependencies
 7. Debug the application with a real device or emulator
 
+<br>
+    
 ## Notification Life Cycle
 
 Notifications are received by local code or Push service using native code, so the messages will appears immediately or at schedule time, independent of your application state.
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/notification-life-cycle.png)
 
+<br>
+    
 ## Flutter Streams
 
 The Flutter code will be called as soon as possible using [Dart Streams](https://dart.dev/tutorials/language/streams).
@@ -238,6 +242,7 @@ The Flutter code will be called as soon as possible using [Dart Streams](https:/
 | **iOS**     | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the app returns to Foreground, but fires `actionStream` immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes on Foreground, but fires `actionStream` immediately after occurs |
 
 <br>
+<br>
 
 ## Permissions
 
@@ -251,6 +256,8 @@ The permissions can be defined in 3 types:
 
 As a good pratice, consider always to check if the permissions that you're desiring are conceived before create any new notification, independent of platform. To check if the permissions needs the explicity user consent, call the method shouldShowRationaleToRequest. The list of permissions that needs a rationale to the user can be different between platforms and O.S. versions. And if you app does not require extremely the permission to execute what you need, consider to not request the user permission and respect his will.
 
+<br>
+    
 ### Notification's Permissions:
 
 - Alert: Alerts are notifications with high priority that pops up on the user screen. Notifications with normal priority only shows the icon on status bar.
@@ -278,6 +285,8 @@ As a good pratice, consider always to check if the permissions that you're desir
     
 OBS: If none permission is requested through `requestPermissionToSendNotifications` method, the standard permissions requested are Alert, Badge, Sound, Vibrate and Light.
 
+<br>
+    
 ### Notification's Permission Level
 
 A permission can be segregated in 3 different levels:
@@ -289,7 +298,8 @@ A permission can be segregated in 3 different levels:
 - Application level: The permissions set at the global app configurations are appliable to any notification in any channel.
 - Channel level: The permissions set on the channel has effect only for notifications displayed through that specific channel.
 
-
+<br>
+    
 ### Full example code
 
 Bellow there is a full example of how to check if the desired permission is enable and to request it showing a dialog with a rationale if necessary (this example was took from our example app):
@@ -416,6 +426,7 @@ Bellow there is a full example of how to check if the desired permission is enab
 ```
 
 <br>
+<br>
 
 ## Notification's Category
 
@@ -441,6 +452,9 @@ The notification category is a group of predefined categories that best describe
  * Transport: media transport control for playback.
  * Workout: tracking a user's workout.
 
+<br>
+<br>
+    
 ## Notification Structures
 
 ### Notification Layout Types
