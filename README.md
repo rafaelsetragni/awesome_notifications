@@ -292,7 +292,7 @@ A permission can be segregated in 3 different levels:
 
 ### Full example code
 
-Bellow there is a full example of how to check if the desired permission is enable, request it and look if you should prompt a dialog with a rationale (this example was took from our example app):
+Bellow there is a full example of how to check if the desired permission is enable and to request it showing a dialog with a rationale if necessary (this example was took from our example app):
 
 ```Dart
   static Future<List<NotificationPermission>> requestUserPermissions(
