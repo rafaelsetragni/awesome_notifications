@@ -140,7 +140,8 @@ class AwesomeNotifications {
   /// OBS 2: [channels] are updated if they already exists
   Future<bool> initialize(
       String? defaultIcon, List<NotificationChannel> channels,
-      {List<NotificationChannelGroup>? channelGroups, bool debug = false}) async {
+      {List<NotificationChannelGroup>? channelGroups,
+      bool debug = false}) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     _channel.setMethodCallHandler(_handleMethod);
@@ -151,7 +152,7 @@ class AwesomeNotifications {
     }
 
     List<dynamic> serializedChannelGroups = [];
-    if(channelGroups != null)
+    if (channelGroups != null)
       for (NotificationChannelGroup channelGroup in channelGroups) {
         serializedChannelGroups.add(channelGroup.toMap());
       }
@@ -291,7 +292,8 @@ class AwesomeNotifications {
 
   /// Opens the app notifications page
   Future<void> showNotificationConfigPage({String? channelKey}) async {
-    await _channel.invokeMethod(CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE, channelKey);
+    await _channel.invokeMethod(
+        CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE, channelKey);
   }
 
   /// Opens the app notifications page
@@ -313,16 +315,14 @@ class AwesomeNotifications {
 
   /// Prompts the user to enabled notifications
   Future<bool> requestPermissionToSendNotifications(
-      {
-        String? channelKey,
-        List<NotificationPermission> permissions = const [
-          NotificationPermission.Alert,
-          NotificationPermission.Sound,
-          NotificationPermission.Badge,
-          NotificationPermission.Vibration,
-          NotificationPermission.Light,
-        ]
-      }) async {
+      {String? channelKey,
+      List<NotificationPermission> permissions = const [
+        NotificationPermission.Alert,
+        NotificationPermission.Sound,
+        NotificationPermission.Badge,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light,
+      ]}) async {
     final List<String> permissionList = [];
     for (final permission in permissions) {
       String? permissionValue = AssertUtils.toSimpleEnumString(permission);
@@ -330,48 +330,46 @@ class AwesomeNotifications {
     }
 
     final List<Object?>? missingPermissions = await _channel.invokeMethod(
-      CHANNEL_METHOD_REQUEST_NOTIFICATIONS, {
-        NOTIFICATION_CHANNEL_KEY: channelKey,
-        NOTIFICATION_PERMISSIONS: permissionList
-      });
+        CHANNEL_METHOD_REQUEST_NOTIFICATIONS, {
+      NOTIFICATION_CHANNEL_KEY: channelKey,
+      NOTIFICATION_PERMISSIONS: permissionList
+    });
 
     return missingPermissions?.isEmpty ?? false;
   }
 
   /// Check each individual permission to send notifications and returns only the allowed permissions
-  Future<List<NotificationPermission>> checkPermissionList({
-        String? channelKey,
-        List<NotificationPermission> permissions = const [
-          NotificationPermission.Badge,
-          NotificationPermission.Alert,
-          NotificationPermission.Sound,
-          NotificationPermission.Vibration,
-          NotificationPermission.Light
-        ]}) async {
-
+  Future<List<NotificationPermission>> checkPermissionList(
+      {String? channelKey,
+      List<NotificationPermission> permissions = const [
+        NotificationPermission.Badge,
+        NotificationPermission.Alert,
+        NotificationPermission.Sound,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light
+      ]}) async {
     List<Object?> permissionList = _listPermissionToListString(permissions);
 
     permissionList = await _channel.invokeMethod(
-      CHANNEL_METHOD_CHECK_PERMISSIONS, {
-        NOTIFICATION_CHANNEL_KEY: channelKey,
-        NOTIFICATION_PERMISSIONS: permissionList
-      });
+        CHANNEL_METHOD_CHECK_PERMISSIONS, {
+      NOTIFICATION_CHANNEL_KEY: channelKey,
+      NOTIFICATION_PERMISSIONS: permissionList
+    });
 
     return _listStringToListPermission(permissionList);
   }
 
   /// Check if the app must show some rationale before request the user's consent. Returns the
   /// list of permissions that can only be changed via user's intervention.
-  Future<List<NotificationPermission>> shouldShowRationaleToRequest({
-    String? channelKey,
-    List<NotificationPermission> permissions = const [
-      NotificationPermission.Badge,
-      NotificationPermission.Alert,
-      NotificationPermission.Sound,
-      NotificationPermission.Vibration,
-      NotificationPermission.Light
-    ]}) async {
-
+  Future<List<NotificationPermission>> shouldShowRationaleToRequest(
+      {String? channelKey,
+      List<NotificationPermission> permissions = const [
+        NotificationPermission.Badge,
+        NotificationPermission.Alert,
+        NotificationPermission.Sound,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light
+      ]}) async {
     List<Object?> permissionList = _listPermissionToListString(permissions);
 
     permissionList = await _channel.invokeMethod(
@@ -383,7 +381,8 @@ class AwesomeNotifications {
     return _listStringToListPermission(permissionList);
   }
 
-  List<Object?> _listPermissionToListString(List<NotificationPermission> permissions){
+  List<Object?> _listPermissionToListString(
+      List<NotificationPermission> permissions) {
     List<Object?> permissionList = [];
     for (final permission in permissions) {
       String? permissionValue = AssertUtils.toSimpleEnumString(permission);
@@ -392,12 +391,13 @@ class AwesomeNotifications {
     return permissionList;
   }
 
-  List<NotificationPermission> _listStringToListPermission(List<Object?> permissionList){
+  List<NotificationPermission> _listStringToListPermission(
+      List<Object?> permissionList) {
     List<NotificationPermission> lockedPermissions = [];
     for (final permission in permissionList) {
       NotificationPermission? permissionValue =
-      AssertUtils.enumToString<NotificationPermission>(
-          permission.toString(), NotificationPermission.values, null);
+          AssertUtils.enumToString<NotificationPermission>(
+              permission.toString(), NotificationPermission.values, null);
       if (permissionValue != null) lockedPermissions.add(permissionValue);
     }
     return lockedPermissions;

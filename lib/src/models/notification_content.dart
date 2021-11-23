@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 /// Main content of notification
 /// If notification has no [body] or [title], it will only be created, but not displayed to the user (background notification).
 class NotificationContent extends BaseNotificationContent {
-
   bool? hideLargeIconOnExpand;
   int? progress;
   String? ticker;

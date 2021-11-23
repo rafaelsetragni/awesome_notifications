@@ -11,7 +11,6 @@
 /// [Provisional] The ability to post noninterrupting notifications provisionally to the Notification Center.
 /// [Car] The ability to display notifications in a CarPlay environment.
 enum NotificationPermission {
-
   /// [Alert] The ability to display alerts.
   Alert,
 

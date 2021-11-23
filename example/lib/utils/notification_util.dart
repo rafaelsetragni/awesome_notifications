@@ -16,7 +16,6 @@ import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart';
 import 'package:awesome_notifications_example/utils/media_player_central.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 /* *********************************************
     LARGE TEXT FOR OUR NOTIFICATIONS TESTS
@@ -121,18 +120,8 @@ class NotificationUtils {
     return isAllowed;
   }
 
-  static Future<void> requestFullScheduleChannelPermissions(BuildContext context) async {
+  static Future<void> requestFullScheduleChannelPermissions(BuildContext context, List<NotificationPermission> requestedPermissions) async {
     String channelKey = 'scheduled';
-    List<NotificationPermission> requestedPermissions = [
-      NotificationPermission.Alert,
-      NotificationPermission.Sound,
-      NotificationPermission.Badge,
-      NotificationPermission.Light,
-      NotificationPermission.Vibration,
-      NotificationPermission.CriticalAlert,
-      NotificationPermission.OverrideDnD,
-      NotificationPermission.PreciseAlarms
-    ];
 
     await requestUserPermissions(context, channelKey: channelKey, permissionList: requestedPermissions);
   }
@@ -162,83 +151,92 @@ class NotificationUtils {
         permissions: permissionsNeeded
     );
 
-    // If there is some permitions independing of user's intervention, request it directly
-    if(lockedPermissions.length != permissionsNeeded.length){
-
+    // If there is no permitions depending of user's intervention, so request it directly
+    if(lockedPermissions.isEmpty){
       List<NotificationPermission> permissionsNeeded =
         permissionList.toSet().difference(permissionsAllowed.toSet()).toList();
+
+      if(permissionsNeeded.isEmpty)
+        return permissionsNeeded;
 
       await AwesomeNotifications().requestPermissionToSendNotifications(
           channelKey: channelKey,
           permissions: permissionsNeeded
       );
-    }
 
-    if(lockedPermissions.isNotEmpty)
-      await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            backgroundColor: Color(0xfffbfbfb),
-            title: Text('Awesome Notificaitons needs your permission to continue',
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  'assets/images/animated-clock.gif',
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  fit: BoxFit.fitWidth,
+      permissionsAllowed = await AwesomeNotifications().checkPermissionList(
+          channelKey: channelKey,
+          permissions: permissionsNeeded
+      );
+    }
+    else {
+
+      if(lockedPermissions.isNotEmpty)
+        await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              backgroundColor: Color(0xfffbfbfb),
+              title: Text('Awesome Notificaitons needs your permission to continue',
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/images/animated-clock.gif',
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    fit: BoxFit.fitWidth,
+                  ),
+                  Text(
+                    'To proceede, you need to enable the permissions above'+
+                        (channelKey?.isEmpty ?? true ? '' : ' on channel $channelKey')+':',
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    lockedPermissions.join(', ').replaceAll('NotificationPermission.', ''),
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                    onPressed: (){ Navigator.pop(context); },
+                    child: Text(
+                      'Deny',
+                      style: TextStyle(color: Colors.red, fontSize: 18),
+                    )
                 ),
-                Text(
-                  'To proceede, you need to enable the permissions above'+
-                      (channelKey?.isEmpty ?? true ? '' : ' on channel $channelKey')+':',
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 5),
-                Text(
-                  lockedPermissions.join(', ').replaceAll('NotificationPermission.', ''),
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                TextButton(
+                  onPressed: () async {
+
+                    // After the user come back, check if he has successfully enabled then
+                    await AwesomeNotifications().requestPermissionToSendNotifications(
+                        channelKey: channelKey,
+                        permissions: lockedPermissions
+                    );
+
+                    permissionsAllowed = await AwesomeNotifications().checkPermissionList(
+                        channelKey: channelKey,
+                        permissions: lockedPermissions
+                    );
+
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Allow',
+                    style: TextStyle(color: Colors.deepPurple, fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: (){ Navigator.pop(context); },
-                  child: Text(
-                    'Deny',
-                    style: TextStyle(color: Colors.red, fontSize: 18),
-                  )
-              ),
-              TextButton(
-                onPressed: () async {
-
-                  // After the user come back, check if he has successfully enabled then
-                  await AwesomeNotifications().requestPermissionToSendNotifications(
-                      channelKey: channelKey,
-                      permissions: lockedPermissions
-                  );
-
-                  permissionsAllowed = await AwesomeNotifications().checkPermissionList(
-                      channelKey: channelKey,
-                      permissions: lockedPermissions
-                  );
-
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Allow',
-                  style: TextStyle(color: Colors.deepPurple, fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-          )
-      );
+            )
+        );
+    }
 
     return permissionsAllowed;
   }

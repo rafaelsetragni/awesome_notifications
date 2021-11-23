@@ -81,7 +81,8 @@ class NotificationCalendar extends NotificationSchedule {
   NotificationCalendar.fromDate(
       {required DateTime date,
       bool allowWhileIdle = false,
-      bool repeats = false, bool preciseAlarm = false})
+      bool repeats = false,
+      bool preciseAlarm = false})
       : super(
             timeZone: date.isUtc
                 ? AwesomeNotifications.utcTimeZoneIdentifier

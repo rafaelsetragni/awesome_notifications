@@ -22,40 +22,58 @@
 enum NotificationCategory {
   /// Alarm or timer.
   Alarm,
+
   /// incoming call (voice or video) or similar synchronous communication request
   Call,
+
   /// asynchronous bulk message (email).
   Email,
+
   /// error in background operation or authentication status.
   Error,
+
   /// calendar event.
   Event,
+
   /// temporarily sharing location.
   LocalSharing,
+
   /// incoming direct message (SMS, instant message, etc.).
   Message,
+
   /// alert about some missed incoming call (voice or video) or similar synchronous communication request
   MissedCall,
+
   /// map turn-by-turn navigation.
   Navigation,
+
   /// progress of a long-running background operation.
   Progress,
+
   /// promotion or advertisement.
   Promo,
+
   /// a specific, timely recommendation for a single thing. For example, a news app might want to recommend a news story it believes the user will want to read next.
   Recommendation,
+
   /// user-scheduled reminder.
   Reminder,
+
   /// indication of running background service.
   Service,
+
   /// social network or sharing update.
   Social,
+
   /// ongoing information about device or contextual status.
   Status,
+
   /// running stopwatch.
   StopWatch,
+
   /// media transport control for playback.
   Transport,
+
   /// tracking a user's workout.
   Workout,
 }

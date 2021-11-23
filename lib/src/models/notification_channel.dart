@@ -52,32 +52,32 @@ class NotificationChannel extends Model {
 
   bool? criticalAlerts;
 
-  NotificationChannel({
-    required String channelKey,
-    required String channelName,
-    required String channelDescription,
-    this.channelGroupKey,
-    this.channelShowBadge,
-    this.importance,
-    this.playSound,
-    this.soundSource,
-    this.defaultRingtoneType,
-    this.enableVibration,
-    this.vibrationPattern,
-    this.enableLights,
-    this.ledColor,
-    this.ledOnMs,
-    this.ledOffMs,
-    this.groupKey,
-    this.groupSort,
-    this.groupAlertBehavior,
-    this.icon,
-    this.defaultColor,
-    this.locked,
-    this.onlyAlertOnce,
-    this.defaultPrivacy,
-    this.criticalAlerts
-  }) : super() {
+  NotificationChannel(
+      {required String channelKey,
+      required String channelName,
+      required String channelDescription,
+      this.channelGroupKey,
+      this.channelShowBadge,
+      this.importance,
+      this.playSound,
+      this.soundSource,
+      this.defaultRingtoneType,
+      this.enableVibration,
+      this.vibrationPattern,
+      this.enableLights,
+      this.ledColor,
+      this.ledOnMs,
+      this.ledOffMs,
+      this.groupKey,
+      this.groupSort,
+      this.groupAlertBehavior,
+      this.icon,
+      this.defaultColor,
+      this.locked,
+      this.onlyAlertOnce,
+      this.defaultPrivacy,
+      this.criticalAlerts})
+      : super() {
     this.channelKey = channelKey;
     this.channelName = channelName;
     this.channelDescription = channelDescription;
@@ -233,8 +233,8 @@ class NotificationChannel extends Model {
     this.ledOffMs =
         AssertUtils.extractValue(NOTIFICATION_LED_OFF_MS, dataMap, int);
 
-    this.criticalAlerts =
-        AssertUtils.extractValue(NOTIFICATION_CHANNEL_CRITICAL_ALERTS, dataMap, bool);
+    this.criticalAlerts = AssertUtils.extractValue(
+        NOTIFICATION_CHANNEL_CRITICAL_ALERTS, dataMap, bool);
 
     return this;
   }

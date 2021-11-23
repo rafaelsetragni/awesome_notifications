@@ -45,11 +45,8 @@ public class PermissionManager {
             = new LinkedBlockingDeque<ActivityCompletionHandler>();
 
     public static Boolean areNotificationsGloballyAllowed(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N /*Android 7*/) {
-            NotificationManagerCompat manager = NotificationManagerCompat.from(context);
-            return manager.areNotificationsEnabled();
-        }
-        return true;
+        NotificationManagerCompat manager = NotificationManagerCompat.from(context);
+        return manager.areNotificationsEnabled();
     }
 
     public static List<String> arePermissionsAllowed(Context context, String channelKey, List<String> permissions) throws AwesomeNotificationException {
@@ -75,6 +72,7 @@ public class PermissionManager {
     private static List<String> oldAndroidShouldShowRationale = new ArrayList<String>(){{
         add(NotificationPermission.Sound.toString());
         add(NotificationPermission.CriticalAlert.toString());
+        add(NotificationPermission.OverrideDnD.toString());
     }};
 
     private static List<String> newAndroidShouldntShowRationale = new ArrayList<String>(){{
@@ -94,7 +92,12 @@ public class PermissionManager {
             permissions.removeAll(allowedPermissions);
         }
         else {
-            permissions.stream().filter(permission -> oldAndroidShouldShowRationale.contains(permission));
+            List<String> permissionsShouldShowRationale = new ArrayList<String>();
+            for (String permission : oldAndroidShouldShowRationale)
+                if (permissions.contains(permission))
+                    permissionsShouldShowRationale.add(permission);
+            permissions = permissionsShouldShowRationale;
+
             List<String> allowedGlobalPermissions = arePermissionsAllowed(context, null, permissions);
             permissions.removeAll(allowedGlobalPermissions);
         }
@@ -221,7 +224,7 @@ public class PermissionManager {
             Activity activity,
             Context context,
             String channelKey,
-            List<String> permissions,
+            final List<String> permissions,
             PermissionCompletionHandler permissionCompletionHandler
     ) throws AwesomeNotificationException {
 
@@ -239,10 +242,11 @@ public class PermissionManager {
                 return;
             }
 
-            List<String> allowedPermissions = arePermissionsAllowed(context, channelKey, permissions);
+            List<String>permissionsRequested = new ArrayList<String>(permissions);
+            List<String> allowedPermissions = arePermissionsAllowed(context, channelKey, permissionsRequested);
 
-            permissions.removeAll(allowedPermissions);
-            List<String> permissionsNeedingRationale = shouldShowRationale(context, channelKey, permissions);
+            permissionsRequested.removeAll(allowedPermissions);
+            List<String> permissionsNeedingRationale = shouldShowRationale(context, channelKey, permissionsRequested);
 
             List<String> manifestPermissions = new ArrayList<>();
             for (String permissionNeeded : permissionsNeedingRationale) {
@@ -255,7 +259,7 @@ public class PermissionManager {
                             context,
                             channelKey,
                             permissionEnum,
-                            permissions,
+                            permissionsRequested,
                             allowedPermissions,
                             permissionCompletionHandler);
                     return;
@@ -269,7 +273,7 @@ public class PermissionManager {
                         activity,
                         context,
                         channelKey,
-                        permissions,
+                        permissionsRequested,
                         manifestPermissions,
                         permissionCompletionHandler);
                 return;
@@ -357,11 +361,18 @@ public class PermissionManager {
     ){
         try {
             if(!permissionsNeeded.isEmpty()) {
+
+                if (!StringUtils.isNullOrEmpty(channelKey)){
+                    List<String> allowedPermissions = arePermissionsAllowed(
+                            context,
+                            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) ?
+                                    channelKey : null,
+                            permissionsNeeded);
+                    updateChannelModelThroughPermissions(context, channelKey, allowedPermissions);
+                }
+
                 List<String> allowedPermissions = arePermissionsAllowed(context, channelKey, permissionsNeeded);
                 permissionsNeeded.removeAll(allowedPermissions);
-
-                if (!StringUtils.isNullOrEmpty(channelKey))
-                    updateChannelModelThroughPermissions(context, channelKey, permissionsNeeded);
             }
         } catch (AwesomeNotificationException e) {
             e.printStackTrace();
@@ -574,14 +585,25 @@ public class PermissionManager {
     }
 
     private static void fireActivityCompletionHandle(){
-        while(!activityQueue.isEmpty()){
+        if(activityQueue.isEmpty())
+            return;
+
+        int retries = 3;
+        ActivityCompletionHandler completionHandler;
+        do{
+            completionHandler = null;
             try {
-                ActivityCompletionHandler completionHandler = activityQueue.take();
-                completionHandler.handle();
+                if(!activityQueue.isEmpty())
+                    completionHandler = activityQueue.take();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                retries--;
             }
-        }
+
+            if(completionHandler != null){
+                completionHandler.handle();
+                retries = 3;
+            }
+        } while (retries > 0 && completionHandler != null);
     }
 
     private static boolean startTestedActivity(Context context, Intent intent){

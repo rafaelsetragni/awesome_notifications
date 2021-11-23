@@ -483,7 +483,7 @@ class _HomePageState extends State<HomePage> {
             ),
             SimpleButton('Request full permissons for Schedule\'s channel',
                 enabled: !schedulesFullControl,
-                onPressed: () => NotificationUtils.requestFullScheduleChannelPermissions(context).then(
+                onPressed: () => NotificationUtils.requestFullScheduleChannelPermissions(context, scheduleChannelPermissions.keys.toList()).then(
                     (_)=> refreshDetailedPagePermissions()
                 )
             ),

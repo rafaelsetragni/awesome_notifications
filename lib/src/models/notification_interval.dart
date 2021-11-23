@@ -30,7 +30,7 @@ class NotificationInterval extends NotificationSchedule {
   @override
   NotificationInterval? fromMap(Map<String, dynamic> dataMap) {
     super.fromMap(dataMap);
-    
+
     this.interval = AssertUtils.extractValue(
         NOTIFICATION_SCHEDULE_INTERVAL, dataMap, String);
 
@@ -46,10 +46,7 @@ class NotificationInterval extends NotificationSchedule {
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
-    return map
-      ..addAll({
-        NOTIFICATION_SCHEDULE_INTERVAL: this.interval
-      });
+    return map..addAll({NOTIFICATION_SCHEDULE_INTERVAL: this.interval});
   }
 
   @override
