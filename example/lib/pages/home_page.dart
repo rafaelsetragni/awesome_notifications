@@ -195,16 +195,9 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) async {
-      setState(() {
-        globalNotificationsAllowed = isAllowed;
-      });
-
-      if (!isAllowed) {
-        isAllowed = await NotificationUtils.requestBasicPermissionsToSendNotifications(context);
-      }
+    NotificationUtils.requestBasicPermissionsToSendNotifications(context).then((allowed){
+      refreshDetailedPagePermissions();
     });
-
     refreshDetailedPagePermissions();
   }
 

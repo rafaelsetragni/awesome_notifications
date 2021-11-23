@@ -176,7 +176,7 @@ class NotificationUtils {
             context: context,
             builder: (context) => AlertDialog(
               backgroundColor: Color(0xfffbfbfb),
-              title: Text('Awesome Notificaitons needs your permission to continue',
+              title: Text('Awesome Notificaitons needs your permission',
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
