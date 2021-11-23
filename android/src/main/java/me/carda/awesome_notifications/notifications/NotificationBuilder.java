@@ -105,14 +105,14 @@ public class NotificationBuilder {
                 context,
                 notificationModel.content.id,
                 intent,
-                PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
         );
 
         PendingIntent pendingDeleteIntent = PendingIntent.getBroadcast(
                 context,
                 notificationModel.content.id,
                 deleteIntent,
-                PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
         );
 
         Notification finalNotification = getNotificationBuilderFromModel(context, notificationModel, pendingIntent, pendingDeleteIntent, isSummary);
@@ -201,12 +201,12 @@ public class NotificationBuilder {
 
         if (buttonKeyPressed == null) return null;
 
-        Boolean isNormalAction = Definitions.SELECT_NOTIFICATION.equals(buttonKeyPressed) || Definitions.DISMISSED_NOTIFICATION.equals(buttonKeyPressed);
-        Boolean isButtonAction = buttonKeyPressed.startsWith(Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX);
+        boolean isNormalAction = Definitions.SELECT_NOTIFICATION.equals(buttonKeyPressed) || Definitions.DISMISSED_NOTIFICATION.equals(buttonKeyPressed);
+        boolean isButtonAction = buttonKeyPressed.startsWith(Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX);
 
         if (isNormalAction || isButtonAction) {
 
-            Integer notificationId = intent.getIntExtra(Definitions.NOTIFICATION_ID, -1);
+            int notificationId = intent.getIntExtra(Definitions.NOTIFICATION_ID, -1);
             String notificationJson = intent.getStringExtra(Definitions.NOTIFICATION_JSON);
 
             NotificationModel notificationModel = new NotificationModel().fromJson(notificationJson);
@@ -402,10 +402,10 @@ public class NotificationBuilder {
 
     private Notification getNotificationBuilderFromModel(Context context, NotificationModel notificationModel, PendingIntent pendingIntent, PendingIntent deleteIntent, boolean isSummary) throws AwesomeNotificationException {
 
-        if (!ChannelManager.isChannelEnabled(context, notificationModel.content.channelKey))
-            throw new AwesomeNotificationException("Channel '" + notificationModel.content.channelKey + "' does not exist or is disabled");
-
         NotificationChannelModel channel = ChannelManager.getChannelByKey(context, notificationModel.content.channelKey);
+
+        if (channel == null || !ChannelManager.isChannelEnabled(context, notificationModel.content.channelKey))
+            throw new AwesomeNotificationException("Channel '" + notificationModel.content.channelKey + "' does not exist or is disabled");
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationModel.content.channelKey);
 
@@ -527,13 +527,13 @@ public class NotificationBuilder {
     }
 
     private void setLockedNotification(NotificationModel notificationModel, NotificationChannelModel channel, NotificationCompat.Builder builder) {
-        Boolean contentLocked = BooleanUtils.getValue(notificationModel.content.locked);
-        Boolean channelLocked = BooleanUtils.getValue(channel.locked);
+        boolean contentLocked = BooleanUtils.getValue(notificationModel.content.locked);
+        boolean channelLocked = BooleanUtils.getValue(channel.locked);
 
         if (contentLocked) {
             builder.setOngoing(true);
         } else if (channelLocked) {
-            Boolean lockedValue = BooleanUtils.getValueOrDefault(notificationModel.content.locked, true) && channelLocked;
+            boolean lockedValue = BooleanUtils.getValueOrDefault(notificationModel.content.locked, true);
             builder.setOngoing(lockedValue);
         }
     }
@@ -588,14 +588,14 @@ public class NotificationBuilder {
 
     private void setVisibility(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+//
             Integer visibilityIndex;
             visibilityIndex = IntegerUtils.extractInteger(notificationModel.content.privacy, channelModel.defaultPrivacy.ordinal());
             visibilityIndex = IntegerUtils.extractInteger(visibilityIndex, NotificationPrivacy.Public);
 
             builder.setVisibility(visibilityIndex - 1);
-        }
+//        }
     }
 
     private void setLayoutColor(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
@@ -674,7 +674,7 @@ public class NotificationBuilder {
                             context,
                             notificationModel.content.id,
                             actionIntent,
-                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
                     );
 
                 } else if (buttonProperties.buttonType == ActionButtonType.DisabledAction) {
@@ -692,7 +692,7 @@ public class NotificationBuilder {
                             context,
                             notificationModel.content.id,
                             actionIntent,
-                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
                     );
                 }
             }
@@ -1025,9 +1025,10 @@ public class NotificationBuilder {
 
                 if(messagingQueue.containsKey(messageQueueKey)){
                     NotificationContentModel firstModel = messagingQueue.get(messageQueueKey);
-
-                    contentModel.id = firstModel.id;
-                    contentModel.messages = firstModel.messages;
+                    if(firstModel != null){
+                        contentModel.id = firstModel.id;
+                        contentModel.messages = firstModel.messages;
+                    }
                 }
 
                 if(contentModel.messages == null){
