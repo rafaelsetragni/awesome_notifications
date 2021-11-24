@@ -479,25 +479,45 @@ public class PermissionManager {
 
     public static void showNotificationConfigPage(Context context, PermissionCompletionHandler permissionCompletionHandler){
         if (gotoAndroidAppNotificationPage(context))
-            activityQueue.add(() -> permissionCompletionHandler.handle(new ArrayList<>()));
+            activityQueue.add(new ActivityCompletionHandler() {
+                @Override
+                public void handle() {
+                    permissionCompletionHandler.handle(new ArrayList<>());
+                }
+            });
         else permissionCompletionHandler.handle(new ArrayList<>());
     }
 
     public static void showChannelConfigPage(Context context, String channelKey, PermissionCompletionHandler permissionCompletionHandler){
         if (gotoAndroidChannelPage(context, channelKey))
-            activityQueue.add(() -> permissionCompletionHandler.handle(new ArrayList<>()));
+            activityQueue.add(new ActivityCompletionHandler() {
+                @Override
+                public void handle() {
+                    permissionCompletionHandler.handle(new ArrayList<>());
+                }
+            });
         else permissionCompletionHandler.handle(new ArrayList<>());
     }
 
     public static void showPreciseAlarmPage(Context context, PermissionCompletionHandler permissionCompletionHandler){
         if (gotoPreciseAlarmPage(context))
-            activityQueue.add(() -> permissionCompletionHandler.handle(new ArrayList<>()));
+            activityQueue.add(new ActivityCompletionHandler() {
+                @Override
+                public void handle() {
+                    permissionCompletionHandler.handle(new ArrayList<>());
+                }
+            });
         else permissionCompletionHandler.handle(new ArrayList<>());
     }
 
     public static void showDnDGlobalOverridingPage(Context context, PermissionCompletionHandler permissionCompletionHandler){
         if (gotoControlsDnDPage(context))
-            activityQueue.add(() -> permissionCompletionHandler.handle(new ArrayList<>()));
+            activityQueue.add(new ActivityCompletionHandler() {
+                @Override
+                public void handle() {
+                    permissionCompletionHandler.handle(new ArrayList<>());
+                }
+            });
         else permissionCompletionHandler.handle(new ArrayList<>());
     }
 
