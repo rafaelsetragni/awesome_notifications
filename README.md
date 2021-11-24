@@ -11,7 +11,7 @@
 [![Likes](https://badges.bar/awesome_notifications/likes)](https://pub.dev/packages/awesome_notifications/score)
 [![popularity](https://badges.bar/awesome_notifications/popularity)](https://pub.dev/packages/awesome_notifications/score)
 [![pub points](https://badges.bar/awesome_notifications/pub%20points)](https://pub.dev/packages/awesome_notifications/score)
-   
+
 ### Features
 
 - Create **Local Notifications** on Android, iOS and Web using Flutter.
@@ -83,14 +83,46 @@ This way, your Application will receive **all notifications at Flutter level cod
 <br>
 <br>
 
+## Discord Chat Server
+
+To stay tuned with new updates and get our community support, please subscribe into our Discord Chat Server:
+https://discord.gg/MP3sEXPTnx
+
+<br>
+<br>
+
 ## Initial Requirements
 
 <br>
     
 Bellow are the obligatory requirements that your app must meet to use awesome_notifications:
 
-* Android: is required the minimum android SDK to 23 (Android 6.0 Marshmallow). You can change the minSdkVersion to 23, inside the file build.gradle in "android/app" folder.
-* iOS: is required the minimum iOS version to 10. You can change the minimum app version through xCode, Project Runner (clicking on the app icon) > Info > Deployment Target  and changing the option "ios minimum deployment target" to 10.0
+### Android
+
+Is required the minimum android SDK to 23 (Android 6.0 Marshmallow) and Java compile SDK Version to 31 (Android 12.0 S). You can change the `minSdkVersion` to 23 and the `compileSdkVersion` to 31, inside the file build.gradle in "android/app" folder.
+Also, to turn your app fully compatible with Android 12 (SDK 31), you need to add the tag `android:exported="true"` to any <activity>, <activity-alias>, <service>, or <receiver> components that have <intent-filter> declared inside in the app’s AndroidManifest.xml file, and this is valid for every other flutter packages that youre using.
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.myapp">
+   <application
+        android:label="myapp"
+        android:icon="@mipmap/ic_launcher">
+        (...)
+        <activity
+            android:name=".MainActivity"
+            (...)
+            android:exported="true">
+                (...)
+        </activity>
+        (...)
+    </application>
+</manifest>
+```
+
+### iOS
+
+Is required the minimum iOS version to 10. You can change the minimum app version through xCode, Project Runner (clicking on the app icon) > Info > Deployment Target  and changing the option "ios minimum deployment target" to 10.0
 
 <br>
 
@@ -1096,6 +1128,34 @@ You can download a example of how to send Push Notifications through FCM using "
 <br>
 
 ## Common Known Issues
+
+**Issue:** Targeting S+ (version 31 and above) requires that an explicit value for android:exported be defined when intent filters are present
+
+**Fix:** You need to add the tag `android:exported="true"` to any <activity>, <activity-alias>, <service>, or <receiver> components that have <intent-filter> declared inside in the app’s AndroidManifest.xml file, and this is valid for every other flutter packages that youre using.
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.myapp">
+   <application
+        android:label="myapp"
+        android:icon="@mipmap/ic_launcher">
+        (...)
+        <activity
+            android:name=".MainActivity"
+            (...)
+            android:exported="true">
+                (...)
+        </activity>
+        (...)
+    </application>
+</manifest>
+```
+
+But you need to remember that your plugin local files can be modified or even erased by some flutter commands, such as "Pub clear cache". So, do not add the tag exported manually. Instead, request this changes to your plugin repository instead and upgrate it in your pubspec.yaml to the last version.
+To know more about it, please visit [Android 12 - Safer component exporting](https://developer.android.com/about/versions/12/behavior-changes-12?hl=pt-br#exported)
+
+
+##
 
 **Issue:** awesome_notifications is not working on release mode on Android with custom sound or icon.
 

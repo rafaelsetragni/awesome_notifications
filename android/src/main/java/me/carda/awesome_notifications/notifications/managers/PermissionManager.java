@@ -221,9 +221,9 @@ public class PermissionManager {
     }
 
     public static void requestUserPermissions(
-            Activity activity,
-            Context context,
-            String channelKey,
+            final Activity activity,
+            final Context context,
+            final String channelKey,
             final List<String> permissions,
             final PermissionCompletionHandler permissionCompletionHandler
     ) throws AwesomeNotificationException {
@@ -280,11 +280,11 @@ public class PermissionManager {
     }
 
     private static void shouldShowAndroidRequestDialog(
-            Activity activity,
-            Context context,
-            String channelKey,
-            List<String> permissions,
-            List<String> manifestPermissions,
+            final Activity activity,
+            final Context context,
+            final String channelKey,
+            final List<String> permissions,
+            final List<String> manifestPermissions,
             final PermissionCompletionHandler permissionCompletionHandler
     ) throws AwesomeNotificationException {
 
@@ -298,10 +298,10 @@ public class PermissionManager {
     }
 
     private static void shouldShowRationalePage(
-            Context context,
-            String channelKey,
-            @Nullable NotificationPermission permissionEnum,
-            List<String> permissions,
+            final Context context,
+            final String channelKey,
+            final @Nullable NotificationPermission permissionEnum,
+            final List<String> permissions,
             final PermissionCompletionHandler permissionCompletionHandler
     ) throws AwesomeNotificationException {
 
@@ -347,8 +347,8 @@ public class PermissionManager {
     }
 
     private static void refreshReturnedPermissions(
-            Context context,
-            String channelKey,
+            final Context context,
+            final String channelKey,
             List<String> permissionsNeeded,
             final PermissionCompletionHandler permissionCompletionHandler
     ){
@@ -373,7 +373,7 @@ public class PermissionManager {
         permissionCompletionHandler.handle(permissionsNeeded);
     }
 
-    private static void updateChannelModelThroughPermissions(Context context, @NonNull String channelKey, @NonNull List<String> permissionsNeeded) {
+    private static void updateChannelModelThroughPermissions(final Context context, final @NonNull String channelKey, final @NonNull List<String> permissionsNeeded) {
 
         // For Android 8 and above, channels are updated at every load process
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/)
@@ -470,7 +470,7 @@ public class PermissionManager {
         }
     }
 
-    public static void showNotificationConfigPage(Context context, final PermissionCompletionHandler permissionCompletionHandler){
+    public static void showNotificationConfigPage(final Context context, final PermissionCompletionHandler permissionCompletionHandler){
         if (gotoAndroidAppNotificationPage(context))
             activityQueue.add(new ActivityCompletionHandler() {
                 @Override
@@ -481,7 +481,7 @@ public class PermissionManager {
         else permissionCompletionHandler.handle(new ArrayList<String>());
     }
 
-    public static void showChannelConfigPage(Context context, String channelKey, final PermissionCompletionHandler permissionCompletionHandler){
+    public static void showChannelConfigPage(final Context context, final String channelKey, final PermissionCompletionHandler permissionCompletionHandler){
         if (gotoAndroidChannelPage(context, channelKey))
             activityQueue.add(new ActivityCompletionHandler() {
                 @Override
@@ -492,7 +492,7 @@ public class PermissionManager {
         else permissionCompletionHandler.handle(new ArrayList<String>());
     }
 
-    public static void showPreciseAlarmPage(Context context, final PermissionCompletionHandler permissionCompletionHandler){
+    public static void showPreciseAlarmPage(final Context context, final PermissionCompletionHandler permissionCompletionHandler){
         if (gotoPreciseAlarmPage(context))
             activityQueue.add(new ActivityCompletionHandler() {
                 @Override
@@ -503,7 +503,7 @@ public class PermissionManager {
         else permissionCompletionHandler.handle(new ArrayList<String>());
     }
 
-    public static void showDnDGlobalOverridingPage(Context context, final PermissionCompletionHandler permissionCompletionHandler){
+    public static void showDnDGlobalOverridingPage(final Context context, final PermissionCompletionHandler permissionCompletionHandler){
         if (gotoControlsDnDPage(context))
             activityQueue.add(new ActivityCompletionHandler() {
                 @Override
@@ -514,7 +514,7 @@ public class PermissionManager {
         else permissionCompletionHandler.handle(new ArrayList<String>());
     }
 
-    private static boolean gotoAndroidGlobalNotificationsPage(Context context){
+    private static boolean gotoAndroidGlobalNotificationsPage(final Context context){
         final Intent intent = new Intent();
 
         // TODO missing action link to global notifications page
@@ -525,7 +525,7 @@ public class PermissionManager {
         return startTestedActivity(context, intent);
     }
 
-    private static boolean gotoAndroidAppNotificationPage(Context context){
+    private static boolean gotoAndroidAppNotificationPage(final Context context){
         final Intent intent = new Intent();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
             intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
@@ -546,7 +546,7 @@ public class PermissionManager {
         return startTestedActivity(context, intent);
     }
 
-    private static boolean gotoAndroidChannelPage(Context context, String channelKey){
+    private static boolean gotoAndroidChannelPage(final Context context, final String channelKey){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = ChannelManager.getAndroidChannel(context, channelKey);
 
@@ -560,7 +560,7 @@ public class PermissionManager {
         else return gotoAndroidAppNotificationPage(context);
     }
 
-    private static boolean gotoPreciseAlarmPage(Context context){
+    private static boolean gotoPreciseAlarmPage(final Context context){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S /*Android 12*/) {
             final Intent intent = new Intent();
 
@@ -574,7 +574,7 @@ public class PermissionManager {
         return gotoAndroidAppNotificationPage(context);
     }
 
-    private static boolean gotoControlsDnDPage(Context context){
+    private static boolean gotoControlsDnDPage(final Context context){
         final Intent intent = new Intent(
                 android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
