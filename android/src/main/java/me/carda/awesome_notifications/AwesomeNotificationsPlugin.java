@@ -36,6 +36,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import android.app.Activity;
 
 import me.carda.awesome_notifications.notifications.BitmapResourceDecoder;
+import me.carda.awesome_notifications.notifications.handlers.PermissionCompletionHandler;
 import me.carda.awesome_notifications.notifications.managers.BadgeManager;
 import me.carda.awesome_notifications.notifications.managers.ChannelGroupManager;
 import me.carda.awesome_notifications.notifications.models.DefaultsModel;
@@ -923,24 +924,44 @@ public class AwesomeNotificationsPlugin
         if(StringUtils.isNullOrEmpty(channelKey))
             PermissionManager.showNotificationConfigPage(
                     applicationContext,
-                    result::success);
+                    new PermissionCompletionHandler() {
+                        @Override
+                        public void handle(List<String> missingPermissions) {
+                            result.success(missingPermissions);
+                        }
+                    });
         else
             PermissionManager.showChannelConfigPage(
                     applicationContext,
                     channelKey,
-                    result::success);
+                    new PermissionCompletionHandler() {
+                        @Override
+                        public void handle(List<String> missingPermissions) {
+                            result.success(missingPermissions);
+                        }
+                    });
     }
 
     private void channelShowAlarmPage(MethodCall call, @NonNull Result result) throws Exception {
         PermissionManager.showPreciseAlarmPage(
                 applicationContext,
-                result::success);
+                new PermissionCompletionHandler() {
+                    @Override
+                    public void handle(List<String> missingPermissions) {
+                        result.success(missingPermissions);
+                    }
+                });
     }
 
     private void channelShowGlobalDndPage(MethodCall call, @NonNull Result result) throws Exception {
         PermissionManager.showDnDGlobalOverridingPage(
                 applicationContext,
-                result::success);
+                new PermissionCompletionHandler() {
+                    @Override
+                    public void handle(List<String> missingPermissions) {
+                        result.success(missingPermissions);
+                    }
+                });
     }
 
     @SuppressWarnings("unchecked")
@@ -1007,7 +1028,12 @@ public class AwesomeNotificationsPlugin
                 applicationContext,
                 channelKey,
                 permissions,
-                result::success);
+                new PermissionCompletionHandler() {
+                    @Override
+                    public void handle(List<String> missingPermissions) {
+                        result.success(missingPermissions);
+                    }
+                });
     }
 
     private void channelMethodCreateNotification(MethodCall call, Result result) throws Exception {
