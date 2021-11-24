@@ -225,7 +225,7 @@ public class PermissionManager {
             Context context,
             String channelKey,
             final List<String> permissions,
-            PermissionCompletionHandler permissionCompletionHandler
+            final PermissionCompletionHandler permissionCompletionHandler
     ) throws AwesomeNotificationException {
 
         if(!permissions.isEmpty()){
@@ -285,7 +285,7 @@ public class PermissionManager {
             String channelKey,
             List<String> permissions,
             List<String> manifestPermissions,
-            PermissionCompletionHandler permissionCompletionHandler
+            final PermissionCompletionHandler permissionCompletionHandler
     ) throws AwesomeNotificationException {
 
         activity.requestPermissions(manifestPermissions.toArray(new String[0]), REQUEST_CODE);
@@ -302,7 +302,7 @@ public class PermissionManager {
             String channelKey,
             @Nullable NotificationPermission permissionEnum,
             List<String> permissions,
-            PermissionCompletionHandler permissionCompletionHandler
+            final PermissionCompletionHandler permissionCompletionHandler
     ) throws AwesomeNotificationException {
 
         boolean success;
@@ -350,7 +350,7 @@ public class PermissionManager {
             Context context,
             String channelKey,
             List<String> permissionsNeeded,
-            PermissionCompletionHandler permissionCompletionHandler
+            final PermissionCompletionHandler permissionCompletionHandler
     ){
         try {
             if(!permissionsNeeded.isEmpty()) {
