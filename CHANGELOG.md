@@ -1,3 +1,5 @@
+## [0.6.18+1]
+* Java lambda expressions removed to turn Android source compatible with old Java 7
 ## [0.6.18]
 * Added Channel's Group feature for Android
 * Added notification's category feature for Android
