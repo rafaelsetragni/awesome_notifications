@@ -345,6 +345,7 @@ public class NotificationBuilder {
                     PowerManager.PARTIAL_WAKE_LOCK,
                     appName+":"+TAG+":WakeupCpuLock");
             wl_cpu.acquire(10000);
+            wl_cpu.acquire(10000);
         }
     }
 
@@ -692,7 +693,7 @@ public class NotificationBuilder {
                             context,
                             notificationModel.content.id,
                             actionIntent,
-                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
                     );
                 }
             }
