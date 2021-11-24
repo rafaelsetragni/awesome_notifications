@@ -47,13 +47,13 @@ class NotificationCalendar extends NotificationSchedule {
   /// [hour] Schedule hour condition
   /// [minute] Schedule minute condition
   /// [second] Schedule second condition
-  /// [millisecond] Schedule millisecond condition
   /// [weekday] Schedule weekday condition
   /// [weekOfMonth] Schedule weekOfMonth condition
   /// [weekOfMonth] Schedule weekOfMonth condition
   /// [weekOfYear] Schedule weekOfYear condition
   /// [allowWhileIdle] Displays the notification, even when the device is low battery
   /// [repeats] Defines if the notification should play only once or keeps repeating
+  /// [preciseAlarm] Requires maximum precision to schedule notifications at exact time, but may use more battery. Requires the explicit user consent for Android 12 and beyond.
   /// [timeZone] time zone identifier as reference of this schedule date. (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
   NotificationCalendar({
     this.era,
@@ -69,23 +69,27 @@ class NotificationCalendar extends NotificationSchedule {
     this.weekOfYear,
     String? timeZone,
     bool allowWhileIdle = false,
+    bool preciseAlarm = false,
     bool repeats = false,
   }) : super(
             timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
-            repeats: repeats);
+            repeats: repeats,
+            preciseAlarm: preciseAlarm);
 
   /// Initialize a notification schedule calendar based on a date object
   NotificationCalendar.fromDate(
       {required DateTime date,
       bool allowWhileIdle = false,
-      bool repeats = false})
+      bool repeats = false,
+      bool preciseAlarm = false})
       : super(
             timeZone: date.isUtc
                 ? AwesomeNotifications.utcTimeZoneIdentifier
                 : AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
-            repeats: repeats) {
+            repeats: repeats,
+            preciseAlarm: preciseAlarm) {
     this.year = date.year;
     this.month = date.month;
     this.day = date.day;

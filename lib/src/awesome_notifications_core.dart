@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
@@ -20,7 +19,7 @@ import 'package:awesome_notifications/src/models/notification_button.dart';
 import 'package:awesome_notifications/src/models/notification_channel.dart';
 import 'package:awesome_notifications/src/models/notification_content.dart';
 import 'package:awesome_notifications/src/models/notification_schedule.dart';
-import 'package:awesome_notifications/src/models/received_models/notification_model.dart';
+import 'package:awesome_notifications/src/models/notification_model.dart';
 import 'package:awesome_notifications/src/models/received_models/received_action.dart';
 import 'package:awesome_notifications/src/models/received_models/received_notification.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
@@ -29,6 +28,7 @@ import 'package:awesome_notifications/src/utils/date_utils.dart';
 import 'package:rxdart/rxdart.dart' show BehaviorSubject;
 
 import 'enumerators/notification_permission.dart';
+import 'models/notification_channel_group.dart';
 
 class AwesomeNotifications {
   static String? rootNativePath;
@@ -140,7 +140,8 @@ class AwesomeNotifications {
   /// OBS 2: [channels] are updated if they already exists
   Future<bool> initialize(
       String? defaultIcon, List<NotificationChannel> channels,
-      {bool debug = false}) async {
+      {List<NotificationChannelGroup>? channelGroups,
+      bool debug = false}) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     _channel.setMethodCallHandler(_handleMethod);
@@ -149,6 +150,12 @@ class AwesomeNotifications {
     for (NotificationChannel channel in channels) {
       serializedChannels.add(channel.toMap());
     }
+
+    List<dynamic> serializedChannelGroups = [];
+    if (channelGroups != null)
+      for (NotificationChannelGroup channelGroup in channelGroups) {
+        serializedChannelGroups.add(channelGroup.toMap());
+      }
 
     String? defaultIconPath;
     if (kIsWeb) {
@@ -165,7 +172,8 @@ class AwesomeNotifications {
     var result = await _channel.invokeMethod(CHANNEL_METHOD_INITIALIZE, {
       INITIALIZE_DEBUG_MODE: debug,
       INITIALIZE_DEFAULT_ICON: defaultIconPath,
-      INITIALIZE_CHANNELS: serializedChannels
+      INITIALIZE_CHANNELS: serializedChannels,
+      INITIALIZE_CHANNELS_GROUPS: serializedChannelGroups
     });
 
     localTimeZoneIdentifier = await _channel
@@ -283,8 +291,19 @@ class AwesomeNotifications {
   }
 
   /// Opens the app notifications page
-  Future<void> showNotificationConfigPage() async {
-    await _channel.invokeMethod(CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE);
+  Future<void> showNotificationConfigPage({String? channelKey}) async {
+    await _channel.invokeMethod(
+        CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE, channelKey);
+  }
+
+  /// Opens the app notifications page
+  Future<void> showAlarmPage() async {
+    await _channel.invokeMethod(CHANNEL_METHOD_SHOW_ALARM_PAGE);
+  }
+
+  /// Opens the app page to allows to override device DnD
+  Future<void> showGlobalDndOverridePage() async {
+    await _channel.invokeMethod(CHANNEL_METHOD_SHOW_GLOBAL_DND_PAGE);
   }
 
   /// Check if the notifications are globally permitted
@@ -296,10 +315,13 @@ class AwesomeNotifications {
 
   /// Prompts the user to enabled notifications
   Future<bool> requestPermissionToSendNotifications(
-      {List<NotificationPermission> permissions = const [
-        NotificationPermission.Badge,
+      {String? channelKey,
+      List<NotificationPermission> permissions = const [
         NotificationPermission.Alert,
-        NotificationPermission.Sound
+        NotificationPermission.Sound,
+        NotificationPermission.Badge,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light,
       ]}) async {
     final List<String> permissionList = [];
     for (final permission in permissions) {
@@ -307,36 +329,78 @@ class AwesomeNotifications {
       if (permissionValue != null) permissionList.add(permissionValue);
     }
 
-    final bool isAllowed = await _channel.invokeMethod(
-        CHANNEL_METHOD_REQUEST_NOTIFICATIONS, permissionList);
-    return isAllowed;
+    final List<Object?>? missingPermissions = await _channel.invokeMethod(
+        CHANNEL_METHOD_REQUEST_NOTIFICATIONS, {
+      NOTIFICATION_CHANNEL_KEY: channelKey,
+      NOTIFICATION_PERMISSIONS: permissionList
+    });
+
+    return missingPermissions?.isEmpty ?? false;
   }
 
   /// Check each individual permission to send notifications and returns only the allowed permissions
   Future<List<NotificationPermission>> checkPermissionList(
-      {List<NotificationPermission> permissions = const [
+      {String? channelKey,
+      List<NotificationPermission> permissions = const [
         NotificationPermission.Badge,
         NotificationPermission.Alert,
-        NotificationPermission.Sound
+        NotificationPermission.Sound,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light
       ]}) async {
-    List<String> permissionList = [];
+    List<Object?> permissionList = _listPermissionToListString(permissions);
+
+    permissionList = await _channel.invokeMethod(
+        CHANNEL_METHOD_CHECK_PERMISSIONS, {
+      NOTIFICATION_CHANNEL_KEY: channelKey,
+      NOTIFICATION_PERMISSIONS: permissionList
+    });
+
+    return _listStringToListPermission(permissionList);
+  }
+
+  /// Check if the app must show some rationale before request the user's consent. Returns the
+  /// list of permissions that can only be changed via user's intervention.
+  Future<List<NotificationPermission>> shouldShowRationaleToRequest(
+      {String? channelKey,
+      List<NotificationPermission> permissions = const [
+        NotificationPermission.Badge,
+        NotificationPermission.Alert,
+        NotificationPermission.Sound,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light
+      ]}) async {
+    List<Object?> permissionList = _listPermissionToListString(permissions);
+
+    permissionList = await _channel.invokeMethod(
+        CHANNEL_METHOD_SHOULD_SHOW_RATIONALE, {
+      NOTIFICATION_CHANNEL_KEY: channelKey,
+      NOTIFICATION_PERMISSIONS: permissionList
+    });
+
+    return _listStringToListPermission(permissionList);
+  }
+
+  List<Object?> _listPermissionToListString(
+      List<NotificationPermission> permissions) {
+    List<Object?> permissionList = [];
     for (final permission in permissions) {
       String? permissionValue = AssertUtils.toSimpleEnumString(permission);
       if (permissionValue != null) permissionList.add(permissionValue);
     }
+    return permissionList;
+  }
 
-    permissionList = await _channel.invokeMethod(
-        CHANNEL_METHOD_REQUEST_NOTIFICATIONS, permissionList);
-
-    List<NotificationPermission> allowed = [];
+  List<NotificationPermission> _listStringToListPermission(
+      List<Object?> permissionList) {
+    List<NotificationPermission> lockedPermissions = [];
     for (final permission in permissionList) {
       NotificationPermission? permissionValue =
           AssertUtils.enumToString<NotificationPermission>(
-              permission, NotificationPermission.values, null);
-      if (permissionValue != null) allowed.add(permissionValue);
+              permission.toString(), NotificationPermission.values, null);
+      if (permissionValue != null) lockedPermissions.add(permissionValue);
     }
-
-    return allowed;
+    return lockedPermissions;
   }
 
   /// List all active scheduled notifications.

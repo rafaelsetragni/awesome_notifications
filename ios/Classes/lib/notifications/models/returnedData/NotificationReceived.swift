@@ -25,7 +25,7 @@ public class NotificationReceived : NotificationContentModel {
         self.largeIcon = contentModel!.largeIcon
         self.bigPicture = contentModel!.bigPicture
         self.hideLargeIconOnExpand = contentModel!.hideLargeIconOnExpand
-        self.autoDismissable = contentModel!.autoDismissable
+        self.autoDismissible = contentModel!.autoDismissible
         self.color = contentModel!.color
         self.progress = contentModel!.progress
         self.ticker = contentModel!.ticker

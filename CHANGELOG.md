@@ -1,3 +1,15 @@
+## [0.6.18+1]
+* Java lambda expressions removed to turn Android source compatible with old Java 7
+## [0.6.18]
+* Added Channel's Group feature for Android
+* Added notification's category feature for Android
+* Added fullScreenIntent permission and content option to allow to show notifications in full screen mode.
+* Added PreciseAlarms permission and sheculde option to allow to show scheduled notifications with more precision.
+* Added showPage methods to provide shortcuts to channel permissions page and alarm permission page.
+* Added shouldShowRationale method for android to check if the requested permissions require user intervention to be enable.
+* Added request permissions methods to demand the users permissions considered dangerous by the system.
+* Permission's request methods refactored to enable a more modular and scalable evolution to comport future permissions for Android
+* Documentation has been improved with the new permissions methods, channel's group, notification categories, fullScreenIntent and PreciseAlarms permissions
 ## [0.6.17]
 * Added wakeUpScreen option in notification content to wake up screen when a notification is displayed (Requires to add WAKE_LOCK permission into AndroidManifest.xml).
 * Added custom permissions for method requestPermissionToSendNotifications (has no effect on Android).

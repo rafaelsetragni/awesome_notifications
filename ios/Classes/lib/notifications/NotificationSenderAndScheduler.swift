@@ -48,7 +48,7 @@ class NotificationSenderAndScheduler {
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "Notification is not valid")
         }
 
-        NotificationBuilder.isNotificationAllowed(completion: { (allowed) in
+        PermissionManager.areNotificationsGloballyAllowed(permissionCompletion: { (allowed) in
             
             do{
                 if (allowed){

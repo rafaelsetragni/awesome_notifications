@@ -1,6 +1,5 @@
 package me.carda.awesome_notifications.notifications;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,7 +7,6 @@ import android.app.PendingIntent;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -16,8 +14,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 
 
@@ -29,8 +25,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.Person;
 import androidx.core.app.RemoteInput;
 
@@ -44,11 +40,13 @@ import me.carda.awesome_notifications.notifications.enumerators.ActionButtonType
 import me.carda.awesome_notifications.notifications.enumerators.GroupSort;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationImportance;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLayout;
-import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationPermission;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
+import me.carda.awesome_notifications.notifications.managers.BadgeManager;
 import me.carda.awesome_notifications.notifications.managers.ChannelManager;
 import me.carda.awesome_notifications.notifications.managers.DefaultsManager;
+import me.carda.awesome_notifications.notifications.managers.PermissionManager;
 import me.carda.awesome_notifications.notifications.models.NotificationButtonModel;
 import me.carda.awesome_notifications.notifications.models.NotificationChannelModel;
 import me.carda.awesome_notifications.notifications.models.NotificationContentModel;
@@ -64,7 +62,6 @@ import me.carda.awesome_notifications.utils.ListUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
 //badges
-import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static android.app.NotificationManager.Policy.PRIORITY_CATEGORY_ALARMS;
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -72,95 +69,6 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 public class NotificationBuilder {
 
     public static String TAG = "NotificationBuilder";
-
-    public static Boolean isNotificationEnabled(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            NotificationManagerCompat manager = NotificationManagerCompat.from(context);
-            return manager.areNotificationsEnabled();
-        }
-        return true;
-    }
-
-    public static List<String> isPermissionsAllowed(Context context, String channelKey, List<String> permissions) throws AwesomeNotificationException {
-        List<String> allowedPermissions = new ArrayList<>();
-
-        if(isNotificationEnabled(context)) {
-
-            NotificationChannel channel = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-
-                channel = ChannelManager.getAndroidChannel(context, channelKey);
-                if(channel == null)
-                    throw new AwesomeNotificationException("Channel "+channelKey+" does not exists.");
-
-                if(channel.getImportance() != NotificationManager.IMPORTANCE_NONE){
-
-                    for (String permission : permissions) {
-
-                        NotificationPermission permissionEnum =
-                                StringUtils.getEnumFromString(NotificationPermission.class, permission);
-
-                        switch (permissionEnum){
-                            case Sound:
-                                if(channel.getSound() == null)
-                                    continue;
-
-                            case CriticalAlert:
-                                // TODO implement critical alerts for Android
-                        }
-
-                        allowedPermissions.add(permission);
-                    }
-                }
-            } else {
-                NotificationChannelModel channelModel = ChannelManager.getChannelByKey(context, channelKey);
-                if (channelModel.importance != NotificationImportance.None){
-
-                    for (String permission : permissions) {
-
-                        NotificationPermission permissionEnum =
-                                StringUtils.getEnumFromString(NotificationPermission.class, permission);
-
-                        switch (permissionEnum){
-                            case Sound:
-                                if(!channelModel.playSound)
-                                    continue;
-
-                            case CriticalAlert:
-                                // TODO implement critical alerts for Android
-                        }
-
-                        allowedPermissions.add(permission);
-                    }
-                }
-            }
-        }
-
-        return allowedPermissions;
-    }
-
-    public static void showNotificationConfigPage(Context context){
-
-        final Intent intent = new Intent();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
-            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
-            intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
-        } else
-            // Android 5 (LOLLIPOP) is now the minimum required
-            /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)*/{
-            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
-            intent.putExtra("app_package", context.getPackageName());
-            intent.putExtra("app_uid", context.getApplicationInfo().uid);
-        } /*else {
-            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            intent.addCategory(Intent.CATEGORY_DEFAULT);
-            intent.setData(Uri.parse("package:" + applicationContext.getPackageName()));
-        }*/
-
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
 
     public Notification createNotification(Context context, NotificationModel notificationModel) throws AwesomeNotificationException {
         return createNotification(context, notificationModel, false);
@@ -197,14 +105,14 @@ public class NotificationBuilder {
                 context,
                 notificationModel.content.id,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
         );
 
         PendingIntent pendingDeleteIntent = PendingIntent.getBroadcast(
                 context,
                 notificationModel.content.id,
                 deleteIntent,
-                PendingIntent.FLAG_CANCEL_CURRENT
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
         );
 
         Notification finalNotification = getNotificationBuilderFromModel(context, notificationModel, pendingIntent, pendingDeleteIntent, isSummary);
@@ -285,7 +193,7 @@ public class NotificationBuilder {
         extras.putInt(Definitions.NOTIFICATION_ID, notificationModel.content.id);
         extras.putString(Definitions.NOTIFICATION_CHANNEL_KEY, StringUtils.digestString(notificationModel.content.channelKey));
         extras.putString(Definitions.NOTIFICATION_GROUP_KEY, StringUtils.digestString(groupKey));
-        extras.putBoolean(Definitions.NOTIFICATION_AUTO_DISMISSABLE, notificationModel.content.autoDismissable);
+        extras.putBoolean(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, notificationModel.content.autoDismissible);
     }
 
     public static ActionReceived buildNotificationActionFromIntent(Context context, Intent intent) {
@@ -293,12 +201,12 @@ public class NotificationBuilder {
 
         if (buttonKeyPressed == null) return null;
 
-        Boolean isNormalAction = Definitions.SELECT_NOTIFICATION.equals(buttonKeyPressed) || Definitions.DISMISSED_NOTIFICATION.equals(buttonKeyPressed);
-        Boolean isButtonAction = buttonKeyPressed.startsWith(Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX);
+        boolean isNormalAction = Definitions.SELECT_NOTIFICATION.equals(buttonKeyPressed) || Definitions.DISMISSED_NOTIFICATION.equals(buttonKeyPressed);
+        boolean isButtonAction = buttonKeyPressed.startsWith(Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX);
 
         if (isNormalAction || isButtonAction) {
 
-            Integer notificationId = intent.getIntExtra(Definitions.NOTIFICATION_ID, -1);
+            int notificationId = intent.getIntExtra(Definitions.NOTIFICATION_ID, -1);
             String notificationJson = intent.getStringExtra(Definitions.NOTIFICATION_JSON);
 
             NotificationModel notificationModel = new NotificationModel().fromJson(notificationJson);
@@ -325,7 +233,7 @@ public class NotificationBuilder {
                 }
             }
 
-            if (intent.getBooleanExtra(Definitions.NOTIFICATION_AUTO_DISMISSABLE, notificationId >= 0)) {
+            if (intent.getBooleanExtra(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, notificationId >= 0)) {
                 NotificationSender.dismissNotification(context, notificationId);
             }
 
@@ -437,34 +345,52 @@ public class NotificationBuilder {
                     PowerManager.PARTIAL_WAKE_LOCK,
                     appName+":"+TAG+":WakeupCpuLock");
             wl_cpu.acquire(10000);
+            wl_cpu.acquire(10000);
         }
     }
 
-    public static void activateCritialAlert(Context context) throws AwesomeNotificationException {
-
-        // TODO implement critical alerts for Android
+    public static void ensureCriticalAlert(Context context) throws AwesomeNotificationException {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        if (notificationManager.isNotificationPolicyAccessGranted()) {
-            notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P /*Android 9*/) {
-                NotificationManager.Policy policy = new NotificationManager.Policy(PRIORITY_CATEGORY_ALARMS, 0, 0);
-                notificationManager.setNotificationPolicy(policy);
+        if (isDndOverrideAllowed(context, notificationManager)) {
+            if (!PermissionManager.isSpecifiedPermissionGloballyAllowed(context, NotificationPermission.CriticalAlert)){
+                notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P /*Android 9*/) {
+                    NotificationManager.Policy policy = new NotificationManager.Policy(PRIORITY_CATEGORY_ALARMS, 0, 0);
+                    notificationManager.setNotificationPolicy(policy);
+                }
             }
-        } else {
-            throw new AwesomeNotificationException("Critical Alert mode is not enable");
         }
     }
 
-    public static void requestCriticalAlerts(Context context){
+    public static NotificationManager getAndroidNotificationManager(Context context){
+        return  (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    }
 
-        // TODO implement critical alerts for Android
+    public static boolean isDndOverrideAllowed(Context context){
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        return isDndOverrideAllowed(context, notificationManager);
+    }
 
-        if (!notificationManager.isNotificationPolicyAccessGranted()) {
-            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-            Activity activity = (Activity) context;
-            activity.startActivity(intent);
+    public static boolean isCriticalAlertsGloballyAllowed(Context context){
+        NotificationManager notificationManager = getAndroidNotificationManager(context);
+        // Critical alerts until Android 7 are "Treat as priority" or "Priority"
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O /*Android 8*/){
+//            return (notificationManager.getNotificationPolicy().state
+//                    & NotificationManager.Policy.STATE_CHANNELS_BYPASSING_DND) == 1;
+            // TODO read "Treat as priority" or "Priority" property on notifications page
         }
+        return notificationManager.getCurrentInterruptionFilter() != NotificationManager.INTERRUPTION_FILTER_NONE;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static boolean isNotificationSoundGloballyAllowed(Context context){
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        int importance = manager.getImportance();
+        return importance < 0 || importance >= NotificationManager.IMPORTANCE_DEFAULT;
+    }
+
+    public static boolean isDndOverrideAllowed(Context context, NotificationManager notificationManager){
+        return notificationManager.isNotificationPolicyAccessGranted();
     }
 
     private static String getButtonInputText(Intent intent, String buttonKey) {
@@ -477,10 +403,10 @@ public class NotificationBuilder {
 
     private Notification getNotificationBuilderFromModel(Context context, NotificationModel notificationModel, PendingIntent pendingIntent, PendingIntent deleteIntent, boolean isSummary) throws AwesomeNotificationException {
 
-        if (!ChannelManager.isChannelEnabled(context, notificationModel.content.channelKey))
-            throw new AwesomeNotificationException("Channel '" + notificationModel.content.channelKey + "' does not exist or is disabled");
-
         NotificationChannelModel channel = ChannelManager.getChannelByKey(context, notificationModel.content.channelKey);
+
+        if (channel == null || !ChannelManager.isChannelEnabled(context, notificationModel.content.channelKey))
+            throw new AwesomeNotificationException("Channel '" + notificationModel.content.channelKey + "' does not exist or is disabled");
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationModel.content.channelKey);
 
@@ -512,6 +438,7 @@ public class NotificationBuilder {
 
         setLockedNotification(notificationModel, channel, builder);
         setImportance(channel, builder);
+        setCategory(notificationModel, builder);
 
         setSound(context, notificationModel, channel, builder);
         setVibrationPattern(channel, builder);
@@ -520,6 +447,8 @@ public class NotificationBuilder {
         setSmallIcon(context, notificationModel, channel, builder);
         setLargeIcon(context, notificationModel, builder);
         setLayoutColor(context, notificationModel, channel, builder);
+
+        setFullScreenIntent(context, pendingIntent, notificationModel, builder);
 
         if(!isSummary)
             setBadge(context, channel, builder);
@@ -535,7 +464,7 @@ public class NotificationBuilder {
         updateTrackingExtras(notificationModel, channel, androidNotification.extras);
 
         setWakeUpScreen(context, notificationModel);
-        setCritialAlert(context, notificationModel);
+        setCriticalAlert(context, channel);
 
         return androidNotification;
     }
@@ -545,9 +474,15 @@ public class NotificationBuilder {
             wakeUpScreen(context);
     }
 
-    private void setCritialAlert(Context context, NotificationModel notificationModel) throws AwesomeNotificationException {
-        if (notificationModel.content.criticalAlert)
-            activateCritialAlert(context);
+    private void setCriticalAlert(Context context, NotificationChannelModel channel) throws AwesomeNotificationException {
+        if (channel.criticalAlerts)
+            ensureCriticalAlert(context);
+    }
+
+    private void setFullScreenIntent(Context context, PendingIntent pendingIntent, NotificationModel notificationModel, NotificationCompat.Builder builder) {
+        if (BooleanUtils.getValue(notificationModel.content.fullScreenIntent)) {
+            builder.setFullScreenIntent(pendingIntent, true);
+        }
     }
 
     private void setShowWhen(NotificationModel notificationModel, NotificationCompat.Builder builder) {
@@ -573,13 +508,16 @@ public class NotificationBuilder {
     }
 
     private void setImportance(NotificationChannelModel channel, NotificationCompat.Builder builder) {
-        // Conversion to Priority
-        int priorityValue = Math.min(Math.max(IntegerUtils.extractInteger(channel.importance) - 2, -2), 2);
-        builder.setPriority(priorityValue);
+        builder.setPriority(NotificationImportance.toAndroidPriority(channel.importance));
+    }
+
+    private void setCategory(NotificationModel notificationModel, NotificationCompat.Builder builder){
+        if(notificationModel.content.category != null)
+            builder.setCategory(notificationModel.content.category.rawValue);
     }
 
     private void setOnlyAlertOnce(NotificationModel notificationModel, NotificationChannelModel channel, NotificationCompat.Builder builder) {
-        Boolean onlyAlertOnceValue = BooleanUtils.getValue(notificationModel.content.notificationLayout == NotificationLayout.ProgressBar ? true : channel.onlyAlertOnce);
+        boolean onlyAlertOnceValue = BooleanUtils.getValue(notificationModel.content.notificationLayout == NotificationLayout.ProgressBar || channel.onlyAlertOnce);
         builder.setOnlyAlertOnce(onlyAlertOnceValue);
     }
 
@@ -590,13 +528,13 @@ public class NotificationBuilder {
     }
 
     private void setLockedNotification(NotificationModel notificationModel, NotificationChannelModel channel, NotificationCompat.Builder builder) {
-        Boolean contentLocked = BooleanUtils.getValue(notificationModel.content.locked);
-        Boolean channelLocked = BooleanUtils.getValue(channel.locked);
+        boolean contentLocked = BooleanUtils.getValue(notificationModel.content.locked);
+        boolean channelLocked = BooleanUtils.getValue(channel.locked);
 
         if (contentLocked) {
             builder.setOngoing(true);
         } else if (channelLocked) {
-            Boolean lockedValue = BooleanUtils.getValueOrDefault(notificationModel.content.locked, true) && channelLocked;
+            boolean lockedValue = BooleanUtils.getValueOrDefault(notificationModel.content.locked, true);
             builder.setOngoing(lockedValue);
         }
     }
@@ -611,13 +549,13 @@ public class NotificationBuilder {
 
     private void setBadge(Context context, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
         if (BooleanUtils.getValue(channelModel.channelShowBadge)) {
-            incrementGlobalBadgeCounter(context);
+            BadgeManager.incrementGlobalBadgeCounter(context);
             builder.setNumber(1);
         }
     }
 
     private void setAutoCancel(NotificationModel notificationModel, NotificationCompat.Builder builder) {
-        builder.setAutoCancel(BooleanUtils.getValueOrDefault(notificationModel.content.autoDismissable, true));
+        builder.setAutoCancel(BooleanUtils.getValueOrDefault(notificationModel.content.autoDismissible, true));
     }
 
     private void setBody(NotificationModel notificationModel, NotificationCompat.Builder builder) {
@@ -651,14 +589,14 @@ public class NotificationBuilder {
 
     private void setVisibility(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+//
             Integer visibilityIndex;
             visibilityIndex = IntegerUtils.extractInteger(notificationModel.content.privacy, channelModel.defaultPrivacy.ordinal());
             visibilityIndex = IntegerUtils.extractInteger(visibilityIndex, NotificationPrivacy.Public);
 
             builder.setVisibility(visibilityIndex - 1);
-        }
+//        }
     }
 
     private void setLayoutColor(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
@@ -677,40 +615,6 @@ public class NotificationBuilder {
                 builder.setLargeIcon(largeIcon);
             }
         }
-    }
-
-    public static int getGlobalBadgeCounter(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        // Read previous value. If not found, use 0 as default value.
-        return prefs.getInt(Definitions.BADGE_COUNT, 0);
-    }
-
-    public static void setGlobalBadgeCounter(Context context, int count) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-
-        editor.putInt(Definitions.BADGE_COUNT, count);
-        ShortcutBadger.applyCount(context, count);
-
-        editor.apply();
-    }
-
-    public static void resetGlobalBadgeCounter(Context context) {
-        setGlobalBadgeCounter(context, 0);
-    }
-
-    public static int incrementGlobalBadgeCounter(Context context) {
-
-        int totalAmount = getGlobalBadgeCounter(context);
-        setGlobalBadgeCounter(context, ++totalAmount);
-        return totalAmount;
-    }
-
-    public static int decrementGlobalBadgeCounter(Context context) {
-
-        int totalAmount = Math.max(getGlobalBadgeCounter(context)-1, 0);
-        setGlobalBadgeCounter(context, totalAmount);
-        return totalAmount;
     }
 
     // https://github.com/rafaelsetragni/awesome_notifications/issues/191
@@ -755,7 +659,7 @@ public class NotificationBuilder {
                                     KeepOnTopActionReceiver.class : getNotificationTargetActivityClass(context)
             );
 
-            actionIntent.putExtra(Definitions.NOTIFICATION_AUTO_DISMISSABLE, buttonProperties.autoDismissable);
+            actionIntent.putExtra(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, buttonProperties.autoDismissible);
             actionIntent.putExtra(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, buttonProperties.showInCompactView);
             actionIntent.putExtra(Definitions.NOTIFICATION_ENABLED, buttonProperties.enabled);
             actionIntent.putExtra(Definitions.NOTIFICATION_BUTTON_TYPE, buttonProperties.buttonType.toString());
@@ -771,7 +675,7 @@ public class NotificationBuilder {
                             context,
                             notificationModel.content.id,
                             actionIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT
+                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
                     );
 
                 } else if (buttonProperties.buttonType == ActionButtonType.DisabledAction) {
@@ -789,7 +693,7 @@ public class NotificationBuilder {
                             context,
                             notificationModel.content.id,
                             actionIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT
+                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
                     );
                 }
             }
@@ -1027,8 +931,6 @@ public class NotificationBuilder {
 
     private Boolean setInboxLayout(Context context, NotificationContentModel contentModel, NotificationCompat.Builder builder) {
 
-        // TODO THIS LAYOUT NEEDS TO BE IMPROVED
-
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
         if (StringUtils.isNullOrEmpty(contentModel.body)) return false;
@@ -1124,9 +1026,10 @@ public class NotificationBuilder {
 
                 if(messagingQueue.containsKey(messageQueueKey)){
                     NotificationContentModel firstModel = messagingQueue.get(messageQueueKey);
-
-                    contentModel.id = firstModel.id;
-                    contentModel.messages = firstModel.messages;
+                    if(firstModel != null){
+                        contentModel.id = firstModel.id;
+                        contentModel.messages = firstModel.messages;
+                    }
                 }
 
                 if(contentModel.messages == null){

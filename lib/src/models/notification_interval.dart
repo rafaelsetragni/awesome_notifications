@@ -11,29 +11,28 @@ class NotificationInterval extends NotificationSchedule {
   /// [interval] Time interval between each notification (minimum of 60 sec case repeating)
   /// [allowWhileIdle] Displays the notification, even when the device is low battery
   /// [repeats] Defines if the notification should play only once or keeps repeating
+  /// [preciseAlarm] Requires maximum precision to schedule notifications at exact time, but may use more battery. Requires the explicit user consent for Android 12 and beyond.
   /// [timeZone] time zone identifier as reference of this schedule date. (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
-  NotificationInterval({
-    required int interval,
-    String? timeZone,
-    bool allowWhileIdle = false,
-    bool repeats = false,
-  }) : super(
+  NotificationInterval(
+      {required int interval,
+      String? timeZone,
+      bool allowWhileIdle = false,
+      bool repeats = false,
+      bool preciseAlarm = false})
+      : super(
             timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
-            repeats: repeats) {
+            repeats: repeats,
+            preciseAlarm: preciseAlarm) {
     this.interval = interval;
   }
 
   @override
   NotificationInterval? fromMap(Map<String, dynamic> dataMap) {
-    this.timeZone = AssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_TIMEZONE, dataMap, String);
+    super.fromMap(dataMap);
+
     this.interval = AssertUtils.extractValue(
         NOTIFICATION_SCHEDULE_INTERVAL, dataMap, String);
-    this.repeats =
-        AssertUtils.extractValue(NOTIFICATION_SCHEDULE_REPEATS, dataMap, bool);
-    this.allowWhileIdle = AssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_ALLOW_WHILE_IDLE, dataMap, bool);
 
     try {
       validate();
@@ -46,14 +45,8 @@ class NotificationInterval extends NotificationSchedule {
 
   @override
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> dataMap = {
-      NOTIFICATION_SCHEDULE_TIMEZONE: this.timeZone,
-      NOTIFICATION_SCHEDULE_ALLOW_WHILE_IDLE: this.allowWhileIdle,
-      NOTIFICATION_SCHEDULE_INTERVAL: this.interval,
-      NOTIFICATION_SCHEDULE_REPEATS: this.repeats
-    };
-
-    return dataMap;
+    Map<String, dynamic> map = super.toMap();
+    return map..addAll({NOTIFICATION_SCHEDULE_INTERVAL: this.interval});
   }
 
   @override

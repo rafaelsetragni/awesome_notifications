@@ -8,13 +8,18 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="" />
+    <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\Rafael Setragni\.android\avd\Pixel_XL_A12.avd]" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -52,17 +57,17 @@
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/example" />
-    <property name="settings.editor.selected.configurable" value="flutter.settings" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/src/models" />
+    <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\plugins\awesome_notifications\lib\src\models" />
+      <recent name="E:\plugins\awesome_notifications\lib\src\enumerators" />
       <recent name="E:\plugins\awesome_notifications\android\src\main" />
       <recent name="E:\plugins\awesome_notifications\example\android\app" />
       <recent name="E:\plugins\awesome_notifications\android\src\main\test\java\me\carda\awesome_notifications" />
-      <recent name="E:\plugins\awesome_notifications\lib\src\utils" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\plugins\awesome_notifications\lib\src\enumerators" />
@@ -71,16 +76,23 @@
       <recent name="E:\plugins\awesome_notifications\example\assets\readme" />
       <recent name="E:\plugins\awesome_notifications\lib\src\helpers" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="me.carda.awesome_notifications.notifications.managers" />
+      <recent name="me.carda.awesome_notifications.notifications.models" />
+      <recent name="me.carda.awesome_notifications.notifications.enumerators" />
+    </key>
   </component>
   <component name="RunManager" selected="Flutter.example/lib/main.dart">
     <configuration name="getPlatformVersion" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
       <option name="testName" value="getPlatformVersion" />
       <option name="testFile" value="$PROJECT_DIR$/test/awesome_notifications_test.dart" />
+      <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
     <configuration name="jsonConversion" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
       <option name="testName" value="jsonConversion" />
       <option name="testFile" value="$PROJECT_DIR$/test/awesome_notifications_test.dart" />
+      <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
     <recent_temporary>
@@ -126,7 +138,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java</url>
-          <line>53</line>
+          <line>45</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
@@ -136,18 +148,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java</url>
-          <line>179</line>
+          <line>147</line>
           <option name="timeStamp" value="24" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
-          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java</url>
-          <line>648</line>
-          <option name="timeStamp" value="25" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
-          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java</url>
-          <line>671</line>
-          <option name="timeStamp" value="41" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/utils/AudioUtils.java</url>
@@ -162,7 +164,7 @@
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <condition expression="newChannel.channelKey.equals(&quot;groupded&quot;)" language="JAVA" />
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/ChannelManager.java</url>
-          <line>163</line>
+          <line>176</line>
           <option name="timeStamp" value="78" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
@@ -171,36 +173,51 @@
           <option name="timeStamp" value="106" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
-          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java</url>
-          <line>1042</line>
-          <option name="timeStamp" value="120" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationSender.java</url>
-          <line>190</line>
+          <line>189</line>
           <option name="timeStamp" value="150" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationSender.java</url>
-          <line>259</line>
+          <line>258</line>
           <option name="timeStamp" value="151" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
-          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java</url>
-          <line>1035</line>
-          <option name="timeStamp" value="152" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java</url>
-          <line>678</line>
+          <line>652</line>
           <option name="timeStamp" value="154" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/PermissionManager.java</url>
+          <line>265</line>
+          <option name="timeStamp" value="155" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/PermissionManager.java</url>
+          <line>223</line>
+          <option name="timeStamp" value="156" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/PermissionManager.java</url>
+          <line>253</line>
+          <option name="timeStamp" value="168" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/managers/PermissionManager.java</url>
+          <line>88</line>
+          <option name="timeStamp" value="180" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/src/awesome_notifications_core.dart</url>
-          <line>327</line>
-          <option name="timeStamp" value="160" />
+          <condition expression="callback == null" language="Dart" />
+          <url>file://D:/flutter/packages/flutter/lib/src/widgets/widget_inspector.dart</url>
+          <line>796</line>
+          <option name="timeStamp" value="182" />
         </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint enabled="true" suspend="THREAD" type="CidrExceptionBreakpoint" />
+        <breakpoint enabled="true" suspend="THREAD" type="java-exception" />
+      </default-breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Remote">

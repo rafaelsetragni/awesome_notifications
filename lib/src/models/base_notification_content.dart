@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
 import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
 import 'package:awesome_notifications/src/models/model.dart';
@@ -21,16 +22,30 @@ class BaseNotificationContent extends Model {
   String? largeIcon;
   String? bigPicture;
   String? customSound;
-  bool? autoDismissable;
+  bool? autoDismissible;
   bool? wakeUpScreen;
-  //bool? criticalAlert;
+  bool? fullScreenIntent;
+  bool? criticalAlert;
   Color? color;
   Color? backgroundColor;
   NotificationPrivacy? privacy;
+  NotificationCategory? category;
+
+  String? displayedDate;
+  String? createdDate;
+
+  NotificationSource? createdSource;
+
+  NotificationLifeCycle? createdLifeCycle;
+  NotificationLifeCycle? displayedLifeCycle;
 
   @Deprecated(
-      'property name autoCancel is deprecated. Use autoDismissable instead.')
-  bool? get autoCancel => autoDismissable;
+      'property name autoCancel is deprecated. Use autoDismissible instead.')
+  bool? get autoCancel => autoDismissible;
+
+  @Deprecated(
+      'property name autoDismissable is deprecated. Use autoDismissible instead.')
+  bool? get autoDismissable => autoDismissible;
 
   BaseNotificationContent(
       {required this.id,
@@ -44,15 +59,17 @@ class BaseNotificationContent extends Model {
       this.largeIcon,
       this.bigPicture,
       this.wakeUpScreen,
-      //this.criticalAlert,
-      this.autoDismissable,
+      this.fullScreenIntent,
+      this.criticalAlert,
+      this.category,
+      this.autoDismissible,
       this.color,
       this.backgroundColor,
       this.payload,
       this.customSound,
       bool? autoCancel}) {
-    this.autoDismissable =
-        this.autoDismissable != null ? this.autoDismissable : autoCancel;
+    this.autoDismissible =
+        this.autoDismissible != null ? this.autoDismissible : autoCancel;
   }
 
   @override
@@ -77,13 +94,18 @@ class BaseNotificationContent extends Model {
         AssertUtils.extractValue(NOTIFICATION_CUSTOM_SOUND, mapData, String);
     this.wakeUpScreen =
         AssertUtils.extractValue(NOTIFICATION_WAKE_UP_SCREEN, mapData, bool);
-    // this.criticalAlert =
-    //     AssertUtils.extractValue(NOTIFICATION_CRITICAL_ALERT, mapData, bool);
-    this.autoDismissable =
-        AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSABLE, mapData, bool);
+    this.fullScreenIntent = AssertUtils.extractValue(
+        NOTIFICATION_FULL_SCREEN_INTENT, mapData, bool);
+    this.criticalAlert =
+        AssertUtils.extractValue(NOTIFICATION_CRITICAL_ALERT, mapData, bool);
+    this.autoDismissible =
+        AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, mapData, bool);
 
     this.privacy = AssertUtils.extractEnum<NotificationPrivacy>(
         NOTIFICATION_PRIVACY, mapData, NotificationPrivacy.values);
+
+    this.category = AssertUtils.extractEnum<NotificationCategory>(
+        NOTIFICATION_CATEGORY, mapData, NotificationCategory.values);
 
     int? colorValue =
         AssertUtils.extractValue(NOTIFICATION_COLOR, mapData, int);
@@ -115,12 +137,14 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_LARGE_ICON: largeIcon,
       NOTIFICATION_BIG_PICTURE: bigPicture,
       NOTIFICATION_CUSTOM_SOUND: customSound,
-      NOTIFICATION_AUTO_DISMISSABLE: autoDismissable,
+      NOTIFICATION_AUTO_DISMISSIBLE: autoDismissible,
       NOTIFICATION_PRIVACY: AssertUtils.toSimpleEnumString(privacy),
+      NOTIFICATION_CATEGORY: AssertUtils.toSimpleEnumString(category),
       NOTIFICATION_COLOR: color?.value,
       NOTIFICATION_BACKGROUND_COLOR: backgroundColor?.value,
       NOTIFICATION_WAKE_UP_SCREEN: wakeUpScreen,
-      // NOTIFICATION_CRITICAL_ALERT: criticalAlert
+      NOTIFICATION_FULL_SCREEN_INTENT: fullScreenIntent,
+      NOTIFICATION_CRITICAL_ALERT: criticalAlert
     };
   }
 

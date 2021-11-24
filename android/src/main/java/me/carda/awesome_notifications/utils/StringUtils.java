@@ -42,10 +42,10 @@ public class StringUtils {
         }
     }
 
-    public static <T extends Enum<T>> T getEnumFromString(Class<T> c, String string) {
-        if( c != null && string != null ) {
+    public static <T extends Enum<T>> T getEnumFromString(Class<T> clazz, String string) {
+        if( clazz != null && string != null ) {
             try {
-                return Enum.valueOf(c, string.trim().toUpperCase());
+                return Enum.valueOf(clazz, string.trim());
             } catch(IllegalArgumentException ex) {
             }
         }

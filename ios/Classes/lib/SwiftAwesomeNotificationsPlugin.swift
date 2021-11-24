@@ -10,10 +10,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     
     static var debug = false
     static let TAG = "AwesomeNotificationsPlugin"
-    
-    static var hasGoneToAuthorizationPage:Bool = false
-    static var pendingAuthorizationReturn:FlutterResult?
-    
+        
     public static var appLifeCycle:NotificationLifeCycle {
         get { return LifeCycleManager.getLifeCycle(referenceKey: "currentlifeCycle") }
         set (newValue) { LifeCycleManager.setLifeCycle(referenceKey: "currentlifeCycle", lifeCycle: newValue) }
@@ -401,16 +398,8 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         }
         SwiftAwesomeNotificationsPlugin.didIRealyGoneBackground = false
 		
-        if(SwiftAwesomeNotificationsPlugin.hasGoneToAuthorizationPage){
-            SwiftAwesomeNotificationsPlugin.hasGoneToAuthorizationPage = false
-            
-            NotificationBuilder.isNotificationAllowed { isAllowed in
-                SwiftAwesomeNotificationsPlugin.pendingAuthorizationReturn?(isAllowed)
-                SwiftAwesomeNotificationsPlugin.pendingAuthorizationReturn = nil
-            }
-            
-        }
-		
+        PermissionManager.handlePermissionResult()
+        
         if(SwiftAwesomeNotificationsPlugin.debug){
 			Log.d(
 				SwiftAwesomeNotificationsPlugin.TAG,
@@ -459,9 +448,8 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     public func applicationWillEnterForeground(_ application: UIApplication) {
 	
         SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Background
-        
-        //stopBackgroundScheduler()
-        rescheduleLostNotifications()
+
+        PermissionManager.handlePermissionResult()
 		
         if(SwiftAwesomeNotificationsPlugin.debug){
 			Log.d(
@@ -612,9 +600,25 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 				case Definitions.CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED:
                     try channelMethodIsNotificationAllowed(call: call, result: result)
 					return
-
+                
+                case Definitions.CHANNEL_METHOD_SHOULD_SHOW_RATIONALE:
+                    try channelMethodShouldShowRationale(call: call, result: result)
+                    return
+                
                 case Definitions.CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE:
                     try channelMethodShowNotificationConfigPage(call: call, result: result)
+                    return
+                    
+                case Definitions.CHANNEL_METHOD_SHOW_ALARM_PAGE:
+                    try channelMethodShowPreciseAlarmsPage(call: call, result: result)
+                    return
+                
+                case Definitions.CHANNEL_METHOD_SHOW_GLOBAL_DND_PAGE:
+                    try channelMethodShowGlobalDndPage(call: call, result: result)
+                    return
+                    
+                case Definitions.CHANNEL_METHOD_CHECK_PERMISSIONS:
+                    try channelMethodCheckPermissions(call: call, result: result)
                     return
 
 				case Definitions.CHANNEL_METHOD_REQUEST_NOTIFICATIONS:
@@ -888,15 +892,44 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     }
     
     private func channelMethodIsNotificationAllowed(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        NotificationBuilder.isNotificationAllowed(completion: { (allowed) in
+        PermissionManager.areNotificationsGloballyAllowed(permissionCompletion: { (allowed) in
             result(allowed)
         })
     }
-
+    
+    private func channelMethodShowPreciseAlarmsPage(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        // There is no precise alarms page on iOS. This mode is always enabled
+        result(false)
+    }
+    
+    private func channelMethodShowGlobalDndPage(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        // There is no override DnD on iOS. This mode is always enabled with critical alerts
+        result(false)
+    }
+    
     private func channelMethodShowNotificationConfigPage(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        NotificationBuilder.showNotificationConfigPage { (allowed) in
-            self.saveReturnPageParameters(result)
+        PermissionManager.showNotificationConfigPage(completionHandler: {
+            result(true)
+        })
+    }
+    
+    private func channelMethodShouldShowRationale(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        
+        let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
+        
+        let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
+        
+        guard let permissions:[String] = platformParameters[Definitions.NOTIFICATION_PERMISSIONS] as? [String] else {
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
         }
+
+        if(permissions.isEmpty){
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
+        }
+
+        PermissionManager.shouldShowRationale(permissions, channelKey: channelKey, completion: { (permissionsAllowed) in
+            result(permissionsAllowed)
+        })
     }
 
     private func channelMethodCheckPermissions(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
@@ -913,30 +946,32 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
         }
 
-        NotificationBuilder.checkPermissions(permissions, channel: channelKey, completion: { (allowedPermissions) in
-            result(allowedPermissions)
+        PermissionManager.arePermissionsAllowed(permissions, channelKey: channelKey, completion: { (permissionsAllowed) in
+            result(permissionsAllowed)
         })
     }
 
     private func channelMethodRequestNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         
+        let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
         
-        guard let permissions:[String] = call.arguments as? [String] else {
+        let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
+        
+        guard let permissions:[String] = platformParameters[Definitions.NOTIFICATION_PERMISSIONS] as? [String] else {
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
         }
+
+        if(permissions.isEmpty){
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
+        }
         
-        NotificationBuilder.requestPermissions(permissions, completion: { (allowed) in
-            self.saveReturnPageParameters(result)
+        try PermissionManager.requestUserPermissions(permissions: permissions, channelKey: channelKey, permissionCompletion: { (deniedPermissions) in
+            result(deniedPermissions)
         })
     }
     
-    private func saveReturnPageParameters(_ result: @escaping FlutterResult){
-        SwiftAwesomeNotificationsPlugin.hasGoneToAuthorizationPage = true
-        SwiftAwesomeNotificationsPlugin.pendingAuthorizationReturn = result
-    }
-    
     private func channelMethodGetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        result(NotificationBuilder.getBadge().intValue)
+        result(BadgeManager.getGlobalBadgeCounter())
     }
     
     private func channelMethodSetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
@@ -947,25 +982,25 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "Invalid Badge value")
         }
         
-        NotificationBuilder.setBadge(count)
+        BadgeManager.setGlobalBadgeCounter(count)
         result(nil)
     }
 
     private func channelMethodIncrementBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        let actualValue:NSNumber = NotificationBuilder.incrementBadge()
-        result(actualValue.intValue)
+        let actualValue:Int = BadgeManager.incrementGlobalBadgeCounter()
+        result(actualValue)
         return
     }
 
     private func channelMethodDecrementBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         
-        let actualValue:NSNumber = NotificationBuilder.decrementBadge()
-        result(actualValue.intValue)
+        let actualValue:Int = BadgeManager.decrementGlobalBadgeCounter()
+        result(actualValue)
         return
     }
     
     private func channelMethodResetBadge(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        NotificationBuilder.resetBadge()
+        BadgeManager.resetGlobalBadgeCounter()
         result(nil)
     }
     

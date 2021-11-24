@@ -12,7 +12,7 @@ import me.carda.awesome_notifications.utils.DateUtils;
 import me.carda.awesome_notifications.utils.MapUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
-public abstract class NotificationScheduleModel extends Model {
+public abstract class NotificationScheduleModel extends AbstractModel {
 
     public String timeZone;
     public String createdDate;
@@ -20,6 +20,7 @@ public abstract class NotificationScheduleModel extends Model {
     /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
     public Boolean repeats;
     public Boolean allowWhileIdle;
+    public Boolean preciseAlarm;
 
     public NotificationScheduleModel fromMap(Map<String, Object> arguments) {
         timeZone = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, String.class);
@@ -29,6 +30,8 @@ public abstract class NotificationScheduleModel extends Model {
 
         repeats = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_REPEATS, Boolean.class);
         allowWhileIdle = getValueOrDefault(arguments, Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, Boolean.class);
+
+        preciseAlarm = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_PRECISE_ALARM, Boolean.class);
 
         return this;
     }
@@ -42,6 +45,8 @@ public abstract class NotificationScheduleModel extends Model {
 
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_REPEATS, repeats);
         returnedObject.put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, allowWhileIdle);
+
+        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_PRECISE_ALARM, preciseAlarm);
 
         return returnedObject;
     }
@@ -81,7 +86,7 @@ public abstract class NotificationScheduleModel extends Model {
             map.containsKey(Definitions.NOTIFICATION_PRECISE_SCHEDULES) ||
             map.containsKey(Definitions.NOTIFICATION_EXPIRATION_DATE_TIME)
         ){
-            return new NotificationCrontab().fromMap(map);
+            return new NotificationCrontabModel().fromMap(map);
         }
 
         if(

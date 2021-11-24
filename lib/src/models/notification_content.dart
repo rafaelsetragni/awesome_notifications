@@ -1,8 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications/src/enumerators/notification_layout.dart';
-import 'package:awesome_notifications/src/enumerators/notification_life_cycle.dart';
-import 'package:awesome_notifications/src/enumerators/notification_source.dart';
-import 'package:awesome_notifications/src/models/basic_notification_content.dart';
+import 'package:awesome_notifications/src/models/base_notification_content.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -13,18 +11,10 @@ class NotificationContent extends BaseNotificationContent {
   int? progress;
   String? ticker;
 
-  NotificationLifeCycle? displayedLifeCycle;
-
-  NotificationSource? createdSource;
-  NotificationLifeCycle? createdLifeCycle;
-
   NotificationLayout? notificationLayout;
 
   bool? displayOnForeground;
   bool? displayOnBackground;
-
-  String? createdDate;
-  String? displayedDate;
 
   bool? locked;
 
@@ -37,27 +27,24 @@ class NotificationContent extends BaseNotificationContent {
       String? summary,
       bool? showWhen,
       bool? wakeUpScreen,
+      bool? fullScreenIntent,
       bool? criticalAlert,
       String? icon,
       String? largeIcon,
       String? bigPicture,
       String? customSound,
-      bool? autoDismissable,
+      bool? autoDismissible,
       Color? color,
       Color? backgroundColor,
       Map<String, String>? payload,
+      NotificationCategory? category,
       this.notificationLayout,
       this.hideLargeIconOnExpand,
       this.locked,
       this.progress,
       this.ticker,
-      this.createdSource,
-      this.createdLifeCycle,
-      this.displayedLifeCycle,
-      this.createdDate,
       this.displayOnForeground,
-      this.displayOnBackground,
-      this.displayedDate})
+      this.displayOnBackground})
       : super(
             id: id,
             channelKey: channelKey,
@@ -66,14 +53,16 @@ class NotificationContent extends BaseNotificationContent {
             body: body,
             summary: summary,
             wakeUpScreen: wakeUpScreen,
-            // criticalAlert: criticalAlert,
+            fullScreenIntent: fullScreenIntent,
+            category: category,
+            criticalAlert: criticalAlert,
             showWhen: showWhen,
             payload: payload,
             icon: icon,
             largeIcon: largeIcon,
             bigPicture: bigPicture,
             customSound: customSound,
-            autoDismissable: autoDismissable,
+            autoDismissible: autoDismissible,
             color: color,
             backgroundColor: backgroundColor);
 
@@ -93,26 +82,10 @@ class NotificationContent extends BaseNotificationContent {
     this.notificationLayout = AssertUtils.extractEnum(
         NOTIFICATION_LAYOUT, mapData, NotificationLayout.values);
 
-    this.displayedLifeCycle = AssertUtils.extractEnum(
-        NOTIFICATION_DISPLAYED_LIFECYCLE,
-        mapData,
-        NotificationLifeCycle.values);
-
-    this.createdSource = AssertUtils.extractEnum(
-        NOTIFICATION_CREATED_SOURCE, mapData, NotificationSource.values);
-    this.createdLifeCycle = AssertUtils.extractEnum(
-        NOTIFICATION_CREATED_LIFECYCLE, mapData, NotificationLifeCycle.values);
-
-    this.createdDate =
-        AssertUtils.extractValue(NOTIFICATION_CREATED_DATE, mapData, String);
-
     this.displayOnForeground = AssertUtils.extractValue(
         NOTIFICATION_DISPLAY_ON_FOREGROUND, mapData, bool);
     this.displayOnBackground = AssertUtils.extractValue(
         NOTIFICATION_DISPLAY_ON_BACKGROUND, mapData, bool);
-
-    this.displayedDate =
-        AssertUtils.extractValue(NOTIFICATION_DISPLAYED_DATE, mapData, String);
 
     try {
       validate();
@@ -134,16 +107,8 @@ class NotificationContent extends BaseNotificationContent {
         NOTIFICATION_TICKER: ticker,
         NOTIFICATION_LOCKED: locked,
         NOTIFICATION_LAYOUT: AssertUtils.toSimpleEnumString(notificationLayout),
-        NOTIFICATION_CREATED_SOURCE:
-            AssertUtils.toSimpleEnumString(createdSource),
-        NOTIFICATION_CREATED_LIFECYCLE:
-            AssertUtils.toSimpleEnumString(createdLifeCycle),
-        NOTIFICATION_DISPLAYED_LIFECYCLE:
-            AssertUtils.toSimpleEnumString(displayedLifeCycle),
         NOTIFICATION_DISPLAY_ON_FOREGROUND: displayOnForeground,
         NOTIFICATION_DISPLAY_ON_BACKGROUND: displayOnBackground,
-        NOTIFICATION_CREATED_DATE: createdDate,
-        NOTIFICATION_DISPLAYED_DATE: displayedDate,
       });
     return dataMap;
   }

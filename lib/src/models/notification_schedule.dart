@@ -12,7 +12,8 @@ abstract class NotificationSchedule extends Model {
   NotificationSchedule(
       {required this.timeZone,
       this.allowWhileIdle = false,
-      this.repeats = false});
+      this.repeats = false,
+      this.preciseAlarm = false});
 
   String? _createdDate;
 
@@ -25,15 +26,27 @@ abstract class NotificationSchedule extends Model {
   /// Displays the notification, even when the device is low battery
   bool allowWhileIdle;
 
+  /// Displays the notification at precise date, even when the device is low battery. Requires explicity permission in Android 12 and beyond.
+  bool preciseAlarm;
+
   /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
   bool repeats;
 
   NotificationSchedule? fromMap(Map<String, dynamic> dataMap) {
+    this.timeZone = AssertUtils.extractValue(
+            NOTIFICATION_SCHEDULE_TIMEZONE, dataMap, String) ??
+        false;
+
     this.allowWhileIdle = AssertUtils.extractValue(
             NOTIFICATION_ALLOW_WHILE_IDLE, dataMap, bool) ??
         false;
+
     this.repeats = AssertUtils.extractValue(
             NOTIFICATION_SCHEDULE_REPEATS, dataMap, bool) ??
+        false;
+
+    this.preciseAlarm = AssertUtils.extractValue(
+            NOTIFICATION_SCHEDULE_PRECISE_ALARM, dataMap, bool) ??
         false;
 
     return this;
@@ -43,7 +56,8 @@ abstract class NotificationSchedule extends Model {
     Map<String, dynamic> dataMap = {
       NOTIFICATION_SCHEDULE_TIMEZONE: this.timeZone,
       NOTIFICATION_ALLOW_WHILE_IDLE: this.allowWhileIdle,
-      NOTIFICATION_SCHEDULE_REPEATS: this.repeats
+      NOTIFICATION_SCHEDULE_REPEATS: this.repeats,
+      NOTIFICATION_SCHEDULE_PRECISE_ALARM: this.preciseAlarm
     };
 
     return dataMap;

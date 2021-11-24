@@ -19,6 +19,7 @@ const EXTRA_BROADCAST_MESSAGE = 'notification';
 const INITIALIZE_DEBUG_MODE = "debug";
 const INITIALIZE_DEFAULT_ICON = "defaultIcon";
 const INITIALIZE_CHANNELS = "initializeChannels";
+const INITIALIZE_CHANNELS_GROUPS = "initializeChannelGroups";
 
 const NOTIFICATION_CONTENT = "content";
 const NOTIFICATION_SCHEDULE = "schedule";
@@ -45,6 +46,8 @@ const CHANNEL_METHOD_INITIALIZE = 'initialize';
 const CHANNEL_METHOD_GET_DRAWABLE_DATA = 'getDrawableData';
 
 const CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = 'showNotificationPage';
+const CHANNEL_METHOD_SHOW_ALARM_PAGE = 'showAlarmPage';
+const CHANNEL_METHOD_SHOW_GLOBAL_DND_PAGE = 'showGlobalDndPage';
 const CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = 'isNotificationAllowed';
 const CHANNEL_METHOD_REQUEST_NOTIFICATIONS = 'requestNotifications';
 
@@ -87,6 +90,8 @@ const CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_GROUP_KEY =
     'cancelNotificationsByGroupKey';
 const CHANNEL_METHOD_CANCEL_SCHEDULES_BY_GROUP_KEY =
     'cancelSchedulesByGroupKey';
+const CHANNEL_METHOD_CHECK_PERMISSIONS = 'checkPermissions';
+const CHANNEL_METHOD_SHOULD_SHOW_RATIONALE = 'shouldShowRationale';
 const CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = 'cancelAllSchedules';
 const CHANNEL_METHOD_DISMISS_ALL_NOTIFICATIONS = 'dismissAllNotifications';
 const CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = 'cancelAllNotifications';
@@ -140,6 +145,7 @@ const NOTIFICATION_DISMISSED_DATE = 'dismissedDate';
 const NOTIFICATION_DISMISSED_LIFE_CYCLE = 'dismissedLifeCycle';
 
 const NOTIFICATION_SCHEDULE_TIMEZONE = 'timeZone';
+const NOTIFICATION_SCHEDULE_PRECISE_ALARM = 'preciseAlarm';
 const NOTIFICATION_SCHEDULE_ERA = 'era';
 const NOTIFICATION_SCHEDULE_YEAR = 'year';
 const NOTIFICATION_SCHEDULE_MONTH = 'month';
@@ -155,12 +161,16 @@ const NOTIFICATION_SCHEDULE_INTERVAL = 'interval';
 const NOTIFICATION_SCHEDULE_ALLOW_WHILE_IDLE = 'allowWhileIdle';
 const NOTIFICATION_SCHEDULE_REPEATS = 'repeats';
 
+const NOTIFICATION_CHANNEL_GROUP_KEY = 'channelGroupKey';
+const NOTIFICATION_CHANNEL_GROUP_NAME = 'channelGroupName';
+
 const NOTIFICATION_TITLE = 'title';
 const NOTIFICATION_BODY = 'body';
 const NOTIFICATION_SUMMARY = 'summary';
 const NOTIFICATION_SHOW_WHEN = 'showWhen';
 const NOTIFICATION_EXPANDABLE_BODY = 'expandableBody';
 const NOTIFICATION_JSON = 'notificationJson';
+const NOTIFICATION_PERMISSIONS = 'permissions';
 
 const NOTIFICATION_ACTION_BUTTONS = 'actionButtons';
 const NOTIFICATION_BUTTON_KEY = 'key';
@@ -182,13 +192,16 @@ const NOTIFICATION_PLATFORM_CONFIGURATION = 'platformConfiguration';
 const NOTIFICATION_PRIVATE_MESSAGE = "privateMessage";
 const NOTIFICATION_DEFAULT_PRIVACY = "defaultPrivacy";
 const NOTIFICATION_DEFAULT_RINGTONE_TYPE = "defaultRingtoneType";
-const NOTIFICATION_PRIVACY = "privacy";
-const NOTIFICATION_AUTO_DISMISSABLE = 'autoDismissable';
+const NOTIFICATION_PRIVACY = 'privacy';
+const NOTIFICATION_CATEGORY = 'category';
+const NOTIFICATION_AUTO_DISMISSIBLE = 'autoDismissible';
 const NOTIFICATION_SHOW_IN_COMPACT_VIEW = 'showInCompactView';
 const NOTIFICATION_LOCKED = 'locked';
 const NOTIFICATION_ICON = 'icon';
 const NOTIFICATION_WAKE_UP_SCREEN = 'wakeUpScreen';
+const NOTIFICATION_FULL_SCREEN_INTENT = 'fullScreenIntent';
 const NOTIFICATION_CRITICAL_ALERT = 'criticalAlert';
+const NOTIFICATION_CHANNEL_CRITICAL_ALERTS = 'criticalAlerts';
 const NOTIFICATION_PLAY_SOUND = 'playSound';
 const NOTIFICATION_SOUND_SOURCE = 'soundSource';
 const NOTIFICATION_ENABLE_VIBRATION = 'enableVibration';
@@ -258,7 +271,7 @@ class Definitions {
     NOTIFICATION_LED_OFF_MS: 700,
     NOTIFICATION_LED_ON_MS: 300,
     NOTIFICATION_PLAY_SOUND: true,
-    NOTIFICATION_AUTO_DISMISSABLE: true,
+    NOTIFICATION_AUTO_DISMISSIBLE: true,
     NOTIFICATION_LOCKED: false,
     NOTIFICATION_TICKER: 'ticker',
     NOTIFICATION_ALLOW_WHILE_IDLE: false,
@@ -269,6 +282,7 @@ class Definitions {
     NOTIFICATION_BUTTON_KEY_INPUT: '',
     NOTIFICATION_IS_DANGEROUS_OPTION: false,
     NOTIFICATION_WAKE_UP_SCREEN: false,
-    NOTIFICATION_CRITICAL_ALERT: false
+    NOTIFICATION_CRITICAL_ALERT: false,
+    NOTIFICATION_CHANNEL_CRITICAL_ALERTS: false
   };
 }

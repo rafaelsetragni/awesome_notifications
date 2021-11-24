@@ -25,9 +25,9 @@ public interface Definitions {
 
     String BADGE_COUNT = "badgeCount";
     String INITIALIZE_DEBUG_MODE = "debug";
-    String INITIALIZE_CHANNELS = "initializeChannels";
     String INITIALIZE_DEFAULT_ICON = "defaultIcon";
-    String INITIALIZE_REQUIRE_PERMISSION = "requirePermission";
+    String INITIALIZE_CHANNELS = "initializeChannels";
+    String INITIALIZE_CHANNEL_GROUPS = "initializeChannelGroups";
 
     String BROADCAST_CREATED_NOTIFICATION   = "broadcast.awesome_notifications.CREATED_NOTIFICATION";
     String BROADCAST_DISPLAYED_NOTIFICATION = "broadcast.awesome_notifications.DISPLAYED_NOTIFICATION";
@@ -44,6 +44,7 @@ public interface Definitions {
     String SHARED_MANAGER = "sharedManager";
     String SHARED_CHANNELS = "channels";
     String SHARED_CREATED = "created";
+    String SHARED_CHANNEL_GROUP = "channelGroup";
     String SHARED_DISPLAYED = "displayed";
     String SHARED_DISMISSED = "dismissed";
     String SHARED_SCHEDULED_NOTIFICATIONS = "schedules";
@@ -65,9 +66,12 @@ public interface Definitions {
     String CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL = "removeNotificationChannel";
 
     String CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = "showNotificationPage";
+    String CHANNEL_METHOD_SHOW_ALARM_PAGE = "showAlarmPage";
+    String CHANNEL_METHOD_SHOW_GLOBAL_DND_PAGE = "showGlobalDndPage";
     String CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed";
     String CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications";
     String CHANNEL_METHOD_CHECK_PERMISSIONS = "checkPermissions";
+    String CHANNEL_METHOD_SHOULD_SHOW_RATIONALE = "shouldShowRationale";
 
     String CHANNEL_METHOD_GET_BADGE_COUNT = "getBadgeCount";
     String CHANNEL_METHOD_SET_BADGE_COUNT = "setBadgeCount";
@@ -116,6 +120,7 @@ public interface Definitions {
     String NOTIFICATION_SCHEDULE_CREATED_DATE = "createdDate";
     String NOTIFICATION_SCHEDULE_ERA = "era";
     String NOTIFICATION_SCHEDULE_TIMEZONE = "timeZone";
+    String NOTIFICATION_SCHEDULE_PRECISE_ALARM = "preciseAlarm";
     String NOTIFICATION_SCHEDULE_YEAR = "year";
     String NOTIFICATION_SCHEDULE_MONTH = "month";
     String NOTIFICATION_SCHEDULE_DAY = "day";
@@ -165,7 +170,7 @@ public interface Definitions {
     String NOTIFICATION_CRONTAB_EXPRESSION = "crontabExpression";
     String NOTIFICATION_PRECISE_SCHEDULES = "preciseSchedules";
     String NOTIFICATION_ENABLED = "enabled";
-    String NOTIFICATION_AUTO_DISMISSABLE = "autoDismissable";
+    String NOTIFICATION_AUTO_DISMISSIBLE = "autoDismissible";
     String NOTIFICATION_IS_DANGEROUS_OPTION = "isDangerousOption";
     String NOTIFICATION_PERMISSIONS = "permissions";
 
@@ -174,8 +179,8 @@ public interface Definitions {
     String NOTIFICATION_DISPLAY_ON_FOREGROUND = "displayOnForeground";
     String NOTIFICATION_DISPLAY_ON_BACKGROUND = "displayOnBackground";
     String NOTIFICATION_ICON = "icon";
+    String NOTIFICATION_FULL_SCREEN_INTENT = "fullScreenIntent";
     String NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen";
-    String NOTIFICATION_CRITICAL_ALERT = "criticalAlert";
     String NOTIFICATION_PLAY_SOUND = "playSound";
     String NOTIFICATION_SOUND_SOURCE = "soundSource";
     String NOTIFICATION_ENABLE_VIBRATION = "enableVibration";
@@ -184,6 +189,7 @@ public interface Definitions {
     String NOTIFICATION_GROUP_SORT = "groupSort";
     String NOTIFICATION_GROUP_ALERT_BEHAVIOR = "groupAlertBehavior";
     String NOTIFICATION_PRIVACY = "privacy";
+    String NOTIFICATION_CATEGORY = "category";
     String NOTIFICATION_CUSTOM_SOUND = "customSound";
     String NOTIFICATION_DEFAULT_PRIVACY = "defaultPrivacy";
     String NOTIFICATION_DEFAULT_RINGTONE_TYPE = "defaultRingtoneType";
@@ -193,6 +199,9 @@ public interface Definitions {
     String NOTIFICATION_CHANNEL_NAME = "channelName";
     String NOTIFICATION_CHANNEL_DESCRIPTION = "channelDescription";
     String NOTIFICATION_CHANNEL_SHOW_BADGE = "channelShowBadge";
+    String NOTIFICATION_CHANNEL_GROUP_NAME = "channelGroupName";
+    String NOTIFICATION_CHANNEL_GROUP_KEY = "channelGroupKey";
+    String NOTIFICATION_CHANNEL_CRITICAL_ALERTS = "criticalAlerts";
     String NOTIFICATION_IMPORTANCE = "importance";
     String NOTIFICATION_COLOR = "color";
     String NOTIFICATION_BACKGROUND_COLOR = "backgroundColor";
@@ -237,7 +246,7 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_LED_OFF_MS, 700);
         put(Definitions.NOTIFICATION_LED_ON_MS, 300);
         put(Definitions.NOTIFICATION_PLAY_SOUND, true);
-        put(Definitions.NOTIFICATION_AUTO_DISMISSABLE, true);
+        put(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, true);
         put(Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, DefaultRingtoneType.Notification);
         put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, DateUtils.localTimeZone.toString());
         put(Definitions.NOTIFICATION_TICKER, "ticker");
@@ -246,6 +255,6 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, true);
         put(Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, false);
         put(Definitions.NOTIFICATION_WAKE_UP_SCREEN, false);
-        put(Definitions.NOTIFICATION_CRITICAL_ALERT, false);
+        put(Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS, false);
     }};
 }

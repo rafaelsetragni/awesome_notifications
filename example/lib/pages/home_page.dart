@@ -2,13 +2,13 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:awesome_notifications_example/common_widgets/led_light.dart';
+import 'package:awesome_notifications_example/common_widgets/seconds_slider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide DateUtils;
 //import 'package:flutter/material.dart' as Material show DateUtils;
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/android_foreground_service.dart';
 
 import 'package:awesome_notifications_example/main.dart';
 import 'package:awesome_notifications_example/routes.dart';
@@ -34,8 +34,32 @@ class _HomePageState extends State<HomePage> {
   //String _oneSignalToken = '';
 
   bool delayLEDTests = false;
+  double _secondsToWakeUp = 5;
 
-  bool notificationsAllowed = false;
+  bool globalNotificationsAllowed = false;
+  bool schedulesFullControl = false;
+  bool isCriticalAlertsEnabled = false;
+  bool isPreciseAlarmEnabled = false;
+  bool isOverrideDnDEnabled = false;
+
+  Map<NotificationPermission, bool> scheduleChannelPermissions = {};
+  Map<NotificationPermission, bool> dangerousPermissionsStatus = {};
+
+  List<NotificationPermission> channelPermissions = [
+    NotificationPermission.Alert,
+    NotificationPermission.Sound,
+    NotificationPermission.Badge,
+    NotificationPermission.Light,
+    NotificationPermission.Vibration,
+    NotificationPermission.CriticalAlert,
+    NotificationPermission.FullScreenIntent
+  ];
+
+  List<NotificationPermission> dangerousPermissions = [
+    NotificationPermission.CriticalAlert,
+    NotificationPermission.OverrideDnD,
+    NotificationPermission.PreciseAlarms,
+  ];
 
   String packageName = 'me.carda.awesome_notifications_example';
 
@@ -108,6 +132,14 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
+    for(NotificationPermission permission in channelPermissions){
+      scheduleChannelPermissions[permission] = false;
+    }
+
+    for(NotificationPermission permission in dangerousPermissions){
+      dangerousPermissionsStatus[permission] = false;
+    }
+
     // Uncomment those lines after activate google services inside example/android/build.gradle
     // initializeFirebaseService();
 
@@ -115,15 +147,15 @@ class _HomePageState extends State<HomePage> {
     MediaPlayerCentral.mediaStream.listen((media) {
       switch (MediaPlayerCentral.mediaLifeCycle) {
         case MediaLifeCycle.Stopped:
-          cancelNotification(100);
+          NotificationUtils.cancelNotification(100);
           break;
 
         case MediaLifeCycle.Paused:
-          updateNotificationMediaPlayer(100, media);
+          NotificationUtils.updateNotificationMediaPlayer(100, media);
           break;
 
         case MediaLifeCycle.Playing:
-          updateNotificationMediaPlayer(100, media);
+          NotificationUtils.updateNotificationMediaPlayer(100, media);
           break;
       }
     });
@@ -163,15 +195,53 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
+    refreshPermissionsIcons().then((_) =>
+      NotificationUtils.requestBasicPermissionToSendNotifications(context).then((allowed){
+        if(allowed != globalNotificationsAllowed)
+          refreshPermissionsIcons();
+      })
+    );
+  }
+
+  Future<void> refreshPermissionsIcons() async {
+
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) async {
       setState(() {
-        notificationsAllowed = isAllowed;
+        globalNotificationsAllowed = isAllowed;
       });
-
-      if (!isAllowed) {
-        isAllowed = await requestPermissionToSendNotifications(context);
-      }
     });
+    refreshScheduleChannelPermissions();
+    refreshDangerousChannelPermissions();
+  }
+
+  void refreshScheduleChannelPermissions(){
+    AwesomeNotifications().checkPermissionList(
+        channelKey: 'scheduled',
+        permissions: channelPermissions
+    ).then((List<NotificationPermission> permissionsAllowed) =>
+        setState(() {
+          schedulesFullControl = true;
+          for(NotificationPermission permission in channelPermissions){
+            scheduleChannelPermissions[permission] = permissionsAllowed.contains(permission);
+            schedulesFullControl = schedulesFullControl && scheduleChannelPermissions[permission]!;
+          }
+        })
+    );
+  }
+
+  void refreshDangerousChannelPermissions(){
+    AwesomeNotifications().checkPermissionList(
+        permissions: dangerousPermissions
+    ).then((List<NotificationPermission> permissionsAllowed) =>
+        setState(() {
+          for(NotificationPermission permission in dangerousPermissions){
+            dangerousPermissionsStatus[permission] = permissionsAllowed.contains(permission);
+          }
+          isCriticalAlertsEnabled = dangerousPermissionsStatus[NotificationPermission.CriticalAlert]!;
+          isPreciseAlarmEnabled = dangerousPermissionsStatus[NotificationPermission.PreciseAlarms]!;
+          isOverrideDnDEnabled = dangerousPermissionsStatus[NotificationPermission.OverrideDnD]!;
+        })
+    );
   }
 
   void processDefaultActionReceived(ReceivedAction receivedNotification) {
@@ -195,7 +265,7 @@ class _HomePageState extends State<HomePage> {
 
   void processInputTextReceived(ReceivedAction receivedAction) {
     if(receivedAction.channelKey == 'chats')
-      simulateSendResponseChatConversation(
+      NotificationUtils.simulateSendResponseChatConversation(
           msg: receivedAction.buttonKeyInput,
           groupKey: 'jhonny_group'
       );
@@ -209,6 +279,7 @@ class _HomePageState extends State<HomePage> {
 
   void processMediaControls(actionReceived) {
     switch (actionReceived.buttonKeyPressed) {
+
       case 'MEDIA_CLOSE':
         MediaPlayerCentral.stop();
         break;
@@ -343,14 +414,6 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () => Navigator.pushNamed(
                         context, PAGE_FIREBASE_TESTS,
                         arguments: _firebaseAppToken)),
-                /*
-              /// TODO MISSING IMPLEMENTATION FOR ONE SIGNAL
-              ServiceControlPanel(
-                  'One Signal',
-                  _oneSignalToken.isNotEmpty,
-                  themeData
-              ),
-              */
               ],
             ),
             TextNote(
@@ -358,39 +421,119 @@ class _HomePageState extends State<HomePage> {
 
             /* ******************************************************************** */
 
-            TextDivisor(title: 'Permission to send Notifications'),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Column(
-                    children: [
-                      Text(notificationsAllowed ? 'Allowed' : 'Not allowed',
-                          style: TextStyle(
-                              color: notificationsAllowed
-                                  ? Colors.green
-                                  : Colors.red)),
-                      LedLight(notificationsAllowed)
-                    ],
-                  )
-                ]),
+            TextDivisor(title: 'Global Permission to send Notifications'),
+            PermissionIndicator(name: null, allowed: globalNotificationsAllowed),
             TextNote(
                 'To send local and push notifications, it is necessary to obtain the user\'s consent. Keep in mind that he user consent can be revoked at any time.\n\n'
                 '* Android: notifications are enabled by default and are considered not dangerous.\n'
                 '* iOS: notifications are not enabled by default and you must explicitly request it to the user.'),
             SimpleButton('Request permission',
-                onPressed: () => requestPermissionToSendNotifications(context).then(
+                enabled: !globalNotificationsAllowed,
+                onPressed: (){
+                  NotificationUtils.requestBasicPermissionToSendNotifications(context).then(
                     (isAllowed) =>
-                      setState(() {
-                        notificationsAllowed = isAllowed;
-                      })
-                )
+                        setState(() {
+                          globalNotificationsAllowed = isAllowed;
+                          refreshPermissionsIcons();
+                        })
+                  );
+                }
             ),
             SimpleButton('Open notifications permission page',
-                onPressed: () => redirectToPermissionsPage().then(
+                onPressed: () => NotificationUtils.redirectToPermissionsPage().then(
+                        (isAllowed) =>
+                        setState(() {
+                          globalNotificationsAllowed = isAllowed;
+                          refreshPermissionsIcons();
+                        })
+                )
+            ),
+            SimpleButton('Open basic channel permission page',
+                enabled: !Platform.isIOS,
+                onPressed: () => NotificationUtils.redirectToBasicChannelPage()
+            ),
+
+            /* ******************************************************************** */
+
+            TextDivisor(title: 'Channel\'s Permissions'),
+            Wrap(
+              alignment: WrapAlignment.center,
+                children: <Widget>[
+                  PermissionIndicator(name: 'Alerts', allowed: scheduleChannelPermissions[NotificationPermission.Alert]!),
+                  PermissionIndicator(name: 'Sounds', allowed: scheduleChannelPermissions[NotificationPermission.Sound]!),
+                  PermissionIndicator(name: 'Badges', allowed: scheduleChannelPermissions[NotificationPermission.Badge]!),
+                  PermissionIndicator(name: 'Vibrations', allowed: scheduleChannelPermissions[NotificationPermission.Vibration]!),
+                  PermissionIndicator(name: 'Lights', allowed: scheduleChannelPermissions[NotificationPermission.Light]!),
+                  PermissionIndicator(name: 'Full Intents', allowed: scheduleChannelPermissions[NotificationPermission.FullScreenIntent]!),
+                  PermissionIndicator(name: 'Critical Alerts', allowed: scheduleChannelPermissions[NotificationPermission.CriticalAlert]!),
+                ]),
+            TextNote(
+                'To send local and push notifications, it is necessary to obtain the user\'s consent. Keep in mind that he user consent can be revoked at any time.\n\n'
+                    '* OBS: if the feature is not available on device, it will be considered enabled by default.\n'),
+            SimpleButton('Open Schedule channel\'s permission page',
+                enabled: !Platform.isIOS,
+                onPressed: () => NotificationUtils.redirectToScheduledChannelsPage().then(
+                    (_)=> refreshPermissionsIcons()
+                )
+            ),
+            SimpleButton('Request full permissons for Schedule\'s channel',
+                enabled: !schedulesFullControl,
+                onPressed: () => NotificationUtils.requestFullScheduleChannelPermissions(context, scheduleChannelPermissions.keys.toList()).then(
+                    (_)=> refreshPermissionsIcons()
+                )
+            ),
+
+            /* ******************************************************************** */
+
+            TextDivisor(title: 'Global Dangerous Permissions'),
+            Wrap(
+                alignment: WrapAlignment.center,
+                children: <Widget>[
+                  PermissionIndicator(name: 'Critical Alerts', allowed: isCriticalAlertsEnabled),
+                  PermissionIndicator(name: 'Precise Alarms', allowed: isPreciseAlarmEnabled),
+                  PermissionIndicator(name: 'Override DnD', allowed: isOverrideDnDEnabled),
+                ]),
+            TextNote(
+                'Dangerous permissions are permissions that can be disabled by default and you must obtain the user\'s consent explicity to enable. Keep in mind that he user consent can be revoked at any time.\n\n'
+                    '* Android: override DnD mode is disabled by default. When the permission is granted, the DnD device state is downgraded every time when a new critical notification is displayed and all notifications are being fully supressed by DnD.\n'
+                    '* iOS: override DnD is automatically enabled with Critical Alert\'s permission.'),
+            SimpleButton('Request Precise Alarms mode',
+                enabled: !isPreciseAlarmEnabled,
+                onPressed: () => NotificationUtils.requestPreciseAlarmPermission(context).then(
                     (isAllowed) =>
-                      setState(() {
-                        notificationsAllowed = isAllowed;
-                      })
+                    setState(() {
+                      refreshPermissionsIcons();
+                    })
+                )
+            ),
+            SimpleButton('Request Critical Alerts mode',
+                enabled: !isCriticalAlertsEnabled,
+                onPressed: () => NotificationUtils.requestCriticalAlertsPermission(context).then(
+                    (isAllowed) =>
+                    setState(() {
+                      refreshPermissionsIcons();
+                    })
+                )
+            ),
+            SimpleButton('Request to Override Do not Disturbe mode (Android)',
+                enabled: !isOverrideDnDEnabled,
+                onPressed: () => NotificationUtils.requestOverrideDndPermission(context).then(
+                    (isAllowed) =>
+                    setState(() {
+                      refreshPermissionsIcons();
+                    })
+                )
+            ),
+            SimpleButton('Open Precise Alarm\'s permission page',
+                enabled: !Platform.isIOS,
+                onPressed: () => NotificationUtils.redirectToAlarmPage().then(
+                    (_)=> refreshPermissionsIcons()
+                )
+            ),
+            SimpleButton('Open DnD\'s permission page',
+                enabled: !Platform.isIOS,
+                onPressed: () => NotificationUtils.redirectToOverrideDndsPage().then(
+                    (_)=> refreshPermissionsIcons()
                 )
             ),
 
@@ -400,19 +543,19 @@ class _HomePageState extends State<HomePage> {
             TextNote('A simple and fast notification to fresh start.\n\n'
                 'Tap on notification when it appears on your system tray to go to Details page.'),
             SimpleButton('Show the most basic notification',
-                onPressed: () => showBasicNotification(1)),
+                onPressed: () => NotificationUtils.showBasicNotification(1)),
             SimpleButton('Show notification with payload',
-                onPressed: () => showNotificationWithPayloadContent(1)),
+                onPressed: () => NotificationUtils.showNotificationWithPayloadContent(1)),
             SimpleButton('Show notification without body content',
-                onPressed: () => showNotificationWithoutBody(1)),
+                onPressed: () => NotificationUtils.showNotificationWithoutBody(1)),
             SimpleButton('Show notification without title content',
-                onPressed: () => showNotificationWithoutTitle(1)),
+                onPressed: () => NotificationUtils.showNotificationWithoutTitle(1)),
             SimpleButton('Send background notification',
-                onPressed: () => sendBackgroundNotification(1)),
+                onPressed: () => NotificationUtils.sendBackgroundNotification(1)),
             SimpleButton('Cancel the basic notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotification(1)),
+                onPressed: () => NotificationUtils.cancelNotification(1)),
 
             /* ******************************************************************** */
 
@@ -430,26 +573,26 @@ class _HomePageState extends State<HomePage> {
                 '\n\n'
                 '* Resource: images access through drawable native resources.\n\t Example:\n\t resource://url.com/to/image-asset.png'),
             SimpleButton('Show large icon notification',
-                onPressed: () => showLargeIconNotification(2)),
+                onPressed: () => NotificationUtils.showLargeIconNotification(2)),
             SimpleButton('Show big picture notification\n(Network Source)',
-                onPressed: () => showBigPictureNetworkNotification(2)),
+                onPressed: () => NotificationUtils.showBigPictureNetworkNotification(2)),
             SimpleButton('Show big picture notification\n(Asset Source)',
-                onPressed: () => showBigPictureAssetNotification(2)),
+                onPressed: () => NotificationUtils.showBigPictureAssetNotification(2)),
             SimpleButton('Show big picture notification\n(File Source)',
-                onPressed: () => showBigPictureFileNotification(2)),
+                onPressed: () => NotificationUtils.showBigPictureFileNotification(2)),
             SimpleButton('Show big picture notification\n(Resource Source)',
-                onPressed: () => showBigPictureResourceNotification(2)),
+                onPressed: () => NotificationUtils.showBigPictureResourceNotification(2)),
             SimpleButton(
                 'Show big picture and\nlarge icon notification simultaneously',
-                onPressed: () => showBigPictureAndLargeIconNotification(2)),
+                onPressed: () => NotificationUtils.showBigPictureAndLargeIconNotification(2)),
             SimpleButton(
                 'Show big picture notification,\n but hide large icon on expand',
                 onPressed: () =>
-                    showBigPictureNotificationHideExpandedLargeIcon(2)),
+                    NotificationUtils.showBigPictureNotificationHideExpandedLargeIcon(2)),
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotification(2)),
+                onPressed: () => NotificationUtils.cancelNotification(2)),
 
             /* ******************************************************************** */
 
@@ -460,7 +603,7 @@ class _HomePageState extends State<HomePage> {
                 'To send local and push notifications with emojis, use the class Emoji concatenated with your text.\n\n'
                 'Attention: not all Emojis work with all platforms. Please, test the specific emoji before using it in production.'),
             SimpleButton('Show notification with emojis',
-                onPressed: () => showEmojiNotification(1)),
+                onPressed: () => NotificationUtils.showEmojiNotification(1)),
             SimpleButton(
               'Go to complete Emojis list (web)',
               onPressed: () => externalUrl(
@@ -474,9 +617,9 @@ class _HomePageState extends State<HomePage> {
                 'To send local or push locked notification, that users cannot dismiss it swiping it, set the "locked" property to true.\n\n' +
                     "Attention: Notification's content locked property has priority over the Channel's one."),
             SimpleButton('Send/Update the locked notification',
-                onPressed: () => showLockedNotification(2)),
+                onPressed: () => NotificationUtils.showLockedNotification(2)),
             SimpleButton('Send/Update the unlocked notification',
-                onPressed: () => showUnlockedNotification(2)),
+                onPressed: () => NotificationUtils.showUnlockedNotification(2)),
 
             /* ******************************************************************** */
 
@@ -484,24 +627,9 @@ class _HomePageState extends State<HomePage> {
             TextNote(
                 'This feature is only available for Android devices.'),
             SimpleButton('Start foreground service',
-                onPressed: () => AndroidForegroundService.startForeground(
-                    content: NotificationContent(
-                        id: 2341234,
-                        body: 'Service is running!',
-                        title: 'Android Foreground Service',
-                        channelKey: 'basic_channel',
-                        bigPicture: 'asset://assets/images/android-bg-worker.jpg',
-                        notificationLayout: NotificationLayout.BigPicture,
-                    ),
-                    actionButtons: [
-                      NotificationActionButton(
-                        key: 'SHOW_SERVICE_DETAILS',
-                        label: 'Show details'
-                      )
-                    ]
-                )),
+                onPressed: () => NotificationUtils.startForegroundServiceNotification()),
             SimpleButton('Stop foreground service',
-                onPressed: () => AndroidForegroundService.stopForeground()),
+                onPressed: () => NotificationUtils.stopForegroundServiceNotification()),
 
             /* ******************************************************************** */
 
@@ -518,25 +646,25 @@ class _HomePageState extends State<HomePage> {
                 "Attention: Notification's channel importance can only be defined on first time."),
             SimpleButton('Display notification with NotificationImportance.Max',
                 onPressed: () =>
-                    showNotificationImportance(3, NotificationImportance.Max)),
+                    NotificationUtils.showNotificationImportance(3, NotificationImportance.Max)),
             SimpleButton(
                 'Display notification with NotificationImportance.High',
                 onPressed: () =>
-                    showNotificationImportance(3, NotificationImportance.High)),
+                    NotificationUtils.showNotificationImportance(3, NotificationImportance.High)),
             SimpleButton(
                 'Display notification with NotificationImportance.Default',
-                onPressed: () => showNotificationImportance(
+                onPressed: () => NotificationUtils.showNotificationImportance(
                     3, NotificationImportance.Default)),
             SimpleButton('Display notification with NotificationImportance.Low',
                 onPressed: () =>
-                    showNotificationImportance(3, NotificationImportance.Low)),
+                    NotificationUtils.showNotificationImportance(3, NotificationImportance.Low)),
             SimpleButton('Display notification with NotificationImportance.Min',
                 onPressed: () =>
-                    showNotificationImportance(3, NotificationImportance.Min)),
+                    NotificationUtils.showNotificationImportance(3, NotificationImportance.Min)),
             SimpleButton(
                 'Display notification with NotificationImportance.None',
                 onPressed: () =>
-                    showNotificationImportance(3, NotificationImportance.None)),
+                    NotificationUtils.showNotificationImportance(3, NotificationImportance.None)),
 
             /* ******************************************************************** */
 
@@ -554,24 +682,24 @@ class _HomePageState extends State<HomePage> {
                 'Since Android Nougat, icons are only displayed on media layout. The icon media needs to be a native resource type.'),
             SimpleButton(
                 'Show notification with\nsimple Action buttons (one disabled)',
-                onPressed: () => showNotificationWithActionButtons(3)),
+                onPressed: () => NotificationUtils.showNotificationWithActionButtons(3)),
             SimpleButton('Show notification with\nIcons and Action buttons',
-                onPressed: () => showNotificationWithIconsAndActionButtons(3)),
+                onPressed: () => NotificationUtils.showNotificationWithIconsAndActionButtons(3)),
             SimpleButton('Show notification with\nReply and Action button',
-                onPressed: () => showNotificationWithActionButtonsAndReply(3)),
+                onPressed: () => NotificationUtils.showNotificationWithActionButtonsAndReply(3)),
             SimpleButton('Show Big picture notification\nwith Action Buttons',
-                onPressed: () => showBigPictureNotificationActionButtons(3)),
+                onPressed: () => NotificationUtils.showBigPictureNotificationActionButtons(3)),
             SimpleButton(
                 'Show Big picture notification\nwith Reply and Action button',
                 onPressed: () =>
-                    showBigPictureNotificationActionButtonsAndReply(3)),
+                    NotificationUtils.showBigPictureNotificationActionButtonsAndReply(3)),
             SimpleButton(
                 'Show Big text notification\nwith Reply and Action button',
-                onPressed: () => showBigTextNotificationWithActionAndReply(3)),
+                onPressed: () => NotificationUtils.showBigTextNotificationWithActionAndReply(3)),
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotification(3)),
+                onPressed: () => NotificationUtils.cancelNotification(3)),
 
             /* ******************************************************************** */
 
@@ -587,36 +715,36 @@ class _HomePageState extends State<HomePage> {
             ),
             SimpleButton(
                 'Shows a notification with a badge indicator channel activate',
-                onPressed: () => showBadgeNotification(Random().nextInt(100))),
+                onPressed: () => NotificationUtils.showBadgeNotification(Random().nextInt(100))),
             SimpleButton(
                 'Shows a notification with a badge indicator channel deactivate',
                 onPressed: () =>
-                    showWithoutBadgeNotification(Random().nextInt(100))),
+                    NotificationUtils.showWithoutBadgeNotification(Random().nextInt(100))),
             SimpleButton('Read the badge indicator', onPressed: () async {
-              int amount = await getBadgeIndicator();
+              int amount = await NotificationUtils.getBadgeIndicator();
               Fluttertoast.showToast(msg: 'Badge count: $amount');
             }),
             SimpleButton('Increment the badge indicator', onPressed: () async {
-              int amount = await incrementBadgeIndicator();
+              int amount = await NotificationUtils.incrementBadgeIndicator();
               Fluttertoast.showToast(msg: 'Badge count: $amount');
             }),
             SimpleButton('Decrement the badge indicator', onPressed: () async {
-              int amount = await decrementBadgeIndicator();
+              int amount = await NotificationUtils.decrementBadgeIndicator();
               Fluttertoast.showToast(msg: 'Badge count: $amount');
             }),
             SimpleButton('Set manually the badge indicator',
                 onPressed: () async {
-              int? amount = await pickBadgeCounter(context, await getBadgeIndicator());
+              int? amount = await pickBadgeCounter(context, await NotificationUtils.getBadgeIndicator());
               if (amount != null) {
-                setBadgeIndicator(amount);
+                NotificationUtils.setBadgeIndicator(amount);
               }
             }),
             SimpleButton('Reset the badge indicator',
-                onPressed: () => resetBadgeIndicator()),
+                onPressed: () => NotificationUtils.resetBadgeIndicator()),
             SimpleButton('Cancel all the badge test notifications',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelAllNotifications()),
+                onPressed: () => NotificationUtils.cancelAllNotifications()),
 
             /* ******************************************************************** */
 
@@ -628,19 +756,19 @@ class _HomePageState extends State<HomePage> {
             TextNote(
                 'A vibration pattern pre-configured in a channel could be updated at any time using the method NotificationModel.setChannel'),
             SimpleButton('Show plain notification with low vibration pattern',
-                onPressed: () => showLowVibrationNotification(4)),
+                onPressed: () => NotificationUtils.showLowVibrationNotification(4)),
             SimpleButton(
                 'Show plain notification with medium vibration pattern',
-                onPressed: () => showMediumVibrationNotification(4)),
+                onPressed: () => NotificationUtils.showMediumVibrationNotification(4)),
             SimpleButton('Show plain notification with high vibration pattern',
-                onPressed: () => showHighVibrationNotification(4)),
+                onPressed: () => NotificationUtils.showHighVibrationNotification(4)),
             SimpleButton(
                 'Show plain notification with custom vibration pattern',
-                onPressed: () => showCustomVibrationNotification(4)),
+                onPressed: () => NotificationUtils.showCustomVibrationNotification(4)),
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotification(4)),
+                onPressed: () => NotificationUtils.cancelNotification(4)),
 
             /* ******************************************************************** */
 
@@ -652,14 +780,14 @@ class _HomePageState extends State<HomePage> {
                 'Also channels can only update his title and description. All the other parameters could only be change if you erase the channel and recreates it with a different ID.'
                 'For other devices, such iOS, notification channels are emulated and used only as pre-configurations.'),
             SimpleButton('Create a test channel called "Editable channel"',
-                onPressed: () => createTestChannel('Editable channel')),
+                onPressed: () => NotificationUtils.createTestChannel('Editable channel')),
             SimpleButton(
                 'Update the title and description of "Editable channel"',
-                onPressed: () => updateTestChannel('Editable channel')),
+                onPressed: () => NotificationUtils.updateTestChannel('Editable channel')),
             SimpleButton('Remove "Editable channel"',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => removeTestChannel('Editable channel')),
+                onPressed: () => NotificationUtils.removeTestChannel('Editable channel')),
 
             /* ******************************************************************** */
 
@@ -676,51 +804,66 @@ class _HomePageState extends State<HomePage> {
               });
             }),
             SimpleButton('Notification with red text color\nand red LED',
-                onPressed: () => redNotification(5, delayLEDTests)),
+                onPressed: () => NotificationUtils.redNotification(5, delayLEDTests)),
             SimpleButton('Notification with yellow text color\nand yellow LED',
-                onPressed: () => yellowNotification(5, delayLEDTests)),
+                onPressed: () => NotificationUtils.yellowNotification(5, delayLEDTests)),
             SimpleButton('Notification with green text color\nand green LED',
-                onPressed: () => greenNotification(5, delayLEDTests)),
+                onPressed: () => NotificationUtils.greenNotification(5, delayLEDTests)),
             SimpleButton('Notification with blue text color\nand blue LED',
-                onPressed: () => blueNotification(5, delayLEDTests)),
+                onPressed: () => NotificationUtils.blueNotification(5, delayLEDTests)),
             SimpleButton('Notification with purple text color\nand purple LED',
-                onPressed: () => purpleNotification(5, delayLEDTests)),
+                onPressed: () => NotificationUtils.purpleNotification(5, delayLEDTests)),
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotification(5)),
+                onPressed: () => NotificationUtils.cancelNotification(5)),
 
             /* ******************************************************************** */
 
             TextDivisor(title: 'Wake Up Locked Screen Notifications'),
             TextNote(
-                'To enable this feature on Android, is necessary to add the WAKE_LOCK permission into your AndroidManifest.xml file. For iOS, this is the default behavior.'),
-            SimpleButton('Show notification with wake up locked screen option',
-                onPressed: () => showNotificationWithWakeUp(27)),
+                'Wake Up Locked Screen notifications are notifications that can wake up the device screen to call the user attention, if the device is on lock screen.\n\n'
+                'To enable this feature on Android, is necessary to add the WAKE_LOCK permission into your AndroidManifest.xml file. For iOS, this is the default behavior for high priority channels.'),
+            SecondsSlider(steps: 11, onChanged: (newValue){ setState(() => _secondsToWakeUp = newValue ); }),
+            SimpleButton('Schedule notification with wake up locked screen option',
+                onPressed: () => NotificationUtils.scheduleNotificationWithWakeUp(27, _secondsToWakeUp.toInt())),
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotification(27)),
+                onPressed: () => NotificationUtils.cancelNotification(27)),
+
+            /* ******************************************************************** */
+
+            TextDivisor(title: 'Full Screen Intent Notifications'),
+            TextNote(
+                'Full-Screen Intents are notifications that can launch in full-screen mode. They are indicate since Android 9 to receiving calls and alarm features.\n\n'
+                'To enable this feature on Android, is necessary to add the USE_FULL_SCREEN_INTENT permission into your AndroidManifest.xml file and explicity request the user permission since Android 11. For iOS, this option has no effect.'),
+            SimpleButton('Schedule notification with full screen locked screen option',
+                onPressed: () => NotificationUtils.scheduleFullScrenNotification(27)),
+            SimpleButton('Cancel notification',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () => NotificationUtils.cancelNotification(27)),
 
             /* ******************************************************************** */
 
             TextDivisor(title: 'Notification Sound'),
             SimpleButton('Show notification with custom sound',
-                onPressed: () => showCustomSoundNotification(6)),
+                onPressed: () => NotificationUtils.showCustomSoundNotification(6)),
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotification(6)),
+                onPressed: () => NotificationUtils.cancelNotification(6)),
 
             /* ******************************************************************** */
 
             TextDivisor(title: 'Silenced Notifications'),
             SimpleButton('Show notification with no sound',
-                onPressed: () => showNotificationWithNoSound(7)),
+                onPressed: () => NotificationUtils.showNotificationWithNoSound(7)),
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotification(7)),
+                onPressed: () => NotificationUtils.cancelNotification(7)),
 
             /* ******************************************************************** */
 
@@ -730,7 +873,7 @@ class _HomePageState extends State<HomePage> {
               DateTime? pickedDate =
                   await pickScheduleDate(context, isUtc: false);
               if (pickedDate != null) {
-                showNotificationAtScheduleCron(pickedDate);
+                NotificationUtils.showNotificationAtSchedulePreciseDate(pickedDate);
               }
             }),
             SimpleButton('Schedule notification with utc time zone',
@@ -738,28 +881,28 @@ class _HomePageState extends State<HomePage> {
               DateTime? pickedDate =
                   await pickScheduleDate(context, isUtc: true);
               if (pickedDate != null) {
-                showNotificationAtScheduleCron(pickedDate);
+                NotificationUtils.showNotificationAtSchedulePreciseDate(pickedDate);
               }
             }),
             SimpleButton(
               'Show notification at every single minute',
-              onPressed: () => repeatMinuteNotification(),
+              onPressed: () => NotificationUtils.repeatMinuteNotification(),
             ),
             SimpleButton(
               'Show notifications repeatedly in 10 sec, spaced 5 sec from each other for 1 minute (only for Android)',
-              onPressed: () => repeatMultiple5Crontab(),
+              onPressed: () => NotificationUtils.repeatMultiple5Crontab(),
             ),
             SimpleButton(
               'Show notification with 3 precise times (only for Android)',
-              onPressed: () => repeatPreciseThreeTimes(),
+              onPressed: () => NotificationUtils.repeatPreciseThreeTimes(),
             ),
             SimpleButton(
               'Show notification at every single minute o\'clock',
-              onPressed: () => repeatMinuteNotificationOClock(),
+              onPressed: () => NotificationUtils.repeatMinuteNotificationOClock(),
             ),
             SimpleButton('Get current time zone reference name',
                 onPressed: () =>
-                    getCurrentTimeZone().then((timeZone) => showDialog(
+                    NotificationUtils.getCurrentTimeZone().then((timeZone) => showDialog(
                         context: context,
                         builder: (_) => AlertDialog(
                             backgroundColor: Color(0xfffbfbfb),
@@ -775,7 +918,7 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ))))))),
             SimpleButton('Get utc time zone reference name',
-                onPressed: () => getUtcTimeZone().then((timeZone) => showDialog(
+                onPressed: () => NotificationUtils.getUtcTimeZone().then((timeZone) => showDialog(
                     context: context,
                     builder: (_) => AlertDialog(
                         backgroundColor: Color(0xfffbfbfb),
@@ -791,21 +934,21 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ))))))),
             SimpleButton('List all active schedules',
-                onPressed: () => listScheduledNotifications(context)),
+                onPressed: () => NotificationUtils.listScheduledNotifications(context)),
             SimpleButton(
                 'Dismiss the displayed scheduled notifications without cancel the respective schedules',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => dismissNotificationsByChannelKey('scheduled')),
+                onPressed: () => NotificationUtils.dismissNotificationsByChannelKey('scheduled')),
             SimpleButton(
                 'Cancel the active schedules without dismiss the displayed notifications',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelSchedulesByChannelKey('scheduled')),
+                onPressed: () => NotificationUtils.cancelSchedulesByChannelKey('scheduled')),
             SimpleButton('Cancel all schedules and dismiss the respective displayed notifications',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotificationsByChannelKey('scheduled')),
+                onPressed: () => NotificationUtils.cancelNotificationsByChannelKey('scheduled')),
 
             /* ******************************************************************** */
 
@@ -863,92 +1006,122 @@ class _HomePageState extends State<HomePage> {
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotification(100)),
+                onPressed: () => NotificationUtils.cancelNotification(100)),
 
             /* ******************************************************************** */
 
             TextDivisor(title: 'Progress Notifications'),
             SimpleButton('Show indeterminate progress notification',
-                onPressed: () => showIndeterminateProgressNotification(9)),
+                onPressed: () => NotificationUtils.showIndeterminateProgressNotification(9)),
             SimpleButton('Show progress notification - updates every second',
-                onPressed: () => showProgressNotification(9)),
+                onPressed: () => NotificationUtils.showProgressNotification(9)),
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotification(9)),
+                onPressed: () => NotificationUtils.cancelNotification(9)),
 
             /* ******************************************************************** */
 
             TextDivisor(title: 'Inbox Notifications'),
             SimpleButton(
               'Show Inbox notification',
-              onPressed: () => showInboxNotification(10),
+              onPressed: () => NotificationUtils.showInboxNotification(10),
             ),
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotification(10)),
+                onPressed: () => NotificationUtils.cancelNotification(10)),
 
             /* ******************************************************************** */
 
             TextDivisor(title: 'Messaging Notifications'),
             SimpleButton('Simulate Chat Messaging notification',
-                onPressed: () => simulateChatConversation(groupKey: 'jhonny_group')
+                onPressed: () => NotificationUtils.simulateChatConversation(groupKey: 'jhonny_group')
               ),
             SimpleButton('Cancel Chat notification by group key',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotificationsByGroupKey('jhonny_group')),
+                onPressed: () => NotificationUtils.cancelNotificationsByGroupKey('jhonny_group')),
 
             /* ******************************************************************** */
 
             TextDivisor(title: 'Grouped Notifications'),
             SimpleButton('Show grouped notifications',
-                onPressed: () => showGroupedNotifications(12)),
+                onPressed: () => NotificationUtils.showGroupedNotifications(12)),
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotification(12)),
+                onPressed: () => NotificationUtils.cancelNotification(12)),
 
             /* ******************************************************************** */
             TextDivisor(),
             SimpleButton('Dismiss all notifications by channel key',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => dismissNotificationsByChannelKey('scheduled')),
+                onPressed: () => NotificationUtils.dismissNotificationsByChannelKey('scheduled')),
             SimpleButton('Dismiss all notifications by group key',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => dismissNotificationsByGroupKey('grouped')),
+                onPressed: () => NotificationUtils.dismissNotificationsByGroupKey('grouped')),
             SimpleButton('Cancel all schedules by channel key',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelSchedulesByChannelKey('scheduled')),
+                onPressed: () => NotificationUtils.cancelSchedulesByChannelKey('scheduled')),
             SimpleButton('Cancel all schedules by group key',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelSchedulesByGroupKey('grouped')),
+                onPressed: () => NotificationUtils.cancelSchedulesByGroupKey('grouped')),
             SimpleButton('Cancel all notifications by channel key',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotificationsByChannelKey('scheduled')),
+                onPressed: () => NotificationUtils.cancelNotificationsByChannelKey('scheduled')),
             SimpleButton('Cancel all notifications by group key',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => cancelNotificationsByGroupKey('grouped')),
+                onPressed: () => NotificationUtils.cancelNotificationsByGroupKey('grouped')),
             SimpleButton('Dismiss all notifications',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: dismissAllNotifications),
+                onPressed: NotificationUtils.dismissAllNotifications),
             SimpleButton('Cancel all active schedules',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: cancelAllSchedules),
+                onPressed: NotificationUtils.cancelAllSchedules),
             SimpleButton('Cancel all notifications and schedules',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: cancelAllNotifications),
+                onPressed: NotificationUtils.cancelAllNotifications),
           ],
         ));
+  }
+}
+
+class PermissionIndicator extends StatelessWidget {
+  const PermissionIndicator({
+    Key? key,
+    required this.name,
+    required this.allowed
+  }) : super(key: key);
+
+  final String? name;
+  final bool allowed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      width: 125,
+      child: Column(
+        children: [
+          (name != null) ? Text(name!+':', textAlign: TextAlign.center) : SizedBox(),
+          Text(allowed ? 'Allowed' : 'Not allowed',
+              style: TextStyle(
+                  color: allowed
+                      ? Colors.green
+                      : Colors.red)),
+          LedLight(allowed)
+        ],
+      ),
+    );
   }
 }

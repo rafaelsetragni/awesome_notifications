@@ -17,26 +17,29 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   /// Crontab expression as repetition rule (with seconds precision), as described in https://www.baeldung.com/cron-expressions
   String? crontabExpression;
 
-  /// Notification Schedule based on calendar components. At least one date parameter is required.
+  /// Notification Schedule based on crontab rules or a list of valid dates.
   /// [initialDate]: The initial limit date that an schedule is considered valid (YYYY-MM-DD hh:mm:ss)
   /// [expirationDate]: The final limit date that an schedule is considered valid (YYYY-MM-DD hh:mm:ss)
   /// [crontabExpression]: Crontab expression as repetition rule (with seconds precision), as described in https://www.baeldung.com/cron-expressions
   /// [preciseSchedules]: List of precise valid schedule dates
   /// [allowWhileIdle]: Determines if notification will send, even when the device is in critical situation, such as low battery.
   /// [repeats]: Determines if notification will send, even when the device is in critical situation, such as low battery.
+  /// [preciseAlarm] Requires maximum precision to schedule notifications at exact time, but may use more battery. Requires the explicit user consent for Android 12 and beyond.
   /// [timeZone] time zone identifier as reference of this schedule date. (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
-  NotificationAndroidCrontab({
-    this.initialDateTime,
-    this.expirationDateTime,
-    this.preciseSchedules,
-    this.crontabExpression,
-    String? timeZone,
-    bool allowWhileIdle = false,
-    bool repeats = false,
-  }) : super(
+  NotificationAndroidCrontab(
+      {this.initialDateTime,
+      this.expirationDateTime,
+      this.preciseSchedules,
+      this.crontabExpression,
+      String? timeZone,
+      bool allowWhileIdle = false,
+      bool repeats = false,
+      bool preciseAlarm = false})
+      : super(
             timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
-            repeats: repeats);
+            repeats: repeats,
+            preciseAlarm: preciseAlarm);
 
   /// Initialize a notification crontab schedule based on a date reference
   NotificationAndroidCrontab.fromDate(

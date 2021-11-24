@@ -16,7 +16,7 @@ import me.carda.awesome_notifications.utils.DateUtils;
 import me.carda.awesome_notifications.utils.ListUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
-public class NotificationCrontab extends NotificationScheduleModel {
+public class NotificationCrontabModel extends NotificationScheduleModel {
 
     public String initialDateTime;
     public String expirationDateTime;
@@ -25,7 +25,7 @@ public class NotificationCrontab extends NotificationScheduleModel {
 
     @Override
     @SuppressWarnings("unchecked")
-    public NotificationCrontab fromMap(Map<String, Object> arguments) {
+    public NotificationCrontabModel fromMap(Map<String, Object> arguments) {
         super.fromMap(arguments);
 
         initialDateTime = getValueOrDefault(arguments, Definitions.NOTIFICATION_INITIAL_DATE_TIME, String.class);

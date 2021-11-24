@@ -75,9 +75,12 @@ enum Definitions {
     static let  CHANNEL_METHOD_RESET_BADGE = "resetBadge"
     
     static let  CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = "showNotificationPage"
+    static let  CHANNEL_METHOD_SHOW_ALARM_PAGE = "showAlarmPage"
+    static let  CHANNEL_METHOD_SHOW_GLOBAL_DND_PAGE = "showGlobalDndPage"
     static let  CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed"
-    static let  CHANNEL_METHOD_CHECK_PERMISSIONS = "checkPermissions"
     static let  CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications"
+    static let  CHANNEL_METHOD_CHECK_PERMISSIONS = "checkPermissions"
+    static let  CHANNEL_METHOD_SHOULD_SHOW_RATIONALE = "shouldShowRationale"
 
     static let  CHANNEL_METHOD_DISMISS_NOTIFICATION = "dismissNotification"
     static let  CHANNEL_METHOD_CANCEL_SCHEDULE = "cancelSchedule"
@@ -128,7 +131,6 @@ enum Definitions {
     static let  NOTIFICATION_TITLE = "title"
     static let  NOTIFICATION_BODY = "body"
     static let  NOTIFICATION_SUMMARY = "summary"
-    static let  NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen"
     static let  NOTIFICATION_CUSTOM_SOUND = "customSound"
     static let  NOTIFICATION_SHOW_WHEN = "showWen"
     static let  NOTIFICATION_BUTTON_KEY_PRESSED = "buttonKeyPressed"
@@ -148,11 +150,13 @@ enum Definitions {
     static let  NOTIFICATION_INITIAL_FIXED_DATE = "fixedDate"
     static let  NOTIFICATION_CREATED_DATE_TIME = "createdDateTime"
     static let  NOTIFICATION_ENABLED = "enabled"
-    static let  NOTIFICATION_AUTO_DISMISSABLE = "autoDismissable"
+    static let  NOTIFICATION_AUTO_DISMISSIBLE = "autoDismissible"
     static let  NOTIFICATION_LOCKED = "locked"
     static let  NOTIFICATION_DISPLAY_ON_FOREGROUND = "displayOnForeground"
     static let  NOTIFICATION_DISPLAY_ON_BACKGROUND = "displayOnBackground"
     static let  NOTIFICATION_ICON = "icon"
+    static let  NOTIFICATION_FULL_SCREEN_INTENT = "fullScreenIntent"
+    static let  NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen"
     static let  NOTIFICATION_PLAY_SOUND = "playSound"
     static let  NOTIFICATION_SOUND_SOURCE = "soundSource"
     static let  NOTIFICATION_DEFAULT_RINGTONE_TYPE = "defaultRingtoneType"
@@ -169,6 +173,7 @@ enum Definitions {
     static let  NOTIFICATION_CHANNEL_NAME = "channelName"
     static let  NOTIFICATION_CHANNEL_DESCRIPTION = "channelDescription"
     static let  NOTIFICATION_CHANNEL_SHOW_BADGE = "channelShowBadge"
+    static let  NOTIFICATION_CHANNEL_CRITICAL_ALERTS = "criticalAlerts"
     static let  NOTIFICATION_IMPORTANCE = "importance"
     static let  NOTIFICATION_COLOR = "color"
     static let  NOTIFICATION_BACKGROUND_COLOR = "backgroundColor"
@@ -215,7 +220,7 @@ enum Definitions {
         Definitions.NOTIFICATION_LED_OFF_MS: 700,
         Definitions.NOTIFICATION_LED_ON_MS: 300,
         Definitions.NOTIFICATION_PLAY_SOUND: true,
-        Definitions.NOTIFICATION_AUTO_DISMISSABLE: true,
+        Definitions.NOTIFICATION_AUTO_DISMISSIBLE: true,
         Definitions.NOTIFICATION_LOCKED: false,
         Definitions.NOTIFICATION_TICKER: "ticker",
         Definitions.NOTIFICATION_ALLOW_WHILE_IDLE: false,

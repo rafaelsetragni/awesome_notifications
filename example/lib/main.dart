@@ -15,12 +15,16 @@ void main() async {
     'resource://drawable/res_app_icon',
     [
       NotificationChannel(
+          channelGroupKey: 'basic_tests',
           channelKey: 'basic_channel',
           channelName: 'Basic notifications',
           channelDescription: 'Notification channel for basic tests',
           defaultColor: Color(0xFF9D50DD),
-          ledColor: Colors.white),
+          ledColor: Colors.white,
+          importance: NotificationImportance.High
+      ),
       NotificationChannel(
+          channelGroupKey: 'basic_tests',
           channelKey: 'badge_channel',
           channelName: 'Badge indicator notifications',
           channelDescription: 'Notification channel to activate badge indicator',
@@ -28,6 +32,7 @@ void main() async {
           defaultColor: Color(0xFF9D50DD),
           ledColor: Colors.yellow),
       NotificationChannel(
+          channelGroupKey: 'sound_tests',
           channelKey: 'ringtone_channel',
           channelName: 'Ringtone Channel',
           channelDescription: 'Channel with default ringtone',
@@ -35,12 +40,14 @@ void main() async {
           ledColor: Colors.white,
           defaultRingtoneType: DefaultRingtoneType.Ringtone),
       NotificationChannel(
+          channelGroupKey: 'channel_tests',
           channelKey: 'updated_channel',
           channelName: 'Channel to update',
           channelDescription: 'Notifications with not updated channel',
           defaultColor: Color(0xFF9D50DD),
           ledColor: Colors.white),
       NotificationChannel(
+          channelGroupKey: 'chat_tests',
           channelKey: 'chats',
           channelName: 'Chat groups',
           channelDescription: 'This is a simple example channel of a chat group',
@@ -50,6 +57,7 @@ void main() async {
           defaultColor: Color(0xFF9D50DD),
       ),
       NotificationChannel(
+          channelGroupKey: 'vibration_tests',
           channelKey: 'low_intensity',
           channelName: 'Low intensity notifications',
           channelDescription:
@@ -58,6 +66,7 @@ void main() async {
           ledColor: Colors.green,
           vibrationPattern: lowVibrationPattern),
       NotificationChannel(
+          channelGroupKey: 'vibration_tests',
           channelKey: 'medium_intensity',
           channelName: 'Medium intensity notifications',
           channelDescription:
@@ -66,6 +75,7 @@ void main() async {
           ledColor: Colors.yellow,
           vibrationPattern: mediumVibrationPattern),
       NotificationChannel(
+          channelGroupKey: 'vibration_tests',
           channelKey: 'high_intensity',
           channelName: 'High intensity notifications',
           channelDescription:
@@ -74,6 +84,7 @@ void main() async {
           ledColor: Colors.red,
           vibrationPattern: highVibrationPattern),
       NotificationChannel(
+          channelGroupKey: 'privacy_tests',
           channelKey: "private_channel",
           channelName: "Privates notification channel",
           channelDescription: "Privates notification from lock screen",
@@ -83,6 +94,7 @@ void main() async {
           vibrationPattern: lowVibrationPattern,
           defaultPrivacy: NotificationPrivacy.Private),
       NotificationChannel(
+          channelGroupKey: 'sound_tests',
           icon: 'resource://drawable/res_power_ranger_thunder',
           channelKey: "custom_sound",
           channelName: "Custom sound notifications",
@@ -93,6 +105,7 @@ void main() async {
           ledColor: Colors.red,
           vibrationPattern: lowVibrationPattern),
       NotificationChannel(
+          channelGroupKey: 'sound_tests',
           channelKey: "silenced",
           channelName: "Silenced notifications",
           channelDescription: "The most quiet notifications",
@@ -100,23 +113,27 @@ void main() async {
           enableVibration: false,
           enableLights: false),
       NotificationChannel(
-        icon: 'resource://drawable/res_media_icon',
-        channelKey: 'media_player',
-        channelName: 'Media player controller',
-        channelDescription: 'Media player controller',
-        defaultPrivacy: NotificationPrivacy.Public,
-        enableVibration: false,
-        enableLights: false,
-        playSound: false,
-        locked: true),
+          channelGroupKey: 'media_player_tests',
+          icon: 'resource://drawable/res_media_icon',
+          channelKey: 'media_player',
+          channelName: 'Media player controller',
+          channelDescription: 'Media player controller',
+          defaultPrivacy: NotificationPrivacy.Public,
+          enableVibration: false,
+          enableLights: false,
+          playSound: false,
+          locked: true),
       NotificationChannel(
+          channelGroupKey: 'image_tests',
           channelKey: 'big_picture',
           channelName: 'Big pictures',
           channelDescription: 'Notifications with big and beautiful images',
           defaultColor: Color(0xFF9D50DD),
           ledColor: Color(0xFF9D50DD),
-          vibrationPattern: lowVibrationPattern),
+          vibrationPattern: lowVibrationPattern,
+          importance: NotificationImportance.High),
       NotificationChannel(
+          channelGroupKey: 'layout_tests',
           channelKey: 'big_text',
           channelName: 'Big text notifications',
           channelDescription: 'Notifications with a expandable body text',
@@ -124,6 +141,7 @@ void main() async {
           ledColor: Colors.blueGrey,
           vibrationPattern: lowVibrationPattern),
       NotificationChannel(
+          channelGroupKey: 'layout_tests',
           channelKey: 'inbox',
           channelName: 'Inbox notifications',
           channelDescription: 'Notifications with inbox layout',
@@ -131,6 +149,7 @@ void main() async {
           ledColor: Color(0xFF9D50DD),
           vibrationPattern: mediumVibrationPattern),
       NotificationChannel(
+          channelGroupKey: 'schedule_tests',
           channelKey: 'scheduled',
           channelName: 'Scheduled notifications',
           channelDescription: 'Notifications with schedule functionality',
@@ -138,8 +157,11 @@ void main() async {
           ledColor: Color(0xFF9D50DD),
           vibrationPattern: lowVibrationPattern,
           importance: NotificationImportance.High,
-          defaultRingtoneType: DefaultRingtoneType.Alarm),
+          defaultRingtoneType: DefaultRingtoneType.Alarm,
+          criticalAlerts: true,
+      ),
       NotificationChannel(
+          channelGroupKey: 'layout_tests',
           icon: 'resource://drawable/res_download_icon',
           channelKey: 'progress_bar',
           channelName: 'Progress bar notifications',
@@ -149,6 +171,7 @@ void main() async {
           vibrationPattern: lowVibrationPattern,
           onlyAlertOnce: true),
       NotificationChannel(
+          channelGroupKey: 'grouping_tests',
           channelKey: 'grouped',
           channelName: 'Grouped notifications',
           channelDescription: 'Notifications with group functionality',
@@ -159,6 +182,19 @@ void main() async {
           ledColor: Colors.lightGreen,
           vibrationPattern: lowVibrationPattern,
           importance: NotificationImportance.High)
+    ],
+    channelGroups: [
+      NotificationChannelGroup(channelGroupkey: 'basic_tests', channelGroupName: 'Basic tests'),
+      NotificationChannelGroup(channelGroupkey: 'image_tests', channelGroupName: 'Images tests'),
+      NotificationChannelGroup(channelGroupkey: 'schedule_tests', channelGroupName: 'Schedule tests'),
+      NotificationChannelGroup(channelGroupkey: 'chat_tests', channelGroupName: 'Chat tests'),
+      NotificationChannelGroup(channelGroupkey: 'channel_tests', channelGroupName: 'Channel tests'),
+      NotificationChannelGroup(channelGroupkey: 'sound_tests', channelGroupName: 'Sound tests'),
+      NotificationChannelGroup(channelGroupkey: 'vibration_tests', channelGroupName: 'Vibration tests'),
+      NotificationChannelGroup(channelGroupkey: 'privacy_tests', channelGroupName: 'Privacy tests'),
+      NotificationChannelGroup(channelGroupkey: 'layout_tests', channelGroupName: 'Layout tests'),
+      NotificationChannelGroup(channelGroupkey: 'grouping_tests', channelGroupName: 'Grouping tests'),
+      NotificationChannelGroup(channelGroupkey: 'media_player_tests', channelGroupName: 'Media Player tests')
     ],
     debug: true
   );

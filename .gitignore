@@ -24,3 +24,5 @@ android/.settings/org.eclipse.buildship.core.prefs
 android/.project
 android/.classpath
 .idea/workspace.xml
+.idea/libraries/
+.idea/workspace.xml

@@ -1,7 +1,6 @@
 package me.carda.awesome_notifications.notifications.models;
 
 import android.content.Context;
-import android.content.Intent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,17 +8,16 @@ import java.util.Map;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.enumerators.ActionButtonType;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
-import me.carda.awesome_notifications.utils.IntegerUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
-public class NotificationButtonModel extends Model {
+public class NotificationButtonModel extends AbstractModel {
 
     public String key;
     public String icon;
     public String label;
     public Integer color;
     public Boolean enabled;
-    public Boolean autoDismissable;
+    public Boolean autoDismissible;
     public Boolean showInCompactView;
     public Boolean isDangerousOption;
     public ActionButtonType buttonType;
@@ -39,7 +37,7 @@ public class NotificationButtonModel extends Model {
 
         enabled    = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLED, Boolean.class);
         isDangerousOption = getValueOrDefault(arguments, Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, Boolean.class);
-        autoDismissable   = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSABLE, Boolean.class);
+        autoDismissible   = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSIBLE, Boolean.class);
         showInCompactView = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, Boolean.class);
 
         return this;
@@ -58,7 +56,7 @@ public class NotificationButtonModel extends Model {
                 this.buttonType != null ? this.buttonType.toString() : ActionButtonType.Default.toString());
 
         returnedObject.put(Definitions.NOTIFICATION_ENABLED, enabled);
-        returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSABLE, autoDismissable);
+        returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, autoDismissible);
         returnedObject.put(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, showInCompactView);
         returnedObject.put(Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, isDangerousOption);
 

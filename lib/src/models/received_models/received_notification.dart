@@ -1,37 +1,32 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications/src/enumerators/notification_life_cycle.dart';
 import 'package:awesome_notifications/src/enumerators/notification_source.dart';
-import 'package:awesome_notifications/src/models/basic_notification_content.dart';
+import 'package:awesome_notifications/src/models/base_notification_content.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
 /// All received details of a notification created or displayed on the system
 /// The data field
 class ReceivedNotification extends BaseNotificationContent {
-  NotificationLifeCycle? displayedLifeCycle;
-
-  NotificationSource? createdSource;
-  NotificationLifeCycle? createdLifeCycle;
-
-  String? displayedDate;
-  String? createdDate;
-
   ReceivedNotification() : super(channelKey: null, id: null);
 
   ReceivedNotification fromMap(Map<String, dynamic> dataMap) {
     super.fromMap(dataMap);
 
+    createdDate =
+        AssertUtils.extractValue(NOTIFICATION_CREATED_DATE, dataMap, String);
+
+    displayedDate =
+        AssertUtils.extractValue(NOTIFICATION_DISPLAYED_DATE, dataMap, String);
+
     createdSource = AssertUtils.extractEnum(
         NOTIFICATION_CREATED_SOURCE, dataMap, NotificationSource.values);
+
     createdLifeCycle = AssertUtils.extractEnum(
         NOTIFICATION_CREATED_LIFECYCLE, dataMap, NotificationLifeCycle.values);
     displayedLifeCycle = AssertUtils.extractEnum(
         NOTIFICATION_DISPLAYED_LIFECYCLE,
         dataMap,
         NotificationLifeCycle.values);
-    displayedDate =
-        AssertUtils.extractValue(NOTIFICATION_DISPLAYED_DATE, dataMap, String);
-    createdDate =
-        AssertUtils.extractValue(NOTIFICATION_CREATED_DATE, dataMap, String);
 
     return this;
   }

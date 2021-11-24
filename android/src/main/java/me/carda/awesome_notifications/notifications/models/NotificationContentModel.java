@@ -10,6 +10,7 @@ import java.util.List;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.notifications.enumerators.MediaSource;
+import me.carda.awesome_notifications.notifications.enumerators.NotificationCategory;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLayout;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationPrivacy;
@@ -24,7 +25,7 @@ import me.carda.awesome_notifications.utils.MapUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
 @SuppressWarnings("unchecked")
-public class NotificationContentModel extends Model {
+public class NotificationContentModel extends AbstractModel {
 
     public boolean isRefreshNotification = false;
     public boolean isRandomId = false;
@@ -45,9 +46,9 @@ public class NotificationContentModel extends Model {
     public Boolean locked;
     public String bigPicture;
     public Boolean wakeUpScreen;
-    public Boolean criticalAlert;
+    public Boolean fullScreenIntent;
     public Boolean hideLargeIconOnExpand;
-    public Boolean autoDismissable;
+    public Boolean autoDismissible;
     public Boolean displayOnForeground;
     public Boolean displayOnBackground;
     public Long color;
@@ -60,9 +61,13 @@ public class NotificationContentModel extends Model {
 
     public NotificationLayout notificationLayout;
 
+    public NotificationCategory notificationCategory;
+
     public NotificationSource createdSource;
     public NotificationLifeCycle createdLifeCycle;
     public NotificationLifeCycle displayedLifeCycle;
+    public NotificationCategory category;
+
     public String createdDate;
     public String displayedDate;
 
@@ -104,7 +109,7 @@ public class NotificationContentModel extends Model {
         customSound = getValueOrDefault(arguments, Definitions.NOTIFICATION_CUSTOM_SOUND, String.class);
 
         wakeUpScreen = getValueOrDefault(arguments, Definitions.NOTIFICATION_WAKE_UP_SCREEN, Boolean.class);
-        criticalAlert = getValueOrDefault(arguments, Definitions.NOTIFICATION_CRITICAL_ALERT, Boolean.class);
+        fullScreenIntent = getValueOrDefault(arguments, Definitions.NOTIFICATION_FULL_SCREEN_INTENT, Boolean.class);
 
         showWhen = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_WHEN, Boolean.class);
         locked = getValueOrDefault(arguments, Definitions.NOTIFICATION_LOCKED, Boolean.class);
@@ -120,6 +125,9 @@ public class NotificationContentModel extends Model {
         privacy =
                 getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_PRIVACY, NotificationPrivacy.class, NotificationPrivacy.values());
 
+        category =
+                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_CATEGORY, NotificationCategory.class, NotificationCategory.values());
+
         privateMessage = getValueOrDefault(arguments, Definitions.NOTIFICATION_PRIVATE_MESSAGE, String.class);
 
         icon  = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON, String.class);
@@ -128,7 +136,7 @@ public class NotificationContentModel extends Model {
 
         payload = getValueOrDefault(arguments, Definitions.NOTIFICATION_PAYLOAD, Map.class);
 
-        autoDismissable = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSABLE, Boolean.class);
+        autoDismissible = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSIBLE, Boolean.class);
 
         progress    = getValueOrDefault(arguments, Definitions.NOTIFICATION_PROGRESS, Integer.class);
 
@@ -151,9 +159,10 @@ public class NotificationContentModel extends Model {
         returnedObject.put(Definitions.NOTIFICATION_BODY, this.body);
         returnedObject.put(Definitions.NOTIFICATION_SUMMARY, this.summary);
 
-        returnedObject.put(Definitions.NOTIFICATION_WAKE_UP_SCREEN, this.wakeUpScreen);
-        returnedObject.put(Definitions.NOTIFICATION_CRITICAL_ALERT, this.criticalAlert);
         returnedObject.put(Definitions.NOTIFICATION_SHOW_WHEN, this.showWhen);
+        returnedObject.put(Definitions.NOTIFICATION_WAKE_UP_SCREEN, this.wakeUpScreen);
+        returnedObject.put(Definitions.NOTIFICATION_FULL_SCREEN_INTENT, this.fullScreenIntent);
+
 
         returnedObject.put(Definitions.NOTIFICATION_LOCKED, this.locked);
 
@@ -162,7 +171,7 @@ public class NotificationContentModel extends Model {
 
         returnedObject.put(Definitions.NOTIFICATION_TICKER, this.ticker);
         returnedObject.put(Definitions.NOTIFICATION_PAYLOAD, this.payload);
-        returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSABLE, this.autoDismissable);
+        returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, this.autoDismissible);
 
         returnedObject.put(Definitions.NOTIFICATION_LAYOUT,
                 this.notificationLayout != null ? this.notificationLayout.toString() : "Default");
@@ -181,8 +190,12 @@ public class NotificationContentModel extends Model {
 
         returnedObject.put(Definitions.NOTIFICATION_CHANNEL_KEY, this.channelKey);
 
-        if(this.autoDismissable != null)
-            returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSABLE, this.autoDismissable);
+        if(this.category != null)
+            returnedObject.put(Definitions.NOTIFICATION_CATEGORY,
+                    this.category.toString());
+
+        if(this.autoDismissible != null)
+            returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, this.autoDismissible);
 
         if(this.displayOnForeground != null)
             returnedObject.put(Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, this.displayOnForeground);
@@ -212,7 +225,7 @@ public class NotificationContentModel extends Model {
 
         if(this.privacy != null)
             returnedObject.put(Definitions.NOTIFICATION_PRIVACY,
-                    this.privacy != null ? this.privacy.toString() : null);
+                    this.privacy.toString());
 
         if(this.privateMessage != null)
             returnedObject.put(Definitions.NOTIFICATION_PRIVATE_MESSAGE, this.privateMessage);
@@ -258,7 +271,7 @@ public class NotificationContentModel extends Model {
     public void validate(Context context) throws AwesomeNotificationException {
 
         if(ChannelManager.getChannelByKey(context, channelKey) == null)
-            throw new AwesomeNotificationException("Notification channel '"+channelKey+"' does not exists.");
+            throw new AwesomeNotificationException("Notification channel '"+channelKey+"' does not exist.");
 
         validateIcon(context);
 
