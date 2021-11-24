@@ -50,7 +50,7 @@ public class PermissionManager {
     }
 
     public static List<String> arePermissionsAllowed(Context context, String channelKey, List<String> permissions) throws AwesomeNotificationException {
-        List<String> permissionsAllowed = new ArrayList<>();
+        List<String> permissionsAllowed = new ArrayList<String>();
 
         if(!areNotificationsGloballyAllowed(context))
             return  permissionsAllowed;
@@ -69,13 +69,13 @@ public class PermissionManager {
         return permissionsAllowed;
     }
 
-    private static List<String> oldAndroidShouldShowRationale = new ArrayList<String>(){{
+    private static final List<String> oldAndroidShouldShowRationale = new ArrayList<String>(){{
         add(NotificationPermission.Sound.toString());
         add(NotificationPermission.CriticalAlert.toString());
         add(NotificationPermission.OverrideDnD.toString());
     }};
 
-    private static List<String> newAndroidShouldntShowRationale = new ArrayList<String>(){{
+    private static final List<String> newAndroidShouldntShowRationale = new ArrayList<String>(){{
         add(NotificationPermission.FullScreenIntent.toString());
         add(NotificationPermission.Provisional.toString());
     }};
@@ -232,12 +232,10 @@ public class PermissionManager {
 
             if(!areNotificationsGloballyAllowed(context)){
                 shouldShowRationalePage(
-                        activity,
                         context,
                         channelKey,
                         null,
                         permissions,
-                        new ArrayList<>(),
                         permissionCompletionHandler);
                 return;
             }
@@ -248,19 +246,17 @@ public class PermissionManager {
             permissionsRequested.removeAll(allowedPermissions);
             List<String> permissionsNeedingRationale = shouldShowRationale(context, channelKey, permissionsRequested);
 
-            List<String> manifestPermissions = new ArrayList<>();
+            List<String> manifestPermissions = new ArrayList<String>();
             for (String permissionNeeded : permissionsNeedingRationale) {
                 NotificationPermission permissionEnum = StringUtils.getEnumFromString(NotificationPermission.class, permissionNeeded);
                 String permissionCode = getManifestPermissionCode(permissionEnum);
 
                 if(permissionCode == null || activity.shouldShowRequestPermissionRationale(permissionCode)) {
                     shouldShowRationalePage(
-                            activity,
                             context,
                             channelKey,
                             permissionEnum,
                             permissionsRequested,
-                            allowedPermissions,
                             permissionCompletionHandler);
                     return;
                 }
@@ -280,7 +276,7 @@ public class PermissionManager {
             }
         }
 
-        refreshReturnedPermissions(activity, context, channelKey, permissions, permissionCompletionHandler);
+        refreshReturnedPermissions(context, channelKey, permissions, permissionCompletionHandler);
     }
 
     private static void shouldShowAndroidRequestDialog(
@@ -296,18 +292,16 @@ public class PermissionManager {
         activityQueue.add(new ActivityCompletionHandler() {
             @Override
             public void handle() {
-                refreshReturnedPermissions(activity, context, channelKey, permissions, permissionCompletionHandler);
+                refreshReturnedPermissions(context, channelKey, permissions, permissionCompletionHandler);
             }
         });
     }
 
     private static void shouldShowRationalePage(
-            Activity activity,
             Context context,
             String channelKey,
             @Nullable NotificationPermission permissionEnum,
             List<String> permissions,
-            List<String> permissionsAllowed,
             PermissionCompletionHandler permissionCompletionHandler
     ) throws AwesomeNotificationException {
 
@@ -345,15 +339,14 @@ public class PermissionManager {
             activityQueue.add(new ActivityCompletionHandler() {
                 @Override
                 public void handle() {
-                    refreshReturnedPermissions(activity, context, channelKey, permissions, permissionCompletionHandler);
+                    refreshReturnedPermissions(context, channelKey, permissions, permissionCompletionHandler);
                 }
             });
         else
-            refreshReturnedPermissions(activity, context, channelKey, permissions, permissionCompletionHandler);
+            refreshReturnedPermissions(context, channelKey, permissions, permissionCompletionHandler);
     }
 
     private static void refreshReturnedPermissions(
-            Activity activity,
             Context context,
             String channelKey,
             List<String> permissionsNeeded,
@@ -477,48 +470,48 @@ public class PermissionManager {
         }
     }
 
-    public static void showNotificationConfigPage(Context context, PermissionCompletionHandler permissionCompletionHandler){
+    public static void showNotificationConfigPage(Context context, final PermissionCompletionHandler permissionCompletionHandler){
         if (gotoAndroidAppNotificationPage(context))
             activityQueue.add(new ActivityCompletionHandler() {
                 @Override
                 public void handle() {
-                    permissionCompletionHandler.handle(new ArrayList<>());
+                    permissionCompletionHandler.handle(new ArrayList<String>());
                 }
             });
-        else permissionCompletionHandler.handle(new ArrayList<>());
+        else permissionCompletionHandler.handle(new ArrayList<String>());
     }
 
-    public static void showChannelConfigPage(Context context, String channelKey, PermissionCompletionHandler permissionCompletionHandler){
+    public static void showChannelConfigPage(Context context, String channelKey, final PermissionCompletionHandler permissionCompletionHandler){
         if (gotoAndroidChannelPage(context, channelKey))
             activityQueue.add(new ActivityCompletionHandler() {
                 @Override
                 public void handle() {
-                    permissionCompletionHandler.handle(new ArrayList<>());
+                    permissionCompletionHandler.handle(new ArrayList<String>());
                 }
             });
-        else permissionCompletionHandler.handle(new ArrayList<>());
+        else permissionCompletionHandler.handle(new ArrayList<String>());
     }
 
-    public static void showPreciseAlarmPage(Context context, PermissionCompletionHandler permissionCompletionHandler){
+    public static void showPreciseAlarmPage(Context context, final PermissionCompletionHandler permissionCompletionHandler){
         if (gotoPreciseAlarmPage(context))
             activityQueue.add(new ActivityCompletionHandler() {
                 @Override
                 public void handle() {
-                    permissionCompletionHandler.handle(new ArrayList<>());
+                    permissionCompletionHandler.handle(new ArrayList<String>());
                 }
             });
-        else permissionCompletionHandler.handle(new ArrayList<>());
+        else permissionCompletionHandler.handle(new ArrayList<String>());
     }
 
-    public static void showDnDGlobalOverridingPage(Context context, PermissionCompletionHandler permissionCompletionHandler){
+    public static void showDnDGlobalOverridingPage(Context context, final PermissionCompletionHandler permissionCompletionHandler){
         if (gotoControlsDnDPage(context))
             activityQueue.add(new ActivityCompletionHandler() {
                 @Override
                 public void handle() {
-                    permissionCompletionHandler.handle(new ArrayList<>());
+                    permissionCompletionHandler.handle(new ArrayList<String>());
                 }
             });
-        else permissionCompletionHandler.handle(new ArrayList<>());
+        else permissionCompletionHandler.handle(new ArrayList<String>());
     }
 
     private static boolean gotoAndroidGlobalNotificationsPage(Context context){
