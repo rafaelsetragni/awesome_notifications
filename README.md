@@ -80,6 +80,7 @@ Also, the Notification Channels follows the same rule. If there is no channel se
 And all notifications sent while the app was killed are registered and delivered as soon as possible to the Application, after the plugin initialization, respecting the delivery order.
 
 This way, your Application will receive **all notifications at Flutter level code**.
+    
 <br>
 <br>
 
@@ -100,14 +101,13 @@ Bellow are the obligatory requirements that your app must meet to use awesome_no
 ### Android
 
 Is required the minimum android SDK to 23 (Android 6.0 Marshmallow) and Java compile SDK Version to 31 (Android 12.0 S). You can change the `minSdkVersion` to 23 and the `compileSdkVersion` to 31, inside the file build.gradle in "android/app" folder.
-Also, to turn your app fully compatible with Android 12 (SDK 31), you need to add the tag `android:exported="true"` to any <activity>, <activity-alias>, <service>, or <receiver> components that have <intent-filter> declared inside in the app’s AndroidManifest.xml file, and this is valid for every other flutter packages that youre using.
+
+Also, to turn your app fully compatible with Android 12 (SDK 31), you need to add the attribute `android:exported="true"` to any \<activity\>, \<activity-alias\>, \<service\>, or \<receiver\> components that have \<intent-filter\> declared inside in the app’s AndroidManifest.xml file, and thats turns valid for every other flutter packages that you're using.
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myapp">
-   <application
-        android:label="myapp"
-        android:icon="@mipmap/ic_launcher">
+   <application>
         (...)
         <activity
             android:name=".MainActivity"
@@ -1131,7 +1131,7 @@ You can download a example of how to send Push Notifications through FCM using "
 
 **Issue:** Targeting S+ (version 31 and above) requires that an explicit value for android:exported be defined when intent filters are present
 
-**Fix:** You need to add the tag `android:exported="true"` to any <activity>, <activity-alias>, <service>, or <receiver> components that have <intent-filter> declared inside in the app’s AndroidManifest.xml file, and this is valid for every other flutter packages that youre using.
+**Fix:** You need to add the attribute `android:exported="true"` to any \<activity\>, \<activity-alias\>, \<service\>, or \<receiver\> components that have \<intent-filter\> declared inside in the app’s AndroidManifest.xml file, and thats turns valid for every other flutter packages that youre using.
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -1151,7 +1151,9 @@ You can download a example of how to send Push Notifications through FCM using "
 </manifest>
 ```
 
-But you need to remember that your plugin local files can be modified or even erased by some flutter commands, such as "Pub clear cache". So, do not add the tag exported manually. Instead, request this changes to your plugin repository instead and upgrate it in your pubspec.yaml to the last version.
+But you need to remember that your plugin local files can be modified or even erased by some flutter commands, such as "Pub clear cache". So, do not add the attribute exported manually. Instead, request this changes to your plugin repository instead and upgrate it in your pubspec.yaml to the last version.
+
+    
 To know more about it, please visit [Android 12 - Safer component exporting](https://developer.android.com/about/versions/12/behavior-changes-12?hl=pt-br#exported)
 
 
