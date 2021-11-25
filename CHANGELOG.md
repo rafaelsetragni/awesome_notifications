@@ -1,3 +1,5 @@
+## [0.6.18+2]
+* Update readme file and PermissionManager to be compatible with Android 12 and Java 7
 ## [0.6.18+1]
 * Java lambda expressions removed to turn Android source compatible with old Java 7
 ## [0.6.18]
