@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:awesome_notifications_example/utils/notification_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:awesome_notifications_example/models/media_model.dart';
@@ -43,6 +45,28 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
   void initState() {
     super.initState();
 
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
+    // this is not part of notification system, but just a media player simulator instead
+    MediaPlayerCentral.mediaStream.listen((media) {
+      switch (MediaPlayerCentral.mediaLifeCycle) {
+        case MediaLifeCycle.Stopped:
+          NotificationUtils.cancelNotification(100);
+          break;
+
+        case MediaLifeCycle.Paused:
+          NotificationUtils.updateNotificationMediaPlayer(100, media);
+          break;
+
+        case MediaLifeCycle.Playing:
+          NotificationUtils.updateNotificationMediaPlayer(100, media);
+          break;
+      }
+    });
+
     MediaPlayerCentral.mediaStream.listen((media) {
       _updatePlayer(media: media);
     });
@@ -62,6 +86,11 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
 
   @override
   dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     MediaPlayerCentral.mediaSink.close();
     MediaPlayerCentral.progressSink.close();
     super.dispose();

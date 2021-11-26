@@ -143,23 +143,6 @@ class _HomePageState extends State<HomePage> {
     // Uncomment those lines after activate google services inside example/android/build.gradle
     // initializeFirebaseService();
 
-    // this is not part of notification system, but media player simulator instead
-    MediaPlayerCentral.mediaStream.listen((media) {
-      switch (MediaPlayerCentral.mediaLifeCycle) {
-        case MediaLifeCycle.Stopped:
-          NotificationUtils.cancelNotification(100);
-          break;
-
-        case MediaLifeCycle.Paused:
-          NotificationUtils.updateNotificationMediaPlayer(100, media);
-          break;
-
-        case MediaLifeCycle.Playing:
-          NotificationUtils.updateNotificationMediaPlayer(100, media);
-          break;
-      }
-    });
-
     // If you pretend to use the firebase service, you need to initialize it
     // getting a valid token
     // initializeFirebaseService();
@@ -1047,11 +1030,11 @@ class _HomePageState extends State<HomePage> {
 
             TextDivisor(title: 'Grouped Notifications'),
             SimpleButton('Show grouped notifications',
-                onPressed: () => NotificationUtils.showGroupedNotifications(12)),
-            SimpleButton('Cancel notification',
+                onPressed: () => NotificationUtils.showGroupedNotifications('grouped')),
+            SimpleButton('Cancel grouped notifications',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => NotificationUtils.cancelNotification(12)),
+                onPressed: () => NotificationUtils.dismissNotificationsByChannelKey('grouped')),
 
             /* ******************************************************************** */
             TextDivisor(),

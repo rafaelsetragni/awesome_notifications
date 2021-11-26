@@ -1,3 +1,5 @@
+## [0.6.19]
+* Added CancellationManager to allows to extend the minimum supported version from Android 6.0 Lollipop to Android 5.0 Lollipop (SDK 21)
 ## [0.6.18+2]
 * Update readme file and PermissionManager to be compatible with Android 12 and Java 7
 ## [0.6.18+1]

@@ -100,7 +100,7 @@ Bellow are the obligatory requirements that your app must meet to use awesome_no
 
 ### Android
 
-Is required the minimum android SDK to 23 (Android 6.0 Marshmallow) and Java compile SDK Version to 31 (Android 12.0 S). You can change the `minSdkVersion` to 23 and the `compileSdkVersion` to 31, inside the file build.gradle in "android/app" folder.
+Is required the minimum android SDK to 21 (Android 5.0 Lollipop) and Java compile SDK Version to 31 (Android 12.0 S). You can change the `minSdkVersion` to 21 and the `compileSdkVersion` to 31, inside the file build.gradle in "android/app" folder.
 
 Also, to turn your app fully compatible with Android 12 (SDK 31), you need to add the attribute `android:exported="true"` to any \<activity\>, \<activity-alias\>, \<service\>, or \<receiver\> components that have \<intent-filter\> declared inside in the app’s AndroidManifest.xml file, and thats turns valid for every other flutter packages that you're using.
 
@@ -108,14 +108,14 @@ Also, to turn your app fully compatible with Android 12 (SDK 31), you need to ad
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myapp">
    <application>
-        (...)
+        ...
         <activity
             android:name=".MainActivity"
-            (...)
+            ...
             android:exported="true">
-                (...)
+                ...
         </activity>
-        (...)
+        ...
     </application>
 </manifest>
 ```
@@ -774,13 +774,19 @@ To enable this property on Android, you need to add the `WAKE_LOCK` permission a
 ## Full Screen Intent Notifications (only for Android)
 
 To send notifications in full screen mode, even when it is locked, you can set the `fullScreenIntent` property to true.
-To enable this property, you need to add the `USE_FULL_SCREEN_INTENT` permission to your `AndroidManifest.xml` file, inside the `Android/app/src/main/` folder
+To enable this property, you need to add the property `android:showOnLockScreen="true"` and the `USE_FULL_SCREEN_INTENT` permission to your `AndroidManifest.xml` file, inside the `Android/app/src/main/` folder
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
    package="com.example">
    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
    <application>
+       ...
+       <activity
+            android:name=".MainActivity"
+            android:showOnLockScreen="true">
+           ...
+       </activity>
        ...
    </application>
 </manifest>
@@ -1139,14 +1145,14 @@ You can download a example of how to send Push Notifications through FCM using "
    <application
         android:label="myapp"
         android:icon="@mipmap/ic_launcher">
-        (...)
+        ...
         <activity
             android:name=".MainActivity"
-            (...)
+            ...
             android:exported="true">
-                (...)
+                ...
         </activity>
-        (...)
+        ...
     </application>
 </manifest>
 ```

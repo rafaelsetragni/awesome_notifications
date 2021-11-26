@@ -328,7 +328,7 @@ class NotificationUtils {
         category: NotificationCategory.Social,
         title: 'Emojis are awesome too! ' +
             Emojis.smile_face_with_tongue +
-            Emojis.smile_rolling_on_the_floor_laughing +
+            Emojis.smile_smiling_face +
             Emojis.smile_smiling_face_with_heart_eyes,
         body:
             'Simple body with a bunch of Emojis! ${Emojis.transport_police_car} ${Emojis.animals_dog} ${Emojis.flag_UnitedStates} ${Emojis.person_baby}',
@@ -1215,7 +1215,7 @@ class NotificationUtils {
       createMessagingNotification(
         channelKey: 'chats',
         groupKey: 'jhonny_group',
-        chatName: 'Michael\'s Group',
+        chatName: 'Jhonny\'s Group',
         username: 'Michael',
         largeIcon: 'asset://assets/images/dj-disc.jpg',
         message: 'Michael\'s message $_messageIncrement',
@@ -1337,11 +1337,11 @@ class NotificationUtils {
       INBOX NOTIFICATIONS
   ************************************************ */
   
-  static Future<void> showGroupedNotifications(id) async {
+  static Future<void> showGroupedNotifications(String channelKey) async {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: 1,
-            channelKey: 'grouped',
+            channelKey: channelKey,
             title: 'Little Jhonny',
             body: 'Hey dude! Look what i found!'));
   
@@ -1356,7 +1356,7 @@ class NotificationUtils {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: 3,
-            channelKey: 'grouped',
+            channelKey: channelKey,
             title: 'Little Jhonny',
             body: 'This push notifications plugin is amazing!'));
   
@@ -1365,7 +1365,7 @@ class NotificationUtils {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: 4,
-            channelKey: 'grouped',
+            channelKey: channelKey,
             title: 'Little Jhonny',
             body: 'Its perfect!'));
   
@@ -1374,7 +1374,7 @@ class NotificationUtils {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: 5,
-            channelKey: 'grouped',
+            channelKey: channelKey,
             title: 'Little Jhonny',
             body: 'I gonna contribute with the project! For sure!'));
   }

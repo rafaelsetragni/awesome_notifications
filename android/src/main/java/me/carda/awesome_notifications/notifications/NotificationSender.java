@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
 
+import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.RequiresApi;
@@ -15,11 +16,11 @@ import androidx.core.app.NotificationManagerCompat;
 
 import me.carda.awesome_notifications.BroadcastSender;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
-import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLayout;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationSource;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
+import me.carda.awesome_notifications.notifications.managers.StatusBarManager;
 import me.carda.awesome_notifications.notifications.managers.CreatedManager;
 import me.carda.awesome_notifications.notifications.managers.DismissedManager;
 import me.carda.awesome_notifications.notifications.managers.DisplayedManager;
@@ -130,7 +131,10 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
                     // Only save DisplayedMethods if notificationModel was created and displayed successfully
                     if(notificationModel != null){
+
                         displayed = true;
+                        StatusBarManager.getInstance(context)
+                                .registerActiveNotification(notificationModel);
 
                         receivedNotification = new NotificationReceived(notificationModel.content);
 
@@ -186,6 +190,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
     private NotificationModel _buildSummaryGroupNotification(NotificationModel original){
 
         NotificationModel pushSummary = notificationModel.ClonePush();
+
         pushSummary.content.id = IntegerUtils.generateNextRandomId();
         pushSummary.content.notificationLayout = NotificationLayout.Default;
         pushSummary.content.largeIcon = null;
@@ -195,6 +200,8 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
         return  pushSummary;
     }
 
+    private static List<NotificationLayout> notificationsCollapsedLayouts =  Arrays.asList(
+           NotificationLayout.Messaging, NotificationLayout.MessagingGroup, NotificationLayout.ProgressBar);
     public NotificationModel showNotification(Context context, NotificationModel notificationModel) {
 
         try {
@@ -207,21 +214,24 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                 (lifeCycle == NotificationLifeCycle.Background && notificationModel.content.displayOnBackground)
             ){
                 Notification notification = notificationBuilder.createNotification(context, notificationModel);
+                int finalAndroidNotificationId = notificationModel.content.replaceId != null ? notificationModel.content.replaceId : notificationModel.content.id;
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.notify(finalAndroidNotificationId, notification);
 
-                    if(notificationModel.groupSummary){
+                    if(
+                        notificationModel.content.notificationLayout == NotificationLayout.Default &&
+                        notificationBuilder.isFirstActiveOnGroupKey(context, notificationModel.content.groupKey)
+                    ){
                         NotificationModel pushSummary = _buildSummaryGroupNotification(notificationModel);
-                        Notification summaryNotification = notificationBuilder.createNotification(context, pushSummary, true);
+                        Notification summaryNotification = notificationBuilder.createNotification(context, pushSummary);
                         notificationManager.notify(pushSummary.content.id, summaryNotification);
                     }
-
-                    notificationManager.notify(notificationModel.content.id, notification);
                 }
                 else {
                     NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
-                    notificationManagerCompat.notify(notificationModel.content.id.toString(), notificationModel.content.id, notification);
+                    notificationManagerCompat.notify(String.valueOf(finalAndroidNotificationId), finalAndroidNotificationId, notification);
                 }
             }
 
@@ -252,24 +262,6 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(id.toString(), id);
             notificationManager.cancel(id);
-        }
-    }
-
-    public static void dismissNotificationsByChannelKey(Context context, String channelKey) {
-        List<Notification> notificationList = NotificationBuilder.getAllAndroidActiveNotificationsByChannelKey(context, channelKey);
-
-        for(Notification notification : notificationList){
-            int id = notification.extras.getInt(Definitions.NOTIFICATION_ID);
-            NotificationSender.dismissNotification(context, id);
-        }
-    }
-
-    public static void dismissNotificationsByGroupKey(Context context, String groupKey) {
-        List<Notification> notificationList = NotificationBuilder.getAllAndroidActiveNotificationsByGroupKey(context, groupKey);
-
-        for(Notification notification : notificationList){
-            int id = notification.extras.getInt(Definitions.NOTIFICATION_ID);
-            NotificationSender.dismissNotification(context, id);
         }
     }
 

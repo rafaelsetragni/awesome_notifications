@@ -20,6 +20,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import javax.annotation.Nullable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -251,7 +252,7 @@ public class PermissionManager {
                 NotificationPermission permissionEnum = StringUtils.getEnumFromString(NotificationPermission.class, permissionNeeded);
                 String permissionCode = getManifestPermissionCode(permissionEnum);
 
-                if(permissionCode == null || activity.shouldShowRequestPermissionRationale(permissionCode)) {
+                if(permissionCode == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M || activity.shouldShowRequestPermissionRationale(permissionCode)) {
                     shouldShowRationalePage(
                             context,
                             channelKey,
@@ -279,6 +280,7 @@ public class PermissionManager {
         refreshReturnedPermissions(context, channelKey, permissions, permissionCompletionHandler);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private static void shouldShowAndroidRequestDialog(
             final Activity activity,
             final Context context,
@@ -527,20 +529,19 @@ public class PermissionManager {
 
     private static boolean gotoAndroidAppNotificationPage(final Context context){
         final Intent intent = new Intent();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
+
             intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
             intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
-        } else
-            // Android 5 (LOLLIPOP) is now the minimum required
-            /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)*/{
+
+        } else {
+
             intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
             intent.putExtra("app_package", context.getPackageName());
             intent.putExtra("app_uid", context.getApplicationInfo().uid);
-        } /*else {
-            intent.addCategory(Intent.CATEGORY_DEFAULT);
-            intent.setData(Uri.parse("package:" + applicationContext.getPackageName()));
-        }*/
-        //intent.setData(Uri.parse("package:" + context.getPackageName()));
+
+        }
 
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return startTestedActivity(context, intent);
@@ -555,9 +556,10 @@ public class PermissionManager {
                     .putExtra(Settings.EXTRA_CHANNEL_ID, channel.getId());
 
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            return startTestedActivity(context, intent);
+            if(startTestedActivity(context, intent))
+                return true;
         }
-        else return gotoAndroidAppNotificationPage(context);
+        return gotoAndroidAppNotificationPage(context);
     }
 
     private static boolean gotoPreciseAlarmPage(final Context context){
@@ -569,16 +571,22 @@ public class PermissionManager {
             intent.setData(Uri.parse("package:" + context.getPackageName()));
 
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            return startTestedActivity(context, intent);
+            if(startTestedActivity(context, intent))
+                return true;
         }
         return gotoAndroidAppNotificationPage(context);
     }
 
     private static boolean gotoControlsDnDPage(final Context context){
-        final Intent intent = new Intent(
-                android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        return startTestedActivity(context, intent);
+        final Intent intent;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            intent = new Intent(
+                    Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if(startTestedActivity(context, intent))
+                return true;
+        }
+        return gotoAndroidAppNotificationPage(context);
     }
 
     public static boolean handlePermissionResult(final int requestCode, final String[] permissions, final int[] grantResults) {

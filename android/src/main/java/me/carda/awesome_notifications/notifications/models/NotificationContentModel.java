@@ -70,6 +70,7 @@ public class NotificationContentModel extends AbstractModel {
 
     public String createdDate;
     public String displayedDate;
+    public Integer replaceId;
 
     public NotificationContentModel(){}
 
