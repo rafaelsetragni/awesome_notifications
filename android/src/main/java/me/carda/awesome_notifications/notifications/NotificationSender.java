@@ -131,10 +131,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
                     // Only save DisplayedMethods if notificationModel was created and displayed successfully
                     if(notificationModel != null){
-
                         displayed = true;
-                        StatusBarManager.getInstance(context)
-                                .registerActiveNotification(notificationModel);
 
                         receivedNotification = new NotificationReceived(notificationModel.content);
 
@@ -200,8 +197,6 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
         return  pushSummary;
     }
 
-    private static List<NotificationLayout> notificationsCollapsedLayouts =  Arrays.asList(
-           NotificationLayout.Messaging, NotificationLayout.MessagingGroup, NotificationLayout.ProgressBar);
     public NotificationModel showNotification(Context context, NotificationModel notificationModel) {
 
         try {
@@ -214,25 +209,25 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                 (lifeCycle == NotificationLifeCycle.Background && notificationModel.content.displayOnBackground)
             ){
                 Notification notification = notificationBuilder.createNotification(context, notificationModel);
-                int finalAndroidNotificationId = notificationModel.content.replaceId != null ? notificationModel.content.replaceId : notificationModel.content.id;
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.notify(finalAndroidNotificationId, notification);
+                if(
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
+                    notificationModel.content.notificationLayout == NotificationLayout.Default &&
+                    StatusBarManager
+                        .getInstance(context)
+                        .isFirstActiveOnGroupKey(notificationModel.content.groupKey)
+                ){
+                    NotificationModel pushSummary = _buildSummaryGroupNotification(notificationModel);
+                    Notification summaryNotification = notificationBuilder.createNotification(context, pushSummary);
 
-                    if(
-                        notificationModel.content.notificationLayout == NotificationLayout.Default &&
-                        notificationBuilder.isFirstActiveOnGroupKey(context, notificationModel.content.groupKey)
-                    ){
-                        NotificationModel pushSummary = _buildSummaryGroupNotification(notificationModel);
-                        Notification summaryNotification = notificationBuilder.createNotification(context, pushSummary);
-                        notificationManager.notify(pushSummary.content.id, summaryNotification);
-                    }
+                    StatusBarManager
+                        .getInstance(context)
+                        .showNotificationOnStatusBar(pushSummary, summaryNotification);
                 }
-                else {
-                    NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
-                    notificationManagerCompat.notify(String.valueOf(finalAndroidNotificationId), finalAndroidNotificationId, notification);
-                }
+
+                StatusBarManager
+                        .getInstance(context)
+                        .showNotificationOnStatusBar(notificationModel, notification);
             }
 
             return notificationModel;
@@ -241,42 +236,6 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             e.printStackTrace();
         }
         return null;
-    }
-
-    private static NotificationManagerCompat getNotificationManager(Context context) {
-        return NotificationManagerCompat.from(context);
-    }
-
-    public static void dismissNotification(Context context, Integer id) {
-        if(context != null){
-
-            if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O /*Android 8*/) {
-                NotificationManagerCompat notificationManager = getNotificationManager(context);
-
-                dismissOrphanGroupDescription(context, notificationManager, id);
-
-                notificationManager.cancel(id.toString(), id);
-                notificationManager.cancel(id);
-            }
-
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel(id.toString(), id);
-            notificationManager.cancel(id);
-        }
-    }
-
-    public static boolean dismissAllNotifications(Context context) {
-
-        if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O /*Android 8*/) {
-            NotificationManagerCompat notificationManager = getNotificationManager(context);
-            notificationManager.cancelAll();
-        }
-        else {
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-        }
-
-        return true;
     }
 
     public static void sendDismissedNotification(Context context, ActionReceived actionReceived){
@@ -300,38 +259,6 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                 e.printStackTrace();
             }
         }
-    }
-
-    /// fix to canceling a automatic generated summary notification
-    /// https://github.com/rafaelsetragni/awesome_notifications/issues/69
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private static void dismissOrphanGroupDescription(Context context, NotificationManagerCompat notificationManager, int id){
-
-        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
-
-        if(currentActiveNotifications != null)
-            for (StatusBarNotification activeNotification : currentActiveNotifications) {
-                if(activeNotification.getId() == id){
-                    String groupKey = activeNotification.getGroupKey();
-                    if(!StringUtils.isNullOrEmpty(groupKey)) {
-                        Integer otherId = 0, count = 0;
-                        for (StatusBarNotification otherNotification : currentActiveNotifications) {
-                            if(otherNotification.getGroupKey().equals(groupKey)) {
-                                count++;
-                                if(otherNotification.getId() != id)
-                                    otherId = otherNotification.getId();
-                            }
-                        }
-                        if(count <= 2){
-                            notificationManager.cancel(otherId.toString(), otherId);
-                            notificationManager.cancel(otherId);
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
     }
 
 }

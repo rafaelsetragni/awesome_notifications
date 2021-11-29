@@ -12,6 +12,10 @@ public class ActionReceived extends NotificationReceived {
     public String buttonKeyPressed;
     public String buttonKeyInput;
 
+    // The value autoDismiss must return as original. Because
+    // of that, this variable is being used as temporary
+    public boolean shouldAutoDismiss = true;
+
     public NotificationLifeCycle actionLifeCycle;
     public NotificationLifeCycle dismissedLifeCycle;
     public String actionDate;
@@ -53,6 +57,8 @@ public class ActionReceived extends NotificationReceived {
         this.createdSource = contentModel.createdSource;
         this.createdLifeCycle = contentModel.createdLifeCycle;
         this.createdDate = contentModel.createdDate;
+
+        this.shouldAutoDismiss = this.autoDismissible;
     }
 
     @Override
@@ -69,7 +75,6 @@ public class ActionReceived extends NotificationReceived {
         returnedObject.put(Definitions.NOTIFICATION_BUTTON_KEY_INPUT, this.buttonKeyInput);
         returnedObject.put(Definitions.NOTIFICATION_ACTION_DATE, this.actionDate);
         returnedObject.put(Definitions.NOTIFICATION_DISMISSED_DATE, this.dismissedDate);
-
 
         return returnedObject;
     }

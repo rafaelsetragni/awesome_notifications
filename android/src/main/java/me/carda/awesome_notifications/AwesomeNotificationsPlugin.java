@@ -1190,18 +1190,13 @@ public class AwesomeNotificationsPlugin
 
     private Boolean receiveNotificationAction(Intent intent, NotificationLifeCycle appLifeCycle) {
 
-        ActionReceived actionModel = NotificationBuilder.buildNotificationActionFromIntent(applicationContext, intent);
+        ActionReceived actionModel
+            = NotificationBuilder
+                .receiveNotificationAction(applicationContext, intent, appLifeCycle);
 
         if (actionModel != null) {
 
-            StatusBarManager.getInstance(applicationContext)
-                    .unregisterActiveNotification(actionModel.id);
-
-            actionModel.actionDate = DateUtils.getUTCDate();
-            actionModel.actionLifeCycle = appLifeCycle;
-
             Map<String, Object> returnObject = actionModel.toMap();
-
             pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_RECEIVED_ACTION, returnObject);
 
             if (AwesomeNotificationsPlugin.debug)

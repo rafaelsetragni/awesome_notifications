@@ -282,6 +282,14 @@ public class ChannelManager {
             }
         }
 
+        // Try to search for a forcedUpdatedChannel
+        List<NotificationChannel> notificationChannels = notificationManager.getNotificationChannels();
+        for(NotificationChannel currentAndroidChannel : notificationChannels){
+            String androidChannelKey = currentAndroidChannel.getId();
+            if(androidChannelKey.startsWith(channelKey + "_"))
+                return currentAndroidChannel;
+        }
+
         // If hash key was not defined, so there is nothing more to do
         if(awesomeChannelHashKey == null) return null;
         return notificationManager.getNotificationChannel(awesomeChannelHashKey);
