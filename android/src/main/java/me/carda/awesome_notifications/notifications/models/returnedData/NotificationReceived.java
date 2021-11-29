@@ -2,6 +2,7 @@ package me.carda.awesome_notifications.notifications.models.returnedData;
 
 import java.util.Map;
 
+import me.carda.awesome_notifications.notifications.enumerators.ActionButtonType;
 import me.carda.awesome_notifications.notifications.models.NotificationContentModel;
 
 // Just created because of Json process

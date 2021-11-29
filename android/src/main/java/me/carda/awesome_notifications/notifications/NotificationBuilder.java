@@ -78,11 +78,15 @@ public class NotificationBuilder {
             = NotificationBuilder
                 .buildNotificationActionFromIntent(context, intent, appLifeCycle);
 
-        if (actionReceived != null)
-            if(NotificationBuilder.notificationActionShouldAutoDismiss(actionReceived))
+        if (actionReceived != null) {
+            if (NotificationBuilder.notificationActionShouldAutoDismiss(actionReceived))
                 StatusBarManager
                         .getInstance(context)
                         .dismissNotification(actionReceived.id);
+
+            if (actionReceived.actionButtonType == ActionButtonType.DisabledAction)
+                return null;
+        }
 
         return actionReceived;
     }
@@ -228,6 +232,7 @@ public class NotificationBuilder {
             if (StringUtils.isNullOrEmpty(actionModel.displayedDate))
                 actionModel.displayedDate = DateUtils.getUTCDate();
 
+            actionModel.autoDismissible = intent.getBooleanExtra(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, true);
             actionModel.shouldAutoDismiss = actionModel.autoDismissible;
 
             if (isButtonAction) {
@@ -240,21 +245,31 @@ public class NotificationBuilder {
 
                 if(
                     !StringUtils.isNullOrEmpty(actionModel.buttonKeyInput) &&
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.P /*Android 9*/
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.N /*Android 7*/
                 ) {
-                    if(notificationModel.content.notificationLayout == NotificationLayout.Default)
-                        try {
-                            actionModel.shouldAutoDismiss = false;
-                            notificationModel.remoteHistory = actionModel.buttonKeyInput;
-                            NotificationSender.send(context, notificationModel);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                    actionModel.shouldAutoDismiss = false;
+
+                    switch (notificationModel.content.notificationLayout){
+
+                        case Inbox:
+                        case BigText:
+                        case BigPicture:
+                        case ProgressBar:
+                        case MediaPlayer:
+                        case Default:
+                            try {
+                                notificationModel.remoteHistory = actionModel.buttonKeyInput;
+                                NotificationSender.send(context, notificationModel);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                    }
                 }
             }
 
-            if (isButtonAction && intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_TYPE).equals(ActionButtonType.DisabledAction.toString()))
-                return null;
+            if (isButtonAction)
+                actionModel.actionButtonType = StringUtils.getEnumFromString(ActionButtonType.class, intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_TYPE));
 
             return actionModel;
         }
@@ -564,12 +579,12 @@ public class NotificationBuilder {
     }
 
     private static void setLargeIcon(Context context, NotificationModel notificationModel, NotificationCompat.Builder builder) {
-        if (!StringUtils.isNullOrEmpty(notificationModel.content.largeIcon)) {
-            Bitmap largeIcon = BitmapUtils.getBitmapFromSource(context, notificationModel.content.largeIcon);
-            if (largeIcon != null) {
-                builder.setLargeIcon(largeIcon);
+        if (notificationModel.content.notificationLayout != NotificationLayout.BigPicture)
+            if (!StringUtils.isNullOrEmpty(notificationModel.content.largeIcon)) {
+                Bitmap largeIcon = BitmapUtils.getBitmapFromSource(context, notificationModel.content.largeIcon);
+                if (largeIcon != null)
+                    builder.setLargeIcon(largeIcon);
             }
-        }
     }
 
     // https://github.com/rafaelsetragni/awesome_notifications/issues/191
@@ -609,8 +624,8 @@ public class NotificationBuilder {
                     Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX + "_" + buttonProperties.key,
                     notificationModel,
                     channel,
-                    (buttonProperties.buttonType == ActionButtonType.DisabledAction) ? AwesomeNotificationsPlugin.class :
-                            (buttonProperties.buttonType == ActionButtonType.KeepOnTop) ?
+                    buttonProperties.buttonType == ActionButtonType.DisabledAction ||
+                    buttonProperties.buttonType == ActionButtonType.KeepOnTop ?
                                     KeepOnTopActionReceiver.class : getNotificationTargetActivityClass(context)
             );
 
@@ -624,7 +639,10 @@ public class NotificationBuilder {
 
             if (buttonProperties.enabled) {
 
-                if (buttonProperties.buttonType == ActionButtonType.KeepOnTop) {
+                if (
+                    buttonProperties.buttonType == ActionButtonType.KeepOnTop ||
+                    buttonProperties.buttonType == ActionButtonType.DisabledAction
+                ) {
 
                     actionPendingIntent = PendingIntent.getBroadcast(
                             context,
@@ -633,7 +651,7 @@ public class NotificationBuilder {
                             PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
                     );
 
-                } else if (buttonProperties.buttonType == ActionButtonType.DisabledAction) {
+                } /*else if (buttonProperties.buttonType == ActionButtonType.DisabledAction) {
 
                     actionPendingIntent = PendingIntent.getActivity(
                             context,
@@ -642,7 +660,7 @@ public class NotificationBuilder {
                             0
                     );
 
-                } else {
+                }*/ else {
 
                     actionPendingIntent = PendingIntent.getActivity(
                             context,
@@ -804,17 +822,30 @@ public class NotificationBuilder {
 
         Bitmap bigPicture = null, largeIcon = null;
 
-        if (!StringUtils.isNullOrEmpty(contentModel.largeIcon)) {
-            largeIcon = BitmapUtils.getBitmapFromSource(context, contentModel.largeIcon);
-        }
-
-        if (!StringUtils.isNullOrEmpty(contentModel.bigPicture)) {
+        if (!StringUtils.isNullOrEmpty(contentModel.bigPicture))
             bigPicture = BitmapUtils.getBitmapFromSource(context, contentModel.bigPicture);
+
+        if (contentModel.hideLargeIconOnExpand)
+            largeIcon = bigPicture != null ?
+                bigPicture : (!StringUtils.isNullOrEmpty(contentModel.largeIcon) ?
+                    BitmapUtils.getBitmapFromSource(context, contentModel.largeIcon) : null);
+        else {
+            boolean areEqual =
+                    !StringUtils.isNullOrEmpty(contentModel.largeIcon) &&
+                            contentModel.largeIcon.equals(contentModel.bigPicture);
+
+            if(areEqual)
+                largeIcon = bigPicture;
+            else if(!StringUtils.isNullOrEmpty(contentModel.largeIcon))
+                largeIcon =
+                        BitmapUtils.getBitmapFromSource(context, contentModel.largeIcon);
         }
 
-        if (bigPicture == null) {
+        if (largeIcon != null)
+            builder.setLargeIcon(largeIcon);
+
+        if (bigPicture == null)
             return false;
-        }
 
         NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle();
 

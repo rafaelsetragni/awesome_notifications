@@ -255,19 +255,21 @@ public class StatusBarManager {
 
             List<String> listToRemove = activeNotificationsGroup.get(groupKey);
             if(listToRemove != null){
-                listToRemove.remove(idKey);
-                if(listToRemove.isEmpty())
-                    activeNotificationsGroup.remove(groupKey);
-                else
-                    activeNotificationsGroup.put(groupKey, listToRemove);
-                updateActiveMapIntoPreferences(editor, "group", activeNotificationsGroup);
+                if(listToRemove.remove(idKey)){
+                    if(listToRemove.isEmpty())
+                        activeNotificationsGroup.remove(groupKey);
+                    else
+                        activeNotificationsGroup.put(groupKey, listToRemove);
+                    updateActiveMapIntoPreferences(editor, "group", activeNotificationsGroup);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    boolean isCollapsedLayout = isIndexCollapsedLayout(groupKey);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        boolean isCollapsedLayout = isIndexCollapsedLayout(groupKey);
 
-                    // For collapsed layouts, where the group has 1 left notification (summary), the entire group should be removed
-                    if(!isCollapsedLayout && listToRemove.size() == 1)
-                        dismissNotification(notificationId);
+                        // For collapsed layouts, where the group has 1 left notification,
+                        // the missing summary orphan group should be removed
+                        if(!isCollapsedLayout && listToRemove.size() == 1)
+                            dismissNotification(Integer.parseInt(listToRemove.get(0)));
+                    }
                 }
             }
         }

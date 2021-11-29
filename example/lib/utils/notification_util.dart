@@ -458,7 +458,11 @@ class NotificationUtils {
           NotificationActionButton(
               key: 'PROFILE', label: 'Profile', autoDismissible: true, color: Colors.green),
           NotificationActionButton(
-              key: 'DISMISS', label: 'Dismiss', autoDismissible: true, isDangerousOption: true)
+              key: 'DISMISS',
+              label: 'Dismiss',
+              autoDismissible: true,
+              buttonType: ActionButtonType.DisabledAction,
+              isDangerousOption: true)
         ]);
   }
   

@@ -3,6 +3,7 @@ package me.carda.awesome_notifications.notifications.models.returnedData;
 import java.util.Map;
 
 import me.carda.awesome_notifications.Definitions;
+import me.carda.awesome_notifications.notifications.enumerators.ActionButtonType;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.models.NotificationContentModel;
 import me.carda.awesome_notifications.utils.MapUtils;
@@ -11,6 +12,8 @@ public class ActionReceived extends NotificationReceived {
 
     public String buttonKeyPressed;
     public String buttonKeyInput;
+
+    public ActionButtonType actionButtonType;
 
     // The value autoDismiss must return as original. Because
     // of that, this variable is being used as temporary

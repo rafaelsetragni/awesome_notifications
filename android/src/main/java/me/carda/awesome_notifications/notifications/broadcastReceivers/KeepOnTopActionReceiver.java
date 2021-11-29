@@ -7,13 +7,10 @@ import android.content.Intent;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.BroadcastSender;
 import me.carda.awesome_notifications.notifications.NotificationBuilder;
+import me.carda.awesome_notifications.notifications.enumerators.ActionButtonType;
 import me.carda.awesome_notifications.notifications.managers.StatusBarManager;
 import me.carda.awesome_notifications.notifications.models.NotificationModel;
 import me.carda.awesome_notifications.notifications.models.returnedData.ActionReceived;
-
-/**
- * Created by michaelbui on 24/3/18.
- */
 
 public class KeepOnTopActionReceiver extends BroadcastReceiver {
 
@@ -32,6 +29,9 @@ public class KeepOnTopActionReceiver extends BroadcastReceiver {
                 StatusBarManager
                     .getInstance(context)
                     .dismissNotification(actionReceived.id);
+
+            if (actionReceived.actionButtonType == ActionButtonType.DisabledAction)
+                return;
 
             try {
 

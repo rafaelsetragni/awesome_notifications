@@ -44,8 +44,6 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
     private Boolean created = false;
     private Boolean displayed = false;
 
-    private NotificationBuilder notificationBuilder = new NotificationBuilder();
-
     public static void send(
             Context context,
             NotificationModel notificationModel
@@ -208,7 +206,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                 (lifeCycle == NotificationLifeCycle.Foreground && notificationModel.content.displayOnForeground) ||
                 (lifeCycle == NotificationLifeCycle.Background && notificationModel.content.displayOnBackground)
             ){
-                Notification notification = notificationBuilder.createNotification(context, notificationModel);
+                Notification notification = NotificationBuilder.createNotification(context, notificationModel);
 
                 if(
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
@@ -218,7 +216,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                         .isFirstActiveOnGroupKey(notificationModel.content.groupKey)
                 ){
                     NotificationModel pushSummary = _buildSummaryGroupNotification(notificationModel);
-                    Notification summaryNotification = notificationBuilder.createNotification(context, pushSummary);
+                    Notification summaryNotification = NotificationBuilder.createNotification(context, pushSummary);
 
                     StatusBarManager
                         .getInstance(context)

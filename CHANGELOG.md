@@ -1,5 +1,8 @@
 ## [0.6.19]
-* Added CancellationManager to allows to extend the minimum supported version from Android 6.0 Lollipop to Android 5.0 Lollipop (SDK 21)
+* Added CancellationManager to reorganize all dismiss and cancelation methods in a single place
+* Created StatusBarManager to manage which notifications are currently active, improving performance and extending support to Android 5.0 Lollipop (SDK 21)
+* Notification layouts BigPicture, Messsaging and MessagingGroup improved to be more performatic and to reuses network connection data
+* Added history box to notification's reply buttons on Android 8.0 to 12.0
 ## [0.6.18+2]
 * Update readme file and PermissionManager to be compatible with Android 12 and Java 7
 ## [0.6.18+1]
