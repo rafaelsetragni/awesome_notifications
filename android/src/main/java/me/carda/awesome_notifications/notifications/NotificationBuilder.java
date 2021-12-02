@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.widget.RemoteViews;
 
 
 import java.io.Serializable;
@@ -31,7 +32,6 @@ import androidx.core.app.RemoteInput;
 
 import androidx.core.graphics.drawable.IconCompat;
 import androidx.core.text.HtmlCompat;
-import io.flutter.Log;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.broadcastReceivers.DismissedNotificationReceiver;
@@ -169,6 +169,7 @@ public class NotificationBuilder {
         return pendingDismissIntent;
     }
 
+    @SuppressWarnings("unchecked")
     private static void updateTrackingExtras(NotificationModel notificationModel, NotificationChannelModel channel, Bundle extras) {
         String groupKey = getGroupKey(notificationModel.content, channel);
 
@@ -429,8 +430,26 @@ public class NotificationBuilder {
 
         setWakeUpScreen(context, notificationModel);
         setCriticalAlert(context, channel);
+        setCategoryFlags(context, notificationModel, androidNotification);
 
         return androidNotification;
+    }
+
+    private static void setCategoryFlags(Context context, NotificationModel notificationModel, Notification androidNotification) {
+
+        switch (notificationModel.content.category){
+
+            case Alarm:
+                androidNotification.flags |= Notification.FLAG_INSISTENT;
+                androidNotification.flags |= Notification.FLAG_NO_CLEAR;
+                break;
+
+            case Call:
+                androidNotification.flags |= Notification.FLAG_INSISTENT;
+                androidNotification.flags |= Notification.FLAG_HIGH_PRIORITY;
+                androidNotification.flags |= Notification.FLAG_NO_CLEAR;
+                break;
+        }
     }
 
     private static void setNotificationPendingIntents(NotificationModel notificationModel, PendingIntent pendingActionIntent, PendingIntent pendingDismissIntent, NotificationCompat.Builder builder) {
@@ -657,7 +676,7 @@ public class NotificationBuilder {
                             context,
                             notificationModel.content.id,
                             actionIntent,
-                            0
+                            PendingIntent.FLAG_IMMUTABLE
                     );
 
                 }*/ else {
@@ -666,7 +685,7 @@ public class NotificationBuilder {
                             context,
                             notificationModel.content.id,
                             actionIntent,
-                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
                     );
                 }
             }
@@ -802,6 +821,10 @@ public class NotificationBuilder {
 
             case MessagingGroup:
                 if(setMessagingLayout(context, true, notificationModel.content, channelModel, builder)) return;
+                break;
+
+            case PhoneCall:
+                setPhoneCallLayout(context, notificationModel, builder);
                 break;
 
             case MediaPlayer:
@@ -1047,6 +1070,13 @@ public class NotificationBuilder {
             builder.setSubText(contentModel.summary);
         }
 
+        if(contentModel.progress != null)
+            builder.setProgress(
+                    100,
+                    Math.max(0, Math.min(100, IntegerUtils.extractInteger(contentModel.progress, 0))),
+                    contentModel.progress == null
+            );
+
         builder.setShowWhen(false);
 
         return true;
@@ -1058,6 +1088,16 @@ public class NotificationBuilder {
                 Math.max(0, Math.min(100, IntegerUtils.extractInteger(notificationModel.content.progress, 0))),
                 notificationModel.content.progress == null
         );
+    }
+
+    private static void setPhoneCallLayout(Context context, NotificationModel notificationModel, NotificationCompat.Builder builder) {
+       /* RemoteViews notificationLayout = new RemoteViews(context.getPackageName(), android.R.layout.incoming_call);
+        //RemoteViews notificationLayoutExpanded = new RemoteViews(context.getPackageName(), R.layout.incoming_call_large);
+
+        builder
+            .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+            .setCustomContentView(notificationLayout);
+            //.setCustomBigContentView(notificationLayoutExpanded);*/
     }
 
     private static int[] toIntArray(ArrayList<Integer> list) {

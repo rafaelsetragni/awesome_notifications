@@ -44,12 +44,14 @@ const CHANNEL_FLUTTER_PLUGIN = 'awesome_notifications';
 
 const CHANNEL_METHOD_INITIALIZE = 'initialize';
 const CHANNEL_METHOD_GET_DRAWABLE_DATA = 'getDrawableData';
+const CHANNEL_METHOD_GET_PLATFORM_VERSION = 'getPlatformVersion';
 
 const CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = 'showNotificationPage';
 const CHANNEL_METHOD_SHOW_ALARM_PAGE = 'showAlarmPage';
 const CHANNEL_METHOD_SHOW_GLOBAL_DND_PAGE = 'showGlobalDndPage';
 const CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = 'isNotificationAllowed';
 const CHANNEL_METHOD_REQUEST_NOTIFICATIONS = 'requestNotifications';
+
 
 const CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL = 'setNotificationChannel';
 const CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL = 'removeNotificationChannel';

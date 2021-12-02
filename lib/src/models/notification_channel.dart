@@ -49,6 +49,7 @@ class NotificationChannel extends Model {
 
   bool? locked;
   bool? onlyAlertOnce;
+  bool? stayOnScreen = true;
 
   bool? criticalAlerts;
 

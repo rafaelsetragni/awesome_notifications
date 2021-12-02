@@ -487,6 +487,65 @@ class NotificationUtils {
               key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
         ]);
   }
+
+  /* *********************************************
+      NOTIFICATION'S SPECIAL CATEGORIES
+  ************************************************ */
+
+  static Future<void> showCallNotification(int id) async {
+    AndroidForegroundService.startForeground(
+    //await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: id,
+            channelKey: 'call_channel',
+            title: 'Incoming Call',
+            body: 'from Little Mary',
+            category: NotificationCategory.Call,
+            largeIcon: 'asset://assets/images/girl-phonecall.jpg',
+            wakeUpScreen: true,
+            fullScreenIntent: true,
+            autoDismissible: false,
+            backgroundColor: (AwesomeNotifications.platformVersion == 'Android-31') ? Color(0x00796a) : Colors.white,
+            payload: {
+              'username': 'Little Mary'
+            }
+        ),
+        actionButtons: [
+          NotificationActionButton(
+              key: 'ACCEPT',
+              label: 'Accept Call',
+              color: Colors.green,
+              autoDismissible: true
+          ),
+          NotificationActionButton(
+              key: 'REJECT',
+              label: 'Reject',
+              isDangerousOption: true,
+              autoDismissible: true
+          ),
+        ]
+    );
+  }
+
+  static Future<void> showAlarmNotification(int id) async {
+    AndroidForegroundService.startForeground(
+        content: NotificationContent(
+            id: id,
+            channelKey: 'alarm_channel',
+            title: 'Alarm is playing',
+            body: 'Hey! Wake Up!',
+            category: NotificationCategory.Alarm
+        ),
+        actionButtons: [
+          NotificationActionButton(
+              key: 'SNOOZE',
+              label: 'Snooze for 5 minutes',
+              color: Colors.blue,
+              autoDismissible: true
+          ),
+        ]
+    );
+  }
   
   /* *********************************************
       LOCKED (ONGOING) NOTIFICATIONS

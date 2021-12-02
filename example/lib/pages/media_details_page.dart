@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:awesome_notifications_example/utils/common_functions.dart';
 import 'package:awesome_notifications_example/utils/notification_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,14 +33,6 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
   String? music;
   Duration? mediaLength;
   Duration? durationPlayed;
-
-  String _printDuration(Duration? duration) {
-    if (duration == null) return '00:00';
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$twoDigitMinutes:$twoDigitSeconds";
-  }
 
   @override
   void initState() {
@@ -437,7 +430,8 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(_printDuration(durationPlayed)),
+                Text(printDuration(durationPlayed)),
+                Text(printDuration(durationPlayed)),
                 hasCloseCaption
                     ? IconButton(
                         padding: EdgeInsets.zero,
@@ -450,7 +444,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                             closeCaptionActivated = !closeCaptionActivated,
                       )
                     : SizedBox(height: 47),
-                Text(_printDuration(mediaLength),
+                Text(printDuration(mediaLength),
                     style: TextStyle(color: contrastColor)),
               ],
             ),

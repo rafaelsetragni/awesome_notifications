@@ -442,6 +442,10 @@ public class AwesomeNotificationsPlugin
                     channelMethodGetDrawableData(call, result);
                     return;
 
+                case Definitions.CHANNEL_METHOD_GET_PLATFORM_VERSION:
+                    channelMethodGetPlatformVersion(call, result);
+                    return;
+
                 case Definitions.CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED:
                     channelIsNotificationAllowed(call, result);
                     return;
@@ -626,6 +630,10 @@ public class AwesomeNotificationsPlugin
         );
 
         bitmapResourceDecoder.execute();
+    }
+
+    private void channelMethodGetPlatformVersion(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+        result.success("Android-"+String.valueOf(Build.VERSION.SDK_INT));
     }
 
     private void channelMethodListAllSchedules(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {

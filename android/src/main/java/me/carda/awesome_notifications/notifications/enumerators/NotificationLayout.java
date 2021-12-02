@@ -8,6 +8,7 @@ public enum NotificationLayout {
     ProgressBar,
     Messaging,
     MessagingGroup,
-    MediaPlayer
+    MediaPlayer,
+    PhoneCall
 }
 

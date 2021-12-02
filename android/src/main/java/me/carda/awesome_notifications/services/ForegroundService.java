@@ -1,7 +1,9 @@
 package me.carda.awesome_notifications.services;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
@@ -23,6 +25,17 @@ public class ForegroundService extends Service {
     public ForegroundService() {
         super();
         this.builder = new NotificationBuilder();
+    }
+
+    public static boolean isForegroundServiceRunning(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
+            if (ForegroundService.class.getName().equals(service.service.getClassName()))
+                if (service.foreground)
+                    return true;
+
+        return false;
     }
 
     @Override

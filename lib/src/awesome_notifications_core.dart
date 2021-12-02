@@ -33,8 +33,10 @@ import 'models/notification_channel_group.dart';
 class AwesomeNotifications {
   static String? rootNativePath;
 
-  static String utcTimeZoneIdentifier = "UTC";
-  static String localTimeZoneIdentifier = "UTC";
+  static String _utcTimeZoneIdentifier = 'UTC', _localTimeZoneIdentifier = 'UTC', _platformVersion = 'unknow';
+  static String get utcTimeZoneIdentifier => _utcTimeZoneIdentifier;
+  static String get localTimeZoneIdentifier => _localTimeZoneIdentifier;
+  static String get platformVersion => _platformVersion;
 
   /// WEB SUPPORT METHODS *********************************************
 /*
@@ -176,10 +178,13 @@ class AwesomeNotifications {
       INITIALIZE_CHANNELS_GROUPS: serializedChannelGroups
     });
 
-    localTimeZoneIdentifier = await _channel
+    _localTimeZoneIdentifier = await _channel
         .invokeMethod(CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER);
-    utcTimeZoneIdentifier =
+    _utcTimeZoneIdentifier =
         await _channel.invokeMethod(CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER);
+
+    _platformVersion = await _channel
+        .invokeMethod(CHANNEL_METHOD_GET_PLATFORM_VERSION);
 
     return result;
   }
