@@ -57,36 +57,68 @@ class AssertUtils {
     dynamic defaultValue = _getDefaultValue(reference, T);
     dynamic value = dataMap[reference];
 
-    // Color hexadecimal representation
-    if (T == int && value != null && value is String) {
+    if (value is String) {
       String valueCasted = value;
 
-      final RegExpMatch? match =
+      switch (T) {
+        case String:
+          return valueCasted;
+
+        case Color:
+        case int:
+
+        // Color hexadecimal representation
+          final RegExpMatch? match =
           RegExp(r'^(0x|#)(\w{2})?(\w{6,6})$').firstMatch(valueCasted);
-      if (match != null) {
-        String hex = (match.group(2) ?? 'FF') + match.group(3)!;
-        final int colorValue = int.parse(hex, radix: 16);
-        return colorValue;
+
+          if (match != null) {
+            String hex = (match.group(2) ?? 'FF') + match.group(3)!;
+            final int colorValue = int.parse(hex, radix: 16);
+            return (T == Color) ? Color(colorValue) : colorValue;
+          } else if (T == int) {
+            int? parsedValue = int.tryParse(valueCasted.replaceFirstMapped(
+                RegExp(r'^(\d+)\.\d+$'), (match) => '${match.group(1)}'));
+            return parsedValue ?? defaultValue;
+          }
+          break;
+
+        case double:
+          double? parsedValue = double.tryParse(valueCasted);
+          return parsedValue ?? defaultValue;
       }
     }
 
-    switch (value.runtimeType) {
-      case MaterialColor:
-        value = (value as MaterialColor).shade500;
-        break;
+    switch (T) {
+      case int:
+        if (value is int) return value;
+        if (value is double) return value.round();
+        return defaultValue;
 
-      case MaterialAccentColor:
-        value = Color((value as MaterialAccentColor).value);
-        break;
+      case double:
+        if (value is int) return value;
+        if (value is double) return value;
+        return defaultValue;
 
-      case CupertinoDynamicColor:
-        value = Color((value as CupertinoDynamicColor).value);
-        break;
+      case Color:
+        switch (value.runtimeType) {
+          case MaterialColor:
+            value = (value as MaterialColor).shade500;
+            break;
+
+          case MaterialAccentColor:
+            value = Color((value as MaterialAccentColor).value);
+            break;
+
+          case CupertinoDynamicColor:
+            value = Color((value as CupertinoDynamicColor).value);
+            break;
+        }
     }
 
-    if (value == null || !(value.runtimeType == T)) return defaultValue;
+    if (value == null || value.runtimeType.hashCode != T.hashCode)
+      return defaultValue;
 
-    return value;
+    return null;
   }
 
   static extractMap<T, C>(Map dataMap, String reference) {
@@ -111,6 +143,7 @@ class AssertUtils {
     if (value == null || !(value is String)) return defaultValue;
 
     String castedValue = value;
+    castedValue = castedValue.trim();
     if (AssertUtils.isNullOrEmptyOrInvalid(castedValue, String))
       return defaultValue;
 

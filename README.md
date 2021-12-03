@@ -1105,9 +1105,9 @@ OBS 4: Again, the background message method of the `firebase_messaging` plug-in 
         ],
         "schedule": {
             "timeZone": "America/New_York",
-            "hour": 10,
-            "minute": 0,
-            "second": 0,
+            "hour": "10",
+            "minute": "0",
+            "second": "0",
             "allowWhileIdle": true,
             "repeat": true
         }
