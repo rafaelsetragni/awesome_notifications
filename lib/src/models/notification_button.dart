@@ -60,9 +60,7 @@ class NotificationActionButton extends Model {
     buttonType = AssertUtils.extractEnum(
         NOTIFICATION_BUTTON_TYPE, dataMap, ActionButtonType.values);
 
-    int? colorValue =
-        AssertUtils.extractValue(NOTIFICATION_COLOR, dataMap, int);
-    this.color = colorValue == null ? null : Color(colorValue);
+    color = AssertUtils.extractValue(NOTIFICATION_COLOR, dataMap, Color);
 
     return this;
   }

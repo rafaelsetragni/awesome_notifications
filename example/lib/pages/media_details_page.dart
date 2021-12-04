@@ -36,12 +36,8 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
 
   @override
   void initState() {
+    lockScreenPortrait();
     super.initState();
-
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
 
     // this is not part of notification system, but just a media player simulator instead
     MediaPlayerCentral.mediaStream.listen((media) {
@@ -79,10 +75,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
 
   @override
   dispose() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    unlockScreenPortrait();
 
     MediaPlayerCentral.mediaSink.close();
     MediaPlayerCentral.progressSink.close();

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'dart:math' as math;
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -19,6 +20,22 @@ Future<String> saveAssetOnDisk(ImageProvider image, String fileName) async {
   }
 
   return filePath;
+}
+
+void lockScreenPortrait(){
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+}
+
+void unlockScreenPortrait(){
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeRight,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 }
 
 String printDuration(Duration? duration) {

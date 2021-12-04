@@ -23,6 +23,7 @@ import 'package:awesome_notifications_example/common_widgets/simple_button.dart'
 import 'package:awesome_notifications_example/common_widgets/text_divisor.dart';
 import 'package:awesome_notifications_example/common_widgets/text_note.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:vibration/vibration.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -578,13 +579,19 @@ class _HomePageState extends State<HomePage> {
                 'Slide the bar above to add some delay on notification.'),
             SecondsSlider(steps: 12, minValue: 0, onChanged: (newValue){ setState(() => _secondsToCallCategory = newValue ); }),
             SimpleButton('Show call notification',
-                onPressed: () => Future.delayed(Duration(seconds: _secondsToCallCategory.toInt()), () {
-                  NotificationUtils.showCallNotification(1);
-                })),
+                onPressed: () {
+                  Vibration.vibrate(duration: 100);
+                  Future.delayed(Duration(seconds: _secondsToCallCategory.toInt()), () {
+                    NotificationUtils.showCallNotification(1);
+                  });
+                }),
             SimpleButton('Show alarm notification',
-                onPressed: () => Future.delayed(Duration(seconds: _secondsToCallCategory.toInt()), () {
-                  NotificationUtils.showAlarmNotification(1);
-                })),
+                onPressed: () {
+                  Vibration.vibrate(duration: 100);
+                  Future.delayed(Duration(seconds: _secondsToCallCategory.toInt()), () {
+                    NotificationUtils.showAlarmNotification(1);
+                  });
+                }),
             SimpleButton('Stop Alarm / Call',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,

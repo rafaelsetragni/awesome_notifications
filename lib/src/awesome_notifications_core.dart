@@ -33,7 +33,11 @@ import 'models/notification_channel_group.dart';
 class AwesomeNotifications {
   static String? rootNativePath;
 
-  static String _utcTimeZoneIdentifier = 'UTC', _localTimeZoneIdentifier = 'UTC', _platformVersion = 'unknow';
+  static String
+      _utcTimeZoneIdentifier = 'UTC',
+      _localTimeZoneIdentifier = 'UTC',
+      _platformVersion = 'unknow';
+
   static String get utcTimeZoneIdentifier => _utcTimeZoneIdentifier;
   static String get localTimeZoneIdentifier => _localTimeZoneIdentifier;
   static String get platformVersion => _platformVersion;

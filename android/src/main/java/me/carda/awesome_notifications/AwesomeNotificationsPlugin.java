@@ -446,6 +446,10 @@ public class AwesomeNotificationsPlugin
                     channelMethodGetPlatformVersion(call, result);
                     return;
 
+                case Definitions.CHANNEL_METHOD_ENABLE_WAKELOCK:
+                    channelMethodGetPlatformVersion(call, result);
+                    return;
+
                 case Definitions.CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED:
                     channelIsNotificationAllowed(call, result);
                     return;
@@ -633,6 +637,10 @@ public class AwesomeNotificationsPlugin
     }
 
     private void channelMethodGetPlatformVersion(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+        result.success("Android-"+String.valueOf(Build.VERSION.SDK_INT));
+    }
+
+    private void channelMethodEnableWakeLock(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
         result.success("Android-"+String.valueOf(Build.VERSION.SDK_INT));
     }
 

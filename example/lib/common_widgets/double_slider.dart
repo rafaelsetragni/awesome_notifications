@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class ConfirmationSlider extends StatefulWidget {
+class DoubleSliderToConfirm extends StatefulWidget {
   /// Height of the slider. Defaults to 70.
   final double height;
 
@@ -54,7 +54,7 @@ class ConfirmationSlider extends StatefulWidget {
   /// Stick the slider to the end
   final bool stickToEnd;
 
-  const ConfirmationSlider({
+  const DoubleSliderToConfirm({
     Key? key,
     this.height = 70,
     this.width = 300,
@@ -68,7 +68,7 @@ class ConfirmationSlider extends StatefulWidget {
       color: Colors.white,
       size: 35,
     ),
-    this.text = "Slide to confirm",
+    this.text = 'Slide to confirm',
     this.textStyle,
     required this.onConfirmation,
     this.onTapDown,
@@ -80,11 +80,11 @@ class ConfirmationSlider extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return ConfirmationSliderState();
+    return _DoubleSliderToConfirmState();
   }
 }
 
-class ConfirmationSliderState extends State<ConfirmationSlider> {
+class _DoubleSliderToConfirmState extends State<DoubleSliderToConfirm> {
   double _position = 0;
   int _duration = 0;
 

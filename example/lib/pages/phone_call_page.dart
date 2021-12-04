@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:awesome_notifications/android_foreground_service.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications_example/common_widgets/slide_to_confirm.dart';
+import 'package:awesome_notifications_example/common_widgets/single_slider.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,9 +37,24 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
     );
   }
 
+  void finishCall(){
+    Vibration.vibrate(duration: 100);
+    AndroidForegroundService.stopForeground();
+    Navigator.pop(context);
+  }
+
+  @override
+  void initState() {
+    lockScreenPortrait();
+    super.initState();
+    if(widget.receivedAction.buttonKeyPressed == 'ACCEPT')
+      startCallingTimer();
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
+    unlockScreenPortrait();
     AndroidForegroundService.stopForeground();
     super.dispose();
   }
@@ -48,6 +63,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
   Widget build(BuildContext context) {
 
     MediaQueryData mediaQueryData = MediaQuery.of(context);
+    ThemeData themeData = Theme.of(context);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
@@ -73,7 +89,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
                       widget.receivedAction.payload?['username']?.replaceAll(r'\s+', r'\n')
                       ?? 'Unknow',
                       maxLines: 4,
-                      style: Theme.of(context)
+                      style: themeData
                           .textTheme
                           .headline3
                           ?.copyWith(color: Colors.white),
@@ -81,11 +97,49 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
                     Text(
                       _timer == null ?
                         'Incoming call' : 'Call in progress: ${printDuration(_secondsElapsed)}',
-                      style: Theme.of(context)
+                      style: themeData
                         .textTheme
                         .headline6
                         ?.copyWith(color: Colors.white54, fontSize: _timer == null ? 20 : 12),
                     ),
+                    SizedBox(height: 50),
+                    _timer == null ?
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          TextButton(
+                            onPressed: (){},
+                            style: ButtonStyle(
+                              overlayColor: MaterialStateProperty.all<Color>(Colors.white12),
+                            ),
+                            child: Column(
+                              children: [
+                                Icon(FontAwesomeIcons.solidClock, color: Colors.white54),
+                                Text('Reminder me', style:  themeData
+                                    .textTheme
+                                    .headline6
+                                    ?.copyWith(color: Colors.white54, fontSize: 12, height: 2))
+                              ],
+                            )
+                          ),
+                          SizedBox(),
+                          TextButton(
+                            onPressed: (){},
+                            style: ButtonStyle(
+                              overlayColor: MaterialStateProperty.all<Color>(Colors.white12),
+                            ),
+                            child: Column(
+                              children: [
+                                Icon(FontAwesomeIcons.solidEnvelope, color: Colors.white54),
+                                Text('Message', style:  themeData
+                                    .textTheme
+                                    .headline6
+                                    ?.copyWith(color: Colors.white54, fontSize: 12, height: 2))
+                              ],
+                            ),
+                          )
+                        ],
+                      ) : SizedBox(),
                     Spacer(),
                     Container(
                       padding: EdgeInsets.all(15),
@@ -98,23 +152,23 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
                         children: _timer == null ?
                         [
                           RoundedButton(
-                            press: () => Navigator.pop(context),
+                            press: finishCall,
                             color: Colors.red,
                             icon: Icon(FontAwesomeIcons.phoneAlt, color: Colors.white),
                           ),
-                          ConfirmationSlider(
+                          SingleSliderToConfirm(
                             onConfirmation: (){
-                              Vibration.vibrate();
+                              Vibration.vibrate(duration: 100);
                               startCallingTimer();
                             },
-                            width: 250,
+                            width: mediaQueryData.size.width * 0.55,
                             backgroundColor: Colors.white60,
                             text: 'Slide to Talk',
                             stickToEnd: true,
                             textStyle: Theme.of(context)
                                 .textTheme
                                 .headline6
-                                ?.copyWith(color: Colors.white, fontSize: 20),
+                                ?.copyWith(color: Colors.white, fontSize: mediaQueryData.size.width * 0.05),
                             sliderButtonContent: RoundedButton(
                               press: (){},
                               color: Colors.white,
@@ -128,7 +182,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
                             icon: Icon(FontAwesomeIcons.microphone),
                           ),
                           RoundedButton(
-                            press: () => Navigator.pop(context),
+                            press: finishCall,
                             color: Colors.red,
                             icon: Icon(FontAwesomeIcons.phoneAlt, color: Colors.white),
                           ),

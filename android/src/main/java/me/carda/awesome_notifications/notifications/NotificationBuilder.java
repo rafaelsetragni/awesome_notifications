@@ -437,19 +437,20 @@ public class NotificationBuilder {
 
     private static void setCategoryFlags(Context context, NotificationModel notificationModel, Notification androidNotification) {
 
-        switch (notificationModel.content.category){
+        if(notificationModel.content.category != null)
+            switch (notificationModel.content.category){
 
-            case Alarm:
-                androidNotification.flags |= Notification.FLAG_INSISTENT;
-                androidNotification.flags |= Notification.FLAG_NO_CLEAR;
-                break;
+                case Alarm:
+                    androidNotification.flags |= Notification.FLAG_INSISTENT;
+                    androidNotification.flags |= Notification.FLAG_NO_CLEAR;
+                    break;
 
-            case Call:
-                androidNotification.flags |= Notification.FLAG_INSISTENT;
-                androidNotification.flags |= Notification.FLAG_HIGH_PRIORITY;
-                androidNotification.flags |= Notification.FLAG_NO_CLEAR;
-                break;
-        }
+                case Call:
+                    androidNotification.flags |= Notification.FLAG_INSISTENT;
+                    androidNotification.flags |= Notification.FLAG_HIGH_PRIORITY;
+                    androidNotification.flags |= Notification.FLAG_NO_CLEAR;
+                    break;
+            }
     }
 
     private static void setNotificationPendingIntents(NotificationModel notificationModel, PendingIntent pendingActionIntent, PendingIntent pendingDismissIntent, NotificationCompat.Builder builder) {

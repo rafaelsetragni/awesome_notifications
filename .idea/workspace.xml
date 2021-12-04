@@ -9,34 +9,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/example/lib/common_widgets/slide_to_confirm.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/lib/pages/phone_call_page.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/lib/common_widgets/double_slider.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/extraction_values_test.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/Definitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/Definitions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/enumerators/NotificationLayout.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/enumerators/NotificationLayout.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/services/ForegroundService.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/services/ForegroundService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/common_widgets/slide_to_confirm.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/common_widgets/single_slider.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/pages/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/home_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/pages/media_details_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/media_details_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/routes.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/pages/phone_call_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/phone_call_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/utils/common_functions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/common_functions.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/definitions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/definitions.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/base_notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/base_notification_content.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_button.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/awesome_notifications_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/awesome_notifications_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\Rafael Setragni\.android\avd\Pixel_XL.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\Rafael Setragni\.android\avd\Pixel_XL_A12.avd]" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -72,18 +68,19 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHOW_ALL_PROCESSES" value="false" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../connectycube-flutter-call-kit" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Examples/awesome_notifications_conversion_fix" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\plugins\awesome_notifications\test" />
+      <recent name="E:\plugins\awesome_notifications\example\lib\common_widgets" />
       <recent name="E:\plugins\awesome_notifications\lib\src\models" />
       <recent name="E:\plugins\awesome_notifications\lib\src\enumerators" />
       <recent name="E:\plugins\awesome_notifications\android\src\main" />
-      <recent name="E:\plugins\awesome_notifications\example\android\app" />
-      <recent name="E:\plugins\awesome_notifications\android\src\main\test\java\me\carda\awesome_notifications" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\plugins\awesome_notifications\lib\src\enumerators" />
@@ -98,28 +95,36 @@
       <recent name="me.carda.awesome_notifications.notifications.enumerators" />
     </key>
   </component>
-  <component name="RunManager" selected="Flutter.example/lib/main.dart">
-    <configuration name="getPlatformVersion" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
-      <option name="testName" value="getPlatformVersion" />
-      <option name="testFile" value="$PROJECT_DIR$/test/awesome_notifications_test.dart" />
+  <component name="RunManager" selected="Flutter Test.extractValueTest">
+    <configuration name="extractValueTest" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testName" value="extractValueTest" />
+      <option name="testFile" value="$PROJECT_DIR$/test/extraction_values_test.dart" />
       <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="jsonConversion" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
-      <option name="testName" value="jsonConversion" />
-      <option name="testFile" value="$PROJECT_DIR$/test/awesome_notifications_test.dart" />
+    <configuration name="testExtractValue" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testName" value="testExtractValue" />
+      <option name="testFile" value="$PROJECT_DIR$/test/extraction_values_test.dart" />
+      <option name="useRegexp" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="testExtractValueConversion" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testName" value="testExtractValueConversion" />
+      <option name="testFile" value="$PROJECT_DIR$/test/extraction_values_test.dart" />
       <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Flutter.example/lib/main.dart" />
-      <item itemvalue="Flutter Test.getPlatformVersion" />
-      <item itemvalue="Flutter Test.jsonConversion" />
+      <item itemvalue="Flutter Test.testExtractValueConversion" />
+      <item itemvalue="Flutter Test.testExtractValue" />
+      <item itemvalue="Flutter Test.extractValueTest" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Flutter Test.jsonConversion" />
-        <item itemvalue="Flutter Test.getPlatformVersion" />
+        <item itemvalue="Flutter Test.extractValueTest" />
+        <item itemvalue="Flutter Test.testExtractValue" />
+        <item itemvalue="Flutter Test.testExtractValueConversion" />
       </list>
     </recent_temporary>
   </component>
@@ -189,7 +194,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java</url>
-          <line>659</line>
+          <line>667</line>
           <option name="timeStamp" value="154" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
@@ -226,6 +231,7 @@
       </breakpoints>
       <default-breakpoints>
         <breakpoint enabled="true" suspend="THREAD" type="CidrExceptionBreakpoint" />
+        <breakpoint suspend="THREAD" type="dart-exception" />
       </default-breakpoints>
     </breakpoint-manager>
     <watches-manager>
