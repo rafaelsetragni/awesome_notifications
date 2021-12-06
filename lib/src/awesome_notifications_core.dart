@@ -35,12 +35,10 @@ class AwesomeNotifications {
 
   static String
       _utcTimeZoneIdentifier = 'UTC',
-      _localTimeZoneIdentifier = 'UTC',
-      _platformVersion = 'unknow';
+      _localTimeZoneIdentifier = 'UTC';
 
   static String get utcTimeZoneIdentifier => _utcTimeZoneIdentifier;
   static String get localTimeZoneIdentifier => _localTimeZoneIdentifier;
-  static String get platformVersion => _platformVersion;
 
   /// WEB SUPPORT METHODS *********************************************
 /*
@@ -186,9 +184,6 @@ class AwesomeNotifications {
         .invokeMethod(CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER);
     _utcTimeZoneIdentifier =
         await _channel.invokeMethod(CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER);
-
-    _platformVersion = await _channel
-        .invokeMethod(CHANNEL_METHOD_GET_PLATFORM_VERSION);
 
     return result;
   }

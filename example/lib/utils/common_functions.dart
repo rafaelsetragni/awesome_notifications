@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+import 'package:device_info/device_info.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<String> saveAssetOnDisk(ImageProvider image, String fileName) async {
@@ -36,6 +37,23 @@ void unlockScreenPortrait(){
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+}
+
+Future<String> getPlatformVersion() async {
+  if (Platform.isAndroid) {
+    var androidInfo = await DeviceInfoPlugin().androidInfo;
+    var sdkInt = androidInfo.version.sdkInt;
+    return 'Android-$sdkInt';
+  }
+
+  if (Platform.isIOS) {
+    var iosInfo = await DeviceInfoPlugin().iosInfo;
+    var systemName = iosInfo.systemName;
+    var version = iosInfo.systemVersion;
+    return '$systemName-$version';
+  }
+
+  return 'unknow';
 }
 
 String printDuration(Duration? duration) {

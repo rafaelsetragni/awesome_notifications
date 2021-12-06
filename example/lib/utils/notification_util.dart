@@ -493,6 +493,7 @@ class NotificationUtils {
   ************************************************ */
 
   static Future<void> showCallNotification(int id) async {
+    String platformVersion = await getPlatformVersion();
     AndroidForegroundService.startForeground(
     //await AwesomeNotifications().createNotification(
         content: NotificationContent(
@@ -505,7 +506,8 @@ class NotificationUtils {
             wakeUpScreen: true,
             fullScreenIntent: true,
             autoDismissible: false,
-            backgroundColor: (AwesomeNotifications.platformVersion == 'Android-31') ? Color(0x00796a) : Colors.white,
+            backgroundColor: (platformVersion == 'Android-31') ?
+              Color(0x00796a) : Colors.white,
             payload: {
               'username': 'Little Mary'
             }

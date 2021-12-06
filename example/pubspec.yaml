@@ -33,6 +33,8 @@ dependencies:
   giffy_dialog: ^1.8.0
   vibration: ^1.7.4-nullsafety.0
 
+  device_info: ^2.0.3
+
   url_launcher: ^6.0.3
 
   intl: ^0.17.0

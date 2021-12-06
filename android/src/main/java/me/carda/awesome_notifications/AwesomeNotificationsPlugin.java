@@ -442,10 +442,6 @@ public class AwesomeNotificationsPlugin
                     channelMethodGetDrawableData(call, result);
                     return;
 
-                case Definitions.CHANNEL_METHOD_GET_PLATFORM_VERSION:
-                    channelMethodGetPlatformVersion(call, result);
-                    return;
-
                 case Definitions.CHANNEL_METHOD_ENABLE_WAKELOCK:
                     channelMethodGetPlatformVersion(call, result);
                     return;

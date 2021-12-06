@@ -53,7 +53,6 @@ public interface Definitions {
 
     String CHANNEL_METHOD_INITIALIZE = "initialize";
     String CHANNEL_METHOD_GET_DRAWABLE_DATA = "getDrawableData";
-    String CHANNEL_METHOD_GET_PLATFORM_VERSION = "getPlatformVersion";
     String CHANNEL_METHOD_ENABLE_WAKELOCK = "enableWakelock";
     String CHANNEL_METHOD_CREATE_NOTIFICATION = "createNewNotification";
 
