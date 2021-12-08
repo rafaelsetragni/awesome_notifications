@@ -47,4 +47,26 @@ void main() {
     expect(null, AssertUtils.extractValue("test", {"test": 0}, String));
     expect(null, AssertUtils.extractValue("test", {"test": null}, String));
   });
+
+  test('extractEnumTest', () async {
+    expect(NotificationPrivacy.Private,
+        AssertUtils.extractEnum<NotificationPrivacy>(
+            "test", {"test": "Private"}, NotificationPrivacy.values));
+
+    expect(NotificationPrivacy.Public,
+        AssertUtils.extractEnum<NotificationPrivacy>(
+            "test", {"test": "Public"}, NotificationPrivacy.values));
+
+    expect(null,
+        AssertUtils.extractEnum<NotificationPrivacy>(
+            "test", {"test": ""}, NotificationPrivacy.values));
+
+    expect(null,
+        AssertUtils.extractEnum<NotificationPrivacy>(
+            "test", {"test": " "}, NotificationPrivacy.values));
+
+    expect(null,
+        AssertUtils.extractEnum<NotificationPrivacy>(
+            "test", {"test": null}, NotificationPrivacy.values));
+  });
 }
