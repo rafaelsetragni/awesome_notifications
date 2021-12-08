@@ -221,8 +221,10 @@ class NotificationChannel extends Model {
     this.onlyAlertOnce =
         AssertUtils.extractValue(NOTIFICATION_ONLY_ALERT_ONCE, dataMap, bool);
 
-    this.defaultColor = AssertUtils.extractValue(NOTIFICATION_DEFAULT_COLOR, dataMap, Color);
-    this.ledColor = AssertUtils.extractValue(NOTIFICATION_LED_COLOR, dataMap, Color);
+    this.defaultColor =
+        AssertUtils.extractValue(NOTIFICATION_DEFAULT_COLOR, dataMap, Color);
+    this.ledColor =
+        AssertUtils.extractValue(NOTIFICATION_LED_COLOR, dataMap, Color);
 
     this.ledOnMs =
         AssertUtils.extractValue(NOTIFICATION_LED_ON_MS, dataMap, int);

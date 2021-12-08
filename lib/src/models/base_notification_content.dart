@@ -108,7 +108,8 @@ class BaseNotificationContent extends Model {
         NOTIFICATION_CATEGORY, mapData, NotificationCategory.values);
 
     this.color = AssertUtils.extractValue(NOTIFICATION_COLOR, mapData, Color);
-    this.backgroundColor = AssertUtils.extractValue(NOTIFICATION_BACKGROUND_COLOR, mapData, Color);
+    this.backgroundColor =
+        AssertUtils.extractValue(NOTIFICATION_BACKGROUND_COLOR, mapData, Color);
 
     this.payload =
         AssertUtils.extractMap<String, String>(mapData, NOTIFICATION_PAYLOAD);

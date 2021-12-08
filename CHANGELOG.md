@@ -5,6 +5,7 @@
 * Created StatusBarManager to manage which notifications are currently active, improving performance and extending support to Android 5.0 Lollipop (SDK 21)
 * Notification layouts BigPicture, Messsaging and MessagingGroup improved to be more performatic and to reuses network connection data
 * Added history box to notification's reply buttons on Android 8.0 to 12.0
+* iOS swift completion handlers modified to allow display notifications from another plugins
 ## [0.6.18+2]
 * Update readme file and PermissionManager to be compatible with Android 12 and Java 7
 ## [0.6.18+1]

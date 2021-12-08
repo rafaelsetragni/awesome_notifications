@@ -52,7 +52,6 @@ const CHANNEL_METHOD_SHOW_GLOBAL_DND_PAGE = 'showGlobalDndPage';
 const CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = 'isNotificationAllowed';
 const CHANNEL_METHOD_REQUEST_NOTIFICATIONS = 'requestNotifications';
 
-
 const CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL = 'setNotificationChannel';
 const CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL = 'removeNotificationChannel';
 
