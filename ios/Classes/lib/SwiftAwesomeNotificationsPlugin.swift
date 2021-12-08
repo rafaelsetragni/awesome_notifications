@@ -44,14 +44,17 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                   jsonData: jsonData,
                   buttonKeyPressed: response.actionIdentifier,
                   userText: userText,
-                  completionHandler: completionHandler
+                  withCompletionHandler: completionHandler
               )
         } else {
             print("Received an invalid notification content")
-        }
-
-        if _originalNotificationCenterDelegate?.userNotificationCenter?(center, didReceive: response, withCompletionHandler: completionHandler) == nil {
-            completionHandler()
+            
+            if _originalNotificationCenterDelegate != nil {
+                _originalNotificationCenterDelegate?.userNotificationCenter?(center, didReceive: response, withCompletionHandler: completionHandler)
+            }
+            else {
+                completionHandler()
+            }
         }
     }
 
@@ -60,7 +63,10 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         if !receiveNotification(content: notification.request.content, withCompletionHandler: completionHandler) {
             // completionHandler was *not* called, so maybe this notification is for another plugin:
 
-            if _originalNotificationCenterDelegate?.userNotificationCenter?(center, willPresent: notification, withCompletionHandler: completionHandler) == nil {
+            if _originalNotificationCenterDelegate != nil {
+                _originalNotificationCenterDelegate?.userNotificationCenter?(center, willPresent: notification, withCompletionHandler: completionHandler)
+            }
+            else {
                 completionHandler([.alert, .badge, .sound])
             }
         }
@@ -319,7 +325,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     }
     
 #if !ACTION_EXTENSION
-    private func receiveAction(jsonData: String?, buttonKeyPressed:String?, userText:String?, withCompletionHandler: completionHandler){
+    private func receiveAction(jsonData: String?, buttonKeyPressed:String?, userText:String?, withCompletionHandler completionHandler: @escaping () -> Void){
 		
         if(SwiftAwesomeNotificationsPlugin.appLifeCycle == .AppKilled){
             fireBackgroundLostEvents()

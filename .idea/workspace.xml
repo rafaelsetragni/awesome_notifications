@@ -21,7 +21,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\Rafael Setragni\.android\avd\Nexus_4_A5.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -88,19 +88,16 @@
     <configuration name="extractValueTest" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
       <option name="testName" value="extractValueTest" />
       <option name="testFile" value="$PROJECT_DIR$/test/extraction_values_test.dart" />
-      <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
     <configuration name="testExtractValue" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
       <option name="testName" value="testExtractValue" />
       <option name="testFile" value="$PROJECT_DIR$/test/extraction_values_test.dart" />
-      <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
     <configuration name="testExtractValueConversion" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
       <option name="testName" value="testExtractValueConversion" />
       <option name="testFile" value="$PROJECT_DIR$/test/extraction_values_test.dart" />
-      <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
     <list>
