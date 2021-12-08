@@ -43,7 +43,8 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             receiveAction(
                   jsonData: jsonData,
                   buttonKeyPressed: response.actionIdentifier,
-                  userText: userText
+                  userText: userText,
+                  completionHandler: completionHandler
               )
         } else {
             print("Received an invalid notification content")
@@ -60,9 +61,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             // completionHandler was *not* called, so maybe this notification is for another plugin:
 
             if _originalNotificationCenterDelegate?.userNotificationCenter?(center, willPresent: notification, withCompletionHandler: completionHandler) == nil {
-                // TODO(tek08): Absorb notifications like this?  Or present them by default?
-                print("Was going to present a notification, but no plugin wanted to handle it.")
-                completionHandler([])
+                completionHandler([.alert, .badge, .sound])
             }
         }
     }
@@ -320,7 +319,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     }
     
 #if !ACTION_EXTENSION
-    private func receiveAction(jsonData: String?, buttonKeyPressed:String?, userText:String?){
+    private func receiveAction(jsonData: String?, buttonKeyPressed:String?, userText:String?, withCompletionHandler: completionHandler){
 		
         if(SwiftAwesomeNotificationsPlugin.appLifeCycle == .AppKilled){
             fireBackgroundLostEvents()
@@ -343,9 +342,8 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 				}
                 flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED, arguments: actionReceived?.toMap())
             }
-        } else {
-            // Fallback on earlier versions
-        }
+        } 
+        completionHandler()
     }
 #endif
     

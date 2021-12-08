@@ -49,17 +49,34 @@ public class ChannelManager {
 
     public static NotificationChannelModel getChannelByKey(Context context, String channelKey){
 
-        if(StringUtils.isNullOrEmpty(channelKey))
+        if(StringUtils.isNullOrEmpty(channelKey)) {
+            if(AwesomeNotificationsPlugin.debug)
+                Log.e(TAG, "'"+channelKey+"' cannot be empty or null");
             return null;
+        }
 
         NotificationChannelModel channelModel = shared.get(context, Definitions.SHARED_CHANNELS, channelKey);
-        if(channelModel == null) return null;
+        if(channelModel == null) {
+            if(AwesomeNotificationsPlugin.debug)
+                Log.e(TAG, "Channel model '"+channelKey+"' was not found");
+            return null;
+        }
 
         channelModel.refreshIconResource(context);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/){
 
             NotificationChannel androidChannel = getAndroidChannel(context, channelKey);
-            if(androidChannel == null) return null;
+            if(androidChannel == null) {
+                if(AwesomeNotificationsPlugin.debug)
+                    Log.e(TAG, "Android native channel '"+channelKey+"' was not found");
+                return null;
+            }
+
+            if(androidChannel.getImportance() == NotificationManager.IMPORTANCE_NONE){
+                if(AwesomeNotificationsPlugin.debug)
+                    Log.e(TAG, "Android native channel '"+channelKey+"' is disabled");
+            }
+
             updateChannelModelThroughAndroidChannel(channelModel, androidChannel);
         }
 
