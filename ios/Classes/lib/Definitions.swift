@@ -58,6 +58,7 @@ enum Definitions {
 
     static let  CHANNEL_METHOD_INITIALIZE = "initialize"
     static let  CHANNEL_METHOD_GET_DRAWABLE_DATA = "getDrawableData"
+    static let  CHANNEL_METHOD_GET_PLATFORM_VERSION = "getPlatformVersion"
     static let  CHANNEL_METHOD_CREATE_NOTIFICATION = "createNewNotification"
 
     static let  CHANNEL_METHOD_GET_FCM_TOKEN = "getFirebaseToken"

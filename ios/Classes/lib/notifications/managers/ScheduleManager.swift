@@ -95,12 +95,13 @@ public class ScheduleManager {
         return shared.get(referenceKey: channelKey) != nil
     }
     
-    public static func cancelAllSchedules() {
+    public static func cancelAllSchedules() -> Bool {
         shared.removeAll()
         pendingShared.removeAll()
+        return true
     }
 
-    public static func cancelScheduled(id:Int) {
-        _ = shared.remove(referenceKey: String(id))
+    public static func cancelScheduled(id:Int) -> Bool {
+        return shared.remove(referenceKey: String(id))
     }
 }

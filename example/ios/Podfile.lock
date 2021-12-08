@@ -1,6 +1,8 @@
 PODS:
   - awesome_notifications (0.0.3):
     - Flutter
+  - device_info (0.0.1):
+    - Flutter
   - Firebase/CoreOnly (7.11.0):
     - FirebaseCore (= 7.11.0)
   - Firebase/Messaging (7.11.0):
@@ -78,9 +80,12 @@ PODS:
   - Toast (4.0.0)
   - url_launcher (0.0.1):
     - Flutter
+  - vibration (1.7.4-nullsafety.0):
+    - Flutter
 
 DEPENDENCIES:
   - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
+  - device_info (from `.symlinks/plugins/device_info/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
@@ -88,6 +93,7 @@ DEPENDENCIES:
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
+  - vibration (from `.symlinks/plugins/vibration/ios`)
 
 SPEC REPOS:
   trunk:
@@ -106,6 +112,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   awesome_notifications:
     :path: ".symlinks/plugins/awesome_notifications/ios"
+  device_info:
+    :path: ".symlinks/plugins/device_info/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_messaging:
@@ -120,9 +128,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
+  vibration:
+    :path: ".symlinks/plugins/vibration/ios"
 
 SPEC CHECKSUMS:
   awesome_notifications: 04530aafec8dac4635244ed4b4072f4aea6cc938
+  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Firebase: c121feb35e4126c0b355e3313fa9b487d47319fd
   firebase_core: 84dcd80ac6d29c3d1039071b7306ee99688eb9c7
   firebase_messaging: 7aecb08eada5e5cde85b10875141706a8d18b818
@@ -141,6 +152,7 @@ SPEC CHECKSUMS:
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
+  vibration: 1ec279c4a1a7a646627b54039d812334b3f1114a
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 

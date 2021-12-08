@@ -9,21 +9,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/CancellationManager.swift" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/StatusBarManager.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/Definitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/Definitions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/utils/common_functions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/common_functions.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/Definitions.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/Definitions.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationBuilder.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationBuilder.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationSenderAndScheduler.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/NotificationSenderAndScheduler.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/ScheduleManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/notifications/managers/ScheduleManager.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[0029216329]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -90,19 +92,16 @@
     <configuration name="extractValueTest" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
       <option name="testName" value="extractValueTest" />
       <option name="testFile" value="$PROJECT_DIR$/test/extraction_values_test.dart" />
-      <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
     <configuration name="testExtractValue" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
       <option name="testName" value="testExtractValue" />
       <option name="testFile" value="$PROJECT_DIR$/test/extraction_values_test.dart" />
-      <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
     <configuration name="testExtractValueConversion" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
       <option name="testName" value="testExtractValueConversion" />
       <option name="testFile" value="$PROJECT_DIR$/test/extraction_values_test.dart" />
-      <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
     <list>
@@ -155,7 +154,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java</url>
-          <line>46</line>
+          <line>48</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
@@ -175,7 +174,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/ScheduledNotificationReceiver.java</url>
-          <line>21</line>
+          <line>17</line>
           <option name="timeStamp" value="106" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
@@ -185,37 +184,32 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java</url>
-          <line>663</line>
+          <line>678</line>
           <option name="timeStamp" value="154" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/DismissedNotificationReceiver.java</url>
-          <line>23</line>
+          <line>18</line>
           <option name="timeStamp" value="202" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationSender.java</url>
-          <line>219</line>
+          <line>220</line>
           <option name="timeStamp" value="204" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/broadcastReceivers/KeepOnTopActionReceiver.java</url>
-          <line>25</line>
+          <line>40</line>
           <option name="timeStamp" value="207" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/services/ForegroundService.java</url>
-          <line>63</line>
+          <line>76</line>
           <option name="timeStamp" value="211" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
-          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/services/ForegroundService.java</url>
-          <line>91</line>
-          <option name="timeStamp" value="213" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-field">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/services/ForegroundService.java</url>
-          <line>69</line>
+          <line>82</line>
           <properties field="EXTRA" class="me.carda.awesome_notifications.services.ForegroundService.StartParameter" />
           <option name="timeStamp" value="210" />
         </line-breakpoint>

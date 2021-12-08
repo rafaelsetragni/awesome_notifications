@@ -492,12 +492,12 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                             }
                         }
                         if(!founded){
-                            ScheduleManager.cancelScheduled(id: notificationModel.content!.id!)
+                            _ = ScheduleManager.cancelScheduled(id: notificationModel.content!.id!)
                         }
                     }
                 }
             } else {
-                ScheduleManager.cancelAllSchedules();
+                _ = ScheduleManager.cancelAllSchedules();
             }
         })
     }
@@ -795,12 +795,12 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                             }
                         }
                         if(!founded){
-                            ScheduleManager.cancelScheduled(id: notificationModel.content!.id!)
+                            _ = ScheduleManager.cancelScheduled(id: notificationModel.content!.id!)
                         }
                     }
                 }
             } else {
-                ScheduleManager.cancelAllSchedules();
+                _ = ScheduleManager.cancelAllSchedules();
             }
 
             result(serializeds)
@@ -1009,17 +1009,27 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             result(false); return
         }
         
-        result(NotificationSenderAndScheduler.dismissNotification(id: notificationId))
-        return
+        let success:Bool = CancellationManager.dismissNotification(id: notificationId)
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification id "+String(notificationId)+" dismissed")
+        }
+        
+        result(success)
     }
     
     private func channelMethodCancelSchedule(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let notificationId:Int = call.arguments as? Int else {
             result(false); return
         }
-    
-        result(NotificationSenderAndScheduler.cancelSchedule(id: notificationId))
-        return
+        
+        let success:Bool = CancellationManager.cancelSchedule(id: notificationId)
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Schedule id "+String(notificationId)+" cancelled")
+        }
+        
+        result(success)
     }
     
     private func channelMethodCancelNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
@@ -1027,8 +1037,13 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             result(false); return
         }
         
-        result(NotificationSenderAndScheduler.cancelNotification(id: notificationId))
-        return
+        let success:Bool = CancellationManager.cancelNotification(id: notificationId)
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification id "+String(notificationId)+" cancelled")
+        }
+        
+        result(success)
     }
 
     private func channelMethodDismissNotificationsByChannelKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
@@ -1036,8 +1051,13 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             result(false); return
         }
         
-        result(NotificationSenderAndScheduler.dismissNotificationsByChannelKey(channelKey: channelKey))
-        return
+        let success:Bool = CancellationManager.dismissNotificationsByChannelKey(channelKey: channelKey)
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notifications from channel "+channelKey+" dismissed")
+        }
+        
+        result(success)
     }
 
     private func channelMethodCancelSchedulesByChannelKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
@@ -1045,8 +1065,13 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             result(false); return
         }
         
-        result(NotificationSenderAndScheduler.cancelSchedulesByChannelKey(channelKey: channelKey))
-        return
+        let success:Bool = CancellationManager.cancelSchedulesByChannelKey(channelKey: channelKey)
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Schedules from channel "+channelKey+" cancelled")
+        }
+        
+        result(success)
     }
 
     private func channelMethodCancelNotificationsByChannelKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
@@ -1054,53 +1079,88 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             result(false); return
         }
         
-        result(NotificationSenderAndScheduler.cancelNotificationsByChannelKey(channelKey: channelKey))
-        return
+        let success:Bool = CancellationManager.cancelNotificationsByChannelKey(channelKey: channelKey)
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notifications from channel "+channelKey+" cancelled")
+        }
+        
+        result(success)
     }
 
     private func channelMethodDismissNotificationsByGroupKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let groupKey:String = call.arguments as? String else {
             result(false); return
         }
+        
+        let success:Bool = CancellationManager.dismissNotificationsByGroupKey(groupKey: groupKey)
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notifications from group "+groupKey+" cancelled")
+        }
 
-        result(NotificationSenderAndScheduler.dismissNotificationsByGroupKey(groupKey: groupKey))
-        return
+        result(success)
     }
 
     private func channelMethodCancelSchedulesByGroupKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let groupKey:String = call.arguments as? String else {
             result(false); return
         }
+        
+        let success:Bool = CancellationManager.cancelSchedulesByGroupKey(groupKey: groupKey)
 
-        result(NotificationSenderAndScheduler.cancelSchedulesByGroupKey(groupKey: groupKey))
-        return
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Schedules from group "+groupKey+" cancelled")
+        }
+        
+        result(success)
     }
 
     private func channelMethodCancelNotificationsByGroupKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let groupKey:String = call.arguments as? String else {
             result(false); return
         }
-
-        result(NotificationSenderAndScheduler.cancelNotificationsByGroupKey(groupKey: groupKey))
-        return
+        
+        let success:Bool = CancellationManager.cancelNotificationsByGroupKey(groupKey: groupKey)
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notifications from group "+groupKey+" cancelled")
+        }
+        
+        result(success)
     }
     
     private func channelMethodDismissAllNotifications(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         
-        result(NotificationSenderAndScheduler.dismissAllNotifications())
-        return
+        let success:Bool = CancellationManager.dismissAllNotifications()
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "All notifications was dismissed")
+        }
+        
+        result(success)
     }
     
     private func channelMethodCancelAllSchedules(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         
-        result(NotificationSenderAndScheduler.cancelAllSchedules())
-        return
+        let success:Bool = CancellationManager.cancelAllSchedules()
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "All schedules was cancelled")
+        }
+        
+        result(success)
     }
 
     private func channelMethodCancelAllNotifications(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         
-        result(NotificationSenderAndScheduler.cancelAllNotifications())
-        return
+        let success:Bool = CancellationManager.cancelAllNotifications()
+        
+        if(SwiftAwesomeNotificationsPlugin.debug){
+            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "All notifications was cancelled")
+        }
+        
+        result(success)
     }
 
     private func channelMethodCreateNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
