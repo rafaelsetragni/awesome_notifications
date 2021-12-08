@@ -67,9 +67,9 @@ class AssertUtils {
         case Color:
         case int:
 
-        // Color hexadecimal representation
+          // Color hexadecimal representation
           final RegExpMatch? match =
-          RegExp(r'^(0x|#)(\w{2})?(\w{6,6})$').firstMatch(valueCasted);
+              RegExp(r'^(0x|#)(\w{2})?(\w{6,6})$').firstMatch(valueCasted);
 
           if (match != null) {
             String hex = (match.group(2) ?? 'FF') + match.group(3)!;

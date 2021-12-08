@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
+
 import io.flutter.Log;
 
 import java.util.Calendar;
@@ -229,7 +231,11 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
         AlarmManager alarmManager = ScheduleManager.getAlarmManager(context);
         long timeMillis = nextValidDate.getTimeInMillis();
 
-        if (BooleanUtils.getValue(notificationModel.schedule.preciseAlarm) && ScheduleManager.isPreciseAlarmGloballyAllowed(alarmManager)) {
+        if (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+            BooleanUtils.getValue(notificationModel.schedule.preciseAlarm) &&
+            ScheduleManager.isPreciseAlarmGloballyAllowed(alarmManager)
+        ) {
             AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(timeMillis, pendingIntent);
             alarmManager.setAlarmClock(info, pendingIntent);
             return;

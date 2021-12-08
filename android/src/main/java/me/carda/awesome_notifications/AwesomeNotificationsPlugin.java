@@ -38,6 +38,8 @@ import android.app.Activity;
 import me.carda.awesome_notifications.notifications.BitmapResourceDecoder;
 import me.carda.awesome_notifications.notifications.handlers.PermissionCompletionHandler;
 import me.carda.awesome_notifications.notifications.managers.BadgeManager;
+import me.carda.awesome_notifications.notifications.managers.CancellationManager;
+import me.carda.awesome_notifications.notifications.managers.StatusBarManager;
 import me.carda.awesome_notifications.notifications.managers.ChannelGroupManager;
 import me.carda.awesome_notifications.notifications.models.DefaultsModel;
 import me.carda.awesome_notifications.notifications.models.NotificationChannelGroupModel;
@@ -440,6 +442,10 @@ public class AwesomeNotificationsPlugin
                     channelMethodGetDrawableData(call, result);
                     return;
 
+                case Definitions.CHANNEL_METHOD_ENABLE_WAKELOCK:
+                    channelMethodGetPlatformVersion(call, result);
+                    return;
+
                 case Definitions.CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED:
                     channelIsNotificationAllowed(call, result);
                     return;
@@ -626,6 +632,14 @@ public class AwesomeNotificationsPlugin
         bitmapResourceDecoder.execute();
     }
 
+    private void channelMethodGetPlatformVersion(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+        result.success("Android-"+String.valueOf(Build.VERSION.SDK_INT));
+    }
+
+    private void channelMethodEnableWakeLock(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+        result.success("Android-"+String.valueOf(Build.VERSION.SDK_INT));
+    }
+
     private void channelMethodListAllSchedules(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
         List<NotificationModel> activeSchedules = ScheduleManager.listSchedules(applicationContext);
         List<Map<String, Object>> listSerialized = new ArrayList<>();
@@ -756,125 +770,24 @@ public class AwesomeNotificationsPlugin
         result.success(badgeCount);
     }
 
-    private void channelMethodCancelSchedule(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-
-        Integer notificationId = call.arguments();
-        if (notificationId == null || notificationId < 0)
-            throw new AwesomeNotificationException("Invalid notification id");
-
-        NotificationScheduler.cancelSchedule(applicationContext, notificationId);
-
-        if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Schedule id " + notificationId + " cancelled");
-
-        result.success(true);
-    }
-
-    private void channelMethodDismissNotificationsByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-
-        String channelKey = call.arguments();
-        if(StringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationException("Invalid channel key");
-
-        NotificationSender.dismissNotificationsByChannelKey(applicationContext, channelKey);
-
-        if(AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notifications from channel "+channelKey+" dismissed");
-
-        result.success(true);
-    }
-
-    private void channelMethodCancelSchedulesByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-
-        String channelKey = call.arguments();
-        if(StringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationException("Invalid channel key");
-
-        NotificationScheduler.cancelSchedulesByChannelKey(applicationContext, channelKey);
-
-        if(AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Scheduled Notifications from channel "+channelKey+" canceled");
-
-        result.success(true);
-    }
-
-    private void channelMethodCancelNotificationsByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-
-        String channelKey = call.arguments();
-        if(StringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationException("Invalid channel key");
-
-        NotificationSender.dismissNotificationsByChannelKey(applicationContext, channelKey);
-        NotificationScheduler.cancelSchedulesByChannelKey(applicationContext, channelKey);
-
-        if(AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notifications and schedules from channel "+channelKey+" canceled");
-
-        result.success(true);
-    }
-
-    private void channelMethodDismissNotificationsByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-
-        String groupKey = call.arguments();
-        if(StringUtils.isNullOrEmpty(groupKey))
-            throw new AwesomeNotificationException("Invalid group key");
-
-        NotificationSender.dismissNotificationsByGroupKey(applicationContext, groupKey);
-
-        if(AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notifications from group "+groupKey+" dismissed");
-
-        result.success(true);
-    }
-
-    private void channelMethodCancelSchedulesByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-
-        String groupKey = call.arguments();
-        if(StringUtils.isNullOrEmpty(groupKey))
-            throw new AwesomeNotificationException("Invalid group key");
-
-        NotificationScheduler.cancelSchedulesByGroupKey(applicationContext, groupKey);
-
-        if(AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Scheduled Notifications from group "+groupKey+" canceled");
-
-        result.success(true);
-    }
-
-    private void channelMethodCancelNotificationsByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-
-        String groupKey = call.arguments();
-        if(StringUtils.isNullOrEmpty(groupKey))
-            throw new AwesomeNotificationException("Invalid group key");
-
-        NotificationSender.dismissNotificationsByGroupKey(applicationContext, groupKey);
-        NotificationScheduler.cancelSchedulesByGroupKey(applicationContext, groupKey);
-
-        if(AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notifications and schedules from group "+groupKey+" canceled");
-
-        result.success(true);
-    }
-
-    private void channelMethodCancelAllSchedules(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-
-        NotificationScheduler.cancelAllSchedules(applicationContext);
-        if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "All notifications scheduled was cancelled");
-
-        result.success(true);
-    }
-
     private void channelMethodDismissNotification(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         Integer notificationId = call.arguments();
-        if (notificationId == null || notificationId < 0)
-            throw new AwesomeNotificationException("Invalid notification id");
-
-        NotificationSender.dismissNotification(applicationContext, notificationId);
+        boolean dismissed = CancellationManager.dismissNotification(applicationContext, notificationId);
 
         if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notification id " + notificationId + " dismissed");
+            Log.d(TAG, "Notification id " + notificationId + (dismissed ? "" : "not found to be") + " dismissed");
+
+        result.success(dismissed);
+    }
+
+    private void channelMethodCancelSchedule(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+
+        Integer notificationId = call.arguments();
+        boolean dismissed = CancellationManager.cancelSchedule(applicationContext, notificationId);
+
+        if (AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "Schedule id " + notificationId + (dismissed ? "" : "not found to be") + " cancelled");
 
         result.success(true);
     }
@@ -882,32 +795,105 @@ public class AwesomeNotificationsPlugin
     private void channelMethodCancelNotification(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         Integer notificationId = call.arguments();
-        if (notificationId == null || notificationId < 0)
-            throw new AwesomeNotificationException("Invalid notification id");
-
-        NotificationScheduler.cancelSchedule(applicationContext, notificationId);
-        NotificationSender.dismissNotification(applicationContext, notificationId);
+        boolean dismissed = CancellationManager.cancelNotification(applicationContext, notificationId);
 
         if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notification id " + notificationId + " cancelled");
+            Log.d(TAG, "Notification id " + notificationId + (dismissed ? "" : "not found to be") + " cancelled");
+
+        result.success(true);
+    }
+
+    private void channelMethodDismissNotificationsByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+
+        String channelKey = call.arguments();
+        boolean dismissed = CancellationManager.dismissNotificationsByChannelKey(applicationContext, channelKey);
+
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "Notifications from channel " + channelKey + (dismissed ? "" : "not found to be") + " dismissed");
+
+        result.success(true);
+    }
+
+    private void channelMethodCancelSchedulesByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+
+        String channelKey = call.arguments();
+        boolean dismissed = CancellationManager.cancelSchedulesByChannelKey(applicationContext, channelKey);
+
+        NotificationScheduler.cancelSchedulesByChannelKey(applicationContext, channelKey);
+
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "Scheduled Notifications from channel " + channelKey + (dismissed ? "" : "not found to be") + " canceled");
+
+        result.success(true);
+    }
+
+    private void channelMethodCancelNotificationsByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+
+        String channelKey = call.arguments();
+        boolean dismissed = CancellationManager.cancelNotificationsByChannelKey(applicationContext, channelKey);
+
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "Notifications and schedules from channel " + channelKey + (dismissed ? "" : "not found to be") + " canceled");
+
+        result.success(true);
+    }
+
+    private void channelMethodDismissNotificationsByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+
+        String groupKey = call.arguments();
+        boolean dismissed = CancellationManager.dismissNotificationsByGroupKey(applicationContext, groupKey);
+
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "Notifications from group " + groupKey + (dismissed ? "" : "not found to be") + " dismissed");
+
+        result.success(true);
+    }
+
+    private void channelMethodCancelSchedulesByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+
+        String groupKey = call.arguments();
+        boolean dismissed = CancellationManager.cancelSchedulesByGroupKey(applicationContext, groupKey);
+
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "Scheduled Notifications from group " + groupKey + (dismissed ? "" : "not found to be") + " canceled");
+
+        result.success(true);
+    }
+
+    private void channelMethodCancelNotificationsByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+
+        String groupKey = call.arguments();
+        boolean dismissed = CancellationManager.cancelNotificationsByGroupKey(applicationContext, groupKey);
+
+        if(AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "Notifications and schedules from group " + groupKey + (dismissed ? "" : "not found to be") + " canceled");
 
         result.success(true);
     }
 
     private void channelMethodDismissAllNotifications(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
-        NotificationSender.dismissAllNotifications(applicationContext);
+        CancellationManager.dismissAllNotifications(applicationContext);
+
         if (AwesomeNotificationsPlugin.debug)
             Log.d(TAG, "All notifications was dismissed");
 
         result.success(true);
     }
 
+    private void channelMethodCancelAllSchedules(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+
+        CancellationManager.cancelAllSchedules(applicationContext);
+
+        if (AwesomeNotificationsPlugin.debug)
+            Log.d(TAG, "All notifications scheduled was cancelled");
+
+        result.success(true);
+    }
 
     private void channelMethodCancelAllNotifications(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
-        NotificationScheduler.cancelAllSchedules(applicationContext);
-        NotificationSender.dismissAllNotifications(applicationContext);
+        CancellationManager.cancelAllNotifications(applicationContext);
 
         if (AwesomeNotificationsPlugin.debug)
             Log.d(TAG, "All notifications was cancelled");
@@ -1216,15 +1202,13 @@ public class AwesomeNotificationsPlugin
 
     private Boolean receiveNotificationAction(Intent intent, NotificationLifeCycle appLifeCycle) {
 
-        ActionReceived actionModel = NotificationBuilder.buildNotificationActionFromIntent(applicationContext, intent);
+        ActionReceived actionModel
+            = NotificationBuilder
+                .receiveNotificationAction(applicationContext, intent, appLifeCycle);
 
         if (actionModel != null) {
 
-            actionModel.actionDate = DateUtils.getUTCDate();
-            actionModel.actionLifeCycle = appLifeCycle;
-
             Map<String, Object> returnObject = actionModel.toMap();
-
             pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_RECEIVED_ACTION, returnObject);
 
             if (AwesomeNotificationsPlugin.debug)

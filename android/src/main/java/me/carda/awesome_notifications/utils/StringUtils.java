@@ -24,10 +24,7 @@ public class StringUtils {
         try {
             reference = reference.replaceAll("\\W+", "");
 
-            byte[] bytes = new byte[0];
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                bytes = reference.getBytes(StandardCharsets.UTF_8);
-            }
+            byte[] bytes = reference.getBytes(StandardCharsets.UTF_8);
 
             md = MessageDigest.getInstance(MD5);
             md.reset();

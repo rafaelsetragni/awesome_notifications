@@ -1,8 +1,11 @@
 import 'dart:math';
 
+import 'package:awesome_notifications_example/utils/common_functions.dart';
+import 'package:awesome_notifications_example/utils/notification_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:awesome_notifications_example/models/media_model.dart';
@@ -31,17 +34,27 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
   Duration? mediaLength;
   Duration? durationPlayed;
 
-  String _printDuration(Duration? duration) {
-    if (duration == null) return '00:00';
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$twoDigitMinutes:$twoDigitSeconds";
-  }
-
   @override
   void initState() {
+    lockScreenPortrait();
     super.initState();
+
+    // this is not part of notification system, but just a media player simulator instead
+    MediaPlayerCentral.mediaStream.listen((media) {
+      switch (MediaPlayerCentral.mediaLifeCycle) {
+        case MediaLifeCycle.Stopped:
+          NotificationUtils.cancelNotification(100);
+          break;
+
+        case MediaLifeCycle.Paused:
+          NotificationUtils.updateNotificationMediaPlayer(100, media);
+          break;
+
+        case MediaLifeCycle.Playing:
+          NotificationUtils.updateNotificationMediaPlayer(100, media);
+          break;
+      }
+    });
 
     MediaPlayerCentral.mediaStream.listen((media) {
       _updatePlayer(media: media);
@@ -62,6 +75,8 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
 
   @override
   dispose() {
+    unlockScreenPortrait();
+
     MediaPlayerCentral.mediaSink.close();
     MediaPlayerCentral.progressSink.close();
     super.dispose();
@@ -408,7 +423,8 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(_printDuration(durationPlayed)),
+                Text(printDuration(durationPlayed)),
+                Text(printDuration(durationPlayed)),
                 hasCloseCaption
                     ? IconButton(
                         padding: EdgeInsets.zero,
@@ -421,7 +437,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                             closeCaptionActivated = !closeCaptionActivated,
                       )
                     : SizedBox(height: 47),
-                Text(_printDuration(mediaLength),
+                Text(printDuration(mediaLength),
                     style: TextStyle(color: contrastColor)),
               ],
             ),

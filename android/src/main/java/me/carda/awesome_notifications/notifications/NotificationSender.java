@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
 
+import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.RequiresApi;
@@ -15,11 +16,11 @@ import androidx.core.app.NotificationManagerCompat;
 
 import me.carda.awesome_notifications.BroadcastSender;
 import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
-import me.carda.awesome_notifications.Definitions;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLayout;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.notifications.enumerators.NotificationSource;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
+import me.carda.awesome_notifications.notifications.managers.StatusBarManager;
 import me.carda.awesome_notifications.notifications.managers.CreatedManager;
 import me.carda.awesome_notifications.notifications.managers.DismissedManager;
 import me.carda.awesome_notifications.notifications.managers.DisplayedManager;
@@ -42,8 +43,6 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
     private Boolean created = false;
     private Boolean displayed = false;
-
-    private NotificationBuilder notificationBuilder = new NotificationBuilder();
 
     public static void send(
             Context context,
@@ -186,6 +185,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
     private NotificationModel _buildSummaryGroupNotification(NotificationModel original){
 
         NotificationModel pushSummary = notificationModel.ClonePush();
+
         pushSummary.content.id = IntegerUtils.generateNextRandomId();
         pushSummary.content.notificationLayout = NotificationLayout.Default;
         pushSummary.content.largeIcon = null;
@@ -206,23 +206,26 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                 (lifeCycle == NotificationLifeCycle.Foreground && notificationModel.content.displayOnForeground) ||
                 (lifeCycle == NotificationLifeCycle.Background && notificationModel.content.displayOnBackground)
             ){
-                Notification notification = notificationBuilder.createNotification(context, notificationModel);
+                Notification notification = NotificationBuilder.createNotification(context, notificationModel);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                if(
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
+                    notificationModel.content.notificationLayout == NotificationLayout.Default &&
+                    StatusBarManager
+                        .getInstance(context)
+                        .isFirstActiveOnGroupKey(notificationModel.content.groupKey)
+                ){
+                    NotificationModel pushSummary = _buildSummaryGroupNotification(notificationModel);
+                    Notification summaryNotification = NotificationBuilder.createNotification(context, pushSummary);
 
-                    if(notificationModel.groupSummary){
-                        NotificationModel pushSummary = _buildSummaryGroupNotification(notificationModel);
-                        Notification summaryNotification = notificationBuilder.createNotification(context, pushSummary, true);
-                        notificationManager.notify(pushSummary.content.id, summaryNotification);
-                    }
-
-                    notificationManager.notify(notificationModel.content.id, notification);
+                    StatusBarManager
+                        .getInstance(context)
+                        .showNotificationOnStatusBar(pushSummary, summaryNotification);
                 }
-                else {
-                    NotificationManagerCompat notificationManagerCompat = getNotificationManager(context);
-                    notificationManagerCompat.notify(notificationModel.content.id.toString(), notificationModel.content.id, notification);
-                }
+
+                StatusBarManager
+                        .getInstance(context)
+                        .showNotificationOnStatusBar(notificationModel, notification);
             }
 
             return notificationModel;
@@ -231,60 +234,6 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             e.printStackTrace();
         }
         return null;
-    }
-
-    private static NotificationManagerCompat getNotificationManager(Context context) {
-        return NotificationManagerCompat.from(context);
-    }
-
-    public static void dismissNotification(Context context, Integer id) {
-        if(context != null){
-
-            if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O /*Android 8*/) {
-                NotificationManagerCompat notificationManager = getNotificationManager(context);
-
-                dismissOrphanGroupDescription(context, notificationManager, id);
-
-                notificationManager.cancel(id.toString(), id);
-                notificationManager.cancel(id);
-            }
-
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel(id.toString(), id);
-            notificationManager.cancel(id);
-        }
-    }
-
-    public static void dismissNotificationsByChannelKey(Context context, String channelKey) {
-        List<Notification> notificationList = NotificationBuilder.getAllAndroidActiveNotificationsByChannelKey(context, channelKey);
-
-        for(Notification notification : notificationList){
-            int id = notification.extras.getInt(Definitions.NOTIFICATION_ID);
-            NotificationSender.dismissNotification(context, id);
-        }
-    }
-
-    public static void dismissNotificationsByGroupKey(Context context, String groupKey) {
-        List<Notification> notificationList = NotificationBuilder.getAllAndroidActiveNotificationsByGroupKey(context, groupKey);
-
-        for(Notification notification : notificationList){
-            int id = notification.extras.getInt(Definitions.NOTIFICATION_ID);
-            NotificationSender.dismissNotification(context, id);
-        }
-    }
-
-    public static boolean dismissAllNotifications(Context context) {
-
-        if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O /*Android 8*/) {
-            NotificationManagerCompat notificationManager = getNotificationManager(context);
-            notificationManager.cancelAll();
-        }
-        else {
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancelAll();
-        }
-
-        return true;
     }
 
     public static void sendDismissedNotification(Context context, ActionReceived actionReceived){
@@ -308,38 +257,6 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                 e.printStackTrace();
             }
         }
-    }
-
-    /// fix to canceling a automatic generated summary notification
-    /// https://github.com/rafaelsetragni/awesome_notifications/issues/69
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private static void dismissOrphanGroupDescription(Context context, NotificationManagerCompat notificationManager, int id){
-
-        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
-
-        if(currentActiveNotifications != null)
-            for (StatusBarNotification activeNotification : currentActiveNotifications) {
-                if(activeNotification.getId() == id){
-                    String groupKey = activeNotification.getGroupKey();
-                    if(!StringUtils.isNullOrEmpty(groupKey)) {
-                        Integer otherId = 0, count = 0;
-                        for (StatusBarNotification otherNotification : currentActiveNotifications) {
-                            if(otherNotification.getGroupKey().equals(groupKey)) {
-                                count++;
-                                if(otherNotification.getId() != id)
-                                    otherId = otherNotification.getId();
-                            }
-                        }
-                        if(count <= 2){
-                            notificationManager.cancel(otherId.toString(), otherId);
-                            notificationManager.cancel(otherId);
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
     }
 
 }

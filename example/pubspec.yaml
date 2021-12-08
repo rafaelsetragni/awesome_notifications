@@ -31,6 +31,9 @@ dependencies:
   shared_preferences: ^2.0.5
   numberpicker: ^2.0.1
   giffy_dialog: ^1.8.0
+  vibration: ^1.7.4-nullsafety.0
+
+  device_info: ^2.0.3
 
   url_launcher: ^6.0.3
 
@@ -80,6 +83,7 @@ flutter:
     - assets/images/awesome-notifications-logo-color.png
     - assets/images/awesome-notifications-logo-black.png
     - assets/images/awesome-notifications-logo-white.png
+    - assets/images/girl-phonecall.jpg
     - assets/images/animated-bell.gif
     - assets/images/animated-clock.gif
     - assets/images/animated-warning.gif

@@ -53,6 +53,7 @@ public interface Definitions {
 
     String CHANNEL_METHOD_INITIALIZE = "initialize";
     String CHANNEL_METHOD_GET_DRAWABLE_DATA = "getDrawableData";
+    String CHANNEL_METHOD_ENABLE_WAKELOCK = "enableWakelock";
     String CHANNEL_METHOD_CREATE_NOTIFICATION = "createNewNotification";
 
     String CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER = "getUtcTimeZoneIdentifier";

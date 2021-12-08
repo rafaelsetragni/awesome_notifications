@@ -69,5 +69,4 @@ void main() {
         AssertUtils.extractEnum<NotificationPrivacy>(
             "test", {"test": null}, NotificationPrivacy.values));
   });
-
 }

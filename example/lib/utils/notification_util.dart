@@ -328,7 +328,7 @@ class NotificationUtils {
         category: NotificationCategory.Social,
         title: 'Emojis are awesome too! ' +
             Emojis.smile_face_with_tongue +
-            Emojis.smile_rolling_on_the_floor_laughing +
+            Emojis.smile_smiling_face +
             Emojis.smile_smiling_face_with_heart_eyes,
         body:
             'Simple body with a bunch of Emojis! ${Emojis.transport_police_car} ${Emojis.animals_dog} ${Emojis.flag_UnitedStates} ${Emojis.person_baby}',
@@ -458,7 +458,11 @@ class NotificationUtils {
           NotificationActionButton(
               key: 'PROFILE', label: 'Profile', autoDismissible: true, color: Colors.green),
           NotificationActionButton(
-              key: 'DISMISS', label: 'Dismiss', autoDismissible: true, isDangerousOption: true)
+              key: 'DISMISS',
+              label: 'Dismiss',
+              autoDismissible: true,
+              buttonType: ActionButtonType.DisabledAction,
+              isDangerousOption: true)
         ]);
   }
   
@@ -482,6 +486,67 @@ class NotificationUtils {
           NotificationActionButton(
               key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
         ]);
+  }
+
+  /* *********************************************
+      NOTIFICATION'S SPECIAL CATEGORIES
+  ************************************************ */
+
+  static Future<void> showCallNotification(int id) async {
+    String platformVersion = await getPlatformVersion();
+    AndroidForegroundService.startForeground(
+    //await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: id,
+            channelKey: 'call_channel',
+            title: 'Incoming Call',
+            body: 'from Little Mary',
+            category: NotificationCategory.Call,
+            largeIcon: 'asset://assets/images/girl-phonecall.jpg',
+            wakeUpScreen: true,
+            fullScreenIntent: true,
+            autoDismissible: false,
+            backgroundColor: (platformVersion == 'Android-31') ?
+              Color(0x00796a) : Colors.white,
+            payload: {
+              'username': 'Little Mary'
+            }
+        ),
+        actionButtons: [
+          NotificationActionButton(
+              key: 'ACCEPT',
+              label: 'Accept Call',
+              color: Colors.green,
+              autoDismissible: true
+          ),
+          NotificationActionButton(
+              key: 'REJECT',
+              label: 'Reject',
+              isDangerousOption: true,
+              autoDismissible: true
+          ),
+        ]
+    );
+  }
+
+  static Future<void> showAlarmNotification(int id) async {
+    AndroidForegroundService.startForeground(
+        content: NotificationContent(
+            id: id,
+            channelKey: 'alarm_channel',
+            title: 'Alarm is playing',
+            body: 'Hey! Wake Up!',
+            category: NotificationCategory.Alarm
+        ),
+        actionButtons: [
+          NotificationActionButton(
+              key: 'SNOOZE',
+              label: 'Snooze for 5 minutes',
+              color: Colors.blue,
+              autoDismissible: true
+          ),
+        ]
+    );
   }
   
   /* *********************************************
@@ -1215,7 +1280,7 @@ class NotificationUtils {
       createMessagingNotification(
         channelKey: 'chats',
         groupKey: 'jhonny_group',
-        chatName: 'Michael\'s Group',
+        chatName: 'Jhonny\'s Group',
         username: 'Michael',
         largeIcon: 'asset://assets/images/dj-disc.jpg',
         message: 'Michael\'s message $_messageIncrement',
@@ -1337,11 +1402,11 @@ class NotificationUtils {
       INBOX NOTIFICATIONS
   ************************************************ */
   
-  static Future<void> showGroupedNotifications(id) async {
+  static Future<void> showGroupedNotifications(String channelKey) async {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: 1,
-            channelKey: 'grouped',
+            channelKey: channelKey,
             title: 'Little Jhonny',
             body: 'Hey dude! Look what i found!'));
   
@@ -1356,7 +1421,7 @@ class NotificationUtils {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: 3,
-            channelKey: 'grouped',
+            channelKey: channelKey,
             title: 'Little Jhonny',
             body: 'This push notifications plugin is amazing!'));
   
@@ -1365,7 +1430,7 @@ class NotificationUtils {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: 4,
-            channelKey: 'grouped',
+            channelKey: channelKey,
             title: 'Little Jhonny',
             body: 'Its perfect!'));
   
@@ -1374,7 +1439,7 @@ class NotificationUtils {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: 5,
-            channelKey: 'grouped',
+            channelKey: channelKey,
             title: 'Little Jhonny',
             body: 'I gonna contribute with the project! For sure!'));
   }

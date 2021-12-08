@@ -76,8 +76,16 @@ class MediaPlayerCentral {
   static bool get hasNextMedia => hasAnyMedia && index < _playlist.length - 1;
   static bool get hasPreviousMedia => hasAnyMedia && index > 0;
 
-  static Stream get mediaStream => _mediaBroadcaster.stream;
-  static Stream get progressStream => _mediaProgress.stream;
+  static Stream get mediaStream {
+    if (_mediaBroadcaster.isClosed)
+      _mediaBroadcaster = StreamController<MediaModel>.broadcast();
+    return _mediaBroadcaster.stream;
+  }
+  static Stream get progressStream {
+    if (_mediaProgress.isClosed)
+      _mediaProgress = StreamController<Duration>.broadcast();
+    return _mediaProgress.stream;
+  }
   static StreamSink get mediaSink => _mediaBroadcaster.sink;
   static StreamSink get progressSink => _mediaProgress.sink;
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:awesome_notifications/android_foreground_service.dart';
 import 'package:awesome_notifications_example/common_widgets/led_light.dart';
 import 'package:awesome_notifications_example/common_widgets/seconds_slider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -22,6 +23,7 @@ import 'package:awesome_notifications_example/common_widgets/simple_button.dart'
 import 'package:awesome_notifications_example/common_widgets/text_divisor.dart';
 import 'package:awesome_notifications_example/common_widgets/text_note.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:vibration/vibration.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -35,6 +37,7 @@ class _HomePageState extends State<HomePage> {
 
   bool delayLEDTests = false;
   double _secondsToWakeUp = 5;
+  double _secondsToCallCategory = 5;
 
   bool globalNotificationsAllowed = false;
   bool schedulesFullControl = false;
@@ -143,23 +146,6 @@ class _HomePageState extends State<HomePage> {
     // Uncomment those lines after activate google services inside example/android/build.gradle
     // initializeFirebaseService();
 
-    // this is not part of notification system, but media player simulator instead
-    MediaPlayerCentral.mediaStream.listen((media) {
-      switch (MediaPlayerCentral.mediaLifeCycle) {
-        case MediaLifeCycle.Stopped:
-          NotificationUtils.cancelNotification(100);
-          break;
-
-        case MediaLifeCycle.Paused:
-          NotificationUtils.updateNotificationMediaPlayer(100, media);
-          break;
-
-        case MediaLifeCycle.Playing:
-          NotificationUtils.updateNotificationMediaPlayer(100, media);
-          break;
-      }
-    });
-
     // If you pretend to use the firebase service, you need to initialize it
     // getting a valid token
     // initializeFirebaseService();
@@ -184,6 +170,31 @@ class _HomePageState extends State<HomePage> {
     });
 
     AwesomeNotifications().actionStream.listen((receivedAction) {
+
+      if(receivedAction.channelKey == 'call_channel'){
+        switch (receivedAction.buttonKeyPressed) {
+
+          case 'REJECT':
+            AndroidForegroundService.stopForeground();
+            break;
+
+          case 'ACCEPT':
+            loadSingletonPage(targetPage: PAGE_PHONE_CALL, receivedAction: receivedAction);
+            AndroidForegroundService.stopForeground();
+            break;
+
+          default:
+            loadSingletonPage(targetPage: PAGE_PHONE_CALL, receivedAction: receivedAction);
+            break;
+        }
+        return;
+      }
+
+      if (receivedAction.channelKey == 'alarm_channel') {
+        AndroidForegroundService.stopForeground();
+        return;
+      }
+
       if (!StringUtils.isNullOrEmpty(receivedAction.buttonKeyInput)) {
         processInputTextReceived(receivedAction);
       } else if (!StringUtils.isNullOrEmpty(
@@ -201,6 +212,13 @@ class _HomePageState extends State<HomePage> {
           refreshPermissionsIcons();
       })
     );
+  }
+
+  void loadSingletonPage({required String targetPage, required ReceivedAction receivedAction}){
+    // Avoid to open the notification details page over another details page already opened
+    Navigator.pushNamedAndRemoveUntil(context, targetPage,
+            (route) => (route.settings.name != targetPage) || route.isFirst,
+        arguments: receivedAction);
   }
 
   Future<void> refreshPermissionsIcons() async {
@@ -244,23 +262,20 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void processDefaultActionReceived(ReceivedAction receivedNotification) {
+  void processDefaultActionReceived(ReceivedAction receivedAction) {
     Fluttertoast.showToast(msg: 'Action received');
 
     String targetPage;
 
     // Avoid to reopen the media page if is already opened
-    if (receivedNotification.channelKey == 'media_player') {
+    if (receivedAction.channelKey == 'media_player') {
       targetPage = PAGE_MEDIA_DETAILS;
       if (Navigator.of(context).isCurrent(PAGE_MEDIA_DETAILS)) return;
     } else {
       targetPage = PAGE_NOTIFICATION_DETAILS;
     }
 
-    // Avoid to open the notification details page over another details page already opened
-    Navigator.pushNamedAndRemoveUntil(context, targetPage,
-        (route) => (route.settings.name != targetPage) || route.isFirst,
-        arguments: receivedNotification);
+    loadSingletonPage(targetPage: targetPage, receivedAction: receivedAction);
   }
 
   void processInputTextReceived(ReceivedAction receivedAction) {
@@ -556,6 +571,31 @@ class _HomePageState extends State<HomePage> {
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: () => NotificationUtils.cancelNotification(1)),
+
+            /* ******************************************************************** */
+
+            TextDivisor(title: 'Notification\'s Special Category'),
+            TextNote('The notification category is a group of predefined categories that best describe the nature of the notification and may be used by some systems for ranking, delay or filter the notifications. Its highly recommended to correctly categorize your notifications..\n\n'
+                'Slide the bar above to add some delay on notification.'),
+            SecondsSlider(steps: 12, minValue: 0, onChanged: (newValue){ setState(() => _secondsToCallCategory = newValue ); }),
+            SimpleButton('Show call notification',
+                onPressed: () {
+                  Vibration.vibrate(duration: 100);
+                  Future.delayed(Duration(seconds: _secondsToCallCategory.toInt()), () {
+                    NotificationUtils.showCallNotification(1);
+                  });
+                }),
+            SimpleButton('Show alarm notification',
+                onPressed: () {
+                  Vibration.vibrate(duration: 100);
+                  Future.delayed(Duration(seconds: _secondsToCallCategory.toInt()), () {
+                    NotificationUtils.showAlarmNotification(1);
+                  });
+                }),
+            SimpleButton('Stop Alarm / Call',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () => NotificationUtils.stopForegroundServiceNotification()),
 
             /* ******************************************************************** */
 
@@ -1047,11 +1087,11 @@ class _HomePageState extends State<HomePage> {
 
             TextDivisor(title: 'Grouped Notifications'),
             SimpleButton('Show grouped notifications',
-                onPressed: () => NotificationUtils.showGroupedNotifications(12)),
-            SimpleButton('Cancel notification',
+                onPressed: () => NotificationUtils.showGroupedNotifications('grouped')),
+            SimpleButton('Cancel grouped notifications',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => NotificationUtils.cancelNotification(12)),
+                onPressed: () => NotificationUtils.dismissNotificationsByChannelKey('grouped')),
 
             /* ******************************************************************** */
             TextDivisor(),

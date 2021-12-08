@@ -23,6 +23,7 @@ public class SharedManager<T extends AbstractModel> {
     private String className;
 
     private static String TAG = "SharedManager";
+
     private String reference;
     private String hashedReference = "default";
 
@@ -31,18 +32,11 @@ public class SharedManager<T extends AbstractModel> {
         this.className = className;
         this.reference = Definitions.SHARED_MANAGER +"."+ fileIdentifier +"."+ className;
         try {
-
-            MessageDigest m = MessageDigest.getInstance("MD5");
-            m.update(reference.getBytes(),0,reference.length());
-            hashedReference = new BigInteger(1,m.digest()).toString(16);
-
+            hashedReference = StringUtils.digestString(reference);
             //Log.d(TAG, fileIdentifier+": file initialized = "+ hashedReference);
-
         } catch (Exception e) {
-
             this.hashedReference = reference;
-
-            Log.e(TAG, "SharedManager could not be initialized: "+ e.getMessage());
+            Log.e(TAG, "SharedManager could not be correctly initialized: "+ e.getMessage());
             e.printStackTrace();
         }
     }
