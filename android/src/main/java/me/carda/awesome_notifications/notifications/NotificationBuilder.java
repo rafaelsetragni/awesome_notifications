@@ -15,7 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.widget.RemoteViews;
-
+import android.support.v4.media.MediaMetadataCompat;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -1059,6 +1059,20 @@ public class NotificationBuilder {
         }
 
         int[] showInCompactView = toIntArray(indexes);
+
+        /*
+        * This fix is to show the notification in Android versions >= 11 in the QuickSettings area.
+        * https://developer.android.com/guide/topics/media/media-controls
+	* https://github.com/rafaelsetragni/awesome_notifications/pull/364
+        */
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R /*Android 11*/){		
+	        AwesomeNotificationsPlugin.mediaSession.setMetadata(
+			        new MediaMetadataCompat.Builder()
+					        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, contentModel.title)
+					        .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, contentModel.body)
+					        .build()
+	        );
+        }
 
         builder.setStyle(
                 new androidx.media.app.NotificationCompat.MediaStyle()
