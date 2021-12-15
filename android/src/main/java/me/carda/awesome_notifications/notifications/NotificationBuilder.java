@@ -17,8 +17,6 @@ import android.os.PowerManager;
 import android.widget.RemoteViews;
 import android.support.v4.media.MediaMetadataCompat;
 
-import io.flutter.Log;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
