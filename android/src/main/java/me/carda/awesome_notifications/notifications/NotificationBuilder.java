@@ -1065,10 +1065,9 @@ public class NotificationBuilder {
         /*
         * This fix is to show the notification in Android versions >= 11 in the QuickSettings area.
         * https://developer.android.com/guide/topics/media/media-controls
+	* https://github.com/rafaelsetragni/awesome_notifications/pull/364
         */
-
-        if(Build.VERSION.SDK_INT >= 30){
-	        Log.d(TAG, "Set metadata for Android >= 11 (API Level 30)");
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R /*Android 11*/){		
 	        AwesomeNotificationsPlugin.mediaSession.setMetadata(
 			        new MediaMetadataCompat.Builder()
 					        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, contentModel.title)
