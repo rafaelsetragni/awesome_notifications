@@ -64,6 +64,14 @@ String printDuration(Duration? duration) {
   return "$twoDigitMinutes:$twoDigitSeconds";
 }
 
+void loadSingletonPage(NavigatorState? navigatorState, {required String targetPage, required ReceivedAction receivedAction}){
+  // Avoid to open the notification details page over another details page already opened
+  // Navigate into pages, avoiding to open the notification details page over another details page already opened
+  navigatorState?.pushNamedAndRemoveUntil(targetPage,
+          (route) => (route.settings.name != targetPage) || route.isFirst,
+      arguments: receivedAction);
+}
+
 Future<String> downloadAndSaveImageOnDisk(String url, String fileName) async {
   var directory = await getApplicationDocumentsDirectory();
   var filePath = '${directory.path}/$fileName';

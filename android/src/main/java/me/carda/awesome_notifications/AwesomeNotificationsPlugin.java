@@ -1,14 +1,7 @@
 package me.carda.awesome_notifications;
 
-import android.app.Application;
-import android.app.Application.ActivityLifecycleCallbacks;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.v4.media.session.MediaSessionCompat;
 
 import io.flutter.Log;
 
@@ -20,109 +13,60 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.*;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
-import io.flutter.embedding.engine.plugins.activity.ActivityAware;
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
-import android.app.Activity;
+import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
+import me.carda.awesome_notifications.awesome_notifications_android_core.observers.AwesomeEventListener;
+import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
+import me.carda.awesome_notifications.awesome_notifications_android_core.decoders.BitmapResourceDecoder;
+import me.carda.awesome_notifications.awesome_notifications_android_core.completion_handlers.BitmapCompletionHandler;
+import me.carda.awesome_notifications.awesome_notifications_android_core.completion_handlers.PermissionCompletionHandler;
+import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
+import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationScheduleModel;
+import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
 
-import me.carda.awesome_notifications.notifications.BitmapResourceDecoder;
-import me.carda.awesome_notifications.notifications.handlers.PermissionCompletionHandler;
-import me.carda.awesome_notifications.notifications.managers.BadgeManager;
-import me.carda.awesome_notifications.notifications.managers.CancellationManager;
-import me.carda.awesome_notifications.notifications.managers.StatusBarManager;
-import me.carda.awesome_notifications.notifications.managers.ChannelGroupManager;
-import me.carda.awesome_notifications.notifications.models.DefaultsModel;
-import me.carda.awesome_notifications.notifications.models.NotificationChannelGroupModel;
-import me.carda.awesome_notifications.notifications.models.NotificationModel;
-import me.carda.awesome_notifications.notifications.models.NotificationScheduleModel;
-import me.carda.awesome_notifications.notifications.managers.PermissionManager;
-import me.carda.awesome_notifications.notifications.enumerators.MediaSource;
-import me.carda.awesome_notifications.notifications.enumerators.NotificationLifeCycle;
-import me.carda.awesome_notifications.notifications.enumerators.NotificationSource;
-import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
+import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationChannelModel;
 
-import me.carda.awesome_notifications.notifications.NotificationBuilder;
-
-import me.carda.awesome_notifications.notifications.managers.ChannelManager;
-import me.carda.awesome_notifications.notifications.managers.CreatedManager;
-import me.carda.awesome_notifications.notifications.managers.DefaultsManager;
-import me.carda.awesome_notifications.notifications.managers.DismissedManager;
-import me.carda.awesome_notifications.notifications.managers.DisplayedManager;
-
-import me.carda.awesome_notifications.notifications.managers.ScheduleManager;
-import me.carda.awesome_notifications.notifications.models.NotificationChannelModel;
-import me.carda.awesome_notifications.notifications.models.returnedData.ActionReceived;
-import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
-
-import me.carda.awesome_notifications.notifications.NotificationSender;
-import me.carda.awesome_notifications.notifications.NotificationScheduler;
-
-import me.carda.awesome_notifications.utils.BooleanUtils;
-import me.carda.awesome_notifications.utils.DateUtils;
-import me.carda.awesome_notifications.utils.JsonUtils;
-import me.carda.awesome_notifications.utils.ListUtils;
-import me.carda.awesome_notifications.utils.MapUtils;
-import me.carda.awesome_notifications.utils.MediaUtils;
-import me.carda.awesome_notifications.utils.StringUtils;
+import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BooleanUtils;
+import me.carda.awesome_notifications.awesome_notifications_android_core.utils.DateUtils;
+import me.carda.awesome_notifications.awesome_notifications_android_core.utils.ListUtils;
+import me.carda.awesome_notifications.awesome_notifications_android_core.utils.MapUtils;
+import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
 
 
-import me.carda.awesome_notifications.services.ForegroundService;
+import static me.carda.awesome_notifications.awesome_notifications_android_core.Definitions.ACTION_HANDLE;
 
 /**
  * AwesomeNotificationsPlugin
  **/
 public class AwesomeNotificationsPlugin
-        extends BroadcastReceiver
-        implements FlutterPlugin, MethodCallHandler, PluginRegistry.NewIntentListener, ActivityAware, ActivityLifecycleCallbacks {
-
-    public static Boolean debug = false;
-
-    private static String mainTargetClassName;
-    public static NotificationLifeCycle appLifeCycle = NotificationLifeCycle.AppKilled;
+        implements FlutterPlugin, MethodCallHandler, AwesomeEventListener {
 
     private static final String TAG = "AwesomeNotificationsPlugin";
 
-    private ActivityPluginBinding activityBinding;
-    private Activity initialActivity;
     private MethodChannel pluginChannel;
-    private Context applicationContext;
-
-    public static MediaSessionCompat mediaSession;
-
-    public static String getMainTargetClassName() {
-        return mainTargetClassName;
-    }
-
-    @Override
-    public boolean onNewIntent(Intent intent) {
-        //Log.d(TAG, "onNewIntent called");
-        return receiveNotificationAction(intent);
-    }
+    private AwesomeNotifications awesomeNotifications;
 
     // https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration
     // FOR OLDER FLUTTER VERSIONS (1.11 releases and bellow)
     public static void registerWith(Registrar registrar) {
-        AwesomeNotificationsPlugin awesomeNotificationsPlugin = new AwesomeNotificationsPlugin();
 
-        awesomeNotificationsPlugin.initialActivity = registrar.activity();
+        AwesomeNotificationsPlugin awesomeNotificationsPlugin
+                = new AwesomeNotificationsPlugin();
 
         awesomeNotificationsPlugin.AttachAwesomeNotificationsPlugin(
                 registrar.context(),
                 new MethodChannel(
                         registrar.messenger(),
                         Definitions.CHANNEL_FLUTTER_PLUGIN
-                )
-        );
+                ));
     }
 
     // FOR NEWER FLUTTER VERSIONS (1.12 releases and above)
@@ -132,303 +76,54 @@ public class AwesomeNotificationsPlugin
         AttachAwesomeNotificationsPlugin(
                 flutterPluginBinding.getApplicationContext(),
                 new MethodChannel(
-                        flutterPluginBinding.getBinaryMessenger(),
-                        Definitions.CHANNEL_FLUTTER_PLUGIN
-                )
-        );
-    }
+                    flutterPluginBinding.getBinaryMessenger(),
+                    Definitions.CHANNEL_FLUTTER_PLUGIN
+                ));
 
-    private void AttachAwesomeNotificationsPlugin(Context context, MethodChannel channel) {
-
-        this.applicationContext = context;
-
-        pluginChannel = channel;
-        pluginChannel.setMethodCallHandler(this);
-
-        IntentFilter intentFilter = new IntentFilter();
-
-        intentFilter.addAction(Definitions.EXTRA_BROADCAST_FCM_TOKEN);
-        intentFilter.addAction(Definitions.BROADCAST_CREATED_NOTIFICATION);
-        intentFilter.addAction(Definitions.BROADCAST_DISPLAYED_NOTIFICATION);
-        intentFilter.addAction(Definitions.BROADCAST_DISMISSED_NOTIFICATION);
-        intentFilter.addAction(Definitions.BROADCAST_KEEP_ON_TOP);
-        intentFilter.addAction(Definitions.BROADCAST_MEDIA_BUTTON);
-
-        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(applicationContext);
-        manager.registerReceiver(this, intentFilter);
-
-        mediaSession = new MediaSessionCompat(applicationContext, "PUSH_MEDIA");
-
-        getApplicationLifeCycle();
-
-        if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Awesome Notifications attached for Android " + Build.VERSION.SDK_INT);
-
-        NotificationScheduler.refreshScheduleNotifications(context);
-        // enableFirebase(context);
-    }
-
-    @Override
-    public void onAttachedToActivity(ActivityPluginBinding activityPluginBinding) {
-        initialActivity = activityPluginBinding.getActivity();
-        activityBinding = activityPluginBinding;
-        startListeningPermissions();
-        getApplicationLifeCycle();
-
-        activityPluginBinding.addOnNewIntentListener(this);
-
-        Application application = initialActivity.getApplication();
-        application.registerActivityLifecycleCallbacks(this);
-
-        Intent intent = initialActivity.getIntent();
-        mainTargetClassName = intent.getComponent().getClassName();
-
-        if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notification Lifecycle: (onAttachedToActivity)" + appLifeCycle.toString());
+        if (AwesomeNotifications.debug)
+            Log.d(TAG, "Awesome Notifications attached to engine for Android " + Build.VERSION.SDK_INT);
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        detachAwesomeNotificationsPlugin(
+                binding.getApplicationContext());
+
+        if (AwesomeNotifications.debug)
+            Log.d(TAG, "Awesome Notifications plugin detached from engine");
+    }
+
+    private void AttachAwesomeNotificationsPlugin(Context applicationContext, MethodChannel channel) {
+        pluginChannel = channel;
+        pluginChannel.setMethodCallHandler(this);
+
+        awesomeNotifications = new AwesomeNotifications(applicationContext);
+        awesomeNotifications.subscribeOnAwesomeNotificationEvents(this);
+    }
+
+    private void detachAwesomeNotificationsPlugin(Context applicationContext) {
+
         pluginChannel.setMethodCallHandler(null);
-        getApplicationLifeCycle();
+        pluginChannel = null;
 
-        if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notification Lifecycle: (onDetachedFromEngine)" + appLifeCycle.toString());
+        awesomeNotifications
+                .unsubscribeOnAwesomeNotificationEvents(this)
+                .dispose();
+
+        awesomeNotifications = null;
+
+        if (AwesomeNotifications.debug)
+            Log.d(TAG, "Awesome Notifications detached for Android " + Build.VERSION.SDK_INT);
     }
 
     @Override
-    public void onDetachedFromActivityForConfigChanges() {
-        stopListeningPermissions();
-        getApplicationLifeCycle();
-
-        if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notification Lifecycle: (onDetachedFromActivityForConfigChanges)" + appLifeCycle.toString());
-    }
-
-    @Override
-    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding activityPluginBinding) {
-        activityBinding = activityPluginBinding;
-        startListeningPermissions();
-        getApplicationLifeCycle();
-
-        if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notification Lifecycle: (onReattachedToActivityForConfigChanges)" + appLifeCycle.toString());
-    }
-
-    @Override
-    public void onDetachedFromActivity() {
-        stopListeningPermissions();
-        getApplicationLifeCycle();
-
-        if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notification Lifecycle: (onDetachedFromActivity)" + appLifeCycle.toString());
-    }
-
-    // BroadcastReceiver by other classes.
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        getApplicationLifeCycle();
-        try {
-            String action = intent.getAction();
-            switch (action) {
-
-                case Definitions.BROADCAST_CREATED_NOTIFICATION:
-                    onBroadcastNotificationCreated(intent);
-                    return;
-
-                case Definitions.BROADCAST_DISPLAYED_NOTIFICATION:
-                    onBroadcastNotificationDisplayed(intent);
-                    return;
-
-                case Definitions.BROADCAST_DISMISSED_NOTIFICATION:
-                    onBroadcastNotificationDismissed(intent);
-                    return;
-
-                case Definitions.BROADCAST_KEEP_ON_TOP:
-                    onBroadcastKeepOnTopActionNotification(intent);
-                    return;
-
-                case Definitions.BROADCAST_MEDIA_BUTTON:
-                    onBroadcastMediaButton(intent);
-                    return;
-
-                default:
-                    if (AwesomeNotificationsPlugin.debug)
-                        Log.d(TAG, "Received unknown action: " + (
-                                StringUtils.isNullOrEmpty(action) ? "empty" : action));
-
-            }
-        } catch (Exception e) {
-            if (AwesomeNotificationsPlugin.debug)
-                Log.d(TAG, String.format("%s", e.getMessage()));
-            e.printStackTrace();
-        }
-    }
-
-    private void onBroadcastNotificationCreated(Intent intent) throws AwesomeNotificationException {
-
-        Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object> content = (serializable instanceof Map ? (Map<String, Object>) serializable : null);
-        if (content == null) return;
-
-        NotificationReceived received = new NotificationReceived().fromMap(content);
-        received.validate(applicationContext);
-
-        CreatedManager.removeCreated(applicationContext, received.id);
-        CreatedManager.commitChanges(applicationContext);
-
-        pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED, content);
-
-        if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notification created");
-    }
-
-    private void onBroadcastKeepOnTopActionNotification(Intent intent) throws AwesomeNotificationException {
-        try {
-
-            Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
-            pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_RECEIVED_ACTION, serializable);
-
-            if (AwesomeNotificationsPlugin.debug)
-                Log.d(TAG, "Notification action received");
-
-        } catch (Exception e) {
-            throw new AwesomeNotificationException(e.getMessage());
-        }
-    }
-
-    private void onBroadcastMediaButton(Intent intent) throws AwesomeNotificationException {
-        try {
-            Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
-            pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_MEDIA_BUTTON, serializable);
-
-            if (AwesomeNotificationsPlugin.debug)
-                Log.d(TAG, "Notification action received");
-
-        } catch (Exception e) {
-            throw new AwesomeNotificationException(e.getMessage());
-        }
-    }
-
-    private void onBroadcastNotificationDisplayed(Intent intent) throws AwesomeNotificationException {
-        try {
-
-            Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
-
-            @SuppressWarnings("unchecked")
-            Map<String, Object> content = (serializable instanceof Map ? (Map<String, Object>) serializable : null);
-            if (content == null) return;
-
-            NotificationReceived received = new NotificationReceived().fromMap(content);
-            received.validate(applicationContext);
-
-            DisplayedManager.removeDisplayed(applicationContext, received.id);
-            DisplayedManager.commitChanges(applicationContext);
-
-            pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISPLAYED, content);
-
-            if (AwesomeNotificationsPlugin.debug)
-                Log.d(TAG, "Notification displayed");
-
-        } catch (Exception e) {
-            throw new AwesomeNotificationException(e.getMessage());
-        }
-    }
-
-    private void onBroadcastNotificationDismissed(Intent intent) throws AwesomeNotificationException {
-        try {
-
-            Serializable serializable = intent.getSerializableExtra(Definitions.EXTRA_BROADCAST_MESSAGE);
-
-            @SuppressWarnings("unchecked")
-            Map<String, Object> content = (serializable instanceof Map ? (Map<String, Object>) serializable : null);
-            if (content == null) return;
-
-            ActionReceived received = new ActionReceived().fromMap(content);
-            received.validate(applicationContext);
-
-            DismissedManager.removeDismissed(applicationContext, received.id);
-            DisplayedManager.commitChanges(applicationContext);
-
-            pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED, content);
-
-            if (AwesomeNotificationsPlugin.debug)
-                Log.d(TAG, "Notification dismissed");
-
-        } catch (Exception e) {
-            throw new AwesomeNotificationException(e.getMessage());
-        }
-    }
-
-    private void recoverNotificationCreated(Context context) {
-        List<NotificationReceived> lostCreated = CreatedManager.listCreated(context);
-
-        if (lostCreated != null) {
-            for (NotificationReceived created : lostCreated) {
-                try {
-
-                    created.validate(applicationContext);
-                    pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED, created.toMap());
-                    CreatedManager.removeCreated(context, created.id);
-                    CreatedManager.commitChanges(context);
-
-                } catch (AwesomeNotificationException e) {
-                    if (AwesomeNotificationsPlugin.debug)
-                        Log.d(TAG, String.format("%s", e.getMessage()));
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private void recoverNotificationDisplayed(Context context) {
-        List<NotificationReceived> lostDisplayed = DisplayedManager.listDisplayed(context);
-
-        if (lostDisplayed != null) {
-            for (NotificationReceived displayed : lostDisplayed) {
-                try {
-
-                    displayed.validate(applicationContext);
-                    pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISPLAYED, displayed.toMap());
-                    DisplayedManager.removeDisplayed(context, displayed.id);
-                    DisplayedManager.commitChanges(context);
-
-                } catch (AwesomeNotificationException e) {
-                    if (AwesomeNotificationsPlugin.debug)
-                        Log.d(TAG, String.format("%s", e.getMessage()));
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private void recoverNotificationDismissed(Context context) {
-        List<ActionReceived> lostDismissed = DismissedManager.listDismissed(context);
-
-        if (lostDismissed != null) {
-            for (ActionReceived received : lostDismissed) {
-                try {
-
-                    received.validate(applicationContext);
-                    pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED, received.toMap());
-                    DismissedManager.removeDismissed(context, received.id);
-                    DismissedManager.commitChanges(context);
-
-                } catch (AwesomeNotificationException e) {
-                    if (AwesomeNotificationsPlugin.debug)
-                        Log.d(TAG, String.format("%s", e.getMessage()));
-                    e.printStackTrace();
-                }
-            }
-        }
+    public void onNewAwesomeEvent(String eventType, Serializable content) {
+        if (pluginChannel != null)
+            pluginChannel.invokeMethod(eventType, content);
     }
 
     @Override
     public void onMethodCall(@NonNull final MethodCall call, @NonNull final Result result) {
-
-        getApplicationLifeCycle();
 
         try {
 
@@ -438,12 +133,12 @@ public class AwesomeNotificationsPlugin
                     channelMethodInitialize(call, result);
                     return;
 
-                case Definitions.CHANNEL_METHOD_GET_DRAWABLE_DATA:
-                    channelMethodGetDrawableData(call, result);
+                case Definitions.CHANNEL_METHOD_SET_ACTION_HANDLE:
+                    channelMethodSetActionHandle(call, result);
                     return;
 
-                case Definitions.CHANNEL_METHOD_ENABLE_WAKELOCK:
-                    channelMethodGetPlatformVersion(call, result);
+                case Definitions.CHANNEL_METHOD_GET_DRAWABLE_DATA:
+                    channelMethodGetDrawableData(call, result);
                     return;
 
                 case Definitions.CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED:
@@ -471,7 +166,7 @@ public class AwesomeNotificationsPlugin
                     return;
 
                 case Definitions.CHANNEL_METHOD_REQUEST_NOTIFICATIONS:
-                    channelRequestNotification(call, result);
+                    channelRequestUserPermissions(call, result);
                     return;
 
                 case Definitions.CHANNEL_METHOD_CREATE_NOTIFICATION:
@@ -583,7 +278,7 @@ public class AwesomeNotificationsPlugin
             }
 
         } catch (Exception e) {
-            if (AwesomeNotificationsPlugin.debug)
+            if (AwesomeNotifications.debug)
                 Log.d(TAG, String.format("%s", e.getMessage()));
 
             result.error(call.method, e.getMessage(), e);
@@ -592,30 +287,36 @@ public class AwesomeNotificationsPlugin
     }
 
     private void channelMethodStartForeground(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        // We don't do any checks here if the notification channel belonging to the notification is disabled
-        // because for an foreground service, it doesn't matter
+
         Map<String, Object> notificationData = call.<Map<String, Object>>argument("notificationData");
         Integer startType = call.<Integer>argument("startType");
         Boolean hasForegroundServiceType = call.<Boolean>argument("hasForegroundServiceType");
         Integer foregroundServiceType = call.<Integer>argument("foregroundServiceType");
-        if (notificationData != null && startType != null && hasForegroundServiceType != null && foregroundServiceType != null) {
-            ForegroundService.StartParameter parameter =
-                    new ForegroundService.StartParameter(notificationData, startType, hasForegroundServiceType, foregroundServiceType);
-            Intent intent = new Intent(applicationContext, ForegroundService.class);
-            intent.putExtra(ForegroundService.StartParameter.EXTRA, parameter);
-            if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O /*Android 8*/) {
-                applicationContext.startForegroundService(intent);
-            } else {
-                applicationContext.startService(intent);
-            }
-            result.success(null);
-        } else {
-            throw new IllegalArgumentException("An argument passed to startForeground was null!");
-        }
+
+        NotificationModel notificationModel = new NotificationModel().fromMap(notificationData);
+
+        if(notificationModel == null)
+            throw new AwesomeNotificationException("Foreground notification is invalid");
+
+        if(startType == null)
+            throw new AwesomeNotificationException("Foreground start type is required");
+
+        if(hasForegroundServiceType == null)
+            throw new AwesomeNotificationException("hasForegroundServiceType is required");
+
+        if(foregroundServiceType == null)
+            throw new AwesomeNotificationException("foregroundServiceType is required");
+
+        awesomeNotifications.startForegroundService(
+                    notificationModel,
+                    startType,
+                    hasForegroundServiceType,
+                    foregroundServiceType
+                );
     }
 
     private void channelMethodStopForeground(@NonNull final MethodCall call, @NonNull final Result result) {
-        applicationContext.stopService(new Intent(applicationContext, ForegroundService.class));
+        awesomeNotifications.stopForegroundService();
         result.success(null);
     }
 
@@ -623,160 +324,108 @@ public class AwesomeNotificationsPlugin
 
         String bitmapReference = call.arguments();
 
-        BitmapResourceDecoder bitmapResourceDecoder = new BitmapResourceDecoder(
-                applicationContext,
-                result,
-                bitmapReference
-        );
-
-        bitmapResourceDecoder.execute();
+        awesomeNotifications
+                .getDrawableData(
+                    bitmapReference,
+                    new BitmapCompletionHandler() {
+                        @Override
+                        public void handle(byte[] byteArray, Exception exception) {
+                            if(exception != null){
+                                result.error(
+                                        BitmapResourceDecoder.TAG,
+                                        exception.getMessage(),
+                                        exception);
+                            }
+                            else {
+                                result.success(byteArray);
+                            }
+                        }
+                    });
     }
 
-    private void channelMethodGetPlatformVersion(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        result.success("Android-"+String.valueOf(Build.VERSION.SDK_INT));
-    }
-
-    private void channelMethodEnableWakeLock(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        result.success("Android-"+String.valueOf(Build.VERSION.SDK_INT));
-    }
-
-    private void channelMethodListAllSchedules(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        List<NotificationModel> activeSchedules = ScheduleManager.listSchedules(applicationContext);
-        List<Map<String, Object>> listSerialized = new ArrayList<>();
-
-        if (activeSchedules != null) {
-            for (NotificationModel notificationModel : activeSchedules) {
-                Map<String, Object> serialized = notificationModel.toMap();
-                listSerialized.add(serialized);
-            }
-        }
-
-        result.success(listSerialized);
-    }
-
-    private void channelMethodGetNextDate(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object> data = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
-
-        assert data != null;
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object> scheduleData = (Map<String, Object>) data.get(Definitions.NOTIFICATION_MODEL_SCHEDULE);
-        String fixedDateString = (String) data.get(Definitions.NOTIFICATION_INITIAL_FIXED_DATE);
-
-        if (scheduleData == null)
-            throw new AwesomeNotificationException("Schedule data is invalid");
-
-        NotificationScheduleModel scheduleModel = NotificationScheduleModel.getScheduleModelFromMap(scheduleData);
-
-        if (scheduleModel == null)
-            throw new AwesomeNotificationException("Schedule data is invalid");
-
-        Date fixedDate = null;
-
-        if (!StringUtils.isNullOrEmpty(fixedDateString))
-            fixedDate = DateUtils.stringToDate(fixedDateString, scheduleModel.timeZone);
-
-        Calendar nextValidDate = scheduleModel.getNextValidDate(fixedDate);
-
-        String finalValidDateString = null;
-        if (nextValidDate != null)
-            finalValidDateString = DateUtils.dateToString(nextValidDate.getTime(), scheduleModel.timeZone);
-
-        result.success(finalValidDateString);
-    }
-
-    private void channelMethodGetLocalTimeZone(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        result.success(DateUtils.localTimeZone.getID());
-    }
-
-    private void channelMethodGetUtcTimeZone(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        result.success(DateUtils.utcTimeZone.getID());
-    }
-
+    @SuppressWarnings("unchecked")
     private void channelMethodSetChannel(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
-        @SuppressWarnings("unchecked")
         Map<String, Object> channelData = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
-        assert channelData != null;
+        if (channelData == null)
+            throw new AwesomeNotificationException("Channel is invalid");
 
         NotificationChannelModel channelModel = new NotificationChannelModel().fromMap(channelData);
-        Boolean forceUpdate = BooleanUtils.getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
-
-        if (channelModel == null) {
+        if (channelModel == null)
             throw new AwesomeNotificationException("Channel is invalid");
-        } else {
 
-            ChannelManager.saveChannel(applicationContext, channelModel, forceUpdate);
-            result.success(true);
+        boolean forceUpdate = BooleanUtils.getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
 
-            ChannelManager.commitChanges(applicationContext);
-        }
+        boolean channelSaved =
+                awesomeNotifications
+                        .setChannel(channelModel, forceUpdate);
+
+        result.success(channelSaved);
     }
 
     private void channelMethodRemoveChannel(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
         String channelKey = call.arguments();
 
-        if (StringUtils.isNullOrEmpty(channelKey)) {
+        if (StringUtils.isNullOrEmpty(channelKey))
             throw new AwesomeNotificationException("Empty channel key");
-        } else {
-            Boolean removed = ChannelManager.removeChannel(applicationContext, channelKey);
 
-            if (removed) {
-                if (AwesomeNotificationsPlugin.debug)
-                    Log.d(TAG, "Channel removed");
-                result.success(true);
-            } else {
-                if (AwesomeNotificationsPlugin.debug)
-                    Log.d(TAG, "Channel '" + channelKey + "' not found");
-                result.success(false);
-            }
+        boolean removed =
+                awesomeNotifications
+                        .removeChannel(channelKey);
 
-            ChannelManager.commitChanges(applicationContext);
-        }
+        if (AwesomeNotifications.debug)
+            Log.d(TAG, removed ?
+                    "Channel removed" :
+                    "Channel '" + channelKey + "' not found");
+
+        result.success(removed);
     }
 
     private void channelMethodGetBadgeCounter(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        Integer badgeCount = BadgeManager.getGlobalBadgeCounter(applicationContext);
-        // Android resets badges automatically when all notifications are cleared
+        Integer badgeCount =
+                awesomeNotifications
+                        .getGlobalBadgeCounter();
+
         result.success(badgeCount);
     }
 
     private void channelMethodSetBadgeCounter(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        @SuppressWarnings("unchecked")
-        Integer count = MapUtils.extractArgument(call.arguments(), Integer.class).orNull();
 
-        if (count == null || count < 0)
+        int count = MapUtils.extractArgument(call.arguments(), Integer.class).or(-1);
+        if (count < 0)
             throw new AwesomeNotificationException("Invalid Badge value");
 
-        // Android resets badges automatically when all notifications are cleared
-        BadgeManager.setGlobalBadgeCounter(applicationContext, count);
+        awesomeNotifications.setGlobalBadgeCounter(count);
         result.success(true);
     }
 
     private void channelMethodResetBadge(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        BadgeManager.resetGlobalBadgeCounter(applicationContext);
+        awesomeNotifications.resetGlobalBadgeCounter();
         result.success(null);
     }
 
     private void channelMethodIncrementBadge(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        Integer badgeCount = BadgeManager.incrementGlobalBadgeCounter(applicationContext);
+        int badgeCount = awesomeNotifications.incrementGlobalBadgeCounter();
         result.success(badgeCount);
     }
 
     private void channelMethodDecrementBadge(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        Integer badgeCount = BadgeManager.decrementGlobalBadgeCounter(applicationContext);
+        int badgeCount = awesomeNotifications.decrementGlobalBadgeCounter();
         result.success(badgeCount);
     }
 
     private void channelMethodDismissNotification(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         Integer notificationId = call.arguments();
-        boolean dismissed = CancellationManager.dismissNotification(applicationContext, notificationId);
+        if (notificationId == null || notificationId < 0)
+            throw new AwesomeNotificationException("Invalid id value");
 
-        if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notification id " + notificationId + (dismissed ? "" : "not found to be") + " dismissed");
+        boolean dismissed = awesomeNotifications.dismissNotification(notificationId);
+
+        if (AwesomeNotifications.debug)
+            Log.d(TAG, dismissed ?
+                    "Notification " + notificationId + " dismissed" :
+                    "Notification " + notificationId + " was not found");
 
         result.success(dismissed);
     }
@@ -784,98 +433,136 @@ public class AwesomeNotificationsPlugin
     private void channelMethodCancelSchedule(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         Integer notificationId = call.arguments();
-        boolean dismissed = CancellationManager.cancelSchedule(applicationContext, notificationId);
+        if (notificationId == null || notificationId < 0)
+            throw new AwesomeNotificationException("Invalid id value");
 
-        if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Schedule id " + notificationId + (dismissed ? "" : "not found to be") + " cancelled");
+        boolean canceled = awesomeNotifications.cancelSchedule(notificationId);
 
-        result.success(true);
+        if (AwesomeNotifications.debug)
+            Log.d(TAG, canceled ?
+                    "Schedule " + notificationId + " cancelled" :
+                    "Schedule " + notificationId + " was not found");
+
+        result.success(canceled);
     }
 
     private void channelMethodCancelNotification(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         Integer notificationId = call.arguments();
-        boolean dismissed = CancellationManager.cancelNotification(applicationContext, notificationId);
+        if (notificationId == null || notificationId < 0)
+            throw new AwesomeNotificationException("Invalid id value");
 
-        if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notification id " + notificationId + (dismissed ? "" : "not found to be") + " cancelled");
+        boolean canceled = awesomeNotifications.cancelNotification(notificationId);
 
-        result.success(true);
+        if (AwesomeNotifications.debug)
+            Log.d(TAG, canceled ?
+                    "Notification " + notificationId + " cancelled" :
+                    "Notification " + notificationId + " was not found");
+
+        result.success(canceled);
     }
 
     private void channelMethodDismissNotificationsByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         String channelKey = call.arguments();
-        boolean dismissed = CancellationManager.dismissNotificationsByChannelKey(applicationContext, channelKey);
+        if (StringUtils.isNullOrEmpty(channelKey))
+            throw new AwesomeNotificationException("Invalid channelKey value");
 
-        if(AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notifications from channel " + channelKey + (dismissed ? "" : "not found to be") + " dismissed");
+        boolean dismissed = awesomeNotifications.dismissNotificationsByChannelKey(channelKey);
 
-        result.success(true);
+        if(AwesomeNotifications.debug)
+            Log.d(TAG, dismissed ?
+                    "Notifications from channel " + channelKey + " dismissed" :
+                    "Notifications from channel " + channelKey + " not found");
+
+        result.success(dismissed);
     }
 
     private void channelMethodCancelSchedulesByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         String channelKey = call.arguments();
-        boolean dismissed = CancellationManager.cancelSchedulesByChannelKey(applicationContext, channelKey);
+        if (StringUtils.isNullOrEmpty(channelKey))
+            throw new AwesomeNotificationException("Invalid channelKey value");
 
-        NotificationScheduler.cancelSchedulesByChannelKey(applicationContext, channelKey);
+        boolean canceled = awesomeNotifications.cancelSchedulesByChannelKey(channelKey);
 
-        if(AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Scheduled Notifications from channel " + channelKey + (dismissed ? "" : "not found to be") + " canceled");
+        if(AwesomeNotifications.debug)
+            Log.d(TAG, canceled ?
+                    "Scheduled Notifications from channel " + channelKey + " canceled" :
+                    "Scheduled Notifications from channel " + channelKey + " not found");
 
-        result.success(true);
+        result.success(canceled);
     }
 
     private void channelMethodCancelNotificationsByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         String channelKey = call.arguments();
-        boolean dismissed = CancellationManager.cancelNotificationsByChannelKey(applicationContext, channelKey);
+        if (StringUtils.isNullOrEmpty(channelKey))
+            throw new AwesomeNotificationException("Invalid channelKey value");
 
-        if(AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notifications and schedules from channel " + channelKey + (dismissed ? "" : "not found to be") + " canceled");
+        boolean canceled = awesomeNotifications.cancelNotificationsByChannelKey(channelKey);
 
-        result.success(true);
+        if(AwesomeNotifications.debug)
+            Log.d(TAG, canceled ?
+                    "Notifications and schedules from channel " + channelKey + " canceled" :
+                    "Notifications and schedules from channel " + channelKey + " not found");
+
+        result.success(canceled);
     }
 
     private void channelMethodDismissNotificationsByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         String groupKey = call.arguments();
-        boolean dismissed = CancellationManager.dismissNotificationsByGroupKey(applicationContext, groupKey);
+        if (StringUtils.isNullOrEmpty(groupKey))
+            throw new AwesomeNotificationException("Invalid groupKey value");
 
-        if(AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notifications from group " + groupKey + (dismissed ? "" : "not found to be") + " dismissed");
+        boolean dismissed = awesomeNotifications.dismissNotificationsByGroupKey(groupKey);
 
-        result.success(true);
+        if(AwesomeNotifications.debug)
+            Log.d(TAG, dismissed ?
+                    "Notifications from group " + groupKey + " dismissed" :
+                    "Notifications from group " + groupKey + " not found");
+
+        result.success(dismissed);
     }
 
     private void channelMethodCancelSchedulesByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         String groupKey = call.arguments();
-        boolean dismissed = CancellationManager.cancelSchedulesByGroupKey(applicationContext, groupKey);
+        if (StringUtils.isNullOrEmpty(groupKey))
+            throw new AwesomeNotificationException("Invalid groupKey value");
 
-        if(AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Scheduled Notifications from group " + groupKey + (dismissed ? "" : "not found to be") + " canceled");
+        boolean canceled = awesomeNotifications.cancelSchedulesByGroupKey(groupKey);
 
-        result.success(true);
+        if(AwesomeNotifications.debug)
+            Log.d(TAG, canceled ?
+                    "Scheduled Notifications from group " + groupKey + " canceled" :
+                    "Scheduled Notifications from group " + groupKey + " not found");
+
+        result.success(canceled);
     }
 
     private void channelMethodCancelNotificationsByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         String groupKey = call.arguments();
-        boolean dismissed = CancellationManager.cancelNotificationsByGroupKey(applicationContext, groupKey);
+        if (StringUtils.isNullOrEmpty(groupKey))
+            throw new AwesomeNotificationException("Invalid groupKey value");
 
-        if(AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Notifications and schedules from group " + groupKey + (dismissed ? "" : "not found to be") + " canceled");
+        boolean canceled = awesomeNotifications.cancelNotificationsByGroupKey(groupKey);
 
-        result.success(true);
+        if(AwesomeNotifications.debug)
+            Log.d(TAG, canceled ?
+                    "Notifications and schedules from group " + groupKey + " canceled" :
+                    "Notifications and schedules from group " + groupKey + " not found to be");
+
+        result.success(canceled);
     }
 
     private void channelMethodDismissAllNotifications(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
-        CancellationManager.dismissAllNotifications(applicationContext);
+        awesomeNotifications.dismissAllNotifications();
 
-        if (AwesomeNotificationsPlugin.debug)
+        if (AwesomeNotifications.debug)
             Log.d(TAG, "All notifications was dismissed");
 
         result.success(true);
@@ -883,9 +570,9 @@ public class AwesomeNotificationsPlugin
 
     private void channelMethodCancelAllSchedules(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
-        CancellationManager.cancelAllSchedules(applicationContext);
+        awesomeNotifications.cancelAllSchedules();
 
-        if (AwesomeNotificationsPlugin.debug)
+        if (AwesomeNotifications.debug)
             Log.d(TAG, "All notifications scheduled was cancelled");
 
         result.success(true);
@@ -893,61 +580,120 @@ public class AwesomeNotificationsPlugin
 
     private void channelMethodCancelAllNotifications(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
-        CancellationManager.cancelAllNotifications(applicationContext);
+        awesomeNotifications.cancelAllNotifications();
 
-        if (AwesomeNotificationsPlugin.debug)
+        if (AwesomeNotifications.debug)
             Log.d(TAG, "All notifications was cancelled");
 
         result.success(true);
     }
 
+    private void channelMethodListAllSchedules(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+        List<NotificationModel> activeSchedules =
+                awesomeNotifications.listAllPendingSchedules();
+
+        List<Map<String, Object>> listSerialized = new ArrayList<>();
+
+        if (activeSchedules != null)
+            for (NotificationModel notificationModel : activeSchedules) {
+                Map<String, Object> serialized = notificationModel.toMap();
+                listSerialized.add(serialized);
+            }
+
+        result.success(listSerialized);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void channelMethodGetNextDate(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+
+        Map<String, Object> data = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
+        if (data == null)
+            throw new AwesomeNotificationException("Schedule data is invalid");
+
+        Map<String, Object> scheduleData = (Map<String, Object>) data.get(Definitions.NOTIFICATION_MODEL_SCHEDULE);
+        if (scheduleData == null)
+            throw new AwesomeNotificationException("Schedule data is invalid");
+
+        NotificationScheduleModel scheduleModel = NotificationScheduleModel.getScheduleModelFromMap(scheduleData);
+        if (scheduleModel == null)
+            throw new AwesomeNotificationException("Schedule data is invalid");
+
+        String fixedDateString = (String) data.get(Definitions.NOTIFICATION_INITIAL_FIXED_DATE);
+        Date fixedDate = null;
+        if (!StringUtils.isNullOrEmpty(fixedDateString))
+            fixedDate = DateUtils.stringToDate(fixedDateString, scheduleModel.timeZone);
+
+        Calendar nextValidDate =
+                awesomeNotifications
+                        .getNextValidDate(scheduleModel, fixedDate);
+
+        String finalValidDateString = null;
+        if (nextValidDate != null)
+            finalValidDateString = DateUtils
+                    .dateToString(
+                            nextValidDate.getTime(),
+                            scheduleModel.timeZone);
+
+        result.success(finalValidDateString);
+    }
+
+    private void channelMethodGetLocalTimeZone(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+        result.success(
+                awesomeNotifications
+                        .getLocalTimeZone());
+    }
+
+    private void channelMethodGetUtcTimeZone(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+        result.success(
+                awesomeNotifications
+                        .getUtcTimeZone());
+    }
+
     private void channelIsNotificationAllowed(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        result.success(PermissionManager.areNotificationsGloballyAllowed(applicationContext));
+        result.success(
+                awesomeNotifications
+                        .areNotificationsGloballyAllowed());
     }
 
     private void channelShowNotificationPage(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
         String channelKey = call.arguments();
-        if(StringUtils.isNullOrEmpty(channelKey))
-            PermissionManager.showNotificationConfigPage(
-                    applicationContext,
-                    new PermissionCompletionHandler() {
-                        @Override
-                        public void handle(List<String> missingPermissions) {
-                            result.success(missingPermissions);
-                        }
-                    });
-        else
-            PermissionManager.showChannelConfigPage(
-                    applicationContext,
+
+        awesomeNotifications
+                .showNotificationPage(
                     channelKey,
                     new PermissionCompletionHandler() {
                         @Override
                         public void handle(List<String> missingPermissions) {
                             result.success(missingPermissions);
                         }
-                    });
+                    }
+                );
     }
 
     private void channelShowAlarmPage(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        PermissionManager.showPreciseAlarmPage(
-                applicationContext,
-                new PermissionCompletionHandler() {
-                    @Override
-                    public void handle(List<String> missingPermissions) {
-                        result.success(missingPermissions);
+
+        awesomeNotifications
+                .showPreciseAlarmPage(
+                    new PermissionCompletionHandler() {
+                        @Override
+                        public void handle(List<String> missingPermissions) {
+                            result.success(missingPermissions);
+                        }
                     }
-                });
+                );
     }
 
     private void channelShowGlobalDndPage(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        PermissionManager.showDnDGlobalOverridingPage(
-                applicationContext,
-                new PermissionCompletionHandler() {
-                    @Override
-                    public void handle(List<String> missingPermissions) {
-                        result.success(missingPermissions);
-                    }
-                });
+
+        awesomeNotifications
+                .showDnDGlobalOverridingPage(
+                        new PermissionCompletionHandler() {
+                            @Override
+                            public void handle(List<String> missingPermissions) {
+                                result.success(missingPermissions);
+                            }
+                        }
+                );
     }
 
     @SuppressWarnings("unchecked")
@@ -958,15 +704,15 @@ public class AwesomeNotificationsPlugin
             throw new AwesomeNotificationException("Parameters are required");
 
         String channelKey = (String) parameters.get(Definitions.NOTIFICATION_CHANNEL_KEY);
-        List<String> permissions = (List<String>) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);
 
-        if(permissions == null)
+        List<String> permissions = (List<String>) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);
+        if(ListUtils.isNullOrEmpty(permissions))
             throw new AwesomeNotificationException("Permission list is required");
 
-        if(permissions.isEmpty())
-            throw new AwesomeNotificationException("Permission list cannot be empty");
-
-        permissions = PermissionManager.arePermissionsAllowed(applicationContext, channelKey, permissions);
+        permissions = awesomeNotifications
+                        .arePermissionsAllowed(
+                                channelKey,
+                                permissions);
 
         result.success(permissions);
     }
@@ -987,13 +733,15 @@ public class AwesomeNotificationsPlugin
         if(permissions.isEmpty())
             throw new AwesomeNotificationException("Permission list cannot be empty");
 
-        permissions = PermissionManager.shouldShowRationale(applicationContext, channelKey, permissions);
+        permissions = awesomeNotifications.shouldShowRationale(
+                        channelKey,
+                        permissions);
 
         result.success(permissions);
     }
 
     @SuppressWarnings("unchecked")
-    private void channelRequestNotification(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelRequestUserPermissions(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         Map<String, Object> parameters = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
         if(parameters == null)
@@ -1007,19 +755,17 @@ public class AwesomeNotificationsPlugin
 
         if(ListUtils.isNullOrEmpty(permissions))
             throw new AwesomeNotificationException("Permission list is required");
-        assert permissions != null;
 
-        PermissionManager.requestUserPermissions(
-                activityBinding.getActivity(),
-                applicationContext,
-                channelKey,
-                permissions,
-                new PermissionCompletionHandler() {
-                    @Override
-                    public void handle(List<String> missingPermissions) {
-                        result.success(missingPermissions);
-                    }
-                });
+        awesomeNotifications
+                .requestUserPermissions(
+                    channelKey,
+                    permissions,
+                    new PermissionCompletionHandler() {
+                        @Override
+                        public void handle(List<String> missingPermissions) {
+                            result.success(missingPermissions);
+                        }
+                    });
     }
 
     private void channelMethodCreateNotification(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
@@ -1027,242 +773,54 @@ public class AwesomeNotificationsPlugin
         Map<String, Object> pushData = call.arguments();
         NotificationModel notificationModel = new NotificationModel().fromMap(pushData);
 
-        if (notificationModel == null) {
+        if (notificationModel == null)
             throw new AwesomeNotificationException("Invalid parameters");
-        }
 
-        if (!PermissionManager.areNotificationsGloballyAllowed(applicationContext)) {
-            throw new AwesomeNotificationException("Notifications are disabled");
-        }
+        boolean created = awesomeNotifications.createNotification(notificationModel);
+        result.success(created);
+    }
 
-        if (notificationModel.schedule == null) {
+    @SuppressWarnings("unchecked")
+    private void channelMethodInitialize(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+        Map<String, Object> platformParameters = call.arguments();
 
-            NotificationSender.send(
-                    applicationContext,
-                    NotificationSource.Local,
-                    notificationModel
-            );
-        } else {
+        String defaultIconPath = (String) platformParameters.get(Definitions.INITIALIZE_DEFAULT_ICON);
 
-            NotificationScheduler.schedule(
-                    applicationContext,
-                    NotificationSource.Schedule,
-                    notificationModel
-            );
-        }
+        List<Object> channelsData = (List<Object>) platformParameters.get(Definitions.INITIALIZE_CHANNELS);
+        List<Object> channelGroupsData = (List<Object>) platformParameters.get(Definitions.INITIALIZE_CHANNEL_GROUPS);
+
+        Boolean debug = (Boolean) platformParameters.get(Definitions.INITIALIZE_DEBUG_MODE);
+        debug = debug != null && debug;
+
+        Object callbackDartObj = platformParameters.get(Definitions.DART_BG_HANDLE);
+        long dartCallback = callbackDartObj == null ? 0L :(Long) callbackDartObj;
+
+        awesomeNotifications.initialize(
+                defaultIconPath,
+                channelsData,
+                channelGroupsData,
+                dartCallback,
+                debug);
+
+        if (AwesomeNotifications.debug)
+            Log.d(TAG, "Awesome Notifications Flutter plugin initialized");
 
         result.success(true);
     }
 
     @SuppressWarnings("unchecked")
-    private void channelMethodInitialize(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        List<Object> channelsData, channelGroupsData;
-
+    private void channelMethodSetActionHandle(@NonNull MethodCall call, Result result) throws Exception {
         Map<String, Object> platformParameters = call.arguments();
+        Object callbackActionObj = platformParameters.get(ACTION_HANDLE);
 
-        debug = (Boolean) platformParameters.get(Definitions.INITIALIZE_DEBUG_MODE);
-        debug = debug != null && debug;
+        long silentCallback = callbackActionObj == null ? 0L : (Long) callbackActionObj;
 
-        String defaultIconPath = (String) platformParameters.get(Definitions.INITIALIZE_DEFAULT_ICON);
-        channelsData = (List<Object>) platformParameters.get(Definitions.INITIALIZE_CHANNELS);
-        channelGroupsData = (List<Object>) platformParameters.get(Definitions.INITIALIZE_CHANNEL_GROUPS);
+        awesomeNotifications.SetActionHandle(silentCallback);
 
-        setDefaultConfigurations(
-            applicationContext,
-            defaultIconPath,
-            channelsData,
-            channelGroupsData
-        );
+        boolean success = silentCallback != 0L;
+        if(!success)
+            Log.e(TAG, "Attention: there is no valid static method to receive notification action data in background");
 
-        if (AwesomeNotificationsPlugin.debug)
-            Log.d(TAG, "Awesome Notifications service initialized");
-
-        result.success(true);
-    }
-
-    private void setDefaultConfigurations(Context context, String defaultIcon, List<Object> channelsData, List<Object> channelGroupsData) throws Exception {
-
-        setDefaults(context, defaultIcon);
-
-        setChannelGroups(context, channelGroupsData);
-        setChannels(context, channelsData);
-
-        recoverNotificationCreated(context);
-        recoverNotificationDisplayed(context);
-        recoverNotificationDismissed(context);
-
-        captureNotificationActionOnLaunch();
-    }
-
-    private void setChannelGroups(Context context, List<Object> channelGroupsData) throws Exception {
-        if (ListUtils.isNullOrEmpty(channelGroupsData)) return;
-
-        List<NotificationChannelGroupModel> channelGroups = new ArrayList<>();
-
-        for (Object channelDataObject : channelGroupsData) {
-            if (channelDataObject instanceof Map<?, ?>) {
-                @SuppressWarnings("unchecked")
-                Map<String, Object> channelData = (Map<String, Object>) channelDataObject;
-                NotificationChannelGroupModel channelGroup = new NotificationChannelGroupModel().fromMap(channelData);
-
-                if (channelGroup != null) {
-                    channelGroups.add(channelGroup);
-                } else {
-                    throw new AwesomeNotificationException("Invalid channel group: " + JsonUtils.toJson(channelData));
-                }
-            }
-        }
-
-        for (NotificationChannelGroupModel channelGroupModel : channelGroups) {
-            ChannelGroupManager.saveChannelGroup(context, channelGroupModel);
-        }
-
-        ChannelManager.commitChanges(context);
-    }
-
-    private void setChannels(Context context, List<Object> channelsData) throws Exception {
-        if (ListUtils.isNullOrEmpty(channelsData)) return;
-
-        List<NotificationChannelModel> channels = new ArrayList<>();
-        boolean forceUpdate = false;
-
-        for (Object channelDataObject : channelsData) {
-            if (channelDataObject instanceof Map<?, ?>) {
-                @SuppressWarnings("unchecked")
-                Map<String, Object> channelData = (Map<String, Object>) channelDataObject;
-                NotificationChannelModel channelModel = new NotificationChannelModel().fromMap(channelData);
-                forceUpdate = BooleanUtils.getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
-
-                if (channelModel != null) {
-                    channels.add(channelModel);
-                } else {
-                    throw new AwesomeNotificationException("Invalid channel: " + JsonUtils.toJson(channelData));
-                }
-            }
-        }
-
-        for (NotificationChannelModel channelModel : channels) {
-            ChannelManager.saveChannel(context, channelModel, false, forceUpdate);
-        }
-
-        ChannelManager.commitChanges(context);
-    }
-
-    private void setDefaults(Context context, String defaultIcon) {
-
-        if (MediaUtils.getMediaSourceType(defaultIcon) != MediaSource.Resource) {
-            defaultIcon = null;
-        }
-
-        DefaultsManager.saveDefault(context, new DefaultsModel(defaultIcon));
-        DefaultsManager.commitChanges(context);
-    }
-
-    public static NotificationLifeCycle getApplicationLifeCycle() {
-
-        Lifecycle.State state = ProcessLifecycleOwner.get().getLifecycle().getCurrentState();
-
-        if (state == Lifecycle.State.RESUMED) {
-            appLifeCycle = NotificationLifeCycle.Foreground;
-        } else if (state == Lifecycle.State.CREATED) {
-            appLifeCycle = NotificationLifeCycle.Background;
-        } else {
-            appLifeCycle = NotificationLifeCycle.AppKilled;
-        }
-
-        return appLifeCycle;
-    }
-
-    private void captureNotificationActionOnLaunch() {
-
-        if (initialActivity == null) {
-            return;
-        }
-
-        Intent intent = initialActivity.getIntent();
-        if (intent == null) {
-            return;
-        }
-
-        String actionName = intent.getAction();
-        if (actionName != null) {
-
-            Boolean isStandardAction = Definitions.SELECT_NOTIFICATION.equals(actionName);
-            Boolean isButtonAction = actionName.startsWith(Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX);
-
-            if (isStandardAction || isButtonAction) {
-                receiveNotificationAction(intent, NotificationLifeCycle.AppKilled);
-            }
-        }
-    }
-
-    private Boolean receiveNotificationAction(Intent intent) {
-        return receiveNotificationAction(intent, getApplicationLifeCycle());
-    }
-
-    private Boolean receiveNotificationAction(Intent intent, NotificationLifeCycle appLifeCycle) {
-
-        ActionReceived actionModel
-            = NotificationBuilder
-                .receiveNotificationAction(applicationContext, intent, appLifeCycle);
-
-        if (actionModel != null) {
-
-            Map<String, Object> returnObject = actionModel.toMap();
-            pluginChannel.invokeMethod(Definitions.CHANNEL_METHOD_RECEIVED_ACTION, returnObject);
-
-            if (AwesomeNotificationsPlugin.debug)
-                Log.d(TAG, "Notification action received");
-        }
-        return true;
-    }
-
-    private void startListeningPermissions(){
-        if(activityBinding != null){
-            initialActivity = activityBinding.getActivity();
-            activityBinding.addRequestPermissionsResultListener(AwesomePermissionHandler.getInstance());
-            activityBinding.addActivityResultListener(AwesomePermissionHandler.getInstance());
-        }
-    }
-
-    private void stopListeningPermissions(){
-        activityBinding.removeRequestPermissionsResultListener(AwesomePermissionHandler.getInstance());
-        activityBinding.removeActivityResultListener(AwesomePermissionHandler.getInstance());
-        activityBinding = null;
-    }
-
-    @Override
-    public void onActivityCreated(Activity activity, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onActivityStarted(Activity activity) {
-
-    }
-
-    @Override
-    public void onActivityResumed(Activity activity) {
-        PermissionManager.handlePermissionResult(PermissionManager.REQUEST_CODE, null, null);
-    }
-
-    @Override
-    public void onActivityPaused(Activity activity) {
-
-    }
-
-    @Override
-    public void onActivityStopped(Activity activity) {
-
-    }
-
-    @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onActivityDestroyed(Activity activity) {
-
+        result.success(success);
     }
 }

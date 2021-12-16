@@ -443,6 +443,30 @@ class NotificationUtils {
               key: 'PROFILE', label: 'Profile', autoDismissible: true, enabled: false)
         ]);
   }
+
+  static Future<void> showNotificationWithSilentActionButtons(int id) async {
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: id,
+            channelKey: 'basic_channel',
+            title: 'Action Type tests',
+            body: 'Click on the buttons above to test each action type:'
+                '<br>* The notification body has the default action type.'
+                '<br>* The silent action runs on background but uses UI Thread.'
+                '<br>* The silent bg action runs on Backgrond Thread and does not allows UI.'
+                '<br>* The disabled action runs on background and never fires any event method.',
+            notificationLayout: NotificationLayout.BigText,
+            autoDismissible: false,
+            payload: {'uuid': 'user-profile-uuid'}),
+        actionButtons: [
+          NotificationActionButton(
+              key: 'SILENT', label: 'Silent', buttonType: ActionType.SilentAction, autoDismissible: false),
+          NotificationActionButton(
+              key: 'SILENT_BG', label: 'Silent BG', buttonType: ActionType.SilentBackgroundAction, autoDismissible: false),
+          NotificationActionButton(
+              key: 'DISMISS', label: 'Dismiss', buttonType: ActionType.DisabledAction, autoDismissible: true, isDangerousOption: true),
+        ]);
+  }
   
   static Future<void> showNotificationWithIconsAndActionButtons(int id) async {
     await AwesomeNotifications().createNotification(
@@ -461,7 +485,7 @@ class NotificationUtils {
               key: 'DISMISS',
               label: 'Dismiss',
               autoDismissible: true,
-              buttonType: ActionButtonType.DisabledAction,
+              buttonType: ActionType.DisabledAction,
               isDangerousOption: true)
         ]);
   }
@@ -479,7 +503,7 @@ class NotificationUtils {
             key: 'REPLY',
             label: 'Reply',
             autoDismissible: true,
-            buttonType: ActionButtonType.InputField,
+            buttonType: ActionType.InputField,
           ),
           NotificationActionButton(
               key: 'READ', label: 'Mark as read', autoDismissible: true),
@@ -740,7 +764,7 @@ class NotificationUtils {
             key: 'REPLY',
             label: 'Reply',
             autoDismissible: true,
-            buttonType: ActionButtonType.InputField,
+            buttonType: ActionType.InputField,
           ),
           NotificationActionButton(
               key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
@@ -774,7 +798,7 @@ class NotificationUtils {
             key: 'REPLY',
             label: 'Reply',
             autoDismissible: true,
-            buttonType: ActionButtonType.InputField,
+            buttonType: ActionType.InputField,
           ),
           NotificationActionButton(
               key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
@@ -806,7 +830,7 @@ class NotificationUtils {
             key: 'REPLY',
             label: 'Reply',
             autoDismissible: true,
-            buttonType: ActionButtonType.InputField,
+            buttonType: ActionType.InputField,
           ),
           NotificationActionButton(
               key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
@@ -838,7 +862,7 @@ class NotificationUtils {
             key: 'REPLY',
             label: 'Reply',
             autoDismissible: true,
-            buttonType: ActionButtonType.InputField,
+            buttonType: ActionType.InputField,
           ),
           NotificationActionButton(
               key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
@@ -870,7 +894,7 @@ class NotificationUtils {
             key: 'REPLY',
             label: 'Reply',
             autoDismissible: true,
-            buttonType: ActionButtonType.InputField,
+            buttonType: ActionType.InputField,
           ),
           NotificationActionButton(
               key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
@@ -1113,7 +1137,7 @@ class NotificationUtils {
               key: 'REPLY',
               label: 'Reply',
               autoDismissible: true,
-              buttonType: ActionButtonType.InputField),
+              buttonType: ActionType.InputField),
           NotificationActionButton(
               key: 'REMEMBER', label: 'Remember-me later', autoDismissible: true)
         ]);
@@ -1192,7 +1216,7 @@ class NotificationUtils {
               key: 'REPLY',
               label: 'Reply',
               autoDismissible: true,
-              buttonType: ActionButtonType.InputField),
+              buttonType: ActionType.InputField),
           NotificationActionButton(
               key: 'REMEMBER', label: 'Remember-me later', autoDismissible: true)
         ]);
@@ -1230,7 +1254,7 @@ class NotificationUtils {
               autoDismissible: false,
               showInCompactView: false,
               enabled: MediaPlayerCentral.hasPreviousMedia,
-              buttonType: ActionButtonType.KeepOnTop),
+              buttonType: ActionType.KeepOnTop),
           MediaPlayerCentral.isPlaying
               ? NotificationActionButton(
                   key: 'MEDIA_PAUSE',
@@ -1238,7 +1262,7 @@ class NotificationUtils {
                   label: 'Pause',
                   autoDismissible: false,
                   showInCompactView: true,
-                  buttonType: ActionButtonType.KeepOnTop)
+                  buttonType: ActionType.KeepOnTop)
               : NotificationActionButton(
                   key: 'MEDIA_PLAY',
                   icon: 'resource://drawable/res_ic_play' +
@@ -1247,7 +1271,7 @@ class NotificationUtils {
                   autoDismissible: false,
                   showInCompactView: true,
                   enabled: MediaPlayerCentral.hasAnyMedia,
-                  buttonType: ActionButtonType.KeepOnTop),
+                  buttonType: ActionType.KeepOnTop),
           NotificationActionButton(
               key: 'MEDIA_NEXT',
               icon: 'resource://drawable/res_ic_next' +
@@ -1255,14 +1279,14 @@ class NotificationUtils {
               label: 'Previous',
               showInCompactView: true,
               enabled: MediaPlayerCentral.hasNextMedia,
-              buttonType: ActionButtonType.KeepOnTop),
+              buttonType: ActionType.KeepOnTop),
           NotificationActionButton(
               key: 'MEDIA_CLOSE',
               icon: 'resource://drawable/res_ic_close',
               label: 'Close',
               autoDismissible: true,
               showInCompactView: true,
-              buttonType: ActionButtonType.KeepOnTop)
+              buttonType: ActionType.KeepOnTop)
         ]);
   }
   
@@ -1285,17 +1309,6 @@ class NotificationUtils {
         largeIcon: 'asset://assets/images/dj-disc.jpg',
         message: 'Michael\'s message $_messageIncrement',
       );
-  }
-  
-  static Future<void> simulateSendResponseChatConversation({required String msg, required String groupKey}) async {
-    createMessagingNotification(
-      channelKey: 'chats',
-      groupKey: groupKey,
-      chatName: 'Jhonny\'s Group',
-      username: 'you',
-      largeIcon: 'asset://assets/images/rock-disc.jpg',
-      message: msg,
-    );
   }
   
   static Future<void> createMessagingNotification({
@@ -1324,14 +1337,14 @@ class NotificationUtils {
             NotificationActionButton(
               key: 'REPLY',
               label: 'Reply',
-              buttonType: ActionButtonType.InputField,
+              buttonType: ActionType.InputField,
               autoDismissible: false,
             ),
             NotificationActionButton(
               key: 'READ',
               label: 'Mark as Read',
               autoDismissible: true,
-              buttonType: ActionButtonType.InputField,
+              buttonType: ActionType.InputField,
             )
           ]
       );
@@ -1386,7 +1399,7 @@ class NotificationUtils {
           NotificationActionButton(
               key: 'DISMISS',
               label: 'Dismiss',
-              buttonType: ActionButtonType.DisabledAction,
+              buttonType: ActionType.DisabledAction,
               autoDismissible: true,
               icon: 'resource://drawable/res_ic_close'),
           NotificationActionButton(

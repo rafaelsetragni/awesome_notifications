@@ -1,5 +1,9 @@
+import 'dart:io';
 import 'dart:math';
 
+import 'package:awesome_notifications/android_foreground_service.dart';
+import 'package:awesome_notifications_example/utils/common_functions.dart';
+import 'package:awesome_notifications_example/utils/notification_util.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +11,7 @@ import 'package:awesome_notifications_example/routes.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/media_player_central.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -266,10 +271,189 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 class App extends StatefulWidget {
   App();
 
-  static final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   static String name = 'Awesome Notifications - Example App';
   static Color mainColor = Color(0xFF9D50DD);
+
+  static String _toSimpleEnum(NotificationLifeCycle lifeCycle) => lifeCycle.toString().split('.').last;
+
+  /// Use this method to detect when a new notification or a schedule is created
+  static Future <void> onNotificationCreatedMethod(ReceivedNotification receivedNotification) async {
+    Fluttertoast.showToast(
+        msg: 'Notification created on ${_toSimpleEnum(receivedNotification.createdLifeCycle!)}',
+        toastLength: Toast.LENGTH_SHORT,
+        backgroundColor: Colors.green,
+        gravity: ToastGravity.BOTTOM
+    );
+  }
+
+  /// Use this method to detect every time that a new notification is displayed
+  static Future <void> onNotificationDisplayedMethod(ReceivedNotification receivedNotification) async {
+    Fluttertoast.showToast(
+        msg: 'Notification displayed on ${_toSimpleEnum(receivedNotification.displayedLifeCycle!)}',
+        toastLength: Toast.LENGTH_SHORT,
+        backgroundColor: Colors.blue,
+        gravity: ToastGravity.BOTTOM
+    );
+  }
+
+  /// Use this method to detect if the user dismissed a notification
+  static Future <void> onDismissActionReceivedMethod(ReceivedAction receivedAction) async {
+    Fluttertoast.showToast(
+        msg: 'Notification dismissed on ${_toSimpleEnum(receivedAction.dismissedLifeCycle!)}',
+        toastLength: Toast.LENGTH_SHORT,
+        backgroundColor: Colors.orange,
+        gravity: ToastGravity.BOTTOM
+    );
+  }
+
+  /// Use this method to detect when the user taps on a notification or action button
+  static Future <void> onActionReceivedMethod(ReceivedAction receivedAction) async {
+
+    bool isSilentAction =
+        receivedAction.actionType == ActionType.SilentAction ||
+        receivedAction.actionType == ActionType.SilentBackgroundAction;
+
+    Fluttertoast.showToast(
+        msg: '${ isSilentAction ? 'Silent action' : 'Action'
+          } received on ${_toSimpleEnum(receivedAction.actionLifeCycle!)}',
+        toastLength: Toast.LENGTH_SHORT,
+        backgroundColor: isSilentAction ? Colors.blueAccent : App.mainColor,
+        gravity: ToastGravity.BOTTOM);
+
+    switch (receivedAction.channelKey){
+
+      case 'call_channel':
+        receiveCallNotificationAction(receivedAction);
+        break;
+
+      case 'alarm_channel':
+        receiveAlarmNotificationAction(receivedAction);
+        break;
+
+      case 'media_player':
+        receiveMediaNotificationAction(receivedAction);
+        break;
+
+      case 'chats':
+        receiveChatNotificationAction(receivedAction);
+        break;
+
+      default:
+        if (!StringUtils.isNullOrEmpty(receivedAction.buttonKeyInput))
+          receiveButtonInputText(receivedAction);
+        else
+          receiveStandardNotificationAction(receivedAction);
+        break;
+    }
+  }
+
+  static void receiveButtonInputText(ReceivedAction receivedAction) {
+    print('Input Button Message: "${receivedAction.buttonKeyInput}"');
+    Fluttertoast.showToast(
+        msg: 'Msg: ' + receivedAction.buttonKeyInput,
+        backgroundColor: App.mainColor,
+        textColor: Colors.white);
+
+  }
+
+  static void receiveStandardNotificationAction(ReceivedAction receivedAction) {
+    switch(receivedAction.actionType){
+
+      case ActionType.SilentAction:
+      case ActionType.SilentBackgroundAction:
+        print(receivedAction.toString());
+        break;
+
+      default:
+        loadSingletonPage(
+            App.navigatorKey.currentState,
+            targetPage: PAGE_NOTIFICATION_DETAILS,
+            receivedAction: receivedAction);
+        break;
+    }
+  }
+
+  static void receiveMediaNotificationAction(ReceivedAction receivedAction) {
+    switch (receivedAction.buttonKeyPressed) {
+
+      case 'MEDIA_CLOSE':
+        MediaPlayerCentral.stop();
+        break;
+
+      case 'MEDIA_PLAY':
+      case 'MEDIA_PAUSE':
+        MediaPlayerCentral.playPause();
+        break;
+
+      case 'MEDIA_PREV':
+        MediaPlayerCentral.previousMedia();
+        break;
+
+      case 'MEDIA_NEXT':
+        MediaPlayerCentral.nextMedia();
+        break;
+
+      default:
+        loadSingletonPage(
+            App.navigatorKey.currentState,
+            targetPage: PAGE_MEDIA_DETAILS,
+            receivedAction: receivedAction);
+        break;
+    }
+  }
+
+  static Future<void> receiveChatNotificationAction(ReceivedAction receivedAction) async {
+
+    if( receivedAction.buttonKeyPressed == 'REPLY' ){
+      NotificationUtils.createMessagingNotification(
+        channelKey: 'chats',
+        groupKey: 'jhonny_group',
+        chatName: 'Jhonny\'s Group',
+        username: 'you',
+        largeIcon: 'asset://assets/images/rock-disc.jpg',
+        message: receivedAction.buttonKeyInput,
+      );
+    }
+    else {
+      loadSingletonPage(
+          App.navigatorKey.currentState,
+          targetPage: PAGE_MEDIA_DETAILS,
+          receivedAction: receivedAction);
+    }
+
+  }
+
+  static void receiveAlarmNotificationAction(ReceivedAction receivedAction) {
+    AndroidForegroundService.stopForeground();
+  }
+
+  static void receiveCallNotificationAction(ReceivedAction receivedAction) {
+    switch (receivedAction.buttonKeyPressed) {
+
+      case 'REJECT':
+        AndroidForegroundService.stopForeground();
+        break;
+
+      case 'ACCEPT':
+        loadSingletonPage(
+            App.navigatorKey.currentState,
+            targetPage: PAGE_PHONE_CALL,
+            receivedAction: receivedAction);
+
+        AndroidForegroundService.stopForeground();
+        break;
+
+      default:
+        loadSingletonPage(
+            App.navigatorKey.currentState,
+            targetPage: PAGE_PHONE_CALL,
+            receivedAction: receivedAction);
+        break;
+    }
+  }
+
 
   @override
   _AppState createState() => _AppState();
@@ -278,6 +462,16 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   void initState() {
+
+    // Only after at least the action method is set, the notification events are delivered
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod:         App.onActionReceivedMethod,
+        onNotificationCreatedMethod:    App.onNotificationCreatedMethod,
+        onNotificationDisplayedMethod:  App.onNotificationDisplayedMethod,
+        onDismissActionReceivedMethod:  App.onDismissActionReceivedMethod
+    );
+
+    // Adding playlist songs to our example
     MediaPlayerCentral.addAll([
       MediaModel(
           diskImagePath: 'asset://assets/images/rock-disc.jpg',
@@ -323,16 +517,19 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: App.navKey,
+
       title: App.name,
       color: App.mainColor,
+
+      navigatorKey: App.navigatorKey,
       initialRoute: PAGE_HOME,
-      //onGenerateRoute: generateRoute,
       routes: materialRoutes,
+
       builder: (context, child) => MediaQuery(
         data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
         child: child ?? const SizedBox.shrink(),
       ),
+
       theme: ThemeData(
         brightness: Brightness.light,
 

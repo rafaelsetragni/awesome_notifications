@@ -34,6 +34,7 @@ class BaseNotificationContent extends Model {
   String? displayedDate;
   String? createdDate;
 
+  ActionType? actionType;
   NotificationSource? createdSource;
 
   NotificationLifeCycle? createdLifeCycle;
@@ -50,6 +51,7 @@ class BaseNotificationContent extends Model {
   BaseNotificationContent(
       {required this.id,
       required this.channelKey,
+      this.actionType,
       this.groupKey,
       this.title,
       this.body,
@@ -101,6 +103,9 @@ class BaseNotificationContent extends Model {
     this.autoDismissible =
         AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, mapData, bool);
 
+    this.actionType = AssertUtils.extractEnum<ActionType>(
+        NOTIFICATION_ACTION_TYPE, mapData, ActionType.values);
+
     this.privacy = AssertUtils.extractEnum<NotificationPrivacy>(
         NOTIFICATION_PRIVACY, mapData, NotificationPrivacy.values);
 
@@ -135,11 +140,12 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_AUTO_DISMISSIBLE: autoDismissible,
       NOTIFICATION_PRIVACY: AssertUtils.toSimpleEnumString(privacy),
       NOTIFICATION_CATEGORY: AssertUtils.toSimpleEnumString(category),
+      NOTIFICATION_ACTION_TYPE: AssertUtils.toSimpleEnumString(actionType),
       NOTIFICATION_COLOR: color?.value,
       NOTIFICATION_BACKGROUND_COLOR: backgroundColor?.value,
       NOTIFICATION_WAKE_UP_SCREEN: wakeUpScreen,
       NOTIFICATION_FULL_SCREEN_INTENT: fullScreenIntent,
-      NOTIFICATION_CRITICAL_ALERT: criticalAlert
+      NOTIFICATION_CRITICAL_ALERT: criticalAlert,
     };
   }
 

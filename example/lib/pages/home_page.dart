@@ -135,6 +135,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
+    // Uncomment those lines after activate google services inside example/android/build.gradle
+    // initializeFirebaseService();
+
+    // If you pretend to use the firebase service, you need to initialize it
+    // getting a valid token
+    // initializeFirebaseService();
+
     for(NotificationPermission permission in channelPermissions){
       scheduleChannelPermissions[permission] = false;
     }
@@ -143,82 +150,12 @@ class _HomePageState extends State<HomePage> {
       dangerousPermissionsStatus[permission] = false;
     }
 
-    // Uncomment those lines after activate google services inside example/android/build.gradle
-    // initializeFirebaseService();
-
-    // If you pretend to use the firebase service, you need to initialize it
-    // getting a valid token
-    // initializeFirebaseService();
-
-    AwesomeNotifications().createdStream.listen((receivedNotification) {
-      String? createdSourceText =
-          AssertUtils.toSimpleEnumString(receivedNotification.createdSource);
-      Fluttertoast.showToast(msg: '$createdSourceText notification created');
-    });
-
-    AwesomeNotifications().displayedStream.listen((receivedNotification) {
-      String? createdSourceText =
-          AssertUtils.toSimpleEnumString(receivedNotification.createdSource);
-      Fluttertoast.showToast(msg: '$createdSourceText notification displayed');
-    });
-
-    AwesomeNotifications().dismissedStream.listen((receivedAction) {
-      String? dismissedSourceText = AssertUtils.toSimpleEnumString(
-          receivedAction.dismissedLifeCycle);
-      Fluttertoast.showToast(
-          msg: 'Notification dismissed on $dismissedSourceText');
-    });
-
-    AwesomeNotifications().actionStream.listen((receivedAction) {
-
-      if(receivedAction.channelKey == 'call_channel'){
-        switch (receivedAction.buttonKeyPressed) {
-
-          case 'REJECT':
-            AndroidForegroundService.stopForeground();
-            break;
-
-          case 'ACCEPT':
-            loadSingletonPage(targetPage: PAGE_PHONE_CALL, receivedAction: receivedAction);
-            AndroidForegroundService.stopForeground();
-            break;
-
-          default:
-            loadSingletonPage(targetPage: PAGE_PHONE_CALL, receivedAction: receivedAction);
-            break;
-        }
-        return;
-      }
-
-      if (receivedAction.channelKey == 'alarm_channel') {
-        AndroidForegroundService.stopForeground();
-        return;
-      }
-
-      if (!StringUtils.isNullOrEmpty(receivedAction.buttonKeyInput)) {
-        processInputTextReceived(receivedAction);
-      } else if (!StringUtils.isNullOrEmpty(
-              receivedAction.buttonKeyPressed) &&
-          receivedAction.buttonKeyPressed.startsWith('MEDIA_')) {
-        processMediaControls(receivedAction);
-      } else {
-        processDefaultActionReceived(receivedAction);
-      }
-    });
-
     refreshPermissionsIcons().then((_) =>
       NotificationUtils.requestBasicPermissionToSendNotifications(context).then((allowed){
         if(allowed != globalNotificationsAllowed)
           refreshPermissionsIcons();
       })
     );
-  }
-
-  void loadSingletonPage({required String targetPage, required ReceivedAction receivedAction}){
-    // Avoid to open the notification details page over another details page already opened
-    Navigator.pushNamedAndRemoveUntil(context, targetPage,
-            (route) => (route.settings.name != targetPage) || route.isFirst,
-        arguments: receivedAction);
   }
 
   Future<void> refreshPermissionsIcons() async {
@@ -260,67 +197,6 @@ class _HomePageState extends State<HomePage> {
           isOverrideDnDEnabled = dangerousPermissionsStatus[NotificationPermission.OverrideDnD]!;
         })
     );
-  }
-
-  void processDefaultActionReceived(ReceivedAction receivedAction) {
-    Fluttertoast.showToast(msg: 'Action received');
-
-    String targetPage;
-
-    // Avoid to reopen the media page if is already opened
-    if (receivedAction.channelKey == 'media_player') {
-      targetPage = PAGE_MEDIA_DETAILS;
-      if (Navigator.of(context).isCurrent(PAGE_MEDIA_DETAILS)) return;
-    } else {
-      targetPage = PAGE_NOTIFICATION_DETAILS;
-    }
-
-    loadSingletonPage(targetPage: targetPage, receivedAction: receivedAction);
-  }
-
-  void processInputTextReceived(ReceivedAction receivedAction) {
-    if(receivedAction.channelKey == 'chats')
-      NotificationUtils.simulateSendResponseChatConversation(
-          msg: receivedAction.buttonKeyInput,
-          groupKey: 'jhonny_group'
-      );
-
-    sleep(Duration(seconds: 2)); // To give time to show
-    Fluttertoast.showToast(
-        msg: 'Msg: ' + receivedAction.buttonKeyInput,
-        backgroundColor: App.mainColor,
-        textColor: Colors.white);
-  }
-
-  void processMediaControls(actionReceived) {
-    switch (actionReceived.buttonKeyPressed) {
-
-      case 'MEDIA_CLOSE':
-        MediaPlayerCentral.stop();
-        break;
-
-      case 'MEDIA_PLAY':
-      case 'MEDIA_PAUSE':
-        MediaPlayerCentral.playPause();
-        break;
-
-      case 'MEDIA_PREV':
-        MediaPlayerCentral.previousMedia();
-        break;
-
-      case 'MEDIA_NEXT':
-        MediaPlayerCentral.nextMedia();
-        break;
-
-      default:
-        break;
-    }
-
-    Fluttertoast.showToast(
-        msg: 'Media: ' +
-            actionReceived.buttonKeyPressed.replaceFirst('MEDIA_', ''),
-        backgroundColor: App.mainColor,
-        textColor: Colors.white);
   }
 
   @override
@@ -419,6 +295,13 @@ class _HomePageState extends State<HomePage> {
             }),
 
             /* ******************************************************************** */
+
+            SimpleButton('Show notification with\nReply and Action button',
+                onPressed: () => NotificationUtils.showNotificationWithSilentActionButtons(30)),
+            SimpleButton('Cancel notification',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () => NotificationUtils.cancelNotification(30)),
 
             TextDivisor(title: 'Push Service Status'),
             Row(

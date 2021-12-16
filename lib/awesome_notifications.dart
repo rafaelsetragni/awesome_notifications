@@ -3,7 +3,7 @@ library awesome_notifications;
 import 'dart:typed_data';
 
 export 'src/awesome_notifications_core.dart';
-export 'src/enumerators/action_button_type.dart';
+export 'src/enumerators/action_type.dart';
 export 'src/enumerators/group_alert_behaviour.dart';
 export 'src/enumerators/media_source.dart';
 export 'src/enumerators/emojis.dart';
@@ -19,6 +19,7 @@ export 'src/enumerators/group_sort.dart';
 export 'src/enumerators/notification_permission.dart';
 export 'src/extensions/extension_navigator_state.dart';
 export 'src/exceptions/awesome_exception.dart';
+export 'src/exceptions/isolate_callback_exception.dart';
 export 'src/helpers/bitmap_helper.dart';
 export 'src/helpers/cron_helper.dart';
 export 'src/models/notification_button.dart';
@@ -40,6 +41,15 @@ export 'src/utils/map_utils.dart';
 export 'src/utils/resource_image_provider.dart';
 export 'src/utils/string_utils.dart';
 export 'src/definitions.dart';
+
+import 'package:awesome_notifications/src/models/received_models/received_action.dart';
+import 'package:awesome_notifications/src/models/received_models/received_notification.dart';
+
+/// Method structure to listen to an incoming action with dart
+typedef Future<void> ActionHandler(ReceivedAction receivedAction);
+
+/// Method structure to listen to an notification event with dart
+typedef Future<void> NotificationHandler(ReceivedNotification receivedNotification);
 
 // Pause and Play vibration sequences
 Int64List lowVibrationPattern = Int64List.fromList([0, 200, 200, 200]);

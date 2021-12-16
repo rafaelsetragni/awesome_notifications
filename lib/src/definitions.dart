@@ -1,4 +1,4 @@
-import 'package:awesome_notifications/src/enumerators/action_button_type.dart';
+import 'package:awesome_notifications/src/enumerators/action_type.dart';
 import 'package:awesome_notifications/src/enumerators/default_ringtone_type.dart';
 import 'package:awesome_notifications/src/enumerators/group_alert_behaviour.dart';
 import 'package:awesome_notifications/src/enumerators/group_sort.dart';
@@ -9,11 +9,11 @@ import 'package:flutter/material.dart';
 import 'enumerators/notification_layout.dart';
 
 const BROADCAST_FCM_TOKEN =
-    'me.carda.awesome_notifications.services.firebase.TOKEN';
+    'me.carda.awesome_notifications.notifications.system.services.firebase.TOKEN';
 const EXTRA_BROADCAST_FCM_TOKEN = 'token';
 
 const BROADCAST_MESSAGE =
-    'me.carda.awesome_notifications.services.firebase.NOTIFICATION';
+    'me.carda.awesome_notifications.notifications.system.services.firebase.NOTIFICATION';
 const EXTRA_BROADCAST_MESSAGE = 'notification';
 
 const INITIALIZE_DEBUG_MODE = "debug";
@@ -41,6 +41,10 @@ const PUSH_SOURCE_LOCAL_NOTIFICATION = 'Local';
 const SHARED_PREFERENCES_KEY = 'notification_plugin_cache';
 
 const CHANNEL_FLUTTER_PLUGIN = 'awesome_notifications';
+const DART_REVERSE_CHANNEL = 'awesome_notifications_reverse';
+
+const ACTION_HANDLE = 'actionHandle';
+const DART_BG_HANDLE = 'dartBgHandle';
 
 const CHANNEL_METHOD_INITIALIZE = 'initialize';
 const CHANNEL_METHOD_GET_DRAWABLE_DATA = 'getDrawableData';
@@ -64,7 +68,8 @@ const CHANNEL_METHOD_CREATE_NOTIFICATION = 'createNewNotification';
 const CHANNEL_METHOD_NOTIFICATION_CREATED = 'notificationCreated';
 const CHANNEL_METHOD_NOTIFICATION_DISPLAYED = 'notificationDisplayed';
 const CHANNEL_METHOD_NOTIFICATION_DISMISSED = 'notificationDismissed';
-const CHANNEL_METHOD_ACTION_RECEIVED = 'receivedAction';
+const CHANNEL_METHOD_RECEIVED_ACTION = 'receivedAction';
+const CHANNEL_METHOD_SILENT_ACTION = 'silentAction';
 
 const CHANNEL_METHOD_NOTIFICATION_AT_LAUNCH = 'notificationAtLaunch';
 
@@ -76,6 +81,7 @@ const CHANNEL_METHOD_INCREMENT_BADGE_COUNT = 'incBadgeCount';
 const CHANNEL_METHOD_DECREMENT_BADGE_COUNT = 'decBadgeCount';
 const CHANNEL_METHOD_RESET_BADGE = 'resetBadge';
 
+const CHANNEL_METHOD_SET_ACTION_HANDLE = 'setActionHandle';
 const CHANNEL_METHOD_DISMISS_NOTIFICATION = 'dismissNotification';
 const CHANNEL_METHOD_CANCEL_NOTIFICATION = 'cancelNotification';
 const CHANNEL_METHOD_CANCEL_SCHEDULE = 'cancelSchedule';
@@ -132,6 +138,10 @@ const NOTIFICATION_ICON_RESOURCE_ID = 'iconResourceId';
 const NOTIFICATION_ID = 'id';
 const NOTIFICATION_LAYOUT = 'notificationLayout';
 
+const CHANNEL_METHOD_ISOLATE_CALLBACK = 'isolateCallbackReference';
+const CHANNEL_METHOD_ISOLATE_SHUTDOWN = 'isolateShutdown';
+const CHANNEL_METHOD_DART_CALLBACK = 'dartCallbackReference';
+
 const NOTIFICATION_DISPLAY_ON_FOREGROUND = 'displayOnForeground';
 const NOTIFICATION_DISPLAY_ON_BACKGROUND = 'displayOnBackground';
 
@@ -179,8 +189,9 @@ const NOTIFICATION_BUTTON_LABEL = 'label';
 const NOTIFICATION_BUTTON_KEY_PRESSED = 'buttonKeyPressed';
 const NOTIFICATION_BUTTON_KEY_INPUT = 'buttonKeyInput';
 const NOTIFICATION_BUTTON_INPUT = 'buttonKeyInput';
-const NOTIFICATION_BUTTON_TYPE = 'buttonType';
+const NOTIFICATION_ACTION_TYPE = 'actionType';
 const NOTIFICATION_ENABLED = "enabled";
+const NOTIFICATION_REQUIRE_INPUT_TEXT = "requireInputText";
 const NOTIFICATION_IS_DANGEROUS_OPTION = "isDangerousOption";
 
 const NOTIFICATION_PAYLOAD = 'payload';
@@ -256,7 +267,7 @@ class Definitions {
     NOTIFICATION_IMPORTANCE: NotificationImportance.Default,
     NOTIFICATION_LAYOUT: NotificationLayout.Default,
     NOTIFICATION_DEFAULT_PRIVACY: NotificationPrivacy.Private,
-    NOTIFICATION_BUTTON_TYPE: ActionButtonType.Default,
+    NOTIFICATION_ACTION_TYPE: ActionType.Default,
     NOTIFICATION_PRIVACY: NotificationPrivacy.Private,
     NOTIFICATION_DEFAULT_RINGTONE_TYPE: DefaultRingtoneType.Notification,
     NOTIFICATION_CHANNEL_DESCRIPTION: 'Notifications',

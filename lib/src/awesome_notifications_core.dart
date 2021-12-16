@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
@@ -26,7 +27,9 @@ import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
 import 'package:awesome_notifications/src/utils/date_utils.dart';
 
+import '../awesome_notifications.dart';
 import 'enumerators/notification_permission.dart';
+import 'isolates/isolate_main.dart';
 import 'models/notification_channel_group.dart';
 
 class AwesomeNotifications {
@@ -37,6 +40,11 @@ class AwesomeNotifications {
 
   static String get utcTimeZoneIdentifier => _utcTimeZoneIdentifier;
   static String get localTimeZoneIdentifier => _localTimeZoneIdentifier;
+
+  ActionHandler? _actionHandler;
+  ActionHandler? _dismissedHandler;
+  NotificationHandler? _createdHandler;
+  NotificationHandler? _displayedHandler;
 
   /// WEB SUPPORT METHODS *********************************************
 /*
@@ -71,21 +79,25 @@ class AwesomeNotifications {
   /// STREAM METHODS *********************************************
 
   /// Stream to capture all created notifications
+  @Deprecated('Use static methods instead, calling AwesomeNotifications().setListeners()')
   Stream<ReceivedNotification> get createdStream {
     return _createdSubject.stream;
   }
 
   /// Stream to capture all notifications displayed on user's screen.
+  @Deprecated('Use static methods instead, calling AwesomeNotifications().setListeners()')
   Stream<ReceivedNotification> get displayedStream {
     return _displayedSubject.stream;
   }
 
   /// Stream to capture all notifications dismissed by the user.
+  @Deprecated('Use static methods instead, calling AwesomeNotifications().setListeners()')
   Stream<ReceivedAction> get dismissedStream {
     return _dismissedSubject.stream;
   }
 
   /// Stream to capture all actions (tap) over notifications
+  @Deprecated('Use static methods instead, calling AwesomeNotifications().setListeners()')
   Stream<ReceivedAction> get actionStream {
     return _actionSubject.stream;
   }
@@ -120,6 +132,36 @@ class AwesomeNotifications {
     _displayedSubject.close();
     _dismissedSubject.close();
     _actionSubject.close();
+  }
+
+  /// BRIDGE BETWEEN LISTENERS AND OBSERV METHODS *********************************************
+
+  StreamSubscription? _createdSubscription;
+  StreamSubscription? _displayedSubscription;
+  StreamSubscription? _actionSubscription;
+  StreamSubscription? _dismissedSubscription;
+
+  _startEventListeners(){
+
+    // Ensures that there is at most one subscription
+    _createdSubscription?.cancel();
+    _displayedSubscription?.cancel();
+    _actionSubscription?.cancel();
+    _dismissedSubscription?.cancel();
+
+    // Streams will be keept internally. They are deprecated to use outside.
+    _createdSubscription = createdStream.listen((event) {
+      if(_createdHandler != null) _createdHandler!(event);
+    });
+    _displayedSubscription = displayedStream.listen((event) {
+      if(_displayedHandler != null) _displayedHandler!(event);
+    });
+    _actionSubscription = actionStream.listen((event) {
+      if(_actionHandler != null) _actionHandler!(event);
+    });
+    _dismissedSubscription = dismissedStream.listen((event) {
+      if(_dismissedHandler != null) _dismissedHandler!(event);
+    });
   }
 
   /// SINGLETON METHODS *********************************************
@@ -171,17 +213,62 @@ class AwesomeNotifications {
       }
     }
 
+    final CallbackHandle? dartCallbackReference =
+      PluginUtilities.getCallbackHandle(dartIsolateMain);
+
     var result = await _channel.invokeMethod(CHANNEL_METHOD_INITIALIZE, {
       INITIALIZE_DEBUG_MODE: debug,
       INITIALIZE_DEFAULT_ICON: defaultIconPath,
       INITIALIZE_CHANNELS: serializedChannels,
-      INITIALIZE_CHANNELS_GROUPS: serializedChannelGroups
+      INITIALIZE_CHANNELS_GROUPS: serializedChannelGroups,
+      DART_BG_HANDLE: dartCallbackReference!.toRawHandle()
     });
 
     _localTimeZoneIdentifier = await _channel
         .invokeMethod(CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER);
     _utcTimeZoneIdentifier =
         await _channel.invokeMethod(CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER);
+
+    return result;
+  }
+
+  /// Defines the global or static methods that gonna receive the notification
+  /// events. OBS: Only after set at least one method, the notification's events are delivered.
+  ///
+  /// [onActionReceivedMethod] method that receives all the notification actions
+  /// [onNotificationCreatedMethod] method that gets called when a new notification or schedule is created on the system
+  /// [onNotificationDisplayedMethod] method that gets called when a new notification is displayed on status bar
+  /// [onDismissActionReceivedMethod] method that receives the notification dismiss actions
+  Future<bool> setListeners({
+    required ActionHandler onActionReceivedMethod,
+    NotificationHandler? onNotificationCreatedMethod,
+    NotificationHandler? onNotificationDisplayedMethod,
+    ActionHandler? onDismissActionReceivedMethod
+  }) async {
+
+    if(_actionHandler != null){
+      print('static methods was already setted.');
+      return false;
+    }
+
+    final CallbackHandle? actionCallbackReference =
+    PluginUtilities.getCallbackHandle(onActionReceivedMethod);
+
+    bool result = await _channel.invokeMethod(CHANNEL_METHOD_SET_ACTION_HANDLE, {
+      ACTION_HANDLE: actionCallbackReference?.toRawHandle()
+    });
+
+    if(!result){
+      print('onActionNotificationMethod is not a valid global or static method.');
+      return false;
+    }
+
+    _actionHandler = onActionReceivedMethod;
+    _dismissedHandler = onDismissActionReceivedMethod;
+    _createdHandler = onNotificationCreatedMethod;
+    _displayedHandler = onNotificationDisplayedMethod;
+
+    _startEventListeners();
 
     return result;
   }
@@ -198,6 +285,7 @@ class AwesomeNotifications {
     return result2;
   }
 
+  String _silentBGActionTypeKey = AssertUtils.toSimpleEnumString(ActionType.SilentBackgroundAction)!;
   Future<dynamic> _handleMethod(MethodCall call) async {
     Map<String, dynamic> arguments =
         (call.arguments as Map).cast<String, dynamic>();
@@ -215,8 +303,16 @@ class AwesomeNotifications {
         _dismissedSubject.sink.add(ReceivedAction().fromMap(arguments));
         return;
 
-      case CHANNEL_METHOD_ACTION_RECEIVED:
+      case CHANNEL_METHOD_RECEIVED_ACTION:
         _actionSubject.sink.add(ReceivedAction().fromMap(arguments));
+        return;
+
+      case CHANNEL_METHOD_SILENT_ACTION:
+        if(arguments[CHANNEL_METHOD_RECEIVED_ACTION][NOTIFICATION_ACTION_TYPE] == _silentBGActionTypeKey) {
+          compute(receiveSilentAction, arguments);
+        } else {
+          receiveSilentAction(arguments);
+        }
         return;
 
       default:

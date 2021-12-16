@@ -6,14 +6,15 @@
   
     <application>
 
-        <receiver android:name=".notifications.broadcastReceivers.DismissedNotificationReceiver"
+        <receiver android:name=".awesome_notifications_android_core.broadcasters.receivers.DismissedNotificationReceiver"
             android:exported="false"/>
-        <receiver android:name=".notifications.broadcastReceivers.ScheduledNotificationReceiver"
+        <receiver android:name=".awesome_notifications_android_core.broadcasters.receivers.ScheduledNotificationReceiver"
             android:exported="false"/>
-        <receiver android:name=".notifications.broadcastReceivers.KeepOnTopActionReceiver"
+        <receiver android:name=".awesome_notifications_android_core.broadcasters.receivers.NotificationActionReceiver"
             android:exported="false"/>
+
         <receiver
-            android:name=".notifications.broadcastReceivers.RefreshSchedulesReceiver"
+            android:name=".awesome_notifications_android_core.broadcasters.receivers.RefreshSchedulesReceiver"
             android:exported="false">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -25,6 +26,10 @@
                 <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED"/>
             </intent-filter>
         </receiver>
+
+        <service android:name=".awesome_notifications_android_core.services.BackgroundService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="false"/>
 
     </application>
 </manifest>

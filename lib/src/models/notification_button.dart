@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:awesome_notifications/src/definitions.dart';
-import 'package:awesome_notifications/src/enumerators/action_button_type.dart';
+import 'package:awesome_notifications/src/enumerators/action_type.dart';
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
 import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
 import 'package:awesome_notifications/src/models/model.dart';
@@ -24,24 +24,37 @@ class NotificationActionButton extends Model {
   String? label;
   String? icon;
   bool? enabled;
+  bool requireInputText;
   bool? autoDismissible;
   bool? showInCompactView;
   bool? isDangerousOption;
   Color? color;
-  ActionButtonType? buttonType;
+  ActionType? buttonType;
 
   NotificationActionButton(
       {required String key,
       required String label,
       this.icon,
       this.enabled,
+      this.requireInputText = false,
       this.autoDismissible,
       this.showInCompactView,
       this.isDangerousOption,
       this.color,
-      this.buttonType = ActionButtonType.Default}) {
+      this.buttonType = ActionType.Default}) {
     this.key = key;
     this.label = label;
+
+    // Adapting to
+    adaptInputFieldToRequireText();
+  }
+
+  void adaptInputFieldToRequireText() {
+    // Adapting to 0.7.0 pattern
+    if(this.buttonType == ActionType.InputField){
+      this.requireInputText = true;
+      this.buttonType = ActionType.SilentAction;
+    }
   }
 
   @override
@@ -51,6 +64,7 @@ class NotificationActionButton extends Model {
     label =
         AssertUtils.extractValue(NOTIFICATION_BUTTON_LABEL, dataMap, String);
     enabled = AssertUtils.extractValue(NOTIFICATION_ENABLED, dataMap, bool);
+    requireInputText = AssertUtils.extractValue(NOTIFICATION_REQUIRE_INPUT_TEXT, dataMap, bool);
     autoDismissible =
         AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, dataMap, bool);
     showInCompactView = AssertUtils.extractValue(
@@ -58,7 +72,7 @@ class NotificationActionButton extends Model {
     isDangerousOption = AssertUtils.extractValue(
         NOTIFICATION_IS_DANGEROUS_OPTION, dataMap, bool);
     buttonType = AssertUtils.extractEnum(
-        NOTIFICATION_BUTTON_TYPE, dataMap, ActionButtonType.values);
+        NOTIFICATION_ACTION_TYPE, dataMap, ActionType.values);
 
     color = AssertUtils.extractValue(NOTIFICATION_COLOR, dataMap, Color);
 
@@ -67,15 +81,18 @@ class NotificationActionButton extends Model {
 
   @override
   Map<String, dynamic> toMap() {
+    adaptInputFieldToRequireText();
+
     return {
       NOTIFICATION_KEY: key,
       NOTIFICATION_ICON: icon,
       NOTIFICATION_BUTTON_LABEL: label,
       NOTIFICATION_ENABLED: enabled,
+      NOTIFICATION_REQUIRE_INPUT_TEXT: requireInputText,
       NOTIFICATION_AUTO_DISMISSIBLE: autoDismissible,
       NOTIFICATION_SHOW_IN_COMPACT_VIEW: showInCompactView,
       NOTIFICATION_IS_DANGEROUS_OPTION: isDangerousOption,
-      NOTIFICATION_BUTTON_TYPE: AssertUtils.toSimpleEnumString(buttonType),
+      NOTIFICATION_ACTION_TYPE: AssertUtils.toSimpleEnumString(buttonType),
       NOTIFICATION_COLOR: color?.value
     };
   }
