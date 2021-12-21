@@ -157,15 +157,15 @@ AwesomeNotifications().initialize(
             defaultColor: Color(0xFF9D50DD),
             ledColor: Colors.white
         ),
-        // Channel groups are only visual and are not required
-        channelGroups: [
-          NotificationChannelGroup(
-            channelGroupkey: 'basic_channel_group',
-            channelGroupName: 'Basic group'
-          )
-        ],
-        debug: true
-    ]
+    ],
+    // Channel groups are only visual and are not required
+    channelGroups: [
+      NotificationChannelGroup(
+        channelGroupkey: 'basic_channel_group',
+        channelGroupName: 'Basic group'
+      )
+    ],
+    debug: true
 );
 ```
 
