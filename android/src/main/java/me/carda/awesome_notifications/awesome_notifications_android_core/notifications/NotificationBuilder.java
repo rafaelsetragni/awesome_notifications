@@ -73,7 +73,7 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.utils.S
 
 import static android.app.NotificationManager.Policy.PRIORITY_CATEGORY_ALARMS;
 
-public class NotificationBuilder {
+protected class NotificationBuilder {
 
     public static String TAG = "NotificationBuilder";
 
@@ -691,12 +691,12 @@ public class NotificationBuilder {
     private void setVisibility(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
 
 //        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-//
-            Integer visibilityIndex;
-            visibilityIndex = IntegerUtils.extractInteger(notificationModel.content.privacy, channelModel.defaultPrivacy.ordinal());
-            visibilityIndex = IntegerUtils.extractInteger(visibilityIndex, NotificationPrivacy.Public);
+            NotificationPrivacy privacy =
+                notificationModel.content.privacy != null ?
+                        notificationModel.content.privacy :
+                        channelModel.defaultPrivacy;
 
-            builder.setVisibility(visibilityIndex - 1);
+            builder.setVisibility(NotificationPrivacy.toAndroidPrivacy(privacy));
 //        }
     }
 

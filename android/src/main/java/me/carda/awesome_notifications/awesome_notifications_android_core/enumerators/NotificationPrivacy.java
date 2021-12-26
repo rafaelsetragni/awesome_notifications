@@ -1,5 +1,10 @@
 package me.carda.awesome_notifications.awesome_notifications_android_core.enumerators;
 
+import android.app.Notification;
+
+import androidx.annotation.Nullable;
+import me.carda.awesome_notifications.awesome_notifications_android_core.utils.IntegerUtils;
+
 public enum NotificationPrivacy {
 
     /**
@@ -16,5 +21,17 @@ public enum NotificationPrivacy {
     /**
      * Notification visibility: Show this notification on every lockscreens.
      */
-    Public,
+    Public;
+
+    public static int toAndroidPrivacy(@Nullable NotificationPrivacy importance){
+        switch (importance == null ? NotificationPrivacy.Private : importance){
+            case Secret:
+                return Notification.VISIBILITY_SECRET;
+            case Public:
+                return Notification.VISIBILITY_PUBLIC;
+            case Private:
+            default:
+                return Notification.VISIBILITY_PRIVATE;
+        }
+    }
 }

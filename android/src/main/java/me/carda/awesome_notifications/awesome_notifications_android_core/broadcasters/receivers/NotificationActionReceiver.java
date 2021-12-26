@@ -3,6 +3,7 @@ package me.carda.awesome_notifications.awesome_notifications_android_core.broadc
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 
 import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ActionType;
@@ -43,9 +44,12 @@ public class NotificationActionReceiver extends BroadcastReceiver {
                 .dismissNotification(actionReceived.id);
         else
             if (actionReceived.actionType != ActionType.KeepOnTop)
-                StatusBarManager
-                    .getInstance(context)
-                    .closeStatusBar();
+                // All background notifications are or auto dismissible or keep on top since Android 12
+                // https://developer.android.com/about/versions/12/behavior-changes-all?hl=pt-br#close-system-dialogs-exceptions
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S /*Android 12*/)
+                    StatusBarManager
+                            .getInstance(context)
+                            .closeStatusBar();
 
         try {
 

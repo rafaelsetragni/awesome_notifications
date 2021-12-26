@@ -11,8 +11,8 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.excepti
 public class DefaultsModel extends AbstractModel {
 
     public String appIcon;
-    public long silentDataCallback;
-    public long reverseDartCallback;
+    public Long silentDataCallback;
+    public Long reverseDartCallback;
 
     public DefaultsModel(){}
 

@@ -9,6 +9,12 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ActionType;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationCategory;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationImportance;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLayout;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.AbstractModel;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.CompareUtils;
@@ -74,9 +80,6 @@ public class TestUtils {
             case Definitions.NOTIFICATION_ENABLE_VIBRATION:
             case Definitions.NOTIFICATION_GROUP_SORT:
             case Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR:
-            case Definitions.NOTIFICATION_PRIVACY:
-            case Definitions.NOTIFICATION_CATEGORY:
-            case Definitions.NOTIFICATION_DEFAULT_PRIVACY:
             case Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE:
             case Definitions.NOTIFICATION_ONLY_ALERT_ONCE:
             case Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE:
@@ -114,10 +117,23 @@ public class TestUtils {
             case Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE:
             case Definitions.NOTIFICATION_DISMISSED_LIFECYCLE:
             case Definitions.NOTIFICATION_ACTION_LIFECYCLE:
+                testEnumField(model, fieldName, NotificationLifeCycle.class, NotificationLifeCycle.values());
+
             case Definitions.NOTIFICATION_LAYOUT:
+                testEnumField(model, fieldName, NotificationLayout.class, NotificationLayout.values());
+
             case Definitions.NOTIFICATION_ACTION_TYPE:
+                testEnumField(model, fieldName, ActionType.class, ActionType.values());
+
             case Definitions.NOTIFICATION_IMPORTANCE:
-                testEnumField(model, fieldName);
+                testEnumField(model, fieldName, NotificationImportance.class, NotificationImportance.values());
+
+            case Definitions.NOTIFICATION_CATEGORY:
+                testEnumField(model, fieldName, NotificationCategory.class, NotificationCategory.values());
+
+            case Definitions.NOTIFICATION_PRIVACY:
+            case Definitions.NOTIFICATION_DEFAULT_PRIVACY:
+                testEnumField(model, fieldName, NotificationPrivacy.class, NotificationPrivacy.values());
                 break;
 
             //case Definitions.NOTIFICATION_SCHEDULE_CREATED_DATE:
@@ -181,7 +197,11 @@ public class TestUtils {
         testDefaultFieldValue(model, fieldName);
     }
 
-    public static void testEnumField(@NonNull AbstractModel model, @NonNull String fieldName) {
+    public static <T> void testEnumField(@NonNull AbstractModel model, @NonNull String fieldName, Class<T> enumerator, T[] values) {
+
+        for(T enumValue : values)
+            testFieldValue(model, fieldName, enumValue.toString(), enumerator);
+
         testDefaultFieldValue(model, fieldName);
     }
 
@@ -206,10 +226,7 @@ public class TestUtils {
 
         assertNotNull("Field value of '" + fieldName + "' could not be recovered using map converters.", valueReturned);
 
-        assertTrue("Field value of '" + fieldName + "' is not the same as expected using map converters.",
-                type.isAssignableFrom(valueReturned.getClass()));
-
-        testEqualValuesWithAwesomeTolerance(fieldName, valueReturned, testValue);
+        testEqualValuesWithAwesomeTolerance(fieldName, testValue, valueReturned);
     }
 
     private static void testEqualValuesWithAwesomeTolerance(String fieldName, Object value1, Object value2) {

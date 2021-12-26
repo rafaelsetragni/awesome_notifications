@@ -1,7 +1,5 @@
 package me.carda.awesome_notifications.awesome_notifications_android_core.utils;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -14,14 +12,6 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.utils.M
 import static org.junit.Assert.*;
 
 public class MapUtilsTest {
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
 
     @Test
     public void testIsNullOrEmptyKey() {

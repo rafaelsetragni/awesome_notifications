@@ -19,7 +19,7 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.observe
 
 public class LifeCycleManager implements ActivityLifecycleCallbacks {
 
-    static NotificationLifeCycle appLifeCycle = NotificationLifeCycle.AppKilled;
+    protected static NotificationLifeCycle appLifeCycle = NotificationLifeCycle.AppKilled;
     public static NotificationLifeCycle getApplicationLifeCycle(){
         return appLifeCycle;
     }

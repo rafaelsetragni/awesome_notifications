@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.carda.awesome_notifications.awesome_notifications_android_core.TestEnum;
+
 import static org.junit.Assert.*;
 
 public class IntegerUtilsTest {
@@ -17,12 +19,6 @@ public class IntegerUtilsTest {
 
     @After
     public void tearDown() throws Exception {
-    }
-
-    enum TestEnum {
-        First,
-        Second,
-        Last
     }
 
     @Test

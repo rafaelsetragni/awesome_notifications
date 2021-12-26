@@ -83,9 +83,8 @@ public final class CronUtils {
         calendarHelper.setTimeZone(timeZone);
         calendarHelper.setTime(initialScheduleDay);
         calendarHelper.set(Calendar.MILLISECOND,0);
-        calendarHelper.set(Calendar.SECOND,calendarHelper.get(Calendar.SECOND)-1);
-        Date delayedScheduleDay = calendarHelper.getTime();
-        return delayedScheduleDay;
+        calendarHelper.set(Calendar.SECOND, calendarHelper.get(Calendar.SECOND)-1);
+        return calendarHelper.getTime();
     }
 }
 

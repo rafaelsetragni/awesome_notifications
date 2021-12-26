@@ -36,8 +36,7 @@ public class ForegroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int foregroundId = intent.getIntExtra(Definitions.AWESOME_FOREGROUND_ID, -1);
-        ForegroundServiceIntent foregroundServiceIntent = serviceStack.get(foregroundId);
+        ForegroundServiceIntent foregroundServiceIntent = serviceStack.get(startId);
         assert foregroundServiceIntent != null;
 
         try {
@@ -50,9 +49,9 @@ public class ForegroundService extends Service {
                             .createNewAndroidNotification(this, notificationModel);
 
             if (foregroundServiceIntent.hasForegroundServiceType && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                startForeground(foregroundId, androidNotification, foregroundServiceIntent.foregroundServiceType);
+                startForeground(startId, androidNotification, foregroundServiceIntent.foregroundServiceType);
             } else {
-                startForeground(foregroundId, androidNotification);
+                startForeground(startId, androidNotification);
             }
         } catch (AwesomeNotificationException e) {
             e.printStackTrace();

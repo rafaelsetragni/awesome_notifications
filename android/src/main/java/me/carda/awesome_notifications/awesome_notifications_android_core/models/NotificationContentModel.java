@@ -81,9 +81,6 @@ public class NotificationContentModel extends AbstractModel {
     public NotificationContentModel fromMap(Map<String, Object> arguments) {
 
         id = getValueOrDefault(arguments, Definitions.NOTIFICATION_ID, Integer.class);
-        if(id < 0) {
-            id = IntegerUtils.generateNextRandomId();
-        }
 
         actionType = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_ACTION_TYPE,
                 ActionType.class, ActionType.values());
@@ -160,87 +157,44 @@ public class NotificationContentModel extends AbstractModel {
     public Map<String, Object> toMap(){
         Map<String, Object> returnedObject = new HashMap<>();
 
-        returnedObject.put(Definitions.NOTIFICATION_ID, this.id);
-        returnedObject.put(Definitions.NOTIFICATION_RANDOM_ID, this.isRandomId);
-        returnedObject.put(Definitions.NOTIFICATION_TITLE, this.title);
-        returnedObject.put(Definitions.NOTIFICATION_BODY, this.body);
-        returnedObject.put(Definitions.NOTIFICATION_SUMMARY, this.summary);
+        putDataOnMapObject(Definitions.NOTIFICATION_ID, returnedObject, this.id);
+        putDataOnMapObject(Definitions.NOTIFICATION_ID, returnedObject, this.id);
+        putDataOnMapObject(Definitions.NOTIFICATION_RANDOM_ID, returnedObject, this.isRandomId);
+        putDataOnMapObject(Definitions.NOTIFICATION_TITLE, returnedObject, this.title);
+        putDataOnMapObject(Definitions.NOTIFICATION_BODY, returnedObject, this.body);
+        putDataOnMapObject(Definitions.NOTIFICATION_SUMMARY, returnedObject, this.summary);
+        putDataOnMapObject(Definitions.NOTIFICATION_SHOW_WHEN, returnedObject, this.showWhen);
+        putDataOnMapObject(Definitions.NOTIFICATION_WAKE_UP_SCREEN, returnedObject, this.wakeUpScreen);
+        putDataOnMapObject(Definitions.NOTIFICATION_FULL_SCREEN_INTENT, returnedObject, this.fullScreenIntent);
+        putDataOnMapObject(Definitions.NOTIFICATION_ACTION_TYPE, returnedObject, this.actionType);
+        putDataOnMapObject(Definitions.NOTIFICATION_LOCKED, returnedObject, this.locked);
+        putDataOnMapObject(Definitions.NOTIFICATION_PLAY_SOUND, returnedObject, this.playSound);
+        putDataOnMapObject(Definitions.NOTIFICATION_CUSTOM_SOUND, returnedObject, this.customSound);
+        putDataOnMapObject(Definitions.NOTIFICATION_TICKER, returnedObject, this.ticker);
+        putDataOnMapObject(Definitions.NOTIFICATION_PAYLOAD, returnedObject, this.payload);
+        putDataOnMapObject(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, returnedObject, this.autoDismissible);
+        putDataOnMapObject(Definitions.NOTIFICATION_LAYOUT, returnedObject, this.notificationLayout);
+        putDataOnMapObject(Definitions.NOTIFICATION_CREATED_SOURCE, returnedObject, this.createdSource);
+        putDataOnMapObject(Definitions.NOTIFICATION_CREATED_LIFECYCLE, returnedObject, this.createdLifeCycle);
+        putDataOnMapObject(Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE, returnedObject, this.displayedLifeCycle);
+        putDataOnMapObject(Definitions.NOTIFICATION_DISPLAYED_DATE, returnedObject, this.displayedDate);
+        putDataOnMapObject(Definitions.NOTIFICATION_CREATED_DATE, returnedObject, this.createdDate);
+        putDataOnMapObject(Definitions.NOTIFICATION_CHANNEL_KEY, returnedObject, this.channelKey);
+        putDataOnMapObject(Definitions.NOTIFICATION_CATEGORY, returnedObject, this.category);
+        putDataOnMapObject(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, returnedObject, this.autoDismissible);
+        putDataOnMapObject(Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, returnedObject, this.displayOnForeground);
+        putDataOnMapObject(Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, returnedObject, this.displayOnBackground);
+        putDataOnMapObject(Definitions.NOTIFICATION_COLOR, returnedObject, this.color);
+        putDataOnMapObject(Definitions.NOTIFICATION_BACKGROUND_COLOR, returnedObject, this.backgroundColor);
+        putDataOnMapObject(Definitions.NOTIFICATION_ICON, returnedObject, this.icon);
+        putDataOnMapObject(Definitions.NOTIFICATION_LARGE_ICON, returnedObject, this.largeIcon);
+        putDataOnMapObject(Definitions.NOTIFICATION_BIG_PICTURE, returnedObject, this.bigPicture);
+        putDataOnMapObject(Definitions.NOTIFICATION_PROGRESS, returnedObject, this.progress);
+        putDataOnMapObject(Definitions.NOTIFICATION_GROUP_KEY, returnedObject, this.groupKey);
+        putDataOnMapObject(Definitions.NOTIFICATION_PRIVACY, returnedObject, this.privacy);
+        putDataOnMapObject(Definitions.NOTIFICATION_PRIVATE_MESSAGE, returnedObject, this.privateMessage);
 
-        returnedObject.put(Definitions.NOTIFICATION_SHOW_WHEN, this.showWhen);
-        returnedObject.put(Definitions.NOTIFICATION_WAKE_UP_SCREEN, this.wakeUpScreen);
-        returnedObject.put(Definitions.NOTIFICATION_FULL_SCREEN_INTENT, this.fullScreenIntent);
-
-        returnedObject.put(Definitions.NOTIFICATION_ACTION_TYPE,
-                this.actionType != null ? this.actionType.toString() : ActionType.Default.toString());
-
-        returnedObject.put(Definitions.NOTIFICATION_LOCKED, this.locked);
-
-        returnedObject.put(Definitions.NOTIFICATION_PLAY_SOUND, this.playSound);
-        returnedObject.put(Definitions.NOTIFICATION_CUSTOM_SOUND, this.customSound);
-
-        returnedObject.put(Definitions.NOTIFICATION_TICKER, this.ticker);
-        returnedObject.put(Definitions.NOTIFICATION_PAYLOAD, this.payload);
-        returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, this.autoDismissible);
-
-        returnedObject.put(Definitions.NOTIFICATION_LAYOUT,
-                this.notificationLayout != null ? this.notificationLayout.toString() : "Default");
-
-        returnedObject.put(Definitions.NOTIFICATION_CREATED_SOURCE,
-                this.createdSource != null ? this.createdSource.toString() : "Local");
-
-        returnedObject.put(Definitions.NOTIFICATION_CREATED_LIFECYCLE,
-                this.createdLifeCycle != null ? this.createdLifeCycle.toString() : AwesomeNotifications.getApplicationLifeCycle().toString());
-
-        returnedObject.put(Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE,
-                this.displayedLifeCycle != null ? this.displayedLifeCycle.toString() : null);
-
-        returnedObject.put(Definitions.NOTIFICATION_DISPLAYED_DATE, this.displayedDate);
-        returnedObject.put(Definitions.NOTIFICATION_CREATED_DATE, this.createdDate);
-
-        returnedObject.put(Definitions.NOTIFICATION_CHANNEL_KEY, this.channelKey);
-
-        if(this.category != null)
-            returnedObject.put(Definitions.NOTIFICATION_CATEGORY,
-                    this.category.toString());
-
-        if(this.autoDismissible != null)
-            returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, this.autoDismissible);
-
-        if(this.displayOnForeground != null)
-            returnedObject.put(Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, this.displayOnForeground);
-
-        if(this.displayOnBackground != null)
-            returnedObject.put(Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, this.displayOnBackground);
-
-        if(this.color != null)
-            returnedObject.put(Definitions.NOTIFICATION_COLOR, this.color);
-        if(this.backgroundColor != null)
-            returnedObject.put(Definitions.NOTIFICATION_BACKGROUND_COLOR, this.backgroundColor);
-
-        if(this.icon != null)
-            returnedObject.put(Definitions.NOTIFICATION_ICON, this.icon);
-
-        if(this.largeIcon != null)
-            returnedObject.put(Definitions.NOTIFICATION_LARGE_ICON, this.largeIcon);
-
-        if(this.bigPicture != null)
-            returnedObject.put(Definitions.NOTIFICATION_BIG_PICTURE, this.bigPicture);
-
-        if(this.progress != null)
-            returnedObject.put(Definitions.NOTIFICATION_PROGRESS, this.progress);
-
-        if(this.groupKey != null)
-            returnedObject.put(Definitions.NOTIFICATION_GROUP_KEY, this.groupKey);
-
-        if(this.privacy != null)
-            returnedObject.put(Definitions.NOTIFICATION_PRIVACY,
-                    this.privacy.toString());
-
-        if(this.privateMessage != null)
-            returnedObject.put(Definitions.NOTIFICATION_PRIVATE_MESSAGE, this.privateMessage);
-
-        if(this.messages != null)
-            returnedObject.put(Definitions.NOTIFICATION_MESSAGES, messagesToMap(this.messages));
+        putDataOnMapObject(Definitions.NOTIFICATION_MESSAGES, returnedObject, messagesToMap(this.messages));
 
         return returnedObject;
     }

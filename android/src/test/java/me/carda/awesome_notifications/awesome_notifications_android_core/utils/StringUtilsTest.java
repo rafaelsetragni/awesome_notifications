@@ -1,25 +1,15 @@
 package me.carda.awesome_notifications.awesome_notifications_android_core.utils;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class StringUtilsTest {
 
-    enum TestEnum {
+    public enum TestEnum {
         First,
         Second,
         Last
-    }
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
     }
 
     @Test

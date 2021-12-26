@@ -291,6 +291,7 @@ class AwesomeNotifications {
         (call.arguments as Map).cast<String, dynamic>();
 
     switch (call.method) {
+
       case CHANNEL_METHOD_NOTIFICATION_CREATED:
         _createdSubject.sink.add(ReceivedNotification().fromMap(arguments));
         return;

@@ -60,6 +60,7 @@ public class StatusBarManager {
         return instance;
     }
 
+    // https://developer.android.com/about/versions/12/behavior-changes-all?hl=pt-br#close-system-dialogs-exceptions
     public void closeStatusBar(){
         Intent closingIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         instance.currentContext.sendBroadcast(closingIntent);
