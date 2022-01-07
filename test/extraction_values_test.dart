@@ -46,6 +46,10 @@ void main() {
 
     expect(null, AssertUtils.extractValue("test", {"test": 0}, String));
     expect(null, AssertUtils.extractValue("test", {"test": null}, String));
+
+    expect(true, AssertUtils.extractValue("test", {"test": true}, bool));
+    expect(true, AssertUtils.extractValue("test", {"test": "true"}, bool));
+    expect(false, AssertUtils.extractValue("test", {"test": "false"}, bool));
   });
 
   test('extractEnumTest', () async {

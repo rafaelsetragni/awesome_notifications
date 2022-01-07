@@ -85,6 +85,9 @@ class AssertUtils {
         case double:
           double? parsedValue = double.tryParse(valueCasted);
           return parsedValue ?? defaultValue;
+
+        case bool:
+          return valueCasted.toLowerCase() == 'true';
       }
     }
 
@@ -113,6 +116,10 @@ class AssertUtils {
             value = Color((value as CupertinoDynamicColor).value);
             break;
         }
+        break;
+
+      case bool:
+        return value ?? defaultValue;
     }
 
     if (value == null || value.runtimeType.hashCode != T.hashCode)
