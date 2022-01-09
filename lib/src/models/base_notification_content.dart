@@ -119,10 +119,10 @@ class BaseNotificationContent extends Model {
     this.payload =
         AssertUtils.extractMap<String, String>(mapData, NOTIFICATION_PAYLOAD);
 
-    this.roundedLargeIcon =
-        AssertUtils.extractValue(NOTIFICATION_ROUNDED_LARGE_ICON, mapData, bool);
-    this.roundedBigPicture =
-        AssertUtils.extractValue(NOTIFICATION_ROUNDED_BIG_PICTURE, mapData, bool);
+    this.roundedLargeIcon = AssertUtils.extractValue(
+        NOTIFICATION_ROUNDED_LARGE_ICON, mapData, bool);
+    this.roundedBigPicture = AssertUtils.extractValue(
+        NOTIFICATION_ROUNDED_BIG_PICTURE, mapData, bool);
 
     return this;
   }

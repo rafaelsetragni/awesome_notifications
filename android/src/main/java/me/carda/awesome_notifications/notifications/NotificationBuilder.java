@@ -861,12 +861,13 @@ public class NotificationBuilder {
                     BitmapUtils.getBitmapFromSource(
                             context,
                             contentModel.largeIcon,
-                            contentModel.roundedLargeIcon || contentModel.roundedBigPicture
+                            contentModel.roundedLargeIcon
                     ) : null);
         else {
             boolean areEqual =
                     !StringUtils.isNullOrEmpty(contentModel.largeIcon) &&
-                            contentModel.largeIcon.equals(contentModel.bigPicture);
+                    contentModel.largeIcon.equals(contentModel.bigPicture) &&
+                    contentModel.roundedLargeIcon == contentModel.roundedBigPicture;
 
             if(areEqual)
                 largeIcon = bigPicture;
