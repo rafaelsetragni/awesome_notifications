@@ -81,7 +81,8 @@ class NotificationContent extends BaseNotificationContent {
         AwesomeAssertUtils.extractValue(NOTIFICATION_PROGRESS, mapData, int);
     this.ticker =
         AwesomeAssertUtils.extractValue(NOTIFICATION_TICKER, mapData, String);
-    this.locked = AwesomeAssertUtils.extractValue(NOTIFICATION_LOCKED, mapData, bool);
+    this.locked =
+        AwesomeAssertUtils.extractValue(NOTIFICATION_LOCKED, mapData, bool);
 
     this.notificationLayout = AwesomeAssertUtils.extractEnum(
         NOTIFICATION_LAYOUT, mapData, NotificationLayout.values);
@@ -110,7 +111,8 @@ class NotificationContent extends BaseNotificationContent {
         NOTIFICATION_PROGRESS: progress,
         NOTIFICATION_TICKER: ticker,
         NOTIFICATION_LOCKED: locked,
-        NOTIFICATION_LAYOUT: AwesomeAssertUtils.toSimpleEnumString(notificationLayout),
+        NOTIFICATION_LAYOUT:
+            AwesomeAssertUtils.toSimpleEnumString(notificationLayout),
         NOTIFICATION_DISPLAY_ON_FOREGROUND: displayOnForeground,
         NOTIFICATION_DISPLAY_ON_BACKGROUND: displayOnBackground,
       });

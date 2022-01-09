@@ -80,31 +80,34 @@ class BaseNotificationContent extends Model {
   @override
   BaseNotificationContent? fromMap(Map<String, dynamic> mapData) {
     this.id = AwesomeAssertUtils.extractValue(NOTIFICATION_ID, mapData, int);
-    this.channelKey =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_CHANNEL_KEY, mapData, String);
-    this.groupKey =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_GROUP_KEY, mapData, String);
-    this.title = AwesomeAssertUtils.extractValue(NOTIFICATION_TITLE, mapData, String);
-    this.body = AwesomeAssertUtils.extractValue(NOTIFICATION_BODY, mapData, String);
+    this.channelKey = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_CHANNEL_KEY, mapData, String);
+    this.groupKey = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_GROUP_KEY, mapData, String);
+    this.title =
+        AwesomeAssertUtils.extractValue(NOTIFICATION_TITLE, mapData, String);
+    this.body =
+        AwesomeAssertUtils.extractValue(NOTIFICATION_BODY, mapData, String);
     this.summary =
         AwesomeAssertUtils.extractValue(NOTIFICATION_SUMMARY, mapData, String);
     this.showWhen =
         AwesomeAssertUtils.extractValue(NOTIFICATION_SHOW_WHEN, mapData, bool);
-    this.icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, mapData, String);
-    this.largeIcon =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_LARGE_ICON, mapData, String);
-    this.bigPicture =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_BIG_PICTURE, mapData, String);
-    this.customSound =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_CUSTOM_SOUND, mapData, String);
-    this.wakeUpScreen =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_WAKE_UP_SCREEN, mapData, bool);
+    this.icon =
+        AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, mapData, String);
+    this.largeIcon = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_LARGE_ICON, mapData, String);
+    this.bigPicture = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_BIG_PICTURE, mapData, String);
+    this.customSound = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_CUSTOM_SOUND, mapData, String);
+    this.wakeUpScreen = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_WAKE_UP_SCREEN, mapData, bool);
     this.fullScreenIntent = AwesomeAssertUtils.extractValue(
         NOTIFICATION_FULL_SCREEN_INTENT, mapData, bool);
-    this.criticalAlert =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_CRITICAL_ALERT, mapData, bool);
-    this.autoDismissible =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, mapData, bool);
+    this.criticalAlert = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_CRITICAL_ALERT, mapData, bool);
+    this.autoDismissible = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_AUTO_DISMISSIBLE, mapData, bool);
 
     this.privacy = AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
         NOTIFICATION_PRIVACY, mapData, NotificationPrivacy.values);
@@ -112,12 +115,13 @@ class BaseNotificationContent extends Model {
     this.category = AwesomeAssertUtils.extractEnum<NotificationCategory>(
         NOTIFICATION_CATEGORY, mapData, NotificationCategory.values);
 
-    this.color = AwesomeAssertUtils.extractValue(NOTIFICATION_COLOR, mapData, Color);
-    this.backgroundColor =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_BACKGROUND_COLOR, mapData, Color);
+    this.color =
+        AwesomeAssertUtils.extractValue(NOTIFICATION_COLOR, mapData, Color);
+    this.backgroundColor = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_BACKGROUND_COLOR, mapData, Color);
 
-    this.payload =
-        AwesomeAssertUtils.extractMap<String, String>(mapData, NOTIFICATION_PAYLOAD);
+    this.payload = AwesomeAssertUtils.extractMap<String, String>(
+        mapData, NOTIFICATION_PAYLOAD);
 
     this.roundedLargeIcon = AwesomeAssertUtils.extractValue(
         NOTIFICATION_ROUNDED_LARGE_ICON, mapData, bool);

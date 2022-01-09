@@ -165,8 +165,8 @@ class AwesomeNotifications {
     } else {
       if (!AwesomeAssertUtils.isNullOrEmptyOrInvalid(defaultIcon, String)) {
         // To set a icon on top of notification, is mandatory to user a native resource
-        assert(
-            AwesomeBitmapUtils().getMediaSource(defaultIcon!) == MediaSource.Resource);
+        assert(AwesomeBitmapUtils().getMediaSource(defaultIcon!) ==
+            MediaSource.Resource);
         defaultIconPath = defaultIcon;
       }
     }
@@ -327,7 +327,8 @@ class AwesomeNotifications {
       ]}) async {
     final List<String> permissionList = [];
     for (final permission in permissions) {
-      String? permissionValue = AwesomeAssertUtils.toSimpleEnumString(permission);
+      String? permissionValue =
+          AwesomeAssertUtils.toSimpleEnumString(permission);
       if (permissionValue != null) permissionList.add(permissionValue);
     }
 
@@ -387,7 +388,8 @@ class AwesomeNotifications {
       List<NotificationPermission> permissions) {
     List<Object?> permissionList = [];
     for (final permission in permissions) {
-      String? permissionValue = AwesomeAssertUtils.toSimpleEnumString(permission);
+      String? permissionValue =
+          AwesomeAssertUtils.toSimpleEnumString(permission);
       if (permissionValue != null) permissionList.add(permissionValue);
     }
     return permissionList;
@@ -488,7 +490,8 @@ class AwesomeNotifications {
   }) async {
     fixedDate ??= DateTime.now().toUtc();
     Map parameters = {
-      NOTIFICATION_INITIAL_FIXED_DATE: AwesomeDateUtils.parseDateToString(fixedDate),
+      NOTIFICATION_INITIAL_FIXED_DATE:
+          AwesomeDateUtils.parseDateToString(fixedDate),
       NOTIFICATION_SCHEDULE: schedule.toMap()
     };
 

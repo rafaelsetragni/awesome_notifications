@@ -12,11 +12,11 @@ class ReceivedNotification extends BaseNotificationContent {
   ReceivedNotification fromMap(Map<String, dynamic> dataMap) {
     super.fromMap(dataMap);
 
-    createdDate =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_CREATED_DATE, dataMap, String);
+    createdDate = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_CREATED_DATE, dataMap, String);
 
-    displayedDate =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_DISPLAYED_DATE, dataMap, String);
+    displayedDate = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_DISPLAYED_DATE, dataMap, String);
 
     createdSource = AwesomeAssertUtils.extractEnum(
         NOTIFICATION_CREATED_SOURCE, dataMap, NotificationSource.values);

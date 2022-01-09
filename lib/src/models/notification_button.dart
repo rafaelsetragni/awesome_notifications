@@ -48,11 +48,12 @@ class NotificationActionButton extends Model {
   NotificationActionButton? fromMap(Map<String, dynamic> dataMap) {
     key = AwesomeAssertUtils.extractValue(NOTIFICATION_KEY, dataMap, String);
     icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, dataMap, String);
-    label =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_BUTTON_LABEL, dataMap, String);
-    enabled = AwesomeAssertUtils.extractValue(NOTIFICATION_ENABLED, dataMap, bool);
-    autoDismissible =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, dataMap, bool);
+    label = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_BUTTON_LABEL, dataMap, String);
+    enabled =
+        AwesomeAssertUtils.extractValue(NOTIFICATION_ENABLED, dataMap, bool);
+    autoDismissible = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_AUTO_DISMISSIBLE, dataMap, bool);
     showInCompactView = AwesomeAssertUtils.extractValue(
         NOTIFICATION_SHOW_IN_COMPACT_VIEW, dataMap, bool);
     isDangerousOption = AwesomeAssertUtils.extractValue(
@@ -75,7 +76,8 @@ class NotificationActionButton extends Model {
       NOTIFICATION_AUTO_DISMISSIBLE: autoDismissible,
       NOTIFICATION_SHOW_IN_COMPACT_VIEW: showInCompactView,
       NOTIFICATION_IS_DANGEROUS_OPTION: isDangerousOption,
-      NOTIFICATION_BUTTON_TYPE: AwesomeAssertUtils.toSimpleEnumString(buttonType),
+      NOTIFICATION_BUTTON_TYPE:
+          AwesomeAssertUtils.toSimpleEnumString(buttonType),
       NOTIFICATION_COLOR: color?.value
     };
   }

@@ -100,22 +100,22 @@ class NotificationCalendar extends NotificationSchedule {
 
   @override
   NotificationCalendar? fromMap(Map<String, dynamic> dataMap) {
-    this.era =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_ERA, dataMap, int);
-    this.year =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_YEAR, dataMap, int);
-    this.month =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_MONTH, dataMap, int);
-    this.day =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_DAY, dataMap, int);
-    this.hour =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_HOUR, dataMap, int);
-    this.minute =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_MINUTE, dataMap, int);
-    this.second =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_SECOND, dataMap, int);
-    this.weekday =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_WEEKDAY, dataMap, int);
+    this.era = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_ERA, dataMap, int);
+    this.year = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_YEAR, dataMap, int);
+    this.month = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_MONTH, dataMap, int);
+    this.day = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_DAY, dataMap, int);
+    this.hour = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_HOUR, dataMap, int);
+    this.minute = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_MINUTE, dataMap, int);
+    this.second = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_SECOND, dataMap, int);
+    this.weekday = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_WEEKDAY, dataMap, int);
     this.weekOfMonth = AwesomeAssertUtils.extractValue(
         NOTIFICATION_SCHEDULE_WEEKOFMONTH, dataMap, int);
     this.weekOfYear = AwesomeAssertUtils.extractValue(
