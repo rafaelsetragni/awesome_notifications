@@ -29,6 +29,7 @@ import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificati
 import me.carda.awesome_notifications.notifications.models.NotificationModel;
 import me.carda.awesome_notifications.notifications.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.notifications.models.returnedData.NotificationReceived;
+import me.carda.awesome_notifications.services.ForegroundService;
 import me.carda.awesome_notifications.utils.StringUtils;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -65,6 +66,20 @@ public class StatusBarManager {
     }
 
     public void showNotificationOnStatusBar(NotificationModel notificationModel, Notification notification){
+
+        registerActiveNotification(notificationModel, notificationModel.content.id);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = getNotificationManager();
+            notificationManager.notify(notificationModel.content.id, notification);
+        }
+        else {
+            NotificationManagerCompat notificationManagerCompat = getAdaptedOldNotificationManager();
+            notificationManagerCompat.notify(String.valueOf(notificationModel.content.id), notificationModel.content.id, notification);
+        }
+    }
+
+    public void showNotificationOnForegroundService(NotificationModel notificationModel, Notification notification, ForegroundService foregroundService){
 
         registerActiveNotification(notificationModel, notificationModel.content.id);
 

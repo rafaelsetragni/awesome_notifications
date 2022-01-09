@@ -71,6 +71,9 @@ public class NotificationContentModel extends AbstractModel {
     public String createdDate;
     public String displayedDate;
 
+    public Boolean roundedLargeIcon;
+    public Boolean roundedBigPicture;
+
     public NotificationContentModel(){}
 
     @Override
@@ -146,6 +149,9 @@ public class NotificationContentModel extends AbstractModel {
 
         messages = mapToMessages(getValueOrDefault(arguments, Definitions.NOTIFICATION_MESSAGES, List.class));
 
+        roundedLargeIcon = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, Boolean.class);
+        roundedBigPicture = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, Boolean.class);
+
         return this;
     }
 
@@ -189,6 +195,9 @@ public class NotificationContentModel extends AbstractModel {
         returnedObject.put(Definitions.NOTIFICATION_CREATED_DATE, this.createdDate);
 
         returnedObject.put(Definitions.NOTIFICATION_CHANNEL_KEY, this.channelKey);
+
+        returnedObject.put(Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, this.roundedLargeIcon);
+        returnedObject.put(Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, this.roundedBigPicture);
 
         if(this.category != null)
             returnedObject.put(Definitions.NOTIFICATION_CATEGORY,
