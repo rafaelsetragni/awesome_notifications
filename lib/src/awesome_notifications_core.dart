@@ -163,10 +163,10 @@ class AwesomeNotifications {
     if (kIsWeb) {
       // For web release
     } else {
-      if (!AssertUtils.isNullOrEmptyOrInvalid(defaultIcon, String)) {
+      if (!AwesomeAssertUtils.isNullOrEmptyOrInvalid(defaultIcon, String)) {
         // To set a icon on top of notification, is mandatory to user a native resource
         assert(
-            BitmapUtils().getMediaSource(defaultIcon!) == MediaSource.Resource);
+            AwesomeBitmapUtils().getMediaSource(defaultIcon!) == MediaSource.Resource);
         defaultIconPath = defaultIcon;
       }
     }
@@ -327,7 +327,7 @@ class AwesomeNotifications {
       ]}) async {
     final List<String> permissionList = [];
     for (final permission in permissions) {
-      String? permissionValue = AssertUtils.toSimpleEnumString(permission);
+      String? permissionValue = AwesomeAssertUtils.toSimpleEnumString(permission);
       if (permissionValue != null) permissionList.add(permissionValue);
     }
 
@@ -387,7 +387,7 @@ class AwesomeNotifications {
       List<NotificationPermission> permissions) {
     List<Object?> permissionList = [];
     for (final permission in permissions) {
-      String? permissionValue = AssertUtils.toSimpleEnumString(permission);
+      String? permissionValue = AwesomeAssertUtils.toSimpleEnumString(permission);
       if (permissionValue != null) permissionList.add(permissionValue);
     }
     return permissionList;
@@ -398,7 +398,7 @@ class AwesomeNotifications {
     List<NotificationPermission> lockedPermissions = [];
     for (final permission in permissionList) {
       NotificationPermission? permissionValue =
-          AssertUtils.enumToString<NotificationPermission>(
+          AwesomeAssertUtils.enumToString<NotificationPermission>(
               permission.toString(), NotificationPermission.values, null);
       if (permissionValue != null) lockedPermissions.add(permissionValue);
     }
@@ -488,7 +488,7 @@ class AwesomeNotifications {
   }) async {
     fixedDate ??= DateTime.now().toUtc();
     Map parameters = {
-      NOTIFICATION_INITIAL_FIXED_DATE: DateUtils.parseDateToString(fixedDate),
+      NOTIFICATION_INITIAL_FIXED_DATE: AwesomeDateUtils.parseDateToString(fixedDate),
       NOTIFICATION_SCHEDULE: schedule.toMap()
     };
 
@@ -497,7 +497,7 @@ class AwesomeNotifications {
 
     if (nextDate == null) return null;
 
-    return DateUtils.parseStringToDate(nextDate)!;
+    return AwesomeDateUtils.parseStringToDate(nextDate)!;
   }
 
   /// Get the current UTC time zone identifier

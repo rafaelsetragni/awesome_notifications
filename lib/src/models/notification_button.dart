@@ -46,21 +46,21 @@ class NotificationActionButton extends Model {
 
   @override
   NotificationActionButton? fromMap(Map<String, dynamic> dataMap) {
-    key = AssertUtils.extractValue(NOTIFICATION_KEY, dataMap, String);
-    icon = AssertUtils.extractValue(NOTIFICATION_ICON, dataMap, String);
+    key = AwesomeAssertUtils.extractValue(NOTIFICATION_KEY, dataMap, String);
+    icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, dataMap, String);
     label =
-        AssertUtils.extractValue(NOTIFICATION_BUTTON_LABEL, dataMap, String);
-    enabled = AssertUtils.extractValue(NOTIFICATION_ENABLED, dataMap, bool);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_BUTTON_LABEL, dataMap, String);
+    enabled = AwesomeAssertUtils.extractValue(NOTIFICATION_ENABLED, dataMap, bool);
     autoDismissible =
-        AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, dataMap, bool);
-    showInCompactView = AssertUtils.extractValue(
+        AwesomeAssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, dataMap, bool);
+    showInCompactView = AwesomeAssertUtils.extractValue(
         NOTIFICATION_SHOW_IN_COMPACT_VIEW, dataMap, bool);
-    isDangerousOption = AssertUtils.extractValue(
+    isDangerousOption = AwesomeAssertUtils.extractValue(
         NOTIFICATION_IS_DANGEROUS_OPTION, dataMap, bool);
-    buttonType = AssertUtils.extractEnum(
+    buttonType = AwesomeAssertUtils.extractEnum(
         NOTIFICATION_BUTTON_TYPE, dataMap, ActionButtonType.values);
 
-    color = AssertUtils.extractValue(NOTIFICATION_COLOR, dataMap, Color);
+    color = AwesomeAssertUtils.extractValue(NOTIFICATION_COLOR, dataMap, Color);
 
     return this;
   }
@@ -75,27 +75,27 @@ class NotificationActionButton extends Model {
       NOTIFICATION_AUTO_DISMISSIBLE: autoDismissible,
       NOTIFICATION_SHOW_IN_COMPACT_VIEW: showInCompactView,
       NOTIFICATION_IS_DANGEROUS_OPTION: isDangerousOption,
-      NOTIFICATION_BUTTON_TYPE: AssertUtils.toSimpleEnumString(buttonType),
+      NOTIFICATION_BUTTON_TYPE: AwesomeAssertUtils.toSimpleEnumString(buttonType),
       NOTIFICATION_COLOR: color?.value
     };
   }
 
   @override
   void validate() {
-    if (AssertUtils.isNullOrEmptyOrInvalid(key, String))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(key, String))
       throw AwesomeNotificationsException(message: 'key id is requried');
-    if (AssertUtils.isNullOrEmptyOrInvalid(label, String))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(label, String))
       throw AwesomeNotificationsException(message: 'label id is requried');
-    if (AssertUtils.isNullOrEmptyOrInvalid(autoDismissible, bool))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(autoDismissible, bool))
       throw AwesomeNotificationsException(
           message: 'autoDismissible id is requried');
-    if (AssertUtils.isNullOrEmptyOrInvalid(showInCompactView, bool))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(showInCompactView, bool))
       throw AwesomeNotificationsException(
           message: 'showInCompactView id is requried');
 
     // For action buttons, it's only allowed resource media types
-    if (!StringUtils.isNullOrEmpty(icon) &&
-        BitmapUtils().getMediaSource(icon!) != MediaSource.Resource)
+    if (!AwesomeStringUtils.isNullOrEmpty(icon) &&
+        AwesomeBitmapUtils().getMediaSource(icon!) != MediaSource.Resource)
       throw AwesomeNotificationsException(
           message:
               'icons for action buttons must be a native resource media type');

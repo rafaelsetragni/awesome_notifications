@@ -29,8 +29,8 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
   @override
   void initState() {
     super.initState();
-    displayedDate = DateUtils.parseDateToString(
-        DateUtils.utcToLocal(DateUtils.parseStringToDate(
+    displayedDate = AwesomeDateUtils.parseDateToString(
+        AwesomeDateUtils.utcToLocal(AwesomeDateUtils.parseStringToDate(
             widget.receivedNotification.displayedDate)!),
         format: 'dd/MM/yyyy HH:mm');
   }

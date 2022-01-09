@@ -31,7 +31,7 @@ class NotificationInterval extends NotificationSchedule {
   NotificationInterval? fromMap(Map<String, dynamic> dataMap) {
     super.fromMap(dataMap);
 
-    this.interval = AssertUtils.extractValue(
+    this.interval = AwesomeAssertUtils.extractValue(
         NOTIFICATION_SCHEDULE_INTERVAL, dataMap, String);
 
     try {

@@ -9,14 +9,46 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/notifications/NotificationBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/models/media_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/models/media_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/pages/firebase_test_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/firebase_test_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/pages/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/home_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/pages/notification_details_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/notification_details_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/base_notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/base_notification_content.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_android_crontab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_android_crontab.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_button.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_calendar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_calendar.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_channel_group.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_channel_group.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_content.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_interval.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_interval.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_schedule.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_schedule.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/received_models/received_action.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/received_models/received_action.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/received_models/received_notification.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/received_models/received_notification.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/utils/audio_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/audio_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/utils/bitmap_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/bitmap_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/utils/date_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/date_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/utils/html_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/html_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/utils/list_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/list_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/utils/map_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/map_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/utils/media_abstract_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/media_abstract_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/utils/string_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/string_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/awesome_notifications_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/awesome_notifications_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/extraction_values_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/extraction_values_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\rafae\.android\avd\Nexus_5_A05.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\rafae\.android\avd\Nexus_5_A07.avd]" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>

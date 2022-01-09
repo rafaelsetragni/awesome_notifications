@@ -152,18 +152,18 @@ class _HomePageState extends State<HomePage> {
 
     AwesomeNotifications().createdStream.listen((receivedNotification) {
       String? createdSourceText =
-          AssertUtils.toSimpleEnumString(receivedNotification.createdSource);
+          AwesomeAssertUtils.toSimpleEnumString(receivedNotification.createdSource);
       Fluttertoast.showToast(msg: '$createdSourceText notification created');
     });
 
     AwesomeNotifications().displayedStream.listen((receivedNotification) {
       String? createdSourceText =
-          AssertUtils.toSimpleEnumString(receivedNotification.createdSource);
+          AwesomeAssertUtils.toSimpleEnumString(receivedNotification.createdSource);
       Fluttertoast.showToast(msg: '$createdSourceText notification displayed');
     });
 
     AwesomeNotifications().dismissedStream.listen((receivedAction) {
-      String? dismissedSourceText = AssertUtils.toSimpleEnumString(
+      String? dismissedSourceText = AwesomeAssertUtils.toSimpleEnumString(
           receivedAction.dismissedLifeCycle);
       Fluttertoast.showToast(
           msg: 'Notification dismissed on $dismissedSourceText');
@@ -195,9 +195,9 @@ class _HomePageState extends State<HomePage> {
         return;
       }
 
-      if (!StringUtils.isNullOrEmpty(receivedAction.buttonKeyInput)) {
+      if (!AwesomeStringUtils.isNullOrEmpty(receivedAction.buttonKeyInput)) {
         processInputTextReceived(receivedAction);
-      } else if (!StringUtils.isNullOrEmpty(
+      } else if (!AwesomeStringUtils.isNullOrEmpty(
               receivedAction.buttonKeyPressed) &&
           receivedAction.buttonKeyPressed.startsWith('MEDIA_')) {
         processMediaControls(receivedAction);
@@ -341,7 +341,7 @@ class _HomePageState extends State<HomePage> {
         ) ??
         '';
 
-    if (StringUtils.isNullOrEmpty(firebaseAppToken,
+    if (AwesomeStringUtils.isNullOrEmpty(firebaseAppToken,
         considerWhiteSpaceAsEmpty: true)) return;
 
     if (!mounted) {
@@ -361,9 +361,9 @@ class _HomePageState extends State<HomePage> {
       if (
           // This step (if condition) is only necessary if you pretend to use the
           // test page inside console.firebase.google.com
-          !StringUtils.isNullOrEmpty(message.notification?.title,
+          !AwesomeStringUtils.isNullOrEmpty(message.notification?.title,
                   considerWhiteSpaceAsEmpty: true) ||
-              !StringUtils.isNullOrEmpty(message.notification?.body,
+              !AwesomeStringUtils.isNullOrEmpty(message.notification?.body,
                   considerWhiteSpaceAsEmpty: true)) {
         print('Message also contained a notification: ${message.notification}');
 
@@ -379,7 +379,7 @@ class _HomePageState extends State<HomePage> {
             NOTIFICATION_TITLE: message.notification!.title,
             NOTIFICATION_BODY: message.notification!.body,
             NOTIFICATION_LAYOUT:
-                StringUtils.isNullOrEmpty(imageUrl) ? 'Default' : 'BigPicture',
+                AwesomeStringUtils.isNullOrEmpty(imageUrl) ? 'Default' : 'BigPicture',
             NOTIFICATION_BIG_PICTURE: imageUrl
           }
         };
@@ -425,7 +425,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 ServiceControlPanel('Firebase',
-                    !StringUtils.isNullOrEmpty(_firebaseAppToken), themeData,
+                    !AwesomeStringUtils.isNullOrEmpty(_firebaseAppToken), themeData,
                     onPressed: () => Navigator.pushNamed(
                         context, PAGE_FIREBASE_TESTS,
                         arguments: _firebaseAppToken)),
@@ -952,7 +952,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Center(
                                     child: Column(
                                   children: [
-                                    Text(DateUtils.parseDateToString(
+                                    Text(AwesomeDateUtils.parseDateToString(
                                         DateTime.now())!),
                                     Text(timeZone),
                                   ],
@@ -968,7 +968,7 @@ class _HomePageState extends State<HomePage> {
                             child: Center(
                                 child: Column(
                               children: [
-                                Text(DateUtils.parseDateToString(
+                                Text(AwesomeDateUtils.parseDateToString(
                                     DateTime.now().toUtc())!),
                                 Text(timeZone),
                               ],
@@ -1011,7 +1011,7 @@ class _HomePageState extends State<HomePage> {
               if (nextValidDate == null)
                 response = 'There is no more valid date for this schedule';
               else
-                response = DateUtils.parseDateToString(nextValidDate.toUtc(),
+                response = AwesomeDateUtils.parseDateToString(nextValidDate.toUtc(),
                     format: 'dd/MM/yyyy')!;
 
               showDialog(

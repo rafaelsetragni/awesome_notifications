@@ -67,6 +67,6 @@ class MediaModel {
         _diskImagePath = diskImagePath,
         isPlaying = false;
 
-  ImageProvider get diskImage => BitmapUtils().getFromMediaPath(_diskImagePath);
+  ImageProvider get diskImage => AwesomeBitmapUtils().getFromMediaPath(_diskImagePath);
   String get diskImagePath => _diskImagePath;
 }

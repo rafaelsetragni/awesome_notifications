@@ -230,8 +230,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('Handling a background message: ${message.messageId}');
 
   if(
-    !StringUtils.isNullOrEmpty(message.notification?.title, considerWhiteSpaceAsEmpty: true) ||
-    !StringUtils.isNullOrEmpty(message.notification?.body, considerWhiteSpaceAsEmpty: true)
+    !AwesomeStringUtils.isNullOrEmpty(message.notification?.title, considerWhiteSpaceAsEmpty: true) ||
+    !AwesomeStringUtils.isNullOrEmpty(message.notification?.body, considerWhiteSpaceAsEmpty: true)
   ){
     print('message also contained a notification: ${message.notification}');
 
@@ -252,7 +252,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
             message.data[NOTIFICATION_CONTENT]?[NOTIFICATION_BODY] ??
             message.notification?.body ,
       NOTIFICATION_LAYOUT:
-          StringUtils.isNullOrEmpty(imageUrl) ? 'Default' : 'BigPicture',
+          AwesomeStringUtils.isNullOrEmpty(imageUrl) ? 'Default' : 'BigPicture',
       NOTIFICATION_BIG_PICTURE: imageUrl
     };
 

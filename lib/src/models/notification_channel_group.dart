@@ -15,9 +15,9 @@ class NotificationChannelGroup extends Model {
 
   @override
   NotificationChannelGroup? fromMap(Map<String, dynamic> dataMap) {
-    channelGroupkey = AssertUtils.extractValue(
+    channelGroupkey = AwesomeAssertUtils.extractValue(
         NOTIFICATION_CHANNEL_GROUP_KEY, dataMap, String);
-    channelGroupName = AssertUtils.extractValue(
+    channelGroupName = AwesomeAssertUtils.extractValue(
         NOTIFICATION_CHANNEL_GROUP_NAME, dataMap, String);
 
     return this;
@@ -33,10 +33,10 @@ class NotificationChannelGroup extends Model {
 
   @override
   void validate() {
-    if (AssertUtils.isNullOrEmptyOrInvalid(channelGroupkey, String))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(channelGroupkey, String))
       throw AwesomeNotificationsException(
           message: 'channelGroupkey is requried');
-    if (AssertUtils.isNullOrEmptyOrInvalid(channelGroupName, String))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(channelGroupName, String))
       throw AwesomeNotificationsException(
           message: 'channelGroupName is requried');
   }

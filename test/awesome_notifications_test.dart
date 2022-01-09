@@ -12,8 +12,8 @@ void main() {
 
   test('getPlatformVersion', () async {
     DateTime referenceDate =
-        DateUtils.parseStringToDate('2021-01-12 20:00:00')!;
-    DateTime expectedDate = DateUtils.parseStringToDate('2021-01-12 21:00:00')!;
+        AwesomeDateUtils.parseStringToDate('2021-01-12 20:00:00')!;
+    DateTime expectedDate = AwesomeDateUtils.parseStringToDate('2021-01-12 21:00:00')!;
     NotificationSchedule schedule = NotificationCalendar.fromDate(date: expectedDate);
 
     DateTime? result = await AwesomeNotifications()

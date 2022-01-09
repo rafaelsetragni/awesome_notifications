@@ -114,7 +114,7 @@ class _FirebaseTestPageState extends State<FirebaseTestPage> {
                         ),
                       ),
                     ),
-                    Text(MapUtils.printPrettyMap(widget.firebaseDataSource
+                    Text(AwesomeMapUtils.printPrettyMap(widget.firebaseDataSource
                         .getFirebaseExampleContent(
                             firebaseAppToken:
                                 _serverKeyTextController.value.text))),

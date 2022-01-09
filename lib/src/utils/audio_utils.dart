@@ -1,15 +1,15 @@
 import 'package:awesome_notifications/src/utils/media_abstract_utils.dart';
 import 'package:flutter/material.dart';
 
-class AudioUtils extends MediaUtils {
+class AwesomeAudioUtils extends AwesomeMediaUtils {
   /// FACTORY METHODS *********************************************
 
-  factory AudioUtils() => _instance;
+  factory AwesomeAudioUtils() => _instance;
 
   @visibleForTesting
-  AudioUtils.private();
+  AwesomeAudioUtils.private();
 
-  static final AudioUtils _instance = AudioUtils.private();
+  static final AwesomeAudioUtils _instance = AwesomeAudioUtils.private();
 
   /// FACTORY METHODS *********************************************
 

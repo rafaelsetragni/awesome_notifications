@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
-class MapUtils {
+class AwesomeMapUtils {
   static String printPrettyMap(Map mapData) {
     JsonEncoder encoder = JsonEncoder.withIndent('  ');
 

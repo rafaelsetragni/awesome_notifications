@@ -18,23 +18,23 @@ class ReceivedAction extends ReceivedNotification {
   ReceivedAction fromMap(Map<String, dynamic> dataMap) {
     super.fromMap(dataMap);
 
-    actionLifeCycle = AssertUtils.extractEnum(
+    actionLifeCycle = AwesomeAssertUtils.extractEnum(
         NOTIFICATION_ACTION_LIFECYCLE, dataMap, NotificationLifeCycle.values);
 
-    dismissedLifeCycle = AssertUtils.extractEnum(
+    dismissedLifeCycle = AwesomeAssertUtils.extractEnum(
         NOTIFICATION_DISMISSED_LIFE_CYCLE,
         dataMap,
         NotificationLifeCycle.values);
 
     actionDate =
-        AssertUtils.extractValue(NOTIFICATION_ACTION_DATE, dataMap, String);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_ACTION_DATE, dataMap, String);
     dismissedDate =
-        AssertUtils.extractValue(NOTIFICATION_DISMISSED_DATE, dataMap, String);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_DISMISSED_DATE, dataMap, String);
 
-    buttonKeyPressed = AssertUtils.extractValue(
+    buttonKeyPressed = AwesomeAssertUtils.extractValue(
         NOTIFICATION_BUTTON_KEY_PRESSED, dataMap, String);
 
-    buttonKeyInput = AssertUtils.extractValue(
+    buttonKeyInput = AwesomeAssertUtils.extractValue(
         NOTIFICATION_BUTTON_KEY_INPUT, dataMap, String);
 
     return this;
@@ -48,9 +48,9 @@ class ReceivedAction extends ReceivedNotification {
         NOTIFICATION_ACTION_DATE: actionDate,
         NOTIFICATION_DISMISSED_DATE: dismissedDate,
         NOTIFICATION_ACTION_LIFECYCLE:
-            AssertUtils.toSimpleEnumString(actionLifeCycle),
+            AwesomeAssertUtils.toSimpleEnumString(actionLifeCycle),
         NOTIFICATION_DISMISSED_LIFE_CYCLE:
-            AssertUtils.toSimpleEnumString(dismissedLifeCycle),
+            AwesomeAssertUtils.toSimpleEnumString(dismissedLifeCycle),
         NOTIFICATION_BUTTON_KEY_PRESSED: buttonKeyPressed,
         NOTIFICATION_BUTTON_KEY_INPUT: buttonKeyInput
       });

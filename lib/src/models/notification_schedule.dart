@@ -33,19 +33,19 @@ abstract class NotificationSchedule extends Model {
   bool repeats;
 
   NotificationSchedule? fromMap(Map<String, dynamic> dataMap) {
-    this.timeZone = AssertUtils.extractValue(
+    this.timeZone = AwesomeAssertUtils.extractValue(
             NOTIFICATION_SCHEDULE_TIMEZONE, dataMap, String) ??
         false;
 
-    this.allowWhileIdle = AssertUtils.extractValue(
+    this.allowWhileIdle = AwesomeAssertUtils.extractValue(
             NOTIFICATION_ALLOW_WHILE_IDLE, dataMap, bool) ??
         false;
 
-    this.repeats = AssertUtils.extractValue(
+    this.repeats = AwesomeAssertUtils.extractValue(
             NOTIFICATION_SCHEDULE_REPEATS, dataMap, bool) ??
         false;
 
-    this.preciseAlarm = AssertUtils.extractValue(
+    this.preciseAlarm = AwesomeAssertUtils.extractValue(
             NOTIFICATION_SCHEDULE_PRECISE_ALARM, dataMap, bool) ??
         false;
 

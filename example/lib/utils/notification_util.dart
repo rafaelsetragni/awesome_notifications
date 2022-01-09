@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 
 // TO AVOID CONFLICT WITH MATERIAL DATE UTILS CLASS
 import 'package:awesome_notifications/awesome_notifications.dart'
-    hide DateUtils;
+    hide AwesomeDateUtils;
 import 'package:awesome_notifications/awesome_notifications.dart' as Utils
-    show DateUtils;
+    show AwesomeDateUtils;
 
 import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart';
@@ -1559,9 +1559,9 @@ class NotificationUtils {
           channelKey: 'scheduled',
           title: 'Just in time!',
           body: 'This notification was schedule to shows at ' +
-              (Utils.DateUtils.parseDateToString(scheduleTime.toLocal()) ?? '?') +
+              (Utils.AwesomeDateUtils.parseDateToString(scheduleTime.toLocal()) ?? '?') +
               ' $timeZoneIdentifier (' +
-              (Utils.DateUtils.parseDateToString(scheduleTime.toUtc()) ?? '?') +
+              (Utils.AwesomeDateUtils.parseDateToString(scheduleTime.toUtc()) ?? '?') +
               ' utc)',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/delivery.jpeg',
