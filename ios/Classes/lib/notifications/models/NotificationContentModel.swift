@@ -36,6 +36,9 @@ public class NotificationContentModel : AbstractModel {
     var progress: Int?
     var ticker: String?
 
+    var roundedLargeIcon: Bool?
+    var roundedBigPicture: Bool?
+    
     var privacy: NotificationPrivacy?
     var privateMessage: String?
 
@@ -89,6 +92,9 @@ public class NotificationContentModel : AbstractModel {
         self.createdDate        = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_CREATED_DATE, arguments: arguments)
         self.displayedDate      = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_DISPLAYED_DATE, arguments: arguments)
         
+        self.roundedLargeIcon   = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, arguments: arguments)
+        self.roundedBigPicture  = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, arguments: arguments)
+        
         self.payload  = MapUtils<[String:String?]>.getValueOrDefault(reference: Definitions.NOTIFICATION_PAYLOAD, arguments: arguments)
         
         return self
@@ -115,6 +121,8 @@ public class NotificationContentModel : AbstractModel {
         if(self.autoDismissible != nil){ mapData[Definitions.NOTIFICATION_AUTO_DISMISSIBLE] = self.autoDismissible }
         if(self.displayOnForeground != nil){ mapData[Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND] = self.displayOnForeground }
         if(self.displayOnBackground != nil){ mapData[Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND] = self.displayOnBackground }
+        if(self.roundedLargeIcon != nil){ mapData[Definitions.NOTIFICATION_ROUNDED_LARGE_ICON] = self.roundedLargeIcon }
+        if(self.roundedBigPicture != nil){ mapData[Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE] = self.roundedBigPicture }
         if(self.color != nil){ mapData[Definitions.NOTIFICATION_COLOR] = self.color }
         if(self.backgroundColor != nil){ mapData[Definitions.NOTIFICATION_BACKGROUND_COLOR] = self.backgroundColor }
         if(self.progress != nil){ mapData[Definitions.NOTIFICATION_PROGRESS] = self.progress }
