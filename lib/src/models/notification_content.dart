@@ -33,6 +33,8 @@ class NotificationContent extends BaseNotificationContent {
       String? largeIcon,
       String? bigPicture,
       String? customSound,
+      bool? roundedLargeIcon,
+      bool? roundedBigPicture,
       bool? autoDismissible,
       Color? color,
       Color? backgroundColor,
@@ -64,7 +66,9 @@ class NotificationContent extends BaseNotificationContent {
             customSound: customSound,
             autoDismissible: autoDismissible,
             color: color,
-            backgroundColor: backgroundColor);
+            backgroundColor: backgroundColor,
+            roundedLargeIcon: roundedLargeIcon,
+            roundedBigPicture: roundedBigPicture);
 
   @override
   NotificationContent? fromMap(Map<String, dynamic> mapData) {

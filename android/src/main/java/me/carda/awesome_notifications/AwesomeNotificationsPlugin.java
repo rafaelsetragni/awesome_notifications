@@ -600,7 +600,7 @@ public class AwesomeNotificationsPlugin
         Integer foregroundServiceType = call.<Integer>argument("foregroundServiceType");
         if (notificationData != null && startType != null && hasForegroundServiceType != null && foregroundServiceType != null) {
             ForegroundService.StartParameter parameter =
-                    new ForegroundService.StartParameter(notificationData, startType, hasForegroundServiceType, foregroundServiceType);
+                    new ForegroundService.StartParameter(applicationContext, notificationData, startType, hasForegroundServiceType, foregroundServiceType);
             Intent intent = new Intent(applicationContext, ForegroundService.class);
             intent.putExtra(ForegroundService.StartParameter.EXTRA, parameter);
             if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O /*Android 8*/) {

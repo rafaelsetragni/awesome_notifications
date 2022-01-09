@@ -1,3 +1,8 @@
+## [0.6.20]
+* Added rounded images for large icon and big picture
+* Added bool value extraction for Map objects in dart
+* Fixed immutable error for input buttons in Android 12
+* Network images for foreground services are temporarily disabled (https://github.com/rafaelsetragni/awesome_notifications/issues/369)
 ## [0.6.19]
 * Added sound extension for notifications with categories Alarm and Call
 * Added call notification behavior (stay floating on screen and keep playing the sound in loop) for Call category

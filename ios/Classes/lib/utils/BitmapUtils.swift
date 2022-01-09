@@ -9,27 +9,34 @@ import Foundation
 
 public class BitmapUtils : MediaUtils {
     
-    public static func getBitmapFromSource(bitmapPath:String?) -> UIImage? {
+    public static func getBitmapFromSource(bitmapPath:String?, roundedBitpmap:Bool) -> UIImage? {
         
         if(StringUtils.isNullOrEmpty(bitmapPath)){ return nil }
         
+        var resultedImage:UIImage? = nil
         switch(MediaUtils.getMediaSourceType(mediaPath: bitmapPath)){
                 
             case .Resource:
-                return getBitmapFromResource(bitmapPath ?? "")
+            resultedImage = getBitmapFromResource(bitmapPath ?? "")
                 
             case .Asset:
-                return getBitmapFromAsset(bitmapPath ?? "")
+            resultedImage = getBitmapFromAsset(bitmapPath ?? "")
                 
             case .File:
-                return getBitmapFromFile(bitmapPath ?? "")
+            resultedImage = getBitmapFromFile(bitmapPath ?? "")
                 
             case .Network:
-                return getBitmapFromUrl(bitmapPath ?? "")
+            resultedImage = getBitmapFromUrl(bitmapPath ?? "")
                 
             case .Unknown:
-                return nil
+            resultedImage = nil
         }
+        
+        if(resultedImage != nil && roundedBitpmap){
+            resultedImage = roundUiImage(resultedImage!)
+        }
+        
+        return resultedImage
     }
     
     private static func cleanMediaPath(_ mediaPath:String?) -> String? {
@@ -170,6 +177,16 @@ public class BitmapUtils : MediaUtils {
             print("Resource error: \(error)")
         }
         return nil
+    }
+    
+    public static func roundUiImage(_ image:UIImage) -> UIImage? {
+        let rect = CGRect(origin: .zero, size: image.size)
+        let format = image.imageRendererFormat
+        format.opaque = false
+        return UIGraphicsImageRenderer(size: image.size, format: format).image{ _ in
+            UIBezierPath(ovalIn: rect).addClip()
+            image.draw(in: rect)
+        }
     }
     
     public static func isValidBitmap(_ mediaPath:String?) -> Bool {

@@ -601,7 +601,10 @@ public class NotificationBuilder {
     private static void setLargeIcon(Context context, NotificationModel notificationModel, NotificationCompat.Builder builder) {
         if (notificationModel.content.notificationLayout != NotificationLayout.BigPicture)
             if (!StringUtils.isNullOrEmpty(notificationModel.content.largeIcon)) {
-                Bitmap largeIcon = BitmapUtils.getBitmapFromSource(context, notificationModel.content.largeIcon);
+                Bitmap largeIcon = BitmapUtils.getBitmapFromSource(
+                        context,
+                        notificationModel.content.largeIcon,
+                        notificationModel.content.roundedLargeIcon);
                 if (largeIcon != null)
                     builder.setLargeIcon(largeIcon);
             }
@@ -671,16 +674,16 @@ public class NotificationBuilder {
                             PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
                     );
 
-                } /*else if (buttonProperties.buttonType == ActionButtonType.DisabledAction) {
+                } else if (buttonProperties.buttonType == ActionButtonType.InputField) {
 
                     actionPendingIntent = PendingIntent.getActivity(
                             context,
                             notificationModel.content.id,
                             actionIntent,
-                            PendingIntent.FLAG_IMMUTABLE
+                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
                     );
 
-                }*/ else {
+                } else {
 
                     actionPendingIntent = PendingIntent.getActivity(
                             context,
@@ -847,22 +850,33 @@ public class NotificationBuilder {
         Bitmap bigPicture = null, largeIcon = null;
 
         if (!StringUtils.isNullOrEmpty(contentModel.bigPicture))
-            bigPicture = BitmapUtils.getBitmapFromSource(context, contentModel.bigPicture);
+            bigPicture = BitmapUtils.getBitmapFromSource(
+                    context,
+                    contentModel.bigPicture,
+                    contentModel.roundedBigPicture);
 
         if (contentModel.hideLargeIconOnExpand)
             largeIcon = bigPicture != null ?
                 bigPicture : (!StringUtils.isNullOrEmpty(contentModel.largeIcon) ?
-                    BitmapUtils.getBitmapFromSource(context, contentModel.largeIcon) : null);
+                    BitmapUtils.getBitmapFromSource(
+                            context,
+                            contentModel.largeIcon,
+                            contentModel.roundedLargeIcon
+                    ) : null);
         else {
             boolean areEqual =
                     !StringUtils.isNullOrEmpty(contentModel.largeIcon) &&
-                            contentModel.largeIcon.equals(contentModel.bigPicture);
+                    contentModel.largeIcon.equals(contentModel.bigPicture) &&
+                    contentModel.roundedLargeIcon == contentModel.roundedBigPicture;
 
             if(areEqual)
                 largeIcon = bigPicture;
             else if(!StringUtils.isNullOrEmpty(contentModel.largeIcon))
                 largeIcon =
-                        BitmapUtils.getBitmapFromSource(context, contentModel.largeIcon);
+                        BitmapUtils.getBitmapFromSource(
+                                context,
+                                contentModel.largeIcon,
+                                contentModel.roundedLargeIcon);
         }
 
         if (largeIcon != null)
@@ -1006,7 +1020,9 @@ public class NotificationBuilder {
                     if(!StringUtils.isNullOrEmpty(contentModel.largeIcon)){
                         Bitmap largeIcon = BitmapUtils.getBitmapFromSource(
                                 context,
-                                contentModel.largeIcon);
+                                contentModel.largeIcon,
+                                contentModel.roundedLargeIcon);
+
                         if(largeIcon != null)
                             personBuilder.setIcon(
                                     IconCompat.createWithBitmap(largeIcon));

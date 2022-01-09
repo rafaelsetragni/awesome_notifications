@@ -189,6 +189,9 @@ enum Definitions {
     static let  NOTIFICATION_LED_OFF_MS = "ledOffMs"
     static let  NOTIFICATION_TICKER = "ticker"
     static let  NOTIFICATION_ALLOW_WHILE_IDLE = "allowWhileIdle"
+    
+    static let  NOTIFICATION_ROUNDED_LARGE_ICON = "roundedLargeIcon"
+    static let  NOTIFICATION_ROUNDED_BIG_PICTURE = "roundedBigPicture"
 
     static let  initialValues = [
         Definitions.NOTIFICATION_ID: 0,
@@ -227,6 +230,8 @@ enum Definitions {
         Definitions.NOTIFICATION_ALLOW_WHILE_IDLE: false,
         Definitions.NOTIFICATION_ONLY_ALERT_ONCE: false,
         Definitions.NOTIFICATION_IS_DANGEROUS_OPTION: false,
-        Definitions.NOTIFICATION_WAKE_UP_SCREEN: false
+        Definitions.NOTIFICATION_WAKE_UP_SCREEN: false,
+        Definitions.NOTIFICATION_ROUNDED_LARGE_ICON: false,
+        Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE: false
     ] as [String : Any?]
 }

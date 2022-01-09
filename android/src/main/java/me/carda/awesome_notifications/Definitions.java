@@ -166,6 +166,9 @@ public interface Definitions {
     String NOTIFICATION_PAYLOAD = "payload";
     String NOTIFICATION_INITIAL_FIXED_DATE = "fixedDate";
 
+    String NOTIFICATION_ROUNDED_LARGE_ICON = "roundedLargeIcon";
+    String NOTIFICATION_ROUNDED_BIG_PICTURE = "roundedBigPicture";
+
     String NOTIFICATION_INITIAL_DATE_TIME = "initialDateTime";
     String NOTIFICATION_EXPIRATION_DATE_TIME = "expirationDateTime";
     String NOTIFICATION_CRONTAB_EXPRESSION = "crontabExpression";
@@ -257,5 +260,8 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, false);
         put(Definitions.NOTIFICATION_WAKE_UP_SCREEN, false);
         put(Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS, false);
+        put(Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, false);
+        put(Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, false);
+
     }};
 }

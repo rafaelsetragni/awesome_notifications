@@ -14,9 +14,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.carda.awesome_notifications.notifications.enumerators.MediaSource;
 import me.carda.awesome_notifications.notifications.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.notifications.models.NotificationModel;
 import me.carda.awesome_notifications.notifications.NotificationBuilder;
+import me.carda.awesome_notifications.utils.BitmapUtils;
 
 public class ForegroundService extends Service {
 
@@ -51,6 +53,7 @@ public class ForegroundService extends Service {
         } catch (AwesomeNotificationException e) {
             throw new RuntimeException(e);
         }
+
         if (parameter.hasForegroundServiceType && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(notificationId, notification, parameter.foregroundServiceType);
         } else {
@@ -75,12 +78,29 @@ public class ForegroundService extends Service {
         public final boolean hasForegroundServiceType;
         public final int foregroundServiceType;
 
-        public StartParameter(Map<String, Object> notificationData, int startMode, boolean hasForegroundServiceType, int foregroundServiceType) {
-            if (notificationData instanceof HashMap) {
+        public StartParameter(
+                Context context,
+                Map<String, Object> notificationData,
+                int startMode,
+                boolean hasForegroundServiceType,
+                int foregroundServiceType
+        ) throws AwesomeNotificationException {
+
+            if (notificationData instanceof HashMap)
                 this.notificationData = (HashMap<String, Object>) notificationData;
-            } else {
+            else
                 this.notificationData = new HashMap<>(notificationData);
-            }
+
+            NotificationModel notificationModel = new NotificationModel().fromMap(this.notificationData);
+
+            if (BitmapUtils.getMediaSourceType(notificationModel.content.largeIcon) == MediaSource.Network)
+                throw new AwesomeNotificationException("Network media images are not available for Foreground Services");
+
+            if (BitmapUtils.getMediaSourceType(notificationModel.content.bigPicture) == MediaSource.Network)
+                throw new AwesomeNotificationException("Network media images are not available for Foreground Services");
+
+            notificationModel.validate(context);
+
             this.startMode = startMode;
             this.hasForegroundServiceType = hasForegroundServiceType;
             this.foregroundServiceType = foregroundServiceType;

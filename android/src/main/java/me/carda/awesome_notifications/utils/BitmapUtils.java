@@ -5,6 +5,11 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.os.Build;
 
 import java.io.BufferedInputStream;
@@ -16,9 +21,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.regex.Pattern;
 
-import io.flutter.embedding.engine.loader.FlutterLoader;
 import io.flutter.view.FlutterMain;
-import me.carda.awesome_notifications.R;
 
 import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_ASSET;
 import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_FILE;
@@ -27,26 +30,36 @@ import static me.carda.awesome_notifications.Definitions.MEDIA_VALID_RESOURCE;
 
 public class BitmapUtils extends MediaUtils {
 
-    public static Bitmap getBitmapFromSource(Context context, String bitmapPath) {
+    public static Bitmap getBitmapFromSource(Context context, String bitmapPath, boolean roundedBitmap) {
 
-        switch (MediaUtils.getMediaSourceType(bitmapPath)){
+        Bitmap returnedBitmap = null;
+        switch (getMediaSourceType(bitmapPath)){
 
             case Resource:
-                return getBitmapFromResource(context, bitmapPath);
+                returnedBitmap = getBitmapFromResource(context, bitmapPath);
+                break;
 
             case File:
-                return getBitmapFromFile(bitmapPath);
+                returnedBitmap = getBitmapFromFile(bitmapPath);
+                break;
 
             case Asset:
-                return getBitmapFromAsset(context, bitmapPath);
+                returnedBitmap = getBitmapFromAsset(context, bitmapPath);
+                break;
 
             case Network:
-                return getBitmapFromUrl(BitmapUtils.cleanMediaPath(bitmapPath));
+                returnedBitmap = getBitmapFromUrl(cleanMediaPath(bitmapPath));
+                break;
 
             case Unknown:
-                return null;
+                break;
         }
-        return null;
+
+        if(returnedBitmap != null && roundedBitmap){
+            returnedBitmap = roundBitmap(returnedBitmap);
+        }
+
+        return returnedBitmap;
     }
 
     public static String cleanMediaPath(String mediaPath) {
@@ -113,6 +126,28 @@ public class BitmapUtils extends MediaUtils {
         return 0;
     }
 
+    public static Bitmap roundBitmap(Bitmap bitmap) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+                bitmap.getWidth() / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
+        //return _bmp;
+        return output;
+    }
+
     public static Bitmap getBitmapFromResource(Context context, String bitmapReference){
         int resourceId = getDrawableResourceId(context, bitmapReference);
         if(resourceId <= 0) return null;
@@ -167,6 +202,9 @@ public class BitmapUtils extends MediaUtils {
         Bitmap bitmap = null;
         InputStream inputStream = null;
         BufferedInputStream bufferedInputStream = null;
+
+        if(StringUtils.isNullOrEmpty(bitmapUri))
+            return null;
 
         try {
             URLConnection conn = new URL(bitmapUri).openConnection();

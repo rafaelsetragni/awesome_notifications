@@ -1052,6 +1052,7 @@ class NotificationUtils {
             body: '$lorenIpsumText\n\n$lorenIpsumText\n\n$lorenIpsumText',
             largeIcon:
                 'https://image.freepik.com/vetores-gratis/modelo-de-logotipo-de-restaurante-retro_23-2148451519.jpg',
+            roundedLargeIcon: true,
             notificationLayout: NotificationLayout.BigPicture,
             payload: {'uuid': 'uuid-test'}));
   }

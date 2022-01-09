@@ -34,6 +34,9 @@ class BaseNotificationContent extends Model {
   String? displayedDate;
   String? createdDate;
 
+  bool? roundedLargeIcon;
+  bool? roundedBigPicture;
+
   NotificationSource? createdSource;
 
   NotificationLifeCycle? createdLifeCycle;
@@ -67,6 +70,8 @@ class BaseNotificationContent extends Model {
       this.backgroundColor,
       this.payload,
       this.customSound,
+      this.roundedLargeIcon,
+      this.roundedBigPicture,
       bool? autoCancel}) {
     this.autoDismissible =
         this.autoDismissible != null ? this.autoDismissible : autoCancel;
@@ -114,6 +119,11 @@ class BaseNotificationContent extends Model {
     this.payload =
         AssertUtils.extractMap<String, String>(mapData, NOTIFICATION_PAYLOAD);
 
+    this.roundedLargeIcon = AssertUtils.extractValue(
+        NOTIFICATION_ROUNDED_LARGE_ICON, mapData, bool);
+    this.roundedBigPicture = AssertUtils.extractValue(
+        NOTIFICATION_ROUNDED_BIG_PICTURE, mapData, bool);
+
     return this;
   }
 
@@ -139,7 +149,9 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_BACKGROUND_COLOR: backgroundColor?.value,
       NOTIFICATION_WAKE_UP_SCREEN: wakeUpScreen,
       NOTIFICATION_FULL_SCREEN_INTENT: fullScreenIntent,
-      NOTIFICATION_CRITICAL_ALERT: criticalAlert
+      NOTIFICATION_CRITICAL_ALERT: criticalAlert,
+      NOTIFICATION_ROUNDED_LARGE_ICON: roundedLargeIcon,
+      NOTIFICATION_ROUNDED_BIG_PICTURE: roundedBigPicture
     };
   }
 

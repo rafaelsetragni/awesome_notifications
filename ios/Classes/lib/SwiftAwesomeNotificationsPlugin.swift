@@ -875,7 +875,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         
 		let bitmapReference:String = call.arguments as! String
 			
-		let image:UIImage = BitmapUtils.getBitmapFromSource(bitmapPath: bitmapReference)!
+		let image:UIImage = BitmapUtils.getBitmapFromSource(bitmapPath: bitmapReference, roundedBitpmap: false)!
 		let data:Data? = UIImage.pngData(image)()
 
 		if(data == nil){

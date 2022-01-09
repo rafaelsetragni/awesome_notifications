@@ -247,6 +247,8 @@ const NOTIFICATION_LED_ON_MS = 'ledOnMs';
 const NOTIFICATION_LED_OFF_MS = 'ledOffMs';
 const NOTIFICATION_TICKER = 'ticker';
 const NOTIFICATION_ALLOW_WHILE_IDLE = 'allowWhileIdle';
+const NOTIFICATION_ROUNDED_LARGE_ICON = 'roundedLargeIcon';
+const NOTIFICATION_ROUNDED_BIG_PICTURE = 'roundedBigPicture';
 
 class Definitions {
   static Map<String, Object?> initialValues = {
@@ -284,6 +286,8 @@ class Definitions {
     NOTIFICATION_IS_DANGEROUS_OPTION: false,
     NOTIFICATION_WAKE_UP_SCREEN: false,
     NOTIFICATION_CRITICAL_ALERT: false,
-    NOTIFICATION_CHANNEL_CRITICAL_ALERTS: false
+    NOTIFICATION_CHANNEL_CRITICAL_ALERTS: false,
+    NOTIFICATION_ROUNDED_LARGE_ICON: false,
+    NOTIFICATION_ROUNDED_BIG_PICTURE: false,
   };
 }

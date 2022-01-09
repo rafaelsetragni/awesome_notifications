@@ -533,13 +533,13 @@ public class NotificationBuilder {
         }
     }
     
-    private static func getAttatchmentFromBitmapSource(_ bitmapSource:String?) -> UNNotificationAttachment? {
+    private static func getAttatchmentFromBitmapSource(_ bitmapSource:String?, rounded:Bool) -> UNNotificationAttachment? {
         
         //let dimensionLimit:CGFloat = 1038.0
         		
         if !StringUtils.isNullOrEmpty(bitmapSource) {
             
-            if let image:UIImage = BitmapUtils.getBitmapFromSource(bitmapPath: bitmapSource!) {
+            if let image:UIImage = BitmapUtils.getBitmapFromSource(bitmapPath: bitmapSource!, roundedBitpmap: rounded) {
                 
                 let fileManager = FileManager.default
                 let tmpSubFolderName = ProcessInfo.processInfo.globallyUniqueString
@@ -570,7 +570,10 @@ public class NotificationBuilder {
         
         if(!StringUtils.isNullOrEmpty(notificationModel.content?.bigPicture)){
             
-            if let attachment:UNNotificationAttachment = getAttatchmentFromBitmapSource(notificationModel.content?.bigPicture) {
+            if let attachment:UNNotificationAttachment =
+                getAttatchmentFromBitmapSource(
+                    notificationModel.content?.bigPicture,
+                    rounded: notificationModel.content?.roundedBigPicture ?? false) {
                 content.attachments.append(attachment)
                 return
             }
@@ -578,7 +581,10 @@ public class NotificationBuilder {
         
         if(!StringUtils.isNullOrEmpty(notificationModel.content?.largeIcon)){
             
-            if let attachment:UNNotificationAttachment = getAttatchmentFromBitmapSource(notificationModel.content?.largeIcon) {
+            if let attachment:UNNotificationAttachment =
+                getAttatchmentFromBitmapSource(
+                    notificationModel.content?.largeIcon,
+                    rounded: notificationModel.content?.roundedLargeIcon ?? false) {
                 content.attachments.append(attachment)
             }
         }
