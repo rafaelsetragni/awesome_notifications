@@ -738,7 +738,8 @@ public class NotificationBuilder {
         Uri uri = null;
 
         if (!notificationModel.content.isRefreshNotification && BooleanUtils.getValue(channelModel.playSound)) {
-            uri = ChannelManager.retrieveSoundResourceUri(context, channelModel.defaultRingtoneType, channelModel.soundSource);
+            String soundSource = StringUtils.isNullOrEmpty(notificationModel.content.customSound) ? channelModel.soundSource : notificationModel.content.customSound;
+            uri = ChannelManager.retrieveSoundResourceUri(context, channelModel.defaultRingtoneType, soundSource);
         }
 
         builder.setSound(uri);

@@ -88,7 +88,7 @@ public class ChannelManager {
         channelModel.channelName = String.valueOf(androidChannel.getName());
         channelModel.channelDescription = androidChannel.getDescription();
         channelModel.channelShowBadge = androidChannel.canShowBadge();
-        channelModel.playSound = androidChannel.canShowBadge();
+        channelModel.playSound = androidChannel.getImportance() > NotificationImportance.toAndroidImportance(NotificationImportance.Low);
         channelModel.enableLights = androidChannel.shouldShowLights();
         channelModel.enableVibration = androidChannel.shouldVibrate();
         channelModel.importance = NotificationImportance.fromAndroidImportance(androidChannel.getImportance());

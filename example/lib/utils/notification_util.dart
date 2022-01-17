@@ -315,7 +315,8 @@ class NotificationUtils {
         id: id,
         channelKey: 'basic_channel',
         title: 'Simple Notification',
-        body: 'Simple body'
+        body: 'Simple body',
+        customSound: 'resource://raw/res_morph_power_rangers'
       )
     );
   }

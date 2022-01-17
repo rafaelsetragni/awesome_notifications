@@ -1,3 +1,6 @@
+## [0.6.21]
+* Added customSound feature for Android (only applicable for versions older than Android 8 (Oreo))
+* Type parameter T removed for AwessomeAssertUtils to allows it to be compatible with Flutter web parser.
 ## [0.6.20]
 * Added rounded images for large icon and big picture
 * Added bool value extraction for Map objects in dart

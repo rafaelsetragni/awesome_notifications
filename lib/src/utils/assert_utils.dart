@@ -53,7 +53,7 @@ class AwesomeAssertUtils {
     return _getDefaultValue(reference, T);
   }
 
-  static extractValue<T>(String reference, Map dataMap, Type T) {
+  static extractValue(String reference, Map dataMap, Type T) {
     dynamic defaultValue = _getDefaultValue(reference, T);
     dynamic value = dataMap[reference];
 
@@ -130,7 +130,7 @@ class AwesomeAssertUtils {
 
   static extractMap<T, C>(Map dataMap, String reference) {
     Map? defaultValue = _getDefaultValue(reference, Map);
-    if (defaultValue != null && !(defaultValue is Map)) return defaultValue;
+    if (defaultValue != null) return defaultValue;
 
     dynamic value = dataMap[reference];
     if (value == null || !(value is Map)) return defaultValue;
