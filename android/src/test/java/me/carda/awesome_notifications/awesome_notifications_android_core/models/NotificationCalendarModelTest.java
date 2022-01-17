@@ -1,5 +1,7 @@
 package me.carda.awesome_notifications.awesome_notifications_android_core.models;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Map;
@@ -14,6 +16,20 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.utils.D
 import static org.junit.Assert.*;
 
 public class NotificationCalendarModelTest {
+
+    @Before
+    public void setUp() throws Exception {
+        AbstractModel
+                .defaultValues
+                .putAll(Definitions.initialValues);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        Definitions
+                .initialValues
+                .clear();
+    }
 
     // Starts on Monday
     interface IsoWeekDay {

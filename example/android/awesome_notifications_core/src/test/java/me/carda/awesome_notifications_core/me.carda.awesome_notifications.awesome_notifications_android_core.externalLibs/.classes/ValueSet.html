@@ -1,0 +1,1748 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ValueSet</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">me.carda.awesome_notifications.awesome_notifications_android_core.externalLibs</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ValueSet (me.carda.awesome_notifications.awesome_notifications_android_core.externalLibs)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ValueSet</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package me.carda.awesome_notifications.awesome_notifications_android_core.externalLibs;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;/*
+<i>4</i>&nbsp; * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
+<i>5</i>&nbsp; *
+<i>6</i>&nbsp; * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not
+<i>7</i>&nbsp; * use this file except in compliance with the License. You may obtain a copy
+<i>8</i>&nbsp; * of the License at
+<i>9</i>&nbsp; *
+<i>10</i>&nbsp; *   http://www.apache.org/licenses/LICENSE-2.0
+<i>11</i>&nbsp; *
+<i>12</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>13</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT
+<i>14</i>&nbsp; * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+<i>15</i>&nbsp; * License for the specific language governing permissions and limitations
+<i>16</i>&nbsp; * under the License.
+<i>17</i>&nbsp; *
+<i>18</i>&nbsp; */
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.Serializable;
+<i>21</i>&nbsp;import java.text.ParseException;
+<i>22</i>&nbsp;import java.util.Calendar;
+<i>23</i>&nbsp;import java.util.Date;
+<i>24</i>&nbsp;import java.util.HashMap;
+<i>25</i>&nbsp;import java.util.Iterator;
+<i>26</i>&nbsp;import java.util.Locale;
+<i>27</i>&nbsp;import java.util.Map;
+<i>28</i>&nbsp;import java.util.SortedSet;
+<i>29</i>&nbsp;import java.util.StringTokenizer;
+<i>30</i>&nbsp;import java.util.TimeZone;
+<i>31</i>&nbsp;import java.util.TreeSet;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;/**
+<i>34</i>&nbsp; * Provides a parser and evaluator for unix-like cron expressions. Cron
+<i>35</i>&nbsp; * expressions provide the ability to specify complex time combinations such as
+<i>36</i>&nbsp; * &amp;quot;At 8:00am every Monday through Friday&amp;quot; or &amp;quot;At 1:30am every
+<i>37</i>&nbsp; * last Friday of the month&amp;quot;.
+<i>38</i>&nbsp; * &lt;P&gt;
+<i>39</i>&nbsp; * Cron expressions are comprised of 6 required fields and one optional field
+<i>40</i>&nbsp; * separated by white space. The fields respectively are described as follows:
+<i>41</i>&nbsp; *
+<i>42</i>&nbsp; * &lt;table cellspacing=&quot;8&quot;&gt;
+<i>43</i>&nbsp; * &lt;tr&gt;
+<i>44</i>&nbsp; * &lt;th align=&quot;left&quot;&gt;Field Name&lt;/th&gt;
+<i>45</i>&nbsp; * &lt;th align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>46</i>&nbsp; * &lt;th align=&quot;left&quot;&gt;Allowed Values&lt;/th&gt;
+<i>47</i>&nbsp; * &lt;th align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>48</i>&nbsp; * &lt;th align=&quot;left&quot;&gt;Allowed Special Characters&lt;/th&gt;
+<i>49</i>&nbsp; * &lt;/tr&gt;
+<i>50</i>&nbsp; * &lt;tr&gt;
+<i>51</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;Seconds&lt;/code&gt;&lt;/td&gt;
+<i>52</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>53</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;0-59&lt;/code&gt;&lt;/td&gt;
+<i>54</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>55</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;, - * /&lt;/code&gt;&lt;/td&gt;
+<i>56</i>&nbsp; * &lt;/tr&gt;
+<i>57</i>&nbsp; * &lt;tr&gt;
+<i>58</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;Minutes&lt;/code&gt;&lt;/td&gt;
+<i>59</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>60</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;0-59&lt;/code&gt;&lt;/td&gt;
+<i>61</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>62</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;, - * /&lt;/code&gt;&lt;/td&gt;
+<i>63</i>&nbsp; * &lt;/tr&gt;
+<i>64</i>&nbsp; * &lt;tr&gt;
+<i>65</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;Hours&lt;/code&gt;&lt;/td&gt;
+<i>66</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>67</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;0-23&lt;/code&gt;&lt;/td&gt;
+<i>68</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>69</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;, - * /&lt;/code&gt;&lt;/td&gt;
+<i>70</i>&nbsp; * &lt;/tr&gt;
+<i>71</i>&nbsp; * &lt;tr&gt;
+<i>72</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;Day-of-month&lt;/code&gt;&lt;/td&gt;
+<i>73</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>74</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;1-31&lt;/code&gt;&lt;/td&gt;
+<i>75</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>76</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;, - * ? / L W&lt;/code&gt;&lt;/td&gt;
+<i>77</i>&nbsp; * &lt;/tr&gt;
+<i>78</i>&nbsp; * &lt;tr&gt;
+<i>79</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;Month&lt;/code&gt;&lt;/td&gt;
+<i>80</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>81</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;0-11 or JAN-DEC&lt;/code&gt;&lt;/td&gt;
+<i>82</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>83</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;, - * /&lt;/code&gt;&lt;/td&gt;
+<i>84</i>&nbsp; * &lt;/tr&gt;
+<i>85</i>&nbsp; * &lt;tr&gt;
+<i>86</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;Day-of-Week&lt;/code&gt;&lt;/td&gt;
+<i>87</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>88</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;1-7 or SUN-SAT&lt;/code&gt;&lt;/td&gt;
+<i>89</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>90</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;, - * ? / L #&lt;/code&gt;&lt;/td&gt;
+<i>91</i>&nbsp; * &lt;/tr&gt;
+<i>92</i>&nbsp; * &lt;tr&gt;
+<i>93</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;Year (Optional)&lt;/code&gt;&lt;/td&gt;
+<i>94</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>95</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;empty, 1970-2199&lt;/code&gt;&lt;/td&gt;
+<i>96</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&amp;nbsp;&lt;/th&gt;
+<i>97</i>&nbsp; * &lt;td align=&quot;left&quot;&gt;&lt;code&gt;, - * /&lt;/code&gt;&lt;/td&gt;
+<i>98</i>&nbsp; * &lt;/tr&gt;
+<i>99</i>&nbsp; * &lt;/table&gt;
+<i>100</i>&nbsp; * &lt;P&gt;
+<i>101</i>&nbsp; * The &#39;*&#39; character is used to specify all values. For example, &amp;quot;*&amp;quot;
+<i>102</i>&nbsp; * in the minute field means &amp;quot;every minute&amp;quot;.
+<i>103</i>&nbsp; * &lt;P&gt;
+<i>104</i>&nbsp; * The &#39;?&#39; character is allowed for the day-of-month and day-of-week fields. It
+<i>105</i>&nbsp; * is used to specify &#39;no specific value&#39;. This is useful when you need to
+<i>106</i>&nbsp; * specify something in one of the two fields, but not the other.
+<i>107</i>&nbsp; * &lt;P&gt;
+<i>108</i>&nbsp; * The &#39;-&#39; character is used to specify ranges For example &amp;quot;10-12&amp;quot; in
+<i>109</i>&nbsp; * the hour field means &amp;quot;the hours 10, 11 and 12&amp;quot;.
+<i>110</i>&nbsp; * &lt;P&gt;
+<i>111</i>&nbsp; * The &#39;,&#39; character is used to specify additional values. For example
+<i>112</i>&nbsp; * &amp;quot;MON,WED,FRI&amp;quot; in the day-of-week field means &amp;quot;the days Monday,
+<i>113</i>&nbsp; * Wednesday, and Friday&amp;quot;.
+<i>114</i>&nbsp; * &lt;P&gt;
+<i>115</i>&nbsp; * The &#39;/&#39; character is used to specify increments. For example &amp;quot;0/15&amp;quot;
+<i>116</i>&nbsp; * in the seconds field means &amp;quot;the seconds 0, 15, 30, and 45&amp;quot;. And
+<i>117</i>&nbsp; * &amp;quot;5/15&amp;quot; in the seconds field means &amp;quot;the seconds 5, 20, 35, and
+<i>118</i>&nbsp; * 50&amp;quot;.  Specifying &#39;*&#39; before the  &#39;/&#39; is equivalent to specifying 0 is
+<i>119</i>&nbsp; * the value to start with. Essentially, for each field in the expression, there
+<i>120</i>&nbsp; * is a set of numbers that can be turned on or off. For seconds and minutes,
+<i>121</i>&nbsp; * the numbers range from 0 to 59. For hours 0 to 23, for days of the month 0 to
+<i>122</i>&nbsp; * 31, and for months 0 to 11 (JAN to DEC). The &amp;quot;/&amp;quot; character simply helps you turn
+<i>123</i>&nbsp; * on every &amp;quot;nth&amp;quot; value in the given set. Thus &amp;quot;7/6&amp;quot; in the
+<i>124</i>&nbsp; * month field only turns on month &amp;quot;7&amp;quot;, it does NOT mean every 6th
+<i>125</i>&nbsp; * month, please note that subtlety.
+<i>126</i>&nbsp; * &lt;P&gt;
+<i>127</i>&nbsp; * The &#39;L&#39; character is allowed for the day-of-month and day-of-week fields.
+<i>128</i>&nbsp; * This character is short-hand for &amp;quot;last&amp;quot;, but it has different
+<i>129</i>&nbsp; * meaning in each of the two fields. For example, the value &amp;quot;L&amp;quot; in
+<i>130</i>&nbsp; * the day-of-month field means &amp;quot;the last day of the month&amp;quot; - day 31
+<i>131</i>&nbsp; * for January, day 28 for February on non-leap years. If used in the
+<i>132</i>&nbsp; * day-of-week field by itself, it simply means &amp;quot;7&amp;quot; or
+<i>133</i>&nbsp; * &amp;quot;SAT&amp;quot;. But if used in the day-of-week field after another value, it
+<i>134</i>&nbsp; * means &amp;quot;the last xxx day of the month&amp;quot; - for example &amp;quot;6L&amp;quot;
+<i>135</i>&nbsp; * means &amp;quot;the last friday of the month&amp;quot;. You can also specify an offset
+<i>136</i>&nbsp; * from the last day of the month, such as &quot;L-3&quot; which would mean the third-to-last
+<i>137</i>&nbsp; * day of the calendar month. &lt;i&gt;When using the &#39;L&#39; option, it is important not to
+<i>138</i>&nbsp; * specify lists, or ranges of values, as you&#39;ll get confusing/unexpected results.&lt;/i&gt;
+<i>139</i>&nbsp; * &lt;P&gt;
+<i>140</i>&nbsp; * The &#39;W&#39; character is allowed for the day-of-month field.  This character
+<i>141</i>&nbsp; * is used to specify the weekday (Monday-Friday) nearest the given day.  As an
+<i>142</i>&nbsp; * example, if you were to specify &amp;quot;15W&amp;quot; as the value for the
+<i>143</i>&nbsp; * day-of-month field, the meaning is: &amp;quot;the nearest weekday to the 15th of
+<i>144</i>&nbsp; * the month&amp;quot;. So if the 15th is a Saturday, the trigger will fire on
+<i>145</i>&nbsp; * Friday the 14th. If the 15th is a Sunday, the trigger will fire on Monday the
+<i>146</i>&nbsp; * 16th. If the 15th is a Tuesday, then it will fire on Tuesday the 15th.
+<i>147</i>&nbsp; * However if you specify &amp;quot;1W&amp;quot; as the value for day-of-month, and the
+<i>148</i>&nbsp; * 1st is a Saturday, the trigger will fire on Monday the 3rd, as it will not
+<i>149</i>&nbsp; * &#39;jump&#39; over the boundary of a month&#39;s days.  The &#39;W&#39; character can only be
+<i>150</i>&nbsp; * specified when the day-of-month is a single day, not a range or list of days.
+<i>151</i>&nbsp; * &lt;P&gt;
+<i>152</i>&nbsp; * The &#39;L&#39; and &#39;W&#39; characters can also be combined for the day-of-month
+<i>153</i>&nbsp; * expression to yield &#39;LW&#39;, which translates to &amp;quot;last weekday of the
+<i>154</i>&nbsp; * month&amp;quot;.
+<i>155</i>&nbsp; * &lt;P&gt;
+<i>156</i>&nbsp; * The &#39;#&#39; character is allowed for the day-of-week field. This character is
+<i>157</i>&nbsp; * used to specify &amp;quot;the nth&amp;quot; XXX day of the month. For example, the
+<i>158</i>&nbsp; * value of &amp;quot;6#3&amp;quot; in the day-of-week field means the third Friday of
+<i>159</i>&nbsp; * the month (day 6 = Friday and &amp;quot;#3&amp;quot; = the 3rd one in the month).
+<i>160</i>&nbsp; * Other examples: &amp;quot;2#1&amp;quot; = the first Monday of the month and
+<i>161</i>&nbsp; * &amp;quot;4#5&amp;quot; = the fifth Wednesday of the month. Note that if you specify
+<i>162</i>&nbsp; * &amp;quot;#5&amp;quot; and there is not 5 of the given day-of-week in the month, then
+<i>163</i>&nbsp; * no firing will occur that month.  If the &#39;#&#39; character is used, there can
+<i>164</i>&nbsp; * only be one expression in the day-of-week field (&amp;quot;3#1,6#3&amp;quot; is
+<i>165</i>&nbsp; * not valid, since there are two expressions).
+<i>166</i>&nbsp; * &lt;P&gt;
+<i>167</i>&nbsp; * &lt;!--The &#39;C&#39; character is allowed for the day-of-month and day-of-week fields.
+<i>168</i>&nbsp; * This character is short-hand for &quot;calendar&quot;. This means values are
+<i>169</i>&nbsp; * calculated against the associated calendar, if any. If no calendar is
+<i>170</i>&nbsp; * associated, then it is equivalent to having an all-inclusive calendar. A
+<i>171</i>&nbsp; * value of &quot;5C&quot; in the day-of-month field means &quot;the first day included by the
+<i>172</i>&nbsp; * calendar on or after the 5th&quot;. A value of &quot;1C&quot; in the day-of-week field
+<i>173</i>&nbsp; * means &quot;the first day included by the calendar on or after Sunday&quot;.--&gt;
+<i>174</i>&nbsp; * &lt;P&gt;
+<i>175</i>&nbsp; * The legal characters and the names of months and days of the week are not
+<i>176</i>&nbsp; * case sensitive.
+<i>177</i>&nbsp; *
+<i>178</i>&nbsp; * &lt;p&gt;
+<i>179</i>&nbsp; * &lt;b&gt;NOTES:&lt;/b&gt;
+<i>180</i>&nbsp; * &lt;ul&gt;
+<i>181</i>&nbsp; * &lt;li&gt;Support for specifying both a day-of-week and a day-of-month value is
+<i>182</i>&nbsp; * not complete (you&#39;ll need to use the &#39;?&#39; character in one of these fields).
+<i>183</i>&nbsp; * &lt;/li&gt;
+<i>184</i>&nbsp; * &lt;li&gt;Overflowing ranges is supported - that is, having a larger number on
+<i>185</i>&nbsp; * the left hand side than the right. You might do 22-2 to catch 10 o&#39;clock
+<i>186</i>&nbsp; * at night until 2 o&#39;clock in the morning, or you might have NOV-FEB. It is
+<i>187</i>&nbsp; * very important to note that overuse of overflowing ranges creates ranges
+<i>188</i>&nbsp; * that don&#39;t make sense and no effort has been made to determine which
+<i>189</i>&nbsp; * interpretation CronExpression chooses. An example would be
+<i>190</i>&nbsp; * &quot;0 0 14-6 ? * FRI-MON&quot;. &lt;/li&gt;
+<i>191</i>&nbsp; * &lt;/ul&gt;
+<i>192</i>&nbsp; * &lt;/p&gt;
+<i>193</i>&nbsp; *
+<i>194</i>&nbsp; *
+<i>195</i>&nbsp; * @author Sharada Jambula, James House
+<i>196</i>&nbsp; * @author Contributions from Mads Henderson
+<i>197</i>&nbsp; * @author Refactoring from CronTrigger to CronExpression by Aaron Craven
+<i>198</i>&nbsp; */
+<i>199</i>&nbsp;public class CronExpression implements Serializable, Cloneable {
+<i>200</i>&nbsp;
+<i>201</i>&nbsp;    private static final long serialVersionUID = 12423409423L;
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;    protected static final int SECOND = 0;
+<i>204</i>&nbsp;    protected static final int MINUTE = 1;
+<i>205</i>&nbsp;    protected static final int HOUR = 2;
+<i>206</i>&nbsp;    protected static final int DAY_OF_MONTH = 3;
+<i>207</i>&nbsp;    protected static final int MONTH = 4;
+<i>208</i>&nbsp;    protected static final int DAY_OF_WEEK = 5;
+<i>209</i>&nbsp;    protected static final int YEAR = 6;
+<i>210</i>&nbsp;    protected static final int ALL_SPEC_INT = 99; // &#39;*&#39;
+<i>211</i>&nbsp;    protected static final int NO_SPEC_INT = 98; // &#39;?&#39;
+<i>212</i>&nbsp;    protected static final Integer ALL_SPEC = ALL_SPEC_INT;
+<i>213</i>&nbsp;    protected static final Integer NO_SPEC = NO_SPEC_INT;
+<i>214</i>&nbsp;
+<i>215</i>&nbsp;    protected static final Map&lt;String, Integer&gt; monthMap = new HashMap&lt;String, Integer&gt;(20);
+<i>216</i>&nbsp;    protected static final Map&lt;String, Integer&gt; dayMap = new HashMap&lt;String, Integer&gt;(60);
+<i>217</i>&nbsp;    static {
+<i>218</i>&nbsp;        monthMap.put(&quot;JAN&quot;, 0);
+<i>219</i>&nbsp;        monthMap.put(&quot;FEB&quot;, 1);
+<i>220</i>&nbsp;        monthMap.put(&quot;MAR&quot;, 2);
+<i>221</i>&nbsp;        monthMap.put(&quot;APR&quot;, 3);
+<i>222</i>&nbsp;        monthMap.put(&quot;MAY&quot;, 4);
+<i>223</i>&nbsp;        monthMap.put(&quot;JUN&quot;, 5);
+<i>224</i>&nbsp;        monthMap.put(&quot;JUL&quot;, 6);
+<i>225</i>&nbsp;        monthMap.put(&quot;AUG&quot;, 7);
+<i>226</i>&nbsp;        monthMap.put(&quot;SEP&quot;, 8);
+<i>227</i>&nbsp;        monthMap.put(&quot;OCT&quot;, 9);
+<i>228</i>&nbsp;        monthMap.put(&quot;NOV&quot;, 10);
+<i>229</i>&nbsp;        monthMap.put(&quot;DEC&quot;, 11);
+<i>230</i>&nbsp;
+<i>231</i>&nbsp;        dayMap.put(&quot;SUN&quot;, 1);
+<i>232</i>&nbsp;        dayMap.put(&quot;MON&quot;, 2);
+<i>233</i>&nbsp;        dayMap.put(&quot;TUE&quot;, 3);
+<i>234</i>&nbsp;        dayMap.put(&quot;WED&quot;, 4);
+<i>235</i>&nbsp;        dayMap.put(&quot;THU&quot;, 5);
+<i>236</i>&nbsp;        dayMap.put(&quot;FRI&quot;, 6);
+<i>237</i>&nbsp;        dayMap.put(&quot;SAT&quot;, 7);
+<i>238</i>&nbsp;    }
+<i>239</i>&nbsp;
+<i>240</i>&nbsp;    private final String cronExpression;
+<i>241</i>&nbsp;    private TimeZone timeZone = null;
+<i>242</i>&nbsp;    protected transient TreeSet&lt;Integer&gt; seconds;
+<i>243</i>&nbsp;    protected transient TreeSet&lt;Integer&gt; minutes;
+<i>244</i>&nbsp;    protected transient TreeSet&lt;Integer&gt; hours;
+<i>245</i>&nbsp;    protected transient TreeSet&lt;Integer&gt; daysOfMonth;
+<i>246</i>&nbsp;    protected transient TreeSet&lt;Integer&gt; months;
+<i>247</i>&nbsp;    protected transient TreeSet&lt;Integer&gt; daysOfWeek;
+<i>248</i>&nbsp;    protected transient TreeSet&lt;Integer&gt; years;
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;    protected transient boolean lastdayOfWeek = false;
+<i>251</i>&nbsp;    protected transient int nthdayOfWeek = 0;
+<i>252</i>&nbsp;    protected transient boolean lastdayOfMonth = false;
+<i>253</i>&nbsp;    protected transient boolean nearestWeekday = false;
+<i>254</i>&nbsp;    protected transient int lastdayOffset = 0;
+<i>255</i>&nbsp;    protected transient boolean expressionParsed = false;
+<i>256</i>&nbsp;
+<i>257</i>&nbsp;    public static final int MAX_YEAR = Calendar.getInstance().get(Calendar.YEAR) + 100;
+<i>258</i>&nbsp;
+<i>259</i>&nbsp;    /**
+<i>260</i>&nbsp;     * Constructs a new &lt;CODE&gt;CronExpression&lt;/CODE&gt; based on the specified
+<i>261</i>&nbsp;     * parameter.
+<i>262</i>&nbsp;     *
+<i>263</i>&nbsp;     * @param cronExpression String representation of the cron expression the
+<i>264</i>&nbsp;     *                       new object should represent
+<i>265</i>&nbsp;     * @throws ParseException
+<i>266</i>&nbsp;     *         if the string expression cannot be parsed into a valid
+<i>267</i>&nbsp;     *         &lt;CODE&gt;CronExpression&lt;/CODE&gt;
+<i>268</i>&nbsp;     */
+<i>269</i>&nbsp;    public CronExpression(String cronExpression) throws ParseException {
+<i>270</i>&nbsp;        if (cronExpression == null) {
+<i>271</i>&nbsp;            throw new IllegalArgumentException(&quot;cronExpression cannot be null&quot;);
+<i>272</i>&nbsp;        }
+<i>273</i>&nbsp;
+<i>274</i>&nbsp;        this.cronExpression = cronExpression.toUpperCase(Locale.US);
+<i>275</i>&nbsp;
+<i>276</i>&nbsp;        buildExpression(this.cronExpression);
+<i>277</i>&nbsp;    }
+<i>278</i>&nbsp;
+<i>279</i>&nbsp;    /**
+<i>280</i>&nbsp;     * Constructs a new {@code CronExpression} as a copy of an existing
+<i>281</i>&nbsp;     * instance.
+<i>282</i>&nbsp;     *
+<i>283</i>&nbsp;     * @param expression
+<i>284</i>&nbsp;     *            The existing cron expression to be copied
+<i>285</i>&nbsp;     */
+<i>286</i>&nbsp;    public CronExpression(CronExpression expression) {
+<i>287</i>&nbsp;        /*
+<i>288</i>&nbsp;         * We don&#39;t call the other constructor here since we need to swallow the
+<i>289</i>&nbsp;         * ParseException. We also elide some of the sanity checking as it is
+<i>290</i>&nbsp;         * not logically trippable.
+<i>291</i>&nbsp;         */
+<i>292</i>&nbsp;        this.cronExpression = expression.getCronExpression();
+<i>293</i>&nbsp;        try {
+<i>294</i>&nbsp;            buildExpression(cronExpression);
+<i>295</i>&nbsp;        } catch (ParseException ex) {
+<i>296</i>&nbsp;            throw new AssertionError();
+<i>297</i>&nbsp;        }
+<i>298</i>&nbsp;        if (expression.getTimeZone() != null) {
+<i>299</i>&nbsp;            setTimeZone((TimeZone) expression.getTimeZone().clone());
+<i>300</i>&nbsp;        }
+<i>301</i>&nbsp;    }
+<i>302</i>&nbsp;
+<i>303</i>&nbsp;    /**
+<i>304</i>&nbsp;     * Indicates whether the given date satisfies the cron expression. Note that
+<i>305</i>&nbsp;     * milliseconds are ignored, so two Dates falling on different milliseconds
+<i>306</i>&nbsp;     * of the same second will always have the same result here.
+<i>307</i>&nbsp;     *
+<i>308</i>&nbsp;     * @param date the date to evaluate
+<i>309</i>&nbsp;     * @return a boolean indicating whether the given date satisfies the cron
+<i>310</i>&nbsp;     *         expression
+<i>311</i>&nbsp;     */
+<i>312</i>&nbsp;    public boolean isSatisfiedBy(Date date) {
+<i>313</i>&nbsp;        Calendar testDateCal = Calendar.getInstance(getTimeZone());
+<i>314</i>&nbsp;        testDateCal.setTime(date);
+<i>315</i>&nbsp;        testDateCal.set(Calendar.MILLISECOND, 0);
+<i>316</i>&nbsp;        Date originalDate = testDateCal.getTime();
+<i>317</i>&nbsp;
+<i>318</i>&nbsp;        testDateCal.add(Calendar.SECOND, -1);
+<i>319</i>&nbsp;
+<i>320</i>&nbsp;        Date timeAfter = getTimeAfter(testDateCal.getTime());
+<i>321</i>&nbsp;
+<i>322</i>&nbsp;        return ((timeAfter != null) &amp;&amp; (timeAfter.equals(originalDate)));
+<i>323</i>&nbsp;    }
+<i>324</i>&nbsp;
+<i>325</i>&nbsp;    /**
+<i>326</i>&nbsp;     * Returns the next date/time &lt;I&gt;after&lt;/I&gt; the given date/time which
+<i>327</i>&nbsp;     * satisfies the cron expression.
+<i>328</i>&nbsp;     *
+<i>329</i>&nbsp;     * @param date the date/time at which to begin the search for the next valid
+<i>330</i>&nbsp;     *             date/time
+<i>331</i>&nbsp;     * @return the next valid date/time
+<i>332</i>&nbsp;     */
+<i>333</i>&nbsp;    public Date getNextValidTimeAfter(Date date) {
+<i>334</i>&nbsp;        return getTimeAfter(date);
+<i>335</i>&nbsp;    }
+<i>336</i>&nbsp;
+<i>337</i>&nbsp;    /**
+<i>338</i>&nbsp;     * Returns the next date/time &lt;I&gt;after&lt;/I&gt; the given date/time which does
+<i>339</i>&nbsp;     * &lt;I&gt;not&lt;/I&gt; satisfy the expression
+<i>340</i>&nbsp;     *
+<i>341</i>&nbsp;     * @param date the date/time at which to begin the search for the next
+<i>342</i>&nbsp;     *             invalid date/time
+<i>343</i>&nbsp;     * @return the next valid date/time
+<i>344</i>&nbsp;     */
+<i>345</i>&nbsp;    public Date getNextInvalidTimeAfter(Date date) {
+<i>346</i>&nbsp;        long difference = 1000;
+<i>347</i>&nbsp;
+<i>348</i>&nbsp;        //move back to the nearest second so differences will be accurate
+<i>349</i>&nbsp;        Calendar adjustCal = Calendar.getInstance(getTimeZone());
+<i>350</i>&nbsp;        adjustCal.setTime(date);
+<i>351</i>&nbsp;        adjustCal.set(Calendar.MILLISECOND, 0);
+<i>352</i>&nbsp;        Date lastDate = adjustCal.getTime();
+<i>353</i>&nbsp;
+<i>354</i>&nbsp;        Date newDate;
+<i>355</i>&nbsp;
+<i>356</i>&nbsp;        //FUTURE_TODO: (QUARTZ-481) IMPROVE THIS! The following is a BAD solution to this problem. Performance will be very bad here, depending on the cron expression. It is, however A solution.
+<i>357</i>&nbsp;
+<i>358</i>&nbsp;        //keep getting the next included time until it&#39;s farther than one second
+<i>359</i>&nbsp;        // apart. At that point, lastDate is the last valid fire time. We return
+<i>360</i>&nbsp;        // the second immediately following it.
+<i>361</i>&nbsp;        while (difference == 1000) {
+<i>362</i>&nbsp;            newDate = getTimeAfter(lastDate);
+<i>363</i>&nbsp;            if(newDate == null)
+<i>364</i>&nbsp;                break;
+<i>365</i>&nbsp;
+<i>366</i>&nbsp;            difference = newDate.getTime() - lastDate.getTime();
+<i>367</i>&nbsp;
+<i>368</i>&nbsp;            if (difference == 1000) {
+<i>369</i>&nbsp;                lastDate = newDate;
+<i>370</i>&nbsp;            }
+<i>371</i>&nbsp;        }
+<i>372</i>&nbsp;
+<i>373</i>&nbsp;        return new Date(lastDate.getTime() + 1000);
+<i>374</i>&nbsp;    }
+<i>375</i>&nbsp;
+<i>376</i>&nbsp;    /**
+<i>377</i>&nbsp;     * Returns the time zone for which this &lt;code&gt;CronExpression&lt;/code&gt;
+<i>378</i>&nbsp;     * will be resolved.
+<i>379</i>&nbsp;     */
+<i>380</i>&nbsp;    public TimeZone getTimeZone() {
+<i>381</i>&nbsp;        if (timeZone == null) {
+<i>382</i>&nbsp;            timeZone = TimeZone.getDefault();
+<i>383</i>&nbsp;        }
+<i>384</i>&nbsp;
+<i>385</i>&nbsp;        return timeZone;
+<i>386</i>&nbsp;    }
+<i>387</i>&nbsp;
+<i>388</i>&nbsp;    /**
+<i>389</i>&nbsp;     * Sets the time zone for which  this &lt;code&gt;CronExpression&lt;/code&gt;
+<i>390</i>&nbsp;     * will be resolved.
+<i>391</i>&nbsp;     */
+<i>392</i>&nbsp;    public void setTimeZone(TimeZone timeZone) {
+<i>393</i>&nbsp;        this.timeZone = timeZone;
+<i>394</i>&nbsp;    }
+<i>395</i>&nbsp;
+<i>396</i>&nbsp;    /**
+<i>397</i>&nbsp;     * Returns the string representation of the &lt;CODE&gt;CronExpression&lt;/CODE&gt;
+<i>398</i>&nbsp;     *
+<i>399</i>&nbsp;     * @return a string representation of the &lt;CODE&gt;CronExpression&lt;/CODE&gt;
+<i>400</i>&nbsp;     */
+<i>401</i>&nbsp;    @Override
+<i>402</i>&nbsp;    public String toString() {
+<i>403</i>&nbsp;        return cronExpression;
+<i>404</i>&nbsp;    }
+<i>405</i>&nbsp;
+<i>406</i>&nbsp;    /**
+<i>407</i>&nbsp;     * Indicates whether the specified cron expression can be parsed into a
+<i>408</i>&nbsp;     * valid cron expression
+<i>409</i>&nbsp;     *
+<i>410</i>&nbsp;     * @param cronExpression the expression to evaluate
+<i>411</i>&nbsp;     * @return a boolean indicating whether the given expression is a valid cron
+<i>412</i>&nbsp;     *         expression
+<i>413</i>&nbsp;     */
+<i>414</i>&nbsp;    public static boolean isValidExpression(String cronExpression) {
+<i>415</i>&nbsp;
+<i>416</i>&nbsp;        try {
+<i>417</i>&nbsp;            new CronExpression(cronExpression);
+<i>418</i>&nbsp;        } catch (ParseException pe) {
+<i>419</i>&nbsp;            return false;
+<i>420</i>&nbsp;        }
+<i>421</i>&nbsp;
+<i>422</i>&nbsp;        return true;
+<i>423</i>&nbsp;    }
+<i>424</i>&nbsp;
+<i>425</i>&nbsp;    public static void validateExpression(String cronExpression) throws ParseException {
+<i>426</i>&nbsp;
+<i>427</i>&nbsp;        new CronExpression(cronExpression);
+<i>428</i>&nbsp;    }
+<i>429</i>&nbsp;
+<i>430</i>&nbsp;
+<i>431</i>&nbsp;    ////////////////////////////////////////////////////////////////////////////
+<i>432</i>&nbsp;    //
+<i>433</i>&nbsp;    // Expression Parsing Functions
+<i>434</i>&nbsp;    //
+<i>435</i>&nbsp;    ////////////////////////////////////////////////////////////////////////////
+<i>436</i>&nbsp;
+<i>437</i>&nbsp;    protected void buildExpression(String expression) throws ParseException {
+<i>438</i>&nbsp;        expressionParsed = true;
+<i>439</i>&nbsp;
+<i>440</i>&nbsp;        try {
+<i>441</i>&nbsp;
+<i>442</i>&nbsp;            if (seconds == null) {
+<i>443</i>&nbsp;                seconds = new TreeSet&lt;Integer&gt;();
+<i>444</i>&nbsp;            }
+<i>445</i>&nbsp;            if (minutes == null) {
+<i>446</i>&nbsp;                minutes = new TreeSet&lt;Integer&gt;();
+<i>447</i>&nbsp;            }
+<i>448</i>&nbsp;            if (hours == null) {
+<i>449</i>&nbsp;                hours = new TreeSet&lt;Integer&gt;();
+<i>450</i>&nbsp;            }
+<i>451</i>&nbsp;            if (daysOfMonth == null) {
+<i>452</i>&nbsp;                daysOfMonth = new TreeSet&lt;Integer&gt;();
+<i>453</i>&nbsp;            }
+<i>454</i>&nbsp;            if (months == null) {
+<i>455</i>&nbsp;                months = new TreeSet&lt;Integer&gt;();
+<i>456</i>&nbsp;            }
+<i>457</i>&nbsp;            if (daysOfWeek == null) {
+<i>458</i>&nbsp;                daysOfWeek = new TreeSet&lt;Integer&gt;();
+<i>459</i>&nbsp;            }
+<i>460</i>&nbsp;            if (years == null) {
+<i>461</i>&nbsp;                years = new TreeSet&lt;Integer&gt;();
+<i>462</i>&nbsp;            }
+<i>463</i>&nbsp;
+<i>464</i>&nbsp;            int exprOn = SECOND;
+<i>465</i>&nbsp;
+<i>466</i>&nbsp;            StringTokenizer exprsTok = new StringTokenizer(expression, &quot; \t&quot;,
+<i>467</i>&nbsp;                    false);
+<i>468</i>&nbsp;
+<i>469</i>&nbsp;            while (exprsTok.hasMoreTokens() &amp;&amp; exprOn &lt;= YEAR) {
+<i>470</i>&nbsp;                String expr = exprsTok.nextToken().trim();
+<i>471</i>&nbsp;
+<i>472</i>&nbsp;                // throw an exception if L is used with other days of the month
+<i>473</i>&nbsp;                if(exprOn == DAY_OF_MONTH &amp;&amp; expr.indexOf(&#39;L&#39;) != -1 &amp;&amp; expr.length() &gt; 1 &amp;&amp; expr.contains(&quot;,&quot;)) {
+<i>474</i>&nbsp;                    throw new ParseException(&quot;Support for specifying &#39;L&#39; and &#39;LW&#39; with other days of the month is not implemented&quot;, -1);
+<i>475</i>&nbsp;                }
+<i>476</i>&nbsp;                // throw an exception if L is used with other days of the week
+<i>477</i>&nbsp;                if(exprOn == DAY_OF_WEEK &amp;&amp; expr.indexOf(&#39;L&#39;) != -1 &amp;&amp; expr.length() &gt; 1  &amp;&amp; expr.contains(&quot;,&quot;)) {
+<i>478</i>&nbsp;                    throw new ParseException(&quot;Support for specifying &#39;L&#39; with other days of the week is not implemented&quot;, -1);
+<i>479</i>&nbsp;                }
+<i>480</i>&nbsp;                if(exprOn == DAY_OF_WEEK &amp;&amp; expr.indexOf(&#39;#&#39;) != -1 &amp;&amp; expr.indexOf(&#39;#&#39;, expr.indexOf(&#39;#&#39;) +1) != -1) {
+<i>481</i>&nbsp;                    throw new ParseException(&quot;Support for specifying multiple \&quot;nth\&quot; days is not implemented.&quot;, -1);
+<i>482</i>&nbsp;                }
+<i>483</i>&nbsp;
+<i>484</i>&nbsp;                StringTokenizer vTok = new StringTokenizer(expr, &quot;,&quot;);
+<i>485</i>&nbsp;                while (vTok.hasMoreTokens()) {
+<i>486</i>&nbsp;                    String v = vTok.nextToken();
+<i>487</i>&nbsp;                    storeExpressionVals(0, v, exprOn);
+<i>488</i>&nbsp;                }
+<i>489</i>&nbsp;
+<i>490</i>&nbsp;                exprOn++;
+<i>491</i>&nbsp;            }
+<i>492</i>&nbsp;
+<i>493</i>&nbsp;            if (exprOn &lt;= DAY_OF_WEEK) {
+<i>494</i>&nbsp;                throw new ParseException(&quot;Unexpected end of expression.&quot;,
+<i>495</i>&nbsp;                        expression.length());
+<i>496</i>&nbsp;            }
+<i>497</i>&nbsp;
+<i>498</i>&nbsp;            if (exprOn &lt;= YEAR) {
+<i>499</i>&nbsp;                storeExpressionVals(0, &quot;*&quot;, YEAR);
+<i>500</i>&nbsp;            }
+<i>501</i>&nbsp;
+<i>502</i>&nbsp;            TreeSet&lt;Integer&gt; dow = getSet(DAY_OF_WEEK);
+<i>503</i>&nbsp;            TreeSet&lt;Integer&gt; dom = getSet(DAY_OF_MONTH);
+<i>504</i>&nbsp;
+<i>505</i>&nbsp;            // Copying the logic from the UnsupportedOperationException below
+<i>506</i>&nbsp;            boolean dayOfMSpec = !dom.contains(NO_SPEC);
+<i>507</i>&nbsp;            boolean dayOfWSpec = !dow.contains(NO_SPEC);
+<i>508</i>&nbsp;
+<i>509</i>&nbsp;            if (!dayOfMSpec || dayOfWSpec) {
+<i>510</i>&nbsp;                if (!dayOfWSpec || dayOfMSpec) {
+<i>511</i>&nbsp;                    throw new ParseException(
+<i>512</i>&nbsp;                            &quot;Support for specifying both a day-of-week AND a day-of-month parameter is not implemented.&quot;, 0);
+<i>513</i>&nbsp;                }
+<i>514</i>&nbsp;            }
+<i>515</i>&nbsp;        } catch (ParseException pe) {
+<i>516</i>&nbsp;            throw pe;
+<i>517</i>&nbsp;        } catch (Exception e) {
+<i>518</i>&nbsp;            throw new ParseException(&quot;Illegal cron expression format (&quot;
+<i>519</i>&nbsp;                    + e.toString() + &quot;)&quot;, 0);
+<i>520</i>&nbsp;        }
+<i>521</i>&nbsp;    }
+<i>522</i>&nbsp;
+<i>523</i>&nbsp;    protected int storeExpressionVals(int pos, String s, int type)
+<i>524</i>&nbsp;            throws ParseException {
+<i>525</i>&nbsp;
+<i>526</i>&nbsp;        int incr = 0;
+<i>527</i>&nbsp;        int i = skipWhiteSpace(pos, s);
+<i>528</i>&nbsp;        if (i &gt;= s.length()) {
+<i>529</i>&nbsp;            return i;
+<i>530</i>&nbsp;        }
+<i>531</i>&nbsp;        char c = s.charAt(i);
+<i>532</i>&nbsp;        if ((c &gt;= &#39;A&#39;) &amp;&amp; (c &lt;= &#39;Z&#39;) &amp;&amp; (!s.equals(&quot;L&quot;)) &amp;&amp; (!s.equals(&quot;LW&quot;)) &amp;&amp; (!s.matches(&quot;^L-[0-9]*[W]?&quot;))) {
+<i>533</i>&nbsp;            String sub = s.substring(i, i + 3);
+<i>534</i>&nbsp;            int sval = -1;
+<i>535</i>&nbsp;            int eval = -1;
+<i>536</i>&nbsp;            if (type == MONTH) {
+<i>537</i>&nbsp;                sval = getMonthNumber(sub) + 1;
+<i>538</i>&nbsp;                if (sval &lt;= 0) {
+<i>539</i>&nbsp;                    throw new ParseException(&quot;Invalid Month value: &#39;&quot; + sub + &quot;&#39;&quot;, i);
+<i>540</i>&nbsp;                }
+<i>541</i>&nbsp;                if (s.length() &gt; i + 3) {
+<i>542</i>&nbsp;                    c = s.charAt(i + 3);
+<i>543</i>&nbsp;                    if (c == &#39;-&#39;) {
+<i>544</i>&nbsp;                        i += 4;
+<i>545</i>&nbsp;                        sub = s.substring(i, i + 3);
+<i>546</i>&nbsp;                        eval = getMonthNumber(sub) + 1;
+<i>547</i>&nbsp;                        if (eval &lt;= 0) {
+<i>548</i>&nbsp;                            throw new ParseException(&quot;Invalid Month value: &#39;&quot; + sub + &quot;&#39;&quot;, i);
+<i>549</i>&nbsp;                        }
+<i>550</i>&nbsp;                    }
+<i>551</i>&nbsp;                }
+<i>552</i>&nbsp;            } else if (type == DAY_OF_WEEK) {
+<i>553</i>&nbsp;                sval = getDayOfWeekNumber(sub);
+<i>554</i>&nbsp;                if (sval &lt; 0) {
+<i>555</i>&nbsp;                    throw new ParseException(&quot;Invalid Day-of-Week value: &#39;&quot;
+<i>556</i>&nbsp;                            + sub + &quot;&#39;&quot;, i);
+<i>557</i>&nbsp;                }
+<i>558</i>&nbsp;                if (s.length() &gt; i + 3) {
+<i>559</i>&nbsp;                    c = s.charAt(i + 3);
+<i>560</i>&nbsp;                    if (c == &#39;-&#39;) {
+<i>561</i>&nbsp;                        i += 4;
+<i>562</i>&nbsp;                        sub = s.substring(i, i + 3);
+<i>563</i>&nbsp;                        eval = getDayOfWeekNumber(sub);
+<i>564</i>&nbsp;                        if (eval &lt; 0) {
+<i>565</i>&nbsp;                            throw new ParseException(
+<i>566</i>&nbsp;                                    &quot;Invalid Day-of-Week value: &#39;&quot; + sub
+<i>567</i>&nbsp;                                            + &quot;&#39;&quot;, i);
+<i>568</i>&nbsp;                        }
+<i>569</i>&nbsp;                    } else if (c == &#39;#&#39;) {
+<i>570</i>&nbsp;                        try {
+<i>571</i>&nbsp;                            i += 4;
+<i>572</i>&nbsp;                            nthdayOfWeek = Integer.parseInt(s.substring(i));
+<i>573</i>&nbsp;                            if (nthdayOfWeek &lt; 1 || nthdayOfWeek &gt; 5) {
+<i>574</i>&nbsp;                                throw new Exception();
+<i>575</i>&nbsp;                            }
+<i>576</i>&nbsp;                        } catch (Exception e) {
+<i>577</i>&nbsp;                            throw new ParseException(
+<i>578</i>&nbsp;                                    &quot;A numeric value between 1 and 5 must follow the &#39;#&#39; option&quot;,
+<i>579</i>&nbsp;                                    i);
+<i>580</i>&nbsp;                        }
+<i>581</i>&nbsp;                    } else if (c == &#39;L&#39;) {
+<i>582</i>&nbsp;                        lastdayOfWeek = true;
+<i>583</i>&nbsp;                        i++;
+<i>584</i>&nbsp;                    }
+<i>585</i>&nbsp;                }
+<i>586</i>&nbsp;
+<i>587</i>&nbsp;            } else {
+<i>588</i>&nbsp;                throw new ParseException(
+<i>589</i>&nbsp;                        &quot;Illegal characters for this position: &#39;&quot; + sub + &quot;&#39;&quot;,
+<i>590</i>&nbsp;                        i);
+<i>591</i>&nbsp;            }
+<i>592</i>&nbsp;            if (eval != -1) {
+<i>593</i>&nbsp;                incr = 1;
+<i>594</i>&nbsp;            }
+<i>595</i>&nbsp;            addToSet(sval, eval, incr, type);
+<i>596</i>&nbsp;            return (i + 3);
+<i>597</i>&nbsp;        }
+<i>598</i>&nbsp;
+<i>599</i>&nbsp;        if (c == &#39;?&#39;) {
+<i>600</i>&nbsp;            i++;
+<i>601</i>&nbsp;            if ((i + 1) &lt; s.length()
+<i>602</i>&nbsp;                    &amp;&amp; (s.charAt(i) != &#39; &#39; &amp;&amp; s.charAt(i + 1) != &#39;\t&#39;)) {
+<i>603</i>&nbsp;                throw new ParseException(&quot;Illegal character after &#39;?&#39;: &quot;
+<i>604</i>&nbsp;                        + s.charAt(i), i);
+<i>605</i>&nbsp;            }
+<i>606</i>&nbsp;            if (type != DAY_OF_WEEK &amp;&amp; type != DAY_OF_MONTH) {
+<i>607</i>&nbsp;                throw new ParseException(
+<i>608</i>&nbsp;                        &quot;&#39;?&#39; can only be specified for Day-of-Month or Day-of-Week.&quot;,
+<i>609</i>&nbsp;                        i);
+<i>610</i>&nbsp;            }
+<i>611</i>&nbsp;            if (type == DAY_OF_WEEK &amp;&amp; !lastdayOfMonth) {
+<i>612</i>&nbsp;                int val = daysOfMonth.last();
+<i>613</i>&nbsp;                if (val == NO_SPEC_INT) {
+<i>614</i>&nbsp;                    throw new ParseException(
+<i>615</i>&nbsp;                            &quot;&#39;?&#39; can only be specified for Day-of-Month -OR- Day-of-Week.&quot;,
+<i>616</i>&nbsp;                            i);
+<i>617</i>&nbsp;                }
+<i>618</i>&nbsp;            }
+<i>619</i>&nbsp;
+<i>620</i>&nbsp;            addToSet(NO_SPEC_INT, -1, 0, type);
+<i>621</i>&nbsp;            return i;
+<i>622</i>&nbsp;        }
+<i>623</i>&nbsp;
+<i>624</i>&nbsp;        if (c == &#39;*&#39; || c == &#39;/&#39;) {
+<i>625</i>&nbsp;            if (c == &#39;*&#39; &amp;&amp; (i + 1) &gt;= s.length()) {
+<i>626</i>&nbsp;                addToSet(ALL_SPEC_INT, -1, incr, type);
+<i>627</i>&nbsp;                return i + 1;
+<i>628</i>&nbsp;            } else if (c == &#39;/&#39;
+<i>629</i>&nbsp;                    &amp;&amp; ((i + 1) &gt;= s.length() || s.charAt(i + 1) == &#39; &#39; || s
+<i>630</i>&nbsp;                    .charAt(i + 1) == &#39;\t&#39;)) {
+<i>631</i>&nbsp;                throw new ParseException(&quot;&#39;/&#39; must be followed by an integer.&quot;, i);
+<i>632</i>&nbsp;            } else if (c == &#39;*&#39;) {
+<i>633</i>&nbsp;                i++;
+<i>634</i>&nbsp;            }
+<i>635</i>&nbsp;            c = s.charAt(i);
+<i>636</i>&nbsp;            if (c == &#39;/&#39;) { // is an increment specified?
+<i>637</i>&nbsp;                i++;
+<i>638</i>&nbsp;                if (i &gt;= s.length()) {
+<i>639</i>&nbsp;                    throw new ParseException(&quot;Unexpected end of string.&quot;, i);
+<i>640</i>&nbsp;                }
+<i>641</i>&nbsp;
+<i>642</i>&nbsp;                incr = getNumericValue(s, i);
+<i>643</i>&nbsp;
+<i>644</i>&nbsp;                i++;
+<i>645</i>&nbsp;                if (incr &gt; 10) {
+<i>646</i>&nbsp;                    i++;
+<i>647</i>&nbsp;                }
+<i>648</i>&nbsp;                checkIncrementRange(incr, type, i);
+<i>649</i>&nbsp;            } else {
+<i>650</i>&nbsp;                incr = 1;
+<i>651</i>&nbsp;            }
+<i>652</i>&nbsp;
+<i>653</i>&nbsp;            addToSet(ALL_SPEC_INT, -1, incr, type);
+<i>654</i>&nbsp;            return i;
+<i>655</i>&nbsp;        } else if (c == &#39;L&#39;) {
+<i>656</i>&nbsp;            i++;
+<i>657</i>&nbsp;            if (type == DAY_OF_MONTH) {
+<i>658</i>&nbsp;                lastdayOfMonth = true;
+<i>659</i>&nbsp;            }
+<i>660</i>&nbsp;            if (type == DAY_OF_WEEK) {
+<i>661</i>&nbsp;                addToSet(7, 7, 0, type);
+<i>662</i>&nbsp;            }
+<i>663</i>&nbsp;            if(type == DAY_OF_MONTH &amp;&amp; s.length() &gt; i) {
+<i>664</i>&nbsp;                c = s.charAt(i);
+<i>665</i>&nbsp;                if(c == &#39;-&#39;) {
+<i>666</i>&nbsp;                    ValueSet vs = getValue(0, s, i+1);
+<i>667</i>&nbsp;                    lastdayOffset = vs.value;
+<i>668</i>&nbsp;                    if(lastdayOffset &gt; 30)
+<i>669</i>&nbsp;                        throw new ParseException(&quot;Offset from last day must be &lt;= 30&quot;, i+1);
+<i>670</i>&nbsp;                    i = vs.pos;
+<i>671</i>&nbsp;                }
+<i>672</i>&nbsp;                if(s.length() &gt; i) {
+<i>673</i>&nbsp;                    c = s.charAt(i);
+<i>674</i>&nbsp;                    if(c == &#39;W&#39;) {
+<i>675</i>&nbsp;                        nearestWeekday = true;
+<i>676</i>&nbsp;                        i++;
+<i>677</i>&nbsp;                    }
+<i>678</i>&nbsp;                }
+<i>679</i>&nbsp;            }
+<i>680</i>&nbsp;            return i;
+<i>681</i>&nbsp;        } else if (c &gt;= &#39;0&#39; &amp;&amp; c &lt;= &#39;9&#39;) {
+<i>682</i>&nbsp;            int val = Integer.parseInt(String.valueOf(c));
+<i>683</i>&nbsp;            i++;
+<i>684</i>&nbsp;            if (i &gt;= s.length()) {
+<i>685</i>&nbsp;                addToSet(val, -1, -1, type);
+<i>686</i>&nbsp;            } else {
+<i>687</i>&nbsp;                c = s.charAt(i);
+<i>688</i>&nbsp;                if (c &gt;= &#39;0&#39; &amp;&amp; c &lt;= &#39;9&#39;) {
+<i>689</i>&nbsp;                    ValueSet vs = getValue(val, s, i);
+<i>690</i>&nbsp;                    val = vs.value;
+<i>691</i>&nbsp;                    i = vs.pos;
+<i>692</i>&nbsp;                }
+<i>693</i>&nbsp;                i = checkNext(i, s, val, type);
+<i>694</i>&nbsp;                return i;
+<i>695</i>&nbsp;            }
+<i>696</i>&nbsp;        } else {
+<i>697</i>&nbsp;            throw new ParseException(&quot;Unexpected character: &quot; + c, i);
+<i>698</i>&nbsp;        }
+<i>699</i>&nbsp;
+<i>700</i>&nbsp;        return i;
+<i>701</i>&nbsp;    }
+<i>702</i>&nbsp;
+<i>703</i>&nbsp;    private void checkIncrementRange(int incr, int type, int idxPos) throws ParseException {
+<i>704</i>&nbsp;        if (incr &gt; 59 &amp;&amp; (type == SECOND || type == MINUTE)) {
+<i>705</i>&nbsp;            throw new ParseException(&quot;Increment &gt; 60 : &quot; + incr, idxPos);
+<i>706</i>&nbsp;        } else if (incr &gt; 23 &amp;&amp; (type == HOUR)) {
+<i>707</i>&nbsp;            throw new ParseException(&quot;Increment &gt; 24 : &quot; + incr, idxPos);
+<i>708</i>&nbsp;        } else if (incr &gt; 31 &amp;&amp; (type == DAY_OF_MONTH)) {
+<i>709</i>&nbsp;            throw new ParseException(&quot;Increment &gt; 31 : &quot; + incr, idxPos);
+<i>710</i>&nbsp;        } else if (incr &gt; 7 &amp;&amp; (type == DAY_OF_WEEK)) {
+<i>711</i>&nbsp;            throw new ParseException(&quot;Increment &gt; 7 : &quot; + incr, idxPos);
+<i>712</i>&nbsp;        } else if (incr &gt; 12 &amp;&amp; (type == MONTH)) {
+<i>713</i>&nbsp;            throw new ParseException(&quot;Increment &gt; 12 : &quot; + incr, idxPos);
+<i>714</i>&nbsp;        }
+<i>715</i>&nbsp;    }
+<i>716</i>&nbsp;
+<i>717</i>&nbsp;    protected int checkNext(int pos, String s, int val, int type)
+<i>718</i>&nbsp;            throws ParseException {
+<i>719</i>&nbsp;
+<i>720</i>&nbsp;        int end = -1;
+<i>721</i>&nbsp;        int i = pos;
+<i>722</i>&nbsp;
+<i>723</i>&nbsp;        if (i &gt;= s.length()) {
+<i>724</i>&nbsp;            addToSet(val, end, -1, type);
+<i>725</i>&nbsp;            return i;
+<i>726</i>&nbsp;        }
+<i>727</i>&nbsp;
+<i>728</i>&nbsp;        char c = s.charAt(pos);
+<i>729</i>&nbsp;
+<i>730</i>&nbsp;        if (c == &#39;L&#39;) {
+<i>731</i>&nbsp;            if (type == DAY_OF_WEEK) {
+<i>732</i>&nbsp;                if(val &lt; 1 || val &gt; 7)
+<i>733</i>&nbsp;                    throw new ParseException(&quot;Day-of-Week values must be between 1 and 7&quot;, -1);
+<i>734</i>&nbsp;                lastdayOfWeek = true;
+<i>735</i>&nbsp;            } else {
+<i>736</i>&nbsp;                throw new ParseException(&quot;&#39;L&#39; option is not valid here. (pos=&quot; + i + &quot;)&quot;, i);
+<i>737</i>&nbsp;            }
+<i>738</i>&nbsp;            TreeSet&lt;Integer&gt; set = getSet(type);
+<i>739</i>&nbsp;            set.add(val);
+<i>740</i>&nbsp;            i++;
+<i>741</i>&nbsp;            return i;
+<i>742</i>&nbsp;        }
+<i>743</i>&nbsp;
+<i>744</i>&nbsp;        if (c == &#39;W&#39;) {
+<i>745</i>&nbsp;            if (type == DAY_OF_MONTH) {
+<i>746</i>&nbsp;                nearestWeekday = true;
+<i>747</i>&nbsp;            } else {
+<i>748</i>&nbsp;                throw new ParseException(&quot;&#39;W&#39; option is not valid here. (pos=&quot; + i + &quot;)&quot;, i);
+<i>749</i>&nbsp;            }
+<i>750</i>&nbsp;            if(val &gt; 31)
+<i>751</i>&nbsp;                throw new ParseException(&quot;The &#39;W&#39; option does not make sense with values larger than 31 (max number of days in a month)&quot;, i);
+<i>752</i>&nbsp;            TreeSet&lt;Integer&gt; set = getSet(type);
+<i>753</i>&nbsp;            set.add(val);
+<i>754</i>&nbsp;            i++;
+<i>755</i>&nbsp;            return i;
+<i>756</i>&nbsp;        }
+<i>757</i>&nbsp;
+<i>758</i>&nbsp;        if (c == &#39;#&#39;) {
+<i>759</i>&nbsp;            if (type != DAY_OF_WEEK) {
+<i>760</i>&nbsp;                throw new ParseException(&quot;&#39;#&#39; option is not valid here. (pos=&quot; + i + &quot;)&quot;, i);
+<i>761</i>&nbsp;            }
+<i>762</i>&nbsp;            i++;
+<i>763</i>&nbsp;            try {
+<i>764</i>&nbsp;                nthdayOfWeek = Integer.parseInt(s.substring(i));
+<i>765</i>&nbsp;                if (nthdayOfWeek &lt; 1 || nthdayOfWeek &gt; 5) {
+<i>766</i>&nbsp;                    throw new Exception();
+<i>767</i>&nbsp;                }
+<i>768</i>&nbsp;            } catch (Exception e) {
+<i>769</i>&nbsp;                throw new ParseException(
+<i>770</i>&nbsp;                        &quot;A numeric value between 1 and 5 must follow the &#39;#&#39; option&quot;,
+<i>771</i>&nbsp;                        i);
+<i>772</i>&nbsp;            }
+<i>773</i>&nbsp;
+<i>774</i>&nbsp;            TreeSet&lt;Integer&gt; set = getSet(type);
+<i>775</i>&nbsp;            set.add(val);
+<i>776</i>&nbsp;            i++;
+<i>777</i>&nbsp;            return i;
+<i>778</i>&nbsp;        }
+<i>779</i>&nbsp;
+<i>780</i>&nbsp;        if (c == &#39;-&#39;) {
+<i>781</i>&nbsp;            i++;
+<i>782</i>&nbsp;            c = s.charAt(i);
+<i>783</i>&nbsp;            int v = Integer.parseInt(String.valueOf(c));
+<i>784</i>&nbsp;            end = v;
+<i>785</i>&nbsp;            i++;
+<i>786</i>&nbsp;            if (i &gt;= s.length()) {
+<i>787</i>&nbsp;                addToSet(val, end, 1, type);
+<i>788</i>&nbsp;                return i;
+<i>789</i>&nbsp;            }
+<i>790</i>&nbsp;            c = s.charAt(i);
+<i>791</i>&nbsp;            if (c &gt;= &#39;0&#39; &amp;&amp; c &lt;= &#39;9&#39;) {
+<i>792</i>&nbsp;                ValueSet vs = getValue(v, s, i);
+<i>793</i>&nbsp;                end = vs.value;
+<i>794</i>&nbsp;                i = vs.pos;
+<i>795</i>&nbsp;            }
+<i>796</i>&nbsp;            if (i &lt; s.length() &amp;&amp; ((c = s.charAt(i)) == &#39;/&#39;)) {
+<i>797</i>&nbsp;                i++;
+<i>798</i>&nbsp;                c = s.charAt(i);
+<i>799</i>&nbsp;                int v2 = Integer.parseInt(String.valueOf(c));
+<i>800</i>&nbsp;                i++;
+<i>801</i>&nbsp;                if (i &gt;= s.length()) {
+<i>802</i>&nbsp;                    addToSet(val, end, v2, type);
+<i>803</i>&nbsp;                    return i;
+<i>804</i>&nbsp;                }
+<i>805</i>&nbsp;                c = s.charAt(i);
+<i>806</i>&nbsp;                if (c &gt;= &#39;0&#39; &amp;&amp; c &lt;= &#39;9&#39;) {
+<i>807</i>&nbsp;                    ValueSet vs = getValue(v2, s, i);
+<i>808</i>&nbsp;                    int v3 = vs.value;
+<i>809</i>&nbsp;                    addToSet(val, end, v3, type);
+<i>810</i>&nbsp;                    i = vs.pos;
+<i>811</i>&nbsp;                    return i;
+<i>812</i>&nbsp;                } else {
+<i>813</i>&nbsp;                    addToSet(val, end, v2, type);
+<i>814</i>&nbsp;                    return i;
+<i>815</i>&nbsp;                }
+<i>816</i>&nbsp;            } else {
+<i>817</i>&nbsp;                addToSet(val, end, 1, type);
+<i>818</i>&nbsp;                return i;
+<i>819</i>&nbsp;            }
+<i>820</i>&nbsp;        }
+<i>821</i>&nbsp;
+<i>822</i>&nbsp;        if (c == &#39;/&#39;) {
+<i>823</i>&nbsp;            if ((i + 1) &gt;= s.length() || s.charAt(i + 1) == &#39; &#39; || s.charAt(i + 1) == &#39;\t&#39;) {
+<i>824</i>&nbsp;                throw new ParseException(&quot;&#39;/&#39; must be followed by an integer.&quot;, i);
+<i>825</i>&nbsp;            }
+<i>826</i>&nbsp;
+<i>827</i>&nbsp;            i++;
+<i>828</i>&nbsp;            c = s.charAt(i);
+<i>829</i>&nbsp;            int v2 = Integer.parseInt(String.valueOf(c));
+<i>830</i>&nbsp;            i++;
+<i>831</i>&nbsp;            if (i &gt;= s.length()) {
+<i>832</i>&nbsp;                checkIncrementRange(v2, type, i);
+<i>833</i>&nbsp;                addToSet(val, end, v2, type);
+<i>834</i>&nbsp;                return i;
+<i>835</i>&nbsp;            }
+<i>836</i>&nbsp;            c = s.charAt(i);
+<i>837</i>&nbsp;            if (c &gt;= &#39;0&#39; &amp;&amp; c &lt;= &#39;9&#39;) {
+<i>838</i>&nbsp;                ValueSet vs = getValue(v2, s, i);
+<i>839</i>&nbsp;                int v3 = vs.value;
+<i>840</i>&nbsp;                checkIncrementRange(v3, type, i);
+<i>841</i>&nbsp;                addToSet(val, end, v3, type);
+<i>842</i>&nbsp;                i = vs.pos;
+<i>843</i>&nbsp;                return i;
+<i>844</i>&nbsp;            } else {
+<i>845</i>&nbsp;                throw new ParseException(&quot;Unexpected character &#39;&quot; + c + &quot;&#39; after &#39;/&#39;&quot;, i);
+<i>846</i>&nbsp;            }
+<i>847</i>&nbsp;        }
+<i>848</i>&nbsp;
+<i>849</i>&nbsp;        addToSet(val, end, 0, type);
+<i>850</i>&nbsp;        i++;
+<i>851</i>&nbsp;        return i;
+<i>852</i>&nbsp;    }
+<i>853</i>&nbsp;
+<i>854</i>&nbsp;    public String getCronExpression() {
+<i>855</i>&nbsp;        return cronExpression;
+<i>856</i>&nbsp;    }
+<i>857</i>&nbsp;
+<i>858</i>&nbsp;    public String getExpressionSummary() {
+<i>859</i>&nbsp;        StringBuilder buf = new StringBuilder();
+<i>860</i>&nbsp;
+<i>861</i>&nbsp;        buf.append(&quot;seconds: &quot;);
+<i>862</i>&nbsp;        buf.append(getExpressionSetSummary(seconds));
+<i>863</i>&nbsp;        buf.append(&quot;\n&quot;);
+<i>864</i>&nbsp;        buf.append(&quot;minutes: &quot;);
+<i>865</i>&nbsp;        buf.append(getExpressionSetSummary(minutes));
+<i>866</i>&nbsp;        buf.append(&quot;\n&quot;);
+<i>867</i>&nbsp;        buf.append(&quot;hours: &quot;);
+<i>868</i>&nbsp;        buf.append(getExpressionSetSummary(hours));
+<i>869</i>&nbsp;        buf.append(&quot;\n&quot;);
+<i>870</i>&nbsp;        buf.append(&quot;daysOfMonth: &quot;);
+<i>871</i>&nbsp;        buf.append(getExpressionSetSummary(daysOfMonth));
+<i>872</i>&nbsp;        buf.append(&quot;\n&quot;);
+<i>873</i>&nbsp;        buf.append(&quot;months: &quot;);
+<i>874</i>&nbsp;        buf.append(getExpressionSetSummary(months));
+<i>875</i>&nbsp;        buf.append(&quot;\n&quot;);
+<i>876</i>&nbsp;        buf.append(&quot;daysOfWeek: &quot;);
+<i>877</i>&nbsp;        buf.append(getExpressionSetSummary(daysOfWeek));
+<i>878</i>&nbsp;        buf.append(&quot;\n&quot;);
+<i>879</i>&nbsp;        buf.append(&quot;lastdayOfWeek: &quot;);
+<i>880</i>&nbsp;        buf.append(lastdayOfWeek);
+<i>881</i>&nbsp;        buf.append(&quot;\n&quot;);
+<i>882</i>&nbsp;        buf.append(&quot;nearestWeekday: &quot;);
+<i>883</i>&nbsp;        buf.append(nearestWeekday);
+<i>884</i>&nbsp;        buf.append(&quot;\n&quot;);
+<i>885</i>&nbsp;        buf.append(&quot;NthDayOfWeek: &quot;);
+<i>886</i>&nbsp;        buf.append(nthdayOfWeek);
+<i>887</i>&nbsp;        buf.append(&quot;\n&quot;);
+<i>888</i>&nbsp;        buf.append(&quot;lastdayOfMonth: &quot;);
+<i>889</i>&nbsp;        buf.append(lastdayOfMonth);
+<i>890</i>&nbsp;        buf.append(&quot;\n&quot;);
+<i>891</i>&nbsp;        buf.append(&quot;years: &quot;);
+<i>892</i>&nbsp;        buf.append(getExpressionSetSummary(years));
+<i>893</i>&nbsp;        buf.append(&quot;\n&quot;);
+<i>894</i>&nbsp;
+<i>895</i>&nbsp;        return buf.toString();
+<i>896</i>&nbsp;    }
+<i>897</i>&nbsp;
+<i>898</i>&nbsp;    protected String getExpressionSetSummary(java.util.Set&lt;Integer&gt; set) {
+<i>899</i>&nbsp;
+<i>900</i>&nbsp;        if (set.contains(NO_SPEC)) {
+<i>901</i>&nbsp;            return &quot;?&quot;;
+<i>902</i>&nbsp;        }
+<i>903</i>&nbsp;        if (set.contains(ALL_SPEC)) {
+<i>904</i>&nbsp;            return &quot;*&quot;;
+<i>905</i>&nbsp;        }
+<i>906</i>&nbsp;
+<i>907</i>&nbsp;        StringBuilder buf = new StringBuilder();
+<i>908</i>&nbsp;
+<i>909</i>&nbsp;        Iterator&lt;Integer&gt; itr = set.iterator();
+<i>910</i>&nbsp;        boolean first = true;
+<i>911</i>&nbsp;        while (itr.hasNext()) {
+<i>912</i>&nbsp;            Integer iVal = itr.next();
+<i>913</i>&nbsp;            String val = iVal.toString();
+<i>914</i>&nbsp;            if (!first) {
+<i>915</i>&nbsp;                buf.append(&quot;,&quot;);
+<i>916</i>&nbsp;            }
+<i>917</i>&nbsp;            buf.append(val);
+<i>918</i>&nbsp;            first = false;
+<i>919</i>&nbsp;        }
+<i>920</i>&nbsp;
+<i>921</i>&nbsp;        return buf.toString();
+<i>922</i>&nbsp;    }
+<i>923</i>&nbsp;
+<i>924</i>&nbsp;    protected String getExpressionSetSummary(java.util.ArrayList&lt;Integer&gt; list) {
+<i>925</i>&nbsp;
+<i>926</i>&nbsp;        if (list.contains(NO_SPEC)) {
+<i>927</i>&nbsp;            return &quot;?&quot;;
+<i>928</i>&nbsp;        }
+<i>929</i>&nbsp;        if (list.contains(ALL_SPEC)) {
+<i>930</i>&nbsp;            return &quot;*&quot;;
+<i>931</i>&nbsp;        }
+<i>932</i>&nbsp;
+<i>933</i>&nbsp;        StringBuilder buf = new StringBuilder();
+<i>934</i>&nbsp;
+<i>935</i>&nbsp;        Iterator&lt;Integer&gt; itr = list.iterator();
+<i>936</i>&nbsp;        boolean first = true;
+<i>937</i>&nbsp;        while (itr.hasNext()) {
+<i>938</i>&nbsp;            Integer iVal = itr.next();
+<i>939</i>&nbsp;            String val = iVal.toString();
+<i>940</i>&nbsp;            if (!first) {
+<i>941</i>&nbsp;                buf.append(&quot;,&quot;);
+<i>942</i>&nbsp;            }
+<i>943</i>&nbsp;            buf.append(val);
+<i>944</i>&nbsp;            first = false;
+<i>945</i>&nbsp;        }
+<i>946</i>&nbsp;
+<i>947</i>&nbsp;        return buf.toString();
+<i>948</i>&nbsp;    }
+<i>949</i>&nbsp;
+<i>950</i>&nbsp;    protected int skipWhiteSpace(int i, String s) {
+<i>951</i>&nbsp;        for (; i &lt; s.length() &amp;&amp; (s.charAt(i) == &#39; &#39; || s.charAt(i) == &#39;\t&#39;); i++) {
+<i>952</i>&nbsp;            ;
+<i>953</i>&nbsp;        }
+<i>954</i>&nbsp;
+<i>955</i>&nbsp;        return i;
+<i>956</i>&nbsp;    }
+<i>957</i>&nbsp;
+<i>958</i>&nbsp;    protected int findNextWhiteSpace(int i, String s) {
+<i>959</i>&nbsp;        for (; i &lt; s.length() &amp;&amp; (s.charAt(i) != &#39; &#39; || s.charAt(i) != &#39;\t&#39;); i++) {
+<i>960</i>&nbsp;            ;
+<i>961</i>&nbsp;        }
+<i>962</i>&nbsp;
+<i>963</i>&nbsp;        return i;
+<i>964</i>&nbsp;    }
+<i>965</i>&nbsp;
+<i>966</i>&nbsp;    protected void addToSet(int val, int end, int incr, int type)
+<i>967</i>&nbsp;            throws ParseException {
+<i>968</i>&nbsp;
+<i>969</i>&nbsp;        TreeSet&lt;Integer&gt; set = getSet(type);
+<i>970</i>&nbsp;
+<i>971</i>&nbsp;        if (type == SECOND || type == MINUTE) {
+<i>972</i>&nbsp;            if ((val &lt; 0 || val &gt; 59 || end &gt; 59) &amp;&amp; (val != ALL_SPEC_INT)) {
+<i>973</i>&nbsp;                throw new ParseException(
+<i>974</i>&nbsp;                        &quot;Minute and Second values must be between 0 and 59&quot;,
+<i>975</i>&nbsp;                        -1);
+<i>976</i>&nbsp;            }
+<i>977</i>&nbsp;        } else if (type == HOUR) {
+<i>978</i>&nbsp;            if ((val &lt; 0 || val &gt; 23 || end &gt; 23) &amp;&amp; (val != ALL_SPEC_INT)) {
+<i>979</i>&nbsp;                throw new ParseException(
+<i>980</i>&nbsp;                        &quot;Hour values must be between 0 and 23&quot;, -1);
+<i>981</i>&nbsp;            }
+<i>982</i>&nbsp;        } else if (type == DAY_OF_MONTH) {
+<i>983</i>&nbsp;            if ((val &lt; 1 || val &gt; 31 || end &gt; 31) &amp;&amp; (val != ALL_SPEC_INT)
+<i>984</i>&nbsp;                    &amp;&amp; (val != NO_SPEC_INT)) {
+<i>985</i>&nbsp;                throw new ParseException(
+<i>986</i>&nbsp;                        &quot;Day of month values must be between 1 and 31&quot;, -1);
+<i>987</i>&nbsp;            }
+<i>988</i>&nbsp;        } else if (type == MONTH) {
+<i>989</i>&nbsp;            if ((val &lt; 1 || val &gt; 12 || end &gt; 12) &amp;&amp; (val != ALL_SPEC_INT)) {
+<i>990</i>&nbsp;                throw new ParseException(
+<i>991</i>&nbsp;                        &quot;Month values must be between 1 and 12&quot;, -1);
+<i>992</i>&nbsp;            }
+<i>993</i>&nbsp;        } else if (type == DAY_OF_WEEK) {
+<i>994</i>&nbsp;            if ((val == 0 || val &gt; 7 || end &gt; 7) &amp;&amp; (val != ALL_SPEC_INT)
+<i>995</i>&nbsp;                    &amp;&amp; (val != NO_SPEC_INT)) {
+<i>996</i>&nbsp;                throw new ParseException(
+<i>997</i>&nbsp;                        &quot;Day-of-Week values must be between 1 and 7&quot;, -1);
+<i>998</i>&nbsp;            }
+<i>999</i>&nbsp;        }
+<i>1000</i>&nbsp;
+<i>1001</i>&nbsp;        if ((incr == 0 || incr == -1) &amp;&amp; val != ALL_SPEC_INT) {
+<i>1002</i>&nbsp;            if (val != -1) {
+<i>1003</i>&nbsp;                set.add(val);
+<i>1004</i>&nbsp;            } else {
+<i>1005</i>&nbsp;                set.add(NO_SPEC);
+<i>1006</i>&nbsp;            }
+<i>1007</i>&nbsp;
+<i>1008</i>&nbsp;            return;
+<i>1009</i>&nbsp;        }
+<i>1010</i>&nbsp;
+<i>1011</i>&nbsp;        int startAt = val;
+<i>1012</i>&nbsp;        int stopAt = end;
+<i>1013</i>&nbsp;
+<i>1014</i>&nbsp;        if (val == ALL_SPEC_INT &amp;&amp; incr &lt;= 0) {
+<i>1015</i>&nbsp;            incr = 1;
+<i>1016</i>&nbsp;            set.add(ALL_SPEC); // put in a marker, but also fill values
+<i>1017</i>&nbsp;        }
+<i>1018</i>&nbsp;
+<i>1019</i>&nbsp;        if (type == SECOND || type == MINUTE) {
+<i>1020</i>&nbsp;            if (stopAt == -1) {
+<i>1021</i>&nbsp;                stopAt = 59;
+<i>1022</i>&nbsp;            }
+<i>1023</i>&nbsp;            if (startAt == -1 || startAt == ALL_SPEC_INT) {
+<i>1024</i>&nbsp;                startAt = 0;
+<i>1025</i>&nbsp;            }
+<i>1026</i>&nbsp;        } else if (type == HOUR) {
+<i>1027</i>&nbsp;            if (stopAt == -1) {
+<i>1028</i>&nbsp;                stopAt = 23;
+<i>1029</i>&nbsp;            }
+<i>1030</i>&nbsp;            if (startAt == -1 || startAt == ALL_SPEC_INT) {
+<i>1031</i>&nbsp;                startAt = 0;
+<i>1032</i>&nbsp;            }
+<i>1033</i>&nbsp;        } else if (type == DAY_OF_MONTH) {
+<i>1034</i>&nbsp;            if (stopAt == -1) {
+<i>1035</i>&nbsp;                stopAt = 31;
+<i>1036</i>&nbsp;            }
+<i>1037</i>&nbsp;            if (startAt == -1 || startAt == ALL_SPEC_INT) {
+<i>1038</i>&nbsp;                startAt = 1;
+<i>1039</i>&nbsp;            }
+<i>1040</i>&nbsp;        } else if (type == MONTH) {
+<i>1041</i>&nbsp;            if (stopAt == -1) {
+<i>1042</i>&nbsp;                stopAt = 12;
+<i>1043</i>&nbsp;            }
+<i>1044</i>&nbsp;            if (startAt == -1 || startAt == ALL_SPEC_INT) {
+<i>1045</i>&nbsp;                startAt = 1;
+<i>1046</i>&nbsp;            }
+<i>1047</i>&nbsp;        } else if (type == DAY_OF_WEEK) {
+<i>1048</i>&nbsp;            if (stopAt == -1) {
+<i>1049</i>&nbsp;                stopAt = 7;
+<i>1050</i>&nbsp;            }
+<i>1051</i>&nbsp;            if (startAt == -1 || startAt == ALL_SPEC_INT) {
+<i>1052</i>&nbsp;                startAt = 1;
+<i>1053</i>&nbsp;            }
+<i>1054</i>&nbsp;        } else if (type == YEAR) {
+<i>1055</i>&nbsp;            if (stopAt == -1) {
+<i>1056</i>&nbsp;                stopAt = MAX_YEAR;
+<i>1057</i>&nbsp;            }
+<i>1058</i>&nbsp;            if (startAt == -1 || startAt == ALL_SPEC_INT) {
+<i>1059</i>&nbsp;                startAt = 1970;
+<i>1060</i>&nbsp;            }
+<i>1061</i>&nbsp;        }
+<i>1062</i>&nbsp;
+<i>1063</i>&nbsp;        // if the end of the range is before the start, then we need to overflow into
+<i>1064</i>&nbsp;        // the next day, month etc. This is done by adding the maximum amount for that
+<i>1065</i>&nbsp;        // type, and using modulus max to determine the value being added.
+<i>1066</i>&nbsp;        int max = -1;
+<i>1067</i>&nbsp;        if (stopAt &lt; startAt) {
+<i>1068</i>&nbsp;            switch (type) {
+<i>1069</i>&nbsp;                case       SECOND : max = 60; break;
+<i>1070</i>&nbsp;                case       MINUTE : max = 60; break;
+<i>1071</i>&nbsp;                case         HOUR : max = 24; break;
+<i>1072</i>&nbsp;                case        MONTH : max = 12; break;
+<i>1073</i>&nbsp;                case  DAY_OF_WEEK : max = 7;  break;
+<i>1074</i>&nbsp;                case DAY_OF_MONTH : max = 31; break;
+<i>1075</i>&nbsp;                case         YEAR : throw new IllegalArgumentException(&quot;Start year must be less than stop year&quot;);
+<i>1076</i>&nbsp;                default           : throw new IllegalArgumentException(&quot;Unexpected type encountered&quot;);
+<i>1077</i>&nbsp;            }
+<i>1078</i>&nbsp;            stopAt += max;
+<i>1079</i>&nbsp;        }
+<i>1080</i>&nbsp;
+<i>1081</i>&nbsp;        for (int i = startAt; i &lt;= stopAt; i += incr) {
+<i>1082</i>&nbsp;            if (max == -1) {
+<i>1083</i>&nbsp;                // ie: there&#39;s no max to overflow over
+<i>1084</i>&nbsp;                set.add(i);
+<i>1085</i>&nbsp;            } else {
+<i>1086</i>&nbsp;                // take the modulus to get the real value
+<i>1087</i>&nbsp;                int i2 = i % max;
+<i>1088</i>&nbsp;
+<i>1089</i>&nbsp;                // 1-indexed ranges should not include 0, and should include their max
+<i>1090</i>&nbsp;                if (i2 == 0 &amp;&amp; (type == MONTH || type == DAY_OF_WEEK || type == DAY_OF_MONTH) ) {
+<i>1091</i>&nbsp;                    i2 = max;
+<i>1092</i>&nbsp;                }
+<i>1093</i>&nbsp;
+<i>1094</i>&nbsp;                set.add(i2);
+<i>1095</i>&nbsp;            }
+<i>1096</i>&nbsp;        }
+<i>1097</i>&nbsp;    }
+<i>1098</i>&nbsp;
+<i>1099</i>&nbsp;    TreeSet&lt;Integer&gt; getSet(int type) {
+<i>1100</i>&nbsp;        switch (type) {
+<i>1101</i>&nbsp;            case SECOND:
+<i>1102</i>&nbsp;                return seconds;
+<i>1103</i>&nbsp;            case MINUTE:
+<i>1104</i>&nbsp;                return minutes;
+<i>1105</i>&nbsp;            case HOUR:
+<i>1106</i>&nbsp;                return hours;
+<i>1107</i>&nbsp;            case DAY_OF_MONTH:
+<i>1108</i>&nbsp;                return daysOfMonth;
+<i>1109</i>&nbsp;            case MONTH:
+<i>1110</i>&nbsp;                return months;
+<i>1111</i>&nbsp;            case DAY_OF_WEEK:
+<i>1112</i>&nbsp;                return daysOfWeek;
+<i>1113</i>&nbsp;            case YEAR:
+<i>1114</i>&nbsp;                return years;
+<i>1115</i>&nbsp;            default:
+<i>1116</i>&nbsp;                return null;
+<i>1117</i>&nbsp;        }
+<i>1118</i>&nbsp;    }
+<i>1119</i>&nbsp;
+<i>1120</i>&nbsp;    protected ValueSet getValue(int v, String s, int i) {
+<i>1121</i>&nbsp;        char c = s.charAt(i);
+<i>1122</i>&nbsp;        StringBuilder s1 = new StringBuilder(String.valueOf(v));
+<i>1123</i>&nbsp;        while (c &gt;= &#39;0&#39; &amp;&amp; c &lt;= &#39;9&#39;) {
+<i>1124</i>&nbsp;            s1.append(c);
+<i>1125</i>&nbsp;            i++;
+<i>1126</i>&nbsp;            if (i &gt;= s.length()) {
+<i>1127</i>&nbsp;                break;
+<i>1128</i>&nbsp;            }
+<i>1129</i>&nbsp;            c = s.charAt(i);
+<i>1130</i>&nbsp;        }
+<i>1131</i>&nbsp;        ValueSet val = new ValueSet();
+<i>1132</i>&nbsp;
+<i>1133</i>&nbsp;        val.pos = (i &lt; s.length()) ? i : i + 1;
+<i>1134</i>&nbsp;        val.value = Integer.parseInt(s1.toString());
+<i>1135</i>&nbsp;        return val;
+<i>1136</i>&nbsp;    }
+<i>1137</i>&nbsp;
+<i>1138</i>&nbsp;    protected int getNumericValue(String s, int i) {
+<i>1139</i>&nbsp;        int endOfVal = findNextWhiteSpace(i, s);
+<i>1140</i>&nbsp;        String val = s.substring(i, endOfVal);
+<i>1141</i>&nbsp;        return Integer.parseInt(val);
+<i>1142</i>&nbsp;    }
+<i>1143</i>&nbsp;
+<i>1144</i>&nbsp;    protected int getMonthNumber(String s) {
+<i>1145</i>&nbsp;        Integer integer = monthMap.get(s);
+<i>1146</i>&nbsp;
+<i>1147</i>&nbsp;        if (integer == null) {
+<i>1148</i>&nbsp;            return -1;
+<i>1149</i>&nbsp;        }
+<i>1150</i>&nbsp;
+<i>1151</i>&nbsp;        return integer;
+<i>1152</i>&nbsp;    }
+<i>1153</i>&nbsp;
+<i>1154</i>&nbsp;    protected int getDayOfWeekNumber(String s) {
+<i>1155</i>&nbsp;        Integer integer = dayMap.get(s);
+<i>1156</i>&nbsp;
+<i>1157</i>&nbsp;        if (integer == null) {
+<i>1158</i>&nbsp;            return -1;
+<i>1159</i>&nbsp;        }
+<i>1160</i>&nbsp;
+<i>1161</i>&nbsp;        return integer;
+<i>1162</i>&nbsp;    }
+<i>1163</i>&nbsp;
+<i>1164</i>&nbsp;    ////////////////////////////////////////////////////////////////////////////
+<i>1165</i>&nbsp;    //
+<i>1166</i>&nbsp;    // Computation Functions
+<i>1167</i>&nbsp;    //
+<i>1168</i>&nbsp;    ////////////////////////////////////////////////////////////////////////////
+<i>1169</i>&nbsp;
+<i>1170</i>&nbsp;    public Date getTimeAfter(Date afterTime) {
+<i>1171</i>&nbsp;
+<i>1172</i>&nbsp;        // Computation is based on Gregorian year only.
+<i>1173</i>&nbsp;        Calendar cl = new java.util.GregorianCalendar(getTimeZone());
+<i>1174</i>&nbsp;
+<i>1175</i>&nbsp;        // move ahead one second, since we&#39;re computing the time *after* the
+<i>1176</i>&nbsp;        // given time
+<i>1177</i>&nbsp;        afterTime = new Date(afterTime.getTime() + 1000);
+<i>1178</i>&nbsp;        // CronTrigger does not deal with milliseconds
+<i>1179</i>&nbsp;        cl.setTime(afterTime);
+<i>1180</i>&nbsp;        cl.set(Calendar.MILLISECOND, 0);
+<i>1181</i>&nbsp;
+<i>1182</i>&nbsp;        boolean gotOne = false;
+<i>1183</i>&nbsp;        // loop until we&#39;ve computed the next time, or we&#39;ve past the endTime
+<i>1184</i>&nbsp;        while (!gotOne) {
+<i>1185</i>&nbsp;
+<i>1186</i>&nbsp;            //if (endTime != null &amp;&amp; cl.getTime().after(endTime)) return null;
+<i>1187</i>&nbsp;            if(cl.get(Calendar.YEAR) &gt; 2999) { // prevent endless loop...
+<i>1188</i>&nbsp;                return null;
+<i>1189</i>&nbsp;            }
+<i>1190</i>&nbsp;
+<i>1191</i>&nbsp;            SortedSet&lt;Integer&gt; st = null;
+<i>1192</i>&nbsp;            int t = 0;
+<i>1193</i>&nbsp;
+<i>1194</i>&nbsp;            int sec = cl.get(Calendar.SECOND);
+<i>1195</i>&nbsp;            int min = cl.get(Calendar.MINUTE);
+<i>1196</i>&nbsp;
+<i>1197</i>&nbsp;            // get second.................................................
+<i>1198</i>&nbsp;            st = seconds.tailSet(sec);
+<i>1199</i>&nbsp;            if (st != null &amp;&amp; st.size() != 0) {
+<i>1200</i>&nbsp;                sec = st.first();
+<i>1201</i>&nbsp;            } else {
+<i>1202</i>&nbsp;                sec = seconds.first();
+<i>1203</i>&nbsp;                min++;
+<i>1204</i>&nbsp;                cl.set(Calendar.MINUTE, min);
+<i>1205</i>&nbsp;            }
+<i>1206</i>&nbsp;            cl.set(Calendar.SECOND, sec);
+<i>1207</i>&nbsp;
+<i>1208</i>&nbsp;            min = cl.get(Calendar.MINUTE);
+<i>1209</i>&nbsp;            int hr = cl.get(Calendar.HOUR_OF_DAY);
+<i>1210</i>&nbsp;            t = -1;
+<i>1211</i>&nbsp;
+<i>1212</i>&nbsp;            // get minute.................................................
+<i>1213</i>&nbsp;            st = minutes.tailSet(min);
+<i>1214</i>&nbsp;            if (st != null &amp;&amp; st.size() != 0) {
+<i>1215</i>&nbsp;                t = min;
+<i>1216</i>&nbsp;                min = st.first();
+<i>1217</i>&nbsp;            } else {
+<i>1218</i>&nbsp;                min = minutes.first();
+<i>1219</i>&nbsp;                hr++;
+<i>1220</i>&nbsp;            }
+<i>1221</i>&nbsp;            if (min != t) {
+<i>1222</i>&nbsp;                cl.set(Calendar.SECOND, 0);
+<i>1223</i>&nbsp;                cl.set(Calendar.MINUTE, min);
+<i>1224</i>&nbsp;                setCalendarHour(cl, hr);
+<i>1225</i>&nbsp;                continue;
+<i>1226</i>&nbsp;            }
+<i>1227</i>&nbsp;            cl.set(Calendar.MINUTE, min);
+<i>1228</i>&nbsp;
+<i>1229</i>&nbsp;            hr = cl.get(Calendar.HOUR_OF_DAY);
+<i>1230</i>&nbsp;            int day = cl.get(Calendar.DAY_OF_MONTH);
+<i>1231</i>&nbsp;            t = -1;
+<i>1232</i>&nbsp;
+<i>1233</i>&nbsp;            // get hour...................................................
+<i>1234</i>&nbsp;            st = hours.tailSet(hr);
+<i>1235</i>&nbsp;            if (st != null &amp;&amp; st.size() != 0) {
+<i>1236</i>&nbsp;                t = hr;
+<i>1237</i>&nbsp;                hr = st.first();
+<i>1238</i>&nbsp;            } else {
+<i>1239</i>&nbsp;                hr = hours.first();
+<i>1240</i>&nbsp;                day++;
+<i>1241</i>&nbsp;            }
+<i>1242</i>&nbsp;            if (hr != t) {
+<i>1243</i>&nbsp;                cl.set(Calendar.SECOND, 0);
+<i>1244</i>&nbsp;                cl.set(Calendar.MINUTE, 0);
+<i>1245</i>&nbsp;                cl.set(Calendar.DAY_OF_MONTH, day);
+<i>1246</i>&nbsp;                setCalendarHour(cl, hr);
+<i>1247</i>&nbsp;                continue;
+<i>1248</i>&nbsp;            }
+<i>1249</i>&nbsp;            cl.set(Calendar.HOUR_OF_DAY, hr);
+<i>1250</i>&nbsp;
+<i>1251</i>&nbsp;            day = cl.get(Calendar.DAY_OF_MONTH);
+<i>1252</i>&nbsp;            int mon = cl.get(Calendar.MONTH) + 1;
+<i>1253</i>&nbsp;            // &#39;+ 1&#39; because calendar is 0-based for this field, and we are
+<i>1254</i>&nbsp;            // 1-based
+<i>1255</i>&nbsp;            t = -1;
+<i>1256</i>&nbsp;            int tmon = mon;
+<i>1257</i>&nbsp;
+<i>1258</i>&nbsp;            // get day...................................................
+<i>1259</i>&nbsp;            boolean dayOfMSpec = !daysOfMonth.contains(NO_SPEC);
+<i>1260</i>&nbsp;            boolean dayOfWSpec = !daysOfWeek.contains(NO_SPEC);
+<i>1261</i>&nbsp;            if (dayOfMSpec &amp;&amp; !dayOfWSpec) { // get day by day of month rule
+<i>1262</i>&nbsp;                st = daysOfMonth.tailSet(day);
+<i>1263</i>&nbsp;                if (lastdayOfMonth) {
+<i>1264</i>&nbsp;                    if(!nearestWeekday) {
+<i>1265</i>&nbsp;                        t = day;
+<i>1266</i>&nbsp;                        day = getLastDayOfMonth(mon, cl.get(Calendar.YEAR));
+<i>1267</i>&nbsp;                        day -= lastdayOffset;
+<i>1268</i>&nbsp;                        if(t &gt; day) {
+<i>1269</i>&nbsp;                            mon++;
+<i>1270</i>&nbsp;                            if(mon &gt; 12) {
+<i>1271</i>&nbsp;                                mon = 1;
+<i>1272</i>&nbsp;                                tmon = 3333; // ensure test of mon != tmon further below fails
+<i>1273</i>&nbsp;                                cl.add(Calendar.YEAR, 1);
+<i>1274</i>&nbsp;                            }
+<i>1275</i>&nbsp;                            day = 1;
+<i>1276</i>&nbsp;                        }
+<i>1277</i>&nbsp;                    } else {
+<i>1278</i>&nbsp;                        t = day;
+<i>1279</i>&nbsp;                        day = getLastDayOfMonth(mon, cl.get(Calendar.YEAR));
+<i>1280</i>&nbsp;                        day -= lastdayOffset;
+<i>1281</i>&nbsp;
+<i>1282</i>&nbsp;                        Calendar tcal = Calendar.getInstance(getTimeZone());
+<i>1283</i>&nbsp;                        tcal.set(Calendar.SECOND, 0);
+<i>1284</i>&nbsp;                        tcal.set(Calendar.MINUTE, 0);
+<i>1285</i>&nbsp;                        tcal.set(Calendar.HOUR_OF_DAY, 0);
+<i>1286</i>&nbsp;                        tcal.set(Calendar.DAY_OF_MONTH, day);
+<i>1287</i>&nbsp;                        tcal.set(Calendar.MONTH, mon - 1);
+<i>1288</i>&nbsp;                        tcal.set(Calendar.YEAR, cl.get(Calendar.YEAR));
+<i>1289</i>&nbsp;
+<i>1290</i>&nbsp;                        int ldom = getLastDayOfMonth(mon, cl.get(Calendar.YEAR));
+<i>1291</i>&nbsp;                        int dow = tcal.get(Calendar.DAY_OF_WEEK);
+<i>1292</i>&nbsp;
+<i>1293</i>&nbsp;                        if(dow == Calendar.SATURDAY &amp;&amp; day == 1) {
+<i>1294</i>&nbsp;                            day += 2;
+<i>1295</i>&nbsp;                        } else if(dow == Calendar.SATURDAY) {
+<i>1296</i>&nbsp;                            day -= 1;
+<i>1297</i>&nbsp;                        } else if(dow == Calendar.SUNDAY &amp;&amp; day == ldom) {
+<i>1298</i>&nbsp;                            day -= 2;
+<i>1299</i>&nbsp;                        } else if(dow == Calendar.SUNDAY) {
+<i>1300</i>&nbsp;                            day += 1;
+<i>1301</i>&nbsp;                        }
+<i>1302</i>&nbsp;
+<i>1303</i>&nbsp;                        tcal.set(Calendar.SECOND, sec);
+<i>1304</i>&nbsp;                        tcal.set(Calendar.MINUTE, min);
+<i>1305</i>&nbsp;                        tcal.set(Calendar.HOUR_OF_DAY, hr);
+<i>1306</i>&nbsp;                        tcal.set(Calendar.DAY_OF_MONTH, day);
+<i>1307</i>&nbsp;                        tcal.set(Calendar.MONTH, mon - 1);
+<i>1308</i>&nbsp;                        Date nTime = tcal.getTime();
+<i>1309</i>&nbsp;                        if(nTime.before(afterTime)) {
+<i>1310</i>&nbsp;                            day = 1;
+<i>1311</i>&nbsp;                            mon++;
+<i>1312</i>&nbsp;                        }
+<i>1313</i>&nbsp;                    }
+<i>1314</i>&nbsp;                } else if(nearestWeekday) {
+<i>1315</i>&nbsp;                    t = day;
+<i>1316</i>&nbsp;                    day = daysOfMonth.first();
+<i>1317</i>&nbsp;
+<i>1318</i>&nbsp;                    Calendar tcal = Calendar.getInstance(getTimeZone());
+<i>1319</i>&nbsp;                    tcal.set(Calendar.SECOND, 0);
+<i>1320</i>&nbsp;                    tcal.set(Calendar.MINUTE, 0);
+<i>1321</i>&nbsp;                    tcal.set(Calendar.HOUR_OF_DAY, 0);
+<i>1322</i>&nbsp;                    tcal.set(Calendar.DAY_OF_MONTH, day);
+<i>1323</i>&nbsp;                    tcal.set(Calendar.MONTH, mon - 1);
+<i>1324</i>&nbsp;                    tcal.set(Calendar.YEAR, cl.get(Calendar.YEAR));
+<i>1325</i>&nbsp;
+<i>1326</i>&nbsp;                    int ldom = getLastDayOfMonth(mon, cl.get(Calendar.YEAR));
+<i>1327</i>&nbsp;                    int dow = tcal.get(Calendar.DAY_OF_WEEK);
+<i>1328</i>&nbsp;
+<i>1329</i>&nbsp;                    if(dow == Calendar.SATURDAY &amp;&amp; day == 1) {
+<i>1330</i>&nbsp;                        day += 2;
+<i>1331</i>&nbsp;                    } else if(dow == Calendar.SATURDAY) {
+<i>1332</i>&nbsp;                        day -= 1;
+<i>1333</i>&nbsp;                    } else if(dow == Calendar.SUNDAY &amp;&amp; day == ldom) {
+<i>1334</i>&nbsp;                        day -= 2;
+<i>1335</i>&nbsp;                    } else if(dow == Calendar.SUNDAY) {
+<i>1336</i>&nbsp;                        day += 1;
+<i>1337</i>&nbsp;                    }
+<i>1338</i>&nbsp;
+<i>1339</i>&nbsp;
+<i>1340</i>&nbsp;                    tcal.set(Calendar.SECOND, sec);
+<i>1341</i>&nbsp;                    tcal.set(Calendar.MINUTE, min);
+<i>1342</i>&nbsp;                    tcal.set(Calendar.HOUR_OF_DAY, hr);
+<i>1343</i>&nbsp;                    tcal.set(Calendar.DAY_OF_MONTH, day);
+<i>1344</i>&nbsp;                    tcal.set(Calendar.MONTH, mon - 1);
+<i>1345</i>&nbsp;                    Date nTime = tcal.getTime();
+<i>1346</i>&nbsp;                    if(nTime.before(afterTime)) {
+<i>1347</i>&nbsp;                        day = daysOfMonth.first();
+<i>1348</i>&nbsp;                        mon++;
+<i>1349</i>&nbsp;                    }
+<i>1350</i>&nbsp;                } else if (st != null &amp;&amp; st.size() != 0) {
+<i>1351</i>&nbsp;                    t = day;
+<i>1352</i>&nbsp;                    day = st.first();
+<i>1353</i>&nbsp;                    // make sure we don&#39;t over-run a short month, such as february
+<i>1354</i>&nbsp;                    int lastDay = getLastDayOfMonth(mon, cl.get(Calendar.YEAR));
+<i>1355</i>&nbsp;                    if (day &gt; lastDay) {
+<i>1356</i>&nbsp;                        day = daysOfMonth.first();
+<i>1357</i>&nbsp;                        mon++;
+<i>1358</i>&nbsp;                    }
+<i>1359</i>&nbsp;                } else {
+<i>1360</i>&nbsp;                    day = daysOfMonth.first();
+<i>1361</i>&nbsp;                    mon++;
+<i>1362</i>&nbsp;                }
+<i>1363</i>&nbsp;
+<i>1364</i>&nbsp;                if (day != t || mon != tmon) {
+<i>1365</i>&nbsp;                    cl.set(Calendar.SECOND, 0);
+<i>1366</i>&nbsp;                    cl.set(Calendar.MINUTE, 0);
+<i>1367</i>&nbsp;                    cl.set(Calendar.HOUR_OF_DAY, 0);
+<i>1368</i>&nbsp;                    cl.set(Calendar.DAY_OF_MONTH, day);
+<i>1369</i>&nbsp;                    cl.set(Calendar.MONTH, mon - 1);
+<i>1370</i>&nbsp;                    // &#39;- 1&#39; because calendar is 0-based for this field, and we
+<i>1371</i>&nbsp;                    // are 1-based
+<i>1372</i>&nbsp;                    continue;
+<i>1373</i>&nbsp;                }
+<i>1374</i>&nbsp;            } else if (dayOfWSpec &amp;&amp; !dayOfMSpec) { // get day by day of week rule
+<i>1375</i>&nbsp;                if (lastdayOfWeek) { // are we looking for the last XXX day of
+<i>1376</i>&nbsp;                    // the month?
+<i>1377</i>&nbsp;                    int dow = daysOfWeek.first(); // desired
+<i>1378</i>&nbsp;                    // d-o-w
+<i>1379</i>&nbsp;                    int cDow = cl.get(Calendar.DAY_OF_WEEK); // current d-o-w
+<i>1380</i>&nbsp;                    int daysToAdd = 0;
+<i>1381</i>&nbsp;                    if (cDow &lt; dow) {
+<i>1382</i>&nbsp;                        daysToAdd = dow - cDow;
+<i>1383</i>&nbsp;                    }
+<i>1384</i>&nbsp;                    if (cDow &gt; dow) {
+<i>1385</i>&nbsp;                        daysToAdd = dow + (7 - cDow);
+<i>1386</i>&nbsp;                    }
+<i>1387</i>&nbsp;
+<i>1388</i>&nbsp;                    int lDay = getLastDayOfMonth(mon, cl.get(Calendar.YEAR));
+<i>1389</i>&nbsp;
+<i>1390</i>&nbsp;                    if (day + daysToAdd &gt; lDay) { // did we already miss the
+<i>1391</i>&nbsp;                        // last one?
+<i>1392</i>&nbsp;                        cl.set(Calendar.SECOND, 0);
+<i>1393</i>&nbsp;                        cl.set(Calendar.MINUTE, 0);
+<i>1394</i>&nbsp;                        cl.set(Calendar.HOUR_OF_DAY, 0);
+<i>1395</i>&nbsp;                        cl.set(Calendar.DAY_OF_MONTH, 1);
+<i>1396</i>&nbsp;                        cl.set(Calendar.MONTH, mon);
+<i>1397</i>&nbsp;                        // no &#39;- 1&#39; here because we are promoting the month
+<i>1398</i>&nbsp;                        continue;
+<i>1399</i>&nbsp;                    }
+<i>1400</i>&nbsp;
+<i>1401</i>&nbsp;                    // find date of last occurrence of this day in this month...
+<i>1402</i>&nbsp;                    while ((day + daysToAdd + 7) &lt;= lDay) {
+<i>1403</i>&nbsp;                        daysToAdd += 7;
+<i>1404</i>&nbsp;                    }
+<i>1405</i>&nbsp;
+<i>1406</i>&nbsp;                    day += daysToAdd;
+<i>1407</i>&nbsp;
+<i>1408</i>&nbsp;                    if (daysToAdd &gt; 0) {
+<i>1409</i>&nbsp;                        cl.set(Calendar.SECOND, 0);
+<i>1410</i>&nbsp;                        cl.set(Calendar.MINUTE, 0);
+<i>1411</i>&nbsp;                        cl.set(Calendar.HOUR_OF_DAY, 0);
+<i>1412</i>&nbsp;                        cl.set(Calendar.DAY_OF_MONTH, day);
+<i>1413</i>&nbsp;                        cl.set(Calendar.MONTH, mon - 1);
+<i>1414</i>&nbsp;                        // &#39;- 1&#39; here because we are not promoting the month
+<i>1415</i>&nbsp;                        continue;
+<i>1416</i>&nbsp;                    }
+<i>1417</i>&nbsp;
+<i>1418</i>&nbsp;                } else if (nthdayOfWeek != 0) {
+<i>1419</i>&nbsp;                    // are we looking for the Nth XXX day in the month?
+<i>1420</i>&nbsp;                    int dow = daysOfWeek.first(); // desired
+<i>1421</i>&nbsp;                    // d-o-w
+<i>1422</i>&nbsp;                    int cDow = cl.get(Calendar.DAY_OF_WEEK); // current d-o-w
+<i>1423</i>&nbsp;                    int daysToAdd = 0;
+<i>1424</i>&nbsp;                    if (cDow &lt; dow) {
+<i>1425</i>&nbsp;                        daysToAdd = dow - cDow;
+<i>1426</i>&nbsp;                    } else if (cDow &gt; dow) {
+<i>1427</i>&nbsp;                        daysToAdd = dow + (7 - cDow);
+<i>1428</i>&nbsp;                    }
+<i>1429</i>&nbsp;
+<i>1430</i>&nbsp;                    boolean dayShifted = false;
+<i>1431</i>&nbsp;                    if (daysToAdd &gt; 0) {
+<i>1432</i>&nbsp;                        dayShifted = true;
+<i>1433</i>&nbsp;                    }
+<i>1434</i>&nbsp;
+<i>1435</i>&nbsp;                    day += daysToAdd;
+<i>1436</i>&nbsp;                    int weekOfMonth = day / 7;
+<i>1437</i>&nbsp;                    if (day % 7 &gt; 0) {
+<i>1438</i>&nbsp;                        weekOfMonth++;
+<i>1439</i>&nbsp;                    }
+<i>1440</i>&nbsp;
+<i>1441</i>&nbsp;                    daysToAdd = (nthdayOfWeek - weekOfMonth) * 7;
+<i>1442</i>&nbsp;                    day += daysToAdd;
+<i>1443</i>&nbsp;                    if (daysToAdd &lt; 0
+<i>1444</i>&nbsp;                            || day &gt; getLastDayOfMonth(mon, cl
+<i>1445</i>&nbsp;                            .get(Calendar.YEAR))) {
+<i>1446</i>&nbsp;                        cl.set(Calendar.SECOND, 0);
+<i>1447</i>&nbsp;                        cl.set(Calendar.MINUTE, 0);
+<i>1448</i>&nbsp;                        cl.set(Calendar.HOUR_OF_DAY, 0);
+<i>1449</i>&nbsp;                        cl.set(Calendar.DAY_OF_MONTH, 1);
+<i>1450</i>&nbsp;                        cl.set(Calendar.MONTH, mon);
+<i>1451</i>&nbsp;                        // no &#39;- 1&#39; here because we are promoting the month
+<i>1452</i>&nbsp;                        continue;
+<i>1453</i>&nbsp;                    } else if (daysToAdd &gt; 0 || dayShifted) {
+<i>1454</i>&nbsp;                        cl.set(Calendar.SECOND, 0);
+<i>1455</i>&nbsp;                        cl.set(Calendar.MINUTE, 0);
+<i>1456</i>&nbsp;                        cl.set(Calendar.HOUR_OF_DAY, 0);
+<i>1457</i>&nbsp;                        cl.set(Calendar.DAY_OF_MONTH, day);
+<i>1458</i>&nbsp;                        cl.set(Calendar.MONTH, mon - 1);
+<i>1459</i>&nbsp;                        // &#39;- 1&#39; here because we are NOT promoting the month
+<i>1460</i>&nbsp;                        continue;
+<i>1461</i>&nbsp;                    }
+<i>1462</i>&nbsp;                } else {
+<i>1463</i>&nbsp;                    int cDow = cl.get(Calendar.DAY_OF_WEEK); // current d-o-w
+<i>1464</i>&nbsp;                    int dow = daysOfWeek.first(); // desired
+<i>1465</i>&nbsp;                    // d-o-w
+<i>1466</i>&nbsp;                    st = daysOfWeek.tailSet(cDow);
+<i>1467</i>&nbsp;                    if (st != null &amp;&amp; st.size() &gt; 0) {
+<i>1468</i>&nbsp;                        dow = st.first();
+<i>1469</i>&nbsp;                    }
+<i>1470</i>&nbsp;
+<i>1471</i>&nbsp;                    int daysToAdd = 0;
+<i>1472</i>&nbsp;                    if (cDow &lt; dow) {
+<i>1473</i>&nbsp;                        daysToAdd = dow - cDow;
+<i>1474</i>&nbsp;                    }
+<i>1475</i>&nbsp;                    if (cDow &gt; dow) {
+<i>1476</i>&nbsp;                        daysToAdd = dow + (7 - cDow);
+<i>1477</i>&nbsp;                    }
+<i>1478</i>&nbsp;
+<i>1479</i>&nbsp;                    int lDay = getLastDayOfMonth(mon, cl.get(Calendar.YEAR));
+<i>1480</i>&nbsp;
+<i>1481</i>&nbsp;                    if (day + daysToAdd &gt; lDay) { // will we pass the end of
+<i>1482</i>&nbsp;                        // the month?
+<i>1483</i>&nbsp;                        cl.set(Calendar.SECOND, 0);
+<i>1484</i>&nbsp;                        cl.set(Calendar.MINUTE, 0);
+<i>1485</i>&nbsp;                        cl.set(Calendar.HOUR_OF_DAY, 0);
+<i>1486</i>&nbsp;                        cl.set(Calendar.DAY_OF_MONTH, 1);
+<i>1487</i>&nbsp;                        cl.set(Calendar.MONTH, mon);
+<i>1488</i>&nbsp;                        // no &#39;- 1&#39; here because we are promoting the month
+<i>1489</i>&nbsp;                        continue;
+<i>1490</i>&nbsp;                    } else if (daysToAdd &gt; 0) { // are we swithing days?
+<i>1491</i>&nbsp;                        cl.set(Calendar.SECOND, 0);
+<i>1492</i>&nbsp;                        cl.set(Calendar.MINUTE, 0);
+<i>1493</i>&nbsp;                        cl.set(Calendar.HOUR_OF_DAY, 0);
+<i>1494</i>&nbsp;                        cl.set(Calendar.DAY_OF_MONTH, day + daysToAdd);
+<i>1495</i>&nbsp;                        cl.set(Calendar.MONTH, mon - 1);
+<i>1496</i>&nbsp;                        // &#39;- 1&#39; because calendar is 0-based for this field,
+<i>1497</i>&nbsp;                        // and we are 1-based
+<i>1498</i>&nbsp;                        continue;
+<i>1499</i>&nbsp;                    }
+<i>1500</i>&nbsp;                }
+<i>1501</i>&nbsp;            } else { // dayOfWSpec &amp;&amp; !dayOfMSpec
+<i>1502</i>&nbsp;                throw new UnsupportedOperationException(
+<i>1503</i>&nbsp;                        &quot;Support for specifying both a day-of-week AND a day-of-month parameter is not implemented.&quot;);
+<i>1504</i>&nbsp;            }
+<i>1505</i>&nbsp;            cl.set(Calendar.DAY_OF_MONTH, day);
+<i>1506</i>&nbsp;
+<i>1507</i>&nbsp;            mon = cl.get(Calendar.MONTH) + 1;
+<i>1508</i>&nbsp;            // &#39;+ 1&#39; because calendar is 0-based for this field, and we are
+<i>1509</i>&nbsp;            // 1-based
+<i>1510</i>&nbsp;            int year = cl.get(Calendar.YEAR);
+<i>1511</i>&nbsp;            t = -1;
+<i>1512</i>&nbsp;
+<i>1513</i>&nbsp;            // test for expressions that never generate a valid fire date,
+<i>1514</i>&nbsp;            // but keep looping...
+<i>1515</i>&nbsp;            if (year &gt; MAX_YEAR) {
+<i>1516</i>&nbsp;                return null;
+<i>1517</i>&nbsp;            }
+<i>1518</i>&nbsp;
+<i>1519</i>&nbsp;            // get month...................................................
+<i>1520</i>&nbsp;            st = months.tailSet(mon);
+<i>1521</i>&nbsp;            if (st != null &amp;&amp; st.size() != 0) {
+<i>1522</i>&nbsp;                t = mon;
+<i>1523</i>&nbsp;                mon = st.first();
+<i>1524</i>&nbsp;            } else {
+<i>1525</i>&nbsp;                mon = months.first();
+<i>1526</i>&nbsp;                year++;
+<i>1527</i>&nbsp;            }
+<i>1528</i>&nbsp;            if (mon != t) {
+<i>1529</i>&nbsp;                cl.set(Calendar.SECOND, 0);
+<i>1530</i>&nbsp;                cl.set(Calendar.MINUTE, 0);
+<i>1531</i>&nbsp;                cl.set(Calendar.HOUR_OF_DAY, 0);
+<i>1532</i>&nbsp;                cl.set(Calendar.DAY_OF_MONTH, 1);
+<i>1533</i>&nbsp;                cl.set(Calendar.MONTH, mon - 1);
+<i>1534</i>&nbsp;                // &#39;- 1&#39; because calendar is 0-based for this field, and we are
+<i>1535</i>&nbsp;                // 1-based
+<i>1536</i>&nbsp;                cl.set(Calendar.YEAR, year);
+<i>1537</i>&nbsp;                continue;
+<i>1538</i>&nbsp;            }
+<i>1539</i>&nbsp;            cl.set(Calendar.MONTH, mon - 1);
+<i>1540</i>&nbsp;            // &#39;- 1&#39; because calendar is 0-based for this field, and we are
+<i>1541</i>&nbsp;            // 1-based
+<i>1542</i>&nbsp;
+<i>1543</i>&nbsp;            year = cl.get(Calendar.YEAR);
+<i>1544</i>&nbsp;            t = -1;
+<i>1545</i>&nbsp;
+<i>1546</i>&nbsp;            // get year...................................................
+<i>1547</i>&nbsp;            st = years.tailSet(year);
+<i>1548</i>&nbsp;            if (st != null &amp;&amp; st.size() != 0) {
+<i>1549</i>&nbsp;                t = year;
+<i>1550</i>&nbsp;                year = st.first();
+<i>1551</i>&nbsp;            } else {
+<i>1552</i>&nbsp;                return null; // ran out of years...
+<i>1553</i>&nbsp;            }
+<i>1554</i>&nbsp;
+<i>1555</i>&nbsp;            if (year != t) {
+<i>1556</i>&nbsp;                cl.set(Calendar.SECOND, 0);
+<i>1557</i>&nbsp;                cl.set(Calendar.MINUTE, 0);
+<i>1558</i>&nbsp;                cl.set(Calendar.HOUR_OF_DAY, 0);
+<i>1559</i>&nbsp;                cl.set(Calendar.DAY_OF_MONTH, 1);
+<i>1560</i>&nbsp;                cl.set(Calendar.MONTH, 0);
+<i>1561</i>&nbsp;                // &#39;- 1&#39; because calendar is 0-based for this field, and we are
+<i>1562</i>&nbsp;                // 1-based
+<i>1563</i>&nbsp;                cl.set(Calendar.YEAR, year);
+<i>1564</i>&nbsp;                continue;
+<i>1565</i>&nbsp;            }
+<i>1566</i>&nbsp;            cl.set(Calendar.YEAR, year);
+<i>1567</i>&nbsp;
+<i>1568</i>&nbsp;            gotOne = true;
+<i>1569</i>&nbsp;        } // while( !done )
+<i>1570</i>&nbsp;
+<i>1571</i>&nbsp;        return cl.getTime();
+<i>1572</i>&nbsp;    }
+<i>1573</i>&nbsp;
+<i>1574</i>&nbsp;    /**
+<i>1575</i>&nbsp;     * Advance the calendar to the particular hour paying particular attention
+<i>1576</i>&nbsp;     * to daylight saving problems.
+<i>1577</i>&nbsp;     *
+<i>1578</i>&nbsp;     * @param cal the calendar to operate on
+<i>1579</i>&nbsp;     * @param hour the hour to set
+<i>1580</i>&nbsp;     */
+<i>1581</i>&nbsp;    protected void setCalendarHour(Calendar cal, int hour) {
+<i>1582</i>&nbsp;        cal.set(Calendar.HOUR_OF_DAY, hour);
+<i>1583</i>&nbsp;        if (cal.get(Calendar.HOUR_OF_DAY) != hour &amp;&amp; hour != 24) {
+<i>1584</i>&nbsp;            cal.set(Calendar.HOUR_OF_DAY, hour + 1);
+<i>1585</i>&nbsp;        }
+<i>1586</i>&nbsp;    }
+<i>1587</i>&nbsp;
+<i>1588</i>&nbsp;    /**
+<i>1589</i>&nbsp;     * NOT YET IMPLEMENTED: Returns the time before the given time
+<i>1590</i>&nbsp;     * that the &lt;code&gt;CronExpression&lt;/code&gt; matches.
+<i>1591</i>&nbsp;     */
+<i>1592</i>&nbsp;    public Date getTimeBefore(Date endTime) {
+<i>1593</i>&nbsp;        // FUTURE_TODO: implement QUARTZ-423
+<i>1594</i>&nbsp;        return null;
+<i>1595</i>&nbsp;    }
+<i>1596</i>&nbsp;
+<i>1597</i>&nbsp;    /**
+<i>1598</i>&nbsp;     * NOT YET IMPLEMENTED: Returns the final time that the
+<i>1599</i>&nbsp;     * &lt;code&gt;CronExpression&lt;/code&gt; will match.
+<i>1600</i>&nbsp;     */
+<i>1601</i>&nbsp;    public Date getFinalFireTime() {
+<i>1602</i>&nbsp;        // FUTURE_TODO: implement QUARTZ-423
+<i>1603</i>&nbsp;        return null;
+<i>1604</i>&nbsp;    }
+<i>1605</i>&nbsp;
+<i>1606</i>&nbsp;    protected boolean isLeapYear(int year) {
+<i>1607</i>&nbsp;        return ((year % 4 == 0 &amp;&amp; year % 100 != 0) || (year % 400 == 0));
+<i>1608</i>&nbsp;    }
+<i>1609</i>&nbsp;
+<i>1610</i>&nbsp;    protected int getLastDayOfMonth(int monthNum, int year) {
+<i>1611</i>&nbsp;
+<i>1612</i>&nbsp;        switch (monthNum) {
+<i>1613</i>&nbsp;            case 1:
+<i>1614</i>&nbsp;                return 31;
+<i>1615</i>&nbsp;            case 2:
+<i>1616</i>&nbsp;                return (isLeapYear(year)) ? 29 : 28;
+<i>1617</i>&nbsp;            case 3:
+<i>1618</i>&nbsp;                return 31;
+<i>1619</i>&nbsp;            case 4:
+<i>1620</i>&nbsp;                return 30;
+<i>1621</i>&nbsp;            case 5:
+<i>1622</i>&nbsp;                return 31;
+<i>1623</i>&nbsp;            case 6:
+<i>1624</i>&nbsp;                return 30;
+<i>1625</i>&nbsp;            case 7:
+<i>1626</i>&nbsp;                return 31;
+<i>1627</i>&nbsp;            case 8:
+<i>1628</i>&nbsp;                return 31;
+<i>1629</i>&nbsp;            case 9:
+<i>1630</i>&nbsp;                return 30;
+<i>1631</i>&nbsp;            case 10:
+<i>1632</i>&nbsp;                return 31;
+<i>1633</i>&nbsp;            case 11:
+<i>1634</i>&nbsp;                return 30;
+<i>1635</i>&nbsp;            case 12:
+<i>1636</i>&nbsp;                return 31;
+<i>1637</i>&nbsp;            default:
+<i>1638</i>&nbsp;                throw new IllegalArgumentException(&quot;Illegal month number: &quot;
+<i>1639</i>&nbsp;                        + monthNum);
+<i>1640</i>&nbsp;        }
+<i>1641</i>&nbsp;    }
+<i>1642</i>&nbsp;
+<i>1643</i>&nbsp;
+<i>1644</i>&nbsp;    private void readObject(java.io.ObjectInputStream stream)
+<i>1645</i>&nbsp;            throws java.io.IOException, ClassNotFoundException {
+<i>1646</i>&nbsp;
+<i>1647</i>&nbsp;        stream.defaultReadObject();
+<i>1648</i>&nbsp;        try {
+<i>1649</i>&nbsp;            buildExpression(cronExpression);
+<i>1650</i>&nbsp;        } catch (Exception ignore) {
+<i>1651</i>&nbsp;        } // never happens
+<i>1652</i>&nbsp;    }
+<i>1653</i>&nbsp;
+<i>1654</i>&nbsp;    @Override
+<i>1655</i>&nbsp;    @Deprecated
+<i>1656</i>&nbsp;    public Object clone() {
+<i>1657</i>&nbsp;        return new CronExpression(this);
+<i>1658</i>&nbsp;    }
+<i>1659</i>&nbsp;}
+<i>1660</i>&nbsp;
+<b class="fc"><i>1661</i>&nbsp;class ValueSet {</b>
+<i>1662</i>&nbsp;    public int value;
+<i>1663</i>&nbsp;
+<i>1664</i>&nbsp;    public int pos;
+<i>1665</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-28 19:15</div>
+</div>
+</body>
+</html>

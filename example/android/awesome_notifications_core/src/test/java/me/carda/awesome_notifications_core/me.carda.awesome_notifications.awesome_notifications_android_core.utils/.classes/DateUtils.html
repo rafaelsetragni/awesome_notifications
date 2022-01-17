@@ -1,0 +1,232 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DateUtils</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">me.carda.awesome_notifications.awesome_notifications_android_core.utils</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DateUtils (me.carda.awesome_notifications.awesome_notifications_android_core.utils)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DateUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (10/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (78/ 104)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package me.carda.awesome_notifications.awesome_notifications_android_core.utils;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.sql.Time;
+<i>4</i>&nbsp;import java.text.ParseException;
+<i>5</i>&nbsp;import java.text.SimpleDateFormat;
+<i>6</i>&nbsp;import java.time.ZoneId;
+<i>7</i>&nbsp;import java.util.Calendar;
+<i>8</i>&nbsp;import java.util.Date;
+<i>9</i>&nbsp;import java.util.Locale;
+<i>10</i>&nbsp;import java.util.TimeZone;
+<i>11</i>&nbsp;import java.util.regex.Matcher;
+<i>12</i>&nbsp;import java.util.regex.Pattern;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
+<i>15</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
+<i>16</i>&nbsp;
+<b class="nc"><i>17</i>&nbsp;public class DateUtils {</b>
+<i>18</i>&nbsp;
+<b class="fc"><i>19</i>&nbsp;    static TimeZone utcTimeZone = TimeZone.getTimeZone(&quot;GMT&quot;);</b>
+<b class="fc"><i>20</i>&nbsp;    public static TimeZone getUtcTimeZone() {</b>
+<b class="nc"><i>21</i>&nbsp;        return utcTimeZone;</b>
+<i>22</i>&nbsp;    }
+<i>23</i>&nbsp;
+<b class="fc"><i>24</i>&nbsp;    static TimeZone localTimeZone = TimeZone.getDefault();</b>
+<i>25</i>&nbsp;    public static TimeZone getLocalTimeZone() {
+<b class="fc"><i>26</i>&nbsp;        return localTimeZone;</b>
+<b class="nc"><i>27</i>&nbsp;    }</b>
+<i>28</i>&nbsp;
+<b class="fc"><i>29</i>&nbsp;    public static Date stringToDate(String dateTime, String fromTimeZone) throws AwesomeNotificationException {</b>
+<b class="fc"><i>30</i>&nbsp;        try {</b>
+<b class="fc"><i>31</i>&nbsp;            TimeZone timeZone = getTimeZone(fromTimeZone);</b>
+<b class="fc"><i>32</i>&nbsp;</b>
+<b class="fc"><i>33</i>&nbsp;            if(timeZone == null)</b>
+<b class="nc"><i>34</i>&nbsp;                throw new AwesomeNotificationException(&quot;Invalid time zone&quot;);</b>
+<b class="nc"><i>35</i>&nbsp;</b>
+<b class="fc"><i>36</i>&nbsp;            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Definitions.DATE_FORMAT, Locale.US);</b>
+<b class="fc"><i>37</i>&nbsp;            simpleDateFormat.setTimeZone(timeZone);</b>
+<i>38</i>&nbsp;
+<b class="fc"><i>39</i>&nbsp;            return simpleDateFormat.parse(dateTime);</b>
+<b class="fc"><i>40</i>&nbsp;        } catch (ParseException e) {</b>
+<b class="nc"><i>41</i>&nbsp;            e.printStackTrace();</b>
+<b class="fc"><i>42</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid date&quot;);</b>
+<b class="nc"><i>43</i>&nbsp;        }</b>
+<i>44</i>&nbsp;    }
+<b class="fc"><i>45</i>&nbsp;</b>
+<b class="fc"><i>46</i>&nbsp;    public static String dateToString(Date dateTime, String fromTimeZone) throws AwesomeNotificationException {</b>
+<b class="nc"><i>47</i>&nbsp;        TimeZone timeZone = getTimeZone(fromTimeZone);</b>
+<b class="fc"><i>48</i>&nbsp;</b>
+<b class="nc"><i>49</i>&nbsp;        if(timeZone == null)</b>
+<b class="nc"><i>50</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid time zone&quot;);</b>
+<i>51</i>&nbsp;
+<b class="fc"><i>52</i>&nbsp;        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Definitions.DATE_FORMAT, Locale.US);</b>
+<b class="fc"><i>53</i>&nbsp;        simpleDateFormat.setTimeZone(timeZone);</b>
+<b class="fc"><i>54</i>&nbsp;</b>
+<b class="nc"><i>55</i>&nbsp;        return simpleDateFormat.format(dateTime);</b>
+<b class="fc"><i>56</i>&nbsp;    }</b>
+<b class="nc"><i>57</i>&nbsp;</b>
+<i>58</i>&nbsp;    public static String getLocalDate(String fromTimeZone) throws AwesomeNotificationException {
+<b class="fc"><i>59</i>&nbsp;        TimeZone timeZone = (fromTimeZone == null) ?</b>
+<b class="fc"><i>60</i>&nbsp;                localTimeZone :</b>
+<b class="fc"><i>61</i>&nbsp;                getTimeZone(fromTimeZone);</b>
+<b class="fc"><i>62</i>&nbsp;</b>
+<b class="fc"><i>63</i>&nbsp;        if(timeZone == null)</b>
+<b class="nc"><i>64</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid time zone&quot;);</b>
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Definitions.DATE_FORMAT, Locale.US);</b>
+<b class="fc"><i>67</i>&nbsp;        simpleDateFormat.setTimeZone(timeZone);</b>
+<b class="fc"><i>68</i>&nbsp;</b>
+<b class="fc"><i>69</i>&nbsp;        return simpleDateFormat.format(new Date());</b>
+<b class="fc"><i>70</i>&nbsp;    }</b>
+<i>71</i>&nbsp;
+<b class="fc"><i>72</i>&nbsp;    public static Date shiftToTimeZone(Date date, TimeZone timeZone) {</b>
+<b class="fc"><i>73</i>&nbsp;        timeZone = (timeZone == null) ? utcTimeZone : timeZone;</b>
+<i>74</i>&nbsp;
+<b class="fc"><i>75</i>&nbsp;        Calendar calendar = Calendar.getInstance();</b>
+<b class="nc"><i>76</i>&nbsp;        calendar.setTime(date);</b>
+<b class="nc"><i>77</i>&nbsp;        calendar.setTimeZone(timeZone);</b>
+<i>78</i>&nbsp;
+<b class="fc"><i>79</i>&nbsp;        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Definitions.DATE_FORMAT, Locale.US);</b>
+<b class="fc"><i>80</i>&nbsp;        simpleDateFormat.setTimeZone(timeZone);</b>
+<i>81</i>&nbsp;
+<b class="fc"><i>82</i>&nbsp;        return calendar.getTime();</b>
+<b class="fc"><i>83</i>&nbsp;    }</b>
+<i>84</i>&nbsp;
+<b class="fc"><i>85</i>&nbsp;    public static String getUTCDate(){</b>
+<b class="fc"><i>86</i>&nbsp;        Calendar calendar = Calendar.getInstance();</b>
+<b class="fc"><i>87</i>&nbsp;        calendar.setTimeZone(utcTimeZone);</b>
+<i>88</i>&nbsp;
+<b class="fc"><i>89</i>&nbsp;        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Definitions.DATE_FORMAT, Locale.US);</b>
+<b class="fc"><i>90</i>&nbsp;        simpleDateFormat.setTimeZone(utcTimeZone);</b>
+<b class="fc"><i>91</i>&nbsp;</b>
+<b class="fc"><i>92</i>&nbsp;        return simpleDateFormat.format(calendar.getTime());</b>
+<i>93</i>&nbsp;    }
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    public static Date getUTCDateTime(){
+<b class="nc"><i>96</i>&nbsp;        Calendar calendar = Calendar.getInstance();</b>
+<b class="nc"><i>97</i>&nbsp;        calendar.setTimeZone(utcTimeZone);</b>
+<b class="nc"><i>98</i>&nbsp;        calendar.set(Calendar.MILLISECOND, 0);</b>
+<b class="fc"><i>99</i>&nbsp;        return calendar.getTime();</b>
+<b class="fc"><i>100</i>&nbsp;    }</b>
+<b class="nc"><i>101</i>&nbsp;</b>
+<i>102</i>&nbsp;    public static Date getLocalDateTime(String fromTimeZone) throws AwesomeNotificationException {
+<b class="fc"><i>103</i>&nbsp;        TimeZone timeZone;</b>
+<b class="fc"><i>104</i>&nbsp;</b>
+<b class="nc"><i>105</i>&nbsp;        String cleanedTimeZone =</b>
+<b class="nc"><i>106</i>&nbsp;            cleanTimeZoneIdentifier(</b>
+<b class="fc"><i>107</i>&nbsp;                fromTimeZone == null ?</b>
+<b class="fc"><i>108</i>&nbsp;                        DateUtils.localTimeZone.getID() : fromTimeZone);</b>
+<b class="fc"><i>109</i>&nbsp;</b>
+<b class="nc"><i>110</i>&nbsp;        timeZone = TimeZone.getTimeZone(cleanedTimeZone);</b>
+<b class="fc"><i>111</i>&nbsp;        if(timeZone == null)</b>
+<b class="nc"><i>112</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid time zone&quot;);</b>
+<i>113</i>&nbsp;
+<b class="nc"><i>114</i>&nbsp;        Calendar calendar = Calendar.getInstance();</b>
+<b class="nc"><i>115</i>&nbsp;        calendar.setTimeZone(timeZone);</b>
+<b class="fc"><i>116</i>&nbsp;        calendar.set(Calendar.MILLISECOND, 0);</b>
+<b class="fc"><i>117</i>&nbsp;</b>
+<b class="nc"><i>118</i>&nbsp;        return calendar.getTime();</b>
+<b class="fc"><i>119</i>&nbsp;    }</b>
+<i>120</i>&nbsp;
+<b class="fc"><i>121</i>&nbsp;    public static TimeZone getTimeZone(String timeZoneId) throws AwesomeNotificationException {</b>
+<b class="fc"><i>122</i>&nbsp;</b>
+<b class="fc"><i>123</i>&nbsp;        if(StringUtils.isNullOrEmpty(timeZoneId))</b>
+<b class="fc"><i>124</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid time zone &quot;+timeZoneId);</b>
+<b class="fc"><i>125</i>&nbsp;</b>
+<b class="fc"><i>126</i>&nbsp;        String cleanedTimeZoneId = cleanTimeZoneIdentifier(timeZoneId);</b>
+<i>127</i>&nbsp;
+<b class="fc"><i>128</i>&nbsp;        TimeZone timeZone = TimeZone.getTimeZone(cleanTimeZoneIdentifier(timeZoneId));</b>
+<b class="fc"><i>129</i>&nbsp;        if(</b>
+<b class="fc"><i>130</i>&nbsp;            !cleanedTimeZoneId.equals(&quot;UTC&quot;) &amp;&amp;</b>
+<b class="fc"><i>131</i>&nbsp;            !cleanedTimeZoneId.equals(&quot;GMT&quot;) &amp;&amp;</b>
+<b class="fc"><i>132</i>&nbsp;            !cleanedTimeZoneId.equals(&quot;GMT+00:00&quot;) &amp;&amp;</b>
+<b class="fc"><i>133</i>&nbsp;            (timeZone.getID().equals(&quot;GMT&quot;) || timeZone.getID().equals(&quot;UTC&quot;))</b>
+<b class="fc"><i>134</i>&nbsp;        )</b>
+<b class="fc"><i>135</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid time zone &quot;+timeZoneId);</b>
+<i>136</i>&nbsp;
+<b class="fc"><i>137</i>&nbsp;        return timeZone;</b>
+<b class="fc"><i>138</i>&nbsp;    }</b>
+<i>139</i>&nbsp;
+<b class="fc"><i>140</i>&nbsp;    public static String cleanTimeZoneIdentifier(String timeZoneId){</b>
+<b class="fc"><i>141</i>&nbsp;        final String regex = &quot;.*.ZoneInfo\\[id=\&quot;([\\w\\/]+)\&quot;,.*&quot;;</b>
+<b class="fc"><i>142</i>&nbsp;        final String subst = &quot;$1&quot;;</b>
+<i>143</i>&nbsp;
+<b class="fc"><i>144</i>&nbsp;        final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);</b>
+<b class="fc"><i>145</i>&nbsp;        final Matcher matcher = pattern.matcher(timeZoneId);</b>
+<i>146</i>&nbsp;
+<b class="fc"><i>147</i>&nbsp;        return matcher.replaceAll(subst);</b>
+<i>148</i>&nbsp;    }
+<i>149</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-28 19:15</div>
+</div>
+</body>
+</html>

@@ -177,7 +177,7 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
                         (year == null ? "*" : year.toString());
 
         TimeZone timeZone = StringUtils.isNullOrEmpty(this.timeZone) ?
-                DateUtils.localTimeZone :
+                DateUtils.getLocalTimeZone() :
                 TimeZone.getTimeZone(this.timeZone);
 
         if (timeZone == null)

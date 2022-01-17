@@ -1,4 +1,4 @@
-package me.carda.awesome_notifications.awesome_notifications_android_core.background;
+package me.carda.awesome_notifications;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +29,7 @@ import io.flutter.view.FlutterCallbackInformation;
 
 import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
+import me.carda.awesome_notifications.awesome_notifications_android_core.background.AwesomeBackgroundExecutor;
 import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.LifeCycleManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.returnedData.ActionReceived;
@@ -37,7 +38,7 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.models.
  * An background execution abstraction which handles initializing a background isolate running a
  * callback dispatcher, used to invoke Dart callbacks while backgrounded.
  */
-public class DartBackgroundExecutor implements MethodCallHandler {
+public class DartBackgroundExecutor extends AwesomeBackgroundExecutor implements MethodCallHandler {
     private static final String TAG = "DartBackgroundExec";
 
     private static final BlockingQueue<Intent> silentDataQueue = new LinkedBlockingDeque<Intent>();
@@ -54,23 +55,23 @@ public class DartBackgroundExecutor implements MethodCallHandler {
 
     private static DartBackgroundExecutor runningInstance;
 
-    public static void runBackgroundExecutor(
-        Context context,
-        Intent silentIntent,
-        long dartCallbackHandle,
-        long silentCallbackHandle
+    @Override
+    public void receiveBackgroundAction(
+            Context context,
+            Intent silentIntent,
+            long dartCallbackHandle,
+            long silentCallbackHandle
     ){
         addSilentIntent(silentIntent);
-        if (runningInstance == null) {
+
+        if (runningInstance == null)
             runningInstance = new DartBackgroundExecutor(
                     dartCallbackHandle,
                     silentCallbackHandle
             );
-        }
 
-        if(!runningInstance.isRunning.get()){
+        if(!runningInstance.isRunning.get())
             runningInstance.startExecute(context);
-        }
     }
 
     private static io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback
@@ -272,7 +273,7 @@ public class DartBackgroundExecutor implements MethodCallHandler {
 
         ActionReceived actionReceived =
                 NotificationBuilder
-                        .getInstance()
+                        .getNewBuilder()
                         .buildNotificationActionFromIntent(
                                 applicationContext,
                                 intent,

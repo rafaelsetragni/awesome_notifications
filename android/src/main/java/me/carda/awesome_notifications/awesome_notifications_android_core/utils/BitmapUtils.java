@@ -5,6 +5,11 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.os.Build;
 
 import java.io.BufferedInputStream;
@@ -24,6 +29,10 @@ import static me.carda.awesome_notifications.awesome_notifications_android_core.
 import static me.carda.awesome_notifications.awesome_notifications_android_core.Definitions.MEDIA_VALID_NETWORK;
 import static me.carda.awesome_notifications.awesome_notifications_android_core.Definitions.MEDIA_VALID_RESOURCE;
 
+import androidx.annotation.NonNull;
+
+import javax.annotation.Nullable;
+
 public class BitmapUtils extends MediaUtils {
 
     // ************** SINGLETON PATTERN ***********************
@@ -40,26 +49,32 @@ public class BitmapUtils extends MediaUtils {
 
     // ********************************************************
 
-    public Bitmap getBitmapFromSource(Context context, String bitmapPath) {
+    public Bitmap getBitmapFromSource(Context context, String bitmapPath, boolean roundedBitmap) {
 
+        Bitmap returnedBitmap = null;
         switch (getMediaSourceType(bitmapPath)){
 
             case Resource:
-                return getBitmapFromResource(context, bitmapPath);
+                returnedBitmap = getBitmapFromResource(context, bitmapPath);
 
             case File:
-                return getBitmapFromFile(bitmapPath);
+                returnedBitmap = getBitmapFromFile(bitmapPath);
 
             case Asset:
-                return getBitmapFromAsset(context, bitmapPath);
+                returnedBitmap = getBitmapFromAsset(context, bitmapPath);
 
             case Network:
-                return getBitmapFromUrl(this.cleanMediaPath(bitmapPath));
+                returnedBitmap = getBitmapFromUrl(this.cleanMediaPath(bitmapPath));
 
             case Unknown:
-                return null;
+                break;
         }
-        return null;
+
+        if(returnedBitmap != null && roundedBitmap){
+            returnedBitmap = roundBitmap(returnedBitmap);
+        }
+
+        return returnedBitmap;
     }
 
     public String cleanMediaPath(String mediaPath) {
@@ -88,20 +103,10 @@ public class BitmapUtils extends MediaUtils {
         return null;
     }
 
-    public int getResId(String variableName, Class<?> c) {
-
-        try {
-            Field idField = c.getDeclaredField(variableName);
-            return idField.getInt(idField);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
     public int getDrawableResourceId(Context context, String bitmapReference){
         bitmapReference = this.cleanMediaPath(bitmapReference);
         String[] reference = bitmapReference.split("\\/");
+
         try {
             int resId;
 
@@ -119,8 +124,7 @@ public class BitmapUtils extends MediaUtils {
 
             return resId;
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignore) {
         }
 
         return 0;
@@ -159,6 +163,28 @@ public class BitmapUtils extends MediaUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public Bitmap roundBitmap(Bitmap bitmap) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+                bitmap.getWidth() / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
+        //return _bmp;
+        return output;
     }
 
     private Bitmap getBitmapFromFile(String bitmapPath){
@@ -219,7 +245,7 @@ public class BitmapUtils extends MediaUtils {
         return bitmap;
     }
 
-    public Boolean isValidBitmap(Context context, String mediaPath) {
+    public Boolean isValidBitmap(@NonNull Context context, @Nullable String mediaPath) {
 
         if (mediaPath != null) {
 
@@ -242,11 +268,8 @@ public class BitmapUtils extends MediaUtils {
         return false;
     }
 
-    private Boolean isValidDrawableResource(Context context, String name) {
-        if(name != null){
-            int resourceId = getDrawableResourceId(context, name);
-            return resourceId > 0;
-        }
-        return false;
+    private Boolean isValidDrawableResource(@NonNull Context context, @NonNull String name) {
+        int resourceId = getDrawableResourceId(context, name);
+        return resourceId > 0;
     }
 }

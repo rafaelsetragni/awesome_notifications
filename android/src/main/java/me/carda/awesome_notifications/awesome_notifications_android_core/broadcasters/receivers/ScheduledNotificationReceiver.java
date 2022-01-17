@@ -35,19 +35,19 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
                 NotificationSender
                     .send(
                         context,
-                        NotificationBuilder.getInstance(),
+                        NotificationBuilder.getNewBuilder(),
                         AwesomeNotifications.getApplicationLifeCycle(),
-                        notificationModel
-                    );
+                        notificationModel);
 
                 if(notificationModel.schedule.repeats) {
-                    NotificationScheduler.schedule(
+                    NotificationScheduler
+                        .schedule(
                             context,
-                            notificationModel
-                    );
+                            notificationModel);
                 }
                 else {
-                    NotificationScheduler.cancelSchedule(
+                    NotificationScheduler
+                        .cancelSchedule(
                             context,
                             notificationModel.content.id);
 

@@ -1077,6 +1077,7 @@ class NotificationUtils {
             largeIcon:
                 'https://image.freepik.com/vetores-gratis/modelo-de-logotipo-de-restaurante-retro_23-2148451519.jpg',
             notificationLayout: NotificationLayout.BigPicture,
+            roundedLargeIcon: true,
             payload: {'uuid': 'uuid-test'}));
   }
   

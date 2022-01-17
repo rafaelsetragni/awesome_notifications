@@ -1,0 +1,167 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BitmapResourceDecoder</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">me.carda.awesome_notifications.awesome_notifications_android_core.decoders</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BitmapResourceDecoder (me.carda.awesome_notifications.awesome_notifications_android_core.decoders)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BitmapResourceDecoder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (23/ 23)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package me.carda.awesome_notifications.awesome_notifications_android_core.decoders;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import android.content.Context;
+<i>4</i>&nbsp;import android.graphics.Bitmap;
+<i>5</i>&nbsp;import android.os.AsyncTask;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import androidx.annotation.NonNull;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import java.io.ByteArrayOutputStream;
+<i>10</i>&nbsp;import java.lang.ref.WeakReference;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
+<i>13</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.completion_handlers.BitmapCompletionHandler;
+<i>14</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BitmapUtils;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;public class BitmapResourceDecoder extends AsyncTask&lt;Void, Void, byte[]&gt; {
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    public static final String TAG = &quot;BitmapResourceDecoder&quot;;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    //the reason to use a weak reference is to protect from memory leak issues.
+<i>21</i>&nbsp;    private final WeakReference&lt;Context&gt; wContextReference;
+<i>22</i>&nbsp;    private final String bitmapReference;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    private final BitmapCompletionHandler completionHandler;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    private Exception exception;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    public BitmapResourceDecoder(
+<i>29</i>&nbsp;            Context context,
+<i>30</i>&nbsp;            String bitmapReference,
+<i>31</i>&nbsp;            BitmapCompletionHandler completionHandler
+<b class="fc"><i>32</i>&nbsp;    ){</b>
+<b class="fc"><i>33</i>&nbsp;        this.wContextReference = new WeakReference&lt;&gt;(context);</b>
+<b class="fc"><i>34</i>&nbsp;        this.bitmapReference = bitmapReference;</b>
+<b class="fc"><i>35</i>&nbsp;        this.completionHandler = completionHandler;</b>
+<b class="fc"><i>36</i>&nbsp;    }</b>
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    byte[] convertBitmapToByteArray(
+<i>39</i>&nbsp;            @NonNull Bitmap bitmap,
+<i>40</i>&nbsp;            @NonNull ByteArrayOutputStream outputStream
+<i>41</i>&nbsp;    ){
+<b class="fc"><i>42</i>&nbsp;        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);</b>
+<b class="fc"><i>43</i>&nbsp;        byte[] byteArray = outputStream.toByteArray();</b>
+<b class="fc"><i>44</i>&nbsp;        bitmap.recycle();</b>
+<i>45</i>&nbsp;
+<b class="fc"><i>46</i>&nbsp;        return byteArray;</b>
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    @Override
+<i>50</i>&nbsp;    protected byte[] doInBackground(Void... params) {
+<i>51</i>&nbsp;
+<b class="fc"><i>52</i>&nbsp;        Context context = wContextReference.get();</b>
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;        try {
+<i>55</i>&nbsp;
+<b class="fc"><i>56</i>&nbsp;            if(context != null) {</b>
+<i>57</i>&nbsp;                Bitmap bitmap = BitmapUtils
+<b class="fc"><i>58</i>&nbsp;                        .getInstance()</b>
+<b class="fc"><i>59</i>&nbsp;                        .getBitmapFromResource(context, bitmapReference);</b>
+<i>60</i>&nbsp;
+<b class="fc"><i>61</i>&nbsp;                if(bitmap == null)</b>
+<b class="fc"><i>62</i>&nbsp;                    throw new AwesomeNotificationException(</b>
+<i>63</i>&nbsp;                            &quot;File &#39;&quot;+
+<b class="fc"><i>64</i>&nbsp;                            (bitmapReference == null ? &quot;null&quot; : bitmapReference)+</b>
+<i>65</i>&nbsp;                            &quot;&#39; not found or invalid&quot;);
+<i>66</i>&nbsp;
+<b class="fc"><i>67</i>&nbsp;                return convertBitmapToByteArray(</b>
+<i>68</i>&nbsp;                        bitmap,
+<i>69</i>&nbsp;                        new ByteArrayOutputStream());
+<i>70</i>&nbsp;            }
+<i>71</i>&nbsp;            else
+<b class="fc"><i>72</i>&nbsp;                return null;</b>
+<i>73</i>&nbsp;
+<b class="fc"><i>74</i>&nbsp;        } catch (Exception e){</b>
+<b class="fc"><i>75</i>&nbsp;            exception = e;</b>
+<b class="fc"><i>76</i>&nbsp;            return null;</b>
+<i>77</i>&nbsp;        }
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    @Override
+<i>81</i>&nbsp;    protected void onPostExecute(byte[] byteArray) {
+<b class="fc"><i>82</i>&nbsp;        completionHandler.handle(byteArray, exception);</b>
+<b class="fc"><i>83</i>&nbsp;    }</b>
+<i>84</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-28 19:15</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,129 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SharedPreferencesPlugin</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">io.flutter.plugins.sharedpreferences</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SharedPreferencesPlugin (io.flutter.plugins.sharedpreferences)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SharedPreferencesPlugin</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;// Copyright 2017 The Chromium Authors. All rights reserved.
+<i>2</i>&nbsp;// Use of this source code is governed by a BSD-style license that can be
+<i>3</i>&nbsp;// found in the LICENSE file.
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;package io.flutter.plugins.sharedpreferences;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import android.content.Context;
+<i>8</i>&nbsp;import io.flutter.embedding.engine.plugins.FlutterPlugin;
+<i>9</i>&nbsp;import io.flutter.plugin.common.BinaryMessenger;
+<i>10</i>&nbsp;import io.flutter.plugin.common.MethodChannel;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;/** SharedPreferencesPlugin */
+<b class="nc"><i>13</i>&nbsp;public class SharedPreferencesPlugin implements FlutterPlugin {</b>
+<i>14</i>&nbsp;  private static final String CHANNEL_NAME = &quot;plugins.flutter.io/shared_preferences&quot;;
+<i>15</i>&nbsp;  private MethodChannel channel;
+<i>16</i>&nbsp;  private MethodCallHandlerImpl handler;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;  @SuppressWarnings(&quot;deprecation&quot;)
+<i>19</i>&nbsp;  public static void registerWith(io.flutter.plugin.common.PluginRegistry.Registrar registrar) {
+<b class="nc"><i>20</i>&nbsp;    final SharedPreferencesPlugin plugin = new SharedPreferencesPlugin();</b>
+<b class="nc"><i>21</i>&nbsp;    plugin.setupChannel(registrar.messenger(), registrar.context());</b>
+<i>22</i>&nbsp;  }
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;  @Override
+<i>25</i>&nbsp;  public void onAttachedToEngine(FlutterPlugin.FlutterPluginBinding binding) {
+<b class="nc"><i>26</i>&nbsp;    setupChannel(binding.getBinaryMessenger(), binding.getApplicationContext());</b>
+<i>27</i>&nbsp;  }
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;  @Override
+<i>30</i>&nbsp;  public void onDetachedFromEngine(FlutterPlugin.FlutterPluginBinding binding) {
+<b class="nc"><i>31</i>&nbsp;    teardownChannel();</b>
+<i>32</i>&nbsp;  }
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;  private void setupChannel(BinaryMessenger messenger, Context context) {
+<b class="nc"><i>35</i>&nbsp;    channel = new MethodChannel(messenger, CHANNEL_NAME);</b>
+<b class="nc"><i>36</i>&nbsp;    handler = new MethodCallHandlerImpl(context);</b>
+<b class="nc"><i>37</i>&nbsp;    channel.setMethodCallHandler(handler);</b>
+<i>38</i>&nbsp;  }
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;  private void teardownChannel() {
+<b class="nc"><i>41</i>&nbsp;    handler.teardown();</b>
+<b class="nc"><i>42</i>&nbsp;    handler = null;</b>
+<b class="nc"><i>43</i>&nbsp;    channel.setMethodCallHandler(null);</b>
+<b class="nc"><i>44</i>&nbsp;    channel = null;</b>
+<i>45</i>&nbsp;  }
+<i>46</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-28 19:15</div>
+</div>
+</body>
+</html>

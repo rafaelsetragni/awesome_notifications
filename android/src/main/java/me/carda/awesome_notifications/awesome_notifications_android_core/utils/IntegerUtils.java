@@ -4,11 +4,6 @@ import java.security.SecureRandom;
 
 public class IntegerUtils {
 
-    // Note: sometimes Json parser converts Integer into Double objects
-    public static Integer extractInteger(Object object){
-        return extractInteger(object, 0);
-    }
-
     public static Integer convertToInt(Object object){
         int intValue = 0;
         if(object != null) {

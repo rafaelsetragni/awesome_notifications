@@ -1,23 +1,38 @@
 package me.carda.awesome_notifications.awesome_notifications_android_core;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ActionType;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.DefaultRingtoneType;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.GroupAlertBehaviour;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.GroupSort;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationCategory;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationImportance;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLayout;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationPrivacy;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationSource;
 import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.AbstractModel;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.CompareUtils;
+import me.carda.awesome_notifications.awesome_notifications_android_core.utils.DateUtils;
+import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -25,11 +40,93 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.test.mock.MockContext;
+import android.util.Log;
+
+import org.mockito.MockedStatic;
 
 public class TestUtils {
 
+    // ********************************** MOCK METHODS ***********************************************
+
+    // ********************************** DateUtils
+
+    public static TimeZone testTimezone;
+    public static Date exampleDate = new GregorianCalendar(2000, 1, 1).getTime();
+    public static String exampleStringDate = "2000-01-01 00:00:00";
+
+    /// Returns only fixed date in millennial bug time, without any time zone difference
+    public static MockedStatic<DateUtils> mockedDateUtils;
+    public static void startMockedDateUtils(){
+
+        testTimezone = TimeZone.getTimeZone("GMT");
+
+        mockedDateUtils = mockStatic(DateUtils.class);
+        mockedDateUtils.when(() -> DateUtils.getLocalDateTime(any())).thenReturn(exampleDate);
+        mockedDateUtils.when(() -> DateUtils.getLocalTimeZone()).thenReturn(testTimezone);
+        mockedDateUtils.when(() -> DateUtils.getUtcTimeZone()).thenReturn(testTimezone);
+        mockedDateUtils.when(() -> DateUtils.stringToDate(any(), any())).thenReturn(exampleDate);
+        mockedDateUtils.when(() -> DateUtils.dateToString(any(), any())).thenReturn(exampleStringDate);
+        mockedDateUtils.when(() -> DateUtils.getLocalDate(any())).thenReturn(exampleStringDate);
+        mockedDateUtils.when(() -> DateUtils.shiftToTimeZone(any(), any())).thenReturn(exampleDate);
+        mockedDateUtils.when(() -> DateUtils.getUTCDate()).thenReturn(exampleStringDate);
+        mockedDateUtils.when(() -> DateUtils.getUTCDateTime()).thenReturn(exampleDate);
+        mockedDateUtils.when(() -> DateUtils.getLocalDateTime(any())).thenReturn(exampleDate);
+        mockedDateUtils.when(() -> DateUtils.getTimeZone(any())).thenReturn(testTimezone);
+        mockedDateUtils.when(() -> DateUtils.cleanTimeZoneIdentifier(any())).thenReturn("GMT");
+    }
+    public static void stopMockedDateUtils(){
+        mockedDateUtils.close();
+    }
+
+
+    // ********************************** Android Log
+
+    public static MockedStatic<Log> mockedLog;
+    public static void startMockedLog(){
+        mockedLog = mockStatic(Log.class);
+        mockedLog.when(() -> Log.e(anyString(), anyString())).thenReturn(0);
+        mockedLog.when(() -> Log.i(anyString(), anyString())).thenReturn(0);
+        mockedLog.when(() -> Log.d(anyString(), anyString())).thenReturn(0);
+        mockedLog.when(() -> Log.v(anyString(), anyString())).thenReturn(0);
+    }
+    public static void stopMockedLog(){
+        mockedLog.close();
+    }
+
+
+    // ********************************** Android Context
+
+    public static final String mockPackageName = "com.test.testPackage";
+    public static Context mockContext;
+    public static Resources mockResources;
+
+    public static void startMockedContext(){
+        mockContext =  mock(MockContext.class);
+        mockResources =  mock(Resources.class);
+
+        when(mockContext.getPackageName())
+                .thenReturn(mockPackageName);
+        when(mockContext.getResources())
+                .thenReturn(mockResources);
+
+    }
+    public static void stopMockedContext(){
+    }
+
+    // ********************************** MOCK METHODS ***********************************************
+
     public static Object getDefaultValue(String reference) {
-        return Definitions.initialValues.get(reference);
+        return AbstractModel.defaultValues.get(reference);
     }
 
     public static void testModelField(AbstractModel model, String fieldName) {
@@ -78,9 +175,6 @@ public class TestUtils {
             case Definitions.NOTIFICATION_WAKE_UP_SCREEN:
             case Definitions.NOTIFICATION_PLAY_SOUND:
             case Definitions.NOTIFICATION_ENABLE_VIBRATION:
-            case Definitions.NOTIFICATION_GROUP_SORT:
-            case Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR:
-            case Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE:
             case Definitions.NOTIFICATION_ONLY_ALERT_ONCE:
             case Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE:
             case Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS:
@@ -113,27 +207,47 @@ public class TestUtils {
                 break;
 
             case Definitions.NOTIFICATION_CREATED_SOURCE:
+                testEnumField(model, fieldName, NotificationSource.class, NotificationSource.values());
+                break;
+
             case Definitions.NOTIFICATION_CREATED_LIFECYCLE:
             case Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE:
             case Definitions.NOTIFICATION_DISMISSED_LIFECYCLE:
             case Definitions.NOTIFICATION_ACTION_LIFECYCLE:
                 testEnumField(model, fieldName, NotificationLifeCycle.class, NotificationLifeCycle.values());
+                break;
 
             case Definitions.NOTIFICATION_LAYOUT:
                 testEnumField(model, fieldName, NotificationLayout.class, NotificationLayout.values());
+                break;
 
             case Definitions.NOTIFICATION_ACTION_TYPE:
                 testEnumField(model, fieldName, ActionType.class, ActionType.values());
+                break;
 
             case Definitions.NOTIFICATION_IMPORTANCE:
                 testEnumField(model, fieldName, NotificationImportance.class, NotificationImportance.values());
+                break;
 
             case Definitions.NOTIFICATION_CATEGORY:
                 testEnumField(model, fieldName, NotificationCategory.class, NotificationCategory.values());
+                break;
 
             case Definitions.NOTIFICATION_PRIVACY:
             case Definitions.NOTIFICATION_DEFAULT_PRIVACY:
                 testEnumField(model, fieldName, NotificationPrivacy.class, NotificationPrivacy.values());
+                break;
+
+            case Definitions.NOTIFICATION_GROUP_SORT:
+                testEnumField(model, fieldName, GroupSort.class, GroupSort.values());
+                break;
+
+            case Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR:
+                testEnumField(model, fieldName, GroupAlertBehaviour.class, GroupAlertBehaviour.values());
+                break;
+
+            case Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE:
+                testEnumField(model, fieldName, DefaultRingtoneType.class, DefaultRingtoneType.values());
                 break;
 
             //case Definitions.NOTIFICATION_SCHEDULE_CREATED_DATE:
@@ -159,8 +273,11 @@ public class TestUtils {
                 break;
 
             case Definitions.NOTIFICATION_PRECISE_SCHEDULES:
-            case Definitions.NOTIFICATION_VIBRATION_PATTERN:
                 testListField(model, fieldName);
+                break;
+
+            case Definitions.NOTIFICATION_VIBRATION_PATTERN:
+                testArrayField(model, fieldName);
                 break;
         }
     }
@@ -193,7 +310,7 @@ public class TestUtils {
     }
 
     public static void testDateField(@NonNull AbstractModel model, @NonNull String fieldName) {
-        testFieldValue(model, fieldName, "2000-01-01 00:00:00", String.class);
+        testFieldValue(model, fieldName, TestUtils.exampleStringDate, String.class);
         testDefaultFieldValue(model, fieldName);
     }
 
@@ -205,8 +322,14 @@ public class TestUtils {
         testDefaultFieldValue(model, fieldName);
     }
 
+    public static void testArrayField(@NonNull AbstractModel model, @NonNull String fieldName) {
+        testFieldValue(model, fieldName, new long[]{1L}, long[].class);
+        testFieldValue(model, fieldName, new long[]{1L,2L,3L}, List.class);
+        testDefaultFieldValue(model, fieldName);
+    }
+
     public static void testListField(@NonNull AbstractModel model, @NonNull String fieldName) {
-        testFieldValue(model, fieldName, Collections.singletonList(1), List.class);
+        testFieldValue(model, fieldName, Arrays.asList(1), List.class);
         testFieldValue(model, fieldName, Arrays.asList(1,2,3), List.class);
         testDefaultFieldValue(model, fieldName);
     }

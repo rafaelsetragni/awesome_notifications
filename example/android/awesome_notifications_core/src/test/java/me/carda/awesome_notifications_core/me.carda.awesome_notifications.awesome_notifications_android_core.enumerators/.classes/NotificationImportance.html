@@ -1,0 +1,161 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NotificationImportance</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">me.carda.awesome_notifications.awesome_notifications_android_core.enumerators</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NotificationImportance (me.carda.awesome_notifications.awesome_notifications_android_core.enumerators)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NotificationImportance</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (25/ 25)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">NotificationImportance$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (26/ 26)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package me.carda.awesome_notifications.awesome_notifications_android_core.enumerators;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import androidx.annotation.Nullable;
+<i>4</i>&nbsp;import androidx.core.app.NotificationCompat;
+<i>5</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.IntegerUtils;
+<i>6</i>&nbsp;
+<b class="fc"><i>7</i>&nbsp;public enum NotificationImportance {</b>
+<b class="fc"><i>8</i>&nbsp;    None,</b>
+<b class="fc"><i>9</i>&nbsp;    Min,</b>
+<b class="fc"><i>10</i>&nbsp;    Low,</b>
+<b class="fc"><i>11</i>&nbsp;    Default,</b>
+<b class="fc"><i>12</i>&nbsp;    High,</b>
+<b class="fc"><i>13</i>&nbsp;    Max;</b>
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    public static int toAndroidPriority(@Nullable NotificationImportance importance){
+<b class="fc"><i>16</i>&nbsp;        switch (importance == null ? NotificationImportance.Default : importance){</b>
+<i>17</i>&nbsp;            case None:
+<b class="fc"><i>18</i>&nbsp;            case Min: return NotificationCompat.PRIORITY_MIN;</b>
+<b class="fc"><i>19</i>&nbsp;            case Low: return NotificationCompat.PRIORITY_LOW;</b>
+<b class="fc"><i>20</i>&nbsp;            case High: return NotificationCompat.PRIORITY_HIGH;</b>
+<b class="fc"><i>21</i>&nbsp;            case Max: return NotificationCompat.PRIORITY_MAX;</b>
+<i>22</i>&nbsp;            case Default:
+<i>23</i>&nbsp;            default:
+<b class="fc"><i>24</i>&nbsp;                return NotificationCompat.PRIORITY_DEFAULT;</b>
+<i>25</i>&nbsp;        }
+<i>26</i>&nbsp;        //return Math.min(Math.max(IntegerUtils.extractInteger(importance) - 3, -2), 2);
+<i>27</i>&nbsp;    }
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    public static int toAndroidImportance(@Nullable NotificationImportance importance){
+<b class="fc"><i>30</i>&nbsp;        return importance == null ? NotificationImportance.Default.ordinal() : importance.ordinal();</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    public static NotificationImportance fromAndroidPriority(int ordinal){
+<b class="fc"><i>34</i>&nbsp;        if(ordinal &lt; -2) ordinal = -2;</b>
+<b class="fc"><i>35</i>&nbsp;        if(ordinal &gt; 2) ordinal = 2;</b>
+<b class="fc"><i>36</i>&nbsp;        switch (ordinal){</b>
+<b class="fc"><i>37</i>&nbsp;            case NotificationCompat.PRIORITY_MIN: return NotificationImportance.Min;</b>
+<b class="fc"><i>38</i>&nbsp;            case NotificationCompat.PRIORITY_LOW: return NotificationImportance.Low;</b>
+<b class="fc"><i>39</i>&nbsp;            case NotificationCompat.PRIORITY_HIGH: return NotificationImportance.High;</b>
+<b class="fc"><i>40</i>&nbsp;            case NotificationCompat.PRIORITY_MAX: return NotificationImportance.Max;</b>
+<i>41</i>&nbsp;            case NotificationCompat.PRIORITY_DEFAULT:
+<b class="fc"><i>42</i>&nbsp;            default: return NotificationImportance.Default;</b>
+<i>43</i>&nbsp;        }
+<i>44</i>&nbsp;        //return NotificationImportance.values()[Math.max(Math.min(ordinal + 3, 5), 0)];
+<i>45</i>&nbsp;    }
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    public static NotificationImportance fromAndroidImportance(int ordinal){
+<b class="fc"><i>48</i>&nbsp;        if(ordinal &lt; 0) ordinal = 0;</b>
+<b class="fc"><i>49</i>&nbsp;        if(ordinal &gt; 5) ordinal = 5;</b>
+<b class="fc"><i>50</i>&nbsp;        return NotificationImportance.values()[ordinal];</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-28 19:15</div>
+</div>
+</body>
+</html>

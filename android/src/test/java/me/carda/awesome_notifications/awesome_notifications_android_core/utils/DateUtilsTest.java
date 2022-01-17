@@ -134,6 +134,7 @@ public class DateUtilsTest {
     public void getUTCDateTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(DateUtils.utcTimeZone);
+        calendar.set(Calendar.MILLISECOND, 0);
         Date utcDate =  calendar.getTime();
 
         assertEquals("The UTC date is different from current UTC date", utcDate, DateUtils.getUTCDateTime());
@@ -143,6 +144,8 @@ public class DateUtilsTest {
     public void getLocalDateTime() throws AwesomeNotificationException {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(DateUtils.localTimeZone);
+        calendar.set(Calendar.MILLISECOND, 0);
+
         Date utcDate =  calendar.getTime();
         Date returned = DateUtils.getLocalDateTime(DateUtils.localTimeZone.toString());
 

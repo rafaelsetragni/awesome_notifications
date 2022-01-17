@@ -73,36 +73,33 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.utils.S
 
 import static android.app.NotificationManager.Policy.PRIORITY_CATEGORY_ALARMS;
 
-protected class NotificationBuilder {
+public class NotificationBuilder {
 
     public static String TAG = "NotificationBuilder";
 
+    private static String mainTargetClassName;
+
     private final BitmapUtils bitmapUtils;
     private final PermissionManager permissionManager;
-    private String mainTargetClassName;
     private MediaSessionCompat mediaSession;
 
     // ************** SINGLETON PATTERN ***********************
-
-    private static NotificationBuilder instance;
 
     private NotificationBuilder(BitmapUtils bitmapUtils, PermissionManager permissionManager) {
         this.bitmapUtils = bitmapUtils;
         this.permissionManager = permissionManager;
     }
 
-    public static NotificationBuilder getInstance() {
-        if (instance == null)
-            instance = new NotificationBuilder(
-                    BitmapUtils.getInstance(),
-                    PermissionManager.getInstance());
-        return instance;
+    public static NotificationBuilder getNewBuilder() {
+        return new NotificationBuilder(
+                BitmapUtils.getInstance(),
+                PermissionManager.getInstance());
     }
 
     // ********************************************************
 
     public void forceBringAppToForeground(Context context){
-        Intent startActivity = new Intent(context, getMainTargetClass());
+        Intent startActivity = new Intent(context, getMainTargetClass(context));
         startActivity.setFlags(
                 Intent.FLAG_ACTIVITY_REORDER_TO_FRONT |
                 Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY |
@@ -308,7 +305,11 @@ protected class NotificationBuilder {
             return null;
         }
     }
-    public Class getMainTargetClass(){
+    public Class getMainTargetClass(Context applicationContext){
+
+        if(mainTargetClassName == null)
+            updateMainTargetClassNameFromInitialIntent(applicationContext);
+
         Class clazz = tryResolveClassName(mainTargetClassName);
         if(clazz != null) return clazz;
 
@@ -582,13 +583,13 @@ protected class NotificationBuilder {
     }
 
     private void setFullScreenIntent(Context context, PendingIntent pendingIntent, NotificationModel notificationModel, NotificationCompat.Builder builder) {
-        if (BooleanUtils.getValue(notificationModel.content.fullScreenIntent)) {
+        if (BooleanUtils.getInstance().getValue(notificationModel.content.fullScreenIntent)) {
             builder.setFullScreenIntent(pendingIntent, true);
         }
     }
 
     private void setShowWhen(NotificationModel notificationModel, NotificationCompat.Builder builder) {
-        builder.setShowWhen(BooleanUtils.getValueOrDefault(notificationModel.content.showWhen, true));
+        builder.setShowWhen(BooleanUtils.getInstance().getValueOrDefault(notificationModel.content.showWhen, true));
     }
 
     private Integer getBackgroundColor(NotificationModel notificationModel, NotificationChannelModel channel, NotificationCompat.Builder builder) {
@@ -619,7 +620,7 @@ protected class NotificationBuilder {
     }
 
     private void setOnlyAlertOnce(NotificationModel notificationModel, NotificationChannelModel channel, NotificationCompat.Builder builder) {
-        boolean onlyAlertOnceValue = BooleanUtils.getValue(notificationModel.content.notificationLayout == NotificationLayout.ProgressBar || channel.onlyAlertOnce);
+        boolean onlyAlertOnceValue = BooleanUtils.getInstance().getValue(notificationModel.content.notificationLayout == NotificationLayout.ProgressBar || channel.onlyAlertOnce);
         builder.setOnlyAlertOnce(onlyAlertOnceValue);
     }
 
@@ -629,13 +630,13 @@ protected class NotificationBuilder {
     }
 
     private void setLockedNotification(NotificationModel notificationModel, NotificationChannelModel channel, NotificationCompat.Builder builder) {
-        boolean contentLocked = BooleanUtils.getValue(notificationModel.content.locked);
-        boolean channelLocked = BooleanUtils.getValue(channel.locked);
+        boolean contentLocked = BooleanUtils.getInstance().getValue(notificationModel.content.locked);
+        boolean channelLocked = BooleanUtils.getInstance().getValue(channel.locked);
 
         if (contentLocked) {
             builder.setOngoing(true);
         } else if (channelLocked) {
-            boolean lockedValue = BooleanUtils.getValueOrDefault(notificationModel.content.locked, true);
+            boolean lockedValue = BooleanUtils.getInstance().getValueOrDefault(notificationModel.content.locked, true);
             builder.setOngoing(lockedValue);
         }
     }
@@ -649,14 +650,14 @@ protected class NotificationBuilder {
     }
 
     private void setBadge(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
-        if (!notificationModel.groupSummary && BooleanUtils.getValue(channelModel.channelShowBadge)) {
+        if (!notificationModel.groupSummary && BooleanUtils.getInstance().getValue(channelModel.channelShowBadge)) {
             BadgeManager.incrementGlobalBadgeCounter(context);
             builder.setNumber(1);
         }
     }
 
     private void setAutoCancel(NotificationModel notificationModel, NotificationCompat.Builder builder) {
-        builder.setAutoCancel(BooleanUtils.getValueOrDefault(notificationModel.content.autoDismissible, true));
+        builder.setAutoCancel(BooleanUtils.getInstance().getValueOrDefault(notificationModel.content.autoDismissible, true));
     }
 
     private void setBody(NotificationModel notificationModel, NotificationCompat.Builder builder) {
@@ -670,7 +671,7 @@ protected class NotificationBuilder {
     }
 
     private void setVibrationPattern(NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
-        if (BooleanUtils.getValue(channelModel.enableVibration)) {
+        if (BooleanUtils.getInstance().getValue(channelModel.enableVibration)) {
             if (channelModel.vibrationPattern != null && channelModel.vibrationPattern.length > 0) {
                 builder.setVibrate(channelModel.vibrationPattern);
             }
@@ -680,7 +681,7 @@ protected class NotificationBuilder {
     }
 
     private void setLights(NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
-        if (BooleanUtils.getValue(channelModel.enableLights)) {
+        if (BooleanUtils.getInstance().getValue(channelModel.enableLights)) {
             Integer ledColorValue = IntegerUtils.extractInteger(channelModel.ledColor, Color.WHITE);
             Integer ledOnMsValue = IntegerUtils.extractInteger(channelModel.ledOnMs, 300);
             Integer ledOffMsValue = IntegerUtils.extractInteger(channelModel.ledOffMs, 700);
@@ -712,7 +713,10 @@ protected class NotificationBuilder {
     private void setLargeIcon(Context context, NotificationModel notificationModel, NotificationCompat.Builder builder) {
         if (notificationModel.content.notificationLayout != NotificationLayout.BigPicture)
             if (!StringUtils.isNullOrEmpty(notificationModel.content.largeIcon)) {
-                Bitmap largeIcon = bitmapUtils.getBitmapFromSource(context, notificationModel.content.largeIcon);
+                Bitmap largeIcon = bitmapUtils.getBitmapFromSource(
+                        context,
+                        notificationModel.content.largeIcon,
+                        notificationModel.content.roundedLargeIcon);
                 if (largeIcon != null)
                     builder.setLargeIcon(largeIcon);
             }
@@ -740,7 +744,7 @@ protected class NotificationBuilder {
                     channel,
                     buttonProperties.actionType,
                     buttonProperties.actionType == ActionType.Default ?
-                            getMainTargetClass() : NotificationActionReceiver.class
+                            getMainTargetClass(context) : NotificationActionReceiver.class
                     );
 
             if(buttonProperties.actionType == ActionType.Default)
@@ -835,7 +839,7 @@ protected class NotificationBuilder {
 
         Uri uri = null;
 
-        if (!notificationModel.content.isRefreshNotification && BooleanUtils.getValue(channelModel.playSound)) {
+        if (!notificationModel.content.isRefreshNotification && BooleanUtils.getInstance().getValue(channelModel.playSound)) {
             uri = ChannelManager
                     .getInstance()
                     .retrieveSoundResourceUri(context, channelModel.defaultRingtoneType, channelModel.soundSource);
@@ -950,12 +954,15 @@ protected class NotificationBuilder {
         Bitmap bigPicture = null, largeIcon = null;
 
         if (!StringUtils.isNullOrEmpty(contentModel.bigPicture))
-            bigPicture = bitmapUtils.getBitmapFromSource(context, contentModel.bigPicture);
+            bigPicture = bitmapUtils.getBitmapFromSource(context, contentModel.bigPicture, contentModel.roundedBigPicture);
 
         if (contentModel.hideLargeIconOnExpand)
             largeIcon = bigPicture != null ?
                 bigPicture : (!StringUtils.isNullOrEmpty(contentModel.largeIcon) ?
-                    bitmapUtils.getBitmapFromSource(context, contentModel.largeIcon) : null);
+                    bitmapUtils.getBitmapFromSource(
+                            context,
+                            contentModel.largeIcon,
+                            contentModel.roundedLargeIcon || contentModel.roundedBigPicture) : null);
         else {
             boolean areEqual =
                     !StringUtils.isNullOrEmpty(contentModel.largeIcon) &&
@@ -965,7 +972,7 @@ protected class NotificationBuilder {
                 largeIcon = bigPicture;
             else if(!StringUtils.isNullOrEmpty(contentModel.largeIcon))
                 largeIcon =
-                        bitmapUtils.getBitmapFromSource(context, contentModel.largeIcon);
+                        bitmapUtils.getBitmapFromSource(context, contentModel.largeIcon, contentModel.roundedLargeIcon);
         }
 
         if (largeIcon != null)
@@ -1109,7 +1116,8 @@ protected class NotificationBuilder {
                     if(!StringUtils.isNullOrEmpty(contentModel.largeIcon)){
                         Bitmap largeIcon = bitmapUtils.getBitmapFromSource(
                                 context,
-                                contentModel.largeIcon);
+                                contentModel.largeIcon,
+                                contentModel.roundedLargeIcon);
                         if(largeIcon != null)
                             personBuilder.setIcon(
                                     IconCompat.createWithBitmap(largeIcon));

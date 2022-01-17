@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
+
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
 
@@ -23,10 +25,25 @@ public class BitmapResourceDecoder extends AsyncTask<Void, Void, byte[]> {
 
     private Exception exception;
 
-    public BitmapResourceDecoder(Context context, String bitmapReference, BitmapCompletionHandler completionHandler) {
+    public BitmapResourceDecoder(
+            Context context,
+            String bitmapReference,
+            BitmapCompletionHandler completionHandler
+    ){
         this.wContextReference = new WeakReference<>(context);
         this.bitmapReference = bitmapReference;
         this.completionHandler = completionHandler;
+    }
+
+    byte[] convertBitmapToByteArray(
+            @NonNull Bitmap bitmap,
+            @NonNull ByteArrayOutputStream outputStream
+    ){
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+        byte[] byteArray = outputStream.toByteArray();
+        bitmap.recycle();
+
+        return byteArray;
     }
 
     @Override
@@ -41,21 +58,23 @@ public class BitmapResourceDecoder extends AsyncTask<Void, Void, byte[]> {
                         .getInstance()
                         .getBitmapFromResource(context, bitmapReference);
 
-                if(bitmap == null) throw new AwesomeNotificationException("File '"+bitmapReference+"' not found or invalid");
+                if(bitmap == null)
+                    throw new AwesomeNotificationException(
+                            "File '"+
+                            (bitmapReference == null ? "null" : bitmapReference)+
+                            "' not found or invalid");
 
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-                bitmap.recycle();
-
-                return byteArray;
+                return convertBitmapToByteArray(
+                        bitmap,
+                        new ByteArrayOutputStream());
             }
+            else
+                return null;
 
         } catch (Exception e){
             exception = e;
+            return null;
         }
-
-        return null;
     }
 
     @Override

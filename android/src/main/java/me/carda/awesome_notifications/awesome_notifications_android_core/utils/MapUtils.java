@@ -3,8 +3,10 @@ package me.carda.awesome_notifications.awesome_notifications_android_core.utils;
 import android.util.Log;
 
 import com.google.common.base.Optional;
+import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Floats;
+import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import com.google.common.primitives.Shorts;
 
@@ -71,26 +73,26 @@ public class MapUtils {
             Object value = map.get(key);
 
             if(Number.class.isAssignableFrom(expectedClass)){
-                String expectedClassName = expectedClass.getSimpleName().toLowerCase();
 
                 // Hexadecimal color conversion
-                if(expectedClassName.equals("long") && value instanceof String){
+                if(expectedClass == Long.class && value instanceof String){
                     Pattern pattern = Pattern.compile("(0x|#)(\\w{2})?(\\w{6})", Pattern.CASE_INSENSITIVE);
                     Matcher matcher = pattern.matcher((String) value);
 
                     // 0x000000 hexadecimal color conversion
                     if(matcher.find()) {
-                        String transparency = matcher.group(1);
-                        String textValue = (transparency == null ? "FF" : transparency) + matcher.group(2);
-                        Long finalValue = 0L;
+                        String transparency = matcher.group(2);
+                        String textValue = (transparency == null ? "FF" : transparency) + matcher.group(3);
+                        long finalValue = 0L;
                         if(!StringUtils.isNullOrEmpty(textValue)){
                             finalValue += Long.parseLong(textValue, 16);
                         }
-                        return Optional.of(expectedClass.cast(finalValue));
+                        return Optional.fromNullable(expectedClass.cast(finalValue));
                     }
                 }
 
                 if(value instanceof Number){
+                    String expectedClassName = expectedClass.getSimpleName().toLowerCase();
                     switch (expectedClassName){
                         case "integer": value = ((Number)value).intValue();     break;
                         case "double":  value = ((Number)value).doubleValue();  break;
@@ -103,19 +105,20 @@ public class MapUtils {
             }
 
             if(value instanceof List && expectedClass.isArray()){
-                switch (expectedClass.getComponentType().getSimpleName().toLowerCase()){
-                    case "double":  value = Doubles.toArray((List)value);  break;
-                    case "long":    value = Longs.toArray((List)value);   break;
-                    case "short":   value = Shorts.toArray((List)value);   break;
-                    case "integer":
-                    case "byte":
-                    case "float":   value = Floats.toArray((List)value);   break;
+                String expectedClassName = expectedClass.getSimpleName().toLowerCase();
+                switch (expectedClassName){
+                    case "double[]":  value = Doubles.toArray((List)value);  break;
+                    case "long[]":    value = Longs.toArray((List)value);   break;
+                    case "short[]":   value = Shorts.toArray((List)value);   break;
+                    case "int[]":     value = Ints.toArray((List)value);   break;
+                    case "byte[]":    value = Bytes.toArray((List)value);   break;
+                    case "float[]":   value = Floats.toArray((List)value);   break;
                 }
-                return Optional.of(expectedClass.cast(value));
+                return Optional.fromNullable(expectedClass.cast(value));
             }
 
             if(expectedClass.isInstance(value)){
-                return Optional.of(expectedClass.cast(value));
+                return Optional.fromNullable(expectedClass.cast(value));
             }
 
             // TODO REGRESSION TO PRIMITIVES. IS NOT SO NECESSARY, DUE MAPS AND GSON DO NOT USE THEN. ITS A OVERKILL SOLUTION

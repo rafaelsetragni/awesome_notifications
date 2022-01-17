@@ -29,6 +29,8 @@ class NotificationContent extends BaseNotificationContent {
       bool? wakeUpScreen,
       bool? fullScreenIntent,
       bool? criticalAlert,
+      bool? roundedLargeIcon,
+      bool? roundedBigPicture,
       String? icon,
       String? largeIcon,
       String? bigPicture,
@@ -64,7 +66,9 @@ class NotificationContent extends BaseNotificationContent {
             customSound: customSound,
             autoDismissible: autoDismissible,
             color: color,
-            backgroundColor: backgroundColor);
+            backgroundColor: backgroundColor,
+            roundedBigPicture: roundedBigPicture,
+            roundedLargeIcon: roundedLargeIcon);
 
   @override
   NotificationContent? fromMap(Map<String, dynamic> mapData) {

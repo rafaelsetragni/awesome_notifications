@@ -18,12 +18,17 @@ import androidx.annotation.Nullable;
 
 import androidx.lifecycle.Lifecycle;
 
+import me.carda.awesome_notifications.awesome_notifications_android_core.background.AwesomeBackgroundExecutor;
 import me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.receivers.AwesomeEventsReceiver;
 import me.carda.awesome_notifications.awesome_notifications_android_core.decoders.BitmapResourceDecoder;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ForegroundServiceType;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ForegroundStartMode;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.MediaSource;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationSource;
+import me.carda.awesome_notifications.awesome_notifications_android_core.models.AbstractModel;
 import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationBuilder;
+import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationForegroundThread;
 import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationScheduler;
 import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationSender;
 import me.carda.awesome_notifications.awesome_notifications_android_core.observers.AwesomeActionEventListener;
@@ -51,6 +56,7 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.models.
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationScheduleModel;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.returnedData.NotificationReceived;
+import me.carda.awesome_notifications.awesome_notifications_android_core.services.BackgroundService;
 import me.carda.awesome_notifications.awesome_notifications_android_core.services.ForegroundService;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BitmapUtils;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BooleanUtils;
@@ -76,12 +82,20 @@ public class AwesomeNotifications
                 .getInstance()
                 .subscribe(this)
                 .startListeners(applicationContext);
+
+        AbstractModel
+                .defaultValues
+                .putAll(Definitions.initialValues);
     }
 
     public void dispose(){
         LifeCycleManager
                 .getInstance()
                 .unsubscribe(this);
+
+        AbstractModel
+                .defaultValues
+                .clear();
     }
 
     // ********************************************************
@@ -132,7 +146,7 @@ public class AwesomeNotifications
 
             case CREATED:
                 NotificationBuilder
-                        .getInstance()
+                        .getNewBuilder()
                         .updateMainTargetClassName(activity);
                 break;
 
@@ -158,10 +172,12 @@ public class AwesomeNotifications
         notificationEventListeners.add(listener);
         return this;
     }
+
     public AwesomeNotifications unsubscribeOnNotificationEvents(AwesomeNotificationEventListener listener) {
         notificationEventListeners.remove(listener);
         return this;
     }
+
     private void notifyNotificationEvent(String eventName, NotificationReceived notificationReceived) {
         notifyAwesomeEvent(eventName, notificationReceived);
         for (AwesomeNotificationEventListener listener : notificationEventListeners)
@@ -175,10 +191,12 @@ public class AwesomeNotifications
         notificationActionListeners.add(listener);
         return this;
     }
+
     public AwesomeNotifications unsubscribeOnActionEvents(AwesomeActionEventListener listener) {
         notificationActionListeners.remove(listener);
         return this;
     }
+
     private void notifyActionEvent(String eventName, ActionReceived actionReceived) {
         notifyAwesomeEvent(eventName, actionReceived);
         for (AwesomeActionEventListener listener : notificationActionListeners)
@@ -192,18 +210,22 @@ public class AwesomeNotifications
         awesomeEventListeners.add(listener);
         return this;
     }
+
     public AwesomeNotifications unsubscribeOnAwesomeNotificationEvents(AwesomeEventListener listener) {
         awesomeEventListeners.remove(listener);
         return this;
     }
+
     private void notifyAwesomeEvent(String eventName, ActionReceived actionReceived) {
         for (AwesomeEventListener listener : awesomeEventListeners)
             listener.onNewAwesomeEvent(eventName, (Serializable) actionReceived.toMap());
     }
+
     private void notifyAwesomeEvent(String eventName, NotificationReceived notificationReceived) {
         for (AwesomeEventListener listener : awesomeEventListeners)
             listener.onNewAwesomeEvent(eventName, (Serializable) notificationReceived.toMap());
     }
+
     private void notifyAwesomeEvent(String eventName, Serializable content) {
         for (AwesomeEventListener listener : awesomeEventListeners)
             listener.onNewAwesomeEvent(eventName, content);
@@ -263,6 +285,12 @@ public class AwesomeNotifications
             Log.d(TAG, "Awesome Notifications initialized");
     }
 
+    public void setBackgroundExecutorClass(Class awesomeBackgroundExecutorClass)
+            throws AwesomeNotificationException {
+        AwesomeBackgroundExecutor
+                .setBackgroundExecutorClass(awesomeBackgroundExecutorClass);
+    }
+
     private void setChannelGroups(
             @NonNull Context context,
             @NonNull List<Object> channelGroupsData)
@@ -306,7 +334,7 @@ public class AwesomeNotifications
                 @SuppressWarnings("unchecked")
                 Map<String, Object> channelData = (Map<String, Object>) channelDataObject;
                 NotificationChannelModel channelModel = new NotificationChannelModel().fromMap(channelData);
-                forceUpdate = BooleanUtils.getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
+                forceUpdate = BooleanUtils.getInstance().getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
 
                 if (channelModel != null) {
                     channels.add(channelModel);
@@ -433,7 +461,7 @@ public class AwesomeNotifications
             NotificationSender
                     .send(
                         applicationContext,
-                        NotificationBuilder.getInstance(),
+                        NotificationBuilder.getNewBuilder(),
                         NotificationSource.Local,
                         AwesomeNotifications.getApplicationLifeCycle(),
                         notificationModel);
@@ -472,38 +500,28 @@ public class AwesomeNotifications
 
     public void startForegroundService(
             @NonNull NotificationModel notificationModel,
-            int startType,
-            boolean hasForegroundServiceType,
-            int foregroundServiceType) {
-
-        ForegroundService.ForegroundServiceIntent foregroundServiceIntent =
-                new ForegroundService
-                        .ForegroundServiceIntent(
-                            notificationModel,
-                            startType,
-                            hasForegroundServiceType,
-                            foregroundServiceType);
-
-        Intent intent = new Intent(applicationContext, ForegroundService.class);
-        intent.putExtra(Definitions.AWESOME_FOREGROUND_ID, foregroundServiceIntent);
-
-        if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O /*Android 8*/) {
-            applicationContext.startForegroundService(intent);
-        } else {
-            applicationContext.startService(intent);
-        }
+            @NonNull ForegroundStartMode startMode,
+            @NonNull ForegroundServiceType foregroundServiceType
+    ){
+        ForegroundService.start(
+                applicationContext,
+                notificationModel,
+                startMode,
+                foregroundServiceType);
     }
 
-    public void stopForegroundService() {
-        applicationContext
-                .stopService(new Intent(applicationContext, ForegroundService.class));
+    public void stopForegroundService(Integer notificationId) {
+        ForegroundService.stop(notificationId);
     }
 
-    private Boolean receiveNotificationAction(@NonNull Intent intent, @NonNull NotificationLifeCycle appLifeCycle) throws AwesomeNotificationException {
+    private Boolean receiveNotificationAction(
+            @NonNull Intent intent,
+            @NonNull NotificationLifeCycle appLifeCycle
+    ) throws AwesomeNotificationException {
 
         ActionReceived actionModel =
                 NotificationBuilder
-                        .getInstance()
+                        .getNewBuilder()
                         .receiveNotificationActionFromIntent(
                                 applicationContext,
                                 intent,
@@ -532,11 +550,11 @@ public class AwesomeNotifications
     }
 
     public String getLocalTimeZone() {
-        return DateUtils.localTimeZone.getID();
+        return DateUtils.getLocalTimeZone().getID();
     }
 
     public Object getUtcTimeZone() {
-        return DateUtils.utcTimeZone.getID();
+        return DateUtils.getUtcTimeZone().getID();
     }
 
     public int getGlobalBadgeCounter() {

@@ -18,7 +18,7 @@ public class AutoCancelService extends Service {
     }
 
     public void onTaskRemoved(Intent rootIntent) {
-        Log.e(TAG, "TASK END");
+        Log.d(TAG, "TASK END");
         //unregister listeners
         //do any other cleanup if required
 

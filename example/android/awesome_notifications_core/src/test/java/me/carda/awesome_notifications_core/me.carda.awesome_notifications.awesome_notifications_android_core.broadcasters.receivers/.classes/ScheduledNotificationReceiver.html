@@ -1,0 +1,148 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ScheduledNotificationReceiver</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.receivers</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ScheduledNotificationReceiver (me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.receivers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ScheduledNotificationReceiver</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.receivers;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import android.content.BroadcastReceiver;
+<i>4</i>&nbsp;import android.content.Context;
+<i>5</i>&nbsp;import android.content.Intent;
+<i>6</i>&nbsp;import android.util.Log;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;//import com.google.common.reflect.TypeToken;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
+<i>11</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
+<i>12</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationBuilder;
+<i>13</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
+<i>14</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationScheduler;
+<i>15</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationSender;
+<i>16</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
+<i>17</i>&nbsp;
+<b class="nc"><i>18</i>&nbsp;public class ScheduledNotificationReceiver extends BroadcastReceiver {</b>
+<i>19</i>&nbsp;
+<b class="nc"><i>20</i>&nbsp;    static String TAG = &quot;ScheduledNotificationReceiver&quot;;</b>
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    @Override
+<i>23</i>&nbsp;    public void onReceive(final Context context, Intent intent) {
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;        //Toast.makeText(context, &quot;ScheduledNotificationReceiver&quot;, Toast.LENGTH_SHORT).show();
+<i>26</i>&nbsp;
+<b class="nc"><i>27</i>&nbsp;        String notificationDetailsJson = intent.getStringExtra(Definitions.NOTIFICATION_JSON);</b>
+<b class="nc"><i>28</i>&nbsp;        if (!StringUtils.isNullOrEmpty(notificationDetailsJson)) {</b>
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;            try {
+<b class="nc"><i>31</i>&nbsp;                NotificationModel notificationModel = new NotificationModel().fromJson(notificationDetailsJson);</b>
+<i>32</i>&nbsp;
+<b class="nc"><i>33</i>&nbsp;                if(notificationModel == null){ return; }</b>
+<i>34</i>&nbsp;
+<b class="nc"><i>35</i>&nbsp;                NotificationSender</b>
+<b class="nc"><i>36</i>&nbsp;                    .send(</b>
+<i>37</i>&nbsp;                        context,
+<b class="nc"><i>38</i>&nbsp;                        NotificationBuilder.getInstance(),</b>
+<b class="nc"><i>39</i>&nbsp;                        AwesomeNotifications.getApplicationLifeCycle(),</b>
+<i>40</i>&nbsp;                        notificationModel
+<i>41</i>&nbsp;                    );
+<i>42</i>&nbsp;
+<b class="nc"><i>43</i>&nbsp;                if(notificationModel.schedule.repeats) {</b>
+<b class="nc"><i>44</i>&nbsp;                    NotificationScheduler.schedule(</b>
+<i>45</i>&nbsp;                            context,
+<i>46</i>&nbsp;                            notificationModel
+<i>47</i>&nbsp;                    );
+<i>48</i>&nbsp;                }
+<i>49</i>&nbsp;                else {
+<b class="nc"><i>50</i>&nbsp;                    NotificationScheduler.cancelSchedule(</b>
+<i>51</i>&nbsp;                            context,
+<i>52</i>&nbsp;                            notificationModel.content.id);
+<i>53</i>&nbsp;
+<b class="nc"><i>54</i>&nbsp;                    if(AwesomeNotifications.debug)</b>
+<b class="nc"><i>55</i>&nbsp;                        Log.d(TAG,</b>
+<b class="nc"><i>56</i>&nbsp;                            &quot;Schedule &quot;+ notificationModel.content.id.toString() +</b>
+<i>57</i>&nbsp;                                    &quot; finished since repeat option is off&quot;);
+<i>58</i>&nbsp;                }
+<i>59</i>&nbsp;
+<b class="nc"><i>60</i>&nbsp;            } catch (Exception e) {</b>
+<b class="nc"><i>61</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>62</i>&nbsp;            }</b>
+<i>63</i>&nbsp;        }
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-28 19:15</div>
+</div>
+</body>
+</html>

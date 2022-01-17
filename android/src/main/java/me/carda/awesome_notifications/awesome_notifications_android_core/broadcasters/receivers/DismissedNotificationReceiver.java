@@ -8,10 +8,12 @@ import android.os.Build;
 
 import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.senders.BroadcastSender;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.StatusBarManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.returnedData.ActionReceived;
+import me.carda.awesome_notifications.awesome_notifications_android_core.utils.DateUtils;
 
 @TargetApi(Build.VERSION_CODES.CUPCAKE)
 public class DismissedNotificationReceiver extends BroadcastReceiver
@@ -24,21 +26,28 @@ public class DismissedNotificationReceiver extends BroadcastReceiver
         String action = intent.getAction();
         if (action != null && action.equals(Definitions.DISMISSED_NOTIFICATION)) {
 
+            NotificationLifeCycle appLifeCycle =
+                    AwesomeNotifications
+                        .getApplicationLifeCycle();
+
             ActionReceived actionReceived
                     = NotificationBuilder
-                            .getInstance()
+                            .getNewBuilder()
                             .buildNotificationActionFromIntent(
                                     context,
                                     intent,
-                                    AwesomeNotifications.getApplicationLifeCycle());
+                                    appLifeCycle);
 
             if(actionReceived == null)
                 return;
+
+            actionReceived.registerDismissedEvent(appLifeCycle);
 
             // In this case, the notification is always dismissed
             StatusBarManager
                 .getInstance(context)
                 .unregisterActiveNotification(actionReceived.id);
+
 
             BroadcastSender
                 .sendBroadcastNotificationDismissed(context, actionReceived);

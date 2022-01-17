@@ -395,12 +395,12 @@ public class ChannelManager {
             newAndroidNotificationChannel.setSound(null, null);
         }
 
-        newAndroidNotificationChannel.enableVibration(BooleanUtils.getValue(newChannel.enableVibration));
+        newAndroidNotificationChannel.enableVibration(BooleanUtils.getInstance().getValue(newChannel.enableVibration));
         if (newChannel.vibrationPattern != null && newChannel.vibrationPattern.length > 0) {
             newAndroidNotificationChannel.setVibrationPattern(newChannel.vibrationPattern);
         }
 
-        boolean enableLights = BooleanUtils.getValue(newChannel.enableLights);
+        boolean enableLights = BooleanUtils.getInstance().getValue(newChannel.enableLights);
         newAndroidNotificationChannel.enableLights(enableLights);
 
         if (enableLights && newChannel.ledColor != null) {
@@ -411,7 +411,7 @@ public class ChannelManager {
             newAndroidNotificationChannel.setBypassDnd(true);
         }
 
-        newAndroidNotificationChannel.setShowBadge(BooleanUtils.getValue(newChannel.channelShowBadge));
+        newAndroidNotificationChannel.setShowBadge(BooleanUtils.getInstance().getValue(newChannel.channelShowBadge));
 
         notificationManager.createNotificationChannel(newAndroidNotificationChannel);
     }

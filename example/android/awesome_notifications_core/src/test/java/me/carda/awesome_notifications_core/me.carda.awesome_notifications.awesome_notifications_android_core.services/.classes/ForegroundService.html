@@ -1,0 +1,204 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ForegroundService</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">me.carda.awesome_notifications.awesome_notifications_android_core.services</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ForegroundService (me.carda.awesome_notifications.awesome_notifications_android_core.services)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ForegroundService</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 14)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ForegroundService$ForegroundServiceIntent</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 21)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package me.carda.awesome_notifications.awesome_notifications_android_core.services;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import android.app.ActivityManager;
+<i>4</i>&nbsp;import android.app.Notification;
+<i>5</i>&nbsp;import android.app.Service;
+<i>6</i>&nbsp;import android.content.Context;
+<i>7</i>&nbsp;import android.content.Intent;
+<i>8</i>&nbsp;import android.os.Build;
+<i>9</i>&nbsp;import android.os.IBinder;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import androidx.annotation.NonNull;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;import java.io.Serializable;
+<i>14</i>&nbsp;import java.util.HashMap;
+<i>15</i>&nbsp;import java.util.Map;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
+<i>18</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationSource;
+<i>19</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
+<i>20</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.managers.LifeCycleManager;
+<i>21</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
+<i>22</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationBuilder;
+<i>23</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationForegroundThread;
+<i>24</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationSender;
+<i>25</i>&nbsp;
+<b class="nc"><i>26</i>&nbsp;public class ForegroundService extends Service {</b>
+<i>27</i>&nbsp;
+<b class="nc"><i>28</i>&nbsp;    private static Map&lt;Integer, ForegroundServiceIntent&gt; serviceStack = new HashMap&lt;&gt;();</b>
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    public static boolean isForegroundServiceRunning(Context context) {
+<b class="nc"><i>31</i>&nbsp;        return NotificationForegroundService.isRunning(context);</b>
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    @Override
+<i>35</i>&nbsp;    public int onStartCommand(Intent intent, int flags, int startId) {
+<b class="nc"><i>36</i>&nbsp;        ForegroundServiceIntent foregroundServiceIntent = serviceStack.get(startId);</b>
+<b class="nc"><i>37</i>&nbsp;        assert foregroundServiceIntent != null;</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;        try {
+<b class="nc"><i>40</i>&nbsp;            NotificationModel notificationModel = foregroundServiceIntent.notificationModel;</b>
+<i>41</i>&nbsp;
+<b class="nc"><i>42</i>&nbsp;            NotificationForegroundService.start(</b>
+<i>43</i>&nbsp;                this,
+<i>44</i>&nbsp;                startId,
+<i>45</i>&nbsp;                foregroundServiceIntent,
+<b class="nc"><i>46</i>&nbsp;                NotificationBuilder.getInstance(),</b>
+<b class="nc"><i>47</i>&nbsp;                LifeCycleManager.getApplicationLifeCycle(),</b>
+<i>48</i>&nbsp;                notificationModel);
+<i>49</i>&nbsp;
+<b class="nc"><i>50</i>&nbsp;        } catch (AwesomeNotificationException e) {</b>
+<b class="nc"><i>51</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>52</i>&nbsp;        }</b>
+<i>53</i>&nbsp;
+<b class="nc"><i>54</i>&nbsp;        return foregroundServiceIntent.startMode;</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    @Override
+<i>58</i>&nbsp;    public IBinder onBind(Intent intent) {
+<b class="nc"><i>59</i>&nbsp;        return null;</b>
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    // This class is used to transport parameters from the platform channel through an intent to the service
+<i>63</i>&nbsp;    public static class ForegroundServiceIntent implements Serializable {
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;        // Explicitly use HashMap here since it is serializable
+<i>66</i>&nbsp;        public final NotificationModel notificationModel;
+<i>67</i>&nbsp;        public final int startMode;
+<i>68</i>&nbsp;        public final boolean hasForegroundServiceType;
+<i>69</i>&nbsp;        public final int foregroundServiceType;
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;        public ForegroundServiceIntent(
+<i>72</i>&nbsp;                @NonNull NotificationModel notificationModel,
+<i>73</i>&nbsp;                int startMode,
+<i>74</i>&nbsp;                boolean hasForegroundServiceType,
+<b class="nc"><i>75</i>&nbsp;                int foregroundServiceType) {</b>
+<i>76</i>&nbsp;
+<b class="nc"><i>77</i>&nbsp;            this.notificationModel = notificationModel;</b>
+<b class="nc"><i>78</i>&nbsp;            this.startMode = startMode;</b>
+<b class="nc"><i>79</i>&nbsp;            this.hasForegroundServiceType = hasForegroundServiceType;</b>
+<b class="nc"><i>80</i>&nbsp;            this.foregroundServiceType = foregroundServiceType;</b>
+<i>81</i>&nbsp;        }
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;        @Override
+<i>84</i>&nbsp;        public @NonNull
+<i>85</i>&nbsp;        String toString() {
+<b class="nc"><i>86</i>&nbsp;            return &quot;StartParameter{&quot; +</b>
+<b class="nc"><i>87</i>&nbsp;                    &quot;notification=&quot; + notificationModel.toString() +</b>
+<i>88</i>&nbsp;                    &quot;, startMode=&quot; + startMode +
+<i>89</i>&nbsp;                    &quot;, hasForegroundServiceType=&quot; + hasForegroundServiceType +
+<i>90</i>&nbsp;                    &quot;, foregroundServiceType=&quot; + foregroundServiceType +
+<i>91</i>&nbsp;                    &#39;}&#39;;
+<i>92</i>&nbsp;        }
+<i>93</i>&nbsp;    }
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-28 19:15</div>
+</div>
+</body>
+</html>

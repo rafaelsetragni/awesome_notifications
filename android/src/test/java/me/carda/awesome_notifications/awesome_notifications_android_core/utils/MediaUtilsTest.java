@@ -7,6 +7,7 @@ import org.junit.Test;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.MediaSource;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class MediaUtilsTest {
 
@@ -54,7 +55,14 @@ public class MediaUtilsTest {
     @Test
     public void testCleanMediaPath() {
 
-        MediaUtils mediaUtils = new BitmapUtils();
+        MediaUtils mediaUtils = new MediaUtils() {
+            @Override
+            protected Boolean matchMediaType(String regex, String mediaPath) {
+                return super.matchMediaType(regex, mediaPath);
+            }
+        };
+
+        assertNull("Null values must return null", mediaUtils.cleanMediaPath(null));
 
         assertEquals("Network address must be preserved", "http://www.media.com",        mediaUtils.cleanMediaPath("http://www.media.com"));
         assertEquals("Network address must be preserved", "https://media.com",           mediaUtils.cleanMediaPath("https://media.com"));

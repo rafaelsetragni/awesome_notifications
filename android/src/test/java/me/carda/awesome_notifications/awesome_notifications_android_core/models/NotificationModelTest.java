@@ -2,6 +2,8 @@ package me.carda.awesome_notifications.awesome_notifications_android_core.models
 
 import android.content.Context;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.Serializable;
@@ -20,6 +22,20 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.excepti
 import static org.junit.Assert.*;
 
 public class NotificationModelTest {
+
+    @Before
+    public void setUp() throws Exception {
+        AbstractModel
+                .defaultValues
+                .putAll(Definitions.initialValues);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        Definitions
+                .initialValues
+                .clear();
+    }
 
     @Test
     public void fromJsonAndToJson() {

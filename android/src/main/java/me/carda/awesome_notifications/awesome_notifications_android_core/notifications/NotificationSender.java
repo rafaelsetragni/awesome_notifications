@@ -35,7 +35,9 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
     private NotificationModel notificationModel;
 
     private Boolean created = false;
-    private Boolean displayed = false;
+
+
+    /// FACTORY METHODS BEGIN *********************************
 
     public static void send(
             Context context,
@@ -49,8 +51,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                 notificationBuilder,
                 notificationModel.content.createdSource,
                 appLifeCycle,
-                notificationModel
-        );
+                notificationModel);
     }
 
     public static void send(
@@ -96,43 +97,28 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
             if (notificationModel != null){
 
-                NotificationReceived receivedNotification = null;
+                created = notificationModel
+                        .content
+                        .registerCreatedEvent(
+                            appLifeCycle,
+                            createdSource);
 
-                if(notificationModel.content.createdSource == null){
-                    notificationModel.content.createdSource = createdSource;
-                    created = true;
-                }
-
-                if(notificationModel.content.createdLifeCycle == null)
-                    notificationModel.content.createdLifeCycle = appLifeCycle;
+                notificationModel
+                        .content
+                        .registerDisplayedEvent(
+                                appLifeCycle);
 
                 if (
                     !StringUtils.isNullOrEmpty(notificationModel.content.title) ||
                     !StringUtils.isNullOrEmpty(notificationModel.content.body)
                 ){
-
-                    if(notificationModel.content.displayedLifeCycle == null)
-                        notificationModel.content.displayedLifeCycle = appLifeCycle;
-
-                    notificationModel.content.displayedDate = DateUtils.getUTCDate();
-
                     notificationModel = showNotification(context, notificationModel);
-
-                    // Only save DisplayedMethods if notificationModel was created and displayed successfully
-                    if(notificationModel != null){
-                        displayed = true;
-
-                        receivedNotification = new NotificationReceived(notificationModel.content);
-
-                        receivedNotification.displayedLifeCycle = receivedNotification.displayedLifeCycle == null ?
-                                appLifeCycle : receivedNotification.displayedLifeCycle;
-                    }
-
-                } else {
-                    receivedNotification = new NotificationReceived(notificationModel.content);
                 }
 
-                return receivedNotification;
+                // Only save DisplayedMethods if notificationModel was created
+                // and displayed successfully
+                if(notificationModel != null)
+                    return new NotificationReceived(notificationModel.content);
             }
 
         } catch (Exception e) {
@@ -149,42 +135,18 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
         // Only broadcast if notificationModel is valid
         if(notificationModel != null){
 
-            if(created){
-                CreatedManager.saveCreated(context, receivedNotification);
+            if(created)
                 BroadcastSender.sendBroadcastNotificationCreated(
                     context,
-                    receivedNotification
-                );
+                    receivedNotification);
 
-                CreatedManager.commitChanges(context);
-            }
-
-            if(displayed){
-                DisplayedManager.saveDisplayed(context, receivedNotification);
-                BroadcastSender.sendBroadcastNotificationDisplayed(
-                    context,
-                    receivedNotification
-                );
-
-                DisplayedManager.commitChanges(context);
-            }
+            BroadcastSender.sendBroadcastNotificationDisplayed(
+                context,
+                receivedNotification);
         }
     }
 
     /// AsyncTask METHODS END *********************************
-
-    private NotificationModel _buildSummaryGroupNotification(NotificationModel original){
-
-        NotificationModel pushSummary = notificationModel.ClonePush();
-
-        pushSummary.content.id = IntegerUtils.generateNextRandomId();
-        pushSummary.content.notificationLayout = NotificationLayout.Default;
-        pushSummary.content.largeIcon = null;
-        pushSummary.content.bigPicture = null;
-        pushSummary.groupSummary = true;
-
-        return  pushSummary;
-    }
 
     public NotificationModel showNotification(Context context, NotificationModel notificationModel) {
 
@@ -192,12 +154,23 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
             NotificationLifeCycle lifeCycle = AwesomeNotifications.getApplicationLifeCycle();
 
-            if(
-                (lifeCycle == NotificationLifeCycle.AppKilled) ||
-                (lifeCycle == NotificationLifeCycle.Foreground && notificationModel.content.displayOnForeground) ||
-                (lifeCycle == NotificationLifeCycle.Background && notificationModel.content.displayOnBackground)
-            ){
-                Notification notification = notificationBuilder.createNewAndroidNotification(context, notificationModel);
+            boolean shouldDisplay = true;
+            switch (lifeCycle){
+
+                case Background:
+                    shouldDisplay = notificationModel.content.displayOnBackground;
+                    break;
+
+                case Foreground:
+                    shouldDisplay = notificationModel.content.displayOnForeground;
+                    break;
+            }
+
+            if(shouldDisplay){
+
+                Notification notification =
+                        notificationBuilder
+                            .createNewAndroidNotification(context, notificationModel);
 
                 if(
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
@@ -207,7 +180,9 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                         .isFirstActiveOnGroupKey(notificationModel.content.groupKey)
                 ){
                     NotificationModel pushSummary = _buildSummaryGroupNotification(notificationModel);
-                    Notification summaryNotification = notificationBuilder.createNewAndroidNotification(context, pushSummary);
+                    Notification summaryNotification =
+                            notificationBuilder
+                                    .createNewAndroidNotification(context, pushSummary);
 
                     StatusBarManager
                         .getInstance(context)
@@ -225,5 +200,18 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             e.printStackTrace();
         }
         return null;
+    }
+
+    private NotificationModel _buildSummaryGroupNotification(NotificationModel original){
+
+        NotificationModel pushSummary = notificationModel.ClonePush();
+
+        pushSummary.content.id = IntegerUtils.generateNextRandomId();
+        pushSummary.content.notificationLayout = NotificationLayout.Default;
+        pushSummary.content.largeIcon = null;
+        pushSummary.content.bigPicture = null;
+        pushSummary.groupSummary = true;
+
+        return  pushSummary;
     }
 }

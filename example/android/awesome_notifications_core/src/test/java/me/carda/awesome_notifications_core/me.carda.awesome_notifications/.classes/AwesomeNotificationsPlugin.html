@@ -1,0 +1,1011 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AwesomeNotificationsPlugin</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">me.carda.awesome_notifications</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AwesomeNotificationsPlugin (me.carda.awesome_notifications)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AwesomeNotificationsPlugin</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 44)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 324)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AwesomeNotificationsPlugin$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AwesomeNotificationsPlugin$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AwesomeNotificationsPlugin$3</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AwesomeNotificationsPlugin$4</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AwesomeNotificationsPlugin$5</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 54)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 337)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package me.carda.awesome_notifications;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import android.content.Context;
+<i>4</i>&nbsp;import android.os.Build;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import io.flutter.Log;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.io.Serializable;
+<i>9</i>&nbsp;import java.util.ArrayList;
+<i>10</i>&nbsp;import java.util.Calendar;
+<i>11</i>&nbsp;import java.util.Date;
+<i>12</i>&nbsp;import java.util.List;
+<i>13</i>&nbsp;import java.util.Map;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;import androidx.annotation.NonNull;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import io.flutter.embedding.engine.plugins.FlutterPlugin;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import io.flutter.plugin.common.MethodCall;
+<i>20</i>&nbsp;import io.flutter.plugin.common.MethodChannel;
+<i>21</i>&nbsp;import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+<i>22</i>&nbsp;import io.flutter.plugin.common.MethodChannel.Result;
+<i>23</i>&nbsp;import io.flutter.plugin.common.PluginRegistry.Registrar;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
+<i>26</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.observers.AwesomeEventListener;
+<i>27</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
+<i>28</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.decoders.BitmapResourceDecoder;
+<i>29</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.completion_handlers.BitmapCompletionHandler;
+<i>30</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.completion_handlers.PermissionCompletionHandler;
+<i>31</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
+<i>32</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationScheduleModel;
+<i>33</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationChannelModel;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BooleanUtils;
+<i>38</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.DateUtils;
+<i>39</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.ListUtils;
+<i>40</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.MapUtils;
+<i>41</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;import static me.carda.awesome_notifications.awesome_notifications_android_core.Definitions.ACTION_HANDLE;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;/**
+<i>47</i>&nbsp; * AwesomeNotificationsPlugin
+<i>48</i>&nbsp; **/
+<b class="nc"><i>49</i>&nbsp;public class AwesomeNotificationsPlugin</b>
+<i>50</i>&nbsp;        implements FlutterPlugin, MethodCallHandler, AwesomeEventListener {
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    private static final String TAG = &quot;AwesomeNotificationsPlugin&quot;;
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    private MethodChannel pluginChannel;
+<i>55</i>&nbsp;    private AwesomeNotifications awesomeNotifications;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    // https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration
+<i>58</i>&nbsp;    // FOR OLDER FLUTTER VERSIONS (1.11 releases and bellow)
+<i>59</i>&nbsp;    public static void registerWith(Registrar registrar) {
+<i>60</i>&nbsp;
+<b class="nc"><i>61</i>&nbsp;        AwesomeNotificationsPlugin awesomeNotificationsPlugin</b>
+<i>62</i>&nbsp;                = new AwesomeNotificationsPlugin();
+<i>63</i>&nbsp;
+<b class="nc"><i>64</i>&nbsp;        awesomeNotificationsPlugin.AttachAwesomeNotificationsPlugin(</b>
+<b class="nc"><i>65</i>&nbsp;                registrar.context(),</b>
+<i>66</i>&nbsp;                new MethodChannel(
+<b class="nc"><i>67</i>&nbsp;                        registrar.messenger(),</b>
+<i>68</i>&nbsp;                        Definitions.CHANNEL_FLUTTER_PLUGIN
+<i>69</i>&nbsp;                ));
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    // FOR NEWER FLUTTER VERSIONS (1.12 releases and above)
+<i>73</i>&nbsp;    @Override
+<i>74</i>&nbsp;    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+<i>75</i>&nbsp;
+<b class="nc"><i>76</i>&nbsp;        AttachAwesomeNotificationsPlugin(</b>
+<b class="nc"><i>77</i>&nbsp;                flutterPluginBinding.getApplicationContext(),</b>
+<i>78</i>&nbsp;                new MethodChannel(
+<b class="nc"><i>79</i>&nbsp;                    flutterPluginBinding.getBinaryMessenger(),</b>
+<i>80</i>&nbsp;                    Definitions.CHANNEL_FLUTTER_PLUGIN
+<i>81</i>&nbsp;                ));
+<i>82</i>&nbsp;
+<b class="nc"><i>83</i>&nbsp;        if (AwesomeNotifications.debug)</b>
+<b class="nc"><i>84</i>&nbsp;            Log.d(TAG, &quot;Awesome Notifications attached to engine for Android &quot; + Build.VERSION.SDK_INT);</b>
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    @Override
+<i>88</i>&nbsp;    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+<b class="nc"><i>89</i>&nbsp;        detachAwesomeNotificationsPlugin(</b>
+<b class="nc"><i>90</i>&nbsp;                binding.getApplicationContext());</b>
+<i>91</i>&nbsp;
+<b class="nc"><i>92</i>&nbsp;        if (AwesomeNotifications.debug)</b>
+<b class="nc"><i>93</i>&nbsp;            Log.d(TAG, &quot;Awesome Notifications plugin detached from engine&quot;);</b>
+<i>94</i>&nbsp;    }
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;    private void AttachAwesomeNotificationsPlugin(Context applicationContext, MethodChannel channel) {
+<b class="nc"><i>97</i>&nbsp;        pluginChannel = channel;</b>
+<b class="nc"><i>98</i>&nbsp;        pluginChannel.setMethodCallHandler(this);</b>
+<i>99</i>&nbsp;
+<b class="nc"><i>100</i>&nbsp;        awesomeNotifications = new AwesomeNotifications(applicationContext);</b>
+<b class="nc"><i>101</i>&nbsp;        awesomeNotifications.subscribeOnAwesomeNotificationEvents(this);</b>
+<i>102</i>&nbsp;    }
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    private void detachAwesomeNotificationsPlugin(Context applicationContext) {
+<i>105</i>&nbsp;
+<b class="nc"><i>106</i>&nbsp;        pluginChannel.setMethodCallHandler(null);</b>
+<b class="nc"><i>107</i>&nbsp;        pluginChannel = null;</b>
+<i>108</i>&nbsp;
+<b class="nc"><i>109</i>&nbsp;        awesomeNotifications</b>
+<b class="nc"><i>110</i>&nbsp;                .unsubscribeOnAwesomeNotificationEvents(this)</b>
+<b class="nc"><i>111</i>&nbsp;                .dispose();</b>
+<i>112</i>&nbsp;
+<b class="nc"><i>113</i>&nbsp;        awesomeNotifications = null;</b>
+<i>114</i>&nbsp;
+<b class="nc"><i>115</i>&nbsp;        if (AwesomeNotifications.debug)</b>
+<b class="nc"><i>116</i>&nbsp;            Log.d(TAG, &quot;Awesome Notifications detached for Android &quot; + Build.VERSION.SDK_INT);</b>
+<i>117</i>&nbsp;    }
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;    @Override
+<i>120</i>&nbsp;    public void onNewAwesomeEvent(String eventType, Serializable content) {
+<b class="nc"><i>121</i>&nbsp;        if (pluginChannel != null)</b>
+<b class="nc"><i>122</i>&nbsp;            pluginChannel.invokeMethod(eventType, content);</b>
+<i>123</i>&nbsp;    }
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;    @Override
+<i>126</i>&nbsp;    public void onMethodCall(@NonNull final MethodCall call, @NonNull final Result result) {
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;        try {
+<i>129</i>&nbsp;
+<b class="nc"><i>130</i>&nbsp;            switch (call.method) {</b>
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;                case Definitions.CHANNEL_METHOD_INITIALIZE:
+<b class="nc"><i>133</i>&nbsp;                    channelMethodInitialize(call, result);</b>
+<i>134</i>&nbsp;                    return;
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;                case Definitions.CHANNEL_METHOD_SET_ACTION_HANDLE:
+<b class="nc"><i>137</i>&nbsp;                    channelMethodSetActionHandle(call, result);</b>
+<i>138</i>&nbsp;                    return;
+<i>139</i>&nbsp;
+<i>140</i>&nbsp;                case Definitions.CHANNEL_METHOD_GET_DRAWABLE_DATA:
+<b class="nc"><i>141</i>&nbsp;                    channelMethodGetDrawableData(call, result);</b>
+<i>142</i>&nbsp;                    return;
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;                case Definitions.CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED:
+<b class="nc"><i>145</i>&nbsp;                    channelIsNotificationAllowed(call, result);</b>
+<i>146</i>&nbsp;                    return;
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;                case Definitions.CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE:
+<b class="nc"><i>149</i>&nbsp;                    channelShowNotificationPage(call, result);</b>
+<i>150</i>&nbsp;                    return;
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;                case Definitions.CHANNEL_METHOD_SHOW_ALARM_PAGE:
+<b class="nc"><i>153</i>&nbsp;                    channelShowAlarmPage(call, result);</b>
+<i>154</i>&nbsp;                    return;
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;                case Definitions.CHANNEL_METHOD_SHOW_GLOBAL_DND_PAGE:
+<b class="nc"><i>157</i>&nbsp;                    channelShowGlobalDndPage(call, result);</b>
+<i>158</i>&nbsp;                    return;
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;                case Definitions.CHANNEL_METHOD_CHECK_PERMISSIONS:
+<b class="nc"><i>161</i>&nbsp;                    channelMethodCheckPermissions(call, result);</b>
+<i>162</i>&nbsp;                    return;
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;                case Definitions.CHANNEL_METHOD_SHOULD_SHOW_RATIONALE:
+<b class="nc"><i>165</i>&nbsp;                    channelMethodShouldShowRationale(call, result);</b>
+<i>166</i>&nbsp;                    return;
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;                case Definitions.CHANNEL_METHOD_REQUEST_NOTIFICATIONS:
+<b class="nc"><i>169</i>&nbsp;                    channelRequestUserPermissions(call, result);</b>
+<i>170</i>&nbsp;                    return;
+<i>171</i>&nbsp;
+<i>172</i>&nbsp;                case Definitions.CHANNEL_METHOD_CREATE_NOTIFICATION:
+<b class="nc"><i>173</i>&nbsp;                    channelMethodCreateNotification(call, result);</b>
+<i>174</i>&nbsp;                    return;
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;                case Definitions.CHANNEL_METHOD_LIST_ALL_SCHEDULES:
+<b class="nc"><i>177</i>&nbsp;                    channelMethodListAllSchedules(call, result);</b>
+<i>178</i>&nbsp;                    return;
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;                case Definitions.CHANNEL_METHOD_GET_NEXT_DATE:
+<b class="nc"><i>181</i>&nbsp;                    channelMethodGetNextDate(call, result);</b>
+<i>182</i>&nbsp;                    return;
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;                case Definitions.CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER:
+<b class="nc"><i>185</i>&nbsp;                    channelMethodGetLocalTimeZone(call, result);</b>
+<i>186</i>&nbsp;                    return;
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;                case Definitions.CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER:
+<b class="nc"><i>189</i>&nbsp;                    channelMethodGetUtcTimeZone(call, result);</b>
+<i>190</i>&nbsp;                    return;
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;                case Definitions.CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL:
+<b class="nc"><i>193</i>&nbsp;                    channelMethodSetChannel(call, result);</b>
+<i>194</i>&nbsp;                    return;
+<i>195</i>&nbsp;
+<i>196</i>&nbsp;                case Definitions.CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL:
+<b class="nc"><i>197</i>&nbsp;                    channelMethodRemoveChannel(call, result);</b>
+<i>198</i>&nbsp;                    return;
+<i>199</i>&nbsp;
+<i>200</i>&nbsp;                case Definitions.CHANNEL_METHOD_GET_BADGE_COUNT:
+<b class="nc"><i>201</i>&nbsp;                    channelMethodGetBadgeCounter(call, result);</b>
+<i>202</i>&nbsp;                    return;
+<i>203</i>&nbsp;
+<i>204</i>&nbsp;                case Definitions.CHANNEL_METHOD_SET_BADGE_COUNT:
+<b class="nc"><i>205</i>&nbsp;                    channelMethodSetBadgeCounter(call, result);</b>
+<i>206</i>&nbsp;                    return;
+<i>207</i>&nbsp;
+<i>208</i>&nbsp;                case Definitions.CHANNEL_METHOD_INCREMENT_BADGE_COUNT:
+<b class="nc"><i>209</i>&nbsp;                    channelMethodIncrementBadge(call, result);</b>
+<i>210</i>&nbsp;                    return;
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;                case Definitions.CHANNEL_METHOD_DECREMENT_BADGE_COUNT:
+<b class="nc"><i>213</i>&nbsp;                    channelMethodDecrementBadge(call, result);</b>
+<i>214</i>&nbsp;                    return;
+<i>215</i>&nbsp;
+<i>216</i>&nbsp;                case Definitions.CHANNEL_METHOD_RESET_BADGE:
+<b class="nc"><i>217</i>&nbsp;                    channelMethodResetBadge(call, result);</b>
+<i>218</i>&nbsp;                    return;
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;                case Definitions.CHANNEL_METHOD_DISMISS_NOTIFICATION:
+<b class="nc"><i>221</i>&nbsp;                    channelMethodDismissNotification(call, result);</b>
+<i>222</i>&nbsp;                    return;
+<i>223</i>&nbsp;
+<i>224</i>&nbsp;                case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATION:
+<b class="nc"><i>225</i>&nbsp;                    channelMethodCancelNotification(call, result);</b>
+<i>226</i>&nbsp;                    return;
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;                case Definitions.CHANNEL_METHOD_CANCEL_SCHEDULE:
+<b class="nc"><i>229</i>&nbsp;                    channelMethodCancelSchedule(call, result);</b>
+<i>230</i>&nbsp;                    return;
+<i>231</i>&nbsp;
+<i>232</i>&nbsp;                case Definitions.CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_CHANNEL_KEY:
+<b class="nc"><i>233</i>&nbsp;                    channelMethodDismissNotificationsByChannelKey(call, result);</b>
+<i>234</i>&nbsp;                    return;
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;                case Definitions.CHANNEL_METHOD_CANCEL_SCHEDULES_BY_CHANNEL_KEY:
+<b class="nc"><i>237</i>&nbsp;                    channelMethodCancelSchedulesByChannelKey(call, result);</b>
+<i>238</i>&nbsp;                    return;
+<i>239</i>&nbsp;
+<i>240</i>&nbsp;                case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_CHANNEL_KEY:
+<b class="nc"><i>241</i>&nbsp;                    channelMethodCancelNotificationsByChannelKey(call, result);</b>
+<i>242</i>&nbsp;                    return;
+<i>243</i>&nbsp;
+<i>244</i>&nbsp;                case Definitions.CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_GROUP_KEY:
+<b class="nc"><i>245</i>&nbsp;                    channelMethodDismissNotificationsByGroupKey(call, result);</b>
+<i>246</i>&nbsp;                    return;
+<i>247</i>&nbsp;
+<i>248</i>&nbsp;                case Definitions.CHANNEL_METHOD_CANCEL_SCHEDULES_BY_GROUP_KEY:
+<b class="nc"><i>249</i>&nbsp;                    channelMethodCancelSchedulesByGroupKey(call, result);</b>
+<i>250</i>&nbsp;                    return;
+<i>251</i>&nbsp;
+<i>252</i>&nbsp;                case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_GROUP_KEY:
+<b class="nc"><i>253</i>&nbsp;                    channelMethodCancelNotificationsByGroupKey(call, result);</b>
+<i>254</i>&nbsp;                    return;
+<i>255</i>&nbsp;
+<i>256</i>&nbsp;                case Definitions.CHANNEL_METHOD_DISMISS_ALL_NOTIFICATIONS:
+<b class="nc"><i>257</i>&nbsp;                    channelMethodDismissAllNotifications(call, result);</b>
+<i>258</i>&nbsp;                    return;
+<i>259</i>&nbsp;
+<i>260</i>&nbsp;                case Definitions.CHANNEL_METHOD_CANCEL_ALL_SCHEDULES:
+<b class="nc"><i>261</i>&nbsp;                    channelMethodCancelAllSchedules(call, result);</b>
+<i>262</i>&nbsp;                    return;
+<i>263</i>&nbsp;
+<i>264</i>&nbsp;                case Definitions.CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS:
+<b class="nc"><i>265</i>&nbsp;                    channelMethodCancelAllNotifications(call, result);</b>
+<i>266</i>&nbsp;                    return;
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;                case Definitions.CHANNEL_METHOD_START_FOREGROUND:
+<b class="nc"><i>269</i>&nbsp;                    channelMethodStartForeground(call, result);</b>
+<i>270</i>&nbsp;                    return;
+<i>271</i>&nbsp;
+<i>272</i>&nbsp;                case Definitions.CHANNEL_METHOD_STOP_FOREGROUND:
+<b class="nc"><i>273</i>&nbsp;                    channelMethodStopForeground(call, result);</b>
+<i>274</i>&nbsp;                    return;
+<i>275</i>&nbsp;
+<i>276</i>&nbsp;                default:
+<b class="nc"><i>277</i>&nbsp;                    result.notImplemented();</b>
+<i>278</i>&nbsp;            }
+<i>279</i>&nbsp;
+<b class="nc"><i>280</i>&nbsp;        } catch (Exception e) {</b>
+<b class="nc"><i>281</i>&nbsp;            if (AwesomeNotifications.debug)</b>
+<b class="nc"><i>282</i>&nbsp;                Log.d(TAG, String.format(&quot;%s&quot;, e.getMessage()));</b>
+<i>283</i>&nbsp;
+<b class="nc"><i>284</i>&nbsp;            result.error(call.method, e.getMessage(), e);</b>
+<b class="nc"><i>285</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>286</i>&nbsp;        }</b>
+<i>287</i>&nbsp;    }
+<i>288</i>&nbsp;
+<i>289</i>&nbsp;    private void channelMethodStartForeground(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>290</i>&nbsp;
+<b class="nc"><i>291</i>&nbsp;        Map&lt;String, Object&gt; notificationData = call.&lt;Map&lt;String, Object&gt;&gt;argument(&quot;notificationData&quot;);</b>
+<b class="nc"><i>292</i>&nbsp;        Integer startType = call.&lt;Integer&gt;argument(&quot;startType&quot;);</b>
+<b class="nc"><i>293</i>&nbsp;        Boolean hasForegroundServiceType = call.&lt;Boolean&gt;argument(&quot;hasForegroundServiceType&quot;);</b>
+<b class="nc"><i>294</i>&nbsp;        Integer foregroundServiceType = call.&lt;Integer&gt;argument(&quot;foregroundServiceType&quot;);</b>
+<i>295</i>&nbsp;
+<b class="nc"><i>296</i>&nbsp;        NotificationModel notificationModel = new NotificationModel().fromMap(notificationData);</b>
+<i>297</i>&nbsp;
+<b class="nc"><i>298</i>&nbsp;        if(notificationModel == null)</b>
+<b class="nc"><i>299</i>&nbsp;            throw new AwesomeNotificationException(&quot;Foreground notification is invalid&quot;);</b>
+<i>300</i>&nbsp;
+<b class="nc"><i>301</i>&nbsp;        if(startType == null)</b>
+<b class="nc"><i>302</i>&nbsp;            throw new AwesomeNotificationException(&quot;Foreground start type is required&quot;);</b>
+<i>303</i>&nbsp;
+<b class="nc"><i>304</i>&nbsp;        if(hasForegroundServiceType == null)</b>
+<b class="nc"><i>305</i>&nbsp;            throw new AwesomeNotificationException(&quot;hasForegroundServiceType is required&quot;);</b>
+<i>306</i>&nbsp;
+<b class="nc"><i>307</i>&nbsp;        if(foregroundServiceType == null)</b>
+<b class="nc"><i>308</i>&nbsp;            throw new AwesomeNotificationException(&quot;foregroundServiceType is required&quot;);</b>
+<i>309</i>&nbsp;
+<b class="nc"><i>310</i>&nbsp;        awesomeNotifications.startForegroundService(</b>
+<i>311</i>&nbsp;                    notificationModel,
+<b class="nc"><i>312</i>&nbsp;                    startType,</b>
+<b class="nc"><i>313</i>&nbsp;                    hasForegroundServiceType,</b>
+<b class="nc"><i>314</i>&nbsp;                    foregroundServiceType</b>
+<i>315</i>&nbsp;                );
+<i>316</i>&nbsp;    }
+<i>317</i>&nbsp;
+<i>318</i>&nbsp;    private void channelMethodStopForeground(@NonNull final MethodCall call, @NonNull final Result result) {
+<b class="nc"><i>319</i>&nbsp;        awesomeNotifications.stopForegroundService();</b>
+<b class="nc"><i>320</i>&nbsp;        result.success(null);</b>
+<i>321</i>&nbsp;    }
+<i>322</i>&nbsp;
+<i>323</i>&nbsp;    private void channelMethodGetDrawableData(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>324</i>&nbsp;
+<b class="nc"><i>325</i>&nbsp;        String bitmapReference = call.arguments();</b>
+<i>326</i>&nbsp;
+<b class="nc"><i>327</i>&nbsp;        awesomeNotifications</b>
+<b class="nc"><i>328</i>&nbsp;                .getDrawableData(</b>
+<i>329</i>&nbsp;                    bitmapReference,
+<b class="nc"><i>330</i>&nbsp;                    new BitmapCompletionHandler() {</b>
+<i>331</i>&nbsp;                        @Override
+<i>332</i>&nbsp;                        public void handle(byte[] byteArray, Exception exception) {
+<b class="nc"><i>333</i>&nbsp;                            if(exception != null){</b>
+<b class="nc"><i>334</i>&nbsp;                                result.error(</b>
+<i>335</i>&nbsp;                                        BitmapResourceDecoder.TAG,
+<b class="nc"><i>336</i>&nbsp;                                        exception.getMessage(),</b>
+<i>337</i>&nbsp;                                        exception);
+<i>338</i>&nbsp;                            }
+<i>339</i>&nbsp;                            else {
+<b class="nc"><i>340</i>&nbsp;                                result.success(byteArray);</b>
+<i>341</i>&nbsp;                            }
+<i>342</i>&nbsp;                        }
+<i>343</i>&nbsp;                    });
+<i>344</i>&nbsp;    }
+<i>345</i>&nbsp;
+<i>346</i>&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+<i>347</i>&nbsp;    private void channelMethodSetChannel(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>348</i>&nbsp;
+<b class="nc"><i>349</i>&nbsp;        Map&lt;String, Object&gt; channelData = MapUtils.extractArgument(call.arguments(), Map.class).orNull();</b>
+<b class="nc"><i>350</i>&nbsp;        if (channelData == null)</b>
+<b class="nc"><i>351</i>&nbsp;            throw new AwesomeNotificationException(&quot;Channel is invalid&quot;);</b>
+<i>352</i>&nbsp;
+<b class="nc"><i>353</i>&nbsp;        NotificationChannelModel channelModel = new NotificationChannelModel().fromMap(channelData);</b>
+<b class="nc"><i>354</i>&nbsp;        if (channelModel == null)</b>
+<b class="nc"><i>355</i>&nbsp;            throw new AwesomeNotificationException(&quot;Channel is invalid&quot;);</b>
+<i>356</i>&nbsp;
+<b class="nc"><i>357</i>&nbsp;        boolean forceUpdate = BooleanUtils.getInstance().getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));</b>
+<i>358</i>&nbsp;
+<b class="nc"><i>359</i>&nbsp;        boolean channelSaved =</b>
+<i>360</i>&nbsp;                awesomeNotifications
+<b class="nc"><i>361</i>&nbsp;                        .setChannel(channelModel, forceUpdate);</b>
+<i>362</i>&nbsp;
+<b class="nc"><i>363</i>&nbsp;        result.success(channelSaved);</b>
+<i>364</i>&nbsp;    }
+<i>365</i>&nbsp;
+<i>366</i>&nbsp;    private void channelMethodRemoveChannel(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<b class="nc"><i>367</i>&nbsp;        String channelKey = call.arguments();</b>
+<i>368</i>&nbsp;
+<b class="nc"><i>369</i>&nbsp;        if (StringUtils.isNullOrEmpty(channelKey))</b>
+<b class="nc"><i>370</i>&nbsp;            throw new AwesomeNotificationException(&quot;Empty channel key&quot;);</b>
+<i>371</i>&nbsp;
+<b class="nc"><i>372</i>&nbsp;        boolean removed =</b>
+<i>373</i>&nbsp;                awesomeNotifications
+<b class="nc"><i>374</i>&nbsp;                        .removeChannel(channelKey);</b>
+<i>375</i>&nbsp;
+<b class="nc"><i>376</i>&nbsp;        if (AwesomeNotifications.debug)</b>
+<b class="nc"><i>377</i>&nbsp;            Log.d(TAG, removed ?</b>
+<b class="nc"><i>378</i>&nbsp;                    &quot;Channel removed&quot; :</b>
+<b class="nc"><i>379</i>&nbsp;                    &quot;Channel &#39;&quot; + channelKey + &quot;&#39; not found&quot;);</b>
+<i>380</i>&nbsp;
+<b class="nc"><i>381</i>&nbsp;        result.success(removed);</b>
+<i>382</i>&nbsp;    }
+<i>383</i>&nbsp;
+<i>384</i>&nbsp;    private void channelMethodGetBadgeCounter(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<b class="nc"><i>385</i>&nbsp;        Integer badgeCount =</b>
+<b class="nc"><i>386</i>&nbsp;                awesomeNotifications</b>
+<b class="nc"><i>387</i>&nbsp;                        .getGlobalBadgeCounter();</b>
+<i>388</i>&nbsp;
+<b class="nc"><i>389</i>&nbsp;        result.success(badgeCount);</b>
+<i>390</i>&nbsp;    }
+<i>391</i>&nbsp;
+<i>392</i>&nbsp;    private void channelMethodSetBadgeCounter(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>393</i>&nbsp;
+<b class="nc"><i>394</i>&nbsp;        int count = MapUtils.extractArgument(call.arguments(), Integer.class).or(-1);</b>
+<b class="nc"><i>395</i>&nbsp;        if (count &lt; 0)</b>
+<b class="nc"><i>396</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid Badge value&quot;);</b>
+<i>397</i>&nbsp;
+<b class="nc"><i>398</i>&nbsp;        awesomeNotifications.setGlobalBadgeCounter(count);</b>
+<b class="nc"><i>399</i>&nbsp;        result.success(true);</b>
+<i>400</i>&nbsp;    }
+<i>401</i>&nbsp;
+<i>402</i>&nbsp;    private void channelMethodResetBadge(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<b class="nc"><i>403</i>&nbsp;        awesomeNotifications.resetGlobalBadgeCounter();</b>
+<b class="nc"><i>404</i>&nbsp;        result.success(null);</b>
+<i>405</i>&nbsp;    }
+<i>406</i>&nbsp;
+<i>407</i>&nbsp;    private void channelMethodIncrementBadge(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<b class="nc"><i>408</i>&nbsp;        int badgeCount = awesomeNotifications.incrementGlobalBadgeCounter();</b>
+<b class="nc"><i>409</i>&nbsp;        result.success(badgeCount);</b>
+<i>410</i>&nbsp;    }
+<i>411</i>&nbsp;
+<i>412</i>&nbsp;    private void channelMethodDecrementBadge(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<b class="nc"><i>413</i>&nbsp;        int badgeCount = awesomeNotifications.decrementGlobalBadgeCounter();</b>
+<b class="nc"><i>414</i>&nbsp;        result.success(badgeCount);</b>
+<i>415</i>&nbsp;    }
+<i>416</i>&nbsp;
+<i>417</i>&nbsp;    private void channelMethodDismissNotification(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>418</i>&nbsp;
+<b class="nc"><i>419</i>&nbsp;        Integer notificationId = call.arguments();</b>
+<b class="nc"><i>420</i>&nbsp;        if (notificationId == null || notificationId &lt; 0)</b>
+<b class="nc"><i>421</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid id value&quot;);</b>
+<i>422</i>&nbsp;
+<b class="nc"><i>423</i>&nbsp;        boolean dismissed = awesomeNotifications.dismissNotification(notificationId);</b>
+<i>424</i>&nbsp;
+<b class="nc"><i>425</i>&nbsp;        if (AwesomeNotifications.debug)</b>
+<b class="nc"><i>426</i>&nbsp;            Log.d(TAG, dismissed ?</b>
+<b class="nc"><i>427</i>&nbsp;                    &quot;Notification &quot; + notificationId + &quot; dismissed&quot; :</b>
+<b class="nc"><i>428</i>&nbsp;                    &quot;Notification &quot; + notificationId + &quot; was not found&quot;);</b>
+<i>429</i>&nbsp;
+<b class="nc"><i>430</i>&nbsp;        result.success(dismissed);</b>
+<i>431</i>&nbsp;    }
+<i>432</i>&nbsp;
+<i>433</i>&nbsp;    private void channelMethodCancelSchedule(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>434</i>&nbsp;
+<b class="nc"><i>435</i>&nbsp;        Integer notificationId = call.arguments();</b>
+<b class="nc"><i>436</i>&nbsp;        if (notificationId == null || notificationId &lt; 0)</b>
+<b class="nc"><i>437</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid id value&quot;);</b>
+<i>438</i>&nbsp;
+<b class="nc"><i>439</i>&nbsp;        boolean canceled = awesomeNotifications.cancelSchedule(notificationId);</b>
+<i>440</i>&nbsp;
+<b class="nc"><i>441</i>&nbsp;        if (AwesomeNotifications.debug)</b>
+<b class="nc"><i>442</i>&nbsp;            Log.d(TAG, canceled ?</b>
+<b class="nc"><i>443</i>&nbsp;                    &quot;Schedule &quot; + notificationId + &quot; cancelled&quot; :</b>
+<b class="nc"><i>444</i>&nbsp;                    &quot;Schedule &quot; + notificationId + &quot; was not found&quot;);</b>
+<i>445</i>&nbsp;
+<b class="nc"><i>446</i>&nbsp;        result.success(canceled);</b>
+<i>447</i>&nbsp;    }
+<i>448</i>&nbsp;
+<i>449</i>&nbsp;    private void channelMethodCancelNotification(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>450</i>&nbsp;
+<b class="nc"><i>451</i>&nbsp;        Integer notificationId = call.arguments();</b>
+<b class="nc"><i>452</i>&nbsp;        if (notificationId == null || notificationId &lt; 0)</b>
+<b class="nc"><i>453</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid id value&quot;);</b>
+<i>454</i>&nbsp;
+<b class="nc"><i>455</i>&nbsp;        boolean canceled = awesomeNotifications.cancelNotification(notificationId);</b>
+<i>456</i>&nbsp;
+<b class="nc"><i>457</i>&nbsp;        if (AwesomeNotifications.debug)</b>
+<b class="nc"><i>458</i>&nbsp;            Log.d(TAG, canceled ?</b>
+<b class="nc"><i>459</i>&nbsp;                    &quot;Notification &quot; + notificationId + &quot; cancelled&quot; :</b>
+<b class="nc"><i>460</i>&nbsp;                    &quot;Notification &quot; + notificationId + &quot; was not found&quot;);</b>
+<i>461</i>&nbsp;
+<b class="nc"><i>462</i>&nbsp;        result.success(canceled);</b>
+<i>463</i>&nbsp;    }
+<i>464</i>&nbsp;
+<i>465</i>&nbsp;    private void channelMethodDismissNotificationsByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>466</i>&nbsp;
+<b class="nc"><i>467</i>&nbsp;        String channelKey = call.arguments();</b>
+<b class="nc"><i>468</i>&nbsp;        if (StringUtils.isNullOrEmpty(channelKey))</b>
+<b class="nc"><i>469</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid channelKey value&quot;);</b>
+<i>470</i>&nbsp;
+<b class="nc"><i>471</i>&nbsp;        boolean dismissed = awesomeNotifications.dismissNotificationsByChannelKey(channelKey);</b>
+<i>472</i>&nbsp;
+<b class="nc"><i>473</i>&nbsp;        if(AwesomeNotifications.debug)</b>
+<b class="nc"><i>474</i>&nbsp;            Log.d(TAG, dismissed ?</b>
+<b class="nc"><i>475</i>&nbsp;                    &quot;Notifications from channel &quot; + channelKey + &quot; dismissed&quot; :</b>
+<b class="nc"><i>476</i>&nbsp;                    &quot;Notifications from channel &quot; + channelKey + &quot; not found&quot;);</b>
+<i>477</i>&nbsp;
+<b class="nc"><i>478</i>&nbsp;        result.success(dismissed);</b>
+<i>479</i>&nbsp;    }
+<i>480</i>&nbsp;
+<i>481</i>&nbsp;    private void channelMethodCancelSchedulesByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>482</i>&nbsp;
+<b class="nc"><i>483</i>&nbsp;        String channelKey = call.arguments();</b>
+<b class="nc"><i>484</i>&nbsp;        if (StringUtils.isNullOrEmpty(channelKey))</b>
+<b class="nc"><i>485</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid channelKey value&quot;);</b>
+<i>486</i>&nbsp;
+<b class="nc"><i>487</i>&nbsp;        boolean canceled = awesomeNotifications.cancelSchedulesByChannelKey(channelKey);</b>
+<i>488</i>&nbsp;
+<b class="nc"><i>489</i>&nbsp;        if(AwesomeNotifications.debug)</b>
+<b class="nc"><i>490</i>&nbsp;            Log.d(TAG, canceled ?</b>
+<b class="nc"><i>491</i>&nbsp;                    &quot;Scheduled Notifications from channel &quot; + channelKey + &quot; canceled&quot; :</b>
+<b class="nc"><i>492</i>&nbsp;                    &quot;Scheduled Notifications from channel &quot; + channelKey + &quot; not found&quot;);</b>
+<i>493</i>&nbsp;
+<b class="nc"><i>494</i>&nbsp;        result.success(canceled);</b>
+<i>495</i>&nbsp;    }
+<i>496</i>&nbsp;
+<i>497</i>&nbsp;    private void channelMethodCancelNotificationsByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>498</i>&nbsp;
+<b class="nc"><i>499</i>&nbsp;        String channelKey = call.arguments();</b>
+<b class="nc"><i>500</i>&nbsp;        if (StringUtils.isNullOrEmpty(channelKey))</b>
+<b class="nc"><i>501</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid channelKey value&quot;);</b>
+<i>502</i>&nbsp;
+<b class="nc"><i>503</i>&nbsp;        boolean canceled = awesomeNotifications.cancelNotificationsByChannelKey(channelKey);</b>
+<i>504</i>&nbsp;
+<b class="nc"><i>505</i>&nbsp;        if(AwesomeNotifications.debug)</b>
+<b class="nc"><i>506</i>&nbsp;            Log.d(TAG, canceled ?</b>
+<b class="nc"><i>507</i>&nbsp;                    &quot;Notifications and schedules from channel &quot; + channelKey + &quot; canceled&quot; :</b>
+<b class="nc"><i>508</i>&nbsp;                    &quot;Notifications and schedules from channel &quot; + channelKey + &quot; not found&quot;);</b>
+<i>509</i>&nbsp;
+<b class="nc"><i>510</i>&nbsp;        result.success(canceled);</b>
+<i>511</i>&nbsp;    }
+<i>512</i>&nbsp;
+<i>513</i>&nbsp;    private void channelMethodDismissNotificationsByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>514</i>&nbsp;
+<b class="nc"><i>515</i>&nbsp;        String groupKey = call.arguments();</b>
+<b class="nc"><i>516</i>&nbsp;        if (StringUtils.isNullOrEmpty(groupKey))</b>
+<b class="nc"><i>517</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid groupKey value&quot;);</b>
+<i>518</i>&nbsp;
+<b class="nc"><i>519</i>&nbsp;        boolean dismissed = awesomeNotifications.dismissNotificationsByGroupKey(groupKey);</b>
+<i>520</i>&nbsp;
+<b class="nc"><i>521</i>&nbsp;        if(AwesomeNotifications.debug)</b>
+<b class="nc"><i>522</i>&nbsp;            Log.d(TAG, dismissed ?</b>
+<b class="nc"><i>523</i>&nbsp;                    &quot;Notifications from group &quot; + groupKey + &quot; dismissed&quot; :</b>
+<b class="nc"><i>524</i>&nbsp;                    &quot;Notifications from group &quot; + groupKey + &quot; not found&quot;);</b>
+<i>525</i>&nbsp;
+<b class="nc"><i>526</i>&nbsp;        result.success(dismissed);</b>
+<i>527</i>&nbsp;    }
+<i>528</i>&nbsp;
+<i>529</i>&nbsp;    private void channelMethodCancelSchedulesByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>530</i>&nbsp;
+<b class="nc"><i>531</i>&nbsp;        String groupKey = call.arguments();</b>
+<b class="nc"><i>532</i>&nbsp;        if (StringUtils.isNullOrEmpty(groupKey))</b>
+<b class="nc"><i>533</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid groupKey value&quot;);</b>
+<i>534</i>&nbsp;
+<b class="nc"><i>535</i>&nbsp;        boolean canceled = awesomeNotifications.cancelSchedulesByGroupKey(groupKey);</b>
+<i>536</i>&nbsp;
+<b class="nc"><i>537</i>&nbsp;        if(AwesomeNotifications.debug)</b>
+<b class="nc"><i>538</i>&nbsp;            Log.d(TAG, canceled ?</b>
+<b class="nc"><i>539</i>&nbsp;                    &quot;Scheduled Notifications from group &quot; + groupKey + &quot; canceled&quot; :</b>
+<b class="nc"><i>540</i>&nbsp;                    &quot;Scheduled Notifications from group &quot; + groupKey + &quot; not found&quot;);</b>
+<i>541</i>&nbsp;
+<b class="nc"><i>542</i>&nbsp;        result.success(canceled);</b>
+<i>543</i>&nbsp;    }
+<i>544</i>&nbsp;
+<i>545</i>&nbsp;    private void channelMethodCancelNotificationsByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>546</i>&nbsp;
+<b class="nc"><i>547</i>&nbsp;        String groupKey = call.arguments();</b>
+<b class="nc"><i>548</i>&nbsp;        if (StringUtils.isNullOrEmpty(groupKey))</b>
+<b class="nc"><i>549</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid groupKey value&quot;);</b>
+<i>550</i>&nbsp;
+<b class="nc"><i>551</i>&nbsp;        boolean canceled = awesomeNotifications.cancelNotificationsByGroupKey(groupKey);</b>
+<i>552</i>&nbsp;
+<b class="nc"><i>553</i>&nbsp;        if(AwesomeNotifications.debug)</b>
+<b class="nc"><i>554</i>&nbsp;            Log.d(TAG, canceled ?</b>
+<b class="nc"><i>555</i>&nbsp;                    &quot;Notifications and schedules from group &quot; + groupKey + &quot; canceled&quot; :</b>
+<b class="nc"><i>556</i>&nbsp;                    &quot;Notifications and schedules from group &quot; + groupKey + &quot; not found to be&quot;);</b>
+<i>557</i>&nbsp;
+<b class="nc"><i>558</i>&nbsp;        result.success(canceled);</b>
+<i>559</i>&nbsp;    }
+<i>560</i>&nbsp;
+<i>561</i>&nbsp;    private void channelMethodDismissAllNotifications(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>562</i>&nbsp;
+<b class="nc"><i>563</i>&nbsp;        awesomeNotifications.dismissAllNotifications();</b>
+<i>564</i>&nbsp;
+<b class="nc"><i>565</i>&nbsp;        if (AwesomeNotifications.debug)</b>
+<b class="nc"><i>566</i>&nbsp;            Log.d(TAG, &quot;All notifications was dismissed&quot;);</b>
+<i>567</i>&nbsp;
+<b class="nc"><i>568</i>&nbsp;        result.success(true);</b>
+<i>569</i>&nbsp;    }
+<i>570</i>&nbsp;
+<i>571</i>&nbsp;    private void channelMethodCancelAllSchedules(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>572</i>&nbsp;
+<b class="nc"><i>573</i>&nbsp;        awesomeNotifications.cancelAllSchedules();</b>
+<i>574</i>&nbsp;
+<b class="nc"><i>575</i>&nbsp;        if (AwesomeNotifications.debug)</b>
+<b class="nc"><i>576</i>&nbsp;            Log.d(TAG, &quot;All notifications scheduled was cancelled&quot;);</b>
+<i>577</i>&nbsp;
+<b class="nc"><i>578</i>&nbsp;        result.success(true);</b>
+<i>579</i>&nbsp;    }
+<i>580</i>&nbsp;
+<i>581</i>&nbsp;    private void channelMethodCancelAllNotifications(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>582</i>&nbsp;
+<b class="nc"><i>583</i>&nbsp;        awesomeNotifications.cancelAllNotifications();</b>
+<i>584</i>&nbsp;
+<b class="nc"><i>585</i>&nbsp;        if (AwesomeNotifications.debug)</b>
+<b class="nc"><i>586</i>&nbsp;            Log.d(TAG, &quot;All notifications was cancelled&quot;);</b>
+<i>587</i>&nbsp;
+<b class="nc"><i>588</i>&nbsp;        result.success(true);</b>
+<i>589</i>&nbsp;    }
+<i>590</i>&nbsp;
+<i>591</i>&nbsp;    private void channelMethodListAllSchedules(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<b class="nc"><i>592</i>&nbsp;        List&lt;NotificationModel&gt; activeSchedules =</b>
+<b class="nc"><i>593</i>&nbsp;                awesomeNotifications.listAllPendingSchedules();</b>
+<i>594</i>&nbsp;
+<b class="nc"><i>595</i>&nbsp;        List&lt;Map&lt;String, Object&gt;&gt; listSerialized = new ArrayList&lt;&gt;();</b>
+<i>596</i>&nbsp;
+<b class="nc"><i>597</i>&nbsp;        if (activeSchedules != null)</b>
+<b class="nc"><i>598</i>&nbsp;            for (NotificationModel notificationModel : activeSchedules) {</b>
+<b class="nc"><i>599</i>&nbsp;                Map&lt;String, Object&gt; serialized = notificationModel.toMap();</b>
+<b class="nc"><i>600</i>&nbsp;                listSerialized.add(serialized);</b>
+<b class="nc"><i>601</i>&nbsp;            }</b>
+<i>602</i>&nbsp;
+<b class="nc"><i>603</i>&nbsp;        result.success(listSerialized);</b>
+<i>604</i>&nbsp;    }
+<i>605</i>&nbsp;
+<i>606</i>&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+<i>607</i>&nbsp;    private void channelMethodGetNextDate(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>608</i>&nbsp;
+<b class="nc"><i>609</i>&nbsp;        Map&lt;String, Object&gt; data = MapUtils.extractArgument(call.arguments(), Map.class).orNull();</b>
+<b class="nc"><i>610</i>&nbsp;        if (data == null)</b>
+<b class="nc"><i>611</i>&nbsp;            throw new AwesomeNotificationException(&quot;Schedule data is invalid&quot;);</b>
+<i>612</i>&nbsp;
+<b class="nc"><i>613</i>&nbsp;        Map&lt;String, Object&gt; scheduleData = (Map&lt;String, Object&gt;) data.get(Definitions.NOTIFICATION_MODEL_SCHEDULE);</b>
+<b class="nc"><i>614</i>&nbsp;        if (scheduleData == null)</b>
+<b class="nc"><i>615</i>&nbsp;            throw new AwesomeNotificationException(&quot;Schedule data is invalid&quot;);</b>
+<i>616</i>&nbsp;
+<b class="nc"><i>617</i>&nbsp;        NotificationScheduleModel scheduleModel = NotificationScheduleModel.getScheduleModelFromMap(scheduleData);</b>
+<b class="nc"><i>618</i>&nbsp;        if (scheduleModel == null)</b>
+<b class="nc"><i>619</i>&nbsp;            throw new AwesomeNotificationException(&quot;Schedule data is invalid&quot;);</b>
+<i>620</i>&nbsp;
+<b class="nc"><i>621</i>&nbsp;        String fixedDateString = (String) data.get(Definitions.NOTIFICATION_INITIAL_FIXED_DATE);</b>
+<b class="nc"><i>622</i>&nbsp;        Date fixedDate = null;</b>
+<b class="nc"><i>623</i>&nbsp;        if (!StringUtils.isNullOrEmpty(fixedDateString))</b>
+<b class="nc"><i>624</i>&nbsp;            fixedDate = DateUtils.stringToDate(fixedDateString, scheduleModel.timeZone);</b>
+<i>625</i>&nbsp;
+<b class="nc"><i>626</i>&nbsp;        Calendar nextValidDate =</b>
+<i>627</i>&nbsp;                awesomeNotifications
+<b class="nc"><i>628</i>&nbsp;                        .getNextValidDate(scheduleModel, fixedDate);</b>
+<i>629</i>&nbsp;
+<b class="nc"><i>630</i>&nbsp;        String finalValidDateString = null;</b>
+<b class="nc"><i>631</i>&nbsp;        if (nextValidDate != null)</b>
+<b class="nc"><i>632</i>&nbsp;            finalValidDateString = DateUtils</b>
+<b class="nc"><i>633</i>&nbsp;                    .dateToString(</b>
+<b class="nc"><i>634</i>&nbsp;                            nextValidDate.getTime(),</b>
+<i>635</i>&nbsp;                            scheduleModel.timeZone);
+<i>636</i>&nbsp;
+<b class="nc"><i>637</i>&nbsp;        result.success(finalValidDateString);</b>
+<i>638</i>&nbsp;    }
+<i>639</i>&nbsp;
+<i>640</i>&nbsp;    private void channelMethodGetLocalTimeZone(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<b class="nc"><i>641</i>&nbsp;        result.success(</b>
+<i>642</i>&nbsp;                awesomeNotifications
+<b class="nc"><i>643</i>&nbsp;                        .getLocalTimeZone());</b>
+<i>644</i>&nbsp;    }
+<i>645</i>&nbsp;
+<i>646</i>&nbsp;    private void channelMethodGetUtcTimeZone(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<b class="nc"><i>647</i>&nbsp;        result.success(</b>
+<i>648</i>&nbsp;                awesomeNotifications
+<b class="nc"><i>649</i>&nbsp;                        .getUtcTimeZone());</b>
+<i>650</i>&nbsp;    }
+<i>651</i>&nbsp;
+<i>652</i>&nbsp;    private void channelIsNotificationAllowed(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<b class="nc"><i>653</i>&nbsp;        result.success(</b>
+<i>654</i>&nbsp;                awesomeNotifications
+<b class="nc"><i>655</i>&nbsp;                        .areNotificationsGloballyAllowed());</b>
+<i>656</i>&nbsp;    }
+<i>657</i>&nbsp;
+<i>658</i>&nbsp;    private void channelShowNotificationPage(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<b class="nc"><i>659</i>&nbsp;        String channelKey = call.arguments();</b>
+<i>660</i>&nbsp;
+<b class="nc"><i>661</i>&nbsp;        awesomeNotifications</b>
+<b class="nc"><i>662</i>&nbsp;                .showNotificationPage(</b>
+<i>663</i>&nbsp;                    channelKey,
+<b class="nc"><i>664</i>&nbsp;                    new PermissionCompletionHandler() {</b>
+<i>665</i>&nbsp;                        @Override
+<i>666</i>&nbsp;                        public void handle(List&lt;String&gt; missingPermissions) {
+<b class="nc"><i>667</i>&nbsp;                            result.success(missingPermissions);</b>
+<i>668</i>&nbsp;                        }
+<i>669</i>&nbsp;                    }
+<i>670</i>&nbsp;                );
+<i>671</i>&nbsp;    }
+<i>672</i>&nbsp;
+<i>673</i>&nbsp;    private void channelShowAlarmPage(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>674</i>&nbsp;
+<b class="nc"><i>675</i>&nbsp;        awesomeNotifications</b>
+<b class="nc"><i>676</i>&nbsp;                .showPreciseAlarmPage(</b>
+<b class="nc"><i>677</i>&nbsp;                    new PermissionCompletionHandler() {</b>
+<i>678</i>&nbsp;                        @Override
+<i>679</i>&nbsp;                        public void handle(List&lt;String&gt; missingPermissions) {
+<b class="nc"><i>680</i>&nbsp;                            result.success(missingPermissions);</b>
+<i>681</i>&nbsp;                        }
+<i>682</i>&nbsp;                    }
+<i>683</i>&nbsp;                );
+<i>684</i>&nbsp;    }
+<i>685</i>&nbsp;
+<i>686</i>&nbsp;    private void channelShowGlobalDndPage(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>687</i>&nbsp;
+<b class="nc"><i>688</i>&nbsp;        awesomeNotifications</b>
+<b class="nc"><i>689</i>&nbsp;                .showDnDGlobalOverridingPage(</b>
+<b class="nc"><i>690</i>&nbsp;                        new PermissionCompletionHandler() {</b>
+<i>691</i>&nbsp;                            @Override
+<i>692</i>&nbsp;                            public void handle(List&lt;String&gt; missingPermissions) {
+<b class="nc"><i>693</i>&nbsp;                                result.success(missingPermissions);</b>
+<i>694</i>&nbsp;                            }
+<i>695</i>&nbsp;                        }
+<i>696</i>&nbsp;                );
+<i>697</i>&nbsp;    }
+<i>698</i>&nbsp;
+<i>699</i>&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+<i>700</i>&nbsp;    private void channelMethodCheckPermissions(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>701</i>&nbsp;
+<b class="nc"><i>702</i>&nbsp;        Map&lt;String, Object&gt; parameters = MapUtils.extractArgument(call.arguments(), Map.class).orNull();</b>
+<b class="nc"><i>703</i>&nbsp;        if(parameters == null)</b>
+<b class="nc"><i>704</i>&nbsp;            throw new AwesomeNotificationException(&quot;Parameters are required&quot;);</b>
+<i>705</i>&nbsp;
+<b class="nc"><i>706</i>&nbsp;        String channelKey = (String) parameters.get(Definitions.NOTIFICATION_CHANNEL_KEY);</b>
+<i>707</i>&nbsp;
+<b class="nc"><i>708</i>&nbsp;        List&lt;String&gt; permissions = (List&lt;String&gt;) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);</b>
+<b class="nc"><i>709</i>&nbsp;        if(ListUtils.isNullOrEmpty(permissions))</b>
+<b class="nc"><i>710</i>&nbsp;            throw new AwesomeNotificationException(&quot;Permission list is required&quot;);</b>
+<i>711</i>&nbsp;
+<b class="nc"><i>712</i>&nbsp;        permissions = awesomeNotifications</b>
+<b class="nc"><i>713</i>&nbsp;                        .arePermissionsAllowed(</b>
+<i>714</i>&nbsp;                                channelKey,
+<i>715</i>&nbsp;                                permissions);
+<i>716</i>&nbsp;
+<b class="nc"><i>717</i>&nbsp;        result.success(permissions);</b>
+<i>718</i>&nbsp;    }
+<i>719</i>&nbsp;
+<i>720</i>&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+<i>721</i>&nbsp;    private void channelMethodShouldShowRationale(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>722</i>&nbsp;
+<b class="nc"><i>723</i>&nbsp;        Map&lt;String, Object&gt; parameters = MapUtils.extractArgument(call.arguments(), Map.class).orNull();</b>
+<b class="nc"><i>724</i>&nbsp;        if(parameters == null)</b>
+<b class="nc"><i>725</i>&nbsp;            throw new AwesomeNotificationException(&quot;Parameters are required&quot;);</b>
+<i>726</i>&nbsp;
+<b class="nc"><i>727</i>&nbsp;        String channelKey = (String) parameters.get(Definitions.NOTIFICATION_CHANNEL_KEY);</b>
+<b class="nc"><i>728</i>&nbsp;        List&lt;String&gt; permissions = (List&lt;String&gt;) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);</b>
+<i>729</i>&nbsp;
+<b class="nc"><i>730</i>&nbsp;        if(permissions == null)</b>
+<b class="nc"><i>731</i>&nbsp;            throw new AwesomeNotificationException(&quot;Permission list is required&quot;);</b>
+<i>732</i>&nbsp;
+<b class="nc"><i>733</i>&nbsp;        if(permissions.isEmpty())</b>
+<b class="nc"><i>734</i>&nbsp;            throw new AwesomeNotificationException(&quot;Permission list cannot be empty&quot;);</b>
+<i>735</i>&nbsp;
+<b class="nc"><i>736</i>&nbsp;        permissions = awesomeNotifications.shouldShowRationale(</b>
+<i>737</i>&nbsp;                        channelKey,
+<i>738</i>&nbsp;                        permissions);
+<i>739</i>&nbsp;
+<b class="nc"><i>740</i>&nbsp;        result.success(permissions);</b>
+<i>741</i>&nbsp;    }
+<i>742</i>&nbsp;
+<i>743</i>&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+<i>744</i>&nbsp;    private void channelRequestUserPermissions(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>745</i>&nbsp;
+<b class="nc"><i>746</i>&nbsp;        Map&lt;String, Object&gt; parameters = MapUtils.extractArgument(call.arguments(), Map.class).orNull();</b>
+<b class="nc"><i>747</i>&nbsp;        if(parameters == null)</b>
+<b class="nc"><i>748</i>&nbsp;            throw new AwesomeNotificationException(&quot;Parameters are required&quot;);</b>
+<i>749</i>&nbsp;
+<b class="nc"><i>750</i>&nbsp;        if(!parameters.containsKey(Definitions.NOTIFICATION_PERMISSIONS))</b>
+<b class="nc"><i>751</i>&nbsp;            throw new AwesomeNotificationException(&quot;Permission list is required&quot;);</b>
+<i>752</i>&nbsp;
+<b class="nc"><i>753</i>&nbsp;        String channelKey = (String) parameters.get(Definitions.NOTIFICATION_CHANNEL_KEY);</b>
+<b class="nc"><i>754</i>&nbsp;        List&lt;String&gt; permissions = (List&lt;String&gt;) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);</b>
+<i>755</i>&nbsp;
+<b class="nc"><i>756</i>&nbsp;        if(ListUtils.isNullOrEmpty(permissions))</b>
+<b class="nc"><i>757</i>&nbsp;            throw new AwesomeNotificationException(&quot;Permission list is required&quot;);</b>
+<i>758</i>&nbsp;
+<b class="nc"><i>759</i>&nbsp;        awesomeNotifications</b>
+<b class="nc"><i>760</i>&nbsp;                .requestUserPermissions(</b>
+<i>761</i>&nbsp;                    channelKey,
+<i>762</i>&nbsp;                    permissions,
+<b class="nc"><i>763</i>&nbsp;                    new PermissionCompletionHandler() {</b>
+<i>764</i>&nbsp;                        @Override
+<i>765</i>&nbsp;                        public void handle(List&lt;String&gt; missingPermissions) {
+<b class="nc"><i>766</i>&nbsp;                            result.success(missingPermissions);</b>
+<i>767</i>&nbsp;                        }
+<i>768</i>&nbsp;                    });
+<i>769</i>&nbsp;    }
+<i>770</i>&nbsp;
+<i>771</i>&nbsp;    private void channelMethodCreateNotification(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<i>772</i>&nbsp;
+<b class="nc"><i>773</i>&nbsp;        Map&lt;String, Object&gt; pushData = call.arguments();</b>
+<b class="nc"><i>774</i>&nbsp;        NotificationModel notificationModel = new NotificationModel().fromMap(pushData);</b>
+<i>775</i>&nbsp;
+<b class="nc"><i>776</i>&nbsp;        if (notificationModel == null)</b>
+<b class="nc"><i>777</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid parameters&quot;);</b>
+<i>778</i>&nbsp;
+<b class="nc"><i>779</i>&nbsp;        boolean created = awesomeNotifications.createNotification(notificationModel);</b>
+<b class="nc"><i>780</i>&nbsp;        result.success(created);</b>
+<i>781</i>&nbsp;    }
+<i>782</i>&nbsp;
+<i>783</i>&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+<i>784</i>&nbsp;    private void channelMethodInitialize(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+<b class="nc"><i>785</i>&nbsp;        Map&lt;String, Object&gt; platformParameters = call.arguments();</b>
+<i>786</i>&nbsp;
+<b class="nc"><i>787</i>&nbsp;        String defaultIconPath = (String) platformParameters.get(Definitions.INITIALIZE_DEFAULT_ICON);</b>
+<i>788</i>&nbsp;
+<b class="nc"><i>789</i>&nbsp;        List&lt;Object&gt; channelsData = (List&lt;Object&gt;) platformParameters.get(Definitions.INITIALIZE_CHANNELS);</b>
+<b class="nc"><i>790</i>&nbsp;        List&lt;Object&gt; channelGroupsData = (List&lt;Object&gt;) platformParameters.get(Definitions.INITIALIZE_CHANNEL_GROUPS);</b>
+<i>791</i>&nbsp;
+<b class="nc"><i>792</i>&nbsp;        Boolean debug = (Boolean) platformParameters.get(Definitions.INITIALIZE_DEBUG_MODE);</b>
+<b class="nc"><i>793</i>&nbsp;        debug = debug != null &amp;&amp; debug;</b>
+<i>794</i>&nbsp;
+<b class="nc"><i>795</i>&nbsp;        Object callbackDartObj = platformParameters.get(Definitions.DART_BG_HANDLE);</b>
+<b class="nc"><i>796</i>&nbsp;        long dartCallback = callbackDartObj == null ? 0L :(Long) callbackDartObj;</b>
+<i>797</i>&nbsp;
+<b class="nc"><i>798</i>&nbsp;        awesomeNotifications.initialize(</b>
+<i>799</i>&nbsp;                defaultIconPath,
+<i>800</i>&nbsp;                channelsData,
+<i>801</i>&nbsp;                channelGroupsData,
+<i>802</i>&nbsp;                dartCallback,
+<b class="nc"><i>803</i>&nbsp;                debug);</b>
+<i>804</i>&nbsp;
+<b class="nc"><i>805</i>&nbsp;        if (AwesomeNotifications.debug)</b>
+<b class="nc"><i>806</i>&nbsp;            Log.d(TAG, &quot;Awesome Notifications Flutter plugin initialized&quot;);</b>
+<i>807</i>&nbsp;
+<b class="nc"><i>808</i>&nbsp;        result.success(true);</b>
+<i>809</i>&nbsp;    }
+<i>810</i>&nbsp;
+<i>811</i>&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+<i>812</i>&nbsp;    private void channelMethodSetActionHandle(@NonNull MethodCall call, Result result) throws Exception {
+<b class="nc"><i>813</i>&nbsp;        Map&lt;String, Object&gt; platformParameters = call.arguments();</b>
+<b class="nc"><i>814</i>&nbsp;        Object callbackActionObj = platformParameters.get(ACTION_HANDLE);</b>
+<i>815</i>&nbsp;
+<b class="nc"><i>816</i>&nbsp;        long silentCallback = callbackActionObj == null ? 0L : (Long) callbackActionObj;</b>
+<i>817</i>&nbsp;
+<b class="nc"><i>818</i>&nbsp;        awesomeNotifications.SetActionHandle(silentCallback);</b>
+<i>819</i>&nbsp;
+<b class="nc"><i>820</i>&nbsp;        boolean success = silentCallback != 0L;</b>
+<b class="nc"><i>821</i>&nbsp;        if(!success)</b>
+<b class="nc"><i>822</i>&nbsp;            Log.e(TAG, &quot;Attention: there is no valid static method to receive notification action data in background&quot;);</b>
+<i>823</i>&nbsp;
+<b class="nc"><i>824</i>&nbsp;        result.success(success);</b>
+<i>825</i>&nbsp;    }
+<i>826</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-28 19:15</div>
+</div>
+</body>
+</html>

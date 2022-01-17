@@ -60,7 +60,7 @@ public class NotificationIntervalModel extends NotificationScheduleModel {
         Date currentDate;
 
         TimeZone timeZone = StringUtils.isNullOrEmpty(this.timeZone) ?
-                DateUtils.localTimeZone :
+                DateUtils.getLocalTimeZone() :
                 TimeZone.getTimeZone(this.timeZone);
 
         if (timeZone == null)

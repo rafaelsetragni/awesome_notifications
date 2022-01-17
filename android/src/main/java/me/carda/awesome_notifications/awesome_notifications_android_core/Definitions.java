@@ -44,11 +44,16 @@ public interface Definitions {
     String SILENT_HANDLE = "silentHandle";
     String DART_BG_HANDLE = "dartBgHandle";
 
+    String NOTIFICATION_MODEL = "notificationModel";
     String NOTIFICATION_MODEL_CONTENT = "content";
     String NOTIFICATION_MODEL_SCHEDULE = "schedule";
     String NOTIFICATION_MODEL_BUTTONS = "actionButtons";
     String NOTIFICATION_SILENT_ACTION = "silentAction";
     String NOTIFICATION_RECEIVED_ACTION = "receivedAction";
+
+    String NOTIFICATION_SERVICE_START_TYPE = "startType";
+    String NOTIFICATION_HAS_FOREGROUND_SERVICE = "hasForegroundServiceType";
+    String NOTIFICATION_FOREGROUND_SERVICE_TYPE = "foregroundServiceType";
 
     String SHARED_DEFAULTS = "defaults";
     String SHARED_MANAGER = "sharedManager";
@@ -178,6 +183,9 @@ public interface Definitions {
     String NOTIFICATION_PAYLOAD = "payload";
     String NOTIFICATION_INITIAL_FIXED_DATE = "fixedDate";
 
+    String NOTIFICATION_ROUNDED_LARGE_ICON = "roundedLargeIcon";
+    String NOTIFICATION_ROUNDED_BIG_PICTURE = "roundedBigPicture";
+
     String NOTIFICATION_INITIAL_DATE_TIME = "initialDateTime";
     String NOTIFICATION_EXPIRATION_DATE_TIME = "expirationDateTime";
     String NOTIFICATION_CRONTAB_EXPRESSION = "crontabExpression";
@@ -262,7 +270,7 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_PLAY_SOUND, true);
         put(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, true);
         put(Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, DefaultRingtoneType.Notification);
-        put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, DateUtils.localTimeZone.toString());
+        put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, DateUtils.getLocalTimeZone().toString());
         put(Definitions.NOTIFICATION_TICKER, "ticker");
         put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, false);
         put(Definitions.NOTIFICATION_ONLY_ALERT_ONCE, false);
@@ -270,5 +278,7 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, false);
         put(Definitions.NOTIFICATION_WAKE_UP_SCREEN, false);
         put(Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS, false);
+        put(Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, false);
+        put(Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, false);
     }};
 }

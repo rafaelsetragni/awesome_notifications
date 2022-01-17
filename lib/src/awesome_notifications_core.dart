@@ -14,23 +14,8 @@ import 'package:flutter/widgets.dart';
 //import 'dart:html' as html;
 //import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
-import 'package:awesome_notifications/src/definitions.dart';
-import 'package:awesome_notifications/src/enumerators/media_source.dart';
-import 'package:awesome_notifications/src/models/notification_button.dart';
-import 'package:awesome_notifications/src/models/notification_channel.dart';
-import 'package:awesome_notifications/src/models/notification_content.dart';
-import 'package:awesome_notifications/src/models/notification_schedule.dart';
-import 'package:awesome_notifications/src/models/notification_model.dart';
-import 'package:awesome_notifications/src/models/received_models/received_action.dart';
-import 'package:awesome_notifications/src/models/received_models/received_notification.dart';
-import 'package:awesome_notifications/src/utils/assert_utils.dart';
-import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
-import 'package:awesome_notifications/src/utils/date_utils.dart';
-
 import '../awesome_notifications.dart';
-import 'enumerators/notification_permission.dart';
 import 'isolates/isolate_main.dart';
-import 'models/notification_channel_group.dart';
 
 class AwesomeNotifications {
   static String? rootNativePath;
@@ -304,12 +289,12 @@ class AwesomeNotifications {
         _dismissedSubject.sink.add(ReceivedAction().fromMap(arguments));
         return;
 
-      case CHANNEL_METHOD_RECEIVED_ACTION:
+      case CHANNEL_METHOD_DEFAULT_ACTION:
         _actionSubject.sink.add(ReceivedAction().fromMap(arguments));
         return;
 
       case CHANNEL_METHOD_SILENT_ACTION:
-        if(arguments[CHANNEL_METHOD_RECEIVED_ACTION][NOTIFICATION_ACTION_TYPE] == _silentBGActionTypeKey) {
+        if(arguments[CHANNEL_METHOD_DEFAULT_ACTION][NOTIFICATION_ACTION_TYPE] == _silentBGActionTypeKey) {
           compute(receiveSilentAction, arguments);
         } else {
           receiveSilentAction(arguments);

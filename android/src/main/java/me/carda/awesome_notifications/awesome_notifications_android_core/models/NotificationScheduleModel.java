@@ -8,6 +8,7 @@ import java.util.TimeZone;
 
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
+import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BooleanUtils;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.DateUtils;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.MapUtils;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
@@ -55,26 +56,33 @@ public abstract class NotificationScheduleModel extends AbstractModel {
 
     public Boolean hasNextValidDate() throws Exception {
 
+        // Timezone constructor returns GMT default in case of invalid timezone
         TimeZone timeZone = StringUtils.isNullOrEmpty(this.timeZone) ?
-                DateUtils.localTimeZone :
+                DateUtils.getLocalTimeZone() :
                 TimeZone.getTimeZone(this.timeZone);
 
-        if (timeZone == null)
+        if (timeZone == null || this.timeZone != null && !timeZone.getID().equals(this.timeZone))
             throw new AwesomeNotificationException("Invalid time zone");
+
+        repeats = BooleanUtils.getInstance().getValue(repeats);
 
         if(createdDate == null && !repeats)
             return false;
 
         Date referenceDate = repeats ?
-                DateUtils.getLocalDateTime(this.timeZone) :
-                DateUtils.stringToDate(createdDate, this.timeZone);
+                DateUtils.getLocalDateTime(timeZone.getID()) :
+                DateUtils.stringToDate(createdDate, timeZone.getID());
+
+        return hasNextValidDate(referenceDate);
+    }
+
+    public Boolean hasNextValidDate(Date referenceDate) throws Exception {
 
         Calendar nextSchedule = getNextValidDate(referenceDate);
         if(nextSchedule == null)
             return false;
 
-        Date nextValidDate = nextSchedule.getTime();
-        return nextValidDate != null && nextValidDate.compareTo(DateUtils.getLocalDateTime(this.timeZone)) >= 0;
+        return nextSchedule.getTime() != null;
     }
 
     public static NotificationScheduleModel getScheduleModelFromMap(Map<String, Object> map){

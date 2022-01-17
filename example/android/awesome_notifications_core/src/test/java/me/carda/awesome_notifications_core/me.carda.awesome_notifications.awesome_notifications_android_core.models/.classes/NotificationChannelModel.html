@@ -1,0 +1,400 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NotificationChannelModel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">me.carda.awesome_notifications.awesome_notifications_android_core.models</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NotificationChannelModel (me.carda.awesome_notifications.awesome_notifications_android_core.models)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NotificationChannelModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    36,4%
+  </span>
+  <span class="absValue">
+    (4/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    61,7%
+  </span>
+  <span class="absValue">
+    (103/ 167)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package me.carda.awesome_notifications.awesome_notifications_android_core.models;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import android.content.Context;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.HashMap;
+<i>6</i>&nbsp;import java.util.Map;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import androidx.annotation.Nullable;
+<i>9</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
+<i>10</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.DefaultRingtoneType;
+<i>11</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.GroupSort;
+<i>12</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.MediaSource;
+<i>13</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.GroupAlertBehaviour;
+<i>14</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationImportance;
+<i>15</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationPrivacy;
+<i>16</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
+<i>17</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.AudioUtils;
+<i>18</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BitmapUtils;
+<i>19</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BooleanUtils;
+<i>20</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.CompareUtils;
+<i>21</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.MediaUtils;
+<i>22</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;public class NotificationChannelModel extends AbstractModel {
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    public String channelKey;
+<i>27</i>&nbsp;    public String channelName;
+<i>28</i>&nbsp;    public String channelDescription;
+<i>29</i>&nbsp;    public Boolean channelShowBadge;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    public String channelGroupKey;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    public NotificationImportance importance;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    public Boolean playSound;
+<i>36</i>&nbsp;    public String soundSource;
+<i>37</i>&nbsp;    public DefaultRingtoneType defaultRingtoneType;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    public Boolean enableVibration;
+<i>40</i>&nbsp;    public long[] vibrationPattern;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    public Boolean enableLights;
+<i>43</i>&nbsp;    public Integer ledColor;
+<i>44</i>&nbsp;    public Integer ledOnMs;
+<i>45</i>&nbsp;    public Integer ledOffMs;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    public String  groupKey;
+<i>48</i>&nbsp;    public GroupSort groupSort;
+<i>49</i>&nbsp;    public GroupAlertBehaviour groupAlertBehavior;
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    // Note: this is set on the Android to save details about the icon that should be used when re-hydrating delayed notifications when a device has been restarted.
+<i>52</i>&nbsp;    public Integer iconResourceId;
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    public String  icon;
+<i>55</i>&nbsp;    public Long defaultColor;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    public Boolean locked;
+<i>58</i>&nbsp;    public Boolean onlyAlertOnce;
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    public Boolean criticalAlerts;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    public NotificationPrivacy defaultPrivacy;
+<i>63</i>&nbsp;
+<b class="fc"><i>64</i>&nbsp;    public NotificationChannelModel(){}</b>
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    public void refreshIconResource(Context context){
+<b class="nc"><i>67</i>&nbsp;        if(iconResourceId == null &amp;&amp; icon != null){</b>
+<b class="nc"><i>68</i>&nbsp;            if(BitmapUtils.getInstance().getMediaSourceType(icon) == MediaSource.Resource) {</b>
+<i>69</i>&nbsp;
+<b class="nc"><i>70</i>&nbsp;                int resourceIndex = BitmapUtils.getInstance().getDrawableResourceId(context, icon);</b>
+<b class="nc"><i>71</i>&nbsp;                if (resourceIndex &gt; 0) {</b>
+<b class="nc"><i>72</i>&nbsp;                    iconResourceId = resourceIndex;</b>
+<i>73</i>&nbsp;                } else {
+<b class="nc"><i>74</i>&nbsp;                    iconResourceId = null;</b>
+<i>75</i>&nbsp;                }
+<i>76</i>&nbsp;            }
+<i>77</i>&nbsp;        }
+<b class="nc"><i>78</i>&nbsp;    }</b>
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    public boolean isChannelEnabled(){
+<b class="nc"><i>81</i>&nbsp;        return importance != null &amp;&amp; importance != NotificationImportance.None;</b>
+<i>82</i>&nbsp;    }
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    public String getChannelHashKey(Context context, boolean fullHashObject){
+<i>85</i>&nbsp;
+<b class="nc"><i>86</i>&nbsp;        refreshIconResource(context);</b>
+<i>87</i>&nbsp;
+<b class="nc"><i>88</i>&nbsp;        if(fullHashObject){</b>
+<b class="nc"><i>89</i>&nbsp;            String jsonData = this.toJson();</b>
+<b class="nc"><i>90</i>&nbsp;            return StringUtils.digestString(jsonData);</b>
+<i>91</i>&nbsp;        }
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;        NotificationChannelModel channelCopied = this.clone();</b>
+<b class="nc"><i>94</i>&nbsp;        channelCopied.channelName = &quot;&quot;;</b>
+<b class="nc"><i>95</i>&nbsp;        channelCopied.channelDescription = &quot;&quot;;</b>
+<b class="nc"><i>96</i>&nbsp;        channelCopied.groupKey = null;</b>
+<i>97</i>&nbsp;
+<b class="nc"><i>98</i>&nbsp;        String jsonData = channelCopied.toJson();</b>
+<b class="nc"><i>99</i>&nbsp;        return channelKey + &quot;_&quot; + StringUtils.digestString(jsonData);</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    @Override
+<i>103</i>&nbsp;    public boolean equals(@Nullable Object obj) {
+<b class="nc"><i>104</i>&nbsp;        if(super.equals(obj)) return true;</b>
+<b class="nc"><i>105</i>&nbsp;        if(!(obj instanceof NotificationChannelModel)) return false;</b>
+<b class="nc"><i>106</i>&nbsp;        NotificationChannelModel other = (NotificationChannelModel) obj;</b>
+<i>107</i>&nbsp;
+<b class="nc"><i>108</i>&nbsp;        return</b>
+<b class="nc"><i>109</i>&nbsp;            CompareUtils.assertEqualObjects(other.iconResourceId, this.iconResourceId) &amp;&amp;</b>
+<b class="nc"><i>110</i>&nbsp;            CompareUtils.assertEqualObjects(other.defaultColor, this.defaultColor) &amp;&amp;</b>
+<b class="nc"><i>111</i>&nbsp;            CompareUtils.assertEqualObjects(other.channelKey, this.channelKey) &amp;&amp;</b>
+<b class="nc"><i>112</i>&nbsp;            CompareUtils.assertEqualObjects(other.channelName, this.channelName) &amp;&amp;</b>
+<b class="nc"><i>113</i>&nbsp;            CompareUtils.assertEqualObjects(other.channelDescription, this.channelDescription) &amp;&amp;</b>
+<b class="nc"><i>114</i>&nbsp;            CompareUtils.assertEqualObjects(other.channelShowBadge, this.channelShowBadge) &amp;&amp;</b>
+<b class="nc"><i>115</i>&nbsp;            CompareUtils.assertEqualObjects(other.importance, this.importance) &amp;&amp;</b>
+<b class="nc"><i>116</i>&nbsp;            CompareUtils.assertEqualObjects(other.playSound, this.playSound) &amp;&amp;</b>
+<b class="nc"><i>117</i>&nbsp;            CompareUtils.assertEqualObjects(other.soundSource, this.soundSource) &amp;&amp;</b>
+<b class="nc"><i>118</i>&nbsp;            CompareUtils.assertEqualObjects(other.enableVibration, this.enableVibration) &amp;&amp;</b>
+<b class="nc"><i>119</i>&nbsp;            CompareUtils.assertEqualObjects(other.vibrationPattern, this.vibrationPattern) &amp;&amp;</b>
+<b class="nc"><i>120</i>&nbsp;            CompareUtils.assertEqualObjects(other.enableLights, this.enableLights) &amp;&amp;</b>
+<b class="nc"><i>121</i>&nbsp;            CompareUtils.assertEqualObjects(other.ledColor, this.ledColor) &amp;&amp;</b>
+<b class="nc"><i>122</i>&nbsp;            CompareUtils.assertEqualObjects(other.ledOnMs, this.ledOnMs) &amp;&amp;</b>
+<b class="nc"><i>123</i>&nbsp;            CompareUtils.assertEqualObjects(other.ledOffMs, this.ledOffMs) &amp;&amp;</b>
+<b class="nc"><i>124</i>&nbsp;            CompareUtils.assertEqualObjects(other.groupKey, this.groupKey) &amp;&amp;</b>
+<b class="nc"><i>125</i>&nbsp;            CompareUtils.assertEqualObjects(other.locked, this.locked) &amp;&amp;</b>
+<b class="nc"><i>126</i>&nbsp;            CompareUtils.assertEqualObjects(other.criticalAlerts, this.criticalAlerts) &amp;&amp;</b>
+<b class="nc"><i>127</i>&nbsp;            CompareUtils.assertEqualObjects(other.onlyAlertOnce, this.onlyAlertOnce) &amp;&amp;</b>
+<b class="nc"><i>128</i>&nbsp;            CompareUtils.assertEqualObjects(other.defaultPrivacy, this.defaultPrivacy) &amp;&amp;</b>
+<b class="nc"><i>129</i>&nbsp;            CompareUtils.assertEqualObjects(other.defaultRingtoneType, this.defaultRingtoneType) &amp;&amp;</b>
+<b class="nc"><i>130</i>&nbsp;            CompareUtils.assertEqualObjects(other.groupSort, this.groupSort) &amp;&amp;</b>
+<b class="nc"><i>131</i>&nbsp;            CompareUtils.assertEqualObjects(other.groupAlertBehavior, this.groupAlertBehavior);</b>
+<i>132</i>&nbsp;    }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;    @Override
+<i>135</i>&nbsp;    public NotificationChannelModel fromMap(Map&lt;String, Object&gt; arguments) {
+<i>136</i>&nbsp;
+<b class="fc"><i>137</i>&nbsp;        iconResourceId = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON_RESOURCE_ID, Integer.class);</b>
+<b class="fc"><i>138</i>&nbsp;        icon           = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON, String.class);</b>
+<i>139</i>&nbsp;
+<b class="fc"><i>140</i>&nbsp;        defaultColor    = getValueOrDefault(arguments, Definitions.NOTIFICATION_DEFAULT_COLOR, Long.class);</b>
+<i>141</i>&nbsp;
+<b class="fc"><i>142</i>&nbsp;        channelKey         = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_KEY, String.class);</b>
+<b class="fc"><i>143</i>&nbsp;        channelName        = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_NAME, String.class);</b>
+<b class="fc"><i>144</i>&nbsp;        channelDescription = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_DESCRIPTION, String.class);</b>
+<b class="fc"><i>145</i>&nbsp;        channelShowBadge   = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE, Boolean.class);</b>
+<i>146</i>&nbsp;
+<b class="fc"><i>147</i>&nbsp;        channelGroupKey    = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_GROUP_KEY, String.class);</b>
+<i>148</i>&nbsp;
+<b class="fc"><i>149</i>&nbsp;        playSound = getValueOrDefault(arguments, Definitions.NOTIFICATION_PLAY_SOUND, Boolean.class);</b>
+<b class="fc"><i>150</i>&nbsp;        soundSource = getValueOrDefault(arguments, Definitions.NOTIFICATION_SOUND_SOURCE, String.class);</b>
+<i>151</i>&nbsp;
+<b class="fc"><i>152</i>&nbsp;        criticalAlerts   = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS, Boolean.class);</b>
+<i>153</i>&nbsp;
+<b class="fc"><i>154</i>&nbsp;        enableVibration  = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLE_VIBRATION, Boolean.class);</b>
+<b class="fc"><i>155</i>&nbsp;        vibrationPattern = getValueOrDefault(arguments, Definitions.NOTIFICATION_VIBRATION_PATTERN, long[].class);</b>
+<i>156</i>&nbsp;
+<b class="fc"><i>157</i>&nbsp;        ledColor     = getValueOrDefault(arguments, Definitions.NOTIFICATION_LED_COLOR, Integer.class);</b>
+<b class="fc"><i>158</i>&nbsp;        enableLights = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLE_LIGHTS, Boolean.class);</b>
+<b class="fc"><i>159</i>&nbsp;        ledOnMs      = getValueOrDefault(arguments, Definitions.NOTIFICATION_LED_ON_MS, Integer.class);</b>
+<b class="fc"><i>160</i>&nbsp;        ledOffMs     = getValueOrDefault(arguments, Definitions.NOTIFICATION_LED_OFF_MS, Integer.class);</b>
+<i>161</i>&nbsp;
+<b class="fc"><i>162</i>&nbsp;        importance =</b>
+<b class="fc"><i>163</i>&nbsp;                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_IMPORTANCE, NotificationImportance.class, NotificationImportance.values());</b>
+<i>164</i>&nbsp;
+<b class="fc"><i>165</i>&nbsp;        groupSort =</b>
+<b class="fc"><i>166</i>&nbsp;                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_SORT, GroupSort.class, GroupSort.values());</b>
+<i>167</i>&nbsp;
+<b class="fc"><i>168</i>&nbsp;        groupAlertBehavior =</b>
+<b class="fc"><i>169</i>&nbsp;                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR, GroupAlertBehaviour.class, GroupAlertBehaviour.values());</b>
+<i>170</i>&nbsp;
+<b class="fc"><i>171</i>&nbsp;        defaultPrivacy =</b>
+<b class="fc"><i>172</i>&nbsp;                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_DEFAULT_PRIVACY, NotificationPrivacy.class, NotificationPrivacy.values());</b>
+<i>173</i>&nbsp;
+<b class="fc"><i>174</i>&nbsp;        defaultRingtoneType =</b>
+<b class="fc"><i>175</i>&nbsp;                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, DefaultRingtoneType.class, DefaultRingtoneType.values());</b>
+<i>176</i>&nbsp;
+<b class="fc"><i>177</i>&nbsp;        groupKey = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_KEY, String.class);</b>
+<i>178</i>&nbsp;
+<b class="fc"><i>179</i>&nbsp;        locked = getValueOrDefault(arguments, Definitions.NOTIFICATION_LOCKED, Boolean.class);</b>
+<b class="fc"><i>180</i>&nbsp;        onlyAlertOnce = getValueOrDefault(arguments, Definitions.NOTIFICATION_ONLY_ALERT_ONCE, Boolean.class);</b>
+<i>181</i>&nbsp;
+<b class="fc"><i>182</i>&nbsp;        return this;</b>
+<i>183</i>&nbsp;    }
+<i>184</i>&nbsp;
+<i>185</i>&nbsp;    public Map&lt;String, Object&gt; toMap(){
+<b class="fc"><i>186</i>&nbsp;        Map&lt;String, Object&gt; returnedObject = new HashMap&lt;&gt;();</b>
+<i>187</i>&nbsp;
+<b class="fc"><i>188</i>&nbsp;        returnedObject.put(Definitions.NOTIFICATION_ICON_RESOURCE_ID, this.iconResourceId);</b>
+<i>189</i>&nbsp;
+<b class="fc"><i>190</i>&nbsp;        returnedObject.put(Definitions.NOTIFICATION_ICON, this.icon);</b>
+<i>191</i>&nbsp;
+<b class="fc"><i>192</i>&nbsp;        returnedObject.put(Definitions.NOTIFICATION_DEFAULT_COLOR, this.defaultColor);</b>
+<b class="fc"><i>193</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_KEY, this.channelKey);</b>
+<b class="fc"><i>194</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_NAME, this.channelName);</b>
+<b class="fc"><i>195</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_DESCRIPTION, this.channelDescription);</b>
+<b class="fc"><i>196</i>&nbsp;        if(this.channelShowBadge != null)</b>
+<b class="fc"><i>197</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE, this.channelShowBadge);</b>
+<i>198</i>&nbsp;
+<b class="fc"><i>199</i>&nbsp;        if(this.channelGroupKey != null)</b>
+<b class="fc"><i>200</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_GROUP_KEY, this.channelGroupKey);</b>
+<i>201</i>&nbsp;
+<b class="fc"><i>202</i>&nbsp;        if(this.playSound != null)</b>
+<b class="fc"><i>203</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_PLAY_SOUND, this.playSound);</b>
+<b class="fc"><i>204</i>&nbsp;        if(this.soundSource != null)</b>
+<b class="fc"><i>205</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_SOUND_SOURCE, this.soundSource);</b>
+<i>206</i>&nbsp;
+<b class="fc"><i>207</i>&nbsp;        if(this.enableVibration != null)</b>
+<b class="fc"><i>208</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_ENABLE_VIBRATION, this.enableVibration);</b>
+<b class="fc"><i>209</i>&nbsp;        if(this.vibrationPattern != null)</b>
+<b class="fc"><i>210</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_VIBRATION_PATTERN, this.vibrationPattern);</b>
+<i>211</i>&nbsp;
+<b class="fc"><i>212</i>&nbsp;        if(this.enableLights != null)</b>
+<b class="fc"><i>213</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_ENABLE_LIGHTS, this.enableLights);</b>
+<b class="fc"><i>214</i>&nbsp;        if(this.ledColor != null)</b>
+<b class="fc"><i>215</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_LED_COLOR, this.ledColor);</b>
+<b class="fc"><i>216</i>&nbsp;        if(this.ledOnMs != null)</b>
+<b class="fc"><i>217</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_LED_ON_MS, this.ledOnMs);</b>
+<b class="fc"><i>218</i>&nbsp;        if(this.ledOffMs != null)</b>
+<b class="fc"><i>219</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_LED_OFF_MS, this.ledOffMs);</b>
+<i>220</i>&nbsp;
+<b class="fc"><i>221</i>&nbsp;        if(this.groupKey != null)</b>
+<b class="fc"><i>222</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_GROUP_KEY, this.groupKey);</b>
+<i>223</i>&nbsp;
+<b class="fc"><i>224</i>&nbsp;        if(this.groupSort != null)</b>
+<b class="fc"><i>225</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_GROUP_SORT, this.groupSort.toString());</b>
+<i>226</i>&nbsp;
+<b class="fc"><i>227</i>&nbsp;        if(this.importance != null)</b>
+<b class="fc"><i>228</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_IMPORTANCE, this.importance.toString());</b>
+<i>229</i>&nbsp;
+<b class="fc"><i>230</i>&nbsp;        if(this.groupAlertBehavior != null)</b>
+<b class="fc"><i>231</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR, this.groupAlertBehavior.toString());</b>
+<i>232</i>&nbsp;
+<b class="fc"><i>233</i>&nbsp;        if(this.defaultPrivacy != null)</b>
+<b class="fc"><i>234</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_DEFAULT_PRIVACY, this.defaultPrivacy.toString());</b>
+<i>235</i>&nbsp;
+<b class="fc"><i>236</i>&nbsp;        if(this.defaultRingtoneType != null)</b>
+<b class="fc"><i>237</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, this.defaultRingtoneType.toString());</b>
+<i>238</i>&nbsp;
+<b class="fc"><i>239</i>&nbsp;        if(this.locked != null)</b>
+<b class="fc"><i>240</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_LOCKED, this.locked);</b>
+<b class="fc"><i>241</i>&nbsp;        if(this.onlyAlertOnce != null)</b>
+<b class="fc"><i>242</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_ONLY_ALERT_ONCE, this.onlyAlertOnce);</b>
+<i>243</i>&nbsp;
+<b class="fc"><i>244</i>&nbsp;        if(this.criticalAlerts != null &amp;&amp; this.criticalAlerts)</b>
+<b class="fc"><i>245</i>&nbsp;            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS, this.criticalAlerts);</b>
+<i>246</i>&nbsp;
+<b class="fc"><i>247</i>&nbsp;        return returnedObject;</b>
+<i>248</i>&nbsp;    }
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;    @Override
+<i>251</i>&nbsp;    public String toJson() {
+<b class="nc"><i>252</i>&nbsp;        return templateToJson();</b>
+<i>253</i>&nbsp;    }
+<i>254</i>&nbsp;
+<i>255</i>&nbsp;    @Override
+<i>256</i>&nbsp;    public NotificationChannelModel fromJson(String json){
+<b class="nc"><i>257</i>&nbsp;        return (NotificationChannelModel) super.templateFromJson(json);</b>
+<i>258</i>&nbsp;    }
+<i>259</i>&nbsp;
+<i>260</i>&nbsp;    @Override
+<i>261</i>&nbsp;    public void validate(Context context) throws AwesomeNotificationException {
+<i>262</i>&nbsp;
+<b class="nc"><i>263</i>&nbsp;        if(icon != null)</b>
+<b class="nc"><i>264</i>&nbsp;            if(BitmapUtils.getInstance().getMediaSourceType(icon) != MediaSource.Resource)</b>
+<b class="nc"><i>265</i>&nbsp;                throw new AwesomeNotificationException(&quot;Icon is not a Resource media type&quot;);</b>
+<i>266</i>&nbsp;
+<b class="nc"><i>267</i>&nbsp;        if(StringUtils.isNullOrEmpty(channelKey))</b>
+<b class="nc"><i>268</i>&nbsp;            throw new AwesomeNotificationException(&quot;Channel key cannot be null or empty&quot;);</b>
+<i>269</i>&nbsp;
+<b class="nc"><i>270</i>&nbsp;        if(StringUtils.isNullOrEmpty(channelName))</b>
+<b class="nc"><i>271</i>&nbsp;            throw new AwesomeNotificationException(&quot;Channel name cannot be null or empty&quot;);</b>
+<i>272</i>&nbsp;
+<b class="nc"><i>273</i>&nbsp;        if(StringUtils.isNullOrEmpty(channelDescription))</b>
+<b class="nc"><i>274</i>&nbsp;            throw new AwesomeNotificationException(&quot;Channel description cannot be null or empty&quot;);</b>
+<i>275</i>&nbsp;
+<b class="nc"><i>276</i>&nbsp;        if(playSound == null)</b>
+<b class="nc"><i>277</i>&nbsp;            throw new AwesomeNotificationException(&quot;Play sound selector cannot be null or empty&quot;);</b>
+<i>278</i>&nbsp;
+<b class="nc"><i>279</i>&nbsp;        if (ledColor != null &amp;&amp; (ledOnMs == null || ledOffMs == null)) {</b>
+<b class="nc"><i>280</i>&nbsp;            throw new AwesomeNotificationException(&quot;Standard led on and off times cannot be null or empty&quot;);</b>
+<i>281</i>&nbsp;        }
+<i>282</i>&nbsp;
+<b class="nc"><i>283</i>&nbsp;        if(BooleanUtils.getInstance().getValue(playSound) &amp;&amp; !StringUtils.isNullOrEmpty(soundSource))</b>
+<b class="nc"><i>284</i>&nbsp;            if(!AudioUtils.getInstance().isValidAudio(context, soundSource))</b>
+<b class="nc"><i>285</i>&nbsp;                throw new AwesomeNotificationException(&quot;Audio media is not valid&quot;);</b>
+<b class="nc"><i>286</i>&nbsp;    }</b>
+<i>287</i>&nbsp;
+<i>288</i>&nbsp;    public NotificationChannelModel clone() {
+<b class="fc"><i>289</i>&nbsp;        NotificationChannelModel cloned = new NotificationChannelModel();</b>
+<i>290</i>&nbsp;
+<b class="fc"><i>291</i>&nbsp;        cloned.iconResourceId = this.iconResourceId;</b>
+<b class="fc"><i>292</i>&nbsp;        cloned.defaultColor = this.defaultColor;</b>
+<b class="fc"><i>293</i>&nbsp;        cloned.channelKey = this.channelKey;</b>
+<b class="fc"><i>294</i>&nbsp;        cloned.channelName = this.channelName;</b>
+<b class="fc"><i>295</i>&nbsp;        cloned.channelDescription = this.channelDescription;</b>
+<b class="fc"><i>296</i>&nbsp;        cloned.channelShowBadge = this.channelShowBadge;</b>
+<b class="fc"><i>297</i>&nbsp;        cloned.importance = this.importance;</b>
+<b class="fc"><i>298</i>&nbsp;        cloned.playSound = this.playSound;</b>
+<b class="fc"><i>299</i>&nbsp;        cloned.soundSource = this.soundSource;</b>
+<b class="fc"><i>300</i>&nbsp;        cloned.enableVibration = this.enableVibration;</b>
+<b class="fc"><i>301</i>&nbsp;        cloned.vibrationPattern = this.vibrationPattern;</b>
+<b class="fc"><i>302</i>&nbsp;        cloned.enableLights = this.enableLights;</b>
+<b class="fc"><i>303</i>&nbsp;        cloned.ledColor = this.ledColor;</b>
+<b class="fc"><i>304</i>&nbsp;        cloned.ledOnMs = this.ledOnMs;</b>
+<b class="fc"><i>305</i>&nbsp;        cloned.ledOffMs = this.ledOffMs;</b>
+<b class="fc"><i>306</i>&nbsp;        cloned.groupKey = this.groupKey;</b>
+<b class="fc"><i>307</i>&nbsp;        cloned.locked = this.locked;</b>
+<b class="fc"><i>308</i>&nbsp;        cloned.onlyAlertOnce = this.onlyAlertOnce;</b>
+<b class="fc"><i>309</i>&nbsp;        cloned.defaultPrivacy = this.defaultPrivacy;</b>
+<b class="fc"><i>310</i>&nbsp;        cloned.defaultRingtoneType = this.defaultRingtoneType;</b>
+<b class="fc"><i>311</i>&nbsp;        cloned.groupSort = this.groupSort;</b>
+<b class="fc"><i>312</i>&nbsp;        cloned.groupAlertBehavior = this.groupAlertBehavior;</b>
+<b class="fc"><i>313</i>&nbsp;        cloned.criticalAlerts = this.criticalAlerts;</b>
+<i>314</i>&nbsp;
+<b class="fc"><i>315</i>&nbsp;        return cloned;</b>
+<i>316</i>&nbsp;    }
+<i>317</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-28 19:15</div>
+</div>
+</body>
+</html>

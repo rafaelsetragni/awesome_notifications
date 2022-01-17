@@ -7,20 +7,31 @@ import static org.junit.Assert.*;
 public class BooleanUtilsTest {
 
     @Test
+    public void getInstance() {
+        BooleanUtils booleanUtils1 = BooleanUtils.getInstance();
+        assertNotNull("", booleanUtils1);
+
+        BooleanUtils booleanUtils2 = BooleanUtils.getInstance();
+        assertNotNull("", booleanUtils2);
+
+        assertEquals("", booleanUtils1, booleanUtils2);
+    }
+
+    @Test
     public void getValue() {
-        assertFalse("Null boolean object must return false", BooleanUtils.getValue(null));
-        assertFalse("False boolean object must return false", BooleanUtils.getValue(false));
-        assertTrue("True boolean object must return true", BooleanUtils.getValue(true));
+        assertFalse("Null boolean object must return false", BooleanUtils.getInstance().getValue(null));
+        assertFalse("False boolean object must return false", BooleanUtils.getInstance().getValue(false));
+        assertTrue("True boolean object must return true", BooleanUtils.getInstance().getValue(true));
     }
 
     @Test
     public void getValueOrDefault() {
-        assertEquals("Null boolean object must return default", true, BooleanUtils.getValueOrDefault(null, true));
-        assertEquals("Null boolean object must return default", false, BooleanUtils.getValueOrDefault(null, false));
+        assertTrue("Null boolean object must return default", BooleanUtils.getInstance().getValueOrDefault(null, true));
+        assertFalse("Null boolean object must return default", BooleanUtils.getInstance().getValueOrDefault(null, false));
 
-        assertEquals("Null boolean object must return false if default was also null", false, BooleanUtils.getValueOrDefault(null, null));
+        assertFalse("Null boolean object must return false if default was also null", BooleanUtils.getInstance().getValueOrDefault(null, null));
 
-        assertEquals("True boolean object must return true", true, BooleanUtils.getValueOrDefault(true, false));
-        assertEquals("False boolean object must return false", false, BooleanUtils.getValueOrDefault(false, true));
+        assertTrue("True boolean object must return true", BooleanUtils.getInstance().getValueOrDefault(true, false));
+        assertFalse("False boolean object must return false", BooleanUtils.getInstance().getValueOrDefault(false, true));
     }
 }

@@ -1,0 +1,149 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BackgroundService</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">me.carda.awesome_notifications.awesome_notifications_android_core.services</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BackgroundService (me.carda.awesome_notifications.awesome_notifications_android_core.services)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BackgroundService</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package me.carda.awesome_notifications.awesome_notifications_android_core.services;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import android.content.Context;
+<i>4</i>&nbsp;import android.content.Intent;
+<i>5</i>&nbsp;import android.util.Log;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import androidx.annotation.NonNull;
+<i>8</i>&nbsp;import androidx.core.app.JobIntentService;
+<i>9</i>&nbsp;import me.carda.awesome_notifications.DartBackgroundExecutor;
+<i>10</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.managers.DefaultsManager;
+<i>11</i>&nbsp;
+<b class="nc"><i>12</i>&nbsp;public class BackgroundService extends JobIntentService {</b>
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    private static final String TAG = &quot;BackgroundService&quot;;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    @Override
+<i>17</i>&nbsp;    protected void onHandleWork(@NonNull final Intent intent) {
+<i>18</i>&nbsp;
+<b class="nc"><i>19</i>&nbsp;        Log.d(TAG, &quot;A new Dart background service has started&quot;);</b>
+<i>20</i>&nbsp;
+<b class="nc"><i>21</i>&nbsp;        long dartCallbackHandle = getDartCallbackDispatcher(this);</b>
+<b class="nc"><i>22</i>&nbsp;        if (dartCallbackHandle == 0L) {</b>
+<b class="nc"><i>23</i>&nbsp;            Log.w(TAG, &quot;A background message could not be handled in Dart&quot; +</b>
+<i>24</i>&nbsp;                            &quot; because there is no onActionReceivedMethod handler registered.&quot;);
+<i>25</i>&nbsp;            return;
+<i>26</i>&nbsp;        }
+<i>27</i>&nbsp;
+<b class="nc"><i>28</i>&nbsp;        long silentCallbackHandle = getSilentCallbackDispatcher(this);</b>
+<b class="nc"><i>29</i>&nbsp;        if (silentCallbackHandle == 0L) {</b>
+<b class="nc"><i>30</i>&nbsp;            Log.w(TAG,&quot;A background message could not be handled in Dart&quot; +</b>
+<i>31</i>&nbsp;                            &quot; because there is no dart background handler registered.&quot;);
+<i>32</i>&nbsp;            return;
+<i>33</i>&nbsp;        }
+<i>34</i>&nbsp;
+<b class="nc"><i>35</i>&nbsp;        DartBackgroundExecutor.runBackgroundExecutor(</b>
+<i>36</i>&nbsp;                this,
+<i>37</i>&nbsp;                intent,
+<i>38</i>&nbsp;                dartCallbackHandle,
+<i>39</i>&nbsp;                silentCallbackHandle);
+<i>40</i>&nbsp;    }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    public static long getDartCallbackDispatcher(Context context){
+<b class="nc"><i>43</i>&nbsp;        return DefaultsManager.getDartCallbackDispatcher(context);</b>
+<i>44</i>&nbsp;    }
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    public static long getSilentCallbackDispatcher(Context context){
+<b class="nc"><i>47</i>&nbsp;        return DefaultsManager.getSilentCallbackDispatcher(context);</b>
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    /**
+<i>51</i>&nbsp;     * Sets the {@link io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback} used to
+<i>52</i>&nbsp;     * register the plugins used by an application with the newly spawned background isolate.
+<i>53</i>&nbsp;     *
+<i>54</i>&nbsp;     * &lt;p&gt;This should be invoked in {@link MainApplication.onCreate} with {@link
+<i>55</i>&nbsp;     * GeneratedPluginRegistrant} in applications using the V1 embedding API in order to use other
+<i>56</i>&nbsp;     * plugins in the background isolate. For applications using the V2 embedding API, it is not
+<i>57</i>&nbsp;     * necessary to set a {@link io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback} as
+<i>58</i>&nbsp;     * plugins are registered automatically.
+<i>59</i>&nbsp;     */
+<i>60</i>&nbsp;    @SuppressWarnings({&quot;deprecation&quot;, &quot;JavadocReference&quot;})
+<i>61</i>&nbsp;    public static void setPluginRegistrant(
+<i>62</i>&nbsp;            io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback callback) {
+<i>63</i>&nbsp;        // Indirectly set in FlutterFirebaseMessagingBackgroundExecutor for backwards compatibility.
+<b class="nc"><i>64</i>&nbsp;        DartBackgroundExecutor.setPluginRegistrant(callback);</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-28 19:15</div>
+</div>
+</body>
+</html>

@@ -66,7 +66,7 @@ public class ScheduleManager {
 
                 String finalGroupKey =
                         NotificationBuilder
-                                .getInstance()
+                                .getNewBuilder()
                                 .getGroupKey(
                                         notificationModel.content,
                                         channelModel);

@@ -60,6 +60,9 @@ public class NotificationContentModel extends AbstractModel {
     public Integer progress;
     public String ticker;
 
+    public Boolean roundedLargeIcon;
+    public Boolean roundedBigPicture;
+
     public ActionType actionType;
 
     public NotificationPrivacy privacy;
@@ -69,13 +72,33 @@ public class NotificationContentModel extends AbstractModel {
 
     public NotificationSource createdSource;
     public NotificationLifeCycle createdLifeCycle;
-    public NotificationLifeCycle displayedLifeCycle;
-    public NotificationCategory category;
-
     public String createdDate;
+
+    public NotificationLifeCycle displayedLifeCycle;
     public String displayedDate;
 
+    public NotificationCategory category;
+
     public NotificationContentModel(){}
+
+    public boolean registerCreatedEvent(NotificationLifeCycle lifeCycle, NotificationSource createdSource){
+
+        // Creation register can only happen once
+        if(this.createdSource == null){
+
+            this.createdDate = DateUtils.getUTCDate();
+            this.createdLifeCycle = lifeCycle;
+            this.createdSource = createdSource;
+
+            return true;
+        }
+        return false;
+    }
+
+    public void registerDisplayedEvent(NotificationLifeCycle lifeCycle){
+        this.displayedDate = DateUtils.getUTCDate();
+        this.displayedLifeCycle = lifeCycle;
+    }
 
     @Override
     public NotificationContentModel fromMap(Map<String, Object> arguments) {
@@ -150,6 +173,9 @@ public class NotificationContentModel extends AbstractModel {
 
         messages = mapToMessages(getValueOrDefault(arguments, Definitions.NOTIFICATION_MESSAGES, List.class));
 
+        roundedLargeIcon = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, Boolean.class);
+        roundedBigPicture = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, Boolean.class);
+
         return this;
     }
 
@@ -195,6 +221,9 @@ public class NotificationContentModel extends AbstractModel {
         putDataOnMapObject(Definitions.NOTIFICATION_PRIVATE_MESSAGE, returnedObject, this.privateMessage);
 
         putDataOnMapObject(Definitions.NOTIFICATION_MESSAGES, returnedObject, messagesToMap(this.messages));
+
+        putDataOnMapObject(Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, returnedObject, this.roundedLargeIcon);
+        putDataOnMapObject(Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, returnedObject, this.roundedBigPicture);
 
         return returnedObject;
     }

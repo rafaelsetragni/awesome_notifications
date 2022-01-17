@@ -29,55 +29,6 @@ public class AudioUtils extends MediaUtils {
 
     // ********************************************************
 
-    public Bitmap getAudioFromSource(Context context, String bitmapPath) {
-
-        switch (getMediaSourceType(bitmapPath)){
-
-            case Resource:
-                return getAudioFromResource(context, bitmapPath);
-
-            case File:
-                /// TODO MISSING IMPLEMENTATION
-                return null;
-
-            case Asset:
-                /// TODO MISSING IMPLEMENTATION
-                return null;
-
-            case Network:
-                /// TODO MISSING IMPLEMENTATION
-                return null;
-
-            case Unknown:
-                return null;
-        }
-        return null;
-    }
-
-    public MediaSource getAudioSourceType(String mediaPath) {
-
-        if (mediaPath != null) {
-
-            if (matchMediaType(MEDIA_VALID_NETWORK, mediaPath, false)) {
-                return MediaSource.Network;
-            }
-
-            if (matchMediaType(MEDIA_VALID_FILE, mediaPath)) {
-                return MediaSource.File;
-            }
-
-            if (matchMediaType(MEDIA_VALID_RESOURCE, mediaPath)) {
-                return MediaSource.Resource;
-            }
-
-            if (matchMediaType(MEDIA_VALID_ASSET, mediaPath)) {
-                return MediaSource.Asset;
-            }
-
-        }
-        return MediaSource.Unknown;
-    }
-
     public int getAudioResourceId(Context context, String audioReference){
         audioReference = this.cleanMediaPath(audioReference);
         String[] reference = audioReference.split("\\/");
@@ -104,11 +55,6 @@ public class AudioUtils extends MediaUtils {
         }
 
         return 0;
-    }
-
-    private Bitmap getAudioFromResource(Context context, String bitmapReference){
-        int resourceId = getAudioResourceId(context, bitmapReference);
-        return BitmapFactory.decodeResource(context.getResources(), resourceId);
     }
 
     public Boolean isValidAudio(Context context, String mediaPath) {

@@ -1,0 +1,361 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NotificationContentModel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">me.carda.awesome_notifications.awesome_notifications_android_core.models</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NotificationContentModel (me.carda.awesome_notifications.awesome_notifications_android_core.models)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NotificationContentModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    45,5%
+  </span>
+  <span class="absValue">
+    (5/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    73,8%
+  </span>
+  <span class="absValue">
+    (93/ 126)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package me.carda.awesome_notifications.awesome_notifications_android_core.models;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import android.app.Notification;
+<i>4</i>&nbsp;import android.content.Context;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.util.ArrayList;
+<i>7</i>&nbsp;import java.util.HashMap;
+<i>8</i>&nbsp;import java.util.Map;
+<i>9</i>&nbsp;import java.util.List;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
+<i>12</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
+<i>13</i>&nbsp;import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
+<i>14</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ActionType;
+<i>15</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.MediaSource;
+<i>16</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationCategory;
+<i>17</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLayout;
+<i>18</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
+<i>19</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationPrivacy;
+<i>20</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationSource;
+<i>21</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
+<i>22</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.managers.ChannelManager;
+<i>23</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.managers.LifeCycleManager;
+<i>24</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BitmapUtils;
+<i>25</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.DateUtils;
+<i>26</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.IntegerUtils;
+<i>27</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.ListUtils;
+<i>28</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.MapUtils;
+<i>29</i>&nbsp;import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;@SuppressWarnings(&quot;unchecked&quot;)
+<i>32</i>&nbsp;public class NotificationContentModel extends AbstractModel {
+<i>33</i>&nbsp;
+<b class="fc"><i>34</i>&nbsp;    public boolean isRefreshNotification = false;</b>
+<b class="fc"><i>35</i>&nbsp;    public boolean isRandomId = false;</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    public Integer id;
+<i>38</i>&nbsp;    public String channelKey;
+<i>39</i>&nbsp;    public String title;
+<i>40</i>&nbsp;    public String body;
+<i>41</i>&nbsp;    public String summary;
+<i>42</i>&nbsp;    public Boolean showWhen;
+<i>43</i>&nbsp;    public List&lt;NotificationMessageModel&gt; messages;
+<i>44</i>&nbsp;    public Map&lt;String, String&gt; payload;
+<i>45</i>&nbsp;    public String groupKey;
+<i>46</i>&nbsp;    public String customSound;
+<i>47</i>&nbsp;    public Boolean playSound;
+<i>48</i>&nbsp;    public String icon;
+<i>49</i>&nbsp;    public String largeIcon;
+<i>50</i>&nbsp;    public Boolean locked;
+<i>51</i>&nbsp;    public String bigPicture;
+<i>52</i>&nbsp;    public Boolean wakeUpScreen;
+<i>53</i>&nbsp;    public Boolean fullScreenIntent;
+<i>54</i>&nbsp;    public Boolean hideLargeIconOnExpand;
+<i>55</i>&nbsp;    public Boolean autoDismissible;
+<i>56</i>&nbsp;    public Boolean displayOnForeground;
+<i>57</i>&nbsp;    public Boolean displayOnBackground;
+<i>58</i>&nbsp;    public Long color;
+<i>59</i>&nbsp;    public Long backgroundColor;
+<i>60</i>&nbsp;    public Integer progress;
+<i>61</i>&nbsp;    public String ticker;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    public ActionType actionType;
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    public NotificationPrivacy privacy;
+<i>66</i>&nbsp;    public String privateMessage;
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    public NotificationLayout notificationLayout;
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    public NotificationSource createdSource;
+<i>71</i>&nbsp;    public NotificationLifeCycle createdLifeCycle;
+<i>72</i>&nbsp;    public NotificationLifeCycle displayedLifeCycle;
+<i>73</i>&nbsp;    public NotificationCategory category;
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    public String createdDate;
+<i>76</i>&nbsp;    public String displayedDate;
+<i>77</i>&nbsp;
+<b class="fc"><i>78</i>&nbsp;    public NotificationContentModel(){}</b>
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    @Override
+<i>81</i>&nbsp;    public NotificationContentModel fromMap(Map&lt;String, Object&gt; arguments) {
+<i>82</i>&nbsp;
+<b class="fc"><i>83</i>&nbsp;        id = getValueOrDefault(arguments, Definitions.NOTIFICATION_ID, Integer.class);</b>
+<i>84</i>&nbsp;
+<b class="fc"><i>85</i>&nbsp;        actionType = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_ACTION_TYPE,</b>
+<b class="fc"><i>86</i>&nbsp;                ActionType.class, ActionType.values());</b>
+<i>87</i>&nbsp;
+<b class="fc"><i>88</i>&nbsp;        createdDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_CREATED_DATE, String.class)</b>
+<b class="fc"><i>89</i>&nbsp;                            .or(DateUtils.getUTCDate());</b>
+<i>90</i>&nbsp;
+<b class="fc"><i>91</i>&nbsp;        displayedDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_DISPLAYED_DATE, String.class)</b>
+<b class="fc"><i>92</i>&nbsp;                            .orNull();</b>
+<i>93</i>&nbsp;
+<b class="fc"><i>94</i>&nbsp;        createdLifeCycle = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_CREATED_LIFECYCLE,</b>
+<b class="fc"><i>95</i>&nbsp;                NotificationLifeCycle.class, NotificationLifeCycle.values());</b>
+<i>96</i>&nbsp;
+<b class="fc"><i>97</i>&nbsp;        displayedLifeCycle = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE,</b>
+<b class="fc"><i>98</i>&nbsp;                NotificationLifeCycle.class, NotificationLifeCycle.values());</b>
+<i>99</i>&nbsp;
+<b class="fc"><i>100</i>&nbsp;        createdSource = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_CREATED_SOURCE,</b>
+<b class="fc"><i>101</i>&nbsp;                NotificationSource.class, NotificationSource.values());</b>
+<i>102</i>&nbsp;
+<b class="fc"><i>103</i>&nbsp;        channelKey = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_KEY, String.class);</b>
+<b class="fc"><i>104</i>&nbsp;        color = getValueOrDefault(arguments, Definitions.NOTIFICATION_COLOR, Long.class);</b>
+<b class="fc"><i>105</i>&nbsp;        backgroundColor = getValueOrDefault(arguments, Definitions.NOTIFICATION_BACKGROUND_COLOR, Long.class);</b>
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;
+<b class="fc"><i>108</i>&nbsp;        title = getValueOrDefault(arguments, Definitions.NOTIFICATION_TITLE, String.class);</b>
+<b class="fc"><i>109</i>&nbsp;        body  = getValueOrDefault(arguments, Definitions.NOTIFICATION_BODY, String.class);</b>
+<b class="fc"><i>110</i>&nbsp;        summary = getValueOrDefault(arguments, Definitions.NOTIFICATION_SUMMARY, String.class);</b>
+<i>111</i>&nbsp;
+<b class="fc"><i>112</i>&nbsp;        playSound = getValueOrDefault(arguments, Definitions.NOTIFICATION_PLAY_SOUND, Boolean.class);</b>
+<b class="fc"><i>113</i>&nbsp;        customSound = getValueOrDefault(arguments, Definitions.NOTIFICATION_CUSTOM_SOUND, String.class);</b>
+<i>114</i>&nbsp;
+<b class="fc"><i>115</i>&nbsp;        wakeUpScreen = getValueOrDefault(arguments, Definitions.NOTIFICATION_WAKE_UP_SCREEN, Boolean.class);</b>
+<b class="fc"><i>116</i>&nbsp;        fullScreenIntent = getValueOrDefault(arguments, Definitions.NOTIFICATION_FULL_SCREEN_INTENT, Boolean.class);</b>
+<i>117</i>&nbsp;
+<b class="fc"><i>118</i>&nbsp;        showWhen = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_WHEN, Boolean.class);</b>
+<b class="fc"><i>119</i>&nbsp;        locked = getValueOrDefault(arguments, Definitions.NOTIFICATION_LOCKED, Boolean.class);</b>
+<i>120</i>&nbsp;
+<b class="fc"><i>121</i>&nbsp;        displayOnForeground = getValueOrDefault(arguments, Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, Boolean.class);</b>
+<b class="fc"><i>122</i>&nbsp;        displayOnBackground = getValueOrDefault(arguments, Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, Boolean.class);</b>
+<i>123</i>&nbsp;
+<b class="fc"><i>124</i>&nbsp;        hideLargeIconOnExpand = getValueOrDefault(arguments, Definitions.NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND, Boolean.class);</b>
+<i>125</i>&nbsp;
+<b class="fc"><i>126</i>&nbsp;        notificationLayout =</b>
+<b class="fc"><i>127</i>&nbsp;                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_LAYOUT, NotificationLayout.class, NotificationLayout.values());</b>
+<i>128</i>&nbsp;
+<b class="fc"><i>129</i>&nbsp;        privacy =</b>
+<b class="fc"><i>130</i>&nbsp;                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_PRIVACY, NotificationPrivacy.class, NotificationPrivacy.values());</b>
+<i>131</i>&nbsp;
+<b class="fc"><i>132</i>&nbsp;        category =</b>
+<b class="fc"><i>133</i>&nbsp;                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_CATEGORY, NotificationCategory.class, NotificationCategory.values());</b>
+<i>134</i>&nbsp;
+<b class="fc"><i>135</i>&nbsp;        privateMessage = getValueOrDefault(arguments, Definitions.NOTIFICATION_PRIVATE_MESSAGE, String.class);</b>
+<i>136</i>&nbsp;
+<b class="fc"><i>137</i>&nbsp;        icon  = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON, String.class);</b>
+<b class="fc"><i>138</i>&nbsp;        largeIcon  = getValueOrDefault(arguments, Definitions.NOTIFICATION_LARGE_ICON, String.class);</b>
+<b class="fc"><i>139</i>&nbsp;        bigPicture = getValueOrDefault(arguments, Definitions.NOTIFICATION_BIG_PICTURE, String.class);</b>
+<i>140</i>&nbsp;
+<b class="fc"><i>141</i>&nbsp;        payload = getValueOrDefault(arguments, Definitions.NOTIFICATION_PAYLOAD, Map.class);</b>
+<i>142</i>&nbsp;
+<b class="fc"><i>143</i>&nbsp;        autoDismissible = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSIBLE, Boolean.class);</b>
+<i>144</i>&nbsp;
+<b class="fc"><i>145</i>&nbsp;        progress    = getValueOrDefault(arguments, Definitions.NOTIFICATION_PROGRESS, Integer.class);</b>
+<i>146</i>&nbsp;
+<b class="fc"><i>147</i>&nbsp;        groupKey = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_KEY, String.class);</b>
+<i>148</i>&nbsp;
+<b class="fc"><i>149</i>&nbsp;        ticker = getValueOrDefault(arguments, Definitions.NOTIFICATION_TICKER, String.class);</b>
+<i>150</i>&nbsp;
+<b class="fc"><i>151</i>&nbsp;        messages = mapToMessages(getValueOrDefault(arguments, Definitions.NOTIFICATION_MESSAGES, List.class));</b>
+<i>152</i>&nbsp;
+<b class="fc"><i>153</i>&nbsp;        return this;</b>
+<i>154</i>&nbsp;    }
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;    @Override
+<i>157</i>&nbsp;    public Map&lt;String, Object&gt; toMap(){
+<b class="fc"><i>158</i>&nbsp;        Map&lt;String, Object&gt; returnedObject = new HashMap&lt;&gt;();</b>
+<i>159</i>&nbsp;
+<b class="fc"><i>160</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_ID, returnedObject, this.id);</b>
+<b class="fc"><i>161</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_ID, returnedObject, this.id);</b>
+<b class="fc"><i>162</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_RANDOM_ID, returnedObject, this.isRandomId);</b>
+<b class="fc"><i>163</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_TITLE, returnedObject, this.title);</b>
+<b class="fc"><i>164</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_BODY, returnedObject, this.body);</b>
+<b class="fc"><i>165</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_SUMMARY, returnedObject, this.summary);</b>
+<b class="fc"><i>166</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_SHOW_WHEN, returnedObject, this.showWhen);</b>
+<b class="fc"><i>167</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_WAKE_UP_SCREEN, returnedObject, this.wakeUpScreen);</b>
+<b class="fc"><i>168</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_FULL_SCREEN_INTENT, returnedObject, this.fullScreenIntent);</b>
+<b class="fc"><i>169</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_ACTION_TYPE, returnedObject, this.actionType);</b>
+<b class="fc"><i>170</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_LOCKED, returnedObject, this.locked);</b>
+<b class="fc"><i>171</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_PLAY_SOUND, returnedObject, this.playSound);</b>
+<b class="fc"><i>172</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_CUSTOM_SOUND, returnedObject, this.customSound);</b>
+<b class="fc"><i>173</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_TICKER, returnedObject, this.ticker);</b>
+<b class="fc"><i>174</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_PAYLOAD, returnedObject, this.payload);</b>
+<b class="fc"><i>175</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, returnedObject, this.autoDismissible);</b>
+<b class="fc"><i>176</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_LAYOUT, returnedObject, this.notificationLayout);</b>
+<b class="fc"><i>177</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_CREATED_SOURCE, returnedObject, this.createdSource);</b>
+<b class="fc"><i>178</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_CREATED_LIFECYCLE, returnedObject, this.createdLifeCycle);</b>
+<b class="fc"><i>179</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE, returnedObject, this.displayedLifeCycle);</b>
+<b class="fc"><i>180</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_DISPLAYED_DATE, returnedObject, this.displayedDate);</b>
+<b class="fc"><i>181</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_CREATED_DATE, returnedObject, this.createdDate);</b>
+<b class="fc"><i>182</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_CHANNEL_KEY, returnedObject, this.channelKey);</b>
+<b class="fc"><i>183</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_CATEGORY, returnedObject, this.category);</b>
+<b class="fc"><i>184</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, returnedObject, this.autoDismissible);</b>
+<b class="fc"><i>185</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, returnedObject, this.displayOnForeground);</b>
+<b class="fc"><i>186</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, returnedObject, this.displayOnBackground);</b>
+<b class="fc"><i>187</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_COLOR, returnedObject, this.color);</b>
+<b class="fc"><i>188</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_BACKGROUND_COLOR, returnedObject, this.backgroundColor);</b>
+<b class="fc"><i>189</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_ICON, returnedObject, this.icon);</b>
+<b class="fc"><i>190</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_LARGE_ICON, returnedObject, this.largeIcon);</b>
+<b class="fc"><i>191</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_BIG_PICTURE, returnedObject, this.bigPicture);</b>
+<b class="fc"><i>192</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_PROGRESS, returnedObject, this.progress);</b>
+<b class="fc"><i>193</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_GROUP_KEY, returnedObject, this.groupKey);</b>
+<b class="fc"><i>194</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_PRIVACY, returnedObject, this.privacy);</b>
+<b class="fc"><i>195</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_PRIVATE_MESSAGE, returnedObject, this.privateMessage);</b>
+<i>196</i>&nbsp;
+<b class="fc"><i>197</i>&nbsp;        putDataOnMapObject(Definitions.NOTIFICATION_MESSAGES, returnedObject, messagesToMap(this.messages));</b>
+<i>198</i>&nbsp;
+<b class="fc"><i>199</i>&nbsp;        return returnedObject;</b>
+<i>200</i>&nbsp;    }
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    public static List&lt;Map&gt; messagesToMap(List&lt;NotificationMessageModel&gt; messages){
+<b class="fc"><i>203</i>&nbsp;        List&lt;Map&gt; returnedMessages = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>204</i>&nbsp;        if(!ListUtils.isNullOrEmpty(messages)){</b>
+<b class="nc"><i>205</i>&nbsp;            for (NotificationMessageModel messageModel : messages) {</b>
+<b class="nc"><i>206</i>&nbsp;                returnedMessages.add(messageModel.toMap());</b>
+<b class="nc"><i>207</i>&nbsp;            }</b>
+<i>208</i>&nbsp;        }
+<b class="fc"><i>209</i>&nbsp;        return returnedMessages;</b>
+<i>210</i>&nbsp;    }
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;    public static List&lt;NotificationMessageModel&gt; mapToMessages(List&lt;Map&gt; messagesData){
+<b class="fc"><i>213</i>&nbsp;        List&lt;NotificationMessageModel&gt; messages = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>214</i>&nbsp;        if(!ListUtils.isNullOrEmpty(messagesData))</b>
+<b class="nc"><i>215</i>&nbsp;            for(Map&lt;String, Object&gt; messageData : messagesData){</b>
+<b class="nc"><i>216</i>&nbsp;                NotificationMessageModel messageModel =</b>
+<b class="nc"><i>217</i>&nbsp;                        new NotificationMessageModel().fromMap(messageData);</b>
+<b class="nc"><i>218</i>&nbsp;                messages.add(messageModel);</b>
+<b class="nc"><i>219</i>&nbsp;            }</b>
+<b class="fc"><i>220</i>&nbsp;        return messages;</b>
+<i>221</i>&nbsp;    }
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;    @Override
+<i>224</i>&nbsp;    public String toJson() {
+<b class="nc"><i>225</i>&nbsp;        return templateToJson();</b>
+<i>226</i>&nbsp;    }
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;    @Override
+<i>229</i>&nbsp;    public NotificationContentModel fromJson(String json){
+<b class="nc"><i>230</i>&nbsp;        return (NotificationContentModel) super.templateFromJson(json);</b>
+<i>231</i>&nbsp;    }
+<i>232</i>&nbsp;
+<i>233</i>&nbsp;    @Override
+<i>234</i>&nbsp;    public void validate(Context context) throws AwesomeNotificationException {
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;        if(ChannelManager
+<b class="nc"><i>237</i>&nbsp;                .getInstance()</b>
+<b class="nc"><i>238</i>&nbsp;                .getChannelByKey(context, channelKey) == null)</b>
+<b class="nc"><i>239</i>&nbsp;            throw new AwesomeNotificationException(&quot;Notification channel &#39;&quot;+channelKey+&quot;&#39; does not exist.&quot;);</b>
+<i>240</i>&nbsp;
+<b class="nc"><i>241</i>&nbsp;        validateIcon(context);</b>
+<i>242</i>&nbsp;
+<b class="nc"><i>243</i>&nbsp;        if (notificationLayout == NotificationLayout.BigPicture)</b>
+<b class="nc"><i>244</i>&nbsp;            validateBigPicture(context);</b>
+<i>245</i>&nbsp;
+<b class="nc"><i>246</i>&nbsp;        validateLargeIcon(context);</b>
+<i>247</i>&nbsp;
+<b class="nc"><i>248</i>&nbsp;    }</b>
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;    private void validateIcon(Context context) throws AwesomeNotificationException {
+<i>251</i>&nbsp;
+<b class="nc"><i>252</i>&nbsp;        if(!StringUtils.isNullOrEmpty(icon)){</b>
+<i>253</i>&nbsp;            if(
+<b class="nc"><i>254</i>&nbsp;                BitmapUtils.getInstance().getMediaSourceType(icon) != MediaSource.Resource ||</b>
+<b class="nc"><i>255</i>&nbsp;                !BitmapUtils.getInstance().isValidBitmap(context, icon)</b>
+<i>256</i>&nbsp;            ){
+<b class="nc"><i>257</i>&nbsp;                throw new AwesomeNotificationException(&quot;Small icon (&#39;&quot;+icon+&quot;&#39;) must be a valid media native resource type.&quot;);</b>
+<i>258</i>&nbsp;            }
+<i>259</i>&nbsp;        }
+<b class="nc"><i>260</i>&nbsp;    }</b>
+<i>261</i>&nbsp;
+<i>262</i>&nbsp;    private void validateBigPicture(Context context) throws AwesomeNotificationException {
+<b class="nc"><i>263</i>&nbsp;        if(</b>
+<b class="nc"><i>264</i>&nbsp;            (StringUtils.isNullOrEmpty(largeIcon) &amp;&amp; StringUtils.isNullOrEmpty(bigPicture)) ||</b>
+<b class="nc"><i>265</i>&nbsp;            (!StringUtils.isNullOrEmpty(largeIcon) &amp;&amp; !BitmapUtils.getInstance().isValidBitmap(context, largeIcon)) ||</b>
+<b class="nc"><i>266</i>&nbsp;            (!StringUtils.isNullOrEmpty(bigPicture) &amp;&amp; !BitmapUtils.getInstance().isValidBitmap(context, bigPicture))</b>
+<i>267</i>&nbsp;        ){
+<b class="nc"><i>268</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid big picture &#39;&quot;+bigPicture+&quot;&#39; or large icon &#39;&quot;+largeIcon+&quot;&#39;&quot;);</b>
+<i>269</i>&nbsp;        }
+<b class="nc"><i>270</i>&nbsp;    }</b>
+<i>271</i>&nbsp;
+<i>272</i>&nbsp;    private void validateLargeIcon(Context context) throws AwesomeNotificationException {
+<b class="nc"><i>273</i>&nbsp;        if(</b>
+<b class="nc"><i>274</i>&nbsp;                (!StringUtils.isNullOrEmpty(largeIcon) &amp;&amp; !BitmapUtils.getInstance().isValidBitmap(context, largeIcon))</b>
+<i>275</i>&nbsp;        )
+<b class="nc"><i>276</i>&nbsp;            throw new AwesomeNotificationException(&quot;Invalid large icon &#39;&quot;+largeIcon+&quot;&#39;&quot;);</b>
+<b class="nc"><i>277</i>&nbsp;    }</b>
+<i>278</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-28 19:15</div>
+</div>
+</body>
+</html>

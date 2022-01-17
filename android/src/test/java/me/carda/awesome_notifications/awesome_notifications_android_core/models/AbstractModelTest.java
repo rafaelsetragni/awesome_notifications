@@ -28,13 +28,12 @@ public class AbstractModelTest {
     @Before
     public void setUp() throws Exception {
         emptyMap = new HashMap<String, Object>();
-        originalInitialValues = Definitions.initialValues;
         Definitions.initialValues.clear();
     }
 
     @After
     public void tearDown() throws Exception {
-        Definitions.initialValues.putAll(originalInitialValues);
+        Definitions.initialValues.clear();
     }
 
     @Test
@@ -140,17 +139,19 @@ public class AbstractModelTest {
     @Test
     public void getValueOrDefault() {
 
-        Map<String, Object> testMap1 = new HashMap<String, Object>(){{ put("asdfasdfasdfasdf", "value"); }};
+        String exampleText = "abcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVXWYZ0123456789";
+
+        assertNotNull("Definitions.initialValues is not defined since begin", Definitions.initialValues);
+
+        AbstractModel.defaultValues.clear();
+        Map<String, Object> testMap1 = new HashMap<String, Object>(){{ put("KEY", exampleText); }};
         assertEquals("Valid values without default must return the respective valid value",
-                "value", AbstractModel.getValueOrDefault(testMap1, "asdfasdfasdfasdf", String.class));
+                exampleText, AbstractModel.getValueOrDefault(testMap1, "KEY", String.class));
 
-        Map.Entry<String, Object> entry = Definitions.initialValues.entrySet().iterator().next();
-        String key = entry.getKey();
-        Object value = entry.getValue();
-
-        Map<String, Object> testMap2 = new HashMap<String, Object>(){{ put(key, null); }};
+        AbstractModel.defaultValues.put("KEY", exampleText);
+        Map<String, Object> testMap2 = new HashMap<String, Object>(){{ put("KEY", null); }};
         assertEquals("Null values with default must return the default value",
-                value, AbstractModel.getValueOrDefault(testMap2, key, value.getClass()));
+                exampleText, AbstractModel.getValueOrDefault(testMap2, "KEY", String.class));
     }
 
     @Test
@@ -183,6 +184,11 @@ public class AbstractModelTest {
         assertNull(
                 "getEnumValueOrDefault fail to retrieve the null value for fields without default value",
                 AbstractModel.getEnumValueOrDefault(
-                    new HashMap<String, Object>(), "testEnum", TestEnum.class, TestEnum.values()));
+                        new HashMap<String, Object>(), "testEnum", TestEnum.class, TestEnum.values()));
+
+        assertNull(
+                "getEnumValueOrDefault fail to retrieve the null value for fields without default value",
+                AbstractModel.getEnumValueOrDefault(
+                        new HashMap<String, Object>(), "testEnum", TestEnum.class, TestEnum.values()));
     }
 }

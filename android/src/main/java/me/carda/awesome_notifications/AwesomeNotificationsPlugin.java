@@ -99,6 +99,15 @@ public class AwesomeNotificationsPlugin
 
         awesomeNotifications = new AwesomeNotifications(applicationContext);
         awesomeNotifications.subscribeOnAwesomeNotificationEvents(this);
+
+        try {
+            awesomeNotifications
+                    .setBackgroundExecutorClass(
+                            DartBackgroundExecutor.class);
+
+        } catch (AwesomeNotificationException e) {
+            e.printStackTrace();
+        }
     }
 
     private void detachAwesomeNotificationsPlugin(Context applicationContext) {
@@ -286,12 +295,13 @@ public class AwesomeNotificationsPlugin
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void channelMethodStartForeground(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
-        Map<String, Object> notificationData = call.<Map<String, Object>>argument("notificationData");
-        Integer startType = call.<Integer>argument("startType");
-        Boolean hasForegroundServiceType = call.<Boolean>argument("hasForegroundServiceType");
-        Integer foregroundServiceType = call.<Integer>argument("foregroundServiceType");
+        Map<String, Object> notificationData = call.<Map<String, Object>>argument(Definitions.NOTIFICATION_MODEL);
+        Integer startType = call.<Integer>argument(Definitions.NOTIFICATION_SERVICE_START_TYPE);
+        Boolean hasForegroundServiceType = call.<Boolean>argument(Definitions.NOTIFICATION_HAS_FOREGROUND_SERVICE);
+        Integer foregroundServiceType = call.<Integer>argument(Definitions.NOTIFICATION_FOREGROUND_SERVICE_TYPE);
 
         NotificationModel notificationModel = new NotificationModel().fromMap(notificationData);
 
@@ -306,17 +316,18 @@ public class AwesomeNotificationsPlugin
 
         if(foregroundServiceType == null)
             throw new AwesomeNotificationException("foregroundServiceType is required");
-
+/*
         awesomeNotifications.startForegroundService(
                     notificationModel,
                     startType,
                     hasForegroundServiceType,
                     foregroundServiceType
-                );
+                );*/
     }
 
     private void channelMethodStopForeground(@NonNull final MethodCall call, @NonNull final Result result) {
-        awesomeNotifications.stopForegroundService();
+        Integer notificationId = call.<Integer>argument(Definitions.NOTIFICATION_SERVICE_START_TYPE);
+        awesomeNotifications.stopForegroundService(notificationId);
         result.success(null);
     }
 
@@ -354,7 +365,7 @@ public class AwesomeNotificationsPlugin
         if (channelModel == null)
             throw new AwesomeNotificationException("Channel is invalid");
 
-        boolean forceUpdate = BooleanUtils.getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
+        boolean forceUpdate = BooleanUtils.getInstance().getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
 
         boolean channelSaved =
                 awesomeNotifications

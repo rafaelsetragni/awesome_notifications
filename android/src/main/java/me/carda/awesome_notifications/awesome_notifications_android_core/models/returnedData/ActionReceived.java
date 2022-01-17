@@ -5,6 +5,7 @@ import java.util.Map;
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationContentModel;
+import me.carda.awesome_notifications.awesome_notifications_android_core.utils.DateUtils;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.MapUtils;
 
 public class ActionReceived extends NotificationReceived {
@@ -59,6 +60,16 @@ public class ActionReceived extends NotificationReceived {
         this.createdDate = contentModel.createdDate;
 
         this.shouldAutoDismiss = this.autoDismissible;
+    }
+
+    public void registerUserActionEvent(NotificationLifeCycle lifeCycle){
+        this.actionDate = DateUtils.getUTCDate();
+        this.actionLifeCycle = lifeCycle;
+    }
+
+    public void registerDismissedEvent(NotificationLifeCycle lifeCycle){
+        this.dismissedDate = DateUtils.getUTCDate();
+        this.dismissedLifeCycle = lifeCycle;
     }
 
     @Override

@@ -19,6 +19,20 @@ import static org.junit.Assert.*;
 
 public class NotificationContentModelTest {
 
+    @Before
+    public void setUp() throws Exception {
+        AbstractModel
+                .defaultValues
+                .putAll(Definitions.initialValues);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        Definitions
+                .initialValues
+                .clear();
+    }
+
     @Test
     public void fromJsonAndToJson() {
         NotificationContentModel contentModel = new NotificationContentModel();

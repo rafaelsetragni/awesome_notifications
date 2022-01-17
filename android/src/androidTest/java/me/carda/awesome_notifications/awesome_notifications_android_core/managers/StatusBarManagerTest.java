@@ -42,7 +42,7 @@ public class StatusBarManagerTest {
 
     @Test
     public void closeStatusBar() {
-        StatusBarManager.
+        //StatusBarManager.
     }
 
     @Test

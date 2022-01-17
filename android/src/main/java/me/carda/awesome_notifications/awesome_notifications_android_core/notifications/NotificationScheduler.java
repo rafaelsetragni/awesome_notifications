@@ -228,7 +228,7 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
 
         if (
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-            BooleanUtils.getValue(notificationModel.schedule.preciseAlarm) &&
+            BooleanUtils.getInstance().getValue(notificationModel.schedule.preciseAlarm) &&
             ScheduleManager.isPreciseAlarmGloballyAllowed(alarmManager)
         ) {
             AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(timeMillis, pendingIntent);
@@ -236,7 +236,7 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
             return;
         }
 
-        if (BooleanUtils.getValue(notificationModel.schedule.allowWhileIdle)) {
+        if (BooleanUtils.getInstance().getValue(notificationModel.schedule.allowWhileIdle)) {
             AlarmManagerCompat.setExactAndAllowWhileIdle(alarmManager, AlarmManager.RTC_WAKEUP, timeMillis, pendingIntent);
             return;
         }

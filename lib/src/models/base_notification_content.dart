@@ -1,13 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';
-import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
 import 'package:awesome_notifications/src/models/model.dart';
-import 'package:awesome_notifications/src/utils/assert_utils.dart';
-import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
 import 'package:awesome_notifications/src/utils/html_utils.dart';
 import 'package:flutter/material.dart';
-
-import '../definitions.dart';
 
 class BaseNotificationContent extends Model {
   int? id;
@@ -40,6 +34,9 @@ class BaseNotificationContent extends Model {
   NotificationLifeCycle? createdLifeCycle;
   NotificationLifeCycle? displayedLifeCycle;
 
+  bool? roundedLargeIcon;
+  bool? roundedBigPicture;
+
   @Deprecated(
       'property name autoCancel is deprecated. Use autoDismissible instead.')
   bool? get autoCancel => autoDismissible;
@@ -69,6 +66,8 @@ class BaseNotificationContent extends Model {
       this.backgroundColor,
       this.payload,
       this.customSound,
+      this.roundedLargeIcon,
+      this.roundedBigPicture,
       bool? autoCancel}) {
     this.autoDismissible =
         this.autoDismissible != null ? this.autoDismissible : autoCancel;
@@ -102,6 +101,11 @@ class BaseNotificationContent extends Model {
         AssertUtils.extractValue(NOTIFICATION_CRITICAL_ALERT, mapData, bool);
     this.autoDismissible =
         AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, mapData, bool);
+
+    this.roundedLargeIcon =
+        AssertUtils.extractValue(NOTIFICATION_ROUNDED_LARGE_ICON, mapData, bool);
+    this.roundedBigPicture =
+        AssertUtils.extractValue(NOTIFICATION_ROUNDED_BIG_PICTURE, mapData, bool);
 
     this.actionType = AssertUtils.extractEnum<ActionType>(
         NOTIFICATION_ACTION_TYPE, mapData, ActionType.values);
@@ -146,6 +150,8 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_WAKE_UP_SCREEN: wakeUpScreen,
       NOTIFICATION_FULL_SCREEN_INTENT: fullScreenIntent,
       NOTIFICATION_CRITICAL_ALERT: criticalAlert,
+      NOTIFICATION_ROUNDED_LARGE_ICON: roundedLargeIcon,
+      NOTIFICATION_ROUNDED_BIG_PICTURE: roundedBigPicture
     };
   }
 

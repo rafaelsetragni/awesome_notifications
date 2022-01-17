@@ -20,6 +20,8 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.utils.S
 
 public abstract class AbstractModel implements Cloneable {
 
+    public static Map<String, Object> defaultValues = new HashMap<>();
+
     public abstract AbstractModel fromMap(Map<String, Object> arguments);
     public abstract Map<String, Object> toMap();
 
@@ -122,12 +124,12 @@ public abstract class AbstractModel implements Cloneable {
 
         if(value != null) return value;
 
-        return MapUtils.extractValue(Definitions.initialValues, reference, expectedClass).orNull();
+        return MapUtils.extractValue(defaultValues, reference, expectedClass).orNull();
     }
 
     protected static <T> T getEnumValueOrDefault(Map<String, Object> arguments, String reference, Class<T> enumerator, T[] values) {
         String key = MapUtils.extractValue(arguments, reference, String.class).orNull();
-        T defaultValue =  MapUtils.extractValue(Definitions.initialValues, reference, enumerator).orNull();
+        T defaultValue =  MapUtils.extractValue(defaultValues, reference, enumerator).orNull();
         if(key == null) return defaultValue;
 
         for(T enumValue : values){

@@ -1,0 +1,109 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BooleanUtils</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">me.carda.awesome_notifications.awesome_notifications_android_core.utils</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BooleanUtils (me.carda.awesome_notifications.awesome_notifications_android_core.utils)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BooleanUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package me.carda.awesome_notifications.awesome_notifications_android_core.utils;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;public class BooleanUtils {
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;    // ************** SINGLETON PATTERN ***********************
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;    private static BooleanUtils instance;
+<i>8</i>&nbsp;
+<b class="fc"><i>9</i>&nbsp;    private BooleanUtils(){</b>
+<b class="fc"><i>10</i>&nbsp;    }</b>
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    public static BooleanUtils getInstance() {
+<b class="fc"><i>13</i>&nbsp;        if (instance == null)</b>
+<b class="fc"><i>14</i>&nbsp;            instance = new BooleanUtils();</b>
+<b class="fc"><i>15</i>&nbsp;        return instance;</b>
+<i>16</i>&nbsp;    }
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    // ********************************************************
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    public boolean getValue(Boolean booleanObject){
+<b class="fc"><i>21</i>&nbsp;        return booleanObject != null &amp;&amp; booleanObject;</b>
+<i>22</i>&nbsp;    }
+<i>23</i>&nbsp;    public boolean getValueOrDefault(Boolean booleanObject, Boolean defaultValue){
+<b class="fc"><i>24</i>&nbsp;        return booleanObject == null ? getValue(defaultValue) : getValue(booleanObject);</b>
+<i>25</i>&nbsp;    }
+<i>26</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-12-28 19:15</div>
+</div>
+</body>
+</html>

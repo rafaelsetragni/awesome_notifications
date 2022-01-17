@@ -57,7 +57,7 @@ public class BroadcastSender {
                             .getInstance()
                             .addAwesomeNotificationEvent(
                                     context,
-                                    Definitions.BROADCAST_DISMISSED_NOTIFICATION,
+                                    Definitions.BROADCAST_DISPLAYED_NOTIFICATION,
                                     notificationReceived);
                 }
 
@@ -138,7 +138,7 @@ public class BroadcastSender {
 
         Intent serviceIntent =
                 NotificationBuilder
-                        .getInstance()
+                        .getNewBuilder()
                         .buildNotificationIntentFromActionModel(
                                 context,
                                 previousAction,
@@ -156,7 +156,7 @@ public class BroadcastSender {
 
         Intent serviceIntent =
                 NotificationBuilder
-                        .getInstance()
+                        .getNewBuilder()
                         .buildNotificationIntentFromActionModel(
                                 context,
                                 previousAction,

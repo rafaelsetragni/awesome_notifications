@@ -1,10 +1,26 @@
 package me.carda.awesome_notifications.awesome_notifications_android_core.utils;
 
 public class BooleanUtils {
-    public static boolean getValue(Boolean booleanObject){
+
+    // ************** SINGLETON PATTERN ***********************
+
+    private static BooleanUtils instance;
+
+    private BooleanUtils(){
+    }
+
+    public static BooleanUtils getInstance() {
+        if (instance == null)
+            instance = new BooleanUtils();
+        return instance;
+    }
+
+    // ********************************************************
+
+    public boolean getValue(Boolean booleanObject){
         return booleanObject != null && booleanObject;
     }
-    public static boolean getValueOrDefault(Boolean booleanObject, Boolean defaultValue){
+    public boolean getValueOrDefault(Boolean booleanObject, Boolean defaultValue){
         return booleanObject == null ? getValue(defaultValue) : getValue(booleanObject);
     }
 }

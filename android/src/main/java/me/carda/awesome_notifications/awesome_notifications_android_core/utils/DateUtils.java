@@ -16,8 +16,15 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.excepti
 
 public class DateUtils {
 
-    public static TimeZone utcTimeZone = TimeZone.getTimeZone("GMT");
-    public static TimeZone localTimeZone = TimeZone.getDefault();
+    static TimeZone utcTimeZone = TimeZone.getTimeZone("GMT");
+    public static TimeZone getUtcTimeZone() {
+        return utcTimeZone;
+    }
+
+    static TimeZone localTimeZone = TimeZone.getDefault();
+    public static TimeZone getLocalTimeZone() {
+        return localTimeZone;
+    }
 
     public static Date stringToDate(String dateTime, String fromTimeZone) throws AwesomeNotificationException {
         try {
@@ -88,6 +95,7 @@ public class DateUtils {
     public static Date getUTCDateTime(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(utcTimeZone);
+        calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
     }
 
@@ -105,6 +113,8 @@ public class DateUtils {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(timeZone);
+        calendar.set(Calendar.MILLISECOND, 0);
+
         return calendar.getTime();
     }
 

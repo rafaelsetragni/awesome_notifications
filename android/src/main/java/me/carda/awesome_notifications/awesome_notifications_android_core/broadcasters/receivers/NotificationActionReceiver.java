@@ -18,13 +18,14 @@ public class NotificationActionReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
 
+        NotificationBuilder notificationBuilder = NotificationBuilder.getNewBuilder();
+
         NotificationLifeCycle appLifeCycle =
                 LifeCycleManager
                     .getApplicationLifeCycle();
 
         ActionReceived actionReceived
-            = NotificationBuilder
-                .getInstance()
+            = notificationBuilder
                 .buildNotificationActionFromIntent(
                     context,
                     intent,
@@ -33,9 +34,10 @@ public class NotificationActionReceiver extends BroadcastReceiver {
         // This is not a valid notification intent
         if (actionReceived == null) return;
 
+        actionReceived.registerUserActionEvent(appLifeCycle);
+
         boolean shouldAutoDismiss =
-                        NotificationBuilder
-                            .getInstance()
+                        notificationBuilder
                             .notificationActionShouldAutoDismiss(actionReceived);
 
         if(shouldAutoDismiss)
@@ -57,8 +59,7 @@ public class NotificationActionReceiver extends BroadcastReceiver {
 
                 case Default:
                     if (appLifeCycle != NotificationLifeCycle.Foreground)
-                        NotificationBuilder
-                                .getInstance()
+                        notificationBuilder
                                 .forceBringAppToForeground(context);
 
                     BroadcastSender.sendBroadcastDefaultAction(

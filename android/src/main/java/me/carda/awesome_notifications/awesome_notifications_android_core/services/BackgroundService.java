@@ -6,7 +6,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
-import me.carda.awesome_notifications.awesome_notifications_android_core.background.DartBackgroundExecutor;
+import me.carda.awesome_notifications.DartBackgroundExecutor;
+import me.carda.awesome_notifications.awesome_notifications_android_core.background.AwesomeBackgroundExecutor;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.DefaultsManager;
 
 public class BackgroundService extends JobIntentService {
@@ -32,7 +33,7 @@ public class BackgroundService extends JobIntentService {
             return;
         }
 
-        DartBackgroundExecutor.runBackgroundExecutor(
+        AwesomeBackgroundExecutor.runBackgroundExecutor(
                 this,
                 intent,
                 dartCallbackHandle,

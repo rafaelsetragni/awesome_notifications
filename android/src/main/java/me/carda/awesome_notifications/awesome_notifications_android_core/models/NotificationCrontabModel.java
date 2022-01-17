@@ -69,7 +69,7 @@ public class NotificationCrontabModel extends NotificationScheduleModel {
             throw new AwesomeNotificationException("At least one schedule parameter is required");
 
         TimeZone timeZone = StringUtils.isNullOrEmpty(this.timeZone) ?
-                DateUtils.localTimeZone :
+                DateUtils.getLocalTimeZone() :
                 TimeZone.getTimeZone(this.timeZone);
 
         if (timeZone == null)
@@ -120,7 +120,7 @@ public class NotificationCrontabModel extends NotificationScheduleModel {
         try {
 
             TimeZone timeZone = StringUtils.isNullOrEmpty(this.timeZone) ?
-                    DateUtils.localTimeZone :
+                    DateUtils.getLocalTimeZone() :
                     TimeZone.getTimeZone(this.timeZone);
 
             if (timeZone == null)

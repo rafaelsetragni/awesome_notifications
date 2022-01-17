@@ -13,7 +13,7 @@ public class NotificationMessageModel extends AbstractModel {
     public String title;
     public String message;
     public String largeIcon;
-    public long timestamp;
+    public Long timestamp;
 
     public NotificationMessageModel(){}
 
