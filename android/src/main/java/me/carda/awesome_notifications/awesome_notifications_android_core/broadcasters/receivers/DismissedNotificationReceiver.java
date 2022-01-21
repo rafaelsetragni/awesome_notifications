@@ -9,11 +9,10 @@ import android.os.Build;
 import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationBuilder;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.senders.BroadcastSender;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.StatusBarManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.returnedData.ActionReceived;
-import me.carda.awesome_notifications.awesome_notifications_android_core.utils.DateUtils;
 
 @TargetApi(Build.VERSION_CODES.CUPCAKE)
 public class DismissedNotificationReceiver extends BroadcastReceiver

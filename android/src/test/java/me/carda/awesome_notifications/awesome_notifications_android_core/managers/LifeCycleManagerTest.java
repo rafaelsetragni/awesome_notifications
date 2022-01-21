@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import androidx.lifecycle.Lifecycle;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
-import me.carda.awesome_notifications.awesome_notifications_android_core.observers.AwesomeLifeCycleEventListener;
+import me.carda.awesome_notifications.awesome_notifications_android_core.listeners.AwesomeLifeCycleEventListener;
 
 import static org.junit.Assert.*;
 

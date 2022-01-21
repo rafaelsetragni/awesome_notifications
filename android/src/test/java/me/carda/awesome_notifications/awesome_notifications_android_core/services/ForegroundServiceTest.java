@@ -17,7 +17,7 @@ import org.mockito.MockedStatic;
 import me.carda.awesome_notifications.awesome_notifications_android_core.TestUtils;
 import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationForegroundThread;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationForegroundSender;
 
 public class ForegroundServiceTest {
 
@@ -46,8 +46,8 @@ public class ForegroundServiceTest {
 
     @Test
     public void onStartCommand() throws AwesomeNotificationException {
-        MockedStatic<NotificationForegroundThread> foregroundServiceStatic =
-                mockStatic(NotificationForegroundThread.class);
+        MockedStatic<NotificationForegroundSender> foregroundServiceStatic =
+                mockStatic(NotificationForegroundSender.class);
 
         Intent mockedIntent = mock(Intent.class);
 

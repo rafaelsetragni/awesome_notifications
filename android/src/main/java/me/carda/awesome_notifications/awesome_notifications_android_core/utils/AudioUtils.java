@@ -16,9 +16,9 @@ public class AudioUtils extends MediaUtils {
 
     // ************** SINGLETON PATTERN ***********************
 
-    private static AudioUtils instance;
+    protected static AudioUtils instance;
 
-    private AudioUtils(){
+    protected AudioUtils(){
     }
 
     public static AudioUtils getInstance() {

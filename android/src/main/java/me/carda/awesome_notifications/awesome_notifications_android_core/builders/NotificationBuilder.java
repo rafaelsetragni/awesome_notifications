@@ -1,4 +1,4 @@
-package me.carda.awesome_notifications.awesome_notifications_android_core.notifications;
+package me.carda.awesome_notifications.awesome_notifications_android_core.builders;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -18,7 +18,6 @@ import android.os.PowerManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.text.Spanned;
-import android.util.Log;
 
 
 import java.io.Serializable;
@@ -39,7 +38,6 @@ import androidx.core.text.HtmlCompat;
 
 import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
-import me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.receivers.AwesomeEventsReceiver;
 import me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.receivers.DismissedNotificationReceiver;
 import me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.receivers.NotificationActionReceiver;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ActionType;
@@ -651,7 +649,7 @@ public class NotificationBuilder {
 
     private void setBadge(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
         if (!notificationModel.groupSummary && BooleanUtils.getInstance().getValue(channelModel.channelShowBadge)) {
-            BadgeManager.incrementGlobalBadgeCounter(context);
+            BadgeManager.getInstance().incrementGlobalBadgeCounter(context);
             builder.setNumber(1);
         }
     }

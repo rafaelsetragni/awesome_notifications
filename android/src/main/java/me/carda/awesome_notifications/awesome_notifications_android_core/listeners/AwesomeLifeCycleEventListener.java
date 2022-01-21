@@ -1,4 +1,4 @@
-package me.carda.awesome_notifications.awesome_notifications_android_core.observers;
+package me.carda.awesome_notifications.awesome_notifications_android_core.listeners;
 
 import android.app.Activity;
 

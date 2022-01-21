@@ -1,8 +1,6 @@
 package me.carda.awesome_notifications.awesome_notifications_android_core.utils;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -10,19 +8,14 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.os.Build;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.regex.Pattern;
-
-import io.flutter.view.FlutterMain;
-import me.carda.awesome_notifications.awesome_notifications_android_core.managers.ChannelManager;
 
 import static me.carda.awesome_notifications.awesome_notifications_android_core.Definitions.MEDIA_VALID_ASSET;
 import static me.carda.awesome_notifications.awesome_notifications_android_core.Definitions.MEDIA_VALID_FILE;
@@ -37,9 +30,9 @@ public class BitmapUtils extends MediaUtils {
 
     // ************** SINGLETON PATTERN ***********************
 
-    private static BitmapUtils instance;
+    protected static BitmapUtils instance;
 
-    BitmapUtils(){}
+    protected BitmapUtils(){}
 
     public static BitmapUtils getInstance() {
         if (instance == null)
@@ -56,12 +49,15 @@ public class BitmapUtils extends MediaUtils {
 
             case Resource:
                 returnedBitmap = getBitmapFromResource(context, bitmapPath);
+                break;
 
             case File:
                 returnedBitmap = getBitmapFromFile(bitmapPath);
+                break;
 
             case Asset:
                 returnedBitmap = getBitmapFromAsset(context, bitmapPath);
+                break;
 
             case Network:
                 returnedBitmap = getBitmapFromUrl(this.cleanMediaPath(bitmapPath));
@@ -137,31 +133,6 @@ public class BitmapUtils extends MediaUtils {
     }
 
     public Bitmap getBitmapFromAsset(Context context, String bitmapPath) {
-        bitmapPath = this.cleanMediaPath(bitmapPath);
-
-        if(bitmapPath == null) return null;
-
-        //String appDir = context.getApplicationInfo().dataDir;
-        //String filePathName = appDir +"/app_flutter/"+ bitmapPath;
-
-        Bitmap bitmap = null;
-        InputStream inputStream = null;
-        try {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                inputStream = context.getAssets().open("flutter_assets/" + bitmapPath);
-            } else {
-                String assetLookupKey = FlutterMain.getLookupKeyForAsset(bitmapPath);
-                AssetManager assetManager = context.getAssets();
-                AssetFileDescriptor assetFileDescriptor = assetManager.openFd(assetLookupKey);
-                inputStream = assetFileDescriptor.createInputStream();
-            }
-
-            bitmap = BitmapFactory.decodeStream(inputStream);
-            return bitmap;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return null;
     }
 

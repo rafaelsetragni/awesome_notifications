@@ -294,7 +294,7 @@ class AwesomeNotifications {
         return;
 
       case CHANNEL_METHOD_SILENT_ACTION:
-        if(arguments[CHANNEL_METHOD_DEFAULT_ACTION][NOTIFICATION_ACTION_TYPE] == _silentBGActionTypeKey) {
+        if(arguments[NOTIFICATION_ACTION_TYPE] == _silentBGActionTypeKey) {
           compute(receiveSilentAction, arguments);
         } else {
           receiveSilentAction(arguments);

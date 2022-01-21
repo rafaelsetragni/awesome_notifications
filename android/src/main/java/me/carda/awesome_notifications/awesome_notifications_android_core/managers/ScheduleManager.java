@@ -6,8 +6,8 @@ import android.content.Context;
 import java.util.List;
 
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationBuilder;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationScheduler;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationScheduler;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationChannelModel;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
 

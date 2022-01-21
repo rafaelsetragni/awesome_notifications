@@ -7,22 +7,15 @@ import android.os.Build;
 import android.os.IBinder;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
-import me.carda.awesome_notifications.awesome_notifications_android_core.completion_handlers.ForegroundCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ForegroundServiceType;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ForegroundStartMode;
-import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
-import me.carda.awesome_notifications.awesome_notifications_android_core.managers.LifeCycleManager;
-import me.carda.awesome_notifications.awesome_notifications_android_core.managers.StatusBarManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationBuilder;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationForegroundThread;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.IntegerUtils;
 
 public class ForegroundService extends Service {

@@ -9,10 +9,10 @@ import android.util.Log;
 
 import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationBuilder;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationScheduler;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationSender;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationScheduler;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationSender;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
 
 public class ScheduledNotificationReceiver extends BroadcastReceiver {

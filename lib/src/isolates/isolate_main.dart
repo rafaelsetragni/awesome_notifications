@@ -77,7 +77,7 @@ Future<bool> receiveSilentAction(Map<String, dynamic> arguments) async {
     throw IsolateCallbackException('could not find action callback');
   }
 
-  Map<String, dynamic> actionMap = Map<String, dynamic>.from(arguments[CHANNEL_METHOD_DEFAULT_ACTION]);
+  Map<String, dynamic> actionMap = Map<String, dynamic>.from(arguments);
   final ReceivedAction receivedAction = ReceivedAction().fromMap(actionMap);
 
   try {

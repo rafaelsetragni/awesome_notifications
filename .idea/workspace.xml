@@ -9,98 +9,61 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/android/src/androidTest/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/SharedManagerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/background/AwesomeBackgroundExecutor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/completion_handlers/ForegroundCompletionHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/enumerators/ForegroundServiceType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/enumerators/ForegroundStartMode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/notifications/NotificationForegroundThread.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/decoders/BitmapResourceDecoderTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/services/AutoCancelServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/services/ForegroundServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/AudioUtilsTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/BitmapUtilsTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/FlutterBitmapUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/builders/NotificationBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/builders/NotificationForegroundSender.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/builders/NotificationScheduler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/builders/NotificationSender.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/listeners/AwesomeActionEventListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/listeners/AwesomeEventListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/listeners/AwesomeLifeCycleEventListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/listeners/AwesomeNotificationEventListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/BadgeManagerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/androidTest/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/StatusBarManagerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/androidTest/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/StatusBarManagerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/DartBackgroundExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/DartBackgroundExecutor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/AwesomeNotifications.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/AwesomeNotifications.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/Definitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/Definitions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/background/DartBackgroundExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/DartBackgroundExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/broadcasters/receivers/AwesomeEventsReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/broadcasters/receivers/AwesomeEventsReceiver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/broadcasters/receivers/DismissedNotificationReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/broadcasters/receivers/DismissedNotificationReceiver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/broadcasters/receivers/NotificationActionReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/broadcasters/receivers/NotificationActionReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/broadcasters/receivers/RefreshSchedulesReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/broadcasters/receivers/RefreshSchedulesReceiver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/broadcasters/receivers/ScheduledNotificationReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/broadcasters/receivers/ScheduledNotificationReceiver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/broadcasters/senders/BroadcastSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/broadcasters/senders/BroadcastSender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/decoders/BitmapResourceDecoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/decoders/BitmapResourceDecoder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/enumerators/NotificationSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/enumerators/NotificationSource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/externalLibs/RuntimeTypeAdapterFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/ChannelManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/ChannelManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/BadgeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/BadgeManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/CancellationManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/CancellationManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/LifeCycleManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/LifeCycleManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/PermissionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/PermissionManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/ScheduleManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/ScheduleManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/AbstractModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/AbstractModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationCalendarModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationCalendarModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationChannelModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationChannelModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationContentModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationContentModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationCrontabModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationCrontabModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationIntervalModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationIntervalModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationMessageModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationMessageModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationScheduleModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationScheduleModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/returnedData/ActionReceived.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/returnedData/ActionReceived.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/returnedData/NotificationReceived.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/returnedData/NotificationReceived.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/notifications/NotificationBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/notifications/NotificationBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/notifications/NotificationScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/notifications/NotificationScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/notifications/NotificationSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/notifications/NotificationSender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/services/AutoCancelService.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/services/AutoCancelService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/services/BackgroundService.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/services/BackgroundService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/notifications/NotificationBuilder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/notifications/NotificationForegroundThread.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/notifications/NotificationScheduler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/notifications/NotificationSender.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/observers/AwesomeActionEventListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/observers/AwesomeEventListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/observers/AwesomeLifeCycleEventListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/observers/AwesomeNotificationEventListener.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/services/ForegroundService.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/services/ForegroundService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/AudioUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/AudioUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/BitmapUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/BitmapUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/BooleanUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/BooleanUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/DateUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/DateUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/HtmlUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/HtmlUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/IntegerUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/IntegerUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/JsonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/JsonUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/MapUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/MapUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/TestUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/TestUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/enumerators/NotificationSourceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/enumerators/NotificationSourceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/AbstractModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/AbstractModelTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/DefaultsModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/DefaultsModelTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationButtonModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationButtonModelTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationCalendarModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationCalendarModelTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationChannelGroupModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationChannelGroupModelTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationContentModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationContentModelTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationCrontabModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationCrontabModelTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationIntervalModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationIntervalModelTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationMessageModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationMessageModelTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationModelTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationScheduleModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/models/NotificationScheduleModelTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/BooleanUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/BooleanUtilsTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/DateUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/DateUtilsTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/HtmlUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/HtmlUtilsTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/JsonUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/JsonUtilsTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/MapUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/MapUtilsTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/MediaUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/MediaUtilsTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/utils/notification_util.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/LifeCycleManagerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/LifeCycleManagerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/services/ForegroundServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/awesome_notifications_android_core/services/ForegroundServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/pages/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/home_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/definitions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/definitions.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/isolates/isolate_main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/isolates/isolate_main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/base_notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/base_notification_content.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_android_crontab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_android_crontab.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_content.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\rafae\.android\avd\Nexus_5_A12.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\rafae\.android\avd\Nexus_5_A11.avd]" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Class" />
         <option value="JUnit5 Test Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -126,7 +89,7 @@
     <option name="showMembers" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="DEBUGGABLE_DEVICE" value="Nexus_5_A12 [emulator-5554]" />
+    <property name="DEBUGGABLE_DEVICE" value="Nexus_5_A11 [emulator-5554]" />
     <property name="DEBUGGABLE_PROCESS" value="me.carda.awesome_notifications_example" />
     <property name="DEBUGGER_ID" value="Java" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
@@ -259,7 +222,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java</url>
-          <line>603</line>
+          <line>610</line>
           <option name="timeStamp" value="154" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
@@ -269,17 +232,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/services/ForegroundService.java</url>
-          <line>63</line>
+          <line>56</line>
           <option name="timeStamp" value="211" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/services/ForegroundService.java</url>
-          <line>91</line>
+          <line>84</line>
           <option name="timeStamp" value="213" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java</url>
-          <line>373</line>
+          <line>380</line>
           <option name="timeStamp" value="214" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
@@ -288,13 +251,18 @@
           <option name="timeStamp" value="254" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
-          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/utils/BitmapUtils.java</url>
-          <line>53</line>
-          <option name="timeStamp" value="256" />
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/broadcasters/receivers/NotificationActionReceiver.java</url>
+          <line>20</line>
+          <option name="timeStamp" value="255" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java</url>
+          <line>131</line>
+          <option name="timeStamp" value="260" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="java-field">
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_android_core/services/ForegroundService.java</url>
-          <line>69</line>
+          <line>62</line>
           <properties field="EXTRA" class="me.carda.awesome_notifications.awesome_notifications_android_core.system.services.ForegroundService.StartParameter" />
           <option name="timeStamp" value="210" />
         </line-breakpoint>

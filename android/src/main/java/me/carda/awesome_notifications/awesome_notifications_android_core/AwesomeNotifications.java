@@ -3,7 +3,6 @@ package me.carda.awesome_notifications.awesome_notifications_android_core;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -27,15 +26,14 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.enumera
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationSource;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.AbstractModel;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationBuilder;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationForegroundThread;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationScheduler;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationSender;
-import me.carda.awesome_notifications.awesome_notifications_android_core.observers.AwesomeActionEventListener;
-import me.carda.awesome_notifications.awesome_notifications_android_core.observers.AwesomeLifeCycleEventListener;
-import me.carda.awesome_notifications.awesome_notifications_android_core.observers.AwesomeNotificationEventListener;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationScheduler;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationSender;
+import me.carda.awesome_notifications.awesome_notifications_android_core.listeners.AwesomeActionEventListener;
+import me.carda.awesome_notifications.awesome_notifications_android_core.listeners.AwesomeLifeCycleEventListener;
+import me.carda.awesome_notifications.awesome_notifications_android_core.listeners.AwesomeNotificationEventListener;
 import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
-import me.carda.awesome_notifications.awesome_notifications_android_core.observers.AwesomeEventListener;
+import me.carda.awesome_notifications.awesome_notifications_android_core.listeners.AwesomeEventListener;
 import me.carda.awesome_notifications.awesome_notifications_android_core.completion_handlers.BitmapCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_android_core.completion_handlers.PermissionCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.BadgeManager;
@@ -56,7 +54,6 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.models.
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationScheduleModel;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.returnedData.NotificationReceived;
-import me.carda.awesome_notifications.awesome_notifications_android_core.services.BackgroundService;
 import me.carda.awesome_notifications.awesome_notifications_android_core.services.ForegroundService;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BitmapUtils;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BooleanUtils;
@@ -218,15 +215,15 @@ public class AwesomeNotifications
 
     private void notifyAwesomeEvent(String eventName, ActionReceived actionReceived) {
         for (AwesomeEventListener listener : awesomeEventListeners)
-            listener.onNewAwesomeEvent(eventName, (Serializable) actionReceived.toMap());
+            listener.onNewAwesomeEvent(eventName, actionReceived.toMap());
     }
 
     private void notifyAwesomeEvent(String eventName, NotificationReceived notificationReceived) {
         for (AwesomeEventListener listener : awesomeEventListeners)
-            listener.onNewAwesomeEvent(eventName, (Serializable) notificationReceived.toMap());
+            listener.onNewAwesomeEvent(eventName, notificationReceived.toMap());
     }
 
-    private void notifyAwesomeEvent(String eventName, Serializable content) {
+    private void notifyAwesomeEvent(String eventName, Map<String, Object> content) {
         for (AwesomeEventListener listener : awesomeEventListeners)
             listener.onNewAwesomeEvent(eventName, content);
     }
@@ -247,10 +244,15 @@ public class AwesomeNotifications
         bitmapResourceDecoder.execute();
     }
 
-    public void SetActionHandle(long silentCallback) {
+    public void setActionHandle(long silentCallback) {
         setActionHandleDefaults(
                 applicationContext,
                 silentCallback);
+    }
+
+    public long getActionHandle() {
+        return getActionHandleDefaults(
+                applicationContext);
     }
 
     public List<NotificationModel> listAllPendingSchedules(){
@@ -365,6 +367,12 @@ public class AwesomeNotifications
 
         DefaultsManager.saveDefault(context, defaults);
         DefaultsManager.commitChanges(context);
+    }
+
+    private long getActionHandleDefaults(@NonNull Context context) {
+        DefaultsModel defaults = DefaultsManager.getDefaultByKey(context);
+        return defaults.silentDataCallback == null ?
+                0L : defaults.silentDataCallback;
     }
 
     private void recoverNotificationCreated(@NonNull Context context) {
@@ -558,24 +566,24 @@ public class AwesomeNotifications
     }
 
     public int getGlobalBadgeCounter() {
-        return BadgeManager.getGlobalBadgeCounter(applicationContext);
+        return BadgeManager.getInstance().getGlobalBadgeCounter(applicationContext);
     }
 
     public void setGlobalBadgeCounter(@NonNull Integer count) {
         // Android resets badges automatically when all notifications are cleared
-        BadgeManager.setGlobalBadgeCounter(applicationContext, count);
+        BadgeManager.getInstance().setGlobalBadgeCounter(applicationContext, count);
     }
 
     public void resetGlobalBadgeCounter() {
-        BadgeManager.resetGlobalBadgeCounter(applicationContext);
+        BadgeManager.getInstance().resetGlobalBadgeCounter(applicationContext);
     }
 
     public int incrementGlobalBadgeCounter() {
-        return BadgeManager.incrementGlobalBadgeCounter(applicationContext);
+        return BadgeManager.getInstance().incrementGlobalBadgeCounter(applicationContext);
     }
 
     public int decrementGlobalBadgeCounter() {
-        return BadgeManager.decrementGlobalBadgeCounter(applicationContext);
+        return BadgeManager.getInstance().decrementGlobalBadgeCounter(applicationContext);
     }
 
     public boolean dismissNotification(@NonNull Integer notificationId) throws AwesomeNotificationException {

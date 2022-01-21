@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationScheduler;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationScheduler;
 
 public class RefreshSchedulesReceiver extends BroadcastReceiver
 {

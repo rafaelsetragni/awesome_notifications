@@ -1,5 +1,7 @@
 package me.carda.awesome_notifications.awesome_notifications_android_core.managers;
 
+import static java.lang.Math.max;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -7,17 +9,32 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
+import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BitmapUtils;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class BadgeManager {
 
-    public static int getGlobalBadgeCounter(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        // Read previous value. If not found, use 0 as default value.
-        return prefs.getInt(Definitions.BADGE_COUNT, 0);
+    // ************** SINGLETON PATTERN ***********************
+
+    protected static BadgeManager instance;
+
+    protected BadgeManager(){}
+
+    public static BadgeManager getInstance() {
+        if (instance == null)
+            instance = new BadgeManager();
+        return instance;
     }
 
-    public static void setGlobalBadgeCounter(Context context, int count) {
+    // ********************************************************
+
+    public int getGlobalBadgeCounter(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        // Read previous value. If not found, use 0 as default value.
+        return max(prefs.getInt(Definitions.BADGE_COUNT, 0),0);
+    }
+
+    public void setGlobalBadgeCounter(Context context, int count) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -27,23 +44,23 @@ public class BadgeManager {
         editor.apply();
     }
 
-    public static void resetGlobalBadgeCounter(Context context) {
+    public void resetGlobalBadgeCounter(Context context) {
         setGlobalBadgeCounter(context, 0);
     }
 
-    public static int incrementGlobalBadgeCounter(Context context) {
+    public int incrementGlobalBadgeCounter(Context context) {
         int totalAmount = getGlobalBadgeCounter(context);
         setGlobalBadgeCounter(context, ++totalAmount);
         return totalAmount;
     }
 
-    public static int decrementGlobalBadgeCounter(Context context) {
-        int totalAmount = Math.max(getGlobalBadgeCounter(context)-1, 0);
+    public int decrementGlobalBadgeCounter(Context context) {
+        int totalAmount = max(getGlobalBadgeCounter(context)-1, 0);
         setGlobalBadgeCounter(context, totalAmount);
         return totalAmount;
     }
 
-    private static boolean isBadgeDeviceGloballyAllowed(Context context){
+    private boolean isBadgeDeviceGloballyAllowed(Context context){
         try {
             return Settings.Secure.getInt(context.getContentResolver(), "notification_badging") == PermissionManager.ON;
         } catch (Settings.SettingNotFoundException e) {
@@ -51,7 +68,7 @@ public class BadgeManager {
         }
     }
 
-    private static boolean isBadgeNumberingAllowed(Context context){
+    private boolean isBadgeNumberingAllowed(Context context){
         try {
             int currentBadgeCount = getGlobalBadgeCounter(context);
             ShortcutBadger.applyCountOrThrow(context, currentBadgeCount);
@@ -61,13 +78,13 @@ public class BadgeManager {
         }
     }
 
-    private static boolean isBadgeAppGloballyAllowed(Context context){
+    private boolean isBadgeAppGloballyAllowed(Context context){
         // TODO missing global badge checking for the current application scope
         //Settings.Secure.getInt(context.getContentResolver(), "notification_badging").contains(context.getPackageName());
         return true;
     }
 
-    public static boolean isBadgeGloballyAllowed(Context context){
+    public boolean isBadgeGloballyAllowed(Context context){
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N /*Android 7*/) {
             if(!isBadgeDeviceGloballyAllowed(context))

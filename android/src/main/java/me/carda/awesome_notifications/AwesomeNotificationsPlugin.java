@@ -23,7 +23,7 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
-import me.carda.awesome_notifications.awesome_notifications_android_core.observers.AwesomeEventListener;
+import me.carda.awesome_notifications.awesome_notifications_android_core.listeners.AwesomeEventListener;
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_android_core.decoders.BitmapResourceDecoder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.completion_handlers.BitmapCompletionHandler;
@@ -100,6 +100,8 @@ public class AwesomeNotificationsPlugin
         awesomeNotifications = new AwesomeNotifications(applicationContext);
         awesomeNotifications.subscribeOnAwesomeNotificationEvents(this);
 
+        FlutterBitmapUtils.extendBitmapUtilsCapabilities();
+
         try {
             awesomeNotifications
                     .setBackgroundExecutorClass(
@@ -126,9 +128,16 @@ public class AwesomeNotificationsPlugin
     }
 
     @Override
-    public void onNewAwesomeEvent(String eventType, Serializable content) {
-        if (pluginChannel != null)
-            pluginChannel.invokeMethod(eventType, content);
+    public void onNewAwesomeEvent(String eventType, Map<String, Object> content) {
+        if (pluginChannel != null){
+            if(Definitions.CHANNEL_METHOD_SILENT_ACTION.equals(eventType)){
+                content.put(ACTION_HANDLE, awesomeNotifications.getActionHandle());
+                pluginChannel.invokeMethod(eventType, (Serializable) content);
+            }
+            else {
+                pluginChannel.invokeMethod(eventType, (Serializable) content);
+            }
+        }
     }
 
     @Override
@@ -826,7 +835,7 @@ public class AwesomeNotificationsPlugin
 
         long silentCallback = callbackActionObj == null ? 0L : (Long) callbackActionObj;
 
-        awesomeNotifications.SetActionHandle(silentCallback);
+        awesomeNotifications.setActionHandle(silentCallback);
 
         boolean success = silentCallback != 0L;
         if(!success)

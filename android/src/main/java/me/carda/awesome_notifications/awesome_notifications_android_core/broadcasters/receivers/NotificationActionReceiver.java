@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationBuilder;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ActionType;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.LifeCycleManager;

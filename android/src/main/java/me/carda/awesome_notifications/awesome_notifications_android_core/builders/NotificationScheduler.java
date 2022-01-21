@@ -1,4 +1,4 @@
-package me.carda.awesome_notifications.awesome_notifications_android_core.notifications;
+package me.carda.awesome_notifications.awesome_notifications_android_core.builders;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;

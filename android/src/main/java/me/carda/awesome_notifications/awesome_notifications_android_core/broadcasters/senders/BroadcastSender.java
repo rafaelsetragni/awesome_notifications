@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import androidx.core.app.JobIntentService;
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationBuilder;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.receivers.AwesomeEventsReceiver;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.CreatedManager;

@@ -1,4 +1,4 @@
-package me.carda.awesome_notifications.awesome_notifications_android_core.notifications;
+package me.carda.awesome_notifications.awesome_notifications_android_core.builders;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -12,12 +12,9 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.enumera
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationSource;
 import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.StatusBarManager;
-import me.carda.awesome_notifications.awesome_notifications_android_core.managers.CreatedManager;
-import me.carda.awesome_notifications.awesome_notifications_android_core.managers.DisplayedManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.returnedData.NotificationReceived;
 import me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.senders.BroadcastSender;
-import me.carda.awesome_notifications.awesome_notifications_android_core.utils.DateUtils;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.IntegerUtils;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
 

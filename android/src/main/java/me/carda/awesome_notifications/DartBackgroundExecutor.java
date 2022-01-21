@@ -30,7 +30,7 @@ import io.flutter.view.FlutterCallbackInformation;
 import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_android_core.background.AwesomeBackgroundExecutor;
-import me.carda.awesome_notifications.awesome_notifications_android_core.notifications.NotificationBuilder;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.LifeCycleManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.returnedData.ActionReceived;
 

@@ -130,7 +130,7 @@ public class PermissionManager {
                 return isCriticalAlertsGloballyAllowed(context);
 
             case Badge:
-                return BadgeManager.isBadgeGloballyAllowed(context);
+                return BadgeManager.getInstance().getInstance().isBadgeGloballyAllowed(context);
 
             case OverrideDnD:
                 return isDndOverrideAllowed(context);

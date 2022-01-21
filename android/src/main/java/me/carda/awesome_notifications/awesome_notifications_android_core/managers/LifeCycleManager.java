@@ -15,7 +15,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
-import me.carda.awesome_notifications.awesome_notifications_android_core.observers.AwesomeLifeCycleEventListener;
+import me.carda.awesome_notifications.awesome_notifications_android_core.listeners.AwesomeLifeCycleEventListener;
 
 public class LifeCycleManager implements ActivityLifecycleCallbacks {
 

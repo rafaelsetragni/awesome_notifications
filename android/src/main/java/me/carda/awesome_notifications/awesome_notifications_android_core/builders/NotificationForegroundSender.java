@@ -1,4 +1,4 @@
-package me.carda.awesome_notifications.awesome_notifications_android_core.notifications;
+package me.carda.awesome_notifications.awesome_notifications_android_core.builders;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -18,15 +18,13 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.enumera
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationSource;
 import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
-import me.carda.awesome_notifications.awesome_notifications_android_core.managers.CreatedManager;
-import me.carda.awesome_notifications.awesome_notifications_android_core.managers.DisplayedManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.returnedData.NotificationReceived;
 import me.carda.awesome_notifications.awesome_notifications_android_core.services.ForegroundService;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.DateUtils;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
 
-public class NotificationForegroundThread extends AsyncTask<String, Void, NotificationModel> {
+public class NotificationForegroundSender extends AsyncTask<String, Void, NotificationModel> {
 
     public static String TAG = "NotificationSender";
 
@@ -54,7 +52,7 @@ public class NotificationForegroundThread extends AsyncTask<String, Void, Notifi
                 .notificationModel
                 .validate(applicationContext);
 
-        new NotificationForegroundThread(
+        new NotificationForegroundSender(
             applicationContext,
             foregroundServiceIntent,
             notificationBuilder,
@@ -78,7 +76,7 @@ public class NotificationForegroundThread extends AsyncTask<String, Void, Notifi
         return false;
     }
 
-    private NotificationForegroundThread(
+    private NotificationForegroundSender(
             Context context,
             ForegroundService.ForegroundServiceIntent foregroundServiceIntent,
             NotificationBuilder notificationBuilder,

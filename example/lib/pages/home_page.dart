@@ -1,19 +1,15 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:awesome_notifications/android_foreground_service.dart';
 import 'package:awesome_notifications_example/common_widgets/led_light.dart';
 import 'package:awesome_notifications_example/common_widgets/seconds_slider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide DateUtils;
-//import 'package:flutter/material.dart' as Material show DateUtils;
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
-import 'package:awesome_notifications_example/main.dart';
 import 'package:awesome_notifications_example/routes.dart';
-import 'package:awesome_notifications_example/utils/media_player_central.dart';
 import 'package:awesome_notifications_example/utils/notification_util.dart';
 
 import 'package:awesome_notifications_example/common_widgets/check_button.dart';
