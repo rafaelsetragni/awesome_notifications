@@ -1,5 +1,7 @@
 package me.carda.awesome_notifications.awesome_notifications_android_core;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ActionType;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.DefaultRingtoneType;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.GroupAlertBehaviour;
@@ -47,6 +50,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
 import android.test.mock.MockContext;
@@ -109,21 +113,39 @@ public class TestUtils {
     public static final String mockPackageName = "com.test.testPackage";
     public static Context mockContext;
     public static Resources mockResources;
+    public static ContentResolver mockContent;
 
     public static void startMockedContext(){
         mockContext =  mock(MockContext.class);
         mockResources =  mock(Resources.class);
+        mockContent =  mock(ContentResolver.class);
 
         when(mockContext.getPackageName())
                 .thenReturn(mockPackageName);
         when(mockContext.getResources())
                 .thenReturn(mockResources);
+        when(mockContext.getContentResolver())
+                .thenReturn(mockContent);
 
     }
     public static void stopMockedContext(){
     }
 
     // ********************************** MOCK METHODS ***********************************************
+
+    public static void setFinalStaticField(Field field, Object newValue) {
+        field.setAccessible(true);
+
+        try {
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+
+            field.set(null, newValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static Object getDefaultValue(String reference) {
         return AbstractModel.defaultValues.get(reference);

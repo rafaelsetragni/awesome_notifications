@@ -50,52 +50,44 @@ public class BadgeManager {
 
     public int incrementGlobalBadgeCounter(Context context) {
         int totalAmount = getGlobalBadgeCounter(context);
-        setGlobalBadgeCounter(context, ++totalAmount);
-        return totalAmount;
-    }
-
-    public int decrementGlobalBadgeCounter(Context context) {
-        int totalAmount = max(getGlobalBadgeCounter(context)-1, 0);
+        totalAmount++;
         setGlobalBadgeCounter(context, totalAmount);
         return totalAmount;
     }
 
-    private boolean isBadgeDeviceGloballyAllowed(Context context){
+    public int decrementGlobalBadgeCounter(Context context) {
+        int totalAmount = max(getGlobalBadgeCounter(context) - 1, 0);
+        setGlobalBadgeCounter(context, totalAmount);
+        return totalAmount;
+    }
+
+    boolean isBadgeDeviceGloballyAllowed(Context context){
         try {
             return Settings.Secure.getInt(context.getContentResolver(), "notification_badging") == PermissionManager.ON;
-        } catch (Settings.SettingNotFoundException e) {
+        } catch (Settings.SettingNotFoundException ignored) {
             return true;
         }
     }
 
-    private boolean isBadgeNumberingAllowed(Context context){
+    boolean isBadgeNumberingAllowed(Context context){
         try {
             int currentBadgeCount = getGlobalBadgeCounter(context);
             ShortcutBadger.applyCountOrThrow(context, currentBadgeCount);
             return true;
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             return false;
         }
     }
 
-    private boolean isBadgeAppGloballyAllowed(Context context){
+    boolean isBadgeAppGloballyAllowed(Context context){
         // TODO missing global badge checking for the current application scope
         //Settings.Secure.getInt(context.getContentResolver(), "notification_badging").contains(context.getPackageName());
         return true;
     }
 
     public boolean isBadgeGloballyAllowed(Context context){
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N /*Android 7*/) {
-            if(!isBadgeDeviceGloballyAllowed(context))
-                return false;
-
-            if(isBadgeNumberingAllowed(context))
-                return true;
-
-            return isBadgeAppGloballyAllowed(context);
-        }
-
-        return true;
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.N /*Android 7*/ ||
+               isBadgeDeviceGloballyAllowed(context) &&
+               isBadgeAppGloballyAllowed(context);
     }
 }
