@@ -1,0 +1,1750 @@
+define(['dart_sdk', 'packages/flutter/src/services/system_channels.dart', 'packages/firebase_messaging_platform_interface/src/method_channel/utils/exception.dart', 'packages/flutter/src/foundation/_platform_web.dart', 'packages/firebase_core/firebase_core.dart', 'packages/plugin_platform_interface/plugin_platform_interface.dart', 'packages/flutter/src/widgets/widget_span.dart'], (function load__packages__firebase_messaging_platform_interface__src__remote_notification_dart(dart_sdk, packages__flutter__src__services__system_channels$46dart, packages__firebase_messaging_platform_interface__src__method_channel__utils__exception$46dart, packages__flutter__src__foundation___platform_web$46dart, packages__firebase_core__firebase_core$46dart, packages__plugin_platform_interface__plugin_platform_interface$46dart, packages__flutter__src__widgets__widget_span$46dart) {
+  'use strict';
+  const core = dart_sdk.core;
+  const _interceptors = dart_sdk._interceptors;
+  const _js_helper = dart_sdk._js_helper;
+  const collection = dart_sdk.collection;
+  const async = dart_sdk.async;
+  const _internal = dart_sdk._internal;
+  const ui = dart_sdk.ui;
+  const dart = dart_sdk.dart;
+  const dartx = dart_sdk.dartx;
+  const message_codec = packages__flutter__src__services__system_channels$46dart.src__services__message_codec;
+  const platform_channel = packages__flutter__src__services__system_channels$46dart.src__services__platform_channel;
+  const message_codecs = packages__flutter__src__services__system_channels$46dart.src__services__message_codecs;
+  const exception = packages__firebase_messaging_platform_interface__src__method_channel__utils__exception$46dart.src__method_channel__utils__exception;
+  const platform = packages__flutter__src__foundation___platform_web$46dart.src__foundation__platform;
+  const firebase_core = packages__firebase_core__firebase_core$46dart.firebase_core;
+  const plugin_platform_interface = packages__plugin_platform_interface__plugin_platform_interface$46dart.plugin_platform_interface;
+  const binding = packages__flutter__src__widgets__widget_span$46dart.src__widgets__binding;
+  var remote_notification = Object.create(dart.library);
+  var remote_message = Object.create(dart.library);
+  var types = Object.create(dart.library);
+  var notification_settings = Object.create(dart.library);
+  var utils = Object.create(dart.library);
+  var method_channel_messaging = Object.create(dart.library);
+  var platform_interface_messaging = Object.create(dart.library);
+  var firebase_messaging_platform_interface = Object.create(dart.library);
+  var $_get = dartx._get;
+  var $toString = dartx.toString;
+  dart._checkModuleNullSafetyMode(true);
+  var T = {
+    StringN: () => (T.StringN = dart.constFn(dart.nullable(core.String)))(),
+    intN: () => (T.intN = dart.constFn(dart.nullable(core.int)))(),
+    JSArrayOfString: () => (T.JSArrayOfString = dart.constFn(_interceptors.JSArray$(core.String)))(),
+    ListOfString: () => (T.ListOfString = dart.constFn(core.List$(core.String)))(),
+    IdentityMapOfString$dynamic: () => (T.IdentityMapOfString$dynamic = dart.constFn(_js_helper.IdentityMap$(core.String, dart.dynamic)))(),
+    LinkedHashMapOfString$dynamic: () => (T.LinkedHashMapOfString$dynamic = dart.constFn(collection.LinkedHashMap$(core.String, dart.dynamic)))(),
+    StreamControllerOfString: () => (T.StreamControllerOfString = dart.constFn(async.StreamController$(core.String)))(),
+    FutureOfvoid: () => (T.FutureOfvoid = dart.constFn(async.Future$(dart.void)))(),
+    MethodCallToFutureOfvoid: () => (T.MethodCallToFutureOfvoid = dart.constFn(dart.fnType(T.FutureOfvoid(), [message_codec.MethodCall])))(),
+    IdentityMapOfString$String: () => (T.IdentityMapOfString$String = dart.constFn(_js_helper.IdentityMap$(core.String, core.String)))(),
+    RemoteMessageN: () => (T.RemoteMessageN = dart.constFn(dart.nullable(remote_message.RemoteMessage)))(),
+    VoidTovoid: () => (T.VoidTovoid = dart.constFn(dart.fnType(dart.void, [])))(),
+    IdentityMapOfString$int: () => (T.IdentityMapOfString$int = dart.constFn(_js_helper.IdentityMap$(core.String, core.int)))(),
+    IdentityMapOfString$StringN: () => (T.IdentityMapOfString$StringN = dart.constFn(_js_helper.IdentityMap$(core.String, T.StringN())))(),
+    IdentityMapOfString$bool: () => (T.IdentityMapOfString$bool = dart.constFn(_js_helper.IdentityMap$(core.String, core.bool)))(),
+    IdentityMapOfString$Object: () => (T.IdentityMapOfString$Object = dart.constFn(_js_helper.IdentityMap$(core.String, core.Object)))(),
+    ObjectN: () => (T.ObjectN = dart.constFn(dart.nullable(core.Object)))(),
+    IdentityMapOfString$ObjectN: () => (T.IdentityMapOfString$ObjectN = dart.constFn(_js_helper.IdentityMap$(core.String, T.ObjectN())))(),
+    boolN: () => (T.boolN = dart.constFn(dart.nullable(core.bool)))(),
+    StreamControllerOfRemoteMessage: () => (T.StreamControllerOfRemoteMessage = dart.constFn(async.StreamController$(remote_message.RemoteMessage)))(),
+    RemoteMessageToFutureOfvoid: () => (T.RemoteMessageToFutureOfvoid = dart.constFn(dart.fnType(T.FutureOfvoid(), [remote_message.RemoteMessage])))(),
+    FutureOfNull: () => (T.FutureOfNull = dart.constFn(async.Future$(core.Null)))(),
+    MethodCallToFutureOfNull: () => (T.MethodCallToFutureOfNull = dart.constFn(dart.fnType(T.FutureOfNull(), [message_codec.MethodCall])))()
+  };
+  var T$Eval = Object.assign({
+    _: () => T$Eval
+  }, T);
+  var S = {
+    _: () => S
+  };
+  var S$Eval = Object.assign({
+    _: () => S$Eval
+  }, S);
+  const CT = Object.create({
+    _: () => (C, CT)
+  });
+  dart.defineLazy(CT, {
+    get C0() {
+      return C[0] = dart.constList([], core.String);
+    },
+    get C1() {
+      return C[1] = dart.const({
+        __proto__: types.AndroidNotificationPriority.prototype,
+        [_name$]: "AndroidNotificationPriority.defaultPriority",
+        index: 2
+      });
+    },
+    get C2() {
+      return C[2] = dart.const({
+        __proto__: types.AndroidNotificationVisibility.prototype,
+        [_name$]: "AndroidNotificationVisibility.private",
+        index: 1
+      });
+    },
+    get C3() {
+      return C[3] = dart.constMap(core.String, dart.dynamic, []);
+    },
+    get C4() {
+      return C[4] = dart.const({
+        __proto__: types.AppleNotificationSetting.prototype,
+        [_name$]: "AppleNotificationSetting.disabled",
+        index: 0
+      });
+    },
+    get C5() {
+      return C[5] = dart.const({
+        __proto__: types.AppleNotificationSetting.prototype,
+        [_name$]: "AppleNotificationSetting.enabled",
+        index: 1
+      });
+    },
+    get C6() {
+      return C[6] = dart.const({
+        __proto__: types.AppleNotificationSetting.prototype,
+        [_name$]: "AppleNotificationSetting.notSupported",
+        index: 2
+      });
+    },
+    get C7() {
+      return C[7] = dart.constList([C[4] || CT.C4, C[5] || CT.C5, C[6] || CT.C6], types.AppleNotificationSetting);
+    },
+    get C8() {
+      return C[8] = dart.const({
+        __proto__: types.AppleShowPreviewSetting.prototype,
+        [_name$]: "AppleShowPreviewSetting.always",
+        index: 0
+      });
+    },
+    get C9() {
+      return C[9] = dart.const({
+        __proto__: types.AppleShowPreviewSetting.prototype,
+        [_name$]: "AppleShowPreviewSetting.never",
+        index: 1
+      });
+    },
+    get C10() {
+      return C[10] = dart.const({
+        __proto__: types.AppleShowPreviewSetting.prototype,
+        [_name$]: "AppleShowPreviewSetting.notSupported",
+        index: 2
+      });
+    },
+    get C11() {
+      return C[11] = dart.const({
+        __proto__: types.AppleShowPreviewSetting.prototype,
+        [_name$]: "AppleShowPreviewSetting.whenAuthenticated",
+        index: 3
+      });
+    },
+    get C12() {
+      return C[12] = dart.constList([C[8] || CT.C8, C[9] || CT.C9, C[10] || CT.C10, C[11] || CT.C11], types.AppleShowPreviewSetting);
+    },
+    get C13() {
+      return C[13] = dart.const({
+        __proto__: types.AuthorizationStatus.prototype,
+        [_name$]: "AuthorizationStatus.authorized",
+        index: 0
+      });
+    },
+    get C14() {
+      return C[14] = dart.const({
+        __proto__: types.AuthorizationStatus.prototype,
+        [_name$]: "AuthorizationStatus.denied",
+        index: 1
+      });
+    },
+    get C15() {
+      return C[15] = dart.const({
+        __proto__: types.AuthorizationStatus.prototype,
+        [_name$]: "AuthorizationStatus.notDetermined",
+        index: 2
+      });
+    },
+    get C16() {
+      return C[16] = dart.const({
+        __proto__: types.AuthorizationStatus.prototype,
+        [_name$]: "AuthorizationStatus.provisional",
+        index: 3
+      });
+    },
+    get C17() {
+      return C[17] = dart.constList([C[13] || CT.C13, C[14] || CT.C14, C[15] || CT.C15, C[16] || CT.C16], types.AuthorizationStatus);
+    },
+    get C18() {
+      return C[18] = dart.const({
+        __proto__: types.AndroidNotificationPriority.prototype,
+        [_name$]: "AndroidNotificationPriority.minimumPriority",
+        index: 0
+      });
+    },
+    get C19() {
+      return C[19] = dart.const({
+        __proto__: types.AndroidNotificationPriority.prototype,
+        [_name$]: "AndroidNotificationPriority.lowPriority",
+        index: 1
+      });
+    },
+    get C20() {
+      return C[20] = dart.const({
+        __proto__: types.AndroidNotificationPriority.prototype,
+        [_name$]: "AndroidNotificationPriority.highPriority",
+        index: 3
+      });
+    },
+    get C21() {
+      return C[21] = dart.const({
+        __proto__: types.AndroidNotificationPriority.prototype,
+        [_name$]: "AndroidNotificationPriority.maximumPriority",
+        index: 4
+      });
+    },
+    get C22() {
+      return C[22] = dart.constList([C[18] || CT.C18, C[19] || CT.C19, C[1] || CT.C1, C[20] || CT.C20, C[21] || CT.C21], types.AndroidNotificationPriority);
+    },
+    get C23() {
+      return C[23] = dart.const({
+        __proto__: types.AndroidNotificationVisibility.prototype,
+        [_name$]: "AndroidNotificationVisibility.secret",
+        index: 0
+      });
+    },
+    get C24() {
+      return C[24] = dart.const({
+        __proto__: types.AndroidNotificationVisibility.prototype,
+        [_name$]: "AndroidNotificationVisibility.public",
+        index: 2
+      });
+    },
+    get C25() {
+      return C[25] = dart.constList([C[23] || CT.C23, C[2] || CT.C2, C[24] || CT.C24], types.AndroidNotificationVisibility);
+    },
+    get C26() {
+      return C[26] = dart.const({
+        __proto__: notification_settings.NotificationSettings.prototype,
+        [sound$1]: C[6] || CT.C6,
+        [showPreviews$]: C[10] || CT.C10,
+        [notificationCenter$]: C[6] || CT.C6,
+        [lockScreen$]: C[6] || CT.C6,
+        [carPlay$]: C[6] || CT.C6,
+        [badge$0]: C[6] || CT.C6,
+        [authorizationStatus$]: C[13] || CT.C13,
+        [announcement$]: C[6] || CT.C6,
+        [alert$]: C[6] || CT.C6
+      });
+    },
+    get C27() {
+      return C[27] = dart.fn(method_channel_messaging._firebaseMessagingCallbackDispatcher, T.VoidTovoid());
+    },
+    get C30() {
+      return C[30] = dart.const({
+        __proto__: message_codecs.StandardMessageCodec.prototype
+      });
+    },
+    get C29() {
+      return C[29] = dart.const({
+        __proto__: message_codecs.StandardMethodCodec.prototype,
+        [StandardMethodCodec_messageCodec]: C[30] || CT.C30
+      });
+    },
+    get C28() {
+      return C[28] = dart.const({
+        __proto__: platform_channel.MethodChannel.prototype,
+        [MethodChannel__binaryMessenger]: null,
+        [MethodChannel_codec]: C[29] || CT.C29,
+        [MethodChannel_name]: "plugins.flutter.io/firebase_messaging"
+      });
+    },
+    get C31() {
+      return C[31] = dart.const({
+        __proto__: platform_channel.MethodChannel.prototype,
+        [MethodChannel__binaryMessenger]: null,
+        [MethodChannel_codec]: C[29] || CT.C29,
+        [MethodChannel_name]: "plugins.flutter.io/firebase_messaging_background"
+      });
+    }
+  }, false);
+  var C = Array(32).fill(void 0);
+  var I = [
+    "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging_platform_interface-2.1.3/lib/src/remote_notification.dart",
+    "package:firebase_messaging_platform_interface/src/remote_notification.dart",
+    "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging_platform_interface-2.1.3/lib/src/remote_message.dart",
+    "package:firebase_messaging_platform_interface/src/remote_message.dart",
+    "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging_platform_interface-2.1.3/lib/src/types.dart",
+    "package:firebase_messaging_platform_interface/src/types.dart",
+    "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging_platform_interface-2.1.3/lib/src/notification_settings.dart",
+    "package:firebase_messaging_platform_interface/src/notification_settings.dart",
+    "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging_platform_interface-2.1.3/lib/src/utils.dart",
+    "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging_platform_interface-2.1.3/lib/src/method_channel/method_channel_messaging.dart",
+    "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging_platform_interface-2.1.3/lib/src/platform_interface/platform_interface_messaging.dart",
+    "package:firebase_messaging_platform_interface/src/platform_interface/platform_interface_messaging.dart",
+    "package:firebase_messaging_platform_interface/src/method_channel/method_channel_messaging.dart"
+  ];
+  var android$ = dart.privateName(remote_notification, "RemoteNotification.android");
+  var apple$ = dart.privateName(remote_notification, "RemoteNotification.apple");
+  var title$ = dart.privateName(remote_notification, "RemoteNotification.title");
+  var titleLocArgs$ = dart.privateName(remote_notification, "RemoteNotification.titleLocArgs");
+  var titleLocKey$ = dart.privateName(remote_notification, "RemoteNotification.titleLocKey");
+  var body$ = dart.privateName(remote_notification, "RemoteNotification.body");
+  var bodyLocArgs$ = dart.privateName(remote_notification, "RemoteNotification.bodyLocArgs");
+  var bodyLocKey$ = dart.privateName(remote_notification, "RemoteNotification.bodyLocKey");
+  remote_notification.RemoteNotification = class RemoteNotification extends core.Object {
+    get android() {
+      return this[android$];
+    }
+    set android(value) {
+      super.android = value;
+    }
+    get apple() {
+      return this[apple$];
+    }
+    set apple(value) {
+      super.apple = value;
+    }
+    get title() {
+      return this[title$];
+    }
+    set title(value) {
+      super.title = value;
+    }
+    get titleLocArgs() {
+      return this[titleLocArgs$];
+    }
+    set titleLocArgs(value) {
+      super.titleLocArgs = value;
+    }
+    get titleLocKey() {
+      return this[titleLocKey$];
+    }
+    set titleLocKey(value) {
+      super.titleLocKey = value;
+    }
+    get body() {
+      return this[body$];
+    }
+    set body(value) {
+      super.body = value;
+    }
+    get bodyLocArgs() {
+      return this[bodyLocArgs$];
+    }
+    set bodyLocArgs(value) {
+      super.bodyLocArgs = value;
+    }
+    get bodyLocKey() {
+      return this[bodyLocKey$];
+    }
+    set bodyLocKey(value) {
+      super.bodyLocKey = value;
+    }
+    static fromMap(map) {
+      if (map == null) dart.nullFailed(I[0], 25, 59, "map");
+      let _android = null;
+      let _apple = null;
+      if (map[$_get]("android") != null) {
+        _android = new remote_notification.AndroidNotification.new({channelId: T.StringN().as(dart.dsend(map[$_get]("android"), '_get', ["channelId"])), clickAction: T.StringN().as(dart.dsend(map[$_get]("android"), '_get', ["clickAction"])), color: T.StringN().as(dart.dsend(map[$_get]("android"), '_get', ["color"])), count: T.intN().as(dart.dsend(map[$_get]("android"), '_get', ["count"])), imageUrl: T.StringN().as(dart.dsend(map[$_get]("android"), '_get', ["imageUrl"])), link: T.StringN().as(dart.dsend(map[$_get]("android"), '_get', ["link"])), priority: utils.convertToAndroidNotificationPriority(T.intN().as(dart.dsend(map[$_get]("android"), '_get', ["priority"]))), smallIcon: T.StringN().as(dart.dsend(map[$_get]("android"), '_get', ["smallIcon"])), sound: T.StringN().as(dart.dsend(map[$_get]("android"), '_get', ["sound"])), ticker: T.StringN().as(dart.dsend(map[$_get]("android"), '_get', ["ticker"])), tag: T.StringN().as(dart.dsend(map[$_get]("android"), '_get', ["tag"])), visibility: utils.convertToAndroidNotificationVisibility(T.intN().as(dart.dsend(map[$_get]("android"), '_get', ["visibility"])))});
+      }
+      if (map[$_get]("apple") != null) {
+        _apple = new remote_notification.AppleNotification.new({badge: T.StringN().as(dart.dsend(map[$_get]("apple"), '_get', ["badge"])), subtitle: T.StringN().as(dart.dsend(map[$_get]("apple"), '_get', ["subtitle"])), subtitleLocArgs: remote_notification._toList(dart.dsend(map[$_get]("apple"), '_get', ["subtitleLocArgs"])), subtitleLocKey: T.StringN().as(dart.dsend(map[$_get]("apple"), '_get', ["subtitleLocKey"])), imageUrl: T.StringN().as(dart.dsend(map[$_get]("apple"), '_get', ["imageUrl"])), sound: dart.dsend(map[$_get]("apple"), '_get', ["sound"]) == null ? null : new remote_notification.AppleNotificationSound.new({critical: core.bool.as(dart.dsend(dart.dsend(map[$_get]("apple"), '_get', ["sound"]), '_get', ["critical"])), name: T.StringN().as(dart.dsend(dart.dsend(map[$_get]("apple"), '_get', ["sound"]), '_get', ["name"])), volume: core.num.as(dart.dsend(dart.dsend(map[$_get]("apple"), '_get', ["sound"]), '_get', ["volume"]))})});
+      }
+      return new remote_notification.RemoteNotification.new({title: T.StringN().as(map[$_get]("title")), titleLocArgs: remote_notification._toList(map[$_get]("titleLocArgs")), titleLocKey: T.StringN().as(map[$_get]("titleLocKey")), body: T.StringN().as(map[$_get]("body")), bodyLocArgs: remote_notification._toList(map[$_get]("bodyLocArgs")), bodyLocKey: T.StringN().as(map[$_get]("bodyLocKey")), android: _android, apple: _apple});
+    }
+  };
+  (remote_notification.RemoteNotification.new = function(opts) {
+    let android = opts && 'android' in opts ? opts.android : null;
+    let apple = opts && 'apple' in opts ? opts.apple : null;
+    let title = opts && 'title' in opts ? opts.title : null;
+    let titleLocArgs = opts && 'titleLocArgs' in opts ? opts.titleLocArgs : C[0] || CT.C0;
+    if (titleLocArgs == null) dart.nullFailed(I[0], 18, 12, "titleLocArgs");
+    let titleLocKey = opts && 'titleLocKey' in opts ? opts.titleLocKey : null;
+    let body = opts && 'body' in opts ? opts.body : null;
+    let bodyLocArgs = opts && 'bodyLocArgs' in opts ? opts.bodyLocArgs : C[0] || CT.C0;
+    if (bodyLocArgs == null) dart.nullFailed(I[0], 21, 12, "bodyLocArgs");
+    let bodyLocKey = opts && 'bodyLocKey' in opts ? opts.bodyLocKey : null;
+    this[android$] = android;
+    this[apple$] = apple;
+    this[title$] = title;
+    this[titleLocArgs$] = titleLocArgs;
+    this[titleLocKey$] = titleLocKey;
+    this[body$] = body;
+    this[bodyLocArgs$] = bodyLocArgs;
+    this[bodyLocKey$] = bodyLocKey;
+    ;
+  }).prototype = remote_notification.RemoteNotification.prototype;
+  dart.addTypeTests(remote_notification.RemoteNotification);
+  dart.addTypeCaches(remote_notification.RemoteNotification);
+  dart.setLibraryUri(remote_notification.RemoteNotification, I[1]);
+  dart.setFieldSignature(remote_notification.RemoteNotification, () => ({
+    __proto__: dart.getFields(remote_notification.RemoteNotification.__proto__),
+    android: dart.finalFieldType(dart.nullable(remote_notification.AndroidNotification)),
+    apple: dart.finalFieldType(dart.nullable(remote_notification.AppleNotification)),
+    title: dart.finalFieldType(dart.nullable(core.String)),
+    titleLocArgs: dart.finalFieldType(core.List$(core.String)),
+    titleLocKey: dart.finalFieldType(dart.nullable(core.String)),
+    body: dart.finalFieldType(dart.nullable(core.String)),
+    bodyLocArgs: dart.finalFieldType(core.List$(core.String)),
+    bodyLocKey: dart.finalFieldType(dart.nullable(core.String))
+  }));
+  var channelId$ = dart.privateName(remote_notification, "AndroidNotification.channelId");
+  var clickAction$ = dart.privateName(remote_notification, "AndroidNotification.clickAction");
+  var color$ = dart.privateName(remote_notification, "AndroidNotification.color");
+  var count$ = dart.privateName(remote_notification, "AndroidNotification.count");
+  var imageUrl$ = dart.privateName(remote_notification, "AndroidNotification.imageUrl");
+  var link$ = dart.privateName(remote_notification, "AndroidNotification.link");
+  var priority$ = dart.privateName(remote_notification, "AndroidNotification.priority");
+  var smallIcon$ = dart.privateName(remote_notification, "AndroidNotification.smallIcon");
+  var sound$ = dart.privateName(remote_notification, "AndroidNotification.sound");
+  var ticker$ = dart.privateName(remote_notification, "AndroidNotification.ticker");
+  var visibility$ = dart.privateName(remote_notification, "AndroidNotification.visibility");
+  var tag$ = dart.privateName(remote_notification, "AndroidNotification.tag");
+  var _name$ = dart.privateName(types, "_name");
+  remote_notification.AndroidNotification = class AndroidNotification extends core.Object {
+    get channelId() {
+      return this[channelId$];
+    }
+    set channelId(value) {
+      super.channelId = value;
+    }
+    get clickAction() {
+      return this[clickAction$];
+    }
+    set clickAction(value) {
+      super.clickAction = value;
+    }
+    get color() {
+      return this[color$];
+    }
+    set color(value) {
+      super.color = value;
+    }
+    get count() {
+      return this[count$];
+    }
+    set count(value) {
+      super.count = value;
+    }
+    get imageUrl() {
+      return this[imageUrl$];
+    }
+    set imageUrl(value) {
+      super.imageUrl = value;
+    }
+    get link() {
+      return this[link$];
+    }
+    set link(value) {
+      super.link = value;
+    }
+    get priority() {
+      return this[priority$];
+    }
+    set priority(value) {
+      super.priority = value;
+    }
+    get smallIcon() {
+      return this[smallIcon$];
+    }
+    set smallIcon(value) {
+      super.smallIcon = value;
+    }
+    get sound() {
+      return this[sound$];
+    }
+    set sound(value) {
+      super.sound = value;
+    }
+    get ticker() {
+      return this[ticker$];
+    }
+    set ticker(value) {
+      super.ticker = value;
+    }
+    get visibility() {
+      return this[visibility$];
+    }
+    set visibility(value) {
+      super.visibility = value;
+    }
+    get tag() {
+      return this[tag$];
+    }
+    set tag(value) {
+      super.tag = value;
+    }
+  };
+  (remote_notification.AndroidNotification.new = function(opts) {
+    let channelId = opts && 'channelId' in opts ? opts.channelId : null;
+    let clickAction = opts && 'clickAction' in opts ? opts.clickAction : null;
+    let color = opts && 'color' in opts ? opts.color : null;
+    let count = opts && 'count' in opts ? opts.count : null;
+    let imageUrl = opts && 'imageUrl' in opts ? opts.imageUrl : null;
+    let link = opts && 'link' in opts ? opts.link : null;
+    let priority = opts && 'priority' in opts ? opts.priority : C[1] || CT.C1;
+    if (priority == null) dart.nullFailed(I[0], 112, 12, "priority");
+    let smallIcon = opts && 'smallIcon' in opts ? opts.smallIcon : null;
+    let sound = opts && 'sound' in opts ? opts.sound : null;
+    let ticker = opts && 'ticker' in opts ? opts.ticker : null;
+    let tag = opts && 'tag' in opts ? opts.tag : null;
+    let visibility = opts && 'visibility' in opts ? opts.visibility : C[2] || CT.C2;
+    if (visibility == null) dart.nullFailed(I[0], 117, 12, "visibility");
+    this[channelId$] = channelId;
+    this[clickAction$] = clickAction;
+    this[color$] = color;
+    this[count$] = count;
+    this[imageUrl$] = imageUrl;
+    this[link$] = link;
+    this[priority$] = priority;
+    this[smallIcon$] = smallIcon;
+    this[sound$] = sound;
+    this[ticker$] = ticker;
+    this[tag$] = tag;
+    this[visibility$] = visibility;
+    ;
+  }).prototype = remote_notification.AndroidNotification.prototype;
+  dart.addTypeTests(remote_notification.AndroidNotification);
+  dart.addTypeCaches(remote_notification.AndroidNotification);
+  dart.setLibraryUri(remote_notification.AndroidNotification, I[1]);
+  dart.setFieldSignature(remote_notification.AndroidNotification, () => ({
+    __proto__: dart.getFields(remote_notification.AndroidNotification.__proto__),
+    channelId: dart.finalFieldType(dart.nullable(core.String)),
+    clickAction: dart.finalFieldType(dart.nullable(core.String)),
+    color: dart.finalFieldType(dart.nullable(core.String)),
+    count: dart.finalFieldType(dart.nullable(core.int)),
+    imageUrl: dart.finalFieldType(dart.nullable(core.String)),
+    link: dart.finalFieldType(dart.nullable(core.String)),
+    priority: dart.finalFieldType(types.AndroidNotificationPriority),
+    smallIcon: dart.finalFieldType(dart.nullable(core.String)),
+    sound: dart.finalFieldType(dart.nullable(core.String)),
+    ticker: dart.finalFieldType(dart.nullable(core.String)),
+    visibility: dart.finalFieldType(types.AndroidNotificationVisibility),
+    tag: dart.finalFieldType(dart.nullable(core.String))
+  }));
+  var badge$ = dart.privateName(remote_notification, "AppleNotification.badge");
+  var sound$0 = dart.privateName(remote_notification, "AppleNotification.sound");
+  var imageUrl$0 = dart.privateName(remote_notification, "AppleNotification.imageUrl");
+  var subtitle$ = dart.privateName(remote_notification, "AppleNotification.subtitle");
+  var subtitleLocArgs$ = dart.privateName(remote_notification, "AppleNotification.subtitleLocArgs");
+  var subtitleLocKey$ = dart.privateName(remote_notification, "AppleNotification.subtitleLocKey");
+  remote_notification.AppleNotification = class AppleNotification extends core.Object {
+    get badge() {
+      return this[badge$];
+    }
+    set badge(value) {
+      super.badge = value;
+    }
+    get sound() {
+      return this[sound$0];
+    }
+    set sound(value) {
+      super.sound = value;
+    }
+    get imageUrl() {
+      return this[imageUrl$0];
+    }
+    set imageUrl(value) {
+      super.imageUrl = value;
+    }
+    get subtitle() {
+      return this[subtitle$];
+    }
+    set subtitle(value) {
+      super.subtitle = value;
+    }
+    get subtitleLocArgs() {
+      return this[subtitleLocArgs$];
+    }
+    set subtitleLocArgs(value) {
+      super.subtitleLocArgs = value;
+    }
+    get subtitleLocKey() {
+      return this[subtitleLocKey$];
+    }
+    set subtitleLocKey(value) {
+      super.subtitleLocKey = value;
+    }
+  };
+  (remote_notification.AppleNotification.new = function(opts) {
+    let badge = opts && 'badge' in opts ? opts.badge : null;
+    let sound = opts && 'sound' in opts ? opts.sound : null;
+    let imageUrl = opts && 'imageUrl' in opts ? opts.imageUrl : null;
+    let subtitle = opts && 'subtitle' in opts ? opts.subtitle : null;
+    let subtitleLocArgs = opts && 'subtitleLocArgs' in opts ? opts.subtitleLocArgs : C[0] || CT.C0;
+    if (subtitleLocArgs == null) dart.nullFailed(I[0], 173, 12, "subtitleLocArgs");
+    let subtitleLocKey = opts && 'subtitleLocKey' in opts ? opts.subtitleLocKey : null;
+    this[badge$] = badge;
+    this[sound$0] = sound;
+    this[imageUrl$0] = imageUrl;
+    this[subtitle$] = subtitle;
+    this[subtitleLocArgs$] = subtitleLocArgs;
+    this[subtitleLocKey$] = subtitleLocKey;
+    ;
+  }).prototype = remote_notification.AppleNotification.prototype;
+  dart.addTypeTests(remote_notification.AppleNotification);
+  dart.addTypeCaches(remote_notification.AppleNotification);
+  dart.setLibraryUri(remote_notification.AppleNotification, I[1]);
+  dart.setFieldSignature(remote_notification.AppleNotification, () => ({
+    __proto__: dart.getFields(remote_notification.AppleNotification.__proto__),
+    badge: dart.finalFieldType(dart.nullable(core.String)),
+    sound: dart.finalFieldType(dart.nullable(remote_notification.AppleNotificationSound)),
+    imageUrl: dart.finalFieldType(dart.nullable(core.String)),
+    subtitle: dart.finalFieldType(dart.nullable(core.String)),
+    subtitleLocArgs: dart.finalFieldType(core.List$(core.String)),
+    subtitleLocKey: dart.finalFieldType(dart.nullable(core.String))
+  }));
+  var critical$ = dart.privateName(remote_notification, "AppleNotificationSound.critical");
+  var name$ = dart.privateName(remote_notification, "AppleNotificationSound.name");
+  var volume$ = dart.privateName(remote_notification, "AppleNotificationSound.volume");
+  remote_notification.AppleNotificationSound = class AppleNotificationSound extends core.Object {
+    get critical() {
+      return this[critical$];
+    }
+    set critical(value) {
+      super.critical = value;
+    }
+    get name() {
+      return this[name$];
+    }
+    set name(value) {
+      super.name = value;
+    }
+    get volume() {
+      return this[volume$];
+    }
+    set volume(value) {
+      super.volume = value;
+    }
+  };
+  (remote_notification.AppleNotificationSound.new = function(opts) {
+    let critical = opts && 'critical' in opts ? opts.critical : false;
+    if (critical == null) dart.nullFailed(I[0], 201, 13, "critical");
+    let name = opts && 'name' in opts ? opts.name : null;
+    let volume = opts && 'volume' in opts ? opts.volume : 0;
+    if (volume == null) dart.nullFailed(I[0], 201, 47, "volume");
+    this[critical$] = critical;
+    this[name$] = name;
+    this[volume$] = volume;
+    ;
+  }).prototype = remote_notification.AppleNotificationSound.prototype;
+  dart.addTypeTests(remote_notification.AppleNotificationSound);
+  dart.addTypeCaches(remote_notification.AppleNotificationSound);
+  dart.setLibraryUri(remote_notification.AppleNotificationSound, I[1]);
+  dart.setFieldSignature(remote_notification.AppleNotificationSound, () => ({
+    __proto__: dart.getFields(remote_notification.AppleNotificationSound.__proto__),
+    critical: dart.finalFieldType(core.bool),
+    name: dart.finalFieldType(dart.nullable(core.String)),
+    volume: dart.finalFieldType(core.num)
+  }));
+  remote_notification._toList = function _toList(value) {
+    if (value == null) {
+      return T.JSArrayOfString().of([]);
+    }
+    return T.ListOfString().from(core.Iterable.as(value));
+  };
+  var senderId$ = dart.privateName(remote_message, "RemoteMessage.senderId");
+  var category$ = dart.privateName(remote_message, "RemoteMessage.category");
+  var collapseKey$ = dart.privateName(remote_message, "RemoteMessage.collapseKey");
+  var contentAvailable$ = dart.privateName(remote_message, "RemoteMessage.contentAvailable");
+  var data$ = dart.privateName(remote_message, "RemoteMessage.data");
+  var from$ = dart.privateName(remote_message, "RemoteMessage.from");
+  var messageId$ = dart.privateName(remote_message, "RemoteMessage.messageId");
+  var messageType$ = dart.privateName(remote_message, "RemoteMessage.messageType");
+  var mutableContent$ = dart.privateName(remote_message, "RemoteMessage.mutableContent");
+  var notification$ = dart.privateName(remote_message, "RemoteMessage.notification");
+  var sentTime$ = dart.privateName(remote_message, "RemoteMessage.sentTime");
+  var threadId$ = dart.privateName(remote_message, "RemoteMessage.threadId");
+  var ttl$ = dart.privateName(remote_message, "RemoteMessage.ttl");
+  remote_message.RemoteMessage = class RemoteMessage extends core.Object {
+    get senderId() {
+      return this[senderId$];
+    }
+    set senderId(value) {
+      super.senderId = value;
+    }
+    get category() {
+      return this[category$];
+    }
+    set category(value) {
+      super.category = value;
+    }
+    get collapseKey() {
+      return this[collapseKey$];
+    }
+    set collapseKey(value) {
+      super.collapseKey = value;
+    }
+    get contentAvailable() {
+      return this[contentAvailable$];
+    }
+    set contentAvailable(value) {
+      super.contentAvailable = value;
+    }
+    get data() {
+      return this[data$];
+    }
+    set data(value) {
+      super.data = value;
+    }
+    get from() {
+      return this[from$];
+    }
+    set from(value) {
+      super.from = value;
+    }
+    get messageId() {
+      return this[messageId$];
+    }
+    set messageId(value) {
+      super.messageId = value;
+    }
+    get messageType() {
+      return this[messageType$];
+    }
+    set messageType(value) {
+      super.messageType = value;
+    }
+    get mutableContent() {
+      return this[mutableContent$];
+    }
+    set mutableContent(value) {
+      super.mutableContent = value;
+    }
+    get notification() {
+      return this[notification$];
+    }
+    set notification(value) {
+      super.notification = value;
+    }
+    get sentTime() {
+      return this[sentTime$];
+    }
+    set sentTime(value) {
+      super.sentTime = value;
+    }
+    get threadId() {
+      return this[threadId$];
+    }
+    set threadId(value) {
+      super.threadId = value;
+    }
+    get ttl() {
+      return this[ttl$];
+    }
+    set ttl(value) {
+      super.ttl = value;
+    }
+    static fromMap(map) {
+      let t0, t0$, t0$0;
+      if (map == null) dart.nullFailed(I[2], 26, 54, "map");
+      return new remote_message.RemoteMessage.new({senderId: T.StringN().as(map[$_get]("senderId")), category: T.StringN().as(map[$_get]("category")), collapseKey: T.StringN().as(map[$_get]("collapseKey")), contentAvailable: core.bool.as((t0 = map[$_get]("contentAvailable"), t0 == null ? false : t0)), data: map[$_get]("data") == null ? new (T.IdentityMapOfString$dynamic()).new() : T.LinkedHashMapOfString$dynamic().from(core.Map.as(map[$_get]("data"))), from: T.StringN().as(map[$_get]("from")), messageId: (t0$ = map[$_get]("messageId"), t0$ == null ? null : dart.toString(t0$)), messageType: T.StringN().as(map[$_get]("messageType")), mutableContent: core.bool.as((t0$0 = map[$_get]("mutableContent"), t0$0 == null ? false : t0$0)), notification: map[$_get]("notification") == null ? null : remote_notification.RemoteNotification.fromMap(T.LinkedHashMapOfString$dynamic().from(core.Map.as(map[$_get]("notification")))), sentTime: map[$_get]("sentTime") == null ? null : new core.DateTime.fromMillisecondsSinceEpoch(core.int.parse(dart.toString(map[$_get]("sentTime")))), threadId: T.StringN().as(map[$_get]("threadId")), ttl: T.intN().as(map[$_get]("ttl"))});
+    }
+  };
+  (remote_message.RemoteMessage.new = function(opts) {
+    let senderId = opts && 'senderId' in opts ? opts.senderId : null;
+    let category = opts && 'category' in opts ? opts.category : null;
+    let collapseKey = opts && 'collapseKey' in opts ? opts.collapseKey : null;
+    let contentAvailable = opts && 'contentAvailable' in opts ? opts.contentAvailable : false;
+    if (contentAvailable == null) dart.nullFailed(I[2], 14, 12, "contentAvailable");
+    let data = opts && 'data' in opts ? opts.data : C[3] || CT.C3;
+    if (data == null) dart.nullFailed(I[2], 15, 12, "data");
+    let from = opts && 'from' in opts ? opts.from : null;
+    let messageId = opts && 'messageId' in opts ? opts.messageId : null;
+    let messageType = opts && 'messageType' in opts ? opts.messageType : null;
+    let mutableContent = opts && 'mutableContent' in opts ? opts.mutableContent : false;
+    if (mutableContent == null) dart.nullFailed(I[2], 19, 12, "mutableContent");
+    let notification = opts && 'notification' in opts ? opts.notification : null;
+    let sentTime = opts && 'sentTime' in opts ? opts.sentTime : null;
+    let threadId = opts && 'threadId' in opts ? opts.threadId : null;
+    let ttl = opts && 'ttl' in opts ? opts.ttl : null;
+    this[senderId$] = senderId;
+    this[category$] = category;
+    this[collapseKey$] = collapseKey;
+    this[contentAvailable$] = contentAvailable;
+    this[data$] = data;
+    this[from$] = from;
+    this[messageId$] = messageId;
+    this[messageType$] = messageType;
+    this[mutableContent$] = mutableContent;
+    this[notification$] = notification;
+    this[sentTime$] = sentTime;
+    this[threadId$] = threadId;
+    this[ttl$] = ttl;
+    ;
+  }).prototype = remote_message.RemoteMessage.prototype;
+  dart.addTypeTests(remote_message.RemoteMessage);
+  dart.addTypeCaches(remote_message.RemoteMessage);
+  dart.setLibraryUri(remote_message.RemoteMessage, I[3]);
+  dart.setFieldSignature(remote_message.RemoteMessage, () => ({
+    __proto__: dart.getFields(remote_message.RemoteMessage.__proto__),
+    senderId: dart.finalFieldType(dart.nullable(core.String)),
+    category: dart.finalFieldType(dart.nullable(core.String)),
+    collapseKey: dart.finalFieldType(dart.nullable(core.String)),
+    contentAvailable: dart.finalFieldType(core.bool),
+    data: dart.finalFieldType(core.Map$(core.String, dart.dynamic)),
+    from: dart.finalFieldType(dart.nullable(core.String)),
+    messageId: dart.finalFieldType(dart.nullable(core.String)),
+    messageType: dart.finalFieldType(dart.nullable(core.String)),
+    mutableContent: dart.finalFieldType(core.bool),
+    notification: dart.finalFieldType(dart.nullable(remote_notification.RemoteNotification)),
+    sentTime: dart.finalFieldType(dart.nullable(core.DateTime)),
+    threadId: dart.finalFieldType(dart.nullable(core.String)),
+    ttl: dart.finalFieldType(dart.nullable(core.int))
+  }));
+  types.AppleNotificationSetting = class AppleNotificationSetting extends core.Object {
+    toString() {
+      return this[_name$];
+    }
+  };
+  (types.AppleNotificationSetting.new = function(index, _name) {
+    if (index == null) dart.nullFailed(I[4], 11, 6, "index");
+    if (_name == null) dart.nullFailed(I[4], 11, 6, "_name");
+    this.index = index;
+    this[_name$] = _name;
+    ;
+  }).prototype = types.AppleNotificationSetting.prototype;
+  dart.addTypeTests(types.AppleNotificationSetting);
+  dart.addTypeCaches(types.AppleNotificationSetting);
+  dart.setLibraryUri(types.AppleNotificationSetting, I[5]);
+  dart.setFieldSignature(types.AppleNotificationSetting, () => ({
+    __proto__: dart.getFields(types.AppleNotificationSetting.__proto__),
+    index: dart.finalFieldType(core.int),
+    [_name$]: dart.finalFieldType(core.String)
+  }));
+  dart.defineExtensionMethods(types.AppleNotificationSetting, ['toString']);
+  types.AppleNotificationSetting.disabled = C[4] || CT.C4;
+  types.AppleNotificationSetting.enabled = C[5] || CT.C5;
+  types.AppleNotificationSetting.notSupported = C[6] || CT.C6;
+  types.AppleNotificationSetting.values = C[7] || CT.C7;
+  types.AppleShowPreviewSetting = class AppleShowPreviewSetting extends core.Object {
+    toString() {
+      return this[_name$];
+    }
+  };
+  (types.AppleShowPreviewSetting.new = function(index, _name) {
+    if (index == null) dart.nullFailed(I[4], 26, 6, "index");
+    if (_name == null) dart.nullFailed(I[4], 26, 6, "_name");
+    this.index = index;
+    this[_name$] = _name;
+    ;
+  }).prototype = types.AppleShowPreviewSetting.prototype;
+  dart.addTypeTests(types.AppleShowPreviewSetting);
+  dart.addTypeCaches(types.AppleShowPreviewSetting);
+  dart.setLibraryUri(types.AppleShowPreviewSetting, I[5]);
+  dart.setFieldSignature(types.AppleShowPreviewSetting, () => ({
+    __proto__: dart.getFields(types.AppleShowPreviewSetting.__proto__),
+    index: dart.finalFieldType(core.int),
+    [_name$]: dart.finalFieldType(core.String)
+  }));
+  dart.defineExtensionMethods(types.AppleShowPreviewSetting, ['toString']);
+  types.AppleShowPreviewSetting.always = C[8] || CT.C8;
+  types.AppleShowPreviewSetting.never = C[9] || CT.C9;
+  types.AppleShowPreviewSetting.notSupported = C[10] || CT.C10;
+  types.AppleShowPreviewSetting.whenAuthenticated = C[11] || CT.C11;
+  types.AppleShowPreviewSetting.values = C[12] || CT.C12;
+  types.AuthorizationStatus = class AuthorizationStatus extends core.Object {
+    toString() {
+      return this[_name$];
+    }
+  };
+  (types.AuthorizationStatus.new = function(index, _name) {
+    if (index == null) dart.nullFailed(I[4], 44, 6, "index");
+    if (_name == null) dart.nullFailed(I[4], 44, 6, "_name");
+    this.index = index;
+    this[_name$] = _name;
+    ;
+  }).prototype = types.AuthorizationStatus.prototype;
+  dart.addTypeTests(types.AuthorizationStatus);
+  dart.addTypeCaches(types.AuthorizationStatus);
+  dart.setLibraryUri(types.AuthorizationStatus, I[5]);
+  dart.setFieldSignature(types.AuthorizationStatus, () => ({
+    __proto__: dart.getFields(types.AuthorizationStatus.__proto__),
+    index: dart.finalFieldType(core.int),
+    [_name$]: dart.finalFieldType(core.String)
+  }));
+  dart.defineExtensionMethods(types.AuthorizationStatus, ['toString']);
+  types.AuthorizationStatus.authorized = C[13] || CT.C13;
+  types.AuthorizationStatus.denied = C[14] || CT.C14;
+  types.AuthorizationStatus.notDetermined = C[15] || CT.C15;
+  types.AuthorizationStatus.provisional = C[16] || CT.C16;
+  types.AuthorizationStatus.values = C[17] || CT.C17;
+  types.AndroidNotificationPriority = class AndroidNotificationPriority extends core.Object {
+    toString() {
+      return this[_name$];
+    }
+  };
+  (types.AndroidNotificationPriority.new = function(index, _name) {
+    if (index == null) dart.nullFailed(I[4], 64, 6, "index");
+    if (_name == null) dart.nullFailed(I[4], 64, 6, "_name");
+    this.index = index;
+    this[_name$] = _name;
+    ;
+  }).prototype = types.AndroidNotificationPriority.prototype;
+  dart.addTypeTests(types.AndroidNotificationPriority);
+  dart.addTypeCaches(types.AndroidNotificationPriority);
+  dart.setLibraryUri(types.AndroidNotificationPriority, I[5]);
+  dart.setFieldSignature(types.AndroidNotificationPriority, () => ({
+    __proto__: dart.getFields(types.AndroidNotificationPriority.__proto__),
+    index: dart.finalFieldType(core.int),
+    [_name$]: dart.finalFieldType(core.String)
+  }));
+  dart.defineExtensionMethods(types.AndroidNotificationPriority, ['toString']);
+  types.AndroidNotificationPriority.minimumPriority = C[18] || CT.C18;
+  types.AndroidNotificationPriority.lowPriority = C[19] || CT.C19;
+  types.AndroidNotificationPriority.defaultPriority = C[1] || CT.C1;
+  types.AndroidNotificationPriority.highPriority = C[20] || CT.C20;
+  types.AndroidNotificationPriority.maximumPriority = C[21] || CT.C21;
+  types.AndroidNotificationPriority.values = C[22] || CT.C22;
+  types.AndroidNotificationVisibility = class AndroidNotificationVisibility extends core.Object {
+    toString() {
+      return this[_name$];
+    }
+  };
+  (types.AndroidNotificationVisibility.new = function(index, _name) {
+    if (index == null) dart.nullFailed(I[4], 89, 6, "index");
+    if (_name == null) dart.nullFailed(I[4], 89, 6, "_name");
+    this.index = index;
+    this[_name$] = _name;
+    ;
+  }).prototype = types.AndroidNotificationVisibility.prototype;
+  dart.addTypeTests(types.AndroidNotificationVisibility);
+  dart.addTypeCaches(types.AndroidNotificationVisibility);
+  dart.setLibraryUri(types.AndroidNotificationVisibility, I[5]);
+  dart.setFieldSignature(types.AndroidNotificationVisibility, () => ({
+    __proto__: dart.getFields(types.AndroidNotificationVisibility.__proto__),
+    index: dart.finalFieldType(core.int),
+    [_name$]: dart.finalFieldType(core.String)
+  }));
+  dart.defineExtensionMethods(types.AndroidNotificationVisibility, ['toString']);
+  types.AndroidNotificationVisibility.secret = C[23] || CT.C23;
+  types.AndroidNotificationVisibility.private = C[2] || CT.C2;
+  types.AndroidNotificationVisibility.public = C[24] || CT.C24;
+  types.AndroidNotificationVisibility.values = C[25] || CT.C25;
+  var alert$ = dart.privateName(notification_settings, "NotificationSettings.alert");
+  var announcement$ = dart.privateName(notification_settings, "NotificationSettings.announcement");
+  var authorizationStatus$ = dart.privateName(notification_settings, "NotificationSettings.authorizationStatus");
+  var badge$0 = dart.privateName(notification_settings, "NotificationSettings.badge");
+  var carPlay$ = dart.privateName(notification_settings, "NotificationSettings.carPlay");
+  var lockScreen$ = dart.privateName(notification_settings, "NotificationSettings.lockScreen");
+  var notificationCenter$ = dart.privateName(notification_settings, "NotificationSettings.notificationCenter");
+  var showPreviews$ = dart.privateName(notification_settings, "NotificationSettings.showPreviews");
+  var sound$1 = dart.privateName(notification_settings, "NotificationSettings.sound");
+  notification_settings.NotificationSettings = class NotificationSettings extends core.Object {
+    get alert() {
+      return this[alert$];
+    }
+    set alert(value) {
+      super.alert = value;
+    }
+    get announcement() {
+      return this[announcement$];
+    }
+    set announcement(value) {
+      super.announcement = value;
+    }
+    get authorizationStatus() {
+      return this[authorizationStatus$];
+    }
+    set authorizationStatus(value) {
+      super.authorizationStatus = value;
+    }
+    get badge() {
+      return this[badge$0];
+    }
+    set badge(value) {
+      super.badge = value;
+    }
+    get carPlay() {
+      return this[carPlay$];
+    }
+    set carPlay(value) {
+      super.carPlay = value;
+    }
+    get lockScreen() {
+      return this[lockScreen$];
+    }
+    set lockScreen(value) {
+      super.lockScreen = value;
+    }
+    get notificationCenter() {
+      return this[notificationCenter$];
+    }
+    set notificationCenter(value) {
+      super.notificationCenter = value;
+    }
+    get showPreviews() {
+      return this[showPreviews$];
+    }
+    set showPreviews(value) {
+      super.showPreviews = value;
+    }
+    get sound() {
+      return this[sound$1];
+    }
+    set sound(value) {
+      super.sound = value;
+    }
+  };
+  (notification_settings.NotificationSettings.new = function(opts) {
+    let alert = opts && 'alert' in opts ? opts.alert : null;
+    if (alert == null) dart.nullFailed(I[6], 11, 22, "alert");
+    let announcement = opts && 'announcement' in opts ? opts.announcement : null;
+    if (announcement == null) dart.nullFailed(I[6], 12, 21, "announcement");
+    let authorizationStatus = opts && 'authorizationStatus' in opts ? opts.authorizationStatus : null;
+    if (authorizationStatus == null) dart.nullFailed(I[6], 13, 21, "authorizationStatus");
+    let badge = opts && 'badge' in opts ? opts.badge : null;
+    if (badge == null) dart.nullFailed(I[6], 14, 21, "badge");
+    let carPlay = opts && 'carPlay' in opts ? opts.carPlay : null;
+    if (carPlay == null) dart.nullFailed(I[6], 15, 21, "carPlay");
+    let lockScreen = opts && 'lockScreen' in opts ? opts.lockScreen : null;
+    if (lockScreen == null) dart.nullFailed(I[6], 16, 21, "lockScreen");
+    let notificationCenter = opts && 'notificationCenter' in opts ? opts.notificationCenter : null;
+    if (notificationCenter == null) dart.nullFailed(I[6], 17, 21, "notificationCenter");
+    let showPreviews = opts && 'showPreviews' in opts ? opts.showPreviews : null;
+    if (showPreviews == null) dart.nullFailed(I[6], 18, 21, "showPreviews");
+    let sound = opts && 'sound' in opts ? opts.sound : null;
+    if (sound == null) dart.nullFailed(I[6], 19, 21, "sound");
+    this[alert$] = alert;
+    this[announcement$] = announcement;
+    this[authorizationStatus$] = authorizationStatus;
+    this[badge$0] = badge;
+    this[carPlay$] = carPlay;
+    this[lockScreen$] = lockScreen;
+    this[notificationCenter$] = notificationCenter;
+    this[showPreviews$] = showPreviews;
+    this[sound$1] = sound;
+    ;
+  }).prototype = notification_settings.NotificationSettings.prototype;
+  dart.addTypeTests(notification_settings.NotificationSettings);
+  dart.addTypeCaches(notification_settings.NotificationSettings);
+  dart.setLibraryUri(notification_settings.NotificationSettings, I[7]);
+  dart.setFieldSignature(notification_settings.NotificationSettings, () => ({
+    __proto__: dart.getFields(notification_settings.NotificationSettings.__proto__),
+    alert: dart.finalFieldType(types.AppleNotificationSetting),
+    announcement: dart.finalFieldType(types.AppleNotificationSetting),
+    authorizationStatus: dart.finalFieldType(types.AuthorizationStatus),
+    badge: dart.finalFieldType(types.AppleNotificationSetting),
+    carPlay: dart.finalFieldType(types.AppleNotificationSetting),
+    lockScreen: dart.finalFieldType(types.AppleNotificationSetting),
+    notificationCenter: dart.finalFieldType(types.AppleNotificationSetting),
+    showPreviews: dart.finalFieldType(types.AppleShowPreviewSetting),
+    sound: dart.finalFieldType(types.AppleNotificationSetting)
+  }));
+  utils.convertToAndroidNotificationPriority = function convertToAndroidNotificationPriority(priority) {
+    switch (priority) {
+      case -2:
+      {
+        return types.AndroidNotificationPriority.minimumPriority;
+      }
+      case -1:
+      {
+        return types.AndroidNotificationPriority.lowPriority;
+      }
+      case 0:
+      {
+        return types.AndroidNotificationPriority.defaultPriority;
+      }
+      case 1:
+      {
+        return types.AndroidNotificationPriority.highPriority;
+      }
+      case 2:
+      {
+        return types.AndroidNotificationPriority.maximumPriority;
+      }
+      default:
+      {
+        return types.AndroidNotificationPriority.defaultPriority;
+      }
+    }
+  };
+  utils.convertToAndroidNotificationVisibility = function convertToAndroidNotificationVisibility(visibility) {
+    switch (visibility) {
+      case -1:
+      {
+        return types.AndroidNotificationVisibility.secret;
+      }
+      case 0:
+      {
+        return types.AndroidNotificationVisibility.private;
+      }
+      case 1:
+      {
+        return types.AndroidNotificationVisibility.public;
+      }
+      default:
+      {
+        return types.AndroidNotificationVisibility.private;
+      }
+    }
+  };
+  utils.convertToAuthorizationStatus = function convertToAuthorizationStatus(status) {
+    if (status == null) {
+      return types.AuthorizationStatus.notDetermined;
+    }
+    switch (status) {
+      case -1:
+      {
+        return types.AuthorizationStatus.notDetermined;
+      }
+      case 0:
+      {
+        return types.AuthorizationStatus.denied;
+      }
+      case 1:
+      {
+        return types.AuthorizationStatus.authorized;
+      }
+      case 2:
+      {
+        return types.AuthorizationStatus.provisional;
+      }
+      default:
+      {
+        return types.AuthorizationStatus.notDetermined;
+      }
+    }
+  };
+  utils.convertToAppleNotificationSetting = function convertToAppleNotificationSetting(status) {
+    if (status == null) {
+      return types.AppleNotificationSetting.notSupported;
+    }
+    switch (status) {
+      case -1:
+      {
+        return types.AppleNotificationSetting.notSupported;
+      }
+      case 0:
+      {
+        return types.AppleNotificationSetting.disabled;
+      }
+      case 1:
+      {
+        return types.AppleNotificationSetting.enabled;
+      }
+      default:
+      {
+        return types.AppleNotificationSetting.notSupported;
+      }
+    }
+  };
+  utils.convertToAppleShowPreviewSetting = function convertToAppleShowPreviewSetting(status) {
+    switch (status) {
+      case -1:
+      {
+        return types.AppleShowPreviewSetting.notSupported;
+      }
+      case 0:
+      {
+        return types.AppleShowPreviewSetting.never;
+      }
+      case 1:
+      {
+        return types.AppleShowPreviewSetting.always;
+      }
+      case 2:
+      {
+        return types.AppleShowPreviewSetting.whenAuthenticated;
+      }
+      default:
+      {
+        return types.AppleShowPreviewSetting.notSupported;
+      }
+    }
+  };
+  utils.convertToNotificationSettings = function convertToNotificationSettings(map) {
+    if (map == null) dart.nullFailed(I[8], 96, 69, "map");
+    return new notification_settings.NotificationSettings.new({authorizationStatus: utils.convertToAuthorizationStatus(map[$_get]("authorizationStatus")), alert: utils.convertToAppleNotificationSetting(map[$_get]("alert")), announcement: utils.convertToAppleNotificationSetting(map[$_get]("announcement")), badge: utils.convertToAppleNotificationSetting(map[$_get]("badge")), carPlay: utils.convertToAppleNotificationSetting(map[$_get]("carPlay")), lockScreen: utils.convertToAppleNotificationSetting(map[$_get]("lockScreen")), notificationCenter: utils.convertToAppleNotificationSetting(map[$_get]("notificationCenter")), showPreviews: utils.convertToAppleShowPreviewSetting(map[$_get]("showPreviews")), sound: utils.convertToAppleNotificationSetting(map[$_get]("sound"))});
+  };
+  dart.defineLazy(utils, {
+    /*utils.androidNotificationSettings*/get androidNotificationSettings() {
+      return C[26] || CT.C26;
+    }
+  }, false);
+  var __MethodChannelFirebaseMessaging__autoInitEnabled = dart.privateName(method_channel_messaging, "_#MethodChannelFirebaseMessaging#_autoInitEnabled");
+  var _tokenStreamController = dart.privateName(method_channel_messaging, "_tokenStreamController");
+  var _autoInitEnabled = dart.privateName(method_channel_messaging, "_autoInitEnabled");
+  var appInstance$ = dart.privateName(platform_interface_messaging, "FirebaseMessagingPlatform.appInstance");
+  platform_interface_messaging.FirebaseMessagingPlatform = class FirebaseMessagingPlatform extends plugin_platform_interface.PlatformInterface {
+    get appInstance() {
+      return this[appInstance$];
+    }
+    set appInstance(value) {
+      super.appInstance = value;
+    }
+    get app() {
+      if (this.appInstance == null) {
+        return firebase_core.Firebase.app();
+      }
+      return dart.nullCheck(this.appInstance);
+    }
+    static instanceFor(opts) {
+      let app = opts && 'app' in opts ? opts.app : null;
+      if (app == null) dart.nullFailed(I[10], 36, 29, "app");
+      let pluginConstants = opts && 'pluginConstants' in opts ? opts.pluginConstants : null;
+      if (pluginConstants == null) dart.nullFailed(I[10], 37, 38, "pluginConstants");
+      return platform_interface_messaging.FirebaseMessagingPlatform.instance.delegateFor({app: app}).setInitialValues({isAutoInitEnabled: T.boolN().as(pluginConstants[$_get]("AUTO_INIT_ENABLED"))});
+    }
+    static get instance() {
+      let t12;
+      t12 = platform_interface_messaging.FirebaseMessagingPlatform._instance;
+      return t12 == null ? platform_interface_messaging.FirebaseMessagingPlatform._instance = method_channel_messaging.MethodChannelFirebaseMessaging.instance : t12;
+    }
+    static set instance(instance) {
+      if (instance == null) dart.nullFailed(I[10], 56, 49, "instance");
+      plugin_platform_interface.PlatformInterface.verifyToken(instance, platform_interface_messaging.FirebaseMessagingPlatform._token);
+      platform_interface_messaging.FirebaseMessagingPlatform._instance = instance;
+    }
+    static get onMessage() {
+      let t12;
+      t12 = platform_interface_messaging.FirebaseMessagingPlatform._onMessageStreamController;
+      return t12 == null ? platform_interface_messaging.FirebaseMessagingPlatform._onMessageStreamController = T.StreamControllerOfRemoteMessage().broadcast() : t12;
+    }
+    static get onMessageOpenedApp() {
+      let t12;
+      t12 = platform_interface_messaging.FirebaseMessagingPlatform._onMessageOpenedAppStreamController;
+      return t12 == null ? platform_interface_messaging.FirebaseMessagingPlatform._onMessageOpenedAppStreamController = T.StreamControllerOfRemoteMessage().broadcast() : t12;
+    }
+    static get onBackgroundMessage() {
+      return platform_interface_messaging.FirebaseMessagingPlatform._onBackgroundMessageHandler;
+    }
+    static set onBackgroundMessage(handler) {
+      platform_interface_messaging.FirebaseMessagingPlatform._onBackgroundMessageHandler = handler;
+      if (handler != null) {
+        platform_interface_messaging.FirebaseMessagingPlatform.instance.registerBackgroundMessageHandler(handler);
+      }
+    }
+    delegateFor(opts) {
+      let app = opts && 'app' in opts ? opts.app : null;
+      if (app == null) dart.nullFailed(I[10], 115, 63, "app");
+      dart.throw(new core.UnimplementedError.new("delegateFor() is not implemented"));
+    }
+    setInitialValues(opts) {
+      let isAutoInitEnabled = opts && 'isAutoInitEnabled' in opts ? opts.isAutoInitEnabled : null;
+      dart.throw(new core.UnimplementedError.new("setInitialValues() is not implemented"));
+    }
+    get isAutoInitEnabled() {
+      dart.throw(new core.UnimplementedError.new("isAutoInitEnabled is not implemented"));
+    }
+    getInitialMessage() {
+      dart.throw(new core.UnimplementedError.new("getInitialMessage() is not implemented"));
+    }
+    registerBackgroundMessageHandler(handler) {
+      if (handler == null) dart.nullFailed(I[10], 153, 66, "handler");
+      dart.throw(new core.UnimplementedError.new("registerBackgroundMessageHandler() is not implemented"));
+    }
+    deleteToken(opts) {
+      let senderId = opts && 'senderId' in opts ? opts.senderId : null;
+      dart.throw(new core.UnimplementedError.new("deleteToken() is not implemented"));
+    }
+    getAPNSToken() {
+      dart.throw(new core.UnimplementedError.new("getAPNSToken() is not implemented"));
+    }
+    getToken(opts) {
+      let senderId = opts && 'senderId' in opts ? opts.senderId : null;
+      let vapidKey = opts && 'vapidKey' in opts ? opts.vapidKey : null;
+      dart.throw(new core.UnimplementedError.new("getToken() is not implemented"));
+    }
+    get onTokenRefresh() {
+      dart.throw(new core.UnimplementedError.new("onTokenRefresh is not implemented"));
+    }
+    getNotificationSettings() {
+      dart.throw(new core.UnimplementedError.new("getNotificationSettings() is not implemented"));
+    }
+    requestPermission(opts) {
+      let alert = opts && 'alert' in opts ? opts.alert : true;
+      if (alert == null) dart.nullFailed(I[10], 212, 10, "alert");
+      let announcement = opts && 'announcement' in opts ? opts.announcement : false;
+      if (announcement == null) dart.nullFailed(I[10], 218, 10, "announcement");
+      let badge = opts && 'badge' in opts ? opts.badge : true;
+      if (badge == null) dart.nullFailed(I[10], 223, 10, "badge");
+      let carPlay = opts && 'carPlay' in opts ? opts.carPlay : false;
+      if (carPlay == null) dart.nullFailed(I[10], 229, 10, "carPlay");
+      let criticalAlert = opts && 'criticalAlert' in opts ? opts.criticalAlert : false;
+      if (criticalAlert == null) dart.nullFailed(I[10], 238, 10, "criticalAlert");
+      let provisional = opts && 'provisional' in opts ? opts.provisional : false;
+      if (provisional == null) dart.nullFailed(I[10], 244, 10, "provisional");
+      let sound = opts && 'sound' in opts ? opts.sound : true;
+      if (sound == null) dart.nullFailed(I[10], 249, 10, "sound");
+      dart.throw(new core.UnimplementedError.new("requestPermission() is not implemented"));
+    }
+    setAutoInitEnabled(enabled) {
+      if (enabled == null) dart.nullFailed(I[10], 255, 40, "enabled");
+      return async.async(dart.void, function* setAutoInitEnabled() {
+        dart.throw(new core.UnimplementedError.new("setAutoInitEnabled() is not implemented"));
+      });
+    }
+    setForegroundNotificationPresentationOptions(opts) {
+      let alert = opts && 'alert' in opts ? opts.alert : null;
+      if (alert == null) dart.nullFailed(I[10], 279, 19, "alert");
+      let badge = opts && 'badge' in opts ? opts.badge : null;
+      if (badge == null) dart.nullFailed(I[10], 280, 19, "badge");
+      let sound = opts && 'sound' in opts ? opts.sound : null;
+      if (sound == null) dart.nullFailed(I[10], 281, 19, "sound");
+      dart.throw(new core.UnimplementedError.new("setForegroundNotificationPresentationOptions() is not implemented"));
+    }
+    sendMessage(opts) {
+      let to = opts && 'to' in opts ? opts.to : null;
+      if (to == null) dart.nullFailed(I[10], 289, 21, "to");
+      let data = opts && 'data' in opts ? opts.data : null;
+      let collapseKey = opts && 'collapseKey' in opts ? opts.collapseKey : null;
+      let messageId = opts && 'messageId' in opts ? opts.messageId : null;
+      let messageType = opts && 'messageType' in opts ? opts.messageType : null;
+      let ttl = opts && 'ttl' in opts ? opts.ttl : null;
+      dart.throw(new core.UnimplementedError.new("sendMessage() is not implemented"));
+    }
+    subscribeToTopic(topic) {
+      if (topic == null) dart.nullFailed(I[10], 303, 40, "topic");
+      dart.throw(new core.UnimplementedError.new("subscribeToTopic() is not implemented"));
+    }
+    unsubscribeFromTopic(topic) {
+      if (topic == null) dart.nullFailed(I[10], 308, 44, "topic");
+      dart.throw(new core.UnimplementedError.new("unsubscribeFromTopic() is not implemented"));
+    }
+  };
+  (platform_interface_messaging.FirebaseMessagingPlatform.new = function(opts) {
+    let appInstance = opts && 'appInstance' in opts ? opts.appInstance : null;
+    this[appInstance$] = appInstance;
+    platform_interface_messaging.FirebaseMessagingPlatform.__proto__.new.call(this, {token: platform_interface_messaging.FirebaseMessagingPlatform._token});
+    ;
+  }).prototype = platform_interface_messaging.FirebaseMessagingPlatform.prototype;
+  dart.addTypeTests(platform_interface_messaging.FirebaseMessagingPlatform);
+  dart.addTypeCaches(platform_interface_messaging.FirebaseMessagingPlatform);
+  dart.setMethodSignature(platform_interface_messaging.FirebaseMessagingPlatform, () => ({
+    __proto__: dart.getMethods(platform_interface_messaging.FirebaseMessagingPlatform.__proto__),
+    delegateFor: dart.fnType(platform_interface_messaging.FirebaseMessagingPlatform, [], {}, {app: firebase_core.FirebaseApp}),
+    setInitialValues: dart.fnType(platform_interface_messaging.FirebaseMessagingPlatform, [], {isAutoInitEnabled: dart.nullable(core.bool)}, {}),
+    getInitialMessage: dart.fnType(async.Future$(dart.nullable(remote_message.RemoteMessage)), []),
+    registerBackgroundMessageHandler: dart.fnType(dart.void, [dart.fnType(async.Future$(dart.void), [remote_message.RemoteMessage])]),
+    deleteToken: dart.fnType(async.Future$(dart.void), [], {senderId: dart.nullable(core.String)}, {}),
+    getAPNSToken: dart.fnType(async.Future$(dart.nullable(core.String)), []),
+    getToken: dart.fnType(async.Future$(dart.nullable(core.String)), [], {senderId: dart.nullable(core.String), vapidKey: dart.nullable(core.String)}, {}),
+    getNotificationSettings: dart.fnType(async.Future$(notification_settings.NotificationSettings), []),
+    requestPermission: dart.fnType(async.Future$(notification_settings.NotificationSettings), [], {alert: core.bool, announcement: core.bool, badge: core.bool, carPlay: core.bool, criticalAlert: core.bool, provisional: core.bool, sound: core.bool}, {}),
+    setAutoInitEnabled: dart.fnType(async.Future$(dart.void), [core.bool]),
+    setForegroundNotificationPresentationOptions: dart.fnType(async.Future$(dart.void), [], {}, {alert: core.bool, badge: core.bool, sound: core.bool}),
+    sendMessage: dart.fnType(async.Future$(dart.void), [], {collapseKey: dart.nullable(core.String), data: dart.nullable(core.Map$(core.String, core.String)), messageId: dart.nullable(core.String), messageType: dart.nullable(core.String), ttl: dart.nullable(core.int)}, {to: core.String}),
+    subscribeToTopic: dart.fnType(async.Future$(dart.void), [core.String]),
+    unsubscribeFromTopic: dart.fnType(async.Future$(dart.void), [core.String])
+  }));
+  dart.setGetterSignature(platform_interface_messaging.FirebaseMessagingPlatform, () => ({
+    __proto__: dart.getGetters(platform_interface_messaging.FirebaseMessagingPlatform.__proto__),
+    app: firebase_core.FirebaseApp,
+    isAutoInitEnabled: core.bool,
+    onTokenRefresh: async.Stream$(core.String)
+  }));
+  dart.setLibraryUri(platform_interface_messaging.FirebaseMessagingPlatform, I[11]);
+  dart.setFieldSignature(platform_interface_messaging.FirebaseMessagingPlatform, () => ({
+    __proto__: dart.getFields(platform_interface_messaging.FirebaseMessagingPlatform.__proto__),
+    appInstance: dart.finalFieldType(dart.nullable(firebase_core.FirebaseApp))
+  }));
+  dart.defineLazy(platform_interface_messaging.FirebaseMessagingPlatform, {
+    /*platform_interface_messaging.FirebaseMessagingPlatform._token*/get _token() {
+      return new core.Object.new();
+    },
+    /*platform_interface_messaging.FirebaseMessagingPlatform._instance*/get _instance() {
+      return null;
+    },
+    set _instance(_) {},
+    /*platform_interface_messaging.FirebaseMessagingPlatform._onMessageStreamController*/get _onMessageStreamController() {
+      return null;
+    },
+    set _onMessageStreamController(_) {},
+    /*platform_interface_messaging.FirebaseMessagingPlatform._onMessageOpenedAppStreamController*/get _onMessageOpenedAppStreamController() {
+      return null;
+    },
+    set _onMessageOpenedAppStreamController(_) {},
+    /*platform_interface_messaging.FirebaseMessagingPlatform._onBackgroundMessageHandler*/get _onBackgroundMessageHandler() {
+      return null;
+    },
+    set _onBackgroundMessageHandler(_) {}
+  }, false);
+  var MethodChannel__binaryMessenger = dart.privateName(platform_channel, "MethodChannel._binaryMessenger");
+  var StandardMethodCodec_messageCodec = dart.privateName(message_codecs, "StandardMethodCodec.messageCodec");
+  var MethodChannel_codec = dart.privateName(platform_channel, "MethodChannel.codec");
+  var MethodChannel_name = dart.privateName(platform_channel, "MethodChannel.name");
+  method_channel_messaging.MethodChannelFirebaseMessaging = class MethodChannelFirebaseMessaging extends platform_interface_messaging.FirebaseMessagingPlatform {
+    get [_autoInitEnabled]() {
+      let t0;
+      t0 = this[__MethodChannelFirebaseMessaging__autoInitEnabled];
+      return t0 == null ? dart.throw(new _internal.LateError.fieldNI("_autoInitEnabled")) : t0;
+    }
+    set [_autoInitEnabled](t0) {
+      if (t0 == null) dart.nullFailed(I[9], 101, 13, "null");
+      this[__MethodChannelFirebaseMessaging__autoInitEnabled] = t0;
+    }
+    static get instance() {
+      return new method_channel_messaging.MethodChannelFirebaseMessaging.__();
+    }
+    delegateFor(opts) {
+      let app = opts && 'app' in opts ? opts.app : null;
+      if (app == null) dart.nullFailed(I[9], 128, 63, "app");
+      return new method_channel_messaging.MethodChannelFirebaseMessaging.new({app: app});
+    }
+    setInitialValues(opts) {
+      let t1;
+      let isAutoInitEnabled = opts && 'isAutoInitEnabled' in opts ? opts.isAutoInitEnabled : null;
+      this[_autoInitEnabled] = (t1 = isAutoInitEnabled, t1 == null ? false : t1);
+      return this;
+    }
+    get isAutoInitEnabled() {
+      return this[_autoInitEnabled];
+    }
+    getInitialMessage() {
+      return async.async(T.RemoteMessageN(), (function* getInitialMessage() {
+        try {
+          let remoteMessageMap = (yield method_channel_messaging.MethodChannelFirebaseMessaging.channel.invokeMapMethod(core.String, dart.dynamic, "Messaging#getInitialMessage", new (T.IdentityMapOfString$String()).from(["appName", this.app.name])));
+          if (remoteMessageMap == null) {
+            return null;
+          }
+          return remote_message.RemoteMessage.fromMap(remoteMessageMap);
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          if (core.Object.is(e)) {
+            dart.throw(exception.convertPlatformException(e));
+          } else
+            throw e$;
+        }
+      }).bind(this));
+    }
+    registerBackgroundMessageHandler(handler) {
+      if (handler == null) dart.nullFailed(I[9], 163, 32, "handler");
+      return async.async(dart.void, function* registerBackgroundMessageHandler() {
+        if (platform.defaultTargetPlatform != platform.TargetPlatform.android) {
+          return;
+        }
+        if (!dart.test(method_channel_messaging.MethodChannelFirebaseMessaging._bgHandlerInitialized)) {
+          method_channel_messaging.MethodChannelFirebaseMessaging._bgHandlerInitialized = true;
+          let bgHandle = dart.nullCheck(ui.PluginUtilities.getCallbackHandle(C[27] || CT.C27));
+          let userHandle = dart.nullCheck(ui.PluginUtilities.getCallbackHandle(handler));
+          yield method_channel_messaging.MethodChannelFirebaseMessaging.channel.invokeMapMethod(dart.dynamic, dart.dynamic, "Messaging#startBackgroundIsolate", new (T.IdentityMapOfString$int()).from(["pluginCallbackHandle", bgHandle.toRawHandle(), "userCallbackHandle", userHandle.toRawHandle()]));
+        }
+      });
+    }
+    deleteToken(opts) {
+      let senderId = opts && 'senderId' in opts ? opts.senderId : null;
+      return async.async(dart.void, (function* deleteToken() {
+        try {
+          yield method_channel_messaging.MethodChannelFirebaseMessaging.channel.invokeMapMethod(dart.dynamic, dart.dynamic, "Messaging#deleteToken", new (T.IdentityMapOfString$StringN()).from(["appName", this.app.name, "senderId", senderId]));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          if (core.Object.is(e)) {
+            dart.throw(exception.convertPlatformException(e));
+          } else
+            throw e$;
+        }
+      }).bind(this));
+    }
+    getAPNSToken() {
+      return async.async(T.StringN(), (function* getAPNSToken() {
+        let t3;
+        if (platform.defaultTargetPlatform != platform.TargetPlatform.iOS && platform.defaultTargetPlatform != platform.TargetPlatform.macOS) {
+          return null;
+        }
+        try {
+          let data = (yield method_channel_messaging.MethodChannelFirebaseMessaging.channel.invokeMapMethod(core.String, T.StringN(), "Messaging#getAPNSToken", new (T.IdentityMapOfString$String()).from(["appName", this.app.name])));
+          t3 = data;
+          return t3 == null ? null : t3[$_get]("token");
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          if (core.Object.is(e)) {
+            dart.throw(exception.convertPlatformException(e));
+          } else
+            throw e$;
+        }
+      }).bind(this));
+    }
+    getToken(opts) {
+      let senderId = opts && 'senderId' in opts ? opts.senderId : null;
+      let vapidKey = opts && 'vapidKey' in opts ? opts.vapidKey : null;
+      return async.async(T.StringN(), (function* getToken() {
+        let t4;
+        try {
+          let data = (yield method_channel_messaging.MethodChannelFirebaseMessaging.channel.invokeMapMethod(core.String, core.String, "Messaging#getToken", new (T.IdentityMapOfString$StringN()).from(["appName", this.app.name, "senderId", senderId])));
+          t4 = data;
+          return t4 == null ? null : t4[$_get]("token");
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          if (core.Object.is(e)) {
+            dart.throw(exception.convertPlatformException(e));
+          } else
+            throw e$;
+        }
+      }).bind(this));
+    }
+    getNotificationSettings() {
+      return async.async(notification_settings.NotificationSettings, (function* getNotificationSettings() {
+        if (platform.defaultTargetPlatform != platform.TargetPlatform.iOS && platform.defaultTargetPlatform != platform.TargetPlatform.macOS) {
+          return utils.androidNotificationSettings;
+        }
+        try {
+          let response = (yield method_channel_messaging.MethodChannelFirebaseMessaging.channel.invokeMapMethod(core.String, core.int, "Messaging#getNotificationSettings", new (T.IdentityMapOfString$String()).from(["appName", this.app.name])));
+          return utils.convertToNotificationSettings(dart.nullCheck(response));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          if (core.Object.is(e)) {
+            dart.throw(exception.convertPlatformException(e));
+          } else
+            throw e$;
+        }
+      }).bind(this));
+    }
+    requestPermission(opts) {
+      let alert = opts && 'alert' in opts ? opts.alert : true;
+      if (alert == null) dart.nullFailed(I[9], 251, 13, "alert");
+      let announcement = opts && 'announcement' in opts ? opts.announcement : false;
+      if (announcement == null) dart.nullFailed(I[9], 252, 12, "announcement");
+      let badge = opts && 'badge' in opts ? opts.badge : true;
+      if (badge == null) dart.nullFailed(I[9], 253, 12, "badge");
+      let carPlay = opts && 'carPlay' in opts ? opts.carPlay : false;
+      if (carPlay == null) dart.nullFailed(I[9], 254, 12, "carPlay");
+      let criticalAlert = opts && 'criticalAlert' in opts ? opts.criticalAlert : false;
+      if (criticalAlert == null) dart.nullFailed(I[9], 255, 12, "criticalAlert");
+      let provisional = opts && 'provisional' in opts ? opts.provisional : false;
+      if (provisional == null) dart.nullFailed(I[9], 256, 12, "provisional");
+      let sound = opts && 'sound' in opts ? opts.sound : true;
+      if (sound == null) dart.nullFailed(I[9], 257, 12, "sound");
+      return async.async(notification_settings.NotificationSettings, (function* requestPermission() {
+        if (platform.defaultTargetPlatform != platform.TargetPlatform.iOS && platform.defaultTargetPlatform != platform.TargetPlatform.macOS) {
+          return utils.androidNotificationSettings;
+        }
+        try {
+          let response = (yield method_channel_messaging.MethodChannelFirebaseMessaging.channel.invokeMapMethod(core.String, core.int, "Messaging#requestPermission", new (T.IdentityMapOfString$Object()).from(["appName", this.app.name, "permissions", new (T.IdentityMapOfString$bool()).from(["alert", alert, "announcement", announcement, "badge", badge, "carPlay", carPlay, "criticalAlert", criticalAlert, "provisional", provisional, "sound", sound])])));
+          return utils.convertToNotificationSettings(dart.nullCheck(response));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          if (core.Object.is(e)) {
+            dart.throw(exception.convertPlatformException(e));
+          } else
+            throw e$;
+        }
+      }).bind(this));
+    }
+    setAutoInitEnabled(enabled) {
+      if (enabled == null) dart.nullFailed(I[9], 285, 40, "enabled");
+      return async.async(dart.void, (function* setAutoInitEnabled() {
+        let t7;
+        try {
+          let data = (yield method_channel_messaging.MethodChannelFirebaseMessaging.channel.invokeMapMethod(core.String, dart.dynamic, "Messaging#setAutoInitEnabled", new (T.IdentityMapOfString$Object()).from(["appName", this.app.name, "enabled", enabled])));
+          this[_autoInitEnabled] = core.bool.as((t7 = data, t7 == null ? null : t7[$_get]("isAutoInitEnabled")));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          if (core.Object.is(e)) {
+            dart.throw(exception.convertPlatformException(e));
+          } else
+            throw e$;
+        }
+      }).bind(this));
+    }
+    get onTokenRefresh() {
+      return this[_tokenStreamController].stream;
+    }
+    setForegroundNotificationPresentationOptions(opts) {
+      let alert = opts && 'alert' in opts ? opts.alert : null;
+      if (alert == null) dart.nullFailed(I[9], 306, 19, "alert");
+      let badge = opts && 'badge' in opts ? opts.badge : null;
+      if (badge == null) dart.nullFailed(I[9], 307, 19, "badge");
+      let sound = opts && 'sound' in opts ? opts.sound : null;
+      if (sound == null) dart.nullFailed(I[9], 308, 19, "sound");
+      return async.async(dart.void, (function* setForegroundNotificationPresentationOptions() {
+        if (platform.defaultTargetPlatform != platform.TargetPlatform.iOS && platform.defaultTargetPlatform != platform.TargetPlatform.macOS) {
+          return;
+        }
+        try {
+          yield method_channel_messaging.MethodChannelFirebaseMessaging.channel.invokeMapMethod(dart.dynamic, dart.dynamic, "Messaging#setForegroundNotificationPresentationOptions", new (T.IdentityMapOfString$Object()).from(["appName", this.app.name, "alert", alert, "badge", badge, "sound", sound]));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          if (core.Object.is(e)) {
+            dart.throw(exception.convertPlatformException(e));
+          } else
+            throw e$;
+        }
+      }).bind(this));
+    }
+    sendMessage(opts) {
+      let to = opts && 'to' in opts ? opts.to : null;
+      if (to == null) dart.nullFailed(I[9], 330, 21, "to");
+      let data = opts && 'data' in opts ? opts.data : null;
+      let collapseKey = opts && 'collapseKey' in opts ? opts.collapseKey : null;
+      let messageId = opts && 'messageId' in opts ? opts.messageId : null;
+      let messageType = opts && 'messageType' in opts ? opts.messageType : null;
+      let ttl = opts && 'ttl' in opts ? opts.ttl : null;
+      return async.async(dart.void, (function* sendMessage() {
+        if (platform.defaultTargetPlatform != platform.TargetPlatform.android) {
+          dart.throw(new core.UnimplementedError.new("Sending of messages from the Firebase Messaging SDK is only supported on Android devices."));
+        }
+        try {
+          yield method_channel_messaging.MethodChannelFirebaseMessaging.channel.invokeMapMethod(dart.dynamic, dart.dynamic, "Messaging#sendMessage", new (T.IdentityMapOfString$ObjectN()).from(["appName", this.app.name, "to", to, "data", data, "collapseKey", collapseKey, "messageId", messageId, "messageType", messageType, "ttl", ttl]));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          if (core.Object.is(e)) {
+            dart.throw(exception.convertPlatformException(e));
+          } else
+            throw e$;
+        }
+      }).bind(this));
+    }
+    subscribeToTopic(topic) {
+      if (topic == null) dart.nullFailed(I[9], 358, 40, "topic");
+      return async.async(dart.void, (function* subscribeToTopic() {
+        try {
+          yield method_channel_messaging.MethodChannelFirebaseMessaging.channel.invokeMapMethod(dart.dynamic, dart.dynamic, "Messaging#subscribeToTopic", new (T.IdentityMapOfString$String()).from(["appName", this.app.name, "topic", topic]));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          if (core.Object.is(e)) {
+            dart.throw(exception.convertPlatformException(e));
+          } else
+            throw e$;
+        }
+      }).bind(this));
+    }
+    unsubscribeFromTopic(topic) {
+      if (topic == null) dart.nullFailed(I[9], 370, 44, "topic");
+      return async.async(dart.void, (function* unsubscribeFromTopic() {
+        try {
+          yield method_channel_messaging.MethodChannelFirebaseMessaging.channel.invokeMapMethod(dart.dynamic, dart.dynamic, "Messaging#unsubscribeFromTopic", new (T.IdentityMapOfString$String()).from(["appName", this.app.name, "topic", topic]));
+        } catch (e$) {
+          let e = dart.getThrown(e$);
+          if (core.Object.is(e)) {
+            dart.throw(exception.convertPlatformException(e));
+          } else
+            throw e$;
+        }
+      }).bind(this));
+    }
+  };
+  (method_channel_messaging.MethodChannelFirebaseMessaging.new = function(opts) {
+    let app = opts && 'app' in opts ? opts.app : null;
+    if (app == null) dart.nullFailed(I[9], 68, 56, "app");
+    this[__MethodChannelFirebaseMessaging__autoInitEnabled] = null;
+    this[_tokenStreamController] = T.StreamControllerOfString().broadcast();
+    method_channel_messaging.MethodChannelFirebaseMessaging.__proto__.new.call(this, {appInstance: app});
+    if (dart.test(method_channel_messaging.MethodChannelFirebaseMessaging._initialized)) return;
+    method_channel_messaging.MethodChannelFirebaseMessaging.channel.setMethodCallHandler(dart.fn(call => {
+      if (call == null) dart.nullFailed(I[9], 71, 46, "call");
+      return async.async(dart.void, (function*() {
+        let t0;
+        switch (call.method) {
+          case "Messaging#onTokenRefresh":
+          {
+            this[_tokenStreamController].add(core.String.as(call.arguments));
+            break;
+          }
+          case "Messaging#onMessage":
+          {
+            let messageMap = T.LinkedHashMapOfString$dynamic().from(core.Map.as(call.arguments));
+            platform_interface_messaging.FirebaseMessagingPlatform.onMessage.add(remote_message.RemoteMessage.fromMap(messageMap));
+            break;
+          }
+          case "Messaging#onMessageOpenedApp":
+          {
+            let messageMap = T.LinkedHashMapOfString$dynamic().from(core.Map.as(call.arguments));
+            platform_interface_messaging.FirebaseMessagingPlatform.onMessageOpenedApp.add(remote_message.RemoteMessage.fromMap(messageMap));
+            break;
+          }
+          case "Messaging#onBackgroundMessage":
+          {
+            let messageMap = T.LinkedHashMapOfString$dynamic().from(core.Map.as(call.arguments));
+            t0 = platform_interface_messaging.FirebaseMessagingPlatform.onBackgroundMessage;
+            return t0 == null ? null : t0(remote_message.RemoteMessage.fromMap(messageMap));
+          }
+          default:
+          {
+            dart.throw(new core.UnimplementedError.new(dart.str(call.method) + " has not been implemented"));
+          }
+        }
+      }).bind(this));
+    }, T.MethodCallToFutureOfvoid()));
+    method_channel_messaging.MethodChannelFirebaseMessaging._initialized = true;
+  }).prototype = method_channel_messaging.MethodChannelFirebaseMessaging.prototype;
+  (method_channel_messaging.MethodChannelFirebaseMessaging.__ = function() {
+    this[__MethodChannelFirebaseMessaging__autoInitEnabled] = null;
+    this[_tokenStreamController] = T.StreamControllerOfString().broadcast();
+    method_channel_messaging.MethodChannelFirebaseMessaging.__proto__.new.call(this, {appInstance: null});
+    ;
+  }).prototype = method_channel_messaging.MethodChannelFirebaseMessaging.prototype;
+  dart.addTypeTests(method_channel_messaging.MethodChannelFirebaseMessaging);
+  dart.addTypeCaches(method_channel_messaging.MethodChannelFirebaseMessaging);
+  dart.setMethodSignature(method_channel_messaging.MethodChannelFirebaseMessaging, () => ({
+    __proto__: dart.getMethods(method_channel_messaging.MethodChannelFirebaseMessaging.__proto__),
+    registerBackgroundMessageHandler: dart.fnType(async.Future$(dart.void), [dart.fnType(async.Future$(dart.void), [remote_message.RemoteMessage])])
+  }));
+  dart.setGetterSignature(method_channel_messaging.MethodChannelFirebaseMessaging, () => ({
+    __proto__: dart.getGetters(method_channel_messaging.MethodChannelFirebaseMessaging.__proto__),
+    [_autoInitEnabled]: core.bool
+  }));
+  dart.setSetterSignature(method_channel_messaging.MethodChannelFirebaseMessaging, () => ({
+    __proto__: dart.getSetters(method_channel_messaging.MethodChannelFirebaseMessaging.__proto__),
+    [_autoInitEnabled]: core.bool
+  }));
+  dart.setLibraryUri(method_channel_messaging.MethodChannelFirebaseMessaging, I[12]);
+  dart.setFieldSignature(method_channel_messaging.MethodChannelFirebaseMessaging, () => ({
+    __proto__: dart.getFields(method_channel_messaging.MethodChannelFirebaseMessaging.__proto__),
+    [__MethodChannelFirebaseMessaging__autoInitEnabled]: dart.fieldType(dart.nullable(core.bool)),
+    [_tokenStreamController]: dart.finalFieldType(async.StreamController$(core.String))
+  }));
+  dart.defineLazy(method_channel_messaging.MethodChannelFirebaseMessaging, {
+    /*method_channel_messaging.MethodChannelFirebaseMessaging._initialized*/get _initialized() {
+      return false;
+    },
+    set _initialized(_) {},
+    /*method_channel_messaging.MethodChannelFirebaseMessaging._bgHandlerInitialized*/get _bgHandlerInitialized() {
+      return false;
+    },
+    set _bgHandlerInitialized(_) {},
+    /*method_channel_messaging.MethodChannelFirebaseMessaging.channel*/get channel() {
+      return C[28] || CT.C28;
+    }
+  }, false);
+  method_channel_messaging._firebaseMessagingCallbackDispatcher = function _firebaseMessagingCallbackDispatcher() {
+    binding.WidgetsFlutterBinding.ensureInitialized();
+    let _channel = C[31] || CT.C31;
+    _channel.setMethodCallHandler(dart.fn(call => {
+      if (call == null) dart.nullFailed(I[9], 31, 45, "call");
+      return async.async(core.Null, function*() {
+        if (call.method === "MessagingBackground#onMessage") {
+          let handle = new ui.CallbackHandle.fromRawHandle(core.int.as(dart.dsend(call.arguments, '_get', ["userCallbackHandle"])));
+          let closure = T.RemoteMessageToFutureOfvoid().as(dart.nullCheck(ui.PluginUtilities.getCallbackFromHandle(handle)));
+          try {
+            let messageMap = T.LinkedHashMapOfString$dynamic().from(core.Map.as(dart.dsend(call.arguments, '_get', ["message"])));
+            let remoteMessage = remote_message.RemoteMessage.fromMap(messageMap);
+            yield closure(remoteMessage);
+          } catch (e$) {
+            let e = dart.getThrown(e$);
+            if (core.Object.is(e)) {
+              core.print("FlutterFire Messaging: An error occurred in your background messaging handler:");
+              core.print(e);
+            } else
+              throw e$;
+          }
+        } else {
+          dart.throw(new core.UnimplementedError.new(dart.str(call.method) + " has not been implemented"));
+        }
+      });
+    }, T.MethodCallToFutureOfNull()));
+    _channel.invokeMethod(dart.void, "MessagingBackground#initialized");
+  };
+  dart.trackLibraries("packages/firebase_messaging_platform_interface/src/remote_notification.dart", {
+    "package:firebase_messaging_platform_interface/src/remote_notification.dart": remote_notification,
+    "package:firebase_messaging_platform_interface/src/remote_message.dart": remote_message,
+    "package:firebase_messaging_platform_interface/src/types.dart": types,
+    "package:firebase_messaging_platform_interface/src/notification_settings.dart": notification_settings,
+    "package:firebase_messaging_platform_interface/src/utils.dart": utils,
+    "package:firebase_messaging_platform_interface/src/method_channel/method_channel_messaging.dart": method_channel_messaging,
+    "package:firebase_messaging_platform_interface/src/platform_interface/platform_interface_messaging.dart": platform_interface_messaging,
+    "package:firebase_messaging_platform_interface/firebase_messaging_platform_interface.dart": firebase_messaging_platform_interface
+  }, {
+  }, '{"version":3,"sourceRoot":"","sources":["remote_notification.dart","remote_message.dart","types.dart","notification_settings.dart","utils.dart","platform_interface/platform_interface_messaging.dart","method_channel/method_channel_messaging.dart"],"names":[],"mappings":"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","file":"../../../../../../../../E:/packages/firebase_messaging_platform_interface/src/remote_notification.dart.lib.js"}');
+  // Exports:
+  return {
+    src__remote_notification: remote_notification,
+    src__remote_message: remote_message,
+    src__types: types,
+    src__notification_settings: notification_settings,
+    src__utils: utils,
+    src__method_channel__method_channel_messaging: method_channel_messaging,
+    src__platform_interface__platform_interface_messaging: platform_interface_messaging,
+    firebase_messaging_platform_interface: firebase_messaging_platform_interface
+  };
+}));
+
+//# sourceMappingURL=remote_notification.dart.lib.js.map

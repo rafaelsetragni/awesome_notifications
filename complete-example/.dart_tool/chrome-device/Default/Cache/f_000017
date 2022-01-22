@@ -1,0 +1,336 @@
+define(['dart_sdk', 'packages/flutter/src/widgets/widget_span.dart', 'packages/flutter/src/painting/edge_insets.dart', 'packages/flutter/src/painting/placeholder_span.dart', 'packages/flutter/src/painting/strut_style.dart', 'packages/flutter/src/material/colors.dart', 'packages/awesome_notifications_example/common_widgets/led_light.dart', 'packages/awesome_notifications_example/common_widgets/simple_button.dart', 'packages/flutter/src/material/icon_button.dart'], (function load__packages__awesome_notifications_example__common_widgets__service_control_panel_dart(dart_sdk, packages__flutter__src__widgets__widget_span$46dart, packages__flutter__src__painting__edge_insets$46dart, packages__flutter__src__painting__placeholder_span$46dart, packages__flutter__src__painting__strut_style$46dart, packages__flutter__src__material__colors$46dart, packages__awesome_notifications_example__common_widgets__led_light$46dart, packages__awesome_notifications_example__common_widgets__simple_button$46dart, packages__flutter__src__material__icon_button$46dart) {
+  'use strict';
+  const core = dart_sdk.core;
+  const ui = dart_sdk.ui;
+  const _interceptors = dart_sdk._interceptors;
+  const dart = dart_sdk.dart;
+  const dartx = dart_sdk.dartx;
+  const media_query = packages__flutter__src__widgets__widget_span$46dart.src__widgets__media_query;
+  const container = packages__flutter__src__widgets__widget_span$46dart.src__widgets__container;
+  const basic = packages__flutter__src__widgets__widget_span$46dart.src__widgets__basic;
+  const widget_span = packages__flutter__src__widgets__widget_span$46dart.src__widgets__widget_span;
+  const widget_inspector = packages__flutter__src__widgets__widget_span$46dart.src__widgets__widget_inspector;
+  const framework = packages__flutter__src__widgets__widget_span$46dart.src__widgets__framework;
+  const edge_insets = packages__flutter__src__painting__edge_insets$46dart.src__painting__edge_insets;
+  const text_span = packages__flutter__src__painting__placeholder_span$46dart.src__painting__text_span;
+  const inline_span = packages__flutter__src__painting__placeholder_span$46dart.src__painting__inline_span;
+  const text_style = packages__flutter__src__painting__strut_style$46dart.src__painting__text_style;
+  const colors = packages__flutter__src__material__colors$46dart.src__material__colors;
+  const led_light = packages__awesome_notifications_example__common_widgets__led_light$46dart.common_widgets__led_light;
+  const simple_button = packages__awesome_notifications_example__common_widgets__simple_button$46dart.common_widgets__simple_button;
+  const theme_data = packages__flutter__src__material__icon_button$46dart.src__material__theme_data;
+  var service_control_panel = Object.create(dart.library);
+  dart._checkModuleNullSafetyMode(true);
+  var T = {
+    JSArrayOfInlineSpan: () => (T.JSArrayOfInlineSpan = dart.constFn(_interceptors.JSArray$(inline_span.InlineSpan)))(),
+    JSArrayOfWidget: () => (T.JSArrayOfWidget = dart.constFn(_interceptors.JSArray$(framework.Widget)))()
+  };
+  var T$Eval = Object.assign({
+    _: () => T$Eval
+  }, T);
+  var S = {
+    _: () => S
+  };
+  var S$Eval = Object.assign({
+    _: () => S$Eval
+  }, S);
+  const CT = Object.create({
+    _: () => (C, CT)
+  });
+  dart.defineLazy(CT, {
+    get C0() {
+      return C[0] = dart.const({
+        __proto__: edge_insets.EdgeInsets.prototype,
+        [EdgeInsets_bottom]: 8,
+        [EdgeInsets_right]: 8,
+        [EdgeInsets_top]: 8,
+        [EdgeInsets_left]: 8
+      });
+    },
+    get C3() {
+      return C[3] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "isOn",
+        [_Location_column]: 48,
+        [_Location_line]: 42,
+        [_Location_file]: null
+      });
+    },
+    get C2() {
+      return C[2] = dart.constList([C[3] || CT.C3], widget_inspector._Location);
+    },
+    get C1() {
+      return C[1] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[2] || CT.C2,
+        [_Location_name]: null,
+        [_Location_column]: 39,
+        [_Location_line]: 42,
+        [_Location_file]: "file:///E:/plugins/awesome_notifications/example/lib/common_widgets/service_control_panel.dart"
+      });
+    },
+    get C6() {
+      return C[6] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "textAlign",
+        [_Location_column]: 15,
+        [_Location_line]: 30,
+        [_Location_file]: null
+      });
+    },
+    get C7() {
+      return C[7] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "text",
+        [_Location_column]: 15,
+        [_Location_line]: 31,
+        [_Location_file]: null
+      });
+    },
+    get C5() {
+      return C[5] = dart.constList([C[6] || CT.C6, C[7] || CT.C7], widget_inspector._Location);
+    },
+    get C4() {
+      return C[4] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[5] || CT.C5,
+        [_Location_name]: null,
+        [_Location_column]: 20,
+        [_Location_line]: 29,
+        [_Location_file]: "file:///E:/plugins/awesome_notifications/example/lib/common_widgets/service_control_panel.dart"
+      });
+    },
+    get C10() {
+      return C[10] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "padding",
+        [_Location_column]: 13,
+        [_Location_line]: 28,
+        [_Location_file]: null
+      });
+    },
+    get C11() {
+      return C[11] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 13,
+        [_Location_line]: 29,
+        [_Location_file]: null
+      });
+    },
+    get C9() {
+      return C[9] = dart.constList([C[10] || CT.C10, C[11] || CT.C11], widget_inspector._Location);
+    },
+    get C8() {
+      return C[8] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[9] || CT.C9,
+        [_Location_name]: null,
+        [_Location_column]: 11,
+        [_Location_line]: 27,
+        [_Location_file]: "file:///E:/plugins/awesome_notifications/example/lib/common_widgets/service_control_panel.dart"
+      });
+    },
+    get C14() {
+      return C[14] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "label",
+        [_Location_column]: 49,
+        [_Location_line]: 46,
+        [_Location_file]: null
+      });
+    },
+    get C15() {
+      return C[15] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "width",
+        [_Location_column]: 15,
+        [_Location_line]: 47,
+        [_Location_file]: null
+      });
+    },
+    get C16() {
+      return C[16] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "labelColor",
+        [_Location_column]: 15,
+        [_Location_line]: 48,
+        [_Location_file]: null
+      });
+    },
+    get C17() {
+      return C[17] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onPressed",
+        [_Location_column]: 15,
+        [_Location_line]: 50,
+        [_Location_file]: null
+      });
+    },
+    get C13() {
+      return C[13] = dart.constList([C[14] || CT.C14, C[15] || CT.C15, C[16] || CT.C16, C[17] || CT.C17], widget_inspector._Location);
+    },
+    get C12() {
+      return C[12] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[13] || CT.C13,
+        [_Location_name]: null,
+        [_Location_column]: 11,
+        [_Location_line]: 46,
+        [_Location_file]: "file:///E:/plugins/awesome_notifications/example/lib/common_widgets/service_control_panel.dart"
+      });
+    },
+    get C20() {
+      return C[20] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "children",
+        [_Location_column]: 9,
+        [_Location_line]: 26,
+        [_Location_file]: null
+      });
+    },
+    get C19() {
+      return C[19] = dart.constList([C[20] || CT.C20], widget_inspector._Location);
+    },
+    get C18() {
+      return C[18] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[19] || CT.C19,
+        [_Location_name]: null,
+        [_Location_column]: 14,
+        [_Location_line]: 25,
+        [_Location_file]: "file:///E:/plugins/awesome_notifications/example/lib/common_widgets/service_control_panel.dart"
+      });
+    },
+    get C23() {
+      return C[23] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "width",
+        [_Location_column]: 7,
+        [_Location_line]: 24,
+        [_Location_file]: null
+      });
+    },
+    get C24() {
+      return C[24] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 7,
+        [_Location_line]: 25,
+        [_Location_file]: null
+      });
+    },
+    get C22() {
+      return C[22] = dart.constList([C[23] || CT.C23, C[24] || CT.C24], widget_inspector._Location);
+    },
+    get C21() {
+      return C[21] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[22] || CT.C22,
+        [_Location_name]: null,
+        [_Location_column]: 12,
+        [_Location_line]: 23,
+        [_Location_file]: "file:///E:/plugins/awesome_notifications/example/lib/common_widgets/service_control_panel.dart"
+      });
+    }
+  }, false);
+  var C = Array(25).fill(void 0);
+  var I = [
+    "file:///E:/plugins/awesome_notifications/example/lib/common_widgets/service_control_panel.dart",
+    "package:awesome_notifications_example/common_widgets/service_control_panel.dart"
+  ];
+  var title$ = dart.privateName(service_control_panel, "ServiceControlPanel.title");
+  var statusControl$ = dart.privateName(service_control_panel, "ServiceControlPanel.statusControl");
+  var themeData$ = dart.privateName(service_control_panel, "ServiceControlPanel.themeData");
+  var onPressed$ = dart.privateName(service_control_panel, "ServiceControlPanel.onPressed");
+  var EdgeInsets_bottom = dart.privateName(edge_insets, "EdgeInsets.bottom");
+  var EdgeInsets_right = dart.privateName(edge_insets, "EdgeInsets.right");
+  var EdgeInsets_top = dart.privateName(edge_insets, "EdgeInsets.top");
+  var EdgeInsets_left = dart.privateName(edge_insets, "EdgeInsets.left");
+  var _Location_parameterLocations = dart.privateName(widget_inspector, "_Location.parameterLocations");
+  var _Location_name = dart.privateName(widget_inspector, "_Location.name");
+  var _Location_column = dart.privateName(widget_inspector, "_Location.column");
+  var _Location_line = dart.privateName(widget_inspector, "_Location.line");
+  var _Location_file = dart.privateName(widget_inspector, "_Location.file");
+  service_control_panel.ServiceControlPanel = class ServiceControlPanel extends framework.StatelessWidget {
+    get title() {
+      return this[title$];
+    }
+    set title(value) {
+      super.title = value;
+    }
+    get statusControl() {
+      return this[statusControl$];
+    }
+    set statusControl(value) {
+      super.statusControl = value;
+    }
+    get themeData() {
+      return this[themeData$];
+    }
+    set themeData(value) {
+      super.themeData = value;
+    }
+    get onPressed() {
+      return this[onPressed$];
+    }
+    set onPressed(value) {
+      super.onPressed = value;
+    }
+    build(context) {
+      if (context == null) dart.nullFailed(I[0], 20, 29, "context");
+      let mediaQueryData = media_query.MediaQuery.of(context);
+      return new container.Container.new({width: dart.notNull(mediaQueryData.size.width) * 0.4, child: new basic.Column.new({children: T.JSArrayOfWidget().of([new basic.Padding.new({padding: C[0] || CT.C0, child: new basic.RichText.new({textAlign: ui.TextAlign.center, text: new text_span.TextSpan.new({style: new text_style.TextStyle.new({color: colors.Colors.black87}), text: dart.str(this.title) + " status:\n", children: T.JSArrayOfInlineSpan().of([new text_span.TextSpan.new({style: new text_style.TextStyle.new({color: dart.test(this.statusControl) ? colors.Colors.green : colors.Colors.redAccent}), text: (dart.test(this.statusControl) ? "Available" : "Unavailable") + "\n"}), new widget_span.WidgetSpan.new({child: new led_light.LedLight.new(this.statusControl, {$creationLocationd_0dea112b090073317d4: C[1] || CT.C1})})])}), $creationLocationd_0dea112b090073317d4: C[4] || CT.C4}), $creationLocationd_0dea112b090073317d4: C[8] || CT.C8}), new simple_button.SimpleButton.new("Go to " + dart.str(this.title) + "\nTest Page", {width: dart.notNull(mediaQueryData.size.width) * 0.4, labelColor: dart.test(this.statusControl) ? this.themeData.hintColor : this.themeData.disabledColor, onPressed: dart.test(this.statusControl) ? this.onPressed : null, $creationLocationd_0dea112b090073317d4: C[12] || CT.C12})]), $creationLocationd_0dea112b090073317d4: C[18] || CT.C18}), $creationLocationd_0dea112b090073317d4: C[21] || CT.C21});
+    }
+  };
+  (service_control_panel.ServiceControlPanel.new = function(title, statusControl, themeData, opts) {
+    if (title == null) dart.nullFailed(I[0], 12, 10, "title");
+    if (statusControl == null) dart.nullFailed(I[0], 13, 10, "statusControl");
+    if (themeData == null) dart.nullFailed(I[0], 14, 10, "themeData");
+    let key = opts && 'key' in opts ? opts.key : null;
+    let onPressed = opts && 'onPressed' in opts ? opts.onPressed : null;
+    let $36creationLocationd_0dea112b090073317d4 = opts && '$creationLocationd_0dea112b090073317d4' in opts ? opts.$creationLocationd_0dea112b090073317d4 : null;
+    this[title$] = title;
+    this[statusControl$] = statusControl;
+    this[themeData$] = themeData;
+    this[onPressed$] = onPressed;
+    service_control_panel.ServiceControlPanel.__proto__.new.call(this, {key: key, $creationLocationd_0dea112b090073317d4: $36creationLocationd_0dea112b090073317d4});
+    ;
+  }).prototype = service_control_panel.ServiceControlPanel.prototype;
+  dart.addTypeTests(service_control_panel.ServiceControlPanel);
+  dart.addTypeCaches(service_control_panel.ServiceControlPanel);
+  dart.setMethodSignature(service_control_panel.ServiceControlPanel, () => ({
+    __proto__: dart.getMethods(service_control_panel.ServiceControlPanel.__proto__),
+    build: dart.fnType(framework.Widget, [framework.BuildContext])
+  }));
+  dart.setLibraryUri(service_control_panel.ServiceControlPanel, I[1]);
+  dart.setFieldSignature(service_control_panel.ServiceControlPanel, () => ({
+    __proto__: dart.getFields(service_control_panel.ServiceControlPanel.__proto__),
+    title: dart.finalFieldType(core.String),
+    statusControl: dart.finalFieldType(core.bool),
+    themeData: dart.finalFieldType(theme_data.ThemeData),
+    onPressed: dart.finalFieldType(dart.nullable(dart.fnType(dart.void, [])))
+  }));
+  dart.trackLibraries("packages/awesome_notifications_example/common_widgets/service_control_panel.dart", {
+    "package:awesome_notifications_example/common_widgets/service_control_panel.dart": service_control_panel
+  }, {
+  }, '{"version":3,"sourceRoot":"","sources":["service_control_panel.dart"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;IAKe;;;;;;IACF;;;;;;IACK;;;;;;IACO;;;;;;;UAWG;AACT,2BAA4B,0BAAG,OAAO;AAErD,YAAO,qCAC4B,aAA1B,AAAe,AAAK,cAAN,eAAc,YAC5B,gCACa,wBAChB,sDAES,mCACgB,2BACf,mCACK,qCAAwB,+BACP,SAAhB,cAAK,wBACH,4BACR,mCACW,+CACI,sBACM,sBACA,iCACmC,WAA7C,sBAAgB,cAAc,iBACjC,QACR,uCAAkB,2BAAS,sMAIrC,mCAAa,AAAyB,oBAAjB,cAAK,uBACW,aAA1B,AAAe,AAAK,cAAN,eAAc,2BAE/B,sBAAgB,AAAU,2BAAY,AAAU,mDACzC,sBAAgB,iBAAY;IAInD;;4DA1CO,OACA,eACA;QAFA;QACA;QACA;QACA;QACA;;IAJA;IACA;IACA;IAEA;AACF,6EAAW,GAAG;;EAAC","file":"../../../../../packages/awesome_notifications_example/common_widgets/service_control_panel.dart.lib.js"}');
+  // Exports:
+  return {
+    common_widgets__service_control_panel: service_control_panel
+  };
+}));
+
+//# sourceMappingURL=service_control_panel.dart.lib.js.map

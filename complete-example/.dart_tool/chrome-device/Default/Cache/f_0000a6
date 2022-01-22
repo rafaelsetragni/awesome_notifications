@@ -1,0 +1,625 @@
+define(['dart_sdk', 'packages/file/src/interface/link.dart', 'packages/path/src/path_set.dart'], (function load__packages__file__src__forwarding__forwarding_link_dart(dart_sdk, packages__file__src__interface__link$46dart, packages__path__src__path_set$46dart) {
+  'use strict';
+  const core = dart_sdk.core;
+  const io = dart_sdk.io;
+  const async = dart_sdk.async;
+  const convert = dart_sdk.convert;
+  const typed_data = dart_sdk.typed_data;
+  const dart = dart_sdk.dart;
+  const dartx = dart_sdk.dartx;
+  const link = packages__file__src__interface__link$46dart.src__interface__link;
+  const file_system_entity = packages__file__src__interface__link$46dart.src__interface__file_system_entity;
+  const directory = packages__file__src__interface__link$46dart.src__interface__directory;
+  const file_system = packages__file__src__interface__link$46dart.src__interface__file_system;
+  const file = packages__file__src__interface__link$46dart.src__interface__file;
+  const context = packages__path__src__path_set$46dart.src__context;
+  var forwarding_link = Object.create(dart.library);
+  var forwarding_file_system_entity = Object.create(dart.library);
+  var forwarding_file_system = Object.create(dart.library);
+  var forwarding_file = Object.create(dart.library);
+  var forwarding_directory = Object.create(dart.library);
+  var forwarding = Object.create(dart.library);
+  var file$ = Object.create(dart.library);
+  var $map = dartx.map;
+  var $toList = dartx.toList;
+  dart._checkModuleNullSafetyMode(true);
+  var T = {
+    _: () => T
+  };
+  var T$Eval = Object.assign({
+    _: () => T$Eval
+  }, T);
+  var S = {
+    _: () => S
+  };
+  var S$Eval = Object.assign({
+    _: () => S$Eval
+  }, S);
+  const CT = Object.create({
+    _: () => (C, CT)
+  });
+  dart.defineLazy(CT, {
+    get C0() {
+      return C[0] = dart.const({
+        __proto__: io.FileMode.prototype,
+        [FileMode__mode]: 0
+      });
+    },
+    get C1() {
+      return C[1] = dart.const({
+        __proto__: io.FileMode.prototype,
+        [FileMode__mode]: 1
+      });
+    },
+    get C2() {
+      return C[2] = dart.const({
+        __proto__: convert.Utf8Codec.prototype,
+        [Utf8Codec__allowMalformed]: false
+      });
+    }
+  }, false);
+  var C = Array(3).fill(void 0);
+  var I = [
+    "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.0/lib/src/forwarding/forwarding_link.dart",
+    "package:file/src/forwarding/forwarding_link.dart",
+    "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.0/lib/src/forwarding/forwarding_file_system_entity.dart",
+    "package:file/src/forwarding/forwarding_file_system_entity.dart",
+    "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.0/lib/src/forwarding/forwarding_file_system.dart",
+    "package:file/src/forwarding/forwarding_file_system.dart",
+    "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.0/lib/src/forwarding/forwarding_file.dart",
+    "package:file/src/forwarding/forwarding_file.dart",
+    "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.0/lib/src/forwarding/forwarding_directory.dart",
+    "package:file/src/forwarding/forwarding_directory.dart"
+  ];
+  forwarding_link.ForwardingLink = class ForwardingLink extends core.Object {
+    wrap(delegate) {
+      io.Link.as(delegate);
+      if (delegate == null) dart.nullFailed(I[0], 12, 31, "delegate");
+      return forwarding_link.ForwardingLink.as(this.wrapLink(delegate));
+    }
+    create(target, opts) {
+      if (target == null) dart.nullFailed(I[0], 15, 30, "target");
+      let recursive = opts && 'recursive' in opts ? opts.recursive : false;
+      if (recursive == null) dart.nullFailed(I[0], 15, 44, "recursive");
+      return async.async(link.Link, (function* create() {
+        return this.wrap(yield this.delegate.create(target, {recursive: recursive}));
+      }).bind(this));
+    }
+    createSync(target, opts) {
+      if (target == null) dart.nullFailed(I[0], 19, 26, "target");
+      let recursive = opts && 'recursive' in opts ? opts.recursive : false;
+      if (recursive == null) dart.nullFailed(I[0], 19, 40, "recursive");
+      return this.delegate.createSync(target, {recursive: recursive});
+    }
+    update(target) {
+      if (target == null) dart.nullFailed(I[0], 23, 30, "target");
+      return async.async(link.Link, (function* update() {
+        return this.wrap(yield this.delegate.update(target));
+      }).bind(this));
+    }
+    updateSync(target) {
+      if (target == null) dart.nullFailed(I[0], 27, 26, "target");
+      return this.delegate.updateSync(target);
+    }
+    target() {
+      return this.delegate.target();
+    }
+    targetSync() {
+      return this.delegate.targetSync();
+    }
+  };
+  (forwarding_link.ForwardingLink.new = function() {
+    ;
+  }).prototype = forwarding_link.ForwardingLink.prototype;
+  dart.addTypeTests(forwarding_link.ForwardingLink);
+  dart.addTypeCaches(forwarding_link.ForwardingLink);
+  forwarding_link.ForwardingLink[dart.implements] = () => [forwarding_file_system_entity.ForwardingFileSystemEntity$(link.Link, io.Link), link.Link];
+  dart.setMethodSignature(forwarding_link.ForwardingLink, () => ({
+    __proto__: dart.getMethods(forwarding_link.ForwardingLink.__proto__),
+    wrap: dart.fnType(forwarding_link.ForwardingLink, [dart.nullable(core.Object)]),
+    create: dart.fnType(async.Future$(link.Link), [core.String], {recursive: core.bool}, {}),
+    createSync: dart.fnType(dart.void, [core.String], {recursive: core.bool}, {}),
+    update: dart.fnType(async.Future$(link.Link), [core.String]),
+    updateSync: dart.fnType(dart.void, [core.String]),
+    target: dart.fnType(async.Future$(core.String), []),
+    targetSync: dart.fnType(core.String, [])
+  }));
+  dart.setLibraryUri(forwarding_link.ForwardingLink, I[1]);
+  const _is_ForwardingFileSystemEntity_default = Symbol('_is_ForwardingFileSystemEntity_default');
+  forwarding_file_system_entity.ForwardingFileSystemEntity$ = dart.generic((T, D) => {
+    class ForwardingFileSystemEntity extends core.Object {
+      get uri() {
+        return this.delegate.uri;
+      }
+      exists() {
+        return this.delegate.exists();
+      }
+      existsSync() {
+        return this.delegate.existsSync();
+      }
+      rename(newPath) {
+        if (newPath == null) dart.nullFailed(I[2], 46, 27, "newPath");
+        return async.async(T, (function* rename() {
+          return this.wrap(D.as(yield this.delegate.rename(newPath)));
+        }).bind(this));
+      }
+      renameSync(newPath) {
+        if (newPath == null) dart.nullFailed(I[2], 50, 23, "newPath");
+        return this.wrap(D.as(this.delegate.renameSync(newPath)));
+      }
+      resolveSymbolicLinks() {
+        return this.delegate.resolveSymbolicLinks();
+      }
+      resolveSymbolicLinksSync() {
+        return this.delegate.resolveSymbolicLinksSync();
+      }
+      stat() {
+        return this.delegate.stat();
+      }
+      statSync() {
+        return this.delegate.statSync();
+      }
+      delete(opts) {
+        let recursive = opts && 'recursive' in opts ? opts.recursive : false;
+        if (recursive == null) dart.nullFailed(I[2], 65, 26, "recursive");
+        return async.async(T, (function* $delete() {
+          return this.wrap(D.as(yield this.delegate.delete({recursive: recursive})));
+        }).bind(this));
+      }
+      deleteSync(opts) {
+        let recursive = opts && 'recursive' in opts ? opts.recursive : false;
+        if (recursive == null) dart.nullFailed(I[2], 69, 25, "recursive");
+        return this.delegate.deleteSync({recursive: recursive});
+      }
+      watch(opts) {
+        let events = opts && 'events' in opts ? opts.events : 15;
+        if (events == null) dart.nullFailed(I[2], 74, 9, "events");
+        let recursive = opts && 'recursive' in opts ? opts.recursive : false;
+        if (recursive == null) dart.nullFailed(I[2], 75, 10, "recursive");
+        return this.delegate.watch({events: events, recursive: recursive});
+      }
+      get isAbsolute() {
+        return this.delegate.isAbsolute;
+      }
+      get absolute() {
+        return this.wrap(D.as(this.delegate.absolute));
+      }
+      get parent() {
+        return this.wrapDirectory(this.delegate.parent);
+      }
+      get path() {
+        return this.delegate.path;
+      }
+      get basename() {
+        return this.fileSystem.path.basename(this.path);
+      }
+      get dirname() {
+        return this.fileSystem.path.dirname(this.path);
+      }
+    }
+    (ForwardingFileSystemEntity.new = function() {
+      ;
+    }).prototype = ForwardingFileSystemEntity.prototype;
+    dart.addTypeTests(ForwardingFileSystemEntity);
+    ForwardingFileSystemEntity.prototype[_is_ForwardingFileSystemEntity_default] = true;
+    dart.addTypeCaches(ForwardingFileSystemEntity);
+    ForwardingFileSystemEntity[dart.implements] = () => [file_system_entity.FileSystemEntity];
+    dart.setMethodSignature(ForwardingFileSystemEntity, () => ({
+      __proto__: dart.getMethods(ForwardingFileSystemEntity.__proto__),
+      exists: dart.fnType(async.Future$(core.bool), []),
+      existsSync: dart.fnType(core.bool, []),
+      rename: dart.fnType(async.Future$(T), [core.String]),
+      renameSync: dart.fnType(T, [core.String]),
+      resolveSymbolicLinks: dart.fnType(async.Future$(core.String), []),
+      resolveSymbolicLinksSync: dart.fnType(core.String, []),
+      stat: dart.fnType(async.Future$(io.FileStat), []),
+      statSync: dart.fnType(io.FileStat, []),
+      delete: dart.fnType(async.Future$(T), [], {recursive: core.bool}, {}),
+      deleteSync: dart.fnType(dart.void, [], {recursive: core.bool}, {}),
+      watch: dart.fnType(async.Stream$(io.FileSystemEvent), [], {events: core.int, recursive: core.bool}, {})
+    }));
+    dart.setGetterSignature(ForwardingFileSystemEntity, () => ({
+      __proto__: dart.getGetters(ForwardingFileSystemEntity.__proto__),
+      uri: core.Uri,
+      isAbsolute: core.bool,
+      absolute: T,
+      parent: directory.Directory,
+      path: core.String,
+      basename: core.String,
+      dirname: core.String
+    }));
+    dart.setLibraryUri(ForwardingFileSystemEntity, I[3]);
+    return ForwardingFileSystemEntity;
+  });
+  forwarding_file_system_entity.ForwardingFileSystemEntity = forwarding_file_system_entity.ForwardingFileSystemEntity$();
+  dart.addTypeTests(forwarding_file_system_entity.ForwardingFileSystemEntity, _is_ForwardingFileSystemEntity_default);
+  var delegate$ = dart.privateName(forwarding_file_system, "ForwardingFileSystem.delegate");
+  forwarding_file_system.ForwardingFileSystem = class ForwardingFileSystem extends file_system.FileSystem {
+    get delegate() {
+      return this[delegate$];
+    }
+    set delegate(value) {
+      super.delegate = value;
+    }
+    directory(path) {
+      return this.delegate.directory(path);
+    }
+    file(path) {
+      return this.delegate.file(path);
+    }
+    link(path) {
+      return this.delegate.link(path);
+    }
+    get path() {
+      return this.delegate.path;
+    }
+    get systemTempDirectory() {
+      return this.delegate.systemTempDirectory;
+    }
+    get currentDirectory() {
+      return this.delegate.currentDirectory;
+    }
+    set currentDirectory(path) {
+      return this.delegate.currentDirectory = path;
+    }
+    stat(path) {
+      if (path == null) dart.nullFailed(I[4], 42, 35, "path");
+      return this.delegate.stat(path);
+    }
+    statSync(path) {
+      if (path == null) dart.nullFailed(I[4], 45, 31, "path");
+      return this.delegate.statSync(path);
+    }
+    identical(path1, path2) {
+      if (path1 == null) dart.nullFailed(I[4], 48, 33, "path1");
+      if (path2 == null) dart.nullFailed(I[4], 48, 47, "path2");
+      return this.delegate.identical(path1, path2);
+    }
+    identicalSync(path1, path2) {
+      if (path1 == null) dart.nullFailed(I[4], 52, 29, "path1");
+      if (path2 == null) dart.nullFailed(I[4], 52, 43, "path2");
+      return this.delegate.identicalSync(path1, path2);
+    }
+    get isWatchSupported() {
+      return this.delegate.isWatchSupported;
+    }
+    type(path, opts) {
+      if (path == null) dart.nullFailed(I[4], 59, 47, "path");
+      let followLinks = opts && 'followLinks' in opts ? opts.followLinks : true;
+      if (followLinks == null) dart.nullFailed(I[4], 60, 17, "followLinks");
+      return this.delegate.type(path, {followLinks: followLinks});
+    }
+    typeSync(path, opts) {
+      if (path == null) dart.nullFailed(I[4], 64, 43, "path");
+      let followLinks = opts && 'followLinks' in opts ? opts.followLinks : true;
+      if (followLinks == null) dart.nullFailed(I[4], 64, 55, "followLinks");
+      return this.delegate.typeSync(path, {followLinks: followLinks});
+    }
+  };
+  (forwarding_file_system.ForwardingFileSystem.new = function(delegate) {
+    if (delegate == null) dart.nullFailed(I[4], 14, 29, "delegate");
+    this[delegate$] = delegate;
+    forwarding_file_system.ForwardingFileSystem.__proto__.new.call(this);
+    ;
+  }).prototype = forwarding_file_system.ForwardingFileSystem.prototype;
+  dart.addTypeTests(forwarding_file_system.ForwardingFileSystem);
+  dart.addTypeCaches(forwarding_file_system.ForwardingFileSystem);
+  dart.setMethodSignature(forwarding_file_system.ForwardingFileSystem, () => ({
+    __proto__: dart.getMethods(forwarding_file_system.ForwardingFileSystem.__proto__),
+    directory: dart.fnType(directory.Directory, [dart.dynamic]),
+    file: dart.fnType(file.File, [dart.dynamic]),
+    link: dart.fnType(link.Link, [dart.dynamic]),
+    stat: dart.fnType(async.Future$(io.FileStat), [core.String]),
+    statSync: dart.fnType(io.FileStat, [core.String]),
+    identical: dart.fnType(async.Future$(core.bool), [core.String, core.String]),
+    identicalSync: dart.fnType(core.bool, [core.String, core.String]),
+    type: dart.fnType(async.Future$(io.FileSystemEntityType), [core.String], {followLinks: core.bool}, {}),
+    typeSync: dart.fnType(io.FileSystemEntityType, [core.String], {followLinks: core.bool}, {})
+  }));
+  dart.setGetterSignature(forwarding_file_system.ForwardingFileSystem, () => ({
+    __proto__: dart.getGetters(forwarding_file_system.ForwardingFileSystem.__proto__),
+    path: context.Context,
+    systemTempDirectory: directory.Directory,
+    currentDirectory: directory.Directory,
+    isWatchSupported: core.bool
+  }));
+  dart.setSetterSignature(forwarding_file_system.ForwardingFileSystem, () => ({
+    __proto__: dart.getSetters(forwarding_file_system.ForwardingFileSystem.__proto__),
+    currentDirectory: dart.dynamic
+  }));
+  dart.setLibraryUri(forwarding_file_system.ForwardingFileSystem, I[5]);
+  dart.setFieldSignature(forwarding_file_system.ForwardingFileSystem, () => ({
+    __proto__: dart.getFields(forwarding_file_system.ForwardingFileSystem.__proto__),
+    delegate: dart.finalFieldType(file_system.FileSystem)
+  }));
+  var FileMode__mode = dart.privateName(io, "FileMode._mode");
+  var Utf8Codec__allowMalformed = dart.privateName(convert, "Utf8Codec._allowMalformed");
+  forwarding_file.ForwardingFile = class ForwardingFile extends core.Object {
+    wrap(delegate) {
+      io.File.as(delegate);
+      if (delegate == null) dart.nullFailed(I[6], 15, 31, "delegate");
+      return forwarding_file.ForwardingFile.as(this.wrapFile(delegate));
+    }
+    create(opts) {
+      let recursive = opts && 'recursive' in opts ? opts.recursive : false;
+      if (recursive == null) dart.nullFailed(I[6], 18, 29, "recursive");
+      return async.async(file.File, (function* create() {
+        return this.wrap(yield this.delegate.create({recursive: recursive}));
+      }).bind(this));
+    }
+    createSync(opts) {
+      let recursive = opts && 'recursive' in opts ? opts.recursive : false;
+      if (recursive == null) dart.nullFailed(I[6], 22, 25, "recursive");
+      return this.delegate.createSync({recursive: recursive});
+    }
+    copy(newPath) {
+      if (newPath == null) dart.nullFailed(I[6], 26, 28, "newPath");
+      return async.async(file.File, (function* copy() {
+        return this.wrap(yield this.delegate.copy(newPath));
+      }).bind(this));
+    }
+    copySync(newPath) {
+      if (newPath == null) dart.nullFailed(I[6], 29, 24, "newPath");
+      return this.wrap(this.delegate.copySync(newPath));
+    }
+    length() {
+      return this.delegate.length();
+    }
+    lengthSync() {
+      return this.delegate.lengthSync();
+    }
+    lastAccessed() {
+      return this.delegate.lastAccessed();
+    }
+    lastAccessedSync() {
+      return this.delegate.lastAccessedSync();
+    }
+    setLastAccessed(time) {
+      if (time == null) dart.nullFailed(I[6], 44, 44, "time");
+      return this.delegate.setLastAccessed(time);
+    }
+    setLastAccessedSync(time) {
+      if (time == null) dart.nullFailed(I[6], 48, 37, "time");
+      return this.delegate.setLastAccessedSync(time);
+    }
+    lastModified() {
+      return this.delegate.lastModified();
+    }
+    lastModifiedSync() {
+      return this.delegate.lastModifiedSync();
+    }
+    setLastModified(time) {
+      if (time == null) dart.nullFailed(I[6], 57, 44, "time");
+      return this.delegate.setLastModified(time);
+    }
+    setLastModifiedSync(time) {
+      if (time == null) dart.nullFailed(I[6], 61, 37, "time");
+      return this.delegate.setLastModifiedSync(time);
+    }
+    open(opts) {
+      let mode = opts && 'mode' in opts ? opts.mode : C[0] || CT.C0;
+      if (mode == null) dart.nullFailed(I[6], 65, 14, "mode");
+      return this.delegate.open({mode: mode});
+    }
+    openSync(opts) {
+      let mode = opts && 'mode' in opts ? opts.mode : C[0] || CT.C0;
+      if (mode == null) dart.nullFailed(I[6], 70, 39, "mode");
+      return this.delegate.openSync({mode: mode});
+    }
+    openRead(start = null, end = null) {
+      return this.delegate.openRead(start, end);
+    }
+    openWrite(opts) {
+      let mode = opts && 'mode' in opts ? opts.mode : C[1] || CT.C1;
+      if (mode == null) dart.nullFailed(I[6], 79, 14, "mode");
+      let encoding = opts && 'encoding' in opts ? opts.encoding : C[2] || CT.C2;
+      if (encoding == null) dart.nullFailed(I[6], 80, 14, "encoding");
+      return this.delegate.openWrite({mode: mode, encoding: encoding});
+    }
+    readAsBytes() {
+      return this.delegate.readAsBytes();
+    }
+    readAsBytesSync() {
+      return this.delegate.readAsBytesSync();
+    }
+    readAsString(opts) {
+      let encoding = opts && 'encoding' in opts ? opts.encoding : C[2] || CT.C2;
+      if (encoding == null) dart.nullFailed(I[6], 91, 41, "encoding");
+      return this.delegate.readAsString({encoding: encoding});
+    }
+    readAsStringSync(opts) {
+      let encoding = opts && 'encoding' in opts ? opts.encoding : C[2] || CT.C2;
+      if (encoding == null) dart.nullFailed(I[6], 95, 37, "encoding");
+      return this.delegate.readAsStringSync({encoding: encoding});
+    }
+    readAsLines(opts) {
+      let encoding = opts && 'encoding' in opts ? opts.encoding : C[2] || CT.C2;
+      if (encoding == null) dart.nullFailed(I[6], 99, 46, "encoding");
+      return this.delegate.readAsLines({encoding: encoding});
+    }
+    readAsLinesSync(opts) {
+      let encoding = opts && 'encoding' in opts ? opts.encoding : C[2] || CT.C2;
+      if (encoding == null) dart.nullFailed(I[6], 103, 42, "encoding");
+      return this.delegate.readAsLinesSync({encoding: encoding});
+    }
+    writeAsBytes(bytes, opts) {
+      if (bytes == null) dart.nullFailed(I[6], 108, 15, "bytes");
+      let mode = opts && 'mode' in opts ? opts.mode : C[1] || CT.C1;
+      if (mode == null) dart.nullFailed(I[6], 109, 14, "mode");
+      let flush = opts && 'flush' in opts ? opts.flush : false;
+      if (flush == null) dart.nullFailed(I[6], 110, 10, "flush");
+      return async.async(file.File, (function* writeAsBytes() {
+        return this.wrap(yield this.delegate.writeAsBytes(bytes, {mode: mode, flush: flush}));
+      }).bind(this));
+    }
+    writeAsBytesSync(bytes, opts) {
+      if (bytes == null) dart.nullFailed(I[6], 120, 15, "bytes");
+      let mode = opts && 'mode' in opts ? opts.mode : C[1] || CT.C1;
+      if (mode == null) dart.nullFailed(I[6], 121, 14, "mode");
+      let flush = opts && 'flush' in opts ? opts.flush : false;
+      if (flush == null) dart.nullFailed(I[6], 122, 10, "flush");
+      return this.delegate.writeAsBytesSync(bytes, {mode: mode, flush: flush});
+    }
+    writeAsString(contents, opts) {
+      if (contents == null) dart.nullFailed(I[6], 128, 12, "contents");
+      let mode = opts && 'mode' in opts ? opts.mode : C[1] || CT.C1;
+      if (mode == null) dart.nullFailed(I[6], 129, 14, "mode");
+      let encoding = opts && 'encoding' in opts ? opts.encoding : C[2] || CT.C2;
+      if (encoding == null) dart.nullFailed(I[6], 130, 14, "encoding");
+      let flush = opts && 'flush' in opts ? opts.flush : false;
+      if (flush == null) dart.nullFailed(I[6], 131, 10, "flush");
+      return async.async(file.File, (function* writeAsString() {
+        return this.wrap(yield this.delegate.writeAsString(contents, {mode: mode, encoding: encoding, flush: flush}));
+      }).bind(this));
+    }
+    writeAsStringSync(contents, opts) {
+      if (contents == null) dart.nullFailed(I[6], 142, 12, "contents");
+      let mode = opts && 'mode' in opts ? opts.mode : C[1] || CT.C1;
+      if (mode == null) dart.nullFailed(I[6], 143, 14, "mode");
+      let encoding = opts && 'encoding' in opts ? opts.encoding : C[2] || CT.C2;
+      if (encoding == null) dart.nullFailed(I[6], 144, 14, "encoding");
+      let flush = opts && 'flush' in opts ? opts.flush : false;
+      if (flush == null) dart.nullFailed(I[6], 145, 10, "flush");
+      return this.delegate.writeAsStringSync(contents, {mode: mode, encoding: encoding, flush: flush});
+    }
+  };
+  (forwarding_file.ForwardingFile.new = function() {
+    ;
+  }).prototype = forwarding_file.ForwardingFile.prototype;
+  dart.addTypeTests(forwarding_file.ForwardingFile);
+  dart.addTypeCaches(forwarding_file.ForwardingFile);
+  forwarding_file.ForwardingFile[dart.implements] = () => [forwarding_file_system_entity.ForwardingFileSystemEntity$(file.File, io.File), file.File];
+  dart.setMethodSignature(forwarding_file.ForwardingFile, () => ({
+    __proto__: dart.getMethods(forwarding_file.ForwardingFile.__proto__),
+    wrap: dart.fnType(forwarding_file.ForwardingFile, [dart.nullable(core.Object)]),
+    create: dart.fnType(async.Future$(file.File), [], {recursive: core.bool}, {}),
+    createSync: dart.fnType(dart.void, [], {recursive: core.bool}, {}),
+    copy: dart.fnType(async.Future$(file.File), [core.String]),
+    copySync: dart.fnType(file.File, [core.String]),
+    length: dart.fnType(async.Future$(core.int), []),
+    lengthSync: dart.fnType(core.int, []),
+    lastAccessed: dart.fnType(async.Future$(core.DateTime), []),
+    lastAccessedSync: dart.fnType(core.DateTime, []),
+    setLastAccessed: dart.fnType(async.Future, [core.DateTime]),
+    setLastAccessedSync: dart.fnType(dart.void, [core.DateTime]),
+    lastModified: dart.fnType(async.Future$(core.DateTime), []),
+    lastModifiedSync: dart.fnType(core.DateTime, []),
+    setLastModified: dart.fnType(async.Future, [core.DateTime]),
+    setLastModifiedSync: dart.fnType(dart.void, [core.DateTime]),
+    open: dart.fnType(async.Future$(io.RandomAccessFile), [], {mode: io.FileMode}, {}),
+    openSync: dart.fnType(io.RandomAccessFile, [], {mode: io.FileMode}, {}),
+    openRead: dart.fnType(async.Stream$(core.List$(core.int)), [], [dart.nullable(core.int), dart.nullable(core.int)]),
+    openWrite: dart.fnType(io.IOSink, [], {encoding: convert.Encoding, mode: io.FileMode}, {}),
+    readAsBytes: dart.fnType(async.Future$(typed_data.Uint8List), []),
+    readAsBytesSync: dart.fnType(typed_data.Uint8List, []),
+    readAsString: dart.fnType(async.Future$(core.String), [], {encoding: convert.Encoding}, {}),
+    readAsStringSync: dart.fnType(core.String, [], {encoding: convert.Encoding}, {}),
+    readAsLines: dart.fnType(async.Future$(core.List$(core.String)), [], {encoding: convert.Encoding}, {}),
+    readAsLinesSync: dart.fnType(core.List$(core.String), [], {encoding: convert.Encoding}, {}),
+    writeAsBytes: dart.fnType(async.Future$(file.File), [core.List$(core.int)], {flush: core.bool, mode: io.FileMode}, {}),
+    writeAsBytesSync: dart.fnType(dart.void, [core.List$(core.int)], {flush: core.bool, mode: io.FileMode}, {}),
+    writeAsString: dart.fnType(async.Future$(file.File), [core.String], {encoding: convert.Encoding, flush: core.bool, mode: io.FileMode}, {}),
+    writeAsStringSync: dart.fnType(dart.void, [core.String], {encoding: convert.Encoding, flush: core.bool, mode: io.FileMode}, {})
+  }));
+  dart.setLibraryUri(forwarding_file.ForwardingFile, I[7]);
+  var _wrap = dart.privateName(forwarding_directory, "_wrap");
+  const _is_ForwardingDirectory_default = Symbol('_is_ForwardingDirectory_default');
+  forwarding_directory.ForwardingDirectory$ = dart.generic(T => {
+    class ForwardingDirectory extends core.Object {
+      wrap(delegate) {
+        io.Directory.as(delegate);
+        if (delegate == null) dart.nullFailed(I[8], 12, 23, "delegate");
+        return T.as(this.wrapDirectory(delegate));
+      }
+      create(opts) {
+        let recursive = opts && 'recursive' in opts ? opts.recursive : false;
+        if (recursive == null) dart.nullFailed(I[8], 15, 34, "recursive");
+        return async.async(directory.Directory, (function* create() {
+          return this.wrap(yield this.delegate.create({recursive: recursive}));
+        }).bind(this));
+      }
+      createSync(opts) {
+        let recursive = opts && 'recursive' in opts ? opts.recursive : false;
+        if (recursive == null) dart.nullFailed(I[8], 19, 25, "recursive");
+        return this.delegate.createSync({recursive: recursive});
+      }
+      createTemp(prefix = null) {
+        return async.async(directory.Directory, (function* createTemp() {
+          return this.wrap(yield this.delegate.createTemp(prefix));
+        }).bind(this));
+      }
+      createTempSync(prefix = null) {
+        return this.wrap(this.delegate.createTempSync(prefix));
+      }
+      list(opts) {
+        let recursive = opts && 'recursive' in opts ? opts.recursive : false;
+        if (recursive == null) dart.nullFailed(I[8], 32, 10, "recursive");
+        let followLinks = opts && 'followLinks' in opts ? opts.followLinks : true;
+        if (followLinks == null) dart.nullFailed(I[8], 33, 10, "followLinks");
+        return this.delegate.list({recursive: recursive, followLinks: followLinks}).map(file_system_entity.FileSystemEntity, dart.bind(this, _wrap));
+      }
+      listSync(opts) {
+        let recursive = opts && 'recursive' in opts ? opts.recursive : false;
+        if (recursive == null) dart.nullFailed(I[8], 39, 10, "recursive");
+        let followLinks = opts && 'followLinks' in opts ? opts.followLinks : true;
+        if (followLinks == null) dart.nullFailed(I[8], 40, 10, "followLinks");
+        return this.delegate.listSync({recursive: recursive, followLinks: followLinks})[$map](file_system_entity.FileSystemEntity, dart.bind(this, _wrap))[$toList]();
+      }
+      [_wrap](entity) {
+        if (entity == null) dart.nullFailed(I[8], 47, 46, "entity");
+        if (io.File.is(entity)) {
+          return this.wrapFile(entity);
+        } else if (io.Directory.is(entity)) {
+          return this.wrapDirectory(entity);
+        } else if (io.Link.is(entity)) {
+          return this.wrapLink(entity);
+        }
+        dart.throw(new io.FileSystemException.new("Unsupported type: " + dart.str(entity), entity.path));
+      }
+    }
+    (ForwardingDirectory.new = function() {
+      ;
+    }).prototype = ForwardingDirectory.prototype;
+    dart.addTypeTests(ForwardingDirectory);
+    ForwardingDirectory.prototype[_is_ForwardingDirectory_default] = true;
+    dart.addTypeCaches(ForwardingDirectory);
+    ForwardingDirectory[dart.implements] = () => [forwarding_file_system_entity.ForwardingFileSystemEntity$(T, io.Directory), directory.Directory];
+    dart.setMethodSignature(ForwardingDirectory, () => ({
+      __proto__: dart.getMethods(ForwardingDirectory.__proto__),
+      wrap: dart.fnType(T, [dart.nullable(core.Object)]),
+      create: dart.fnType(async.Future$(directory.Directory), [], {recursive: core.bool}, {}),
+      createSync: dart.fnType(dart.void, [], {recursive: core.bool}, {}),
+      createTemp: dart.fnType(async.Future$(directory.Directory), [], [dart.nullable(core.String)]),
+      createTempSync: dart.fnType(directory.Directory, [], [dart.nullable(core.String)]),
+      list: dart.fnType(async.Stream$(file_system_entity.FileSystemEntity), [], {followLinks: core.bool, recursive: core.bool}, {}),
+      listSync: dart.fnType(core.List$(file_system_entity.FileSystemEntity), [], {followLinks: core.bool, recursive: core.bool}, {}),
+      [_wrap]: dart.fnType(file_system_entity.FileSystemEntity, [io.FileSystemEntity])
+    }));
+    dart.setLibraryUri(ForwardingDirectory, I[9]);
+    return ForwardingDirectory;
+  });
+  forwarding_directory.ForwardingDirectory = forwarding_directory.ForwardingDirectory$();
+  dart.addTypeTests(forwarding_directory.ForwardingDirectory, _is_ForwardingDirectory_default);
+  dart.trackLibraries("packages/file/src/forwarding/forwarding_link.dart", {
+    "package:file/src/forwarding/forwarding_link.dart": forwarding_link,
+    "package:file/src/forwarding/forwarding_file_system_entity.dart": forwarding_file_system_entity,
+    "package:file/src/forwarding/forwarding_file_system.dart": forwarding_file_system,
+    "package:file/src/forwarding/forwarding_file.dart": forwarding_file,
+    "package:file/src/forwarding/forwarding_directory.dart": forwarding_directory,
+    "package:file/src/forwarding.dart": forwarding,
+    "package:file/file.dart": file$
+  }, {
+  }, '{"version":3,"sourceRoot":"","sources":["forwarding_link.dart","forwarding_file_system_entity.dart","forwarding_file_system.dart","forwarding_file.dart","forwarding_directory.dart"],"names":[],"mappings":"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","file":"../../../../../../../../../E:/packages/file/src/forwarding/forwarding_link.dart.lib.js"}');
+  // Exports:
+  return {
+    src__forwarding__forwarding_link: forwarding_link,
+    src__forwarding__forwarding_file_system_entity: forwarding_file_system_entity,
+    src__forwarding__forwarding_file_system: forwarding_file_system,
+    src__forwarding__forwarding_file: forwarding_file,
+    src__forwarding__forwarding_directory: forwarding_directory,
+    src__forwarding: forwarding,
+    file: file$
+  };
+}));
+
+//# sourceMappingURL=forwarding_link.dart.lib.js.map

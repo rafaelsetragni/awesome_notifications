@@ -1,0 +1,634 @@
+define(['dart_sdk', 'packages/url_launcher/url_launcher.dart', 'packages/awesome_notifications/src/models/received_models/received_notification.dart', 'packages/awesome_notifications/src/enumerators/notification_layout.dart', 'packages/awesome_notifications/src/models/notification_interval.dart', 'packages/awesome_notifications/src/enumerators/action_button_type.dart', 'packages/flutter/src/material/colors.dart', 'packages/awesome_notifications/awesome_notifications.dart', 'packages/flutter/src/cupertino/text_theme.dart', 'packages/awesome_notifications_example/utils/common_functions.dart', 'packages/awesome_notifications_example/utils/media_player_central.dart', 'packages/flutter/src/foundation/print.dart', 'packages/flutter/src/material/icon_button.dart', 'packages/flutter/src/widgets/widget_span.dart', 'packages/awesome_notifications/src/models/notification_calendar.dart', 'packages/awesome_notifications/src/utils/date_utils.dart'], (function load__packages__awesome_notifications_example__utils__notification_util_dart(dart_sdk, packages__url_launcher__url_launcher$46dart, packages__awesome_notifications__src__models__received_models__received_notification$46dart, packages__awesome_notifications__src__enumerators__notification_layout$46dart, packages__awesome_notifications__src__models__notification_interval$46dart, packages__awesome_notifications__src__enumerators__action_button_type$46dart, packages__flutter__src__material__colors$46dart, packages__awesome_notifications__awesome_notifications$46dart, packages__flutter__src__cupertino__text_theme$46dart, packages__awesome_notifications_example__utils__common_functions$46dart, packages__awesome_notifications_example__utils__media_player_central$46dart, packages__flutter__src__foundation__print$46dart, packages__flutter__src__material__icon_button$46dart, packages__flutter__src__widgets__widget_span$46dart, packages__awesome_notifications__src__models__notification_calendar$46dart, packages__awesome_notifications__src__utils__date_utils$46dart) {
+  'use strict';
+  const core = dart_sdk.core;
+  const async = dart_sdk.async;
+  const _js_helper = dart_sdk._js_helper;
+  const _interceptors = dart_sdk._interceptors;
+  const typed_data = dart_sdk.typed_data;
+  const io = dart_sdk.io;
+  const math = dart_sdk.math;
+  const dart = dart_sdk.dart;
+  const dartx = dart_sdk.dartx;
+  const url_launcher = packages__url_launcher__url_launcher$46dart.url_launcher;
+  const awesome_notifications_core = packages__awesome_notifications__src__models__received_models__received_notification$46dart.src__awesome_notifications_core;
+  const notification_content = packages__awesome_notifications__src__models__received_models__received_notification$46dart.src__models__notification_content;
+  const notification_button = packages__awesome_notifications__src__models__received_models__received_notification$46dart.src__models__notification_button;
+  const notification_channel = packages__awesome_notifications__src__models__received_models__received_notification$46dart.src__models__notification_channel;
+  const notification_layout = packages__awesome_notifications__src__enumerators__notification_layout$46dart.src__enumerators__notification_layout;
+  const notification_interval = packages__awesome_notifications__src__models__notification_interval$46dart.src__models__notification_interval;
+  const action_button_type = packages__awesome_notifications__src__enumerators__action_button_type$46dart.src__enumerators__action_button_type;
+  const colors = packages__flutter__src__material__colors$46dart.src__material__colors;
+  const awesome_notifications = packages__awesome_notifications__awesome_notifications$46dart.awesome_notifications;
+  const colors$ = packages__flutter__src__cupertino__text_theme$46dart.src__cupertino__colors;
+  const common_functions = packages__awesome_notifications_example__utils__common_functions$46dart.utils__common_functions;
+  const media_player_central = packages__awesome_notifications_example__utils__media_player_central$46dart.utils__media_player_central;
+  const print = packages__flutter__src__foundation__print$46dart.src__foundation__print;
+  const dialog = packages__flutter__src__material__icon_button$46dart.src__material__dialog;
+  const text_button = packages__flutter__src__material__icon_button$46dart.src__material__text_button;
+  const text = packages__flutter__src__widgets__widget_span$46dart.src__widgets__text;
+  const widget_inspector = packages__flutter__src__widgets__widget_span$46dart.src__widgets__widget_inspector;
+  const navigator = packages__flutter__src__widgets__widget_span$46dart.src__widgets__navigator;
+  const framework = packages__flutter__src__widgets__widget_span$46dart.src__widgets__framework;
+  const notification_calendar = packages__awesome_notifications__src__models__notification_calendar$46dart.src__models__notification_calendar;
+  const date_utils = packages__awesome_notifications__src__utils__date_utils$46dart.src__utils__date_utils;
+  var notification_util = Object.create(dart.library);
+  var $last = dartx.last;
+  var $toLowerCase = dartx.toLowerCase;
+  var $split = dartx.split;
+  var $replaceAll = dartx.replaceAll;
+  var $replaceFirst = dartx.replaceFirst;
+  var $toString = dartx.toString;
+  var $length = dartx.length;
+  var $round = dartx.round;
+  var $padLeft = dartx.padLeft;
+  dart._checkModuleNullSafetyMode(true);
+  var T = {
+    IdentityMapOfString$String: () => (T.IdentityMapOfString$String = dart.constFn(_js_helper.IdentityMap$(core.String, core.String)))(),
+    JSArrayOfNotificationActionButton: () => (T.JSArrayOfNotificationActionButton = dart.constFn(_interceptors.JSArray$(notification_button.NotificationActionButton)))(),
+    JSArrayOfint: () => (T.JSArrayOfint = dart.constFn(_interceptors.JSArray$(core.int)))(),
+    ObjectN: () => (T.ObjectN = dart.constFn(dart.nullable(core.Object)))(),
+    VoidTovoid: () => (T.VoidTovoid = dart.constFn(dart.fnType(dart.void, [])))(),
+    JSArrayOfWidget: () => (T.JSArrayOfWidget = dart.constFn(_interceptors.JSArray$(framework.Widget)))(),
+    BuildContextToAlertDialog: () => (T.BuildContextToAlertDialog = dart.constFn(dart.fnType(dialog.AlertDialog, [framework.BuildContext])))(),
+    FutureOfNull: () => (T.FutureOfNull = dart.constFn(async.Future$(core.Null)))(),
+    VoidToFutureOfNull: () => (T.VoidToFutureOfNull = dart.constFn(dart.fnType(T.FutureOfNull(), [])))()
+  };
+  var T$Eval = Object.assign({
+    _: () => T$Eval
+  }, T);
+  var S = {
+    _: () => S
+  };
+  var S$Eval = Object.assign({
+    _: () => S$Eval
+  }, S);
+  const CT = Object.create({
+    _: () => (C, CT)
+  });
+  dart.defineLazy(CT, {
+    get C2() {
+      return C[2] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "data",
+        [_Location_column]: 68,
+        [_Location_line]: 959,
+        [_Location_file]: null
+      });
+    },
+    get C1() {
+      return C[1] = dart.constList([C[2] || CT.C2], widget_inspector._Location);
+    },
+    get C0() {
+      return C[0] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[1] || CT.C1,
+        [_Location_name]: null,
+        [_Location_column]: 18,
+        [_Location_line]: 959,
+        [_Location_file]: "file:///E:/plugins/awesome_notifications/example/lib/utils/notification_util.dart"
+      });
+    },
+    get C5() {
+      return C[5] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "data",
+        [_Location_column]: 25,
+        [_Location_line]: 962,
+        [_Location_file]: null
+      });
+    },
+    get C4() {
+      return C[4] = dart.constList([C[5] || CT.C5], widget_inspector._Location);
+    },
+    get C3() {
+      return C[3] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[4] || CT.C4,
+        [_Location_name]: null,
+        [_Location_column]: 20,
+        [_Location_line]: 962,
+        [_Location_file]: "file:///E:/plugins/awesome_notifications/example/lib/utils/notification_util.dart"
+      });
+    },
+    get C8() {
+      return C[8] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 13,
+        [_Location_line]: 962,
+        [_Location_file]: null
+      });
+    },
+    get C9() {
+      return C[9] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onPressed",
+        [_Location_column]: 13,
+        [_Location_line]: 963,
+        [_Location_file]: null
+      });
+    },
+    get C7() {
+      return C[7] = dart.constList([C[8] || CT.C8, C[9] || CT.C9], widget_inspector._Location);
+    },
+    get C6() {
+      return C[6] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[7] || CT.C7,
+        [_Location_name]: null,
+        [_Location_column]: 11,
+        [_Location_line]: 961,
+        [_Location_file]: "file:///E:/plugins/awesome_notifications/example/lib/utils/notification_util.dart"
+      });
+    },
+    get C12() {
+      return C[12] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "content",
+        [_Location_column]: 9,
+        [_Location_line]: 959,
+        [_Location_file]: null
+      });
+    },
+    get C13() {
+      return C[13] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "actions",
+        [_Location_column]: 9,
+        [_Location_line]: 960,
+        [_Location_file]: null
+      });
+    },
+    get C11() {
+      return C[11] = dart.constList([C[12] || CT.C12, C[13] || CT.C13], widget_inspector._Location);
+    },
+    get C10() {
+      return C[10] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[11] || CT.C11,
+        [_Location_name]: null,
+        [_Location_column]: 14,
+        [_Location_line]: 958,
+        [_Location_file]: "file:///E:/plugins/awesome_notifications/example/lib/utils/notification_util.dart"
+      });
+    }
+  }, false);
+  var C = Array(14).fill(void 0);
+  var I = ["file:///E:/plugins/awesome_notifications/example/lib/utils/notification_util.dart"];
+  var _Location_parameterLocations = dart.privateName(widget_inspector, "_Location.parameterLocations");
+  var _Location_name = dart.privateName(widget_inspector, "_Location.name");
+  var _Location_column = dart.privateName(widget_inspector, "_Location.column");
+  var _Location_line = dart.privateName(widget_inspector, "_Location.line");
+  var _Location_file = dart.privateName(widget_inspector, "_Location.file");
+  notification_util.externalUrl = function externalUrl(url) {
+    if (url == null) dart.nullFailed(I[0], 30, 33, "url");
+    return async.async(dart.void, function* externalUrl() {
+      if (dart.test(yield url_launcher.canLaunch(url))) {
+        yield url_launcher.launch(url);
+      } else {
+        dart.throw("Could not launch " + dart.str(url));
+      }
+    });
+  };
+  notification_util.showBasicNotification = function showBasicNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 42, 40, "id");
+    return async.async(dart.void, function* showBasicNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "basic_channel", title: "Simple Notification", body: "Simple body"})});
+    });
+  };
+  notification_util.showEmojiNotification = function showEmojiNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 52, 40, "id");
+    return async.async(dart.void, function* showEmojiNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "basic_channel", title: "Emojis are awesome too! " + "😛" + "🤣" + "😍", body: "Simple body with a bunch of Emojis! " + "🚓" + " " + "🐕" + " " + "🇺🇸" + " " + "👶", bigPicture: "https://tecnoblog.net/wp-content/uploads/2019/09/emoji.jpg", notificationLayout: notification_layout.NotificationLayout.BigPicture})});
+    });
+  };
+  notification_util.showNotificationWithPayloadContent = function showNotificationWithPayloadContent(id) {
+    if (id == null) dart.nullFailed(I[0], 68, 53, "id");
+    return async.async(dart.void, function* showNotificationWithPayloadContent() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "basic_channel", title: "Simple notification", body: "Only a simple notification", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showNotificationWithoutTitle = function showNotificationWithoutTitle(id) {
+    if (id == null) dart.nullFailed(I[0], 78, 47, "id");
+    return async.async(dart.void, function* showNotificationWithoutTitle() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "basic_channel", body: "Only a simple notification", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showNotificationWithoutBody = function showNotificationWithoutBody(id) {
+    if (id == null) dart.nullFailed(I[0], 87, 46, "id");
+    return async.async(dart.void, function* showNotificationWithoutBody() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "basic_channel", title: "plain title", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.sendBackgroundNotification = function sendBackgroundNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 96, 45, "id");
+    return async.async(dart.void, function* sendBackgroundNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "basic_channel", payload: new (T.IdentityMapOfString$String()).from(["secret-command", "block_user"])})});
+    });
+  };
+  notification_util.showBadgeNotification = function showBadgeNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 108, 40, "id");
+    return async.async(dart.void, function* showBadgeNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "badge_channel", title: "Badge test notification", body: "This notification does activate badge indicator"}), schedule: new notification_interval.NotificationInterval.new({interval: 5})});
+    });
+  };
+  notification_util.showWithoutBadgeNotification = function showWithoutBadgeNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 118, 47, "id");
+    return async.async(dart.void, function* showWithoutBadgeNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "basic_channel", title: "Badge test notification", body: "This notification does not activate badge indicator"}), schedule: new notification_interval.NotificationInterval.new({interval: 5})});
+    });
+  };
+  notification_util.getBadgeIndicator = function getBadgeIndicator() {
+    return async.async(core.int, function* getBadgeIndicator() {
+      let amount = (yield awesome_notifications_core.AwesomeNotifications.new().getGlobalBadgeCounter());
+      return amount;
+    });
+  };
+  notification_util.setBadgeIndicator = function setBadgeIndicator(amount) {
+    if (amount == null) dart.nullFailed(I[0], 135, 36, "amount");
+    return async.async(dart.void, function* setBadgeIndicator() {
+      yield awesome_notifications_core.AwesomeNotifications.new().setGlobalBadgeCounter(amount);
+    });
+  };
+  notification_util.resetBadgeIndicator = function resetBadgeIndicator() {
+    return async.async(dart.void, function* resetBadgeIndicator() {
+      yield awesome_notifications_core.AwesomeNotifications.new().resetGlobalBadge();
+    });
+  };
+  notification_util.showNotificationWithActionButtons = function showNotificationWithActionButtons(id) {
+    if (id == null) dart.nullFailed(I[0], 147, 52, "id");
+    return async.async(dart.void, function* showNotificationWithActionButtons() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "basic_channel", title: "Anonymous says:", body: "Hi there!", payload: new (T.IdentityMapOfString$String()).from(["uuid", "user-profile-uuid"])}), actionButtons: T.JSArrayOfNotificationActionButton().of([new notification_button.NotificationActionButton.new({key: "READ", label: "Mark as read", autoDismissible: true}), new notification_button.NotificationActionButton.new({key: "PROFILE", label: "Profile", autoDismissible: true, enabled: false})])});
+    });
+  };
+  notification_util.showNotificationWithIconsAndActionButtons = function showNotificationWithIconsAndActionButtons(id) {
+    if (id == null) dart.nullFailed(I[0], 163, 60, "id");
+    return async.async(dart.void, function* showNotificationWithIconsAndActionButtons() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "basic_channel", title: "Anonymous says:", body: "Hi there!", payload: new (T.IdentityMapOfString$String()).from(["uuid", "user-profile-uuid"])}), actionButtons: T.JSArrayOfNotificationActionButton().of([new notification_button.NotificationActionButton.new({key: "READ", label: "Mark as read", autoDismissible: true}), new notification_button.NotificationActionButton.new({key: "PROFILE", label: "Profile", autoDismissible: true})])});
+    });
+  };
+  notification_util.showNotificationWithActionButtonsAndReply = function showNotificationWithActionButtonsAndReply(id) {
+    if (id == null) dart.nullFailed(I[0], 179, 60, "id");
+    return async.async(dart.void, function* showNotificationWithActionButtonsAndReply() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "basic_channel", title: "Anonymous says:", body: "Hi there!", payload: new (T.IdentityMapOfString$String()).from(["uuid", "user-profile-uuid"])}), actionButtons: T.JSArrayOfNotificationActionButton().of([new notification_button.NotificationActionButton.new({key: "REPLY", label: "Reply", autoDismissible: true, buttonType: action_button_type.ActionButtonType.InputField}), new notification_button.NotificationActionButton.new({key: "READ", label: "Mark as read", autoDismissible: true}), new notification_button.NotificationActionButton.new({key: "ARCHIVE", label: "Archive", autoDismissible: true})])});
+    });
+  };
+  notification_util.showLockedNotification = function showLockedNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 205, 41, "id");
+    return async.async(dart.void, function* showLockedNotification() {
+      awesome_notifications_core.AwesomeNotifications.new().setChannel(new notification_channel.NotificationChannel.new({channelKey: "locked_notification", channelName: "Locked notification", channelDescription: "Channel created on the fly with lock option", locked: true}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "locked_notification", title: "Locked notification", body: "This notification is locked and cannot be dismissed", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showUnlockedNotification = function showUnlockedNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 221, 43, "id");
+    return async.async(dart.void, function* showUnlockedNotification() {
+      awesome_notifications_core.AwesomeNotifications.new().setChannel(new notification_channel.NotificationChannel.new({channelKey: "locked_notification", channelName: "Unlocked notification", channelDescription: "Channel created on the fly with lock option", locked: true}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "locked_notification", title: "Unlocked notification", body: "This notification is not locked and can be dismissed", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"]), locked: false})});
+    });
+  };
+  notification_util.showNotificationImportance = function showNotificationImportance(id, importance) {
+    if (id == null) dart.nullFailed(I[0], 243, 9, "id");
+    if (importance == null) dart.nullFailed(I[0], 243, 36, "importance");
+    return async.async(dart.void, function* showNotificationImportance() {
+      let importanceKey = dart.toString(importance)[$toLowerCase]()[$split](".")[$last];
+      let channelKey = "importance_" + dart.notNull(importanceKey) + "_channel";
+      let title = "Importance levels (" + dart.notNull(importanceKey) + ")";
+      let body = "Test of importance levels to " + dart.notNull(importanceKey);
+      yield awesome_notifications_core.AwesomeNotifications.new().setChannel(new notification_channel.NotificationChannel.new({channelKey: channelKey, channelName: title, channelDescription: body, importance: importance, defaultColor: colors.Colors.red, ledColor: colors.Colors.red, vibrationPattern: awesome_notifications.highVibrationPattern}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: channelKey, title: title, body: body, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.createTestChannel = function createTestChannel(channelName) {
+    if (channelName == null) dart.nullFailed(I[0], 271, 39, "channelName");
+    return async.async(dart.void, function* createTestChannel() {
+      yield awesome_notifications_core.AwesomeNotifications.new().setChannel(new notification_channel.NotificationChannel.new({channelKey: channelName[$toLowerCase]()[$replaceAll](" ", "_"), channelName: channelName, channelDescription: "Channel created to test the channels manipulation."}));
+    });
+  };
+  notification_util.updateTestChannel = function updateTestChannel(channelName) {
+    if (channelName == null) dart.nullFailed(I[0], 279, 39, "channelName");
+    return async.async(dart.void, function* updateTestChannel() {
+      yield awesome_notifications_core.AwesomeNotifications.new().setChannel(new notification_channel.NotificationChannel.new({channelKey: channelName[$toLowerCase]()[$replaceAll](" ", "_"), channelName: dart.notNull(channelName) + " (updated)", channelDescription: "This channel was successfuly updated."}));
+    });
+  };
+  notification_util.removeTestChannel = function removeTestChannel(channelName) {
+    if (channelName == null) dart.nullFailed(I[0], 286, 39, "channelName");
+    return async.async(dart.void, function* removeTestChannel() {
+      yield awesome_notifications_core.AwesomeNotifications.new().removeChannel(channelName[$toLowerCase]()[$replaceAll](" ", "_"));
+    });
+  };
+  notification_util.delayNotification = function delayNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 295, 36, "id");
+    return async.async(dart.void, function* delayNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "scheduled", title: "scheduled title", body: "scheduled body", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])}), schedule: new notification_interval.NotificationInterval.new({interval: 5})});
+    });
+  };
+  notification_util.showLowVibrationNotification = function showLowVibrationNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 310, 47, "id");
+    return async.async(dart.void, function* showLowVibrationNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "low_intensity", title: "Low vibration title", body: "This is a notification with low vibration pattern", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showMediumVibrationNotification = function showMediumVibrationNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 320, 50, "id");
+    return async.async(dart.void, function* showMediumVibrationNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "medium_intensity", title: "Medium vibration title", body: "This is a notification with medium vibration pattern", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showHighVibrationNotification = function showHighVibrationNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 330, 48, "id");
+    return async.async(dart.void, function* showHighVibrationNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "high_intensity", title: "High vibration title", body: "This is a notification with high vibration pattern", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showCustomVibrationNotification = function showCustomVibrationNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 340, 50, "id");
+    return async.async(dart.void, function* showCustomVibrationNotification() {
+      awesome_notifications_core.AwesomeNotifications.new().setChannel(new notification_channel.NotificationChannel.new({channelKey: "custom_vibration", channelName: "Custom vibration", channelDescription: "Channel created on the fly with custom vibration", vibrationPattern: typed_data.Int64List.fromList(T.JSArrayOfint().of([0, 1000, 200, 200, 1000, 1500, 200, 200])), ledOnMs: 1000, ledOffMs: 500}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "custom_vibration", title: "That's all for today, folks!", bigPicture: "https://i0.wp.com/www.jornadageek.com.br/wp-content/uploads/2018/06/Looney-tunes.png?resize=696%2C398&ssl=1", notificationLayout: notification_layout.NotificationLayout.BigPicture, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.redNotification = function redNotification(id, delayLEDTests) {
+    if (id == null) dart.nullFailed(I[0], 365, 34, "id");
+    if (delayLEDTests == null) dart.nullFailed(I[0], 365, 43, "delayLEDTests");
+    return async.async(dart.void, function* redNotification() {
+      awesome_notifications_core.AwesomeNotifications.new().setChannel(new notification_channel.NotificationChannel.new({channelKey: "colorful_notification", channelName: "Colorful notifications", channelDescription: "A red colorful notification", vibrationPattern: awesome_notifications.lowVibrationPattern, defaultColor: colors.Colors.red, ledColor: colors.Colors.red, ledOnMs: 1000, ledOffMs: 500}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "colorful_notification", title: "<font color='" + dart.str(colors.Colors.red.value) + "'>Red Notification</font>", body: "<font color='" + dart.str(colors.Colors.red.value) + "'>A colorful notification</font>", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-red"])}), actionButtons: T.JSArrayOfNotificationActionButton().of([new notification_button.NotificationActionButton.new({key: "REPLY", label: "Reply", autoDismissible: true, buttonType: action_button_type.ActionButtonType.InputField}), new notification_button.NotificationActionButton.new({key: "ARCHIVE", label: "Archive", autoDismissible: true})]), schedule: dart.test(delayLEDTests) ? new notification_interval.NotificationInterval.new({interval: 5}) : null});
+    });
+  };
+  notification_util.blueNotification = function blueNotification(id, delayLEDTests) {
+    if (id == null) dart.nullFailed(I[0], 397, 35, "id");
+    if (delayLEDTests == null) dart.nullFailed(I[0], 397, 44, "delayLEDTests");
+    return async.async(dart.void, function* blueNotification() {
+      awesome_notifications_core.AwesomeNotifications.new().setChannel(new notification_channel.NotificationChannel.new({channelKey: "colorful_notification", channelName: "Colorful notifications", channelDescription: "A red colorful notification", vibrationPattern: awesome_notifications.lowVibrationPattern, defaultColor: colors.Colors.blueAccent, ledColor: colors.Colors.blueAccent, ledOnMs: 1000, ledOffMs: 500}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "colorful_notification", title: "<font color=\"" + dart.str(colors.Colors.blueAccent.value) + "\">Blue Notification</font>", body: "<font color='" + dart.str(colors.Colors.blueAccent.value) + "'>A colorful notification</font>", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-blue"])}), actionButtons: T.JSArrayOfNotificationActionButton().of([new notification_button.NotificationActionButton.new({key: "REPLY", label: "Reply", autoDismissible: true, buttonType: action_button_type.ActionButtonType.InputField}), new notification_button.NotificationActionButton.new({key: "ARCHIVE", label: "Archive", autoDismissible: true})]), schedule: dart.test(delayLEDTests) ? new notification_interval.NotificationInterval.new({interval: 5}) : null});
+    });
+  };
+  notification_util.yellowNotification = function yellowNotification(id, delayLEDTests) {
+    if (id == null) dart.nullFailed(I[0], 429, 37, "id");
+    if (delayLEDTests == null) dart.nullFailed(I[0], 429, 46, "delayLEDTests");
+    return async.async(dart.void, function* yellowNotification() {
+      awesome_notifications_core.AwesomeNotifications.new().setChannel(new notification_channel.NotificationChannel.new({channelKey: "colorful_notification", channelName: "Colorful notifications", channelDescription: "A red colorful notification", vibrationPattern: awesome_notifications.lowVibrationPattern, defaultColor: colors$.CupertinoColors.activeOrange, ledColor: colors$.CupertinoColors.activeOrange, ledOnMs: 1000, ledOffMs: 500}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "colorful_notification", title: "Yellow Notification", body: "A colorful notification", backgroundColor: colors$.CupertinoColors.activeOrange, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-yellow"])}), actionButtons: T.JSArrayOfNotificationActionButton().of([new notification_button.NotificationActionButton.new({key: "REPLY", label: "Reply", autoDismissible: true, buttonType: action_button_type.ActionButtonType.InputField}), new notification_button.NotificationActionButton.new({key: "ARCHIVE", label: "Archive", autoDismissible: true})]), schedule: dart.test(delayLEDTests) ? new notification_interval.NotificationInterval.new({interval: 5}) : null});
+    });
+  };
+  notification_util.purpleNotification = function purpleNotification(id, delayLEDTests) {
+    if (id == null) dart.nullFailed(I[0], 461, 37, "id");
+    if (delayLEDTests == null) dart.nullFailed(I[0], 461, 46, "delayLEDTests");
+    return async.async(dart.void, function* purpleNotification() {
+      awesome_notifications_core.AwesomeNotifications.new().setChannel(new notification_channel.NotificationChannel.new({channelKey: "colorful_notification", channelName: "Colorful notifications", channelDescription: "A purple colorful notification", vibrationPattern: awesome_notifications.lowVibrationPattern, defaultColor: colors.Colors.deepPurple, ledColor: colors.Colors.deepPurple, ledOnMs: 1000, ledOffMs: 500}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "colorful_notification", title: "<font color=\"" + dart.str(colors.Colors.deepPurple.value) + "\">Purple Notification</font>", body: "<font color='" + dart.str(colors.Colors.deepPurple.value) + "'>A colorful notification</font>", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-purple"])}), actionButtons: T.JSArrayOfNotificationActionButton().of([new notification_button.NotificationActionButton.new({key: "REPLY", label: "Reply", autoDismissible: true, buttonType: action_button_type.ActionButtonType.InputField}), new notification_button.NotificationActionButton.new({key: "ARCHIVE", label: "Archive", autoDismissible: true})]), schedule: dart.test(delayLEDTests) ? new notification_interval.NotificationInterval.new({interval: 5}) : null});
+    });
+  };
+  notification_util.greenNotification = function greenNotification(id, delayLEDTests) {
+    if (id == null) dart.nullFailed(I[0], 493, 36, "id");
+    if (delayLEDTests == null) dart.nullFailed(I[0], 493, 45, "delayLEDTests");
+    return async.async(dart.void, function* greenNotification() {
+      awesome_notifications_core.AwesomeNotifications.new().setChannel(new notification_channel.NotificationChannel.new({channelKey: "colorful_notification", channelName: "Colorful notifications", channelDescription: "A green colorful notification", vibrationPattern: awesome_notifications.lowVibrationPattern, defaultColor: colors.Colors.lightGreen, ledColor: colors.Colors.lightGreen, ledOnMs: 1000, ledOffMs: 500}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "colorful_notification", title: "<font color=\"" + dart.str(colors.Colors.lightGreen.value) + "\">Green Notification</font>", body: "<font color='" + dart.str(colors.Colors.lightGreen.value) + "'>A colorful notification</font>", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-green"])}), actionButtons: T.JSArrayOfNotificationActionButton().of([new notification_button.NotificationActionButton.new({key: "REPLY", label: "Reply", autoDismissible: true, buttonType: action_button_type.ActionButtonType.InputField}), new notification_button.NotificationActionButton.new({key: "ARCHIVE", label: "Archive", autoDismissible: true})]), schedule: dart.test(delayLEDTests) ? new notification_interval.NotificationInterval.new({interval: 5}) : null});
+    });
+  };
+  notification_util.showCustomSoundNotification = function showCustomSoundNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 529, 46, "id");
+    return async.async(dart.void, function* showCustomSoundNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "custom_sound", title: "It's time to morph!", body: "It's time to go save the world!", notificationLayout: notification_layout.NotificationLayout.BigPicture, bigPicture: "asset://assets/images/fireman-hero.jpg", color: colors.Colors.yellow, payload: new (T.IdentityMapOfString$String()).from(["secret", "the green ranger and the white ranger are the same person"])})});
+    });
+  };
+  notification_util.showNotificationWithNoSound = function showNotificationWithNoSound(id) {
+    if (id == null) dart.nullFailed(I[0], 548, 46, "id");
+    return async.async(dart.void, function* showNotificationWithNoSound() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "silenced", title: "Silence, please!", body: "Shhhhhh!!!", notificationLayout: notification_layout.NotificationLayout.BigPicture, bigPicture: "https://image.freepik.com/fotos-gratis/medico-serio-mostrando-o-gesto-de-silencio_1262-17188.jpg", color: colors.Colors.blueGrey, payload: new (T.IdentityMapOfString$String()).from(["advice", "shhhhhhh"])})});
+    });
+  };
+  notification_util.showBigPictureNetworkNotification = function showBigPictureNetworkNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 566, 52, "id");
+    return async.async(dart.void, function* showBigPictureNetworkNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: 11, channelKey: "big_picture", title: "Big picture (Network)", body: dart.str(notification_util.lorenIpsumText) + "\n\n" + dart.str(notification_util.lorenIpsumText) + "\n\n" + dart.str(notification_util.lorenIpsumText), bigPicture: "https://media.wired.com/photos/598e35994ab8482c0d6946e0/master/w_2560%2Cc_limit/phonepicutres-TA.jpg", notificationLayout: notification_layout.NotificationLayout.BigPicture})});
+    });
+  };
+  notification_util.showBigPictureAssetNotification = function showBigPictureAssetNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 578, 50, "id");
+    return async.async(dart.void, function* showBigPictureAssetNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "big_picture", title: "Big picture (Asset)", body: dart.str(notification_util.lorenIpsumText) + "\n\n" + dart.str(notification_util.lorenIpsumText) + "\n\n" + dart.str(notification_util.lorenIpsumText), bigPicture: "asset://assets/images/balloons-in-sky.jpg", notificationLayout: notification_layout.NotificationLayout.BigPicture, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showBigPictureFileNotification = function showBigPictureFileNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 591, 49, "id");
+    return async.async(dart.void, function* showBigPictureFileNotification() {
+      let newFilePath = (yield common_functions.downloadAndSaveImageOnDisk("https://images.freeimages.com/images/large-previews/be7/puppy-2-1456421.jpg", "newTestImage.jpg"));
+      newFilePath = newFilePath[$replaceFirst]("/", "");
+      let finalFilePath = "file://" + dart.notNull(newFilePath);
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "big_picture", title: "Big picture (File)", body: dart.str(notification_util.lorenIpsumText) + "\n\n" + dart.str(notification_util.lorenIpsumText) + "\n\n" + dart.str(notification_util.lorenIpsumText), bigPicture: finalFilePath, notificationLayout: notification_layout.NotificationLayout.BigPicture, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showBigPictureResourceNotification = function showBigPictureResourceNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 611, 53, "id");
+    return async.async(dart.void, function* showBigPictureResourceNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "big_picture", title: "Big picture (Resource)", body: dart.str(notification_util.lorenIpsumText) + "\n\n" + dart.str(notification_util.lorenIpsumText) + "\n\n" + dart.str(notification_util.lorenIpsumText), bigPicture: "resource://drawable/res_mansion", notificationLayout: notification_layout.NotificationLayout.BigPicture, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showLargeIconNotification = function showLargeIconNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 623, 44, "id");
+    return async.async(dart.void, function* showLargeIconNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "big_picture", title: "Big picture title", body: dart.str(notification_util.lorenIpsumText) + "\n\n" + dart.str(notification_util.lorenIpsumText) + "\n\n" + dart.str(notification_util.lorenIpsumText), largeIcon: "https://image.freepik.com/vetores-gratis/modelo-de-logotipo-de-restaurante-retro_23-2148451519.jpg", notificationLayout: notification_layout.NotificationLayout.BigPicture, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showBigPictureAndLargeIconNotification = function showBigPictureAndLargeIconNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 636, 57, "id");
+    return async.async(dart.void, function* showBigPictureAndLargeIconNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "big_picture", title: "Big <b>BIG</b> picture title", summary: "Summary <i>text</i>", body: dart.str(notification_util.lorenIpsumText) + "<br><br>" + dart.str(notification_util.lorenIpsumText) + "<br><br>" + dart.str(notification_util.lorenIpsumText), largeIcon: "https://image.freepik.com/vetores-gratis/modelo-de-logotipo-de-restaurante-retro_23-2148451519.jpg", bigPicture: "https://media-cdn.tripadvisor.com/media/photo-s/15/dd/20/61/al-punto.jpg", notificationLayout: notification_layout.NotificationLayout.BigPicture, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showBigPictureNotificationActionButtons = function showBigPictureNotificationActionButtons(id) {
+    if (id == null) dart.nullFailed(I[0], 651, 58, "id");
+    return async.async(dart.void, function* showBigPictureNotificationActionButtons() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "big_picture", title: "Big <b>BIG</b> picture title", summary: "Summary <i>text</i>", body: dart.str(notification_util.lorenIpsumText) + "<br><br>" + dart.str(notification_util.lorenIpsumText) + "<br><br>" + dart.str(notification_util.lorenIpsumText), largeIcon: "https://image.freepik.com/vetores-gratis/modelo-de-logotipo-de-restaurante-retro_23-2148451519.jpg", bigPicture: "https://media-cdn.tripadvisor.com/media/photo-s/15/dd/20/61/al-punto.jpg", notificationLayout: notification_layout.NotificationLayout.BigPicture, color: colors.Colors.indigoAccent, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])}), actionButtons: T.JSArrayOfNotificationActionButton().of([new notification_button.NotificationActionButton.new({key: "READ", label: "Mark as read", autoDismissible: true}), new notification_button.NotificationActionButton.new({key: "REMEMBER", label: "Remember-me later", autoDismissible: false})])});
+    });
+  };
+  notification_util.showBigPictureNotificationActionButtonsAndReply = function showBigPictureNotificationActionButtonsAndReply(id) {
+    if (id == null) dart.nullFailed(I[0], 673, 66, "id");
+    return async.async(dart.void, function* showBigPictureNotificationActionButtonsAndReply() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "big_picture", title: "Big <b>BIG</b> picture title", summary: "Summary <i>text</i>", body: dart.str(notification_util.lorenIpsumText) + "<br><br>" + dart.str(notification_util.lorenIpsumText) + "<br><br>" + dart.str(notification_util.lorenIpsumText), largeIcon: "https://image.freepik.com/vetores-gratis/modelo-de-logotipo-de-restaurante-retro_23-2148451519.jpg", bigPicture: "https://media-cdn.tripadvisor.com/media/photo-s/15/dd/20/61/al-punto.jpg", notificationLayout: notification_layout.NotificationLayout.BigPicture, color: colors.Colors.indigoAccent, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])}), actionButtons: T.JSArrayOfNotificationActionButton().of([new notification_button.NotificationActionButton.new({key: "REPLY", label: "Reply", autoDismissible: true, buttonType: action_button_type.ActionButtonType.InputField}), new notification_button.NotificationActionButton.new({key: "REMEMBER", label: "Remember-me later", autoDismissible: true})])});
+    });
+  };
+  notification_util.showBigPictureNotificationHideExpandedLargeIcon = function showBigPictureNotificationHideExpandedLargeIcon(id) {
+    if (id == null) dart.nullFailed(I[0], 698, 66, "id");
+    return async.async(dart.void, function* showBigPictureNotificationHideExpandedLargeIcon() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "big_picture", title: "Big <b>BIG</b> picture title", summary: "Summary <i>text</i>", body: dart.str(notification_util.lorenIpsumText) + "<br><br>" + dart.str(notification_util.lorenIpsumText) + "<br><br>" + dart.str(notification_util.lorenIpsumText), hideLargeIconOnExpand: true, largeIcon: "https://img.itdg.com.br/tdg/images/blog/uploads/2019/05/hamburguer.jpg", bigPicture: "https://img.itdg.com.br/tdg/images/blog/uploads/2019/05/hamburguer.jpg", notificationLayout: notification_layout.NotificationLayout.BigPicture, color: colors.Colors.indigoAccent, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showBigTextNotification = function showBigTextNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 719, 42, "id");
+    return async.async(dart.void, function* showBigTextNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "big_text", title: "Big text title", body: dart.str(notification_util.lorenIpsumText) + "\n\n" + dart.str(notification_util.lorenIpsumText) + "\n\n" + dart.str(notification_util.lorenIpsumText), notificationLayout: notification_layout.NotificationLayout.BigText, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showBigTextNotificationWithDifferentSummary = function showBigTextNotificationWithDifferentSummary(id) {
+    if (id == null) dart.nullFailed(I[0], 730, 62, "id");
+    return async.async(dart.void, function* showBigTextNotificationWithDifferentSummary() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "big_text", title: "Big text title", summary: "Notification summary loren ipsum", body: dart.str(notification_util.lorenIpsumText) + "\n\n" + dart.str(notification_util.lorenIpsumText) + "\n\n" + dart.str(notification_util.lorenIpsumText), notificationLayout: notification_layout.NotificationLayout.BigText, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showBigTextHtmlNotification = function showBigTextHtmlNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 742, 46, "id");
+    return async.async(dart.void, function* showBigTextHtmlNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "big_text", title: "Big <b>BIG</b> text title", summary: "Summary <i>text</i>", body: dart.str(notification_util.lorenIpsumText) + "<br><br>" + dart.str(notification_util.lorenIpsumText) + "<br><br>" + dart.str(notification_util.lorenIpsumText), notificationLayout: notification_layout.NotificationLayout.BigText, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showBigTextNotificationWithActionAndReply = function showBigTextNotificationWithActionAndReply(id) {
+    if (id == null) dart.nullFailed(I[0], 754, 60, "id");
+    return async.async(dart.void, function* showBigTextNotificationWithActionAndReply() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "big_text", title: "Big <b>BIG</b> text title", summary: "Summary <i>text</i>", body: dart.str(notification_util.lorenIpsumText) + "<br><br>" + dart.str(notification_util.lorenIpsumText) + "<br><br>" + dart.str(notification_util.lorenIpsumText), color: colors.Colors.indigoAccent, notificationLayout: notification_layout.NotificationLayout.BigText, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])}), actionButtons: T.JSArrayOfNotificationActionButton().of([new notification_button.NotificationActionButton.new({key: "REPLY", label: "Reply", autoDismissible: true, buttonType: action_button_type.ActionButtonType.InputField}), new notification_button.NotificationActionButton.new({key: "REMEMBER", label: "Remember-me later", autoDismissible: true})])});
+    });
+  };
+  notification_util.updateNotificationMediaPlayer = function updateNotificationMediaPlayer(id, mediaNow) {
+    if (id == null) dart.nullFailed(I[0], 780, 40, "id");
+    if (mediaNow == null) {
+      notification_util.cancelNotification(id);
+      return;
+    }
+    awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "media_player", title: mediaNow.bandName, body: mediaNow.trackName, summary: dart.test(media_player_central.MediaPlayerCentral.isPlaying) ? "Now playing" : "", notificationLayout: notification_layout.NotificationLayout.MediaPlayer, largeIcon: mediaNow.diskImagePath, color: colors.Colors.purple.shade700, autoDismissible: false, showWhen: false}), actionButtons: T.JSArrayOfNotificationActionButton().of([new notification_button.NotificationActionButton.new({key: "MEDIA_PREV", icon: "resource://drawable/res_ic_prev" + (dart.test(media_player_central.MediaPlayerCentral.hasPreviousMedia) ? "" : "_disabled"), label: "Previous", autoDismissible: false, enabled: media_player_central.MediaPlayerCentral.hasPreviousMedia, buttonType: action_button_type.ActionButtonType.KeepOnTop}), dart.test(media_player_central.MediaPlayerCentral.isPlaying) ? new notification_button.NotificationActionButton.new({key: "MEDIA_PAUSE", icon: "resource://drawable/res_ic_pause", label: "Pause", autoDismissible: false, buttonType: action_button_type.ActionButtonType.KeepOnTop}) : new notification_button.NotificationActionButton.new({key: "MEDIA_PLAY", icon: "resource://drawable/res_ic_play" + (dart.test(media_player_central.MediaPlayerCentral.hasAnyMedia) ? "" : "_disabled"), label: "Play", autoDismissible: false, enabled: media_player_central.MediaPlayerCentral.hasAnyMedia, buttonType: action_button_type.ActionButtonType.KeepOnTop}), new notification_button.NotificationActionButton.new({key: "MEDIA_NEXT", icon: "resource://drawable/res_ic_next" + (dart.test(media_player_central.MediaPlayerCentral.hasNextMedia) ? "" : "_disabled"), label: "Previous", enabled: media_player_central.MediaPlayerCentral.hasNextMedia, buttonType: action_button_type.ActionButtonType.KeepOnTop}), new notification_button.NotificationActionButton.new({key: "MEDIA_CLOSE", icon: "resource://drawable/res_ic_close", label: "Close", autoDismissible: true, buttonType: action_button_type.ActionButtonType.KeepOnTop})])});
+  };
+  notification_util.showInboxNotification = function showInboxNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 842, 40, "id");
+    return async.async(dart.void, function* showInboxNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "inbox", title: "5 New mails from tester@gmail.com", body: "<b>You are our 10.000 visitor! Congratz!</b> You just won our prize" + "\n" + "<b>Want to loose weight?</b> Are you tired from false advertisements? " + "\n" + "<b>READ MY MESSAGE</b> Stop to ignore me!" + "\n" + "<b>READ MY MESSAGE</b> Stop to ignore me!" + "\n" + "<b>READ MY MESSAGE</b> Stop to ignore me!" + "\n" + "<b>READ MY MESSAGE</b> Stop to ignore me!" + "\n" + "<b>READ MY MESSAGE</b> Stop to ignore me!" + "\n" + "<b>READ MY MESSAGE</b> Stop to ignore me!" + "\n" + "<b>READ MY MESSAGE</b> Stop to ignore me!" + "\n" + "<b>READ MY MESSAGE</b> Stop to ignore me!" + "\n" + "<b>READ MY MESSAGE</b> Stop to ignore me!" + "\n" + "<b>READ MY MESSAGE</b> Stop to ignore me!" + "\n" + "<b>READ MY MESSAGE</b> Stop to ignore me!" + "\n" + "<b>READ MY MESSAGE</b> Stop to ignore me!", summary: "E-mail inbox", largeIcon: "https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/366-mj-7703-fon-jj.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=d144b28b5ebf828b7d2a1bb5b31efdb6", notificationLayout: notification_layout.NotificationLayout.Inbox, payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])}), actionButtons: T.JSArrayOfNotificationActionButton().of([new notification_button.NotificationActionButton.new({key: "DISMISS", label: "Dismiss", buttonType: action_button_type.ActionButtonType.DisabledAction, autoDismissible: true, icon: "resource://drawable/res_ic_close"}), new notification_button.NotificationActionButton.new({key: "READ", label: "Mark as read", autoDismissible: true})])});
+    });
+  };
+  notification_util.showGroupedNotifications = function showGroupedNotifications(id) {
+    return async.async(dart.void, function* showGroupedNotifications() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: 1, channelKey: "grouped", title: "Little Jhonny", body: "Hey dude! Look what i found!"})});
+      io.sleep(new core.Duration.new({seconds: 2}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: 2, channelKey: "grouped", title: "Cyclano", body: "What?"})});
+      io.sleep(new core.Duration.new({seconds: 2}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: 3, channelKey: "grouped", title: "Little Jhonny", body: "This push notifications plugin is amazing!"})});
+      io.sleep(new core.Duration.new({seconds: 2}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: 4, channelKey: "grouped", title: "Little Jhonny", body: "Its perfect!"})});
+      io.sleep(new core.Duration.new({seconds: 2}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: 5, channelKey: "grouped", title: "Little Jhonny", body: "I gonna contribute with the project! For sure!"})});
+    });
+  };
+  notification_util.listScheduledNotifications = function listScheduledNotifications(context) {
+    if (context == null) dart.nullFailed(I[0], 948, 54, "context");
+    return async.async(dart.void, function* listScheduledNotifications() {
+      let activeSchedules = (yield awesome_notifications_core.AwesomeNotifications.new().listScheduledNotifications());
+      for (let schedule of activeSchedules) {
+        print.debugPrint("pending notification: [id: " + dart.str(dart.nullCheck(schedule.content).id) + ", title: " + dart.str(dart.nullCheck(schedule.content).titleWithoutHtml) + ", schedule: " + dart.str(dart.toString(schedule.schedule)) + "]");
+      }
+      return dialog.showDialog(dart.void, {context: context, builder: dart.fn(context => {
+          if (context == null) dart.nullFailed(I[0], 957, 28, "context");
+          return new dialog.AlertDialog.new({content: new text.Text.new(dart.str(activeSchedules[$length]) + " schedules founded", {$creationLocationd_0dea112b090073317d4: C[0] || CT.C0}), actions: T.JSArrayOfWidget().of([new text_button.TextButton.new({child: new text.Text.new("OK", {$creationLocationd_0dea112b090073317d4: C[3] || CT.C3}), onPressed: dart.fn(() => {
+                  navigator.Navigator.of(context).pop(T.ObjectN());
+                }, T.VoidTovoid()), $creationLocationd_0dea112b090073317d4: C[6] || CT.C6})]), $creationLocationd_0dea112b090073317d4: C[10] || CT.C10});
+        }, T.BuildContextToAlertDialog())});
+    });
+  };
+  notification_util.repeatMinuteNotification = function repeatMinuteNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 973, 43, "id");
+    return async.async(dart.void, function* repeatMinuteNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "scheduled", title: "Notification at every single minute", body: "This notification was schedule to repeat at every single minute.", notificationLayout: notification_layout.NotificationLayout.BigPicture, bigPicture: "asset://assets/images/melted-clock.png"}), schedule: new notification_interval.NotificationInterval.new({interval: 60})});
+    });
+  };
+  notification_util.repeatMinuteNotificationOClock = function repeatMinuteNotificationOClock(id) {
+    if (id == null) dart.nullFailed(I[0], 1002, 49, "id");
+    return async.async(dart.void, function* repeatMinuteNotificationOClock() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "scheduled", title: "Notification at exactly every single minute", body: "This notification was schedule to repeat at every single minute at clock.", notificationLayout: notification_layout.NotificationLayout.BigPicture, bigPicture: "asset://assets/images/melted-clock.png"}), schedule: new notification_calendar.NotificationCalendar.new({second: 0, repeats: true})});
+    });
+  };
+  notification_util.showNotificationAtScheduleCron = function showNotificationAtScheduleCron(id, scheduleTime) {
+    if (id == null) dart.nullFailed(I[0], 1016, 9, "id");
+    if (scheduleTime == null) dart.nullFailed(I[0], 1016, 22, "scheduleTime");
+    return async.async(dart.void, function* showNotificationAtScheduleCron() {
+      let t0, t0$;
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "scheduled", title: "Just in time!", body: "This notification was schedule to shows at " + dart.notNull((t0 = date_utils.DateUtils.parseDateToString(scheduleTime.toLocal()), t0 == null ? "?" : t0)) + "(" + dart.notNull((t0$ = date_utils.DateUtils.parseDateToString(scheduleTime.toUtc()), t0$ == null ? "?" : t0$)) + " utc)", notificationLayout: notification_layout.NotificationLayout.BigPicture, bigPicture: "asset://assets/images/delivery.jpeg", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"]), autoDismissible: false}), schedule: new notification_calendar.NotificationCalendar.fromDate({date: scheduleTime.toUtc()})});
+    });
+  };
+  notification_util.showNotificationWithNoBadge = function showNotificationWithNoBadge(id) {
+    if (id == null) dart.nullFailed(I[0], 1051, 46, "id");
+    return async.async(dart.void, function* showNotificationWithNoBadge() {
+      awesome_notifications_core.AwesomeNotifications.new().setChannel(new notification_channel.NotificationChannel.new({channelKey: "no_badge", channelName: "No Badge Notifications", channelDescription: "Notifications with no badge", channelShowBadge: false}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "no_badge", title: "no badge title", body: "no badge body", payload: new (T.IdentityMapOfString$String()).from(["uuid", "uuid-test"])})});
+    });
+  };
+  notification_util.showProgressNotification = function showProgressNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 1067, 43, "id");
+    return async.async(dart.void, function* showProgressNotification() {
+      let maxStep = 10;
+      for (let simulatedStep = 1; simulatedStep <= maxStep + 1; simulatedStep = simulatedStep + 1) {
+        yield T.FutureOfNull().delayed(new core.Duration.new({seconds: 1}), dart.fn(() => async.async(core.Null, function*() {
+          if (simulatedStep > maxStep) {
+            yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "progress_bar", title: "Download finished", body: "filename.txt", payload: new (T.IdentityMapOfString$String()).from(["file", "filename.txt", "path", "-rmdir c://ruwindows/system32/huehuehue"]), locked: false})});
+          } else {
+            yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "progress_bar", title: "Downloading fake file in progress (" + dart.str(simulatedStep) + " of " + dart.str(maxStep) + ")", body: "filename.txt", payload: new (T.IdentityMapOfString$String()).from(["file", "filename.txt", "path", "-rmdir c://ruwindows/system32/huehuehue"]), notificationLayout: notification_layout.NotificationLayout.ProgressBar, progress: math.min(core.int, (simulatedStep / maxStep * 100)[$round](), 100), locked: true})});
+          }
+        }), T.VoidToFutureOfNull()));
+      }
+    });
+  };
+  notification_util.showIndeterminateProgressNotification = function showIndeterminateProgressNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 1103, 56, "id");
+    return async.async(dart.void, function* showIndeterminateProgressNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "progress_bar", title: "Downloading fake file...", body: "filename.txt", payload: new (T.IdentityMapOfString$String()).from(["file", "filename.txt", "path", "-rmdir c://ruwindows/system32/huehuehue"]), notificationLayout: notification_layout.NotificationLayout.ProgressBar, progress: null, locked: true})});
+    });
+  };
+  notification_util.showNotificationWithUpdatedChannelDescription = function showNotificationWithUpdatedChannelDescription(id) {
+    if (id == null) dart.nullFailed(I[0], 1119, 64, "id");
+    return async.async(dart.void, function* showNotificationWithUpdatedChannelDescription() {
+      awesome_notifications_core.AwesomeNotifications.new().setChannel(new notification_channel.NotificationChannel.new({channelKey: "updated_channel", channelName: "Channel to update (updated)", channelDescription: "Notifications with updated channel"}));
+      yield awesome_notifications_core.AwesomeNotifications.new().createNotification({content: new notification_content.NotificationContent.new({id: id, channelKey: "updated_channel", title: "updated notification channel", body: "check settings to see updated channel description", payload: new (T.IdentityMapOfString$String()).from(["uuid", "0123456789"])})});
+    });
+  };
+  notification_util.removeChannel = function removeChannel() {
+    return async.async(dart.void, function* removeChannel() {
+      awesome_notifications_core.AwesomeNotifications.new().removeChannel("updated_channel");
+    });
+  };
+  notification_util.cancelSchedule = function cancelSchedule(id) {
+    if (id == null) dart.nullFailed(I[0], 1138, 33, "id");
+    return async.async(dart.void, function* cancelSchedule() {
+      yield awesome_notifications_core.AwesomeNotifications.new().cancelSchedule(id);
+    });
+  };
+  notification_util.cancelAllSchedules = function cancelAllSchedules() {
+    return async.async(dart.void, function* cancelAllSchedules() {
+      yield awesome_notifications_core.AwesomeNotifications.new().cancelAllSchedules();
+    });
+  };
+  notification_util.cancelNotification = function cancelNotification(id) {
+    if (id == null) dart.nullFailed(I[0], 1146, 37, "id");
+    return async.async(dart.void, function* cancelNotification() {
+      yield awesome_notifications_core.AwesomeNotifications.new().cancel(id);
+    });
+  };
+  notification_util.cancelAllNotifications = function cancelAllNotifications() {
+    return async.async(dart.void, function* cancelAllNotifications() {
+      yield awesome_notifications_core.AwesomeNotifications.new().cancelAll();
+    });
+  };
+  notification_util.toTwoDigitString = function toTwoDigitString(value) {
+    if (value == null) dart.nullFailed(I[0], 1154, 29, "value");
+    return dart.toString(value)[$padLeft](2, "0");
+  };
+  dart.defineLazy(notification_util, {
+    /*notification_util.lorenIpsumText*/get lorenIpsumText() {
+      return "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut " + "labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip " + "ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat " + "nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit" + "anim id est laborum";
+    },
+    set lorenIpsumText(_) {}
+  }, false);
+  dart.trackLibraries("packages/awesome_notifications_example/utils/notification_util.dart", {
+    "package:awesome_notifications_example/utils/notification_util.dart": notification_util
+  }, {
+  }, '{"version":3,"sourceRoot":"","sources":["notification_util.dart"],"names":[],"mappings":"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AACY,MAAtB,qCAAmB,EAAE;AACrB;;AAoDI,IAjDN,AAAuB,mFACV,sDACD,EAAE,cACM,uBACL,AAAS,QAAD,iBACT,AAAS,QAAD,+BACc,qDAAY,gBAAgB,wBACjB,+DAC5B,AAAS,QAAD,uBACL,AAAO,2CACT,iBACF,wBACC,0CACb,2DACS,oBACC,AAAkC,+CAChB,4DAAmB,KAAK,qBACzC,wBACK,gBACgB,sEACC,2DACd,qDACb,2DACO,qBACC,2CACC,qBACK,mBACiB,kDAC/B,2DACO,oBACC,AAAkC,+CAChB,uDAAc,KAAK,qBACpC,oBACK,gBACgB,iEACC,iDACrC,2DACS,oBACC,AAAkC,+CAChB,wDAAe,KAAK,qBACrC,qBACqB,kEACC,iDACjC,2DACS,qBACC,2CACC,qBACK,kBACiB;EAEzC;;QAMuC;AAAL;AAqD1B,MApDN,MAAM,AAAuB,mFAChB,sDACH,EAAE,cACM,gBACL,2CACH,AACA,wEACA,OACA,2EACA,OACA,8CACA,OACA,8CACA,OACA,8CACA,OACA,8CACA,OACA,8CACA,OACA,8CACA,OACA,8CACA,OACA,8CACA,OACA,8CACA,OACA,8CACA,OACA,8CACA,OACA,sDACK,2BAEL,6OACmC,uDAC9B,2CAAC,QAAQ,gCAEL,0CACb,2DACS,kBACE,uBACsB,gEACjB,YACN,sCACV,2DACO,eACE,4BACK;IAItB;;iFAMsC;AAAD;AAMW,MAL9C,MAAM,AAAuB,mFAChB,sDACD,eACQ,kBACL,uBACD;AAEa,MAA3B,SAAM,gCAAkB;AAI+C,MAFvE,MAAM,AAAuB,mFAChB,sDACD,eAAe,kBAAkB,iBAAiB;AAEnC,MAA3B,SAAM,gCAAkB;AAOoC,MAL5D,MAAM,AAAuB,mFAChB,sDACD,eACQ,kBACL,uBACD;AAEa,MAA3B,SAAM,gCAAkB;AAOM,MAL9B,MAAM,AAAuB,mFAChB,sDACD,eACQ,kBACL,uBACD;AAEa,MAA3B,SAAM,gCAAkB;AAOwC,MALhE,MAAM,AAAuB,mFAChB,sDACD,eACQ,kBACL,uBACD;IAChB;;;QAMqD;AAAd;AACd,6BACnB,MAAM,AAAuB;AACjC,eAAsB,WAAY,gBAAe;AAEoG,QADnJ,AAAU,iBACN,AAA8I,yCAAhG,AAAE,eAAlB,AAAS,QAAD,gBAAa,uBAA2B,AAAE,eAAlB,AAAS,QAAD,8BAA2B,0BAAgC,cAAlB,AAAS,QAAD,cAAqB;;AAElJ,YAAO,wCACI,OAAO,WACP;cAAc;AACrB,gBAAO,sCACI,kBAAkD,SAA1C,AAAgB,eAAD,aAAQ,yFAC/B,wBACP,uCACS,kBAAK,2EACD;AACkB,kBAAjB,AAAY,uBAAT,OAAO;;;IAOlC;;;QAE0C;AAAL;AAUc,MATjD,MAAM,AAAuB,mFAChB,sDACD,EAAE,cACM,oBACL,6CAEH,wFACmC,+DAC3B,sDACN,8DAA+B;IAC/C;;;QAkBgD;AAAL;AAUoB,MAT7D,MAAM,AAAuB,mFAChB,sDACD,EAAE,cACM,oBACL,qDAEH,iGACmC,+DAC3B,sDACN,4DAA6B,YAAY;IACzD;;6FAGQ,IAAa;QAAb;QAAa;AADsB;;AAiB+B,MAfxE,MAAM,AAAuB,mFAChB,sDACH,EAAE,cACM,oBACL,uBACD,AAA8C,AACmB,AAC/D,AAC6D,8DAFN,KAA1C,uCAAkB,AAAa,YAAD,aAA9B,aAA6C,aAC9D,oBACyD,MAAxC,uCAAkB,AAAa,YAAD,WAA9B,cAA2C,cAC5D,6BACmC,+DAC3B,gDACH,2CAAC,QAAQ,2BACN,mBAEiB,+DAAe,AAAa,YAAD;IAChE;;;QAkB6C;AAAL;AAKT,MAJ7B,AAAuB,iEAAW,8DAClB,yBACC,8CACO,iDACF;AAQkB,MANxC,MAAM,AAAuB,mFAChB,sDACD,EAAE,cACM,mBACL,wBACD,0BACG,2CAAC,QAAQ;IAC5B;;;QAE0C;AAAL;AAC/B,oBAAU;AACd,eAAS,gBAAgB,GAAG,AAAc,aAAD,IAAI,AAAQ,OAAD,GAAG,GAAG,gBAAA,AAAa,aAAA;AA8BnE,QA7BF,MAAa,yBAAQ,gCAAkB,KAAI;AACzC,cAAI,AAAc,aAAD,GAAG,OAAO;AAWF,YAVvB,MAAM,AAAuB,mFAChB,sDACD,EAAE,cACM,uBACL,2BACD,yBACG,2CACP,QAAQ,gBACR,QAAQ,qDAEF;;AAeM,YAbtB,MAAM,AAAuB,mFAChB,sDACD,EAAE,cACM,uBAER,AAAgE,iDAA3B,aAAa,sBAAK,OAAO,eAC5D,yBACG,2CACP,QAAQ,gBACR,QAAQ,iEAE6B,8DAC7B,mBAAoC,CAA/B,AAAc,AAAU,aAAX,GAAG,OAAO,GAAG,gBAAc,cAC/C;;QAEnB;;IAEL;;;QAEuD;AAAL;AAa1B,MAZtB,MAAM,AAAuB,mFAChB,sDACD,EAAE,cACM,uBACL,kCACD,yBACG,2CACP,QAAQ,gBACR,QAAQ,iEAE6B,8DAC7B,cACF;IAClB;;;QAE+D;AAAL;AAIM,MAH9D,AAAuB,iEAAW,8DAClB,gCACC,mDACO;AAQiB,MANzC,MAAM,AAAuB,mFAChB,sDACD,EAAE,cACM,0BACL,sCACD,8DACG,2CAAC,QAAQ;IAC5B;;;AAE0B;AAC+B,MAAvD,AAAuB,oEAAc;IACvC;;;QAEgC;AAAL;AACsB,MAA/C,MAAM,AAAuB,qEAAe,EAAE;IAChD;;;AAE+B;AACoB,MAAjD,MAAM,AAAuB;IAC/B;;;QAEoC;AAAL;AACU,MAAvC,MAAM,AAAuB,6DAAO,EAAE;IACxC;;;AAEmC;AACO,MAAxC,MAAM,AAAuB;IAC/B;;;QAE4B;AAC1B,UAAa,AAAW,eAAjB,KAAK,YAAoB,GAAG;EACrC;;MA7mCO,gCAAc;YAAC,AAClB,mGACA,uHACA,qHACA,8GACA","file":"../../../../../packages/awesome_notifications_example/utils/notification_util.dart.lib.js"}');
+  // Exports:
+  return {
+    utils__notification_util: notification_util
+  };
+}));
+
+//# sourceMappingURL=notification_util.dart.lib.js.map

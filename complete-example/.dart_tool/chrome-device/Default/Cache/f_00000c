@@ -1,0 +1,975 @@
+define(['dart_sdk', 'packages/flutter/src/painting/basic_types.dart', 'packages/flutter/src/widgets/widget_span.dart', 'packages/flutter/src/painting/strut_style.dart', 'packages/flutter/src/painting/decoration.dart', 'packages/infinite_listview/infinite_listview.dart', 'packages/flutter/src/services/haptic_feedback.dart', 'packages/flutter/src/painting/edge_insets.dart', 'packages/flutter/src/widgets/scroll_view.dart', 'packages/flutter/src/material/icon_button.dart', 'packages/flutter/src/painting/alignment.dart', 'packages/flutter/src/animation/curves.dart'], (function load__packages__numberpicker__src__numberpicker_dart(dart_sdk, packages__flutter__src__painting__basic_types$46dart, packages__flutter__src__widgets__widget_span$46dart, packages__flutter__src__painting__strut_style$46dart, packages__flutter__src__painting__decoration$46dart, packages__infinite_listview__infinite_listview$46dart, packages__flutter__src__services__haptic_feedback$46dart, packages__flutter__src__painting__edge_insets$46dart, packages__flutter__src__widgets__scroll_view$46dart, packages__flutter__src__material__icon_button$46dart, packages__flutter__src__painting__alignment$46dart, packages__flutter__src__animation__curves$46dart) {
+  'use strict';
+  const core = dart_sdk.core;
+  const _internal = dart_sdk._internal;
+  const async = dart_sdk.async;
+  const _interceptors = dart_sdk._interceptors;
+  const dart = dart_sdk.dart;
+  const dartx = dart_sdk.dartx;
+  const basic_types = packages__flutter__src__painting__basic_types$46dart.src__painting__basic_types;
+  const framework = packages__flutter__src__widgets__widget_span$46dart.src__widgets__framework;
+  const scroll_controller = packages__flutter__src__widgets__widget_span$46dart.src__widgets__scroll_controller;
+  const basic = packages__flutter__src__widgets__widget_span$46dart.src__widgets__basic;
+  const notification_listener = packages__flutter__src__widgets__widget_span$46dart.src__widgets__notification_listener;
+  const scroll_notification = packages__flutter__src__widgets__widget_span$46dart.src__widgets__scroll_notification;
+  const widget_inspector = packages__flutter__src__widgets__widget_span$46dart.src__widgets__widget_inspector;
+  const text = packages__flutter__src__widgets__widget_span$46dart.src__widgets__text;
+  const container = packages__flutter__src__widgets__widget_span$46dart.src__widgets__container;
+  const text_style = packages__flutter__src__painting__strut_style$46dart.src__painting__text_style;
+  const decoration = packages__flutter__src__painting__decoration$46dart.src__painting__decoration;
+  const infinite_listview = packages__infinite_listview__infinite_listview$46dart.infinite_listview;
+  const haptic_feedback = packages__flutter__src__services__haptic_feedback$46dart.src__services__haptic_feedback;
+  const edge_insets = packages__flutter__src__painting__edge_insets$46dart.src__painting__edge_insets;
+  const scroll_view = packages__flutter__src__widgets__scroll_view$46dart.src__widgets__scroll_view;
+  const theme = packages__flutter__src__material__icon_button$46dart.src__material__theme;
+  const alignment = packages__flutter__src__painting__alignment$46dart.src__painting__alignment;
+  const curves = packages__flutter__src__animation__curves$46dart.src__animation__curves;
+  var numberpicker = Object.create(dart.library);
+  var $truncate = dartx.truncate;
+  var $round = dartx.round;
+  var $modulo = dartx['%'];
+  var $clamp = dartx.clamp;
+  var $add = dartx.add;
+  var $toString = dartx.toString;
+  var $padLeft = dartx.padLeft;
+  var $floor = dartx.floor;
+  dart._checkModuleNullSafetyMode(true);
+  var T = {
+    FutureOfvoid: () => (T.FutureOfvoid = dart.constFn(async.Future$(dart.void)))(),
+    VoidTovoid: () => (T.VoidTovoid = dart.constFn(dart.fnType(dart.void, [])))(),
+    NotificationListenerOfScrollEndNotification: () => (T.NotificationListenerOfScrollEndNotification = dart.constFn(notification_listener.NotificationListener$(scroll_notification.ScrollEndNotification)))(),
+    ScrollEndNotificationTobool: () => (T.ScrollEndNotificationTobool = dart.constFn(dart.fnType(core.bool, [scroll_notification.ScrollEndNotification])))(),
+    JSArrayOfWidget: () => (T.JSArrayOfWidget = dart.constFn(_interceptors.JSArray$(framework.Widget)))()
+  };
+  var T$Eval = Object.assign({
+    _: () => T$Eval
+  }, T);
+  var S = {
+    _: () => S
+  };
+  var S$Eval = Object.assign({
+    _: () => S$Eval
+  }, S);
+  const CT = Object.create({
+    _: () => (C, CT)
+  });
+  dart.defineLazy(CT, {
+    get C0() {
+      return C[0] = dart.const({
+        __proto__: basic_types.Axis.prototype,
+        [_name]: "Axis.vertical",
+        index: 1
+      });
+    },
+    get C3() {
+      return C[3] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "scrollDirection",
+        [_Location_column]: 17,
+        [_Location_line]: 170,
+        [_Location_file]: null
+      });
+    },
+    get C4() {
+      return C[4] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "controller",
+        [_Location_column]: 17,
+        [_Location_line]: 171,
+        [_Location_file]: null
+      });
+    },
+    get C5() {
+      return C[5] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "itemExtent",
+        [_Location_column]: 17,
+        [_Location_line]: 172,
+        [_Location_file]: null
+      });
+    },
+    get C6() {
+      return C[6] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "itemBuilder",
+        [_Location_column]: 17,
+        [_Location_line]: 173,
+        [_Location_file]: null
+      });
+    },
+    get C7() {
+      return C[7] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "padding",
+        [_Location_column]: 17,
+        [_Location_line]: 174,
+        [_Location_file]: null
+      });
+    },
+    get C2() {
+      return C[2] = dart.constList([C[3] || CT.C3, C[4] || CT.C4, C[5] || CT.C5, C[6] || CT.C6, C[7] || CT.C7], widget_inspector._Location);
+    },
+    get C1() {
+      return C[1] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[2] || CT.C2,
+        [_Location_name]: null,
+        [_Location_column]: 32,
+        [_Location_line]: 169,
+        [_Location_file]: "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/numberpicker-2.1.1/lib/src/numberpicker.dart"
+      });
+    },
+    get C10() {
+      return C[10] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "itemCount",
+        [_Location_column]: 17,
+        [_Location_line]: 178,
+        [_Location_file]: null
+      });
+    },
+    get C11() {
+      return C[11] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "scrollDirection",
+        [_Location_column]: 17,
+        [_Location_line]: 179,
+        [_Location_file]: null
+      });
+    },
+    get C12() {
+      return C[12] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "controller",
+        [_Location_column]: 17,
+        [_Location_line]: 180,
+        [_Location_file]: null
+      });
+    },
+    get C13() {
+      return C[13] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "itemExtent",
+        [_Location_column]: 17,
+        [_Location_line]: 181,
+        [_Location_file]: null
+      });
+    },
+    get C14() {
+      return C[14] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "itemBuilder",
+        [_Location_column]: 17,
+        [_Location_line]: 182,
+        [_Location_file]: null
+      });
+    },
+    get C15() {
+      return C[15] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "padding",
+        [_Location_column]: 17,
+        [_Location_line]: 183,
+        [_Location_file]: null
+      });
+    },
+    get C9() {
+      return C[9] = dart.constList([C[10] || CT.C10, C[11] || CT.C11, C[12] || CT.C12, C[13] || CT.C13, C[14] || CT.C14, C[15] || CT.C15], widget_inspector._Location);
+    },
+    get C8() {
+      return C[8] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[9] || CT.C9,
+        [_Location_name]: null,
+        [_Location_column]: 24,
+        [_Location_line]: 177,
+        [_Location_file]: "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/numberpicker-2.1.1/lib/src/numberpicker.dart"
+      });
+    },
+    get C18() {
+      return C[18] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "axis",
+        [_Location_column]: 15,
+        [_Location_line]: 186,
+        [_Location_file]: null
+      });
+    },
+    get C19() {
+      return C[19] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "itemExtent",
+        [_Location_column]: 15,
+        [_Location_line]: 187,
+        [_Location_file]: null
+      });
+    },
+    get C20() {
+      return C[20] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "decoration",
+        [_Location_column]: 15,
+        [_Location_line]: 188,
+        [_Location_file]: null
+      });
+    },
+    get C17() {
+      return C[17] = dart.constList([C[18] || CT.C18, C[19] || CT.C19, C[20] || CT.C20], widget_inspector._Location);
+    },
+    get C16() {
+      return C[16] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[17] || CT.C17,
+        [_Location_name]: null,
+        [_Location_column]: 13,
+        [_Location_line]: 185,
+        [_Location_file]: "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/numberpicker-2.1.1/lib/src/numberpicker.dart"
+      });
+    },
+    get C23() {
+      return C[23] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "children",
+        [_Location_column]: 11,
+        [_Location_line]: 167,
+        [_Location_file]: null
+      });
+    },
+    get C22() {
+      return C[22] = dart.constList([C[23] || CT.C23], widget_inspector._Location);
+    },
+    get C21() {
+      return C[21] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[22] || CT.C22,
+        [_Location_name]: null,
+        [_Location_column]: 16,
+        [_Location_line]: 166,
+        [_Location_file]: "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/numberpicker-2.1.1/lib/src/numberpicker.dart"
+      });
+    },
+    get C26() {
+      return C[26] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onNotification",
+        [_Location_column]: 9,
+        [_Location_line]: 160,
+        [_Location_file]: null
+      });
+    },
+    get C27() {
+      return C[27] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 9,
+        [_Location_line]: 166,
+        [_Location_file]: null
+      });
+    },
+    get C25() {
+      return C[25] = dart.constList([C[26] || CT.C26, C[27] || CT.C27], widget_inspector._Location);
+    },
+    get C24() {
+      return C[24] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[25] || CT.C25,
+        [_Location_name]: null,
+        [_Location_column]: 14,
+        [_Location_line]: 159,
+        [_Location_file]: "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/numberpicker-2.1.1/lib/src/numberpicker.dart"
+      });
+    },
+    get C30() {
+      return C[30] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "width",
+        [_Location_column]: 7,
+        [_Location_line]: 153,
+        [_Location_file]: null
+      });
+    },
+    get C31() {
+      return C[31] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "height",
+        [_Location_column]: 7,
+        [_Location_line]: 156,
+        [_Location_file]: null
+      });
+    },
+    get C32() {
+      return C[32] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 7,
+        [_Location_line]: 159,
+        [_Location_file]: null
+      });
+    },
+    get C29() {
+      return C[29] = dart.constList([C[30] || CT.C30, C[31] || CT.C31, C[32] || CT.C32], widget_inspector._Location);
+    },
+    get C28() {
+      return C[28] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[29] || CT.C29,
+        [_Location_name]: null,
+        [_Location_column]: 12,
+        [_Location_line]: 152,
+        [_Location_file]: "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/numberpicker-2.1.1/lib/src/numberpicker.dart"
+      });
+    },
+    get C34() {
+      return C[34] = dart.constList([], widget_inspector._Location);
+    },
+    get C33() {
+      return C[33] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[34] || CT.C34,
+        [_Location_name]: null,
+        [_Location_column]: 20,
+        [_Location_line]: 209,
+        [_Location_file]: "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/numberpicker-2.1.1/lib/src/numberpicker.dart"
+      });
+    },
+    get C37() {
+      return C[37] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "data",
+        [_Location_column]: 13,
+        [_Location_line]: 211,
+        [_Location_file]: null
+      });
+    },
+    get C38() {
+      return C[38] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "style",
+        [_Location_column]: 13,
+        [_Location_line]: 212,
+        [_Location_file]: null
+      });
+    },
+    get C36() {
+      return C[36] = dart.constList([C[37] || CT.C37, C[38] || CT.C38], widget_inspector._Location);
+    },
+    get C35() {
+      return C[35] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[36] || CT.C36,
+        [_Location_name]: null,
+        [_Location_column]: 11,
+        [_Location_line]: 210,
+        [_Location_file]: "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/numberpicker-2.1.1/lib/src/numberpicker.dart"
+      });
+    },
+    get C41() {
+      return C[41] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "width",
+        [_Location_column]: 7,
+        [_Location_line]: 216,
+        [_Location_file]: null
+      });
+    },
+    get C42() {
+      return C[42] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "height",
+        [_Location_column]: 7,
+        [_Location_line]: 217,
+        [_Location_file]: null
+      });
+    },
+    get C43() {
+      return C[43] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "alignment",
+        [_Location_column]: 7,
+        [_Location_line]: 218,
+        [_Location_file]: null
+      });
+    },
+    get C44() {
+      return C[44] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 7,
+        [_Location_line]: 219,
+        [_Location_file]: null
+      });
+    },
+    get C40() {
+      return C[40] = dart.constList([C[41] || CT.C41, C[42] || CT.C42, C[43] || CT.C43, C[44] || CT.C44], widget_inspector._Location);
+    },
+    get C39() {
+      return C[39] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[40] || CT.C40,
+        [_Location_name]: null,
+        [_Location_column]: 12,
+        [_Location_line]: 215,
+        [_Location_file]: "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/numberpicker-2.1.1/lib/src/numberpicker.dart"
+      });
+    },
+    get C47() {
+      return C[47] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "width",
+        [_Location_column]: 11,
+        [_Location_line]: 275,
+        [_Location_file]: null
+      });
+    },
+    get C48() {
+      return C[48] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "height",
+        [_Location_column]: 11,
+        [_Location_line]: 276,
+        [_Location_file]: null
+      });
+    },
+    get C49() {
+      return C[49] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "decoration",
+        [_Location_column]: 11,
+        [_Location_line]: 277,
+        [_Location_file]: null
+      });
+    },
+    get C46() {
+      return C[46] = dart.constList([C[47] || CT.C47, C[48] || CT.C48, C[49] || CT.C49], widget_inspector._Location);
+    },
+    get C45() {
+      return C[45] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[46] || CT.C46,
+        [_Location_name]: null,
+        [_Location_column]: 16,
+        [_Location_line]: 274,
+        [_Location_file]: "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/numberpicker-2.1.1/lib/src/numberpicker.dart"
+      });
+    },
+    get C52() {
+      return C[52] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 9,
+        [_Location_line]: 274,
+        [_Location_file]: null
+      });
+    },
+    get C51() {
+      return C[51] = dart.constList([C[52] || CT.C52], widget_inspector._Location);
+    },
+    get C50() {
+      return C[50] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[51] || CT.C51,
+        [_Location_name]: null,
+        [_Location_column]: 14,
+        [_Location_line]: 273,
+        [_Location_file]: "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/numberpicker-2.1.1/lib/src/numberpicker.dart"
+      });
+    },
+    get C55() {
+      return C[55] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 7,
+        [_Location_line]: 273,
+        [_Location_file]: null
+      });
+    },
+    get C54() {
+      return C[54] = dart.constList([C[55] || CT.C55], widget_inspector._Location);
+    },
+    get C53() {
+      return C[53] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[54] || CT.C54,
+        [_Location_name]: null,
+        [_Location_column]: 12,
+        [_Location_line]: 272,
+        [_Location_file]: "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/numberpicker-2.1.1/lib/src/numberpicker.dart"
+      });
+    }
+  }, false);
+  var C = Array(56).fill(void 0);
+  var I = [
+    "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/numberpicker-2.1.1/lib/src/numberpicker.dart",
+    "package:numberpicker/src/numberpicker.dart"
+  ];
+  var minValue$ = dart.privateName(numberpicker, "NumberPicker.minValue");
+  var maxValue$ = dart.privateName(numberpicker, "NumberPicker.maxValue");
+  var value$ = dart.privateName(numberpicker, "NumberPicker.value");
+  var onChanged$ = dart.privateName(numberpicker, "NumberPicker.onChanged");
+  var itemCount$ = dart.privateName(numberpicker, "NumberPicker.itemCount");
+  var step$ = dart.privateName(numberpicker, "NumberPicker.step");
+  var itemHeight$ = dart.privateName(numberpicker, "NumberPicker.itemHeight");
+  var itemWidth$ = dart.privateName(numberpicker, "NumberPicker.itemWidth");
+  var axis$ = dart.privateName(numberpicker, "NumberPicker.axis");
+  var textStyle$ = dart.privateName(numberpicker, "NumberPicker.textStyle");
+  var selectedTextStyle$ = dart.privateName(numberpicker, "NumberPicker.selectedTextStyle");
+  var haptics$ = dart.privateName(numberpicker, "NumberPicker.haptics");
+  var textMapper$ = dart.privateName(numberpicker, "NumberPicker.textMapper");
+  var zeroPad$ = dart.privateName(numberpicker, "NumberPicker.zeroPad");
+  var decoration$ = dart.privateName(numberpicker, "NumberPicker.decoration");
+  var infiniteLoop$ = dart.privateName(numberpicker, "NumberPicker.infiniteLoop");
+  var _name = dart.privateName(basic_types, "_name");
+  numberpicker.NumberPicker = class NumberPicker extends framework.StatefulWidget {
+    get minValue() {
+      return this[minValue$];
+    }
+    set minValue(value) {
+      super.minValue = value;
+    }
+    get maxValue() {
+      return this[maxValue$];
+    }
+    set maxValue(value) {
+      super.maxValue = value;
+    }
+    get value() {
+      return this[value$];
+    }
+    set value(value) {
+      super.value = value;
+    }
+    get onChanged() {
+      return this[onChanged$];
+    }
+    set onChanged(value) {
+      super.onChanged = value;
+    }
+    get itemCount() {
+      return this[itemCount$];
+    }
+    set itemCount(value) {
+      super.itemCount = value;
+    }
+    get step() {
+      return this[step$];
+    }
+    set step(value) {
+      super.step = value;
+    }
+    get itemHeight() {
+      return this[itemHeight$];
+    }
+    set itemHeight(value) {
+      super.itemHeight = value;
+    }
+    get itemWidth() {
+      return this[itemWidth$];
+    }
+    set itemWidth(value) {
+      super.itemWidth = value;
+    }
+    get axis() {
+      return this[axis$];
+    }
+    set axis(value) {
+      super.axis = value;
+    }
+    get textStyle() {
+      return this[textStyle$];
+    }
+    set textStyle(value) {
+      super.textStyle = value;
+    }
+    get selectedTextStyle() {
+      return this[selectedTextStyle$];
+    }
+    set selectedTextStyle(value) {
+      super.selectedTextStyle = value;
+    }
+    get haptics() {
+      return this[haptics$];
+    }
+    set haptics(value) {
+      super.haptics = value;
+    }
+    get textMapper() {
+      return this[textMapper$];
+    }
+    set textMapper(value) {
+      super.textMapper = value;
+    }
+    get zeroPad() {
+      return this[zeroPad$];
+    }
+    set zeroPad(value) {
+      super.zeroPad = value;
+    }
+    get decoration() {
+      return this[decoration$];
+    }
+    set decoration(value) {
+      super.decoration = value;
+    }
+    get infiniteLoop() {
+      return this[infiniteLoop$];
+    }
+    set infiniteLoop(value) {
+      super.infiniteLoop = value;
+    }
+    createState() {
+      return new numberpicker._NumberPickerState.new();
+    }
+  };
+  (numberpicker.NumberPicker.new = function(opts) {
+    let key = opts && 'key' in opts ? opts.key : null;
+    let minValue = opts && 'minValue' in opts ? opts.minValue : null;
+    if (minValue == null) dart.nullFailed(I[0], 62, 19, "minValue");
+    let maxValue = opts && 'maxValue' in opts ? opts.maxValue : null;
+    if (maxValue == null) dart.nullFailed(I[0], 63, 19, "maxValue");
+    let value = opts && 'value' in opts ? opts.value : null;
+    if (value == null) dart.nullFailed(I[0], 64, 19, "value");
+    let onChanged = opts && 'onChanged' in opts ? opts.onChanged : null;
+    if (onChanged == null) dart.nullFailed(I[0], 65, 19, "onChanged");
+    let itemCount = opts && 'itemCount' in opts ? opts.itemCount : 3;
+    if (itemCount == null) dart.nullFailed(I[0], 66, 10, "itemCount");
+    let step = opts && 'step' in opts ? opts.step : 1;
+    if (step == null) dart.nullFailed(I[0], 67, 10, "step");
+    let itemHeight = opts && 'itemHeight' in opts ? opts.itemHeight : 50;
+    if (itemHeight == null) dart.nullFailed(I[0], 68, 10, "itemHeight");
+    let itemWidth = opts && 'itemWidth' in opts ? opts.itemWidth : 100;
+    if (itemWidth == null) dart.nullFailed(I[0], 69, 10, "itemWidth");
+    let axis = opts && 'axis' in opts ? opts.axis : C[0] || CT.C0;
+    if (axis == null) dart.nullFailed(I[0], 70, 10, "axis");
+    let textStyle = opts && 'textStyle' in opts ? opts.textStyle : null;
+    let selectedTextStyle = opts && 'selectedTextStyle' in opts ? opts.selectedTextStyle : null;
+    let haptics = opts && 'haptics' in opts ? opts.haptics : false;
+    if (haptics == null) dart.nullFailed(I[0], 73, 10, "haptics");
+    let decoration = opts && 'decoration' in opts ? opts.decoration : null;
+    let zeroPad = opts && 'zeroPad' in opts ? opts.zeroPad : false;
+    if (zeroPad == null) dart.nullFailed(I[0], 75, 10, "zeroPad");
+    let textMapper = opts && 'textMapper' in opts ? opts.textMapper : null;
+    let infiniteLoop = opts && 'infiniteLoop' in opts ? opts.infiniteLoop : false;
+    if (infiniteLoop == null) dart.nullFailed(I[0], 77, 10, "infiniteLoop");
+    let $36creationLocationd_0dea112b090073317d4 = opts && '$creationLocationd_0dea112b090073317d4' in opts ? opts.$creationLocationd_0dea112b090073317d4 : null;
+    this[minValue$] = minValue;
+    this[maxValue$] = maxValue;
+    this[value$] = value;
+    this[onChanged$] = onChanged;
+    this[itemCount$] = itemCount;
+    this[step$] = step;
+    this[itemHeight$] = itemHeight;
+    this[itemWidth$] = itemWidth;
+    this[axis$] = axis;
+    this[textStyle$] = textStyle;
+    this[selectedTextStyle$] = selectedTextStyle;
+    this[haptics$] = haptics;
+    this[decoration$] = decoration;
+    this[zeroPad$] = zeroPad;
+    this[textMapper$] = textMapper;
+    this[infiniteLoop$] = infiniteLoop;
+    if (!(dart.notNull(minValue) <= dart.notNull(value))) dart.assertFailed(null, I[0], 78, 16, "minValue <= value");
+    if (!(dart.notNull(value) <= dart.notNull(maxValue))) dart.assertFailed(null, I[0], 79, 16, "value <= maxValue");
+    numberpicker.NumberPicker.__proto__.new.call(this, {key: key, $creationLocationd_0dea112b090073317d4: $36creationLocationd_0dea112b090073317d4});
+    ;
+  }).prototype = numberpicker.NumberPicker.prototype;
+  dart.addTypeTests(numberpicker.NumberPicker);
+  dart.addTypeCaches(numberpicker.NumberPicker);
+  dart.setMethodSignature(numberpicker.NumberPicker, () => ({
+    __proto__: dart.getMethods(numberpicker.NumberPicker.__proto__),
+    createState: dart.fnType(numberpicker._NumberPickerState, [])
+  }));
+  dart.setLibraryUri(numberpicker.NumberPicker, I[1]);
+  dart.setFieldSignature(numberpicker.NumberPicker, () => ({
+    __proto__: dart.getFields(numberpicker.NumberPicker.__proto__),
+    minValue: dart.finalFieldType(core.int),
+    maxValue: dart.finalFieldType(core.int),
+    value: dart.finalFieldType(core.int),
+    onChanged: dart.finalFieldType(dart.fnType(dart.void, [core.int])),
+    itemCount: dart.finalFieldType(core.int),
+    step: dart.finalFieldType(core.int),
+    itemHeight: dart.finalFieldType(core.double),
+    itemWidth: dart.finalFieldType(core.double),
+    axis: dart.finalFieldType(basic_types.Axis),
+    textStyle: dart.finalFieldType(dart.nullable(text_style.TextStyle)),
+    selectedTextStyle: dart.finalFieldType(dart.nullable(text_style.TextStyle)),
+    haptics: dart.finalFieldType(core.bool),
+    textMapper: dart.finalFieldType(dart.nullable(dart.fnType(core.String, [core.String]))),
+    zeroPad: dart.finalFieldType(core.bool),
+    decoration: dart.finalFieldType(dart.nullable(decoration.Decoration)),
+    infiniteLoop: dart.finalFieldType(core.bool)
+  }));
+  var ___NumberPickerState__scrollController = dart.privateName(numberpicker, "_#_NumberPickerState#_scrollController");
+  var _scrollController = dart.privateName(numberpicker, "_scrollController");
+  var _scrollListener = dart.privateName(numberpicker, "_scrollListener");
+  var _intValueFromIndex = dart.privateName(numberpicker, "_intValueFromIndex");
+  var _maybeCenterValue = dart.privateName(numberpicker, "_maybeCenterValue");
+  var _itemBuilder = dart.privateName(numberpicker, "_itemBuilder");
+  var _Location_parameterLocations = dart.privateName(widget_inspector, "_Location.parameterLocations");
+  var _Location_name = dart.privateName(widget_inspector, "_Location.name");
+  var _Location_column = dart.privateName(widget_inspector, "_Location.column");
+  var _Location_line = dart.privateName(widget_inspector, "_Location.line");
+  var _Location_file = dart.privateName(widget_inspector, "_Location.file");
+  var _getDisplayedValue = dart.privateName(numberpicker, "_getDisplayedValue");
+  numberpicker._NumberPickerState = class _NumberPickerState extends framework.State$(numberpicker.NumberPicker) {
+    get [_scrollController]() {
+      let t0;
+      t0 = this[___NumberPickerState__scrollController];
+      return t0 == null ? dart.throw(new _internal.LateError.fieldNI("_scrollController")) : t0;
+    }
+    set [_scrollController](t0) {
+      if (t0 == null) dart.nullFailed(I[0], 87, 25, "null");
+      this[___NumberPickerState__scrollController] = t0;
+    }
+    initState() {
+      super.initState();
+      let initialOffset = ((dart.notNull(this.widget.value) - dart.notNull(this.widget.minValue)) / dart.notNull(this.widget.step))[$truncate]() * dart.notNull(this.itemExtent);
+      if (dart.test(this.widget.infiniteLoop)) {
+        this[_scrollController] = new infinite_listview.InfiniteScrollController.new({initialScrollOffset: initialOffset});
+      } else {
+        this[_scrollController] = new scroll_controller.ScrollController.new({initialScrollOffset: initialOffset});
+      }
+      this[_scrollController].addListener(dart.bind(this, _scrollListener));
+    }
+    [_scrollListener]() {
+      let t2, t1;
+      let indexOfMiddleElement = (dart.notNull(this[_scrollController].offset) / dart.notNull(this.itemExtent))[$round]();
+      if (dart.test(this.widget.infiniteLoop)) {
+        indexOfMiddleElement = indexOfMiddleElement[$modulo](this.itemCount);
+      } else {
+        indexOfMiddleElement = indexOfMiddleElement[$clamp](0, dart.notNull(this.itemCount) - 1);
+      }
+      let intValueInTheMiddle = this[_intValueFromIndex](indexOfMiddleElement + dart.notNull(this.additionalItemsOnEachSide));
+      if (this.widget.value != intValueInTheMiddle) {
+        t1 = this.widget;
+        t2 = intValueInTheMiddle;
+        t1.onChanged(t2);
+        if (dart.test(this.widget.haptics)) {
+          haptic_feedback.HapticFeedback.selectionClick();
+        }
+      }
+      T.FutureOfvoid().delayed(new core.Duration.new({milliseconds: 100}), dart.fn(() => this[_maybeCenterValue](), T.VoidTovoid()));
+    }
+    didUpdateWidget(oldWidget) {
+      numberpicker.NumberPicker.as(oldWidget);
+      if (oldWidget == null) dart.nullFailed(I[0], 126, 37, "oldWidget");
+      super.didUpdateWidget(oldWidget);
+      if (oldWidget.value != this.widget.value) {
+        this[_maybeCenterValue]();
+      }
+    }
+    dispose() {
+      this[_scrollController].dispose();
+      super.dispose();
+    }
+    get isScrolling() {
+      return this[_scrollController].position.isScrollingNotifier.value;
+    }
+    get itemExtent() {
+      return this.widget.axis == basic_types.Axis.vertical ? this.widget.itemHeight : this.widget.itemWidth;
+    }
+    get itemCount() {
+      return ((dart.notNull(this.widget.maxValue) - dart.notNull(this.widget.minValue)) / dart.notNull(this.widget.step))[$truncate]() + 1;
+    }
+    get listItemsCount() {
+      return dart.notNull(this.itemCount) + 2 * dart.notNull(this.additionalItemsOnEachSide);
+    }
+    get additionalItemsOnEachSide() {
+      return ((dart.notNull(this.widget.itemCount) - 1) / 2)[$truncate]();
+    }
+    build(context) {
+      if (context == null) dart.nullFailed(I[0], 151, 29, "context");
+      return new basic.SizedBox.new({width: this.widget.axis == basic_types.Axis.vertical ? this.widget.itemWidth : dart.notNull(this.widget.itemCount) * dart.notNull(this.widget.itemWidth), height: this.widget.axis == basic_types.Axis.vertical ? dart.notNull(this.widget.itemCount) * dart.notNull(this.widget.itemHeight) : this.widget.itemHeight, child: new (T.NotificationListenerOfScrollEndNotification()).new({onNotification: dart.fn(not => {
+            let t1;
+            if (not == null) dart.nullFailed(I[0], 160, 26, "not");
+            if ((t1 = not.dragDetails, t1 == null ? null : t1.primaryVelocity) === 0) {
+              T.FutureOfvoid().microtask(dart.fn(() => this[_maybeCenterValue](), T.VoidTovoid()));
+            }
+            return true;
+          }, T.ScrollEndNotificationTobool()), child: new basic.Stack.new({children: (() => {
+              let t1 = T.JSArrayOfWidget().of([]);
+              if (dart.test(this.widget.infiniteLoop))
+                t1[$add](new infinite_listview.InfiniteListView.builder({scrollDirection: this.widget.axis, controller: infinite_listview.InfiniteScrollController.as(this[_scrollController]), itemExtent: this.itemExtent, itemBuilder: dart.bind(this, _itemBuilder), padding: edge_insets.EdgeInsets.zero, $creationLocationd_0dea112b090073317d4: C[1] || CT.C1}));
+              else
+                t1[$add](new scroll_view.ListView.builder({itemCount: this.listItemsCount, scrollDirection: this.widget.axis, controller: this[_scrollController], itemExtent: this.itemExtent, itemBuilder: dart.bind(this, _itemBuilder), padding: edge_insets.EdgeInsets.zero, $creationLocationd_0dea112b090073317d4: C[8] || CT.C8}));
+              t1[$add](new numberpicker._NumberPickerSelectedItemDecoration.new({axis: this.widget.axis, itemExtent: this.itemExtent, decoration: this.widget.decoration, $creationLocationd_0dea112b090073317d4: C[16] || CT.C16}));
+              return t1;
+            })(), $creationLocationd_0dea112b090073317d4: C[21] || CT.C21}), $creationLocationd_0dea112b090073317d4: C[24] || CT.C24}), $creationLocationd_0dea112b090073317d4: C[28] || CT.C28});
+    }
+    [_itemBuilder](context, index) {
+      let t2, t3, t2$;
+      if (context == null) dart.nullFailed(I[0], 196, 36, "context");
+      if (index == null) dart.nullFailed(I[0], 196, 49, "index");
+      let themeData = theme.Theme.of(context);
+      let defaultStyle = (t2 = this.widget.textStyle, t2 == null ? themeData.textTheme.bodyText2 : t2);
+      let selectedStyle = (t2$ = this.widget.selectedTextStyle, t2$ == null ? (t3 = themeData.textTheme.headline5, t3 == null ? null : t3.copyWith({color: themeData.accentColor})) : t2$);
+      let value = this[_intValueFromIndex](index[$modulo](this.itemCount));
+      let isExtra = !dart.test(this.widget.infiniteLoop) && (dart.notNull(index) < dart.notNull(this.additionalItemsOnEachSide) || dart.notNull(index) >= dart.notNull(this.listItemsCount) - dart.notNull(this.additionalItemsOnEachSide));
+      let itemStyle = value == this.widget.value ? selectedStyle : defaultStyle;
+      let child = isExtra ? new basic.SizedBox.shrink({$creationLocationd_0dea112b090073317d4: C[33] || CT.C33}) : new text.Text.new(this[_getDisplayedValue](value), {style: itemStyle, $creationLocationd_0dea112b090073317d4: C[35] || CT.C35});
+      return new container.Container.new({width: this.widget.itemWidth, height: this.widget.itemHeight, alignment: alignment.Alignment.center, child: child, $creationLocationd_0dea112b090073317d4: C[39] || CT.C39});
+    }
+    [_getDisplayedValue](value) {
+      if (value == null) dart.nullFailed(I[0], 223, 33, "value");
+      let text = dart.test(this.widget.zeroPad) ? dart.toString(value)[$padLeft](dart.toString(this.widget.maxValue).length, "0") : dart.toString(value);
+      if (this.widget.textMapper != null) {
+        return dart.nullCheck(this.widget.textMapper)(text);
+      } else {
+        return text;
+      }
+    }
+    [_intValueFromIndex](index) {
+      if (index == null) dart.nullFailed(I[0], 234, 30, "index");
+      index = dart.notNull(index) - dart.notNull(this.additionalItemsOnEachSide);
+      index = index[$modulo](this.itemCount);
+      return dart.notNull(this.widget.minValue) + dart.notNull(index) * dart.notNull(this.widget.step);
+    }
+    [_maybeCenterValue]() {
+      if (dart.test(this[_scrollController].hasClients) && !dart.test(this.isScrolling)) {
+        let diff = dart.notNull(this.widget.value) - dart.notNull(this.widget.minValue);
+        let index = (diff / dart.notNull(this.widget.step))[$truncate]();
+        if (dart.test(this.widget.infiniteLoop)) {
+          let offset = dart.notNull(this[_scrollController].offset) + 0.5 * dart.notNull(this.itemExtent);
+          let cycles = (offset / (dart.notNull(this.itemCount) * dart.notNull(this.itemExtent)))[$floor]();
+          index = index + cycles * dart.notNull(this.itemCount);
+        }
+        this[_scrollController].animateTo(index * dart.notNull(this.itemExtent), {duration: new core.Duration.new({milliseconds: 300}), curve: curves.Curves.easeOutCubic});
+      }
+    }
+  };
+  (numberpicker._NumberPickerState.new = function() {
+    this[___NumberPickerState__scrollController] = null;
+    numberpicker._NumberPickerState.__proto__.new.call(this);
+    ;
+  }).prototype = numberpicker._NumberPickerState.prototype;
+  dart.addTypeTests(numberpicker._NumberPickerState);
+  dart.addTypeCaches(numberpicker._NumberPickerState);
+  dart.setMethodSignature(numberpicker._NumberPickerState, () => ({
+    __proto__: dart.getMethods(numberpicker._NumberPickerState.__proto__),
+    [_scrollListener]: dart.fnType(dart.void, []),
+    build: dart.fnType(framework.Widget, [framework.BuildContext]),
+    [_itemBuilder]: dart.fnType(framework.Widget, [framework.BuildContext, core.int]),
+    [_getDisplayedValue]: dart.fnType(core.String, [core.int]),
+    [_intValueFromIndex]: dart.fnType(core.int, [core.int]),
+    [_maybeCenterValue]: dart.fnType(dart.void, [])
+  }));
+  dart.setGetterSignature(numberpicker._NumberPickerState, () => ({
+    __proto__: dart.getGetters(numberpicker._NumberPickerState.__proto__),
+    [_scrollController]: scroll_controller.ScrollController,
+    isScrolling: core.bool,
+    itemExtent: core.double,
+    itemCount: core.int,
+    listItemsCount: core.int,
+    additionalItemsOnEachSide: core.int
+  }));
+  dart.setSetterSignature(numberpicker._NumberPickerState, () => ({
+    __proto__: dart.getSetters(numberpicker._NumberPickerState.__proto__),
+    [_scrollController]: scroll_controller.ScrollController
+  }));
+  dart.setLibraryUri(numberpicker._NumberPickerState, I[1]);
+  dart.setFieldSignature(numberpicker._NumberPickerState, () => ({
+    __proto__: dart.getFields(numberpicker._NumberPickerState.__proto__),
+    [___NumberPickerState__scrollController]: dart.fieldType(dart.nullable(scroll_controller.ScrollController))
+  }));
+  var axis$0 = dart.privateName(numberpicker, "_NumberPickerSelectedItemDecoration.axis");
+  var itemExtent$ = dart.privateName(numberpicker, "_NumberPickerSelectedItemDecoration.itemExtent");
+  var decoration$0 = dart.privateName(numberpicker, "_NumberPickerSelectedItemDecoration.decoration");
+  numberpicker._NumberPickerSelectedItemDecoration = class _NumberPickerSelectedItemDecoration extends framework.StatelessWidget {
+    get axis() {
+      return this[axis$0];
+    }
+    set axis(value) {
+      super.axis = value;
+    }
+    get itemExtent() {
+      return this[itemExtent$];
+    }
+    set itemExtent(value) {
+      super.itemExtent = value;
+    }
+    get decoration() {
+      return this[decoration$0];
+    }
+    set decoration(value) {
+      super.decoration = value;
+    }
+    build(context) {
+      if (context == null) dart.nullFailed(I[0], 271, 29, "context");
+      return new basic.Center.new({child: new basic.IgnorePointer.new({child: new container.Container.new({width: dart.test(this.isVertical) ? 1 / 0 : this.itemExtent, height: dart.test(this.isVertical) ? this.itemExtent : 1 / 0, decoration: this.decoration, $creationLocationd_0dea112b090073317d4: C[45] || CT.C45}), $creationLocationd_0dea112b090073317d4: C[50] || CT.C50}), $creationLocationd_0dea112b090073317d4: C[53] || CT.C53});
+    }
+    get isVertical() {
+      return this.axis == basic_types.Axis.vertical;
+    }
+  };
+  (numberpicker._NumberPickerSelectedItemDecoration.new = function(opts) {
+    let key = opts && 'key' in opts ? opts.key : null;
+    let axis = opts && 'axis' in opts ? opts.axis : null;
+    if (axis == null) dart.nullFailed(I[0], 265, 19, "axis");
+    let itemExtent = opts && 'itemExtent' in opts ? opts.itemExtent : null;
+    if (itemExtent == null) dart.nullFailed(I[0], 266, 19, "itemExtent");
+    let decoration = opts && 'decoration' in opts ? opts.decoration : null;
+    let $36creationLocationd_0dea112b090073317d4 = opts && '$creationLocationd_0dea112b090073317d4' in opts ? opts.$creationLocationd_0dea112b090073317d4 : null;
+    this[axis$0] = axis;
+    this[itemExtent$] = itemExtent;
+    this[decoration$0] = decoration;
+    numberpicker._NumberPickerSelectedItemDecoration.__proto__.new.call(this, {key: key, $creationLocationd_0dea112b090073317d4: $36creationLocationd_0dea112b090073317d4});
+    ;
+  }).prototype = numberpicker._NumberPickerSelectedItemDecoration.prototype;
+  dart.addTypeTests(numberpicker._NumberPickerSelectedItemDecoration);
+  dart.addTypeCaches(numberpicker._NumberPickerSelectedItemDecoration);
+  dart.setMethodSignature(numberpicker._NumberPickerSelectedItemDecoration, () => ({
+    __proto__: dart.getMethods(numberpicker._NumberPickerSelectedItemDecoration.__proto__),
+    build: dart.fnType(framework.Widget, [framework.BuildContext])
+  }));
+  dart.setGetterSignature(numberpicker._NumberPickerSelectedItemDecoration, () => ({
+    __proto__: dart.getGetters(numberpicker._NumberPickerSelectedItemDecoration.__proto__),
+    isVertical: core.bool
+  }));
+  dart.setLibraryUri(numberpicker._NumberPickerSelectedItemDecoration, I[1]);
+  dart.setFieldSignature(numberpicker._NumberPickerSelectedItemDecoration, () => ({
+    __proto__: dart.getFields(numberpicker._NumberPickerSelectedItemDecoration.__proto__),
+    axis: dart.finalFieldType(basic_types.Axis),
+    itemExtent: dart.finalFieldType(core.double),
+    decoration: dart.finalFieldType(dart.nullable(decoration.Decoration))
+  }));
+  dart.trackLibraries("packages/numberpicker/src/numberpicker.dart", {
+    "package:numberpicker/src/numberpicker.dart": numberpicker
+  }, {
+  }, '{"version":3,"sourceRoot":"","sources":["numberpicker.dart"],"names":[],"mappings":"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","file":"../../../../../../../../E:/packages/numberpicker/src/numberpicker.dart.lib.js"}');
+  // Exports:
+  return {
+    src__numberpicker: numberpicker
+  };
+}));
+
+//# sourceMappingURL=numberpicker.dart.lib.js.map

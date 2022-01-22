@@ -1,0 +1,354 @@
+define(['dart_sdk', 'packages/flutter/src/gestures/debug.dart', 'packages/flutter/src/foundation/print.dart'], (function load__packages__flutter__src__gestures__arena_dart(dart_sdk, packages__flutter__src__gestures__debug$46dart, packages__flutter__src__foundation__print$46dart) {
+  'use strict';
+  const core = dart_sdk.core;
+  const _interceptors = dart_sdk._interceptors;
+  const _js_helper = dart_sdk._js_helper;
+  const async = dart_sdk.async;
+  const dart = dart_sdk.dart;
+  const dartx = dart_sdk.dartx;
+  const debug = packages__flutter__src__gestures__debug$46dart.src__gestures__debug;
+  const print = packages__flutter__src__foundation__print$46dart.src__foundation__print;
+  var arena = Object.create(dart.library);
+  var $add = dartx.add;
+  var $isEmpty = dartx.isEmpty;
+  var $map = dartx.map;
+  var $join = dartx.join;
+  var $putIfAbsent = dartx.putIfAbsent;
+  var $_get = dartx._get;
+  var $remove = dartx.remove;
+  var $isNotEmpty = dartx.isNotEmpty;
+  var $first = dartx.first;
+  var $length = dartx.length;
+  var $contains = dartx.contains;
+  var $containsKey = dartx.containsKey;
+  var $toString = dartx.toString;
+  var $padRight = dartx.padRight;
+  dart._checkModuleNullSafetyMode(true);
+  var T = {
+    JSArrayOfGestureArenaMember: () => (T.JSArrayOfGestureArenaMember = dart.constFn(_interceptors.JSArray$(arena.GestureArenaMember)))(),
+    GestureArenaMemberToString: () => (T.GestureArenaMemberToString = dart.constFn(dart.fnType(core.String, [arena.GestureArenaMember])))(),
+    IdentityMapOfint$_GestureArena: () => (T.IdentityMapOfint$_GestureArena = dart.constFn(_js_helper.IdentityMap$(core.int, arena._GestureArena)))(),
+    VoidTo_GestureArena: () => (T.VoidTo_GestureArena = dart.constFn(dart.fnType(arena._GestureArena, [])))(),
+    VoidTovoid: () => (T.VoidTovoid = dart.constFn(dart.fnType(dart.void, [])))(),
+    VoidTobool: () => (T.VoidTobool = dart.constFn(dart.fnType(core.bool, [])))()
+  };
+  var T$Eval = Object.assign({
+    _: () => T$Eval
+  }, T);
+  var S = {
+    _: () => S
+  };
+  var S$Eval = Object.assign({
+    _: () => S$Eval
+  }, S);
+  const CT = Object.create({
+    _: () => (C, CT)
+  });
+  dart.defineLazy(CT, {
+    get C0() {
+      return C[0] = dart.const({
+        __proto__: arena.GestureDisposition.prototype,
+        [_name$]: "GestureDisposition.accepted",
+        index: 0
+      });
+    },
+    get C1() {
+      return C[1] = dart.const({
+        __proto__: arena.GestureDisposition.prototype,
+        [_name$]: "GestureDisposition.rejected",
+        index: 1
+      });
+    },
+    get C2() {
+      return C[2] = dart.constList([C[0] || CT.C0, C[1] || CT.C1], arena.GestureDisposition);
+    }
+  }, false);
+  var C = Array(3).fill(void 0);
+  var I = [
+    "file:///D:/flutter/packages/flutter/lib/src/gestures/arena.dart",
+    "package:flutter/src/gestures/arena.dart"
+  ];
+  var _name$ = dart.privateName(arena, "_name");
+  arena.GestureDisposition = class GestureDisposition extends core.Object {
+    toString() {
+      return this[_name$];
+    }
+  };
+  (arena.GestureDisposition.new = function(index, _name) {
+    if (index == null) dart.nullFailed(I[0], 13, 6, "index");
+    if (_name == null) dart.nullFailed(I[0], 13, 6, "_name");
+    this.index = index;
+    this[_name$] = _name;
+    ;
+  }).prototype = arena.GestureDisposition.prototype;
+  dart.addTypeTests(arena.GestureDisposition);
+  dart.addTypeCaches(arena.GestureDisposition);
+  dart.setLibraryUri(arena.GestureDisposition, I[1]);
+  dart.setFieldSignature(arena.GestureDisposition, () => ({
+    __proto__: dart.getFields(arena.GestureDisposition.__proto__),
+    index: dart.finalFieldType(core.int),
+    [_name$]: dart.finalFieldType(core.String)
+  }));
+  dart.defineExtensionMethods(arena.GestureDisposition, ['toString']);
+  arena.GestureDisposition.accepted = C[0] || CT.C0;
+  arena.GestureDisposition.rejected = C[1] || CT.C1;
+  arena.GestureDisposition.values = C[2] || CT.C2;
+  arena.GestureArenaMember = class GestureArenaMember extends core.Object {};
+  (arena.GestureArenaMember.new = function() {
+    ;
+  }).prototype = arena.GestureArenaMember.prototype;
+  dart.addTypeTests(arena.GestureArenaMember);
+  dart.addTypeCaches(arena.GestureArenaMember);
+  dart.setLibraryUri(arena.GestureArenaMember, I[1]);
+  var _arena$ = dart.privateName(arena, "_arena");
+  var _pointer$ = dart.privateName(arena, "_pointer");
+  var _member$ = dart.privateName(arena, "_member");
+  var _resolve = dart.privateName(arena, "_resolve");
+  arena.GestureArenaEntry = class GestureArenaEntry extends core.Object {
+    resolve(disposition) {
+      if (disposition == null) dart.nullFailed(I[0], 52, 35, "disposition");
+      this[_arena$][_resolve](this[_pointer$], this[_member$], disposition);
+    }
+  };
+  (arena.GestureArenaEntry.__ = function(_arena, _pointer, _member) {
+    if (_arena == null) dart.nullFailed(I[0], 42, 28, "_arena");
+    if (_pointer == null) dart.nullFailed(I[0], 42, 41, "_pointer");
+    if (_member == null) dart.nullFailed(I[0], 42, 56, "_member");
+    this[_arena$] = _arena;
+    this[_pointer$] = _pointer;
+    this[_member$] = _member;
+    ;
+  }).prototype = arena.GestureArenaEntry.prototype;
+  dart.addTypeTests(arena.GestureArenaEntry);
+  dart.addTypeCaches(arena.GestureArenaEntry);
+  dart.setMethodSignature(arena.GestureArenaEntry, () => ({
+    __proto__: dart.getMethods(arena.GestureArenaEntry.__proto__),
+    resolve: dart.fnType(dart.void, [arena.GestureDisposition])
+  }));
+  dart.setLibraryUri(arena.GestureArenaEntry, I[1]);
+  dart.setFieldSignature(arena.GestureArenaEntry, () => ({
+    __proto__: dart.getFields(arena.GestureArenaEntry.__proto__),
+    [_arena$]: dart.finalFieldType(arena.GestureArenaManager),
+    [_pointer$]: dart.finalFieldType(core.int),
+    [_member$]: dart.finalFieldType(arena.GestureArenaMember)
+  }));
+  arena._GestureArena = class _GestureArena extends core.Object {
+    add(member) {
+      if (member == null) dart.nullFailed(I[0], 69, 31, "member");
+      if (!dart.test(this.isOpen)) dart.assertFailed(null, I[0], 70, 12, "isOpen");
+      this.members[$add](member);
+    }
+    toString() {
+      let buffer = new core.StringBuffer.new();
+      if (dart.test(this.members[$isEmpty])) {
+        buffer.write("<empty>");
+      } else {
+        buffer.write(this.members[$map](core.String, dart.fn(member => {
+          if (member == null) dart.nullFailed(I[0], 80, 60, "member");
+          if (dart.equals(member, this.eagerWinner)) return dart.str(member) + " (eager winner)";
+          return dart.str(member);
+        }, T.GestureArenaMemberToString()))[$join](", "));
+      }
+      if (dart.test(this.isOpen)) buffer.write(" [open]");
+      if (dart.test(this.isHeld)) buffer.write(" [held]");
+      if (dart.test(this.hasPendingSweep)) buffer.write(" [hasPendingSweep]");
+      return buffer.toString();
+    }
+  };
+  (arena._GestureArena.new = function() {
+    this.members = T.JSArrayOfGestureArenaMember().of([]);
+    this.isOpen = true;
+    this.isHeld = false;
+    this.hasPendingSweep = false;
+    this.eagerWinner = null;
+    ;
+  }).prototype = arena._GestureArena.prototype;
+  dart.addTypeTests(arena._GestureArena);
+  dart.addTypeCaches(arena._GestureArena);
+  dart.setMethodSignature(arena._GestureArena, () => ({
+    __proto__: dart.getMethods(arena._GestureArena.__proto__),
+    add: dart.fnType(dart.void, [arena.GestureArenaMember])
+  }));
+  dart.setLibraryUri(arena._GestureArena, I[1]);
+  dart.setFieldSignature(arena._GestureArena, () => ({
+    __proto__: dart.getFields(arena._GestureArena.__proto__),
+    members: dart.finalFieldType(core.List$(arena.GestureArenaMember)),
+    isOpen: dart.fieldType(core.bool),
+    isHeld: dart.fieldType(core.bool),
+    hasPendingSweep: dart.fieldType(core.bool),
+    eagerWinner: dart.fieldType(dart.nullable(arena.GestureArenaMember))
+  }));
+  dart.defineExtensionMethods(arena._GestureArena, ['toString']);
+  var _arenas = dart.privateName(arena, "_arenas");
+  var _debugLogDiagnostic = dart.privateName(arena, "_debugLogDiagnostic");
+  var _tryToResolveArena = dart.privateName(arena, "_tryToResolveArena");
+  var _resolveInFavorOf = dart.privateName(arena, "_resolveInFavorOf");
+  var _resolveByDefault = dart.privateName(arena, "_resolveByDefault");
+  arena.GestureArenaManager = class GestureArenaManager extends core.Object {
+    add(pointer, member) {
+      if (pointer == null) dart.nullFailed(I[0], 107, 29, "pointer");
+      if (member == null) dart.nullFailed(I[0], 107, 57, "member");
+      let state = this[_arenas][$putIfAbsent](pointer, dart.fn(() => {
+        if (!dart.test(this[_debugLogDiagnostic](pointer, "★ Opening new gesture arena."))) dart.assertFailed(null, I[0], 109, 14, "_debugLogDiagnostic(pointer, '★ Opening new gesture arena.')");
+        return new arena._GestureArena.new();
+      }, T.VoidTo_GestureArena()));
+      state.add(member);
+      if (!dart.test(this[_debugLogDiagnostic](pointer, "Adding: " + dart.str(member)))) dart.assertFailed(null, I[0], 113, 12, "_debugLogDiagnostic(pointer, 'Adding: $member')");
+      return new arena.GestureArenaEntry.__(this, pointer, member);
+    }
+    close(pointer) {
+      if (pointer == null) dart.nullFailed(I[0], 120, 18, "pointer");
+      let state = this[_arenas][$_get](pointer);
+      if (state == null) return;
+      state.isOpen = false;
+      if (!dart.test(this[_debugLogDiagnostic](pointer, "Closing", state))) dart.assertFailed(null, I[0], 125, 12, "_debugLogDiagnostic(pointer, 'Closing', state)");
+      this[_tryToResolveArena](pointer, state);
+    }
+    sweep(pointer) {
+      if (pointer == null) dart.nullFailed(I[0], 142, 18, "pointer");
+      let state = this[_arenas][$_get](pointer);
+      if (state == null) return;
+      if (!!dart.test(state.isOpen)) dart.assertFailed(null, I[0], 146, 12, "!state.isOpen");
+      if (dart.test(state.isHeld)) {
+        state.hasPendingSweep = true;
+        if (!dart.test(this[_debugLogDiagnostic](pointer, "Delaying sweep", state))) dart.assertFailed(null, I[0], 149, 14, "_debugLogDiagnostic(pointer, 'Delaying sweep', state)");
+        return;
+      }
+      if (!dart.test(this[_debugLogDiagnostic](pointer, "Sweeping", state))) dart.assertFailed(null, I[0], 152, 12, "_debugLogDiagnostic(pointer, 'Sweeping', state)");
+      this[_arenas][$remove](pointer);
+      if (dart.test(state.members[$isNotEmpty])) {
+        if (!dart.test(this[_debugLogDiagnostic](pointer, "Winner: " + dart.str(state.members[$first])))) dart.assertFailed(null, I[0], 156, 14, "_debugLogDiagnostic(pointer, 'Winner: ${state.members.first}')");
+        state.members[$first].acceptGesture(pointer);
+        for (let i = 1; i < dart.notNull(state.members[$length]); i = i + 1)
+          state.members[$_get](i).rejectGesture(pointer);
+      }
+    }
+    hold(pointer) {
+      if (pointer == null) dart.nullFailed(I[0], 176, 17, "pointer");
+      let state = this[_arenas][$_get](pointer);
+      if (state == null) return;
+      state.isHeld = true;
+      if (!dart.test(this[_debugLogDiagnostic](pointer, "Holding", state))) dart.assertFailed(null, I[0], 181, 12, "_debugLogDiagnostic(pointer, 'Holding', state)");
+    }
+    release(pointer) {
+      if (pointer == null) dart.nullFailed(I[0], 193, 20, "pointer");
+      let state = this[_arenas][$_get](pointer);
+      if (state == null) return;
+      state.isHeld = false;
+      if (!dart.test(this[_debugLogDiagnostic](pointer, "Releasing", state))) dart.assertFailed(null, I[0], 198, 12, "_debugLogDiagnostic(pointer, 'Releasing', state)");
+      if (dart.test(state.hasPendingSweep)) this.sweep(pointer);
+    }
+    [_resolve](pointer, member, disposition) {
+      let t0;
+      if (pointer == null) dart.nullFailed(I[0], 206, 21, "pointer");
+      if (member == null) dart.nullFailed(I[0], 206, 49, "member");
+      if (disposition == null) dart.nullFailed(I[0], 206, 76, "disposition");
+      let state = this[_arenas][$_get](pointer);
+      if (state == null) return;
+      if (!dart.test(this[_debugLogDiagnostic](pointer, (disposition == arena.GestureDisposition.accepted ? "Accepting" : "Rejecting") + ": " + dart.str(member)))) dart.assertFailed(null, I[0], 210, 12, "_debugLogDiagnostic(pointer, '${ disposition == GestureDisposition.accepted ? \"Accepting\" : \"Rejecting\" }: $member')");
+      if (!dart.test(state.members[$contains](member))) dart.assertFailed(null, I[0], 211, 12, "state.members.contains(member)");
+      if (disposition == arena.GestureDisposition.rejected) {
+        state.members[$remove](member);
+        member.rejectGesture(pointer);
+        if (!dart.test(state.isOpen)) this[_tryToResolveArena](pointer, state);
+      } else {
+        if (!(disposition == arena.GestureDisposition.accepted)) dart.assertFailed(null, I[0], 218, 14, "disposition == GestureDisposition.accepted");
+        if (dart.test(state.isOpen)) {
+          t0 = state;
+          t0.eagerWinner == null ? t0.eagerWinner = member : null;
+        } else {
+          if (!dart.test(this[_debugLogDiagnostic](pointer, "Self-declared winner: " + dart.str(member)))) dart.assertFailed(null, I[0], 222, 16, "_debugLogDiagnostic(pointer, 'Self-declared winner: $member')");
+          this[_resolveInFavorOf](pointer, state, member);
+        }
+      }
+    }
+    [_tryToResolveArena](pointer, state) {
+      if (pointer == null) dart.nullFailed(I[0], 228, 31, "pointer");
+      if (state == null) dart.nullFailed(I[0], 228, 54, "state");
+      if (!dart.equals(this[_arenas][$_get](pointer), state)) dart.assertFailed(null, I[0], 229, 12, "_arenas[pointer] == state");
+      if (!!dart.test(state.isOpen)) dart.assertFailed(null, I[0], 230, 12, "!state.isOpen");
+      if (state.members[$length] === 1) {
+        async.scheduleMicrotask(dart.fn(() => this[_resolveByDefault](pointer, state), T.VoidTovoid()));
+      } else if (dart.test(state.members[$isEmpty])) {
+        this[_arenas][$remove](pointer);
+        if (!dart.test(this[_debugLogDiagnostic](pointer, "Arena empty."))) dart.assertFailed(null, I[0], 235, 14, "_debugLogDiagnostic(pointer, 'Arena empty.')");
+      } else if (state.eagerWinner != null) {
+        if (!dart.test(this[_debugLogDiagnostic](pointer, "Eager winner: " + dart.str(state.eagerWinner)))) dart.assertFailed(null, I[0], 237, 14, "_debugLogDiagnostic(pointer, 'Eager winner: ${state.eagerWinner}')");
+        this[_resolveInFavorOf](pointer, state, dart.nullCheck(state.eagerWinner));
+      }
+    }
+    [_resolveByDefault](pointer, state) {
+      if (pointer == null) dart.nullFailed(I[0], 242, 30, "pointer");
+      if (state == null) dart.nullFailed(I[0], 242, 53, "state");
+      if (!dart.test(this[_arenas][$containsKey](pointer))) return;
+      if (!dart.equals(this[_arenas][$_get](pointer), state)) dart.assertFailed(null, I[0], 245, 12, "_arenas[pointer] == state");
+      if (!!dart.test(state.isOpen)) dart.assertFailed(null, I[0], 246, 12, "!state.isOpen");
+      let members = state.members;
+      if (!(members[$length] === 1)) dart.assertFailed(null, I[0], 248, 12, "members.length == 1");
+      this[_arenas][$remove](pointer);
+      if (!dart.test(this[_debugLogDiagnostic](pointer, "Default winner: " + dart.str(state.members[$first])))) dart.assertFailed(null, I[0], 250, 12, "_debugLogDiagnostic(pointer, 'Default winner: ${state.members.first}')");
+      state.members[$first].acceptGesture(pointer);
+    }
+    [_resolveInFavorOf](pointer, state, member) {
+      if (pointer == null) dart.nullFailed(I[0], 254, 30, "pointer");
+      if (state == null) dart.nullFailed(I[0], 254, 53, "state");
+      if (member == null) dart.nullFailed(I[0], 254, 79, "member");
+      if (!dart.equals(state, this[_arenas][$_get](pointer))) dart.assertFailed(null, I[0], 255, 12, "state == _arenas[pointer]");
+      if (!(state != null)) dart.assertFailed(null, I[0], 256, 12, "state != null");
+      if (!(state.eagerWinner == null || dart.equals(state.eagerWinner, member))) dart.assertFailed(null, I[0], 257, 12, "state.eagerWinner == null || state.eagerWinner == member");
+      if (!!dart.test(state.isOpen)) dart.assertFailed(null, I[0], 258, 12, "!state.isOpen");
+      this[_arenas][$remove](pointer);
+      for (let rejectedMember of state.members) {
+        if (!dart.equals(rejectedMember, member)) rejectedMember.rejectGesture(pointer);
+      }
+      member.acceptGesture(pointer);
+    }
+    [_debugLogDiagnostic](pointer, message, state = null) {
+      if (pointer == null) dart.nullFailed(I[0], 267, 32, "pointer");
+      if (message == null) dart.nullFailed(I[0], 267, 48, "message");
+      if (!dart.test(dart.fn(() => {
+        if (dart.test(debug.debugPrintGestureArenaDiagnostics)) {
+          let count = state != null ? state.members[$length] : null;
+          let s = count !== 1 ? "s" : "";
+          print.debugPrint("Gesture arena " + dart.toString(pointer)[$padRight](4) + " ❙ " + dart.str(message) + (count != null ? " with " + dart.str(count) + " member" + s + "." : ""));
+        }
+        return true;
+      }, T.VoidTobool())())) dart.assertFailed(null, I[0], 268, 12, "() {\r\n      if (debugPrintGestureArenaDiagnostics) {\r\n        final int? count = state != null ? state.members.length : null;\r\n        final String s = count != 1 ? 's' : '';\r\n        debugPrint('Gesture arena ${pointer.toString().padRight(4)} ❙ $message${ count != null ? \" with $count member$s.\" : \"\"}');\r\n      }\r\n      return true;\r\n    }()");
+      return true;
+    }
+  };
+  (arena.GestureArenaManager.new = function() {
+    this[_arenas] = new (T.IdentityMapOfint$_GestureArena()).new();
+    ;
+  }).prototype = arena.GestureArenaManager.prototype;
+  dart.addTypeTests(arena.GestureArenaManager);
+  dart.addTypeCaches(arena.GestureArenaManager);
+  dart.setMethodSignature(arena.GestureArenaManager, () => ({
+    __proto__: dart.getMethods(arena.GestureArenaManager.__proto__),
+    add: dart.fnType(arena.GestureArenaEntry, [core.int, arena.GestureArenaMember]),
+    close: dart.fnType(dart.void, [core.int]),
+    sweep: dart.fnType(dart.void, [core.int]),
+    hold: dart.fnType(dart.void, [core.int]),
+    release: dart.fnType(dart.void, [core.int]),
+    [_resolve]: dart.fnType(dart.void, [core.int, arena.GestureArenaMember, arena.GestureDisposition]),
+    [_tryToResolveArena]: dart.fnType(dart.void, [core.int, arena._GestureArena]),
+    [_resolveByDefault]: dart.fnType(dart.void, [core.int, arena._GestureArena]),
+    [_resolveInFavorOf]: dart.fnType(dart.void, [core.int, arena._GestureArena, arena.GestureArenaMember]),
+    [_debugLogDiagnostic]: dart.fnType(core.bool, [core.int, core.String], [dart.nullable(arena._GestureArena)])
+  }));
+  dart.setLibraryUri(arena.GestureArenaManager, I[1]);
+  dart.setFieldSignature(arena.GestureArenaManager, () => ({
+    __proto__: dart.getFields(arena.GestureArenaManager.__proto__),
+    [_arenas]: dart.finalFieldType(core.Map$(core.int, arena._GestureArena))
+  }));
+  dart.trackLibraries("packages/flutter/src/gestures/arena.dart", {
+    "package:flutter/src/gestures/arena.dart": arena
+  }, {
+  }, '{"version":3,"sourceRoot":"","sources":["arena.dart"],"names":[],"mappings":"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","file":"../../../../../../../E:/packages/flutter/src/gestures/arena.dart.lib.js"}');
+  // Exports:
+  return {
+    src__gestures__arena: arena
+  };
+}));
+
+//# sourceMappingURL=arena.dart.lib.js.map

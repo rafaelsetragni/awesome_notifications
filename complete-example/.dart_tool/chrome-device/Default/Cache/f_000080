@@ -1,0 +1,1040 @@
+define(['dart_sdk', 'packages/flutter/src/animation/curves.dart', 'packages/flutter/src/painting/alignment.dart', 'packages/flutter/src/painting/decoration_image.dart', 'packages/flutter/src/painting/_network_image_web.dart', 'packages/flutter/src/painting/image_resolution.dart', 'packages/flutter/src/widgets/widget_span.dart', 'packages/flutter/src/painting/box_fit.dart', 'packages/flutter/src/widgets/implicit_animations.dart', 'packages/flutter/src/animation/listener_helpers.dart', 'packages/flutter/src/animation/tween_sequence.dart', 'packages/flutter/src/rendering/stack.dart', 'packages/flutter/src/foundation/debug.dart'], (function load__packages__flutter__src__widgets__fade_in_image_dart(dart_sdk, packages__flutter__src__animation__curves$46dart, packages__flutter__src__painting__alignment$46dart, packages__flutter__src__painting__decoration_image$46dart, packages__flutter__src__painting___network_image_web$46dart, packages__flutter__src__painting__image_resolution$46dart, packages__flutter__src__widgets__widget_span$46dart, packages__flutter__src__painting__box_fit$46dart, packages__flutter__src__widgets__implicit_animations$46dart, packages__flutter__src__animation__listener_helpers$46dart, packages__flutter__src__animation__tween_sequence$46dart, packages__flutter__src__rendering__stack$46dart, packages__flutter__src__foundation__debug$46dart) {
+  'use strict';
+  const core = dart_sdk.core;
+  const _interceptors = dart_sdk._interceptors;
+  const ui = dart_sdk.ui;
+  const dart = dart_sdk.dart;
+  const dartx = dart_sdk.dartx;
+  const curves = packages__flutter__src__animation__curves$46dart.src__animation__curves;
+  const alignment = packages__flutter__src__painting__alignment$46dart.src__painting__alignment;
+  const decoration_image = packages__flutter__src__painting__decoration_image$46dart.src__painting__decoration_image;
+  const image_provider = packages__flutter__src__painting___network_image_web$46dart.src__painting__image_provider;
+  const _network_image_web = packages__flutter__src__painting___network_image_web$46dart.src__painting___network_image_web;
+  const image_resolution = packages__flutter__src__painting__image_resolution$46dart.src__painting__image_resolution;
+  const image$ = packages__flutter__src__widgets__widget_span$46dart.src__widgets__image;
+  const widget_inspector = packages__flutter__src__widgets__widget_span$46dart.src__widgets__widget_inspector;
+  const framework = packages__flutter__src__widgets__widget_span$46dart.src__widgets__framework;
+  const basic = packages__flutter__src__widgets__widget_span$46dart.src__widgets__basic;
+  const transitions = packages__flutter__src__widgets__widget_span$46dart.src__widgets__transitions;
+  const box_fit = packages__flutter__src__painting__box_fit$46dart.src__painting__box_fit;
+  const implicit_animations = packages__flutter__src__widgets__implicit_animations$46dart.src__widgets__implicit_animations;
+  const tween = packages__flutter__src__animation__listener_helpers$46dart.src__animation__tween;
+  const animation = packages__flutter__src__animation__listener_helpers$46dart.src__animation__animation;
+  const tween_sequence = packages__flutter__src__animation__tween_sequence$46dart.src__animation__tween_sequence;
+  const stack = packages__flutter__src__rendering__stack$46dart.src__rendering__stack;
+  const diagnostics = packages__flutter__src__foundation__debug$46dart.src__foundation__diagnostics;
+  var fade_in_image = Object.create(dart.library);
+  var $toDouble = dartx.toDouble;
+  dart._checkModuleNullSafetyMode(true);
+  var T = {
+    intN: () => (T.intN = dart.constFn(dart.nullable(core.int)))(),
+    BuildContextAndWidgetAndintN__ToWidget: () => (T.BuildContextAndWidgetAndintN__ToWidget = dart.constFn(dart.fnType(framework.Widget, [framework.BuildContext, framework.Widget, T.intN(), core.bool])))(),
+    TweenOfdouble: () => (T.TweenOfdouble = dart.constFn(tween.Tween$(core.double)))(),
+    dynamicToTweenOfdouble: () => (T.dynamicToTweenOfdouble = dart.constFn(dart.fnType(T.TweenOfdouble(), [dart.dynamic])))(),
+    TweenNOfdouble: () => (T.TweenNOfdouble = dart.constFn(dart.nullable(T.TweenOfdouble())))(),
+    TweenSequenceOfdouble: () => (T.TweenSequenceOfdouble = dart.constFn(tween_sequence.TweenSequence$(core.double)))(),
+    TweenSequenceItemOfdouble: () => (T.TweenSequenceItemOfdouble = dart.constFn(tween_sequence.TweenSequenceItem$(core.double)))(),
+    ConstantTweenOfdouble: () => (T.ConstantTweenOfdouble = dart.constFn(tween.ConstantTween$(core.double)))(),
+    JSArrayOfTweenSequenceItemOfdouble: () => (T.JSArrayOfTweenSequenceItemOfdouble = dart.constFn(_interceptors.JSArray$(T.TweenSequenceItemOfdouble())))(),
+    VoidTovoid: () => (T.VoidTovoid = dart.constFn(dart.fnType(dart.void, [])))(),
+    AnimationStatusTovoid: () => (T.AnimationStatusTovoid = dart.constFn(dart.fnType(dart.void, [animation.AnimationStatus])))(),
+    JSArrayOfWidget: () => (T.JSArrayOfWidget = dart.constFn(_interceptors.JSArray$(framework.Widget)))(),
+    AnimationOfdouble: () => (T.AnimationOfdouble = dart.constFn(animation.Animation$(core.double)))(),
+    DiagnosticsPropertyOfAnimationOfdouble: () => (T.DiagnosticsPropertyOfAnimationOfdouble = dart.constFn(diagnostics.DiagnosticsProperty$(T.AnimationOfdouble())))()
+  };
+  var T$Eval = Object.assign({
+    _: () => T$Eval
+  }, T);
+  var S = {
+    _: () => S
+  };
+  var S$Eval = Object.assign({
+    _: () => S$Eval
+  }, S);
+  const CT = Object.create({
+    _: () => (C, CT)
+  });
+  dart.defineLazy(CT, {
+    get C0() {
+      return C[0] = dart.const({
+        __proto__: core.Duration.prototype,
+        [Duration__duration]: 300000
+      });
+    },
+    get C1() {
+      return C[1] = dart.const({
+        __proto__: curves.Cubic.prototype,
+        [Cubic_d]: 1,
+        [Cubic_c]: 0.58,
+        [Cubic_b]: 0,
+        [Cubic_a]: 0
+      });
+    },
+    get C2() {
+      return C[2] = dart.const({
+        __proto__: core.Duration.prototype,
+        [Duration__duration]: 700000
+      });
+    },
+    get C3() {
+      return C[3] = dart.const({
+        __proto__: curves.Cubic.prototype,
+        [Cubic_d]: 1,
+        [Cubic_c]: 1,
+        [Cubic_b]: 0,
+        [Cubic_a]: 0.42
+      });
+    },
+    get C4() {
+      return C[4] = dart.const({
+        __proto__: alignment.Alignment.prototype,
+        [Alignment_y]: 0,
+        [Alignment_x]: 0
+      });
+    },
+    get C5() {
+      return C[5] = dart.const({
+        __proto__: decoration_image.ImageRepeat.prototype,
+        [_name]: "ImageRepeat.noRepeat",
+        index: 3
+      });
+    },
+    get C8() {
+      return C[8] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "image",
+        [_Location_column]: 7,
+        [_Location_line]: 366,
+        [_Location_file]: null
+      });
+    },
+    get C9() {
+      return C[9] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "errorBuilder",
+        [_Location_column]: 7,
+        [_Location_line]: 367,
+        [_Location_file]: null
+      });
+    },
+    get C10() {
+      return C[10] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "frameBuilder",
+        [_Location_column]: 7,
+        [_Location_line]: 368,
+        [_Location_file]: null
+      });
+    },
+    get C11() {
+      return C[11] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "width",
+        [_Location_column]: 7,
+        [_Location_line]: 369,
+        [_Location_file]: null
+      });
+    },
+    get C12() {
+      return C[12] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "height",
+        [_Location_column]: 7,
+        [_Location_line]: 370,
+        [_Location_file]: null
+      });
+    },
+    get C13() {
+      return C[13] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "fit",
+        [_Location_column]: 7,
+        [_Location_line]: 371,
+        [_Location_file]: null
+      });
+    },
+    get C14() {
+      return C[14] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "alignment",
+        [_Location_column]: 7,
+        [_Location_line]: 372,
+        [_Location_file]: null
+      });
+    },
+    get C15() {
+      return C[15] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "repeat",
+        [_Location_column]: 7,
+        [_Location_line]: 373,
+        [_Location_file]: null
+      });
+    },
+    get C16() {
+      return C[16] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "matchTextDirection",
+        [_Location_column]: 7,
+        [_Location_line]: 374,
+        [_Location_file]: null
+      });
+    },
+    get C17() {
+      return C[17] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "gaplessPlayback",
+        [_Location_column]: 7,
+        [_Location_line]: 375,
+        [_Location_file]: null
+      });
+    },
+    get C18() {
+      return C[18] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "excludeFromSemantics",
+        [_Location_column]: 7,
+        [_Location_line]: 376,
+        [_Location_file]: null
+      });
+    },
+    get C7() {
+      return C[7] = dart.constList([C[8] || CT.C8, C[9] || CT.C9, C[10] || CT.C10, C[11] || CT.C11, C[12] || CT.C12, C[13] || CT.C13, C[14] || CT.C14, C[15] || CT.C15, C[16] || CT.C16, C[17] || CT.C17, C[18] || CT.C18], widget_inspector._Location);
+    },
+    get C6() {
+      return C[6] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[7] || CT.C7,
+        [_Location_name]: null,
+        [_Location_column]: 12,
+        [_Location_line]: 365,
+        [_Location_file]: "file:///D:/flutter/packages/flutter/lib/src/widgets/fade_in_image.dart"
+      });
+    },
+    get C21() {
+      return C[21] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "target",
+        [_Location_column]: 11,
+        [_Location_line]: 389,
+        [_Location_file]: null
+      });
+    },
+    get C22() {
+      return C[22] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "placeholder",
+        [_Location_column]: 11,
+        [_Location_line]: 390,
+        [_Location_file]: null
+      });
+    },
+    get C23() {
+      return C[23] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "isTargetLoaded",
+        [_Location_column]: 11,
+        [_Location_line]: 391,
+        [_Location_file]: null
+      });
+    },
+    get C24() {
+      return C[24] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "fadeInDuration",
+        [_Location_column]: 11,
+        [_Location_line]: 392,
+        [_Location_file]: null
+      });
+    },
+    get C25() {
+      return C[25] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "fadeOutDuration",
+        [_Location_column]: 11,
+        [_Location_line]: 393,
+        [_Location_file]: null
+      });
+    },
+    get C26() {
+      return C[26] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "fadeInCurve",
+        [_Location_column]: 11,
+        [_Location_line]: 394,
+        [_Location_file]: null
+      });
+    },
+    get C27() {
+      return C[27] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "fadeOutCurve",
+        [_Location_column]: 11,
+        [_Location_line]: 395,
+        [_Location_file]: null
+      });
+    },
+    get C20() {
+      return C[20] = dart.constList([C[21] || CT.C21, C[22] || CT.C22, C[23] || CT.C23, C[24] || CT.C24, C[25] || CT.C25, C[26] || CT.C26, C[27] || CT.C27], widget_inspector._Location);
+    },
+    get C19() {
+      return C[19] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[20] || CT.C20,
+        [_Location_name]: null,
+        [_Location_column]: 16,
+        [_Location_line]: 388,
+        [_Location_file]: "file:///D:/flutter/packages/flutter/lib/src/widgets/fade_in_image.dart"
+      });
+    },
+    get C30() {
+      return C[30] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "container",
+        [_Location_column]: 9,
+        [_Location_line]: 402,
+        [_Location_file]: null
+      });
+    },
+    get C31() {
+      return C[31] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "image",
+        [_Location_column]: 9,
+        [_Location_line]: 403,
+        [_Location_file]: null
+      });
+    },
+    get C32() {
+      return C[32] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "label",
+        [_Location_column]: 9,
+        [_Location_line]: 404,
+        [_Location_file]: null
+      });
+    },
+    get C33() {
+      return C[33] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 9,
+        [_Location_line]: 405,
+        [_Location_file]: null
+      });
+    },
+    get C29() {
+      return C[29] = dart.constList([C[30] || CT.C30, C[31] || CT.C31, C[32] || CT.C32, C[33] || CT.C33], widget_inspector._Location);
+    },
+    get C28() {
+      return C[28] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[29] || CT.C29,
+        [_Location_name]: null,
+        [_Location_column]: 16,
+        [_Location_line]: 401,
+        [_Location_file]: "file:///D:/flutter/packages/flutter/lib/src/widgets/fade_in_image.dart"
+      });
+    },
+    get C36() {
+      return C[36] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "opacity",
+        [_Location_column]: 7,
+        [_Location_line]: 506,
+        [_Location_file]: null
+      });
+    },
+    get C37() {
+      return C[37] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 7,
+        [_Location_line]: 507,
+        [_Location_file]: null
+      });
+    },
+    get C35() {
+      return C[35] = dart.constList([C[36] || CT.C36, C[37] || CT.C37], widget_inspector._Location);
+    },
+    get C34() {
+      return C[34] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[35] || CT.C35,
+        [_Location_name]: null,
+        [_Location_column]: 27,
+        [_Location_line]: 505,
+        [_Location_file]: "file:///D:/flutter/packages/flutter/lib/src/widgets/fade_in_image.dart"
+      });
+    },
+    get C40() {
+      return C[40] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "opacity",
+        [_Location_column]: 11,
+        [_Location_line]: 523,
+        [_Location_file]: null
+      });
+    },
+    get C41() {
+      return C[41] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 11,
+        [_Location_line]: 524,
+        [_Location_file]: null
+      });
+    },
+    get C39() {
+      return C[39] = dart.constList([C[40] || CT.C40, C[41] || CT.C41], widget_inspector._Location);
+    },
+    get C38() {
+      return C[38] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[39] || CT.C39,
+        [_Location_name]: null,
+        [_Location_column]: 9,
+        [_Location_line]: 522,
+        [_Location_file]: "file:///D:/flutter/packages/flutter/lib/src/widgets/fade_in_image.dart"
+      });
+    },
+    get C44() {
+      return C[44] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "fit",
+        [_Location_column]: 7,
+        [_Location_line]: 515,
+        [_Location_file]: null
+      });
+    },
+    get C45() {
+      return C[45] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "alignment",
+        [_Location_column]: 7,
+        [_Location_line]: 516,
+        [_Location_file]: null
+      });
+    },
+    get C46() {
+      return C[46] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "textDirection",
+        [_Location_column]: 7,
+        [_Location_line]: 519,
+        [_Location_file]: null
+      });
+    },
+    get C47() {
+      return C[47] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "children",
+        [_Location_column]: 7,
+        [_Location_line]: 520,
+        [_Location_file]: null
+      });
+    },
+    get C43() {
+      return C[43] = dart.constList([C[44] || CT.C44, C[45] || CT.C45, C[46] || CT.C46, C[47] || CT.C47], widget_inspector._Location);
+    },
+    get C42() {
+      return C[42] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[43] || CT.C43,
+        [_Location_name]: null,
+        [_Location_column]: 12,
+        [_Location_line]: 514,
+        [_Location_file]: "file:///D:/flutter/packages/flutter/lib/src/widgets/fade_in_image.dart"
+      });
+    }
+  }, false);
+  var C = Array(48).fill(void 0);
+  var I = [
+    "file:///D:/flutter/packages/flutter/lib/src/widgets/fade_in_image.dart",
+    "package:flutter/src/widgets/fade_in_image.dart"
+  ];
+  var placeholder$ = dart.privateName(fade_in_image, "FadeInImage.placeholder");
+  var placeholderErrorBuilder$ = dart.privateName(fade_in_image, "FadeInImage.placeholderErrorBuilder");
+  var image$0 = dart.privateName(fade_in_image, "FadeInImage.image");
+  var imageErrorBuilder$ = dart.privateName(fade_in_image, "FadeInImage.imageErrorBuilder");
+  var fadeOutDuration$ = dart.privateName(fade_in_image, "FadeInImage.fadeOutDuration");
+  var fadeOutCurve$ = dart.privateName(fade_in_image, "FadeInImage.fadeOutCurve");
+  var fadeInDuration$ = dart.privateName(fade_in_image, "FadeInImage.fadeInDuration");
+  var fadeInCurve$ = dart.privateName(fade_in_image, "FadeInImage.fadeInCurve");
+  var width$ = dart.privateName(fade_in_image, "FadeInImage.width");
+  var height$ = dart.privateName(fade_in_image, "FadeInImage.height");
+  var fit$ = dart.privateName(fade_in_image, "FadeInImage.fit");
+  var alignment$ = dart.privateName(fade_in_image, "FadeInImage.alignment");
+  var repeat$ = dart.privateName(fade_in_image, "FadeInImage.repeat");
+  var matchTextDirection$ = dart.privateName(fade_in_image, "FadeInImage.matchTextDirection");
+  var excludeFromSemantics$ = dart.privateName(fade_in_image, "FadeInImage.excludeFromSemantics");
+  var imageSemanticLabel$ = dart.privateName(fade_in_image, "FadeInImage.imageSemanticLabel");
+  var Duration__duration = dart.privateName(core, "Duration._duration");
+  var Cubic_d = dart.privateName(curves, "Cubic.d");
+  var Cubic_c = dart.privateName(curves, "Cubic.c");
+  var Cubic_b = dart.privateName(curves, "Cubic.b");
+  var Cubic_a = dart.privateName(curves, "Cubic.a");
+  var Alignment_y = dart.privateName(alignment, "Alignment.y");
+  var Alignment_x = dart.privateName(alignment, "Alignment.x");
+  var _name = dart.privateName(decoration_image, "_name");
+  var _Location_parameterLocations = dart.privateName(widget_inspector, "_Location.parameterLocations");
+  var _Location_name = dart.privateName(widget_inspector, "_Location.name");
+  var _Location_column = dart.privateName(widget_inspector, "_Location.column");
+  var _Location_line = dart.privateName(widget_inspector, "_Location.line");
+  var _Location_file = dart.privateName(widget_inspector, "_Location.file");
+  var _image = dart.privateName(fade_in_image, "_image");
+  fade_in_image.FadeInImage = class FadeInImage extends framework.StatelessWidget {
+    get placeholder() {
+      return this[placeholder$];
+    }
+    set placeholder(value) {
+      super.placeholder = value;
+    }
+    get placeholderErrorBuilder() {
+      return this[placeholderErrorBuilder$];
+    }
+    set placeholderErrorBuilder(value) {
+      super.placeholderErrorBuilder = value;
+    }
+    get image() {
+      return this[image$0];
+    }
+    set image(value) {
+      super.image = value;
+    }
+    get imageErrorBuilder() {
+      return this[imageErrorBuilder$];
+    }
+    set imageErrorBuilder(value) {
+      super.imageErrorBuilder = value;
+    }
+    get fadeOutDuration() {
+      return this[fadeOutDuration$];
+    }
+    set fadeOutDuration(value) {
+      super.fadeOutDuration = value;
+    }
+    get fadeOutCurve() {
+      return this[fadeOutCurve$];
+    }
+    set fadeOutCurve(value) {
+      super.fadeOutCurve = value;
+    }
+    get fadeInDuration() {
+      return this[fadeInDuration$];
+    }
+    set fadeInDuration(value) {
+      super.fadeInDuration = value;
+    }
+    get fadeInCurve() {
+      return this[fadeInCurve$];
+    }
+    set fadeInCurve(value) {
+      super.fadeInCurve = value;
+    }
+    get width() {
+      return this[width$];
+    }
+    set width(value) {
+      super.width = value;
+    }
+    get height() {
+      return this[height$];
+    }
+    set height(value) {
+      super.height = value;
+    }
+    get fit() {
+      return this[fit$];
+    }
+    set fit(value) {
+      super.fit = value;
+    }
+    get alignment() {
+      return this[alignment$];
+    }
+    set alignment(value) {
+      super.alignment = value;
+    }
+    get repeat() {
+      return this[repeat$];
+    }
+    set repeat(value) {
+      super.repeat = value;
+    }
+    get matchTextDirection() {
+      return this[matchTextDirection$];
+    }
+    set matchTextDirection(value) {
+      super.matchTextDirection = value;
+    }
+    get excludeFromSemantics() {
+      return this[excludeFromSemantics$];
+    }
+    set excludeFromSemantics(value) {
+      super.excludeFromSemantics = value;
+    }
+    get imageSemanticLabel() {
+      return this[imageSemanticLabel$];
+    }
+    set imageSemanticLabel(value) {
+      super.imageSemanticLabel = value;
+    }
+    [_image](opts) {
+      let image = opts && 'image' in opts ? opts.image : null;
+      if (image == null) dart.nullFailed(I[0], 360, 28, "image");
+      let errorBuilder = opts && 'errorBuilder' in opts ? opts.errorBuilder : null;
+      let frameBuilder = opts && 'frameBuilder' in opts ? opts.frameBuilder : null;
+      if (!(image != null)) dart.assertFailed(null, I[0], 364, 12, "image != null");
+      return new image$.Image.new({image: image, errorBuilder: errorBuilder, frameBuilder: frameBuilder, width: this.width, height: this.height, fit: this.fit, alignment: this.alignment, repeat: this.repeat, matchTextDirection: this.matchTextDirection, gaplessPlayback: true, excludeFromSemantics: true, $creationLocationd_0dea112b090073317d4: C[6] || CT.C6});
+    }
+    build(context) {
+      let t0;
+      if (context == null) dart.nullFailed(I[0], 381, 29, "context");
+      let result = this[_image]({image: this.image, errorBuilder: this.imageErrorBuilder, frameBuilder: dart.fn((context, child, frame, wasSynchronouslyLoaded) => {
+          if (context == null) dart.nullFailed(I[0], 385, 35, "context");
+          if (child == null) dart.nullFailed(I[0], 385, 51, "child");
+          if (wasSynchronouslyLoaded == null) dart.nullFailed(I[0], 385, 75, "wasSynchronouslyLoaded");
+          if (dart.test(wasSynchronouslyLoaded)) return child;
+          return new fade_in_image._AnimatedFadeOutFadeIn.new({target: child, placeholder: this[_image]({image: this.placeholder, errorBuilder: this.placeholderErrorBuilder}), isTargetLoaded: frame != null, fadeInDuration: this.fadeInDuration, fadeOutDuration: this.fadeOutDuration, fadeInCurve: this.fadeInCurve, fadeOutCurve: this.fadeOutCurve, $creationLocationd_0dea112b090073317d4: C[19] || CT.C19});
+        }, T.BuildContextAndWidgetAndintN__ToWidget())});
+      if (!dart.test(this.excludeFromSemantics)) {
+        result = new basic.Semantics.new({container: this.imageSemanticLabel != null, image: true, label: (t0 = this.imageSemanticLabel, t0 == null ? "" : t0), child: result, $creationLocationd_0dea112b090073317d4: C[28] || CT.C28});
+      }
+      return result;
+    }
+  };
+  (fade_in_image.FadeInImage.new = function(opts) {
+    let key = opts && 'key' in opts ? opts.key : null;
+    let placeholder = opts && 'placeholder' in opts ? opts.placeholder : null;
+    if (placeholder == null) dart.nullFailed(I[0], 79, 19, "placeholder");
+    let placeholderErrorBuilder = opts && 'placeholderErrorBuilder' in opts ? opts.placeholderErrorBuilder : null;
+    let image = opts && 'image' in opts ? opts.image : null;
+    if (image == null) dart.nullFailed(I[0], 81, 19, "image");
+    let imageErrorBuilder = opts && 'imageErrorBuilder' in opts ? opts.imageErrorBuilder : null;
+    let excludeFromSemantics = opts && 'excludeFromSemantics' in opts ? opts.excludeFromSemantics : false;
+    if (excludeFromSemantics == null) dart.nullFailed(I[0], 83, 10, "excludeFromSemantics");
+    let imageSemanticLabel = opts && 'imageSemanticLabel' in opts ? opts.imageSemanticLabel : null;
+    let fadeOutDuration = opts && 'fadeOutDuration' in opts ? opts.fadeOutDuration : C[0] || CT.C0;
+    if (fadeOutDuration == null) dart.nullFailed(I[0], 85, 10, "fadeOutDuration");
+    let fadeOutCurve = opts && 'fadeOutCurve' in opts ? opts.fadeOutCurve : C[1] || CT.C1;
+    if (fadeOutCurve == null) dart.nullFailed(I[0], 86, 10, "fadeOutCurve");
+    let fadeInDuration = opts && 'fadeInDuration' in opts ? opts.fadeInDuration : C[2] || CT.C2;
+    if (fadeInDuration == null) dart.nullFailed(I[0], 87, 10, "fadeInDuration");
+    let fadeInCurve = opts && 'fadeInCurve' in opts ? opts.fadeInCurve : C[3] || CT.C3;
+    if (fadeInCurve == null) dart.nullFailed(I[0], 88, 10, "fadeInCurve");
+    let width = opts && 'width' in opts ? opts.width : null;
+    let height = opts && 'height' in opts ? opts.height : null;
+    let fit = opts && 'fit' in opts ? opts.fit : null;
+    let alignment = opts && 'alignment' in opts ? opts.alignment : C[4] || CT.C4;
+    if (alignment == null) dart.nullFailed(I[0], 92, 10, "alignment");
+    let repeat = opts && 'repeat' in opts ? opts.repeat : C[5] || CT.C5;
+    if (repeat == null) dart.nullFailed(I[0], 93, 10, "repeat");
+    let matchTextDirection = opts && 'matchTextDirection' in opts ? opts.matchTextDirection : false;
+    if (matchTextDirection == null) dart.nullFailed(I[0], 94, 10, "matchTextDirection");
+    let $36creationLocationd_0dea112b090073317d4 = opts && '$creationLocationd_0dea112b090073317d4' in opts ? opts.$creationLocationd_0dea112b090073317d4 : null;
+    this[placeholder$] = placeholder;
+    this[placeholderErrorBuilder$] = placeholderErrorBuilder;
+    this[image$0] = image;
+    this[imageErrorBuilder$] = imageErrorBuilder;
+    this[excludeFromSemantics$] = excludeFromSemantics;
+    this[imageSemanticLabel$] = imageSemanticLabel;
+    this[fadeOutDuration$] = fadeOutDuration;
+    this[fadeOutCurve$] = fadeOutCurve;
+    this[fadeInDuration$] = fadeInDuration;
+    this[fadeInCurve$] = fadeInCurve;
+    this[width$] = width;
+    this[height$] = height;
+    this[fit$] = fit;
+    this[alignment$] = alignment;
+    this[repeat$] = repeat;
+    this[matchTextDirection$] = matchTextDirection;
+    if (!(placeholder != null)) dart.assertFailed(null, I[0], 95, 15, "placeholder != null");
+    if (!(image != null)) dart.assertFailed(null, I[0], 96, 15, "image != null");
+    if (!(fadeOutDuration != null)) dart.assertFailed(null, I[0], 97, 15, "fadeOutDuration != null");
+    if (!(fadeOutCurve != null)) dart.assertFailed(null, I[0], 98, 15, "fadeOutCurve != null");
+    if (!(fadeInDuration != null)) dart.assertFailed(null, I[0], 99, 15, "fadeInDuration != null");
+    if (!(fadeInCurve != null)) dart.assertFailed(null, I[0], 100, 15, "fadeInCurve != null");
+    if (!(alignment != null)) dart.assertFailed(null, I[0], 101, 15, "alignment != null");
+    if (!(repeat != null)) dart.assertFailed(null, I[0], 102, 15, "repeat != null");
+    if (!(matchTextDirection != null)) dart.assertFailed(null, I[0], 103, 15, "matchTextDirection != null");
+    fade_in_image.FadeInImage.__proto__.new.call(this, {key: key, $creationLocationd_0dea112b090073317d4: $36creationLocationd_0dea112b090073317d4});
+    ;
+  }).prototype = fade_in_image.FadeInImage.prototype;
+  (fade_in_image.FadeInImage.memoryNetwork = function(opts) {
+    let key = opts && 'key' in opts ? opts.key : null;
+    let placeholder = opts && 'placeholder' in opts ? opts.placeholder : null;
+    if (placeholder == null) dart.nullFailed(I[0], 136, 24, "placeholder");
+    let placeholderErrorBuilder = opts && 'placeholderErrorBuilder' in opts ? opts.placeholderErrorBuilder : null;
+    let image = opts && 'image' in opts ? opts.image : null;
+    if (image == null) dart.nullFailed(I[0], 138, 21, "image");
+    let imageErrorBuilder = opts && 'imageErrorBuilder' in opts ? opts.imageErrorBuilder : null;
+    let placeholderScale = opts && 'placeholderScale' in opts ? opts.placeholderScale : 1;
+    if (placeholderScale == null) dart.nullFailed(I[0], 140, 12, "placeholderScale");
+    let imageScale = opts && 'imageScale' in opts ? opts.imageScale : 1;
+    if (imageScale == null) dart.nullFailed(I[0], 141, 12, "imageScale");
+    let excludeFromSemantics = opts && 'excludeFromSemantics' in opts ? opts.excludeFromSemantics : false;
+    if (excludeFromSemantics == null) dart.nullFailed(I[0], 142, 10, "excludeFromSemantics");
+    let imageSemanticLabel = opts && 'imageSemanticLabel' in opts ? opts.imageSemanticLabel : null;
+    let fadeOutDuration = opts && 'fadeOutDuration' in opts ? opts.fadeOutDuration : C[0] || CT.C0;
+    if (fadeOutDuration == null) dart.nullFailed(I[0], 144, 10, "fadeOutDuration");
+    let fadeOutCurve = opts && 'fadeOutCurve' in opts ? opts.fadeOutCurve : C[1] || CT.C1;
+    if (fadeOutCurve == null) dart.nullFailed(I[0], 145, 10, "fadeOutCurve");
+    let fadeInDuration = opts && 'fadeInDuration' in opts ? opts.fadeInDuration : C[2] || CT.C2;
+    if (fadeInDuration == null) dart.nullFailed(I[0], 146, 10, "fadeInDuration");
+    let fadeInCurve = opts && 'fadeInCurve' in opts ? opts.fadeInCurve : C[3] || CT.C3;
+    if (fadeInCurve == null) dart.nullFailed(I[0], 147, 10, "fadeInCurve");
+    let width = opts && 'width' in opts ? opts.width : null;
+    let height = opts && 'height' in opts ? opts.height : null;
+    let fit = opts && 'fit' in opts ? opts.fit : null;
+    let alignment = opts && 'alignment' in opts ? opts.alignment : C[4] || CT.C4;
+    if (alignment == null) dart.nullFailed(I[0], 151, 10, "alignment");
+    let repeat = opts && 'repeat' in opts ? opts.repeat : C[5] || CT.C5;
+    if (repeat == null) dart.nullFailed(I[0], 152, 10, "repeat");
+    let matchTextDirection = opts && 'matchTextDirection' in opts ? opts.matchTextDirection : false;
+    if (matchTextDirection == null) dart.nullFailed(I[0], 153, 10, "matchTextDirection");
+    let placeholderCacheWidth = opts && 'placeholderCacheWidth' in opts ? opts.placeholderCacheWidth : null;
+    let placeholderCacheHeight = opts && 'placeholderCacheHeight' in opts ? opts.placeholderCacheHeight : null;
+    let imageCacheWidth = opts && 'imageCacheWidth' in opts ? opts.imageCacheWidth : null;
+    let imageCacheHeight = opts && 'imageCacheHeight' in opts ? opts.imageCacheHeight : null;
+    let $36creationLocationd_0dea112b090073317d4 = opts && '$creationLocationd_0dea112b090073317d4' in opts ? opts.$creationLocationd_0dea112b090073317d4 : null;
+    this[placeholderErrorBuilder$] = placeholderErrorBuilder;
+    this[imageErrorBuilder$] = imageErrorBuilder;
+    this[excludeFromSemantics$] = excludeFromSemantics;
+    this[imageSemanticLabel$] = imageSemanticLabel;
+    this[fadeOutDuration$] = fadeOutDuration;
+    this[fadeOutCurve$] = fadeOutCurve;
+    this[fadeInDuration$] = fadeInDuration;
+    this[fadeInCurve$] = fadeInCurve;
+    this[width$] = width;
+    this[height$] = height;
+    this[fit$] = fit;
+    this[alignment$] = alignment;
+    this[repeat$] = repeat;
+    this[matchTextDirection$] = matchTextDirection;
+    if (!(placeholder != null)) dart.assertFailed(null, I[0], 158, 15, "placeholder != null");
+    if (!(image != null)) dart.assertFailed(null, I[0], 159, 15, "image != null");
+    if (!(placeholderScale != null)) dart.assertFailed(null, I[0], 160, 15, "placeholderScale != null");
+    if (!(imageScale != null)) dart.assertFailed(null, I[0], 161, 15, "imageScale != null");
+    if (!(fadeOutDuration != null)) dart.assertFailed(null, I[0], 162, 15, "fadeOutDuration != null");
+    if (!(fadeOutCurve != null)) dart.assertFailed(null, I[0], 163, 15, "fadeOutCurve != null");
+    if (!(fadeInDuration != null)) dart.assertFailed(null, I[0], 164, 15, "fadeInDuration != null");
+    if (!(fadeInCurve != null)) dart.assertFailed(null, I[0], 165, 15, "fadeInCurve != null");
+    if (!(alignment != null)) dart.assertFailed(null, I[0], 166, 15, "alignment != null");
+    if (!(repeat != null)) dart.assertFailed(null, I[0], 167, 15, "repeat != null");
+    if (!(matchTextDirection != null)) dart.assertFailed(null, I[0], 168, 15, "matchTextDirection != null");
+    this[placeholder$] = image_provider.ResizeImage.resizeIfNeeded(placeholderCacheWidth, placeholderCacheHeight, new image_provider.MemoryImage.new(placeholder, {scale: placeholderScale}));
+    this[image$0] = image_provider.ResizeImage.resizeIfNeeded(imageCacheWidth, imageCacheHeight, new _network_image_web.NetworkImage.new(image, {scale: imageScale}));
+    fade_in_image.FadeInImage.__proto__.new.call(this, {key: key, $creationLocationd_0dea112b090073317d4: $36creationLocationd_0dea112b090073317d4});
+    ;
+  }).prototype = fade_in_image.FadeInImage.prototype;
+  (fade_in_image.FadeInImage.assetNetwork = function(opts) {
+    let key = opts && 'key' in opts ? opts.key : null;
+    let placeholder = opts && 'placeholder' in opts ? opts.placeholder : null;
+    if (placeholder == null) dart.nullFailed(I[0], 206, 21, "placeholder");
+    let placeholderErrorBuilder = opts && 'placeholderErrorBuilder' in opts ? opts.placeholderErrorBuilder : null;
+    let image = opts && 'image' in opts ? opts.image : null;
+    if (image == null) dart.nullFailed(I[0], 208, 21, "image");
+    let imageErrorBuilder = opts && 'imageErrorBuilder' in opts ? opts.imageErrorBuilder : null;
+    let bundle = opts && 'bundle' in opts ? opts.bundle : null;
+    let placeholderScale = opts && 'placeholderScale' in opts ? opts.placeholderScale : null;
+    let imageScale = opts && 'imageScale' in opts ? opts.imageScale : 1;
+    if (imageScale == null) dart.nullFailed(I[0], 212, 12, "imageScale");
+    let excludeFromSemantics = opts && 'excludeFromSemantics' in opts ? opts.excludeFromSemantics : false;
+    if (excludeFromSemantics == null) dart.nullFailed(I[0], 213, 10, "excludeFromSemantics");
+    let imageSemanticLabel = opts && 'imageSemanticLabel' in opts ? opts.imageSemanticLabel : null;
+    let fadeOutDuration = opts && 'fadeOutDuration' in opts ? opts.fadeOutDuration : C[0] || CT.C0;
+    if (fadeOutDuration == null) dart.nullFailed(I[0], 215, 10, "fadeOutDuration");
+    let fadeOutCurve = opts && 'fadeOutCurve' in opts ? opts.fadeOutCurve : C[1] || CT.C1;
+    if (fadeOutCurve == null) dart.nullFailed(I[0], 216, 10, "fadeOutCurve");
+    let fadeInDuration = opts && 'fadeInDuration' in opts ? opts.fadeInDuration : C[2] || CT.C2;
+    if (fadeInDuration == null) dart.nullFailed(I[0], 217, 10, "fadeInDuration");
+    let fadeInCurve = opts && 'fadeInCurve' in opts ? opts.fadeInCurve : C[3] || CT.C3;
+    if (fadeInCurve == null) dart.nullFailed(I[0], 218, 10, "fadeInCurve");
+    let width = opts && 'width' in opts ? opts.width : null;
+    let height = opts && 'height' in opts ? opts.height : null;
+    let fit = opts && 'fit' in opts ? opts.fit : null;
+    let alignment = opts && 'alignment' in opts ? opts.alignment : C[4] || CT.C4;
+    if (alignment == null) dart.nullFailed(I[0], 222, 10, "alignment");
+    let repeat = opts && 'repeat' in opts ? opts.repeat : C[5] || CT.C5;
+    if (repeat == null) dart.nullFailed(I[0], 223, 10, "repeat");
+    let matchTextDirection = opts && 'matchTextDirection' in opts ? opts.matchTextDirection : false;
+    if (matchTextDirection == null) dart.nullFailed(I[0], 224, 10, "matchTextDirection");
+    let placeholderCacheWidth = opts && 'placeholderCacheWidth' in opts ? opts.placeholderCacheWidth : null;
+    let placeholderCacheHeight = opts && 'placeholderCacheHeight' in opts ? opts.placeholderCacheHeight : null;
+    let imageCacheWidth = opts && 'imageCacheWidth' in opts ? opts.imageCacheWidth : null;
+    let imageCacheHeight = opts && 'imageCacheHeight' in opts ? opts.imageCacheHeight : null;
+    let $36creationLocationd_0dea112b090073317d4 = opts && '$creationLocationd_0dea112b090073317d4' in opts ? opts.$creationLocationd_0dea112b090073317d4 : null;
+    this[placeholderErrorBuilder$] = placeholderErrorBuilder;
+    this[imageErrorBuilder$] = imageErrorBuilder;
+    this[excludeFromSemantics$] = excludeFromSemantics;
+    this[imageSemanticLabel$] = imageSemanticLabel;
+    this[fadeOutDuration$] = fadeOutDuration;
+    this[fadeOutCurve$] = fadeOutCurve;
+    this[fadeInDuration$] = fadeInDuration;
+    this[fadeInCurve$] = fadeInCurve;
+    this[width$] = width;
+    this[height$] = height;
+    this[fit$] = fit;
+    this[alignment$] = alignment;
+    this[repeat$] = repeat;
+    this[matchTextDirection$] = matchTextDirection;
+    if (!(placeholder != null)) dart.assertFailed(null, I[0], 229, 15, "placeholder != null");
+    if (!(image != null)) dart.assertFailed(null, I[0], 230, 15, "image != null");
+    this[placeholder$] = placeholderScale != null ? image_provider.ResizeImage.resizeIfNeeded(placeholderCacheWidth, placeholderCacheHeight, new image_provider.ExactAssetImage.new(placeholder, {bundle: bundle, scale: placeholderScale})) : image_provider.ResizeImage.resizeIfNeeded(placeholderCacheWidth, placeholderCacheHeight, new image_resolution.AssetImage.new(placeholder, {bundle: bundle}));
+    if (!(imageScale != null)) dart.assertFailed(null, I[0], 234, 15, "imageScale != null");
+    if (!(fadeOutDuration != null)) dart.assertFailed(null, I[0], 235, 15, "fadeOutDuration != null");
+    if (!(fadeOutCurve != null)) dart.assertFailed(null, I[0], 236, 15, "fadeOutCurve != null");
+    if (!(fadeInDuration != null)) dart.assertFailed(null, I[0], 237, 15, "fadeInDuration != null");
+    if (!(fadeInCurve != null)) dart.assertFailed(null, I[0], 238, 15, "fadeInCurve != null");
+    if (!(alignment != null)) dart.assertFailed(null, I[0], 239, 15, "alignment != null");
+    if (!(repeat != null)) dart.assertFailed(null, I[0], 240, 15, "repeat != null");
+    if (!(matchTextDirection != null)) dart.assertFailed(null, I[0], 241, 15, "matchTextDirection != null");
+    this[image$0] = image_provider.ResizeImage.resizeIfNeeded(imageCacheWidth, imageCacheHeight, new _network_image_web.NetworkImage.new(image, {scale: imageScale}));
+    fade_in_image.FadeInImage.__proto__.new.call(this, {key: key, $creationLocationd_0dea112b090073317d4: $36creationLocationd_0dea112b090073317d4});
+    ;
+  }).prototype = fade_in_image.FadeInImage.prototype;
+  dart.addTypeTests(fade_in_image.FadeInImage);
+  dart.addTypeCaches(fade_in_image.FadeInImage);
+  dart.setMethodSignature(fade_in_image.FadeInImage, () => ({
+    __proto__: dart.getMethods(fade_in_image.FadeInImage.__proto__),
+    [_image]: dart.fnType(image$.Image, [], {errorBuilder: dart.nullable(dart.fnType(framework.Widget, [framework.BuildContext, core.Object, dart.nullable(core.StackTrace)])), frameBuilder: dart.nullable(dart.fnType(framework.Widget, [framework.BuildContext, framework.Widget, dart.nullable(core.int), core.bool]))}, {image: image_provider.ImageProvider$(core.Object)}),
+    build: dart.fnType(framework.Widget, [framework.BuildContext])
+  }));
+  dart.setLibraryUri(fade_in_image.FadeInImage, I[1]);
+  dart.setFieldSignature(fade_in_image.FadeInImage, () => ({
+    __proto__: dart.getFields(fade_in_image.FadeInImage.__proto__),
+    placeholder: dart.finalFieldType(image_provider.ImageProvider$(core.Object)),
+    placeholderErrorBuilder: dart.finalFieldType(dart.nullable(dart.fnType(framework.Widget, [framework.BuildContext, core.Object, dart.nullable(core.StackTrace)]))),
+    image: dart.finalFieldType(image_provider.ImageProvider$(core.Object)),
+    imageErrorBuilder: dart.finalFieldType(dart.nullable(dart.fnType(framework.Widget, [framework.BuildContext, core.Object, dart.nullable(core.StackTrace)]))),
+    fadeOutDuration: dart.finalFieldType(core.Duration),
+    fadeOutCurve: dart.finalFieldType(curves.Curve),
+    fadeInDuration: dart.finalFieldType(core.Duration),
+    fadeInCurve: dart.finalFieldType(curves.Curve),
+    width: dart.finalFieldType(dart.nullable(core.double)),
+    height: dart.finalFieldType(dart.nullable(core.double)),
+    fit: dart.finalFieldType(dart.nullable(box_fit.BoxFit)),
+    alignment: dart.finalFieldType(alignment.AlignmentGeometry),
+    repeat: dart.finalFieldType(decoration_image.ImageRepeat),
+    matchTextDirection: dart.finalFieldType(core.bool),
+    excludeFromSemantics: dart.finalFieldType(core.bool),
+    imageSemanticLabel: dart.finalFieldType(dart.nullable(core.String))
+  }));
+  var target$ = dart.privateName(fade_in_image, "_AnimatedFadeOutFadeIn.target");
+  var placeholder$0 = dart.privateName(fade_in_image, "_AnimatedFadeOutFadeIn.placeholder");
+  var isTargetLoaded$ = dart.privateName(fade_in_image, "_AnimatedFadeOutFadeIn.isTargetLoaded");
+  var fadeInDuration$0 = dart.privateName(fade_in_image, "_AnimatedFadeOutFadeIn.fadeInDuration");
+  var fadeOutDuration$0 = dart.privateName(fade_in_image, "_AnimatedFadeOutFadeIn.fadeOutDuration");
+  var fadeInCurve$0 = dart.privateName(fade_in_image, "_AnimatedFadeOutFadeIn.fadeInCurve");
+  var fadeOutCurve$0 = dart.privateName(fade_in_image, "_AnimatedFadeOutFadeIn.fadeOutCurve");
+  fade_in_image._AnimatedFadeOutFadeIn = class _AnimatedFadeOutFadeIn extends implicit_animations.ImplicitlyAnimatedWidget {
+    get target() {
+      return this[target$];
+    }
+    set target(value) {
+      super.target = value;
+    }
+    get placeholder() {
+      return this[placeholder$0];
+    }
+    set placeholder(value) {
+      super.placeholder = value;
+    }
+    get isTargetLoaded() {
+      return this[isTargetLoaded$];
+    }
+    set isTargetLoaded(value) {
+      super.isTargetLoaded = value;
+    }
+    get fadeInDuration() {
+      return this[fadeInDuration$0];
+    }
+    set fadeInDuration(value) {
+      super.fadeInDuration = value;
+    }
+    get fadeOutDuration() {
+      return this[fadeOutDuration$0];
+    }
+    set fadeOutDuration(value) {
+      super.fadeOutDuration = value;
+    }
+    get fadeInCurve() {
+      return this[fadeInCurve$0];
+    }
+    set fadeInCurve(value) {
+      super.fadeInCurve = value;
+    }
+    get fadeOutCurve() {
+      return this[fadeOutCurve$0];
+    }
+    set fadeOutCurve(value) {
+      super.fadeOutCurve = value;
+    }
+    createState() {
+      return new fade_in_image._AnimatedFadeOutFadeInState.new();
+    }
+  };
+  (fade_in_image._AnimatedFadeOutFadeIn.new = function(opts) {
+    let key = opts && 'key' in opts ? opts.key : null;
+    let target = opts && 'target' in opts ? opts.target : null;
+    if (target == null) dart.nullFailed(I[0], 416, 19, "target");
+    let placeholder = opts && 'placeholder' in opts ? opts.placeholder : null;
+    if (placeholder == null) dart.nullFailed(I[0], 417, 19, "placeholder");
+    let isTargetLoaded = opts && 'isTargetLoaded' in opts ? opts.isTargetLoaded : null;
+    if (isTargetLoaded == null) dart.nullFailed(I[0], 418, 19, "isTargetLoaded");
+    let fadeOutDuration = opts && 'fadeOutDuration' in opts ? opts.fadeOutDuration : null;
+    if (fadeOutDuration == null) dart.nullFailed(I[0], 419, 19, "fadeOutDuration");
+    let fadeOutCurve = opts && 'fadeOutCurve' in opts ? opts.fadeOutCurve : null;
+    if (fadeOutCurve == null) dart.nullFailed(I[0], 420, 19, "fadeOutCurve");
+    let fadeInDuration = opts && 'fadeInDuration' in opts ? opts.fadeInDuration : null;
+    if (fadeInDuration == null) dart.nullFailed(I[0], 421, 19, "fadeInDuration");
+    let fadeInCurve = opts && 'fadeInCurve' in opts ? opts.fadeInCurve : null;
+    if (fadeInCurve == null) dart.nullFailed(I[0], 422, 19, "fadeInCurve");
+    let $36creationLocationd_0dea112b090073317d4 = opts && '$creationLocationd_0dea112b090073317d4' in opts ? opts.$creationLocationd_0dea112b090073317d4 : null;
+    this[target$] = target;
+    this[placeholder$0] = placeholder;
+    this[isTargetLoaded$] = isTargetLoaded;
+    this[fadeOutDuration$0] = fadeOutDuration;
+    this[fadeOutCurve$0] = fadeOutCurve;
+    this[fadeInDuration$0] = fadeInDuration;
+    this[fadeInCurve$0] = fadeInCurve;
+    if (!(target != null)) dart.assertFailed(null, I[0], 423, 15, "target != null");
+    if (!(placeholder != null)) dart.assertFailed(null, I[0], 424, 15, "placeholder != null");
+    if (!(isTargetLoaded != null)) dart.assertFailed(null, I[0], 425, 15, "isTargetLoaded != null");
+    if (!(fadeOutDuration != null)) dart.assertFailed(null, I[0], 426, 15, "fadeOutDuration != null");
+    if (!(fadeOutCurve != null)) dart.assertFailed(null, I[0], 427, 15, "fadeOutCurve != null");
+    if (!(fadeInDuration != null)) dart.assertFailed(null, I[0], 428, 15, "fadeInDuration != null");
+    if (!(fadeInCurve != null)) dart.assertFailed(null, I[0], 429, 15, "fadeInCurve != null");
+    fade_in_image._AnimatedFadeOutFadeIn.__proto__.new.call(this, {key: key, duration: fadeInDuration['+'](fadeOutDuration), $creationLocationd_0dea112b090073317d4: $36creationLocationd_0dea112b090073317d4});
+    ;
+  }).prototype = fade_in_image._AnimatedFadeOutFadeIn.prototype;
+  dart.addTypeTests(fade_in_image._AnimatedFadeOutFadeIn);
+  dart.addTypeCaches(fade_in_image._AnimatedFadeOutFadeIn);
+  dart.setMethodSignature(fade_in_image._AnimatedFadeOutFadeIn, () => ({
+    __proto__: dart.getMethods(fade_in_image._AnimatedFadeOutFadeIn.__proto__),
+    createState: dart.fnType(fade_in_image._AnimatedFadeOutFadeInState, [])
+  }));
+  dart.setLibraryUri(fade_in_image._AnimatedFadeOutFadeIn, I[1]);
+  dart.setFieldSignature(fade_in_image._AnimatedFadeOutFadeIn, () => ({
+    __proto__: dart.getFields(fade_in_image._AnimatedFadeOutFadeIn.__proto__),
+    target: dart.finalFieldType(framework.Widget),
+    placeholder: dart.finalFieldType(framework.Widget),
+    isTargetLoaded: dart.finalFieldType(core.bool),
+    fadeInDuration: dart.finalFieldType(core.Duration),
+    fadeOutDuration: dart.finalFieldType(core.Duration),
+    fadeInCurve: dart.finalFieldType(curves.Curve),
+    fadeOutCurve: dart.finalFieldType(curves.Curve)
+  }));
+  var _targetOpacity = dart.privateName(fade_in_image, "_targetOpacity");
+  var _placeholderOpacity = dart.privateName(fade_in_image, "_placeholderOpacity");
+  var _targetOpacityAnimation = dart.privateName(fade_in_image, "_targetOpacityAnimation");
+  var _placeholderOpacityAnimation = dart.privateName(fade_in_image, "_placeholderOpacityAnimation");
+  var _isValid = dart.privateName(fade_in_image, "_isValid");
+  fade_in_image._AnimatedFadeOutFadeInState = class _AnimatedFadeOutFadeInState extends implicit_animations.ImplicitlyAnimatedWidgetState$(fade_in_image._AnimatedFadeOutFadeIn) {
+    forEachTween(visitor) {
+      if (visitor == null) dart.nullFailed(I[0], 451, 43, "visitor");
+      this[_targetOpacity] = T.TweenNOfdouble().as(visitor(this[_targetOpacity], dart.test(this.widget.isTargetLoaded) ? 1.0 : 0.0, dart.fn(value => new (T.TweenOfdouble()).new({begin: core.double.as(value)}), T.dynamicToTweenOfdouble())));
+      this[_placeholderOpacity] = T.TweenNOfdouble().as(visitor(this[_placeholderOpacity], dart.test(this.widget.isTargetLoaded) ? 0.0 : 1.0, dart.fn(value => new (T.TweenOfdouble()).new({begin: core.double.as(value)}), T.dynamicToTweenOfdouble())));
+    }
+    didUpdateTweens() {
+      let t0;
+      this[_placeholderOpacityAnimation] = (t0 = this.animation.drive(core.double, new (T.TweenSequenceOfdouble()).new(T.JSArrayOfTweenSequenceItemOfdouble().of([new (T.TweenSequenceItemOfdouble()).new({tween: dart.nullCheck(this[_placeholderOpacity]).chain(new tween.CurveTween.new({curve: this.widget.fadeOutCurve})), weight: this.widget.fadeOutDuration.inMilliseconds[$toDouble]()}), new (T.TweenSequenceItemOfdouble()).new({tween: new (T.ConstantTweenOfdouble()).new(0.0), weight: this.widget.fadeInDuration.inMilliseconds[$toDouble]()})]))), (() => {
+        t0.addStatusListener(dart.fn(status => {
+          if (status == null) dart.nullFailed(I[0], 475, 45, "status");
+          if (dart.test(dart.nullCheck(this[_placeholderOpacityAnimation]).isCompleted)) {
+            this.setState(dart.fn(() => {
+            }, T.VoidTovoid()));
+          }
+        }, T.AnimationStatusTovoid()));
+        return t0;
+      })());
+      this[_targetOpacityAnimation] = this.animation.drive(core.double, new (T.TweenSequenceOfdouble()).new(T.JSArrayOfTweenSequenceItemOfdouble().of([new (T.TweenSequenceItemOfdouble()).new({tween: new (T.ConstantTweenOfdouble()).new(0.0), weight: this.widget.fadeOutDuration.inMilliseconds[$toDouble]()}), new (T.TweenSequenceItemOfdouble()).new({tween: dart.nullCheck(this[_targetOpacity]).chain(new tween.CurveTween.new({curve: this.widget.fadeInCurve})), weight: this.widget.fadeInDuration.inMilliseconds[$toDouble]()})])));
+      if (!dart.test(this.widget.isTargetLoaded) && dart.test(this[_isValid](dart.nullCheck(this[_placeholderOpacity]))) && dart.test(this[_isValid](dart.nullCheck(this[_targetOpacity])))) {
+        this.controller.value = this.controller.upperBound;
+      }
+    }
+    [_isValid](tween) {
+      if (tween == null) dart.nullFailed(I[0], 499, 31, "tween");
+      return tween.begin != null && tween.end != null;
+    }
+    build(context) {
+      if (context == null) dart.nullFailed(I[0], 504, 29, "context");
+      let target = new transitions.FadeTransition.new({opacity: dart.nullCheck(this[_targetOpacityAnimation]), child: this.widget.target, $creationLocationd_0dea112b090073317d4: C[34] || CT.C34});
+      if (dart.test(dart.nullCheck(this[_placeholderOpacityAnimation]).isCompleted)) {
+        return target;
+      }
+      return new basic.Stack.new({fit: stack.StackFit.passthrough, alignment: alignment.AlignmentDirectional.center, textDirection: ui.TextDirection.ltr, children: T.JSArrayOfWidget().of([target, new transitions.FadeTransition.new({opacity: dart.nullCheck(this[_placeholderOpacityAnimation]), child: this.widget.placeholder, $creationLocationd_0dea112b090073317d4: C[38] || CT.C38})]), $creationLocationd_0dea112b090073317d4: C[42] || CT.C42});
+    }
+    debugFillProperties(properties) {
+      if (properties == null) dart.nullFailed(I[0], 531, 56, "properties");
+      super.debugFillProperties(properties);
+      properties.add(new (T.DiagnosticsPropertyOfAnimationOfdouble()).new("targetOpacity", this[_targetOpacityAnimation]));
+      properties.add(new (T.DiagnosticsPropertyOfAnimationOfdouble()).new("placeholderOpacity", this[_placeholderOpacityAnimation]));
+    }
+  };
+  (fade_in_image._AnimatedFadeOutFadeInState.new = function() {
+    this[_targetOpacity] = null;
+    this[_placeholderOpacity] = null;
+    this[_targetOpacityAnimation] = null;
+    this[_placeholderOpacityAnimation] = null;
+    fade_in_image._AnimatedFadeOutFadeInState.__proto__.new.call(this);
+    ;
+  }).prototype = fade_in_image._AnimatedFadeOutFadeInState.prototype;
+  dart.addTypeTests(fade_in_image._AnimatedFadeOutFadeInState);
+  dart.addTypeCaches(fade_in_image._AnimatedFadeOutFadeInState);
+  dart.setMethodSignature(fade_in_image._AnimatedFadeOutFadeInState, () => ({
+    __proto__: dart.getMethods(fade_in_image._AnimatedFadeOutFadeInState.__proto__),
+    forEachTween: dart.fnType(dart.void, [dart.fnType(dart.nullable(tween.Tween), [dart.nullable(tween.Tween), dart.dynamic, dart.fnType(tween.Tween, [dart.dynamic])])]),
+    [_isValid]: dart.fnType(core.bool, [tween.Tween$(core.double)]),
+    build: dart.fnType(framework.Widget, [framework.BuildContext])
+  }));
+  dart.setLibraryUri(fade_in_image._AnimatedFadeOutFadeInState, I[1]);
+  dart.setFieldSignature(fade_in_image._AnimatedFadeOutFadeInState, () => ({
+    __proto__: dart.getFields(fade_in_image._AnimatedFadeOutFadeInState.__proto__),
+    [_targetOpacity]: dart.fieldType(dart.nullable(tween.Tween$(core.double))),
+    [_placeholderOpacity]: dart.fieldType(dart.nullable(tween.Tween$(core.double))),
+    [_targetOpacityAnimation]: dart.fieldType(dart.nullable(animation.Animation$(core.double))),
+    [_placeholderOpacityAnimation]: dart.fieldType(dart.nullable(animation.Animation$(core.double)))
+  }));
+  dart.trackLibraries("packages/flutter/src/widgets/fade_in_image.dart", {
+    "package:flutter/src/widgets/fade_in_image.dart": fade_in_image
+  }, {
+  }, '{"version":3,"sourceRoot":"","sources":["fade_in_image.dart"],"names":[],"mappings":"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","file":"../../../../../../../E:/packages/flutter/src/widgets/fade_in_image.dart.lib.js"}');
+  // Exports:
+  return {
+    src__widgets__fade_in_image: fade_in_image
+  };
+}));
+
+//# sourceMappingURL=fade_in_image.dart.lib.js.map

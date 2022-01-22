@@ -1,0 +1,695 @@
+define(['dart_sdk', 'packages/flutter/src/gestures/tap.dart', 'packages/flutter/src/animation/animation_controller.dart', 'packages/flutter/src/animation/listener_helpers.dart', 'packages/flutter/src/animation/curves.dart', 'packages/flutter/src/material/constants.dart', 'packages/flutter/src/rendering/layer.dart', 'packages/flutter/src/semantics/semantics_event.dart', 'packages/flutter/src/gestures/events.dart', 'packages/flutter/src/foundation/debug.dart', 'packages/flutter/src/rendering/proxy_box.dart', 'packages/flutter/src/scheduler/ticker.dart'], (function load__packages__flutter__src__material__toggleable_dart(dart_sdk, packages__flutter__src__gestures__tap$46dart, packages__flutter__src__animation__animation_controller$46dart, packages__flutter__src__animation__listener_helpers$46dart, packages__flutter__src__animation__curves$46dart, packages__flutter__src__material__constants$46dart, packages__flutter__src__rendering__layer$46dart, packages__flutter__src__semantics__semantics_event$46dart, packages__flutter__src__gestures__events$46dart, packages__flutter__src__foundation__debug$46dart, packages__flutter__src__rendering__proxy_box$46dart, packages__flutter__src__scheduler__ticker$46dart) {
+  'use strict';
+  const core = dart_sdk.core;
+  const _internal = dart_sdk._internal;
+  const ui = dart_sdk.ui;
+  const dart = dart_sdk.dart;
+  const dartx = dart_sdk.dartx;
+  const tap = packages__flutter__src__gestures__tap$46dart.src__gestures__tap;
+  const animation_controller = packages__flutter__src__animation__animation_controller$46dart.src__animation__animation_controller;
+  const animations = packages__flutter__src__animation__listener_helpers$46dart.src__animation__animations;
+  const animation = packages__flutter__src__animation__listener_helpers$46dart.src__animation__animation;
+  const tween = packages__flutter__src__animation__listener_helpers$46dart.src__animation__tween;
+  const curves = packages__flutter__src__animation__curves$46dart.src__animation__curves;
+  const constants = packages__flutter__src__material__constants$46dart.src__material__constants;
+  const object = packages__flutter__src__rendering__layer$46dart.src__rendering__object;
+  const box = packages__flutter__src__rendering__layer$46dart.src__rendering__box;
+  const semantics_event = packages__flutter__src__semantics__semantics_event$46dart.src__semantics__semantics_event;
+  const events = packages__flutter__src__gestures__events$46dart.src__gestures__events;
+  const diagnostics = packages__flutter__src__foundation__debug$46dart.src__foundation__diagnostics;
+  const proxy_box = packages__flutter__src__rendering__proxy_box$46dart.src__rendering__proxy_box;
+  const ticker = packages__flutter__src__scheduler__ticker$46dart.src__scheduler__ticker;
+  var toggleable = Object.create(dart.library);
+  dart._checkModuleNullSafetyMode(true);
+  var T = {
+    TweenOfdouble: () => (T.TweenOfdouble = dart.constFn(tween.Tween$(core.double)))()
+  };
+  var T$Eval = Object.assign({
+    _: () => T$Eval
+  }, T);
+  var S = {
+    _: () => S
+  };
+  var S$Eval = Object.assign({
+    _: () => S$Eval
+  }, S);
+  const CT = Object.create({
+    _: () => (C, CT)
+  });
+  dart.defineLazy(CT, {
+    get C0() {
+      return C[0] = dart.const({
+        __proto__: animation.AnimationStatus.prototype,
+        [_name]: "AnimationStatus.forward",
+        index: 1
+      });
+    },
+    get C1() {
+      return C[1] = dart.const({
+        __proto__: animation.AnimationStatus.prototype,
+        [_name]: "AnimationStatus.reverse",
+        index: 2
+      });
+    },
+    get C2() {
+      return C[2] = dart.const({
+        __proto__: animation.AnimationStatus.prototype,
+        [_name]: "AnimationStatus.dismissed",
+        index: 0
+      });
+    },
+    get C3() {
+      return C[3] = dart.const({
+        __proto__: animation.AnimationStatus.prototype,
+        [_name]: "AnimationStatus.completed",
+        index: 3
+      });
+    },
+    get C4() {
+      return C[4] = dart.const({
+        __proto__: semantics_event.TapSemanticEvent.prototype,
+        [SemanticsEvent_type]: "tap"
+      });
+    },
+    get C5() {
+      return C[5] = dart.const({
+        __proto__: core.Duration.prototype,
+        [Duration__duration]: 200000
+      });
+    },
+    get C6() {
+      return C[6] = dart.const({
+        __proto__: core.Duration.prototype,
+        [Duration__duration]: 50000
+      });
+    }
+  }, false);
+  var C = Array(7).fill(void 0);
+  var I = [
+    "file:///D:/flutter/packages/flutter/lib/src/material/toggleable.dart",
+    "package:flutter/src/material/toggleable.dart"
+  ];
+  var __RenderToggleable__positionController = dart.privateName(toggleable, "_#RenderToggleable#_positionController");
+  var __RenderToggleable__position = dart.privateName(toggleable, "_#RenderToggleable#_position");
+  var __RenderToggleable__reactionController = dart.privateName(toggleable, "_#RenderToggleable#_reactionController");
+  var __RenderToggleable__reaction = dart.privateName(toggleable, "_#RenderToggleable#_reaction");
+  var __RenderToggleable__reactionFocusFadeController = dart.privateName(toggleable, "_#RenderToggleable#_reactionFocusFadeController");
+  var __RenderToggleable__reactionFocusFade = dart.privateName(toggleable, "_#RenderToggleable#_reactionFocusFade");
+  var __RenderToggleable__reactionHoverFadeController = dart.privateName(toggleable, "_#RenderToggleable#_reactionHoverFadeController");
+  var __RenderToggleable__reactionHoverFade = dart.privateName(toggleable, "_#RenderToggleable#_reactionHoverFade");
+  var __RenderToggleable__tap = dart.privateName(toggleable, "_#RenderToggleable#_tap");
+  var _downPosition = dart.privateName(toggleable, "_downPosition");
+  var _value = dart.privateName(toggleable, "_value");
+  var _tristate = dart.privateName(toggleable, "_tristate");
+  var _activeColor = dart.privateName(toggleable, "_activeColor");
+  var _inactiveColor = dart.privateName(toggleable, "_inactiveColor");
+  var _hoverColor = dart.privateName(toggleable, "_hoverColor");
+  var _focusColor = dart.privateName(toggleable, "_focusColor");
+  var _reactionColor = dart.privateName(toggleable, "_reactionColor");
+  var _inactiveReactionColor = dart.privateName(toggleable, "_inactiveReactionColor");
+  var _splashRadius = dart.privateName(toggleable, "_splashRadius");
+  var _onChanged = dart.privateName(toggleable, "_onChanged");
+  var _hasFocus = dart.privateName(toggleable, "_hasFocus");
+  var _hovering = dart.privateName(toggleable, "_hovering");
+  var _vsync = dart.privateName(toggleable, "_vsync");
+  var _tap = dart.privateName(toggleable, "_tap");
+  var _handleTapDown = dart.privateName(toggleable, "_handleTapDown");
+  var _handleTap = dart.privateName(toggleable, "_handleTap");
+  var _handleTapUp = dart.privateName(toggleable, "_handleTapUp");
+  var _handleTapCancel = dart.privateName(toggleable, "_handleTapCancel");
+  var _positionController = dart.privateName(toggleable, "_positionController");
+  var _position = dart.privateName(toggleable, "_position");
+  var _reactionController = dart.privateName(toggleable, "_reactionController");
+  var _reaction = dart.privateName(toggleable, "_reaction");
+  var _reactionHoverFadeController = dart.privateName(toggleable, "_reactionHoverFadeController");
+  var _reactionHoverFade = dart.privateName(toggleable, "_reactionHoverFade");
+  var _reactionFocusFadeController = dart.privateName(toggleable, "_reactionFocusFadeController");
+  var _reactionFocusFade = dart.privateName(toggleable, "_reactionFocusFade");
+  var _name = dart.privateName(animation, "_name");
+  var SemanticsEvent_type = dart.privateName(semantics_event, "SemanticsEvent.type");
+  toggleable.RenderToggleable = class RenderToggleable extends proxy_box.RenderConstrainedBox {
+    get positionController() {
+      return this[_positionController];
+    }
+    get [_positionController]() {
+      let t0;
+      t0 = this[__RenderToggleable__positionController];
+      return t0 == null ? dart.throw(new _internal.LateError.fieldNI("_positionController")) : t0;
+    }
+    set [_positionController](t0) {
+      if (t0 == null) dart.nullFailed(I[0], 114, 28, "null");
+      this[__RenderToggleable__positionController] = t0;
+    }
+    get position() {
+      return this[_position];
+    }
+    get [_position]() {
+      let t1;
+      t1 = this[__RenderToggleable__position];
+      return t1 == null ? dart.throw(new _internal.LateError.fieldNI("_position")) : t1;
+    }
+    set [_position](t1) {
+      if (t1 == null) dart.nullFailed(I[0], 125, 24, "null");
+      this[__RenderToggleable__position] = t1;
+    }
+    get reactionController() {
+      return this[_reactionController];
+    }
+    get [_reactionController]() {
+      let t2;
+      t2 = this[__RenderToggleable__reactionController];
+      return t2 == null ? dart.throw(new _internal.LateError.fieldNI("_reactionController")) : t2;
+    }
+    set [_reactionController](t2) {
+      if (t2 == null) dart.nullFailed(I[0], 136, 28, "null");
+      this[__RenderToggleable__reactionController] = t2;
+    }
+    get [_reaction]() {
+      let t3;
+      t3 = this[__RenderToggleable__reaction];
+      return t3 == null ? dart.throw(new _internal.LateError.fieldNI("_reaction")) : t3;
+    }
+    set [_reaction](t3) {
+      if (t3 == null) dart.nullFailed(I[0], 137, 26, "null");
+      this[__RenderToggleable__reaction] = t3;
+    }
+    get reactionFocusFadeController() {
+      return this[_reactionFocusFadeController];
+    }
+    get [_reactionFocusFadeController]() {
+      let t4;
+      t4 = this[__RenderToggleable__reactionFocusFadeController];
+      return t4 == null ? dart.throw(new _internal.LateError.fieldNI("_reactionFocusFadeController")) : t4;
+    }
+    set [_reactionFocusFadeController](t4) {
+      if (t4 == null) dart.nullFailed(I[0], 150, 28, "null");
+      this[__RenderToggleable__reactionFocusFadeController] = t4;
+    }
+    get [_reactionFocusFade]() {
+      let t5;
+      t5 = this[__RenderToggleable__reactionFocusFade];
+      return t5 == null ? dart.throw(new _internal.LateError.fieldNI("_reactionFocusFade")) : t5;
+    }
+    set [_reactionFocusFade](t5) {
+      if (t5 == null) dart.nullFailed(I[0], 151, 26, "null");
+      this[__RenderToggleable__reactionFocusFade] = t5;
+    }
+    get reactionHoverFadeController() {
+      return this[_reactionHoverFadeController];
+    }
+    get [_reactionHoverFadeController]() {
+      let t6;
+      t6 = this[__RenderToggleable__reactionHoverFadeController];
+      return t6 == null ? dart.throw(new _internal.LateError.fieldNI("_reactionHoverFadeController")) : t6;
+    }
+    set [_reactionHoverFadeController](t6) {
+      if (t6 == null) dart.nullFailed(I[0], 164, 28, "null");
+      this[__RenderToggleable__reactionHoverFadeController] = t6;
+    }
+    set [_reactionHoverFade](t7) {
+      if (t7 == null) dart.nullFailed(I[0], 165, 26, "null");
+      this[__RenderToggleable__reactionHoverFade] = t7;
+    }
+    get [_reactionHoverFade]() {
+      let t8;
+      t8 = this[__RenderToggleable__reactionHoverFade];
+      return t8 == null ? dart.throw(new _internal.LateError.fieldNI("_reactionHoverFade")) : t8;
+    }
+    get hasFocus() {
+      return this[_hasFocus];
+    }
+    set hasFocus(value) {
+      if (value == null) dart.nullFailed(I[0], 170, 21, "value");
+      if (!(value != null)) dart.assertFailed(null, I[0], 171, 12, "value != null");
+      if (value == this[_hasFocus]) return;
+      this[_hasFocus] = value;
+      if (dart.test(this[_hasFocus])) {
+        this[_reactionFocusFadeController].forward();
+      } else {
+        this[_reactionFocusFadeController].reverse();
+      }
+      this.markNeedsPaint();
+    }
+    get hovering() {
+      return this[_hovering];
+    }
+    set hovering(value) {
+      if (value == null) dart.nullFailed(I[0], 186, 21, "value");
+      if (!(value != null)) dart.assertFailed(null, I[0], 187, 12, "value != null");
+      if (value == this[_hovering]) return;
+      this[_hovering] = value;
+      if (dart.test(this[_hovering])) {
+        this[_reactionHoverFadeController].forward();
+      } else {
+        this[_reactionHoverFadeController].reverse();
+      }
+      this.markNeedsPaint();
+    }
+    get vsync() {
+      return this[_vsync];
+    }
+    set vsync(value) {
+      if (value == null) dart.nullFailed(I[0], 202, 28, "value");
+      if (!(value != null)) dart.assertFailed(null, I[0], 203, 12, "value != null");
+      if (dart.equals(value, this[_vsync])) return;
+      this[_vsync] = value;
+      this.positionController.resync(this.vsync);
+      this.reactionController.resync(this.vsync);
+    }
+    get value() {
+      return this[_value];
+    }
+    set value(value) {
+      let t8;
+      if (!(dart.test(this.tristate) || value != null)) dart.assertFailed(null, I[0], 223, 12, "tristate || value != null");
+      if (value == this[_value]) return;
+      this[_value] = value;
+      this.markNeedsSemanticsUpdate();
+      t8 = this[_position];
+      (() => {
+        t8.curve = curves.Curves.easeIn;
+        t8.reverseCurve = curves.Curves.easeOut;
+        return t8;
+      })();
+      if (dart.test(this.tristate)) {
+        if (value == null) this[_positionController].value = 0.0;
+        if (value !== false)
+          this[_positionController].forward();
+        else
+          this[_positionController].reverse();
+      } else {
+        if (value === true)
+          this[_positionController].forward();
+        else
+          this[_positionController].reverse();
+      }
+    }
+    get tristate() {
+      return this[_tristate];
+    }
+    set tristate(value) {
+      if (value == null) dart.nullFailed(I[0], 253, 21, "value");
+      if (!(this.tristate != null)) dart.assertFailed(null, I[0], 254, 12, "tristate != null");
+      if (value == this[_tristate]) return;
+      this[_tristate] = value;
+      this.markNeedsSemanticsUpdate();
+    }
+    get activeColor() {
+      return this[_activeColor];
+    }
+    set activeColor(value) {
+      if (value == null) dart.nullFailed(I[0], 266, 25, "value");
+      if (!(value != null)) dart.assertFailed(null, I[0], 267, 12, "value != null");
+      if (dart.equals(value, this[_activeColor])) return;
+      this[_activeColor] = value;
+      this.markNeedsPaint();
+    }
+    get inactiveColor() {
+      return this[_inactiveColor];
+    }
+    set inactiveColor(value) {
+      if (value == null) dart.nullFailed(I[0], 279, 27, "value");
+      if (!(value != null)) dart.assertFailed(null, I[0], 280, 12, "value != null");
+      if (dart.equals(value, this[_inactiveColor])) return;
+      this[_inactiveColor] = value;
+      this.markNeedsPaint();
+    }
+    get hoverColor() {
+      return this[_hoverColor];
+    }
+    set hoverColor(value) {
+      if (value == null) dart.nullFailed(I[0], 295, 24, "value");
+      if (!(value != null)) dart.assertFailed(null, I[0], 296, 12, "value != null");
+      if (dart.equals(value, this[_hoverColor])) return;
+      this[_hoverColor] = value;
+      this.markNeedsPaint();
+    }
+    get focusColor() {
+      return this[_focusColor];
+    }
+    set focusColor(value) {
+      if (value == null) dart.nullFailed(I[0], 311, 24, "value");
+      if (!(value != null)) dart.assertFailed(null, I[0], 312, 12, "value != null");
+      if (dart.equals(value, this[_focusColor])) return;
+      this[_focusColor] = value;
+      this.markNeedsPaint();
+    }
+    get reactionColor() {
+      return this[_reactionColor];
+    }
+    set reactionColor(value) {
+      if (!(value != null)) dart.assertFailed(null, I[0], 329, 12, "value != null");
+      if (dart.equals(value, this[_reactionColor])) return;
+      this[_reactionColor] = value;
+      this.markNeedsPaint();
+    }
+    get inactiveReactionColor() {
+      return this[_inactiveReactionColor];
+    }
+    set inactiveReactionColor(value) {
+      if (!(value != null)) dart.assertFailed(null, I[0], 346, 12, "value != null");
+      if (dart.equals(value, this[_inactiveReactionColor])) return;
+      this[_inactiveReactionColor] = value;
+      this.markNeedsPaint();
+    }
+    get splashRadius() {
+      return this[_splashRadius];
+    }
+    set splashRadius(value) {
+      if (value == null) dart.nullFailed(I[0], 356, 27, "value");
+      if (value == this[_splashRadius]) return;
+      this[_splashRadius] = value;
+      this.markNeedsPaint();
+    }
+    get onChanged() {
+      return this[_onChanged];
+    }
+    set onChanged(value) {
+      if (dart.equals(value, this[_onChanged])) return;
+      let wasInteractive = this.isInteractive;
+      this[_onChanged] = value;
+      if (wasInteractive != this.isInteractive) {
+        this.markNeedsPaint();
+        this.markNeedsSemanticsUpdate();
+      }
+    }
+    get isInteractive() {
+      return this.onChanged != null;
+    }
+    set [_tap](t8) {
+      if (t8 == null) dart.nullFailed(I[0], 393, 29, "null");
+      this[__RenderToggleable__tap] = t8;
+    }
+    get [_tap]() {
+      let t9;
+      t9 = this[__RenderToggleable__tap];
+      return t9 == null ? dart.throw(new _internal.LateError.fieldNI("_tap")) : t9;
+    }
+    attach(owner) {
+      object.PipelineOwner.as(owner);
+      if (owner == null) dart.nullFailed(I[0], 397, 29, "owner");
+      super.attach(owner);
+      if (this.value === false)
+        this[_positionController].reverse();
+      else
+        this[_positionController].forward();
+      if (dart.test(this.isInteractive)) {
+        switch (this[_reactionController].status) {
+          case C[0] || CT.C0:
+          {
+            this[_reactionController].forward();
+            break;
+          }
+          case C[1] || CT.C1:
+          {
+            this[_reactionController].reverse();
+            break;
+          }
+          case C[2] || CT.C2:
+          case C[3] || CT.C3:
+          {
+            break;
+          }
+        }
+      }
+    }
+    detach() {
+      this[_positionController].stop();
+      this[_reactionController].stop();
+      this[_reactionHoverFadeController].stop();
+      this[_reactionFocusFadeController].stop();
+      super.detach();
+    }
+    [_handleTapDown](details) {
+      if (details == null) dart.nullFailed(I[0], 428, 38, "details");
+      if (dart.test(this.isInteractive)) {
+        this[_downPosition] = this.globalToLocal(details.globalPosition);
+        this[_reactionController].forward();
+      }
+    }
+    [_handleTap]() {
+      if (!dart.test(this.isInteractive)) return;
+      switch (this.value) {
+        case false:
+        {
+          dart.nullCheck(this.onChanged)(true);
+          break;
+        }
+        case true:
+        {
+          dart.nullCheck(this.onChanged)(dart.test(this.tristate) ? null : false);
+          break;
+        }
+        case null:
+        {
+          dart.nullCheck(this.onChanged)(false);
+          break;
+        }
+      }
+      this.sendSemanticsEvent(C[4] || CT.C4);
+    }
+    [_handleTapUp](details) {
+      if (details == null) dart.nullFailed(I[0], 452, 34, "details");
+      this[_downPosition] = null;
+      if (dart.test(this.isInteractive)) this[_reactionController].reverse();
+    }
+    [_handleTapCancel]() {
+      this[_downPosition] = null;
+      if (dart.test(this.isInteractive)) this[_reactionController].reverse();
+    }
+    hitTestSelf(position) {
+      if (position == null) dart.nullFailed(I[0], 465, 27, "position");
+      return true;
+    }
+    handleEvent(event, entry) {
+      if (event == null) dart.nullFailed(I[0], 468, 33, "event");
+      box.BoxHitTestEntry.as(entry);
+      if (entry == null) dart.nullFailed(I[0], 468, 56, "entry");
+      if (!dart.test(this.debugHandleEvent(event, entry))) dart.assertFailed(null, I[0], 469, 12, "debugHandleEvent(event, entry)");
+      if (events.PointerDownEvent.is(event) && dart.test(this.isInteractive)) this[_tap].addPointer(event);
+    }
+    paintRadialReaction(canvas, offset, origin) {
+      let t9, t9$;
+      if (canvas == null) dart.nullFailed(I[0], 480, 35, "canvas");
+      if (offset == null) dart.nullFailed(I[0], 480, 50, "offset");
+      if (origin == null) dart.nullFailed(I[0], 480, 65, "origin");
+      if (!dart.test(this[_reaction].isDismissed) || !dart.test(this[_reactionFocusFade].isDismissed) || !dart.test(this[_reactionHoverFade].isDismissed)) {
+        let reactionPaint = (t9 = ui.Paint.new(), (() => {
+          t9.color = dart.nullCheck(ui.Color.lerp(ui.Color.lerp(ui.Color.lerp(this.inactiveReactionColor, this.reactionColor, this[_position].value), this.hoverColor, this[_reactionHoverFade].value), this.focusColor, this[_reactionFocusFade].value));
+          return t9;
+        })());
+        let center = dart.nullCheck(ui.Offset.lerp((t9$ = this[_downPosition], t9$ == null ? origin : t9$), origin, this[_reaction].value));
+        let radialReactionRadiusTween = new (T.TweenOfdouble()).new({begin: 0.0, end: this.splashRadius});
+        let reactionRadius = dart.test(this.hasFocus) || dart.test(this.hovering) ? this.splashRadius : radialReactionRadiusTween.evaluate(this[_reaction]);
+        if (dart.notNull(reactionRadius) > 0.0) {
+          canvas.drawCircle(center['+'](offset), reactionRadius, reactionPaint);
+        }
+      }
+    }
+    describeSemanticsConfiguration(config) {
+      if (config == null) dart.nullFailed(I[0], 507, 62, "config");
+      super.describeSemanticsConfiguration(config);
+      config.isEnabled = this.isInteractive;
+      if (dart.test(this.isInteractive)) config.onTap = dart.bind(this, _handleTap);
+    }
+    debugFillProperties(properties) {
+      if (properties == null) dart.nullFailed(I[0], 516, 56, "properties");
+      super.debugFillProperties(properties);
+      properties.add(new diagnostics.FlagProperty.new("value", {value: this.value, ifTrue: "checked", ifFalse: "unchecked", showName: true}));
+      properties.add(new diagnostics.FlagProperty.new("isInteractive", {value: this.isInteractive, ifTrue: "enabled", ifFalse: "disabled", defaultValue: true}));
+    }
+  };
+  (toggleable.RenderToggleable.new = function(opts) {
+    let t0, t0$, t0$0, t0$1, t0$2, t0$3, t0$4, t0$5, t0$6;
+    let value = opts && 'value' in opts ? opts.value : null;
+    let tristate = opts && 'tristate' in opts ? opts.tristate : false;
+    if (tristate == null) dart.nullFailed(I[0], 31, 10, "tristate");
+    let activeColor = opts && 'activeColor' in opts ? opts.activeColor : null;
+    if (activeColor == null) dart.nullFailed(I[0], 32, 20, "activeColor");
+    let inactiveColor = opts && 'inactiveColor' in opts ? opts.inactiveColor : null;
+    if (inactiveColor == null) dart.nullFailed(I[0], 33, 20, "inactiveColor");
+    let hoverColor = opts && 'hoverColor' in opts ? opts.hoverColor : null;
+    let focusColor = opts && 'focusColor' in opts ? opts.focusColor : null;
+    let reactionColor = opts && 'reactionColor' in opts ? opts.reactionColor : null;
+    let inactiveReactionColor = opts && 'inactiveReactionColor' in opts ? opts.inactiveReactionColor : null;
+    let splashRadius = opts && 'splashRadius' in opts ? opts.splashRadius : null;
+    if (splashRadius == null) dart.nullFailed(I[0], 38, 21, "splashRadius");
+    let onChanged = opts && 'onChanged' in opts ? opts.onChanged : null;
+    let additionalConstraints = opts && 'additionalConstraints' in opts ? opts.additionalConstraints : null;
+    if (additionalConstraints == null) dart.nullFailed(I[0], 40, 29, "additionalConstraints");
+    let vsync = opts && 'vsync' in opts ? opts.vsync : null;
+    if (vsync == null) dart.nullFailed(I[0], 41, 29, "vsync");
+    let hasFocus = opts && 'hasFocus' in opts ? opts.hasFocus : false;
+    if (hasFocus == null) dart.nullFailed(I[0], 42, 10, "hasFocus");
+    let hovering = opts && 'hovering' in opts ? opts.hovering : false;
+    if (hovering == null) dart.nullFailed(I[0], 43, 10, "hovering");
+    this[__RenderToggleable__positionController] = null;
+    this[__RenderToggleable__position] = null;
+    this[__RenderToggleable__reactionController] = null;
+    this[__RenderToggleable__reaction] = null;
+    this[__RenderToggleable__reactionFocusFadeController] = null;
+    this[__RenderToggleable__reactionFocusFade] = null;
+    this[__RenderToggleable__reactionHoverFadeController] = null;
+    this[__RenderToggleable__reactionHoverFade] = null;
+    this[__RenderToggleable__tap] = null;
+    this[_downPosition] = null;
+    if (!(tristate != null)) dart.assertFailed(null, I[0], 44, 15, "tristate != null");
+    if (!(dart.test(tristate) || value != null)) dart.assertFailed(null, I[0], 45, 15, "tristate || value != null");
+    if (!(activeColor != null)) dart.assertFailed(null, I[0], 46, 15, "activeColor != null");
+    if (!(inactiveColor != null)) dart.assertFailed(null, I[0], 47, 15, "inactiveColor != null");
+    if (!(vsync != null)) dart.assertFailed(null, I[0], 48, 15, "vsync != null");
+    this[_value] = value;
+    this[_tristate] = tristate;
+    this[_activeColor] = activeColor;
+    this[_inactiveColor] = inactiveColor;
+    this[_hoverColor] = (t0 = hoverColor, t0 == null ? activeColor.withAlpha(31) : t0);
+    this[_focusColor] = (t0$ = focusColor, t0$ == null ? activeColor.withAlpha(31) : t0$);
+    this[_reactionColor] = (t0$0 = reactionColor, t0$0 == null ? activeColor.withAlpha(31) : t0$0);
+    this[_inactiveReactionColor] = (t0$1 = inactiveReactionColor, t0$1 == null ? activeColor.withAlpha(31) : t0$1);
+    this[_splashRadius] = splashRadius;
+    this[_onChanged] = onChanged;
+    this[_hasFocus] = hasFocus;
+    this[_hovering] = hovering;
+    this[_vsync] = vsync;
+    toggleable.RenderToggleable.__proto__.new.call(this, {additionalConstraints: additionalConstraints});
+    this[_tap] = (t0$2 = new tap.TapGestureRecognizer.new(), (() => {
+      t0$2.onTapDown = dart.bind(this, _handleTapDown);
+      t0$2.onTap = dart.bind(this, _handleTap);
+      t0$2.onTapUp = dart.bind(this, _handleTapUp);
+      t0$2.onTapCancel = dart.bind(this, _handleTapCancel);
+      return t0$2;
+    })());
+    this[_positionController] = new animation_controller.AnimationController.new({duration: toggleable._kToggleDuration, value: value === false ? 0.0 : 1.0, vsync: vsync});
+    this[_position] = (t0$3 = new animations.CurvedAnimation.new({parent: this[_positionController], curve: curves.Curves.linear}), (() => {
+      t0$3.addListener(dart.bind(this, 'markNeedsPaint'));
+      return t0$3;
+    })());
+    this[_reactionController] = new animation_controller.AnimationController.new({duration: constants.kRadialReactionDuration, vsync: vsync});
+    this[_reaction] = (t0$4 = new animations.CurvedAnimation.new({parent: this[_reactionController], curve: curves.Curves.fastOutSlowIn}), (() => {
+      t0$4.addListener(dart.bind(this, 'markNeedsPaint'));
+      return t0$4;
+    })());
+    this[_reactionHoverFadeController] = new animation_controller.AnimationController.new({duration: toggleable._kReactionFadeDuration, value: dart.test(hovering) || dart.test(hasFocus) ? 1.0 : 0.0, vsync: vsync});
+    this[_reactionHoverFade] = (t0$5 = new animations.CurvedAnimation.new({parent: this[_reactionHoverFadeController], curve: curves.Curves.fastOutSlowIn}), (() => {
+      t0$5.addListener(dart.bind(this, 'markNeedsPaint'));
+      return t0$5;
+    })());
+    this[_reactionFocusFadeController] = new animation_controller.AnimationController.new({duration: toggleable._kReactionFadeDuration, value: dart.test(hovering) || dart.test(hasFocus) ? 1.0 : 0.0, vsync: vsync});
+    this[_reactionFocusFade] = (t0$6 = new animations.CurvedAnimation.new({parent: this[_reactionFocusFadeController], curve: curves.Curves.fastOutSlowIn}), (() => {
+      t0$6.addListener(dart.bind(this, 'markNeedsPaint'));
+      return t0$6;
+    })());
+  }).prototype = toggleable.RenderToggleable.prototype;
+  dart.addTypeTests(toggleable.RenderToggleable);
+  dart.addTypeCaches(toggleable.RenderToggleable);
+  dart.setMethodSignature(toggleable.RenderToggleable, () => ({
+    __proto__: dart.getMethods(toggleable.RenderToggleable.__proto__),
+    [_handleTapDown]: dart.fnType(dart.void, [tap.TapDownDetails]),
+    [_handleTap]: dart.fnType(dart.void, []),
+    [_handleTapUp]: dart.fnType(dart.void, [tap.TapUpDetails]),
+    [_handleTapCancel]: dart.fnType(dart.void, []),
+    paintRadialReaction: dart.fnType(dart.void, [ui.Canvas, ui.Offset, ui.Offset])
+  }));
+  dart.setGetterSignature(toggleable.RenderToggleable, () => ({
+    __proto__: dart.getGetters(toggleable.RenderToggleable.__proto__),
+    positionController: animation_controller.AnimationController,
+    [_positionController]: animation_controller.AnimationController,
+    position: animations.CurvedAnimation,
+    [_position]: animations.CurvedAnimation,
+    reactionController: animation_controller.AnimationController,
+    [_reactionController]: animation_controller.AnimationController,
+    [_reaction]: animation.Animation$(core.double),
+    reactionFocusFadeController: animation_controller.AnimationController,
+    [_reactionFocusFadeController]: animation_controller.AnimationController,
+    [_reactionFocusFade]: animation.Animation$(core.double),
+    reactionHoverFadeController: animation_controller.AnimationController,
+    [_reactionHoverFadeController]: animation_controller.AnimationController,
+    [_reactionHoverFade]: animation.Animation$(core.double),
+    hasFocus: core.bool,
+    hovering: core.bool,
+    vsync: ticker.TickerProvider,
+    value: dart.nullable(core.bool),
+    tristate: core.bool,
+    activeColor: ui.Color,
+    inactiveColor: ui.Color,
+    hoverColor: ui.Color,
+    focusColor: ui.Color,
+    reactionColor: dart.nullable(ui.Color),
+    inactiveReactionColor: dart.nullable(ui.Color),
+    splashRadius: core.double,
+    onChanged: dart.nullable(dart.fnType(dart.void, [dart.nullable(core.bool)])),
+    isInteractive: core.bool,
+    [_tap]: tap.TapGestureRecognizer
+  }));
+  dart.setSetterSignature(toggleable.RenderToggleable, () => ({
+    __proto__: dart.getSetters(toggleable.RenderToggleable.__proto__),
+    [_positionController]: animation_controller.AnimationController,
+    [_position]: animations.CurvedAnimation,
+    [_reactionController]: animation_controller.AnimationController,
+    [_reaction]: animation.Animation$(core.double),
+    [_reactionFocusFadeController]: animation_controller.AnimationController,
+    [_reactionFocusFade]: animation.Animation$(core.double),
+    [_reactionHoverFadeController]: animation_controller.AnimationController,
+    [_reactionHoverFade]: animation.Animation$(core.double),
+    hasFocus: core.bool,
+    hovering: core.bool,
+    vsync: ticker.TickerProvider,
+    value: dart.nullable(core.bool),
+    tristate: core.bool,
+    activeColor: ui.Color,
+    inactiveColor: ui.Color,
+    hoverColor: ui.Color,
+    focusColor: ui.Color,
+    reactionColor: dart.nullable(ui.Color),
+    inactiveReactionColor: dart.nullable(ui.Color),
+    splashRadius: core.double,
+    onChanged: dart.nullable(dart.fnType(dart.void, [dart.nullable(core.bool)])),
+    [_tap]: tap.TapGestureRecognizer
+  }));
+  dart.setLibraryUri(toggleable.RenderToggleable, I[1]);
+  dart.setFieldSignature(toggleable.RenderToggleable, () => ({
+    __proto__: dart.getFields(toggleable.RenderToggleable.__proto__),
+    [__RenderToggleable__positionController]: dart.fieldType(dart.nullable(animation_controller.AnimationController)),
+    [__RenderToggleable__position]: dart.fieldType(dart.nullable(animations.CurvedAnimation)),
+    [__RenderToggleable__reactionController]: dart.fieldType(dart.nullable(animation_controller.AnimationController)),
+    [__RenderToggleable__reaction]: dart.fieldType(dart.nullable(animation.Animation$(core.double))),
+    [__RenderToggleable__reactionFocusFadeController]: dart.fieldType(dart.nullable(animation_controller.AnimationController)),
+    [__RenderToggleable__reactionFocusFade]: dart.fieldType(dart.nullable(animation.Animation$(core.double))),
+    [__RenderToggleable__reactionHoverFadeController]: dart.fieldType(dart.nullable(animation_controller.AnimationController)),
+    [__RenderToggleable__reactionHoverFade]: dart.fieldType(dart.nullable(animation.Animation$(core.double))),
+    [_hasFocus]: dart.fieldType(core.bool),
+    [_hovering]: dart.fieldType(core.bool),
+    [_vsync]: dart.fieldType(ticker.TickerProvider),
+    [_value]: dart.fieldType(dart.nullable(core.bool)),
+    [_tristate]: dart.fieldType(core.bool),
+    [_activeColor]: dart.fieldType(ui.Color),
+    [_inactiveColor]: dart.fieldType(ui.Color),
+    [_hoverColor]: dart.fieldType(ui.Color),
+    [_focusColor]: dart.fieldType(ui.Color),
+    [_reactionColor]: dart.fieldType(dart.nullable(ui.Color)),
+    [_inactiveReactionColor]: dart.fieldType(dart.nullable(ui.Color)),
+    [_splashRadius]: dart.fieldType(core.double),
+    [_onChanged]: dart.fieldType(dart.nullable(dart.fnType(dart.void, [dart.nullable(core.bool)]))),
+    [__RenderToggleable__tap]: dart.fieldType(dart.nullable(tap.TapGestureRecognizer)),
+    [_downPosition]: dart.fieldType(dart.nullable(ui.Offset))
+  }));
+  var Duration__duration = dart.privateName(core, "Duration._duration");
+  dart.defineLazy(toggleable, {
+    /*toggleable._kToggleDuration*/get _kToggleDuration() {
+      return C[5] || CT.C5;
+    },
+    /*toggleable._kReactionFadeDuration*/get _kReactionFadeDuration() {
+      return C[6] || CT.C6;
+    }
+  }, false);
+  dart.trackLibraries("packages/flutter/src/material/toggleable.dart", {
+    "package:flutter/src/material/toggleable.dart": toggleable
+  }, {
+  }, '{"version":3,"sourceRoot":"","sources":["toggleable.dart"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAgHgD;IAAmB;;;AACxC;;IAAmB;;;AAAnB;IAAmB;;AAUZ;IAAS;;;AACpB;;IAAS;;;AAAT;IAAS;;AAUgB;IAAmB;;;AACxC;;IAAmB;;;AAAnB;IAAmB;;;AACrB;;IAAS;;;AAAT;IAAS;;AAYuB;IAA4B;;;AAC1D;;IAA4B;;;AAA5B;IAA4B;;;AAC9B;;IAAkB;;;AAAlB;IAAkB;;AAYc;IAA4B;;;AAC1D;;IAA4B;;;AAA5B;IAA4B;;;AAC9B;IAAkB;;;AAAlB;;IAAkB;;AAGpB;IAAS;;UAEZ;AAChB,YAAO,AAAM,KAAD;AACZ,UAAI,AAAM,KAAD,IAAI,iBACX;AACe,MAAjB,kBAAY,KAAK;AACjB,oBAAI;AACoC,QAAtC,AAA6B;;AAES,QAAtC,AAA6B;;AAEf,MAAhB;IACF;;AAGqB;IAAS;;UAEZ;AAChB,YAAO,AAAM,KAAD;AACZ,UAAI,AAAM,KAAD,IAAI,iBACX;AACe,MAAjB,kBAAY,KAAK;AACjB,oBAAI;AACoC,QAAtC,AAA6B;;AAES,QAAtC,AAA6B;;AAEf,MAAhB;IACF;;AAG4B;IAAM;;UAET;AACvB,YAAO,AAAM,KAAD;AACZ,UAAU,YAAN,KAAK,EAAI,eACX;AACY,MAAd,eAAS,KAAK;AACkB,MAAhC,AAAmB,+BAAO;AACM,MAAhC,AAAmB,+BAAO;IAC5B;;AAWmB;IAAM;cAET;;AACd,YAAgB,UAAT,kBAAY,AAAM,KAAD;AACxB,UAAI,AAAM,KAAD,IAAI,cACX;AACY,MAAd,eAAS,KAAK;AACY,MAA1B;AAGiC,WAFjC;;AACI,mBAAe;AACf,0BAAsB;;;AAC1B,oBAAI;AACF,YAAI,AAAM,KAAD,UACP,AAAoB,AAAW,kCAAH;AAC9B,YAAI,AAAM,KAAD,KAAI;AACkB,UAA7B,AAAoB;;AAES,UAA7B,AAAoB;;AAEtB,YAAI,AAAM,KAAD,KAAI;AACkB,UAA7B,AAAoB;;AAES,UAA7B,AAAoB;;IAE1B;;AAOqB;IAAS;;UAEZ;AAChB,YAAO,AAAS;AAChB,UAAI,AAAM,KAAD,IAAI,iBACX;AACe,MAAjB,kBAAY,KAAK;AACS,MAA1B;IACF;;AAKyB;IAAY;;UAEf;AACpB,YAAO,AAAM,KAAD;AACZ,UAAU,YAAN,KAAK,EAAI,qBACX;AACkB,MAApB,qBAAe,KAAK;AACJ,MAAhB;IACF;;AAK2B;IAAc;;UAEjB;AACtB,YAAO,AAAM,KAAD;AACZ,UAAU,YAAN,KAAK,EAAI,uBACX;AACoB,MAAtB,uBAAiB,KAAK;AACN,MAAhB;IACF;;AAQwB;IAAW;;UAEd;AACnB,YAAO,AAAM,KAAD;AACZ,UAAU,YAAN,KAAK,EAAI,oBACX;AACiB,MAAnB,oBAAc,KAAK;AACH,MAAhB;IACF;;AAQwB;IAAW;;UAEd;AACnB,YAAO,AAAM,KAAD;AACZ,UAAU,YAAN,KAAK,EAAI,oBACX;AACiB,MAAnB,oBAAc,KAAK;AACH,MAAhB;IACF;;AAS4B;IAAc;sBAEjB;AACvB,YAAO,AAAM,KAAD;AACZ,UAAU,YAAN,KAAK,EAAI,uBACX;AACoB,MAAtB,uBAAiB,KAAK;AACN,MAAhB;IACF;;AASoC;IAAsB;8BAEzB;AAC/B,YAAO,AAAM,KAAD;AACZ,UAAU,YAAN,KAAK,EAAI,+BACX;AAC4B,MAA9B,+BAAyB,KAAK;AACd,MAAhB;IACF;;AAG2B;IAAa;;UAEhB;AACtB,UAAI,AAAM,KAAD,IAAI,qBACX;AACmB,MAArB,sBAAgB,KAAK;AACL,MAAhB;IACF;;AAWsC;IAAU;kBAEb;AACjC,UAAU,YAAN,KAAK,EAAI,mBACX;AACS,2BAAiB;AACV,MAAlB,mBAAa,KAAK;AAClB,UAAI,AAAe,cAAD,IAAI;AACJ,QAAhB;AAC0B,QAA1B;;IAEJ;;AAQ0B,YAAA,AAAU;IAAO;;;AAEjB;IAAI;;;AAAJ;;IAAI;;8BAIJ;;AACL,MAAb,aAAO,KAAK;AAClB,UAAI,AAAM,eAAG;AACkB,QAA7B,AAAoB;;AAES,QAA7B,AAAoB;AACtB,oBAAI;AACF,gBAAQ,AAAoB;;;AAEK,YAA7B,AAAoB;AACpB;;;;AAE6B,YAA7B,AAAoB;AACpB;;;;;AAIA;;;;IAGR;;AAI4B,MAA1B,AAAoB;AACM,MAA1B,AAAoB;AACe,MAAnC,AAA6B;AACM,MAAnC,AAA6B;AACf,MAAR;IACR;;UAEmC;AACjC,oBAAI;AACmD,QAArD,sBAAgB,mBAAc,AAAQ,OAAD;AACR,QAA7B,AAAoB;;IAExB;;AAGE,qBAAK,qBACH;AACF,cAAQ;;;AAEY,UAAP,AAAC,eAAV,gBAAW;AACX;;;;AAEmC,UAA1B,AAAC,eAAV,0BAAW,iBAAW,OAAO;AAC7B;;;;AAEiB,UAAR,AAAC,eAAV,gBAAW;AACX;;;AAEwC,MAA5C;IACF;;UAE+B;AACT,MAApB,sBAAgB;AAChB,oBAAI,qBACF,AAAoB,AAAS;IACjC;;AAGsB,MAApB,sBAAgB;AAChB,oBAAI,qBACF,AAAoB,AAAS;IACjC;;UAGwB;AAAa;IAAI;gBAGX,OAAuB;UAAvB;6BAAuB;;AACnD,qBAAO,sBAAiB,KAAK,EAAE,KAAK;AACpC,UAAU,2BAAN,KAAK,eAAwB,qBAC/B,AAAK,AAAiB,sBAAN,KAAK;IACzB;wBAQgC,QAAe,QAAe;;UAA9B;UAAe;UAAe;AAC5D,qBAAK,AAAU,2CAAgB,AAAmB,oDAAgB,AAAmB;AACvE,kDAAgB;AACxB,qBAQD,eARe,cACR,cACE,cAAK,4BAAuB,oBAAe,AAAU,wBAC3D,iBACA,AAAmB,iCAErB,iBACA,AAAmB;;;AAEV,qBAAsE,eAAtD,gBAAmB,2BAAd,cAAiB,MAAM,SAAE,MAAM,EAAE,AAAU;AACpD,wCAA4B,oCAC5C,UACF;AAEM,6BAA0B,UAAT,4BAAY,iBACpC,oBACA,AAA0B,yBAAD,UAAU;AACzC,YAAmB,aAAf,cAAc,IAAG;AAC8C,UAAjE,AAAO,MAAD,YAAY,AAAO,MAAD,MAAG,MAAM,GAAE,cAAc,EAAE,aAAa;;;IAGtE;;UAG2D;AACb,MAAtC,qCAA+B,MAAM;AAEX,MAAhC,AAAO,MAAD,aAAa;AACnB,oBAAI,qBACF,AAAO,AAAkB,MAAnB,mBAAS;IACnB;;UAGqD;AACd,MAA/B,0BAAoB,UAAU;AACwE,MAA5G,AAAW,UAAD,KAAK,iCAAa,iBAAgB,oBAAe,oBAAoB,uBAAuB;AACyB,MAA/H,AAAW,UAAD,KAAK,iCAAa,yBAAwB,4BAAuB,oBAAoB,0BAA0B;IAC3H;;;;QA1eiB;QACV;;QACU;;QACA;;QACR;QACA;QACA;QACA;QACS;;QACK;QACG;;QACA;;QACnB;;QACA;;mDAuEkB;yCAWJ;mDAWI;yCACF;4DAaE;kDACF;4DAaE;kDACF;oCAoOG;IAClB;UA9VI,AAAS,QAAD;UACC,UAAT,QAAQ,KAAI,AAAM,KAAD;UACjB,AAAY,WAAD;UACX,AAAc,aAAD;UACb,AAAM,KAAD;IACL,eAAE,KAAK;IACJ,kBAAE,QAAQ;IACP,qBAAE,WAAW;IACX,uBAAE,aAAa;IAClB,qBAAa,KAAX,UAAU,EAAV,aAAc,AAAY,WAAD;IAC3B,qBAAa,MAAX,UAAU,EAAV,cAAc,AAAY,WAAD;IACxB,wBAAgB,OAAd,aAAa,EAAb,eAAiB,AAAY,WAAD;IACtB,gCAAwB,OAAtB,qBAAqB,EAArB,eAAyB,AAAY,WAAD;IAC/C,sBAAE,YAAY;IACjB,mBAAE,SAAS;IACZ,kBAAE,QAAQ;IACV,kBAAE,QAAQ;IACb,eAAE,KAAK;AACd,iFAA6B,qBAAqB;AAKnB,IAJlC,yDAAO;AACH,iCAAY;AACZ,6BAAQ;AACR,+BAAU;AACV,mCAAc;;;AAKjB,IAJD,4BAAsB,4DACV,oCACH,AAAM,KAAD,KAAI,QAAQ,MAAM,YACvB,KAAK;AAKgB,IAH9B,0BAAY,4CACF,kCACM,wBAFJ;AAGT,iCAAY;;;AAId,IAHD,4BAAsB,4DACV,0CACH,KAAK;AAKgB,IAH9B,0BAAY,4CACF,kCACM,+BAFJ;AAGT,iCAAY;;;AAKd,IAJD,qCAA+B,4DACnB,0CACM,UAAT,QAAQ,eAAI,QAAQ,IAAG,MAAM,YAC7B,KAAK;AAKgB,IAH9B,mCAAqB,4CACX,2CACM,+BAFK;AAGlB,iCAAY;;;AAKd,IAJD,qCAA+B,4DACnB,0CACM,UAAT,QAAQ,eAAI,QAAQ,IAAG,MAAM,YAC7B,KAAK;AAKgB,IAH9B,mCAAqB,4CACX,2CACM,+BAFK;AAGlB,iCAAY;;;EACjB;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;MAzFa,2BAAgB;;;MAGhB,iCAAsB","file":"../../../../../../../E:/packages/flutter/src/material/toggleable.dart.lib.js"}');
+  // Exports:
+  return {
+    src__material__toggleable: toggleable
+  };
+}));
+
+//# sourceMappingURL=toggleable.dart.lib.js.map

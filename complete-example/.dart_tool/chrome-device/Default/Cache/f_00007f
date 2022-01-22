@@ -1,0 +1,2598 @@
+define(['dart_sdk', 'packages/flutter/src/foundation/debug.dart', 'packages/flutter/src/painting/colors.dart', 'packages/flutter/src/widgets/widget_span.dart', 'packages/flutter/src/rendering/layer.dart', 'packages/flutter/src/animation/animation_controller.dart', 'packages/flutter/src/material/constants.dart', 'packages/flutter/src/services/keyboard_key.dart', 'packages/flutter/src/material/icon_button.dart', 'packages/flutter/src/foundation/_platform_web.dart', 'packages/flutter/src/material/material_state.dart', 'packages/flutter/src/cupertino/slider.dart', 'packages/flutter/src/painting/placeholder_span.dart', 'packages/flutter/src/gestures/team.dart', 'packages/flutter/src/gestures/monodrag.dart', 'packages/flutter/src/gestures/tap.dart', 'packages/flutter/src/animation/listener_helpers.dart', 'packages/flutter/src/animation/curves.dart', 'packages/flutter/src/scheduler/binding.dart', 'packages/flutter/src/gestures/events.dart', 'packages/flutter/src/gestures/drag_details.dart'], (function load__packages__flutter__src__material__slider_dart(dart_sdk, packages__flutter__src__foundation__debug$46dart, packages__flutter__src__painting__colors$46dart, packages__flutter__src__widgets__widget_span$46dart, packages__flutter__src__rendering__layer$46dart, packages__flutter__src__animation__animation_controller$46dart, packages__flutter__src__material__constants$46dart, packages__flutter__src__services__keyboard_key$46dart, packages__flutter__src__material__icon_button$46dart, packages__flutter__src__foundation___platform_web$46dart, packages__flutter__src__material__material_state$46dart, packages__flutter__src__cupertino__slider$46dart, packages__flutter__src__painting__placeholder_span$46dart, packages__flutter__src__gestures__team$46dart, packages__flutter__src__gestures__monodrag$46dart, packages__flutter__src__gestures__tap$46dart, packages__flutter__src__animation__listener_helpers$46dart, packages__flutter__src__animation__curves$46dart, packages__flutter__src__scheduler__binding$46dart, packages__flutter__src__gestures__events$46dart, packages__flutter__src__gestures__drag_details$46dart) {
+  'use strict';
+  const core = dart_sdk.core;
+  const ui = dart_sdk.ui;
+  const _internal = dart_sdk._internal;
+  const _js_helper = dart_sdk._js_helper;
+  const collection = dart_sdk.collection;
+  const async = dart_sdk.async;
+  const math = dart_sdk.math;
+  const _interceptors = dart_sdk._interceptors;
+  const dart = dart_sdk.dart;
+  const dartx = dart_sdk.dartx;
+  const diagnostics = packages__flutter__src__foundation__debug$46dart.src__foundation__diagnostics;
+  const colors = packages__flutter__src__painting__colors$46dart.src__painting__colors;
+  const focus_manager = packages__flutter__src__widgets__widget_span$46dart.src__widgets__focus_manager;
+  const framework = packages__flutter__src__widgets__widget_span$46dart.src__widgets__framework;
+  const shortcuts = packages__flutter__src__widgets__widget_span$46dart.src__widgets__shortcuts;
+  const actions = packages__flutter__src__widgets__widget_span$46dart.src__widgets__actions;
+  const basic = packages__flutter__src__widgets__widget_span$46dart.src__widgets__basic;
+  const debug = packages__flutter__src__widgets__widget_span$46dart.src__widgets__debug;
+  const media_query = packages__flutter__src__widgets__widget_span$46dart.src__widgets__media_query;
+  const widget_inspector = packages__flutter__src__widgets__widget_span$46dart.src__widgets__widget_inspector;
+  const overlay = packages__flutter__src__widgets__widget_span$46dart.src__widgets__overlay;
+  const ticker_provider = packages__flutter__src__widgets__widget_span$46dart.src__widgets__ticker_provider;
+  const mouse_cursor = packages__flutter__src__rendering__layer$46dart.src__rendering__mouse_cursor;
+  const layer = packages__flutter__src__rendering__layer$46dart.src__rendering__layer;
+  const object = packages__flutter__src__rendering__layer$46dart.src__rendering__object;
+  const box = packages__flutter__src__rendering__layer$46dart.src__rendering__box;
+  const animation_controller = packages__flutter__src__animation__animation_controller$46dart.src__animation__animation_controller;
+  const constants = packages__flutter__src__material__constants$46dart.src__material__constants;
+  const keyboard_key = packages__flutter__src__services__keyboard_key$46dart.src__services__keyboard_key;
+  const debug$ = packages__flutter__src__material__icon_button$46dart.src__material__debug;
+  const theme$ = packages__flutter__src__material__icon_button$46dart.src__material__theme;
+  const slider_theme = packages__flutter__src__material__icon_button$46dart.src__material__slider_theme;
+  const platform = packages__flutter__src__foundation___platform_web$46dart.src__foundation__platform;
+  const material_state = packages__flutter__src__material__material_state$46dart.src__material__material_state;
+  const slider = packages__flutter__src__cupertino__slider$46dart.src__cupertino__slider;
+  const text_painter = packages__flutter__src__painting__placeholder_span$46dart.src__painting__text_painter;
+  const text_span = packages__flutter__src__painting__placeholder_span$46dart.src__painting__text_span;
+  const team$ = packages__flutter__src__gestures__team$46dart.src__gestures__team;
+  const monodrag = packages__flutter__src__gestures__monodrag$46dart.src__gestures__monodrag;
+  const tap = packages__flutter__src__gestures__tap$46dart.src__gestures__tap;
+  const animations = packages__flutter__src__animation__listener_helpers$46dart.src__animation__animations;
+  const animation = packages__flutter__src__animation__listener_helpers$46dart.src__animation__animation;
+  const curves = packages__flutter__src__animation__curves$46dart.src__animation__curves;
+  const binding = packages__flutter__src__scheduler__binding$46dart.src__scheduler__binding;
+  const events = packages__flutter__src__gestures__events$46dart.src__gestures__events;
+  const drag_details = packages__flutter__src__gestures__drag_details$46dart.src__gestures__drag_details;
+  var slider$ = Object.create(dart.library);
+  var $map = dartx.map;
+  var $reduce = dartx.reduce;
+  var $abs = dartx.abs;
+  var $clamp = dartx.clamp;
+  var $round = dartx.round;
+  dart._checkModuleNullSafetyMode(true);
+  var T = {
+    doubleTovoid: () => (T.doubleTovoid = dart.constFn(dart.fnType(dart.void, [core.double])))(),
+    ObjectFlagPropertyOfdoubleTovoid: () => (T.ObjectFlagPropertyOfdoubleTovoid = dart.constFn(diagnostics.ObjectFlagProperty$(T.doubleTovoid())))(),
+    ObjectFlagPropertyOfFocusNode: () => (T.ObjectFlagPropertyOfFocusNode = dart.constFn(diagnostics.ObjectFlagProperty$(focus_manager.FocusNode)))(),
+    StateOfStatefulWidget: () => (T.StateOfStatefulWidget = dart.constFn(framework.State$(framework.StatefulWidget)))(),
+    GlobalKeyOfStateOfStatefulWidget: () => (T.GlobalKeyOfStateOfStatefulWidget = dart.constFn(framework.GlobalKey$(T.StateOfStatefulWidget())))(),
+    LinkedMapOfLogicalKeySet$Intent: () => (T.LinkedMapOfLogicalKeySet$Intent = dart.constFn(_js_helper.LinkedMap$(shortcuts.LogicalKeySet, actions.Intent)))(),
+    CallbackActionOf_AdjustSliderIntent: () => (T.CallbackActionOf_AdjustSliderIntent = dart.constFn(actions.CallbackAction$(slider$._AdjustSliderIntent)))(),
+    ActionOfIntent: () => (T.ActionOfIntent = dart.constFn(actions.Action$(actions.Intent)))(),
+    LinkedMapOfType$ActionOfIntent: () => (T.LinkedMapOfType$ActionOfIntent = dart.constFn(_js_helper.LinkedMap$(core.Type, T.ActionOfIntent())))(),
+    VoidTovoid: () => (T.VoidTovoid = dart.constFn(dart.fnType(dart.void, [])))(),
+    LinkedHashSetOfMaterialState: () => (T.LinkedHashSetOfMaterialState = dart.constFn(collection.LinkedHashSet$(material_state.MaterialState)))(),
+    VoidToSize: () => (T.VoidToSize = dart.constFn(dart.fnType(ui.Size, [])))(),
+    BuildContextToCompositedTransformFollower: () => (T.BuildContextToCompositedTransformFollower = dart.constFn(dart.fnType(basic.CompositedTransformFollower, [framework.BuildContext])))(),
+    AnimationStatusTovoid: () => (T.AnimationStatusTovoid = dart.constFn(dart.fnType(dart.void, [animation.AnimationStatus])))(),
+    SizeTodouble: () => (T.SizeTodouble = dart.constFn(dart.fnType(core.double, [ui.Size])))(),
+    TAndTToT: () => (T.TAndTToT = dart.constFn(dart.gFnType(T => [T, [T, T]], T => [core.num])))(),
+    JSArrayOfSize: () => (T.JSArrayOfSize = dart.constFn(_interceptors.JSArray$(ui.Size)))(),
+    PaintingContextAndOffsetTovoid: () => (T.PaintingContextAndOffsetTovoid = dart.constFn(dart.fnType(dart.void, [object.PaintingContext, ui.Offset])))()
+  };
+  var T$Eval = Object.assign({
+    _: () => T$Eval
+  }, T);
+  var S = {
+    _: () => S
+  };
+  var S$Eval = Object.assign({
+    _: () => S$Eval
+  }, S);
+  const CT = Object.create({
+    _: () => (C, CT)
+  });
+  dart.defineLazy(CT, {
+    get C0() {
+      return C[0] = dart.const({
+        __proto__: slider$._SliderType.prototype,
+        [_name$]: "_SliderType.material",
+        index: 0
+      });
+    },
+    get C1() {
+      return C[1] = dart.const({
+        __proto__: slider$._SliderType.prototype,
+        [_name$]: "_SliderType.adaptive",
+        index: 1
+      });
+    },
+    get C2() {
+      return C[2] = dart.constList([C[0] || CT.C0, C[1] || CT.C1], slider$._SliderType);
+    },
+    get C4() {
+      return C[4] = dart.const({
+        __proto__: slider$._SliderAdjustmentType.prototype,
+        [_name$]: "_SliderAdjustmentType.up",
+        index: 2
+      });
+    },
+    get C3() {
+      return C[3] = dart.const({
+        __proto__: slider$._AdjustSliderIntent.prototype,
+        [_AdjustSliderIntent_type]: C[4] || CT.C4
+      });
+    },
+    get C6() {
+      return C[6] = dart.const({
+        __proto__: slider$._SliderAdjustmentType.prototype,
+        [_name$]: "_SliderAdjustmentType.down",
+        index: 3
+      });
+    },
+    get C5() {
+      return C[5] = dart.const({
+        __proto__: slider$._AdjustSliderIntent.prototype,
+        [_AdjustSliderIntent_type]: C[6] || CT.C6
+      });
+    },
+    get C8() {
+      return C[8] = dart.const({
+        __proto__: slider$._SliderAdjustmentType.prototype,
+        [_name$]: "_SliderAdjustmentType.left",
+        index: 1
+      });
+    },
+    get C7() {
+      return C[7] = dart.const({
+        __proto__: slider$._AdjustSliderIntent.prototype,
+        [_AdjustSliderIntent_type]: C[8] || CT.C8
+      });
+    },
+    get C10() {
+      return C[10] = dart.const({
+        __proto__: slider$._SliderAdjustmentType.prototype,
+        [_name$]: "_SliderAdjustmentType.right",
+        index: 0
+      });
+    },
+    get C9() {
+      return C[9] = dart.const({
+        __proto__: slider$._AdjustSliderIntent.prototype,
+        [_AdjustSliderIntent_type]: C[10] || CT.C10
+      });
+    },
+    get C11() {
+      return C[11] = dart.const({
+        __proto__: ui.TextDirection.prototype,
+        [_name]: "TextDirection.rtl",
+        index: 0
+      });
+    },
+    get C12() {
+      return C[12] = dart.const({
+        __proto__: ui.TextDirection.prototype,
+        [_name]: "TextDirection.ltr",
+        index: 1
+      });
+    },
+    get C13() {
+      return C[13] = dart.const({
+        __proto__: platform.TargetPlatform.prototype,
+        [_name$0]: "TargetPlatform.android",
+        index: 0
+      });
+    },
+    get C14() {
+      return C[14] = dart.const({
+        __proto__: platform.TargetPlatform.prototype,
+        [_name$0]: "TargetPlatform.fuchsia",
+        index: 1
+      });
+    },
+    get C15() {
+      return C[15] = dart.const({
+        __proto__: platform.TargetPlatform.prototype,
+        [_name$0]: "TargetPlatform.linux",
+        index: 3
+      });
+    },
+    get C16() {
+      return C[16] = dart.const({
+        __proto__: platform.TargetPlatform.prototype,
+        [_name$0]: "TargetPlatform.windows",
+        index: 5
+      });
+    },
+    get C17() {
+      return C[17] = dart.const({
+        __proto__: platform.TargetPlatform.prototype,
+        [_name$0]: "TargetPlatform.iOS",
+        index: 2
+      });
+    },
+    get C18() {
+      return C[18] = dart.const({
+        __proto__: platform.TargetPlatform.prototype,
+        [_name$0]: "TargetPlatform.macOS",
+        index: 4
+      });
+    },
+    get C19() {
+      return C[19] = dart.const({
+        __proto__: slider_theme.RoundedRectSliderTrackShape.prototype
+      });
+    },
+    get C20() {
+      return C[20] = dart.const({
+        __proto__: slider_theme.RoundSliderTickMarkShape.prototype,
+        [RoundSliderTickMarkShape_tickMarkRadius]: null
+      });
+    },
+    get C21() {
+      return C[21] = dart.const({
+        __proto__: slider_theme.RoundSliderOverlayShape.prototype,
+        [RoundSliderOverlayShape_overlayRadius]: 24
+      });
+    },
+    get C22() {
+      return C[22] = dart.const({
+        __proto__: slider_theme.RoundSliderThumbShape.prototype,
+        [RoundSliderThumbShape_pressedElevation]: 6,
+        [RoundSliderThumbShape_elevation]: 1,
+        [RoundSliderThumbShape_disabledThumbRadius]: null,
+        [RoundSliderThumbShape_enabledThumbRadius]: 10
+      });
+    },
+    get C23() {
+      return C[23] = dart.const({
+        __proto__: slider_theme.RectangularSliderValueIndicatorShape.prototype
+      });
+    },
+    get C24() {
+      return C[24] = dart.const({
+        __proto__: slider_theme.ShowValueIndicator.prototype,
+        [_name$1]: "ShowValueIndicator.onlyForDiscrete",
+        index: 0
+      });
+    },
+    get C27() {
+      return C[27] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "key",
+        [_Location_column]: 13,
+        [_Location_line]: 727,
+        [_Location_file]: null
+      });
+    },
+    get C28() {
+      return C[28] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "value",
+        [_Location_column]: 13,
+        [_Location_line]: 728,
+        [_Location_file]: null
+      });
+    },
+    get C29() {
+      return C[29] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "divisions",
+        [_Location_column]: 13,
+        [_Location_line]: 729,
+        [_Location_file]: null
+      });
+    },
+    get C30() {
+      return C[30] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "label",
+        [_Location_column]: 13,
+        [_Location_line]: 730,
+        [_Location_file]: null
+      });
+    },
+    get C31() {
+      return C[31] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "sliderTheme",
+        [_Location_column]: 13,
+        [_Location_line]: 731,
+        [_Location_file]: null
+      });
+    },
+    get C32() {
+      return C[32] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "textScaleFactor",
+        [_Location_column]: 13,
+        [_Location_line]: 732,
+        [_Location_file]: null
+      });
+    },
+    get C33() {
+      return C[33] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "screenSize",
+        [_Location_column]: 13,
+        [_Location_line]: 733,
+        [_Location_file]: null
+      });
+    },
+    get C34() {
+      return C[34] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onChanged",
+        [_Location_column]: 13,
+        [_Location_line]: 734,
+        [_Location_file]: null
+      });
+    },
+    get C35() {
+      return C[35] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onChangeStart",
+        [_Location_column]: 13,
+        [_Location_line]: 735,
+        [_Location_file]: null
+      });
+    },
+    get C36() {
+      return C[36] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onChangeEnd",
+        [_Location_column]: 13,
+        [_Location_line]: 736,
+        [_Location_file]: null
+      });
+    },
+    get C37() {
+      return C[37] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "state",
+        [_Location_column]: 13,
+        [_Location_line]: 737,
+        [_Location_file]: null
+      });
+    },
+    get C38() {
+      return C[38] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "semanticFormatterCallback",
+        [_Location_column]: 13,
+        [_Location_line]: 738,
+        [_Location_file]: null
+      });
+    },
+    get C39() {
+      return C[39] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "hasFocus",
+        [_Location_column]: 13,
+        [_Location_line]: 739,
+        [_Location_file]: null
+      });
+    },
+    get C40() {
+      return C[40] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "hovering",
+        [_Location_column]: 13,
+        [_Location_line]: 740,
+        [_Location_file]: null
+      });
+    },
+    get C26() {
+      return C[26] = dart.constList([C[27] || CT.C27, C[28] || CT.C28, C[29] || CT.C29, C[30] || CT.C30, C[31] || CT.C31, C[32] || CT.C32, C[33] || CT.C33, C[34] || CT.C34, C[35] || CT.C35, C[36] || CT.C36, C[37] || CT.C37, C[38] || CT.C38, C[39] || CT.C39, C[40] || CT.C40], widget_inspector._Location);
+    },
+    get C25() {
+      return C[25] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[26] || CT.C26,
+        [_Location_name]: null,
+        [_Location_column]: 18,
+        [_Location_line]: 726,
+        [_Location_file]: "file:///D:/flutter/packages/flutter/lib/src/material/slider.dart"
+      });
+    },
+    get C43() {
+      return C[43] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "link",
+        [_Location_column]: 11,
+        [_Location_line]: 725,
+        [_Location_file]: null
+      });
+    },
+    get C44() {
+      return C[44] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 11,
+        [_Location_line]: 726,
+        [_Location_file]: null
+      });
+    },
+    get C42() {
+      return C[42] = dart.constList([C[43] || CT.C43, C[44] || CT.C44], widget_inspector._Location);
+    },
+    get C41() {
+      return C[41] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[42] || CT.C42,
+        [_Location_name]: null,
+        [_Location_column]: 16,
+        [_Location_line]: 724,
+        [_Location_file]: "file:///D:/flutter/packages/flutter/lib/src/material/slider.dart"
+      });
+    },
+    get C47() {
+      return C[47] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "actions",
+        [_Location_column]: 9,
+        [_Location_line]: 716,
+        [_Location_file]: null
+      });
+    },
+    get C48() {
+      return C[48] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "shortcuts",
+        [_Location_column]: 9,
+        [_Location_line]: 717,
+        [_Location_file]: null
+      });
+    },
+    get C49() {
+      return C[49] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "focusNode",
+        [_Location_column]: 9,
+        [_Location_line]: 718,
+        [_Location_file]: null
+      });
+    },
+    get C50() {
+      return C[50] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "autofocus",
+        [_Location_column]: 9,
+        [_Location_line]: 719,
+        [_Location_file]: null
+      });
+    },
+    get C51() {
+      return C[51] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "enabled",
+        [_Location_column]: 9,
+        [_Location_line]: 720,
+        [_Location_file]: null
+      });
+    },
+    get C52() {
+      return C[52] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onShowFocusHighlight",
+        [_Location_column]: 9,
+        [_Location_line]: 721,
+        [_Location_file]: null
+      });
+    },
+    get C53() {
+      return C[53] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onShowHoverHighlight",
+        [_Location_column]: 9,
+        [_Location_line]: 722,
+        [_Location_file]: null
+      });
+    },
+    get C54() {
+      return C[54] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "mouseCursor",
+        [_Location_column]: 9,
+        [_Location_line]: 723,
+        [_Location_file]: null
+      });
+    },
+    get C55() {
+      return C[55] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 9,
+        [_Location_line]: 724,
+        [_Location_file]: null
+      });
+    },
+    get C46() {
+      return C[46] = dart.constList([C[47] || CT.C47, C[48] || CT.C48, C[49] || CT.C49, C[50] || CT.C50, C[51] || CT.C51, C[52] || CT.C52, C[53] || CT.C53, C[54] || CT.C54, C[55] || CT.C55], widget_inspector._Location);
+    },
+    get C45() {
+      return C[45] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[46] || CT.C46,
+        [_Location_name]: null,
+        [_Location_column]: 14,
+        [_Location_line]: 715,
+        [_Location_file]: "file:///D:/flutter/packages/flutter/lib/src/material/slider.dart"
+      });
+    },
+    get C58() {
+      return C[58] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "container",
+        [_Location_column]: 7,
+        [_Location_line]: 713,
+        [_Location_file]: null
+      });
+    },
+    get C59() {
+      return C[59] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "slider",
+        [_Location_column]: 7,
+        [_Location_line]: 714,
+        [_Location_file]: null
+      });
+    },
+    get C60() {
+      return C[60] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 7,
+        [_Location_line]: 715,
+        [_Location_file]: null
+      });
+    },
+    get C57() {
+      return C[57] = dart.constList([C[58] || CT.C58, C[59] || CT.C59, C[60] || CT.C60], widget_inspector._Location);
+    },
+    get C56() {
+      return C[56] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[57] || CT.C57,
+        [_Location_name]: null,
+        [_Location_column]: 12,
+        [_Location_line]: 712,
+        [_Location_file]: "file:///D:/flutter/packages/flutter/lib/src/material/slider.dart"
+      });
+    },
+    get C63() {
+      return C[63] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "value",
+        [_Location_column]: 9,
+        [_Location_line]: 754,
+        [_Location_file]: null
+      });
+    },
+    get C64() {
+      return C[64] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onChanged",
+        [_Location_column]: 9,
+        [_Location_line]: 755,
+        [_Location_file]: null
+      });
+    },
+    get C65() {
+      return C[65] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onChangeStart",
+        [_Location_column]: 9,
+        [_Location_line]: 756,
+        [_Location_file]: null
+      });
+    },
+    get C66() {
+      return C[66] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "onChangeEnd",
+        [_Location_column]: 9,
+        [_Location_line]: 757,
+        [_Location_file]: null
+      });
+    },
+    get C67() {
+      return C[67] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "min",
+        [_Location_column]: 9,
+        [_Location_line]: 758,
+        [_Location_file]: null
+      });
+    },
+    get C68() {
+      return C[68] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "max",
+        [_Location_column]: 9,
+        [_Location_line]: 759,
+        [_Location_file]: null
+      });
+    },
+    get C69() {
+      return C[69] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "divisions",
+        [_Location_column]: 9,
+        [_Location_line]: 760,
+        [_Location_file]: null
+      });
+    },
+    get C70() {
+      return C[70] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "activeColor",
+        [_Location_column]: 9,
+        [_Location_line]: 761,
+        [_Location_file]: null
+      });
+    },
+    get C62() {
+      return C[62] = dart.constList([C[63] || CT.C63, C[64] || CT.C64, C[65] || CT.C65, C[66] || CT.C66, C[67] || CT.C67, C[68] || CT.C68, C[69] || CT.C69, C[70] || CT.C70], widget_inspector._Location);
+    },
+    get C61() {
+      return C[61] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[62] || CT.C62,
+        [_Location_name]: null,
+        [_Location_column]: 14,
+        [_Location_line]: 753,
+        [_Location_file]: "file:///D:/flutter/packages/flutter/lib/src/material/slider.dart"
+      });
+    },
+    get C73() {
+      return C[73] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "width",
+        [_Location_column]: 7,
+        [_Location_line]: 752,
+        [_Location_file]: null
+      });
+    },
+    get C74() {
+      return C[74] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 7,
+        [_Location_line]: 753,
+        [_Location_file]: null
+      });
+    },
+    get C72() {
+      return C[72] = dart.constList([C[73] || CT.C73, C[74] || CT.C74], widget_inspector._Location);
+    },
+    get C71() {
+      return C[71] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[72] || CT.C72,
+        [_Location_name]: null,
+        [_Location_column]: 12,
+        [_Location_line]: 751,
+        [_Location_file]: "file:///D:/flutter/packages/flutter/lib/src/material/slider.dart"
+      });
+    },
+    get C77() {
+      return C[77] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "state",
+        [_Location_column]: 15,
+        [_Location_line]: 776,
+        [_Location_file]: null
+      });
+    },
+    get C76() {
+      return C[76] = dart.constList([C[77] || CT.C77], widget_inspector._Location);
+    },
+    get C75() {
+      return C[75] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[76] || CT.C76,
+        [_Location_name]: null,
+        [_Location_column]: 20,
+        [_Location_line]: 775,
+        [_Location_file]: "file:///D:/flutter/packages/flutter/lib/src/material/slider.dart"
+      });
+    },
+    get C80() {
+      return C[80] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "link",
+        [_Location_column]: 13,
+        [_Location_line]: 774,
+        [_Location_file]: null
+      });
+    },
+    get C81() {
+      return C[81] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: null,
+        [_Location_name]: "child",
+        [_Location_column]: 13,
+        [_Location_line]: 775,
+        [_Location_file]: null
+      });
+    },
+    get C79() {
+      return C[79] = dart.constList([C[80] || CT.C80, C[81] || CT.C81], widget_inspector._Location);
+    },
+    get C78() {
+      return C[78] = dart.const({
+        __proto__: widget_inspector._Location.prototype,
+        [_Location_parameterLocations]: C[79] || CT.C79,
+        [_Location_name]: null,
+        [_Location_column]: 18,
+        [_Location_line]: 773,
+        [_Location_file]: "file:///D:/flutter/packages/flutter/lib/src/material/slider.dart"
+      });
+    },
+    get C82() {
+      return C[82] = dart.const({
+        __proto__: core.Duration.prototype,
+        [Duration__duration]: 75000
+      });
+    },
+    get C83() {
+      return C[83] = dart.const({
+        __proto__: core.Duration.prototype,
+        [Duration__duration]: 100000
+      });
+    },
+    get C84() {
+      return C[84] = dart.fn(math.max, T.TAndTToT());
+    },
+    get C85() {
+      return C[85] = dart.const({
+        __proto__: slider_theme.ShowValueIndicator.prototype,
+        [_name$1]: "ShowValueIndicator.onlyForContinuous",
+        index: 1
+      });
+    },
+    get C86() {
+      return C[86] = dart.const({
+        __proto__: slider_theme.ShowValueIndicator.prototype,
+        [_name$1]: "ShowValueIndicator.always",
+        index: 2
+      });
+    },
+    get C87() {
+      return C[87] = dart.const({
+        __proto__: slider_theme.ShowValueIndicator.prototype,
+        [_name$1]: "ShowValueIndicator.never",
+        index: 3
+      });
+    },
+    get C88() {
+      return C[88] = dart.const({
+        __proto__: core.Duration.prototype,
+        [Duration__duration]: 500000
+      });
+    },
+    get C89() {
+      return C[89] = dart.constList([C[10] || CT.C10, C[8] || CT.C8, C[4] || CT.C4, C[6] || CT.C6], slider$._SliderAdjustmentType);
+    }
+  }, false);
+  var C = Array(90).fill(void 0);
+  var I = [
+    "file:///D:/flutter/packages/flutter/lib/src/material/slider.dart",
+    "package:flutter/src/material/slider.dart"
+  ];
+  var _name$ = dart.privateName(slider$, "_name");
+  slider$._SliderType = class _SliderType extends core.Object {
+    toString() {
+      return this[_name$];
+    }
+  };
+  (slider$._SliderType.new = function(index, _name) {
+    if (index == null) dart.nullFailed(I[0], 34, 6, "index");
+    if (_name == null) dart.nullFailed(I[0], 34, 6, "_name");
+    this.index = index;
+    this[_name$] = _name;
+    ;
+  }).prototype = slider$._SliderType.prototype;
+  dart.addTypeTests(slider$._SliderType);
+  dart.addTypeCaches(slider$._SliderType);
+  dart.setLibraryUri(slider$._SliderType, I[1]);
+  dart.setFieldSignature(slider$._SliderType, () => ({
+    __proto__: dart.getFields(slider$._SliderType.__proto__),
+    index: dart.finalFieldType(core.int),
+    [_name$]: dart.finalFieldType(core.String)
+  }));
+  dart.defineExtensionMethods(slider$._SliderType, ['toString']);
+  slider$._SliderType.material = C[0] || CT.C0;
+  slider$._SliderType.adaptive = C[1] || CT.C1;
+  slider$._SliderType.values = C[2] || CT.C2;
+  var value$ = dart.privateName(slider$, "Slider.value");
+  var onChanged$ = dart.privateName(slider$, "Slider.onChanged");
+  var onChangeStart$ = dart.privateName(slider$, "Slider.onChangeStart");
+  var onChangeEnd$ = dart.privateName(slider$, "Slider.onChangeEnd");
+  var min$ = dart.privateName(slider$, "Slider.min");
+  var max$ = dart.privateName(slider$, "Slider.max");
+  var divisions$ = dart.privateName(slider$, "Slider.divisions");
+  var label$ = dart.privateName(slider$, "Slider.label");
+  var activeColor$ = dart.privateName(slider$, "Slider.activeColor");
+  var inactiveColor$ = dart.privateName(slider$, "Slider.inactiveColor");
+  var mouseCursor$ = dart.privateName(slider$, "Slider.mouseCursor");
+  var semanticFormatterCallback$ = dart.privateName(slider$, "Slider.semanticFormatterCallback");
+  var focusNode$ = dart.privateName(slider$, "Slider.focusNode");
+  var autofocus$ = dart.privateName(slider$, "Slider.autofocus");
+  var _sliderType = dart.privateName(slider$, "Slider._sliderType");
+  var _sliderType$ = dart.privateName(slider$, "_sliderType");
+  slider$.Slider = class Slider extends framework.StatefulWidget {
+    get value() {
+      return this[value$];
+    }
+    set value(value) {
+      super.value = value;
+    }
+    get onChanged() {
+      return this[onChanged$];
+    }
+    set onChanged(value) {
+      super.onChanged = value;
+    }
+    get onChangeStart() {
+      return this[onChangeStart$];
+    }
+    set onChangeStart(value) {
+      super.onChangeStart = value;
+    }
+    get onChangeEnd() {
+      return this[onChangeEnd$];
+    }
+    set onChangeEnd(value) {
+      super.onChangeEnd = value;
+    }
+    get min() {
+      return this[min$];
+    }
+    set min(value) {
+      super.min = value;
+    }
+    get max() {
+      return this[max$];
+    }
+    set max(value) {
+      super.max = value;
+    }
+    get divisions() {
+      return this[divisions$];
+    }
+    set divisions(value) {
+      super.divisions = value;
+    }
+    get label() {
+      return this[label$];
+    }
+    set label(value) {
+      super.label = value;
+    }
+    get activeColor() {
+      return this[activeColor$];
+    }
+    set activeColor(value) {
+      super.activeColor = value;
+    }
+    get inactiveColor() {
+      return this[inactiveColor$];
+    }
+    set inactiveColor(value) {
+      super.inactiveColor = value;
+    }
+    get mouseCursor() {
+      return this[mouseCursor$];
+    }
+    set mouseCursor(value) {
+      super.mouseCursor = value;
+    }
+    get semanticFormatterCallback() {
+      return this[semanticFormatterCallback$];
+    }
+    set semanticFormatterCallback(value) {
+      super.semanticFormatterCallback = value;
+    }
+    get focusNode() {
+      return this[focusNode$];
+    }
+    set focusNode(value) {
+      super.focusNode = value;
+    }
+    get autofocus() {
+      return this[autofocus$];
+    }
+    set autofocus(value) {
+      super.autofocus = value;
+    }
+    get [_sliderType$]() {
+      return this[_sliderType];
+    }
+    set [_sliderType$](value) {
+      super[_sliderType$] = value;
+    }
+    createState() {
+      return new slider$._SliderState.new();
+    }
+    debugFillProperties(properties) {
+      if (properties == null) dart.nullFailed(I[0], 444, 56, "properties");
+      super.debugFillProperties(properties);
+      properties.add(new diagnostics.DoubleProperty.new("value", this.value));
+      properties.add(new (T.ObjectFlagPropertyOfdoubleTovoid()).new("onChanged", this.onChanged, {ifNull: "disabled"}));
+      properties.add(new (T.ObjectFlagPropertyOfdoubleTovoid()).has("onChangeStart", this.onChangeStart));
+      properties.add(new (T.ObjectFlagPropertyOfdoubleTovoid()).has("onChangeEnd", this.onChangeEnd));
+      properties.add(new diagnostics.DoubleProperty.new("min", this.min));
+      properties.add(new diagnostics.DoubleProperty.new("max", this.max));
+      properties.add(new diagnostics.IntProperty.new("divisions", this.divisions));
+      properties.add(new diagnostics.StringProperty.new("label", this.label));
+      properties.add(new colors.ColorProperty.new("activeColor", this.activeColor));
+      properties.add(new colors.ColorProperty.new("inactiveColor", this.inactiveColor));
+      properties.add(new (T.ObjectFlagPropertyOfdoubleTovoid()).has("semanticFormatterCallback", this.semanticFormatterCallback));
+      properties.add(new (T.ObjectFlagPropertyOfFocusNode()).has("focusNode", this.focusNode));
+      properties.add(new diagnostics.FlagProperty.new("autofocus", {value: this.autofocus, ifTrue: "autofocus"}));
+    }
+  };
+  (slider$.Slider.new = function(opts) {
+    let key = opts && 'key' in opts ? opts.key : null;
+    let value = opts && 'value' in opts ? opts.value : null;
+    if (value == null) dart.nullFailed(I[0], 147, 19, "value");
+    let onChanged = opts && 'onChanged' in opts ? opts.onChanged : null;
+    let onChangeStart = opts && 'onChangeStart' in opts ? opts.onChangeStart : null;
+    let onChangeEnd = opts && 'onChangeEnd' in opts ? opts.onChangeEnd : null;
+    let min = opts && 'min' in opts ? opts.min : 0;
+    if (min == null) dart.nullFailed(I[0], 151, 10, "min");
+    let max = opts && 'max' in opts ? opts.max : 1;
+    if (max == null) dart.nullFailed(I[0], 152, 10, "max");
+    let divisions = opts && 'divisions' in opts ? opts.divisions : null;
+    let label = opts && 'label' in opts ? opts.label : null;
+    let activeColor = opts && 'activeColor' in opts ? opts.activeColor : null;
+    let inactiveColor = opts && 'inactiveColor' in opts ? opts.inactiveColor : null;
+    let mouseCursor = opts && 'mouseCursor' in opts ? opts.mouseCursor : null;
+    let semanticFormatterCallback = opts && 'semanticFormatterCallback' in opts ? opts.semanticFormatterCallback : null;
+    let focusNode = opts && 'focusNode' in opts ? opts.focusNode : null;
+    let autofocus = opts && 'autofocus' in opts ? opts.autofocus : false;
+    if (autofocus == null) dart.nullFailed(I[0], 160, 10, "autofocus");
+    let $36creationLocationd_0dea112b090073317d4 = opts && '$creationLocationd_0dea112b090073317d4' in opts ? opts.$creationLocationd_0dea112b090073317d4 : null;
+    this[value$] = value;
+    this[onChanged$] = onChanged;
+    this[onChangeStart$] = onChangeStart;
+    this[onChangeEnd$] = onChangeEnd;
+    this[min$] = min;
+    this[max$] = max;
+    this[divisions$] = divisions;
+    this[label$] = label;
+    this[activeColor$] = activeColor;
+    this[inactiveColor$] = inactiveColor;
+    this[mouseCursor$] = mouseCursor;
+    this[semanticFormatterCallback$] = semanticFormatterCallback;
+    this[focusNode$] = focusNode;
+    this[autofocus$] = autofocus;
+    this[_sliderType] = slider$._SliderType.material;
+    if (!(value != null)) dart.assertFailed(null, I[0], 162, 15, "value != null");
+    if (!(min != null)) dart.assertFailed(null, I[0], 163, 15, "min != null");
+    if (!(max != null)) dart.assertFailed(null, I[0], 164, 15, "max != null");
+    if (!(dart.notNull(min) <= dart.notNull(max))) dart.assertFailed(null, I[0], 165, 15, "min <= max");
+    if (!(dart.notNull(value) >= dart.notNull(min) && dart.notNull(value) <= dart.notNull(max))) dart.assertFailed(null, I[0], 166, 15, "value >= min && value <= max");
+    if (!(divisions == null || dart.notNull(divisions) > 0)) dart.assertFailed(null, I[0], 167, 15, "divisions == null || divisions > 0");
+    slider$.Slider.__proto__.new.call(this, {key: key, $creationLocationd_0dea112b090073317d4: $36creationLocationd_0dea112b090073317d4});
+    ;
+  }).prototype = slider$.Slider.prototype;
+  (slider$.Slider.adaptive = function(opts) {
+    let key = opts && 'key' in opts ? opts.key : null;
+    let value = opts && 'value' in opts ? opts.value : null;
+    if (value == null) dart.nullFailed(I[0], 183, 19, "value");
+    let onChanged = opts && 'onChanged' in opts ? opts.onChanged : null;
+    let onChangeStart = opts && 'onChangeStart' in opts ? opts.onChangeStart : null;
+    let onChangeEnd = opts && 'onChangeEnd' in opts ? opts.onChangeEnd : null;
+    let min = opts && 'min' in opts ? opts.min : 0;
+    if (min == null) dart.nullFailed(I[0], 187, 10, "min");
+    let max = opts && 'max' in opts ? opts.max : 1;
+    if (max == null) dart.nullFailed(I[0], 188, 10, "max");
+    let divisions = opts && 'divisions' in opts ? opts.divisions : null;
+    let label = opts && 'label' in opts ? opts.label : null;
+    let mouseCursor = opts && 'mouseCursor' in opts ? opts.mouseCursor : null;
+    let activeColor = opts && 'activeColor' in opts ? opts.activeColor : null;
+    let inactiveColor = opts && 'inactiveColor' in opts ? opts.inactiveColor : null;
+    let semanticFormatterCallback = opts && 'semanticFormatterCallback' in opts ? opts.semanticFormatterCallback : null;
+    let focusNode = opts && 'focusNode' in opts ? opts.focusNode : null;
+    let autofocus = opts && 'autofocus' in opts ? opts.autofocus : false;
+    if (autofocus == null) dart.nullFailed(I[0], 196, 10, "autofocus");
+    let $36creationLocationd_0dea112b090073317d4 = opts && '$creationLocationd_0dea112b090073317d4' in opts ? opts.$creationLocationd_0dea112b090073317d4 : null;
+    this[value$] = value;
+    this[onChanged$] = onChanged;
+    this[onChangeStart$] = onChangeStart;
+    this[onChangeEnd$] = onChangeEnd;
+    this[min$] = min;
+    this[max$] = max;
+    this[divisions$] = divisions;
+    this[label$] = label;
+    this[mouseCursor$] = mouseCursor;
+    this[activeColor$] = activeColor;
+    this[inactiveColor$] = inactiveColor;
+    this[semanticFormatterCallback$] = semanticFormatterCallback;
+    this[focusNode$] = focusNode;
+    this[autofocus$] = autofocus;
+    this[_sliderType] = slider$._SliderType.adaptive;
+    if (!(value != null)) dart.assertFailed(null, I[0], 198, 15, "value != null");
+    if (!(min != null)) dart.assertFailed(null, I[0], 199, 15, "min != null");
+    if (!(max != null)) dart.assertFailed(null, I[0], 200, 15, "max != null");
+    if (!(dart.notNull(min) <= dart.notNull(max))) dart.assertFailed(null, I[0], 201, 15, "min <= max");
+    if (!(dart.notNull(value) >= dart.notNull(min) && dart.notNull(value) <= dart.notNull(max))) dart.assertFailed(null, I[0], 202, 15, "value >= min && value <= max");
+    if (!(divisions == null || dart.notNull(divisions) > 0)) dart.assertFailed(null, I[0], 203, 15, "divisions == null || divisions > 0");
+    slider$.Slider.__proto__.new.call(this, {key: key, $creationLocationd_0dea112b090073317d4: $36creationLocationd_0dea112b090073317d4});
+    ;
+  }).prototype = slider$.Slider.prototype;
+  dart.addTypeTests(slider$.Slider);
+  dart.addTypeCaches(slider$.Slider);
+  dart.setMethodSignature(slider$.Slider, () => ({
+    __proto__: dart.getMethods(slider$.Slider.__proto__),
+    createState: dart.fnType(slider$._SliderState, [])
+  }));
+  dart.setLibraryUri(slider$.Slider, I[1]);
+  dart.setFieldSignature(slider$.Slider, () => ({
+    __proto__: dart.getFields(slider$.Slider.__proto__),
+    value: dart.finalFieldType(core.double),
+    onChanged: dart.finalFieldType(dart.nullable(dart.fnType(dart.void, [core.double]))),
+    onChangeStart: dart.finalFieldType(dart.nullable(dart.fnType(dart.void, [core.double]))),
+    onChangeEnd: dart.finalFieldType(dart.nullable(dart.fnType(dart.void, [core.double]))),
+    min: dart.finalFieldType(core.double),
+    max: dart.finalFieldType(core.double),
+    divisions: dart.finalFieldType(dart.nullable(core.int)),
+    label: dart.finalFieldType(dart.nullable(core.String)),
+    activeColor: dart.finalFieldType(dart.nullable(ui.Color)),
+    inactiveColor: dart.finalFieldType(dart.nullable(ui.Color)),
+    mouseCursor: dart.finalFieldType(dart.nullable(mouse_cursor.MouseCursor)),
+    semanticFormatterCallback: dart.finalFieldType(dart.nullable(dart.fnType(core.String, [core.double]))),
+    focusNode: dart.finalFieldType(dart.nullable(focus_manager.FocusNode)),
+    autofocus: dart.finalFieldType(core.bool),
+    [_sliderType$]: dart.finalFieldType(slider$._SliderType)
+  }));
+  var ___SliderState_overlayController = dart.privateName(slider$, "_#_SliderState#overlayController");
+  var ___SliderState_valueIndicatorController = dart.privateName(slider$, "_#_SliderState#valueIndicatorController");
+  var ___SliderState_enableController = dart.privateName(slider$, "_#_SliderState#enableController");
+  var ___SliderState_positionController = dart.privateName(slider$, "_#_SliderState#positionController");
+  var _renderObjectKey = dart.privateName(slider$, "_renderObjectKey");
+  var ___SliderState__shortcutMap = dart.privateName(slider$, "_#_SliderState#_shortcutMap");
+  var ___SliderState__actionMap = dart.privateName(slider$, "_#_SliderState#_actionMap");
+  var _focused = dart.privateName(slider$, "_focused");
+  var _hovering = dart.privateName(slider$, "_hovering");
+  var _layerLink = dart.privateName(slider$, "_layerLink");
+  var _shortcutMap = dart.privateName(slider$, "_shortcutMap");
+  var _actionMap = dart.privateName(slider$, "_actionMap");
+  var _enabled = dart.privateName(slider$, "_enabled");
+  var _unlerp = dart.privateName(slider$, "_unlerp");
+  var _AdjustSliderIntent_type = dart.privateName(slider$, "_AdjustSliderIntent.type");
+  var _actionHandler = dart.privateName(slider$, "_actionHandler");
+  var _lerp = dart.privateName(slider$, "_lerp");
+  var _handleChanged = dart.privateName(slider$, "_handleChanged");
+  var _handleDragStart = dart.privateName(slider$, "_handleDragStart");
+  var _handleDragEnd = dart.privateName(slider$, "_handleDragEnd");
+  var _name = dart.privateName(ui, "_name");
+  var _handleFocusHighlightChanged = dart.privateName(slider$, "_handleFocusHighlightChanged");
+  var _handleHoverChanged = dart.privateName(slider$, "_handleHoverChanged");
+  var _buildMaterialSlider = dart.privateName(slider$, "_buildMaterialSlider");
+  var _name$0 = dart.privateName(platform, "_name");
+  var _buildCupertinoSlider = dart.privateName(slider$, "_buildCupertinoSlider");
+  var RoundSliderTickMarkShape_tickMarkRadius = dart.privateName(slider_theme, "RoundSliderTickMarkShape.tickMarkRadius");
+  var RoundSliderOverlayShape_overlayRadius = dart.privateName(slider_theme, "RoundSliderOverlayShape.overlayRadius");
+  var RoundSliderThumbShape_pressedElevation = dart.privateName(slider_theme, "RoundSliderThumbShape.pressedElevation");
+  var RoundSliderThumbShape_elevation = dart.privateName(slider_theme, "RoundSliderThumbShape.elevation");
+  var RoundSliderThumbShape_disabledThumbRadius = dart.privateName(slider_theme, "RoundSliderThumbShape.disabledThumbRadius");
+  var RoundSliderThumbShape_enabledThumbRadius = dart.privateName(slider_theme, "RoundSliderThumbShape.enabledThumbRadius");
+  var _name$1 = dart.privateName(slider_theme, "_name");
+  var _Location_parameterLocations = dart.privateName(widget_inspector, "_Location.parameterLocations");
+  var _Location_name = dart.privateName(widget_inspector, "_Location.name");
+  var _Location_column = dart.privateName(widget_inspector, "_Location.column");
+  var _Location_line = dart.privateName(widget_inspector, "_Location.line");
+  var _Location_file = dart.privateName(widget_inspector, "_Location.file");
+  var Duration__duration = dart.privateName(core, "Duration._duration");
+  const State_TickerProviderStateMixin$36 = class State_TickerProviderStateMixin extends framework.State$(slider$.Slider) {};
+  (State_TickerProviderStateMixin$36.new = function() {
+    ticker_provider.TickerProviderStateMixin$(slider$.Slider)[dart.mixinNew].call(this);
+    State_TickerProviderStateMixin$36.__proto__.new.call(this);
+  }).prototype = State_TickerProviderStateMixin$36.prototype;
+  dart.applyMixin(State_TickerProviderStateMixin$36, ticker_provider.TickerProviderStateMixin$(slider$.Slider));
+  slider$._SliderState = class _SliderState extends State_TickerProviderStateMixin$36 {
+    get overlayController() {
+      let t0;
+      t0 = this[___SliderState_overlayController];
+      return t0 == null ? dart.throw(new _internal.LateError.fieldNI("overlayController")) : t0;
+    }
+    set overlayController(t0) {
+      if (t0 == null) dart.nullFailed(I[0], 468, 28, "null");
+      this[___SliderState_overlayController] = t0;
+    }
+    get valueIndicatorController() {
+      let t1;
+      t1 = this[___SliderState_valueIndicatorController];
+      return t1 == null ? dart.throw(new _internal.LateError.fieldNI("valueIndicatorController")) : t1;
+    }
+    set valueIndicatorController(t1) {
+      if (t1 == null) dart.nullFailed(I[0], 471, 28, "null");
+      this[___SliderState_valueIndicatorController] = t1;
+    }
+    get enableController() {
+      let t2;
+      t2 = this[___SliderState_enableController];
+      return t2 == null ? dart.throw(new _internal.LateError.fieldNI("enableController")) : t2;
+    }
+    set enableController(t2) {
+      if (t2 == null) dart.nullFailed(I[0], 473, 28, "null");
+      this[___SliderState_enableController] = t2;
+    }
+    get positionController() {
+      let t3;
+      t3 = this[___SliderState_positionController];
+      return t3 == null ? dart.throw(new _internal.LateError.fieldNI("positionController")) : t3;
+    }
+    set positionController(t3) {
+      if (t3 == null) dart.nullFailed(I[0], 476, 28, "null");
+      this[___SliderState_positionController] = t3;
+    }
+    get [_shortcutMap]() {
+      let t4;
+      t4 = this[___SliderState__shortcutMap];
+      return t4 == null ? dart.throw(new _internal.LateError.fieldNI("_shortcutMap")) : t4;
+    }
+    set [_shortcutMap](t4) {
+      if (t4 == null) dart.nullFailed(I[0], 481, 35, "null");
+      this[___SliderState__shortcutMap] = t4;
+    }
+    get [_actionMap]() {
+      let t5;
+      t5 = this[___SliderState__actionMap];
+      return t5 == null ? dart.throw(new _internal.LateError.fieldNI("_actionMap")) : t5;
+    }
+    set [_actionMap](t5) {
+      if (t5 == null) dart.nullFailed(I[0], 483, 34, "null");
+      this[___SliderState__actionMap] = t5;
+    }
+    get [_enabled]() {
+      return this.widget.onChanged != null;
+    }
+    initState() {
+      super.initState();
+      this.overlayController = new animation_controller.AnimationController.new({duration: constants.kRadialReactionDuration, vsync: this});
+      this.valueIndicatorController = new animation_controller.AnimationController.new({duration: slider$._SliderState.valueIndicatorAnimationDuration, vsync: this});
+      this.enableController = new animation_controller.AnimationController.new({duration: slider$._SliderState.enableAnimationDuration, vsync: this});
+      this.positionController = new animation_controller.AnimationController.new({duration: core.Duration.zero, vsync: this});
+      this.enableController.value = this.widget.onChanged != null ? 1.0 : 0.0;
+      this.positionController.value = this[_unlerp](this.widget.value);
+      this[_shortcutMap] = new (T.LinkedMapOfLogicalKeySet$Intent()).from([new shortcuts.LogicalKeySet.new(keyboard_key.LogicalKeyboardKey.arrowUp), C[3] || CT.C3, new shortcuts.LogicalKeySet.new(keyboard_key.LogicalKeyboardKey.arrowDown), C[5] || CT.C5, new shortcuts.LogicalKeySet.new(keyboard_key.LogicalKeyboardKey.arrowLeft), C[7] || CT.C7, new shortcuts.LogicalKeySet.new(keyboard_key.LogicalKeyboardKey.arrowRight), C[9] || CT.C9]);
+      this[_actionMap] = new (T.LinkedMapOfType$ActionOfIntent()).from([dart.wrapType(slider$._AdjustSliderIntent), new (T.CallbackActionOf_AdjustSliderIntent()).new({onInvoke: dart.bind(this, _actionHandler)})]);
+    }
+    dispose() {
+      let t6;
+      t6 = this.interactionTimer;
+      t6 == null ? null : t6.cancel();
+      this.overlayController.dispose();
+      this.valueIndicatorController.dispose();
+      this.enableController.dispose();
+      this.positionController.dispose();
+      if (this.overlayEntry != null) {
+        dart.nullCheck(this.overlayEntry).remove();
+        this.overlayEntry = null;
+      }
+      super.dispose();
+    }
+    [_handleChanged](value) {
+      if (value == null) dart.nullFailed(I[0], 537, 30, "value");
+      if (!(this.widget.onChanged != null)) dart.assertFailed(null, I[0], 538, 12, "widget.onChanged != null");
+      let lerpValue = this[_lerp](value);
+      if (lerpValue != this.widget.value) {
+        dart.nullCheck(this.widget.onChanged)(lerpValue);
+      }
+    }
+    [_handleDragStart](value) {
+      if (value == null) dart.nullFailed(I[0], 545, 32, "value");
+      if (!(this.widget.onChangeStart != null)) dart.assertFailed(null, I[0], 546, 12, "widget.onChangeStart != null");
+      dart.nullCheck(this.widget.onChangeStart)(this[_lerp](value));
+    }
+    [_handleDragEnd](value) {
+      if (value == null) dart.nullFailed(I[0], 550, 30, "value");
+      if (!(this.widget.onChangeEnd != null)) dart.assertFailed(null, I[0], 551, 12, "widget.onChangeEnd != null");
+      dart.nullCheck(this.widget.onChangeEnd)(this[_lerp](value));
+    }
+    [_actionHandler](intent) {
+      if (intent == null) dart.nullFailed(I[0], 555, 43, "intent");
+      let renderSlider = slider$._RenderSlider.as(dart.nullCheck(dart.nullCheck(this[_renderObjectKey].currentContext).findRenderObject()));
+      let textDirection = basic.Directionality.of(dart.nullCheck(this[_renderObjectKey].currentContext));
+      switch (intent.type) {
+        case C[10] || CT.C10:
+        {
+          switch (textDirection) {
+            case C[11] || CT.C11:
+            {
+              renderSlider.decreaseAction();
+              break;
+            }
+            case C[12] || CT.C12:
+            {
+              renderSlider.increaseAction();
+              break;
+            }
+          }
+          break;
+        }
+        case C[8] || CT.C8:
+        {
+          switch (textDirection) {
+            case C[11] || CT.C11:
+            {
+              renderSlider.increaseAction();
+              break;
+            }
+            case C[12] || CT.C12:
+            {
+              renderSlider.decreaseAction();
+              break;
+            }
+          }
+          break;
+        }
+        case C[4] || CT.C4:
+        {
+          renderSlider.increaseAction();
+          break;
+        }
+        case C[6] || CT.C6:
+        {
+          renderSlider.decreaseAction();
+          break;
+        }
+      }
+    }
+    [_handleFocusHighlightChanged](focused) {
+      if (focused == null) dart.nullFailed(I[0], 589, 42, "focused");
+      if (focused != this[_focused]) {
+        this.setState(dart.fn(() => {
+          this[_focused] = focused;
+        }, T.VoidTovoid()));
+      }
+    }
+    [_handleHoverChanged](hovering) {
+      if (hovering == null) dart.nullFailed(I[0], 596, 33, "hovering");
+      if (hovering != this[_hovering]) {
+        this.setState(dart.fn(() => {
+          this[_hovering] = hovering;
+        }, T.VoidTovoid()));
+      }
+    }
+    [_lerp](value) {
+      if (value == null) dart.nullFailed(I[0], 604, 23, "value");
+      if (!(dart.notNull(value) >= 0.0)) dart.assertFailed(null, I[0], 605, 12, "value >= 0.0");
+      if (!(dart.notNull(value) <= 1.0)) dart.assertFailed(null, I[0], 606, 12, "value <= 1.0");
+      return dart.notNull(value) * (dart.notNull(this.widget.max) - dart.notNull(this.widget.min)) + dart.notNull(this.widget.min);
+    }
+    [_unlerp](value) {
+      if (value == null) dart.nullFailed(I[0], 611, 25, "value");
+      if (!(dart.notNull(value) <= dart.notNull(this.widget.max))) dart.assertFailed(null, I[0], 612, 12, "value <= widget.max");
+      if (!(dart.notNull(value) >= dart.notNull(this.widget.min))) dart.assertFailed(null, I[0], 613, 12, "value >= widget.min");
+      return dart.notNull(this.widget.max) > dart.notNull(this.widget.min) ? (dart.notNull(value) - dart.notNull(this.widget.min)) / (dart.notNull(this.widget.max) - dart.notNull(this.widget.min)) : 0.0;
+    }
+    build(context) {
+      if (context == null) dart.nullFailed(I[0], 618, 29, "context");
+      if (!dart.test(debug$.debugCheckHasMaterial(context))) dart.assertFailed(null, I[0], 619, 12, "debugCheckHasMaterial(context)");
+      if (!dart.test(debug.debugCheckHasMediaQuery(context))) dart.assertFailed(null, I[0], 620, 12, "debugCheckHasMediaQuery(context)");
+      switch (this.widget[_sliderType$]) {
+        case C[0] || CT.C0:
+        {
+          return this[_buildMaterialSlider](context);
+        }
+        case C[1] || CT.C1:
+        {
+          {
+            let theme = theme$.Theme.of(context);
+            if (!(theme.platform != null)) dart.assertFailed(null, I[0], 628, 16, "theme.platform != null");
+            switch (theme.platform) {
+              case C[13] || CT.C13:
+              case C[14] || CT.C14:
+              case C[15] || CT.C15:
+              case C[16] || CT.C16:
+              {
+                return this[_buildMaterialSlider](context);
+              }
+              case C[17] || CT.C17:
+              case C[18] || CT.C18:
+              {
+                return this[_buildCupertinoSlider](context);
+              }
+            }
+          }
+        }
+      }
+    }
+    [_buildMaterialSlider](context) {
+      let t6, t6$, t6$0, t6$1, t6$2, t6$3, t6$4, t6$5, t6$6, t6$7, t6$8, t6$9, t6$10, t6$11, t6$12, t6$13, t6$14, t6$15, t6$16, t6$17, t6$18, t6$19, t6$20, t6$21, t6$22, t6$23, t6$24, t6$25, t6$26, t6$27;
+      if (context == null) dart.nullFailed(I[0], 643, 44, "context");
+      let theme = theme$.Theme.of(context);
+      let sliderTheme = slider_theme.SliderTheme.of(context);
+      let _defaultTrackShape = C[19] || CT.C19;
+      let _defaultTickMarkShape = C[20] || CT.C20;
+      let _defaultOverlayShape = C[21] || CT.C21;
+      let _defaultThumbShape = C[22] || CT.C22;
+      let _defaultValueIndicatorShape = C[23] || CT.C23;
+      let _defaultShowValueIndicator = C[24] || CT.C24;
+      let valueIndicatorShape = (t6 = sliderTheme.valueIndicatorShape, t6 == null ? _defaultValueIndicatorShape : t6);
+      let valueIndicatorColor = null;
+      if (slider_theme.RectangularSliderValueIndicatorShape.is(valueIndicatorShape)) {
+        valueIndicatorColor = (t6$ = sliderTheme.valueIndicatorColor, t6$ == null ? ui.Color.alphaBlend(theme.colorScheme.onSurface.withOpacity(0.6), theme.colorScheme.surface.withOpacity(0.9)) : t6$);
+      } else {
+        valueIndicatorColor = (t6$1 = (t6$0 = this.widget.activeColor, t6$0 == null ? sliderTheme.valueIndicatorColor : t6$0), t6$1 == null ? theme.colorScheme.primary : t6$1);
+      }
+      sliderTheme = sliderTheme.copyWith({trackHeight: (t6$2 = sliderTheme.trackHeight, t6$2 == null ? 4 : t6$2), activeTrackColor: (t6$4 = (t6$3 = this.widget.activeColor, t6$3 == null ? sliderTheme.activeTrackColor : t6$3), t6$4 == null ? theme.colorScheme.primary : t6$4), inactiveTrackColor: (t6$6 = (t6$5 = this.widget.inactiveColor, t6$5 == null ? sliderTheme.inactiveTrackColor : t6$5), t6$6 == null ? theme.colorScheme.primary.withOpacity(0.24) : t6$6), disabledActiveTrackColor: (t6$7 = sliderTheme.disabledActiveTrackColor, t6$7 == null ? theme.colorScheme.onSurface.withOpacity(0.32) : t6$7), disabledInactiveTrackColor: (t6$8 = sliderTheme.disabledInactiveTrackColor, t6$8 == null ? theme.colorScheme.onSurface.withOpacity(0.12) : t6$8), activeTickMarkColor: (t6$10 = (t6$9 = this.widget.inactiveColor, t6$9 == null ? sliderTheme.activeTickMarkColor : t6$9), t6$10 == null ? theme.colorScheme.onPrimary.withOpacity(0.54) : t6$10), inactiveTickMarkColor: (t6$12 = (t6$11 = this.widget.activeColor, t6$11 == null ? sliderTheme.inactiveTickMarkColor : t6$11), t6$12 == null ? theme.colorScheme.primary.withOpacity(0.54) : t6$12), disabledActiveTickMarkColor: (t6$13 = sliderTheme.disabledActiveTickMarkColor, t6$13 == null ? theme.colorScheme.onPrimary.withOpacity(0.12) : t6$13), disabledInactiveTickMarkColor: (t6$14 = sliderTheme.disabledInactiveTickMarkColor, t6$14 == null ? theme.colorScheme.onSurface.withOpacity(0.12) : t6$14), thumbColor: (t6$16 = (t6$15 = this.widget.activeColor, t6$15 == null ? sliderTheme.thumbColor : t6$15), t6$16 == null ? theme.colorScheme.primary : t6$16), disabledThumbColor: (t6$17 = sliderTheme.disabledThumbColor, t6$17 == null ? ui.Color.alphaBlend(theme.colorScheme.onSurface.withOpacity(0.38), theme.colorScheme.surface) : t6$17), overlayColor: (t6$20 = (t6$19 = (t6$18 = this.widget.activeColor, t6$18 == null ? null : t6$18.withOpacity(0.12)), t6$19 == null ? sliderTheme.overlayColor : t6$19), t6$20 == null ? theme.colorScheme.primary.withOpacity(0.12) : t6$20), valueIndicatorColor: valueIndicatorColor, trackShape: (t6$21 = sliderTheme.trackShape, t6$21 == null ? _defaultTrackShape : t6$21), tickMarkShape: (t6$22 = sliderTheme.tickMarkShape, t6$22 == null ? _defaultTickMarkShape : t6$22), thumbShape: (t6$23 = sliderTheme.thumbShape, t6$23 == null ? _defaultThumbShape : t6$23), overlayShape: (t6$24 = sliderTheme.overlayShape, t6$24 == null ? _defaultOverlayShape : t6$24), valueIndicatorShape: valueIndicatorShape, showValueIndicator: (t6$25 = sliderTheme.showValueIndicator, t6$25 == null ? _defaultShowValueIndicator : t6$25), valueIndicatorTextStyle: (t6$26 = sliderTheme.valueIndicatorTextStyle, t6$26 == null ? dart.nullCheck(theme.textTheme.bodyText1).copyWith({color: theme.colorScheme.onPrimary}) : t6$26)});
+      let effectiveMouseCursor = material_state.MaterialStateProperty.resolveAs(mouse_cursor.MouseCursor, (t6$27 = this.widget.mouseCursor, t6$27 == null ? material_state.MaterialStateMouseCursor.clickable : t6$27), (() => {
+        let t6 = T.LinkedHashSetOfMaterialState().new();
+        if (!dart.test(this[_enabled])) t6.add(material_state.MaterialState.disabled);
+        if (dart.test(this[_hovering])) t6.add(material_state.MaterialState.hovered);
+        if (dart.test(this[_focused])) t6.add(material_state.MaterialState.focused);
+        return t6;
+      })());
+      function _screenSize() {
+        return media_query.MediaQuery.of(context).size;
+      }
+      dart.fn(_screenSize, T.VoidToSize());
+      return new basic.Semantics.new({container: true, slider: true, child: new actions.FocusableActionDetector.new({actions: this[_actionMap], shortcuts: this[_shortcutMap], focusNode: this.widget.focusNode, autofocus: this.widget.autofocus, enabled: this[_enabled], onShowFocusHighlight: dart.bind(this, _handleFocusHighlightChanged), onShowHoverHighlight: dart.bind(this, _handleHoverChanged), mouseCursor: effectiveMouseCursor, child: new basic.CompositedTransformTarget.new({link: this[_layerLink], child: new slider$._SliderRenderObjectWidget.new({key: this[_renderObjectKey], value: this[_unlerp](this.widget.value), divisions: this.widget.divisions, label: this.widget.label, sliderTheme: sliderTheme, textScaleFactor: media_query.MediaQuery.of(context).textScaleFactor, screenSize: _screenSize(), onChanged: this.widget.onChanged != null && dart.notNull(this.widget.max) > dart.notNull(this.widget.min) ? dart.bind(this, _handleChanged) : null, onChangeStart: this.widget.onChangeStart != null ? dart.bind(this, _handleDragStart) : null, onChangeEnd: this.widget.onChangeEnd != null ? dart.bind(this, _handleDragEnd) : null, state: this, semanticFormatterCallback: this.widget.semanticFormatterCallback, hasFocus: this[_focused], hovering: this[_hovering], $creationLocationd_0dea112b090073317d4: C[25] || CT.C25}), $creationLocationd_0dea112b090073317d4: C[41] || CT.C41}), $creationLocationd_0dea112b090073317d4: C[45] || CT.C45}), $creationLocationd_0dea112b090073317d4: C[56] || CT.C56});
+    }
+    [_buildCupertinoSlider](context) {
+      if (context == null) dart.nullFailed(I[0], 747, 45, "context");
+      return new basic.SizedBox.new({width: 1 / 0, child: new slider.CupertinoSlider.new({value: this.widget.value, onChanged: this.widget.onChanged, onChangeStart: this.widget.onChangeStart, onChangeEnd: this.widget.onChangeEnd, min: this.widget.min, max: this.widget.max, divisions: this.widget.divisions, activeColor: this.widget.activeColor, $creationLocationd_0dea112b090073317d4: C[61] || CT.C61}), $creationLocationd_0dea112b090073317d4: C[71] || CT.C71});
+    }
+    showValueIndicator() {
+      if (this.overlayEntry == null) {
+        this.overlayEntry = new overlay.OverlayEntry.new({builder: dart.fn(context => {
+            if (context == null) dart.nullFailed(I[0], 772, 32, "context");
+            return new basic.CompositedTransformFollower.new({link: this[_layerLink], child: new slider$._ValueIndicatorRenderObjectWidget.new({state: this, $creationLocationd_0dea112b090073317d4: C[75] || CT.C75}), $creationLocationd_0dea112b090073317d4: C[78] || CT.C78});
+          }, T.BuildContextToCompositedTransformFollower())});
+        dart.nullCheck(overlay.Overlay.of(this.context)).insert(dart.nullCheck(this.overlayEntry));
+      }
+    }
+  };
+  (slider$._SliderState.new = function() {
+    this[___SliderState_overlayController] = null;
+    this[___SliderState_valueIndicatorController] = null;
+    this[___SliderState_enableController] = null;
+    this[___SliderState_positionController] = null;
+    this.interactionTimer = null;
+    this[_renderObjectKey] = T.GlobalKeyOfStateOfStatefulWidget().new();
+    this[___SliderState__shortcutMap] = null;
+    this[___SliderState__actionMap] = null;
+    this.paintValueIndicator = null;
+    this[_focused] = false;
+    this[_hovering] = false;
+    this[_layerLink] = new layer.LayerLink.new();
+    this.overlayEntry = null;
+    slider$._SliderState.__proto__.new.call(this);
+    ;
+  }).prototype = slider$._SliderState.prototype;
+  dart.addTypeTests(slider$._SliderState);
+  dart.addTypeCaches(slider$._SliderState);
+  dart.setMethodSignature(slider$._SliderState, () => ({
+    __proto__: dart.getMethods(slider$._SliderState.__proto__),
+    [_handleChanged]: dart.fnType(dart.void, [core.double]),
+    [_handleDragStart]: dart.fnType(dart.void, [core.double]),
+    [_handleDragEnd]: dart.fnType(dart.void, [core.double]),
+    [_actionHandler]: dart.fnType(dart.void, [slider$._AdjustSliderIntent]),
+    [_handleFocusHighlightChanged]: dart.fnType(dart.void, [core.bool]),
+    [_handleHoverChanged]: dart.fnType(dart.void, [core.bool]),
+    [_lerp]: dart.fnType(core.double, [core.double]),
+    [_unlerp]: dart.fnType(core.double, [core.double]),
+    build: dart.fnType(framework.Widget, [framework.BuildContext]),
+    [_buildMaterialSlider]: dart.fnType(framework.Widget, [framework.BuildContext]),
+    [_buildCupertinoSlider]: dart.fnType(framework.Widget, [framework.BuildContext]),
+    showValueIndicator: dart.fnType(dart.void, [])
+  }));
+  dart.setGetterSignature(slider$._SliderState, () => ({
+    __proto__: dart.getGetters(slider$._SliderState.__proto__),
+    overlayController: animation_controller.AnimationController,
+    valueIndicatorController: animation_controller.AnimationController,
+    enableController: animation_controller.AnimationController,
+    positionController: animation_controller.AnimationController,
+    [_shortcutMap]: core.Map$(shortcuts.LogicalKeySet, actions.Intent),
+    [_actionMap]: core.Map$(core.Type, actions.Action$(actions.Intent)),
+    [_enabled]: core.bool
+  }));
+  dart.setSetterSignature(slider$._SliderState, () => ({
+    __proto__: dart.getSetters(slider$._SliderState.__proto__),
+    overlayController: animation_controller.AnimationController,
+    valueIndicatorController: animation_controller.AnimationController,
+    enableController: animation_controller.AnimationController,
+    positionController: animation_controller.AnimationController,
+    [_shortcutMap]: core.Map$(shortcuts.LogicalKeySet, actions.Intent),
+    [_actionMap]: core.Map$(core.Type, actions.Action$(actions.Intent))
+  }));
+  dart.setLibraryUri(slider$._SliderState, I[1]);
+  dart.setFieldSignature(slider$._SliderState, () => ({
+    __proto__: dart.getFields(slider$._SliderState.__proto__),
+    [___SliderState_overlayController]: dart.fieldType(dart.nullable(animation_controller.AnimationController)),
+    [___SliderState_valueIndicatorController]: dart.fieldType(dart.nullable(animation_controller.AnimationController)),
+    [___SliderState_enableController]: dart.fieldType(dart.nullable(animation_controller.AnimationController)),
+    [___SliderState_positionController]: dart.fieldType(dart.nullable(animation_controller.AnimationController)),
+    interactionTimer: dart.fieldType(dart.nullable(async.Timer)),
+    [_renderObjectKey]: dart.finalFieldType(framework.GlobalKey$(framework.State$(framework.StatefulWidget))),
+    [___SliderState__shortcutMap]: dart.fieldType(dart.nullable(core.Map$(shortcuts.LogicalKeySet, actions.Intent))),
+    [___SliderState__actionMap]: dart.fieldType(dart.nullable(core.Map$(core.Type, actions.Action$(actions.Intent)))),
+    paintValueIndicator: dart.fieldType(dart.nullable(dart.fnType(dart.void, [object.PaintingContext, ui.Offset]))),
+    [_focused]: dart.fieldType(core.bool),
+    [_hovering]: dart.fieldType(core.bool),
+    [_layerLink]: dart.finalFieldType(layer.LayerLink),
+    overlayEntry: dart.fieldType(dart.nullable(overlay.OverlayEntry))
+  }));
+  dart.defineLazy(slider$._SliderState, {
+    /*slider$._SliderState.enableAnimationDuration*/get enableAnimationDuration() {
+      return C[82] || CT.C82;
+    },
+    /*slider$._SliderState.valueIndicatorAnimationDuration*/get valueIndicatorAnimationDuration() {
+      return C[83] || CT.C83;
+    }
+  }, false);
+  var value$0 = dart.privateName(slider$, "_SliderRenderObjectWidget.value");
+  var divisions$0 = dart.privateName(slider$, "_SliderRenderObjectWidget.divisions");
+  var label$0 = dart.privateName(slider$, "_SliderRenderObjectWidget.label");
+  var sliderTheme$ = dart.privateName(slider$, "_SliderRenderObjectWidget.sliderTheme");
+  var textScaleFactor$ = dart.privateName(slider$, "_SliderRenderObjectWidget.textScaleFactor");
+  var screenSize$ = dart.privateName(slider$, "_SliderRenderObjectWidget.screenSize");
+  var onChanged$0 = dart.privateName(slider$, "_SliderRenderObjectWidget.onChanged");
+  var onChangeStart$0 = dart.privateName(slider$, "_SliderRenderObjectWidget.onChangeStart");
+  var onChangeEnd$0 = dart.privateName(slider$, "_SliderRenderObjectWidget.onChangeEnd");
+  var semanticFormatterCallback$0 = dart.privateName(slider$, "_SliderRenderObjectWidget.semanticFormatterCallback");
+  var state$ = dart.privateName(slider$, "_SliderRenderObjectWidget.state");
+  var hasFocus$ = dart.privateName(slider$, "_SliderRenderObjectWidget.hasFocus");
+  var hovering$ = dart.privateName(slider$, "_SliderRenderObjectWidget.hovering");
+  slider$._SliderRenderObjectWidget = class _SliderRenderObjectWidget extends framework.LeafRenderObjectWidget {
+    get value() {
+      return this[value$0];
+    }
+    set value(value) {
+      super.value = value;
+    }
+    get divisions() {
+      return this[divisions$0];
+    }
+    set divisions(value) {
+      super.divisions = value;
+    }
+    get label() {
+      return this[label$0];
+    }
+    set label(value) {
+      super.label = value;
+    }
+    get sliderTheme() {
+      return this[sliderTheme$];
+    }
+    set sliderTheme(value) {
+      super.sliderTheme = value;
+    }
+    get textScaleFactor() {
+      return this[textScaleFactor$];
+    }
+    set textScaleFactor(value) {
+      super.textScaleFactor = value;
+    }
+    get screenSize() {
+      return this[screenSize$];
+    }
+    set screenSize(value) {
+      super.screenSize = value;
+    }
+    get onChanged() {
+      return this[onChanged$0];
+    }
+    set onChanged(value) {
+      super.onChanged = value;
+    }
+    get onChangeStart() {
+      return this[onChangeStart$0];
+    }
+    set onChangeStart(value) {
+      super.onChangeStart = value;
+    }
+    get onChangeEnd() {
+      return this[onChangeEnd$0];
+    }
+    set onChangeEnd(value) {
+      super.onChangeEnd = value;
+    }
+    get semanticFormatterCallback() {
+      return this[semanticFormatterCallback$0];
+    }
+    set semanticFormatterCallback(value) {
+      super.semanticFormatterCallback = value;
+    }
+    get state() {
+      return this[state$];
+    }
+    set state(value) {
+      super.state = value;
+    }
+    get hasFocus() {
+      return this[hasFocus$];
+    }
+    set hasFocus(value) {
+      super.hasFocus = value;
+    }
+    get hovering() {
+      return this[hovering$];
+    }
+    set hovering(value) {
+      super.hovering = value;
+    }
+    createRenderObject(context) {
+      if (context == null) dart.nullFailed(I[0], 820, 49, "context");
+      return new slider$._RenderSlider.new({value: this.value, divisions: this.divisions, label: this.label, sliderTheme: this.sliderTheme, textScaleFactor: this.textScaleFactor, screenSize: this.screenSize, onChanged: this.onChanged, onChangeStart: this.onChangeStart, onChangeEnd: this.onChangeEnd, state: this.state, textDirection: basic.Directionality.of(context), semanticFormatterCallback: this.semanticFormatterCallback, platform: theme$.Theme.of(context).platform, hasFocus: this.hasFocus, hovering: this.hovering});
+    }
+    updateRenderObject(context, renderObject) {
+      let t7;
+      if (context == null) dart.nullFailed(I[0], 841, 40, "context");
+      slider$._RenderSlider.as(renderObject);
+      if (renderObject == null) dart.nullFailed(I[0], 841, 63, "renderObject");
+      t7 = renderObject;
+      (() => {
+        t7.divisions = this.divisions;
+        t7.value = this.value;
+        t7.label = this.label;
+        t7.sliderTheme = this.sliderTheme;
+        t7.textScaleFactor = this.textScaleFactor;
+        t7.screenSize = this.screenSize;
+        t7.onChanged = this.onChanged;
+        t7.onChangeStart = this.onChangeStart;
+        t7.onChangeEnd = this.onChangeEnd;
+        t7.textDirection = basic.Directionality.of(context);
+        t7.semanticFormatterCallback = this.semanticFormatterCallback;
+        t7.platform = theme$.Theme.of(context).platform;
+        t7.hasFocus = this.hasFocus;
+        t7.hovering = this.hovering;
+        return t7;
+      })();
+    }
+  };
+  (slider$._SliderRenderObjectWidget.new = function(opts) {
+    let key = opts && 'key' in opts ? opts.key : null;
+    let value = opts && 'value' in opts ? opts.value : null;
+    if (value == null) dart.nullFailed(I[0], 790, 19, "value");
+    let divisions = opts && 'divisions' in opts ? opts.divisions : null;
+    let label = opts && 'label' in opts ? opts.label : null;
+    let sliderTheme = opts && 'sliderTheme' in opts ? opts.sliderTheme : null;
+    if (sliderTheme == null) dart.nullFailed(I[0], 793, 19, "sliderTheme");
+    let textScaleFactor = opts && 'textScaleFactor' in opts ? opts.textScaleFactor : null;
+    if (textScaleFactor == null) dart.nullFailed(I[0], 794, 19, "textScaleFactor");
+    let screenSize = opts && 'screenSize' in opts ? opts.screenSize : null;
+    if (screenSize == null) dart.nullFailed(I[0], 795, 19, "screenSize");
+    let onChanged = opts && 'onChanged' in opts ? opts.onChanged : null;
+    let onChangeStart = opts && 'onChangeStart' in opts ? opts.onChangeStart : null;
+    let onChangeEnd = opts && 'onChangeEnd' in opts ? opts.onChangeEnd : null;
+    let state = opts && 'state' in opts ? opts.state : null;
+    if (state == null) dart.nullFailed(I[0], 799, 19, "state");
+    let semanticFormatterCallback = opts && 'semanticFormatterCallback' in opts ? opts.semanticFormatterCallback : null;
+    let hasFocus = opts && 'hasFocus' in opts ? opts.hasFocus : null;
+    if (hasFocus == null) dart.nullFailed(I[0], 801, 19, "hasFocus");
+    let hovering = opts && 'hovering' in opts ? opts.hovering : null;
+    if (hovering == null) dart.nullFailed(I[0], 802, 19, "hovering");
+    let $36creationLocationd_0dea112b090073317d4 = opts && '$creationLocationd_0dea112b090073317d4' in opts ? opts.$creationLocationd_0dea112b090073317d4 : null;
+    this[value$0] = value;
+    this[divisions$0] = divisions;
+    this[label$0] = label;
+    this[sliderTheme$] = sliderTheme;
+    this[textScaleFactor$] = textScaleFactor;
+    this[screenSize$] = screenSize;
+    this[onChanged$0] = onChanged;
+    this[onChangeStart$0] = onChangeStart;
+    this[onChangeEnd$0] = onChangeEnd;
+    this[state$] = state;
+    this[semanticFormatterCallback$0] = semanticFormatterCallback;
+    this[hasFocus$] = hasFocus;
+    this[hovering$] = hovering;
+    slider$._SliderRenderObjectWidget.__proto__.new.call(this, {key: key, $creationLocationd_0dea112b090073317d4: $36creationLocationd_0dea112b090073317d4});
+    ;
+  }).prototype = slider$._SliderRenderObjectWidget.prototype;
+  dart.addTypeTests(slider$._SliderRenderObjectWidget);
+  dart.addTypeCaches(slider$._SliderRenderObjectWidget);
+  dart.setMethodSignature(slider$._SliderRenderObjectWidget, () => ({
+    __proto__: dart.getMethods(slider$._SliderRenderObjectWidget.__proto__),
+    createRenderObject: dart.fnType(slider$._RenderSlider, [framework.BuildContext])
+  }));
+  dart.setLibraryUri(slider$._SliderRenderObjectWidget, I[1]);
+  dart.setFieldSignature(slider$._SliderRenderObjectWidget, () => ({
+    __proto__: dart.getFields(slider$._SliderRenderObjectWidget.__proto__),
+    value: dart.finalFieldType(core.double),
+    divisions: dart.finalFieldType(dart.nullable(core.int)),
+    label: dart.finalFieldType(dart.nullable(core.String)),
+    sliderTheme: dart.finalFieldType(slider_theme.SliderThemeData),
+    textScaleFactor: dart.finalFieldType(core.double),
+    screenSize: dart.finalFieldType(ui.Size),
+    onChanged: dart.finalFieldType(dart.nullable(dart.fnType(dart.void, [core.double]))),
+    onChangeStart: dart.finalFieldType(dart.nullable(dart.fnType(dart.void, [core.double]))),
+    onChangeEnd: dart.finalFieldType(dart.nullable(dart.fnType(dart.void, [core.double]))),
+    semanticFormatterCallback: dart.finalFieldType(dart.nullable(dart.fnType(core.String, [core.double]))),
+    state: dart.finalFieldType(slider$._SliderState),
+    hasFocus: dart.finalFieldType(core.bool),
+    hovering: dart.finalFieldType(core.bool)
+  }));
+  var ___RenderSlider__overlayAnimation = dart.privateName(slider$, "_#_RenderSlider#_overlayAnimation");
+  var ___RenderSlider__valueIndicatorAnimation = dart.privateName(slider$, "_#_RenderSlider#_valueIndicatorAnimation");
+  var ___RenderSlider__enableAnimation = dart.privateName(slider$, "_#_RenderSlider#_enableAnimation");
+  var _labelPainter = dart.privateName(slider$, "_labelPainter");
+  var ___RenderSlider__drag = dart.privateName(slider$, "_#_RenderSlider#_drag");
+  var ___RenderSlider__tap = dart.privateName(slider$, "_#_RenderSlider#_tap");
+  var _active = dart.privateName(slider$, "_active");
+  var _currentDragValue = dart.privateName(slider$, "_currentDragValue");
+  var _platform = dart.privateName(slider$, "_platform");
+  var _semanticFormatterCallback = dart.privateName(slider$, "_semanticFormatterCallback");
+  var _label = dart.privateName(slider$, "_label");
+  var _value = dart.privateName(slider$, "_value");
+  var _divisions = dart.privateName(slider$, "_divisions");
+  var _sliderTheme = dart.privateName(slider$, "_sliderTheme");
+  var _textScaleFactor = dart.privateName(slider$, "_textScaleFactor");
+  var _screenSize = dart.privateName(slider$, "_screenSize");
+  var _onChanged = dart.privateName(slider$, "_onChanged");
+  var _state = dart.privateName(slider$, "_state");
+  var _textDirection = dart.privateName(slider$, "_textDirection");
+  var _hasFocus = dart.privateName(slider$, "_hasFocus");
+  var _updateLabelPainter = dart.privateName(slider$, "_updateLabelPainter");
+  var _drag = dart.privateName(slider$, "_drag");
+  var _handleDragUpdate = dart.privateName(slider$, "_handleDragUpdate");
+  var _endInteraction = dart.privateName(slider$, "_endInteraction");
+  var _tap = dart.privateName(slider$, "_tap");
+  var _handleTapDown = dart.privateName(slider$, "_handleTapDown");
+  var _handleTapUp = dart.privateName(slider$, "_handleTapUp");
+  var _overlayAnimation = dart.privateName(slider$, "_overlayAnimation");
+  var _valueIndicatorAnimation = dart.privateName(slider$, "_valueIndicatorAnimation");
+  var _enableAnimation = dart.privateName(slider$, "_enableAnimation");
+  var _sliderPartSizes = dart.privateName(slider$, "_sliderPartSizes");
+  var _maxSliderPartWidth = dart.privateName(slider$, "_maxSliderPartWidth");
+  var _maxSliderPartHeight = dart.privateName(slider$, "_maxSliderPartHeight");
+  var _minPreferredTrackHeight = dart.privateName(slider$, "_minPreferredTrackHeight");
+  var _trackRect = dart.privateName(slider$, "_trackRect");
+  var _discretize = dart.privateName(slider$, "_discretize");
+  var _updateForFocusOrHover = dart.privateName(slider$, "_updateForFocusOrHover");
+  var _adjustmentUnit = dart.privateName(slider$, "_adjustmentUnit");
+  var _getValueFromVisualPosition = dart.privateName(slider$, "_getValueFromVisualPosition");
+  var _getValueFromGlobalPosition = dart.privateName(slider$, "_getValueFromGlobalPosition");
+  var _startInteraction = dart.privateName(slider$, "_startInteraction");
+  var _semanticActionUnit = dart.privateName(slider$, "_semanticActionUnit");
+  const RenderBox_RelayoutWhenSystemFontsChangeMixin$36 = class RenderBox_RelayoutWhenSystemFontsChangeMixin extends box.RenderBox {};
+  (RenderBox_RelayoutWhenSystemFontsChangeMixin$36.new = function() {
+    RenderBox_RelayoutWhenSystemFontsChangeMixin$36.__proto__.new.call(this);
+  }).prototype = RenderBox_RelayoutWhenSystemFontsChangeMixin$36.prototype;
+  dart.applyMixin(RenderBox_RelayoutWhenSystemFontsChangeMixin$36, object.RelayoutWhenSystemFontsChangeMixin);
+  slider$._RenderSlider = class _RenderSlider extends RenderBox_RelayoutWhenSystemFontsChangeMixin$36 {
+    get [_maxSliderPartWidth]() {
+      return this[_sliderPartSizes][$map](core.double, dart.fn(size => {
+        if (size == null) dart.nullFailed(I[0], 937, 64, "size");
+        return size.width;
+      }, T.SizeTodouble()))[$reduce](dart.gbind(C[84] || CT.C84, core.double));
+    }
+    get [_maxSliderPartHeight]() {
+      return this[_sliderPartSizes][$map](core.double, dart.fn(size => {
+        if (size == null) dart.nullFailed(I[0], 938, 65, "size");
+        return size.height;
+      }, T.SizeTodouble()))[$reduce](dart.gbind(C[84] || CT.C84, core.double));
+    }
+    get [_sliderPartSizes]() {
+      return T.JSArrayOfSize().of([dart.nullCheck(this[_sliderTheme].overlayShape).getPreferredSize(this.isInteractive, this.isDiscrete), dart.nullCheck(this[_sliderTheme].thumbShape).getPreferredSize(this.isInteractive, this.isDiscrete), dart.nullCheck(this[_sliderTheme].tickMarkShape).getPreferredSize({isEnabled: this.isInteractive, sliderTheme: this.sliderTheme})]);
+    }
+    get [_minPreferredTrackHeight]() {
+      return dart.nullCheck(this[_sliderTheme].trackHeight);
+    }
+    get [_overlayAnimation]() {
+      let t7;
+      t7 = this[___RenderSlider__overlayAnimation];
+      return t7 == null ? dart.throw(new _internal.LateError.fieldNI("_overlayAnimation")) : t7;
+    }
+    set [_overlayAnimation](t7) {
+      if (t7 == null) dart.nullFailed(I[0], 947, 26, "null");
+      this[___RenderSlider__overlayAnimation] = t7;
+    }
+    get [_valueIndicatorAnimation]() {
+      let t8;
+      t8 = this[___RenderSlider__valueIndicatorAnimation];
+      return t8 == null ? dart.throw(new _internal.LateError.fieldNI("_valueIndicatorAnimation")) : t8;
+    }
+    set [_valueIndicatorAnimation](t8) {
+      if (t8 == null) dart.nullFailed(I[0], 948, 26, "null");
+      this[___RenderSlider__valueIndicatorAnimation] = t8;
+    }
+    get [_enableAnimation]() {
+      let t9;
+      t9 = this[___RenderSlider__enableAnimation];
+      return t9 == null ? dart.throw(new _internal.LateError.fieldNI("_enableAnimation")) : t9;
+    }
+    set [_enableAnimation](t9) {
+      if (t9 == null) dart.nullFailed(I[0], 949, 26, "null");
+      this[___RenderSlider__enableAnimation] = t9;
+    }
+    get [_drag]() {
+      let t10;
+      t10 = this[___RenderSlider__drag];
+      return t10 == null ? dart.throw(new _internal.LateError.fieldNI("_drag")) : t10;
+    }
+    set [_drag](t10) {
+      if (t10 == null) dart.nullFailed(I[0], 951, 40, "null");
+      this[___RenderSlider__drag] = t10;
+    }
+    get [_tap]() {
+      let t11;
+      t11 = this[___RenderSlider__tap];
+      return t11 == null ? dart.throw(new _internal.LateError.fieldNI("_tap")) : t11;
+    }
+    set [_tap](t11) {
+      if (t11 == null) dart.nullFailed(I[0], 952, 29, "null");
+      this[___RenderSlider__tap] = t11;
+    }
+    get [_trackRect]() {
+      return dart.nullCheck(this[_sliderTheme].trackShape).getPreferredRect({parentBox: this, offset: ui.Offset.zero, sliderTheme: this[_sliderTheme], isDiscrete: false});
+    }
+    get isInteractive() {
+      return this.onChanged != null;
+    }
+    get isDiscrete() {
+      return this.divisions != null && dart.nullCheck(this.divisions) > 0;
+    }
+    get value() {
+      return this[_value];
+    }
+    set value(newValue) {
+      if (newValue == null) dart.nullFailed(I[0], 972, 20, "newValue");
+      if (!(newValue != null && dart.notNull(newValue) >= 0.0 && dart.notNull(newValue) <= 1.0)) dart.assertFailed(null, I[0], 973, 12, "newValue != null && newValue >= 0.0 && newValue <= 1.0");
+      let convertedValue = dart.test(this.isDiscrete) ? this[_discretize](newValue) : newValue;
+      if (convertedValue == this[_value]) {
+        return;
+      }
+      this[_value] = convertedValue;
+      if (dart.test(this.isDiscrete)) {
+        let distance = (dart.notNull(this[_value]) - dart.notNull(this[_state].positionController.value))[$abs]();
+        this[_state].positionController.duration = distance !== 0.0 ? slider$._RenderSlider._positionAnimationDuration['*'](1.0 / distance) : core.Duration.zero;
+        this[_state].positionController.animateTo(convertedValue, {curve: curves.Curves.easeInOut});
+      } else {
+        this[_state].positionController.value = convertedValue;
+      }
+      this.markNeedsSemanticsUpdate();
+    }
+    get platform() {
+      return this[_platform];
+    }
+    set platform(value) {
+      if (value == null) dart.nullFailed(I[0], 997, 31, "value");
+      if (this[_platform] == value) return;
+      this[_platform] = value;
+      this.markNeedsSemanticsUpdate();
+    }
+    get semanticFormatterCallback() {
+      return this[_semanticFormatterCallback];
+    }
+    set semanticFormatterCallback(value) {
+      if (dart.equals(this[_semanticFormatterCallback], value)) return;
+      this[_semanticFormatterCallback] = value;
+      this.markNeedsSemanticsUpdate();
+    }
+    get divisions() {
+      return this[_divisions];
+    }
+    set divisions(value) {
+      if (value == this[_divisions]) {
+        return;
+      }
+      this[_divisions] = value;
+      this.markNeedsPaint();
+    }
+    get label() {
+      return this[_label];
+    }
+    set label(value) {
+      if (value == this[_label]) {
+        return;
+      }
+      this[_label] = value;
+      this[_updateLabelPainter]();
+    }
+    get sliderTheme() {
+      return this[_sliderTheme];
+    }
+    set sliderTheme(value) {
+      if (value == null) dart.nullFailed(I[0], 1035, 35, "value");
+      if (dart.equals(value, this[_sliderTheme])) {
+        return;
+      }
+      this[_sliderTheme] = value;
+      this.markNeedsPaint();
+    }
+    get textScaleFactor() {
+      return this[_textScaleFactor];
+    }
+    set textScaleFactor(value) {
+      if (value == null) dart.nullFailed(I[0], 1045, 30, "value");
+      if (value == this[_textScaleFactor]) {
+        return;
+      }
+      this[_textScaleFactor] = value;
+      this[_updateLabelPainter]();
+    }
+    get screenSize() {
+      return this[_screenSize];
+    }
+    set screenSize(value) {
+      if (value == null) dart.nullFailed(I[0], 1055, 23, "value");
+      if (dart.equals(value, this[_screenSize])) {
+        return;
+      }
+      this[_screenSize] = value;
+      this.markNeedsPaint();
+    }
+    get onChanged() {
+      return this[_onChanged];
+    }
+    set onChanged(value) {
+      if (dart.equals(value, this[_onChanged])) {
+        return;
+      }
+      let wasInteractive = this.isInteractive;
+      this[_onChanged] = value;
+      if (wasInteractive != this.isInteractive) {
+        if (dart.test(this.isInteractive)) {
+          this[_state].enableController.forward();
+        } else {
+          this[_state].enableController.reverse();
+        }
+        this.markNeedsPaint();
+        this.markNeedsSemanticsUpdate();
+      }
+    }
+    get textDirection() {
+      return this[_textDirection];
+    }
+    set textDirection(value) {
+      if (value == null) dart.nullFailed(I[0], 1087, 35, "value");
+      if (!(value != null)) dart.assertFailed(null, I[0], 1088, 12, "value != null");
+      if (value == this[_textDirection]) {
+        return;
+      }
+      this[_textDirection] = value;
+      this[_updateLabelPainter]();
+    }
+    get hasFocus() {
+      return this[_hasFocus];
+    }
+    set hasFocus(value) {
+      if (value == null) dart.nullFailed(I[0], 1099, 21, "value");
+      if (!(value != null)) dart.assertFailed(null, I[0], 1100, 12, "value != null");
+      if (value == this[_hasFocus]) return;
+      this[_hasFocus] = value;
+      this[_updateForFocusOrHover](this[_hasFocus]);
+      this.markNeedsSemanticsUpdate();
+    }
+    get hovering() {
+      return this[_hovering];
+    }
+    set hovering(value) {
+      if (value == null) dart.nullFailed(I[0], 1111, 21, "value");
+      if (!(value != null)) dart.assertFailed(null, I[0], 1112, 12, "value != null");
+      if (value == this[_hovering]) return;
+      this[_hovering] = value;
+      this[_updateForFocusOrHover](this[_hovering]);
+    }
+    [_updateForFocusOrHover](hasFocusOrIsHovering) {
+      if (hasFocusOrIsHovering == null) dart.nullFailed(I[0], 1119, 36, "hasFocusOrIsHovering");
+      if (dart.test(hasFocusOrIsHovering)) {
+        this[_state].overlayController.forward();
+        if (dart.test(this.showValueIndicator)) {
+          this[_state].valueIndicatorController.forward();
+        }
+      } else {
+        this[_state].overlayController.reverse();
+        if (dart.test(this.showValueIndicator)) {
+          this[_state].valueIndicatorController.reverse();
+        }
+      }
+    }
+    get showValueIndicator() {
+      switch (dart.nullCheck(this[_sliderTheme].showValueIndicator)) {
+        case C[24] || CT.C24:
+        {
+          return this.isDiscrete;
+        }
+        case C[85] || CT.C85:
+        {
+          return !dart.test(this.isDiscrete);
+        }
+        case C[86] || CT.C86:
+        {
+          return true;
+        }
+        case C[87] || CT.C87:
+        {
+          return false;
+        }
+      }
+    }
+    get [_adjustmentUnit]() {
+      switch (this[_platform]) {
+        case C[17] || CT.C17:
+        case C[18] || CT.C18:
+        {
+          return 0.1;
+        }
+        case C[13] || CT.C13:
+        case C[14] || CT.C14:
+        case C[15] || CT.C15:
+        case C[16] || CT.C16:
+        {
+          return 0.05;
+        }
+      }
+    }
+    [_updateLabelPainter]() {
+      let t12;
+      if (this.label != null) {
+        t12 = this[_labelPainter];
+        (() => {
+          t12.text = new text_span.TextSpan.new({style: this[_sliderTheme].valueIndicatorTextStyle, text: this.label});
+          t12.textDirection = this.textDirection;
+          t12.textScaleFactor = this.textScaleFactor;
+          t12.layout();
+          return t12;
+        })();
+      } else {
+        this[_labelPainter].text = null;
+      }
+      this.markNeedsLayout();
+    }
+    systemFontsDidChange() {
+      super.systemFontsDidChange();
+      this[_labelPainter].markNeedsLayout();
+      this[_updateLabelPainter]();
+    }
+    attach(owner) {
+      object.PipelineOwner.as(owner);
+      if (owner == null) dart.nullFailed(I[0], 1188, 29, "owner");
+      super.attach(owner);
+      this[_overlayAnimation].addListener(dart.bind(this, 'markNeedsPaint'));
+      this[_valueIndicatorAnimation].addListener(dart.bind(this, 'markNeedsPaint'));
+      this[_enableAnimation].addListener(dart.bind(this, 'markNeedsPaint'));
+      this[_state].positionController.addListener(dart.bind(this, 'markNeedsPaint'));
+    }
+    detach() {
+      this[_overlayAnimation].removeListener(dart.bind(this, 'markNeedsPaint'));
+      this[_valueIndicatorAnimation].removeListener(dart.bind(this, 'markNeedsPaint'));
+      this[_enableAnimation].removeListener(dart.bind(this, 'markNeedsPaint'));
+      this[_state].positionController.removeListener(dart.bind(this, 'markNeedsPaint'));
+      super.detach();
+    }
+    [_getValueFromVisualPosition](visualPosition) {
+      if (visualPosition == null) dart.nullFailed(I[0], 1205, 45, "visualPosition");
+      switch (this.textDirection) {
+        case C[11] || CT.C11:
+        {
+          return 1.0 - dart.notNull(visualPosition);
+        }
+        case C[12] || CT.C12:
+        {
+          return visualPosition;
+        }
+      }
+    }
+    [_getValueFromGlobalPosition](globalPosition) {
+      if (globalPosition == null) dart.nullFailed(I[0], 1214, 45, "globalPosition");
+      let visualPosition = (dart.notNull(this.globalToLocal(globalPosition).dx) - dart.notNull(this[_trackRect].left)) / dart.notNull(this[_trackRect].width);
+      return this[_getValueFromVisualPosition](visualPosition);
+    }
+    [_discretize](value) {
+      if (value == null) dart.nullFailed(I[0], 1219, 29, "value");
+      let result = value[$clamp](0.0, 1.0);
+      if (dart.test(this.isDiscrete)) {
+        result = (result * dart.nullCheck(this.divisions))[$round]() / dart.nullCheck(this.divisions);
+      }
+      return result;
+    }
+    [_startInteraction](globalPosition) {
+      let t12;
+      if (globalPosition == null) dart.nullFailed(I[0], 1227, 33, "globalPosition");
+      this[_state].showValueIndicator();
+      if (dart.test(this.isInteractive)) {
+        this[_active] = true;
+        if (this.onChangeStart != null) {
+          dart.nullCheck(this.onChangeStart)(this[_discretize](this.value));
+        }
+        this[_currentDragValue] = this[_getValueFromGlobalPosition](globalPosition);
+        dart.nullCheck(this.onChanged)(this[_discretize](this[_currentDragValue]));
+        this[_state].overlayController.forward();
+        if (dart.test(this.showValueIndicator)) {
+          this[_state].valueIndicatorController.forward();
+          t12 = this[_state].interactionTimer;
+          t12 == null ? null : t12.cancel();
+          this[_state].interactionTimer = async.Timer.new(slider$._RenderSlider._minimumInteractionTime['*'](binding.timeDilation), dart.fn(() => {
+            this[_state].interactionTimer = null;
+            if (!dart.test(this[_active]) && this[_state].valueIndicatorController.status == animation.AnimationStatus.completed) {
+              this[_state].valueIndicatorController.reverse();
+            }
+          }, T.VoidTovoid()));
+        }
+      }
+    }
+    [_endInteraction]() {
+      if (!dart.test(this[_state].mounted)) {
+        return;
+      }
+      if (dart.test(this[_active]) && dart.test(this[_state].mounted)) {
+        if (this.onChangeEnd != null) {
+          dart.nullCheck(this.onChangeEnd)(this[_discretize](this[_currentDragValue]));
+        }
+        this[_active] = false;
+        this[_currentDragValue] = 0.0;
+        this[_state].overlayController.reverse();
+        if (dart.test(this.showValueIndicator) && this[_state].interactionTimer == null) {
+          this[_state].valueIndicatorController.reverse();
+        }
+      }
+    }
+    [_handleDragStart](details) {
+      if (details == null) dart.nullFailed(I[0], 1273, 42, "details");
+      this[_startInteraction](details.globalPosition);
+    }
+    [_handleDragUpdate](details) {
+      if (details == null) dart.nullFailed(I[0], 1277, 44, "details");
+      if (!dart.test(this[_state].mounted)) {
+        return;
+      }
+      if (dart.test(this.isInteractive)) {
+        let valueDelta = dart.nullCheck(details.primaryDelta) / dart.notNull(this[_trackRect].width);
+        switch (this.textDirection) {
+          case C[11] || CT.C11:
+          {
+            this[_currentDragValue] = dart.notNull(this[_currentDragValue]) - valueDelta;
+            break;
+          }
+          case C[12] || CT.C12:
+          {
+            this[_currentDragValue] = dart.notNull(this[_currentDragValue]) + valueDelta;
+            break;
+          }
+        }
+        dart.nullCheck(this.onChanged)(this[_discretize](this[_currentDragValue]));
+      }
+    }
+    [_handleDragEnd](details) {
+      if (details == null) dart.nullFailed(I[0], 1296, 38, "details");
+      this[_endInteraction]();
+    }
+    [_handleTapDown](details) {
+      if (details == null) dart.nullFailed(I[0], 1300, 38, "details");
+      this[_startInteraction](details.globalPosition);
+    }
+    [_handleTapUp](details) {
+      if (details == null) dart.nullFailed(I[0], 1304, 34, "details");
+      this[_endInteraction]();
+    }
+    hitTestSelf(position) {
+      if (position == null) dart.nullFailed(I[0], 1309, 27, "position");
+      return true;
+    }
+    handleEvent(event, entry) {
+      if (event == null) dart.nullFailed(I[0], 1312, 33, "event");
+      box.BoxHitTestEntry.as(entry);
+      if (entry == null) dart.nullFailed(I[0], 1312, 56, "entry");
+      if (!dart.test(this.debugHandleEvent(event, entry))) dart.assertFailed(null, I[0], 1313, 12, "debugHandleEvent(event, entry)");
+      if (events.PointerDownEvent.is(event) && dart.test(this.isInteractive)) {
+        this[_drag].addPointer(event);
+        this[_tap].addPointer(event);
+      }
+    }
+    computeMinIntrinsicWidth(height) {
+      if (height == null) dart.nullFailed(I[0], 1322, 42, "height");
+      return 144 + dart.notNull(this[_maxSliderPartWidth]);
+    }
+    computeMaxIntrinsicWidth(height) {
+      if (height == null) dart.nullFailed(I[0], 1325, 42, "height");
+      return 144 + dart.notNull(this[_maxSliderPartWidth]);
+    }
+    computeMinIntrinsicHeight(width) {
+      if (width == null) dart.nullFailed(I[0], 1328, 43, "width");
+      return math.max(core.double, this[_minPreferredTrackHeight], this[_maxSliderPartHeight]);
+    }
+    computeMaxIntrinsicHeight(width) {
+      if (width == null) dart.nullFailed(I[0], 1331, 43, "width");
+      return math.max(core.double, this[_minPreferredTrackHeight], this[_maxSliderPartHeight]);
+    }
+    get sizedByParent() {
+      return true;
+    }
+    computeDryLayout(constraints) {
+      if (constraints == null) dart.nullFailed(I[0], 1337, 40, "constraints");
+      return new ui.Size.new(dart.test(constraints.hasBoundedWidth) ? constraints.maxWidth : 144 + dart.notNull(this[_maxSliderPartWidth]), dart.test(constraints.hasBoundedHeight) ? constraints.maxHeight : math.max(core.double, this[_minPreferredTrackHeight], this[_maxSliderPartHeight]));
+    }
+    paint(context, offset) {
+      if (context == null) dart.nullFailed(I[0], 1345, 30, "context");
+      if (offset == null) dart.nullFailed(I[0], 1345, 46, "offset");
+      let value = this[_state].positionController.value;
+      let visualPosition = null;
+      switch (this.textDirection) {
+        case C[11] || CT.C11:
+        {
+          visualPosition = 1.0 - dart.notNull(value);
+          break;
+        }
+        case C[12] || CT.C12:
+        {
+          visualPosition = value;
+          break;
+        }
+      }
+      let trackRect = dart.nullCheck(this[_sliderTheme].trackShape).getPreferredRect({parentBox: this, offset: offset, sliderTheme: this[_sliderTheme], isDiscrete: this.isDiscrete});
+      let thumbCenter = new ui.Offset.new(dart.notNull(trackRect.left) + dart.notNull(visualPosition) * dart.notNull(trackRect.width), trackRect.center.dy);
+      dart.nullCheck(this[_sliderTheme].trackShape).paint(context, offset, {parentBox: this, sliderTheme: this[_sliderTheme], enableAnimation: this[_enableAnimation], textDirection: this[_textDirection], thumbCenter: thumbCenter, isDiscrete: this.isDiscrete, isEnabled: this.isInteractive});
+      if (!dart.test(this[_overlayAnimation].isDismissed)) {
+        dart.nullCheck(this[_sliderTheme].overlayShape).paint(context, thumbCenter, {activationAnimation: this[_overlayAnimation], enableAnimation: this[_enableAnimation], isDiscrete: this.isDiscrete, labelPainter: this[_labelPainter], parentBox: this, sliderTheme: this[_sliderTheme], textDirection: this[_textDirection], value: this[_value], textScaleFactor: this[_textScaleFactor], sizeWithOverflow: dart.test(this.screenSize.isEmpty) ? this.size : this.screenSize});
+      }
+      if (dart.test(this.isDiscrete)) {
+        let tickMarkWidth = dart.nullCheck(this[_sliderTheme].tickMarkShape).getPreferredSize({isEnabled: this.isInteractive, sliderTheme: this[_sliderTheme]}).width;
+        let padding = trackRect.height;
+        let adjustedTrackWidth = dart.notNull(trackRect.width) - dart.notNull(padding);
+        if (adjustedTrackWidth / dart.nullCheck(this.divisions) >= 3.0 * dart.notNull(tickMarkWidth)) {
+          let dy = trackRect.center.dy;
+          for (let i = 0; i <= dart.nullCheck(this.divisions); i = i + 1) {
+            let value = i / dart.nullCheck(this.divisions);
+            let dx = dart.notNull(trackRect.left) + value * adjustedTrackWidth + dart.notNull(padding) / 2;
+            let tickMarkOffset = new ui.Offset.new(dx, dy);
+            dart.nullCheck(this[_sliderTheme].tickMarkShape).paint(context, tickMarkOffset, {parentBox: this, sliderTheme: this[_sliderTheme], enableAnimation: this[_enableAnimation], textDirection: this[_textDirection], thumbCenter: thumbCenter, isEnabled: this.isInteractive});
+          }
+        }
+      }
+      if (dart.test(this.isInteractive) && this.label != null && !dart.test(this[_valueIndicatorAnimation].isDismissed)) {
+        if (dart.test(this.showValueIndicator)) {
+          this[_state].paintValueIndicator = dart.fn((context, offset) => {
+            if (context == null) dart.nullFailed(I[0], 1430, 55, "context");
+            if (offset == null) dart.nullFailed(I[0], 1430, 71, "offset");
+            if (dart.test(this.attached)) {
+              dart.nullCheck(this[_sliderTheme].valueIndicatorShape).paint(context, offset['+'](thumbCenter), {activationAnimation: this[_valueIndicatorAnimation], enableAnimation: this[_enableAnimation], isDiscrete: this.isDiscrete, labelPainter: this[_labelPainter], parentBox: this, sliderTheme: this[_sliderTheme], textDirection: this[_textDirection], value: this[_value], textScaleFactor: this.textScaleFactor, sizeWithOverflow: dart.test(this.screenSize.isEmpty) ? this.size : this.screenSize});
+            }
+          }, T.PaintingContextAndOffsetTovoid());
+        }
+      }
+      dart.nullCheck(this[_sliderTheme].thumbShape).paint(context, thumbCenter, {activationAnimation: this[_overlayAnimation], enableAnimation: this[_enableAnimation], isDiscrete: this.isDiscrete, labelPainter: this[_labelPainter], parentBox: this, sliderTheme: this[_sliderTheme], textDirection: this[_textDirection], value: this[_value], textScaleFactor: this.textScaleFactor, sizeWithOverflow: dart.test(this.screenSize.isEmpty) ? this.size : this.screenSize});
+    }
+    describeSemanticsConfiguration(config) {
+      let t12;
+      if (config == null) dart.nullFailed(I[0], 1468, 62, "config");
+      super.describeSemanticsConfiguration(config);
+      config.isSemanticBoundary = false;
+      config.isEnabled = this.isInteractive;
+      config.textDirection = this.textDirection;
+      if (dart.test(this.isInteractive)) {
+        config.onIncrease = dart.bind(this, 'increaseAction');
+        config.onDecrease = dart.bind(this, 'decreaseAction');
+      }
+      config.label = (t12 = this[_label], t12 == null ? "" : t12);
+      if (this.semanticFormatterCallback != null) {
+        config.value = dart.nullCheck(this.semanticFormatterCallback)(this[_state][_lerp](this.value));
+        config.increasedValue = dart.nullCheck(this.semanticFormatterCallback)(this[_state][_lerp]((dart.notNull(this.value) + dart.notNull(this[_semanticActionUnit]))[$clamp](0.0, 1.0)));
+        config.decreasedValue = dart.nullCheck(this.semanticFormatterCallback)(this[_state][_lerp]((dart.notNull(this.value) - dart.notNull(this[_semanticActionUnit]))[$clamp](0.0, 1.0)));
+      } else {
+        config.value = dart.str((dart.notNull(this.value) * 100)[$round]()) + "%";
+        config.increasedValue = dart.str(((dart.notNull(this.value) + dart.notNull(this[_semanticActionUnit]))[$clamp](0.0, 1.0) * 100)[$round]()) + "%";
+        config.decreasedValue = dart.str(((dart.notNull(this.value) - dart.notNull(this[_semanticActionUnit]))[$clamp](0.0, 1.0) * 100)[$round]()) + "%";
+      }
+    }
+    get [_semanticActionUnit]() {
+      return this.divisions != null ? 1.0 / dart.nullCheck(this.divisions) : this[_adjustmentUnit];
+    }
+    increaseAction() {
+      if (dart.test(this.isInteractive)) {
+        dart.nullCheck(this.onChanged)((dart.notNull(this.value) + dart.notNull(this[_semanticActionUnit]))[$clamp](0.0, 1.0));
+      }
+    }
+    decreaseAction() {
+      if (dart.test(this.isInteractive)) {
+        dart.nullCheck(this.onChanged)((dart.notNull(this.value) - dart.notNull(this[_semanticActionUnit]))[$clamp](0.0, 1.0));
+      }
+    }
+  };
+  (slider$._RenderSlider.new = function(opts) {
+    let t7, t7$, t7$0;
+    let value = opts && 'value' in opts ? opts.value : null;
+    if (value == null) dart.nullFailed(I[0], 866, 21, "value");
+    let divisions = opts && 'divisions' in opts ? opts.divisions : null;
+    let label = opts && 'label' in opts ? opts.label : null;
+    let sliderTheme = opts && 'sliderTheme' in opts ? opts.sliderTheme : null;
+    if (sliderTheme == null) dart.nullFailed(I[0], 869, 30, "sliderTheme");
+    let textScaleFactor = opts && 'textScaleFactor' in opts ? opts.textScaleFactor : null;
+    if (textScaleFactor == null) dart.nullFailed(I[0], 870, 21, "textScaleFactor");
+    let screenSize = opts && 'screenSize' in opts ? opts.screenSize : null;
+    if (screenSize == null) dart.nullFailed(I[0], 871, 19, "screenSize");
+    let platform = opts && 'platform' in opts ? opts.platform : null;
+    if (platform == null) dart.nullFailed(I[0], 872, 29, "platform");
+    let onChanged = opts && 'onChanged' in opts ? opts.onChanged : null;
+    let semanticFormatterCallback = opts && 'semanticFormatterCallback' in opts ? opts.semanticFormatterCallback : null;
+    let onChangeStart = opts && 'onChangeStart' in opts ? opts.onChangeStart : null;
+    let onChangeEnd = opts && 'onChangeEnd' in opts ? opts.onChangeEnd : null;
+    let state = opts && 'state' in opts ? opts.state : null;
+    if (state == null) dart.nullFailed(I[0], 877, 27, "state");
+    let textDirection = opts && 'textDirection' in opts ? opts.textDirection : null;
+    if (textDirection == null) dart.nullFailed(I[0], 878, 28, "textDirection");
+    let hasFocus = opts && 'hasFocus' in opts ? opts.hasFocus : null;
+    if (hasFocus == null) dart.nullFailed(I[0], 879, 19, "hasFocus");
+    let hovering = opts && 'hovering' in opts ? opts.hovering : null;
+    if (hovering == null) dart.nullFailed(I[0], 880, 19, "hovering");
+    this[___RenderSlider__overlayAnimation] = null;
+    this[___RenderSlider__valueIndicatorAnimation] = null;
+    this[___RenderSlider__enableAnimation] = null;
+    this[_labelPainter] = new text_painter.TextPainter.new();
+    this[___RenderSlider__drag] = null;
+    this[___RenderSlider__tap] = null;
+    this[_active] = false;
+    this[_currentDragValue] = 0.0;
+    this.onChangeStart = onChangeStart;
+    this.onChangeEnd = onChangeEnd;
+    if (!(value != null && dart.notNull(value) >= 0.0 && dart.notNull(value) <= 1.0)) dart.assertFailed(null, I[0], 881, 15, "value != null && value >= 0.0 && value <= 1.0");
+    if (!(state != null)) dart.assertFailed(null, I[0], 882, 16, "state != null");
+    if (!(textDirection != null)) dart.assertFailed(null, I[0], 883, 16, "textDirection != null");
+    this[_platform] = platform;
+    this[_semanticFormatterCallback] = semanticFormatterCallback;
+    this[_label] = label;
+    this[_value] = value;
+    this[_divisions] = divisions;
+    this[_sliderTheme] = sliderTheme;
+    this[_textScaleFactor] = textScaleFactor;
+    this[_screenSize] = screenSize;
+    this[_onChanged] = onChanged;
+    this[_state] = state;
+    this[_textDirection] = textDirection;
+    this[_hasFocus] = hasFocus;
+    this[_hovering] = hovering;
+    slider$._RenderSlider.__proto__.new.call(this);
+    this[_updateLabelPainter]();
+    let team = new team$.GestureArenaTeam.new();
+    this[_drag] = (t7 = new monodrag.HorizontalDragGestureRecognizer.new(), (() => {
+      t7.team = team;
+      t7.onStart = dart.bind(this, _handleDragStart);
+      t7.onUpdate = dart.bind(this, _handleDragUpdate);
+      t7.onEnd = dart.bind(this, _handleDragEnd);
+      t7.onCancel = dart.bind(this, _endInteraction);
+      return t7;
+    })());
+    this[_tap] = (t7$ = new tap.TapGestureRecognizer.new(), (() => {
+      t7$.team = team;
+      t7$.onTapDown = dart.bind(this, _handleTapDown);
+      t7$.onTapUp = dart.bind(this, _handleTapUp);
+      t7$.onTapCancel = dart.bind(this, _endInteraction);
+      return t7$;
+    })());
+    this[_overlayAnimation] = new animations.CurvedAnimation.new({parent: this[_state].overlayController, curve: curves.Curves.fastOutSlowIn});
+    this[_valueIndicatorAnimation] = (t7$0 = new animations.CurvedAnimation.new({parent: this[_state].valueIndicatorController, curve: curves.Curves.fastOutSlowIn}), (() => {
+      t7$0.addStatusListener(dart.fn(status => {
+        if (status == null) dart.nullFailed(I[0], 917, 43, "status");
+        if (status == animation.AnimationStatus.dismissed && this[_state].overlayEntry != null) {
+          dart.nullCheck(this[_state].overlayEntry).remove();
+          this[_state].overlayEntry = null;
+        }
+      }, T.AnimationStatusTovoid()));
+      return t7$0;
+    })());
+    this[_enableAnimation] = new animations.CurvedAnimation.new({parent: this[_state].enableController, curve: curves.Curves.easeInOut});
+  }).prototype = slider$._RenderSlider.prototype;
+  dart.addTypeTests(slider$._RenderSlider);
+  dart.addTypeCaches(slider$._RenderSlider);
+  dart.setMethodSignature(slider$._RenderSlider, () => ({
+    __proto__: dart.getMethods(slider$._RenderSlider.__proto__),
+    [_updateForFocusOrHover]: dart.fnType(dart.void, [core.bool]),
+    [_updateLabelPainter]: dart.fnType(dart.void, []),
+    [_getValueFromVisualPosition]: dart.fnType(core.double, [core.double]),
+    [_getValueFromGlobalPosition]: dart.fnType(core.double, [ui.Offset]),
+    [_discretize]: dart.fnType(core.double, [core.double]),
+    [_startInteraction]: dart.fnType(dart.void, [ui.Offset]),
+    [_endInteraction]: dart.fnType(dart.void, []),
+    [_handleDragStart]: dart.fnType(dart.void, [drag_details.DragStartDetails]),
+    [_handleDragUpdate]: dart.fnType(dart.void, [drag_details.DragUpdateDetails]),
+    [_handleDragEnd]: dart.fnType(dart.void, [drag_details.DragEndDetails]),
+    [_handleTapDown]: dart.fnType(dart.void, [tap.TapDownDetails]),
+    [_handleTapUp]: dart.fnType(dart.void, [tap.TapUpDetails]),
+    increaseAction: dart.fnType(dart.void, []),
+    decreaseAction: dart.fnType(dart.void, [])
+  }));
+  dart.setGetterSignature(slider$._RenderSlider, () => ({
+    __proto__: dart.getGetters(slider$._RenderSlider.__proto__),
+    [_maxSliderPartWidth]: core.double,
+    [_maxSliderPartHeight]: core.double,
+    [_sliderPartSizes]: core.List$(ui.Size),
+    [_minPreferredTrackHeight]: core.double,
+    [_overlayAnimation]: animation.Animation$(core.double),
+    [_valueIndicatorAnimation]: animation.Animation$(core.double),
+    [_enableAnimation]: animation.Animation$(core.double),
+    [_drag]: monodrag.HorizontalDragGestureRecognizer,
+    [_tap]: tap.TapGestureRecognizer,
+    [_trackRect]: ui.Rect,
+    isInteractive: core.bool,
+    isDiscrete: core.bool,
+    value: core.double,
+    platform: platform.TargetPlatform,
+    semanticFormatterCallback: dart.nullable(dart.fnType(core.String, [core.double])),
+    divisions: dart.nullable(core.int),
+    label: dart.nullable(core.String),
+    sliderTheme: slider_theme.SliderThemeData,
+    textScaleFactor: core.double,
+    screenSize: ui.Size,
+    onChanged: dart.nullable(dart.fnType(dart.void, [core.double])),
+    textDirection: ui.TextDirection,
+    hasFocus: core.bool,
+    hovering: core.bool,
+    showValueIndicator: core.bool,
+    [_adjustmentUnit]: core.double,
+    [_semanticActionUnit]: core.double
+  }));
+  dart.setSetterSignature(slider$._RenderSlider, () => ({
+    __proto__: dart.getSetters(slider$._RenderSlider.__proto__),
+    [_overlayAnimation]: animation.Animation$(core.double),
+    [_valueIndicatorAnimation]: animation.Animation$(core.double),
+    [_enableAnimation]: animation.Animation$(core.double),
+    [_drag]: monodrag.HorizontalDragGestureRecognizer,
+    [_tap]: tap.TapGestureRecognizer,
+    value: core.double,
+    platform: platform.TargetPlatform,
+    semanticFormatterCallback: dart.nullable(dart.fnType(core.String, [core.double])),
+    divisions: dart.nullable(core.int),
+    label: dart.nullable(core.String),
+    sliderTheme: slider_theme.SliderThemeData,
+    textScaleFactor: core.double,
+    screenSize: ui.Size,
+    onChanged: dart.nullable(dart.fnType(dart.void, [core.double])),
+    textDirection: ui.TextDirection,
+    hasFocus: core.bool,
+    hovering: core.bool
+  }));
+  dart.setLibraryUri(slider$._RenderSlider, I[1]);
+  dart.setFieldSignature(slider$._RenderSlider, () => ({
+    __proto__: dart.getFields(slider$._RenderSlider.__proto__),
+    [_state]: dart.finalFieldType(slider$._SliderState),
+    [___RenderSlider__overlayAnimation]: dart.fieldType(dart.nullable(animation.Animation$(core.double))),
+    [___RenderSlider__valueIndicatorAnimation]: dart.fieldType(dart.nullable(animation.Animation$(core.double))),
+    [___RenderSlider__enableAnimation]: dart.fieldType(dart.nullable(animation.Animation$(core.double))),
+    [_labelPainter]: dart.finalFieldType(text_painter.TextPainter),
+    [___RenderSlider__drag]: dart.fieldType(dart.nullable(monodrag.HorizontalDragGestureRecognizer)),
+    [___RenderSlider__tap]: dart.fieldType(dart.nullable(tap.TapGestureRecognizer)),
+    [_active]: dart.fieldType(core.bool),
+    [_currentDragValue]: dart.fieldType(core.double),
+    [_value]: dart.fieldType(core.double),
+    [_platform]: dart.fieldType(platform.TargetPlatform),
+    [_semanticFormatterCallback]: dart.fieldType(dart.nullable(dart.fnType(core.String, [core.double]))),
+    [_divisions]: dart.fieldType(dart.nullable(core.int)),
+    [_label]: dart.fieldType(dart.nullable(core.String)),
+    [_sliderTheme]: dart.fieldType(slider_theme.SliderThemeData),
+    [_textScaleFactor]: dart.fieldType(core.double),
+    [_screenSize]: dart.fieldType(ui.Size),
+    [_onChanged]: dart.fieldType(dart.nullable(dart.fnType(dart.void, [core.double]))),
+    onChangeStart: dart.fieldType(dart.nullable(dart.fnType(dart.void, [core.double]))),
+    onChangeEnd: dart.fieldType(dart.nullable(dart.fnType(dart.void, [core.double]))),
+    [_textDirection]: dart.fieldType(ui.TextDirection),
+    [_hasFocus]: dart.fieldType(core.bool),
+    [_hovering]: dart.fieldType(core.bool)
+  }));
+  dart.defineLazy(slider$._RenderSlider, {
+    /*slider$._RenderSlider._positionAnimationDuration*/get _positionAnimationDuration() {
+      return C[82] || CT.C82;
+    },
+    /*slider$._RenderSlider._minimumInteractionTime*/get _minimumInteractionTime() {
+      return C[88] || CT.C88;
+    },
+    /*slider$._RenderSlider._minPreferredTrackWidth*/get _minPreferredTrackWidth() {
+      return 144;
+    }
+  }, false);
+  const type$ = _AdjustSliderIntent_type;
+  slider$._AdjustSliderIntent = class _AdjustSliderIntent extends actions.Intent {
+    get type() {
+      return this[type$];
+    }
+    set type(value) {
+      super.type = value;
+    }
+  };
+  (slider$._AdjustSliderIntent.new = function(opts) {
+    let type = opts && 'type' in opts ? opts.type : null;
+    if (type == null) dart.nullFailed(I[0], 1517, 19, "type");
+    this[type$] = type;
+    slider$._AdjustSliderIntent.__proto__.new.call(this);
+    ;
+  }).prototype = slider$._AdjustSliderIntent.prototype;
+  (slider$._AdjustSliderIntent.right = function() {
+    this[type$] = slider$._SliderAdjustmentType.right;
+    slider$._AdjustSliderIntent.__proto__.new.call(this);
+    ;
+  }).prototype = slider$._AdjustSliderIntent.prototype;
+  (slider$._AdjustSliderIntent.left = function() {
+    this[type$] = slider$._SliderAdjustmentType.left;
+    slider$._AdjustSliderIntent.__proto__.new.call(this);
+    ;
+  }).prototype = slider$._AdjustSliderIntent.prototype;
+  (slider$._AdjustSliderIntent.up = function() {
+    this[type$] = slider$._SliderAdjustmentType.up;
+    slider$._AdjustSliderIntent.__proto__.new.call(this);
+    ;
+  }).prototype = slider$._AdjustSliderIntent.prototype;
+  (slider$._AdjustSliderIntent.down = function() {
+    this[type$] = slider$._SliderAdjustmentType.down;
+    slider$._AdjustSliderIntent.__proto__.new.call(this);
+    ;
+  }).prototype = slider$._AdjustSliderIntent.prototype;
+  dart.addTypeTests(slider$._AdjustSliderIntent);
+  dart.addTypeCaches(slider$._AdjustSliderIntent);
+  dart.setLibraryUri(slider$._AdjustSliderIntent, I[1]);
+  dart.setFieldSignature(slider$._AdjustSliderIntent, () => ({
+    __proto__: dart.getFields(slider$._AdjustSliderIntent.__proto__),
+    type: dart.finalFieldType(slider$._SliderAdjustmentType)
+  }));
+  slider$._SliderAdjustmentType = class _SliderAdjustmentType extends core.Object {
+    toString() {
+      return this[_name$];
+    }
+  };
+  (slider$._SliderAdjustmentType.new = function(index, _name) {
+    if (index == null) dart.nullFailed(I[0], 1531, 6, "index");
+    if (_name == null) dart.nullFailed(I[0], 1531, 6, "_name");
+    this.index = index;
+    this[_name$] = _name;
+    ;
+  }).prototype = slider$._SliderAdjustmentType.prototype;
+  dart.addTypeTests(slider$._SliderAdjustmentType);
+  dart.addTypeCaches(slider$._SliderAdjustmentType);
+  dart.setLibraryUri(slider$._SliderAdjustmentType, I[1]);
+  dart.setFieldSignature(slider$._SliderAdjustmentType, () => ({
+    __proto__: dart.getFields(slider$._SliderAdjustmentType.__proto__),
+    index: dart.finalFieldType(core.int),
+    [_name$]: dart.finalFieldType(core.String)
+  }));
+  dart.defineExtensionMethods(slider$._SliderAdjustmentType, ['toString']);
+  slider$._SliderAdjustmentType.right = C[10] || CT.C10;
+  slider$._SliderAdjustmentType.left = C[8] || CT.C8;
+  slider$._SliderAdjustmentType.up = C[4] || CT.C4;
+  slider$._SliderAdjustmentType.down = C[6] || CT.C6;
+  slider$._SliderAdjustmentType.values = C[89] || CT.C89;
+  var state$0 = dart.privateName(slider$, "_ValueIndicatorRenderObjectWidget.state");
+  slider$._ValueIndicatorRenderObjectWidget = class _ValueIndicatorRenderObjectWidget extends framework.LeafRenderObjectWidget {
+    get state() {
+      return this[state$0];
+    }
+    set state(value) {
+      super.state = value;
+    }
+    createRenderObject(context) {
+      if (context == null) dart.nullFailed(I[0], 1546, 57, "context");
+      return new slider$._RenderValueIndicator.new({state: this.state});
+    }
+    updateRenderObject(context, renderObject) {
+      if (context == null) dart.nullFailed(I[0], 1552, 40, "context");
+      slider$._RenderValueIndicator.as(renderObject);
+      if (renderObject == null) dart.nullFailed(I[0], 1552, 71, "renderObject");
+      renderObject[_state] = this.state;
+    }
+  };
+  (slider$._ValueIndicatorRenderObjectWidget.new = function(opts) {
+    let state = opts && 'state' in opts ? opts.state : null;
+    if (state == null) dart.nullFailed(I[0], 1540, 19, "state");
+    let $36creationLocationd_0dea112b090073317d4 = opts && '$creationLocationd_0dea112b090073317d4' in opts ? opts.$creationLocationd_0dea112b090073317d4 : null;
+    this[state$0] = state;
+    slider$._ValueIndicatorRenderObjectWidget.__proto__.new.call(this, {$creationLocationd_0dea112b090073317d4: $36creationLocationd_0dea112b090073317d4});
+    ;
+  }).prototype = slider$._ValueIndicatorRenderObjectWidget.prototype;
+  dart.addTypeTests(slider$._ValueIndicatorRenderObjectWidget);
+  dart.addTypeCaches(slider$._ValueIndicatorRenderObjectWidget);
+  dart.setMethodSignature(slider$._ValueIndicatorRenderObjectWidget, () => ({
+    __proto__: dart.getMethods(slider$._ValueIndicatorRenderObjectWidget.__proto__),
+    createRenderObject: dart.fnType(slider$._RenderValueIndicator, [framework.BuildContext])
+  }));
+  dart.setLibraryUri(slider$._ValueIndicatorRenderObjectWidget, I[1]);
+  dart.setFieldSignature(slider$._ValueIndicatorRenderObjectWidget, () => ({
+    __proto__: dart.getFields(slider$._ValueIndicatorRenderObjectWidget.__proto__),
+    state: dart.finalFieldType(slider$._SliderState)
+  }));
+  var ___RenderValueIndicator__valueIndicatorAnimation = dart.privateName(slider$, "_#_RenderValueIndicator#_valueIndicatorAnimation");
+  const RenderBox_RelayoutWhenSystemFontsChangeMixin$36$ = class RenderBox_RelayoutWhenSystemFontsChangeMixin extends box.RenderBox {};
+  (RenderBox_RelayoutWhenSystemFontsChangeMixin$36$.new = function() {
+    RenderBox_RelayoutWhenSystemFontsChangeMixin$36$.__proto__.new.call(this);
+  }).prototype = RenderBox_RelayoutWhenSystemFontsChangeMixin$36$.prototype;
+  dart.applyMixin(RenderBox_RelayoutWhenSystemFontsChangeMixin$36$, object.RelayoutWhenSystemFontsChangeMixin);
+  slider$._RenderValueIndicator = class _RenderValueIndicator extends RenderBox_RelayoutWhenSystemFontsChangeMixin$36$ {
+    get [_valueIndicatorAnimation]() {
+      let t12;
+      t12 = this[___RenderValueIndicator__valueIndicatorAnimation];
+      return t12 == null ? dart.throw(new _internal.LateError.fieldNI("_valueIndicatorAnimation")) : t12;
+    }
+    set [_valueIndicatorAnimation](t12) {
+      if (t12 == null) dart.nullFailed(I[0], 1566, 26, "null");
+      this[___RenderValueIndicator__valueIndicatorAnimation] = t12;
+    }
+    get sizedByParent() {
+      return true;
+    }
+    attach(owner) {
+      object.PipelineOwner.as(owner);
+      if (owner == null) dart.nullFailed(I[0], 1573, 29, "owner");
+      super.attach(owner);
+      this[_valueIndicatorAnimation].addListener(dart.bind(this, 'markNeedsPaint'));
+      this[_state].positionController.addListener(dart.bind(this, 'markNeedsPaint'));
+    }
+    detach() {
+      this[_valueIndicatorAnimation].removeListener(dart.bind(this, 'markNeedsPaint'));
+      this[_state].positionController.removeListener(dart.bind(this, 'markNeedsPaint'));
+      super.detach();
+    }
+    paint(context, offset) {
+      if (context == null) dart.nullFailed(I[0], 1587, 30, "context");
+      if (offset == null) dart.nullFailed(I[0], 1587, 46, "offset");
+      if (this[_state].paintValueIndicator != null) {
+        dart.nullCheck(this[_state].paintValueIndicator)(context, offset);
+      }
+    }
+    computeDryLayout(constraints) {
+      if (constraints == null) dart.nullFailed(I[0], 1594, 40, "constraints");
+      return constraints.smallest;
+    }
+  };
+  (slider$._RenderValueIndicator.new = function(opts) {
+    let state = opts && 'state' in opts ? opts.state : null;
+    if (state == null) dart.nullFailed(I[0], 1559, 27, "state");
+    this[___RenderValueIndicator__valueIndicatorAnimation] = null;
+    this[_state] = state;
+    slider$._RenderValueIndicator.__proto__.new.call(this);
+    this[_valueIndicatorAnimation] = new animations.CurvedAnimation.new({parent: this[_state].valueIndicatorController, curve: curves.Curves.fastOutSlowIn});
+  }).prototype = slider$._RenderValueIndicator.prototype;
+  dart.addTypeTests(slider$._RenderValueIndicator);
+  dart.addTypeCaches(slider$._RenderValueIndicator);
+  dart.setGetterSignature(slider$._RenderValueIndicator, () => ({
+    __proto__: dart.getGetters(slider$._RenderValueIndicator.__proto__),
+    [_valueIndicatorAnimation]: animation.Animation$(core.double)
+  }));
+  dart.setSetterSignature(slider$._RenderValueIndicator, () => ({
+    __proto__: dart.getSetters(slider$._RenderValueIndicator.__proto__),
+    [_valueIndicatorAnimation]: animation.Animation$(core.double)
+  }));
+  dart.setLibraryUri(slider$._RenderValueIndicator, I[1]);
+  dart.setFieldSignature(slider$._RenderValueIndicator, () => ({
+    __proto__: dart.getFields(slider$._RenderValueIndicator.__proto__),
+    [___RenderValueIndicator__valueIndicatorAnimation]: dart.fieldType(dart.nullable(animation.Animation$(core.double))),
+    [_state]: dart.fieldType(slider$._SliderState)
+  }));
+  dart.trackLibraries("packages/flutter/src/material/slider.dart", {
+    "package:flutter/src/material/slider.dart": slider$
+  }, {
+  }, '{"version":3,"sourceRoot":"","sources":["slider.dart"],"names":[],"mappings":"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","file":"../../../../../../../E:/packages/flutter/src/material/slider.dart.lib.js"}');
+  // Exports:
+  return {
+    src__material__slider: slider$
+  };
+}));
+
+//# sourceMappingURL=slider.dart.lib.js.map
