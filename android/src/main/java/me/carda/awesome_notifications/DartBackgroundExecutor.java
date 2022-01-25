@@ -45,33 +45,30 @@ public class DartBackgroundExecutor extends AwesomeBackgroundExecutor implements
 
     public static Context applicationContext;
 
-    private final AtomicBoolean isRunning = new AtomicBoolean(false);
+    private AtomicBoolean isRunning = null;
 
     private MethodChannel backgroundChannel;
     private FlutterEngine backgroundFlutterEngine;
 
-    private final long dartCallbackHandle;
-    private final long silentCallbackHandle;
+    public boolean isDone(){
+        return isRunning != null && !isRunning.get();
+    }
 
-    private static DartBackgroundExecutor runningInstance;
-
-    @Override
-    public void receiveBackgroundAction(
+    public boolean runBackgroundAction(
             Context context,
-            Intent silentIntent,
-            long dartCallbackHandle,
-            long silentCallbackHandle
+            Intent silentIntent
     ){
+        if (dartCallbackHandle == 0) return false;
+        applicationContext = context;
+
         addSilentIntent(silentIntent);
 
-        if (runningInstance == null)
-            runningInstance = new DartBackgroundExecutor(
-                    dartCallbackHandle,
-                    silentCallbackHandle
-            );
+        if (isRunning == null){
+            isRunning = new AtomicBoolean(true);
+            runBackgroundThread(dartCallbackHandle);
+        }
 
-        if(!runningInstance.isRunning.get())
-            runningInstance.startExecute(context);
+        return true;
     }
 
     private static io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback
@@ -88,27 +85,6 @@ public class DartBackgroundExecutor extends AwesomeBackgroundExecutor implements
     public static void setPluginRegistrant(
             io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback callback) {
         pluginRegistrantCallback = callback;
-    }
-
-
-    public DartBackgroundExecutor(long dartCallbackHandle, long silentCallbackHandle){
-        this.dartCallbackHandle = dartCallbackHandle;
-        this.silentCallbackHandle = silentCallbackHandle;
-    }
-
-    public void startExecute(Context context) {
-        if (isNotRunning()) {
-            isRunning.set(true);
-            applicationContext = context;
-
-            if (dartCallbackHandle != 0) {
-                runBackgroundThread(dartCallbackHandle);
-            }
-        }
-    }
-
-    public boolean isNotRunning() {
-        return !isRunning.get();
     }
 
     private static void addSilentIntent(Intent intent){
@@ -130,7 +106,7 @@ public class DartBackgroundExecutor extends AwesomeBackgroundExecutor implements
         }
     }
 
-    public void runBackgroundThread(final long callbackHandle) {
+    public void runBackgroundThread(final Long callbackHandle) {
 
         if (backgroundFlutterEngine != null) {
             Log.e(TAG, "Background isolate already started.");
@@ -196,10 +172,9 @@ public class DartBackgroundExecutor extends AwesomeBackgroundExecutor implements
     }
 
     public void closeBackgroundIsolate() {
-        if (!isNotRunning()) {
+        if (!isDone()) {
 
             isRunning.set(false);
-            runningInstance = null;
 
             Handler handler = new Handler(Looper.getMainLooper());
             Runnable dartBgRunnable =
@@ -282,26 +257,17 @@ public class DartBackgroundExecutor extends AwesomeBackgroundExecutor implements
         // If this intent contains a valid awesome action
         if(actionReceived != null){
 
-            if(actionReceived.displayedDate == null){
-                actionReceived.displayedDate = actionReceived.createdDate;
-                actionReceived.displayedLifeCycle = actionReceived.createdLifeCycle;
-            }
-
             final Map<String, Object> actionData = actionReceived.toMap();
+            actionData.put(Definitions.ACTION_HANDLE, silentCallbackHandle);
 
             // Handle the message event in Dart.
             backgroundChannel.invokeMethod(
-                    Definitions.CHANNEL_METHOD_SILENCED_CALLBACK,
-                new HashMap<String, Object>() {
-                    {
-                        put(Definitions.ACTION_HANDLE, silentCallbackHandle);
-                        put(Definitions.NOTIFICATION_RECEIVED_ACTION, actionData);
-                    }
-                },
+                Definitions.CHANNEL_METHOD_SILENCED_CALLBACK,
+                actionData,
                 dartChannelResultHandle);
 
         } else {
-            Log.e(TAG, "Awesome Notification model not found in Intent background.");
+            Log.e(TAG, "Action Notification model not found inside Intent content.");
             finishDartBackgroundExecution();
         }
     }

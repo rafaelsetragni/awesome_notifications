@@ -4,8 +4,8 @@ import 'dart:math';
 import 'package:awesome_notifications/android_foreground_service.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart';
 import 'package:awesome_notifications_example/utils/notification_util.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_core/firebase_core.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications_example/routes.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -227,7 +227,7 @@ void main() async {
   runApp(App());
 }
 
-
+/*
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
@@ -266,7 +266,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   else {
     AwesomeNotifications().createNotificationFromJsonData(message.data);
   }
-}
+}*/
 
 class App extends StatefulWidget {
   App();

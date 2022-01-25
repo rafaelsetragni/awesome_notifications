@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,6 +24,7 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.enumera
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.MediaSource;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationSource;
+import me.carda.awesome_notifications.awesome_notifications_android_core.managers.DismissedManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.AbstractModel;
 import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationScheduler;
@@ -42,7 +42,6 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.manager
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.ChannelManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.CreatedManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.DefaultsManager;
-import me.carda.awesome_notifications.awesome_notifications_android_core.managers.DismissedManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.DisplayedManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.LifeCycleManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.PermissionManager;
@@ -244,13 +243,13 @@ public class AwesomeNotifications
         bitmapResourceDecoder.execute();
     }
 
-    public void setActionHandle(long silentCallback) {
+    public void setActionHandle(Long silentCallback) {
         setActionHandleDefaults(
                 applicationContext,
                 silentCallback);
     }
 
-    public long getActionHandle() {
+    public Long getActionHandle() {
         return getActionHandleDefaults(
                 applicationContext);
     }
@@ -263,7 +262,7 @@ public class AwesomeNotifications
             @Nullable String defaultIconPath,
             @Nullable List<Object> channelsData,
             @Nullable List<Object> channelGroupsData,
-            long dartCallback,
+            Long dartCallback,
             boolean debug) throws AwesomeNotificationException {
 
         setDefaults(applicationContext, defaultIconPath, dartCallback);
@@ -277,7 +276,7 @@ public class AwesomeNotifications
         setChannels(applicationContext, channelsData);
         recoverNotificationCreated(applicationContext);
         recoverNotificationDisplayed(applicationContext);
-        recoverNotificationDismissed(applicationContext);
+        recoverNotificationsAction(applicationContext);
 
         captureNotificationActionOnLaunch(applicationContext);
 
@@ -352,27 +351,27 @@ public class AwesomeNotifications
         channelManager.commitChanges(context);
     }
 
-    private void setDefaults(@NonNull Context context, @Nullable String defaultIcon, long dartCallbackHandle) {
+    private void setDefaults(@NonNull Context context, @Nullable String defaultIcon, Long dartCallbackHandle) {
 
         if (BitmapUtils.getInstance().getMediaSourceType(defaultIcon) != MediaSource.Resource)
             defaultIcon = null;
 
-        DefaultsManager.saveDefault(context, new DefaultsModel(defaultIcon, dartCallbackHandle));
+        DefaultsManager.saveDefault(context, new DefaultsModel(defaultIcon, dartCallbackHandle.toString()));
         DefaultsManager.commitChanges(context);
     }
 
-    private void setActionHandleDefaults(@NonNull Context context, long silentCallbackHandle) {
+    private void setActionHandleDefaults(@NonNull Context context, Long silentCallbackHandle) {
         DefaultsModel defaults = DefaultsManager.getDefaultByKey(context);
-        defaults.silentDataCallback = silentCallbackHandle;
+        defaults.silentDataCallback = silentCallbackHandle.toString();
 
         DefaultsManager.saveDefault(context, defaults);
         DefaultsManager.commitChanges(context);
     }
 
-    private long getActionHandleDefaults(@NonNull Context context) {
+    private Long getActionHandleDefaults(@NonNull Context context) {
         DefaultsModel defaults = DefaultsManager.getDefaultByKey(context);
         return defaults.silentDataCallback == null ?
-                0L : defaults.silentDataCallback;
+                0L : Long.parseLong(defaults.silentDataCallback);
     }
 
     private void recoverNotificationCreated(@NonNull Context context) {
@@ -416,14 +415,18 @@ public class AwesomeNotifications
                 }
     }
 
-    private void recoverNotificationDismissed(@NonNull Context context) {
-        List<ActionReceived> lostDismissed = DismissedManager.listDismissed(context);
+    private void recoverNotificationsAction(@NonNull Context context) {
+        List<ActionReceived> lostDismissed = DismissedManager.listDismisses(context);
 
         if (lostDismissed != null)
             for (ActionReceived received : lostDismissed)
                 try {
                     received.validate(context);
-                    notifyAwesomeEvent(Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED, received);
+
+                    if(received.actionDate != null)
+                        notifyAwesomeEvent(Definitions.CHANNEL_METHOD_DEFAULT_ACTION, received);
+                    else
+                        notifyAwesomeEvent(Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED, received);
 
                     DismissedManager.removeDismissed(context, received.id);
                     DismissedManager.commitChanges(context);

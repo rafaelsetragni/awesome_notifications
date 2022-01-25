@@ -170,7 +170,7 @@ public class BadgeManagerTest {
         BadgeManager sud = BadgeManager.getInstance();
 
         // TODO missing implementation
-        assertTrue(sud.isBadgeAppGloballyAllowed(any()));
+        assertTrue(sud.isBadgeAppGloballyAllowed(mockContext));
 
     }
 
@@ -202,10 +202,9 @@ public class BadgeManagerTest {
                     "If the badge is disable on device level, it must return false",
                     sud3.isBadgeGloballyAllowed(mockContext));
 
-            BadgeManager sud4 = new BadgeManager();
-            BadgeManager spyReference4 = spy(sud4);
-            doReturn(true).when(spyReference4).isBadgeDeviceGloballyAllowed(any());
-            doReturn(true).when(spyReference4).isBadgeAppGloballyAllowed(any());
+            BadgeManager sud4 = mock(BadgeManager.class);
+            doReturn(true).when(sud4).isBadgeDeviceGloballyAllowed(any());
+            doReturn(true).when(sud4).isBadgeAppGloballyAllowed(any());
             assertTrue(
                     "If the badge is enable on both device and app level, it must return true",
                     sud4.isBadgeGloballyAllowed(mockContext));

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
 import me.carda.awesome_notifications.DartBackgroundExecutor;
 import me.carda.awesome_notifications.awesome_notifications_android_core.background.AwesomeBackgroundExecutor;
+import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.DefaultsManager;
 
 public class BackgroundService extends JobIntentService {
@@ -19,32 +20,37 @@ public class BackgroundService extends JobIntentService {
 
         Log.d(TAG, "A new Dart background service has started");
 
-        long dartCallbackHandle = getDartCallbackDispatcher(this);
+        Long dartCallbackHandle = getDartCallbackDispatcher(this);
         if (dartCallbackHandle == 0L) {
             Log.w(TAG, "A background message could not be handled in Dart" +
                             " because there is no onActionReceivedMethod handler registered.");
             return;
         }
 
-        long silentCallbackHandle = getSilentCallbackDispatcher(this);
+        Long silentCallbackHandle = getSilentCallbackDispatcher(this);
         if (silentCallbackHandle == 0L) {
             Log.w(TAG,"A background message could not be handled in Dart" +
                             " because there is no dart background handler registered.");
             return;
         }
 
-        AwesomeBackgroundExecutor.runBackgroundExecutor(
-                this,
-                intent,
-                dartCallbackHandle,
-                silentCallbackHandle);
+        try {
+            AwesomeBackgroundExecutor.runBackgroundExecutor(
+                    this,
+                    intent,
+                    dartCallbackHandle,
+                    silentCallbackHandle);
+        } catch (AwesomeNotificationException e) {
+            e.printStackTrace();
+            Log.d(TAG, "A new Dart background service could not be executed");
+        }
     }
 
-    public static long getDartCallbackDispatcher(Context context){
+    public static Long getDartCallbackDispatcher(Context context){
         return DefaultsManager.getDartCallbackDispatcher(context);
     }
 
-    public static long getSilentCallbackDispatcher(Context context){
+    public static Long getSilentCallbackDispatcher(Context context){
         return DefaultsManager.getSilentCallbackDispatcher(context);
     }
 

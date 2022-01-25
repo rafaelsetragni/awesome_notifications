@@ -11,12 +11,12 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.excepti
 public class DefaultsModel extends AbstractModel {
 
     public String appIcon;
-    public Long silentDataCallback;
-    public Long reverseDartCallback;
+    public String silentDataCallback;
+    public String reverseDartCallback;
 
     public DefaultsModel(){}
 
-    public DefaultsModel(String defaultAppIcon, long dartCallbackHandle){
+    public DefaultsModel(String defaultAppIcon, String dartCallbackHandle){
         this.appIcon = defaultAppIcon;
         this.reverseDartCallback = dartCallbackHandle;
     }
@@ -24,8 +24,8 @@ public class DefaultsModel extends AbstractModel {
     @Override
     public AbstractModel fromMap(Map<String, Object> arguments) {
         appIcon  = getValueOrDefault(arguments, Definitions.NOTIFICATION_APP_ICON, String.class);
-        silentDataCallback  = getValueOrDefault(arguments, Definitions.SILENT_HANDLE, Long.class);
-        reverseDartCallback = getValueOrDefault(arguments, Definitions.DART_BG_HANDLE, Long.class);
+        silentDataCallback  = getValueOrDefault(arguments, Definitions.SILENT_HANDLE, String.class);
+        reverseDartCallback = getValueOrDefault(arguments, Definitions.DART_BG_HANDLE, String.class);
 
         return this;
     }

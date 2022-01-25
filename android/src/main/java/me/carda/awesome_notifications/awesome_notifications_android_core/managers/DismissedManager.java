@@ -19,7 +19,7 @@ public class DismissedManager {
         return shared.remove(context, Definitions.SHARED_DISMISSED, id.toString());
     }
 
-    public static List<ActionReceived> listDismissed(Context context) {
+    public static List<ActionReceived> listDismisses(Context context) {
         return shared.getAllObjects(context, Definitions.SHARED_DISMISSED);
     }
 
@@ -31,7 +31,7 @@ public class DismissedManager {
         return shared.get(context, Definitions.SHARED_DISMISSED, id.toString());
     }
 
-    public static void cancelAllDismissed(Context context) {
+    public static void clearAllDismissed(Context context) {
         List<ActionReceived> receivedList = shared.getAllObjects(context, Definitions.SHARED_DISMISSED);
         if (receivedList != null){
             for (ActionReceived received : receivedList) {

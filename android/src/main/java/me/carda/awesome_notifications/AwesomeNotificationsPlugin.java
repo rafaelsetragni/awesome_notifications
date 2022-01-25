@@ -40,9 +40,6 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.utils.L
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.MapUtils;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
 
-
-import static me.carda.awesome_notifications.awesome_notifications_android_core.Definitions.ACTION_HANDLE;
-
 /**
  * AwesomeNotificationsPlugin
  **/
@@ -131,12 +128,9 @@ public class AwesomeNotificationsPlugin
     public void onNewAwesomeEvent(String eventType, Map<String, Object> content) {
         if (pluginChannel != null){
             if(Definitions.CHANNEL_METHOD_SILENT_ACTION.equals(eventType)){
-                content.put(ACTION_HANDLE, awesomeNotifications.getActionHandle());
-                pluginChannel.invokeMethod(eventType, (Serializable) content);
+                content.put(Definitions.ACTION_HANDLE, awesomeNotifications.getActionHandle());
             }
-            else {
-                pluginChannel.invokeMethod(eventType, (Serializable) content);
-            }
+            pluginChannel.invokeMethod(eventType, content);
         }
     }
 
@@ -813,7 +807,7 @@ public class AwesomeNotificationsPlugin
         debug = debug != null && debug;
 
         Object callbackDartObj = platformParameters.get(Definitions.DART_BG_HANDLE);
-        long dartCallback = callbackDartObj == null ? 0L :(Long) callbackDartObj;
+        Long dartCallback = callbackDartObj == null ? 0L :(Long) callbackDartObj;
 
         awesomeNotifications.initialize(
                 defaultIconPath,
@@ -831,9 +825,9 @@ public class AwesomeNotificationsPlugin
     @SuppressWarnings("unchecked")
     private void channelMethodSetActionHandle(@NonNull MethodCall call, Result result) throws Exception {
         Map<String, Object> platformParameters = call.arguments();
-        Object callbackActionObj = platformParameters.get(ACTION_HANDLE);
+        Object callbackActionObj = platformParameters.get(Definitions.ACTION_HANDLE);
 
-        long silentCallback = callbackActionObj == null ? 0L : (Long) callbackActionObj;
+        Long silentCallback = callbackActionObj == null ? 0L : (Long) callbackActionObj;
 
         awesomeNotifications.setActionHandle(silentCallback);
 

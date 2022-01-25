@@ -99,8 +99,9 @@ public class NotificationBuilder {
     public void forceBringAppToForeground(Context context){
         Intent startActivity = new Intent(context, getMainTargetClass(context));
         startActivity.setFlags(
-                Intent.FLAG_ACTIVITY_REORDER_TO_FRONT |
-                Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY |
+                // Intent.FLAG_ACTIVITY_REORDER_TO_FRONT |
+                Intent.FLAG_ACTIVITY_SINGLE_TOP |
+                // Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY |
                 Intent.FLAG_ACTIVITY_NEW_TASK);
 
         context.startActivity(startActivity);
@@ -303,10 +304,14 @@ public class NotificationBuilder {
             return null;
         }
     }
+    
     public Class getMainTargetClass(Context applicationContext){
 
         if(mainTargetClassName == null)
             updateMainTargetClassNameFromInitialIntent(applicationContext);
+
+        if(mainTargetClassName == null)
+            mainTargetClassName = applicationContext.getPackageName() + ".MainActivity";
 
         Class clazz = tryResolveClassName(mainTargetClassName);
         if(clazz != null) return clazz;
@@ -358,7 +363,7 @@ public class NotificationBuilder {
         if (isNormalAction || isButtonAction) {
 
             String notificationActionJson = intent.getStringExtra(Definitions.NOTIFICATION_ACTION_JSON);
-            if(StringUtils.isNullOrEmpty(notificationActionJson)){
+            if(!StringUtils.isNullOrEmpty(notificationActionJson)){
                 ActionReceived actionModel = new ActionReceived().fromJson(notificationActionJson);
                 if (actionModel != null) return actionModel;
             }

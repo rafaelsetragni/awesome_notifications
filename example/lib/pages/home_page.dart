@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:awesome_notifications_example/common_widgets/led_light.dart';
 import 'package:awesome_notifications_example/common_widgets/seconds_slider.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide DateUtils;
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -202,7 +202,7 @@ class _HomePageState extends State<HomePage> {
     AwesomeNotifications().actionSink.close();
     super.dispose();
   }
-
+/*
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initializeFirebaseService() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -263,7 +263,7 @@ class _HomePageState extends State<HomePage> {
       }
     });
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
