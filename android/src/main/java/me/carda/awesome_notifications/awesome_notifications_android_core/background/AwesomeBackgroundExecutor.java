@@ -3,7 +3,10 @@ package me.carda.awesome_notifications.awesome_notifications_android_core.backgr
 import android.content.Context;
 import android.content.Intent;
 
+import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
+import me.carda.awesome_notifications.awesome_notifications_android_core.managers.DefaultsManager;
+import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
 
 public abstract class AwesomeBackgroundExecutor {
 
@@ -12,22 +15,13 @@ public abstract class AwesomeBackgroundExecutor {
     protected Long dartCallbackHandle = 0L;
     protected Long silentCallbackHandle = 0L;
 
-    private static Class awesomeBackgroundExecutorClass;
-    public static void setBackgroundExecutorClass (
-        Class awesomeBackgroundExecutorClass
-    ) throws AwesomeNotificationException {
+    private static Class<? extends AwesomeBackgroundExecutor> awesomeBackgroundExecutorClass;
 
-        if(AwesomeBackgroundExecutor
-                .class
-                .isAssignableFrom(awesomeBackgroundExecutorClass)
-        ){
-            AwesomeBackgroundExecutor.awesomeBackgroundExecutorClass
-                    = awesomeBackgroundExecutorClass;
-        }
-        else
-            throw new AwesomeNotificationException(
-                    "Class "+awesomeBackgroundExecutorClass.getSimpleName()+
-                            " does not extends AwesomeBackgroundExecutor.");
+    public static void setBackgroundExecutorClass (
+            Class<? extends AwesomeBackgroundExecutor> awesomeBackgroundExecutorClass
+    ){
+        AwesomeBackgroundExecutor.awesomeBackgroundExecutorClass =
+                awesomeBackgroundExecutorClass;
     }
 
     public abstract boolean isDone();
@@ -40,14 +34,15 @@ public abstract class AwesomeBackgroundExecutor {
         Long silentCallbackHandle
     ) throws AwesomeNotificationException {
 
-        if(awesomeBackgroundExecutorClass == null)
-            throw new AwesomeNotificationException(
-                    "There is no valid AwesomeBackgroundExecutorClass available to use.");
-
         try {
+
+            if(awesomeBackgroundExecutorClass == null)
+                throw new AwesomeNotificationException(
+                        "There is no valid background executor available to run.");
+
             if(runningInstance == null || runningInstance.isDone()) {
 
-                runningInstance = (AwesomeBackgroundExecutor)
+                runningInstance =
                         awesomeBackgroundExecutorClass.newInstance();
 
                 runningInstance.dartCallbackHandle = dartCallbackHandle;
@@ -60,7 +55,7 @@ public abstract class AwesomeBackgroundExecutor {
             )){
                 runningInstance = null;
                 throw new AwesomeNotificationException(
-                        "The background execution could not be started.");
+                        "The background executor could not be started.");
             }
 
         } catch (IllegalAccessException | InstantiationException e) {

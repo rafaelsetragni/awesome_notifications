@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 
+import '../../android_foreground_service.dart';
 import '../enumerators/android_foreground_service_constants.dart';
 
 /// Static helper class that provides methods to start and stop a foreground service.
@@ -26,12 +27,21 @@ class AndroidForegroundService {
   /// Note that `foregroundServiceType` must be a subset of the `android:foregroundServiceType` defined in your `AndroidManifest.xml`!
   ///
   /// On any platform other than Android, this is a no-op and does nothing, so it is safe to call it without a platform check.
+  @Deprecated("This method is deprecated. You should use startAndroidForegroundService instead.")
   static Future<void> startForeground(
       {required NotificationContent content,
       List<NotificationActionButton>? actionButtons,
       int startType = AndroidForegroundServiceConstants.startSticky,
       int? foregroundServiceType}) async {
     //no-op on web
+  }
+
+  static Future<void> startAndroidForegroundService({
+    required NotificationContent content,
+    List<NotificationActionButton>? actionButtons,
+    ForegroundStartMode foregroundStartMode = ForegroundStartMode.stick,
+    ForegroundServiceType foregroundServiceType = ForegroundServiceType.none
+  }) async {
   }
 
   /// Stops a foreground service.
@@ -45,7 +55,7 @@ class AndroidForegroundService {
   ///
   /// On any platform other than Android, this is a no-op and does nothing,
   /// so it is safe to call it without a platform check.
-  static Future<void> stopForeground() async {
+  static Future<void> stopForeground(int id) async {
     //no-op on web
   }
 

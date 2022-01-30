@@ -1,4 +1,4 @@
-class HtmlUtils {
+class AwesomeHtmlUtils {
   static String? removeAllHtmlTags(String? htmlText) {
     if (htmlText == null) return null;
     RegExp exp =

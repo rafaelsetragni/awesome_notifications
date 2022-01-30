@@ -127,7 +127,7 @@ public abstract class AbstractModel implements Cloneable {
         return MapUtils.extractValue(defaultValues, reference, expectedClass).orNull();
     }
 
-    protected static <T> T getEnumValueOrDefault(Map<String, Object> arguments, String reference, Class<T> enumerator, T[] values) {
+    public static <T> T getEnumValueOrDefault(Map<String, Object> arguments, String reference, Class<T> enumerator, T[] values) {
         String key = MapUtils.extractValue(arguments, reference, String.class).orNull();
         T defaultValue =  MapUtils.extractValue(defaultValues, reference, enumerator).orNull();
         if(key == null) return defaultValue;

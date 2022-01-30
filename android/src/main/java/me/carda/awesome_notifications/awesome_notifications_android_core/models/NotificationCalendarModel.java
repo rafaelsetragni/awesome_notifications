@@ -2,8 +2,10 @@ package me.carda.awesome_notifications.awesome_notifications_android_core.models
 
 import android.content.Context;
 
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -167,14 +169,6 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
 
     @Override
     public Calendar getNextValidDate(Date fixedNowDate) throws AwesomeNotificationException {
-        String cronExpression =
-                (second == null ? "*" : second.toString()) + " " +
-                        (minute == null ? "*" : minute.toString()) + " " +
-                        (hour == null ? "*" : hour.toString()) + " " +
-                        (weekday != null ? "?" : (day == null ? "*" : day.toString())) + " " +
-                        (month == null ? "*" : month.toString()) + " " +
-                        (weekday == null ? "?" : weekday.toString()) + " " +
-                        (year == null ? "*" : year.toString());
 
         TimeZone timeZone = StringUtils.isNullOrEmpty(this.timeZone) ?
                 DateUtils.getLocalTimeZone() :
@@ -183,7 +177,50 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
         if (timeZone == null)
             throw new AwesomeNotificationException("Invalid time zone");
 
-        return CronUtils.getNextCalendar(null, cronExpression, fixedNowDate, timeZone);
+        String cronExpression =
+                (second == null ? "*" : second.toString()) + " " +
+                (minute == null ? "*" : minute.toString()) + " " +
+                (hour == null ? "*" : hour.toString()) + " " +
+                (weekday != null ? "?" : (day == null ? "*" : day.toString())) + " " +
+                (month == null ? "*" : month.toString()) + " " +
+                (weekday == null ? "?" : weekday.toString()) + " " +
+                (year == null ? "*" : year.toString());
+
+        Calendar calendar = CronUtils.getNextCalendar(null, cronExpression, fixedNowDate, timeZone);
+
+//        Calendar calendar = new GregorianCalendar();
+//        calendar.setTimeZone(timeZone);
+//
+//        if(era != null)
+//            calendar.set(Calendar.ERA, era);
+//        if(year != null)
+//            calendar.set(Calendar.YEAR, year);
+//        if(month != null)
+//            calendar.set(Calendar.MONTH, month);
+//        if(day != null)
+//            calendar.set(Calendar.DAY_OF_MONTH, day);
+//        if(hour != null)
+//            calendar.set(Calendar.HOUR, hour);
+//        if(minute != null)
+//            calendar.set(Calendar.MINUTE, minute);
+//        if(second != null)
+//            calendar.set(Calendar.SECOND, second);
+//        if(millisecond != null)
+//            calendar.set(Calendar.MILLISECOND, millisecond);
+//        if(weekday != null)
+//            calendar.set(Calendar.DAY_OF_WEEK, weekday);
+//        if(weekOfMonth != null)
+//            calendar.set(Calendar.WEEK_OF_MONTH, weekOfMonth);
+//        if(weekOfYear != null)
+//            calendar.set(Calendar.WEEK_OF_YEAR, weekOfYear);
+//
+//        Date now = DateUtils.getLocalDateTime(this.timeZone);
+//
+//        Date future = calendar.getTime(); // needs to return the next valid date
+//        if(now.after(future))
+//            return null;
+
+        return calendar;
     }
 }
 

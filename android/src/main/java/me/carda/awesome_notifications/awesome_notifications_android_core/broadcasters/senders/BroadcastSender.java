@@ -8,6 +8,7 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.Definit
 import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.receivers.AwesomeEventsReceiver;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
+import me.carda.awesome_notifications.awesome_notifications_android_core.managers.ActionManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.DismissedManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.CreatedManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.DisplayedManager;
@@ -91,12 +92,19 @@ public class BroadcastSender {
     public static void sendBroadcastDefaultAction(Context context, ActionReceived actionReceived){
         if (actionReceived != null)
             try {
-                AwesomeEventsReceiver
-                        .getInstance()
-                        .addAwesomeActionEvent(
-                                context,
-                                Definitions.BROADCAST_DEFAULT_ACTION,
-                                actionReceived);
+
+                if(LifeCycleManager.getApplicationLifeCycle() == NotificationLifeCycle.AppKilled) {
+                    ActionManager.saveAction(context, actionReceived);
+                    ActionManager.commitChanges(context);
+                }
+                else {
+                    AwesomeEventsReceiver
+                            .getInstance()
+                            .addAwesomeActionEvent(
+                                    context,
+                                    Definitions.BROADCAST_DEFAULT_ACTION,
+                                    actionReceived);
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();

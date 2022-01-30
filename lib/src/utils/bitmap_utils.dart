@@ -4,15 +4,15 @@ import 'package:awesome_notifications/src/utils/media_abstract_utils.dart';
 import 'package:awesome_notifications/src/utils/resource_image_provider.dart';
 import 'package:flutter/material.dart';
 
-class BitmapUtils extends MediaUtils {
+class AwesomeBitmapUtils extends AwesomeMediaUtils {
   /// FACTORY METHODS *********************************************
 
-  factory BitmapUtils() => _instance;
+  factory AwesomeBitmapUtils() => _instance;
 
   @visibleForTesting
-  BitmapUtils.private();
+  AwesomeBitmapUtils.private();
 
-  static final BitmapUtils _instance = BitmapUtils.private();
+  static final AwesomeBitmapUtils _instance = AwesomeBitmapUtils.private();
 
   /// FACTORY METHODS *********************************************
 

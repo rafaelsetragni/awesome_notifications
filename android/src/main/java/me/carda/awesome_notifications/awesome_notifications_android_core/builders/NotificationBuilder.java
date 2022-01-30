@@ -1,5 +1,6 @@
 package me.carda.awesome_notifications.awesome_notifications_android_core.builders;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -59,6 +60,7 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.models.
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationMessageModel;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.returnedData.ActionReceived;
+import me.carda.awesome_notifications.awesome_notifications_android_core.threads.NotificationSender;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BitmapUtils;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BooleanUtils;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.DateUtils;
@@ -79,11 +81,11 @@ public class NotificationBuilder {
 
     private final BitmapUtils bitmapUtils;
     private final PermissionManager permissionManager;
-    private MediaSessionCompat mediaSession;
+    private static MediaSessionCompat mediaSession;
 
-    // ************** SINGLETON PATTERN ***********************
+    // *************** DEPENDENCY INJECTION CONSTRUCTOR ***************
 
-    private NotificationBuilder(BitmapUtils bitmapUtils, PermissionManager permissionManager) {
+    NotificationBuilder(BitmapUtils bitmapUtils, PermissionManager permissionManager) {
         this.bitmapUtils = bitmapUtils;
         this.permissionManager = permissionManager;
     }
@@ -94,7 +96,7 @@ public class NotificationBuilder {
                 PermissionManager.getInstance());
     }
 
-    // ********************************************************
+    // ****************************************************************
 
     public void forceBringAppToForeground(Context context){
         Intent startActivity = new Intent(context, getMainTargetClass(context));
@@ -226,8 +228,7 @@ public class NotificationBuilder {
                 notificationModel,
                 channelModel,
                 actionType,
-                /*actionType == ActionType.Default ?
-                    getMainTargetClass() : */NotificationActionReceiver.class
+                NotificationActionReceiver.class
         );
 
         if(actionType == ActionType.Default)
@@ -319,7 +320,7 @@ public class NotificationBuilder {
         return tryResolveClassName("MainActivity");
     }
 
-    public void updateMainTargetClassName(Context applicationContext) {
+    public NotificationBuilder updateMainTargetClassName(Context applicationContext) {
 
         String packageName = applicationContext.getPackageName();
         Intent intent = new Intent();
@@ -334,6 +335,12 @@ public class NotificationBuilder {
 
         if(StringUtils.isNullOrEmpty(mainTargetClassName))
             updateMainTargetClassNameFromInitialIntent(applicationContext);
+
+        return this;
+    }
+
+    public static void setMediaSession(MediaSessionCompat mediaSession) {
+        NotificationBuilder.mediaSession = mediaSession;
     }
 
     private void updateMainTargetClassNameFromInitialIntent(Context applicationContext) {
@@ -725,6 +732,7 @@ public class NotificationBuilder {
             }
     }
 
+    @SuppressLint("WrongConstant")
     @NonNull
     public void createActionButtons(Context context, NotificationModel notificationModel, NotificationChannelModel channel, NotificationCompat.Builder builder) {
 
@@ -746,9 +754,8 @@ public class NotificationBuilder {
                     notificationModel,
                     channel,
                     buttonProperties.actionType,
-                    buttonProperties.actionType == ActionType.Default ?
-                            getMainTargetClass(context) : NotificationActionReceiver.class
-                    );
+                    NotificationActionReceiver.class
+                );
 
             if(buttonProperties.actionType == ActionType.Default)
                     actionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -763,33 +770,19 @@ public class NotificationBuilder {
 
             PendingIntent actionPendingIntent = null;
             if (buttonProperties.enabled) {
-                if (buttonProperties.actionType == ActionType.Default) {
-                    actionPendingIntent = PendingIntent.getActivity(
-                            context,
-                            notificationModel.content.id,
-                            actionIntent,
-                            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ?
-                                    PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
-                                    PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    if(buttonProperties.actionType == ActionType.Default)
-                        actionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                } else {
-
-                    if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N){
-                        actionIntent.setAction(Intent.ACTION_MAIN);
-                        actionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    }
-
-                    actionPendingIntent = PendingIntent.getBroadcast(
-                            context,
-                            notificationModel.content.id,
-                            actionIntent,
-                            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ?
-                                    PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
-                                    PendingIntent.FLAG_UPDATE_CURRENT);
+                if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N){
+                    actionIntent.setAction(Intent.ACTION_MAIN);
+                    actionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 }
+
+                actionPendingIntent = PendingIntent.getBroadcast(
+                        context,
+                        notificationModel.content.id,
+                        actionIntent,
+                        (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ?
+                                PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
+                                PendingIntent.FLAG_UPDATE_CURRENT);
             }
 
             int iconResource = 0;
@@ -857,7 +850,7 @@ public class NotificationBuilder {
         } else if (!StringUtils.isNullOrEmpty(channelModel.icon)) {
             builder.setSmallIcon(bitmapUtils.getDrawableResourceId(context, channelModel.icon));
         } else {
-            String defaultIcon = DefaultsManager.getDefaultIconByKey(context);
+            String defaultIcon = DefaultsManager.getDefaultIcon(context);
 
             if (StringUtils.isNullOrEmpty(defaultIcon)) {
 
@@ -910,8 +903,12 @@ public class NotificationBuilder {
         }
     }
 
-    private void setLayout(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) throws AwesomeNotificationException {
-
+    private void setLayout(
+            Context context,
+            NotificationModel notificationModel,
+            NotificationChannelModel channelModel,
+            NotificationCompat.Builder builder
+    ) throws AwesomeNotificationException {
         switch (notificationModel.content.notificationLayout) {
 
             case BigPicture:
@@ -932,10 +929,6 @@ public class NotificationBuilder {
 
             case MessagingGroup:
                 if(setMessagingLayout(context, true, notificationModel.content, channelModel, builder)) return;
-                break;
-
-            case PhoneCall:
-                setPhoneCallLayout(context, notificationModel, builder);
                 break;
 
             case MediaPlayer:
@@ -1155,7 +1148,7 @@ public class NotificationBuilder {
         return true;
     }
 
-    private Boolean setMediaPlayerLayout(Context context, NotificationContentModel contentModel, List<NotificationButtonModel> actionButtons, NotificationCompat.Builder builder) {
+    private Boolean setMediaPlayerLayout(Context context, NotificationContentModel contentModel, List<NotificationButtonModel> actionButtons, NotificationCompat.Builder builder) throws AwesomeNotificationException {
 
         ArrayList<Integer> indexes = new ArrayList<>();
         for (int i = 0; i < actionButtons.size(); i++) {
@@ -1181,8 +1174,9 @@ public class NotificationBuilder {
          */
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R /*Android 11*/){
 
-            if(mediaSession != null)
-                mediaSession = new MediaSessionCompat(context, "PUSH_MEDIA");
+            if(mediaSession == null)
+                throw new AwesomeNotificationException(
+                        "There is no valid media session available");
 
             mediaSession.setMetadata(
                     new MediaMetadataCompat.Builder()
@@ -1216,16 +1210,6 @@ public class NotificationBuilder {
                 Math.max(0, Math.min(100, IntegerUtils.extractInteger(notificationModel.content.progress, 0))),
                 notificationModel.content.progress == null
         );
-    }
-
-    private void setPhoneCallLayout(Context context, NotificationModel notificationModel, NotificationCompat.Builder builder) {
-       /* RemoteViews notificationLayout = new RemoteViews(context.getPackageName(), android.R.layout.incoming_call);
-        //RemoteViews notificationLayoutExpanded = new RemoteViews(context.getPackageName(), R.layout.incoming_call_large);
-
-        builder
-            .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-            .setCustomContentView(notificationLayout);
-            //.setCustomBigContentView(notificationLayoutExpanded);*/
     }
 
     private int[] toIntArray(ArrayList<Integer> list) {

@@ -11,16 +11,17 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.Definit
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.senders.BroadcastSender;
+import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.StatusBarManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.returnedData.ActionReceived;
 
 @TargetApi(Build.VERSION_CODES.CUPCAKE)
-public class DismissedNotificationReceiver extends BroadcastReceiver
+public class DismissedNotificationReceiver extends AwesomeBroadcastReceiver
 {
     static String TAG = "DismissedNotificationReceiver";
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceiveBroadcastEvent(Context context, Intent intent) {
 
         String action = intent.getAction();
         if (action != null && action.equals(Definitions.DISMISSED_NOTIFICATION)) {

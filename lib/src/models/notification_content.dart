@@ -38,6 +38,7 @@ class NotificationContent extends BaseNotificationContent {
       bool? autoDismissible,
       Color? color,
       Color? backgroundColor,
+      ActionType? actionType,
       Map<String, String>? payload,
       NotificationCategory? category,
       this.notificationLayout,
@@ -66,6 +67,7 @@ class NotificationContent extends BaseNotificationContent {
             customSound: customSound,
             autoDismissible: autoDismissible,
             color: color,
+            actionType: actionType,
             backgroundColor: backgroundColor,
             roundedBigPicture: roundedBigPicture,
             roundedLargeIcon: roundedLargeIcon);
@@ -74,21 +76,21 @@ class NotificationContent extends BaseNotificationContent {
   NotificationContent? fromMap(Map<String, dynamic> mapData) {
     super.fromMap(mapData);
 
-    this.hideLargeIconOnExpand = AssertUtils.extractValue(
+    this.hideLargeIconOnExpand = AwesomeAssertUtils.extractValue(
         NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND, mapData, bool);
 
     this.progress =
-        AssertUtils.extractValue(NOTIFICATION_PROGRESS, mapData, int);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_PROGRESS, mapData, int);
     this.ticker =
-        AssertUtils.extractValue(NOTIFICATION_TICKER, mapData, String);
-    this.locked = AssertUtils.extractValue(NOTIFICATION_LOCKED, mapData, bool);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_TICKER, mapData, String);
+    this.locked = AwesomeAssertUtils.extractValue(NOTIFICATION_LOCKED, mapData, bool);
 
-    this.notificationLayout = AssertUtils.extractEnum(
+    this.notificationLayout = AwesomeAssertUtils.extractEnum(
         NOTIFICATION_LAYOUT, mapData, NotificationLayout.values);
 
-    this.displayOnForeground = AssertUtils.extractValue(
+    this.displayOnForeground = AwesomeAssertUtils.extractValue(
         NOTIFICATION_DISPLAY_ON_FOREGROUND, mapData, bool);
-    this.displayOnBackground = AssertUtils.extractValue(
+    this.displayOnBackground = AwesomeAssertUtils.extractValue(
         NOTIFICATION_DISPLAY_ON_BACKGROUND, mapData, bool);
 
     try {
@@ -110,7 +112,7 @@ class NotificationContent extends BaseNotificationContent {
         NOTIFICATION_PROGRESS: progress,
         NOTIFICATION_TICKER: ticker,
         NOTIFICATION_LOCKED: locked,
-        NOTIFICATION_LAYOUT: AssertUtils.toSimpleEnumString(notificationLayout),
+        NOTIFICATION_LAYOUT: AwesomeAssertUtils.toSimpleEnumString(notificationLayout),
         NOTIFICATION_DISPLAY_ON_FOREGROUND: displayOnForeground,
         NOTIFICATION_DISPLAY_ON_BACKGROUND: displayOnBackground,
       });

@@ -5,5 +5,6 @@ public enum ActionType {
     DisabledAction,
     KeepOnTop,
     SilentAction,
-    SilentBackgroundAction
+    SilentBackgroundAction,
+    DismissAction
 }

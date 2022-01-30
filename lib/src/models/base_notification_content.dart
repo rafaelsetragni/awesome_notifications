@@ -75,53 +75,53 @@ class BaseNotificationContent extends Model {
 
   @override
   BaseNotificationContent? fromMap(Map<String, dynamic> mapData) {
-    this.id = AssertUtils.extractValue(NOTIFICATION_ID, mapData, int);
+    this.id = AwesomeAssertUtils.extractValue(NOTIFICATION_ID, mapData, int);
     this.channelKey =
-        AssertUtils.extractValue(NOTIFICATION_CHANNEL_KEY, mapData, String);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_CHANNEL_KEY, mapData, String);
     this.groupKey =
-        AssertUtils.extractValue(NOTIFICATION_GROUP_KEY, mapData, String);
-    this.title = AssertUtils.extractValue(NOTIFICATION_TITLE, mapData, String);
-    this.body = AssertUtils.extractValue(NOTIFICATION_BODY, mapData, String);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_GROUP_KEY, mapData, String);
+    this.title = AwesomeAssertUtils.extractValue(NOTIFICATION_TITLE, mapData, String);
+    this.body = AwesomeAssertUtils.extractValue(NOTIFICATION_BODY, mapData, String);
     this.summary =
-        AssertUtils.extractValue(NOTIFICATION_SUMMARY, mapData, String);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_SUMMARY, mapData, String);
     this.showWhen =
-        AssertUtils.extractValue(NOTIFICATION_SHOW_WHEN, mapData, bool);
-    this.icon = AssertUtils.extractValue(NOTIFICATION_ICON, mapData, String);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_SHOW_WHEN, mapData, bool);
+    this.icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, mapData, String);
     this.largeIcon =
-        AssertUtils.extractValue(NOTIFICATION_LARGE_ICON, mapData, String);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_LARGE_ICON, mapData, String);
     this.bigPicture =
-        AssertUtils.extractValue(NOTIFICATION_BIG_PICTURE, mapData, String);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_BIG_PICTURE, mapData, String);
     this.customSound =
-        AssertUtils.extractValue(NOTIFICATION_CUSTOM_SOUND, mapData, String);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_CUSTOM_SOUND, mapData, String);
     this.wakeUpScreen =
-        AssertUtils.extractValue(NOTIFICATION_WAKE_UP_SCREEN, mapData, bool);
-    this.fullScreenIntent = AssertUtils.extractValue(
+        AwesomeAssertUtils.extractValue(NOTIFICATION_WAKE_UP_SCREEN, mapData, bool);
+    this.fullScreenIntent = AwesomeAssertUtils.extractValue(
         NOTIFICATION_FULL_SCREEN_INTENT, mapData, bool);
     this.criticalAlert =
-        AssertUtils.extractValue(NOTIFICATION_CRITICAL_ALERT, mapData, bool);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_CRITICAL_ALERT, mapData, bool);
     this.autoDismissible =
-        AssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, mapData, bool);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, mapData, bool);
 
     this.roundedLargeIcon =
-        AssertUtils.extractValue(NOTIFICATION_ROUNDED_LARGE_ICON, mapData, bool);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_ROUNDED_LARGE_ICON, mapData, bool);
     this.roundedBigPicture =
-        AssertUtils.extractValue(NOTIFICATION_ROUNDED_BIG_PICTURE, mapData, bool);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_ROUNDED_BIG_PICTURE, mapData, bool);
 
-    this.actionType = AssertUtils.extractEnum<ActionType>(
+    this.actionType = AwesomeAssertUtils.extractEnum<ActionType>(
         NOTIFICATION_ACTION_TYPE, mapData, ActionType.values);
 
-    this.privacy = AssertUtils.extractEnum<NotificationPrivacy>(
+    this.privacy = AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
         NOTIFICATION_PRIVACY, mapData, NotificationPrivacy.values);
 
-    this.category = AssertUtils.extractEnum<NotificationCategory>(
+    this.category = AwesomeAssertUtils.extractEnum<NotificationCategory>(
         NOTIFICATION_CATEGORY, mapData, NotificationCategory.values);
 
-    this.color = AssertUtils.extractValue(NOTIFICATION_COLOR, mapData, Color);
+    this.color = AwesomeAssertUtils.extractValue(NOTIFICATION_COLOR, mapData, Color);
     this.backgroundColor =
-        AssertUtils.extractValue(NOTIFICATION_BACKGROUND_COLOR, mapData, Color);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_BACKGROUND_COLOR, mapData, Color);
 
     this.payload =
-        AssertUtils.extractMap<String, String>(mapData, NOTIFICATION_PAYLOAD);
+        AwesomeAssertUtils.extractMap<String, String>(mapData, NOTIFICATION_PAYLOAD);
 
     return this;
   }
@@ -142,9 +142,9 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_BIG_PICTURE: bigPicture,
       NOTIFICATION_CUSTOM_SOUND: customSound,
       NOTIFICATION_AUTO_DISMISSIBLE: autoDismissible,
-      NOTIFICATION_PRIVACY: AssertUtils.toSimpleEnumString(privacy),
-      NOTIFICATION_CATEGORY: AssertUtils.toSimpleEnumString(category),
-      NOTIFICATION_ACTION_TYPE: AssertUtils.toSimpleEnumString(actionType),
+      NOTIFICATION_PRIVACY: AwesomeAssertUtils.toSimpleEnumString(privacy),
+      NOTIFICATION_CATEGORY: AwesomeAssertUtils.toSimpleEnumString(category),
+      NOTIFICATION_ACTION_TYPE: AwesomeAssertUtils.toSimpleEnumString(actionType),
       NOTIFICATION_COLOR: color?.value,
       NOTIFICATION_BACKGROUND_COLOR: backgroundColor?.value,
       NOTIFICATION_WAKE_UP_SCREEN: wakeUpScreen,
@@ -157,33 +157,33 @@ class BaseNotificationContent extends Model {
 
   ImageProvider? get bigPictureImage {
     if (bigPicture?.isEmpty ?? true) return null;
-    return BitmapUtils().getFromMediaPath(bigPicture!);
+    return AwesomeBitmapUtils().getFromMediaPath(bigPicture!);
   }
 
   ImageProvider? get largeIconImage {
     if (largeIcon?.isEmpty ?? true) return null;
-    return BitmapUtils().getFromMediaPath(largeIcon!);
+    return AwesomeBitmapUtils().getFromMediaPath(largeIcon!);
   }
 
   String? get bigPicturePath {
     if (bigPicture?.isEmpty ?? true) return null;
-    return BitmapUtils().cleanMediaPath(bigPicture!);
+    return AwesomeBitmapUtils().cleanMediaPath(bigPicture!);
   }
 
   String? get largeIconPath {
     if (largeIcon?.isEmpty ?? true) return null;
-    return BitmapUtils().cleanMediaPath(largeIcon!);
+    return AwesomeBitmapUtils().cleanMediaPath(largeIcon!);
   }
 
-  String? get titleWithoutHtml => HtmlUtils.removeAllHtmlTags(title)!;
+  String? get titleWithoutHtml => AwesomeHtmlUtils.removeAllHtmlTags(title)!;
 
-  String? get bodyWithoutHtml => HtmlUtils.removeAllHtmlTags(body)!;
+  String? get bodyWithoutHtml => AwesomeHtmlUtils.removeAllHtmlTags(body)!;
 
   @override
   void validate() {
-    if (AssertUtils.isNullOrEmptyOrInvalid(id, int))
-      throw AwesomeNotificationsException(message: 'Property id is requried');
-    if (AssertUtils.isNullOrEmptyOrInvalid(channelKey, String))
-      throw AwesomeNotificationsException(message: 'channelKey id is requried');
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(id, int))
+      throw AwesomeNotificationsException(message: 'Property id is required');
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(channelKey, String))
+      throw AwesomeNotificationsException(message: 'Channel Key is required');
   }
 }

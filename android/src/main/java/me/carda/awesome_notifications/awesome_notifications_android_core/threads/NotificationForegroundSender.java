@@ -1,6 +1,5 @@
-package me.carda.awesome_notifications.awesome_notifications_android_core.builders;
+package me.carda.awesome_notifications.awesome_notifications_android_core.threads;
 
-import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.Service;
@@ -8,11 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.lang.ref.WeakReference;
+
 import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.senders.BroadcastSender;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.completion_handlers.ForegroundCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ForegroundServiceType;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
@@ -28,14 +31,15 @@ public class NotificationForegroundSender extends AsyncTask<String, Void, Notifi
 
     public static String TAG = "NotificationSender";
 
-    @SuppressLint("StaticFieldLeak")
-    private final Context context;
+    private final WeakReference<Context> wContextReference;
 
     private final NotificationBuilder notificationBuilder;
     private final ForegroundService.ForegroundServiceIntent foregroundServiceIntent;
     private final NotificationSource createdSource;
     private final NotificationLifeCycle appLifeCycle;
     private final ForegroundCompletionHandler foregroundCompletionHandler;
+
+    private long startTime = 0L, endTime = 0L;
 
     public static void start(
             @NonNull Context applicationContext,
@@ -61,21 +65,6 @@ public class NotificationForegroundSender extends AsyncTask<String, Void, Notifi
         ).execute();
     }
 
-    public void stop(){
-        context.stopService(new Intent(context, ForegroundService.class));
-    }
-
-    public static boolean isRunning(Context context) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
-            if (ForegroundService.class.getName().equals(service.service.getClassName()))
-                if (service.foreground)
-                    return true;
-
-        return false;
-    }
-
     private NotificationForegroundSender(
             Context context,
             ForegroundService.ForegroundServiceIntent foregroundServiceIntent,
@@ -86,12 +75,13 @@ public class NotificationForegroundSender extends AsyncTask<String, Void, Notifi
         if(foregroundServiceIntent == null)
             throw new AwesomeNotificationException("Foreground service intent is invalid");
 
-        this.context = context;
+        this.wContextReference = new WeakReference<>(context);
         this.foregroundServiceIntent = foregroundServiceIntent;
         this.foregroundCompletionHandler = foregroundCompletionHandler;
         this.notificationBuilder = notificationBuilder;
         this.appLifeCycle = appLifeCycle;
         this.createdSource = NotificationSource.ForegroundService;
+        this.startTime = System.nanoTime();
     }
 
     /// AsyncTask METHODS BEGIN *********************************
@@ -121,7 +111,7 @@ public class NotificationForegroundSender extends AsyncTask<String, Void, Notifi
             )
                 throw new AwesomeNotificationException("A foreground service requires at least the title or body");
 
-            return showForegroundNotification(context, notificationModel);
+            return showForegroundNotification(wContextReference.get(), notificationModel);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -141,17 +131,25 @@ public class NotificationForegroundSender extends AsyncTask<String, Void, Notifi
                     appLifeCycle : receivedNotification.displayedLifeCycle;
 
             BroadcastSender.sendBroadcastNotificationCreated(
-                context,
+                wContextReference.get(),
                 receivedNotification);
 
 
             BroadcastSender.sendBroadcastNotificationDisplayed(
-                context,
+                wContextReference.get(),
                 receivedNotification);
         }
 
         this.foregroundCompletionHandler
                 .handle(notificationModel);
+
+        if(this.endTime == 0L)
+            this.endTime = System.nanoTime();
+
+        if(AwesomeNotifications.debug){
+            long elapsed = (endTime - startTime)/1000000;
+            Log.d(TAG, "Notification displayed in "+elapsed+"ms");
+        }
     }
 
     /// AsyncTask METHODS END *********************************
@@ -172,9 +170,9 @@ public class NotificationForegroundSender extends AsyncTask<String, Void, Notifi
                         .createNewAndroidNotification(context, notificationModel);
 
                 if (
-                        androidNotification != null &&
-                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-                        foregroundServiceIntent.foregroundServiceType != ForegroundServiceType.service
+                    androidNotification != null &&
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+                    foregroundServiceIntent.foregroundServiceType != ForegroundServiceType.none
                 ){
                     ((Service) context).startForeground(
                             notificationModel.content.id,

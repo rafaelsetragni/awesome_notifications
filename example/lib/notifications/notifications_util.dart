@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 
 // TO AVOID CONFLICT WITH MATERIAL DATE UTILS CLASS
 import 'package:awesome_notifications/awesome_notifications.dart'
-    hide DateUtils;
+    hide AwesomeDateUtils;
 import 'package:awesome_notifications/awesome_notifications.dart' as Utils
-    show DateUtils;
+    show AwesomeDateUtils;
 
 import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart';
@@ -460,11 +460,11 @@ class NotificationUtils {
             payload: {'uuid': 'user-profile-uuid'}),
         actionButtons: [
           NotificationActionButton(
-              key: 'SILENT', label: 'Silent', buttonType: ActionType.SilentAction, autoDismissible: false),
+              key: 'SILENT', label: 'Silent', actionType: ActionType.SilentAction, autoDismissible: false),
           NotificationActionButton(
-              key: 'SILENT_BG', label: 'Silent BG', buttonType: ActionType.SilentBackgroundAction, autoDismissible: false),
+              key: 'SILENT_BG', label: 'Silent BG', actionType: ActionType.SilentBackgroundAction, autoDismissible: false),
           NotificationActionButton(
-              key: 'DISMISS', label: 'Dismiss', buttonType: ActionType.DisabledAction, autoDismissible: true, isDangerousOption: true),
+              key: 'DISMISS', label: 'Dismiss', actionType: ActionType.DismissAction, autoDismissible: true, isDangerousOption: true),
         ]);
   }
   
@@ -484,9 +484,8 @@ class NotificationUtils {
           NotificationActionButton(
               key: 'DISMISS',
               label: 'Dismiss',
-              autoDismissible: true,
-              buttonType: ActionType.DisabledAction,
-              isDangerousOption: true)
+              isDangerousOption: true,
+              actionType: ActionType.DismissAction)
         ]);
   }
   
@@ -503,8 +502,7 @@ class NotificationUtils {
             key: 'REPLY',
             label: 'Reply',
             autoDismissible: true,
-            buttonType: ActionType.InputField,
-          ),
+            requireInputText: true),
           NotificationActionButton(
               key: 'READ', label: 'Mark as read', autoDismissible: true),
           NotificationActionButton(
@@ -518,8 +516,9 @@ class NotificationUtils {
 
   static Future<void> showCallNotification(int id) async {
     String platformVersion = await getPlatformVersion();
-    AndroidForegroundService.startForeground(
-    //await AwesomeNotifications().createNotification(
+    AndroidForegroundService.startAndroidForegroundService(
+        foregroundStartMode: ForegroundStartMode.stick,
+        foregroundServiceType: ForegroundServiceType.phoneCall,
         content: NotificationContent(
             id: id,
             channelKey: 'call_channel',
@@ -764,7 +763,7 @@ class NotificationUtils {
             key: 'REPLY',
             label: 'Reply',
             autoDismissible: true,
-            buttonType: ActionType.InputField,
+            requireInputText: true,
           ),
           NotificationActionButton(
               key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
@@ -792,18 +791,26 @@ class NotificationUtils {
             title:
                 '<font color="${Colors.blueAccent.value}">Blue Notification</font>',
             body: "<font color='${Colors.blueAccent.value}'>A colorful notification</font>",
-            payload: {'uuid': 'uuid-blue'}),
+            payload: {'uuid': 'uuid-blue'}
+        ),
         actionButtons: [
           NotificationActionButton(
             key: 'REPLY',
             label: 'Reply',
             autoDismissible: true,
-            buttonType: ActionType.InputField,
+            requireInputText: true
           ),
           NotificationActionButton(
-              key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
-        ],
-        schedule: delayLEDTests ? NotificationInterval(interval: 5, timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()) : null);
+              key: 'ARCHIVE', label: 'Archive', autoDismissible: true
+          )
+      ],
+        schedule: delayLEDTests ?
+          NotificationInterval(
+              interval: 5,
+              timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier()
+          ) :
+          null
+    );
   }
   
   static Future<void> yellowNotification(int id, bool delayLEDTests) async {
@@ -830,7 +837,7 @@ class NotificationUtils {
             key: 'REPLY',
             label: 'Reply',
             autoDismissible: true,
-            buttonType: ActionType.InputField,
+            requireInputText: true,
           ),
           NotificationActionButton(
               key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
@@ -862,7 +869,7 @@ class NotificationUtils {
             key: 'REPLY',
             label: 'Reply',
             autoDismissible: true,
-            buttonType: ActionType.InputField,
+            requireInputText: true,
           ),
           NotificationActionButton(
               key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
@@ -894,7 +901,7 @@ class NotificationUtils {
             key: 'REPLY',
             label: 'Reply',
             autoDismissible: true,
-            buttonType: ActionType.InputField,
+            requireInputText: true,
           ),
           NotificationActionButton(
               key: 'ARCHIVE', label: 'Archive', autoDismissible: true)
@@ -903,10 +910,10 @@ class NotificationUtils {
     );
   }
   
-  static Future<void> startForegroundServiceNotification() async {
+  static Future<void> startForegroundServiceNotification(int id) async {
     await AndroidForegroundService.startForeground(
         content: NotificationContent(
-            id: 2341234,
+            id: id,
             body: 'Service is running!',
             title: 'Android Foreground Service',
             channelKey: 'basic_channel',
@@ -923,8 +930,8 @@ class NotificationUtils {
     );
   }
   
-  static Future<void> stopForegroundServiceNotification() async {
-    await AndroidForegroundService.stopForeground();
+  static Future<void> stopForegroundServiceNotification(int id) async {
+    await AndroidForegroundService.stopForeground(id);
   }
   
   /* *********************************************
@@ -1138,7 +1145,7 @@ class NotificationUtils {
               key: 'REPLY',
               label: 'Reply',
               autoDismissible: true,
-              buttonType: ActionType.InputField),
+              requireInputText: true),
           NotificationActionButton(
               key: 'REMEMBER', label: 'Remember-me later', autoDismissible: true)
         ]);
@@ -1217,7 +1224,7 @@ class NotificationUtils {
               key: 'REPLY',
               label: 'Reply',
               autoDismissible: true,
-              buttonType: ActionType.InputField),
+              requireInputText: true),
           NotificationActionButton(
               key: 'REMEMBER', label: 'Remember-me later', autoDismissible: true)
         ]);
@@ -1255,7 +1262,7 @@ class NotificationUtils {
               autoDismissible: false,
               showInCompactView: false,
               enabled: MediaPlayerCentral.hasPreviousMedia,
-              buttonType: ActionType.KeepOnTop),
+              actionType: ActionType.KeepOnTop),
           MediaPlayerCentral.isPlaying
               ? NotificationActionButton(
                   key: 'MEDIA_PAUSE',
@@ -1263,7 +1270,7 @@ class NotificationUtils {
                   label: 'Pause',
                   autoDismissible: false,
                   showInCompactView: true,
-                  buttonType: ActionType.KeepOnTop)
+                  actionType: ActionType.KeepOnTop)
               : NotificationActionButton(
                   key: 'MEDIA_PLAY',
                   icon: 'resource://drawable/res_ic_play' +
@@ -1272,7 +1279,7 @@ class NotificationUtils {
                   autoDismissible: false,
                   showInCompactView: true,
                   enabled: MediaPlayerCentral.hasAnyMedia,
-                  buttonType: ActionType.KeepOnTop),
+                  actionType: ActionType.KeepOnTop),
           NotificationActionButton(
               key: 'MEDIA_NEXT',
               icon: 'resource://drawable/res_ic_next' +
@@ -1280,14 +1287,14 @@ class NotificationUtils {
               label: 'Previous',
               showInCompactView: true,
               enabled: MediaPlayerCentral.hasNextMedia,
-              buttonType: ActionType.KeepOnTop),
+              actionType: ActionType.KeepOnTop),
           NotificationActionButton(
               key: 'MEDIA_CLOSE',
               icon: 'resource://drawable/res_ic_close',
               label: 'Close',
               autoDismissible: true,
               showInCompactView: true,
-              buttonType: ActionType.KeepOnTop)
+              actionType: ActionType.KeepOnTop)
         ]);
   }
   
@@ -1338,14 +1345,14 @@ class NotificationUtils {
             NotificationActionButton(
               key: 'REPLY',
               label: 'Reply',
-              buttonType: ActionType.InputField,
+              requireInputText: true,
               autoDismissible: false,
             ),
             NotificationActionButton(
               key: 'READ',
               label: 'Mark as Read',
               autoDismissible: true,
-              buttonType: ActionType.InputField,
+              requireInputText: true,
             )
           ]
       );
@@ -1400,7 +1407,7 @@ class NotificationUtils {
           NotificationActionButton(
               key: 'DISMISS',
               label: 'Dismiss',
-              buttonType: ActionType.DisabledAction,
+              actionType: ActionType.DismissAction,
               autoDismissible: true,
               icon: 'resource://drawable/res_ic_close'),
           NotificationActionButton(
@@ -1572,9 +1579,9 @@ class NotificationUtils {
           channelKey: 'scheduled',
           title: 'Just in time!',
           body: 'This notification was schedule to shows at ' +
-              (Utils.DateUtils.parseDateToString(scheduleTime.toLocal()) ?? '?') +
+              (Utils.AwesomeDateUtils.parseDateToString(scheduleTime.toLocal()) ?? '?') +
               ' $timeZoneIdentifier (' +
-              (Utils.DateUtils.parseDateToString(scheduleTime.toUtc()) ?? '?') +
+              (Utils.AwesomeDateUtils.parseDateToString(scheduleTime.toUtc()) ?? '?') +
               ' utc)',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/delivery.jpeg',

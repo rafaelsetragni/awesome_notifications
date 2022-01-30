@@ -5,18 +5,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ActionType;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
+import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.LifeCycleManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.managers.StatusBarManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.senders.BroadcastSender;
 
-public class NotificationActionReceiver extends BroadcastReceiver {
+public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
 
     @Override
-    public void onReceive(final Context context, Intent intent) {
+    public void onReceiveBroadcastEvent(final Context context, Intent intent) {
 
         NotificationBuilder notificationBuilder = NotificationBuilder.getNewBuilder();
 
@@ -31,12 +33,16 @@ public class NotificationActionReceiver extends BroadcastReceiver {
                     intent,
                     appLifeCycle);
 
-        // This is not a valid notification intent
+        // In case there is not a valid notification intent
         if (actionReceived == null) return;
 
-        actionReceived.registerUserActionEvent(appLifeCycle);
+        if(actionReceived.actionType == ActionType.DismissAction)
+            actionReceived.registerDismissedEvent(appLifeCycle);
+        else
+            actionReceived.registerUserActionEvent(appLifeCycle);
 
         boolean shouldAutoDismiss =
+                        actionReceived.actionType == ActionType.DismissAction ||
                         notificationBuilder
                             .notificationActionShouldAutoDismiss(actionReceived);
 
@@ -58,13 +64,13 @@ public class NotificationActionReceiver extends BroadcastReceiver {
             switch (actionReceived.actionType){
 
                 case Default:
-                    if (appLifeCycle != NotificationLifeCycle.Foreground)
-                        notificationBuilder
-                                .forceBringAppToForeground(context);
-
                     BroadcastSender.sendBroadcastDefaultAction(
                             context,
                             actionReceived);
+
+                    if (appLifeCycle != NotificationLifeCycle.Foreground)
+                        notificationBuilder
+                                .forceBringAppToForeground(context);
                     break;
 
                 case KeepOnTop:
@@ -98,12 +104,14 @@ public class NotificationActionReceiver extends BroadcastReceiver {
                             actionReceived);
                     break;
 
+                case DismissAction:
+                    BroadcastSender
+                            .sendBroadcastNotificationDismissed(
+                                    context,
+                                    actionReceived);
+                    break;
+
                 case DisabledAction:
-                    if(shouldAutoDismiss)
-                        BroadcastSender
-                                .sendBroadcastNotificationDismissed(
-                                        context,
-                                        actionReceived);
                     break;
             }
 

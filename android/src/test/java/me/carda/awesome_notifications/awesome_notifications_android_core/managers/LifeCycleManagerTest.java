@@ -110,7 +110,7 @@ public class LifeCycleManagerTest {
         LifeCycleManager.getInstance().onActivityCreated(testActivity, null);
         assertEquals("", NotificationLifeCycle.AppKilled, LifeCycleManager.getApplicationLifeCycle());
 
-        LifeCycleManager.getInstance().updateAppLifeCycle(NotificationLifeCycle.Foreground, testActivity);
+        LifeCycleManager.getInstance().updateAppLifeCycle(NotificationLifeCycle.Foreground, Lifecycle.State.CREATED, testActivity);
         assertEquals("", NotificationLifeCycle.Foreground, LifeCycleManager.getApplicationLifeCycle());
     }
 
@@ -120,7 +120,7 @@ public class LifeCycleManagerTest {
         LifeCycleManager.getInstance().onActivityStarted(testActivity);
         assertEquals("", NotificationLifeCycle.AppKilled, LifeCycleManager.getApplicationLifeCycle());
 
-        LifeCycleManager.getInstance().updateAppLifeCycle(NotificationLifeCycle.Foreground, testActivity);
+        LifeCycleManager.getInstance().updateAppLifeCycle(NotificationLifeCycle.Foreground, Lifecycle.State.STARTED, testActivity);
         assertEquals("", NotificationLifeCycle.Foreground, LifeCycleManager.getApplicationLifeCycle());
     }
 

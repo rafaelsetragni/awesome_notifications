@@ -3,7 +3,7 @@ package me.carda.awesome_notifications.awesome_notifications_android_core.manage
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationScheduler;
+import me.carda.awesome_notifications.awesome_notifications_android_core.threads.NotificationScheduler;
 import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
 

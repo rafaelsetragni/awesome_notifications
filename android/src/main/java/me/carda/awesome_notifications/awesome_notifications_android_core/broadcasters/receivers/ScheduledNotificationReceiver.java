@@ -1,6 +1,5 @@
 package me.carda.awesome_notifications.awesome_notifications_android_core.broadcasters.receivers;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -11,16 +10,16 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.Awesome
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
-import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationScheduler;
-import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationSender;
+import me.carda.awesome_notifications.awesome_notifications_android_core.threads.NotificationScheduler;
+import me.carda.awesome_notifications.awesome_notifications_android_core.threads.NotificationSender;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
 
-public class ScheduledNotificationReceiver extends BroadcastReceiver {
+public class ScheduledNotificationReceiver extends AwesomeBroadcastReceiver {
 
     static String TAG = "ScheduledNotificationReceiver";
 
     @Override
-    public void onReceive(final Context context, Intent intent) {
+    public void onReceiveBroadcastEvent(final Context context, Intent intent) {
 
         //Toast.makeText(context, "ScheduledNotificationReceiver", Toast.LENGTH_SHORT).show();
 

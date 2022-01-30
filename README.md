@@ -49,7 +49,7 @@ All notifications could be created locally or via Firebase services, with all th
 
 <br>
 
-## ATENTION - PLUGIN UNDER CONSTRUCTION
+## ATTENTION - PLUGIN UNDER CONSTRUCTION
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-atention.jpg)
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-progress.jpg)
@@ -146,30 +146,132 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 
 ```dart
 AwesomeNotifications().initialize(
-    // set the icon to null if you want to use the default app icon
-    'resource://drawable/res_app_icon',
-    [
-        NotificationChannel(
-            channelGroupKey: 'basic_channel_group',
-            channelKey: 'basic_channel',
-            channelName: 'Basic notifications',
-            channelDescription: 'Notification channel for basic tests',
-            defaultColor: Color(0xFF9D50DD),
-            ledColor: Colors.white
-        ),
-        // Channel groups are only visual and are not required
-        channelGroups: [
-          NotificationChannelGroup(
-            channelGroupkey: 'basic_channel_group',
-            channelGroupName: 'Basic group'
-          )
-        ],
-        debug: true
-    ]
+  // set the icon to null if you want to use the default app icon
+  'resource://drawable/res_app_icon',
+  [
+    NotificationChannel(
+        channelGroupKey: 'basic_channel_group',
+        channelKey: 'basic_channel',
+        channelName: 'Basic notifications',
+        channelDescription: 'Notification channel for basic tests',
+        defaultColor: Color(0xFF9D50DD),
+        ledColor: Colors.white)
+  ],
+  // Channel groups are only visual and are not required
+  channelGroups: [
+    NotificationChannelGroup(
+        channelGroupKey: 'basic_channel_group',
+        channelGroupName: 'Basic group')
+  ],
+  debug: true
 );
 ```
 
-4. Request the user authorization to send local and push notifications (Remember to show a dialog alert to the user before call this request)
+4. Inside the MaterialApp widget, create your named routes and set your global navigator key. Also, inside initState, initialize your static listeners methods to capture notification's actions.
+OBS 1: With the navigator key, you can redirect pages and get context even inside static classes.
+OBS 2: Only after setListeners being called, the notification events starts to be delivered.
+
+```dart
+class MyApp extends StatefulWidget {
+
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  static const String name = 'Awesome Notifications - Example App';
+  static const Color mainColor = Colors.deepPurple;
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+
+    // Only after at least the action method is set, the notification events are delivered
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod:         NotificationController.onActionReceivedMethod,
+        onNotificationCreatedMethod:    NotificationController.onNotificationCreatedMethod,
+        onNotificationDisplayedMethod:  NotificationController.onNotificationDisplayedMethod,
+        onDismissActionReceivedMethod:  NotificationController.onDismissActionReceivedMethod
+    );
+
+    super.initState();
+  }
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+
+      // The navigator key is necessary to allow to navigate through static methods
+      navigatorKey: MyApp.navigatorKey,
+
+      title: MyApp.name,
+      color: MyApp.mainColor,
+
+      initialRoute: '/',
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(builder: (context) =>
+                MyHomePage(title: MyApp.name)
+            );
+
+          case '/notification-page':
+            return MaterialPageRoute(builder: (context) {
+              final ReceivedAction receivedAction = settings
+                  .arguments as ReceivedAction;
+              return MyNotificationPage(receivedAction: receivedAction);
+            });
+
+          default:
+            assert(false, 'Page ${settings.name} not found');
+            return null;
+        }
+      },
+
+      theme: ThemeData(
+          primarySwatch: Colors.deepPurple
+      ),
+    );
+  }
+}
+```
+
+5. Create in any place or class, the static methods to capture the respective notification events
+
+```dart
+class NotificationController {
+
+  /// Use this method to detect when a new notification or a schedule is created
+  static Future <void> onNotificationCreatedMethod(ReceivedNotification receivedNotification) async {
+    // Your code goes here
+  }
+
+  /// Use this method to detect every time that a new notification is displayed
+  static Future <void> onNotificationDisplayedMethod(ReceivedNotification receivedNotification) async {
+    // Your code goes here
+  }
+
+  /// Use this method to detect if the user dismissed a notification
+  static Future <void> onDismissActionReceivedMethod(ReceivedAction receivedAction) async {
+    // Your code goes here
+  }
+
+  /// Use this method to detect when the user taps on a notification or action button
+  static Future <void> onActionReceivedMethod(ReceivedAction receivedAction) async {
+    // Your code goes here
+
+    // Navigate into pages, avoiding to open the notification details page over another details page already opened
+    MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil('/notification-page',
+            (route) => (route.settings.name != '/notification-page') || route.isFirst,
+        arguments: receivedAction);
+  }
+}
+```
+
+6. Request the user authorization to send local and push notifications (Remember to show a dialog alert to the user before call this request)
 
 ```dart
 AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
@@ -182,26 +284,7 @@ AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
 });
 ```
 
-5. On your main page, before MaterialApp widget, starts to listen the notification actions (to detect tap)
-
-```dart
-AwesomeNotifications().actionStream.listen(
-    (ReceivedNotification receivedNotification){
-
-        Navigator.of(context).pushNamed(
-            '/NotificationPage',
-            arguments: {
-                // your page params. I recommend you to pass the
-                // entire *receivedNotification* object
-                id: receivedNotification.id
-            }
-        );
-
-    }
-);
-```
-
-6. In any place of your app, create a new notification
+7. In any place of your app, create a new notification
 
 ```dart
 AwesomeNotifications().createNotification(
@@ -209,7 +292,8 @@ AwesomeNotifications().createNotification(
       id: 10,
       channelKey: 'basic_channel',
       title: 'Simple Notification',
-      body: 'Simple body'
+      body: 'Simple body',
+      actionType: ActionType.Default
   )
 );
 ```
@@ -1235,7 +1319,8 @@ To see more information about each type, please go to https://github.com/rafaels
 <br>
 
 ## Android Foreground Services
-This is an optional feature to enable you to start an Android freground service with a notification from this plugin. Since it is optional it was moved to a second library you can import as follows:
+
+This is an optional feature to enable you to start an Android foreground service with a notification from this plugin. Since it is optional it was moved to a second library you can import as follows:
 ```dart
 import 'package:awesome_notifications/android_foreground_service.dart';
 ```
@@ -1251,14 +1336,16 @@ Next, you have to add the `<service>` tag to your `AndroidManifest.xml`. Inside 
             android:enabled="true"            
             android:exported="false"
             android:stopWithTask="true"
-            android:foregroundServiceType=As you like
+            android:foregroundServiceType=AllServiceTypesThatYouChosen
 ></service>
 ```
 
 And finally, to create the notification as foreground service, use the method startForeground and set the notification category to Service:
 
 ```Dart
-    AndroidForegroundService.startForeground(
+    AndroidForegroundService.startAndroidForegroundService(
+      foregroundStartMode: ForegroundStartMode.stick,
+      foregroundServiceType: ForegroundServiceType.phoneCall,
       content: NotificationContent(
           id: 2341234,
           body: 'Service is running!',

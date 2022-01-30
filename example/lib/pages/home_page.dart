@@ -9,8 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
-import 'package:awesome_notifications_example/routes.dart';
-import 'package:awesome_notifications_example/utils/notification_util.dart';
+import 'package:awesome_notifications_example/routes/routes.dart';
+import 'package:awesome_notifications_example/notifications/notifications_util.dart';
 
 import 'package:awesome_notifications_example/common_widgets/check_button.dart';
 import 'package:awesome_notifications_example/common_widgets/remarkble_text.dart';
@@ -304,7 +304,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 ServiceControlPanel('Firebase',
-                    !StringUtils.isNullOrEmpty(_firebaseAppToken), themeData,
+                    !AwesomeStringUtils.isNullOrEmpty(_firebaseAppToken), themeData,
                     onPressed: () => Navigator.pushNamed(
                         context, PAGE_FIREBASE_TESTS,
                         arguments: _firebaseAppToken)),
@@ -461,20 +461,20 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   Vibration.vibrate(duration: 100);
                   Future.delayed(Duration(seconds: _secondsToCallCategory.toInt()), () {
-                    NotificationUtils.showCallNotification(1);
+                    NotificationUtils.showCallNotification(42);
                   });
                 }),
             SimpleButton('Show alarm notification',
                 onPressed: () {
                   Vibration.vibrate(duration: 100);
                   Future.delayed(Duration(seconds: _secondsToCallCategory.toInt()), () {
-                    NotificationUtils.showAlarmNotification(1);
+                    NotificationUtils.showAlarmNotification(42);
                   });
                 }),
             SimpleButton('Stop Alarm / Call',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
-                onPressed: () => NotificationUtils.stopForegroundServiceNotification()),
+                onPressed: () => NotificationUtils.stopForegroundServiceNotification(42)),
 
             /* ******************************************************************** */
 
@@ -546,9 +546,9 @@ class _HomePageState extends State<HomePage> {
             TextNote(
                 'This feature is only available for Android devices.'),
             SimpleButton('Start foreground service',
-                onPressed: () => NotificationUtils.startForegroundServiceNotification()),
+                onPressed: () => NotificationUtils.startForegroundServiceNotification(9999)),
             SimpleButton('Stop foreground service',
-                onPressed: () => NotificationUtils.stopForegroundServiceNotification()),
+                onPressed: () => NotificationUtils.stopForegroundServiceNotification(9999)),
 
             /* ******************************************************************** */
 
@@ -831,7 +831,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Center(
                                     child: Column(
                                   children: [
-                                    Text(DateUtils.parseDateToString(
+                                    Text(AwesomeDateUtils.parseDateToString(
                                         DateTime.now())!),
                                     Text(timeZone),
                                   ],
@@ -847,7 +847,7 @@ class _HomePageState extends State<HomePage> {
                             child: Center(
                                 child: Column(
                               children: [
-                                Text(DateUtils.parseDateToString(
+                                Text(AwesomeDateUtils.parseDateToString(
                                     DateTime.now().toUtc())!),
                                 Text(timeZone),
                               ],
@@ -890,7 +890,7 @@ class _HomePageState extends State<HomePage> {
               if (nextValidDate == null)
                 response = 'There is no more valid date for this schedule';
               else
-                response = DateUtils.parseDateToString(nextValidDate.toUtc(),
+                response = AwesomeDateUtils.parseDateToString(nextValidDate.toUtc(),
                     format: 'dd/MM/yyyy')!;
 
               showDialog(

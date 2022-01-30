@@ -26,7 +26,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
 
   void startCallingTimer() {
     const oneSec = const Duration(seconds: 1);
-    AndroidForegroundService.stopForeground();
+    AndroidForegroundService.stopForeground(widget.receivedAction.id!);
 
     _timer = new Timer.periodic(
       oneSec, (Timer timer) {
@@ -39,7 +39,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
 
   void finishCall(){
     Vibration.vibrate(duration: 100);
-    AndroidForegroundService.stopForeground();
+    AndroidForegroundService.stopForeground(widget.receivedAction.id!);
     Navigator.pop(context);
   }
 
@@ -55,7 +55,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
   void dispose() {
     _timer?.cancel();
     unlockScreenPortrait();
-    AndroidForegroundService.stopForeground();
+    AndroidForegroundService.stopForeground(widget.receivedAction.id!);
     super.dispose();
   }
 

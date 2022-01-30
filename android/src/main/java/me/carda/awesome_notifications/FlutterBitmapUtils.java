@@ -21,11 +21,8 @@ public class FlutterBitmapUtils extends BitmapUtils {
     }
 
     public static void extendBitmapUtilsCapabilities() {
-        if (instance == null)
+        if (instance == null || instance.getClass() != FlutterBitmapUtils.class)
             instance = new FlutterBitmapUtils();
-        else
-            if(instance.getClass() != FlutterBitmapUtils.class)
-                instance = (FlutterBitmapUtils) instance;
     }
 
     // ********************************************************

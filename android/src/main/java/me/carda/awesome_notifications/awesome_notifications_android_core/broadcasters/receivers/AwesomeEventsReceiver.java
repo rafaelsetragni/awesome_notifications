@@ -168,7 +168,7 @@ public class AwesomeEventsReceiver {
             actionReceived.validate(context);
 
             if(AwesomeNotifications.debug)
-                Log.d(TAG, "Notification silent action received");
+                Log.d(TAG, "Notification action received");
 
             notifyActionEvent(Definitions.CHANNEL_METHOD_DEFAULT_ACTION, actionReceived);
 

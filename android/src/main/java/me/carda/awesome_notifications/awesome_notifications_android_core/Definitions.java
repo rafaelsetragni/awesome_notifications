@@ -21,7 +21,7 @@ public interface Definitions {
     String BROADCAST_FCM_TOKEN = "me.carda.awesome_notifications.notifications.system.services.firebase.TOKEN";
     String EXTRA_BROADCAST_FCM_TOKEN = "token";
     String EXTRA_ANDROID_MEDIA_BUTTON = "android.intent.action.MEDIA_BUTTON";
-    String MEDIA_VALID_NETWORK = "^((http|https):\\/\\/)(www\\.)?[a-zA-Z0-9@:%._\\\\+~#?&\\/\\/=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\\\+~#?&\\/=]*)$";
+    String MEDIA_VALID_NETWORK = "^((http|https):\\/\\/)(www\\.)?[a-zA-Z0-9@:%.\\-_\\\\+~#?&\\/\\/=]{2,2048}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%.\\-_\\\\+~#?&\\/=]*)$";
     String MEDIA_VALID_FILE = "^file?:\\/\\/";
     String MEDIA_VALID_ASSET = "^asset?:\\/\\/";
     String MEDIA_VALID_RESOURCE = "^resource?:\\/\\/";
@@ -51,8 +51,7 @@ public interface Definitions {
     String NOTIFICATION_SILENT_ACTION = "silentAction";
     String NOTIFICATION_RECEIVED_ACTION = "receivedAction";
 
-    String NOTIFICATION_SERVICE_START_TYPE = "startType";
-    String NOTIFICATION_HAS_FOREGROUND_SERVICE = "hasForegroundServiceType";
+    String NOTIFICATION_SERVICE_START_MODE = "startMode";
     String NOTIFICATION_FOREGROUND_SERVICE_TYPE = "foregroundServiceType";
 
     String SHARED_DEFAULTS = "defaults";
@@ -238,6 +237,7 @@ public interface Definitions {
     String NOTIFICATION_LED_OFF_MS = "ledOffMs";
     String NOTIFICATION_TICKER = "ticker";
     String NOTIFICATION_ALLOW_WHILE_IDLE = "allowWhileIdle";
+    String NOTIFICATION_BG_HANDLE_CLASS = "bgHandleClass";
 
     Map<String, Object> initialValues = new HashMap<String, Object>(){{
         put(Definitions.FIREBASE_ENABLED, true);

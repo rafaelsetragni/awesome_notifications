@@ -218,7 +218,7 @@ public class BitmapUtils extends MediaUtils {
 
     public Boolean isValidBitmap(@NonNull Context context, @Nullable String mediaPath) {
 
-        if (mediaPath != null) {
+        if (!StringUtils.isNullOrEmpty(mediaPath)) {
 
             if (matchMediaType(MEDIA_VALID_NETWORK, mediaPath, false)) {
                 return true;

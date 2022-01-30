@@ -1,5 +1,6 @@
 package me.carda.awesome_notifications.awesome_notifications_android_core.services;
 
+import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -7,23 +8,29 @@ import android.os.Build;
 import android.os.IBinder;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
+import me.carda.awesome_notifications.awesome_notifications_android_core.threads.NotificationForegroundSender;
+import me.carda.awesome_notifications.awesome_notifications_android_core.completion_handlers.ForegroundCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ForegroundServiceType;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ForegroundStartMode;
+import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
+import me.carda.awesome_notifications.awesome_notifications_android_core.managers.LifeCycleManager;
 import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
 import me.carda.awesome_notifications.awesome_notifications_android_core.utils.IntegerUtils;
 
 public class ForegroundService extends Service {
 
-    private static Map<Integer, ForegroundService> serviceStack = new HashMap<>();
-    private static Map<Integer, ForegroundServiceIntent> serviceIntentStack = new HashMap<>();
+    private static final Map<Integer, ForegroundService> serviceStack = new HashMap<>();
+    private static final Map<Integer, ForegroundServiceIntent> serviceIntentStack = new HashMap<>();
 
-    public static void start(
+    public static void startNewForegroundService(
         @NonNull Context applicationContext,
         @NonNull NotificationModel notificationModel,
         @NonNull ForegroundStartMode foregroundStartMode,
@@ -35,7 +42,7 @@ public class ForegroundService extends Service {
                         foregroundStartMode,
                         foregroundServiceType);
 
-        int id = IntegerUtils.generateNextRandomId();
+        int id = notificationModel.content.id;//IntegerUtils.generateNextRandomId();
         serviceIntentStack.put(id, foregroundServiceIntent);
 
         Intent intent = new Intent(applicationContext, ForegroundService.class);
@@ -47,56 +54,54 @@ public class ForegroundService extends Service {
             applicationContext.startService(intent);
     }
 
-    public static boolean serviceIsRunning(
-        @NonNull Integer notificationId
-    ){
-        return serviceStack.containsKey(notificationId);
-    }
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int id = intent.getIntExtra(Definitions.AWESOME_FOREGROUND_ID, -1);
         ForegroundServiceIntent serviceIntent = serviceIntentStack.remove(id);
 
-        if(id == -1 || serviceIntent == null){
-            stopSelf();
-            return ForegroundStartMode
-                        .notStick
-                        .toAndroidStartMode();
+        if(!(id == -1 || serviceIntent == null)){
+
+            int notificationId = serviceIntent.notificationModel.content.id;
+            ForegroundService foregroundService = serviceStack.remove(notificationId);
+            if(foregroundService != null)
+                foregroundService.stopSelf();
+
+            serviceStack.put(notificationId, this);
+
+            try {
+                NotificationForegroundSender.start(
+                        this,
+                        NotificationBuilder.getNewBuilder(),
+                        serviceIntent,
+                        LifeCycleManager.getApplicationLifeCycle(),
+                        new ForegroundCompletionHandler() {
+                            @Override
+                            public void handle(@Nullable NotificationModel notificationModel) {
+                                if(notificationModel == null)
+                                    serviceStack.remove(notificationId);
+                            }
+                        });
+                return serviceIntent.startMode.toAndroidStartMode();
+
+            } catch (AwesomeNotificationException e) {
+                e.printStackTrace();
+            }
         }
 
-        int notificationId = serviceIntent.notificationModel.content.id;
-        ForegroundService foregroundService = serviceStack.remove(notificationId);
-        if(foregroundService != null)
-            foregroundService.stopSelf();
+        stopSelf();
+        return ForegroundStartMode.notStick.toAndroidStartMode();
 
-        serviceStack.put(notificationId, this);/*
+    }
 
-        try {
-            NotificationForegroundThread.start(
-                this,
-                notificationId,
-                NotificationBuilder.getNewBuilder(),
-                serviceIntent,
-                LifeCycleManager.getApplicationLifeCycle(),
-                    new ForegroundCompletionHandler() {
-                        @Override
-                        public void handle(@Nullable NotificationModel notificationModel) {
-                            if(notificationModel == null)
-                                serviceStack.remove(notificationId);
-                        }
-                    });
-
-        } catch (AwesomeNotificationException e) {
-            e.printStackTrace();
-        }*/
-
-        return serviceIntent.startMode.toAndroidStartMode();
+    public static boolean serviceIsRunning(
+        @NonNull Integer notificationId
+    ){
+        return serviceStack.containsKey(notificationId);
     }
 
     public static void stop(
-            @NonNull Integer notificationId
+        @NonNull Integer notificationId
     ){
         ForegroundService foregroundService = serviceStack.remove(notificationId);
         if(foregroundService != null)
@@ -130,7 +135,7 @@ public class ForegroundService extends Service {
         public @NonNull
         String toString() {
             return "StartParameter{" +
-                    "notification=" + notificationModel.toString() +
+                    "notification=" + notificationModel +
                     ", startMode=" + startMode +
                     ", foregroundServiceType=" + foregroundServiceType +
                     '}';

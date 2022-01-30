@@ -1,6 +1,5 @@
-package me.carda.awesome_notifications.awesome_notifications_android_core.builders;
+package me.carda.awesome_notifications.awesome_notifications_android_core.threads;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -9,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.List;
 
@@ -34,14 +34,14 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
 
     public static String TAG = "NotificationScheduler";
 
-    @SuppressLint("StaticFieldLeak")
-    private final Context context;
+    private final WeakReference<Context> wContextReference;
 
     private final NotificationSource createdSource;
     private final NotificationLifeCycle appLifeCycle;
     private NotificationModel notificationModel;
 
     private Boolean scheduled = false;
+    private long startTime = 0L, endTime = 0L;
 
     public static void schedule(
             Context context,
@@ -81,10 +81,11 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
         NotificationSource createdSource,
         NotificationModel notificationModel
     ){
-        this.context = context;
+        this.wContextReference = new WeakReference<>(context);
         this.createdSource = createdSource;
         this.appLifeCycle = appLifeCycle;
         this.notificationModel = notificationModel;
+        this.startTime = System.nanoTime();
     }
 
     /// AsyncTask METHODS BEGIN *********************************
@@ -98,7 +99,10 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
 
                 if (!ChannelManager
                         .getInstance()
-                        .isChannelEnabled(context, notificationModel.content.channelKey)) {
+                        .isChannelEnabled(
+                                wContextReference.get(),
+                                notificationModel.content.channelKey)
+                ) {
                     throw new AwesomeNotificationException("Channel '" + notificationModel.content.channelKey + "' do not exist or is disabled");
                 }
 
@@ -121,7 +125,10 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
 
                 if(nextValidDate != null){
 
-                    notificationModel = scheduleNotification(context, notificationModel, nextValidDate);
+                    notificationModel = scheduleNotification(
+                            wContextReference.get(),
+                            notificationModel,
+                            nextValidDate);
 
                     if(notificationModel != null){
                         scheduled = true;
@@ -130,7 +137,9 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                     return nextValidDate;
                 }
                 else {
-                    cancelSchedule(context, notificationModel.content.id);
+                    cancelSchedule(
+                            wContextReference.get(),
+                            notificationModel.content.id);
 
                     String msg = "Date is not more valid. ("+DateUtils.getUTCDate()+")";
                     Log.d(TAG, msg);
@@ -154,23 +163,39 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
             if(nextValidDate != null) {
 
                 if(scheduled){
-                    ScheduleManager.saveSchedule(context, notificationModel);
+                    ScheduleManager.saveSchedule(wContextReference.get(), notificationModel);
                     BroadcastSender.sendBroadcastNotificationCreated(
-                            context,
+                            wContextReference.get(),
                             new NotificationReceived(notificationModel.content)
                     );
 
                     Log.d(TAG, "Scheduled created");
-                    ScheduleManager.commitChanges(context);
+                    ScheduleManager.commitChanges(wContextReference.get());
+
+                    if(this.endTime == 0L)
+                        this.endTime = System.nanoTime();
+
+                    if(AwesomeNotifications.debug){
+                        long elapsed = (endTime - startTime)/1000000;
+                        Log.d(TAG, "Notification scheduled in "+elapsed+"ms");
+                    }
                     return;
                 }
             }
 
-            ScheduleManager.removeSchedule(context, notificationModel);
-            _removeFromAlarm(context, notificationModel.content.id);
+            ScheduleManager.removeSchedule(wContextReference.get(), notificationModel);
+            _removeFromAlarm(wContextReference.get(), notificationModel.content.id);
 
             Log.d(TAG, "Scheduled removed");
-            ScheduleManager.commitChanges(context);
+            ScheduleManager.commitChanges(wContextReference.get());
+        }
+
+        if(this.endTime == 0L)
+            this.endTime = System.nanoTime();
+
+        if(AwesomeNotifications.debug){
+            long elapsed = (endTime - startTime)/1000000;
+            Log.d(TAG, "Notification schedule removed in "+elapsed+"ms");
         }
     }
 

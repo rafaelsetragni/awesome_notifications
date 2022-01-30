@@ -1,11 +1,7 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' hide DateUtils;
-//import 'package:flutter/material.dart' as Material show DateUtils;
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -29,8 +25,8 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
   @override
   void initState() {
     super.initState();
-    displayedDate = DateUtils.parseDateToString(
-        DateUtils.utcToLocal(DateUtils.parseStringToDate(
+    displayedDate = AwesomeDateUtils.parseDateToString(
+        AwesomeDateUtils.utcToLocal(AwesomeDateUtils.parseStringToDate(
             widget.receivedNotification.displayedDate)!),
         format: 'dd/MM/yyyy HH:mm');
   }

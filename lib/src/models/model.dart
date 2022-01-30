@@ -12,7 +12,7 @@ abstract class Model {
   @override
   String toString() {
     Map mapData = toMap();
-    return MapUtils.printPrettyMap(mapData);
+    return AwesomeMapUtils.printPrettyMap(mapData);
   }
 
   /// Validates

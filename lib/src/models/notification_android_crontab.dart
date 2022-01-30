@@ -161,11 +161,11 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   NotificationAndroidCrontab? fromMap(Map<String, dynamic> dataMap) {
     super.fromMap(dataMap);
 
-    this.crontabExpression = AssertUtils.extractValue(
+    this.crontabExpression = AwesomeAssertUtils.extractValue(
         NOTIFICATION_CRONTAB_EXPRESSION, dataMap, DateTime);
-    this.initialDateTime = AssertUtils.extractValue(
+    this.initialDateTime = AwesomeAssertUtils.extractValue(
         NOTIFICATION_INITIAL_DATE_TIME, dataMap, DateTime);
-    this.expirationDateTime = AssertUtils.extractValue(
+    this.expirationDateTime = AwesomeAssertUtils.extractValue(
         NOTIFICATION_EXPIRATION_DATE_TIME, dataMap, DateTime);
 
     if (dataMap[NOTIFICATION_PRECISE_SCHEDULES] is List) {
@@ -174,7 +174,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
       preciseSchedules = [];
 
       for (String schedule in schedules) {
-        DateTime? scheduleDate = DateUtils.parseStringToDate(schedule);
+        DateTime? scheduleDate = AwesomeDateUtils.parseStringToDate(schedule);
         if (scheduleDate != null) {
           preciseSchedules!.add(scheduleDate);
         }
@@ -196,17 +196,17 @@ class NotificationAndroidCrontab extends NotificationSchedule {
       ..addAll({
         NOTIFICATION_CRONTAB_EXPRESSION: this.crontabExpression,
         NOTIFICATION_INITIAL_DATE_TIME:
-            DateUtils.parseDateToString(this.initialDateTime),
+            AwesomeDateUtils.parseDateToString(this.initialDateTime),
         NOTIFICATION_EXPIRATION_DATE_TIME:
-            DateUtils.parseDateToString(this.expirationDateTime),
+            AwesomeDateUtils.parseDateToString(this.expirationDateTime),
         NOTIFICATION_PRECISE_SCHEDULES: null
       });
 
-    if (!ListUtils.isNullOrEmpty(preciseSchedules)) {
+    if (!AwesomeListUtils.isNullOrEmpty(preciseSchedules)) {
       List<String> schedulesMap = [];
 
       for (DateTime schedule in preciseSchedules!) {
-        String? scheduleDate = DateUtils.parseDateToString(schedule);
+        String? scheduleDate = AwesomeDateUtils.parseDateToString(schedule);
         if (scheduleDate != null) {
           schedulesMap.add(scheduleDate);
         }

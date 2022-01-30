@@ -5,7 +5,6 @@ import android.os.Build;
 
 import io.flutter.Log;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,6 +22,10 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
+import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotificationsExtension;
+import me.carda.awesome_notifications.awesome_notifications_android_core.background.AwesomeBackgroundExecutor;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ForegroundServiceType;
+import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ForegroundStartMode;
 import me.carda.awesome_notifications.awesome_notifications_android_core.listeners.AwesomeEventListener;
 import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_android_core.decoders.BitmapResourceDecoder;
@@ -44,12 +47,19 @@ import me.carda.awesome_notifications.awesome_notifications_android_core.utils.S
  * AwesomeNotificationsPlugin
  **/
 public class AwesomeNotificationsPlugin
+        extends AwesomeNotificationsExtension
         implements FlutterPlugin, MethodCallHandler, AwesomeEventListener {
 
     private static final String TAG = "AwesomeNotificationsPlugin";
 
     private MethodChannel pluginChannel;
     private AwesomeNotifications awesomeNotifications;
+
+    @Override
+    public void loadExternalExtensions(Context context) {
+        FlutterBitmapUtils.extendBitmapUtilsCapabilities();
+        AwesomeBackgroundExecutor.setBackgroundExecutorClass(DartBackgroundExecutor.class);
+    }
 
     // https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration
     // FOR OLDER FLUTTER VERSIONS (1.11 releases and bellow)
@@ -94,18 +104,15 @@ public class AwesomeNotificationsPlugin
         pluginChannel = channel;
         pluginChannel.setMethodCallHandler(this);
 
-        awesomeNotifications = new AwesomeNotifications(applicationContext);
-        awesomeNotifications.subscribeOnAwesomeNotificationEvents(this);
-
-        FlutterBitmapUtils.extendBitmapUtilsCapabilities();
-
         try {
-            awesomeNotifications
-                    .setBackgroundExecutorClass(
-                            DartBackgroundExecutor.class);
-
+            awesomeNotifications =
+                    new AwesomeNotifications(
+                            applicationContext,
+                            this);
         } catch (AwesomeNotificationException e) {
             e.printStackTrace();
+        } finally {
+            awesomeNotifications.subscribeOnAwesomeNotificationEvents(this);
         }
     }
 
@@ -301,35 +308,40 @@ public class AwesomeNotificationsPlugin
     @SuppressWarnings("unchecked")
     private void channelMethodStartForeground(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
-        Map<String, Object> notificationData = call.<Map<String, Object>>argument(Definitions.NOTIFICATION_MODEL);
-        Integer startType = call.<Integer>argument(Definitions.NOTIFICATION_SERVICE_START_TYPE);
-        Boolean hasForegroundServiceType = call.<Boolean>argument(Definitions.NOTIFICATION_HAS_FOREGROUND_SERVICE);
-        Integer foregroundServiceType = call.<Integer>argument(Definitions.NOTIFICATION_FOREGROUND_SERVICE_TYPE);
+        Map<String, Object> arguments = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
 
-        NotificationModel notificationModel = new NotificationModel().fromMap(notificationData);
+        if(arguments == null)
+            throw new AwesomeNotificationException("Arguments are missing");
+
+        NotificationModel notificationModel = new NotificationModel().fromMap(
+                (Map<String, Object>) arguments.get(Definitions.NOTIFICATION_MODEL));
+
+        ForegroundStartMode foregroundStartMode =
+                NotificationModel.getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_SERVICE_START_MODE,
+                        ForegroundStartMode.class, ForegroundStartMode.values());
+
+        ForegroundServiceType foregroundServiceType =
+                NotificationModel.getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_FOREGROUND_SERVICE_TYPE,
+                        ForegroundServiceType.class, ForegroundServiceType.values());
+
 
         if(notificationModel == null)
             throw new AwesomeNotificationException("Foreground notification is invalid");
 
-        if(startType == null)
+        if(foregroundStartMode == null)
             throw new AwesomeNotificationException("Foreground start type is required");
-
-        if(hasForegroundServiceType == null)
-            throw new AwesomeNotificationException("hasForegroundServiceType is required");
 
         if(foregroundServiceType == null)
             throw new AwesomeNotificationException("foregroundServiceType is required");
-/*
+
         awesomeNotifications.startForegroundService(
-                    notificationModel,
-                    startType,
-                    hasForegroundServiceType,
-                    foregroundServiceType
-                );*/
+            notificationModel,
+            foregroundStartMode,
+            foregroundServiceType);
     }
 
     private void channelMethodStopForeground(@NonNull final MethodCall call, @NonNull final Result result) {
-        Integer notificationId = call.<Integer>argument(Definitions.NOTIFICATION_SERVICE_START_TYPE);
+        Integer notificationId = call.<Integer>argument(Definitions.NOTIFICATION_ID);
         awesomeNotifications.stopForegroundService(notificationId);
         result.success(null);
     }

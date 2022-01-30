@@ -32,8 +32,9 @@ public class LifeCycleManager implements ActivityLifecycleCallbacks {
     }
 
     public static LifeCycleManager getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new LifeCycleManager();
+        }
         return instance;
     }
 
@@ -68,23 +69,21 @@ public class LifeCycleManager implements ActivityLifecycleCallbacks {
         }
     }
 
+    private boolean wasNotCreated = true;
     private boolean hasGoneForeground = false;
-    private NotificationLifeCycle oldLifeCycle = null;
-    public void updateAppLifeCycle(NotificationLifeCycle lifeCycle, Activity activity){
 
-        Lifecycle.State state =
-                ProcessLifecycleOwner
-                        .get()
-                        .getLifecycle()
-                        .getCurrentState();
+    private NotificationLifeCycle oldLifeCycle = null;
+    private Lifecycle.State oldLifeState = null;
+    public void updateAppLifeCycle(NotificationLifeCycle lifeCycle, Lifecycle.State state, Activity activity){
 
         appLifeCycle = lifeCycle;
 
         if (appLifeCycle == NotificationLifeCycle.Foreground)
             hasGoneForeground = true;
 
-        if(oldLifeCycle != appLifeCycle){
-            oldLifeCycle = appLifeCycle;
+        if(oldLifeCycle != lifeCycle || oldLifeState != state){
+            oldLifeCycle = lifeCycle;
+            oldLifeState = state;
             notify(state, activity);
         }
     }
@@ -95,40 +94,71 @@ public class LifeCycleManager implements ActivityLifecycleCallbacks {
                 hasGoneForeground ?
                         NotificationLifeCycle.Background :
                         NotificationLifeCycle.AppKilled,
+                Lifecycle.State.CREATED,
                 activity);
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
+        if(wasNotCreated){
+            wasNotCreated = false;
+            updateAppLifeCycle(
+                    NotificationLifeCycle.AppKilled,
+                    Lifecycle.State.CREATED,
+                    activity);
+        }
+
         updateAppLifeCycle(
                 hasGoneForeground ?
                         NotificationLifeCycle.Background :
                         NotificationLifeCycle.AppKilled,
+                Lifecycle.State.STARTED,
                 activity);
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
-        updateAppLifeCycle(NotificationLifeCycle.Foreground, activity);
+        updateAppLifeCycle(
+                NotificationLifeCycle.Foreground,
+                Lifecycle.State.RESUMED,
+                activity);
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
-        updateAppLifeCycle(NotificationLifeCycle.Foreground, activity);
+        updateAppLifeCycle(
+                NotificationLifeCycle.Foreground,
+                Lifecycle.State.STARTED,
+                activity);
     }
 
     @Override
     public void onActivityStopped(Activity activity) {
-        updateAppLifeCycle(NotificationLifeCycle.Background, activity);
-    }
-
-    @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-        updateAppLifeCycle(NotificationLifeCycle.Background, activity);
+        updateAppLifeCycle(
+                NotificationLifeCycle.Background,
+                Lifecycle.State.CREATED,
+                activity);
     }
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-        updateAppLifeCycle(NotificationLifeCycle.AppKilled, activity);
+        updateAppLifeCycle(
+                NotificationLifeCycle.AppKilled,
+                Lifecycle.State.DESTROYED,
+                activity);
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+        Lifecycle.State state =
+                ProcessLifecycleOwner
+                        .get()
+                        .getLifecycle()
+                        .getCurrentState();
+
+        updateAppLifeCycle(
+                NotificationLifeCycle.Background,
+                state,
+                activity);
     }
 }

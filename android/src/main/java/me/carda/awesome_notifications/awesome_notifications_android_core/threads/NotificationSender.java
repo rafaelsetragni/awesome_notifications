@@ -1,12 +1,15 @@
-package me.carda.awesome_notifications.awesome_notifications_android_core.builders;
+package me.carda.awesome_notifications.awesome_notifications_android_core.threads;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.util.Log;
+
+import java.lang.ref.WeakReference;
 
 import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
+import me.carda.awesome_notifications.awesome_notifications_android_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLayout;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.NotificationSource;
@@ -22,8 +25,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
     public static String TAG = "NotificationSender";
 
-    @SuppressLint("StaticFieldLeak")
-    private final Context context;
+    private final WeakReference<Context> wContextReference;
 
     private final NotificationBuilder notificationBuilder;
     private final NotificationSource createdSource;
@@ -32,6 +34,8 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
     private NotificationModel notificationModel;
 
     private Boolean created = false;
+
+    private long startTime = 0L, endTime = 0L;
 
 
     /// FACTORY METHODS BEGIN *********************************
@@ -78,11 +82,12 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             NotificationSource createdSource,
             NotificationModel notificationModel
     ){
-        this.context = context;
+        this.wContextReference = new WeakReference<>(context);
         this.notificationBuilder = notificationBuilder;
         this.createdSource = createdSource;
         this.appLifeCycle = appLifeCycle;
         this.notificationModel = notificationModel;
+        this.startTime = System.nanoTime();
     }
 
     /// AsyncTask METHODS BEGIN *********************************
@@ -109,7 +114,9 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                     !StringUtils.isNullOrEmpty(notificationModel.content.title) ||
                     !StringUtils.isNullOrEmpty(notificationModel.content.body)
                 ){
-                    notificationModel = showNotification(context, notificationModel);
+                    notificationModel = showNotification(
+                            wContextReference.get(),
+                            notificationModel);
                 }
 
                 // Only save DisplayedMethods if notificationModel was created
@@ -134,12 +141,20 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
             if(created)
                 BroadcastSender.sendBroadcastNotificationCreated(
-                    context,
+                    wContextReference.get(),
                     receivedNotification);
 
             BroadcastSender.sendBroadcastNotificationDisplayed(
-                context,
+                wContextReference.get(),
                 receivedNotification);
+        }
+
+        if(this.endTime == 0L)
+            this.endTime = System.nanoTime();
+
+        if(AwesomeNotifications.debug){
+            long elapsed = (endTime - startTime)/1000000;
+            Log.d(TAG, "Notification displayed in "+elapsed+"ms");
         }
     }
 

@@ -1,7 +1,7 @@
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
 import 'package:flutter/material.dart';
 
-abstract class MediaUtils {
+abstract class AwesomeMediaUtils {
   MediaSource getMediaSource(String? mediaPath) {
     if (mediaPath != null) {
       if (RegExp(r'^https?:\/\/').hasMatch(mediaPath)) {
