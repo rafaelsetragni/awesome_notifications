@@ -21,27 +21,27 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
-import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotifications;
-import me.carda.awesome_notifications.awesome_notifications_android_core.AwesomeNotificationsExtension;
-import me.carda.awesome_notifications.awesome_notifications_android_core.background.AwesomeBackgroundExecutor;
-import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ForegroundServiceType;
-import me.carda.awesome_notifications.awesome_notifications_android_core.enumerators.ForegroundStartMode;
-import me.carda.awesome_notifications.awesome_notifications_android_core.listeners.AwesomeEventListener;
-import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
-import me.carda.awesome_notifications.awesome_notifications_android_core.decoders.BitmapResourceDecoder;
-import me.carda.awesome_notifications.awesome_notifications_android_core.completion_handlers.BitmapCompletionHandler;
-import me.carda.awesome_notifications.awesome_notifications_android_core.completion_handlers.PermissionCompletionHandler;
-import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
-import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationScheduleModel;
-import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
+import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
+import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotificationsExtension;
+import me.carda.awesome_notifications.awesome_notifications_core.background.AwesomeBackgroundExecutor;
+import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundServiceType;
+import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundStartMode;
+import me.carda.awesome_notifications.awesome_notifications_core.listeners.AwesomeEventListener;
+import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
+import me.carda.awesome_notifications.awesome_notifications_core.decoders.BitmapResourceDecoder;
+import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.BitmapCompletionHandler;
+import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.PermissionCompletionHandler;
+import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationModel;
+import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationScheduleModel;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 
-import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationChannelModel;
+import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationChannelModel;
 
-import me.carda.awesome_notifications.awesome_notifications_android_core.utils.BooleanUtils;
-import me.carda.awesome_notifications.awesome_notifications_android_core.utils.DateUtils;
-import me.carda.awesome_notifications.awesome_notifications_android_core.utils.ListUtils;
-import me.carda.awesome_notifications.awesome_notifications_android_core.utils.MapUtils;
-import me.carda.awesome_notifications.awesome_notifications_android_core.utils.StringUtils;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.BooleanUtils;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.DateUtils;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.ListUtils;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.MapUtils;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 /**
  * AwesomeNotificationsPlugin
@@ -109,7 +109,7 @@ public class AwesomeNotificationsPlugin
                     new AwesomeNotifications(
                             applicationContext,
                             this);
-        } catch (AwesomeNotificationException e) {
+        } catch (AwesomeNotificationsException e) {
             e.printStackTrace();
         } finally {
             awesomeNotifications.subscribeOnAwesomeNotificationEvents(this);
@@ -311,7 +311,7 @@ public class AwesomeNotificationsPlugin
         Map<String, Object> arguments = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
 
         if(arguments == null)
-            throw new AwesomeNotificationException("Arguments are missing");
+            throw new AwesomeNotificationsException("Arguments are missing");
 
         NotificationModel notificationModel = new NotificationModel().fromMap(
                 (Map<String, Object>) arguments.get(Definitions.NOTIFICATION_MODEL));
@@ -326,13 +326,13 @@ public class AwesomeNotificationsPlugin
 
 
         if(notificationModel == null)
-            throw new AwesomeNotificationException("Foreground notification is invalid");
+            throw new AwesomeNotificationsException("Foreground notification is invalid");
 
         if(foregroundStartMode == null)
-            throw new AwesomeNotificationException("Foreground start type is required");
+            throw new AwesomeNotificationsException("Foreground start type is required");
 
         if(foregroundServiceType == null)
-            throw new AwesomeNotificationException("foregroundServiceType is required");
+            throw new AwesomeNotificationsException("foregroundServiceType is required");
 
         awesomeNotifications.startForegroundService(
             notificationModel,
@@ -374,11 +374,11 @@ public class AwesomeNotificationsPlugin
 
         Map<String, Object> channelData = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
         if (channelData == null)
-            throw new AwesomeNotificationException("Channel is invalid");
+            throw new AwesomeNotificationsException("Channel is invalid");
 
         NotificationChannelModel channelModel = new NotificationChannelModel().fromMap(channelData);
         if (channelModel == null)
-            throw new AwesomeNotificationException("Channel is invalid");
+            throw new AwesomeNotificationsException("Channel is invalid");
 
         boolean forceUpdate = BooleanUtils.getInstance().getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
 
@@ -393,7 +393,7 @@ public class AwesomeNotificationsPlugin
         String channelKey = call.arguments();
 
         if (StringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationException("Empty channel key");
+            throw new AwesomeNotificationsException("Empty channel key");
 
         boolean removed =
                 awesomeNotifications
@@ -419,7 +419,7 @@ public class AwesomeNotificationsPlugin
 
         int count = MapUtils.extractArgument(call.arguments(), Integer.class).or(-1);
         if (count < 0)
-            throw new AwesomeNotificationException("Invalid Badge value");
+            throw new AwesomeNotificationsException("Invalid Badge value");
 
         awesomeNotifications.setGlobalBadgeCounter(count);
         result.success(true);
@@ -444,7 +444,7 @@ public class AwesomeNotificationsPlugin
 
         Integer notificationId = call.arguments();
         if (notificationId == null || notificationId < 0)
-            throw new AwesomeNotificationException("Invalid id value");
+            throw new AwesomeNotificationsException("Invalid id value");
 
         boolean dismissed = awesomeNotifications.dismissNotification(notificationId);
 
@@ -460,7 +460,7 @@ public class AwesomeNotificationsPlugin
 
         Integer notificationId = call.arguments();
         if (notificationId == null || notificationId < 0)
-            throw new AwesomeNotificationException("Invalid id value");
+            throw new AwesomeNotificationsException("Invalid id value");
 
         boolean canceled = awesomeNotifications.cancelSchedule(notificationId);
 
@@ -476,7 +476,7 @@ public class AwesomeNotificationsPlugin
 
         Integer notificationId = call.arguments();
         if (notificationId == null || notificationId < 0)
-            throw new AwesomeNotificationException("Invalid id value");
+            throw new AwesomeNotificationsException("Invalid id value");
 
         boolean canceled = awesomeNotifications.cancelNotification(notificationId);
 
@@ -492,7 +492,7 @@ public class AwesomeNotificationsPlugin
 
         String channelKey = call.arguments();
         if (StringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationException("Invalid channelKey value");
+            throw new AwesomeNotificationsException("Invalid channelKey value");
 
         boolean dismissed = awesomeNotifications.dismissNotificationsByChannelKey(channelKey);
 
@@ -508,7 +508,7 @@ public class AwesomeNotificationsPlugin
 
         String channelKey = call.arguments();
         if (StringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationException("Invalid channelKey value");
+            throw new AwesomeNotificationsException("Invalid channelKey value");
 
         boolean canceled = awesomeNotifications.cancelSchedulesByChannelKey(channelKey);
 
@@ -524,7 +524,7 @@ public class AwesomeNotificationsPlugin
 
         String channelKey = call.arguments();
         if (StringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationException("Invalid channelKey value");
+            throw new AwesomeNotificationsException("Invalid channelKey value");
 
         boolean canceled = awesomeNotifications.cancelNotificationsByChannelKey(channelKey);
 
@@ -540,7 +540,7 @@ public class AwesomeNotificationsPlugin
 
         String groupKey = call.arguments();
         if (StringUtils.isNullOrEmpty(groupKey))
-            throw new AwesomeNotificationException("Invalid groupKey value");
+            throw new AwesomeNotificationsException("Invalid groupKey value");
 
         boolean dismissed = awesomeNotifications.dismissNotificationsByGroupKey(groupKey);
 
@@ -556,7 +556,7 @@ public class AwesomeNotificationsPlugin
 
         String groupKey = call.arguments();
         if (StringUtils.isNullOrEmpty(groupKey))
-            throw new AwesomeNotificationException("Invalid groupKey value");
+            throw new AwesomeNotificationsException("Invalid groupKey value");
 
         boolean canceled = awesomeNotifications.cancelSchedulesByGroupKey(groupKey);
 
@@ -572,7 +572,7 @@ public class AwesomeNotificationsPlugin
 
         String groupKey = call.arguments();
         if (StringUtils.isNullOrEmpty(groupKey))
-            throw new AwesomeNotificationException("Invalid groupKey value");
+            throw new AwesomeNotificationsException("Invalid groupKey value");
 
         boolean canceled = awesomeNotifications.cancelNotificationsByGroupKey(groupKey);
 
@@ -634,15 +634,15 @@ public class AwesomeNotificationsPlugin
 
         Map<String, Object> data = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
         if (data == null)
-            throw new AwesomeNotificationException("Schedule data is invalid");
+            throw new AwesomeNotificationsException("Schedule data is invalid");
 
         Map<String, Object> scheduleData = (Map<String, Object>) data.get(Definitions.NOTIFICATION_MODEL_SCHEDULE);
         if (scheduleData == null)
-            throw new AwesomeNotificationException("Schedule data is invalid");
+            throw new AwesomeNotificationsException("Schedule data is invalid");
 
         NotificationScheduleModel scheduleModel = NotificationScheduleModel.getScheduleModelFromMap(scheduleData);
         if (scheduleModel == null)
-            throw new AwesomeNotificationException("Schedule data is invalid");
+            throw new AwesomeNotificationsException("Schedule data is invalid");
 
         String fixedDateString = (String) data.get(Definitions.NOTIFICATION_INITIAL_FIXED_DATE);
         Date fixedDate = null;
@@ -727,13 +727,13 @@ public class AwesomeNotificationsPlugin
 
         Map<String, Object> parameters = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
         if(parameters == null)
-            throw new AwesomeNotificationException("Parameters are required");
+            throw new AwesomeNotificationsException("Parameters are required");
 
         String channelKey = (String) parameters.get(Definitions.NOTIFICATION_CHANNEL_KEY);
 
         List<String> permissions = (List<String>) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);
         if(ListUtils.isNullOrEmpty(permissions))
-            throw new AwesomeNotificationException("Permission list is required");
+            throw new AwesomeNotificationsException("Permission list is required");
 
         permissions = awesomeNotifications
                         .arePermissionsAllowed(
@@ -748,16 +748,16 @@ public class AwesomeNotificationsPlugin
 
         Map<String, Object> parameters = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
         if(parameters == null)
-            throw new AwesomeNotificationException("Parameters are required");
+            throw new AwesomeNotificationsException("Parameters are required");
 
         String channelKey = (String) parameters.get(Definitions.NOTIFICATION_CHANNEL_KEY);
         List<String> permissions = (List<String>) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);
 
         if(permissions == null)
-            throw new AwesomeNotificationException("Permission list is required");
+            throw new AwesomeNotificationsException("Permission list is required");
 
         if(permissions.isEmpty())
-            throw new AwesomeNotificationException("Permission list cannot be empty");
+            throw new AwesomeNotificationsException("Permission list cannot be empty");
 
         permissions = awesomeNotifications.shouldShowRationale(
                         channelKey,
@@ -771,16 +771,16 @@ public class AwesomeNotificationsPlugin
 
         Map<String, Object> parameters = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
         if(parameters == null)
-            throw new AwesomeNotificationException("Parameters are required");
+            throw new AwesomeNotificationsException("Parameters are required");
 
         if(!parameters.containsKey(Definitions.NOTIFICATION_PERMISSIONS))
-            throw new AwesomeNotificationException("Permission list is required");
+            throw new AwesomeNotificationsException("Permission list is required");
 
         String channelKey = (String) parameters.get(Definitions.NOTIFICATION_CHANNEL_KEY);
         List<String> permissions = (List<String>) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);
 
         if(ListUtils.isNullOrEmpty(permissions))
-            throw new AwesomeNotificationException("Permission list is required");
+            throw new AwesomeNotificationsException("Permission list is required");
 
         awesomeNotifications
                 .requestUserPermissions(
@@ -800,7 +800,7 @@ public class AwesomeNotificationsPlugin
         NotificationModel notificationModel = new NotificationModel().fromMap(pushData);
 
         if (notificationModel == null)
-            throw new AwesomeNotificationException("Invalid parameters");
+            throw new AwesomeNotificationsException("Invalid parameters");
 
         boolean created = awesomeNotifications.createNotification(notificationModel);
         result.success(created);

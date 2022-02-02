@@ -11,6 +11,8 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     static var debug = false
     static let TAG = "AwesomeNotificationsPlugin"
         
+    var awesomeNotifications:AwesomeNotifications
+    
     public static var appLifeCycle:NotificationLifeCycle {
         get { return LifeCycleManager.getLifeCycle(referenceKey: "currentlifeCycle") }
         set (newValue) { LifeCycleManager.setLifeCycle(referenceKey: "currentlifeCycle", lifeCycle: newValue) }
@@ -353,12 +355,6 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     }
 #endif
     
-    @available(iOS 10.0, *)
-    public static func processNotificationContent(_ notification: UNNotification) -> UNNotification{
-        print("processNotificationContent SwiftAwesomeNotificationsPlugin")
-        return notification
-    }
-    
     public static func createEvent(notificationReceived:NotificationReceived){
 		if(debug){
 			Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification created")
@@ -486,7 +482,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             if activeSchedules.count > 0 {
                 let schedules = ScheduleManager.listSchedules()
                 
-                if(!ListUtils.isEmptyLists(schedules)){
+                if(!ListUtils.isNullOrEmpty(schedules)){
                     for notificationModel in schedules {
                         var founded = false
                         for activeSchedule in activeSchedules {
@@ -557,6 +553,9 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 
     private func initializeFlutterPlugin(registrar: FlutterPluginRegistrar, channel: FlutterMethodChannel) {
         self.flutterChannel = channel
+        self.awesomeNotifications = AwesomeNotifications(
+            extensionClass:
+        )
         
         registrar.addMethodCallDelegate(self, channel: self.flutterChannel!)
         registrar.addApplicationDelegate(self)
@@ -769,7 +768,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         let convertedDate:String? = DateUtils.dateToString(nextValidDate, timeZone: timezone)
 
 		result(convertedDate)
-    }
+    }|
     
     private func channelMethodGetUTCTimeZoneIdentifier(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         result(DateUtils.utcTimeZone.identifier)
@@ -787,7 +786,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             if activeSchedules.count > 0 {
                 let schedules = ScheduleManager.listSchedules()
                 
-                if(!ListUtils.isEmptyLists(schedules)){
+                if(!ListUtils.isNullOrEmpty(schedules)){
                     for notificationModel in schedules {
                         var founded = false
                         for activeSchedule in activeSchedules {
@@ -874,9 +873,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     private func channelMethodGetDrawableData(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         
 		let bitmapReference:String = call.arguments as! String
-			
-		let image:UIImage = BitmapUtils.getBitmapFromSource(bitmapPath: bitmapReference)!
-		let data:Data? = UIImage.pngData(image)()
+        let data:Data? = awesomeNotifications.getDrawableData(bitmapReference: bitmapReference)
 
 		if(data == nil){
 			result(nil)
