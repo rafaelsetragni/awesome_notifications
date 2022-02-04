@@ -3,6 +3,8 @@ package me.carda.awesome_notifications.awesome_notifications_core.utils;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.Iterator;
+import java.util.Objects;
 
 public class StringUtils {
 
@@ -48,5 +50,37 @@ public class StringUtils {
             }
         }
         return null;
+    }
+
+    public static String join(final Iterator<?> iterator, final String separator) {
+
+        // handle null, zero and one elements before building a buffer
+        if (iterator == null) {
+            return null;
+        }
+        if (!iterator.hasNext()) {
+            return "";
+        }
+        final Object first = iterator.next();
+        if (!iterator.hasNext()) {
+            return Objects.toString(first, "");
+        }
+
+        // two or more elements
+        final StringBuilder buf = new StringBuilder(256);
+        if (first != null) {
+            buf.append(first);
+        }
+
+        while (iterator.hasNext()) {
+            if (separator != null) {
+                buf.append(separator);
+            }
+            final Object obj = iterator.next();
+            if (obj != null) {
+                buf.append(obj);
+            }
+        }
+        return buf.toString();
     }
 }

@@ -1,589 +1,56 @@
 
 import UIKit
 import Flutter
-//import BackgroundTasks
 import UserNotifications
 
-public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNotificationCenterDelegate {
-    
-    private static var _instance:SwiftAwesomeNotificationsPlugin?
-    
-    static var debug = false
-    static let TAG = "AwesomeNotificationsPlugin"
+#if !ACTION_EXTENSION
+public class SwiftAwesomeNotificationsPlugin:
+                NSObject,
+                FlutterPlugin,
+                AwesomeNotificationsExtension,
+                UNUserNotificationCenterDelegate
+{
+    let TAG = "AwesomeNotificationsPlugin"
         
     var awesomeNotifications:AwesomeNotifications
     
-    public static var appLifeCycle:NotificationLifeCycle {
-        get { return LifeCycleManager.getLifeCycle(referenceKey: "currentlifeCycle") }
-        set (newValue) { LifeCycleManager.setLifeCycle(referenceKey: "currentlifeCycle", lifeCycle: newValue) }
-    }
-
-#if !ACTION_EXTENSION
-    static var registrar:FlutterPluginRegistrar?
+    public override init() {}
+    
+    var registrar:FlutterPluginRegistrar?
     var flutterChannel:FlutterMethodChannel?
-#endif
-    // them, we forward on any delegate calls that we receive.
-    private var _originalNotificationCenterDelegate: UNUserNotificationCenterDelegate?
     
-    public static var instance:SwiftAwesomeNotificationsPlugin? {
-        get { return _instance }
+    public func loadExternalExtensions(){
+        
     }
-    
-    private static func checkGooglePlayServices() -> Bool {
-        return true
-    }
-
-    @available(iOS 10.0, *)
-    public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
-        var userText:String?
-        if let textResponse =  response as? UNTextInputNotificationResponse {
-            userText =  textResponse.userText
-        }
-
-        if let jsonData:String = response.notification.request.content.userInfo[Definitions.NOTIFICATION_JSON] as? String {
-            receiveAction(
-                  jsonData: jsonData,
-                  buttonKeyPressed: response.actionIdentifier,
-                  userText: userText,
-                  withCompletionHandler: completionHandler
-              )
-        } else {
-            print("Received an invalid notification content")
-            
-            if _originalNotificationCenterDelegate != nil {
-                _originalNotificationCenterDelegate?.userNotificationCenter?(center, didReceive: response, withCompletionHandler: completionHandler)
-            }
-            else {
-                completionHandler()
-            }
-        }
-    }
-
-    @available(iOS 10.0, *)
-    public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        if !receiveNotification(content: notification.request.content, withCompletionHandler: completionHandler) {
-            // completionHandler was *not* called, so maybe this notification is for another plugin:
-
-            if _originalNotificationCenterDelegate != nil {
-                _originalNotificationCenterDelegate?.userNotificationCenter?(center, willPresent: notification, withCompletionHandler: completionHandler)
-            }
-            else {
-                completionHandler([.alert, .badge, .sound])
-            }
-        }
-    }
-    
-    public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable : Any] = [:]) -> Bool {
-        
-        // Set ourselves as the UNUserNotificationCenter delegate, but also preserve any existing delegate...
-        let notificationCenter = UNUserNotificationCenter.current()
-        _originalNotificationCenterDelegate = notificationCenter.delegate
-        notificationCenter.delegate = self
-        
-        //enableScheduler(application)
-        rescheduleLostNotifications()
-		
-        if(SwiftAwesomeNotificationsPlugin.debug){
-			Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications attached for iOS")
-        }
-		
-        return true
-    }
-    
-    var backgroundSessionCompletionHandler: (() -> Void)?
-    var backgroundSynchTask: UIBackgroundTaskIdentifier = .invalid
-    public func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) -> Bool {
-        
-        rescheduleLostNotifications()
-        
-        backgroundSessionCompletionHandler = completionHandler
-        return true
-    }
-    
-    /*
-    private func enableScheduler(_ application: UIApplication){
-        if !SwiftUtils.isRunningOnExtension() {
-            if #available(iOS 13.0, *) {
-                
-                BGTaskScheduler.shared.register(
-                    forTaskWithIdentifier: Definitions.IOS_BACKGROUND_SCHEDULER,
-                    using: nil//DispatchQueue.global()//DispatchQueue.global(qos: .background).async
-                ){ (task) in
-                    Log.d("BG Schedule","My backgroundTask is executed NOW: \(Date().toString() ?? "")")
-                    self.handleAppSchedules(task: task as! BGAppRefreshTask)
-                }
-                
-            } else {
-                
-                Log.d("BG Schedule","iOS < 13  Registering for Background duty")
-                UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-            }
-        }
-    }
-    
-    private func startBackgroundScheduler(){
-        SwiftAwesomeNotificationsPlugin.rescheduleBackgroundTask()
-    }
-    
-    private func stopBackgroundScheduler(){
-        if #available(iOS 13.0, *) {
-            BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: Definitions.IOS_BACKGROUND_SCHEDULER)
-        }
-    }
-    
-    public static func rescheduleBackgroundTask(){
-        if #available(iOS 13.0, *) {
-            if SwiftAwesomeNotificationsPlugin.appLifeCycle != .Foreground {
-                
-                let earliestDate:Date? = ScheduleManager.getEarliestDate()
-                
-                if earliestDate != nil {
-                    let request = BGAppRefreshTaskRequest(identifier: Definitions.IOS_BACKGROUND_SCHEDULER)
-                    request.earliestBeginDate = earliestDate!
-                         
-                    do {
-                        try BGTaskScheduler.shared.submit(request)
-                        Log.d(TAG, "(\(Date().toString()!)) BG Scheduled created: "+earliestDate!.toString()!)
-                    } catch {
-                       print("Could not schedule next notification: \(error)")
-                    }
-                }
-            }
-        }
-    }
- 
-    @available(iOS 13.0, *)
-    private func handleAppSchedules(task: BGAppRefreshTask){
-        
-        let queue = OperationQueue()
-        queue.maxConcurrentOperationCount = 1
-        
-        queue.addOperation(runScheduler)
-        
-        task.expirationHandler = {
-            queue.cancelAllOperations()
-        }
-
-        let lastOperation = queue.operations.last
-        lastOperation?.completionBlock = {
-            task.setTaskCompleted(success: !(lastOperation?.isCancelled ?? false))
-        }
-    }
-    
-    @available(iOS 13.0, *)
-    private func runScheduler(){
-        
-        rescheduleLostNotifications()
-        SwiftAwesomeNotificationsPlugin.rescheduleBackgroundTask()
-    }
-    */
-
-    /// - Returns: True if completionHandler was called (aka if correct notificationJson was present and processed)
-    @available(iOS 10.0, *)
-    private func receiveNotification(content:UNNotificationContent, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) -> Bool {
-        
-        var arguments:[String : Any?]
-        if(content.userInfo[Definitions.NOTIFICATION_JSON] != nil){
-            let jsonData:String = content.userInfo[Definitions.NOTIFICATION_JSON] as! String
-            arguments = JsonUtils.fromJson(jsonData) ?? [:]
-        }
-        else {
-            arguments = content.userInfo as! [String : Any?]
-            
-            if(arguments[Definitions.NOTIFICATION_MODEL_CONTENT] is String){
-                arguments[Definitions.NOTIFICATION_MODEL_CONTENT] = JsonUtils.fromJson(arguments[Definitions.NOTIFICATION_MODEL_CONTENT] as? String)
-            }
-            
-            if(arguments[Definitions.NOTIFICATION_MODEL_BUTTONS] is String){
-                arguments[Definitions.NOTIFICATION_MODEL_BUTTONS] = JsonUtils.fromJson(arguments[Definitions.NOTIFICATION_MODEL_BUTTONS] as? String)
-            }
-            
-            if(arguments[Definitions.NOTIFICATION_MODEL_SCHEDULE] is String){
-                arguments[Definitions.NOTIFICATION_MODEL_SCHEDULE] = JsonUtils.fromJson(arguments[Definitions.NOTIFICATION_MODEL_SCHEDULE] as? String)
-            }
-        }
-        
-        guard let notificationModel:NotificationModel = NotificationBuilder.jsonDataToNotificationModel(jsonData: arguments)
-        else {
-            Log.d("receiveNotification","notification data invalid")
-            return false
-        }
-        
-        /*
-        if(content.userInfo["updated"] == nil){
-            
-            let pushData = notificationModel.toMap()
-            let updatedJsonData = JsonUtils.toJson(pushData)
-            
-            let content:UNMutableNotificationContent =
-                UNMutableNotificationContent().copyContent(from: content)
-            
-            content.userInfo[Definitions.NOTIFICATION_JSON] = updatedJsonData
-            content.userInfo["updated"] = true
-            
-            let request = UNNotificationRequest(identifier: notificationModel!.content!.id!.description, content: content, trigger: nil)
-            
-            UNUserNotificationCenter.current().add(request)
-            {
-                error in // called when message has been sent
-
-                if error != nil {
-                    debugPrint("Error: \(error.debugDescription)")
-                }
-            }
-            
-            completionHandler([])
-            return
-        }
-        */
-    
-        let notificationReceived:NotificationReceived? = NotificationReceived(notificationModel.content)
-        if(notificationReceived != nil){
-            
-            notificationModel.content!.displayedLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
-                        
-            let channel:NotificationChannelModel? = ChannelManager.getChannelByKey(channelKey: notificationModel.content!.channelKey!)
-            
-            alertOnlyOnceNotification(
-                channel?.onlyAlertOnce,
-                notificationReceived: notificationReceived!,
-                completionHandler: completionHandler
-            )
-            
-            if CreatedManager.getCreatedByKey(id: notificationReceived!.id!) != nil {
-                SwiftAwesomeNotificationsPlugin.createEvent(notificationReceived: notificationReceived!)
-            }
-            
-            DisplayedManager.reloadLostSchedulesDisplayed(referenceDate: Date())
-            
-            SwiftAwesomeNotificationsPlugin.displayEvent(notificationReceived: notificationReceived!)
-
-            /*
-            if(notificationModel.schedule != nil){
-                                
-                do {
-                    try NotificationSenderAndScheduler().send(
-                        createdSource: notificationModel.content!.createdSource!,
-                        notificationModel: notificationModel,
-                        completion: { sent, content, error in
-                        
-                        }
-                    )
-                } catch {
-                    // Fallback on earlier versions
-                }
-            }
-            */
-
-            // Completion handler was called in alertOnlyOnceNotification(...) / its subcalls.
-            return true;
-        }
-        return false;
-    }
-    
-    @available(iOS 10.0, *)
-    private func alertOnlyOnceNotification(_ alertOnce:Bool?, notificationReceived:NotificationReceived, completionHandler: @escaping (UNNotificationPresentationOptions) -> Void){
-        
-        if(alertOnce ?? false){
-            
-            UNUserNotificationCenter.current().getDeliveredNotifications { (notifications) in
-                
-                for notification in notifications {
-                    if notification.request.identifier == String(notificationReceived.id!) {
-                        
-                        self.shouldDisplay(
-                            notificationReceived: notificationReceived,
-                            options: [.alert, .badge],
-                            completionHandler: completionHandler
-                        )
-                        
-                        return
-                    }
-                }
-            }
-            
-        }
-            
-        self.shouldDisplay(
-            notificationReceived: notificationReceived,
-            options: [.alert, .badge, .sound],
-            completionHandler: completionHandler
-        )
-    }
-    
-    @available(iOS 10.0, *)
-    private func shouldDisplay(notificationReceived:NotificationReceived, options:UNNotificationPresentationOptions, completionHandler: @escaping (UNNotificationPresentationOptions) -> Void){
-        
-        let currentLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
-        if(
-            (notificationReceived.displayOnForeground! && currentLifeCycle == .Foreground)
-                ||
-            (notificationReceived.displayOnBackground! && currentLifeCycle == .Background)
-        ){
-            completionHandler(options)
-        }
-        completionHandler([])
-    }
-    
-#if !ACTION_EXTENSION
-    private func receiveAction(jsonData: String?, buttonKeyPressed:String?, userText:String?, withCompletionHandler completionHandler: @escaping () -> Void){
-		
-        if(SwiftAwesomeNotificationsPlugin.appLifeCycle == .AppKilled){
-            fireBackgroundLostEvents()
-        }
-        
-        if #available(iOS 10.0, *) {
-            let actionReceived:ActionReceived? = NotificationBuilder.buildNotificationActionFromJson(jsonData: jsonData, buttonKeyPressed: buttonKeyPressed, userText: userText)
-            
-            if actionReceived?.dismissedDate == nil {
-
-                if(SwiftAwesomeNotificationsPlugin.debug){
-					Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification action received");
-				}
-                flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_RECEIVED_ACTION, arguments: actionReceived?.toMap())
-            }
-            else {
-
-                if(SwiftAwesomeNotificationsPlugin.debug){
-					Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification dismissed");
-				}
-                flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED, arguments: actionReceived?.toMap())
-            }
-        } 
-        completionHandler()
-    }
-#endif
-    
-    public static func createEvent(notificationReceived:NotificationReceived){
-		if(debug){
-			Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification created")
-		}
-        
-        let lifecycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
-        
-        if(SwiftUtils.isRunningOnExtension() || lifecycle == .AppKilled){
-            CreatedManager.saveCreated(received: notificationReceived)
-        } else {
-            _ = CreatedManager.removeCreated(id: notificationReceived.id!)
-            
-            SwiftAwesomeNotificationsPlugin.instance?.flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED, arguments: notificationReceived.toMap())
-        }
-    }
-    
-    public static func displayEvent(notificationReceived:NotificationReceived){
-		if(debug){
-			Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification displayed")
-		}
-
-        let lifecycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
-        
-        if(SwiftUtils.isRunningOnExtension() || lifecycle == .AppKilled){
-            DisplayedManager.saveDisplayed(received: notificationReceived)
-        } else {
-            _ = DisplayedManager.removeDisplayed(id: notificationReceived.id!)
-            
-            SwiftAwesomeNotificationsPlugin.instance?.flutterChannel?.invokeMethod(Definitions.CHANNEL_METHOD_NOTIFICATION_DISPLAYED, arguments: notificationReceived.toMap())
-        }
-    }
-    
-    private static var didIRealyGoneBackground:Bool = true
-    
-    public func applicationDidBecomeActive(_ application: UIApplication) {
-	
-        SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Foreground
-        
-        if(SwiftAwesomeNotificationsPlugin.didIRealyGoneBackground){
-            fireBackgroundLostEvents()
-        }
-        SwiftAwesomeNotificationsPlugin.didIRealyGoneBackground = false
-		
-        PermissionManager.handlePermissionResult()
-        
-        if(SwiftAwesomeNotificationsPlugin.debug){
-			Log.d(
-				SwiftAwesomeNotificationsPlugin.TAG,
-				"Notification lifeCycle: (DidBecomeActive) " 
-					+ SwiftAwesomeNotificationsPlugin.appLifeCycle.rawValue
-			)
-		}
-    }
-    
-    public func applicationWillResignActive(_ application: UIApplication) {
-        
-        // applicationWillTerminate is not always get called, so the Background state is not correct defined in this cases
-        //SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Foreground
-        
-        SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Background
-        SwiftAwesomeNotificationsPlugin.didIRealyGoneBackground = false
-		
-        if(SwiftAwesomeNotificationsPlugin.debug){
-			Log.d(
-				SwiftAwesomeNotificationsPlugin.TAG,
-				"Notification lifeCycle: (WillResignActive) " 
-					+ SwiftAwesomeNotificationsPlugin.appLifeCycle.rawValue
-			)
-		}
-    }
-    
-    public func applicationDidEnterBackground(_ application: UIApplication) {
-        
-        // applicationWillTerminate is not always get called, so the AppKilled state is not correct defined in this cases
-        //SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Background
-        
-        SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.AppKilled
-        SwiftAwesomeNotificationsPlugin.didIRealyGoneBackground = true
-		
-        if(SwiftAwesomeNotificationsPlugin.debug){
-			Log.d(
-				SwiftAwesomeNotificationsPlugin.TAG,
-				"Notification lifeCycle: (DidEnterBackground) " 
-					+ SwiftAwesomeNotificationsPlugin.appLifeCycle.rawValue
-			)
-		}
-        
-        //startBackgroundScheduler()
-    }
-    
-    public func applicationWillEnterForeground(_ application: UIApplication) {
-	
-        SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.Background
-
-        PermissionManager.handlePermissionResult()
-		
-        if(SwiftAwesomeNotificationsPlugin.debug){
-			Log.d(
-				SwiftAwesomeNotificationsPlugin.TAG,
-				"Notification lifeCycle: (WillEnterForeground) " 
-					+ SwiftAwesomeNotificationsPlugin.appLifeCycle.rawValue
-			)
-		}
-    }
-    
-    public func applicationWillTerminate(_ application: UIApplication) {
-        
-        SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.AppKilled
-        
-        //SwiftAwesomeNotificationsPlugin.rescheduleBackgroundTask()
-		
-        if(SwiftAwesomeNotificationsPlugin.debug){
-			Log.d(
-				SwiftAwesomeNotificationsPlugin.TAG,
-				"Notification lifeCycle: (WillTerminate) " 
-					+ SwiftAwesomeNotificationsPlugin.appLifeCycle.rawValue
-			)
-		}
-    }
-    
-    public func clearDeactivatedSchedules(){
-        
-        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { activeSchedules in
-            
-            if activeSchedules.count > 0 {
-                let schedules = ScheduleManager.listSchedules()
-                
-                if(!ListUtils.isNullOrEmpty(schedules)){
-                    for notificationModel in schedules {
-                        var founded = false
-                        for activeSchedule in activeSchedules {
-                            if activeSchedule.identifier != String(notificationModel.content!.id!) {
-                                founded = true
-                                break;
-                            }
-                        }
-                        if(!founded){
-                            _ = ScheduleManager.cancelScheduled(id: notificationModel.content!.id!)
-                        }
-                    }
-                }
-            } else {
-                _ = ScheduleManager.cancelAllSchedules();
-            }
-        })
-    }
-    
-    public func rescheduleLostNotifications(){
-        let referenceDate = Date()
-        
-        let lostSchedules = ScheduleManager.listPendingSchedules(referenceDate: referenceDate)
-        for notificationModel in lostSchedules {
-            
-            do {
-                let hasNextValidDate:Bool = (notificationModel.schedule?.hasNextValidDate() ?? false)
-                if  notificationModel.schedule?.createdDate == nil || !hasNextValidDate {
-                    throw AwesomeNotificationsException.notificationExpired
-                }
-                
-                try NotificationSenderAndScheduler().send(
-                    createdSource: notificationModel.content!.createdSource!,
-                    notificationModel: notificationModel,
-                    completion: { sent, content, error in
-                    }
-                )
-            } catch {
-                let _ = ScheduleManager.removeSchedule(id: notificationModel.content!.id!)
-            }
-        }
-        
-        clearDeactivatedSchedules();
-    }
-
-    public func fireBackgroundLostEvents(){
-        
-        let lostCreated = CreatedManager.listCreated()
-        for createdNotification in lostCreated {
-            SwiftAwesomeNotificationsPlugin.createEvent(notificationReceived: createdNotification)
-        }
-        
-        DisplayedManager.reloadLostSchedulesDisplayed(referenceDate: Date())
-        
-        let lostDisplayed = DisplayedManager.listDisplayed()
-        for displayedNotification in lostDisplayed {
-            SwiftAwesomeNotificationsPlugin.displayEvent(notificationReceived: displayedNotification)
-        }
-    }
-    
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: Definitions.CHANNEL_FLUTTER_PLUGIN, binaryMessenger: registrar.messenger())
-        let instance = SwiftAwesomeNotificationsPlugin()
-
-        instance.initializeFlutterPlugin(registrar: registrar, channel: channel)
-        SwiftAwesomeNotificationsPlugin._instance = instance
+        let flutterChannel = FlutterMethodChannel(
+            name: Definitions.CHANNEL_FLUTTER_PLUGIN,
+            binaryMessenger: registrar.messenger())
+        
+        SwiftAwesomeNotificationsPlugin()
+            .AttachAwesomeNotificationsPlugin(
+                usingRegistrar: registrar,
+                throughFlutterChannel: flutterChannel)
     }
 
-    private func initializeFlutterPlugin(registrar: FlutterPluginRegistrar, channel: FlutterMethodChannel) {
-        self.flutterChannel = channel
-        self.awesomeNotifications = AwesomeNotifications(
-            extensionClass:
-        )
+    private func AttachAwesomeNotificationsPlugin(
+        usingRegistrar registrar: FlutterPluginRegistrar,
+        throughFlutterChannel channel: FlutterMethodChannel
+    ){
+        flutterChannel = channel
+        self.registrar = registrar
+        
+        awesomeNotifications =
+            AwesomeNotifications(extensionClass: self)
         
         registrar.addMethodCallDelegate(self, channel: self.flutterChannel!)
         registrar.addApplicationDelegate(self)
-                
-        SwiftAwesomeNotificationsPlugin.registrar = registrar
         
-        if !SwiftUtils.isRunningOnExtension() {
-            UIApplication.shared.registerForRemoteNotifications()
-        }
-        
-        let categoryObject = UNNotificationCategory(
-            identifier: Definitions.DEFAULT_CATEGORY_IDENTIFIER,
-            actions: [],
-            intentIdentifiers: [],
-            options: .customDismissAction
-        )
-
-        UNUserNotificationCenter.current().getNotificationCategories(completionHandler: { results in
-            UNUserNotificationCenter.current().setNotificationCategories(results.union([categoryObject]))
-        })
-        
-        SwiftAwesomeNotificationsPlugin.appLifeCycle = NotificationLifeCycle.AppKilled
-        
-        if(SwiftAwesomeNotificationsPlugin.debug){
-			Log.d(SwiftAwesomeNotificationsPlugin.TAG, 
-			"Awesome Notifications - App Group : "+Definitions.USER_DEFAULT_TAG)
+        if AwesomeNotifications.debug {
+            Log.d(TAG, "Awesome Notifications attached to engine for iOS \(floor(NSFoundationVersionNumber))")
+            Log.d(TAG, "Awesome Notifications - App Group : \(Definitions.USER_DEFAULT_TAG)")
 		}
-        
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -733,7 +200,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 
             result(
                 FlutterError.init(
-                    code: SwiftAwesomeNotificationsPlugin.TAG,
+                    code: TAG,
                     message: "\(error)",
                     details: error.localizedDescription
                 )
@@ -743,319 +210,178 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
         }
     }
     
-    private func channelMethodGetNextDate(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-
-		let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
-		let fixedDate:String? = platformParameters[Definitions.NOTIFICATION_INITIAL_FIXED_DATE] as? String
+    private func channelMethodGetDrawableData(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         
-        let timezone:String =
-            (platformParameters[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] as? String) ?? DateUtils.utcTimeZone.identifier
-        
-		guard let scheduleData:[String : Any?] = platformParameters[Definitions.NOTIFICATION_MODEL_SCHEDULE] as? [String : Any?]
-		else { result(nil); return }
-        
-        var scheduleModel:NotificationScheduleModel?
-        if(scheduleData[Definitions.NOTIFICATION_SCHEDULE_INTERVAL] != nil){
-            scheduleModel = NotificationIntervalModel().fromMap(arguments: scheduleData) as? NotificationScheduleModel
-        } else {
-            scheduleModel = NotificationCalendarModel().fromMap(arguments: scheduleData) as? NotificationScheduleModel
+        let bitmapReference:String = call.arguments as! String
+        guard let data:Data =
+                awesomeNotifications
+                    .getDrawableData(bitmapReference: bitmapReference)
+        else {
+            result(nil)
         }
-        if(scheduleModel == nil){ result(nil); return }
         
-        let nextValidDate:Date? = DateUtils.getNextValidDate(scheduleModel: scheduleModel!, fixedDate: fixedDate, timeZone: timezone)
-
-		if(nextValidDate == nil){ result(nil); return }
-        let convertedDate:String? = DateUtils.dateToString(nextValidDate, timeZone: timezone)
-
-		result(convertedDate)
-    }|
-    
-    private func channelMethodGetUTCTimeZoneIdentifier(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        result(DateUtils.utcTimeZone.identifier)
-    }
-    
-    private func channelMethodGetLocalTimeZoneIdentifier(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        result(DateUtils.localTimeZone.identifier)
-    }
-    
-    private func channelMethodListAllSchedules(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        
-        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { activeSchedules in
-            
-            var serializeds:[[String:Any?]]  = []
-            if activeSchedules.count > 0 {
-                let schedules = ScheduleManager.listSchedules()
-                
-                if(!ListUtils.isNullOrEmpty(schedules)){
-                    for notificationModel in schedules {
-                        var founded = false
-                        for activeSchedule in activeSchedules {
-                            if activeSchedule.identifier == String(notificationModel.content!.id!) {
-                                founded = true
-                                let serialized:[String:Any?] = notificationModel.toMap()
-                                serializeds.append(serialized)
-                                break;
-                            }
-                        }
-                        if(!founded){
-                            _ = ScheduleManager.cancelScheduled(id: notificationModel.content!.id!)
-                        }
-                    }
-                }
-            } else {
-                _ = ScheduleManager.cancelAllSchedules();
-            }
-
-            result(serializeds)
-        })
+        result(
+            FlutterStandardTypedData
+                .init(bytes: data))
     }
     
     private func channelMethodSetChannel(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-	
-		let channelData:[String:Any?] = call.arguments as! [String:Any?]
-		let channel:NotificationChannelModel = NotificationChannelModel().fromMap(arguments: channelData) as! NotificationChannelModel
+		guard let channelData:[String:Any?] = call.arguments as? [String:Any?]
+        else {
+            throw AwesomeNotificationsException
+                .invalidRequiredFields(msg: "Channel is invalid")
+        }
+                
+		let channel:NotificationChannelModel =
+                NotificationChannelModel()
+                    .fromMap(
+                        arguments: channelData) as! NotificationChannelModel
 		
-		ChannelManager.saveChannel(channel: channel)
+        let updated = awesomeNotifications
+                            .setChannel(channel: channel)
+        
+        if AwesomeNotifications.debug {
+            Log.d(TAG, "Channel \(updated ? "" : "wasn't ")updated")
+        }
 		
-		Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Channel updated")
-		result(true)
+		result(updated)
     }
     
     private func channelMethodRemoveChannel(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
 	
-		let channelKey:String? = call.arguments as? String
-				
-		if (channelKey == nil){
-			
-			result(
-				FlutterError.init(
-					code: "Empty channel key",
-					message: "Empty channel key",
-					details: channelKey
-				)
-			)
+		guard let channelKey:String = call.arguments as? String
+        else {
+            throw AwesomeNotificationsException
+                .invalidRequiredFields(msg: "Empty channel key")
 		}
-		else {
-			
-			let removed:Bool = ChannelManager.removeChannel(channelKey: channelKey!)
-		 
-			if removed {
-				
-				Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Channel removed")
-				result(removed)
-			}
-			else {
-				
-				Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Channel '\(channelKey!)' not found")
-				result(removed)
-			}
-		}
-    }
-    
-    private func channelMethodInitialize(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-	
-		let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
-		let defaultIconPath:String? = platformParameters[Definitions.DEFAULT_ICON] as? String
-		let channelsData:[Any] = platformParameters[Definitions.INITIALIZE_CHANNELS] as? [Any] ?? []
-
-		try setDefaultConfigurations(
-			defaultIconPath,
-			channelsData
-		)
-		
-		Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications service initialized")
-					
-		fireBackgroundLostEvents()
-		
-		result(true)
-    }
-
-    private func channelMethodGetDrawableData(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         
-		let bitmapReference:String = call.arguments as! String
-        let data:Data? = awesomeNotifications.getDrawableData(bitmapReference: bitmapReference)
-
-		if(data == nil){
-			result(nil)
-		}
-		else {
-			let uInt8ListBytes:FlutterStandardTypedData = FlutterStandardTypedData.init(bytes: data!)
-			result(uInt8ListBytes)
-		}
-    }
-    
-    private func isChannelEnabled(channelKey:String) -> Bool {
-        let channel:NotificationChannelModel? = ChannelManager.getChannelByKey(channelKey: channelKey)
-        return
-            channel?.importance == nil ?
-                false :
-                channel?.importance != NotificationImportance.None
-    }
-    
-    private func channelMethodIsNotificationAllowed(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        PermissionManager.areNotificationsGloballyAllowed(permissionCompletion: { (allowed) in
-            result(allowed)
-        })
-    }
-    
-    private func channelMethodShowPreciseAlarmsPage(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        // There is no precise alarms page on iOS. This mode is always enabled
-        result(false)
-    }
-    
-    private func channelMethodShowGlobalDndPage(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        // There is no override DnD on iOS. This mode is always enabled with critical alerts
-        result(false)
-    }
-    
-    private func channelMethodShowNotificationConfigPage(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        PermissionManager.showNotificationConfigPage(completionHandler: {
+        if awesomeNotifications
+            .removeChannel(channelKey: channelKey) {
+            
+            if AwesomeNotifications.debug {
+                Log.d(TAG, "Channel removed")
+            }
             result(true)
-        })
-    }
-    
-    private func channelMethodShouldShowRationale(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        
-        let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
-        
-        let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
-        
-        guard let permissions:[String] = platformParameters[Definitions.NOTIFICATION_PERMISSIONS] as? [String] else {
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
         }
-
-        if(permissions.isEmpty){
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
+        else {
+            if AwesomeNotifications.debug {
+                Log.d(TAG, "Channel '\(channelKey)' not found")
+            }
+            result(false)
         }
-
-        PermissionManager.shouldShowRationale(permissions, channelKey: channelKey, completion: { (permissionsAllowed) in
-            result(permissionsAllowed)
-        })
-    }
-
-    private func channelMethodCheckPermissions(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        
-        let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
-        
-        let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
-        
-        guard let permissions:[String] = platformParameters[Definitions.NOTIFICATION_PERMISSIONS] as? [String] else {
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
-        }
-
-        if(permissions.isEmpty){
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
-        }
-
-        PermissionManager.arePermissionsAllowed(permissions, channelKey: channelKey, completion: { (permissionsAllowed) in
-            result(permissionsAllowed)
-        })
-    }
-
-    private func channelMethodRequestNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        
-        let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
-        
-        let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
-        
-        guard let permissions:[String] = platformParameters[Definitions.NOTIFICATION_PERMISSIONS] as? [String] else {
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
-        }
-
-        if(permissions.isEmpty){
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
-        }
-        
-        try PermissionManager.requestUserPermissions(permissions: permissions, channelKey: channelKey, permissionCompletion: { (deniedPermissions) in
-            result(deniedPermissions)
-        })
     }
     
     private func channelMethodGetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        result(BadgeManager.getGlobalBadgeCounter())
+        result(
+            awesomeNotifications
+                .getGlobalBadgeCounter())
     }
     
     private func channelMethodSetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-
-		let count:Int = call.arguments as? Int ?? -1
-
-        if (count < 0) {
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Invalid Badge value")
+        guard let ammount:Int = call.arguments as? Int
+        else {
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(msg: "Invalid Badge value")
         }
         
-        BadgeManager.setGlobalBadgeCounter(count)
-        result(nil)
+        result(
+            awesomeNotifications
+                .setGlobalBadgeCounter(
+                    withAmmount: ammount))
     }
 
     private func channelMethodIncrementBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        let actualValue:Int = BadgeManager.incrementGlobalBadgeCounter()
-        result(actualValue)
-        return
+        result(
+            awesomeNotifications
+                .incrementGlobalBadgeCounter())
     }
 
     private func channelMethodDecrementBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        
-        let actualValue:Int = BadgeManager.decrementGlobalBadgeCounter()
-        result(actualValue)
-        return
+        result(
+            awesomeNotifications
+                .decrementGlobalBadgeCounter())
     }
     
     private func channelMethodResetBadge(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        BadgeManager.resetGlobalBadgeCounter()
-        result(nil)
+        result(
+            awesomeNotifications
+                .resetGlobalBadgeCounter())
     }
     
     private func channelMethodDismissNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        guard let notificationId:Int = call.arguments as? Int else {
-            result(false); return
+        let notificationId:Int? = call.arguments as? Int
+        if notificationId == nil || notificationId! < 0 {
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(msg: "Invalid id value")
         }
         
-        let success:Bool = CancellationManager.dismissNotification(id: notificationId)
+        let dismissed =
+            awesomeNotifications
+                .dismissNotification(byId: notificationId!)
         
-        if(SwiftAwesomeNotificationsPlugin.debug){
-            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification id "+String(notificationId)+" dismissed")
+        if AwesomeNotifications.debug {
+            Log.d(TAG, dismissed ?
+                  "Notification \(notificationId!) dismissed":
+                  "Notification \(notificationId!) was not found")
         }
         
-        result(success)
+        result(dismissed)
     }
     
     private func channelMethodCancelSchedule(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        guard let notificationId:Int = call.arguments as? Int else {
-            result(false); return
+        let notificationId:Int? = call.arguments as? Int
+        if notificationId == nil || notificationId! < 0 {
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(msg: "Invalid id value")
         }
         
-        let success:Bool = CancellationManager.cancelSchedule(id: notificationId)
+        let cancelled =
+            awesomeNotifications
+                .cancelSchedule(byId: notificationId!)
         
-        if(SwiftAwesomeNotificationsPlugin.debug){
-            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Schedule id "+String(notificationId)+" cancelled")
+        if AwesomeNotifications.debug {
+            Log.d(TAG, cancelled ?
+                  "Schedule \(notificationId!) cancelled":
+                  "Schedule \(notificationId!) was not found")
         }
         
-        result(success)
+        result(cancelled)
     }
     
     private func channelMethodCancelNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-        guard let notificationId:Int = call.arguments as? Int else {
-            result(false); return
+        let notificationId:Int? = call.arguments as? Int
+        if notificationId == nil || notificationId! < 0 {
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(msg: "Invalid id value")
         }
         
-        let success:Bool = CancellationManager.cancelNotification(id: notificationId)
+        let cancelled =
+            awesomeNotifications
+                .cancelNotification(byId: notificationId!)
         
-        if(SwiftAwesomeNotificationsPlugin.debug){
-            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification id "+String(notificationId)+" cancelled")
+        if AwesomeNotifications.debug {
+            Log.d(TAG, cancelled ?
+                  "Notification \(notificationId!) cancelled":
+                  "Notification \(notificationId!) was not found")
         }
         
-        result(success)
+        result(cancelled)
     }
 
     private func channelMethodDismissNotificationsByChannelKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let channelKey:String = call.arguments as? String else {
-            result(false); return
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(msg: "Invalid channel Key value")
         }
         
-        let success:Bool = CancellationManager.dismissNotificationsByChannelKey(channelKey: channelKey)
+        let success =
+            awesomeNotifications
+                .dismissNotifications(byChannelKey: channelKey)
         
-        if(SwiftAwesomeNotificationsPlugin.debug){
-            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notifications from channel "+channelKey+" dismissed")
+        if AwesomeNotifications.debug {
+            Log.d(TAG, success ?
+                  "Notifications from channel \(channelKey) dismissed":
+                  "Notifications from channel \(channelKey) not found")
         }
         
         result(success)
@@ -1063,13 +389,18 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 
     private func channelMethodCancelSchedulesByChannelKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let channelKey:String = call.arguments as? String else {
-            result(false); return
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(msg: "Invalid channel Key value")
         }
         
-        let success:Bool = CancellationManager.cancelSchedulesByChannelKey(channelKey: channelKey)
+        let success =
+            awesomeNotifications
+                .cancelSchedules(byChannelKey: channelKey)
         
-        if(SwiftAwesomeNotificationsPlugin.debug){
-            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Schedules from channel "+channelKey+" cancelled")
+        if AwesomeNotifications.debug {
+            Log.d(TAG, success ?
+                  "Scheduled notifications from channel \(channelKey) canceled":
+                  "Scheduled notifications from channel \(channelKey) not found")
         }
         
         result(success)
@@ -1077,13 +408,18 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 
     private func channelMethodCancelNotificationsByChannelKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let channelKey:String = call.arguments as? String else {
-            result(false); return
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(msg: "Invalid channel Key value")
         }
         
-        let success:Bool = CancellationManager.cancelNotificationsByChannelKey(channelKey: channelKey)
+        let success =
+            awesomeNotifications
+                .cancelNotifications(byChannelKey: channelKey)
         
-        if(SwiftAwesomeNotificationsPlugin.debug){
-            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notifications from channel "+channelKey+" cancelled")
+        if AwesomeNotifications.debug {
+            Log.d(TAG, success ?
+                  "Notifications and schedules from channel \(channelKey) canceled":
+                  "Notifications and schedules from channel \(channelKey) not found")
         }
         
         result(success)
@@ -1091,27 +427,37 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 
     private func channelMethodDismissNotificationsByGroupKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let groupKey:String = call.arguments as? String else {
-            result(false); return
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(msg: "Invalid group Key value")
         }
         
-        let success:Bool = CancellationManager.dismissNotificationsByGroupKey(groupKey: groupKey)
+        let success =
+            awesomeNotifications
+                .dismissNotifications(byGroupKey: groupKey)
         
-        if(SwiftAwesomeNotificationsPlugin.debug){
-            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notifications from group "+groupKey+" cancelled")
+        if AwesomeNotifications.debug {
+            Log.d(TAG, success ?
+                  "Notifications from group \(groupKey) dismissed":
+                  "Notifications from group \(groupKey) not found")
         }
-
+        
         result(success)
     }
 
     private func channelMethodCancelSchedulesByGroupKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let groupKey:String = call.arguments as? String else {
-            result(false); return
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(msg: "Invalid group Key value")
         }
         
-        let success:Bool = CancellationManager.cancelSchedulesByGroupKey(groupKey: groupKey)
-
-        if(SwiftAwesomeNotificationsPlugin.debug){
-            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Schedules from group "+groupKey+" cancelled")
+        let success =
+            awesomeNotifications
+                .cancelSchedules(byGroupKey: groupKey)
+        
+        if AwesomeNotifications.debug {
+            Log.d(TAG, success ?
+                  "Scheduled notifications from group \(groupKey) cancelled":
+                  "Scheduled notifications from group \(groupKey) not found")
         }
         
         result(success)
@@ -1119,63 +465,248 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
 
     private func channelMethodCancelNotificationsByGroupKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let groupKey:String = call.arguments as? String else {
-            result(false); return
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(msg: "Invalid group Key value")
         }
         
-        let success:Bool = CancellationManager.cancelNotificationsByGroupKey(groupKey: groupKey)
+        let success =
+            awesomeNotifications
+                .cancelNotifications(byGroupKey: groupKey)
         
-        if(SwiftAwesomeNotificationsPlugin.debug){
-            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notifications from group "+groupKey+" cancelled")
+        if AwesomeNotifications.debug {
+            Log.d(TAG, success ?
+                  "Notifications and schedules from group \(groupKey) cancelled":
+                  "Notifications and schedules from group \(groupKey) not found")
         }
         
         result(success)
     }
     
     private func channelMethodDismissAllNotifications(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        let success =
+            awesomeNotifications
+                .dismissAllNotifications()
         
-        let success:Bool = CancellationManager.dismissAllNotifications()
-        
-        if(SwiftAwesomeNotificationsPlugin.debug){
-            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "All notifications was dismissed")
+        if AwesomeNotifications.debug {
+            Log.d(TAG, "All notifications was dismissed")
         }
         
         result(success)
     }
     
     private func channelMethodCancelAllSchedules(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        let success =
+            awesomeNotifications
+                .cancelAllSchedules()
         
-        let success:Bool = CancellationManager.cancelAllSchedules()
-        
-        if(SwiftAwesomeNotificationsPlugin.debug){
-            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "All schedules was cancelled")
+        if AwesomeNotifications.debug {
+            Log.d(TAG, "All schedules was cancelled")
         }
         
         result(success)
     }
 
     private func channelMethodCancelAllNotifications(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        let success =
+            awesomeNotifications
+                .cancelAllNotifications()
         
-        let success:Bool = CancellationManager.cancelAllNotifications()
-        
-        if(SwiftAwesomeNotificationsPlugin.debug){
-            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "All notifications was cancelled")
+        if AwesomeNotifications.debug {
+            Log.d(TAG, "All notifications was cancelled")
         }
         
         result(success)
     }
+    
+    private func channelMethodListAllSchedules(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        awesomeNotifications
+            .listAllPendingSchedules { (schedules:[NotificationModel]) in
+                var mapData:[[String:Any?]]
+                for schedule in schedules {
+                    mapData.append(schedule.toMap())
+                }
+                result(mapData)
+            }
+    }
+    
+    private func channelMethodGetNextDate(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
 
-    private func channelMethodCreateNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
+        let fixedDate:String? = platformParameters[Definitions.NOTIFICATION_INITIAL_FIXED_DATE] as? String
         
-		let pushData:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
-		let notificationModel:NotificationModel? = NotificationModel().fromMap(arguments: pushData) as? NotificationModel
-		
-		if(notificationModel != nil){
-				
-            try NotificationSenderAndScheduler().send(
-                createdSource: NotificationSource.Local,
-                notificationModel: notificationModel,
-                completion: { sent, content, error in
-                
+        let timezone:String =
+            (platformParameters[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] as? String) ?? DateUtils.utcTimeZone.identifier
+        
+        guard let scheduleData:[String : Any?] =
+                platformParameters[Definitions.NOTIFICATION_MODEL_SCHEDULE] as? [String : Any?]
+        else {
+            result(nil)
+            return
+        }
+        
+        let scheduleModel:NotificationScheduleModel? =
+                (scheduleData[Definitions.NOTIFICATION_SCHEDULE_INTERVAL] != nil) ?
+                    NotificationIntervalModel().fromMap(arguments: scheduleData) as? NotificationScheduleModel :
+                    NotificationCalendarModel().fromMap(arguments: scheduleData) as? NotificationScheduleModel
+        
+        if scheduleModel == nil {
+            result(nil)
+            return
+        }
+        
+        let nextValidDate:Date? =
+                awesomeNotifications
+                    .getNextValidDate(
+                        scheduleModel: scheduleModel!,
+                        fixedDate: fixedDate,
+                        timeZone: timezone)
+
+        if nextValidDate == nil {
+            result(nil)
+            return
+        }
+        
+        result(
+            DateUtils
+                .dateToString(
+                    nextValidDate,
+                    timeZone: timezone))
+    }
+    
+    private func channelMethodGetUTCTimeZoneIdentifier(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        result(
+            awesomeNotifications
+                .getUtcTimeZone()
+                .identifier)
+    }
+    
+    private func channelMethodGetLocalTimeZoneIdentifier(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        result(
+            awesomeNotifications
+                .getLocalTimeZone()
+                .identifier)
+    }
+    
+    private func channelMethodIsNotificationAllowed(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        awesomeNotifications
+            .areNotificationsGloballyAllowed(
+                whenCompleted: { (allowed) in
+                    result(allowed)
+                })
+    }
+    
+    private func channelMethodShowPreciseAlarmsPage(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        awesomeNotifications
+            .showPreciseAlarmPage(
+                whenUserReturns: {
+                    result(true)
+                })
+    }
+    
+    private func channelMethodShowGlobalDndPage(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        awesomeNotifications
+            .showDnDGlobalOverridingPage(
+                whenUserReturns: {
+                    result(true)
+                })
+    }
+    
+    private func channelMethodShowNotificationConfigPage(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        awesomeNotifications
+            .showNotificationPage(
+                whenUserReturns: {
+                    result(true)
+                })
+    }
+
+    private func channelMethodCheckPermissions(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        guard let platformParameters:[String:Any?] = call.arguments as? [String:Any?]
+        else {
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(msg: "Parameters are required")
+        }
+        
+        let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
+        guard let permissions:[String] = platformParameters[Definitions.NOTIFICATION_PERMISSIONS] as? [String] else {
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
+        }
+
+        if(permissions.isEmpty){
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
+        }
+        
+        awesomeNotifications
+            .arePermissionsAllowed(
+                permissions,
+                filteringByChannelKey: channelKey,
+                whenGotResults: { (permissionsAllowed) in
+                    result(permissionsAllowed)
+                })
+    }
+    
+    private func channelMethodShouldShowRationale(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        guard let platformParameters:[String:Any?] = call.arguments as? [String:Any?]
+        else {
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(msg: "Parameters are required")
+        }
+        
+        let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
+        guard let permissions:[String] = platformParameters[Definitions.NOTIFICATION_PERMISSIONS] as? [String] else {
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
+        }
+
+        if(permissions.isEmpty){
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
+        }
+
+        awesomeNotifications
+            .shouldShowRationale(
+                permissions,
+                filteringByChannelKey: channelKey,
+                whenGotResults: { (permissionsAllowed) in
+                    result(permissionsAllowed)
+                })
+    }
+
+    private func channelMethodRequestNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        guard let platformParameters:[String:Any?] = call.arguments as? [String:Any?]
+        else {
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(msg: "Parameters are required")
+        }
+        
+        let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
+        guard let permissions:[String] = platformParameters[Definitions.NOTIFICATION_PERMISSIONS] as? [String] else {
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
+        }
+
+        if(permissions.isEmpty){
+            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
+        }
+        
+        try awesomeNotifications
+                .requestUserPermissions(
+                    permissions,
+                    filteringByChannelKey: channelKey,
+                    whenUserReturns: { (deniedPermissions) in
+                        result(deniedPermissions)
+                    })
+    }
+    
+    private func channelMethodCreateNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        let pushData:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
+        guard let notificationModel = NotificationModel().fromMap(arguments: pushData) as? NotificationModel
+        else {
+            throw AwesomeNotificationsException
+                .invalidRequiredFields(msg: "Notification content is invalid")
+        }
+        
+        try awesomeNotifications
+            .createNotification(
+                fromNotificationModel: notificationModel,
+                afterCreated: { sent, content, error in
+                    
                     if error != nil {
                         let flutterError:FlutterError?
                         if let notificationError = error as? AwesomeNotificationsException {
@@ -1215,25 +746,50 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                         return
                     }
                     
-                }
-            )
-		}
-		else {
-            result(false)
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Notification content is invalid")
-		}
+                })
     }
-
-    private func setDefaultConfigurations(_ defaultIconPath:String?, _ channelsData:[Any]) throws {
+    
+    private func channelMethodInitialize(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
         
-        for anyData in channelsData {
-            if let channelData = anyData as? [String : Any?] {
-                let channel:NotificationChannelModel? = (NotificationChannelModel().fromMap(arguments: channelData) as? NotificationChannelModel)
-                
-                if(channel != nil){
-                    ChannelManager.saveChannel(channel: channel!)
-                }
-            }
+		let defaultIconPath:String? = platformParameters[Definitions.INITIALIZE_DEFAULT_ICON] as? String
+        let debug:Bool = platformParameters[Definitions.INITIALIZE_DEBUG_MODE] as? Bool ?? false
+        let dartBgHandle:Int64 = platformParameters[Definitions.DART_BG_HANDLE] as? Int64 ?? 0
+        
+        var channels:[NotificationChannelModel] = []
+		guard let channelsData:[Any] = platformParameters[Definitions.INITIALIZE_CHANNELS] as? [Any]
+        else {
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(msg: "Notification channels are required")
         }
+        
+        for channelData in channelsData {
+            guard let channelMap = channelData as? [String : Any?]
+            else {
+                throw AwesomeNotificationsException
+                            .invalidRequiredFields(msg: "Notification channel `\(channelsData)` is invalid")
+            }
+            
+            guard let channel:NotificationChannelModel =
+                            NotificationChannelModel()
+                                .fromMap(arguments: channelMap) as? NotificationChannelModel
+            else {
+                throw AwesomeNotificationsException
+                            .invalidRequiredFields(msg: "Notification channel `\(channelsData)` is invalid")
+            }
+            
+            channels.append(channel)
+        }
+
+        try awesomeNotifications
+                .initialize(
+                    defaultIconPath: defaultIconPath,
+                    channels: channels,
+                    dartCallback: dartBgHandle,
+                    debug: debug)
+		
+		Log.d(TAG, "Awesome Notifications service initialized")
+		result(true)
     }
 }
+#endif

@@ -122,46 +122,52 @@ public class DartBackgroundExecutor extends AwesomeBackgroundExecutor implements
 
         Handler handler = new Handler(Looper.getMainLooper());
         Runnable dartBgRunnable =
-            () -> {
+                new Runnable() {
+                    @Override
+                    public void run() {
 
-                Log.i(TAG, "Initializing Flutter global instance.");
+                        Log.i(TAG, "Initializing Flutter global instance.");
 
-                FlutterInjector.instance().flutterLoader().startInitialization(applicationContext.getApplicationContext());
-                FlutterInjector.instance().flutterLoader().ensureInitializationCompleteAsync(
-                        applicationContext.getApplicationContext(),
-                        null,
-                        handler,
-                        () -> {
-                            String appBundlePath = FlutterInjector.instance().flutterLoader().findAppBundlePath();
-                            AssetManager assets = applicationContext.getApplicationContext().getAssets();
+                        FlutterInjector.instance().flutterLoader().startInitialization(applicationContext.getApplicationContext());
+                        FlutterInjector.instance().flutterLoader().ensureInitializationCompleteAsync(
+                                applicationContext.getApplicationContext(),
+                                null,
+                                handler,
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String appBundlePath = FlutterInjector.instance().flutterLoader().findAppBundlePath();
+                                        AssetManager assets = applicationContext.getApplicationContext().getAssets();
 
-                            Log.i(TAG, "Creating background FlutterEngine instance.");
-                            backgroundFlutterEngine =
-                                    new FlutterEngine(applicationContext.getApplicationContext());
+                                        Log.i(TAG, "Creating background FlutterEngine instance.");
+                                        backgroundFlutterEngine =
+                                                new FlutterEngine(applicationContext.getApplicationContext());
 
-                            // We need to create an instance of `FlutterEngine` before looking up the
-                            // callback. If we don't, the callback cache won't be initialized and the
-                            // lookup will fail.
-                            FlutterCallbackInformation flutterCallback =
-                                    FlutterCallbackInformation.lookupCallbackInformation(callbackHandle);
+                                        // We need to create an instance of `FlutterEngine` before looking up the
+                                        // callback. If we don't, the callback cache won't be initialized and the
+                                        // lookup will fail.
+                                        FlutterCallbackInformation flutterCallback =
+                                                FlutterCallbackInformation.lookupCallbackInformation(callbackHandle);
 
-                            DartExecutor executor = backgroundFlutterEngine.getDartExecutor();
-                            initializeReverseMethodChannel(executor);
+                                        DartExecutor executor = backgroundFlutterEngine.getDartExecutor();
+                                        DartBackgroundExecutor.this.initializeReverseMethodChannel(executor);
 
-                            // The pluginRegistrantCallback should only be set in the V1 embedding as
-                            // plugin registration is done via reflection in the V2 embedding.
-                            if (pluginRegistrantCallback != null) {
-                                pluginRegistrantCallback.registerWith(
-                                        new ShimPluginRegistry(backgroundFlutterEngine));
-                            }
+                                        // The pluginRegistrantCallback should only be set in the V1 embedding as
+                                        // plugin registration is done via reflection in the V2 embedding.
+                                        if (pluginRegistrantCallback != null) {
+                                            pluginRegistrantCallback.registerWith(
+                                                    new ShimPluginRegistry(backgroundFlutterEngine));
+                                        }
 
-                            Log.i(TAG, "Executing background FlutterEngine instance.");
-                            DartCallback dartCallback =
-                                    new DartCallback(assets, appBundlePath, flutterCallback);
-                            executor.executeDartCallback(dartCallback);
-                        });
+                                        Log.i(TAG, "Executing background FlutterEngine instance.");
+                                        DartCallback dartCallback =
+                                                new DartCallback(assets, appBundlePath, flutterCallback);
+                                        executor.executeDartCallback(dartCallback);
+                                    }
+                                });
 
-            };
+                    }
+                };
 
         handler.post(dartBgRunnable);
     }
@@ -178,15 +184,18 @@ public class DartBackgroundExecutor extends AwesomeBackgroundExecutor implements
 
             Handler handler = new Handler(Looper.getMainLooper());
             Runnable dartBgRunnable =
-                    () -> {
+                    new Runnable() {
+                        @Override
+                        public void run() {
 
-                        Log.i(TAG, "Shutting down background FlutterEngine instance.");
+                            Log.i(TAG, "Shutting down background FlutterEngine instance.");
 
-                        if(backgroundFlutterEngine != null){
-                            backgroundFlutterEngine.destroy();
-                            backgroundFlutterEngine = null;
+                            if (backgroundFlutterEngine != null) {
+                                backgroundFlutterEngine.destroy();
+                                backgroundFlutterEngine = null;
+                            }
+
                         }
-
                     };
 
             handler.post(dartBgRunnable);

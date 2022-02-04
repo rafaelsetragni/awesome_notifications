@@ -16,8 +16,14 @@ class DefaultsManager {
     
     // ********************************************************
     
-    public func getActionCallback() -> Int64? {
-        
+    public var actionCallback:Int64? {
+        get {}
+        set {}
+    }
+    
+    public var backgroundCallback:Int64? {
+        get {}
+        set {}
     }
     
     public func setActionCallback(actionHandle:Int64) {

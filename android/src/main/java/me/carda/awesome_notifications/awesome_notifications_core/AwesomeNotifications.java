@@ -108,14 +108,6 @@ public class AwesomeNotifications
 
         if(isExtensionsLoaded) return;
 
-//        try {
-//            Class.forName("dalvik.system.CloseGuard")
-//                    .getMethod("setEnabled", boolean.class)
-//                    .invoke(null, true);
-//        } catch (ReflectiveOperationException e) {
-//            throw new RuntimeException(e);
-//        }
-
         String extensionClassReference = DefaultsManager.getAwesomeExtensionClassName(context);
         if(!StringUtils.isNullOrEmpty(extensionClassReference))
             try {
@@ -317,7 +309,7 @@ public class AwesomeNotifications
         bitmapResourceDecoder.execute();
     }
 
-    boolean waitingForRecover = false;
+    boolean waitingForRecover = true;
     public void setActionHandle(Long actionCallbackHandle) {
         DefaultsManager.setActionCallbackDispatcher(wContext.get(), actionCallbackHandle);
         DefaultsManager.commitChanges(wContext.get());

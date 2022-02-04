@@ -274,7 +274,7 @@ public class NotificationBuilder {
         
         categoryIdentifier = categoryIdentifier.uppercased()
 
-        if(SwiftAwesomeNotificationsPlugin.debug){
+        if(AwesomeNotifications.debug){
             print("Notification category identifier: " + categoryIdentifier)
         }
         content.categoryIdentifier = categoryIdentifier

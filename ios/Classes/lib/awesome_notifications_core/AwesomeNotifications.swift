@@ -14,7 +14,8 @@ public class AwesomeNotifications:
             AwesomeLifeCycleEventListener,
             UNUserNotificationCenterDelegate {
     
-    public static let TAG:String = "AwesomeNotifications"
+    let TAG = "AwesomeNotifications"
+    
     public static var debug:Bool = false
     var initialValues:[String : Any?] = [:]
     
@@ -22,7 +23,7 @@ public class AwesomeNotifications:
     // ************************** CONSTRUCTOR ***********************************
         
     public init(
-        extensionClass:AwesomeNotificationsPlugin
+        extensionClass: AwesomeNotificationsExtension
     ){
         if !SwiftUtils.isRunningOnExtension() {
             LifeCycleManager
@@ -171,6 +172,7 @@ public class AwesomeNotifications:
     public func getDrawableData(bitmapReference:String) -> Data? {
         guard let image:UIImage =
             BitmapUtils
+                .shared
                 .getBitmapFromSource(
                     bitmapPath: bitmapReference,
                     roundedBitpmap: false)
@@ -185,7 +187,10 @@ public class AwesomeNotifications:
     
     var waitingForRecover:Bool = false
     public func setActionHandle(actionHandle:Int64) throws {
-        DefaultsManager.shared.setActionCallback(actionHandle: actionHandle)
+        DefaultsManager
+            .shared
+            .setActionCallback(
+                actionHandle: actionHandle)
         
         if(waitingForRecover && actionHandle != 0){
             waitingForRecover = false
@@ -198,11 +203,46 @@ public class AwesomeNotifications:
     }
     
     public func getActionHandle() -> Int64 {
-        return DefaultsManager.shared.getActionCallback() ?? 0
+        return DefaultsManager
+                    .shared
+                    .getActionCallback() ?? 0
     }
     
-    public func listAllPendingSchedules() -> [NotificationModel] {
-        return ScheduleManager.listSchedules()
+    public func listAllPendingSchedules(
+        whenGotResults completionHandler: @escaping ([NotificationModel]) -> Void
+    ){
+        
+        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { activeSchedules in
+            
+            var serializeds:[[String:Any?]]  = []
+            
+            if activeSchedules.count > 0 {
+                let schedules = ScheduleManager.listSchedules()
+                
+                if(!ListUtils.isNullOrEmpty(schedules)){
+                    for notificationModel in schedules {
+                        var founded = false
+                        for activeSchedule in activeSchedules {
+                            if activeSchedule.identifier == String(notificationModel.content!.id!) {
+                                founded = true
+                                let serialized:[String:Any?] = notificationModel.toMap()
+                                serializeds.append(serialized)
+                                break;
+                            }
+                        }
+                        if(!founded){
+                            _ = ScheduleManager.cancelScheduled(id: notificationModel.content!.id!)
+                        }
+                    }
+                }
+                
+                completionHandler(schedules)
+                
+            } else {
+                _ = ScheduleManager.cancelAllSchedules();
+                completionHandler([])
+            }
+        })
     }
     
     // *****************************  INITIALIZATION FUNCTIONS  **********************************
@@ -232,7 +272,7 @@ public class AwesomeNotifications:
         AwesomeNotifications.debug = debug
         
         if(AwesomeNotifications.debug){
-            Log.d(AwesomeNotifications.TAG, "Awesome Notifications initialized")
+            Log.d(TAG, "Awesome Notifications initialized")
         }
     }
     
@@ -254,7 +294,7 @@ public class AwesomeNotifications:
                 notificationReceived: createdNotification)
             
             if !CreatedManager.removeCreated(id: createdNotification.id!) {
-                Log.e(AwesomeNotifications.TAG, "Created event \(createdNotification.id!) could not be cleaned")
+                Log.e(TAG, "Created event \(createdNotification.id!) could not be cleaned")
             }
         }
     }
@@ -272,7 +312,7 @@ public class AwesomeNotifications:
                 notificationReceived: displayedNotification)
             
             if !DisplayedManager.removeDisplayed(id: displayedNotification.id!) {
-                Log.e(AwesomeNotifications.TAG, "Displayed event \(displayedNotification.id!) could not be cleaned")
+                Log.e(TAG, "Displayed event \(displayedNotification.id!) could not be cleaned")
             }
         }
     }
@@ -288,7 +328,7 @@ public class AwesomeNotifications:
                 withActionReceived: dismissedNotification)
             
             if !DismissedManager.removeDismissed(id: dismissedNotification.id!) {
-                Log.e(AwesomeNotifications.TAG, "Dismissed event \(dismissedNotification.id!) could not be cleaned")
+                Log.e(TAG, "Dismissed event \(dismissedNotification.id!) could not be cleaned")
             }
         }
     }
@@ -304,15 +344,33 @@ public class AwesomeNotifications:
                 withActionReceived: notificationAction)
             
             if !ActionManager.removeAction(id: notificationAction.id!) {
-                Log.e(AwesomeNotifications.TAG, "Action event \(notificationAction.id!) could not be cleaned")
+                Log.e(TAG, "Action event \(notificationAction.id!) could not be cleaned")
             }
         }
     }
     
-#if !ACTION_EXTENSION
+    
     // *****************************  IOS NOTIFICATION CENTER METHODS  **********************************
+#if !ACTION_EXTENSION
     
     private var _originalNotificationCenterDelegate: UNUserNotificationCenterDelegate?
+    
+    public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable : Any] = [:]) -> Bool {
+        
+        // Set ourselves as the UNUserNotificationCenter delegate, but also preserve any existing delegate...
+        let notificationCenter = UNUserNotificationCenter.current()
+        _originalNotificationCenterDelegate = notificationCenter.delegate
+        notificationCenter.delegate = self
+        
+        RefreshSchedulesReceiver()
+                .refreshSchedules()
+        
+        if AwesomeNotifications.debug {
+            Log.d(TAG, "Awesome Notifications attached for iOS")
+        }
+        
+        return true
+    }
     
     @available(iOS 10.0, *)
     public func userNotificationCenter(
@@ -487,25 +545,25 @@ public class AwesomeNotifications:
     // *****************************  SCHEDULE METHODS  **********************************
     
     public func getNextValidDate(
-        scheduleModel:NotificationScheduleModel,
-        timezone:String,
-        fixedDate:String?,
-        timeZone:String?
+        scheduleModel: NotificationScheduleModel,
+        fixedDate: String?,
+        timeZone: String?
     ) -> Date? {
-        return
-            DateUtils
-                .getNextValidDate(
-                    scheduleModel: scheduleModel,
-                    fixedDate: fixedDate,
-                    timeZone: timezone)
+        let nextDate:Date? =
+                DateUtils
+                    .getNextValidDate(
+                        fromScheduleModel: scheduleModel,
+                        withReferenceDate: fixedDate,
+                        usingTimeZone: timezone)
+        return nextDate
     }
     
     public func getLocalTimeZone() -> TimeZone {
-        return DateUtils.localTimeZone
+        return DateUtils.shared.localTimeZone
     }
     
     public func getUtcTimeZone() -> TimeZone {
-        return DateUtils.utcTimeZone
+        return DateUtils.shared.utcTimeZone
     }
     
     // ****************************  BADGE COUNTER METHODS  **********************************
@@ -548,8 +606,8 @@ public class AwesomeNotifications:
                     .shared
                     .dismissNotification(byId: id)
         
-        if(SwiftAwesomeNotificationsPlugin.debug){
-            Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification id \(id) dismissed")
+        if AwesomeNotifications.debug {
+            Log.d(TAG, "Notification id \(id) dismissed")
         }
         
         return success

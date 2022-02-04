@@ -9,6 +9,8 @@ import Foundation
 
 public class NotificationActionReceiver {
     
+    let TAG = "NotificationActionReceiver"
+    
     // ************** SINGLETON PATTERN ***********************
     
     public static let shared: NotificationActionReceiver = NotificationActionReceiver()

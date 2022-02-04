@@ -30,27 +30,27 @@ class BackgroundService {
                     actionReceived: silentAction,
                     handler: handler)
         
-        let dartCallbackHandle: Int64 = DefaultManager.shared.getDartBgCallback()
-        let silentCallbackHandle: Int64 = DefaultManager.shared.getActionCallback()
+        let backgroundCallback:Int64 = DefaultsManager.shared.backgroundCallback ?? 0
+        let actionCallback:Int64 = DefaultsManager.shared.actionCallback ?? 0
         
-        if dartCallbackHandle == 0 {
+        if backgroundCallback == 0 {
             Log.d(TAG,
-                  "A background message could not be handled in Dart because there is no valid onActionReceivedMethod handler register")
+                  "A background message could not be handled in Dart because there is no valid background handler register")
             return
         }
         
-        if silentCallbackHandle == 0 {
+        if actionCallback == 0 {
             Log.d(TAG,
-                  "A background message could not be handled in Dart because there is no valid dart background handler register")
+                  "A background message could not be handled in Dart because there is no valid action callback handler register")
             return
         }
         
         DartBackgroundExecutor
             .shared
-            .runBackgroundExecutor(
+            .runBackgroundProcess(
                 silentActionRequest: silentActionRequest,
-                dartCallbackHandle: dartCallbackHandle,
-                silentCallbackHandle: silentCallbackHandle)
+                dartCallbackHandle: backgroundCallback,
+                silentCallbackHandle: actionCallback)
     }
     
 }

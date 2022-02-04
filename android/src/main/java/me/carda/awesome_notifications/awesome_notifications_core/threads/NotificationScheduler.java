@@ -1,5 +1,6 @@
 package me.carda.awesome_notifications.awesome_notifications_core.threads;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -12,6 +13,7 @@ import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.List;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.AlarmManagerCompat;
 
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
@@ -106,22 +108,18 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
                     throw new AwesomeNotificationsException("Channel '" + notificationModel.content.channelKey + "' do not exist or is disabled");
                 }
 
-                if(notificationModel.content.createdSource == null){
-                    notificationModel.content.createdSource = createdSource;
-                    scheduled = true;
-                }
+                if(notificationModel.schedule == null)
+                    return null;
 
-                if(notificationModel.schedule == null) return null;
+                scheduled = notificationModel
+                                .content
+                                .registerCreatedEvent(
+                                        appLifeCycle,
+                                        createdSource);
 
-                if(notificationModel.schedule.createdDate == null){
-                    notificationModel.content.createdDate = DateUtils.getUTCDate();
-                    scheduled = true;
-                }
-
-                if(notificationModel.content.createdLifeCycle == null)
-                    notificationModel.content.createdLifeCycle = appLifeCycle;
-
-                nextValidDate = notificationModel.schedule.getNextValidDate(null);
+                nextValidDate = notificationModel
+                                    .schedule
+                                    .getNextValidDate(null);
 
                 if(nextValidDate != null){
 
@@ -215,12 +213,15 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
             notificationIntent.putExtra(Definitions.NOTIFICATION_ID, notificationModel.content.id);
             notificationIntent.putExtra(Definitions.NOTIFICATION_JSON, notificationDetailsJson);
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    notificationModel.content.id,
-                    notificationIntent,
-                    PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
-            );
+            @SuppressLint("WrongConstant") PendingIntent pendingIntent =
+                    PendingIntent
+                            .getBroadcast(
+                                context,
+                                notificationModel.content.id,
+                                notificationIntent,
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ?
+                                    PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
+                                    PendingIntent.FLAG_UPDATE_CURRENT );
 
             //scheduleNotificationWithWorkManager(context, notificationModel, nextValidDate);
             scheduleNotificationWithAlarmManager(context, notificationModel, nextValidDate, pendingIntent);
@@ -230,22 +231,22 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
         return null;
     }
 
-    // WorkManager does not not meet the requirements of the scheduling process
-    /*private void scheduleNotificationWithWorkManager(Context context, NotificationModel notificationModel, Calendar nextValidDate) {
-        Constraints myConstraints = new Constraints.Builder()
-                .setRequiresDeviceIdle(!notificationModel.schedule.allowWhileIdle)
-                .setRequiresBatteryNotLow(!notificationModel.schedule.allowWhileIdle)
-                .setRequiresStorageNotLow(false)
-                .build();
-
-        OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(ScheduleWorker.class)
-                .setInitialDelay(calculateDelay(nextValidDate), TimeUnit.MILLISECONDS)
-                .addTag(notificationModel.content.id.toString())
-                .setConstraints(myConstraints)
-                .build();
-
-        WorkManager.getInstance(context).enqueue(notificationWork);
-    }*/
+    // WorkManager does not not meet the requirements to be used in scheduling process
+//    private void scheduleNotificationWithWorkManager(Context context, NotificationModel notificationModel, Calendar nextValidDate) {
+//        Constraints myConstraints = new Constraints.Builder()
+//                .setRequiresDeviceIdle(!notificationModel.schedule.allowWhileIdle)
+//                .setRequiresBatteryNotLow(!notificationModel.schedule.allowWhileIdle)
+//                .setRequiresStorageNotLow(false)
+//                .build();
+//
+//        OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(ScheduleWorker.class)
+//                .setInitialDelay(calculateDelay(nextValidDate), TimeUnit.MILLISECONDS)
+//                .addTag(notificationModel.content.id.toString())
+//                .setConstraints(myConstraints)
+//                .build();
+//
+//        WorkManager.getInstance(context).enqueue(notificationWork);
+//    }
 
     private void scheduleNotificationWithAlarmManager(Context context, NotificationModel notificationModel, Calendar nextValidDate, PendingIntent pendingIntent) {
         AlarmManager alarmManager = ScheduleManager.getAlarmManager(context);
@@ -317,9 +318,15 @@ public class NotificationScheduler extends AsyncTask<String, Void, Calendar> {
         if(context != null){
             Intent intent = new Intent(context, ScheduledNotificationReceiver.class);
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                    context, id, intent,
-                    PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT );
+            @SuppressLint("WrongConstant") PendingIntent pendingIntent =
+                    PendingIntent
+                            .getBroadcast(
+                                context,
+                                id,
+                                intent,
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ?
+                                        PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
+                                        PendingIntent.FLAG_UPDATE_CURRENT );
 
             AlarmManager alarmManager = ScheduleManager.getAlarmManager(context);
             alarmManager.cancel(pendingIntent);

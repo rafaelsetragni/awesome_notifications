@@ -7,6 +7,8 @@ import android.os.Build;
 import android.util.Log;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_core.builders.NotificationBuilder;
@@ -34,6 +36,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
     private NotificationModel notificationModel;
 
     private Boolean created = false;
+    private Boolean displayed = false;
 
     private long startTime = 0L, endTime = 0L;
 
@@ -100,14 +103,14 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             if (notificationModel != null){
 
                 created = notificationModel
-                        .content
-                        .registerCreatedEvent(
-                            appLifeCycle,
-                            createdSource);
+                            .content
+                            .registerCreatedEvent(
+                                appLifeCycle,
+                                createdSource);
 
-                notificationModel
-                        .content
-                        .registerDisplayedEvent(
+                displayed = notificationModel
+                            .content
+                            .registerDisplayedEvent(
                                 appLifeCycle);
 
                 if (
@@ -144,9 +147,10 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                     wContextReference.get(),
                     receivedNotification);
 
-            BroadcastSender.sendBroadcastNotificationDisplayed(
-                wContextReference.get(),
-                receivedNotification);
+            if(displayed)
+                BroadcastSender.sendBroadcastNotificationDisplayed(
+                    wContextReference.get(),
+                    receivedNotification);
         }
 
         if(this.endTime == 0L)
@@ -154,7 +158,12 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
         if(AwesomeNotifications.debug){
             long elapsed = (endTime - startTime)/1000000;
-            Log.d(TAG, "Notification displayed in "+elapsed+"ms");
+
+            List<String> actionsTookList = new ArrayList<>();
+            if(created) actionsTookList.add("created");
+            if(displayed) actionsTookList.add("displayed");
+
+            Log.d(TAG, "Notification "+StringUtils.join(actionsTookList.iterator(), " and ")+" in "+elapsed+"ms");
         }
     }
 

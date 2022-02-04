@@ -492,7 +492,7 @@ public class AwesomeNotificationsPlugin
 
         String channelKey = call.arguments();
         if (StringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationsException("Invalid channelKey value");
+            throw new AwesomeNotificationsException("Invalid channel Key value");
 
         boolean dismissed = awesomeNotifications.dismissNotificationsByChannelKey(channelKey);
 
@@ -508,7 +508,7 @@ public class AwesomeNotificationsPlugin
 
         String channelKey = call.arguments();
         if (StringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationsException("Invalid channelKey value");
+            throw new AwesomeNotificationsException("Invalid channel Key value");
 
         boolean canceled = awesomeNotifications.cancelSchedulesByChannelKey(channelKey);
 
@@ -524,7 +524,7 @@ public class AwesomeNotificationsPlugin
 
         String channelKey = call.arguments();
         if (StringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationsException("Invalid channelKey value");
+            throw new AwesomeNotificationsException("Invalid channel Key value");
 
         boolean canceled = awesomeNotifications.cancelNotificationsByChannelKey(channelKey);
 
@@ -800,7 +800,7 @@ public class AwesomeNotificationsPlugin
         NotificationModel notificationModel = new NotificationModel().fromMap(pushData);
 
         if (notificationModel == null)
-            throw new AwesomeNotificationsException("Invalid parameters");
+            throw new AwesomeNotificationsException("Notification content is invalid");
 
         boolean created = awesomeNotifications.createNotification(notificationModel);
         result.success(created);
@@ -818,14 +818,14 @@ public class AwesomeNotificationsPlugin
         Boolean debug = (Boolean) platformParameters.get(Definitions.INITIALIZE_DEBUG_MODE);
         debug = debug != null && debug;
 
-        Object callbackDartObj = platformParameters.get(Definitions.DART_BG_HANDLE);
-        Long dartCallback = callbackDartObj == null ? 0L :(Long) callbackDartObj;
+        Object backgroundCallbackObj = platformParameters.get(Definitions.DART_BG_HANDLE);
+        Long backgroundCallback = backgroundCallbackObj == null ? 0L :(Long) backgroundCallbackObj;
 
         awesomeNotifications.initialize(
                 defaultIconPath,
                 channelsData,
                 channelGroupsData,
-                dartCallback,
+                backgroundCallback,
                 debug);
 
         if (AwesomeNotifications.debug)

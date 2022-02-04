@@ -234,23 +234,13 @@ public class NotificationBuilder {
         if(actionType == ActionType.Default)
             actionIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        return /*actionType == ActionType.Default ?
-            PendingIntent.getActivity(
-                context,
-                notificationModel.content.id,
-                actionIntent,
-                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ?
-                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
-                    PendingIntent.FLAG_UPDATE_CURRENT)
-                :*/
-            PendingIntent.getBroadcast(
+        return PendingIntent.getBroadcast(
                     context,
                     notificationModel.content.id,
                     actionIntent,
                     (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ?
                             PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
-                            PendingIntent.FLAG_UPDATE_CURRENT
-            );
+                            PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private PendingIntent getPendingDismissIntent(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel) {

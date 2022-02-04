@@ -59,7 +59,7 @@
             android:value="2" />
 
         <service
-            android:name="me.carda.awesome_notifications.awesome_notifications_android_core.services.ForegroundService"
+            android:name="me.carda.awesome_notifications.awesome_notifications_core.services.ForegroundService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="phoneCall"

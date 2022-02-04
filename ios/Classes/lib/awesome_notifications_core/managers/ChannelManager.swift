@@ -9,7 +9,7 @@ import Foundation
 
 public class ChannelManager {
     
-    public static String TAG = "ChannelManager"
+    static let TAG = "ChannelManager"
     
     // ************** SINGLETON PATTERN ***********************
     

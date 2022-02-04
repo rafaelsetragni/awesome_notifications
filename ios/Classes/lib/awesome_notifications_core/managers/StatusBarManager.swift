@@ -9,7 +9,7 @@ import Foundation
 
 public class StatusBarManager {
     
-    public static String TAG = "StatusBarManager"
+    static let TAG = "StatusBarManager"
     
     // ************** SINGLETON PATTERN ***********************
     

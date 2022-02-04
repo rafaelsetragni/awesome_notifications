@@ -19,7 +19,7 @@ class Log {
     }
     
     public static func d(_ tag:String, _ message:String, file:String = #file, function:String = #function, line:Int = #line){
-        if(SwiftAwesomeNotificationsPlugin.debug){
+        if(AwesomeNotifications.debug){
             os_log("%@ %@:%d %@", type: .error, tag, function, line, message)
         }
     }

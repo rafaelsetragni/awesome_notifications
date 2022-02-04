@@ -8,21 +8,26 @@ enum Definitions {
     static let  MEDIA_VALID_FILE = "^file:\\/\\/"
     static let  MEDIA_VALID_ASSET = "^asset:\\/\\/"
     static let  MEDIA_VALID_RESOURCE = "^resource:\\/\\/"
-
-    static let  INITIALIZE_CHANNELS = "initializeChannels"
     
     static let  USER_DEFAULT_TAG = "group.AwesomeNotifications." + Bundle.main.getBundleName()
     static let  DEFAULT_CATEGORY_IDENTIFIER = "DEFAULT"
 
     static let  IOS_BACKGROUND_SCHEDULER = "awesome_notifications.scheduler"
+    
     static let  BROADCAST_CREATED_NOTIFICATION = "broadcast.awesome_notifications.CREATED_NOTIFICATION"
     static let  BROADCAST_DISPLAYED_NOTIFICATION = "broadcast.awesome_notifications.DISPLAYED_NOTIFICATION"
-    static let  BROADCAST_KEEP_ON_TOP = "broadcast.awesome_notifications.KEEP_ON_TOP"
+    static let  BROADCAST_DISMISSED_NOTIFICATION = "broadcast.awesome_notifications.DISMISSED_NOTIFICATION"
+    static let  BROADCAST_SILENT_ACTION = "broadcast.awesome_notifications.SILENT_ACTION"
+    static let  BROADCAST_DEFAULT_ACTION = "broadcast.awesome_notifications.DEFAULT_ACTION"
+    static let  BROADCAST_BACKGROUND_ACTION = "broadcast.awesome_notifications.BACKGROUND_ACTION"
     static let  EXTRA_BROADCAST_MESSAGE = "notification"
 
     static let  NOTIFICATION_MODEL_CONTENT = "content"
     static let  NOTIFICATION_MODEL_SCHEDULE = "schedule"
     static let  NOTIFICATION_MODEL_BUTTONS = "actionButtons"
+    
+    static let  SILENT_HANDLE = "silentHandle"
+    static let  DART_BG_HANDLE = "dartBgHandle"
 
     static let  SHARED_DEFAULTS = "defaults"
     static let  SHARED_MANAGER = "sharedManager"
@@ -102,6 +107,8 @@ enum Definitions {
     static let  CHANNEL_METHOD_NOTIFICATION_DISPLAYED = "notificationDisplayed"
     static let  CHANNEL_METHOD_NOTIFICATION_DISMISSED = "notificationDismissed"
     static let  CHANNEL_METHOD_RECEIVED_ACTION = "receivedAction"
+    static let  CHANNEL_METHOD_SILENT_ACTION = "silentAction"
+    static let  CHANNEL_METHOD_SILENCED_CALLBACK = "isolateCallbackReference";
     
     static let  CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER = "getUtcTimeZoneIdentifier"
     static let  CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER = "getLocalTimeZoneIdentifier"
@@ -112,6 +119,11 @@ enum Definitions {
     static let  BADGE_COUNT = "badgeCount"
     static let  SELECT_NOTIFICATION = "SELECT_NOTIFICATION"
     static let  NOTIFICATION_BUTTON_ACTION_PREFIX = "ACTION_NOTIFICATION"
+    
+    static let  INITIALIZE_DEBUG_MODE = "debug"
+    static let  INITIALIZE_DEFAULT_ICON = "defaultIcon"
+    static let  INITIALIZE_CHANNELS = "initializeChannels"
+    static let  INITIALIZE_CHANNEL_GROUPS = "initializeChannelGroups"
 
     static let  SHARED_PREFERENCES_CHANNEL_MANAGER = "channel_manager"
     

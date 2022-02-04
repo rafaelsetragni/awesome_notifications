@@ -8,11 +8,20 @@
 import Foundation
 
 class DateUtils {
+    
+    let TAG = "DateUtils"
+    
+    // ************** SINGLETON PATTERN ***********************
+    
+    public static let shared: DateUtils = DateUtils()
+    private init(){}
+    
+    // ********************************************************
 
-    public static let localTimeZone :TimeZone = Date.localTimeZone()//Calendar.current.timeZone
-    public static let utcTimeZone :TimeZone = TimeZone(secondsFromGMT: 0)!;
+    public let localTimeZone :TimeZone = Date.localTimeZone()//Calendar.current.timeZone
+    public let utcTimeZone :TimeZone = TimeZone(secondsFromGMT: 0)!;
 
-    public static func stringToDate(_ dateTime:String?, timeZone:String?) -> Date? {
+    public func stringToDate(_ dateTime:String?, timeZone:String?) -> Date? {
         
         if(StringUtils.isNullOrEmpty(dateTime)){ return nil }
         
@@ -26,7 +35,7 @@ class DateUtils {
         return date
     }
     
-    public static func dateToString(_ dateTime:Date?, timeZone:String?) -> String? {
+    public func dateToString(_ dateTime:Date?, timeZone:String?) -> String? {
         
         if(dateTime == nil){ return nil }
         
@@ -38,29 +47,31 @@ class DateUtils {
         return date
     }
 
-    public static func getUTCTextDate() -> String {
+    public func getUTCTextDate() -> String {
         let timeZone:String = DateUtils.utcTimeZone.identifier
         let dateUtc:Date = getUTCDateTime()
         return dateToString(dateUtc, timeZone: timeZone)!
     }
     
-    public static func getLocalTextDate(fromTimeZone timeZone: String) -> String? {
+    public func getLocalTextDate(fromTimeZone timeZone: String) -> String? {
         return dateToString(getLocalDateTime(fromTimeZone: timeZone), timeZone: timeZone)
     }
     
-    public static func getUTCDateTime() -> Date {
+    public func getUTCDateTime() -> Date {
         return Date()
     }
     
-    public static func getLocalDateTime(fromTimeZone timeZone: String?) -> Date? {
+    public func getLocalDateTime(fromTimeZone timeZone: String?) -> Date? {
         return Date() // there is no true timezone component into Dates in swift
     }
     
-    public static func getNextValidDate(
-        scheduleModel:NotificationScheduleModel,
-        fixedDate:String?,
-        timeZone:String = DateUtils.utcTimeZone.identifier) -> Date? {
+    public func getNextValidDate(
+        fromScheduleModel scheduleModel:NotificationScheduleModel,
+        withReferenceDate fixedDate:String?,
+        usingTimeZone timeZone:String?
+    ) -> Date? {
         
+        timeZone:String ??= DateUtils.utcTimeZone.identifier
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(identifier: timeZone)!
         
@@ -82,10 +93,11 @@ class DateUtils {
         return nextValidDate
     }
     
-    public static func getLastValidDate(
+    public func getLastValidDate(
         scheduleModel:NotificationScheduleModel,
         fixedDate:String?,
-        timeZone:String = DateUtils.localTimeZone.identifier) -> Date? {
+        timeZone:String = DateUtils.localTimeZone.identifier
+    ) -> Date? {
         
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(identifier: timeZone)!

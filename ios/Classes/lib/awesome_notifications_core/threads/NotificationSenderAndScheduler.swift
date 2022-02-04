@@ -48,20 +48,24 @@ class NotificationSenderAndScheduler {
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "Notification is not valid")
         }
 
-        PermissionManager.areNotificationsGloballyAllowed(permissionCompletion: { (allowed) in
+        PermissionManager
+            .shared
+            .areNotificationsGloballyAllowed(whenGotResults: { (allowed) in
             
             do{
                 if (allowed){
-                    self.appLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
+                    self.appLifeCycle = LifeCycleManager
+                                            .shared
+                                            .currentLifeCycle
 
                     try notificationModel!.validate()
                     
                     if notificationModel!.schedule != nil &&
                         StringUtils.isNullOrEmpty(notificationModel!.schedule!.createdDate
                     ){
-                        let timeZone:String = notificationModel!.schedule!.timeZone ?? DateUtils.localTimeZone.identifier
+                        let timeZone:String = notificationModel!.schedule!.timeZone ?? DateUtils.shared.localTimeZone.identifier
                         notificationModel!.schedule!.timeZone = timeZone
-                        notificationModel!.schedule!.createdDate = DateUtils.getLocalTextDate(fromTimeZone: timeZone)
+                        notificationModel!.schedule!.createdDate = DateUtils.shared.getLocalTextDate(fromTimeZone: timeZone)
                     }
 
                     // Keep this way to future thread running

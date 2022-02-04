@@ -9,15 +9,15 @@ import Foundation
 
 public class MediaUtils {
 
-    static func matchMediaType(regex:String, mediaPath:String?) -> Bool {
+    func matchMediaType(regex:String, mediaPath:String?) -> Bool {
         return matchMediaType(regex:regex, mediaPath:mediaPath, filterEmpty:true);
     }
 
-    static func matchMediaType(regex:String, mediaPath:String?, filterEmpty:Bool) -> Bool {
+    func matchMediaType(regex:String, mediaPath:String?, filterEmpty:Bool) -> Bool {
         return (mediaPath?.matches(regex) ?? false) && (!filterEmpty || !StringUtils.isNullOrEmpty(mediaPath))
     }
 
-    public static func getMediaSourceType(mediaPath:String?) -> MediaSource {
+    func getMediaSourceType(mediaPath:String?) -> MediaSource {
 
         if (mediaPath != nil) {
 
@@ -41,7 +41,7 @@ public class MediaUtils {
         return MediaSource.Unknown;
     }
 
-    public static func cleanMediaPath(mediaPath:String?) -> String? {
+    func cleanMediaPath(mediaPath:String?) -> String? {
         
         if (mediaPath != nil) {
             

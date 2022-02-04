@@ -57,12 +57,12 @@ public class ActionReceived : NotificationReceived {
     }
     
     public func registerActionEvent(withLifeCycle lifeCycle: NotificationLifeCycle){
-        actionDate = DateUtils.getUTCTextDate()
+        actionDate = DateUtils.shared.getUTCTextDate()
         actionLifeCycle = lifeCycle
     }
     
     public func registerDismissedEvent(withLifeCycle lifeCycle: NotificationLifeCycle){
-        dismissedDate = DateUtils.getUTCTextDate()
+        dismissedDate = DateUtils.shared.getUTCTextDate()
         dismissedLifeCycle = lifeCycle
     }
     

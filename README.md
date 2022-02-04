@@ -1332,7 +1332,7 @@ In your `AndroidManifest.xml` inside the `<manifest>` tag add:
 ```
 Next, you have to add the `<service>` tag to your `AndroidManifest.xml`. Inside your `<application>` tag add
 ```xml
- <service   android:name="me.carda.awesome_notifications.services.ForegroundService"
+ <service   android:name="me.carda.awesome_notifications.awesome_notifications_core.services.ForegroundService"
             android:enabled="true"            
             android:exported="false"
             android:stopWithTask="true"

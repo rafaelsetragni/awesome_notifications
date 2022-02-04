@@ -90,9 +90,10 @@ public class NotificationContentModel extends AbstractModel {
         return false;
     }
 
-    public void registerDisplayedEvent(NotificationLifeCycle lifeCycle){
+    public boolean registerDisplayedEvent(NotificationLifeCycle lifeCycle){
         this.displayedDate = DateUtils.getUTCDate();
         this.displayedLifeCycle = lifeCycle;
+        return true;
     }
 
     @Override
