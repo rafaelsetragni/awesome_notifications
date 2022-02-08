@@ -1,3 +1,5 @@
+## [0.6.22]
+* Bumped `platform` dependency to 3.1.0 to support Flutter 2.10.0+
 ## [0.6.21]
 * Added customSound feature for Android (only applicable for versions older than Android 8 (Oreo))
 * Type parameter T removed for AwessomeAssertUtils to allows it to be compatible with Flutter web parser.
