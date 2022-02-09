@@ -255,16 +255,17 @@ class NotificationController {
   /// Use this method to detect when the user taps on a notification or action button
   static Future <void> onActionReceivedMethod(ReceivedAction receivedAction) async {
 
-    bool isSilentAction =
-        receivedAction.actionType == ActionType.SilentAction ||
-            receivedAction.actionType == ActionType.SilentBackgroundAction;
+    bool isSilentAction = receivedAction.actionType == ActionType.SilentAction;
 
-    Fluttertoast.showToast(
-        msg: '${ isSilentAction ? 'Silent action' : 'Action'
-        } received on ${_toSimpleEnum(receivedAction.actionLifeCycle!)}',
-        toastLength: Toast.LENGTH_SHORT,
-        backgroundColor: isSilentAction ? Colors.blueAccent : App.mainColor,
-        gravity: ToastGravity.BOTTOM);
+    // SilentBackgroundAction runs on background thread and cannot show
+    // UI/visual elements
+    if (receivedAction.actionType != ActionType.SilentBackgroundAction)
+      Fluttertoast.showToast(
+          msg: '${ isSilentAction ? 'Silent action' : 'Action'
+          } received on ${_toSimpleEnum(receivedAction.actionLifeCycle!)}',
+          toastLength: Toast.LENGTH_SHORT,
+          backgroundColor: isSilentAction ? Colors.blueAccent : App.mainColor,
+          gravity: ToastGravity.BOTTOM);
 
     switch (receivedAction.channelKey){
 

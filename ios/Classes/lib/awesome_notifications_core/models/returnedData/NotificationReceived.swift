@@ -42,6 +42,8 @@ public class NotificationReceived : NotificationContentModel {
         self.createdSource = contentModel!.createdSource
         self.createdLifeCycle = contentModel!.createdLifeCycle
         self.createdDate = contentModel!.createdDate
+        
+        self.actionType = contentModel!.actionType
     }
     
 }

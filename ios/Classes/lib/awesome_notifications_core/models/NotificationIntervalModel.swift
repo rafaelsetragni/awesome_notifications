@@ -78,21 +78,26 @@ public class NotificationIntervalModel : NotificationScheduleModel {
     }
     
     public func getNextValidDate() -> Date? {
-        let timeZone:String = self.timeZone ?? DateUtils.localTimeZone.identifier
+        let timeZone:String = self.timeZone ?? DateUtils.shared.localTimeZone.identifier
         
-        return DateUtils.getNextValidDate(
-            scheduleModel: self,
-            fixedDate: (self.repeats ?? true) ?
-                DateUtils.getLocalTextDate(fromTimeZone: timeZone ) :
-                createdDate,
-            timeZone: timeZone
+        return DateUtils
+                .shared
+                .getNextValidDate(
+                    fromScheduleModel: self,
+                    withReferenceDate: (self.repeats ?? true) ?
+                        DateUtils
+                            .shared
+                            .getLocalTextDate(
+                                fromTimeZone: timeZone ) :
+                        createdDate,
+                    usingTimeZone: timeZone
         )
     }
     
     public func hasNextValidDate() -> Bool {
         
-        let timeZone:String = self.timeZone ?? DateUtils.localTimeZone.identifier
-        let nowDate:Date? = DateUtils.getLocalDateTime(fromTimeZone: timeZone)
+        let timeZone:String = self.timeZone ?? DateUtils.shared.localTimeZone.identifier
+        let nowDate:Date? = DateUtils.shared.getLocalDateTime(fromTimeZone: timeZone)
         
         let nextValidDate:Date? = getNextValidDate()
         

@@ -13,12 +13,22 @@ class BroadcastSender {
     
     // ************** SINGLETON PATTERN ***********************
     
-    public static let shared = BroadcastSender()
+    static var instance:BroadcastSender?
+    public static var shared:BroadcastSender {
+        get {
+            BroadcastSender.instance =
+                BroadcastSender.instance ?? BroadcastSender()
+            return BroadcastSender.instance!
+        }
+    }
     private init(){}
     
     // ********************************************************
     
-    public func sendBroadcast(notificationCreated notificationReceived: NotificationReceived){
+    public func sendBroadcast(
+        notificationCreated notificationReceived: NotificationReceived,
+        whenFinished completionHandler: @escaping (Bool) -> Void
+    ){
         if LifeCycleManager.shared.currentLifeCycle == .AppKilled {
             CreatedManager.saveCreated(received: notificationReceived)
         }
@@ -26,12 +36,17 @@ class BroadcastSender {
             AwesomeEventsReceiver
                 .shared
                 .addNotificationEvent(
-                    named: Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED,
+                    named: Definitions.BROADCAST_CREATED_NOTIFICATION,
                     with: notificationReceived)
         }
+        
+        completionHandler(true)
     }
     
-    public func sendBroadcast(notificationDisplayed notificationReceived: NotificationReceived){
+    public func sendBroadcast(
+        notificationDisplayed notificationReceived: NotificationReceived,
+        whenFinished completionHandler: @escaping (Bool) -> Void
+    ){
         if LifeCycleManager.shared.currentLifeCycle == .AppKilled {
             DisplayedManager.saveDisplayed(received: notificationReceived)
         }
@@ -39,51 +54,95 @@ class BroadcastSender {
             AwesomeEventsReceiver
                 .shared
                 .addNotificationEvent(
-                    named: Definitions.CHANNEL_METHOD_NOTIFICATION_DISPLAYED,
+                    named: Definitions.BROADCAST_DISPLAYED_NOTIFICATION,
                     with: notificationReceived)
         }
+        
+        completionHandler(true)
     }
     
-    public func sendBroadcast(notificationDismissed actionReceived: ActionReceived){
-        if LifeCycleManager.shared.currentLifeCycle == .AppKilled {
-            DismissedManager.saveDismissed(received: actionReceived)
-        }
-        else {
-            AwesomeEventsReceiver
-                .shared
-                .addNotificationEvent(
-                    named: Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED,
-                    with: actionReceived)
-        }
-    }
-    
-    public func sendBroadcast(actionReceived: ActionReceived){
+    public func sendBroadcast(
+        actionReceived: ActionReceived,
+        whenFinished completionHandler: @escaping (Bool) -> Void
+    ){
         if LifeCycleManager.shared.currentLifeCycle == .AppKilled {
             ActionManager.saveAction(received: actionReceived)
         }
         else {
             AwesomeEventsReceiver
                 .shared
-                .addNotificationEvent(
-                    named: Definitions.CHANNEL_METHOD_RECEIVED_ACTION,
+                .addActionEvent(
+                    named: Definitions.BROADCAST_DEFAULT_ACTION,
                     with: actionReceived)
         }
+        
+        completionHandler(true)
     }
     
-    public func sendBroadcast(silentAction: ActionReceived){
+    public func sendBroadcast(
+        notificationDismissed actionReceived: ActionReceived,
+        whenFinished completionHandler: @escaping (Bool) -> Void
+    ){
+        if LifeCycleManager.shared.currentLifeCycle == .AppKilled {
+            DismissedManager.saveDismissed(received: actionReceived)
+        }
+        else {
+            AwesomeEventsReceiver
+                .shared
+                .addActionEvent(
+                    named: Definitions.BROADCAST_DISMISSED_NOTIFICATION,
+                    with: actionReceived)
+        }
+        
+        completionHandler(true)
+    }
+    
+    public func sendBroadcast(
+        silentAction: ActionReceived,
+        whenFinished completionHandler: @escaping (Bool) -> Void
+    ){
         AwesomeEventsReceiver
             .shared
-            .addNotificationEvent(
-                named: Definitions.CHANNEL_METHOD_SILENT_ACTION,
+            .addActionEvent(
+                named: Definitions.BROADCAST_SILENT_ACTION,
                 with: silentAction)
+        
+        completionHandler(true)
     }
     
-    public func enqueue(silentAction actionReceived: ActionReceived){
-        Bac
+    public func sendBroadcast(
+        backgroundAction: ActionReceived,
+        whenFinished completionHandler: @escaping (Bool) -> Void
+    ){
+        AwesomeEventsReceiver
+            .shared
+            .addActionEvent(
+                named: Definitions.BROADCAST_BACKGROUND_ACTION,
+                with: backgroundAction)
+        
+        completionHandler(true)
     }
     
-    public func enqueue(silentBackgroundAction actionReceived: ActionReceived){
-        Bac
+    public func enqueue(
+        silentAction actionReceived: ActionReceived,
+        whenFinished completionHandler: @escaping (Bool) -> Void
+    ){
+        BackgroundService
+            .shared
+            .enqueue(
+                SilentBackgroundAction: actionReceived,
+                withCompletionHandler: completionHandler)
+    }
+    
+    public func enqueue(
+        silentBackgroundAction actionReceived: ActionReceived,
+        whenFinished completionHandler: @escaping (Bool) -> Void
+    ){
+        BackgroundService
+            .shared
+            .enqueue(
+                SilentBackgroundAction: actionReceived,
+                withCompletionHandler: completionHandler)
     }
     
 }

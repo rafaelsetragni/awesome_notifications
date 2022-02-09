@@ -65,7 +65,11 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
                     
                 }
                 
-                NotificationBuilder.setUserInfoContent(notificationModel: notificationModel!, content: content)
+                NotificationBuilder
+                    .newInstance()
+                    .setUserInfoContent(
+                        notificationModel: notificationModel!,
+                        content: content)
                 
                 if StringUtils.isNullOrEmpty(title) {
                     content.title = notificationModel?.content?.title ?? ""
@@ -81,7 +85,7 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
                 
                 if let notificationModel = notificationModel {
                     do {
-                        try NotificationSenderAndScheduler().send(
+                        try NotificationSenderAndScheduler.send(
                             createdSource: NotificationSource.Firebase,
                             notificationModel: notificationModel,
                             content: content,
@@ -96,7 +100,10 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
                                     return
                                 }
                                 
-                            }
+                            },
+                            appLifeCycle: LifeCycleManager
+                                                .shared
+                                                .currentLifeCycle
                         )
                     } catch {
                     }

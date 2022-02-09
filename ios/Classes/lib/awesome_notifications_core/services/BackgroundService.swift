@@ -13,7 +13,14 @@ class BackgroundService {
     
     // ************** SINGLETON PATTERN ***********************
     
-    public static let shared = BackgroundService()
+    static var instance:BackgroundService?
+    public static var shared:BackgroundService {
+        get {
+            BackgroundService.instance =
+                BackgroundService.instance ?? BackgroundService()
+            return BackgroundService.instance!
+        }
+    }
     private init(){}
     
     // ********************************************************
@@ -21,27 +28,29 @@ class BackgroundService {
     
     public func enqueue(
         SilentBackgroundAction silentAction: ActionReceived,
-        handler: @escaping () -> ()
+        withCompletionHandler completionHandler: @escaping (Bool) -> ()
     ){
         Log.d(TAG, "A new Dart background service has started")
         
         let silentActionRequest:SilentActionRequest =
                 SilentActionRequest(
                     actionReceived: silentAction,
-                    handler: handler)
+                    handler: completionHandler)
         
-        let backgroundCallback:Int64 = DefaultsManager.shared.backgroundCallback ?? 0
-        let actionCallback:Int64 = DefaultsManager.shared.actionCallback ?? 0
+        let backgroundCallback:Int64 = DefaultsManager.shared.backgroundCallback
+        let actionCallback:Int64 = DefaultsManager.shared.actionCallback
         
         if backgroundCallback == 0 {
             Log.d(TAG,
                   "A background message could not be handled in Dart because there is no valid background handler register")
+            completionHandler(false)
             return
         }
         
         if actionCallback == 0 {
             Log.d(TAG,
                   "A background message could not be handled in Dart because there is no valid action callback handler register")
+            completionHandler(false)
             return
         }
         

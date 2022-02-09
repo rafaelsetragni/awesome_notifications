@@ -102,6 +102,7 @@ public class AwesomeNotifications
     // ******************** LOAD EXTERNAL EXTENSIONS ***************************
 
     public static boolean isExtensionsLoaded = false;
+    @SuppressWarnings("unchecked")
     public static void loadAwesomeExtensions(
         @NonNull Context context
     ) throws AwesomeNotificationsException {
@@ -419,7 +420,7 @@ public class AwesomeNotifications
 
         ChannelManager channelManager = ChannelManager.getInstance();
         for (NotificationChannelModel channelModel : channels)
-            channelManager.saveChannel(context, channelModel, false, forceUpdate);
+            channelManager.saveChannel(context, channelModel, true, forceUpdate);
 
         channelManager.commitChanges(context);
     }
@@ -445,7 +446,7 @@ public class AwesomeNotifications
 
                     created.validate(context);
 
-                    notifyAwesomeEvent(Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED, created);
+                    notifyAwesomeEvent(Definitions.EVENT_NOTIFICATION_CREATED, created);
 
                     CreatedManager.removeCreated(context, created.id);
                     CreatedManager.commitChanges(context);
@@ -465,7 +466,7 @@ public class AwesomeNotifications
                 try {
                     displayed.validate(context);
 
-                    notifyAwesomeEvent(Definitions.CHANNEL_METHOD_NOTIFICATION_DISPLAYED, displayed);
+                    notifyAwesomeEvent(Definitions.EVENT_NOTIFICATION_DISPLAYED, displayed);
 
                     DisplayedManager.removeDisplayed(context, displayed.id);
                     DisplayedManager.commitChanges(context);
@@ -485,7 +486,7 @@ public class AwesomeNotifications
                 try {
                     received.validate(context);
 
-                    notifyAwesomeEvent(Definitions.CHANNEL_METHOD_DEFAULT_ACTION, received);
+                    notifyAwesomeEvent(Definitions.EVENT_DEFAULT_ACTION, received);
 
                     ActionManager.removeAction(context, received.id);
                     ActionManager.commitChanges(context);
@@ -505,7 +506,7 @@ public class AwesomeNotifications
                 try {
                     received.validate(context);
 
-                    notifyAwesomeEvent(Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED, received);
+                    notifyAwesomeEvent(Definitions.EVENT_NOTIFICATION_DISMISSED, received);
 
                     DismissedManager.removeDismissed(context, received.id);
                     DismissedManager.commitChanges(context);
@@ -576,7 +577,7 @@ public class AwesomeNotifications
 
         ChannelManager
                 .getInstance()
-                .saveChannel(wContext.get(), channelModel, forceUpdate)
+                .saveChannel(wContext.get(), channelModel, false, forceUpdate)
                 .commitChanges(wContext.get());
 
         return true;
@@ -641,7 +642,7 @@ public class AwesomeNotifications
 
         actionModel.validate(wContext.get());
 
-        notifyAwesomeEvent(Definitions.CHANNEL_METHOD_DEFAULT_ACTION, actionModel);
+        notifyAwesomeEvent(Definitions.EVENT_DEFAULT_ACTION, actionModel);
 
         if (AwesomeNotifications.debug)
             Log.d(TAG, "Notification action received");

@@ -13,7 +13,14 @@ class DateUtils {
     
     // ************** SINGLETON PATTERN ***********************
     
-    public static let shared: DateUtils = DateUtils()
+    static var instance:DateUtils?
+    public static var shared:DateUtils {
+        get {
+            DateUtils.instance =
+                DateUtils.instance ?? DateUtils()
+            return DateUtils.instance!
+        }
+    }
     private init(){}
     
     // ********************************************************
@@ -28,7 +35,7 @@ class DateUtils {
         guard let safeDateTime:String = dateTime else { return nil }
         
         let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(identifier: timeZone ?? DateUtils.localTimeZone.identifier)
+        dateFormatter.timeZone = TimeZone(identifier: timeZone ?? localTimeZone.identifier)
         dateFormatter.dateFormat = Definitions.DATE_FORMAT
 
         let date = dateFormatter.date(from: safeDateTime)
@@ -40,7 +47,7 @@ class DateUtils {
         if(dateTime == nil){ return nil }
         
         let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(identifier: timeZone ?? DateUtils.localTimeZone.identifier)
+        dateFormatter.timeZone = TimeZone(identifier: timeZone ?? localTimeZone.identifier)
         dateFormatter.dateFormat = Definitions.DATE_FORMAT
 
         let date = dateFormatter.string(from: dateTime!)
@@ -48,7 +55,7 @@ class DateUtils {
     }
 
     public func getUTCTextDate() -> String {
-        let timeZone:String = DateUtils.utcTimeZone.identifier
+        let timeZone:String = utcTimeZone.identifier
         let dateUtc:Date = getUTCDateTime()
         return dateToString(dateUtc, timeZone: timeZone)!
     }
@@ -70,15 +77,13 @@ class DateUtils {
         withReferenceDate fixedDate:String?,
         usingTimeZone timeZone:String?
     ) -> Date? {
-        
-        timeZone:String ??= DateUtils.utcTimeZone.identifier
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: timeZone)!
+        calendar.timeZone = TimeZone(identifier: timeZone ?? utcTimeZone.identifier)!
         
         let fixedDateTime:Date =
             fixedDate?.toDate(fromTimeZone: timeZone) ??
-            DateUtils.getLocalDateTime(fromTimeZone: timeZone) ??
-            DateUtils.getUTCDateTime()
+            getLocalDateTime(fromTimeZone: timeZone) ??
+            getUTCDateTime()
         
         var nextValidDate:Date?
         if scheduleModel is NotificationIntervalModel {
@@ -96,16 +101,15 @@ class DateUtils {
     public func getLastValidDate(
         scheduleModel:NotificationScheduleModel,
         fixedDate:String?,
-        timeZone:String = DateUtils.localTimeZone.identifier
+        timeZone:String?
     ) -> Date? {
-        
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: timeZone)!
+        calendar.timeZone = TimeZone(identifier: timeZone ?? localTimeZone.identifier)!
         
         let fixedDateTime:Date =
             fixedDate?.toDate(fromTimeZone: timeZone) ??
-            DateUtils.getLocalDateTime(fromTimeZone: timeZone) ??
-            DateUtils.getUTCDateTime()
+            getLocalDateTime(fromTimeZone: timeZone) ??
+            getUTCDateTime()
         
         var lastValidDate:Date?
         if scheduleModel is NotificationIntervalModel {

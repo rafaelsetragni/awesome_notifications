@@ -5,19 +5,19 @@ import android.content.Intent;
 
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 
-public abstract class AwesomeBackgroundExecutor {
+public abstract class BackgroundExecutor {
 
-    private static AwesomeBackgroundExecutor runningInstance;
+    private static BackgroundExecutor runningInstance;
 
     protected Long dartCallbackHandle = 0L;
     protected Long silentCallbackHandle = 0L;
 
-    private static Class<? extends AwesomeBackgroundExecutor> awesomeBackgroundExecutorClass;
+    private static Class<? extends BackgroundExecutor> awesomeBackgroundExecutorClass;
 
     public static void setBackgroundExecutorClass (
-            Class<? extends AwesomeBackgroundExecutor> awesomeBackgroundExecutorClass
+            Class<? extends BackgroundExecutor> awesomeBackgroundExecutorClass
     ){
-        AwesomeBackgroundExecutor.awesomeBackgroundExecutorClass =
+        BackgroundExecutor.awesomeBackgroundExecutorClass =
                 awesomeBackgroundExecutorClass;
     }
 

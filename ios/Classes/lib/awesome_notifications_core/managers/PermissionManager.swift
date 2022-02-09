@@ -17,7 +17,14 @@ public class PermissionManager {
     
     // ************** SINGLETON PATTERN ***********************
     
-    public static let shared: PermissionManager = PermissionManager()
+    static var instance:PermissionManager?
+    public static var shared:PermissionManager {
+        get {
+            PermissionManager.instance =
+                PermissionManager.instance ?? PermissionManager()
+            return PermissionManager.instance!
+        }
+    }
     private init(){}
     
     // ********************************************************
@@ -599,7 +606,7 @@ public class PermissionManager {
 
         ChannelManager
             .shared
-            .saveChannel(channel: channelModel)
+            .saveChannel(channel: channelModel, setOnlyNew: false)
     }
     
     public func showNotificationConfigPage(whenUserReturns completionHandler: @escaping () -> ()) {

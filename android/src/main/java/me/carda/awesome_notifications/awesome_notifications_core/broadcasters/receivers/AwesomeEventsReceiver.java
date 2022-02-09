@@ -142,7 +142,7 @@ public class AwesomeEventsReceiver {
             if (AwesomeNotifications.debug)
                 Log.d(TAG, "Notification created");
 
-            notifyNotificationEvent(Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED, notificationReceived);
+            notifyNotificationEvent(Definitions.EVENT_NOTIFICATION_CREATED, notificationReceived);
 
         } catch (Exception e) {
             throw new AwesomeNotificationsException(e.getMessage());
@@ -156,7 +156,7 @@ public class AwesomeEventsReceiver {
             if (AwesomeNotifications.debug)
                 Log.d(TAG, "Notification displayed");
 
-            notifyNotificationEvent(Definitions.CHANNEL_METHOD_NOTIFICATION_DISPLAYED, notificationReceived);
+            notifyNotificationEvent(Definitions.EVENT_NOTIFICATION_DISPLAYED, notificationReceived);
 
         } catch (Exception e) {
             throw new AwesomeNotificationsException(e.getMessage());
@@ -170,7 +170,7 @@ public class AwesomeEventsReceiver {
             if(AwesomeNotifications.debug)
                 Log.d(TAG, "Notification action received");
 
-            notifyActionEvent(Definitions.CHANNEL_METHOD_DEFAULT_ACTION, actionReceived);
+            notifyActionEvent(Definitions.EVENT_DEFAULT_ACTION, actionReceived);
 
         } catch (Exception e) {
             if(AwesomeNotifications.debug)
@@ -186,7 +186,7 @@ public class AwesomeEventsReceiver {
             if (AwesomeNotifications.debug)
                 Log.d(TAG, "Notification dismissed");
 
-            notifyActionEvent(Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED, actionReceived);
+            notifyActionEvent(Definitions.EVENT_NOTIFICATION_DISMISSED, actionReceived);
 
         } catch (Exception e) {
             throw new AwesomeNotificationsException(e.getMessage());
@@ -200,7 +200,7 @@ public class AwesomeEventsReceiver {
             if(AwesomeNotifications.debug)
                 Log.d(TAG, "Silent action received");
 
-            notifyActionEvent(Definitions.CHANNEL_METHOD_SILENT_ACTION, actionReceived);
+            notifyActionEvent(Definitions.EVENT_SILENT_ACTION, actionReceived);
 
         } catch (Exception e) {
             if(AwesomeNotifications.debug)
@@ -216,7 +216,7 @@ public class AwesomeEventsReceiver {
             if (AwesomeNotifications.debug)
                 Log.d(TAG, "Background silent action received");
 
-            notifyActionEvent(Definitions.CHANNEL_METHOD_SILENT_ACTION, actionReceived);
+            notifyActionEvent(Definitions.EVENT_SILENT_ACTION, actionReceived);
 
         } catch (Exception e) {
             throw new AwesomeNotificationsException(e.getMessage());

@@ -9,7 +9,7 @@ import Foundation
 
 public class CronExpression {
 
-    public let timeZone:TimeZone = TimeZone(identifier: DateUtils.utcTimeZone.identifier)!
+    public let timeZone:TimeZone = TimeZone(identifier: DateUtils.shared.utcTimeZone.identifier)!
     public var isValidExpression:Bool = false
     
     public enum CronError: Error {

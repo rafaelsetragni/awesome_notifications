@@ -451,7 +451,7 @@ public class PermissionManager {
         try {
             ChannelManager
                     .getInstance()
-                    .saveChannel(context, channelModel, false);
+                    .saveChannel(context, channelModel, false,false);
         } catch (AwesomeNotificationsException e) {
             e.printStackTrace();
         }

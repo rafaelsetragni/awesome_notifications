@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -29,7 +28,7 @@ import io.flutter.view.FlutterCallbackInformation;
 
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
-import me.carda.awesome_notifications.awesome_notifications_core.background.AwesomeBackgroundExecutor;
+import me.carda.awesome_notifications.awesome_notifications_core.background.BackgroundExecutor;
 import me.carda.awesome_notifications.awesome_notifications_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.LifeCycleManager;
 import me.carda.awesome_notifications.awesome_notifications_core.models.returnedData.ActionReceived;
@@ -38,7 +37,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.models.returned
  * An background execution abstraction which handles initializing a background isolate running a
  * callback dispatcher, used to invoke Dart callbacks while backgrounded.
  */
-public class DartBackgroundExecutor extends AwesomeBackgroundExecutor implements MethodCallHandler {
+public class DartBackgroundExecutor extends BackgroundExecutor implements MethodCallHandler {
     private static final String TAG = "DartBackgroundExec";
 
     private static final BlockingQueue<Intent> silentDataQueue = new LinkedBlockingDeque<Intent>();
@@ -120,7 +119,7 @@ public class DartBackgroundExecutor extends AwesomeBackgroundExecutor implements
 //            e.printStackTrace();
 //        }
 
-        Handler handler = new Handler(Looper.getMainLooper());
+        final Handler handler = new Handler(Looper.getMainLooper());
         Runnable dartBgRunnable =
                 new Runnable() {
                     @Override

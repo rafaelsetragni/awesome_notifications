@@ -13,7 +13,14 @@ public class ChannelManager {
     
     // ************** SINGLETON PATTERN ***********************
     
-    public static let shared: ChannelManager = ChannelManager()
+    static var instance:ChannelManager?
+    public static var shared:ChannelManager {
+        get {
+            ChannelManager.instance =
+                ChannelManager.instance ?? ChannelManager()
+            return ChannelManager.instance!
+        }
+    }
     private init(){}
     
     // ********************************************************
@@ -36,7 +43,13 @@ public class ChannelManager {
         return returnedList
     }
     
-    public func saveChannel(channel:NotificationChannelModel){
+    public func saveChannel(channel:NotificationChannelModel, setOnlyNew:Bool){
+        if setOnlyNew {
+            let oldChannel:NotificationChannelModel? = getChannelByKey(channelKey: channel.channelKey!)
+            if oldChannel != nil && !channel.areAndroidLockedFieldsEqualsTo(channel: oldChannel!) {
+                return
+            }
+        }
         sharedManager.set(channel.toMap(), referenceKey: channel.channelKey!)
     }
     

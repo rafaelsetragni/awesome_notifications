@@ -9,33 +9,40 @@ import Foundation
 
 class DefaultsManager {
     
+    let userDefaults:UserDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)!
+    
     // ************** SINGLETON PATTERN ***********************
     
-    static let shared: DefaultsManager = DefaultsManager()
+    static var instance:DefaultsManager?
+    public static var shared:DefaultsManager {
+        get {
+            DefaultsManager.instance =
+                DefaultsManager.instance ?? DefaultsManager()
+            return DefaultsManager.instance!
+        }
+    }
     private init(){}
     
     // ********************************************************
     
-    public var actionCallback:Int64? {
-        get {}
-        set {}
+    public var actionCallback:Int64 {
+        get { return Int64(userDefaults.object(forKey: Definitions.ACTION_HANDLE) as? Int64 ?? 0) }
+        set { userDefaults.setValue(newValue, forKey: Definitions.ACTION_HANDLE) }
     }
     
-    public var backgroundCallback:Int64? {
-        get {}
-        set {}
+    public var backgroundCallback:Int64 {
+        get { return Int64(userDefaults.object(forKey: Definitions.BACKGROUND_HANDLE) as? Int64 ?? 0) }
+        set { userDefaults.setValue(newValue, forKey: Definitions.BACKGROUND_HANDLE) }
     }
     
-    public func setActionCallback(actionHandle:Int64) {
-        
+    public var defaultIcon:String? {
+        get { return userDefaults.object(forKey: Definitions.DEFAULT_ICON) as? String }
+        set { userDefaults.setValue(newValue, forKey: Definitions.DEFAULT_ICON) }
     }
     
-    public func setDefaultIcon(defaultIconPath:String?) {
-        
-    }
-    
-    public func setDartBgCallback(dartBgHandle:Int64) {
-        
+    public var extensionClassName:String? {
+        get { return userDefaults.object(forKey: Definitions.AWESOME_EXTENSION_CLASS_NAME) as? String }
+        set { userDefaults.setValue(newValue, forKey: Definitions.AWESOME_EXTENSION_CLASS_NAME) }
     }
     
 }

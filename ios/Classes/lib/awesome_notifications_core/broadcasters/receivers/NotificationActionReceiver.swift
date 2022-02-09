@@ -13,7 +13,14 @@ public class NotificationActionReceiver {
     
     // ************** SINGLETON PATTERN ***********************
     
-    public static let shared: NotificationActionReceiver = NotificationActionReceiver()
+    static var instance:NotificationActionReceiver?
+    public static var shared:NotificationActionReceiver {
+        get {
+            NotificationActionReceiver.instance =
+                NotificationActionReceiver.instance ?? NotificationActionReceiver()
+            return NotificationActionReceiver.instance!
+        }
+    }
     private init(){}
     
     // ********************************************************
@@ -28,7 +35,12 @@ public class NotificationActionReceiver {
             userText =  textResponse.userText
         }
         
-        guard let jsonData:String = response.notification.request.content.userInfo[Definitions.NOTIFICATION_JSON] as? String
+        guard let jsonData:String =
+                        response
+                            .notification
+                            .request
+                            .content
+                            .userInfo[Definitions.NOTIFICATION_JSON] as? String
         else {
             completionHandler(false)
             return
@@ -61,13 +73,41 @@ public class NotificationActionReceiver {
                         .currentLifeCycle)
         }
         
+        if #available(iOS 15.0, *), !actionReceived.autoDismissible! {
+            if let notificationModel:NotificationModel =
+                    NotificationBuilder
+                        .newInstance()
+                        .buildNotificationFromJson(
+                            jsonData: jsonData)
+            {
+                let isOutOfFocus =
+                        LifeCycleManager
+                            .shared
+                            .isOutOfFocus
+                
+                DispatchQueue
+                    .global(qos: .background)
+                    .asyncAfter(deadline: .now() +
+                                (isOutOfFocus ? 1.5 : 0)) {
+                        do {
+                            try NotificationSenderAndScheduler
+                                    .mimicPersistentNotification(
+                                        notificationModel: notificationModel)
+                        } catch {
+                            Log.e(self.TAG, "\(error)")
+                        }
+                    }
+            }
+        }
+        
         switch actionReceived.actionType! {
             
             case .Default:
                 BroadcastSender
                     .shared
                     .sendBroadcast(
-                        actionReceived: actionReceived)
+                        actionReceived: actionReceived,
+                        whenFinished: completionHandler)
                 break
                 
             case .KeepOnTop:
@@ -75,13 +115,15 @@ public class NotificationActionReceiver {
                     BroadcastSender
                         .shared
                         .sendBroadcast(
-                            actionReceived: actionReceived)
+                            actionReceived: actionReceived,
+                            whenFinished: completionHandler)
                 }
                 else {
                     BroadcastSender
                         .shared
                         .enqueue(
-                            silentAction: actionReceived)
+                            silentAction: actionReceived,
+                            whenFinished: completionHandler)
                 }
                 break
                 
@@ -90,13 +132,15 @@ public class NotificationActionReceiver {
                     BroadcastSender
                         .shared
                         .sendBroadcast(
-                            silentAction: actionReceived)
+                            silentAction: actionReceived,
+                            whenFinished: completionHandler)
                 }
                 else {
                     BroadcastSender
                         .shared
                         .enqueue(
-                            silentBackgroundAction: actionReceived)
+                            silentBackgroundAction: actionReceived,
+                            whenFinished: completionHandler)
                 }
                 break
                 
@@ -104,21 +148,22 @@ public class NotificationActionReceiver {
                 BroadcastSender
                     .shared
                     .enqueue(
-                        silentBackgroundAction: actionReceived)
+                        silentBackgroundAction: actionReceived,
+                        whenFinished: completionHandler)
                 break
             
             case .DismissAction:
                 BroadcastSender
                     .shared
                     .sendBroadcast(
-                        notificationDismissed: actionReceived)
+                        notificationDismissed: actionReceived,
+                        whenFinished: completionHandler)
                 break
                 
             case .DisabledAction:
+                completionHandler(true)
                 break
         }
-        
-        completionHandler(true)
     }
     
 }

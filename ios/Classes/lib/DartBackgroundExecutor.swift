@@ -9,7 +9,6 @@ import Foundation
 
 public class DartBackgroundExecutor: BackgroundExecutor {
     
-    
     private let TAG = "DartBackgroundExecutor"
     
     public let silentDataQueue:SynchronizedArray = SynchronizedArray<SilentActionRequest>()
@@ -30,11 +29,25 @@ public class DartBackgroundExecutor: BackgroundExecutor {
     
     private var actionReceived:ActionReceived?
     
-    private static var instance:DartBackgroundExecutor?
-    public static var shared: DartBackgroundExecutor = {
-        instance = instance ?? DartBackgroundExecutor()
-        return instance!
-    }()
+    // ************** SINGLETON PATTERN ***********************
+    
+    static var instance:DartBackgroundExecutor?
+    public static var shared:DartBackgroundExecutor {
+        get {
+            DartBackgroundExecutor.instance =
+                DartBackgroundExecutor.instance ?? DartBackgroundExecutor()
+            return DartBackgroundExecutor.instance!
+        }
+    }
+    
+    public static func extendCapabilities(usingFlutterRegistrar registrar:FlutterPluginRegistrar){
+        BitmapUtils.instance = FlutterBitmapUtils(registrar: registrar)
+    }
+    
+    // ************** IOS EVENTS LISTENERS ************************
+    
+    
+    
     
     var dartCallbackHandle:Int64 = 0
     var silentCallbackHandle:Int64 = 0
@@ -74,7 +87,7 @@ public class DartBackgroundExecutor: BackgroundExecutor {
             
             result(
                 FlutterError.init(
-                    code: SwiftAwesomeNotificationsPlugin.TAG,
+                    code: TAG,
                     message: "\(call.method) not implemented",
                     details: call.method
                 )
@@ -95,7 +108,7 @@ public class DartBackgroundExecutor: BackgroundExecutor {
             return
         }
         
-        guard let silentCallbackInfo = FlutterCallbackCache.lookupCallbackInformation(silentCallbackHandle) else {
+        guard FlutterCallbackCache.lookupCallbackInformation(silentCallbackHandle) != nil else {
             Log.d(TAG, "There is no valid callback info to handle silent data.")
             self.closeBackgroundIsolate()
             return
@@ -107,7 +120,7 @@ public class DartBackgroundExecutor: BackgroundExecutor {
             return
         }
         
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.main.async {
             
             self.backgroundEngine = FlutterEngine(
                 name: "AwesomeNotificationsBgEngine",
@@ -116,18 +129,18 @@ public class DartBackgroundExecutor: BackgroundExecutor {
             )
             
             if self.backgroundEngine == nil {
-                Log.d(TAG, "Flutter background engine is not available.")
+                Log.d(self.TAG, "Flutter background engine is not available.")
                 self.closeBackgroundIsolate()
                 return
             }
             
             self.flutterPluginRegistrantCallback?(self.backgroundEngine!)
-            self.initializeReverseMethodChannel(backgroundEngine: self.backgroundEngine!)
             
             self.backgroundEngine!.run(
                 withEntrypoint: dartCallbackInfo.callbackName,
                 libraryURI: dartCallbackInfo.callbackLibraryPath)
             
+            self.initializeReverseMethodChannel(backgroundEngine: self.backgroundEngine!)
             self.backgroundEngine!.viewController = nil
         }
     }
@@ -135,7 +148,7 @@ public class DartBackgroundExecutor: BackgroundExecutor {
     func initializeReverseMethodChannel(backgroundEngine: FlutterEngine){
         
         self.backgroundChannel = FlutterMethodChannel(
-            name: Definitions.CHANNEL_METHOD_DART_CALLBACK,
+            name: Definitions.DART_REVERSE_CHANNEL,
             binaryMessenger: backgroundEngine.binaryMessenger
         )
         
@@ -179,16 +192,14 @@ public class DartBackgroundExecutor: BackgroundExecutor {
                     "dart callback handler has not been registered")
         }
         
-        let silentData = silentDataRequest.actionReceived.toMap()
+        var silentData:[String : Any?] = silentDataRequest.actionReceived.toMap()
+        silentData[Definitions.ACTION_HANDLE] = self.silentCallbackHandle
         
         backgroundChannel?.invokeMethod(
             Definitions.CHANNEL_METHOD_SILENCED_CALLBACK,
-            arguments: [
-                Definitions.ACTION_HANDLE: self.silentCallbackHandle,
-                Definitions.CHANNEL_METHOD_RECEIVED_ACTION: silentData
-            ],
+            arguments: silentData,
             result: { flutterResult in
-                silentDataRequest.handler()
+                silentDataRequest.handler(true)
                 self.finishDartBackgroundExecution()
             }
         )

@@ -54,6 +54,7 @@ public abstract class AbstractModel implements Cloneable {
             mapData.put(reference, serializeValue(value));
     }
 
+    @SuppressWarnings("unchecked")
     public static Serializable serializeValue(@Nullable Object value){
         if(value == null) return null;
 
@@ -79,6 +80,7 @@ public abstract class AbstractModel implements Cloneable {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public static Serializable serializeList(List originalList){
         if(ListUtils.isNullOrEmpty(originalList))
             return null;

@@ -14,6 +14,11 @@ public class FlutterBitmapUtils : BitmapUtils {
     
     public init(registrar:FlutterPluginRegistrar) {
         self.registrar = registrar
+        super.init()
+    }
+    
+    public static func extendCapabilities(usingFlutterRegistrar registrar:FlutterPluginRegistrar){
+        BitmapUtils.instance = FlutterBitmapUtils(registrar: registrar)
     }
     
     override func getBitmapFromAsset(_ mediaPath:String) -> UIImage? {
@@ -25,6 +30,6 @@ public class FlutterBitmapUtils : BitmapUtils {
         let key = registrar.lookupKey(forAsset: mediaPath!)
         let topPath = Bundle.main.path(forResource: key, ofType: nil)!
         
-        return getBitmapFromFile(topPath)
+        return getBitmapFromFile(fromRealPath: topPath)
     }
 }

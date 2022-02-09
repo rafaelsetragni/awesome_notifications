@@ -1,7 +1,7 @@
 ## [0.6.19]
 * Added sound extension for notifications with categories Alarm and Call
 * Added call notification behavior (stay floating on screen and keep playing the sound in loop) for Call category
-* Added CancellationManager to reorganize all dismiss and cancelation methods in a single place
+* Added CancellationManager to reorganize all dismiss and cancellation methods in a single place
 * Created StatusBarManager to manage which notifications are currently active, improving performance and extending support to Android 5.0 Lollipop (SDK 21)
 * Notification layouts BigPicture, Messsaging and MessagingGroup improved to be more performatic and to reuses network connection data
 * Added history box to notification's reply buttons on Android 8.0 to 12.0

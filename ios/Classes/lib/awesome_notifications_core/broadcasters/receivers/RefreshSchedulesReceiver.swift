@@ -23,12 +23,15 @@ class RefreshSchedulesReceiver {
                     throw AwesomeNotificationsException.notificationExpired
                 }
                 
-                try NotificationSenderAndScheduler().send(
-                    createdSource: notificationModel.content!.createdSource!,
-                    notificationModel: notificationModel,
-                    completion: { sent, content, error in
-                    }
-                )
+                try NotificationSenderAndScheduler.send(
+                        createdSource: notificationModel.content!.createdSource!,
+                        notificationModel: notificationModel,
+                        completion: { sent, content, error in
+                        },
+                        appLifeCycle: LifeCycleManager
+                                        .shared
+                                        .currentLifeCycle)
+                
             } catch {
                 let _ = ScheduleManager.removeSchedule(id: notificationModel.content!.id!)
             }

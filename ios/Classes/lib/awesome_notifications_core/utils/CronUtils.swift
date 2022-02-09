@@ -15,7 +15,7 @@ public final class CronUtils {
 
     public func getInitialCalendar() -> Calendar {
         var calendar:Calendar = Calendar.current
-        calendar.timeZone = DateUtils.utcTimeZone
+        calendar.timeZone = DateUtils.shared.utcTimeZone
         return calendar
     }
     
@@ -26,12 +26,15 @@ public final class CronUtils {
         crontabRule:String?
     ) -> Date? {
 
-        if(StringUtils.isNullOrEmpty(initialDateTime) && StringUtils.isNullOrEmpty(crontabRule))
+        if(
+            StringUtils.isNullOrEmpty(initialDateTime) &&
+            StringUtils.isNullOrEmpty(crontabRule))
         { return nil }
 
         var now:Date, delayedNow:Date
-        if(fixedNowDate == nil){
-            now = DateUtils.getUTCDateTime()
+        
+        if fixedNowDate == nil {
+            now = DateUtils.shared.getUTCDateTime()
         } else {
             now = fixedNowDate!
         }
@@ -41,7 +44,12 @@ public final class CronUtils {
             initialScheduleDay = now
         }
         else {
-            initialScheduleDay = DateUtils.stringToDate(initialDateTime, timeZone: DateUtils.localTimeZone.identifier)
+            initialScheduleDay =
+                DateUtils
+                    .shared
+                    .stringToDate(
+                        initialDateTime,
+                        timeZone: DateUtils.shared.localTimeZone.identifier)
         }
 
         // if initial date is a future one, show in future. Otherwise, show now

@@ -144,12 +144,7 @@ public class ChannelManager {
         }
     }
 
-    public ChannelManager saveChannel(Context context, NotificationChannelModel newChannel, Boolean forceUpdate) throws AwesomeNotificationsException {
-        saveChannel(context, newChannel, true, forceUpdate);
-        return this;
-    }
-
-    public void saveChannel(Context context, NotificationChannelModel newChannel, Boolean allowUpdates, Boolean forceUpdate) throws AwesomeNotificationsException {
+    public ChannelManager saveChannel(Context context, NotificationChannelModel newChannel, Boolean setOnlyNew, Boolean forceUpdate) throws AwesomeNotificationsException {
 
         newChannel.refreshIconResource(context);
         newChannel.validate(context);
@@ -157,15 +152,15 @@ public class ChannelManager {
         NotificationChannelModel oldChannelModel = getChannelByKey(context, newChannel.channelKey);
 
         // If nothing has changed, so there is nothing to do
-        if(!allowUpdates && oldChannelModel != null && !oldChannelModel.equals(newChannel))
-            return;
+        if(setOnlyNew && oldChannelModel != null && !oldChannelModel.equals(newChannel))
+            return this;
 
         // Android Channels are only available on Android Oreo and beyond.
         // On older versions, channel models are only used to organize notifications
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O /*Android 8*/) {
 
             // If nothing has changed, so there is nothing to do
-            if(oldChannelModel != null && oldChannelModel.equals(newChannel)) return;
+            if(oldChannelModel != null && oldChannelModel.equals(newChannel)) return this;
 
             // Save into shared manager
             shared.set(context, Definitions.SHARED_CHANNELS, newChannel.channelKey, newChannel);
@@ -183,6 +178,8 @@ public class ChannelManager {
 
             saveAndroidChannel(context, oldChannelModel, newChannel, forceUpdate);
         }
+
+        return this;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O /*Android 8*/)

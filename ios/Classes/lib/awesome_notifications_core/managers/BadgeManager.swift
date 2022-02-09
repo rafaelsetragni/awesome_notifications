@@ -13,7 +13,14 @@ public class BadgeManager {
     
     // ************** SINGLETON PATTERN ***********************
     
-    public static let shared: BadgeManager = BadgeManager()
+    static var instance:BadgeManager?
+    public static var shared:BadgeManager {
+        get {
+            BadgeManager.instance =
+                BadgeManager.instance ?? BadgeManager()
+            return BadgeManager.instance!
+        }
+    }
     private init(){}
     
     // ********************************************************

@@ -8,28 +8,31 @@
 import Foundation
 
 public class AwesomeNotifications:
-            NSObject,
-            AwesomeActionEventListener,
-            AwesomeNotificationEventListener,
-            AwesomeLifeCycleEventListener,
-            UNUserNotificationCenterDelegate {
+        NSObject,
+        AwesomeActionEventListener,
+        AwesomeNotificationEventListener,
+        AwesomeLifeCycleEventListener,
+        UIApplicationDelegate,
+        UNUserNotificationCenterDelegate {
     
     let TAG = "AwesomeNotifications"
     
     public static var debug:Bool = false
     var initialValues:[String : Any?] = [:]
     
-    
     // ************************** CONSTRUCTOR ***********************************
         
     public init(
-        extensionClass: AwesomeNotificationsExtension
-    ){
+        extensionReference: AwesomeNotificationsExtension,
+        usingFlutterRegistrar registrar:FlutterPluginRegistrar
+    ) throws {
+        super.init()
+        
         if !SwiftUtils.isRunningOnExtension() {
             LifeCycleManager
                 .shared
                 .subscribe(listener: self)
-                .notify(lifeCycle: NotificationLifeCycle.AppKilled)
+                .startListeners()
         }
         
         self.initialValues.removeAll()
@@ -37,15 +40,67 @@ public class AwesomeNotifications:
             Definitions.initialValues,
             uniquingKeysWith: { (current, _) in current })
         
-        loadAwesomeExtensions()
+        try loadAwesomeExtensions(
+            usingFlutterRegistrar: registrar,
+            withExtension: extensionReference)
+        
         activateiOSNotifications()
     }
     
     var isExtensionsLoaded = false
-    private func loadAwesomeExtensions(){
+    private func loadAwesomeExtensions(
+        usingFlutterRegistrar registrar:FlutterPluginRegistrar
+    ) throws {
         if isExtensionsLoaded { return }
         
-        // TODO
+        guard let extensionClass:String =
+                DefaultsManager
+                    .shared
+                    .extensionClassName
+        else {
+            throw AwesomeNotificationsException
+                .invalidRequiredFields(
+                    msg: "Awesome plugin reference is invalid or not found")
+        }
+
+        guard let extensionClass:AnyClass =
+                Bundle
+                    .main
+                    .classNamed(extensionClass)
+        else {
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(
+                            msg: "Awesome plugin reference is invalid or not found")
+        }
+        
+        guard let awesomeExtension:AwesomeNotificationsExtension =
+                (extensionClass as! NSObject.Type).initialize() as? AwesomeNotificationsExtension
+        else {
+            throw AwesomeNotificationsException
+                        .invalidRequiredFields(
+                            msg: "Awesome plugin reference is invalid or not found")
+        }
+        
+        try loadAwesomeExtensions(
+                usingFlutterRegistrar: registrar,
+                withExtension: awesomeExtension)
+    }
+    
+    private func loadAwesomeExtensions(
+        usingFlutterRegistrar registrar:FlutterPluginRegistrar,
+        withExtension awesomePlugin: AwesomeNotificationsExtension
+    ) throws {
+        if isExtensionsLoaded { return }
+        
+        DefaultsManager
+            .shared
+            .extensionClassName = String(describing: awesomePlugin.self)
+        
+        awesomePlugin
+            .loadExternalExtensions(
+                usingFlutterRegistrar: registrar)
+        
+        isExtensionsLoaded = true
     }
     
     deinit {
@@ -56,6 +111,7 @@ public class AwesomeNotifications:
                 .unsubscribe(listener: self)
         }
         
+        NotificationCenter.default.removeObserver(self)
     }
     
     func activateiOSNotifications(){
@@ -73,19 +129,64 @@ public class AwesomeNotifications:
         UNUserNotificationCenter.current().getNotificationCategories(completionHandler: { results in
             UNUserNotificationCenter.current().setNotificationCategories(results.union([categoryObject]))
         })
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.didFinishLaunch),
+            name: UIApplication.didFinishLaunchingNotification, object: nil)
     }
     
     // ***********************  EVENT INTERFACES  *******************************
     
     public func onNewNotificationReceived(eventName: String, notificationReceived: NotificationReceived) {
-        notifyAwesomeEvent(eventType: eventName, content: notificationReceived.toMap())
+        notifyNotificationEvent(eventName: eventName, notificationReceived: notificationReceived)
     }
     
     public func onNewActionReceived(fromEventNamed eventName: String, withActionReceived actionReceived: ActionReceived) {
-        notifyAwesomeEvent(eventType: eventName, content: actionReceived.toMap())
+        notifyActionEvent(fromEventNamed: eventName, withActionReceived: actionReceived)
     }
     
+    private var eventListenersHadStarted = false
     public func onNewLifeCycleEvent(lifeCycle: NotificationLifeCycle) {
+        
+        switch lifeCycle {
+            
+            case .Foreground:
+                PermissionManager
+                    .shared
+                    .handlePermissionResult()
+                
+                do {
+                    try recoverLostEvents()
+                }
+                catch {
+                    Log.e(TAG, "\(error)")
+                }
+                break
+            
+            case .Background:
+                break
+                
+            
+            case .AppKilled:
+                if !eventListenersHadStarted {
+                    eventListenersHadStarted = true
+                    AwesomeEventsReceiver
+                        .shared
+                        .subscribeOnNotificationEvents(listener: self)
+                        .subscribeOnActionEvents(listener: self)
+                }
+                else {
+                    AwesomeEventsReceiver
+                        .shared
+                        .unsubscribeOnNotificationEvents(listener: self)
+                        .unsubscribeOnActionEvents(listener: self)
+                }
+                break
+                
+        }
+        
+        
     }
     
     // **************************** OBSERVER PATTERN **************************************
@@ -103,6 +204,7 @@ public class AwesomeNotifications:
     }
     
     private func notifyNotificationEvent(eventName:String, notificationReceived:NotificationReceived){
+        notifyAwesomeEvent(eventType: eventName, content: notificationReceived.toMap())
         for listener in notificationEventListeners {
             listener.onNewNotificationReceived(
                 eventName: eventName,
@@ -125,6 +227,7 @@ public class AwesomeNotifications:
     }
     
     private func notifyActionEvent(fromEventNamed eventName:String, withActionReceived actionReceived:ActionReceived){
+        notifyAwesomeEvent(eventType: eventName, content: actionReceived.toMap())
         for listener in notificationActionListeners {
             listener
                 .onNewActionReceived(
@@ -160,13 +263,6 @@ public class AwesomeNotifications:
         set { LifeCycleManager.shared.currentLifeCycle = newValue }
     }
     
-    public func udpateLifeCycleState(lifeCycle:NotificationLifeCycle){
-        
-    }
-    public func getApplicationLifeCycle() -> NotificationLifeCycle{
-        
-    }
-    
     // *****************************  DRAWABLE FUNCTIONS  **********************************
     
     public func getDrawableData(bitmapReference:String) -> Data? {
@@ -185,14 +281,21 @@ public class AwesomeNotifications:
     
     // ***************************************************************************************
     
-    var waitingForRecover:Bool = false
     public func setActionHandle(actionHandle:Int64) throws {
+        
         DefaultsManager
             .shared
-            .setActionCallback(
-                actionHandle: actionHandle)
+            .actionCallback = actionHandle
         
-        if(waitingForRecover && actionHandle != 0){
+        try recoverLostEvents()
+    }
+    
+    var waitingForRecover:Bool = true
+    private func recoverLostEvents() throws {
+        if waitingForRecover && LifeCycleManager
+                                    .shared
+                                    .hasGoneForeground
+        {
             waitingForRecover = false
             
             try recoverNotificationCreated()
@@ -205,7 +308,7 @@ public class AwesomeNotifications:
     public func getActionHandle() -> Int64 {
         return DefaultsManager
                     .shared
-                    .getActionCallback() ?? 0
+                    .actionCallback
     }
     
     public func listAllPendingSchedules(
@@ -250,13 +353,13 @@ public class AwesomeNotifications:
     public func initialize(
         defaultIconPath:String?,
         channels:[NotificationChannelModel],
-        dartCallback:Int64,
+        backgroundHandle:Int64,
         debug:Bool
     ) throws {
         
         setDefaultConfigurations (
             defaultIconPath: defaultIconPath,
-            dartBgHandle: dartCallback)
+            backgroundHandle: backgroundHandle)
         
         if ListUtils.isNullOrEmpty(channels) {
             throw AwesomeNotificationsException
@@ -266,7 +369,7 @@ public class AwesomeNotifications:
         for channel in channels {
             ChannelManager
                 .shared
-                .saveChannel(channel: channel)
+                .saveChannel(channel: channel, setOnlyNew: true)
         }
         
         AwesomeNotifications.debug = debug
@@ -276,9 +379,9 @@ public class AwesomeNotifications:
         }
     }
     
-    private func setDefaultConfigurations(defaultIconPath:String?, dartBgHandle:Int64?) {
-        DefaultsManager.shared.setDefaultIcon(defaultIconPath: defaultIconPath)
-        DefaultsManager.shared.setDartBgCallback(dartBgHandle: dartBgHandle ?? 0)
+    private func setDefaultConfigurations(defaultIconPath:String?, backgroundHandle:Int64?) {
+        DefaultsManager.shared.defaultIcon = defaultIconPath
+        DefaultsManager.shared.backgroundCallback = backgroundHandle ?? 0
     }
     
     // *****************************  RECOVER FUNCTIONS  **********************************
@@ -290,7 +393,7 @@ public class AwesomeNotifications:
             try createdNotification.validate()
             
             notifyNotificationEvent(
-                eventName: Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED,
+                eventName: Definitions.EVENT_NOTIFICATION_CREATED,
                 notificationReceived: createdNotification)
             
             if !CreatedManager.removeCreated(id: createdNotification.id!) {
@@ -308,7 +411,7 @@ public class AwesomeNotifications:
             try displayedNotification.validate()
             
             notifyNotificationEvent(
-                eventName: Definitions.CHANNEL_METHOD_NOTIFICATION_DISPLAYED,
+                eventName: Definitions.EVENT_NOTIFICATION_DISPLAYED,
                 notificationReceived: displayedNotification)
             
             if !DisplayedManager.removeDisplayed(id: displayedNotification.id!) {
@@ -324,7 +427,7 @@ public class AwesomeNotifications:
             try dismissedNotification.validate()
             
             notifyActionEvent(
-                fromEventNamed: Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED,
+                fromEventNamed: Definitions.EVENT_NOTIFICATION_DISMISSED,
                 withActionReceived: dismissedNotification)
             
             if !DismissedManager.removeDismissed(id: dismissedNotification.id!) {
@@ -340,7 +443,7 @@ public class AwesomeNotifications:
             try notificationAction.validate()
             
             notifyActionEvent(
-                fromEventNamed: Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED,
+                fromEventNamed: Definitions.EVENT_DEFAULT_ACTION,
                 withActionReceived: notificationAction)
             
             if !ActionManager.removeAction(id: notificationAction.id!) {
@@ -355,7 +458,7 @@ public class AwesomeNotifications:
     
     private var _originalNotificationCenterDelegate: UNUserNotificationCenterDelegate?
     
-    public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable : Any] = [:]) -> Bool {
+    @objc public func didFinishLaunch(_ application: UIApplication) {
         
         // Set ourselves as the UNUserNotificationCenter delegate, but also preserve any existing delegate...
         let notificationCenter = UNUserNotificationCenter.current()
@@ -368,8 +471,6 @@ public class AwesomeNotifications:
         if AwesomeNotifications.debug {
             Log.d(TAG, "Awesome Notifications attached for iOS")
         }
-        
-        return true
     }
     
     @available(iOS 10.0, *)
@@ -426,7 +527,7 @@ public class AwesomeNotifications:
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ){
-        var jsonData:[String : Any?] =
+        let jsonData:[String : Any?] =
                 extractNotificationJsonMap(
                     fromContent: notification.request.content)
         
@@ -442,8 +543,8 @@ public class AwesomeNotifications:
                     withNotificationModel: notificationModel,
                     whenFinished: { (notificationDisplayed:Bool, mustPlaySound:Bool) in
                         
-                        if !notificationDisplayed && _originalNotificationCenterDelegate != nil {
-                            _originalNotificationCenterDelegate?
+                        if !notificationDisplayed && self._originalNotificationCenterDelegate != nil {
+                            self._originalNotificationCenterDelegate?
                                 .userNotificationCenter?(
                                     center,
                                     willPresent: notification,
@@ -514,11 +615,14 @@ public class AwesomeNotifications:
         fromNotificationModel notificationModel: NotificationModel,
         afterCreated completionHandler: @escaping (Bool, UNMutableNotificationContent?, Error?) -> ()
     ) throws {
-        try NotificationSenderAndScheduler().send(
-            createdSource: NotificationSource.Local,
-            notificationModel: notificationModel,
-            completion: completionHandler
-        )
+        try NotificationSenderAndScheduler
+                .send(
+                    createdSource: NotificationSource.Local,
+                    notificationModel: notificationModel,
+                    completion: completionHandler,
+                    appLifeCycle: LifeCycleManager
+                                        .shared
+                                        .currentLifeCycle)
     }
     
     // *****************************  CHANNEL METHODS  **********************************
@@ -526,7 +630,7 @@ public class AwesomeNotifications:
     public func setChannel(channel:NotificationChannelModel) -> Bool {
         ChannelManager
             .shared
-            .saveChannel(channel: channel)
+            .saveChannel(channel: channel, setOnlyNew: false)
         return true
     }
     
@@ -547,15 +651,15 @@ public class AwesomeNotifications:
     public func getNextValidDate(
         scheduleModel: NotificationScheduleModel,
         fixedDate: String?,
-        timeZone: String?
+        timeZoneName: String?
     ) -> Date? {
-        let nextDate:Date? =
-                DateUtils
-                    .getNextValidDate(
-                        fromScheduleModel: scheduleModel,
-                        withReferenceDate: fixedDate,
-                        usingTimeZone: timezone)
-        return nextDate
+        return
+            DateUtils
+                .shared
+                .getNextValidDate(
+                    fromScheduleModel: scheduleModel,
+                    withReferenceDate: fixedDate,
+                    usingTimeZone: timeZoneName)
     }
     
     public func getLocalTimeZone() -> TimeZone {

@@ -43,7 +43,7 @@ const CHANNEL_FLUTTER_PLUGIN = 'awesome_notifications';
 const DART_REVERSE_CHANNEL = 'awesome_notifications_reverse';
 
 const ACTION_HANDLE = 'actionHandle';
-const DART_BG_HANDLE = 'dartBgHandle';
+const BACKGROUND_HANDLE = 'bgHandle';
 
 const CHANNEL_METHOD_INITIALIZE = 'initialize';
 const CHANNEL_METHOD_GET_DRAWABLE_DATA = 'getDrawableData';

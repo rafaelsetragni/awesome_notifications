@@ -23,7 +23,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotificationsExtension;
-import me.carda.awesome_notifications.awesome_notifications_core.background.AwesomeBackgroundExecutor;
+import me.carda.awesome_notifications.awesome_notifications_core.background.BackgroundExecutor;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundServiceType;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundStartMode;
 import me.carda.awesome_notifications.awesome_notifications_core.listeners.AwesomeEventListener;
@@ -57,8 +57,8 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void loadExternalExtensions(Context context) {
-        FlutterBitmapUtils.extendBitmapUtilsCapabilities();
-        AwesomeBackgroundExecutor.setBackgroundExecutorClass(DartBackgroundExecutor.class);
+        FlutterBitmapUtils.extendCapabilities();
+        BackgroundExecutor.setBackgroundExecutorClass(DartBackgroundExecutor.class);
     }
 
     // https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration
@@ -134,7 +134,7 @@ public class AwesomeNotificationsPlugin
     @Override
     public void onNewAwesomeEvent(String eventType, Map<String, Object> content) {
         if (pluginChannel != null){
-            if(Definitions.CHANNEL_METHOD_SILENT_ACTION.equals(eventType)){
+            if(Definitions.EVENT_SILENT_ACTION.equals(eventType)){
                 content.put(Definitions.ACTION_HANDLE, awesomeNotifications.getActionHandle());
             }
             pluginChannel.invokeMethod(eventType, content);
@@ -818,7 +818,7 @@ public class AwesomeNotificationsPlugin
         Boolean debug = (Boolean) platformParameters.get(Definitions.INITIALIZE_DEBUG_MODE);
         debug = debug != null && debug;
 
-        Object backgroundCallbackObj = platformParameters.get(Definitions.DART_BG_HANDLE);
+        Object backgroundCallbackObj = platformParameters.get(Definitions.BACKGROUND_HANDLE);
         Long backgroundCallback = backgroundCallbackObj == null ? 0L :(Long) backgroundCallbackObj;
 
         awesomeNotifications.initialize(

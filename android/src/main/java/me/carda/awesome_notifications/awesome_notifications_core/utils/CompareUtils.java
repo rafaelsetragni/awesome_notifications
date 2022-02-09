@@ -47,6 +47,7 @@ public class CompareUtils {
         return b1.compareTo(b2) == 0;
     }
 
+    @SuppressWarnings("unchecked")
     public static boolean assertEqualMaps(Object object1, Object object2) {
         if(object1 == null || object2 == null)
             return false;
@@ -70,6 +71,7 @@ public class CompareUtils {
         return true;
     }
 
+    @SuppressWarnings("unchecked")
     public static boolean assertEqualLists(Object object1, Object object2) {
         if(object1 == null || object2 == null)
             return false;

@@ -14,8 +14,14 @@ public class AudioUtils: MediaUtils {
     
     // ************** SINGLETON PATTERN ***********************
     
-    public static let shared: AudioUtils = AudioUtils()
-    private override init(){}
+    static var instance:AudioUtils?
+    public static var shared:AudioUtils {
+        get {
+            AudioUtils.instance = AudioUtils.instance ?? AudioUtils()
+            return AudioUtils.instance!
+        }
+    }
+    override init(){}
     
     // ********************************************************
         
@@ -42,7 +48,7 @@ public class AudioUtils: MediaUtils {
         }
     }
     
-    private func cleanMediaPath(_ mediaPath:String?) -> String? {
+    func cleanMediaPath(_ mediaPath:String?) -> String? {
          if(mediaPath != nil){
              var mediaPath = mediaPath
              
@@ -72,7 +78,7 @@ public class AudioUtils: MediaUtils {
          return nil
     }
     
-    private func getSoundFromUrl(_ SoundUri:String) -> UNNotificationSound? {
+    func getSoundFromUrl(_ SoundUri:String) -> UNNotificationSound? {
         let SoundUri:String? = cleanMediaPath(mediaPath: SoundUri)
         
         if !StringUtils.isNullOrEmpty(SoundUri) {
@@ -88,30 +94,27 @@ public class AudioUtils: MediaUtils {
         return nil
     }
     
-    private func getSoundFromFile(_ mediaPath:String) -> UNNotificationSound? {
+    func getSoundFromFile(_ mediaPath:String) -> UNNotificationSound? {
         let mediaPath:String? = cleanMediaPath(mediaPath)
         
         if(StringUtils.isNullOrEmpty(mediaPath)){ return nil }
         
-        //do {
-            
-            if FileManager.default.fileExists(atPath: mediaPath!) {
-                return UNNotificationSound(named: UNNotificationSoundName(rawValue: mediaPath!))
-            }
-            
-            return UNNotificationSound.default
-         /*
-        } catch let error {
-            print("error \(error)")
-            return nil
-        }*/
+        return getSoundFromFile(fromRealPath: mediaPath!)
     }
     
-    private func getSoundFromAsset(_ mediaPath:String) -> UNNotificationSound? {
+    func getSoundFromFile(fromRealPath mediaPath:String) -> UNNotificationSound? {
+        if FileManager.default.fileExists(atPath: mediaPath) {
+            return UNNotificationSound(named: UNNotificationSoundName(rawValue: mediaPath))
+        }
+        
+        return UNNotificationSound.default
+    }
+    
+    func getSoundFromAsset(_ mediaPath:String) -> UNNotificationSound? {
         return nil
     }
     
-    private func getSoundFromResource(_ mediaPath:String) -> UNNotificationSound? {
+    func getSoundFromResource(_ mediaPath:String) -> UNNotificationSound? {
         var mediaPath:String? = cleanMediaPath(mediaPath)
         
         //do {

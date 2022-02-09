@@ -26,8 +26,9 @@ enum Definitions {
     static let  NOTIFICATION_MODEL_SCHEDULE = "schedule"
     static let  NOTIFICATION_MODEL_BUTTONS = "actionButtons"
     
+    static let  ACTION_HANDLE = "actionHandle"
     static let  SILENT_HANDLE = "silentHandle"
-    static let  DART_BG_HANDLE = "dartBgHandle"
+    static let  BACKGROUND_HANDLE = "bgHandle"
 
     static let  SHARED_DEFAULTS = "defaults"
     static let  SHARED_MANAGER = "sharedManager"
@@ -62,11 +63,14 @@ enum Definitions {
     static let  NOTIFICATION_EXPIRATION_DATE_TIME = "expirationDateTime"
     
     static let  CHANNEL_FLUTTER_PLUGIN = "awesome_notifications"
+    static let  DART_REVERSE_CHANNEL = "awesome_notifications_reverse"
 
     static let  CHANNEL_METHOD_INITIALIZE = "initialize"
     static let  CHANNEL_METHOD_GET_DRAWABLE_DATA = "getDrawableData"
     static let  CHANNEL_METHOD_GET_PLATFORM_VERSION = "getPlatformVersion"
     static let  CHANNEL_METHOD_CREATE_NOTIFICATION = "createNewNotification"
+    static let  CHANNEL_METHOD_SET_ACTION_HANDLE = "setActionHandle"
+    static let  CHANNEL_METHOD_SILENCED_CALLBACK = "isolateCallbackReference"
 
     static let  CHANNEL_METHOD_GET_FCM_TOKEN = "getFirebaseToken"
     static let  CHANNEL_METHOD_NEW_FCM_TOKEN = "newTokenReceived"
@@ -103,12 +107,12 @@ enum Definitions {
     static let  CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = "cancelAllSchedules"
     static let  CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = "cancelAllNotifications"
 
-    static let  CHANNEL_METHOD_NOTIFICATION_CREATED = "notificationCreated"
-    static let  CHANNEL_METHOD_NOTIFICATION_DISPLAYED = "notificationDisplayed"
-    static let  CHANNEL_METHOD_NOTIFICATION_DISMISSED = "notificationDismissed"
-    static let  CHANNEL_METHOD_RECEIVED_ACTION = "receivedAction"
-    static let  CHANNEL_METHOD_SILENT_ACTION = "silentAction"
-    static let  CHANNEL_METHOD_SILENCED_CALLBACK = "isolateCallbackReference";
+    static let  EVENT_NOTIFICATION_CREATED = "notificationCreated"
+    static let  EVENT_NOTIFICATION_DISPLAYED = "notificationDisplayed"
+    static let  EVENT_NOTIFICATION_DISMISSED = "notificationDismissed"
+    static let  EVENT_RECEIVED_ACTION = "receivedAction"
+    static let  EVENT_DEFAULT_ACTION = "defaultAction"
+    static let  EVENT_SILENT_ACTION = "silentAction"
     
     static let  CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER = "getUtcTimeZoneIdentifier"
     static let  CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER = "getLocalTimeZoneIdentifier"
@@ -118,6 +122,7 @@ enum Definitions {
     static let  DEFAULT_ICON = "defaultIcon"
     static let  BADGE_COUNT = "badgeCount"
     static let  SELECT_NOTIFICATION = "SELECT_NOTIFICATION"
+    static let  AWESOME_EXTENSION_CLASS_NAME = "extensionClass"
     static let  NOTIFICATION_BUTTON_ACTION_PREFIX = "ACTION_NOTIFICATION"
     
     static let  INITIALIZE_DEBUG_MODE = "debug"
@@ -153,11 +158,11 @@ enum Definitions {
     static let  NOTIFICATION_JSON = "notificationJson"
 
     static let  NOTIFICATION_ACTION_BUTTONS = "actionButtons"
-    static let  NOTIFICATION_ACTION_TYPE = "actionType"
     static let  NOTIFICATION_BUTTON_KEY = "key"
     static let  NOTIFICATION_BUTTON_ICON = "icon"
     static let  NOTIFICATION_BUTTON_LABEL = "label"
-    static let  NOTIFICATION_BUTTON_TYPE = "buttonType"
+    static let  NOTIFICATION_ACTION_TYPE = "actionType"
+    static let  NOTIFICATION_REQUIRE_INPUT_TEXT = "requireInputText"
     static let  NOTIFICATION_SHOW_IN_COMPACT_VIEW = "showInCompactView"
     static let  NOTIFICATION_IS_DANGEROUS_OPTION = "isDangerousOption"
     static let  NOTIFICATION_PERMISSIONS = "permissions"
@@ -231,6 +236,7 @@ enum Definitions {
         Definitions.NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND: false,
         Definitions.NOTIFICATION_ENABLED: true,
         Definitions.NOTIFICATION_SHOW_WHEN: true,
+        Definitions.NOTIFICATION_REQUIRE_INPUT_TEXT: false,
         Definitions.NOTIFICATION_ACTION_TYPE: ActionType.Default,
         Definitions.NOTIFICATION_PAYLOAD: nil,
         Definitions.NOTIFICATION_ENABLE_VIBRATION: true,

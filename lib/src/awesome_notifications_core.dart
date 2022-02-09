@@ -206,7 +206,7 @@ class AwesomeNotifications {
       INITIALIZE_DEFAULT_ICON: defaultIconPath,
       INITIALIZE_CHANNELS: serializedChannels,
       INITIALIZE_CHANNELS_GROUPS: serializedChannelGroups,
-      DART_BG_HANDLE: dartCallbackReference!.toRawHandle()
+      BACKGROUND_HANDLE: dartCallbackReference!.toRawHandle()
     });
 
     _localTimeZoneIdentifier = await _channel

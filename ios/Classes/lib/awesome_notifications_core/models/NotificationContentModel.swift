@@ -52,6 +52,27 @@ public class NotificationContentModel : AbstractModel {
     var createdDate: String?
     var displayedDate: String?
     
+    func registerCreateEvent(
+        inLifeCycle lifeCycle: NotificationLifeCycle,
+        fromSource createdSource: NotificationSource
+    ) -> Bool {
+        if(self.createdDate == nil){
+            self.createdSource = createdSource
+            self.createdLifeCycle = lifeCycle
+            self.createdDate = DateUtils.shared.getUTCTextDate()
+            
+            return true
+        }
+        return false
+    }
+    
+    public func registerDisplayedEvent(
+        inLifeCycle lifeCycle: NotificationLifeCycle
+    ){
+        self.displayedLifeCycle = lifeCycle
+        self.displayedDate = DateUtils.shared.getUTCTextDate()
+    }
+    
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
                 
         self.id = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_ID, arguments: arguments)
@@ -159,7 +180,7 @@ public class NotificationContentModel : AbstractModel {
 
         if(!StringUtils.isNullOrEmpty(icon)){
             if(
-                BitmapUtils.getMediaSourceType(mediaPath: icon) != MediaSource.Resource
+                BitmapUtils.shared.getMediaSourceType(mediaPath: icon) != MediaSource.Resource
             ){
                 let iconError = icon ?? "[invalid icon]"
                 throw AwesomeNotificationsException.invalidRequiredFields(
@@ -209,13 +230,13 @@ public class NotificationContentModel : AbstractModel {
     }
     
     private func validateBigPicture() throws {
-        if(bigPicture != nil && !BitmapUtils.isValidBitmap(bigPicture)){
+        if(bigPicture != nil && !BitmapUtils.shared.isValidBitmap(bigPicture)){
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "invalid bigPicture")
         }
     }
     
     private func validateLargeIcon() throws {
-        if(largeIcon != nil && !BitmapUtils.isValidBitmap(largeIcon)){
+        if(largeIcon != nil && !BitmapUtils.shared.isValidBitmap(largeIcon)){
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "invalid largeIcon")
         }
     }

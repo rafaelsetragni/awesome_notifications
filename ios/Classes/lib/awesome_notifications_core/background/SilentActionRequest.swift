@@ -8,9 +8,9 @@ import Foundation
 
 public class SilentActionRequest {
     public let actionReceived: ActionReceived
-    public let handler: () -> ()
+    public let handler: (Bool) -> ()
     
-    init(actionReceived:ActionReceived, handler: @escaping () -> ()){
+    init(actionReceived:ActionReceived, handler: @escaping (Bool) -> ()){
         self.actionReceived = actionReceived
         self.handler = handler
     }

@@ -14,7 +14,14 @@ class DismissedNotificationReceiver {
     
     // **************************** SINGLETON PATTERN *************************************
     
-    public static let shared = DismissedNotificationReceiver()
+    static var instance:DismissedNotificationReceiver?
+    public static var shared:DismissedNotificationReceiver {
+        get {
+            DismissedNotificationReceiver.instance =
+                DismissedNotificationReceiver.instance ?? DismissedNotificationReceiver()
+            return DismissedNotificationReceiver.instance!
+        }
+    }
     private init(){}
     
     
@@ -56,8 +63,7 @@ class DismissedNotificationReceiver {
         BroadcastSender
             .shared
             .sendBroadcast(
-                notificationDismissed: actionReceived)
-        
-        completionHandler(true)
+                notificationDismissed: actionReceived,
+                whenFinished: completionHandler)
     }
 }

@@ -14,7 +14,14 @@ class AwesomeEventsReceiver {
     
     // **************************** SINGLETON PATTERN *************************************
     
-    public static let shared = AwesomeEventsReceiver()
+    static var instance:AwesomeEventsReceiver?
+    public static var shared:AwesomeEventsReceiver {
+        get {
+            AwesomeEventsReceiver.instance =
+                AwesomeEventsReceiver.instance ?? AwesomeEventsReceiver()
+            return AwesomeEventsReceiver.instance!
+        }
+    }
     private init(){}
     
     
@@ -22,14 +29,16 @@ class AwesomeEventsReceiver {
     
     private lazy var notificationEventListeners = [AwesomeNotificationEventListener]()
     
-    public func subscribeOnNotificationEvents(listener:AwesomeNotificationEventListener) {
+    public func subscribeOnNotificationEvents(listener:AwesomeNotificationEventListener) -> Self {
         notificationEventListeners.append(listener)
+        return self
     }
     
-    public func unsubscribeOnNotificationEvents(listener:AwesomeNotificationEventListener) {
+    public func unsubscribeOnNotificationEvents(listener:AwesomeNotificationEventListener) -> Self {
         if let index = notificationEventListeners.firstIndex(where: {$0 === listener}) {
             notificationEventListeners.remove(at: index)
         }
+        return self
     }
     
     private func notifyNotificationEvent(
@@ -48,11 +57,11 @@ class AwesomeEventsReceiver {
     
     private lazy var actionEventListeners = [AwesomeActionEventListener]()
     
-    public func subscribeOnNotificationEvents(listener:AwesomeActionEventListener) {
+    public func subscribeOnActionEvents(listener:AwesomeActionEventListener) {
         actionEventListeners.append(listener)
     }
     
-    public func unsubscribeOnNotificationEvents(listener:AwesomeActionEventListener) {
+    public func unsubscribeOnActionEvents(listener:AwesomeActionEventListener) {
         if let index = actionEventListeners.firstIndex(where: {$0 === listener}) {
             actionEventListeners.remove(at: index)
         }
@@ -144,7 +153,7 @@ class AwesomeEventsReceiver {
         }
         
         notifyNotificationEvent(
-            named: Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED,
+            named: Definitions.EVENT_NOTIFICATION_CREATED,
             with: notificationReceived)
     }
     
@@ -156,7 +165,7 @@ class AwesomeEventsReceiver {
         }
         
         notifyNotificationEvent(
-            named: Definitions.CHANNEL_METHOD_NOTIFICATION_CREATED,
+            named: Definitions.EVENT_NOTIFICATION_DISPLAYED,
             with: notificationReceived)
     }
     
@@ -168,7 +177,7 @@ class AwesomeEventsReceiver {
         }
         
         notifyActionEvent(
-            named: Definitions.CHANNEL_METHOD_NOTIFICATION_DISPLAYED,
+            named: Definitions.EVENT_DEFAULT_ACTION,
             with: actionReceived)
     }
     
@@ -180,7 +189,7 @@ class AwesomeEventsReceiver {
         }
         
         notifyActionEvent(
-            named: Definitions.CHANNEL_METHOD_NOTIFICATION_DISMISSED,
+            named: Definitions.EVENT_NOTIFICATION_DISMISSED,
             with: actionReceived)
     }
     
@@ -192,7 +201,7 @@ class AwesomeEventsReceiver {
         }
         
         notifyActionEvent(
-            named: Definitions.CHANNEL_METHOD_SILENT_ACTION,
+            named: Definitions.EVENT_SILENT_ACTION,
             with: actionReceived)
     }
     
@@ -204,7 +213,7 @@ class AwesomeEventsReceiver {
         }
         
         notifyActionEvent(
-            named: Definitions.CHANNEL_METHOD_SILENT_ACTION,
+            named: Definitions.EVENT_SILENT_ACTION,
             with: actionReceived)
     }
 }

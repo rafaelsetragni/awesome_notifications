@@ -42,7 +42,7 @@ public interface Definitions {
 
     String ACTION_HANDLE = "actionHandle";
     String SILENT_HANDLE = "silentHandle";
-    String DART_BG_HANDLE = "dartBgHandle";
+    String BACKGROUND_HANDLE = "bgHandle";
 
     String NOTIFICATION_MODEL = "notificationModel";
     String NOTIFICATION_MODEL_CONTENT = "content";
@@ -106,12 +106,6 @@ public interface Definitions {
     String CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = "cancelAllSchedules";
     String CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = "cancelAllNotifications";
     String CHANNEL_METHOD_SILENCED_CALLBACK = "isolateCallbackReference";
-    String CHANNEL_METHOD_SILENT_ACTION = "silentAction";
-
-    String CHANNEL_METHOD_NOTIFICATION_CREATED = "notificationCreated";
-    String CHANNEL_METHOD_NOTIFICATION_DISPLAYED = "notificationDisplayed";
-    String CHANNEL_METHOD_NOTIFICATION_DISMISSED = "notificationDismissed";
-    String CHANNEL_METHOD_DEFAULT_ACTION = "defaultAction";
     String CHANNEL_METHOD_SET_ACTION_HANDLE = "setActionHandle";
 
     String CHANNEL_METHOD_START_FOREGROUND = "startForeground";
@@ -119,6 +113,12 @@ public interface Definitions {
 
     String CHANNEL_METHOD_LIST_ALL_SCHEDULES = "listAllSchedules";
     String CHANNEL_FORCE_UPDATE = "forceUpdate";
+
+    String EVENT_NOTIFICATION_CREATED = "notificationCreated";
+    String EVENT_NOTIFICATION_DISPLAYED = "notificationDisplayed";
+    String EVENT_NOTIFICATION_DISMISSED = "notificationDismissed";
+    String EVENT_DEFAULT_ACTION = "defaultAction";
+    String EVENT_SILENT_ACTION = "silentAction";
 
     String FIREBASE_ENABLED = "FIREBASE_ENABLED";
     String SELECT_NOTIFICATION = "SELECT_NOTIFICATION";

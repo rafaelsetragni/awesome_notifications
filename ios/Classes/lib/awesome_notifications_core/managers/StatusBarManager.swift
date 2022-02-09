@@ -13,7 +13,14 @@ public class StatusBarManager {
     
     // ************** SINGLETON PATTERN ***********************
     
-    public static let shared: StatusBarManager = StatusBarManager()
+    static var instance:StatusBarManager?
+    public static var shared:StatusBarManager {
+        get {
+            StatusBarManager.instance =
+                StatusBarManager.instance ?? StatusBarManager()
+            return StatusBarManager.instance!
+        }
+    }
     private init(){}
     
     // ********************************************************
@@ -69,8 +76,8 @@ public class StatusBarManager {
     
     @available(iOS 10.0, *)
     public func showNotificationOnStatusBar(
-        withNotificationModel: notificationModel NotificationModel,
-        whenFinished: completionHandler @escaping (Bool, Bool) -> void
+        withNotificationModel notificationModel: NotificationModel,
+        whenFinished completionHandler: @escaping (Bool, Bool) -> Void
     ) {
         
         /*
@@ -104,47 +111,32 @@ public class StatusBarManager {
         let notificationReceived:NotificationReceived? = NotificationReceived(notificationModel.content)
         if(notificationReceived != nil){
             
-            notificationModel.content!.displayedLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
+            notificationModel.content!.displayedLifeCycle = LifeCycleManager.shared.currentLifeCycle
                         
-            let channel:NotificationChannelModel? = ChannelManager.getChannelByKey(channelKey: notificationModel.content!.channelKey!)
+            let channel:NotificationChannelModel? =
+                ChannelManager
+                .shared
+                .getChannelByKey(channelKey: notificationModel.content!.channelKey!)
             
             alertOnlyOnceNotification(
                 channel?.onlyAlertOnce,
                 notificationReceived: notificationReceived!,
                 completionHandler: completionHandler
             )
-            
-            if CreatedManager.getCreatedByKey(id: notificationReceived!.id!) != nil {
-                SwiftAwesomeNotificationsPlugin.createEvent(notificationReceived: notificationReceived!)
-            }
-            
-            DisplayedManager.reloadLostSchedulesDisplayed(referenceDate: Date())
-            
-            SwiftAwesomeNotificationsPlugin.displayEvent(notificationReceived: notificationReceived!)
-
-            /*
-            if(notificationModel.schedule != nil){
-                                
-                do {
-                    try NotificationSenderAndScheduler().send(
-                        createdSource: notificationModel.content!.createdSource!,
-                        notificationModel: notificationModel,
-                        completion: { sent, content, error in
-                        
-                        }
-                    )
-                } catch {
-                    // Fallback on earlier versions
-                }
-            }
-            */
-
-            // Completion handler was called in alertOnlyOnceNotification(...) / its subcalls.
         }
     }
         
     @available(iOS 10.0, *)
-    private func alertOnlyOnceNotification(_ alertOnce:Bool?, notificationReceived:NotificationReceived, completionHandler: @escaping (UNNotificationPresentationOptions) -> Void){
+    private func alertOnlyOnceNotification(
+        _ alertOnce:Bool?,
+        notificationReceived:NotificationReceived,
+        completionHandler: @escaping (Bool, Bool) -> Void
+    ){
+        
+        if !self.shouldDisplay(notificationReceived: notificationReceived) {
+            completionHandler(true, false)
+            return
+        }
         
         if(alertOnce ?? false){
             
@@ -152,38 +144,30 @@ public class StatusBarManager {
                 
                 for notification in notifications {
                     if notification.request.identifier == String(notificationReceived.id!) {
-                        
-                        self.shouldDisplay(
-                            notificationReceived: notificationReceived,
-                            options: [.alert, .badge],
-                            completionHandler: completionHandler
-                        )
-                        
+                        completionHandler(true, false)
                         return
                     }
                 }
             }
             
         }
-            
-        self.shouldDisplay(
-            notificationReceived: notificationReceived,
-            options: [.alert, .badge, .sound],
-            completionHandler: completionHandler
-        )
+        
+        completionHandler(true, true)
     }
     
     @available(iOS 10.0, *)
-    private func shouldDisplay(notificationReceived:NotificationReceived, options:UNNotificationPresentationOptions, completionHandler: @escaping (UNNotificationPresentationOptions) -> Void){
+    private func shouldDisplay(notificationReceived:NotificationReceived) -> Bool {
         
-        let currentLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
-        if(
-            (notificationReceived.displayOnForeground! && currentLifeCycle == .Foreground)
-                ||
-            (notificationReceived.displayOnBackground! && currentLifeCycle == .Background)
-        ){
-            completionHandler(options)
+        let currentLifeCycle = LifeCycleManager.shared.currentLifeCycle
+        
+        if currentLifeCycle == .Foreground {
+            return notificationReceived.displayOnForeground ?? false
         }
-        completionHandler([])
+        
+        if currentLifeCycle == .Background {
+            return notificationReceived.displayOnBackground ?? false
+        }
+        
+        return false
     }
 }

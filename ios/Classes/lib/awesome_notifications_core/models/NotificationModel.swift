@@ -12,6 +12,7 @@ public class NotificationModel : AbstractModel {
     var content:NotificationContentModel?
     var actionButtons:[NotificationButtonModel]?
     var schedule:NotificationScheduleModel?
+    var importance:NotificationImportance?
     
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         

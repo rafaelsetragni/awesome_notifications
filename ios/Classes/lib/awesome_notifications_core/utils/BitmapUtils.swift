@@ -12,8 +12,14 @@ public class BitmapUtils : MediaUtils {
     
     // ************** SINGLETON PATTERN ***********************
     
-    public static let shared: BitmapUtils = BitmapUtils()
-    private override init(){}
+    static var instance:BitmapUtils?
+    public static var shared:BitmapUtils {
+        get {
+            BitmapUtils.instance = BitmapUtils.instance ?? BitmapUtils()
+            return BitmapUtils.instance!
+        }
+    }
+    override init(){}
     
     // ********************************************************
     
@@ -90,9 +96,9 @@ public class BitmapUtils : MediaUtils {
                 // from EXC_RESOURCE_RESOURCE_TYPE_MEMORY fatal exception
                 
                 if SwiftUtils.isRunningOnExtension() && imageData.count > 1048576 {
-                    throw AwesomeNotificationsException.exceptionMsg(msg:
-                    "Notification image '\( String(describing: bitmapUri))' exceeds 1Mb"
-                    )
+                    throw AwesomeNotificationsException
+                        .invalidRequiredFields(
+                            msg: "Notification image '\( String(describing: bitmapUri))' exceeds 1Mb")
                 }
                 
                 return UIImage(data: imageData)
@@ -133,17 +139,22 @@ public class BitmapUtils : MediaUtils {
         }else{
             return nil
         }
-   }
+    }
     
     func getBitmapFromFile(_ mediaPath:String) -> UIImage? {
         let mediaPath:String? = cleanMediaPath(mediaPath)
         
         if(StringUtils.isNullOrEmpty(mediaPath)){ return nil }
         
+        return getBitmapFromFile(fromRealPath: mediaPath!)
+    }
+    
+    func getBitmapFromFile(fromRealPath realPath:String) -> UIImage? {
+        
         do {
             
-            if FileManager.default.fileExists(atPath: mediaPath!) {
-                let url = URL.init(fileURLWithPath: mediaPath!)
+            if FileManager.default.fileExists(atPath: realPath) {
+                let url = URL.init(fileURLWithPath: realPath)
                 let data = try Data(contentsOf: url)
                 return UIImage(data: data)
             }
@@ -165,6 +176,7 @@ public class BitmapUtils : MediaUtils {
         if mediaPath!.replaceRegex("^.*\\/([^\\/]+)$", replaceWith: "$1") {
             return UIImage(named: mediaPath!)
         }
+        return nil
     }
     
     func roundUiImage(_ image:UIImage) -> UIImage? {

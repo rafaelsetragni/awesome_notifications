@@ -7,7 +7,9 @@
 
 import Foundation
 
-public class LifeCycleManager {
+public class LifeCycleManager:
+    NSObject,
+    UIApplicationDelegate {
     
     private let TAG = "LifeCycleManager"
     
@@ -16,9 +18,54 @@ public class LifeCycleManager {
     
     // ************** SINGLETON PATTERN ***********************
     
-    public static let shared: LifeCycleManager = LifeCycleManager()
-    private init(){}
+    static var instance:LifeCycleManager?
+    public static var shared:LifeCycleManager {
+        get {
+            LifeCycleManager.instance =
+                LifeCycleManager.instance ?? LifeCycleManager()
+            return LifeCycleManager.instance!
+        }
+    }
+    private override init(){
+        super.init()
+    }
     
+    // ************** IOS EVENTS LISTENERS ************************
+    
+    var _listening = false
+    public func startListeners(){
+        _listening = true
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.applicationDidBecomeActive),
+            name: UIApplication.didBecomeActiveNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.applicationWillResignActive),
+            name: UIApplication.willResignActiveNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.applicationDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.applicationWillTerminate),
+            name: UIApplication.willTerminateNotification, object: nil)
+        
+        if !SwiftUtils.isRunningOnExtension() {
+            currentLifeCycle = .AppKilled
+        }
+    }
+    
+    deinit {
+        if _listening {
+            NotificationCenter.default.removeObserver(self)
+        }
+    }
     
     // ************** OBSERVER PATTERN ************************
     
@@ -35,7 +82,7 @@ public class LifeCycleManager {
         }
     }
     
-    public func notify(lifeCycle: NotificationLifeCycle){
+    private func notify(lifeCycle: NotificationLifeCycle){
         for listener in listeners {
             listener.onNewLifeCycleEvent(lifeCycle: lifeCycle)
         }
@@ -43,94 +90,79 @@ public class LifeCycleManager {
     
     // ********************************************************
     
+    private var _oldLifeCycle:NotificationLifeCycle?
     private var _currentLifeCycle:NotificationLifeCycle?
+    
     public var currentLifeCycle: NotificationLifeCycle {
         get {
             if _currentLifeCycle == nil {
-                if let rawName =
-                        LifeCycleManager
-                            ._userDefaults?
-                            .string(forKey: referenceKey)
-                {
-                    _currentLifeCycle = EnumUtils.fromString(rawName)
+                if !SwiftUtils.isRunningOnExtension() {
+                    _currentLifeCycle = .AppKilled
                 }
                 else {
-                    _currentLifeCycle = NotificationLifeCycle.AppKilled
+                    if let rawName =
+                            LifeCycleManager
+                                ._userDefaults?
+                                .string(forKey: referenceKey)
+                    {
+                        _currentLifeCycle = EnumUtils.fromString(rawName)
+                    }
+                    else {
+                        _currentLifeCycle = NotificationLifeCycle.AppKilled
+                    }
                 }
-                
             }
             return _currentLifeCycle ?? NotificationLifeCycle.AppKilled
         }
         set {
             _currentLifeCycle = newValue
-            notify(lifeCycle: newValue)
             
             LifeCycleManager
                 ._userDefaults?
                 .setValue(newValue.rawValue, forKey: referenceKey)
+            
+            if _currentLifeCycle == .Foreground {
+                _hasGoneForeground = true
+            }
+            
+            if _currentLifeCycle != _oldLifeCycle {
+                _oldLifeCycle = _currentLifeCycle
+                notify(lifeCycle: newValue)
+            }
+        }
+    }
+    
+    var _isOutOfFocus = false
+    public var isOutOfFocus:Bool {
+        get {
+            return _isOutOfFocus
+        }
+    }
+    
+    var _hasGoneForeground = false
+    public var hasGoneForeground:Bool {
+        get {
+            return _hasGoneForeground
         }
     }
     
     // ******************************  IOS LIFECYCLE EVENTS  ***********************************
     
-    
     public func applicationDidBecomeActive(_ application: UIApplication) {
-        notify(lifeCycle: NotificationLifeCycle.Foreground)
-        
-        if AwesomeNotifications.debug {
-            Log.d(
-                TAG,
-                "Notification lifeCycle: (DidBecomeActive) "
-                + currentLifeCycle.rawValue )
-        }
+        currentLifeCycle = .Foreground
+        _isOutOfFocus = false
     }
     
     public func applicationWillResignActive(_ application: UIApplication) {
-        // applicationWillTerminate is not always get called, so the Background state is not correct defined in this cases
-        // notify(lifeCycle: NotificationLifeCycle.Foreground)
-        notify(lifeCycle: NotificationLifeCycle.Background)
-        
-        if(AwesomeNotifications.debug){
-            Log.d(
-                SwiftAwesomeNotificationsPlugin.TAG,
-                "Notification lifeCycle: (WillResignActive) "
-                    + currentLifeCycle.rawValue)
-        }
+        _isOutOfFocus = true
     }
     
     public func applicationDidEnterBackground(_ application: UIApplication) {
-        // applicationWillTerminate is not always get called, so the AppKilled state is not correct defined in this cases
-        // notify(lifeCycle: NotificationLifeCycle.Background)
-        notify(lifeCycle: NotificationLifeCycle.AppKilled)
-        
-        if(AwesomeNotifications.debug){
-            Log.d(
-                SwiftAwesomeNotificationsPlugin.TAG,
-                "Notification lifeCycle: (DidEnterBackground) "
-                    + currentLifeCycle.rawValue)
-        }
-    }
-    
-    public func applicationWillEnterForeground(_ application: UIApplication) {
-        notify(lifeCycle: NotificationLifeCycle.Background)
-        
-        if(AwesomeNotifications.debug){
-            Log.d(
-                SwiftAwesomeNotificationsPlugin.TAG,
-                "Notification lifeCycle: (WillEnterForeground) "
-                    + currentLifeCycle.rawValue)
-        }
+        currentLifeCycle = hasGoneForeground ? .Background : .AppKilled
     }
     
     public func applicationWillTerminate(_ application: UIApplication) {
-        notify(lifeCycle: NotificationLifeCycle.AppKilled)
-        
-        if(AwesomeNotifications.debug){
-            Log.d(
-                SwiftAwesomeNotificationsPlugin.TAG,
-                "Notification lifeCycle: (WillTerminate) "
-                    + currentLifeCycle.rawValue)
-        }
+        currentLifeCycle = .AppKilled
     }
     
 }

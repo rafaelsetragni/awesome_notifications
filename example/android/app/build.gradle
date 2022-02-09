@@ -45,6 +45,8 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+            minifyEnabled true
+            shrinkResources true
             // NOT RECOMMENDED DUE SECURITY AGAINST REVERSE ENGINEERING
             // shrinkResources false
         }
@@ -56,8 +58,7 @@ flutter {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
 }
 
 // UNCOMMENT THIS LINE TO ACTIVATE FIREBASE SERVICES ON EXAMPLE APP

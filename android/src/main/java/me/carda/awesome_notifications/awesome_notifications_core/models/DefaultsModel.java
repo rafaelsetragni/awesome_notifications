@@ -26,7 +26,7 @@ public class DefaultsModel extends AbstractModel {
     public AbstractModel fromMap(Map<String, Object> arguments) {
         appIcon  = getValueOrDefault(arguments, Definitions.NOTIFICATION_APP_ICON, String.class);
         silentDataCallback  = getValueOrDefault(arguments, Definitions.SILENT_HANDLE, String.class);
-        reverseDartCallback = getValueOrDefault(arguments, Definitions.DART_BG_HANDLE, String.class);
+        reverseDartCallback = getValueOrDefault(arguments, Definitions.BACKGROUND_HANDLE, String.class);
         backgroundHandleClass = getValueOrDefault(arguments, Definitions.NOTIFICATION_BG_HANDLE_CLASS, String.class);
 
         return this;
@@ -38,7 +38,7 @@ public class DefaultsModel extends AbstractModel {
 
         returnedObject.put(Definitions.NOTIFICATION_APP_ICON, appIcon);
         returnedObject.put(Definitions.SILENT_HANDLE, silentDataCallback);
-        returnedObject.put(Definitions.DART_BG_HANDLE, reverseDartCallback);
+        returnedObject.put(Definitions.BACKGROUND_HANDLE, reverseDartCallback);
         returnedObject.put(Definitions.NOTIFICATION_BG_HANDLE_CLASS, backgroundHandleClass);
 
         return returnedObject;

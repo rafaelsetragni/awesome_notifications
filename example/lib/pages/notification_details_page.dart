@@ -65,9 +65,9 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              bigPicture == null
-                                  ? Container(
-                                      height: mediaQueryData.padding.top + 80,
+                              bigPicture == null ?
+                                    Container(
+                                      height: mediaQueryData.padding.top + 120,
                                       width: mediaQueryData.size.width,
                                       decoration: BoxDecoration(
                                           gradient: LinearGradient(
@@ -81,8 +81,8 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                                 0.0,
                                                 1.0
                                               ])),
-                                    )
-                                  : Container(
+                                    ):
+                                    Container(
                                       height: maxSize * 0.4 +
                                           mediaQueryData.padding.top,
                                       width: mediaQueryData.size.width,
@@ -155,7 +155,7 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                 right: 20.0,
                                 bottom: 10,
                                 top: bigPicture == null
-                                    ? (largeIcon == null ? 120 : 190)
+                                    ? (largeIcon == null ? 130 : 240)
                                     : maxSize * 0.48),
                             child: RichText(
                                 text: TextSpan(children: [
@@ -233,7 +233,7 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                 )
               ],
             ),
-            Theme.of(context).platform == TargetPlatform.android
+            bigPicture == null || Theme.of(context).platform == TargetPlatform.android
                 ? SizedBox()
                 : Positioned(
                     top: 0,

@@ -22,17 +22,17 @@ public class NotificationBuilder {
     // ********************************************************
     
     public func jsonDataToNotificationModel(jsonData:[String : Any?]?) -> NotificationModel? {
-        if(jsonData?.isEmpty ?? true){ return nil }
+        if jsonData?.isEmpty ?? true { return nil }
 
         let notificationModel:NotificationModel? = NotificationModel().fromMap(arguments: jsonData!) as? NotificationModel
         return notificationModel
     }
     
     public func jsonToNotificationModel(jsonData:String?) -> NotificationModel? {
-        if(StringUtils.isNullOrEmpty(jsonData)){ return nil }
+        if StringUtils.isNullOrEmpty(jsonData) { return nil }
         
         let data:[String:Any?]? = JsonUtils.fromJson(jsonData)
-        if(data == nil){ return nil }
+        if data == nil { return nil }
         
         let notificationModel:NotificationModel? = NotificationModel().fromMap(arguments: data!) as? NotificationModel
         return notificationModel
@@ -45,21 +45,22 @@ public class NotificationBuilder {
     public func buildNotificationActionFromJson(jsonData:String?, buttonKeyPressed:String?, userText:String?) -> ActionReceived? {
         
         let notificationModel:NotificationModel? = buildNotificationFromJson(jsonData: jsonData)
-        if(notificationModel == nil){ return nil }
+        if notificationModel == nil { return nil }
         let actionReceived:ActionReceived = ActionReceived(notificationModel!.content)
         
-        if(notificationModel!.actionButtons != nil && !StringUtils.isNullOrEmpty(buttonKeyPressed)) {
+        if notificationModel!.actionButtons != nil && !StringUtils.isNullOrEmpty(buttonKeyPressed) {
             for button:NotificationButtonModel in notificationModel!.actionButtons! {
                 if button.key == buttonKeyPressed {
                     actionReceived.autoDismissible = button.autoDismissible
+                    actionReceived.actionType = button.actionType
                     break
                 }
             }
         }
         
-        if(StringUtils.isNullOrEmpty(actionReceived.displayedDate)){
-            actionReceived.displayedDate = DateUtils.getUTCTextDate()
-            actionReceived.displayedLifeCycle = SwiftAwesomeNotificationsPlugin.appLifeCycle
+        if StringUtils.isNullOrEmpty(actionReceived.displayedDate) {
+            actionReceived.displayedDate = DateUtils.shared.getUTCTextDate()
+            actionReceived.displayedLifeCycle = LifeCycleManager.shared.currentLifeCycle
         }
         else {
             if actionReceived.createdDate == actionReceived.displayedDate {
@@ -72,7 +73,7 @@ public class NotificationBuilder {
     
     public func createNotification(_ notificationModel:NotificationModel, content:UNMutableNotificationContent?) throws -> NotificationModel? {
         
-        guard let channel = ChannelManager.getChannelByKey(channelKey: notificationModel.content!.channelKey!) else {
+        guard let channel = ChannelManager.shared.getChannelByKey(channelKey: notificationModel.content!.channelKey!) else {
             throw AwesomeNotificationsException.invalidRequiredFields(msg: "Channel '\(notificationModel.content!.channelKey!)' does not exist or is disabled")
         }
 
@@ -100,7 +101,7 @@ public class NotificationBuilder {
             setOnlyAlertOnce(notificationModel: notificationModel, channel: channel, content: content)
             
             setLockedNotification(notificationModel: notificationModel, channel: channel, content: content)
-            setImportance(channel: channel, content: content)
+            setImportance(channel: channel, notificationModel: notificationModel,content: content)
             
             setSound(notificationModel: notificationModel, channel: channel, content: content)
             setVibrationPattern(channel: channel, content: content)
@@ -116,15 +117,18 @@ public class NotificationBuilder {
             
             createActionButtonsAndCategory(notificationModel: notificationModel, content: content)
             
+            setWakeUpScreen(notificationModel: notificationModel, content: content)
+            setCriticalAlert(channel: channel, content: content)
+            
             setUserInfoContent(notificationModel: notificationModel, content: content)
             
-            if SwiftUtils.isRunningOnExtension() {                
+            if SwiftUtils.isRunningOnExtension() {
                 return notificationModel
             }
             
             //let trigger:UNCalendarNotificationTrigger? = dateToCalendarTrigger(targetDate: nextDate)
             
-            notificationModel.content!.displayedDate = nextDate?.toString(toTimeZone: "UTC") ?? DateUtils.getUTCTextDate()
+            notificationModel.content!.displayedDate = nextDate?.toString(toTimeZone: "UTC") ?? DateUtils.shared.getUTCTextDate()
             
             let trigger:UNNotificationTrigger? = nextDate == nil ? nil : notificationModel.schedule?.getUNNotificationTrigger()
             let request = UNNotificationRequest(identifier: notificationModel.content!.id!.description, content: content, trigger: trigger)
@@ -140,9 +144,9 @@ public class NotificationBuilder {
                     if(notificationModel.schedule != nil){
                         
                         notificationModel.schedule!.timeZone =
-                            notificationModel.schedule!.timeZone ?? DateUtils.localTimeZone.identifier
+                            notificationModel.schedule!.timeZone ?? DateUtils.shared.localTimeZone.identifier
                         notificationModel.schedule!.createdDate =
-                            DateUtils.getLocalTextDate(fromTimeZone: notificationModel.schedule!.timeZone!)
+                            DateUtils.shared.getLocalTextDate(fromTimeZone: notificationModel.schedule!.timeZone!)
                         
                         if (nextDate != nil){
                             ScheduleManager.saveSchedule(notification: notificationModel, nextDate: nextDate!)
@@ -203,7 +207,7 @@ public class NotificationBuilder {
     
     private func setBadgeIndicator(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){
         if(channel.channelShowBadge!){
-            content.badge = NSNumber(value: BadgeManager.incrementGlobalBadgeCounter())
+            content.badge = NSNumber(value: BadgeManager.shared.incrementGlobalBadgeCounter())
         }
     }
     
@@ -225,45 +229,35 @@ public class NotificationBuilder {
             for button in notificationModel.actionButtons! {
                 
                 let action:UNNotificationAction?
-                                
-                switch button.buttonType {
+                var options:UNNotificationActionOptions = []
                 
-                    case .InputField:
-                        action = UNTextInputNotificationAction(
-                            identifier: button.key!,
-                            title: button.label!,
-                            options: [.foreground]
-                        )
-                        break
-                        
-                    case .Default:
-                        action = UNNotificationAction(
-                            identifier: button.key!,
-                            title: button.label!,
-                            options: (button.isDangerousOption ?? false) ?
-                                [.destructive, .foreground] : [.foreground]
-                        )
-                        
-                    case .DisabledAction:
-                        action = UNNotificationAction(
-                            identifier: button.key!,
-                            title: button.label!,
-                            options: (button.isDangerousOption ?? false) ?
-                                [.destructive] : []
-                        )
-                    
-                    default:
-                        action = UNNotificationAction(
-                            identifier: button.key!,
-                            title: button.label!,
-                            options: (button.isDangerousOption ?? false) ?
-                                [.destructive, .foreground] : [.foreground]
-                        )
-                        break
+                if button.actionType == .Default {
+                    options.update(with: .foreground)
+                }
+                
+                if button.isDangerousOption ?? false {
+                    options.update(with: .destructive)
+                }
+                
+                if button.requireInputText ?? false {
+                    action = UNTextInputNotificationAction(
+                        identifier: button.key!,
+                        title: button.label!,
+                        options: options
+                    )
+                }
+                else {
+                    action = UNNotificationAction(
+                        identifier: button.key!,
+                        title: button.label!,
+                        options: options
+                    )
                 }
                 
                 temporaryCategory.append(button.key!)
-                dynamicLabels.append(button.label! + (button.buttonType?.rawValue ?? "default"))
+                dynamicLabels.append(
+                    button.label! +
+                    (button.actionType?.rawValue ?? "default"))
                 actions.append(action!)
             }
             
@@ -406,45 +400,70 @@ public class NotificationBuilder {
         // TODO
     }
     
-    private func setImportance(channel:NotificationChannelModel, content:UNMutableNotificationContent){
-        // TODO
+    private func setImportance(channel:NotificationChannelModel, notificationModel:NotificationModel, content:UNMutableNotificationContent){
+        notificationModel.importance = notificationModel.importance ?? channel.importance ?? .Default
+        if #available(iOS 15.0, *) {
+            switch notificationModel.importance! {
+                
+            case .None, .Min, .Low:
+                content.interruptionLevel = .passive
+                break
+                
+            case .Default:
+                content.interruptionLevel = .active
+                break
+                
+            case .High, .Max:
+                content.interruptionLevel = .timeSensitive
+                break
+            }
+        }
     }
 
     private func setSound(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){
-        if (notificationModel.content!.playSound ?? false) && (channel.playSound ?? false) {
+        
+        switch notificationModel.importance ?? .Default {
             
-            if(!StringUtils.isNullOrEmpty(notificationModel.content!.customSound)){
-                content.sound = AudioUtils.getSoundFromSource(SoundPath: notificationModel.content!.customSound!)
-                return
-            }
-            
-            if(!StringUtils.isNullOrEmpty(channel.soundSource)){
-                content.sound = AudioUtils.getSoundFromSource(SoundPath: channel.soundSource!)
-                return
-            }
-            
-            // TODO Get default iOS path sounds
-            switch channel.defaultRingtoneType {
+            case .Default, .High, .Max:
+            if (notificationModel.content!.playSound ?? false) && (channel.playSound ?? false) {
                 
-                case .Ringtone:
-                    content.sound = UNNotificationSound.default
+                if(!StringUtils.isNullOrEmpty(notificationModel.content!.customSound)){
+                    content.sound = AudioUtils.shared.getSoundFromSource(SoundPath: notificationModel.content!.customSound!)
                     return
-                    
-                case .Alarm:
-                    content.sound = UNNotificationSound.default
-                    return
+                }
                 
-                case .Notification:
-                    content.sound = UNNotificationSound.default
+                if(!StringUtils.isNullOrEmpty(channel.soundSource)){
+                    content.sound = AudioUtils.shared.getSoundFromSource(SoundPath: channel.soundSource!)
                     return
+                }
+                
+                // TODO Get default iOS path sounds
+                switch channel.defaultRingtoneType {
                     
-                case .none:
-                    content.sound = UNNotificationSound.default
-                    return
+                    case .Ringtone:
+                        content.sound = UNNotificationSound.default
+                        return
+                        
+                    case .Alarm:
+                        content.sound = UNNotificationSound.default
+                        return
+                    
+                    case .Notification:
+                        content.sound = UNNotificationSound.default
+                        return
+                        
+                    case .none:
+                        content.sound = UNNotificationSound.default
+                        return
+                }
             }
-        }
-        else {
-            content.sound = nil
+            else {
+                content.sound = nil
+            }
+            break
+            
+            default:
+            break
         }
     }
     
@@ -454,6 +473,22 @@ public class NotificationBuilder {
     
     private func setLights(channel:NotificationChannelModel, content:UNMutableNotificationContent){
         // iOS does not have any lights
+    }
+    
+    private func setWakeUpScreen(notificationModel:NotificationModel, content:UNMutableNotificationContent){
+        if notificationModel.content?.wakeUpScreen ?? false {
+            if #available(iOS 15.0, *) {
+                content.interruptionLevel = .timeSensitive
+            }
+        }
+    }
+    
+    private func setCriticalAlert(channel:NotificationChannelModel, content:UNMutableNotificationContent){
+        if channel.criticalAlerts ?? false {
+            if #available(iOS 15.0, *) {
+                content.interruptionLevel = .critical
+            }
+        }
     }
 
     private func setSmallIcon(channel:NotificationChannelModel, content:UNMutableNotificationContent){
@@ -528,10 +563,13 @@ public class NotificationBuilder {
         		
         if !StringUtils.isNullOrEmpty(bitmapSource) {
             
-            if let image:UIImage = BitmapUtils.getBitmapFromSource(
-                bitmapPath: bitmapSource!,
-                roundedBitpmap: roundedBitmap
-            ) {
+            if let image:UIImage =
+                BitmapUtils
+                    .shared
+                    .getBitmapFromSource(
+                        bitmapPath: bitmapSource!,
+                        roundedBitpmap: roundedBitmap
+            ){
                 
                 let fileManager = FileManager.default
                 let tmpSubFolderName = ProcessInfo.processInfo.globallyUniqueString

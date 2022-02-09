@@ -123,6 +123,40 @@ public class NotificationChannelModel : AbstractModel {
         return mapData
     }
     
+    public func areAndroidLockedFieldsEqualsTo(channel otherChannel: NotificationChannelModel) -> Bool {
+        return
+            channelKey == otherChannel.channelKey &&
+            channelShowBadge == otherChannel.channelShowBadge &&
+
+            importance == otherChannel.importance &&
+
+            playSound == otherChannel.playSound &&
+            soundSource == otherChannel.soundSource &&
+            defaultRingtoneType == otherChannel.defaultRingtoneType &&
+
+            enableVibration == otherChannel.enableVibration &&
+            vibrationPattern == otherChannel.vibrationPattern &&
+
+            enableLights == otherChannel.enableLights &&
+            ledColor == otherChannel.ledColor &&
+            ledOnMs == otherChannel.ledOnMs &&
+            ledOffMs == otherChannel.ledOffMs &&
+
+            groupKey == otherChannel.groupKey &&
+            groupSort == otherChannel.groupSort &&
+            groupAlertBehavior == otherChannel.groupAlertBehavior &&
+
+            icon == otherChannel.icon &&
+            defaultColor == otherChannel.defaultColor &&
+
+            locked == otherChannel.locked &&
+            onlyAlertOnce == otherChannel.onlyAlertOnce &&
+
+            criticalAlerts == otherChannel.criticalAlerts &&
+
+            defaultPrivacy == otherChannel.defaultPrivacy
+    }
+    
     public func validate() throws {
         
         if(StringUtils.isNullOrEmpty(channelKey)){
@@ -145,7 +179,7 @@ public class NotificationChannelModel : AbstractModel {
             !StringUtils.isNullOrEmpty(soundSource)
         ){
             if #available(iOS 10.0, *) {
-                if(!AudioUtils.isValidSound(soundSource)){
+                if(!AudioUtils.shared.isValidSound(soundSource)){
                     throw AwesomeNotificationsException.invalidRequiredFields(msg: "Audio media is not valid")
                 }
             } else {

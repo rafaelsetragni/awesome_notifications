@@ -13,25 +13,40 @@ public class CancellationManager {
     
     // ************** SINGLETON PATTERN ***********************
     
-    public static let shared: CancellationManager = CancellationManager()
+    static var instance:CancellationManager?
+    public static var shared:CancellationManager {
+        get {
+            CancellationManager.instance =
+                CancellationManager.instance ?? CancellationManager()
+            return CancellationManager.instance!
+        }
+    }
     private init(){}
     
     // ********************************************************
         
     public func dismissNotification(byId id:Int) -> Bool {
-        return StatusBarManager.dismissNotification(id: id)
+        return StatusBarManager
+                    .shared
+                    .dismissNotification(id: id)
     }
     
     public func dismissNotifications(byChannelKey channelKey: String) -> Bool {
-        return StatusBarManager.dismissNotificationsByChannelKey(channelKey: channelKey)
+        return StatusBarManager
+                    .shared
+                    .dismissNotificationsByChannelKey(channelKey: channelKey)
     }
     
     public func dismissNotifications(byGroupKey groupKey: String) -> Bool {
-        return StatusBarManager.dismissNotificationsByGroupKey(groupKey: groupKey)
+        return StatusBarManager
+                    .shared
+                    .dismissNotificationsByGroupKey(groupKey: groupKey)
     }
     
     public func dismissAllNotifications() -> Bool {
-        return StatusBarManager.dismissAllNotifications()
+        return StatusBarManager
+                    .shared
+                    .dismissAllNotifications()
     }
     
     public func cancelSchedule(byId id:Int) -> Bool {
@@ -58,20 +73,20 @@ public class CancellationManager {
     
     public func cancelNotification(byId id:Int) -> Bool {
         return
-            dismissNotification(id: id) &&
-            cancelSchedule(id: id)
+            dismissNotification(byId: id) &&
+            cancelSchedule(byId: id)
     }
     
     public func cancelNotifications(byChannelKey channelKey: String) -> Bool {
         return
-            dismissNotificationsByChannelKey(channelKey: channelKey) &&
-            cancelSchedulesByChannelKey(channelKey: channelKey)
+            dismissNotifications(byChannelKey: channelKey) &&
+            cancelSchedules(byChannelKey: channelKey)
     }
     
     public func cancelNotifications(byGroupKey groupKey: String) -> Bool {
         return
-            dismissNotificationsByGroupKey(groupKey: groupKey) &&
-            cancelSchedulesByGroupKey(groupKey: groupKey)
+            dismissNotifications(byGroupKey: groupKey) &&
+            cancelSchedules(byGroupKey: groupKey)
     }
 
     public func cancelAllNotifications() -> Bool {

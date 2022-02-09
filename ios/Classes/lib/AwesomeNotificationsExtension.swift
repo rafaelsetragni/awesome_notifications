@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol AwesomeNotificationsExtension {
-    
+    func loadExternalExtensions(usingFlutterRegistrar registrar:FlutterPluginRegistrar)
 }

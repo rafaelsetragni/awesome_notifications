@@ -9,7 +9,7 @@ import Foundation
 
 public class SharedManager {
     
-    let _sharedInstance = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)
+    let _userDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)
     
     let tag:String
     var objectList:[String:Any?]    
@@ -22,12 +22,12 @@ public class SharedManager {
     private let TAG:String = "SharedManager"
     
     private func refreshObjects(){
-        objectList = _sharedInstance!.dictionary(forKey: tag) ?? [:]
+        objectList = _userDefaults!.dictionary(forKey: tag) ?? [:]
     }
     
     private func updateObjects(){
-        _sharedInstance!.removeObject(forKey: tag)
-        _sharedInstance!.setValue(objectList, forKey: tag)
+        _userDefaults!.removeObject(forKey: tag)
+        _userDefaults!.setValue(objectList, forKey: tag)
         refreshObjects()
     }
     
