@@ -35,34 +35,31 @@ public class StatusBarManager {
     }
     
     public func dismissNotificationsByChannelKey(channelKey: String) -> Bool {
-        var removed:Bool = false
         let center = UNUserNotificationCenter.current()
+        
         center.getDeliveredNotifications(completionHandler: { (notificationRequest) in
             for notification in notificationRequest {
                 if channelKey == notification.request.content.userInfo[Definitions.NOTIFICATION_CHANNEL_KEY] as? String {
                     center.removeDeliveredNotifications(withIdentifiers: [notification.request.identifier])
-                    removed = true
                 }
             }
         })
         
-        return removed
+        return true
     }
 
     public func dismissNotificationsByGroupKey(groupKey: String) -> Bool {
-        var removed:Bool = false
-
         let center = UNUserNotificationCenter.current()
+        
         center.getDeliveredNotifications(completionHandler: { (notificationRequest) in
             for notification in notificationRequest {
                 if groupKey == notification.request.content.userInfo[Definitions.NOTIFICATION_GROUP_KEY] as? String {
                     center.removeDeliveredNotifications(withIdentifiers: [notification.request.identifier])
-                    removed = true
                 }
             }
         })
         
-        return removed
+        return true
     }
     
     public func dismissAllNotifications() -> Bool {
