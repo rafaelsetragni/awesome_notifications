@@ -23,17 +23,29 @@ public class ActionReceived : NotificationReceived {
         if(contentModel == nil){ return }
     }
     
+    convenience init(
+        _ contentModel:NotificationContentModel?,
+        buttonKeyPressed: String?,
+        buttonKeyInput: String?
+    ){
+        self.init(contentModel)
+        if(contentModel == nil){ return }
+        
+        self.buttonKeyPressed = buttonKeyPressed
+        self.buttonKeyInput = buttonKeyInput
+    }
+    
     override public func fromMap(arguments: [String : Any?]?) -> AbstractModel {
         _ = super.fromMap(arguments: arguments)
         
-        self.buttonKeyPressed = MapUtils<String>.getValueOrDefault(reference: "buttonKeyPressed", arguments: arguments)
-        self.buttonKeyInput   = MapUtils<String>.getValueOrDefault(reference: "buttonKeyInput", arguments: arguments)
+        self.buttonKeyPressed = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_KEY_PRESSED, arguments: arguments)
+        self.buttonKeyInput   = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_KEY_INPUT, arguments: arguments)
         
-        self.actionDate       = MapUtils<RealDateTime>.getRealDateOrDefault(reference: "actionDate", arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
-        self.dismissedDate    = MapUtils<RealDateTime>.getRealDateOrDefault(reference: "dismissedDate", arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
+        self.actionDate       = MapUtils<RealDateTime>.getRealDateOrDefault(reference: Definitions.NOTIFICATION_ACTION_DATE, arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
+        self.dismissedDate    = MapUtils<RealDateTime>.getRealDateOrDefault(reference: Definitions.NOTIFICATION_DISMISSED_DATE, arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
         
-        self.actionLifeCycle  = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: "actionLifeCycle", arguments: arguments)
-        self.dismissedLifeCycle = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: "dismissedLifeCycle", arguments: arguments)
+        self.actionLifeCycle  = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: Definitions.NOTIFICATION_ACTION_LIFECYCLE, arguments: arguments)
+        self.dismissedLifeCycle = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: Definitions.NOTIFICATION_DISMISSED_LIFECYCLE, arguments: arguments)
         
         return self
     }
@@ -41,13 +53,13 @@ public class ActionReceived : NotificationReceived {
     override public func toMap() -> [String : Any?] {
         var dataMap:[String : Any?] = super.toMap()
                 
-        if(buttonKeyPressed != nil) {dataMap["buttonKeyPressed"] = self.buttonKeyPressed}
-        if(buttonKeyInput != nil) {dataMap["buttonKeyInput"] = self.buttonKeyInput}
+        if(buttonKeyPressed != nil) {dataMap[Definitions.NOTIFICATION_BUTTON_KEY_PRESSED] = self.buttonKeyPressed}
+        if(buttonKeyInput != nil) {dataMap[Definitions.NOTIFICATION_BUTTON_KEY_INPUT] = self.buttonKeyInput}
         
-        if(actionLifeCycle != nil) {dataMap["actionLifeCycle"] = self.actionLifeCycle?.rawValue}
-        if(dismissedLifeCycle != nil) {dataMap["dismissedLifeCycle"] = self.dismissedLifeCycle?.rawValue}
-        if(actionDate != nil) {dataMap["actionDate"] = self.actionDate!.description}
-        if(dismissedDate != nil) {dataMap["dismissedDate"] = self.dismissedDate!.description}
+        if(actionLifeCycle != nil) {dataMap[Definitions.NOTIFICATION_ACTION_LIFECYCLE] = self.actionLifeCycle?.rawValue}
+        if(dismissedLifeCycle != nil) {dataMap[Definitions.NOTIFICATION_DISMISSED_LIFECYCLE] = self.dismissedLifeCycle?.rawValue}
+        if(actionDate != nil) {dataMap[Definitions.NOTIFICATION_ACTION_DATE] = self.actionDate!.description}
+        if(dismissedDate != nil) {dataMap[Definitions.NOTIFICATION_DISMISSED_DATE] = self.dismissedDate!.description}
         
         return dataMap
     }
@@ -57,12 +69,12 @@ public class ActionReceived : NotificationReceived {
     }
     
     public func registerActionEvent(withLifeCycle lifeCycle: NotificationLifeCycle){
-        actionDate = RealDateTime.init(fromTimeZone: TimeZone(identifier: "UTC"))
+        actionDate = RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
         actionLifeCycle = lifeCycle
     }
     
     public func registerDismissedEvent(withLifeCycle lifeCycle: NotificationLifeCycle){
-        dismissedDate = RealDateTime.init(fromTimeZone: TimeZone(identifier: "UTC"))
+        dismissedDate = RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
         dismissedLifeCycle = lifeCycle
     }
     

@@ -46,7 +46,10 @@ public class NotificationBuilder {
         
         let notificationModel:NotificationModel? = buildNotificationFromJson(jsonData: jsonData)
         if notificationModel == nil { return nil }
-        let actionReceived:ActionReceived = ActionReceived(notificationModel!.content)
+        let actionReceived:ActionReceived = ActionReceived(
+            notificationModel!.content,
+            buttonKeyPressed: buttonKeyPressed,
+            buttonKeyInput: userText)
         
         if notificationModel!.actionButtons != nil && !StringUtils.isNullOrEmpty(buttonKeyPressed) {
             for button:NotificationButtonModel in notificationModel!.actionButtons! {

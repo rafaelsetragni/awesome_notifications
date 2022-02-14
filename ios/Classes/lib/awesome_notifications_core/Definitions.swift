@@ -142,9 +142,11 @@ enum Definitions {
     static let  NOTIFICATION_CREATED_LIFECYCLE = "createdLifeCycle"
     static let  NOTIFICATION_DISPLAYED_LIFECYCLE = "displayedLifeCycle"
     static let  NOTIFICATION_ACTION_LIFECYCLE = "actionLifeCycle"
+    static let  NOTIFICATION_DISMISSED_LIFECYCLE = "dismissedLifeCycle"
     static let  NOTIFICATION_CREATED_DATE = "createdDate"
     static let  NOTIFICATION_DISPLAYED_DATE = "displayedDate"
     static let  NOTIFICATION_ACTION_DATE = "actionDate"
+    static let  NOTIFICATION_DISMISSED_DATE = "dismissedDate"
 
     static let  NOTIFICATION_ID = "id"
     static let  NOTIFICATION_LAYOUT = "notificationLayout"

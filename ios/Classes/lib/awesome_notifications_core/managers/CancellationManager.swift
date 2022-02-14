@@ -98,7 +98,6 @@ public class CancellationManager {
     private func _cancelNativeSchedulesByChannelKey(channelKey: String) -> Bool {
         
         let center = UNUserNotificationCenter.current()
-        var canceled = true
         
         center.getPendingNotificationRequests(completionHandler: { (notificationRequest) in
             for notification in notificationRequest {
@@ -107,12 +106,12 @@ public class CancellationManager {
                         
                         if let id:String = notification.content.userInfo[Definitions.NOTIFICATION_ID] as? String {
                             center.removePendingNotificationRequests(withIdentifiers: [id])
-                            canceled = canceled && ScheduleManager.cancelScheduled(id: Int(id)!)
+                            let _ = ScheduleManager.cancelScheduled(id: Int(id)!)
                         }
                         else {
                             if let id:Int64 = notification.content.userInfo[Definitions.NOTIFICATION_ID] as? Int64 {
                                 center.removePendingNotificationRequests(withIdentifiers: [String(id)])
-                                canceled = canceled && ScheduleManager.cancelScheduled(id: Int(id))
+                                let _ = ScheduleManager.cancelScheduled(id: Int(id))
                             }
                         }
                     }
@@ -120,13 +119,12 @@ public class CancellationManager {
             }
         })
         
-        return canceled
+        return true
     }
     
     private func _cancelNativeSchedulesByGroupKey(groupKey: String) -> Bool {
 
         let center = UNUserNotificationCenter.current()
-        var canceled = true
         
         center.getPendingNotificationRequests(completionHandler: { (notificationRequest) in
             for notification in notificationRequest {
@@ -135,12 +133,12 @@ public class CancellationManager {
                         
                         if let id:String = notification.content.userInfo[Definitions.NOTIFICATION_ID] as? String {
                             center.removePendingNotificationRequests(withIdentifiers: [id])
-                            canceled = canceled && ScheduleManager.cancelScheduled(id: Int(id)!)
+                            let _ = ScheduleManager.cancelScheduled(id: Int(id)!)
                         }
                         else {
                             if let id:Int64 = notification.content.userInfo[Definitions.NOTIFICATION_ID] as? Int64 {
                                 center.removePendingNotificationRequests(withIdentifiers: [String(id)])
-                                canceled = canceled && ScheduleManager.cancelScheduled(id: Int(id))
+                                let _ = ScheduleManager.cancelScheduled(id: Int(id))
                             }
                         }
                     }
@@ -148,7 +146,7 @@ public class CancellationManager {
             }
         })
         
-        return canceled
+        return true
     }
     
     private func _cancelNativeScheduledNotification(id:Int) -> Bool {
