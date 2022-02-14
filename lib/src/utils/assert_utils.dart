@@ -1,7 +1,9 @@
-import 'package:awesome_notifications/src/definitions.dart';
-import 'package:awesome_notifications/src/models/model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/src/models/model.dart';
+import 'package:intl/intl.dart';
 
 class AwesomeAssertUtils {
   static String? toSimpleEnumString<T>(T e) {
@@ -53,14 +55,29 @@ class AwesomeAssertUtils {
     return _getDefaultValue(reference, T);
   }
 
-  static extractValue<T>(String reference, Map dataMap, Type T) {
+  static extractValue(String reference, Map dataMap, Type T) {
     dynamic defaultValue = _getDefaultValue(reference, T);
     dynamic value = dataMap[reference];
 
     if (value is String) {
       String valueCasted = value;
+      if (AwesomeStringUtils.isNullOrEmpty(valueCasted, considerWhiteSpaceAsEmpty: true))
+        return defaultValue;
 
       switch (T) {
+        case DateTime:
+          final RegExpMatch? match =
+            RegExp(r'^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})( (\S+))?$')
+                .firstMatch(valueCasted);
+
+          if (match != null)
+            return
+              DateFormat("yyyy-MM-dd HH:mm:ss Z")
+                  .parseUTC(match.group(0)!)
+                  .toLocal();
+
+          return defaultValue;
+
         case String:
           return valueCasted;
 
@@ -85,6 +102,9 @@ class AwesomeAssertUtils {
         case double:
           double? parsedValue = double.tryParse(valueCasted);
           return parsedValue ?? defaultValue;
+
+        case bool:
+          return valueCasted.toLowerCase() == 'true';
       }
     }
 
@@ -113,6 +133,10 @@ class AwesomeAssertUtils {
             value = Color((value as CupertinoDynamicColor).value);
             break;
         }
+        break;
+
+      case bool:
+        return value ?? defaultValue;
     }
 
     if (value.runtimeType.hashCode != T.hashCode)

@@ -7,11 +7,13 @@ import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.CronUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.DateUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.IntegerUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
@@ -68,7 +70,6 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
     public Map<String, Object> toMap() {
         Map<String, Object> returnedObject = super.toMap();
 
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, timeZone);
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_ERA, era);
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_YEAR, year);
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_MONTH, month);
@@ -166,11 +167,10 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
     }
 
     @Override
-    public Calendar getNextValidDate(Date fixedNowDate) throws AwesomeNotificationsException {
-
-        TimeZone timeZone = StringUtils.isNullOrEmpty(this.timeZone) ?
-                DateUtils.getLocalTimeZone() :
-                TimeZone.getTimeZone(this.timeZone);
+    @Nullable
+    public Calendar getNextValidDate(
+            @NonNull Calendar fixedNowDate
+    ) throws AwesomeNotificationsException {
 
         if (timeZone == null)
             throw new AwesomeNotificationsException("Invalid time zone");
@@ -184,41 +184,11 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
                 (weekday == null ? "?" : weekday.toString()) + " " +
                 (year == null ? "*" : year.toString());
 
-        Calendar calendar = CronUtils.getNextCalendar(null, cronExpression, fixedNowDate, timeZone);
-
-//        Calendar calendar = new GregorianCalendar();
-//        calendar.setTimeZone(timeZone);
-//
-//        if(era != null)
-//            calendar.set(Calendar.ERA, era);
-//        if(year != null)
-//            calendar.set(Calendar.YEAR, year);
-//        if(month != null)
-//            calendar.set(Calendar.MONTH, month);
-//        if(day != null)
-//            calendar.set(Calendar.DAY_OF_MONTH, day);
-//        if(hour != null)
-//            calendar.set(Calendar.HOUR, hour);
-//        if(minute != null)
-//            calendar.set(Calendar.MINUTE, minute);
-//        if(second != null)
-//            calendar.set(Calendar.SECOND, second);
-//        if(millisecond != null)
-//            calendar.set(Calendar.MILLISECOND, millisecond);
-//        if(weekday != null)
-//            calendar.set(Calendar.DAY_OF_WEEK, weekday);
-//        if(weekOfMonth != null)
-//            calendar.set(Calendar.WEEK_OF_MONTH, weekOfMonth);
-//        if(weekOfYear != null)
-//            calendar.set(Calendar.WEEK_OF_YEAR, weekOfYear);
-//
-//        Date now = DateUtils.getLocalDateTime(this.timeZone);
-//
-//        Date future = calendar.getTime(); // needs to return the next valid date
-//        if(now.after(future))
-//            return null;
-
-        return calendar;
+        return CronUtils
+                .getNextCalendar(
+                        fixedNowDate,
+                        cronExpression,
+                        timeZone);
     }
 }
 

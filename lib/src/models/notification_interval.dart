@@ -1,7 +1,4 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
-import 'package:awesome_notifications/src/models/notification_schedule.dart';
-import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
 class NotificationInterval extends NotificationSchedule {
   /// Field number for get and set indicating the amount of seconds between each repetition (greater than 0).

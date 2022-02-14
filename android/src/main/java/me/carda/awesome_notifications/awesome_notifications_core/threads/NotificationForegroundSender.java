@@ -22,10 +22,9 @@ import me.carda.awesome_notifications.awesome_notifications_core.exceptions.Awes
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationModel;
 import me.carda.awesome_notifications.awesome_notifications_core.models.returnedData.NotificationReceived;
 import me.carda.awesome_notifications.awesome_notifications_core.services.ForegroundService;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.DateUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
-public class NotificationForegroundSender extends AsyncTask<String, Void, NotificationModel> {
+public class NotificationForegroundSender extends NotificationThread<String, Void, NotificationModel> {
 
     public static String TAG = "NotificationSender";
 
@@ -38,6 +37,8 @@ public class NotificationForegroundSender extends AsyncTask<String, Void, Notifi
     private final ForegroundCompletionHandler foregroundCompletionHandler;
 
     private long startTime = 0L, endTime = 0L;
+
+    private StringUtils stringUtils;
 
     public static void start(
             @NonNull Context applicationContext,
@@ -56,19 +57,23 @@ public class NotificationForegroundSender extends AsyncTask<String, Void, Notifi
 
         new NotificationForegroundSender(
             applicationContext,
+            StringUtils.getInstance(),
             foregroundServiceIntent,
             notificationBuilder,
             appLifeCycle,
             foregroundCompletionHandler
-        ).execute();
+        ).executeNotificationThread(
+                foregroundServiceIntent.notificationModel);
     }
 
     private NotificationForegroundSender(
             Context context,
+            StringUtils stringUtils,
             ForegroundService.ForegroundServiceIntent foregroundServiceIntent,
             NotificationBuilder notificationBuilder,
             NotificationLifeCycle appLifeCycle,
-            ForegroundCompletionHandler foregroundCompletionHandler) throws AwesomeNotificationsException {
+            ForegroundCompletionHandler foregroundCompletionHandler
+    ) throws AwesomeNotificationsException {
 
         if(foregroundServiceIntent == null)
             throw new AwesomeNotificationsException("Foreground service intent is invalid");
@@ -80,6 +85,8 @@ public class NotificationForegroundSender extends AsyncTask<String, Void, Notifi
         this.appLifeCycle = appLifeCycle;
         this.createdSource = NotificationSource.ForegroundService;
         this.startTime = System.nanoTime();
+
+        this.stringUtils = stringUtils;
     }
 
     /// AsyncTask METHODS BEGIN *********************************
@@ -92,20 +99,12 @@ public class NotificationForegroundSender extends AsyncTask<String, Void, Notifi
 
         try {
 
-            if(notificationModel.content.createdSource == null)
-                notificationModel.content.createdSource = createdSource;
-
-            if(notificationModel.content.createdLifeCycle == null)
-                notificationModel.content.createdLifeCycle = appLifeCycle;
-
-            if(notificationModel.content.displayedLifeCycle == null)
-                notificationModel.content.displayedLifeCycle = appLifeCycle;
-
-            notificationModel.content.displayedDate = DateUtils.getUTCDate();
+            notificationModel.content.registerCreatedEvent(appLifeCycle, createdSource);
+            notificationModel.content.registerDisplayedEvent(appLifeCycle);
 
             if (
-                StringUtils.isNullOrEmpty(notificationModel.content.title) &&
-                StringUtils.isNullOrEmpty(notificationModel.content.body)
+                stringUtils.isNullOrEmpty(notificationModel.content.title) &&
+                stringUtils.isNullOrEmpty(notificationModel.content.body)
             )
                 throw new AwesomeNotificationsException("A foreground service requires at least the title or body");
 

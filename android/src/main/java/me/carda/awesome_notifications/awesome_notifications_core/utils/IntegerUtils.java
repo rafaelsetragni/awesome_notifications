@@ -39,6 +39,7 @@ public class IntegerUtils {
 
     private static final SecureRandom random = new SecureRandom();
     public static int generateNextRandomId() {
-        return random.nextInt();
+        int randomValue = random.nextInt();
+        return randomValue < 0 ? randomValue * -1 : randomValue;
     }
 }

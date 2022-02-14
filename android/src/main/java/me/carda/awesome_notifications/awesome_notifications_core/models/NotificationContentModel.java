@@ -3,6 +3,7 @@ package me.carda.awesome_notifications.awesome_notifications_core.models;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -18,7 +19,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.enumerators.Not
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.ChannelManager;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BitmapUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.DateUtils;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.ListUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.MapUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
@@ -67,21 +68,23 @@ public class NotificationContentModel extends AbstractModel {
 
     public NotificationSource createdSource;
     public NotificationLifeCycle createdLifeCycle;
-    public String createdDate;
+    public Calendar createdDate;
 
     public NotificationLifeCycle displayedLifeCycle;
-    public String displayedDate;
+    public Calendar displayedDate;
 
     public NotificationCategory category;
 
-    public NotificationContentModel(){}
+    public NotificationContentModel(){
+        super(StringUtils.getInstance());
+    }
 
     public boolean registerCreatedEvent(NotificationLifeCycle lifeCycle, NotificationSource createdSource){
 
         // Creation register can only happen once
         if(this.createdSource == null){
 
-            this.createdDate = DateUtils.getUTCDate();
+            this.createdDate = CalendarUtils.getInstance().getCurrentCalendar();
             this.createdLifeCycle = lifeCycle;
             this.createdSource = createdSource;
 
@@ -91,7 +94,7 @@ public class NotificationContentModel extends AbstractModel {
     }
 
     public boolean registerDisplayedEvent(NotificationLifeCycle lifeCycle){
-        this.displayedDate = DateUtils.getUTCDate();
+        this.displayedDate = CalendarUtils.getInstance().getCurrentCalendar();
         this.displayedLifeCycle = lifeCycle;
         return true;
     }
@@ -104,10 +107,10 @@ public class NotificationContentModel extends AbstractModel {
         actionType = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_ACTION_TYPE,
                 ActionType.class, ActionType.values());
 
-        createdDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_CREATED_DATE, String.class)
-                            .or(DateUtils.getUTCDate());
+        createdDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_CREATED_DATE, Calendar.class)
+                            .orNull();
 
-        displayedDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_DISPLAYED_DATE, String.class)
+        displayedDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_DISPLAYED_DATE, Calendar.class)
                             .orNull();
 
         createdLifeCycle = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_CREATED_LIFECYCLE,
@@ -179,6 +182,8 @@ public class NotificationContentModel extends AbstractModel {
     public Map<String, Object> toMap(){
         Map<String, Object> returnedObject = new HashMap<>();
 
+        CalendarUtils calendarUtils = CalendarUtils.getInstance();
+
         putDataOnMapObject(Definitions.NOTIFICATION_ID, returnedObject, this.id);
         putDataOnMapObject(Definitions.NOTIFICATION_ID, returnedObject, this.id);
         putDataOnMapObject(Definitions.NOTIFICATION_RANDOM_ID, returnedObject, this.isRandomId);
@@ -199,8 +204,8 @@ public class NotificationContentModel extends AbstractModel {
         putDataOnMapObject(Definitions.NOTIFICATION_CREATED_SOURCE, returnedObject, this.createdSource);
         putDataOnMapObject(Definitions.NOTIFICATION_CREATED_LIFECYCLE, returnedObject, this.createdLifeCycle);
         putDataOnMapObject(Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE, returnedObject, this.displayedLifeCycle);
-        putDataOnMapObject(Definitions.NOTIFICATION_DISPLAYED_DATE, returnedObject, this.displayedDate);
-        putDataOnMapObject(Definitions.NOTIFICATION_CREATED_DATE, returnedObject, this.createdDate);
+        putDataOnMapObject(Definitions.NOTIFICATION_DISPLAYED_DATE, returnedObject, calendarUtils.calendarToString(this.displayedDate));
+        putDataOnMapObject(Definitions.NOTIFICATION_CREATED_DATE, returnedObject, calendarUtils.calendarToString(this.createdDate));
         putDataOnMapObject(Definitions.NOTIFICATION_CHANNEL_KEY, returnedObject, this.channelKey);
         putDataOnMapObject(Definitions.NOTIFICATION_CATEGORY, returnedObject, this.category);
         putDataOnMapObject(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, returnedObject, this.autoDismissible);
@@ -274,7 +279,7 @@ public class NotificationContentModel extends AbstractModel {
 
     private void validateIcon(Context context) throws AwesomeNotificationsException {
 
-        if(!StringUtils.isNullOrEmpty(icon)){
+        if(!stringUtils.isNullOrEmpty(icon)){
             if(
                 BitmapUtils.getInstance().getMediaSourceType(icon) != MediaSource.Resource ||
                 !BitmapUtils.getInstance().isValidBitmap(context, icon)
@@ -286,9 +291,9 @@ public class NotificationContentModel extends AbstractModel {
 
     private void validateBigPicture(Context context) throws AwesomeNotificationsException {
         if(
-            (StringUtils.isNullOrEmpty(largeIcon) && StringUtils.isNullOrEmpty(bigPicture)) ||
-            (!StringUtils.isNullOrEmpty(largeIcon) && !BitmapUtils.getInstance().isValidBitmap(context, largeIcon)) ||
-            (!StringUtils.isNullOrEmpty(bigPicture) && !BitmapUtils.getInstance().isValidBitmap(context, bigPicture))
+            (stringUtils.isNullOrEmpty(largeIcon) && stringUtils.isNullOrEmpty(bigPicture)) ||
+            (!stringUtils.isNullOrEmpty(largeIcon) && !BitmapUtils.getInstance().isValidBitmap(context, largeIcon)) ||
+            (!stringUtils.isNullOrEmpty(bigPicture) && !BitmapUtils.getInstance().isValidBitmap(context, bigPicture))
         ){
             throw new AwesomeNotificationsException("Invalid big picture '"+bigPicture+"' or large icon '"+largeIcon+"'");
         }
@@ -296,7 +301,7 @@ public class NotificationContentModel extends AbstractModel {
 
     private void validateLargeIcon(Context context) throws AwesomeNotificationsException {
         if(
-                (!StringUtils.isNullOrEmpty(largeIcon) && !BitmapUtils.getInstance().isValidBitmap(context, largeIcon))
+            (!stringUtils.isNullOrEmpty(largeIcon) && !BitmapUtils.getInstance().isValidBitmap(context, largeIcon))
         )
             throw new AwesomeNotificationsException("Invalid large icon '"+largeIcon+"'");
     }

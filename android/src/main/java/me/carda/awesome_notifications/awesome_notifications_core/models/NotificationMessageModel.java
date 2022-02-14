@@ -7,6 +7,7 @@ import java.util.Map;
 
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class NotificationMessageModel extends AbstractModel {
 
@@ -15,9 +16,12 @@ public class NotificationMessageModel extends AbstractModel {
     public String largeIcon;
     public Long timestamp;
 
-    public NotificationMessageModel(){}
+    public NotificationMessageModel(){
+        super(StringUtils.getInstance());
+    }
 
     public NotificationMessageModel(String title, String message, String largeIcon){
+        super(StringUtils.getInstance());
         this.title = title;
         this.message = message;
         this.largeIcon = largeIcon;

@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
 
@@ -38,7 +39,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.exceptions.Awes
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationChannelModel;
 
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BooleanUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.DateUtils;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.ListUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.MapUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
@@ -54,6 +55,8 @@ public class AwesomeNotificationsPlugin
 
     private MethodChannel pluginChannel;
     private AwesomeNotifications awesomeNotifications;
+
+    private StringUtils stringUtils = StringUtils.getInstance();
 
     @Override
     public void loadExternalExtensions(Context context) {
@@ -392,7 +395,7 @@ public class AwesomeNotificationsPlugin
     private void channelMethodRemoveChannel(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
         String channelKey = call.arguments();
 
-        if (StringUtils.isNullOrEmpty(channelKey))
+        if (stringUtils.isNullOrEmpty(channelKey))
             throw new AwesomeNotificationsException("Empty channel key");
 
         boolean removed =
@@ -491,7 +494,7 @@ public class AwesomeNotificationsPlugin
     private void channelMethodDismissNotificationsByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         String channelKey = call.arguments();
-        if (StringUtils.isNullOrEmpty(channelKey))
+        if (stringUtils.isNullOrEmpty(channelKey))
             throw new AwesomeNotificationsException("Invalid channel Key value");
 
         boolean dismissed = awesomeNotifications.dismissNotificationsByChannelKey(channelKey);
@@ -507,7 +510,7 @@ public class AwesomeNotificationsPlugin
     private void channelMethodCancelSchedulesByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         String channelKey = call.arguments();
-        if (StringUtils.isNullOrEmpty(channelKey))
+        if (stringUtils.isNullOrEmpty(channelKey))
             throw new AwesomeNotificationsException("Invalid channel Key value");
 
         boolean canceled = awesomeNotifications.cancelSchedulesByChannelKey(channelKey);
@@ -523,7 +526,7 @@ public class AwesomeNotificationsPlugin
     private void channelMethodCancelNotificationsByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         String channelKey = call.arguments();
-        if (StringUtils.isNullOrEmpty(channelKey))
+        if (stringUtils.isNullOrEmpty(channelKey))
             throw new AwesomeNotificationsException("Invalid channel Key value");
 
         boolean canceled = awesomeNotifications.cancelNotificationsByChannelKey(channelKey);
@@ -539,7 +542,7 @@ public class AwesomeNotificationsPlugin
     private void channelMethodDismissNotificationsByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         String groupKey = call.arguments();
-        if (StringUtils.isNullOrEmpty(groupKey))
+        if (stringUtils.isNullOrEmpty(groupKey))
             throw new AwesomeNotificationsException("Invalid groupKey value");
 
         boolean dismissed = awesomeNotifications.dismissNotificationsByGroupKey(groupKey);
@@ -555,7 +558,7 @@ public class AwesomeNotificationsPlugin
     private void channelMethodCancelSchedulesByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         String groupKey = call.arguments();
-        if (StringUtils.isNullOrEmpty(groupKey))
+        if (stringUtils.isNullOrEmpty(groupKey))
             throw new AwesomeNotificationsException("Invalid groupKey value");
 
         boolean canceled = awesomeNotifications.cancelSchedulesByGroupKey(groupKey);
@@ -571,7 +574,7 @@ public class AwesomeNotificationsPlugin
     private void channelMethodCancelNotificationsByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
 
         String groupKey = call.arguments();
-        if (StringUtils.isNullOrEmpty(groupKey))
+        if (stringUtils.isNullOrEmpty(groupKey))
             throw new AwesomeNotificationsException("Invalid groupKey value");
 
         boolean canceled = awesomeNotifications.cancelNotificationsByGroupKey(groupKey);
@@ -636,29 +639,33 @@ public class AwesomeNotificationsPlugin
         if (data == null)
             throw new AwesomeNotificationsException("Schedule data is invalid");
 
-        Map<String, Object> scheduleData = (Map<String, Object>) data.get(Definitions.NOTIFICATION_MODEL_SCHEDULE);
+        Map<String, Object> scheduleData =
+                MapUtils.extractValue(data, Definitions.NOTIFICATION_MODEL_SCHEDULE, Map.class)
+                    .orNull();
+
         if (scheduleData == null)
             throw new AwesomeNotificationsException("Schedule data is invalid");
 
-        NotificationScheduleModel scheduleModel = NotificationScheduleModel.getScheduleModelFromMap(scheduleData);
+        NotificationScheduleModel scheduleModel =
+                NotificationScheduleModel
+                        .getScheduleModelFromMap(scheduleData);
+
         if (scheduleModel == null)
             throw new AwesomeNotificationsException("Schedule data is invalid");
 
-        String fixedDateString = (String) data.get(Definitions.NOTIFICATION_INITIAL_FIXED_DATE);
-        Date fixedDate = null;
-        if (!StringUtils.isNullOrEmpty(fixedDateString))
-            fixedDate = DateUtils.stringToDate(fixedDateString, scheduleModel.timeZone);
+        Calendar fixedDate =
+                MapUtils.extractValue(data, Definitions.NOTIFICATION_INITIAL_FIXED_DATE, Calendar.class)
+                            .or(CalendarUtils.getInstance().getCurrentCalendar());
 
         Calendar nextValidDate =
                 awesomeNotifications
                         .getNextValidDate(scheduleModel, fixedDate);
 
-        String finalValidDateString = null;
-        if (nextValidDate != null)
-            finalValidDateString = DateUtils
-                    .dateToString(
-                            nextValidDate.getTime(),
-                            scheduleModel.timeZone);
+        String finalValidDateString =
+                (nextValidDate == null) ? null :
+                CalendarUtils
+                    .getInstance()
+                    .calendarToString(nextValidDate);
 
         result.success(finalValidDateString);
     }

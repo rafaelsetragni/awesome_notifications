@@ -14,12 +14,13 @@ public class NotificationModel : AbstractModel {
     var schedule:NotificationScheduleModel?
     var importance:NotificationImportance?
     
+    var nextValidDate:RealDateTime?
+    
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         
         do {
             self.content = extractNotificationContent(Definitions.NOTIFICATION_MODEL_CONTENT, arguments)
             
-            // required
             if(self.content == nil){ return nil }
             
             self.schedule = try extractNotificationSchedule(Definitions.NOTIFICATION_MODEL_SCHEDULE, arguments)

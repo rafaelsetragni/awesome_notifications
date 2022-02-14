@@ -10,8 +10,12 @@ import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import com.google.common.primitives.Shorts;
 
+import java.sql.Time;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,6 +76,36 @@ public class MapUtils {
 
             Object value = map.get(key);
 
+            if(expectedClass == TimeZone.class){
+                if(value == null)
+                    return Optional.absent();
+
+                if (!(value instanceof String))
+                    return Optional.absent();
+
+                TimeZone finalTimeZone =
+                        TimeZoneUtils
+                            .getInstance()
+                            .getValidTimeZone((String) value);
+
+                if(finalTimeZone == null)
+                    return Optional.absent();
+
+                return Optional.fromNullable(expectedClass.cast(finalTimeZone));
+            }
+
+            if(expectedClass == Calendar.class){
+                if(value == null)
+                    return Optional.absent();
+
+                Calendar finalCalendar =
+                        CalendarUtils
+                                .getInstance()
+                                .calendarFromString((String) value);
+
+                return Optional.fromNullable(expectedClass.cast(finalCalendar));
+            }
+
             if(Number.class.isAssignableFrom(expectedClass)){
 
                 // Hexadecimal color conversion
@@ -84,7 +118,7 @@ public class MapUtils {
                         String transparency = matcher.group(2);
                         String textValue = (transparency == null ? "FF" : transparency) + matcher.group(3);
                         long finalValue = 0L;
-                        if(!StringUtils.isNullOrEmpty(textValue)){
+                        if(!StringUtils.getInstance().isNullOrEmpty(textValue)){
                             finalValue += Long.parseLong(textValue, 16);
                         }
                         return Optional.fromNullable(expectedClass.cast(finalValue));

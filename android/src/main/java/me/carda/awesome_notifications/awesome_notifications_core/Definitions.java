@@ -10,7 +10,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.enumerators.Gro
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationImportance;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationLayout;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationPrivacy;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.DateUtils;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
 
 public interface Definitions {
 
@@ -270,7 +270,7 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_PLAY_SOUND, true);
         put(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, true);
         put(Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, DefaultRingtoneType.Notification);
-        put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, DateUtils.getLocalTimeZone().toString());
+        put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, CalendarUtils.getInstance().getLocalTimeZone().toString());
         put(Definitions.NOTIFICATION_TICKER, "ticker");
         put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, false);
         put(Definitions.NOTIFICATION_ONLY_ALERT_ONCE, false);

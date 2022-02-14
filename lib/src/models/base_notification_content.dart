@@ -1,127 +1,218 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/src/models/model.dart';
-import 'package:awesome_notifications/src/utils/html_utils.dart';
 import 'package:flutter/material.dart';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/src/utils/html_utils.dart';
+import 'model.dart';
+
 class BaseNotificationContent extends Model {
-  int? id;
-  String? channelKey;
-  String? groupKey;
-  String? title;
-  String? body;
-  String? summary;
-  bool? showWhen;
-  Map<String, String>? payload;
-  String? icon;
-  String? largeIcon;
-  String? bigPicture;
-  String? customSound;
-  bool? autoDismissible;
-  bool? wakeUpScreen;
-  bool? fullScreenIntent;
-  bool? criticalAlert;
-  Color? color;
-  Color? backgroundColor;
-  NotificationPrivacy? privacy;
-  NotificationCategory? category;
+  int? _id;
+  String? _channelKey;
+  String? _groupKey;
+  String? _title;
+  String? _body;
+  String? _summary;
+  bool? _showWhen;
+  Map<String, String>? _payload;
+  String? _icon;
+  String? _largeIcon;
+  String? _bigPicture;
+  String? _customSound;
+  bool? _autoDismissible;
+  bool? _wakeUpScreen;
+  bool? _fullScreenIntent;
+  bool? _criticalAlert;
+  Color? _color;
+  Color? _backgroundColor;
+  NotificationPrivacy? _privacy;
+  NotificationCategory? _category;
 
-  String? displayedDate;
-  String? createdDate;
+  DateTime? _displayedDate;
+  DateTime? _createdDate;
 
-  ActionType? actionType;
-  NotificationSource? createdSource;
+  ActionType? _actionType;
+  NotificationSource? _createdSource;
 
-  NotificationLifeCycle? createdLifeCycle;
-  NotificationLifeCycle? displayedLifeCycle;
+  NotificationLifeCycle? _createdLifeCycle;
+  NotificationLifeCycle? _displayedLifeCycle;
 
-  bool? roundedLargeIcon;
-  bool? roundedBigPicture;
+  bool? _roundedLargeIcon;
+  bool? _roundedBigPicture;
+
+  int? get id => _id;
+  String? get channelKey => _channelKey;
+  String? get groupKey => _groupKey;
+  String? get title => _title;
+  String? get body => _body;
+  String? get summary => _summary;
+  bool? get showWhen => _showWhen;
+  Map<String, String>? get payload => _payload;
+  String? get icon => _icon;
+  String? get largeIcon => _largeIcon;
+  String? get bigPicture => _bigPicture;
+  String? get customSound => _customSound;
+  bool? get autoDismissible => _autoDismissible;
+  bool? get wakeUpScreen => _wakeUpScreen;
+  bool? get fullScreenIntent => _fullScreenIntent;
+  bool? get criticalAlert => _criticalAlert;
+  Color? get color => _color;
+  Color? get backgroundColor => _backgroundColor;
+  NotificationPrivacy? get privacy => _privacy;
+  NotificationCategory? get category => _category;
+  ActionType? get actionType => _actionType;
+  bool? get roundedLargeIcon => _roundedLargeIcon;
+  bool? get roundedBigPicture => _roundedBigPicture;
+
+  DateTime? get displayedDate {
+    return _displayedDate;
+  }
+
+  @protected
+  set displayedDate(newValue) {
+    _displayedDate = newValue;
+  }
+
+  DateTime? get createdDate {
+    return _createdDate;
+  }
+
+  @protected
+  set createdDate(newValue) {
+    _createdDate = newValue;
+  }
+
+  NotificationSource? get createdSource {
+    return _createdSource;
+  }
+
+  @protected
+  set createdSource(newValue) {
+    _createdSource = newValue;
+  }
+
+  NotificationLifeCycle? get createdLifeCycle {
+    return _createdLifeCycle;
+  }
+
+  @protected
+  set createdLifeCycle(newValue) {
+    _createdLifeCycle = newValue;
+  }
+
+  NotificationLifeCycle? get displayedLifeCycle {
+    return _displayedLifeCycle;
+  }
+
+  @protected
+  set displayedLifeCycle(newValue) {
+    _displayedLifeCycle = newValue;
+  }
 
   @Deprecated(
       'property name autoCancel is deprecated. Use autoDismissible instead.')
-  bool? get autoCancel => autoDismissible;
+  bool? get autoCancel => _autoDismissible;
 
   @Deprecated(
       'property name autoDismissable is deprecated. Use autoDismissible instead.')
-  bool? get autoDismissable => autoDismissible;
+  bool? get autoDismissable => _autoDismissible;
 
   BaseNotificationContent(
-      {required this.id,
-      required this.channelKey,
-      this.actionType,
-      this.groupKey,
-      this.title,
-      this.body,
-      this.summary,
-      this.showWhen,
-      this.icon,
-      this.largeIcon,
-      this.bigPicture,
-      this.wakeUpScreen,
-      this.fullScreenIntent,
-      this.criticalAlert,
-      this.category,
-      this.autoDismissible,
-      this.color,
-      this.backgroundColor,
-      this.payload,
-      this.customSound,
-      this.roundedLargeIcon,
-      this.roundedBigPicture,
-      bool? autoCancel}) {
-    this.autoDismissible =
-        this.autoDismissible != null ? this.autoDismissible : autoCancel;
-  }
+      {int? id,
+      String? channelKey,
+      String? groupKey,
+      ActionType actionType = ActionType.Default,
+      String? title,
+      String? body,
+      String? summary,
+      bool showWhen = true,
+      String? icon,
+      String? largeIcon,
+      String? bigPicture,
+      bool wakeUpScreen = false,
+      bool fullScreenIntent = false,
+      bool criticalAlert = false,
+      NotificationCategory? category,
+      bool autoDismissible = true,
+      Color? color,
+      Color? backgroundColor,
+      Map<String, String>? payload,
+      String? customSound,
+      bool roundedLargeIcon = false,
+      bool roundedBigPicture = false,
+      bool autoCancel = true})
+      : _id = id,
+        _channelKey = channelKey,
+        _groupKey = groupKey,
+        _actionType = actionType,
+        _title = title,
+        _body = body,
+        _summary = summary,
+        _showWhen = showWhen,
+        _icon = icon,
+        _largeIcon = largeIcon,
+        _bigPicture = bigPicture,
+        _wakeUpScreen = wakeUpScreen,
+        _fullScreenIntent = fullScreenIntent,
+        _criticalAlert = criticalAlert,
+        _category = category,
+        _color = color,
+        _backgroundColor = backgroundColor,
+        _payload = payload,
+        _customSound = customSound,
+        _roundedLargeIcon = roundedLargeIcon,
+        _roundedBigPicture = roundedBigPicture,
+        _autoDismissible = autoDismissible && autoCancel;
 
   @override
   BaseNotificationContent? fromMap(Map<String, dynamic> mapData) {
-    this.id = AwesomeAssertUtils.extractValue(NOTIFICATION_ID, mapData, int);
-    this.channelKey =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_CHANNEL_KEY, mapData, String);
-    this.groupKey =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_GROUP_KEY, mapData, String);
-    this.title = AwesomeAssertUtils.extractValue(NOTIFICATION_TITLE, mapData, String);
-    this.body = AwesomeAssertUtils.extractValue(NOTIFICATION_BODY, mapData, String);
-    this.summary =
+    _id = AwesomeAssertUtils.extractValue(NOTIFICATION_ID, mapData, int);
+    _channelKey = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_CHANNEL_KEY, mapData, String);
+    _groupKey = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_GROUP_KEY, mapData, String);
+
+    _title =
+        AwesomeAssertUtils.extractValue(NOTIFICATION_TITLE, mapData, String);
+    _body = AwesomeAssertUtils.extractValue(NOTIFICATION_BODY, mapData, String);
+    _summary =
         AwesomeAssertUtils.extractValue(NOTIFICATION_SUMMARY, mapData, String);
-    this.showWhen =
+    _showWhen =
         AwesomeAssertUtils.extractValue(NOTIFICATION_SHOW_WHEN, mapData, bool);
-    this.icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, mapData, String);
-    this.largeIcon =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_LARGE_ICON, mapData, String);
-    this.bigPicture =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_BIG_PICTURE, mapData, String);
-    this.customSound =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_CUSTOM_SOUND, mapData, String);
-    this.wakeUpScreen =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_WAKE_UP_SCREEN, mapData, bool);
-    this.fullScreenIntent = AwesomeAssertUtils.extractValue(
+    _icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, mapData, String);
+    _largeIcon = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_LARGE_ICON, mapData, String);
+    _bigPicture = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_BIG_PICTURE, mapData, String);
+    _customSound = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_CUSTOM_SOUND, mapData, String);
+
+    _wakeUpScreen = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_WAKE_UP_SCREEN, mapData, bool);
+    _fullScreenIntent = AwesomeAssertUtils.extractValue(
         NOTIFICATION_FULL_SCREEN_INTENT, mapData, bool);
-    this.criticalAlert =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_CRITICAL_ALERT, mapData, bool);
-    this.autoDismissible =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, mapData, bool);
+    _criticalAlert = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_CRITICAL_ALERT, mapData, bool);
+    _autoDismissible = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_AUTO_DISMISSIBLE, mapData, bool);
 
-    this.roundedLargeIcon =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_ROUNDED_LARGE_ICON, mapData, bool);
-    this.roundedBigPicture =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_ROUNDED_BIG_PICTURE, mapData, bool);
+    _roundedLargeIcon = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_ROUNDED_LARGE_ICON, mapData, bool);
+    _roundedBigPicture = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_ROUNDED_BIG_PICTURE, mapData, bool);
 
-    this.actionType = AwesomeAssertUtils.extractEnum<ActionType>(
+    _actionType = AwesomeAssertUtils.extractEnum<ActionType>(
         NOTIFICATION_ACTION_TYPE, mapData, ActionType.values);
-
-    this.privacy = AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
+    _privacy = AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
         NOTIFICATION_PRIVACY, mapData, NotificationPrivacy.values);
-
-    this.category = AwesomeAssertUtils.extractEnum<NotificationCategory>(
+    _category = AwesomeAssertUtils.extractEnum<NotificationCategory>(
         NOTIFICATION_CATEGORY, mapData, NotificationCategory.values);
 
-    this.color = AwesomeAssertUtils.extractValue(NOTIFICATION_COLOR, mapData, Color);
-    this.backgroundColor =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_BACKGROUND_COLOR, mapData, Color);
+    _color =
+        AwesomeAssertUtils.extractValue(NOTIFICATION_COLOR, mapData, Color);
+    _backgroundColor = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_BACKGROUND_COLOR, mapData, Color);
 
-    this.payload =
-        AwesomeAssertUtils.extractMap<String, String>(mapData, NOTIFICATION_PAYLOAD);
+    _payload = AwesomeAssertUtils.extractMap<String, String>(
+        mapData, NOTIFICATION_PAYLOAD);
 
     return this;
   }
@@ -129,61 +220,70 @@ class BaseNotificationContent extends Model {
   @override
   Map<String, dynamic> toMap() {
     return {
-      NOTIFICATION_ID: id,
-      NOTIFICATION_CHANNEL_KEY: channelKey,
-      NOTIFICATION_GROUP_KEY: groupKey,
-      NOTIFICATION_TITLE: title,
-      NOTIFICATION_BODY: body,
-      NOTIFICATION_SUMMARY: summary,
-      NOTIFICATION_SHOW_WHEN: showWhen,
-      NOTIFICATION_ICON: icon,
-      NOTIFICATION_PAYLOAD: payload,
-      NOTIFICATION_LARGE_ICON: largeIcon,
-      NOTIFICATION_BIG_PICTURE: bigPicture,
-      NOTIFICATION_CUSTOM_SOUND: customSound,
-      NOTIFICATION_AUTO_DISMISSIBLE: autoDismissible,
-      NOTIFICATION_PRIVACY: AwesomeAssertUtils.toSimpleEnumString(privacy),
-      NOTIFICATION_CATEGORY: AwesomeAssertUtils.toSimpleEnumString(category),
-      NOTIFICATION_ACTION_TYPE: AwesomeAssertUtils.toSimpleEnumString(actionType),
-      NOTIFICATION_COLOR: color?.value,
-      NOTIFICATION_BACKGROUND_COLOR: backgroundColor?.value,
-      NOTIFICATION_WAKE_UP_SCREEN: wakeUpScreen,
-      NOTIFICATION_FULL_SCREEN_INTENT: fullScreenIntent,
-      NOTIFICATION_CRITICAL_ALERT: criticalAlert,
-      NOTIFICATION_ROUNDED_LARGE_ICON: roundedLargeIcon,
-      NOTIFICATION_ROUNDED_BIG_PICTURE: roundedBigPicture
+      NOTIFICATION_ID: _id,
+      NOTIFICATION_CHANNEL_KEY: _channelKey,
+      NOTIFICATION_GROUP_KEY: _groupKey,
+      NOTIFICATION_TITLE: _title,
+      NOTIFICATION_BODY: _body,
+      NOTIFICATION_SUMMARY: _summary,
+      NOTIFICATION_SHOW_WHEN: _showWhen,
+      NOTIFICATION_ICON: _icon,
+      NOTIFICATION_PAYLOAD: _payload,
+      NOTIFICATION_LARGE_ICON: _largeIcon,
+      NOTIFICATION_BIG_PICTURE: _bigPicture,
+      NOTIFICATION_CUSTOM_SOUND: _customSound,
+      NOTIFICATION_AUTO_DISMISSIBLE: _autoDismissible,
+      NOTIFICATION_PRIVACY: AwesomeAssertUtils.toSimpleEnumString(_privacy),
+      NOTIFICATION_CATEGORY: AwesomeAssertUtils.toSimpleEnumString(_category),
+      NOTIFICATION_ACTION_TYPE:
+          AwesomeAssertUtils.toSimpleEnumString(_actionType),
+      NOTIFICATION_COLOR: _color?.value,
+      NOTIFICATION_BACKGROUND_COLOR: _backgroundColor?.value,
+      NOTIFICATION_WAKE_UP_SCREEN: _wakeUpScreen,
+      NOTIFICATION_FULL_SCREEN_INTENT: _fullScreenIntent,
+      NOTIFICATION_CRITICAL_ALERT: _criticalAlert,
+      NOTIFICATION_ROUNDED_LARGE_ICON: _roundedLargeIcon,
+      NOTIFICATION_ROUNDED_BIG_PICTURE: _roundedBigPicture,
+      NOTIFICATION_CREATED_SOURCE:
+          AwesomeAssertUtils.toSimpleEnumString(createdSource),
+      NOTIFICATION_CREATED_LIFECYCLE:
+          AwesomeAssertUtils.toSimpleEnumString(createdLifeCycle),
+      NOTIFICATION_DISPLAYED_LIFECYCLE:
+          AwesomeAssertUtils.toSimpleEnumString(displayedLifeCycle),
+      NOTIFICATION_CREATED_DATE: createdDate,
+      NOTIFICATION_DISPLAYED_DATE: displayedDate
     };
   }
 
   ImageProvider? get bigPictureImage {
-    if (bigPicture?.isEmpty ?? true) return null;
-    return AwesomeBitmapUtils().getFromMediaPath(bigPicture!);
+    if (_bigPicture?.isEmpty ?? true) return null;
+    return AwesomeBitmapUtils().getFromMediaPath(_bigPicture!);
   }
 
   ImageProvider? get largeIconImage {
-    if (largeIcon?.isEmpty ?? true) return null;
-    return AwesomeBitmapUtils().getFromMediaPath(largeIcon!);
+    if (_largeIcon?.isEmpty ?? true) return null;
+    return AwesomeBitmapUtils().getFromMediaPath(_largeIcon!);
   }
 
   String? get bigPicturePath {
-    if (bigPicture?.isEmpty ?? true) return null;
-    return AwesomeBitmapUtils().cleanMediaPath(bigPicture!);
+    if (_bigPicture?.isEmpty ?? true) return null;
+    return AwesomeBitmapUtils().cleanMediaPath(_bigPicture!);
   }
 
   String? get largeIconPath {
-    if (largeIcon?.isEmpty ?? true) return null;
-    return AwesomeBitmapUtils().cleanMediaPath(largeIcon!);
+    if (_largeIcon?.isEmpty ?? true) return null;
+    return AwesomeBitmapUtils().cleanMediaPath(_largeIcon!);
   }
 
-  String? get titleWithoutHtml => AwesomeHtmlUtils.removeAllHtmlTags(title)!;
+  String? get titleWithoutHtml => AwesomeHtmlUtils.removeAllHtmlTags(_title)!;
 
-  String? get bodyWithoutHtml => AwesomeHtmlUtils.removeAllHtmlTags(body)!;
+  String? get bodyWithoutHtml => AwesomeHtmlUtils.removeAllHtmlTags(_body)!;
 
   @override
   void validate() {
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(id, int))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_id, int))
       throw AwesomeNotificationsException(message: 'Property id is required');
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(channelKey, String))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_channelKey, String))
       throw AwesomeNotificationsException(message: 'Channel Key is required');
   }
 }

@@ -11,8 +11,8 @@ class ReceivedAction extends ReceivedNotification {
 
   String buttonKeyPressed = '';
   String buttonKeyInput = '';
-  String? actionDate;
-  String? dismissedDate;
+  DateTime? actionDate;
+  DateTime? dismissedDate;
 
   ReceivedAction();
 
@@ -29,9 +29,9 @@ class ReceivedAction extends ReceivedNotification {
         NotificationLifeCycle.values);
 
     actionDate =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_ACTION_DATE, dataMap, String);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_ACTION_DATE, dataMap, DateTime);
     dismissedDate =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_DISMISSED_DATE, dataMap, String);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_DISMISSED_DATE, dataMap, DateTime);
 
     buttonKeyPressed = AwesomeAssertUtils.extractValue(
         NOTIFICATION_BUTTON_KEY_PRESSED, dataMap, String);
@@ -47,8 +47,10 @@ class ReceivedAction extends ReceivedNotification {
     Map<String, dynamic> map = super.toMap();
     return map
       ..addAll({
-        NOTIFICATION_ACTION_DATE: actionDate,
-        NOTIFICATION_DISMISSED_DATE: dismissedDate,
+        NOTIFICATION_ACTION_DATE:
+            AwesomeDateUtils.parseDateToString(actionDate),
+        NOTIFICATION_DISMISSED_DATE:
+            AwesomeDateUtils.parseDateToString(dismissedDate),
         NOTIFICATION_ACTION_LIFECYCLE:
             AwesomeAssertUtils.toSimpleEnumString(actionLifeCycle),
         NOTIFICATION_DISMISSED_LIFE_CYCLE:

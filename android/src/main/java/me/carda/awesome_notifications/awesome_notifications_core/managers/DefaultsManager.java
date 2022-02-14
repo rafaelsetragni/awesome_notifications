@@ -2,15 +2,17 @@ package me.carda.awesome_notifications.awesome_notifications_core.managers;
 
 import android.content.Context;
 
-import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
+import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotificationsExtension;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.models.DefaultsModel;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class DefaultsManager {
 
     private static DefaultsModel instance;
     private static final SharedManager<DefaultsModel> shared
             = new SharedManager<>(
+                    StringUtils.getInstance(),
                     "DefaultsManager",
                     DefaultsModel.class,
                     "DefaultsModel");
@@ -64,7 +66,7 @@ public class DefaultsManager {
         return defaults.backgroundHandleClass;
     }
 
-    public static void setAwesomeExtensionClassName(Context context, Class<? extends AwesomeNotificationsPlugin> backgroundHandleClass) {
+    public static void setAwesomeExtensionClassName(Context context, Class<? extends AwesomeNotificationsExtension> backgroundHandleClass) {
         DefaultsModel defaults = getDefaults(context);
         defaults.backgroundHandleClass = backgroundHandleClass.getName();
         saveDefault(context, defaults);

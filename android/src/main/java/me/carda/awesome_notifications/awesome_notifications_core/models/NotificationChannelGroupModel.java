@@ -13,7 +13,9 @@ public class NotificationChannelGroupModel extends AbstractModel {
     public String channelGroupName;
     public String channelGroupKey;
 
-    public NotificationChannelGroupModel(){}
+    public NotificationChannelGroupModel(){
+        super(StringUtils.getInstance());
+    }
 
     @Override
     public NotificationChannelGroupModel fromMap(Map<String, Object> arguments) {
@@ -44,10 +46,10 @@ public class NotificationChannelGroupModel extends AbstractModel {
 
     @Override
     public void validate(Context context) throws AwesomeNotificationsException {
-        if(StringUtils.isNullOrEmpty(channelGroupName))
+        if(stringUtils.isNullOrEmpty(channelGroupName))
             throw new AwesomeNotificationsException("Channel group name cannot be null or empty");
 
-        if(StringUtils.isNullOrEmpty(channelGroupKey))
+        if(stringUtils.isNullOrEmpty(channelGroupKey))
             throw new AwesomeNotificationsException("Channel group key cannot be null or empty");
     }
 }

@@ -1,9 +1,26 @@
+## [0.7.0-beta.1]
+* Added dart isolates to enable to receive background notifications without bring the app to foreground
+* Added silentBackground, silentBackgroundAction, disableAction and dismissAction action types for notifications and buttons
+* InputField type deprecated, as now is possible to combine input buttons with all other action types. Now, to use InputField, please use the property requireInputText
+* Internal architecture rewrote to decrease O.S. interventions, allowing to increase the performance in create and schedules notifications almost 10 times
+* Date objects replaced by Calendar type to enable real time zone operations in native layer
+* Added test unit cases to increase test coverage (55% coverage)
+* Network images for foreground services are reactivated
+* Upgraded external dependencies to become compatible with Flutter 2.10
+## [0.6.21]
+* Added customSound feature for Android (only applicable for versions older than Android 8 (Oreo))
+* Type parameter T removed from AwesomeAssertUtils to allows it to be compatible with Flutter web parser.
+## [0.6.20]
+* Added rounded images for large icon and big picture
+* Added bool value extraction for Map objects in dart
+* Fixed immutable error for input buttons in Android 12
+* Network images for foreground services are temporarily disabled (https://github.com/rafaelsetragni/awesome_notifications/issues/369)
 ## [0.6.19]
 * Added sound extension for notifications with categories Alarm and Call
 * Added call notification behavior (stay floating on screen and keep playing the sound in loop) for Call category
 * Added CancellationManager to reorganize all dismiss and cancellation methods in a single place
 * Created StatusBarManager to manage which notifications are currently active, improving performance and extending support to Android 5.0 Lollipop (SDK 21)
-* Notification layouts BigPicture, Messsaging and MessagingGroup improved to be more performatic and to reuses network connection data
+* Notification layouts BigPicture, Messaging and MessagingGroup improved to be more performative and to reuses network connection data
 * Added history box to notification's reply buttons on Android 8.0 to 12.0
 * iOS swift completion handlers modified to allow display notifications from another plugins
 ## [0.6.18+2]
@@ -14,7 +31,7 @@
 * Added Channel's Group feature for Android
 * Added notification's category feature for Android
 * Added fullScreenIntent permission and content option to allow to show notifications in full screen mode.
-* Added PreciseAlarms permission and sheculde option to allow to show scheduled notifications with more precision.
+* Added PreciseAlarms permission and schedule option to allow to show scheduled notifications with more precision.
 * Added showPage methods to provide shortcuts to channel permissions page and alarm permission page.
 * Added shouldShowRationale method for android to check if the requested permissions require user intervention to be enable.
 * Added request permissions methods to demand the users permissions considered dangerous by the system.
@@ -52,9 +69,9 @@
 * Version numbering has changed to better translate the stage of development for future releases.
 ## [0.0.6+12]
 * Added showInCompactView property for MediaPlayer buttons
-* Added support to multiple subscriptions on created, displayed, action and dissmissed stream
+* Added support to multiple subscriptions on created, displayed, action and dismissed stream
 * Removed channel key from Android Badge methods, because the segregation in channel keys was never used (now is all global)
-* Added increment and decrement badge methods (more performatic)
+* Added increment and decrement badge methods (more performative)
 ## [0.0.6+11]
 * Fix Android reschedules on startup process (issue #285)
 * Improved Android channels to manage another package channels and convert then to the new standard, using channelKey as hashKey produced from digest channel content
@@ -77,7 +94,7 @@
 * Added debug option on initialize method to lower the debug verbose if not necessary
 * Leveled error messages and error handling for iOS and Android platforms
 ## [0.0.6+4]
-* Added native firebase handling for willpresent notification method
+* Added native firebase handling for will present notification method
 * Added fixedDate to getNextDate on iOS
 * Added .aiff example files with more quality
 * Adjust weekday to work with ISO 8601

@@ -45,10 +45,32 @@ class MapUtils<T: Any> {
             return DoubleUtils.convertToDouble(value: value) as? T
         }
         
+        if(T.self == TimeZone.self){
+            if let identifier = value as? String {
+                return TimeZone(identifier: identifier) as? T
+            }
+        }
+        
         if(value is T) { return value as? T }
         
         if (value as AnyObject).isEmpty ?? false {
             return defaultValue
+        }
+        
+        return defaultValue
+    }
+    
+    public static func getRealDateOrDefault(reference: String, arguments: [String : Any?]?, defaultTimeZone:TimeZone) -> RealDateTime? {
+        let defaultValue:RealDateTime? = Definitions.initialValues[reference] as? RealDateTime
+        
+        guard let value:String = arguments?[reference] as? String
+        else { return defaultValue }
+                
+        if(T.self == RealDateTime.self){
+            return RealDateTime(
+                fromDateText: value,
+                defaultTimeZone: defaultTimeZone
+            )
         }
         
         return defaultValue

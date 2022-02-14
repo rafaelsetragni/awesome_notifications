@@ -23,7 +23,9 @@ public class NotificationButtonModel extends AbstractModel {
     public Boolean isDangerousOption;
     public ActionType actionType;
 
-    public NotificationButtonModel(){}
+    public NotificationButtonModel(){
+        super(StringUtils.getInstance());
+    }
 
     @Override
     public NotificationButtonModel fromMap(Map<String, Object> arguments) {
@@ -78,10 +80,10 @@ public class NotificationButtonModel extends AbstractModel {
 
     @Override
     public void validate(Context context) throws AwesomeNotificationsException {
-        if(StringUtils.isNullOrEmpty(key))
+        if(stringUtils.isNullOrEmpty(key))
             throw new AwesomeNotificationsException("Button action key cannot be null or empty");
 
-        if(StringUtils.isNullOrEmpty(label))
+        if(stringUtils.isNullOrEmpty(label))
             throw new AwesomeNotificationsException("Button label cannot be null or empty");
     }
 }

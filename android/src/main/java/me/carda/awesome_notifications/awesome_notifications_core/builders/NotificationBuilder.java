@@ -63,7 +63,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.models.returned
 import me.carda.awesome_notifications.awesome_notifications_core.threads.NotificationSender;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BitmapUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BooleanUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.DateUtils;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.HtmlUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.IntegerUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.ListUtils;
@@ -80,18 +80,25 @@ public class NotificationBuilder {
     private static String mainTargetClassName;
 
     private final BitmapUtils bitmapUtils;
+    private final StringUtils stringUtils;
     private final PermissionManager permissionManager;
     private static MediaSessionCompat mediaSession;
 
     // *************** DEPENDENCY INJECTION CONSTRUCTOR ***************
 
-    NotificationBuilder(BitmapUtils bitmapUtils, PermissionManager permissionManager) {
+    NotificationBuilder(
+            StringUtils stringUtils,
+            BitmapUtils bitmapUtils,
+            PermissionManager permissionManager
+    ){
+        this.stringUtils = stringUtils;
         this.bitmapUtils = bitmapUtils;
         this.permissionManager = permissionManager;
     }
 
     public static NotificationBuilder getNewBuilder() {
         return new NotificationBuilder(
+                StringUtils.getInstance(),
                 BitmapUtils.getInstance(),
                 PermissionManager.getInstance());
     }
@@ -268,8 +275,8 @@ public class NotificationBuilder {
         String groupKey = getGroupKey(notificationModel.content, channel);
 
         extras.putInt(Definitions.NOTIFICATION_ID, notificationModel.content.id);
-        extras.putString(Definitions.NOTIFICATION_CHANNEL_KEY, StringUtils.digestString(notificationModel.content.channelKey));
-        extras.putString(Definitions.NOTIFICATION_GROUP_KEY, StringUtils.digestString(groupKey));
+        extras.putString(Definitions.NOTIFICATION_CHANNEL_KEY, stringUtils.digestString(notificationModel.content.channelKey));
+        extras.putString(Definitions.NOTIFICATION_GROUP_KEY, stringUtils.digestString(groupKey));
         extras.putBoolean(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, notificationModel.content.autoDismissible);
         extras.putString(Definitions.NOTIFICATION_ACTION_TYPE,
                 notificationModel.content.actionType != null ?
@@ -323,7 +330,7 @@ public class NotificationBuilder {
         if(resolveInfoList.size() > 0)
             mainTargetClassName = resolveInfoList.get(0).activityInfo.name;
 
-        if(StringUtils.isNullOrEmpty(mainTargetClassName))
+        if(stringUtils.isNullOrEmpty(mainTargetClassName))
             updateMainTargetClassNameFromInitialIntent(applicationContext);
 
         return this;
@@ -360,7 +367,7 @@ public class NotificationBuilder {
         if (isNormalAction || isButtonAction) {
 
             String notificationActionJson = intent.getStringExtra(Definitions.NOTIFICATION_ACTION_JSON);
-            if(!StringUtils.isNullOrEmpty(notificationActionJson)){
+            if(!stringUtils.isNullOrEmpty(notificationActionJson)){
                 ActionReceived actionModel = new ActionReceived().fromJson(notificationActionJson);
                 if (actionModel != null) return actionModel;
             }
@@ -372,17 +379,16 @@ public class NotificationBuilder {
 
             ActionReceived actionModel = new ActionReceived(notificationModel.content);
 
-            actionModel.actionDate = DateUtils.getUTCDate();
-            actionModel.actionLifeCycle = lifeCycle;
+            actionModel.registerUserActionEvent(lifeCycle);
 
-            if (StringUtils.isNullOrEmpty(actionModel.displayedDate))
-                actionModel.displayedDate = DateUtils.getUTCDate();
+            if (actionModel.displayedDate == null)
+                actionModel.registerDisplayedEvent(lifeCycle);
 
             actionModel.autoDismissible = intent.getBooleanExtra(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, true);
             actionModel.shouldAutoDismiss = actionModel.autoDismissible;
 
             actionModel.actionType =
-                    StringUtils.getEnumFromString(
+                    stringUtils.getEnumFromString(
                             ActionType.class,
                             intent.getStringExtra(Definitions.NOTIFICATION_ACTION_TYPE));
 
@@ -397,10 +403,11 @@ public class NotificationBuilder {
                 else
                     actionModel.buttonKeyInput = "";
 
-                updateRemoteHistoryOnActiveNotification(
-                        context,
-                        notificationModel,
-                        actionModel);
+                if (!stringUtils.isNullOrEmpty(actionModel.buttonKeyInput))
+                    updateRemoteHistoryOnActiveNotification(
+                            context,
+                            notificationModel,
+                            actionModel);
             }
 
             return actionModel;
@@ -408,9 +415,9 @@ public class NotificationBuilder {
         return null;
     }
 
-    private void updateRemoteHistoryOnActiveNotification(Context context, NotificationModel notificationModel, ActionReceived actionModel) {
+    public void updateRemoteHistoryOnActiveNotification(Context context, NotificationModel notificationModel, ActionReceived actionModel) {
         if(
-            !StringUtils.isNullOrEmpty(actionModel.buttonKeyInput) &&
+            !stringUtils.isNullOrEmpty(actionModel.buttonKeyInput) &&
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.N /*Android 7*/
         ) {
             actionModel.shouldAutoDismiss = false;
@@ -625,7 +632,7 @@ public class NotificationBuilder {
     }
 
     private void setRemoteHistory(NotificationModel notificationModel, NotificationCompat.Builder builder) {
-        if(!StringUtils.isNullOrEmpty(notificationModel.remoteHistory) && notificationModel.content.notificationLayout == NotificationLayout.Default)
+        if(!stringUtils.isNullOrEmpty(notificationModel.remoteHistory) && notificationModel.content.notificationLayout == NotificationLayout.Default)
             builder.setRemoteInputHistory(new CharSequence[]{notificationModel.remoteHistory});
     }
 
@@ -643,9 +650,9 @@ public class NotificationBuilder {
 
     private void setTicker(NotificationModel notificationModel, NotificationCompat.Builder builder) {
         String tickerValue;
-        tickerValue = StringUtils.getValueOrDefault(notificationModel.content.ticker, null);
-        tickerValue = StringUtils.getValueOrDefault(tickerValue, notificationModel.content.summary);
-        tickerValue = StringUtils.getValueOrDefault(tickerValue, notificationModel.content.body);
+        tickerValue = stringUtils.getValueOrDefault(notificationModel.content.ticker, null);
+        tickerValue = stringUtils.getValueOrDefault(tickerValue, notificationModel.content.summary);
+        tickerValue = stringUtils.getValueOrDefault(tickerValue, notificationModel.content.body);
         builder.setTicker(tickerValue);
     }
 
@@ -712,7 +719,7 @@ public class NotificationBuilder {
 
     private void setLargeIcon(Context context, NotificationModel notificationModel, NotificationCompat.Builder builder) {
         if (notificationModel.content.notificationLayout != NotificationLayout.BigPicture)
-            if (!StringUtils.isNullOrEmpty(notificationModel.content.largeIcon)) {
+            if (!stringUtils.isNullOrEmpty(notificationModel.content.largeIcon)) {
                 Bitmap largeIcon = bitmapUtils.getBitmapFromSource(
                         context,
                         notificationModel.content.largeIcon,
@@ -776,7 +783,7 @@ public class NotificationBuilder {
             }
 
             int iconResource = 0;
-            if (!StringUtils.isNullOrEmpty(buttonProperties.icon)) {
+            if (!stringUtils.isNullOrEmpty(buttonProperties.icon)) {
                 iconResource = bitmapUtils.getDrawableResourceId(context, buttonProperties.icon);
             }
 
@@ -826,23 +833,24 @@ public class NotificationBuilder {
         Uri uri = null;
 
         if (!notificationModel.content.isRefreshNotification && BooleanUtils.getInstance().getValue(channelModel.playSound)) {
+            String soundSource = stringUtils.isNullOrEmpty(notificationModel.content.customSound) ? channelModel.soundSource : notificationModel.content.customSound;
             uri = ChannelManager
                     .getInstance()
-                    .retrieveSoundResourceUri(context, channelModel.defaultRingtoneType, channelModel.soundSource);
+                    .retrieveSoundResourceUri(context, channelModel.defaultRingtoneType, soundSource);
         }
 
         builder.setSound(uri);
     }
 
     private void setSmallIcon(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
-        if (!StringUtils.isNullOrEmpty(notificationModel.content.icon)) {
+        if (!stringUtils.isNullOrEmpty(notificationModel.content.icon)) {
             builder.setSmallIcon(bitmapUtils.getDrawableResourceId(context, notificationModel.content.icon));
-        } else if (!StringUtils.isNullOrEmpty(channelModel.icon)) {
+        } else if (!stringUtils.isNullOrEmpty(channelModel.icon)) {
             builder.setSmallIcon(bitmapUtils.getDrawableResourceId(context, channelModel.icon));
         } else {
             String defaultIcon = DefaultsManager.getDefaultIcon(context);
 
-            if (StringUtils.isNullOrEmpty(defaultIcon)) {
+            if (stringUtils.isNullOrEmpty(defaultIcon)) {
 
                 // for backwards compatibility: this is for handling the old way references to the icon used to be kept but should be removed in future
                 if (channelModel.iconResourceId != null) {
@@ -876,7 +884,7 @@ public class NotificationBuilder {
 
         String groupKey = getGroupKey(notificationModel.content, channelModel);
 
-        if (!StringUtils.isNullOrEmpty(groupKey)) {
+        if (!stringUtils.isNullOrEmpty(groupKey)) {
             builder.setGroup(groupKey);
 
             if(notificationModel.groupSummary)
@@ -939,24 +947,24 @@ public class NotificationBuilder {
 
         Bitmap bigPicture = null, largeIcon = null;
 
-        if (!StringUtils.isNullOrEmpty(contentModel.bigPicture))
+        if (!stringUtils.isNullOrEmpty(contentModel.bigPicture))
             bigPicture = bitmapUtils.getBitmapFromSource(context, contentModel.bigPicture, contentModel.roundedBigPicture);
 
         if (contentModel.hideLargeIconOnExpand)
             largeIcon = bigPicture != null ?
-                bigPicture : (!StringUtils.isNullOrEmpty(contentModel.largeIcon) ?
+                bigPicture : (!stringUtils.isNullOrEmpty(contentModel.largeIcon) ?
                     bitmapUtils.getBitmapFromSource(
                             context,
                             contentModel.largeIcon,
                             contentModel.roundedLargeIcon || contentModel.roundedBigPicture) : null);
         else {
             boolean areEqual =
-                    !StringUtils.isNullOrEmpty(contentModel.largeIcon) &&
+                    !stringUtils.isNullOrEmpty(contentModel.largeIcon) &&
                             contentModel.largeIcon.equals(contentModel.bigPicture);
 
             if(areEqual)
                 largeIcon = bigPicture;
-            else if(!StringUtils.isNullOrEmpty(contentModel.largeIcon))
+            else if(!stringUtils.isNullOrEmpty(contentModel.largeIcon))
                 largeIcon =
                         bitmapUtils.getBitmapFromSource(context, contentModel.largeIcon, contentModel.roundedLargeIcon);
         }
@@ -972,12 +980,12 @@ public class NotificationBuilder {
         bigPictureStyle.bigPicture(bigPicture);
         bigPictureStyle.bigLargeIcon(contentModel.hideLargeIconOnExpand ? null : largeIcon);
 
-        if (!StringUtils.isNullOrEmpty(contentModel.title)) {
+        if (!stringUtils.isNullOrEmpty(contentModel.title)) {
             CharSequence contentTitle = HtmlUtils.fromHtml(contentModel.title);
             bigPictureStyle.setBigContentTitle(contentTitle);
         }
 
-        if (!StringUtils.isNullOrEmpty(contentModel.body)) {
+        if (!stringUtils.isNullOrEmpty(contentModel.body)) {
             CharSequence summaryText = HtmlUtils.fromHtml(contentModel.body);
             bigPictureStyle.setSummaryText(summaryText);
         }
@@ -991,17 +999,17 @@ public class NotificationBuilder {
 
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
 
-        if (StringUtils.isNullOrEmpty(contentModel.body)) return false;
+        if (stringUtils.isNullOrEmpty(contentModel.body)) return false;
 
         CharSequence bigBody = HtmlUtils.fromHtml(contentModel.body);
         bigTextStyle.bigText(bigBody);
 
-        if (!StringUtils.isNullOrEmpty(contentModel.summary)) {
+        if (!stringUtils.isNullOrEmpty(contentModel.summary)) {
             CharSequence bigSummary = HtmlUtils.fromHtml(contentModel.summary);
             bigTextStyle.setSummaryText(bigSummary);
         }
 
-        if (!StringUtils.isNullOrEmpty(contentModel.title)) {
+        if (!stringUtils.isNullOrEmpty(contentModel.title)) {
             CharSequence bigTitle = HtmlUtils.fromHtml(contentModel.title);
             bigTextStyle.setBigContentTitle(bigTitle);
         }
@@ -1015,21 +1023,21 @@ public class NotificationBuilder {
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
-        if (StringUtils.isNullOrEmpty(contentModel.body)) return false;
+        if (stringUtils.isNullOrEmpty(contentModel.body)) return false;
 
         List<String> lines = new ArrayList<>(Arrays.asList(contentModel.body.split("\\r?\\n")));
 
         if (ListUtils.isNullOrEmpty(lines)) return false;
 
         CharSequence summary;
-        if (StringUtils.isNullOrEmpty(contentModel.summary)) {
+        if (stringUtils.isNullOrEmpty(contentModel.summary)) {
             summary = "+ " + lines.size() + " more";
         } else {
             summary = HtmlUtils.fromHtml(contentModel.body);
         }
         inboxStyle.setSummaryText(summary);
 
-        if (!StringUtils.isNullOrEmpty(contentModel.title)) {
+        if (!stringUtils.isNullOrEmpty(contentModel.title)) {
             CharSequence contentTitle = HtmlUtils.fromHtml(contentModel.title);
             inboxStyle.setBigContentTitle(contentTitle);
         }
@@ -1048,7 +1056,7 @@ public class NotificationBuilder {
     }
 
     public String getGroupKey(NotificationContentModel contentModel, NotificationChannelModel channelModel){
-        return !StringUtils.isNullOrEmpty(contentModel.groupKey) ?
+        return !stringUtils.isNullOrEmpty(contentModel.groupKey) ?
                 contentModel.groupKey : channelModel.groupKey;
     }
 
@@ -1099,7 +1107,7 @@ public class NotificationBuilder {
                     Person.Builder personBuilder =  new Person.Builder()
                             .setName(message.title);
 
-                    if(!StringUtils.isNullOrEmpty(contentModel.largeIcon)){
+                    if(!stringUtils.isNullOrEmpty(contentModel.largeIcon)){
                         Bitmap largeIcon = bitmapUtils.getBitmapFromSource(
                                 context,
                                 contentModel.largeIcon,
@@ -1121,7 +1129,7 @@ public class NotificationBuilder {
 
             if (
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.P /*Android 9*/ &&
-                !StringUtils.isNullOrEmpty(contentModel.summary)
+                !stringUtils.isNullOrEmpty(contentModel.summary)
             ){
                 messagingStyle.setConversationTitle(contentModel.summary);
                 messagingStyle.setGroupConversation(isGrouping);
@@ -1130,7 +1138,7 @@ public class NotificationBuilder {
             builder.setStyle((NotificationCompat.Style) messagingStyle);
         /*}
         else {
-            if(StringUtils.isNullOrEmpty(groupKey)){
+            if(stringUtils.isNullOrEmpty(groupKey)){
                 builder.setGroup("Messaging."+groupKey);
             }
         }*/
@@ -1180,7 +1188,7 @@ public class NotificationBuilder {
                         .setShowActionsInCompactView(showInCompactView)
                         .setShowCancelButton(true));
 
-        if (!StringUtils.isNullOrEmpty(contentModel.summary))
+        if (!stringUtils.isNullOrEmpty(contentModel.summary))
             builder.setSubText(contentModel.summary);
 
         if(contentModel.progress != null && IntegerUtils.isBetween(contentModel.progress, 0, 100))

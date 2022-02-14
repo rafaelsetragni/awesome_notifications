@@ -48,7 +48,7 @@ extension String {
         return rangeOfCharacter(from: notAlphanumeric, options: String.CompareOptions.literal, range: nil) == nil
     }
     
-    public func matches(_ regex: String) -> Bool {                
+    public func matches(_ regex: String) -> Bool {
         let range = NSRange(location: 0, length: self.utf16.count)
         let regex = try! NSRegularExpression(pattern: regex, options: .caseInsensitive)
         return regex.firstMatch(in: self, options: [], range: range) != nil

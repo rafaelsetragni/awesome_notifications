@@ -539,12 +539,14 @@ class NotificationUtils {
           NotificationActionButton(
               key: 'ACCEPT',
               label: 'Accept Call',
+              actionType: ActionType.Default,
               color: Colors.green,
               autoDismissible: true
           ),
           NotificationActionButton(
               key: 'REJECT',
               label: 'Reject',
+              actionType: ActionType.SilentAction,
               isDangerousOption: true,
               autoDismissible: true
           ),
@@ -968,13 +970,13 @@ class NotificationUtils {
             notificationLayout: NotificationLayout.BigPicture,
             bigPicture: 'asset://assets/images/melted-clock.png',
             color: Colors.blueGrey,
-            category: NotificationCategory.Alarm,
+            category: NotificationCategory.Reminder,
         ),
         schedule: NotificationInterval(interval: seconds, preciseAlarm: true));
   }
   
   /* *********************************************
-      FULL SCREEEN INTENT NOTIFICATIONS
+      FULL SCREEN INTENT NOTIFICATIONS
   ************************************************ */
   
   static Future<void> scheduleFullScrenNotification(int id) async {

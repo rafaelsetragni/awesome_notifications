@@ -28,11 +28,15 @@ import javax.annotation.Nullable;
 
 public class BitmapUtils extends MediaUtils {
 
+    public static final String TAG = "BitmapUtils";
+
     // ************** SINGLETON PATTERN ***********************
 
     protected static BitmapUtils instance;
 
-    protected BitmapUtils(){}
+    protected BitmapUtils(){
+        stringUtils = StringUtils.getInstance();
+    }
 
     public static BitmapUtils getInstance() {
         if (instance == null)
@@ -218,7 +222,7 @@ public class BitmapUtils extends MediaUtils {
 
     public Boolean isValidBitmap(@NonNull Context context, @Nullable String mediaPath) {
 
-        if (!StringUtils.isNullOrEmpty(mediaPath)) {
+        if (!stringUtils.isNullOrEmpty(mediaPath)) {
 
             if (matchMediaType(MEDIA_VALID_NETWORK, mediaPath, false)) {
                 return true;

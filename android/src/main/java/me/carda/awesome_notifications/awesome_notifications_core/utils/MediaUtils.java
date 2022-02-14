@@ -12,6 +12,8 @@ import static me.carda.awesome_notifications.awesome_notifications_core.Definiti
 
 public abstract class MediaUtils {
 
+    protected StringUtils stringUtils;
+
     protected Boolean matchMediaType(String regex, String mediaPath){
         return matchMediaType(regex, mediaPath, true);
     }

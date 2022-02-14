@@ -2,10 +2,7 @@ package me.carda.awesome_notifications.awesome_notifications_core.models.returne
 
 import java.util.Map;
 
-import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationLifeCycle;
-import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationSource;
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationContentModel;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.DateUtils;
 
 // Just created because of Json process
 public class NotificationReceived extends NotificationContentModel {

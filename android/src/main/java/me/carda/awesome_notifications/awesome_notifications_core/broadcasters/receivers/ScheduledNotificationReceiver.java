@@ -24,7 +24,7 @@ public class ScheduledNotificationReceiver extends AwesomeBroadcastReceiver {
         //Toast.makeText(context, "ScheduledNotificationReceiver", Toast.LENGTH_SHORT).show();
 
         String notificationDetailsJson = intent.getStringExtra(Definitions.NOTIFICATION_JSON);
-        if (!StringUtils.isNullOrEmpty(notificationDetailsJson)) {
+        if (!StringUtils.getInstance().isNullOrEmpty(notificationDetailsJson)) {
 
             try {
                 NotificationModel notificationModel = new NotificationModel().fromJson(notificationDetailsJson);

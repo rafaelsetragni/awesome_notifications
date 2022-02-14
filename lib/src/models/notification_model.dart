@@ -10,11 +10,29 @@ import 'package:awesome_notifications/src/models/notification_schedule.dart';
 /// Reference Model to create a new notification
 /// [schedule] and [actionButtons] are optional
 class NotificationModel extends Model {
-  NotificationContent? content;
-  NotificationSchedule? schedule;
-  List<NotificationActionButton>? actionButtons;
+  NotificationContent? _content;
+  NotificationSchedule? _schedule;
+  List<NotificationActionButton>? _actionButtons;
 
-  NotificationModel({required this.content, this.schedule, this.actionButtons});
+  NotificationContent? get content {
+    return _content;
+  }
+
+  NotificationSchedule? get schedule {
+    return _schedule;
+  }
+
+  List<NotificationActionButton>? get actionButtons {
+    return _actionButtons;
+  }
+
+  NotificationModel(
+      {NotificationContent? content,
+      NotificationSchedule? schedule,
+      List<NotificationActionButton>? actionButtons})
+      : _content = content,
+        _schedule = schedule,
+        _actionButtons = actionButtons;
 
   /// Imports data from a serializable object
   NotificationModel? fromMap(Map<String, dynamic> mapData) {
@@ -25,26 +43,26 @@ class NotificationModel extends Model {
       Map<String, dynamic> contentData =
           Map<String, dynamic>.from(mapData[NOTIFICATION_CONTENT]);
 
-      this.content =
+      this._content =
           NotificationContent(id: 0, channelKey: '').fromMap(contentData);
-      if (content == null) return null;
+      if (_content == null) return null;
 
-      this.content!.validate();
+      this._content!.validate();
 
       if (mapData.containsKey(NOTIFICATION_SCHEDULE)) {
         Map<String, dynamic> scheduleData =
             Map<String, dynamic>.from(mapData[NOTIFICATION_SCHEDULE]);
 
         if (scheduleData.containsKey(NOTIFICATION_SCHEDULE_INTERVAL)) {
-          schedule = NotificationInterval(interval: 0).fromMap(scheduleData);
+          _schedule = NotificationInterval(interval: 0).fromMap(scheduleData);
         } else {
-          schedule = NotificationCalendar().fromMap(scheduleData);
+          _schedule = NotificationCalendar().fromMap(scheduleData);
         }
-        schedule?.validate();
+        _schedule?.validate();
       }
 
       if (mapData.containsKey(NOTIFICATION_BUTTONS)) {
-        actionButtons = [];
+        _actionButtons = [];
         List<dynamic> actionButtonsData =
             List<dynamic>.from(mapData[NOTIFICATION_BUTTONS]);
 
@@ -57,9 +75,9 @@ class NotificationModel extends Model {
                   .fromMap(actionButtonData) as NotificationActionButton;
           button.validate();
 
-          actionButtons!.add(button);
+          _actionButtons!.add(button);
         }
-        assert(actionButtons!.isNotEmpty);
+        assert(_actionButtons!.isNotEmpty);
       }
     } catch (e) {
       return null;
@@ -71,15 +89,15 @@ class NotificationModel extends Model {
   /// Exports all content into a serializable object
   Map<String, dynamic> toMap() {
     List<Map<String, dynamic>> actionButtonsData = [];
-    if (actionButtons != null) {
-      for (NotificationActionButton button in actionButtons!) {
+    if (_actionButtons != null) {
+      for (NotificationActionButton button in _actionButtons!) {
         Map<String, dynamic> data = button.toMap();
         if (data.isNotEmpty) actionButtonsData.add(data);
       }
     }
     return {
-      'content': content?.toMap() ?? {},
-      'schedule': schedule?.toMap() ?? {},
+      'content': _content?.toMap() ?? {},
+      'schedule': _schedule?.toMap() ?? {},
       'actionButtons': actionButtonsData.isEmpty ? null : actionButtonsData
     };
   }
@@ -88,7 +106,7 @@ class NotificationModel extends Model {
 
   /// Validates if the models has all the requirements to be considerated valid
   void validate() {
-    if (content == null)
+    if (_content == null)
       throw AwesomeNotificationsException(message: 'content is required.');
   }
 }

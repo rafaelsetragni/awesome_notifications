@@ -11,11 +11,13 @@ import androidx.annotation.RequiresApi;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationChannelGroupModel;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class ChannelGroupManager {
 
     private static final SharedManager<NotificationChannelGroupModel> shared
             = new SharedManager<>(
+                    StringUtils.getInstance(),
                     "ChannelGroupManager",
                     NotificationChannelGroupModel.class,
                     "NotificationChannelGroup");

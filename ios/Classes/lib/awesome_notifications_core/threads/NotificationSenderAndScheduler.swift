@@ -19,7 +19,7 @@ class NotificationSenderAndScheduler {
     
     private var refreshNotification:Bool = false
     private var created:    Bool = false
-    private var scheduled:  Date?
+    private var scheduled:  RealDateTime?
     
     private var completion: ((Bool, UNMutableNotificationContent?, Error?) -> ())
     
@@ -83,9 +83,12 @@ class NotificationSenderAndScheduler {
         appLifeCycle: NotificationLifeCycle,
         completion: @escaping (Bool, UNMutableNotificationContent?, Error?) -> ()
     ){
+        self.createdSource =
+            createdSource == .Local  && notificationModel.schedule != nil ?
+            .Schedule : createdSource
+        
         self.refreshNotification = isRefreshNotification
         self.content = content
-        self.createdSource = createdSource
         self.notificationModel = notificationModel
         self.appLifeCycle = appLifeCycle
         self.completion = completion
@@ -105,23 +108,6 @@ class NotificationSenderAndScheduler {
             
             do{
                 if (allowed){
-
-                    try self.notificationModel!.validate()
-                    
-                    if self.notificationModel!.schedule != nil &&
-                        StringUtils.isNullOrEmpty(self.notificationModel!.schedule!.createdDate
-                    ){
-                        let timeZone:String = self.notificationModel!.schedule!.timeZone ?? DateUtils.shared.localTimeZone.identifier
-                        self.notificationModel!.schedule!.timeZone = timeZone
-                        self.notificationModel!.schedule!.createdDate = DateUtils.shared.getLocalTextDate(fromTimeZone: timeZone)
-                    }
-                    else {
-                        self.notificationModel?
-                            .content?
-                            .registerDisplayedEvent(
-                                inLifeCycle: self.appLifeCycle)
-                    }
-
                     self.execute()
                 }
                 else {
@@ -155,6 +141,21 @@ class NotificationSenderAndScheduler {
                 if ((notificationModel!.content!.id ?? -1) < 0){
                     notificationModel!.content!.id = IntUtils.generateNextRandomId();
                 }
+                
+                try self.notificationModel!.validate()
+                
+                self.created =
+                    self.notificationModel!
+                        .content!
+                        .registerCreateEvent(
+                            inLifeCycle: self.appLifeCycle,
+                            fromSource: self.createdSource)
+                
+                if self.notificationModel!.schedule != nil {
+                    let timeZone:TimeZone = self.notificationModel!.schedule!.timeZone ?? TimeZone.current
+                    self.notificationModel!.schedule!.timeZone = timeZone
+                    self.notificationModel!.schedule!.createdDate = RealDateTime.init(fromTimeZone: timeZone)
+                }
 
                 var receivedNotification: NotificationReceived? = nil
 
@@ -167,24 +168,30 @@ class NotificationSenderAndScheduler {
                     // Only save DisplayedMethods if notificationModel was created and displayed successfully
                     if(notificationModel != nil){
                         
-                        let now = DateUtils.shared.getUTCDateTime()
-                        let displayedDate = notificationModel!.content!.displayedDate?.toDate(fromTimeZone: "UTC") ?? now
+                        let now = RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
                         
-                        if displayedDate.toString(toTimeZone: "UTC") == notificationModel!.content!.createdDate! {
+                        if notificationModel!.nextValidDate == nil {
+                            notificationModel!.content!.displayedDate = notificationModel!.content!.createdDate
                             notificationModel!.content!.displayedLifeCycle = notificationModel!.content!.createdLifeCycle
                         }
-                        else if displayedDate <= now {
-                            notificationModel!.content!.displayedLifeCycle = self.appLifeCycle
-                        }
                         else {
-                            scheduled = displayedDate
-                            notificationModel!.content!.displayedLifeCycle = NotificationLifeCycle.AppKilled
+                            scheduled = notificationModel!.nextValidDate
+                            notificationModel!.content!.displayedDate =
+                                scheduled?.shiftTimeZone(toTimeZone: RealDateTime.utcTimeZone) ??
+                                notificationModel!.content!.displayedDate
+                            
+                            if notificationModel!.nextValidDate! <= now {
+                                notificationModel!.content!.displayedLifeCycle = self.appLifeCycle
+                            }
+                            else {
+                                notificationModel!.content!.displayedLifeCycle = NotificationLifeCycle.AppKilled
+                            }
                         }
                         
                         receivedNotification = NotificationReceived(notificationModel!.content)
 
-                        receivedNotification!.displayedLifeCycle = receivedNotification!.displayedLifeCycle == nil ?
-                            self.appLifeCycle : receivedNotification!.displayedLifeCycle
+                        receivedNotification!.displayedLifeCycle =
+                            receivedNotification!.displayedLifeCycle ?? self.appLifeCycle
                     }
 
                 } else {

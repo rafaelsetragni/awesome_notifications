@@ -7,6 +7,7 @@ import java.util.Map;
 
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class DefaultsModel extends AbstractModel {
 
@@ -15,9 +16,12 @@ public class DefaultsModel extends AbstractModel {
     public String reverseDartCallback = "0";
     public String backgroundHandleClass;
 
-    public DefaultsModel(){}
+    public DefaultsModel(){
+        super(StringUtils.getInstance());
+    }
 
     public DefaultsModel(String defaultAppIcon, String dartCallbackHandle){
+        super(StringUtils.getInstance());
         this.appIcon = defaultAppIcon;
         this.reverseDartCallback = dartCallbackHandle;
     }

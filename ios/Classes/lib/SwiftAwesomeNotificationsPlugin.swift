@@ -565,12 +565,11 @@ public class SwiftAwesomeNotificationsPlugin:
     private func channelMethodGetNextDate(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
 
         let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
-        let fixedDate:String? = platformParameters[Definitions.NOTIFICATION_INITIAL_FIXED_DATE] as? String
-        
-        let timezone:String =
-            (platformParameters[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] as? String) ??
-            DateUtils.shared.utcTimeZone.identifier
-        
+        guard let fixedDate:String = platformParameters[Definitions.NOTIFICATION_INITIAL_FIXED_DATE] as? String
+        else  {
+            result(nil)
+            return
+        }
         guard let scheduleData:[String : Any?] =
                 platformParameters[Definitions.NOTIFICATION_MODEL_SCHEDULE] as? [String : Any?]
         else {
@@ -578,34 +577,27 @@ public class SwiftAwesomeNotificationsPlugin:
             return
         }
         
-        let scheduleModel:NotificationScheduleModel? =
+        let timezone:String =
+            (platformParameters[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] as? String) ??
+            DateUtils.shared.utcTimeZone.identifier
+        
+        guard let scheduleModel:NotificationScheduleModel =
                 (scheduleData[Definitions.NOTIFICATION_SCHEDULE_INTERVAL] != nil) ?
                     NotificationIntervalModel().fromMap(arguments: scheduleData) as? NotificationScheduleModel :
                     NotificationCalendarModel().fromMap(arguments: scheduleData) as? NotificationScheduleModel
-        
-        if scheduleModel == nil {
+        else {
             result(nil)
             return
         }
         
-        let nextValidDate:Date? =
+        let nextValidDate:RealDateTime? =
                 awesomeNotifications?
                     .getNextValidDate(
-                        scheduleModel: scheduleModel!,
+                        scheduleModel: scheduleModel,
                         fixedDate: fixedDate,
                         timeZoneName: timezone)
-
-        if nextValidDate == nil {
-            result(nil)
-        }
-        else {
-            result(
-                DateUtils
-                    .shared
-                    .dateToString(
-                        nextValidDate,
-                        timeZone: timezone))
-        }
+        
+        result(nextValidDate?.description)
     }
     
     private func channelMethodGetUTCTimeZoneIdentifier(call: FlutterMethodCall, result: @escaping FlutterResult) throws {

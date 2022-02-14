@@ -9,6 +9,7 @@ import java.util.Map;
 
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class NotificationModel extends AbstractModel {
 
@@ -19,7 +20,9 @@ public class NotificationModel extends AbstractModel {
     public NotificationScheduleModel schedule;
     public List<NotificationButtonModel> actionButtons;
 
-    public NotificationModel(){}
+    public NotificationModel(){
+        super(StringUtils.getInstance());
+    }
 
     public NotificationModel ClonePush(){
         NotificationModel newPush = new NotificationModel();

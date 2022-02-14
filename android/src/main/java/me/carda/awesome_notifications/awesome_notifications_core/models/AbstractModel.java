@@ -19,7 +19,13 @@ import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUti
 
 public abstract class AbstractModel implements Cloneable {
 
+    protected final StringUtils stringUtils;
+
     public static Map<String, Object> defaultValues = new HashMap<>();
+
+    protected AbstractModel(StringUtils stringUtils) {
+        this.stringUtils = stringUtils;
+    }
 
     public abstract AbstractModel fromMap(Map<String, Object> arguments);
     public abstract Map<String, Object> toMap();
@@ -32,7 +38,7 @@ public abstract class AbstractModel implements Cloneable {
     }
 
     protected AbstractModel templateFromJson(String json) {
-        if(StringUtils.isNullOrEmpty(json)) return null;
+        if(stringUtils.isNullOrEmpty(json)) return null;
         Map<String, Object> map = JsonUtils.fromJson(json);
         return this.fromMap(map);
     }

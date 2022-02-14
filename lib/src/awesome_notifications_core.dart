@@ -64,25 +64,29 @@ class AwesomeNotifications {
   /// STREAM METHODS *********************************************
 
   /// Stream to capture all created notifications
-  @Deprecated('Use static methods instead, calling AwesomeNotifications().setListeners()')
+  @Deprecated(
+      'Use static methods instead, calling AwesomeNotifications().setListeners()')
   Stream<ReceivedNotification> get createdStream {
     return _createdSubject.stream;
   }
 
   /// Stream to capture all notifications displayed on user's screen.
-  @Deprecated('Use static methods instead, calling AwesomeNotifications().setListeners()')
+  @Deprecated(
+      'Use static methods instead, calling AwesomeNotifications().setListeners()')
   Stream<ReceivedNotification> get displayedStream {
     return _displayedSubject.stream;
   }
 
   /// Stream to capture all notifications dismissed by the user.
-  @Deprecated('Use static methods instead, calling AwesomeNotifications().setListeners()')
+  @Deprecated(
+      'Use static methods instead, calling AwesomeNotifications().setListeners()')
   Stream<ReceivedAction> get dismissedStream {
     return _dismissedSubject.stream;
   }
 
   /// Stream to capture all actions (tap) over notifications
-  @Deprecated('Use static methods instead, calling AwesomeNotifications().setListeners()')
+  @Deprecated(
+      'Use static methods instead, calling AwesomeNotifications().setListeners()')
   Stream<ReceivedAction> get actionStream {
     return _actionSubject.stream;
   }
@@ -126,8 +130,7 @@ class AwesomeNotifications {
   StreamSubscription? _actionSubscription;
   StreamSubscription? _dismissedSubscription;
 
-  _startEventListeners(){
-
+  _startEventListeners() {
     // Ensures that there is at most one subscription
     _createdSubscription?.cancel();
     _displayedSubscription?.cancel();
@@ -135,17 +138,17 @@ class AwesomeNotifications {
     _dismissedSubscription?.cancel();
 
     // Streams will be keept internally. They are deprecated to use outside.
-    _createdSubscription = createdStream.listen((event) {
-      if(_createdHandler != null) _createdHandler!(event);
+    _createdSubscription = createdStream.listen((event) async {
+      if (_createdHandler != null) await _createdHandler!(event);
     });
-    _displayedSubscription = displayedStream.listen((event) {
-      if(_displayedHandler != null) _displayedHandler!(event);
+    _displayedSubscription = displayedStream.listen((event) async {
+      if (_displayedHandler != null) await _displayedHandler!(event);
     });
-    _actionSubscription = actionStream.listen((event) {
-      if(_actionHandler != null) _actionHandler!(event);
+    _actionSubscription = actionStream.listen((event) async {
+      if (_actionHandler != null) await _actionHandler!(event);
     });
-    _dismissedSubscription = dismissedStream.listen((event) {
-      if(_dismissedHandler != null) _dismissedHandler!(event);
+    _dismissedSubscription = dismissedStream.listen((event) async {
+      if (_dismissedHandler != null) await _dismissedHandler!(event);
     });
   }
 
@@ -192,14 +195,14 @@ class AwesomeNotifications {
     } else {
       if (!AwesomeAssertUtils.isNullOrEmptyOrInvalid(defaultIcon, String)) {
         // To set a icon on top of notification, is mandatory to user a native resource
-        assert(
-            AwesomeBitmapUtils().getMediaSource(defaultIcon!) == MediaSource.Resource);
+        assert(AwesomeBitmapUtils().getMediaSource(defaultIcon!) ==
+            MediaSource.Resource);
         defaultIconPath = defaultIcon;
       }
     }
 
     final CallbackHandle? dartCallbackReference =
-      PluginUtilities.getCallbackHandle(dartIsolateMain);
+        PluginUtilities.getCallbackHandle(dartIsolateMain);
 
     var result = await _channel.invokeMethod(CHANNEL_METHOD_INITIALIZE, {
       INITIALIZE_DEBUG_MODE: debug,
@@ -224,27 +227,25 @@ class AwesomeNotifications {
   /// [onNotificationCreatedMethod] method that gets called when a new notification or schedule is created on the system
   /// [onNotificationDisplayedMethod] method that gets called when a new notification is displayed on status bar
   /// [onDismissActionReceivedMethod] method that receives the notification dismiss actions
-  Future<bool> setListeners({
-    required ActionHandler onActionReceivedMethod,
-    NotificationHandler? onNotificationCreatedMethod,
-    NotificationHandler? onNotificationDisplayedMethod,
-    ActionHandler? onDismissActionReceivedMethod
-  }) async {
-
-    if(_actionHandler != null){
+  Future<bool> setListeners(
+      {required ActionHandler onActionReceivedMethod,
+      NotificationHandler? onNotificationCreatedMethod,
+      NotificationHandler? onNotificationDisplayedMethod,
+      ActionHandler? onDismissActionReceivedMethod}) async {
+    if (_actionHandler != null) {
       print('static methods was already setted.');
       return false;
     }
 
     final CallbackHandle? actionCallbackReference =
-    PluginUtilities.getCallbackHandle(onActionReceivedMethod);
+        PluginUtilities.getCallbackHandle(onActionReceivedMethod);
 
-    bool result = await _channel.invokeMethod(CHANNEL_METHOD_SET_ACTION_HANDLE, {
-      ACTION_HANDLE: actionCallbackReference?.toRawHandle()
-    });
+    bool result = await _channel.invokeMethod(CHANNEL_METHOD_SET_ACTION_HANDLE,
+        {ACTION_HANDLE: actionCallbackReference?.toRawHandle()});
 
-    if(!result){
-      print('onActionNotificationMethod is not a valid global or static method.');
+    if (!result) {
+      print(
+          'onActionNotificationMethod is not a valid global or static method.');
       return false;
     }
 
@@ -270,13 +271,13 @@ class AwesomeNotifications {
     return result2;
   }
 
-  String _silentBGActionTypeKey = AwesomeAssertUtils.toSimpleEnumString(ActionType.SilentBackgroundAction)!;
+  String _silentBGActionTypeKey =
+      AwesomeAssertUtils.toSimpleEnumString(ActionType.SilentBackgroundAction)!;
   Future<dynamic> _handleMethod(MethodCall call) async {
     Map<String, dynamic> arguments =
         (call.arguments as Map).cast<String, dynamic>();
 
     switch (call.method) {
-
       case CHANNEL_METHOD_NOTIFICATION_CREATED:
         _createdSubject.sink.add(ReceivedNotification().fromMap(arguments));
         return;
@@ -294,7 +295,7 @@ class AwesomeNotifications {
         return;
 
       case CHANNEL_METHOD_SILENT_ACTION:
-        if(arguments[NOTIFICATION_ACTION_TYPE] == _silentBGActionTypeKey) {
+        if (arguments[NOTIFICATION_ACTION_TYPE] == _silentBGActionTypeKey) {
           compute(receiveSilentAction, arguments);
         } else {
           receiveSilentAction(arguments);
@@ -360,7 +361,7 @@ class AwesomeNotifications {
 
       // Invalid Notification
       NotificationModel? notificationModel =
-          NotificationModel(content: null).fromMap(mapData);
+          NotificationModel().fromMap(mapData);
       if (notificationModel == null) {
         throw Exception('Notification map data is invalid');
       }
@@ -409,7 +410,8 @@ class AwesomeNotifications {
       ]}) async {
     final List<String> permissionList = [];
     for (final permission in permissions) {
-      String? permissionValue = AwesomeAssertUtils.toSimpleEnumString(permission);
+      String? permissionValue =
+          AwesomeAssertUtils.toSimpleEnumString(permission);
       if (permissionValue != null) permissionList.add(permissionValue);
     }
 
@@ -469,7 +471,8 @@ class AwesomeNotifications {
       List<NotificationPermission> permissions) {
     List<Object?> permissionList = [];
     for (final permission in permissions) {
-      String? permissionValue = AwesomeAssertUtils.toSimpleEnumString(permission);
+      String? permissionValue =
+          AwesomeAssertUtils.toSimpleEnumString(permission);
       if (permissionValue != null) permissionList.add(permissionValue);
     }
     return permissionList;
@@ -497,8 +500,7 @@ class AwesomeNotifications {
         if (object is Map) {
           try {
             NotificationModel notificationModel =
-                NotificationModel(content: null)
-                    .fromMap(Map<String, dynamic>.from(object))!;
+                NotificationModel().fromMap(Map<String, dynamic>.from(object))!;
             scheduledNotifications.add(notificationModel);
           } catch (e) {
             return [];
@@ -570,7 +572,8 @@ class AwesomeNotifications {
   }) async {
     fixedDate ??= DateTime.now().toUtc();
     Map parameters = {
-      NOTIFICATION_INITIAL_FIXED_DATE: AwesomeDateUtils.parseDateToString(fixedDate),
+      NOTIFICATION_INITIAL_FIXED_DATE:
+          AwesomeDateUtils.parseDateToString(fixedDate),
       NOTIFICATION_SCHEDULE: schedule.toMap()
     };
 

@@ -1,4 +1,4 @@
-package me.carda.awesome_notifications.awesome_notifications_android_core.managers;
+package me.carda.awesome_notifications.awesome_notifications_core.managers;
 
 import android.content.Context;
 

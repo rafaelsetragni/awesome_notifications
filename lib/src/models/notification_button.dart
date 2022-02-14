@@ -13,60 +13,110 @@ import 'package:awesome_notifications/src/utils/string_utils.dart';
 /// Since Android 7, icons are displayed only for Media Layout Notifications
 /// [icon] must be a native resource media type
 class NotificationActionButton extends Model {
-  String? key;
-  String? label;
-  String? icon;
-  bool? enabled;
-  bool requireInputText;
-  bool? autoDismissible;
-  bool? showInCompactView;
-  bool? isDangerousOption;
-  Color? color;
-  ActionType? actionType;
+  String? _key;
+  String? _label;
+  String? _icon;
+  bool? _enabled;
+  bool _requireInputText;
+  bool? _autoDismissible;
+  bool? _showInCompactView;
+  bool? _isDangerousOption;
+  Color? _color;
+  ActionType? _actionType;
+
+  String? get key {
+    return _key;
+  }
+
+  String? get label {
+    return _label;
+  }
+
+  String? get icon {
+    return _icon;
+  }
+
+  bool? get enabled {
+    return _enabled;
+  }
+
+  bool get requireInputText {
+    return _requireInputText;
+  }
+
+  bool? get autoDismissible {
+    return _autoDismissible;
+  }
+
+  bool? get showInCompactView {
+    return _showInCompactView;
+  }
+
+  bool? get isDangerousOption {
+    return _isDangerousOption;
+  }
+
+  Color? get color {
+    return _color;
+  }
+
+  ActionType? get actionType {
+    return _actionType;
+  }
 
   NotificationActionButton(
       {required String key,
       required String label,
-      this.icon,
-      this.enabled,
-      this.requireInputText = false,
-      this.autoDismissible,
-      this.showInCompactView,
-      this.isDangerousOption,
-      this.color,
-      this.actionType = ActionType.Default}) {
-    this.key = key;
-    this.label = label;
-
+      String? icon,
+      bool enabled = true,
+      bool requireInputText = false,
+      bool autoDismissible = true,
+      bool showInCompactView = false,
+      bool isDangerousOption = false,
+      Color? color,
+      ActionType actionType = ActionType.Default})
+      : _key = key,
+        _label = label,
+        _icon = icon,
+        _enabled = enabled,
+        _requireInputText = requireInputText,
+        _autoDismissible = autoDismissible,
+        _showInCompactView = showInCompactView,
+        _isDangerousOption = isDangerousOption,
+        _color = color,
+        _actionType = actionType {
     // Adapting input type to 0.7.0 pattern
     _adaptInputFieldToRequireText();
   }
 
   void _adaptInputFieldToRequireText() {
-    if(this.actionType == ActionType.InputField){
-      this.requireInputText = true;
-      this.actionType = ActionType.SilentAction;
+    if (_actionType == ActionType.InputField) {
+      _requireInputText = true;
+      _actionType = ActionType.SilentAction;
     }
   }
 
   @override
   NotificationActionButton? fromMap(Map<String, dynamic> dataMap) {
-    key = AwesomeAssertUtils.extractValue(NOTIFICATION_KEY, dataMap, String);
-    icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, dataMap, String);
-    label =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_BUTTON_LABEL, dataMap, String);
-    enabled = AwesomeAssertUtils.extractValue(NOTIFICATION_ENABLED, dataMap, bool);
-    requireInputText = AwesomeAssertUtils.extractValue(NOTIFICATION_REQUIRE_INPUT_TEXT, dataMap, bool);
-    autoDismissible =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, dataMap, bool);
-    showInCompactView = AwesomeAssertUtils.extractValue(
+    _key = AwesomeAssertUtils.extractValue(NOTIFICATION_KEY, dataMap, String);
+    _icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, dataMap, String);
+    _label = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_BUTTON_LABEL, dataMap, String);
+    _enabled =
+        AwesomeAssertUtils.extractValue(NOTIFICATION_ENABLED, dataMap, bool);
+    _requireInputText = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_REQUIRE_INPUT_TEXT, dataMap, bool);
+    _autoDismissible = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_AUTO_DISMISSIBLE, dataMap, bool);
+    _showInCompactView = AwesomeAssertUtils.extractValue(
         NOTIFICATION_SHOW_IN_COMPACT_VIEW, dataMap, bool);
-    isDangerousOption = AwesomeAssertUtils.extractValue(
+    _isDangerousOption = AwesomeAssertUtils.extractValue(
         NOTIFICATION_IS_DANGEROUS_OPTION, dataMap, bool);
-    actionType = AwesomeAssertUtils.extractEnum(
+    _actionType = AwesomeAssertUtils.extractEnum(
         NOTIFICATION_ACTION_TYPE, dataMap, ActionType.values);
 
-    color = AwesomeAssertUtils.extractValue(NOTIFICATION_COLOR, dataMap, Color);
+    _color =
+        AwesomeAssertUtils.extractValue(NOTIFICATION_COLOR, dataMap, Color);
 
     return this;
   }
@@ -76,35 +126,36 @@ class NotificationActionButton extends Model {
     _adaptInputFieldToRequireText();
 
     return {
-      NOTIFICATION_KEY: key,
-      NOTIFICATION_ICON: icon,
-      NOTIFICATION_BUTTON_LABEL: label,
-      NOTIFICATION_ENABLED: enabled,
-      NOTIFICATION_REQUIRE_INPUT_TEXT: requireInputText,
-      NOTIFICATION_AUTO_DISMISSIBLE: autoDismissible,
-      NOTIFICATION_SHOW_IN_COMPACT_VIEW: showInCompactView,
-      NOTIFICATION_IS_DANGEROUS_OPTION: isDangerousOption,
-      NOTIFICATION_ACTION_TYPE: AwesomeAssertUtils.toSimpleEnumString(actionType),
-      NOTIFICATION_COLOR: color?.value
+      NOTIFICATION_KEY: _key,
+      NOTIFICATION_ICON: _icon,
+      NOTIFICATION_BUTTON_LABEL: _label,
+      NOTIFICATION_ENABLED: _enabled,
+      NOTIFICATION_REQUIRE_INPUT_TEXT: _requireInputText,
+      NOTIFICATION_AUTO_DISMISSIBLE: _autoDismissible,
+      NOTIFICATION_SHOW_IN_COMPACT_VIEW: _showInCompactView,
+      NOTIFICATION_IS_DANGEROUS_OPTION: _isDangerousOption,
+      NOTIFICATION_ACTION_TYPE:
+          AwesomeAssertUtils.toSimpleEnumString(_actionType),
+      NOTIFICATION_COLOR: _color?.value
     };
   }
 
   @override
   void validate() {
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(key, String))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_key, String))
       throw AwesomeNotificationsException(message: 'key id is requried');
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(label, String))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_label, String))
       throw AwesomeNotificationsException(message: 'label id is requried');
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(autoDismissible, bool))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_autoDismissible, bool))
       throw AwesomeNotificationsException(
           message: 'autoDismissible id is requried');
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(showInCompactView, bool))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_showInCompactView, bool))
       throw AwesomeNotificationsException(
           message: 'showInCompactView id is requried');
 
     // For action buttons, it's only allowed resource media types
-    if (!AwesomeStringUtils.isNullOrEmpty(icon) &&
-        AwesomeBitmapUtils().getMediaSource(icon!) != MediaSource.Resource)
+    if (!AwesomeStringUtils.isNullOrEmpty(_icon) &&
+        AwesomeBitmapUtils().getMediaSource(_icon!) != MediaSource.Resource)
       throw AwesomeNotificationsException(
           message:
               'icons for action buttons must be a native resource media type');

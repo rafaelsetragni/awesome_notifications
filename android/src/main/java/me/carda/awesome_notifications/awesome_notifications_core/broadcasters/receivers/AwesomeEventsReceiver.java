@@ -18,23 +18,26 @@ import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUti
 
 public class AwesomeEventsReceiver {
 
-    public static String TAG = "AwesomeIntentFiltersReceiver";
+    public static String TAG = "AwesomeEventsReceiver";
 
     // ************** SINGLETON PATTERN ***********************
 
-    @SuppressLint("StaticFieldLeak")
     private static AwesomeEventsReceiver instance;
 
-    private AwesomeEventsReceiver(){
+    private AwesomeEventsReceiver(StringUtils stringUtils){
+        this.stringUtils = stringUtils;
     }
 
     public static AwesomeEventsReceiver getInstance() {
         if (instance == null)
-            instance = new AwesomeEventsReceiver();
+            instance = new AwesomeEventsReceiver(
+                    StringUtils.getInstance());
         return instance;
     }
 
     // ********************************************************
+
+    protected final StringUtils stringUtils;
 
     /// **************  OBSERVER PATTERN  *********************
 
@@ -89,7 +92,7 @@ public class AwesomeEventsReceiver {
                 default:
                     if (AwesomeNotifications.debug)
                         Log.d(TAG, "Received unknown notification event: " + (
-                                StringUtils.isNullOrEmpty(eventName) ? "empty" : eventName));
+                                stringUtils.isNullOrEmpty(eventName) ? "empty" : eventName));
 
             }
         } catch (Exception e) {
@@ -123,7 +126,7 @@ public class AwesomeEventsReceiver {
                 default:
                     if (AwesomeNotifications.debug)
                         Log.d(TAG, "Received unknown action event: " + (
-                                StringUtils.isNullOrEmpty(eventName) ? "empty" : eventName));
+                                stringUtils.isNullOrEmpty(eventName) ? "empty" : eventName));
 
             }
         } catch (Exception e) {

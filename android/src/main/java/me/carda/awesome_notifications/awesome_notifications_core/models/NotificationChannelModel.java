@@ -60,7 +60,11 @@ public class NotificationChannelModel extends AbstractModel {
 
     public NotificationPrivacy defaultPrivacy;
 
-    public NotificationChannelModel(){}
+    private static StringUtils stringUtils;
+    public NotificationChannelModel(){
+        super(StringUtils.getInstance());
+        stringUtils = stringUtils.getInstance();
+    }
 
     public void refreshIconResource(Context context){
         if(iconResourceId == null && icon != null){
@@ -86,7 +90,7 @@ public class NotificationChannelModel extends AbstractModel {
 
         if(fullHashObject){
             String jsonData = this.toJson();
-            return StringUtils.digestString(jsonData);
+            return stringUtils.digestString(jsonData);
         }
 
         NotificationChannelModel channelCopied = this.clone();
@@ -95,7 +99,7 @@ public class NotificationChannelModel extends AbstractModel {
         channelCopied.groupKey = null;
 
         String jsonData = channelCopied.toJson();
-        return channelKey + "_" + StringUtils.digestString(jsonData);
+        return channelKey + "_" + stringUtils.digestString(jsonData);
     }
 
     @Override
@@ -263,13 +267,13 @@ public class NotificationChannelModel extends AbstractModel {
             if(BitmapUtils.getInstance().getMediaSourceType(icon) != MediaSource.Resource)
                 throw new AwesomeNotificationsException("Icon is not a Resource media type");
 
-        if(StringUtils.isNullOrEmpty(channelKey))
+        if(stringUtils.isNullOrEmpty(channelKey))
             throw new AwesomeNotificationsException("Channel key cannot be null or empty");
 
-        if(StringUtils.isNullOrEmpty(channelName))
+        if(stringUtils.isNullOrEmpty(channelName))
             throw new AwesomeNotificationsException("Channel name cannot be null or empty");
 
-        if(StringUtils.isNullOrEmpty(channelDescription))
+        if(stringUtils.isNullOrEmpty(channelDescription))
             throw new AwesomeNotificationsException("Channel description cannot be null or empty");
 
         if(playSound == null)
@@ -279,7 +283,7 @@ public class NotificationChannelModel extends AbstractModel {
             throw new AwesomeNotificationsException("Standard led on and off times cannot be null or empty");
         }
 
-        if(BooleanUtils.getInstance().getValue(playSound) && !StringUtils.isNullOrEmpty(soundSource))
+        if(BooleanUtils.getInstance().getValue(playSound) && !stringUtils.isNullOrEmpty(soundSource))
             if(!AudioUtils.getInstance().isValidAudio(context, soundSource))
                 throw new AwesomeNotificationsException("Audio media is not valid");
     }

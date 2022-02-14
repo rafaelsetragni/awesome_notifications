@@ -10,11 +10,13 @@ import me.carda.awesome_notifications.awesome_notifications_core.builders.Notifi
 import me.carda.awesome_notifications.awesome_notifications_core.threads.NotificationScheduler;
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationChannelModel;
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationModel;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class ScheduleManager {
 
     private static final SharedManager<NotificationModel> shared
             = new SharedManager<>(
+                    StringUtils.getInstance(),
                     "ScheduleManager",
                     NotificationModel.class,
                     "NotificationModel");

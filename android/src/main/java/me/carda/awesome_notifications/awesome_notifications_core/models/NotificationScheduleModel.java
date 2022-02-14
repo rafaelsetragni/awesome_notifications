@@ -1,33 +1,42 @@
 package me.carda.awesome_notifications.awesome_notifications_core.models;
 
+import androidx.annotation.NonNull;
+
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javax.annotation.Nullable;
+
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BooleanUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.DateUtils;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.MapUtils;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.TimeZoneUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public abstract class NotificationScheduleModel extends AbstractModel {
 
-    public String timeZone;
-    public String createdDate;
+    public TimeZone timeZone;
+    public Calendar createdDate;
 
     /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
     public Boolean repeats;
     public Boolean allowWhileIdle;
     public Boolean preciseAlarm;
 
-    public NotificationScheduleModel fromMap(Map<String, Object> arguments) {
-        timeZone = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, String.class);
+    public NotificationScheduleModel() {
+        super(StringUtils.getInstance());
+    }
 
-        createdDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_CREATED_DATE, String.class)
-                .or(DateUtils.getUTCDate());
+    @NonNull
+    public NotificationScheduleModel fromMap(Map<String, Object> arguments) {
+        timeZone = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, TimeZone.class);
+
+        createdDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_CREATED_DATE, Calendar.class)
+                .or(CalendarUtils.getInstance().getCurrentCalendar());
 
         repeats = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_REPEATS, Boolean.class);
         allowWhileIdle = getValueOrDefault(arguments, Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, Boolean.class);
@@ -41,8 +50,8 @@ public abstract class NotificationScheduleModel extends AbstractModel {
     public Map<String, Object> toMap(){
         Map<String, Object> returnedObject = new HashMap<>();
 
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, timeZone);
-        returnedObject.put(Definitions.NOTIFICATION_CREATED_DATE, createdDate);
+        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, TimeZoneUtils.getInstance().timeZoneToString(timeZone));
+        returnedObject.put(Definitions.NOTIFICATION_CREATED_DATE, CalendarUtils.getInstance().calendarToString(createdDate));
 
         returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_REPEATS, repeats);
         returnedObject.put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, allowWhileIdle);
@@ -52,39 +61,34 @@ public abstract class NotificationScheduleModel extends AbstractModel {
         return returnedObject;
     }
 
-    public abstract Calendar getNextValidDate(Date fixedNowDate) throws AwesomeNotificationsException;
+    @Nullable
+    public abstract Calendar getNextValidDate(@NonNull Calendar fixedNowDate) throws AwesomeNotificationsException;
 
-    public Boolean hasNextValidDate() throws Exception {
+    @NonNull
+    public Boolean hasNextValidDate() throws AwesomeNotificationsException {
 
-        // Timezone constructor returns GMT default in case of invalid timezone
-        TimeZone timeZone = StringUtils.isNullOrEmpty(this.timeZone) ?
-                DateUtils.getLocalTimeZone() :
-                TimeZone.getTimeZone(this.timeZone);
-
-        if (timeZone == null || this.timeZone != null && !timeZone.getID().equals(this.timeZone))
-            throw new AwesomeNotificationsException("Invalid time zone");
+        CalendarUtils calendarUtils = CalendarUtils.getInstance();
 
         repeats = BooleanUtils.getInstance().getValue(repeats);
-
         if(createdDate == null && !repeats)
             return false;
 
-        Date referenceDate = repeats ?
-                DateUtils.getLocalDateTime(timeZone.getID()) :
-                DateUtils.stringToDate(createdDate, timeZone.getID());
-
-        return hasNextValidDate(referenceDate);
+        return hasNextValidDate(calendarUtils.getCurrentCalendar());
     }
 
-    public Boolean hasNextValidDate(Date referenceDate) throws Exception {
+    @NonNull
+    public Boolean hasNextValidDate(Calendar referenceDate) throws AwesomeNotificationsException {
 
         Calendar nextSchedule = getNextValidDate(referenceDate);
-        if(nextSchedule == null)
-            return false;
 
-        return nextSchedule.getTime() != null;
+        return nextSchedule != null &&
+            (
+                nextSchedule.after(referenceDate) ||
+                nextSchedule.equals(referenceDate)
+            );
     }
 
+    @Nullable
     public static NotificationScheduleModel getScheduleModelFromMap(Map<String, Object> map){
 
         if(map == null || map.isEmpty()) return null;

@@ -23,7 +23,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.se
 import me.carda.awesome_notifications.awesome_notifications_core.utils.IntegerUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
-public class NotificationSender extends AsyncTask<String, Void, NotificationReceived> {
+public class NotificationSender extends NotificationThread<String, Void, NotificationReceived> {
 
     public static String TAG = "NotificationSender";
 
@@ -40,6 +40,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
     private long startTime = 0L, endTime = 0L;
 
+    private final StringUtils stringUtils;
 
     /// FACTORY METHODS BEGIN *********************************
 
@@ -71,15 +72,17 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
 
         new NotificationSender(
             context,
+            StringUtils.getInstance(),
             notificationBuilder,
             appLifeCycle,
             createdSource,
             notificationModel
-        ).execute();
+        ).executeNotificationThread(notificationModel);
     }
 
     private NotificationSender(
             Context context,
+            StringUtils stringUtils,
             NotificationBuilder notificationBuilder,
             NotificationLifeCycle appLifeCycle,
             NotificationSource createdSource,
@@ -91,6 +94,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
         this.appLifeCycle = appLifeCycle;
         this.notificationModel = notificationModel;
         this.startTime = System.nanoTime();
+        this.stringUtils = stringUtils;
     }
 
     /// AsyncTask METHODS BEGIN *********************************
@@ -114,8 +118,8 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
                                 appLifeCycle);
 
                 if (
-                    !StringUtils.isNullOrEmpty(notificationModel.content.title) ||
-                    !StringUtils.isNullOrEmpty(notificationModel.content.body)
+                    !stringUtils.isNullOrEmpty(notificationModel.content.title) ||
+                    !stringUtils.isNullOrEmpty(notificationModel.content.body)
                 ){
                     notificationModel = showNotification(
                             wContextReference.get(),
@@ -132,7 +136,6 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             e.printStackTrace();
         }
 
-        notificationModel = null;
         return null;
     }
 
@@ -140,7 +143,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
     protected void onPostExecute(NotificationReceived receivedNotification) {
 
         // Only broadcast if notificationModel is valid
-        if(notificationModel != null){
+        if(receivedNotification != null){
 
             if(created)
                 BroadcastSender.sendBroadcastNotificationCreated(
@@ -163,7 +166,7 @@ public class NotificationSender extends AsyncTask<String, Void, NotificationRece
             if(created) actionsTookList.add("created");
             if(displayed) actionsTookList.add("displayed");
 
-            Log.d(TAG, "Notification "+StringUtils.join(actionsTookList.iterator(), " and ")+" in "+elapsed+"ms");
+            Log.d(TAG, "Notification "+stringUtils.join(actionsTookList.iterator(), " and ")+" in "+elapsed+"ms");
         }
     }
 

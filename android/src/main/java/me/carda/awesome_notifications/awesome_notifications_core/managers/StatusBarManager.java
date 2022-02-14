@@ -12,6 +12,7 @@ import android.service.notification.StatusBarNotification;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,37 +34,45 @@ public class StatusBarManager {
 
     private static final String TAG = "CancellationManager";
 
+    private WeakReference<Context> wContext;
+
+    private final StringUtils stringUtils;
+
     private final SharedPreferences preferences;
     public final Map<String, List<String>> activeNotificationsGroup;
     public final Map<String, List<String>> activeNotificationsChannel;
 
-    @SuppressLint("StaticFieldLeak")
-    private static StatusBarManager instance = null;
+    // ************** SINGLETON PATTERN ***********************
 
-    private Context currentContext;
+    private static StatusBarManager instance;
 
-    private StatusBarManager(@NonNull final Context context) {
+    private StatusBarManager(@NonNull final Context context, @NonNull StringUtils stringUtils){
+        this.stringUtils = stringUtils;
+
+        wContext = new WeakReference<>(context);
 
         preferences = context.getSharedPreferences(
-                context.getPackageName() + "." + StringUtils.digestString(TAG),
-                Context.MODE_PRIVATE
-        );
+                context.getPackageName() + "." + stringUtils.digestString(TAG),
+                Context.MODE_PRIVATE);
 
         activeNotificationsGroup = loadNotificationIdFromPreferences("group");
         activeNotificationsChannel = loadNotificationIdFromPreferences("channel");
     }
 
     public static StatusBarManager getInstance(@NonNull final Context context) {
-        if(instance == null)
-            instance = new StatusBarManager(context);
-        instance.currentContext = context;
+        if (instance == null)
+            instance = new StatusBarManager(
+                    context,
+                    StringUtils.getInstance());
         return instance;
     }
+
+    // ********************************************************
 
     // https://developer.android.com/about/versions/12/behavior-changes-all?hl=pt-br#close-system-dialogs-exceptions
     public void closeStatusBar(){
         Intent closingIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-        instance.currentContext.sendBroadcast(closingIntent);
+        wContext.get().sendBroadcast(closingIntent);
     }
 
     public void showNotificationOnStatusBar(NotificationModel notificationModel, Notification notification){
@@ -139,7 +148,12 @@ public class StatusBarManager {
             notificationManager.cancelAll();
         }
         else {
-            NotificationManager notificationManager = (NotificationManager) currentContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager
+                    = (NotificationManager)
+                            wContext
+                            .get()
+                            .getSystemService(Context.NOTIFICATION_SERVICE);
+
             notificationManager.cancelAll();
         }
 
@@ -147,7 +161,7 @@ public class StatusBarManager {
     }
 
     public boolean isFirstActiveOnGroupKey(String groupKey){
-        if(StringUtils.isNullOrEmpty(groupKey))
+        if(stringUtils.isNullOrEmpty(groupKey))
             return false;
 
         List<String> activeGroupedNotifications =
@@ -157,7 +171,7 @@ public class StatusBarManager {
     }
 
     public boolean isFirstActiveOnChannelKey(String channelKey){
-        if(StringUtils.isNullOrEmpty(channelKey))
+        if(stringUtils.isNullOrEmpty(channelKey))
             return false;
 
         List<String> activeGroupedNotifications =
@@ -168,11 +182,11 @@ public class StatusBarManager {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private NotificationManager getNotificationManager() {
-        return (NotificationManager) currentContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        return (NotificationManager) wContext.get().getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     private NotificationManagerCompat getAdaptedOldNotificationManager() {
-        return NotificationManagerCompat.from(currentContext);
+        return NotificationManagerCompat.from(wContext.get());
     }
 
     private void setIndexActiveNotificationChannel(SharedPreferences.Editor editor, String idKey, String channelKey){
@@ -214,8 +228,8 @@ public class StatusBarManager {
     private void registerActiveNotification(@NonNull NotificationModel notificationModel, int id){
 
         String idKey = String.valueOf(id);
-        String groupKey = !StringUtils.isNullOrEmpty(notificationModel.content.groupKey) ? notificationModel.content.groupKey : "";
-        String channelKey = !StringUtils.isNullOrEmpty(notificationModel.content.channelKey) ? notificationModel.content.channelKey : "";
+        String groupKey = !stringUtils.isNullOrEmpty(notificationModel.content.groupKey) ? notificationModel.content.groupKey : "";
+        String channelKey = !stringUtils.isNullOrEmpty(notificationModel.content.channelKey) ? notificationModel.content.channelKey : "";
 
         SharedPreferences.Editor editor = preferences.edit();
 
@@ -301,7 +315,7 @@ public class StatusBarManager {
 
     private List<String> unregisterActiveChannelKey(String channelKey){
 
-        if(!StringUtils.isNullOrEmpty(channelKey)){
+        if(!stringUtils.isNullOrEmpty(channelKey)){
             List<String> removed = activeNotificationsChannel.remove(channelKey);
             if(removed != null){
 
@@ -338,7 +352,7 @@ public class StatusBarManager {
 
     public List<String> unregisterActiveGroupKey(String groupKey){
 
-        if(!StringUtils.isNullOrEmpty(groupKey)){
+        if(!stringUtils.isNullOrEmpty(groupKey)){
             List<String> removed = activeNotificationsGroup.remove(groupKey);
             if(removed != null){
 
@@ -403,7 +417,7 @@ public class StatusBarManager {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public static Notification getAndroidNotificationById(Context context, int id){
+    public Notification getAndroidNotificationById(Context context, int id){
         if(context != null){
 
             NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
@@ -421,14 +435,14 @@ public class StatusBarManager {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public static List<Notification> getAllAndroidActiveNotificationsByChannelKey(Context context, String channelKey){
+    public List<Notification> getAllAndroidActiveNotificationsByChannelKey(Context context, String channelKey){
         List<Notification> notifications = new ArrayList<>();
-        if(context != null && !StringUtils.isNullOrEmpty(channelKey)){
+        if(context != null && !stringUtils.isNullOrEmpty(channelKey)){
 
             NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
 
-            String hashedKey = StringUtils.digestString(channelKey);
+            String hashedKey = stringUtils.digestString(channelKey);
 
             if(currentActiveNotifications != null){
                 for (StatusBarNotification activeNotification : currentActiveNotifications) {
@@ -448,14 +462,14 @@ public class StatusBarManager {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public static List<Notification> getAllAndroidActiveNotificationsByGroupKey(Context context, String groupKey){
+    public List<Notification> getAllAndroidActiveNotificationsByGroupKey(Context context, String groupKey){
         List<Notification> notifications = new ArrayList<>();
-        if(context != null && !StringUtils.isNullOrEmpty(groupKey)){
+        if(context != null && !stringUtils.isNullOrEmpty(groupKey)){
 
             NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             StatusBarNotification[] currentActiveNotifications = manager.getActiveNotifications();
 
-            String hashedKey = StringUtils.digestString(groupKey);
+            String hashedKey = stringUtils.digestString(groupKey);
 
             if(currentActiveNotifications != null){
                 for (StatusBarNotification activeNotification : currentActiveNotifications) {

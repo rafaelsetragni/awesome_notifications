@@ -1,4 +1,4 @@
-enum NotificationSource : String, CaseIterable {
+public enum NotificationSource : String, CaseIterable {
     
     case Local = "Local"
     case Schedule = "Schedule"

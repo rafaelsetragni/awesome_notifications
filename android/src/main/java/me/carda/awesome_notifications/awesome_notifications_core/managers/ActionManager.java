@@ -6,11 +6,13 @@ import java.util.List;
 
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.models.returnedData.ActionReceived;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class ActionManager {
 
     private static final SharedManager<ActionReceived> shared
             = new SharedManager<>(
+                    StringUtils.getInstance(),
                     "ActionManager",
                     ActionReceived.class,
                     "ActionReceived");

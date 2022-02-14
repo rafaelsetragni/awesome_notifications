@@ -650,16 +650,24 @@ public class AwesomeNotifications:
     
     public func getNextValidDate(
         scheduleModel: NotificationScheduleModel,
-        fixedDate: String?,
-        timeZoneName: String?
-    ) -> Date? {
-        return
+        fixedDate: String,
+        timeZoneName: String
+    ) -> RealDateTime? {
+        
+        let fixedDateTime:RealDateTime = RealDateTime.init(
+            fromDateText: fixedDate, inTimeZone: timeZoneName) ?? RealDateTime()
+        
+        guard let nextValidDate:Date =
             DateUtils
                 .shared
                 .getNextValidDate(
                     fromScheduleModel: scheduleModel,
-                    withReferenceDate: fixedDate,
-                    usingTimeZone: timeZoneName)
+                    withReferenceDate: fixedDateTime)
+        else {
+            return nil
+        }
+        
+        return RealDateTime.init(fromDate: nextValidDate, inTimeZone: fixedDateTime.timeZone)
     }
     
     public func getLocalTimeZone() -> TimeZone {

@@ -4,20 +4,28 @@ import 'package:awesome_notifications/src/models/model.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
 class NotificationChannelGroup extends Model {
-  String? channelGroupKey;
-  String? channelGroupName;
+  String? _channelGroupKey;
+  String? _channelGroupName;
+
+  String? get channelGroupKey {
+    return _channelGroupKey;
+  }
+
+  String? get channelGroupName {
+    return _channelGroupName;
+  }
 
   NotificationChannelGroup(
       {required String channelGroupKey, required String channelGroupName}) {
-    this.channelGroupKey = channelGroupKey;
-    this.channelGroupName = channelGroupName;
+    _channelGroupKey = channelGroupKey;
+    _channelGroupName = channelGroupName;
   }
 
   @override
   NotificationChannelGroup? fromMap(Map<String, dynamic> dataMap) {
-    channelGroupKey = AwesomeAssertUtils.extractValue(
+    _channelGroupKey = AwesomeAssertUtils.extractValue(
         NOTIFICATION_CHANNEL_GROUP_KEY, dataMap, String);
-    channelGroupName = AwesomeAssertUtils.extractValue(
+    _channelGroupName = AwesomeAssertUtils.extractValue(
         NOTIFICATION_CHANNEL_GROUP_NAME, dataMap, String);
 
     return this;
@@ -26,17 +34,17 @@ class NotificationChannelGroup extends Model {
   @override
   Map<String, dynamic> toMap() {
     return {
-      NOTIFICATION_CHANNEL_GROUP_KEY: channelGroupKey,
-      NOTIFICATION_CHANNEL_GROUP_NAME: channelGroupName
+      NOTIFICATION_CHANNEL_GROUP_KEY: _channelGroupKey,
+      NOTIFICATION_CHANNEL_GROUP_NAME: _channelGroupName
     };
   }
 
   @override
   void validate() {
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(channelGroupKey, String))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_channelGroupKey, String))
       throw AwesomeNotificationsException(
           message: 'channelGroupKey is required');
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(channelGroupName, String))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_channelGroupName, String))
       throw AwesomeNotificationsException(
           message: 'channelGroupName is required');
   }

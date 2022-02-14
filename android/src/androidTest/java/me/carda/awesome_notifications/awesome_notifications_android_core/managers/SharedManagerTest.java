@@ -1,4 +1,4 @@
-package me.carda.awesome_notifications.awesome_notifications_android_core.managers;
+package me.carda.awesome_notifications.awesome_notifications_core.managers;
 
 import static org.junit.Assert.*;
 
@@ -13,12 +13,10 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.carda.awesome_notifications.awesome_notifications_android_core.Definitions;
-import me.carda.awesome_notifications.awesome_notifications_android_core.exceptions.AwesomeNotificationException;
-import me.carda.awesome_notifications.awesome_notifications_android_core.models.AbstractModel;
-import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationButtonModel;
-import me.carda.awesome_notifications.awesome_notifications_android_core.models.NotificationModel;
-import me.carda.awesome_notifications.awesome_notifications_android_core.models.returnedData.NotificationReceived;
+import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.models.AbstractModel;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class SharedManagerTest {
 
@@ -30,7 +28,9 @@ public class SharedManagerTest {
         public Float testFloat;
         public String testString;
 
-        public TestModel(){}
+        public TestModel(){
+            super(stringUtils);
+        }
 
         @Override
         public AbstractModel fromMap(Map<String, Object> arguments) {
@@ -64,7 +64,7 @@ public class SharedManagerTest {
         }
 
         @Override
-        public void validate(Context context) throws AwesomeNotificationException {
+        public void validate(Context context) throws AwesomeNotificationsException {
 
         }
     }
@@ -76,6 +76,7 @@ public class SharedManagerTest {
     @Before
     public void setUp() throws Exception {
         sharedManager = new SharedManager<>(
+                StringUtils.getInstance(),
                 "SharedManagerTest",
                 TestModel.class,
                 "TestModel");

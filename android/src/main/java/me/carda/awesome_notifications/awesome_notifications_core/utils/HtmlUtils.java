@@ -11,7 +11,7 @@ public class HtmlUtils {
 
     @SuppressWarnings("deprecation")
     public static Spanned fromHtml(String html) {
-        if (StringUtils.isNullOrEmpty(html)) {
+        if (StringUtils.getInstance().isNullOrEmpty(html)) {
             return null;
         }
 
@@ -25,7 +25,7 @@ public class HtmlUtils {
     }
 
     public static String adaptFlutterColorsToJava(String htmlText){
-        if(!StringUtils.isNullOrEmpty(htmlText)){
+        if(!StringUtils.getInstance().isNullOrEmpty(htmlText)){
             final String regex = "(<(\\S+\\s+)*)(color=)('|\")(0x|#)?(\\d+)('|\")((\\s+[^\\s>]+)*\\/?>)";
 
             final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);

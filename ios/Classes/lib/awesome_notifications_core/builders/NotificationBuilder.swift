@@ -58,14 +58,20 @@ public class NotificationBuilder {
             }
         }
         
-        if StringUtils.isNullOrEmpty(actionReceived.displayedDate) {
-            actionReceived.displayedDate = DateUtils.shared.getUTCTextDate()
-            actionReceived.displayedLifeCycle = LifeCycleManager.shared.currentLifeCycle
+        if notificationModel!.schedule != nil {
+            let lastDisplayedDate:RealDateTime? =
+                    DateUtils
+                        .shared
+                        .getLastValidDate(
+                            scheduleModel: notificationModel!.schedule!,
+                            fixedDateTime: RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
+                        )
+            
+            actionReceived.displayedDate = lastDisplayedDate ?? RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
         }
         else {
-            if actionReceived.createdDate == actionReceived.displayedDate {
-                actionReceived.displayedLifeCycle = actionReceived.createdLifeCycle
-            }
+            actionReceived.displayedDate = actionReceived.createdDate
+            actionReceived.displayedLifeCycle = actionReceived.createdLifeCycle
         }
         
         return actionReceived
@@ -79,7 +85,7 @@ public class NotificationBuilder {
 
         notificationModel.content!.groupKey = getGroupKey(notificationModel: notificationModel, channel: channel)
 
-        let nextDate:Date? = getNextScheduleDate(notificationModel: notificationModel)
+        let nextDate:RealDateTime? = getNextScheduleDate(notificationModel: notificationModel)
         
         if(notificationModel.schedule == nil || nextDate != nil){
             
@@ -126,9 +132,7 @@ public class NotificationBuilder {
                 return notificationModel
             }
             
-            //let trigger:UNCalendarNotificationTrigger? = dateToCalendarTrigger(targetDate: nextDate)
-            
-            notificationModel.content!.displayedDate = nextDate?.toString(toTimeZone: "UTC") ?? DateUtils.shared.getUTCTextDate()
+            notificationModel.nextValidDate = nextDate
             
             let trigger:UNNotificationTrigger? = nextDate == nil ? nil : notificationModel.schedule?.getUNNotificationTrigger()
             let request = UNNotificationRequest(identifier: notificationModel.content!.id!.description, content: content, trigger: trigger)
@@ -144,12 +148,12 @@ public class NotificationBuilder {
                     if(notificationModel.schedule != nil){
                         
                         notificationModel.schedule!.timeZone =
-                            notificationModel.schedule!.timeZone ?? DateUtils.shared.localTimeZone.identifier
-                        notificationModel.schedule!.createdDate =
-                            DateUtils.shared.getLocalTextDate(fromTimeZone: notificationModel.schedule!.timeZone!)
+                            notificationModel.schedule!.timeZone ?? TimeZone.current
+                        notificationModel.schedule!.createdDate = RealDateTime(
+                            fromTimeZone: notificationModel.schedule!.timeZone!)
                         
                         if (nextDate != nil){
-                            ScheduleManager.saveSchedule(notification: notificationModel, nextDate: nextDate!)
+                            ScheduleManager.saveSchedule(notification: notificationModel, nextDate: nextDate!.date)
                         } else {
                             _ = ScheduleManager.removeSchedule(id: notificationModel.content!.id!)
                         }
@@ -298,10 +302,10 @@ public class NotificationBuilder {
         }
     }
     
-    private func getNextScheduleDate(notificationModel:NotificationModel?) -> Date? {
+    private func getNextScheduleDate(notificationModel:NotificationModel?) -> RealDateTime? {
         
         if notificationModel?.schedule == nil { return nil }
-        
+        var nextDate:Date?
         switch true {
             
             case notificationModel!.schedule! is NotificationCalendarModel:
@@ -309,71 +313,24 @@ public class NotificationBuilder {
                 let calendarModel:NotificationCalendarModel = notificationModel!.schedule! as! NotificationCalendarModel
                 guard let trigger:UNCalendarNotificationTrigger = calendarModel.getUNNotificationTrigger() as? UNCalendarNotificationTrigger else { return nil }
                 
-                return trigger.nextTriggerDate()
+                nextDate = trigger.nextTriggerDate()
                 
             case notificationModel!.schedule! is NotificationIntervalModel:
                 
                 let intervalModel:NotificationIntervalModel = notificationModel!.schedule! as! NotificationIntervalModel
                 guard let trigger:UNTimeIntervalNotificationTrigger = intervalModel.getUNNotificationTrigger() as? UNTimeIntervalNotificationTrigger else { return nil }
                 
-                return trigger.nextTriggerDate()
+                nextDate = trigger.nextTriggerDate()
                 
             default:
-                return nil
+                break
         }
-        /*
-        let cron:CronUtils = CronUtils()
         
-        do {
-
-            if(notificationModel != nil){
-
-                nextValidDate = cron.getNextCalendar(
-                    initialDateTime: notificationModel!.schedule!.createdDateTime,
-                    crontabRule: notificationModel!.schedule!.crontabExpression
-                )
-
-                if(nextValidDate != nil){
-
-                    return nextValidDate
-                }
-                else {
-
-                    if(!(ListUtils.isNullOrEmpty(notificationModel!.schedule!.preciseSchedules as [AnyObject]?))){
-
-                        for nextDateTime in notificationModel!.schedule!.preciseSchedules! {
-
-                            let closestDate:Date? = cron.getNextCalendar(
-                                initialDateTime: nextDateTime,
-                                crontabRule: nil
-                            )
-
-                            if closestDate != nil {
-                                if nextValidDate == nil {
-                                    nextValidDate = closestDate
-                                }
-                                else {
-                                    if closestDate!.compare(nextValidDate!) == ComparisonResult.orderedAscending {
-                                        nextValidDate = closestDate
-                                    }
-                                }
-                            }
-                        }
-
-                        if nextValidDate != nil {
-                            return nextValidDate
-                        }
-                    }
-
-                    _ = NotificationSenderAndScheduler.cancelNotification(id: notificationModel!.content!.id!)
-                    Log.d(TAG, "Date is not more valid. ("+DateUtils.getUTCDate()+")")
-                }
-            }
-        } catch {
-            debugPrint("\(error)")
+        if nextDate == nil {
+            return nil
         }
-        return nil
-        */
+        
+        return RealDateTime.init(fromDate: nextDate!, inTimeZone: notificationModel!.schedule!.timeZone!)
     }
     
     private func setVisibility(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){

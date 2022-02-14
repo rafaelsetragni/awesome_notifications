@@ -60,7 +60,7 @@ public class ForegroundService extends Service {
 
         if(!(id == -1 || serviceIntent == null)){
 
-            int notificationId = serviceIntent.notificationModel.content.id;
+            final int notificationId = serviceIntent.notificationModel.content.id;
             ForegroundService foregroundService = serviceStack.remove(notificationId);
             if(foregroundService != null)
                 foregroundService.stopSelf();

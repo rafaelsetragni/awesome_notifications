@@ -9,18 +9,18 @@ import Foundation
 
 public class NotificationCalendarModel : NotificationScheduleModel {
     
-    var _createdDate:String?
-    var _timeZone:String?
+    var _createdDate:RealDateTime?
+    var _timeZone:TimeZone?
     
     /// Initial reference date from schedule
-    public var createdDate:String? { get{
+    public var createdDate:RealDateTime? { get{
         return _createdDate
     } set(newValue){
         _createdDate = newValue
     }}
     
     /// Initial reference date from schedule
-    public var timeZone:String? { get{
+    public var timeZone:TimeZone? { get{
         return _timeZone
     } set(newValue){
         _timeZone = newValue
@@ -49,8 +49,12 @@ public class NotificationCalendarModel : NotificationScheduleModel {
     
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         
+        self._createdDate =
+            MapUtils<RealDateTime>.getRealDateOrDefault(
+                reference: Definitions.NOTIFICATION_CREATED_DATE, arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
+        
         self._timeZone =
-            MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, arguments: arguments)
+            MapUtils<TimeZone>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, arguments: arguments)
         
         self.year = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_YEAR, arguments: arguments)
         self.month = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_MONTH, arguments: arguments)
@@ -85,7 +89,8 @@ public class NotificationCalendarModel : NotificationScheduleModel {
     public func toMap() -> [String : Any?] {
         var mapData:[String: Any?] = [:]
         
-        if(_timeZone != nil)   {mapData[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] = self._timeZone}
+        if(_timeZone != nil)   {mapData[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] = self._timeZone!.identifier}
+        if(_createdDate != nil){mapData[Definitions.NOTIFICATION_CREATED_DATE] = self._createdDate!.description}
 
         if(year != nil)        {mapData[Definitions.NOTIFICATION_SCHEDULE_YEAR]   = self.year}
         if(month != nil)       {mapData[Definitions.NOTIFICATION_SCHEDULE_MONTH]  = self.month}
@@ -133,8 +138,7 @@ public class NotificationCalendarModel : NotificationScheduleModel {
 
     public func toDateComponents() -> DateComponents {
         let dateComponents:DateComponents = DateComponents(
-            timeZone: TimeZone(
-                identifier: timeZone ?? DateUtils.shared.localTimeZone.identifier),
+            timeZone: timeZone ?? TimeZone.current,
             year: year,
             month: month,
             day: day,
@@ -148,30 +152,35 @@ public class NotificationCalendarModel : NotificationScheduleModel {
         return dateComponents
     }
     
-    public func getNextValidDate() -> Date? {
+    public func getNextValidDate() -> RealDateTime? {
+        let timeZone:TimeZone = self.timeZone ?? TimeZone.current
         
-        let timeZone:String = self.timeZone ?? DateUtils.shared.localTimeZone.identifier
+        let referenceDate =
+            (self.repeats ?? true) ?
+                RealDateTime(fromTimeZone: timeZone):
+                createdDate ?? RealDateTime(fromTimeZone: timeZone)
         
-        return DateUtils
-                .shared
-                .getNextValidDate(
-                    fromScheduleModel: self,
-                    withReferenceDate: (self.repeats ?? true) ?
+        guard let nextValidDate =
                     DateUtils
                         .shared
-                        .getLocalTextDate(
-                            fromTimeZone: timeZone) :
-                        createdDate,
-                    usingTimeZone: timeZone
-        )
+                        .getNextValidDate(
+                            fromScheduleModel: self,
+                            withReferenceDate: referenceDate)
+        else {
+            return nil
+        }
+        
+        return RealDateTime(
+            fromDate: nextValidDate,
+            inTimeZone: timeZone)
     }
     
     public func hasNextValidDate() -> Bool {
         
-        let timeZone:String = self.timeZone ?? DateUtils.shared.localTimeZone.identifier
-        let nowDate:Date? = DateUtils.shared.getLocalDateTime(fromTimeZone: timeZone)
+        let timeZone:TimeZone = self.timeZone ?? TimeZone.current
+        let nowDate:RealDateTime? = RealDateTime(fromTimeZone: timeZone)
         
-        let nextValidDate:Date? = getNextValidDate()
+        let nextValidDate:RealDateTime? = getNextValidDate()
         
         return
             nil != nextValidDate &&

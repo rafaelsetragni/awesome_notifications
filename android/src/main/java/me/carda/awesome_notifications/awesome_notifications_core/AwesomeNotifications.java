@@ -18,8 +18,8 @@ import androidx.annotation.Nullable;
 
 import androidx.lifecycle.Lifecycle;
 
-import me.carda.awesome_notifications.AwesomeNotificationsPlugin;
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.AwesomeEventsReceiver;
+import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.ScheduledNotificationReceiver;
 import me.carda.awesome_notifications.awesome_notifications_core.decoders.BitmapResourceDecoder;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundServiceType;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundStartMode;
@@ -59,7 +59,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.models.returned
 import me.carda.awesome_notifications.awesome_notifications_core.services.ForegroundService;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BitmapUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BooleanUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.DateUtils;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.JsonUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.ListUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
@@ -73,15 +73,18 @@ public class AwesomeNotifications
 
     private WeakReference<Context> wContext;
     private Activity applicationActivity;
+    private StringUtils stringUtils;
 
     // ************************** CONSTRUCTOR ***********************************
 
     public AwesomeNotifications(
         @NonNull Context applicationContext,
-        @NonNull AwesomeNotificationsPlugin extensionClass
+        @NonNull AwesomeNotificationsExtension extensionClass
     ) throws AwesomeNotificationsException {
 
         wContext = new WeakReference<>(applicationContext);
+
+        stringUtils = StringUtils.getInstance();
 
         LifeCycleManager
                 .getInstance()
@@ -96,7 +99,9 @@ public class AwesomeNotifications
                 applicationContext,
                 extensionClass.getClass());
 
-        loadAwesomeExtensions(applicationContext);
+        loadAwesomeExtensions(
+                applicationContext,
+                stringUtils);
     }
 
     // ******************** LOAD EXTERNAL EXTENSIONS ***************************
@@ -104,13 +109,14 @@ public class AwesomeNotifications
     public static boolean isExtensionsLoaded = false;
     @SuppressWarnings("unchecked")
     public static void loadAwesomeExtensions(
-        @NonNull Context context
+        @NonNull Context context,
+        StringUtils stringUtils
     ) throws AwesomeNotificationsException {
 
         if(isExtensionsLoaded) return;
 
         String extensionClassReference = DefaultsManager.getAwesomeExtensionClassName(context);
-        if(!StringUtils.isNullOrEmpty(extensionClassReference))
+        if(!stringUtils.isNullOrEmpty(extensionClassReference))
             try {
                 Class extensionClass =
                         Class.forName(extensionClassReference);
@@ -131,14 +137,13 @@ public class AwesomeNotifications
 
     public static void loadAwesomeExtensions(
             @NonNull Context context,
-            @NonNull Class<? extends AwesomeNotificationsPlugin> extensionClass
+            @NonNull Class<? extends AwesomeNotificationsExtension> extensionClass
     ) throws AwesomeNotificationsException {
 
         if(isExtensionsLoaded) return;
 
         try {
-
-            AwesomeNotificationsPlugin awesomePlugin = extensionClass.newInstance();
+            AwesomeNotificationsExtension awesomePlugin = extensionClass.newInstance();
             awesomePlugin.loadExternalExtensions(context);
             isExtensionsLoaded = true;
 
@@ -214,11 +219,15 @@ public class AwesomeNotifications
                 break;
 
             case DESTROYED:
-                if(activityHasStarted)
+                if(activityHasStarted) {
                     AwesomeEventsReceiver
                             .getInstance()
                             .unsubscribeOnNotificationEvents(this)
                             .unsubscribeOnActionEvents(this);
+
+                    NotificationScheduler
+                            .refreshScheduledNotifications(wContext.get());
+                }
                 break;
 
             default:
@@ -332,6 +341,7 @@ public class AwesomeNotifications
     }
 
     public List<NotificationModel> listAllPendingSchedules(){
+        NotificationScheduler.refreshScheduledNotifications(wContext.get());
         return ScheduleManager.listSchedules(wContext.get());
     }
 
@@ -361,6 +371,9 @@ public class AwesomeNotifications
         captureNotificationActionOnLaunch(wContext.get());
 
         AwesomeNotifications.debug = debug;
+
+        NotificationScheduler
+                .refreshScheduledNotifications(wContext.get());
 
         if (AwesomeNotifications.debug)
             Log.d(TAG, "Awesome Notifications initialized");
@@ -555,7 +568,7 @@ public class AwesomeNotifications
         if (notificationModel.schedule == null)
             NotificationSender
                     .send(
-                            wContext.get(),
+                        wContext.get(),
                         NotificationBuilder.getNewBuilder(),
                         NotificationSource.Local,
                         AwesomeNotifications.getApplicationLifeCycle(),
@@ -563,7 +576,7 @@ public class AwesomeNotifications
         else
             NotificationScheduler
                     .schedule(
-                            wContext.get(),
+                        wContext.get(),
                         NotificationSource.Schedule,
                         notificationModel);
 
@@ -650,16 +663,16 @@ public class AwesomeNotifications
         return true;
     }
 
-    public Calendar getNextValidDate(@NonNull NotificationScheduleModel scheduleModel, @Nullable Date fixedDate) throws AwesomeNotificationsException {
+    public Calendar getNextValidDate(@NonNull NotificationScheduleModel scheduleModel, @Nullable Calendar fixedDate) throws AwesomeNotificationsException {
         return scheduleModel.getNextValidDate(fixedDate);
     }
 
     public String getLocalTimeZone() {
-        return DateUtils.getLocalTimeZone().getID();
+        return CalendarUtils.getInstance().getLocalTimeZone().getID();
     }
 
     public Object getUtcTimeZone() {
-        return DateUtils.getUtcTimeZone().getID();
+        return CalendarUtils.getInstance().getUtcTimeZone().getID();
     }
 
     public int getGlobalBadgeCounter() {
@@ -683,52 +696,95 @@ public class AwesomeNotifications
         return BadgeManager.getInstance().decrementGlobalBadgeCounter(wContext.get());
     }
 
-    public boolean dismissNotification(@NonNull Integer notificationId) throws AwesomeNotificationsException {
-        return CancellationManager.dismissNotification(wContext.get(), notificationId);
+    public boolean dismissNotification(
+            @NonNull Integer notificationId
+    ) throws AwesomeNotificationsException {
+        return CancellationManager
+                .getInstance()
+                .dismissNotification(wContext.get(), notificationId);
     }
 
-    public boolean cancelSchedule(@NonNull Integer notificationId) throws AwesomeNotificationsException {
-        return CancellationManager.cancelSchedule(wContext.get(), notificationId);
+    public boolean cancelSchedule(
+            @NonNull Integer notificationId
+    ) throws AwesomeNotificationsException {
+        return CancellationManager
+                .getInstance()
+                .cancelSchedule(wContext.get(), notificationId);
     }
 
-    public boolean cancelNotification(@NonNull Integer notificationId) throws AwesomeNotificationsException {
-        return CancellationManager.cancelNotification(wContext.get(), notificationId);
+    public boolean cancelNotification(
+            @NonNull Integer notificationId
+    ) throws AwesomeNotificationsException {
+        return CancellationManager
+                .getInstance()
+                .cancelNotification(wContext.get(), notificationId);
     }
 
-    public boolean dismissNotificationsByChannelKey(@NonNull String channelKey) throws AwesomeNotificationsException {
-        return CancellationManager.dismissNotificationsByChannelKey(wContext.get(), channelKey);
+    public boolean dismissNotificationsByChannelKey(
+            @NonNull String channelKey
+    ) throws AwesomeNotificationsException {
+        return CancellationManager
+                .getInstance()
+                .dismissNotificationsByChannelKey(wContext.get(), channelKey);
     }
 
-    public boolean cancelSchedulesByChannelKey(@NonNull String channelKey) throws AwesomeNotificationsException {
-        return CancellationManager.cancelSchedulesByChannelKey(wContext.get(), channelKey);
+    public boolean cancelSchedulesByChannelKey(
+            @NonNull String channelKey
+    ) throws AwesomeNotificationsException {
+        return CancellationManager
+                .getInstance()
+                .cancelSchedulesByChannelKey(wContext.get(), channelKey);
     }
 
-    public boolean cancelNotificationsByChannelKey(@NonNull String channelKey) throws AwesomeNotificationsException {
-        return CancellationManager.cancelNotificationsByChannelKey(wContext.get(), channelKey);
+    public boolean cancelNotificationsByChannelKey(
+            @NonNull String channelKey
+    ) throws AwesomeNotificationsException {
+        return CancellationManager
+                .getInstance()
+                .cancelNotificationsByChannelKey(wContext.get(), channelKey);
     }
 
-    public boolean dismissNotificationsByGroupKey(@NonNull String groupKey) throws AwesomeNotificationsException {
-        return CancellationManager.dismissNotificationsByGroupKey(wContext.get(), groupKey);
+    public boolean dismissNotificationsByGroupKey(
+            @NonNull String groupKey
+    ) throws AwesomeNotificationsException {
+        return CancellationManager
+                .getInstance()
+                .dismissNotificationsByGroupKey(wContext.get(), groupKey);
     }
 
-    public boolean cancelSchedulesByGroupKey(@NonNull String groupKey) throws AwesomeNotificationsException {
-        return CancellationManager.cancelSchedulesByGroupKey(wContext.get(), groupKey);
+    public boolean cancelSchedulesByGroupKey(
+            @NonNull String groupKey
+    ) throws AwesomeNotificationsException {
+        return CancellationManager
+                .getInstance()
+                .cancelSchedulesByGroupKey(wContext.get(), groupKey);
     }
 
-    public boolean cancelNotificationsByGroupKey(@NonNull String groupKey) throws AwesomeNotificationsException {
-        return CancellationManager.cancelNotificationsByGroupKey(wContext.get(), groupKey);
+    public boolean cancelNotificationsByGroupKey(
+            @NonNull String groupKey
+    ) throws AwesomeNotificationsException {
+        return CancellationManager
+                .getInstance()
+                .cancelNotificationsByGroupKey(wContext.get(), groupKey);
     }
 
     public void dismissAllNotifications() {
-        CancellationManager.dismissAllNotifications(wContext.get());
+        CancellationManager
+                .getInstance()
+                .dismissAllNotifications(wContext.get());
     }
 
     public void cancelAllSchedules() {
-        CancellationManager.cancelAllSchedules(wContext.get());
+
+        CancellationManager
+                .getInstance()
+                .cancelAllSchedules(wContext.get());
     }
 
     public void cancelAllNotifications() {
-        CancellationManager.cancelAllNotifications(wContext.get());
+        CancellationManager
+                .getInstance()
+                .cancelAllNotifications(wContext.get());
     }
 
     public Object areNotificationsGloballyAllowed() {
@@ -737,8 +793,11 @@ public class AwesomeNotifications
                     .areNotificationsGloballyAllowed(wContext.get());
     }
 
-    public void showNotificationPage(@Nullable String channelKey, @NonNull PermissionCompletionHandler permissionCompletionHandler) {
-        if(StringUtils.isNullOrEmpty(channelKey))
+    public void showNotificationPage(
+            @Nullable String channelKey,
+            @NonNull PermissionCompletionHandler permissionCompletionHandler
+    ){
+        if(stringUtils.isNullOrEmpty(channelKey))
             PermissionManager
                 .getInstance()
                 .showNotificationConfigPage(
@@ -753,7 +812,9 @@ public class AwesomeNotifications
                         permissionCompletionHandler);
     }
 
-    public void showPreciseAlarmPage(@NonNull PermissionCompletionHandler permissionCompletionHandler) {
+    public void showPreciseAlarmPage(
+            @NonNull PermissionCompletionHandler permissionCompletionHandler
+    ){
         PermissionManager
             .getInstance()
             .showPreciseAlarmPage(
@@ -761,7 +822,9 @@ public class AwesomeNotifications
                     permissionCompletionHandler);
     }
 
-    public void showDnDGlobalOverridingPage(@NonNull PermissionCompletionHandler permissionCompletionHandler) {
+    public void showDnDGlobalOverridingPage(
+            @NonNull PermissionCompletionHandler permissionCompletionHandler
+    ){
         PermissionManager
             .getInstance()
             .showDnDGlobalOverridingPage(
@@ -769,7 +832,10 @@ public class AwesomeNotifications
                     permissionCompletionHandler);
     }
 
-    public List<String> arePermissionsAllowed(@Nullable String channelKey, @NonNull List<String> permissions) throws AwesomeNotificationsException {
+    public List<String> arePermissionsAllowed(
+            @Nullable String channelKey,
+            @NonNull List<String> permissions
+    ) throws AwesomeNotificationsException {
         return PermissionManager
                     .getInstance()
                     .arePermissionsAllowed(
@@ -778,7 +844,10 @@ public class AwesomeNotifications
                             permissions);
     }
 
-    public List<String> shouldShowRationale(@Nullable String channelKey, @NonNull List<String> permissions) throws AwesomeNotificationsException {
+    public List<String> shouldShowRationale(
+            @Nullable String channelKey,
+            @NonNull List<String> permissions
+    ) throws AwesomeNotificationsException {
         return PermissionManager
                     .getInstance()
                     .shouldShowRationale(

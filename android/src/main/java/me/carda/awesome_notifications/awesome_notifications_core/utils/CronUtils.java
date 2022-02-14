@@ -1,5 +1,8 @@
 package me.carda.awesome_notifications.awesome_notifications_core.utils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,50 +17,29 @@ public final class CronUtils {
 
     /// https://www.baeldung.com/cron-expressions
     /// <second> <minute> <hour> <day-of-month> <month> <day-of-week> <year>
+    @Nullable
     public static Calendar getNextCalendar(
-        String initialDateTime,
-        String crontabRule,
-        Date fixedNowDate,
-        TimeZone timeZone
+        @NonNull Calendar fixedNowDate,
+        @NonNull String crontabRule,
+        @NonNull TimeZone timeZone
     ) throws AwesomeNotificationsException {
 
-        if(StringUtils.isNullOrEmpty(crontabRule))
-            return null;
-
-        Date now, delayedNow;
-        if(fixedNowDate == null){
-            now = DateUtils.getUTCDateTime();
-        } else {
-            now = fixedNowDate;
-        }
-
-        if(!StringUtils.isNullOrEmpty(initialDateTime))
-        {
-            Date initialScheduleDay = DateUtils.stringToDate(initialDateTime, timeZone.getID());
-
-            // if initial date is a future one, show in future. Otherwise, show now
-            switch (initialScheduleDay.compareTo(now)){
-
-                case 0: // if initial date is right now or
-                case -1: // if initial date is in the past, do not change now
-                    break;
-
-                case 1: // if initial date is in future, shows in future
-                default:
-                    now = initialScheduleDay;
-                    break;
-            }
-        }
-
-        delayedNow = applyToleranceDate(now, timeZone);
+        if(
+            fixedNowDate == null ||
+            timeZone == null ||
+            StringUtils.getInstance().isNullOrEmpty(crontabRule)
+        ) return null;
 
         if(CronExpression.isValidExpression(crontabRule)) {
             try {
                 CronExpression cronExpression = new CronExpression(crontabRule);
                 cronExpression.setTimeZone(timeZone);
-                Date nextSchedule = cronExpression.getNextValidTimeAfter(delayedNow);
+                Date nextSchedule =
+                        cronExpression
+                                .getNextValidTimeAfter(fixedNowDate.getTime());
 
-                if (nextSchedule != null && nextSchedule.compareTo(delayedNow) >= 0) {
+                Calendar delayedNow = applyToleranceDate(fixedNowDate, -1);
+                if (nextSchedule != null && nextSchedule.compareTo(delayedNow.getTime()) >= 0) {
 
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTimeZone(timeZone);
@@ -78,13 +60,10 @@ public final class CronUtils {
     }
 
     /// Processing time tolerance
-    public static Date applyToleranceDate(Date initialScheduleDay, TimeZone timeZone) {
-        Calendar calendarHelper = Calendar.getInstance();
-        calendarHelper.setTimeZone(timeZone);
-        calendarHelper.setTime(initialScheduleDay);
-        calendarHelper.set(Calendar.MILLISECOND,0);
-        calendarHelper.set(Calendar.SECOND, calendarHelper.get(Calendar.SECOND)-1);
-        return calendarHelper.getTime();
+    public static Calendar applyToleranceDate(Calendar initialScheduleDay, int amount) {
+        Calendar shifted = (Calendar) initialScheduleDay.clone();
+        shifted.add(Calendar.SECOND, amount);
+        return shifted;
     }
 }
 

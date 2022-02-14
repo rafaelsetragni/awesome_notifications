@@ -12,7 +12,7 @@ public class RefreshSchedulesReceiver extends AwesomeBroadcastReceiver
 
         String action = intent.getAction();
         if (action != null) {
-            NotificationScheduler.refreshScheduleNotifications(context);
+            NotificationScheduler.refreshScheduledNotifications(context);
         }
     }
 }

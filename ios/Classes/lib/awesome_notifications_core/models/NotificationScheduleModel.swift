@@ -10,12 +10,12 @@ import Foundation
 public protocol NotificationScheduleModel : AbstractModel {
     
     /// Initial reference date from schedule
-    var createdDate:String? { get set }
+    var createdDate:RealDateTime? { get set }
     /// Initial reference date from schedule
-    var timeZone:String? { get set }
+    var timeZone:TimeZone? { get set }
     
     func getUNNotificationTrigger() -> UNNotificationTrigger?
     
     func hasNextValidDate() -> Bool
-    func getNextValidDate() -> Date?
+    func getNextValidDate() -> RealDateTime?
 }

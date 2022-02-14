@@ -1,7 +1,4 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
-import 'package:awesome_notifications/src/models/notification_schedule.dart';
-import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
 class NotificationCalendar extends NotificationSchedule {
   /// Field number for get and set indicating the era, e.g., AD or BC in the Julian calendar
@@ -100,22 +97,22 @@ class NotificationCalendar extends NotificationSchedule {
 
   @override
   NotificationCalendar? fromMap(Map<String, dynamic> dataMap) {
-    this.era =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_ERA, dataMap, int);
-    this.year =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_YEAR, dataMap, int);
-    this.month =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_MONTH, dataMap, int);
-    this.day =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_DAY, dataMap, int);
-    this.hour =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_HOUR, dataMap, int);
-    this.minute =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_MINUTE, dataMap, int);
-    this.second =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_SECOND, dataMap, int);
-    this.weekday =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SCHEDULE_WEEKDAY, dataMap, int);
+    this.era = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_ERA, dataMap, int);
+    this.year = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_YEAR, dataMap, int);
+    this.month = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_MONTH, dataMap, int);
+    this.day = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_DAY, dataMap, int);
+    this.hour = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_HOUR, dataMap, int);
+    this.minute = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_MINUTE, dataMap, int);
+    this.second = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_SECOND, dataMap, int);
+    this.weekday = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_WEEKDAY, dataMap, int);
     this.weekOfMonth = AwesomeAssertUtils.extractValue(
         NOTIFICATION_SCHEDULE_WEEKOFMONTH, dataMap, int);
     this.weekOfYear = AwesomeAssertUtils.extractValue(

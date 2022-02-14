@@ -40,16 +40,21 @@ public class PermissionManager {
 
     private final String TAG = "PermissionManager";
 
+    private final StringUtils stringUtils;
+
     // ************** SINGLETON PATTERN ***********************
 
     private static PermissionManager instance;
 
-    private PermissionManager(){
+    private PermissionManager(StringUtils stringUtils){
+        this.stringUtils = stringUtils;
     }
 
     public static PermissionManager getInstance() {
         if (instance == null)
-            instance = new PermissionManager();
+            instance = new PermissionManager(
+                StringUtils.getInstance()
+            );
         return instance;
     }
 
@@ -70,7 +75,7 @@ public class PermissionManager {
             return  permissionsAllowed;
 
         for (String permission : permissions) {
-            NotificationPermission permissionEnum = StringUtils.getEnumFromString(NotificationPermission.class, permission);
+            NotificationPermission permissionEnum = stringUtils.getEnumFromString(NotificationPermission.class, permission);
             if(
                 permissionEnum != null &&
                 isSpecifiedPermissionGloballyAllowed(context, permissionEnum) &&
@@ -303,7 +308,7 @@ public class PermissionManager {
 
             List<String> manifestPermissions = new ArrayList<String>();
             for (String permissionNeeded : permissionsNeedingRationale) {
-                NotificationPermission permissionEnum = StringUtils.getEnumFromString(NotificationPermission.class, permissionNeeded);
+                NotificationPermission permissionEnum = stringUtils.getEnumFromString(NotificationPermission.class, permissionNeeded);
                 String permissionCode = getManifestPermissionCode(permissionEnum);
 
                 if(permissionCode == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M || activity.shouldShowRequestPermissionRationale(permissionCode)) {
@@ -411,7 +416,7 @@ public class PermissionManager {
         try {
             if(!permissionsNeeded.isEmpty()) {
 
-                if (!StringUtils.isNullOrEmpty(channelKey)){
+                if (!stringUtils.isNullOrEmpty(channelKey)){
                     List<String> allowedPermissions = arePermissionsAllowed(
                             context,
                             (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) ?
@@ -443,8 +448,8 @@ public class PermissionManager {
         if(channelModel == null) return;
 
         for (String permission : permissionsNeeded) {
-            boolean isAllowed = isSpecifiedPermissionGloballyAllowed(context, StringUtils.getEnumFromString(NotificationPermission.class, permission));
-            NotificationPermission permissionEnum = StringUtils.getEnumFromString(NotificationPermission.class, permission);
+            boolean isAllowed = isSpecifiedPermissionGloballyAllowed(context, stringUtils.getEnumFromString(NotificationPermission.class, permission));
+            NotificationPermission permissionEnum = stringUtils.getEnumFromString(NotificationPermission.class, permission);
             setChannelPropertyThroughPermission(channelModel, permissionEnum, isAllowed);
         }
 

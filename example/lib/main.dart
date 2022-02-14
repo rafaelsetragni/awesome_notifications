@@ -14,11 +14,7 @@ import 'package:awesome_notifications_example/notifications/notifications_contro
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   NotificationController.initializeNotificationsPlugin();
-
-  // Uncomment those lines after activate google services inside example/android/build.gradle
-  // FirebaseController.initializeFirebasesPlugins();
 
   runApp(App());
 }

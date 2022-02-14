@@ -23,13 +23,15 @@ public class SharedManager<T extends AbstractModel> {
 
     private String reference;
     private String hashedReference = "default";
+    private StringUtils stringUtils;
 
-    public SharedManager(String fileIdentifier, Class<T> targetClass, String className){
+    public SharedManager(StringUtils stringUtils, String fileIdentifier, Class<T> targetClass, String className){
         this.clazz = targetClass;
+        this.stringUtils = stringUtils;
         this.className = className;
         this.reference = Definitions.SHARED_MANAGER +"."+ fileIdentifier +"."+ className;
         try {
-            hashedReference = StringUtils.digestString(reference);
+            hashedReference = stringUtils.digestString(reference);
             //Log.d(TAG, fileIdentifier+": file initialized = "+ hashedReference);
         } catch (Exception e) {
             this.hashedReference = reference;
@@ -107,7 +109,7 @@ public class SharedManager<T extends AbstractModel> {
             String json = shared.getString(sharedKey, null);
 
             T returnedObject = null;
-            if (!StringUtils.isNullOrEmpty(json)) {
+            if (!stringUtils.isNullOrEmpty(json)) {
                 T genericModel = clazz.newInstance();
 
                 AbstractModel parsedModel = genericModel.fromJson(json);

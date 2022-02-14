@@ -49,8 +49,8 @@ public class NotificationContentModel : AbstractModel {
     var createdSource: NotificationSource?
     var createdLifeCycle: NotificationLifeCycle?
     var displayedLifeCycle: NotificationLifeCycle?
-    var createdDate: String?
-    var displayedDate: String?
+    var createdDate: RealDateTime?
+    var displayedDate: RealDateTime?
     
     func registerCreateEvent(
         inLifeCycle lifeCycle: NotificationLifeCycle,
@@ -59,7 +59,9 @@ public class NotificationContentModel : AbstractModel {
         if(self.createdDate == nil){
             self.createdSource = createdSource
             self.createdLifeCycle = lifeCycle
-            self.createdDate = DateUtils.shared.getUTCTextDate()
+            self.createdDate =
+                    RealDateTime.init(
+                        fromTimeZone: RealDateTime.utcTimeZone)
             
             return true
         }
@@ -70,7 +72,9 @@ public class NotificationContentModel : AbstractModel {
         inLifeCycle lifeCycle: NotificationLifeCycle
     ){
         self.displayedLifeCycle = lifeCycle
-        self.displayedDate = DateUtils.shared.getUTCTextDate()
+        self.displayedDate =
+                RealDateTime.init(
+                    fromTimeZone: TimeZone(identifier: "UTC"))
     }
     
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
@@ -117,8 +121,8 @@ public class NotificationContentModel : AbstractModel {
         self.createdSource      = EnumUtils<NotificationSource>.getEnumOrDefault(reference: Definitions.NOTIFICATION_CREATED_SOURCE, arguments: arguments)
         self.createdLifeCycle   = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: Definitions.NOTIFICATION_CREATED_LIFECYCLE, arguments: arguments)
         self.displayedLifeCycle = EnumUtils<NotificationLifeCycle>.getEnumOrDefault(reference: Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE, arguments: arguments)
-        self.createdDate        = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_CREATED_DATE, arguments: arguments)
-        self.displayedDate      = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_DISPLAYED_DATE, arguments: arguments)
+        self.createdDate        = MapUtils<RealDateTime>.getRealDateOrDefault(reference: Definitions.NOTIFICATION_CREATED_DATE, arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
+        self.displayedDate      = MapUtils<RealDateTime>.getRealDateOrDefault(reference: Definitions.NOTIFICATION_DISPLAYED_DATE, arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
         
         self.payload  = MapUtils<[String:String?]>.getValueOrDefault(reference: Definitions.NOTIFICATION_PAYLOAD, arguments: arguments)
         
@@ -159,8 +163,8 @@ public class NotificationContentModel : AbstractModel {
         if(self.createdSource != nil){ mapData[Definitions.NOTIFICATION_CREATED_SOURCE] = self.createdSource?.rawValue }
         if(self.createdLifeCycle != nil){ mapData[Definitions.NOTIFICATION_CREATED_LIFECYCLE] = self.createdLifeCycle?.rawValue }
         if(self.displayedLifeCycle != nil){ mapData[Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE] = self.displayedLifeCycle?.rawValue }
-        if(self.createdDate != nil){ mapData[Definitions.NOTIFICATION_CREATED_DATE] = self.createdDate }
-        if(self.displayedDate != nil){ mapData[Definitions.NOTIFICATION_DISPLAYED_DATE] = self.displayedDate }
+        if(self.createdDate != nil){ mapData[Definitions.NOTIFICATION_CREATED_DATE] = self.createdDate!.description }
+        if(self.displayedDate != nil){ mapData[Definitions.NOTIFICATION_DISPLAYED_DATE] = self.displayedDate!.description  }
         if(self.payload != nil){ mapData[Definitions.NOTIFICATION_PAYLOAD] = self.payload }
 
         return mapData

@@ -8,15 +8,31 @@ import java.util.Objects;
 
 public class StringUtils {
 
-    public static Boolean isNullOrEmpty(String string){
+    public static final String TAG = "StringUtils";
+
+    // ************** SINGLETON PATTERN ***********************
+
+    protected static StringUtils instance;
+
+    protected StringUtils(){}
+
+    public static StringUtils getInstance() {
+        if (instance == null)
+            instance = new StringUtils();
+        return instance;
+    }
+
+    // ********************************************************
+
+    public Boolean isNullOrEmpty(String string){
         return string == null || string.trim().isEmpty();
     }
 
-    public static String getValueOrDefault(String value, String defaultValue){
+    public String getValueOrDefault(String value, String defaultValue){
         return isNullOrEmpty(value) ? defaultValue : value;
     }
 
-    public static String digestString(String reference){
+    public String digestString(String reference){
 
         MessageDigest md = null;
         final String MD5 = "MD5";
@@ -42,7 +58,7 @@ public class StringUtils {
         }
     }
 
-    public static <T extends Enum<T>> T getEnumFromString(Class<T> clazz, String string) {
+    public <T extends Enum<T>> T getEnumFromString(Class<T> clazz, String string) {
         if( clazz != null && string != null ) {
             try {
                 return Enum.valueOf(clazz, string.trim());
@@ -52,7 +68,7 @@ public class StringUtils {
         return null;
     }
 
-    public static String join(final Iterator<?> iterator, final String separator) {
+    public String join(final Iterator<?> iterator, final String separator) {
 
         // handle null, zero and one elements before building a buffer
         if (iterator == null) {

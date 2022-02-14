@@ -19,9 +19,9 @@ public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
 
         NotificationBuilder notificationBuilder = NotificationBuilder.getNewBuilder();
 
-        NotificationLifeCycle appLifeCycle =
-                LifeCycleManager
-                    .getApplicationLifeCycle();
+        NotificationLifeCycle appLifeCycle
+            = LifeCycleManager
+                .getApplicationLifeCycle();
 
         ActionReceived actionReceived
             = notificationBuilder
@@ -38,16 +38,17 @@ public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
         else
             actionReceived.registerUserActionEvent(appLifeCycle);
 
-        boolean shouldAutoDismiss =
-                        actionReceived.actionType == ActionType.DismissAction ||
-                        notificationBuilder
+        boolean shouldAutoDismiss
+                  = actionReceived.actionType == ActionType.DismissAction ||
+                    notificationBuilder
                             .notificationActionShouldAutoDismiss(actionReceived);
 
-        if(shouldAutoDismiss)
+        if(shouldAutoDismiss) {
             StatusBarManager
-                .getInstance(context)
-                .dismissNotification(actionReceived.id);
-        else
+                    .getInstance(context)
+                    .dismissNotification(actionReceived.id);
+        }
+        else {
             if (actionReceived.actionType != ActionType.KeepOnTop)
                 // All background notifications are or auto dismissible or keep on top since Android 12
                 // https://developer.android.com/about/versions/12/behavior-changes-all?hl=pt-br#close-system-dialogs-exceptions
@@ -55,6 +56,7 @@ public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
                     StatusBarManager
                             .getInstance(context)
                             .closeStatusBar();
+        }
 
         try {
 

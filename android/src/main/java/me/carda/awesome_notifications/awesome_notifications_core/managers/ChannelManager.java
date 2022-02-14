@@ -29,6 +29,7 @@ public class ChannelManager {
 
     private static final SharedManager<NotificationChannelModel> shared
             = new SharedManager<>(
+                    StringUtils.getInstance(),
                     "ChannelManager",
                     NotificationChannelModel.class,
                     "NotificationChannelModel");
@@ -36,19 +37,24 @@ public class ChannelManager {
     private static final String TAG = "ChannelManager";
 
 
+    private final StringUtils stringUtils;
     private final AudioUtils audioUtils;
 
     // ************** SINGLETON PATTERN ***********************
 
     private static ChannelManager instance;
 
-    private ChannelManager(AudioUtils audioUtils){
+    private ChannelManager(StringUtils stringUtils, AudioUtils audioUtils){
+        this.stringUtils = stringUtils;
         this.audioUtils = audioUtils;
     }
 
     public static ChannelManager getInstance() {
         if (instance == null)
-            instance = new ChannelManager(AudioUtils.getInstance());
+            instance = new ChannelManager(
+                StringUtils.getInstance(),
+                AudioUtils.getInstance()
+            );
         return instance;
     }
 
@@ -67,7 +73,7 @@ public class ChannelManager {
 
     public NotificationChannelModel getChannelByKey(Context context, String channelKey){
 
-        if(StringUtils.isNullOrEmpty(channelKey)) {
+        if(stringUtils.isNullOrEmpty(channelKey)) {
             if(AwesomeNotifications.debug)
                 Log.e(TAG, "'"+channelKey+"' cannot be empty or null");
             return null;
@@ -122,7 +128,7 @@ public class ChannelManager {
 
     public boolean isChannelEnabled(Context context, String channelKey){
 
-        if (StringUtils.isNullOrEmpty(channelKey)) return false;
+        if (stringUtils.isNullOrEmpty(channelKey)) return false;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
 
@@ -268,7 +274,7 @@ public class ChannelManager {
 
     public Uri retrieveSoundResourceUri(Context context, DefaultRingtoneType ringtoneType, String soundSource) {
         Uri uri = null;
-        if (StringUtils.isNullOrEmpty(soundSource)) {
+        if (stringUtils.isNullOrEmpty(soundSource)) {
 
             int defaultRingtoneKey;
             switch (ringtoneType){
@@ -365,7 +371,7 @@ public class ChannelManager {
         newAndroidNotificationChannel.setDescription(newChannel.channelDescription);
 
         NotificationChannelGroupModel channelGroup = null;
-        if(!StringUtils.isNullOrEmpty(newChannel.channelGroupKey)){
+        if(!stringUtils.isNullOrEmpty(newChannel.channelGroupKey)){
             channelGroup = ChannelGroupManager.getChannelGroupByKey(context, newChannel.channelGroupKey);
 
             if(channelGroup != null)
@@ -419,7 +425,7 @@ public class ChannelManager {
 
         notificationManager.deleteNotificationChannel(channelKey);
 
-        if(!StringUtils.isNullOrEmpty(newHashKey))
+        if(!stringUtils.isNullOrEmpty(newHashKey))
             notificationManager.deleteNotificationChannel(newHashKey);
     }
 }

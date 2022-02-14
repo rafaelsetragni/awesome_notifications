@@ -1,22 +1,49 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/src/enumerators/notification_layout.dart';
-import 'package:awesome_notifications/src/models/base_notification_content.dart';
-import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:flutter/material.dart';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/src/models/base_notification_content.dart';
 
 /// Main content of notification
 /// If notification has no [body] or [title], it will only be created, but not displayed to the user (background notification).
 class NotificationContent extends BaseNotificationContent {
-  bool? hideLargeIconOnExpand;
-  int? progress;
-  String? ticker;
+  bool? _hideLargeIconOnExpand;
+  int? _progress;
+  String? _ticker;
 
-  NotificationLayout? notificationLayout;
+  NotificationLayout? _notificationLayout;
 
-  bool? displayOnForeground;
-  bool? displayOnBackground;
+  bool? _displayOnForeground;
+  bool? _displayOnBackground;
 
-  bool? locked;
+  bool? _locked;
+
+  bool? get hideLargeIconOnExpand {
+    return _hideLargeIconOnExpand;
+  }
+
+  int? get progress {
+    return _progress;
+  }
+
+  String? get ticker {
+    return _ticker;
+  }
+
+  NotificationLayout? get notificationLayout {
+    return _notificationLayout;
+  }
+
+  bool? get displayOnForeground {
+    return _displayOnForeground;
+  }
+
+  bool? get displayOnBackground {
+    return _displayOnBackground;
+  }
+
+  bool? get locked {
+    return _locked;
+  }
 
   NotificationContent(
       {required int id,
@@ -25,30 +52,37 @@ class NotificationContent extends BaseNotificationContent {
       String? body,
       String? groupKey,
       String? summary,
-      bool? showWhen,
-      bool? wakeUpScreen,
-      bool? fullScreenIntent,
-      bool? criticalAlert,
-      bool? roundedLargeIcon,
-      bool? roundedBigPicture,
       String? icon,
       String? largeIcon,
       String? bigPicture,
       String? customSound,
-      bool? autoDismissible,
+      bool showWhen = true,
+      bool wakeUpScreen = false,
+      bool fullScreenIntent = false,
+      bool criticalAlert = false,
+      bool roundedLargeIcon = false,
+      bool roundedBigPicture = false,
+      bool autoDismissible = true,
       Color? color,
       Color? backgroundColor,
-      ActionType? actionType,
+      ActionType actionType = ActionType.Default,
+      NotificationLayout notificationLayout = NotificationLayout.Default,
       Map<String, String>? payload,
       NotificationCategory? category,
-      this.notificationLayout,
-      this.hideLargeIconOnExpand,
-      this.locked,
-      this.progress,
-      this.ticker,
-      this.displayOnForeground,
-      this.displayOnBackground})
-      : super(
+      bool hideLargeIconOnExpand = false,
+      bool locked = false,
+      int? progress,
+      String? ticker,
+      bool displayOnForeground = true,
+      bool displayOnBackground = true})
+      : _hideLargeIconOnExpand = hideLargeIconOnExpand,
+        _progress = progress,
+        _ticker = ticker,
+        _notificationLayout = notificationLayout,
+        _displayOnForeground = displayOnForeground,
+        _displayOnBackground = displayOnBackground,
+        _locked = locked,
+        super(
             id: id,
             channelKey: channelKey,
             groupKey: groupKey,
@@ -76,21 +110,22 @@ class NotificationContent extends BaseNotificationContent {
   NotificationContent? fromMap(Map<String, dynamic> mapData) {
     super.fromMap(mapData);
 
-    this.hideLargeIconOnExpand = AwesomeAssertUtils.extractValue(
+    _hideLargeIconOnExpand = AwesomeAssertUtils.extractValue(
         NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND, mapData, bool);
 
-    this.progress =
+    _progress =
         AwesomeAssertUtils.extractValue(NOTIFICATION_PROGRESS, mapData, int);
-    this.ticker =
+    _ticker =
         AwesomeAssertUtils.extractValue(NOTIFICATION_TICKER, mapData, String);
-    this.locked = AwesomeAssertUtils.extractValue(NOTIFICATION_LOCKED, mapData, bool);
+    _locked =
+        AwesomeAssertUtils.extractValue(NOTIFICATION_LOCKED, mapData, bool);
 
-    this.notificationLayout = AwesomeAssertUtils.extractEnum(
+    _notificationLayout = AwesomeAssertUtils.extractEnum(
         NOTIFICATION_LAYOUT, mapData, NotificationLayout.values);
 
-    this.displayOnForeground = AwesomeAssertUtils.extractValue(
+    _displayOnForeground = AwesomeAssertUtils.extractValue(
         NOTIFICATION_DISPLAY_ON_FOREGROUND, mapData, bool);
-    this.displayOnBackground = AwesomeAssertUtils.extractValue(
+    _displayOnBackground = AwesomeAssertUtils.extractValue(
         NOTIFICATION_DISPLAY_ON_BACKGROUND, mapData, bool);
 
     try {
@@ -108,13 +143,14 @@ class NotificationContent extends BaseNotificationContent {
 
     dataMap = dataMap
       ..addAll({
-        NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND: hideLargeIconOnExpand,
-        NOTIFICATION_PROGRESS: progress,
-        NOTIFICATION_TICKER: ticker,
-        NOTIFICATION_LOCKED: locked,
-        NOTIFICATION_LAYOUT: AwesomeAssertUtils.toSimpleEnumString(notificationLayout),
-        NOTIFICATION_DISPLAY_ON_FOREGROUND: displayOnForeground,
-        NOTIFICATION_DISPLAY_ON_BACKGROUND: displayOnBackground,
+        NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND: _hideLargeIconOnExpand,
+        NOTIFICATION_PROGRESS: _progress,
+        NOTIFICATION_TICKER: _ticker,
+        NOTIFICATION_LOCKED: _locked,
+        NOTIFICATION_LAYOUT:
+            AwesomeAssertUtils.toSimpleEnumString(_notificationLayout),
+        NOTIFICATION_DISPLAY_ON_FOREGROUND: _displayOnForeground,
+        NOTIFICATION_DISPLAY_ON_BACKGROUND: _displayOnBackground,
       });
     return dataMap;
   }
