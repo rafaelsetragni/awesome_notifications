@@ -139,7 +139,7 @@ public class NotificationBuilder {
     }
 
     @SuppressWarnings("unchecked")
-    public Notification createNewAndroidNotification(Context context, NotificationModel notificationModel) throws AwesomeNotificationsException {
+    public Notification createNewAndroidNotification(Context context, Intent originalIntent, NotificationModel notificationModel) throws AwesomeNotificationsException {
 
         NotificationChannelModel channelModel =
                 ChannelManager
@@ -159,6 +159,7 @@ public class NotificationBuilder {
         NotificationCompat.Builder builder =
                 getNotificationBuilderFromModel(
                     context,
+                    originalIntent,
                     channelModel,
                     notificationModel);
 
@@ -179,6 +180,7 @@ public class NotificationBuilder {
 
     public Intent buildNotificationIntentFromNotificationModel(
             Context context,
+            Intent originalIntent,
             String ActionReference,
             NotificationModel notificationModel,
             NotificationChannelModel channel,
@@ -186,6 +188,10 @@ public class NotificationBuilder {
             Class targetClass
     ) {
         Intent intent = new Intent(context, targetClass);
+
+        // Preserves analytics extras
+        if(originalIntent != null)
+            intent.putExtras(originalIntent.getExtras());
 
         intent.setAction(ActionReference);
 
@@ -207,11 +213,16 @@ public class NotificationBuilder {
 
     public Intent buildNotificationIntentFromActionModel(
             Context context,
+            Intent originalIntent,
             String ActionReference,
             ActionReceived actionReceived,
             Class<?> targetAction
     ) {
         Intent intent = new Intent(context, targetAction);
+
+        // Preserves analytics extras
+        if(originalIntent != null)
+            intent.putExtras(originalIntent.getExtras());
 
         intent.setAction(ActionReference);
 
@@ -226,11 +237,17 @@ public class NotificationBuilder {
         return intent;
     }
 
-    private PendingIntent getPendingActionIntent(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel) {
+    private PendingIntent getPendingActionIntent(
+            Context context,
+            Intent originalIntent,
+            NotificationModel notificationModel,
+            NotificationChannelModel channelModel
+    ){
         ActionType actionType = notificationModel.content.actionType;
 
         Intent actionIntent = buildNotificationIntentFromNotificationModel(
                 context,
+                originalIntent,
                 Definitions.SELECT_NOTIFICATION,
                 notificationModel,
                 channelModel,
@@ -250,9 +267,15 @@ public class NotificationBuilder {
                             PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private PendingIntent getPendingDismissIntent(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel) {
+    private PendingIntent getPendingDismissIntent(
+            Context context,
+            Intent originalIntent,
+            NotificationModel notificationModel,
+            NotificationChannelModel channelModel
+    ){
         Intent deleteIntent = buildNotificationIntentFromNotificationModel(
                 context,
+                originalIntent,
                 Definitions.DISMISSED_NOTIFICATION,
                 notificationModel,
                 channelModel,
@@ -492,9 +515,17 @@ public class NotificationBuilder {
         }
     }
 
-    private NotificationCompat.Builder getNotificationBuilderFromModel(Context context, NotificationChannelModel channel, NotificationModel notificationModel) throws AwesomeNotificationsException {
+    private NotificationCompat.Builder getNotificationBuilderFromModel(
+            Context context,
+            Intent originalIntent,
+            NotificationChannelModel channel,
+            NotificationModel notificationModel
+    ) throws AwesomeNotificationsException {
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, notificationModel.content.channelKey);
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(
+                        context,
+                        notificationModel.content.channelKey);
 
         setChannelKey(context, channel, builder);
         setNotificationId(notificationModel);
@@ -523,13 +554,15 @@ public class NotificationBuilder {
         setLargeIcon(context, notificationModel, builder);
         setLayoutColor(context, notificationModel, channel, builder);
 
-        PendingIntent pendingActionIntent = getPendingActionIntent(context, notificationModel, channel);
-        PendingIntent pendingDismissIntent = getPendingDismissIntent(context, notificationModel, channel);
+        PendingIntent pendingActionIntent =
+                getPendingActionIntent(context, originalIntent, notificationModel, channel);
+        PendingIntent pendingDismissIntent =
+                getPendingDismissIntent(context, originalIntent, notificationModel, channel);
 
         setFullScreenIntent(context, pendingActionIntent, notificationModel, builder);
 
         setNotificationPendingIntents(notificationModel, pendingActionIntent, pendingDismissIntent, builder);
-        createActionButtons(context, notificationModel, channel, builder);
+        createActionButtons(context, originalIntent, notificationModel, channel, builder);
 
         return builder;
     }
@@ -731,8 +764,13 @@ public class NotificationBuilder {
 
     @SuppressLint("WrongConstant")
     @NonNull
-    public void createActionButtons(Context context, NotificationModel notificationModel, NotificationChannelModel channel, NotificationCompat.Builder builder) {
-
+    public void createActionButtons(
+            Context context,
+            Intent originalIntent,
+            NotificationModel notificationModel,
+            NotificationChannelModel channel,
+            NotificationCompat.Builder builder
+    ){
         if (ListUtils.isNullOrEmpty(notificationModel.actionButtons)) return;
 
         for (NotificationButtonModel buttonProperties : notificationModel.actionButtons) {
@@ -747,6 +785,7 @@ public class NotificationBuilder {
 
             Intent actionIntent = buildNotificationIntentFromNotificationModel(
                     context,
+                    originalIntent,
                     Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX + "_" + buttonProperties.key,
                     notificationModel,
                     channel,

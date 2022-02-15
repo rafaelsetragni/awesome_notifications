@@ -164,7 +164,7 @@ public class NotificationForegroundSender extends NotificationThread<String, Voi
             ){
 
                 Notification androidNotification = notificationBuilder
-                        .createNewAndroidNotification(context, notificationModel);
+                        .createNewAndroidNotification(context, null, notificationModel);
 
                 if (
                     androidNotification != null &&

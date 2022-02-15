@@ -74,7 +74,7 @@ Future<bool> receiveSilentAction(Map<String, dynamic> arguments) async {
     = PluginUtilities.getCallbackFromHandle(actionCallbackHandle) as ActionHandler?;
 
   if (onActionDataHandle == null) {
-    throw IsolateCallbackException('could not find action callback');
+    throw IsolateCallbackException('Could not find a valid action callback. Certifies that your action method is global and static.');
   }
 
   Map<String, dynamic> actionMap = Map<String, dynamic>.from(arguments);

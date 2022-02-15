@@ -142,13 +142,14 @@ public class BroadcastSender {
             }
     }
 
-    public static void enqueueSilentAction(Context context, String previousAction, ActionReceived actionReceived){
+    public static void enqueueSilentAction(Context context, String previousAction, ActionReceived actionReceived, Intent originalIntent){
 
         Intent serviceIntent =
                 NotificationBuilder
                         .getNewBuilder()
                         .buildNotificationIntentFromActionModel(
                                 context,
+                                originalIntent,
                                 previousAction,
                                 actionReceived,
                                 BackgroundService.class);
@@ -160,13 +161,14 @@ public class BroadcastSender {
                 serviceIntent);
     }
 
-    public static void enqueueSilentBackgroundAction(Context context, String previousAction, ActionReceived actionReceived){
+    public static void enqueueSilentBackgroundAction(Context context, String previousAction, ActionReceived actionReceived, Intent originalIntent){
 
         Intent serviceIntent =
                 NotificationBuilder
                         .getNewBuilder()
                         .buildNotificationIntentFromActionModel(
                                 context,
+                                originalIntent,
                                 previousAction,
                                 actionReceived,
                                 BackgroundService.class);

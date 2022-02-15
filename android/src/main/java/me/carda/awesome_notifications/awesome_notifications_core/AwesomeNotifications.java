@@ -572,7 +572,8 @@ public class AwesomeNotifications
                         NotificationBuilder.getNewBuilder(),
                         NotificationSource.Local,
                         AwesomeNotifications.getApplicationLifeCycle(),
-                        notificationModel);
+                        notificationModel,
+                        null);
         else
             NotificationScheduler
                     .schedule(

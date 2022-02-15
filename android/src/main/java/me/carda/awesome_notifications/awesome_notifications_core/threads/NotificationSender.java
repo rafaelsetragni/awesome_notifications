@@ -2,6 +2,7 @@ package me.carda.awesome_notifications.awesome_notifications_core.threads;
 
 import android.app.Notification;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
@@ -32,6 +33,7 @@ public class NotificationSender extends NotificationThread<String, Void, Notific
     private final NotificationBuilder notificationBuilder;
     private final NotificationSource createdSource;
     private final NotificationLifeCycle appLifeCycle;
+    private final Intent originalIntent;
 
     private NotificationModel notificationModel;
 
@@ -56,7 +58,8 @@ public class NotificationSender extends NotificationThread<String, Void, Notific
                 notificationBuilder,
                 notificationModel.content.createdSource,
                 appLifeCycle,
-                notificationModel);
+                notificationModel,
+                null);
     }
 
     public static void send(
@@ -64,7 +67,8 @@ public class NotificationSender extends NotificationThread<String, Void, Notific
         NotificationBuilder notificationBuilder,
         NotificationSource createdSource,
         NotificationLifeCycle appLifeCycle,
-        NotificationModel notificationModel
+        NotificationModel notificationModel,
+        Intent originalIntent
     ) throws AwesomeNotificationsException {
 
         if (notificationModel == null )
@@ -76,7 +80,8 @@ public class NotificationSender extends NotificationThread<String, Void, Notific
             notificationBuilder,
             appLifeCycle,
             createdSource,
-            notificationModel
+            notificationModel,
+            originalIntent
         ).executeNotificationThread(notificationModel);
     }
 
@@ -86,13 +91,16 @@ public class NotificationSender extends NotificationThread<String, Void, Notific
             NotificationBuilder notificationBuilder,
             NotificationLifeCycle appLifeCycle,
             NotificationSource createdSource,
-            NotificationModel notificationModel
+            NotificationModel notificationModel,
+            Intent originalIntent
     ){
         this.wContextReference = new WeakReference<>(context);
         this.notificationBuilder = notificationBuilder;
         this.createdSource = createdSource;
         this.appLifeCycle = appLifeCycle;
         this.notificationModel = notificationModel;
+        this.originalIntent = originalIntent;
+
         this.startTime = System.nanoTime();
         this.stringUtils = stringUtils;
     }
@@ -194,7 +202,7 @@ public class NotificationSender extends NotificationThread<String, Void, Notific
 
                 Notification notification =
                         notificationBuilder
-                            .createNewAndroidNotification(context, notificationModel);
+                            .createNewAndroidNotification(context, null, notificationModel);
 
                 if(
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
@@ -206,7 +214,7 @@ public class NotificationSender extends NotificationThread<String, Void, Notific
                     NotificationModel pushSummary = _buildSummaryGroupNotification(notificationModel);
                     Notification summaryNotification =
                             notificationBuilder
-                                    .createNewAndroidNotification(context, pushSummary);
+                                    .createNewAndroidNotification(context, null, pushSummary);
 
                     StatusBarManager
                         .getInstance(context)

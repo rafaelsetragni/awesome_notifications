@@ -81,7 +81,8 @@ public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
                         BroadcastSender.enqueueSilentAction(
                                 context,
                                 intent.getAction(),
-                                actionReceived);
+                                actionReceived,
+                                intent);
                     break;
 
                 case SilentAction:
@@ -93,14 +94,16 @@ public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
                         BroadcastSender.enqueueSilentAction(
                                 context,
                                 intent.getAction(),
-                                actionReceived);
+                                actionReceived,
+                                intent);
                     break;
 
                 case SilentBackgroundAction:
                     BroadcastSender.enqueueSilentBackgroundAction(
                             context,
                             intent.getAction(),
-                            actionReceived);
+                            actionReceived,
+                            intent);
                     break;
 
                 case DismissAction:

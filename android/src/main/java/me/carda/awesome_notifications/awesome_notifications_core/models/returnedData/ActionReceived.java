@@ -1,9 +1,11 @@
 package me.carda.awesome_notifications.awesome_notifications_core.models.returnedData;
 
+import java.util.Calendar;
 import java.util.Map;
 
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationLifeCycle;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationContentModel;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.MapUtils;
@@ -19,8 +21,8 @@ public class ActionReceived extends NotificationReceived {
 
     public NotificationLifeCycle actionLifeCycle;
     public NotificationLifeCycle dismissedLifeCycle;
-    public String actionDate;
-    public String dismissedDate;
+    public Calendar actionDate;
+    public Calendar dismissedDate;
 
     public ActionReceived(){}
 
@@ -63,13 +65,27 @@ public class ActionReceived extends NotificationReceived {
     }
 
     public void registerUserActionEvent(NotificationLifeCycle lifeCycle){
-        this.actionDate = CalendarUtils.getInstance().getNowStringCalendar();
-        this.actionLifeCycle = lifeCycle;
+        CalendarUtils calendarUtils = CalendarUtils.getInstance();
+        try {
+            this.actionLifeCycle = lifeCycle;
+            this.actionDate =
+                calendarUtils.getCurrentCalendar(
+                        calendarUtils.getUtcTimeZone());
+        } catch (AwesomeNotificationsException e) {
+            e.printStackTrace();
+        }
     }
 
     public void registerDismissedEvent(NotificationLifeCycle lifeCycle){
-        this.dismissedDate = CalendarUtils.getInstance().getNowStringCalendar();
-        this.dismissedLifeCycle = lifeCycle;
+        CalendarUtils calendarUtils = CalendarUtils.getInstance();
+        try {
+            this.dismissedLifeCycle = lifeCycle;
+            this.dismissedDate =
+                    calendarUtils.getCurrentCalendar(
+                            calendarUtils.getUtcTimeZone());
+        } catch (AwesomeNotificationsException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -84,8 +100,8 @@ public class ActionReceived extends NotificationReceived {
 
         returnedObject.put(Definitions.NOTIFICATION_BUTTON_KEY_PRESSED, this.buttonKeyPressed);
         returnedObject.put(Definitions.NOTIFICATION_BUTTON_KEY_INPUT, this.buttonKeyInput);
-        returnedObject.put(Definitions.NOTIFICATION_ACTION_DATE, this.actionDate);
-        returnedObject.put(Definitions.NOTIFICATION_DISMISSED_DATE, this.dismissedDate);
+        returnedObject.put(Definitions.NOTIFICATION_ACTION_DATE,  CalendarUtils.getInstance().calendarToString(this.actionDate));
+        returnedObject.put(Definitions.NOTIFICATION_DISMISSED_DATE, CalendarUtils.getInstance().calendarToString(this.dismissedDate));
 
         return returnedObject;
     }
@@ -96,8 +112,8 @@ public class ActionReceived extends NotificationReceived {
 
         buttonKeyPressed = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_BUTTON_KEY_PRESSED, String.class).orNull();
         buttonKeyInput = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_BUTTON_KEY_INPUT, String.class).orNull();
-        actionDate    = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_ACTION_DATE, String.class).orNull();
-        dismissedDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_DISMISSED_DATE, String.class).orNull();
+        actionDate    = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_ACTION_DATE, Calendar.class).orNull();
+        dismissedDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_DISMISSED_DATE, Calendar.class).orNull();
 
         actionLifeCycle = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_ACTION_LIFECYCLE,
                 NotificationLifeCycle.class, NotificationLifeCycle.values());

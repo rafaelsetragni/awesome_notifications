@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:awesome_notifications_example/common_widgets/led_light.dart';
 import 'package:awesome_notifications_example/common_widgets/seconds_slider.dart';
-//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide DateUtils;
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -28,8 +27,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String _firebaseAppToken = '';
-  //String _oneSignalToken = '';
 
   bool delayLEDTests = false;
   double _secondsToWakeUp = 5;
@@ -131,13 +128,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    // Uncomment those lines after activate google services inside example/android/build.gradle
-    // initializeFirebaseService();
-
-    // If you pretend to use the firebase service, you need to initialize it
-    // getting a valid token
-    // initializeFirebaseService();
-
     for(NotificationPermission permission in channelPermissions){
       scheduleChannelPermissions[permission] = false;
     }
@@ -202,68 +192,7 @@ class _HomePageState extends State<HomePage> {
     AwesomeNotifications().actionSink.close();
     super.dispose();
   }
-/*
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initializeFirebaseService() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-    String firebaseAppToken = await messaging.getToken(
-          // https://stackoverflow.com/questions/54996206/firebase-cloud-messaging-where-to-find-public-vapid-key
-          vapidKey: '',
-        ) ??
-        '';
-
-    if (StringUtils.isNullOrEmpty(firebaseAppToken,
-        considerWhiteSpaceAsEmpty: true)) return;
-
-    if (!mounted) {
-      _firebaseAppToken = firebaseAppToken;
-    } else {
-      setState(() {
-        _firebaseAppToken = firebaseAppToken;
-      });
-    }
-
-    print('Firebase token: $firebaseAppToken');
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
-
-      if (
-          // This step (if condition) is only necessary if you pretend to use the
-          // test page inside console.firebase.google.com
-          !StringUtils.isNullOrEmpty(message.notification?.title,
-                  considerWhiteSpaceAsEmpty: true) ||
-              !StringUtils.isNullOrEmpty(message.notification?.body,
-                  considerWhiteSpaceAsEmpty: true)) {
-        print('Message also contained a notification: ${message.notification}');
-
-        String? imageUrl;
-        imageUrl ??= message.notification!.android?.imageUrl;
-        imageUrl ??= message.notification!.apple?.imageUrl;
-
-        // https://pub.dev/packages/awesome_notifications#notification-types-values-and-defaults
-        Map<String, dynamic> notificationAdapter = {
-          NOTIFICATION_CONTENT: {
-            NOTIFICATION_ID: Random().nextInt(2147483647),
-            NOTIFICATION_CHANNEL_KEY: 'basic_channel',
-            NOTIFICATION_TITLE: message.notification!.title,
-            NOTIFICATION_BODY: message.notification!.body,
-            NOTIFICATION_LAYOUT:
-                StringUtils.isNullOrEmpty(imageUrl) ? 'Default' : 'BigPicture',
-            NOTIFICATION_BIG_PICTURE: imageUrl
-          }
-        };
-
-        AwesomeNotifications()
-            .createNotificationFromJsonData(notificationAdapter);
-      } else {
-        AwesomeNotifications().createNotificationFromJsonData(message.data);
-      }
-    });
-  }
-*/
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -298,20 +227,6 @@ class _HomePageState extends State<HomePage> {
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: () => NotificationUtils.cancelNotification(30)),
-
-            TextDivisor(title: 'Push Service Status'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                ServiceControlPanel('Firebase',
-                    !AwesomeStringUtils.isNullOrEmpty(_firebaseAppToken), themeData,
-                    onPressed: () => Navigator.pushNamed(
-                        context, PAGE_FIREBASE_TESTS,
-                        arguments: _firebaseAppToken)),
-              ],
-            ),
-            TextNote(
-                'Is not necessary to use Firebase (or other) services to use local notifications. But all they can be used simultaneously.'),
 
             /* ******************************************************************** */
 

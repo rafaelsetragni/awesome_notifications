@@ -47,9 +47,9 @@ void main() {
     expect(null, AwesomeAssertUtils.extractValue("test", {"test": 0}, String));
     expect(null, AwesomeAssertUtils.extractValue("test", {"test": null}, String));
 
-    expect(true, AssertUtils.extractValue("test", {"test": true}, bool));
-    expect(true, AssertUtils.extractValue("test", {"test": "true"}, bool));
-    expect(false, AssertUtils.extractValue("test", {"test": "false"}, bool));
+    expect(true, AwesomeAssertUtils.extractValue("test", {"test": true}, bool));
+    expect(true, AwesomeAssertUtils.extractValue("test", {"test": "true"}, bool));
+    expect(false, AwesomeAssertUtils.extractValue("test", {"test": "false"}, bool));
   });
 
   test('extractEnumTest', () async {
