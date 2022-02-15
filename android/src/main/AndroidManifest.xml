@@ -10,13 +10,14 @@
         <receiver android:name=".awesome_notifications_core.broadcasters.receivers.DismissedNotificationReceiver"
             android:exported="false"/>
         <receiver android:name=".awesome_notifications_core.broadcasters.receivers.ScheduledNotificationReceiver"
-            android:exported="false"/>
+            android:exported="true"/>
         <receiver android:name=".awesome_notifications_core.broadcasters.receivers.NotificationActionReceiver"
             android:exported="false"/>
 
         <receiver
             android:name=".awesome_notifications_core.broadcasters.receivers.RefreshSchedulesReceiver"
-            android:exported="false">
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

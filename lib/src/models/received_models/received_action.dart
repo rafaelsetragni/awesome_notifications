@@ -5,7 +5,6 @@ import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
 /// All received details of a user action over a Notification
 class ReceivedAction extends ReceivedNotification {
-
   NotificationLifeCycle? actionLifeCycle;
   NotificationLifeCycle? dismissedLifeCycle;
 
@@ -28,10 +27,10 @@ class ReceivedAction extends ReceivedNotification {
         dataMap,
         NotificationLifeCycle.values);
 
-    actionDate =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_ACTION_DATE, dataMap, DateTime);
-    dismissedDate =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_DISMISSED_DATE, dataMap, DateTime);
+    actionDate = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_ACTION_DATE, dataMap, DateTime);
+    dismissedDate = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_DISMISSED_DATE, dataMap, DateTime);
 
     buttonKeyPressed = AwesomeAssertUtils.extractValue(
         NOTIFICATION_BUTTON_KEY_PRESSED, dataMap, String);

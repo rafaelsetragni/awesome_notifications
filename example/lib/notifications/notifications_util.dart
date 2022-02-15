@@ -192,7 +192,7 @@ class NotificationUtils {
                   fit: BoxFit.fitWidth,
                 ),
                 Text(
-                  'To proceede, you need to enable the permissions above'+
+                  'To proceed, you need to enable the permissions above'+
                       (channelKey?.isEmpty ?? true ? '' : ' on channel $channelKey')+':',
                   maxLines: 2,
                   textAlign: TextAlign.center,
@@ -308,16 +308,20 @@ class NotificationUtils {
   /* *********************************************
       BASIC NOTIFICATIONS
   ************************************************ */
-  
+
   static Future<void> showBasicNotification(int id) async {
     await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: id,
-        channelKey: 'basic_channel',
-        title: 'Simple Notification',
-        body: 'Simple body'
-      )
+        content: NotificationContent(
+            id: id,
+            channelKey: 'basic_channel',
+            title: 'Simple Notification',
+            body: 'Simple body'
+        )
     );
+  }
+
+  static Future<void> showNotificationFromJson(Map<String, Object> jsonData) async {
+    await AwesomeNotifications().createNotificationFromJsonData(jsonData);
   }
   
   static Future<void> showEmojiNotification(int id) async {

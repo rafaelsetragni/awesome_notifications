@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:developer' as developer;
 
 import 'package:awesome_notifications/src/definitions.dart';
 import 'package:awesome_notifications/src/enumerators/action_type.dart';
@@ -89,15 +90,9 @@ class NotificationActionButton extends Model {
     _adaptInputFieldToRequireText();
   }
 
-  void _adaptInputFieldToRequireText() {
-    if (_actionType == ActionType.InputField) {
-      _requireInputText = true;
-      _actionType = ActionType.SilentAction;
-    }
-  }
-
   @override
   NotificationActionButton? fromMap(Map<String, dynamic> dataMap) {
+    _processRetroCompatibility(dataMap);
     _key = AwesomeAssertUtils.extractValue(NOTIFICATION_KEY, dataMap, String);
     _icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, dataMap, String);
     _label = AwesomeAssertUtils.extractValue(
@@ -119,6 +114,32 @@ class NotificationActionButton extends Model {
         AwesomeAssertUtils.extractValue(NOTIFICATION_COLOR, dataMap, Color);
 
     return this;
+  }
+
+  void _processRetroCompatibility(Map<String, dynamic> dataMap) {
+    if (dataMap.containsKey("autoCancel")) {
+      developer
+          .log("autoCancel is deprecated. Please use autoDismissible instead.");
+      _autoDismissible =
+          AwesomeAssertUtils.extractValue("autoCancel", dataMap, bool);
+    }
+
+    if (dataMap.containsKey("buttonType")) {
+      developer.log("buttonType is deprecated. Please use actionType instead.");
+      _actionType = AwesomeAssertUtils.extractEnum(
+          "buttonType", dataMap, ActionType.values);
+    }
+
+    _adaptInputFieldToRequireText();
+  }
+
+  void _adaptInputFieldToRequireText() {
+    if (_actionType == ActionType.InputField) {
+      developer.log(
+          "InputField is deprecated. Please use requireInputText instead.");
+      _requireInputText = true;
+      _actionType = ActionType.SilentAction;
+    }
   }
 
   @override

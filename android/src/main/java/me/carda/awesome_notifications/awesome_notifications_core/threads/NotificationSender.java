@@ -120,15 +120,15 @@ public class NotificationSender extends NotificationThread<String, Void, Notific
                                 appLifeCycle,
                                 createdSource);
 
-                displayed = notificationModel
-                            .content
-                            .registerDisplayedEvent(
-                                appLifeCycle);
-
                 if (
                     !stringUtils.isNullOrEmpty(notificationModel.content.title) ||
                     !stringUtils.isNullOrEmpty(notificationModel.content.body)
                 ){
+                    displayed = notificationModel
+                            .content
+                            .registerDisplayedEvent(
+                                    appLifeCycle);
+
                     notificationModel = showNotification(
                             wContextReference.get(),
                             notificationModel);

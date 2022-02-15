@@ -163,6 +163,10 @@ public class NotificationActionReceiver {
             case .DisabledAction:
                 completionHandler(true)
                 break
+            
+            default:
+                completionHandler(true)
+                break
         }
     }
     

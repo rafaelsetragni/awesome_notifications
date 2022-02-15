@@ -271,6 +271,8 @@ class Definitions {
     NOTIFICATION_ACTION_TYPE: ActionType.Default,
     NOTIFICATION_PRIVACY: NotificationPrivacy.Private,
     NOTIFICATION_DEFAULT_RINGTONE_TYPE: DefaultRingtoneType.Notification,
+    NOTIFICATION_DISPLAY_ON_FOREGROUND: true,
+    NOTIFICATION_DISPLAY_ON_BACKGROUND: true,
     NOTIFICATION_CHANNEL_DESCRIPTION: 'Notifications',
     NOTIFICATION_CHANNEL_NAME: 'Notifications',
     NOTIFICATION_SHOW_WHEN: true,

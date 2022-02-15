@@ -1,6 +1,7 @@
 package me.carda.awesome_notifications.awesome_notifications_core.models;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -101,6 +102,10 @@ public class NotificationContentModel extends AbstractModel {
 
     @Override
     public NotificationContentModel fromMap(Map<String, Object> arguments) {
+        if(arguments == null || arguments.isEmpty())
+            return null;
+
+        processRetroCompatibility(arguments);
 
         id = getValueOrDefault(arguments, Definitions.NOTIFICATION_ID, Integer.class);
 
@@ -176,6 +181,15 @@ public class NotificationContentModel extends AbstractModel {
         roundedBigPicture = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, Boolean.class);
 
         return this;
+    }
+
+    // Retro-compatibility with 0.6.X
+    public void processRetroCompatibility(Map<String, Object> arguments){
+
+        if (arguments.containsKey("autoCancel")) {
+            Log.i("AwesomeNotifications", "autoCancel is deprecated. Please use autoDismissible instead.");
+            autoDismissible   = getValueOrDefault(arguments, "autoCancel", Boolean.class);
+        }
     }
 
     @Override

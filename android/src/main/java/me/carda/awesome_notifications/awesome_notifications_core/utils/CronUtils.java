@@ -38,7 +38,7 @@ public final class CronUtils {
                         cronExpression
                                 .getNextValidTimeAfter(fixedNowDate.getTime());
 
-                Calendar delayedNow = applyToleranceDate(fixedNowDate, -1);
+                Calendar delayedNow = applyToleranceDate(fixedNowDate);
                 if (nextSchedule != null && nextSchedule.compareTo(delayedNow.getTime()) >= 0) {
 
                     Calendar calendar = Calendar.getInstance();
@@ -60,9 +60,9 @@ public final class CronUtils {
     }
 
     /// Processing time tolerance
-    public static Calendar applyToleranceDate(Calendar initialScheduleDay, int amount) {
+    public static Calendar applyToleranceDate(Calendar initialScheduleDay) {
         Calendar shifted = (Calendar) initialScheduleDay.clone();
-        shifted.add(Calendar.SECOND, amount);
+        shifted.set(Calendar.MILLISECOND, 0);
         return shifted;
     }
 }

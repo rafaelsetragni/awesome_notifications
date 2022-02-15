@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -164,6 +165,8 @@ class BaseNotificationContent extends Model {
 
   @override
   BaseNotificationContent? fromMap(Map<String, dynamic> mapData) {
+    _processRetroCompatibility(mapData);
+
     _id = AwesomeAssertUtils.extractValue(NOTIFICATION_ID, mapData, int);
     _channelKey = AwesomeAssertUtils.extractValue(
         NOTIFICATION_CHANNEL_KEY, mapData, String);
@@ -215,6 +218,15 @@ class BaseNotificationContent extends Model {
         mapData, NOTIFICATION_PAYLOAD);
 
     return this;
+  }
+
+  void _processRetroCompatibility(Map<String, dynamic> dataMap) {
+    if (dataMap.containsKey("autoCancel")) {
+      developer
+          .log("autoCancel is deprecated. Please use autoDismissible instead.");
+      _autoDismissible =
+          AwesomeAssertUtils.extractValue("autoCancel", dataMap, bool);
+    }
   }
 
   @override

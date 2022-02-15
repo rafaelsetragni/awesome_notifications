@@ -6,5 +6,7 @@ public enum ActionType {
     KeepOnTop,
     SilentAction,
     SilentBackgroundAction,
-    DismissAction
+    DismissAction,
+    @Deprecated
+    InputField,
 }

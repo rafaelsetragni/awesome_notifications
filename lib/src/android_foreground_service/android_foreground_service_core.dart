@@ -34,22 +34,23 @@ class AndroidForegroundService {
   /// Note that `foregroundServiceType` must be a subset of the `android:foregroundServiceType` defined in your `AndroidManifest.xml`!
   ///
   /// On any platform other than Android, this is a no-op and does nothing, so it is safe to call it without a platform check.
-  @Deprecated("This method is deprecated. You should use startAndroidForegroundService instead.")
+  @Deprecated(
+      "This method is deprecated. You should use startAndroidForegroundService instead.")
   static Future<void> startForeground(
       {required NotificationContent content,
-        List<NotificationActionButton>? actionButtons,
-        int startType = AndroidForegroundServiceConstants.startSticky,
-        int? foregroundServiceType}) async {
+      List<NotificationActionButton>? actionButtons,
+      int startType = AndroidForegroundServiceConstants.startSticky,
+      int? foregroundServiceType}) async {
     if (Platform.isAndroid) {
       startAndroidForegroundService(
-          content: content,
-          actionButtons: actionButtons,
-          foregroundStartMode:
-              AndroidForegroundServiceConstants
-                  .startModeFromAndroidValues(startType),
-          foregroundServiceType:
-              AndroidForegroundServiceConstants
-                  .serviceTypeFromAndroidValues(foregroundServiceType ?? 0),
+        content: content,
+        actionButtons: actionButtons,
+        foregroundStartMode:
+            AndroidForegroundServiceConstants.startModeFromAndroidValues(
+                startType),
+        foregroundServiceType:
+            AndroidForegroundServiceConstants.serviceTypeFromAndroidValues(
+                foregroundServiceType ?? 0),
       );
     }
   }
@@ -73,19 +74,21 @@ class AndroidForegroundService {
   /// Note that `foregroundServiceType` must be a subset of the `android:foregroundServiceType` defined in your `AndroidManifest.xml`!
   ///
   /// On any platform other than Android, this is a no-op and does nothing, so it is safe to call it without a platform check.
-  static Future<void> startAndroidForegroundService({
-        required NotificationContent content,
-        List<NotificationActionButton>? actionButtons,
-        ForegroundStartMode foregroundStartMode = ForegroundStartMode.stick,
-        ForegroundServiceType foregroundServiceType = ForegroundServiceType.none
-      }) async {
+  static Future<void> startAndroidForegroundService(
+      {required NotificationContent content,
+      List<NotificationActionButton>? actionButtons,
+      ForegroundStartMode foregroundStartMode = ForegroundStartMode.stick,
+      ForegroundServiceType foregroundServiceType =
+          ForegroundServiceType.none}) async {
     if (Platform.isAndroid) {
       await _channel.invokeMethod(CHANNEL_METHOD_START_FOREGROUND, {
         FOREGROUND_NOTIFICATION_MODEL:
-        NotificationModel(content: content, actionButtons: actionButtons)
-            .toMap(),
-        FOREGROUND_START_MODE: AwesomeAssertUtils.toSimpleEnumString(foregroundStartMode),
-        FOREGROUND_SERVICE_TYPE: AwesomeAssertUtils.toSimpleEnumString(foregroundServiceType)
+            NotificationModel(content: content, actionButtons: actionButtons)
+                .toMap(),
+        FOREGROUND_START_MODE:
+            AwesomeAssertUtils.toSimpleEnumString(foregroundStartMode),
+        FOREGROUND_SERVICE_TYPE:
+            AwesomeAssertUtils.toSimpleEnumString(foregroundServiceType)
       });
     }
   }
@@ -103,9 +106,8 @@ class AndroidForegroundService {
   /// so it is safe to call it without a platform check.
   static Future<void> stopForeground(int id) async {
     if (Platform.isAndroid) {
-      await _channel.invokeMethod(CHANNEL_METHOD_STOP_FOREGROUND, {
-        NOTIFICATION_ID: id
-      });
+      await _channel
+          .invokeMethod(CHANNEL_METHOD_STOP_FOREGROUND, {NOTIFICATION_ID: id});
     }
   }
 

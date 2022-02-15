@@ -84,6 +84,8 @@ public class NotificationContentModel : AbstractModel {
             id = IntUtils.generateNextRandomId();
         }
         
+        _processRetroCompatibility(fromArguments: arguments)
+        
         self.channelKey     = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_CHANNEL_KEY, arguments: arguments)
         self.groupKey       = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_GROUP_KEY, arguments: arguments)
         self.title          = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_TITLE, arguments: arguments)
@@ -168,6 +170,13 @@ public class NotificationContentModel : AbstractModel {
         if(self.payload != nil){ mapData[Definitions.NOTIFICATION_PAYLOAD] = self.payload }
 
         return mapData
+    }
+    
+    func _processRetroCompatibility(fromArguments arguments: [String : Any?]?){
+        if arguments?["autoCancel"] != nil {
+            Log.d(NotificationButtonModel.TAG, "autoCancel is deprecated. Please use autoDismissible instead.")
+            autoDismissible = MapUtils<Bool>.getValueOrDefault(reference: "autoCancel", arguments: arguments)
+        }
     }
     
     public func validate() throws {

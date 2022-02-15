@@ -27,7 +27,8 @@ class AndroidForegroundService {
   /// Note that `foregroundServiceType` must be a subset of the `android:foregroundServiceType` defined in your `AndroidManifest.xml`!
   ///
   /// On any platform other than Android, this is a no-op and does nothing, so it is safe to call it without a platform check.
-  @Deprecated("This method is deprecated. You should use startAndroidForegroundService instead.")
+  @Deprecated(
+      "This method is deprecated. You should use startAndroidForegroundService instead.")
   static Future<void> startForeground(
       {required NotificationContent content,
       List<NotificationActionButton>? actionButtons,
@@ -36,13 +37,12 @@ class AndroidForegroundService {
     //no-op on web
   }
 
-  static Future<void> startAndroidForegroundService({
-    required NotificationContent content,
-    List<NotificationActionButton>? actionButtons,
-    ForegroundStartMode foregroundStartMode = ForegroundStartMode.stick,
-    ForegroundServiceType foregroundServiceType = ForegroundServiceType.none
-  }) async {
-  }
+  static Future<void> startAndroidForegroundService(
+      {required NotificationContent content,
+      List<NotificationActionButton>? actionButtons,
+      ForegroundStartMode foregroundStartMode = ForegroundStartMode.stick,
+      ForegroundServiceType foregroundServiceType =
+          ForegroundServiceType.none}) async {}
 
   /// Stops a foreground service.
   ///

@@ -9,6 +9,8 @@ import Foundation
 
 public class NotificationButtonModel : AbstractModel {
     
+    public static let TAG = "NotificationButtonModel"
+    
     var key:String?
     var icon:String?
     var label:String?
@@ -23,6 +25,8 @@ public class NotificationButtonModel : AbstractModel {
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         if(arguments == nil){ return self }
        
+        _processRetroCompatibility(fromArguments: arguments)
+        
         self.key        = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_KEY, arguments: arguments)
         self.icon       = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_ICON, arguments: arguments)
         self.label      = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BUTTON_LABEL, arguments: arguments)
@@ -56,6 +60,30 @@ public class NotificationButtonModel : AbstractModel {
         if(isDangerousOption != nil) {mapData[Definitions.NOTIFICATION_IS_DANGEROUS_OPTION] = self.isDangerousOption}
         
         return mapData
+    }
+    
+    func _processRetroCompatibility(fromArguments arguments: [String : Any?]?){
+        
+        if arguments?["autoCancel"] != nil {
+            Log.d(NotificationButtonModel.TAG, "autoCancel is deprecated. Please use autoDismissible instead.")
+            autoDismissible = MapUtils<Bool>.getValueOrDefault(reference: "autoCancel", arguments: arguments)
+        }
+
+        if arguments?["buttonType"] != nil {
+            Log.d(NotificationButtonModel.TAG, "buttonType is deprecated. Please use actionType instead.")            
+            actionType = EnumUtils<ActionType>.getEnumOrDefault(reference: "buttonType", arguments: arguments)
+        }
+        
+        _adaptInputFieldToRequireText()
+    }
+    
+    func _adaptInputFieldToRequireText(){
+        if actionType == ActionType.InputField {
+            Log.d(NotificationButtonModel.TAG,
+                  "InputField is deprecated. Please use requireInputText instead.")
+            requireInputText = true
+            actionType = ActionType.SilentAction
+        }
     }
     
     public func validate() throws {

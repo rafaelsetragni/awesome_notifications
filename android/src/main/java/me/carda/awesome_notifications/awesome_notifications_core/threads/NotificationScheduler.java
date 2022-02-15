@@ -233,6 +233,7 @@ public class NotificationScheduler extends NotificationThread<String, Void, Cale
 
             String notificationDetailsJson = notificationModel.toJson();
             Intent notificationIntent = new Intent(context, ScheduledNotificationReceiver.class);
+            notificationIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
 
             notificationIntent.putExtra(Definitions.NOTIFICATION_ID, notificationModel.content.id);
             notificationIntent.putExtra(Definitions.NOTIFICATION_JSON, notificationDetailsJson);

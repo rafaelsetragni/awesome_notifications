@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -109,7 +110,6 @@ class NotificationContent extends BaseNotificationContent {
   @override
   NotificationContent? fromMap(Map<String, dynamic> mapData) {
     super.fromMap(mapData);
-
     _hideLargeIconOnExpand = AwesomeAssertUtils.extractValue(
         NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND, mapData, bool);
 

@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 void dartIsolateMain() {
-
   // Initialize state necessary for MethodChannels.
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -16,9 +15,7 @@ void dartIsolateMain() {
 
   // This is where we handle background silent events
   _channel.setMethodCallHandler((MethodCall call) async {
-
     switch (call.method) {
-
       case CHANNEL_METHOD_ISOLATE_CALLBACK:
         await channelMethodIsolateCallbackHandle(call);
         break;
@@ -38,9 +35,7 @@ void dartIsolateMain() {
 
 /// This method handle the silent callback as a flutter plugin
 Future<void> channelMethodIsolateShutdown(MethodCall call) async {
-  try {
-
-  } catch (e) {
+  try {} catch (e) {
     print(
         "Awesome Notifications FCM: An error occurred in your background messaging handler:");
     print(e);
@@ -50,12 +45,12 @@ Future<void> channelMethodIsolateShutdown(MethodCall call) async {
 /// This method handle the silent callback as a flutter plugin
 Future<void> channelMethodIsolateCallbackHandle(MethodCall call) async {
   try {
-    bool success =
-    await receiveSilentAction((call.arguments as Map).cast<String, dynamic>());
+    bool success = await receiveSilentAction(
+        (call.arguments as Map).cast<String, dynamic>());
 
     if (!success)
-      throw AwesomeNotificationsException(message: 'Silent data could not be recovered');
-
+      throw AwesomeNotificationsException(
+          message: 'Silent data could not be recovered');
   } catch (e) {
     print(
         "Awesome Notifications FCM: An error occurred in your background messaging handler:");
@@ -65,16 +60,18 @@ Future<void> channelMethodIsolateCallbackHandle(MethodCall call) async {
 
 /// Calls the silent data method, if is a valid static one
 Future<bool> receiveSilentAction(Map<String, dynamic> arguments) async {
-
-  final CallbackHandle actionCallbackHandle = CallbackHandle.fromRawHandle(arguments[ACTION_HANDLE]);
+  final CallbackHandle actionCallbackHandle =
+      CallbackHandle.fromRawHandle(arguments[ACTION_HANDLE]);
 
   // PluginUtilities.getCallbackFromHandle performs a lookup based on the
   // callback handle and returns a tear-off of the original callback.
-  final ActionHandler? onActionDataHandle
-    = PluginUtilities.getCallbackFromHandle(actionCallbackHandle) as ActionHandler?;
+  final ActionHandler? onActionDataHandle =
+      PluginUtilities.getCallbackFromHandle(actionCallbackHandle)
+          as ActionHandler?;
 
   if (onActionDataHandle == null) {
-    throw IsolateCallbackException('Could not find a valid action callback. Certifies that your action method is global and static.');
+    throw IsolateCallbackException(
+        'Could not find a valid action callback. Certifies that your action method is global and static.');
   }
 
   Map<String, dynamic> actionMap = Map<String, dynamic>.from(arguments);
@@ -83,7 +80,7 @@ Future<bool> receiveSilentAction(Map<String, dynamic> arguments) async {
   try {
     onActionDataHandle(receivedAction);
   } catch (e, stacktrace) {
-    print( "Got an unknown Silent Action callback error: ${e.toString()}");
+    print("Got an unknown Silent Action callback error: ${e.toString()}");
     print(stacktrace);
     return false;
   }

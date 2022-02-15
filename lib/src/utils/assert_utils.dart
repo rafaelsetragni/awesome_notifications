@@ -61,20 +61,19 @@ class AwesomeAssertUtils {
 
     if (value is String) {
       String valueCasted = value;
-      if (AwesomeStringUtils.isNullOrEmpty(valueCasted, considerWhiteSpaceAsEmpty: true))
-        return defaultValue;
+      if (AwesomeStringUtils.isNullOrEmpty(valueCasted,
+          considerWhiteSpaceAsEmpty: true)) return defaultValue;
 
       switch (T) {
         case DateTime:
           final RegExpMatch? match =
-            RegExp(r'^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})( (\S+))?$')
-                .firstMatch(valueCasted);
+              RegExp(r'^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})( (\S+))?$')
+                  .firstMatch(valueCasted);
 
           if (match != null)
-            return
-              DateFormat("yyyy-MM-dd HH:mm:ss Z")
-                  .parseUTC(match.group(0)!)
-                  .toLocal();
+            return DateFormat("yyyy-MM-dd HH:mm:ss Z")
+                .parseUTC(match.group(0)!)
+                .toLocal();
 
           return defaultValue;
 
@@ -136,11 +135,10 @@ class AwesomeAssertUtils {
         break;
 
       case bool:
-        return value ?? defaultValue;
+        return value ?? defaultValue ?? false;
     }
 
-    if (value.runtimeType.hashCode != T.hashCode)
-      return defaultValue;
+    if (value.runtimeType.hashCode != T.hashCode) return defaultValue;
 
     return defaultValue;
   }
@@ -163,6 +161,8 @@ class AwesomeAssertUtils {
   static T? extractEnum<T>(String reference, Map dataMap, List<T> values) {
     T? defaultValue = _getDefaultValue(reference, T);
     dynamic value = dataMap[reference];
+
+    if (value is T) return value;
 
     if (value == null || !(value is String)) return defaultValue;
 

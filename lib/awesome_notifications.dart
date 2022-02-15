@@ -49,7 +49,8 @@ import 'package:awesome_notifications/src/models/received_models/received_notifi
 typedef Future<void> ActionHandler(ReceivedAction receivedAction);
 
 /// Method structure to listen to an notification event with dart
-typedef Future<void> NotificationHandler(ReceivedNotification receivedNotification);
+typedef Future<void> NotificationHandler(
+    ReceivedNotification receivedNotification);
 
 // Pause and Play vibration sequences
 Int64List lowVibrationPattern = Int64List.fromList([0, 200, 200, 200]);

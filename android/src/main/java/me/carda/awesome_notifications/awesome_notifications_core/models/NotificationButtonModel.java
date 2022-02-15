@@ -1,6 +1,7 @@
 package me.carda.awesome_notifications.awesome_notifications_core.models;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +31,8 @@ public class NotificationButtonModel extends AbstractModel {
     @Override
     public NotificationButtonModel fromMap(Map<String, Object> arguments) {
 
+        processRetroCompatibility(arguments);
+
         key        = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_KEY, String.class);
         icon       = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_ICON, String.class);
         label      = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_LABEL, String.class);
@@ -45,6 +48,32 @@ public class NotificationButtonModel extends AbstractModel {
         showInCompactView = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, Boolean.class);
 
         return this;
+    }
+
+    // Retro-compatibility with 0.6.X
+    private void processRetroCompatibility(Map<String, Object> arguments){
+
+        if (arguments.containsKey("autoCancel")) {
+            Log.d("AwesomeNotifications", "autoCancel is deprecated. Please use autoDismissible instead.");
+            autoDismissible   = getValueOrDefault(arguments, "autoCancel", Boolean.class);
+        }
+
+        if (arguments.containsKey("buttonType")){
+            Log.d("AwesomeNotifications", "buttonType is deprecated. Please use actionType instead.");
+            actionType = getEnumValueOrDefault(arguments, "buttonType",
+                    ActionType.class, ActionType.values());
+        }
+
+        adaptInputFieldToRequireText();
+    }
+
+    // Retro-compatibility with 0.6.X
+    private void adaptInputFieldToRequireText(){
+        if (actionType == ActionType.InputField) {
+            Log.d("AwesomeNotifications", "InputField is deprecated. Please use requireInputText instead.");
+            actionType = ActionType.SilentAction;
+            requireInputText = true;
+        }
     }
 
     @Override
