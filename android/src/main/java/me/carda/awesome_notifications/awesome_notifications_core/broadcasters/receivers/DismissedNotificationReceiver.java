@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
@@ -20,6 +21,9 @@ public class DismissedNotificationReceiver extends AwesomeBroadcastReceiver
 
     @Override
     public void onReceiveBroadcastEvent(Context context, Intent intent) {
+
+        if(AwesomeNotifications.debug)
+            Log.i(TAG, "The action received do not contain any awesome notification data and was discarded");
 
         String action = intent.getAction();
         if (action != null && action.equals(Definitions.DISMISSED_NOTIFICATION)) {

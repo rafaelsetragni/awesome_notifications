@@ -3,7 +3,9 @@ package me.carda.awesome_notifications.awesome_notifications_core.broadcasters.r
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
+import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ActionType;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationLifeCycle;
@@ -14,8 +16,13 @@ import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.se
 
 public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
 
+    public static String TAG = "NotificationActionReceiver";
+
     @Override
     public void onReceiveBroadcastEvent(final Context context, Intent intent) {
+
+        if(AwesomeNotifications.debug)
+            Log.d(TAG, "New action received");
 
         NotificationBuilder notificationBuilder = NotificationBuilder.getNewBuilder();
 
@@ -31,7 +38,11 @@ public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
                     appLifeCycle);
 
         // In case there is not a valid notification intent
-        if (actionReceived == null) return;
+        if (actionReceived == null) {
+            if(AwesomeNotifications.debug)
+                Log.e(TAG, "The action received do not contain any awesome notification data and was discarded");
+            return;
+        }
 
         if(actionReceived.actionType == ActionType.DismissAction)
             actionReceived.registerDismissedEvent(appLifeCycle);

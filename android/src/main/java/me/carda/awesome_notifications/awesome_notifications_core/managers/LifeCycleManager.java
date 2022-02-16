@@ -6,6 +6,7 @@ import android.app.Application.ActivityLifecycleCallbacks;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,13 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
+import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_core.listeners.AwesomeLifeCycleEventListener;
 
 public class LifeCycleManager implements ActivityLifecycleCallbacks {
+
+    private static final String TAG = "LifeCycleManager";
 
     protected static NotificationLifeCycle appLifeCycle = NotificationLifeCycle.AppKilled;
     public static NotificationLifeCycle getApplicationLifeCycle(){
@@ -66,6 +70,9 @@ public class LifeCycleManager implements ActivityLifecycleCallbacks {
         if(hasNotStarted) {
             hasNotStarted = false;
             ((Application) applicationContext).registerActivityLifecycleCallbacks(this);
+
+            if(AwesomeNotifications.debug)
+                Log.d(TAG, "LiceCycleManager listener successfully attached to Android");
         }
     }
 
@@ -81,10 +88,16 @@ public class LifeCycleManager implements ActivityLifecycleCallbacks {
         if (appLifeCycle == NotificationLifeCycle.Foreground)
             hasGoneForeground = true;
 
+        if(AwesomeNotifications.debug)
+            Log.d(TAG, "Android lifeCycle: "+state);
+
         if(oldLifeCycle != lifeCycle || oldLifeState != state){
             oldLifeCycle = lifeCycle;
             oldLifeState = state;
             notify(state, activity);
+
+            if(AwesomeNotifications.debug)
+                Log.d(TAG, "App is now "+lifeCycle);
         }
     }
 

@@ -44,13 +44,25 @@ public class AwesomeEventsReceiver {
     static List<AwesomeNotificationEventListener> notificationEventListeners = new ArrayList<>();
     public AwesomeEventsReceiver subscribeOnNotificationEvents(AwesomeNotificationEventListener listener) {
         notificationEventListeners.add(listener);
+
+        if(AwesomeNotifications.debug)
+            Log.d(TAG, listener.getClass().getSimpleName() + " subscribed to receive notification events");
+
         return this;
     }
     public AwesomeEventsReceiver unsubscribeOnNotificationEvents(AwesomeNotificationEventListener listener) {
         notificationEventListeners.remove(listener);
+
+        if(AwesomeNotifications.debug)
+            Log.d(TAG, listener.getClass().getSimpleName() + " unsubscribed from notification events");
+
         return this;
     }
     private void notifyNotificationEvent(String eventName, NotificationReceived notificationReceived) {
+
+        if(AwesomeNotifications.debug && notificationEventListeners.isEmpty())
+            Log.e(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new notification events");
+
         for (AwesomeNotificationEventListener listener : notificationEventListeners)
             listener.onNewNotificationReceived(eventName, notificationReceived);
     }
@@ -60,13 +72,25 @@ public class AwesomeEventsReceiver {
     static List<AwesomeActionEventListener> notificationActionListeners = new ArrayList<>();
     public AwesomeEventsReceiver subscribeOnActionEvents(AwesomeActionEventListener listener) {
         notificationActionListeners.add(listener);
+
+        if(AwesomeNotifications.debug)
+            Log.d(TAG, listener.getClass().getSimpleName() + " subscribed to receive action events");
+
         return this;
     }
     public AwesomeEventsReceiver unsubscribeOnActionEvents(AwesomeActionEventListener listener) {
         notificationActionListeners.remove(listener);
+
+        if(AwesomeNotifications.debug)
+            Log.d(TAG, listener.getClass().getSimpleName() + " unsubscribed from action events");
+
         return this;
     }
     private void notifyActionEvent(String eventName, ActionReceived actionReceived) {
+
+        if(AwesomeNotifications.debug && notificationEventListeners.isEmpty())
+            Log.e(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new action events");
+
         for (AwesomeActionEventListener listener : notificationActionListeners)
             listener.onNewActionReceived(eventName, actionReceived);
     }
@@ -75,8 +99,11 @@ public class AwesomeEventsReceiver {
 
     public void addNotificationEvent(Context context, String eventName, NotificationReceived notificationReceived){
 
-        if(notificationEventListeners.isEmpty())
+        if(notificationEventListeners.isEmpty()) {
+            if(AwesomeNotifications.debug)
+                Log.e(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new notification events");
             return;
+        }
 
         try {
             switch (eventName) {
@@ -103,6 +130,12 @@ public class AwesomeEventsReceiver {
     }
 
     public void addAwesomeActionEvent(Context context, String eventName, ActionReceived actionReceived){
+
+        if(notificationEventListeners.isEmpty()) {
+            if(AwesomeNotifications.debug)
+                Log.e(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new action events");
+            return;
+        }
 
         try {
             switch (eventName) {

@@ -24,6 +24,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.ActivityCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.PermissionCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationImportance;
@@ -676,6 +677,9 @@ public class PermissionManager {
     private void fireActivityCompletionHandle(){
         if(activityQueue.isEmpty())
             return;
+
+        if(AwesomeNotifications.debug)
+            Log.d(TAG, "New permissions request found waiting for user response");
 
         int retries = 3;
         ActivityCompletionHandler completionHandler;

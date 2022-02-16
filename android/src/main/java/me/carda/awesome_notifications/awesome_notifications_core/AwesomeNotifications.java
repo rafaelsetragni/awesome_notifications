@@ -3,6 +3,7 @@ package me.carda.awesome_notifications.awesome_notifications_core;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 
@@ -81,6 +82,8 @@ public class AwesomeNotifications
         @NonNull Context applicationContext,
         @NonNull AwesomeNotificationsExtension extensionClass
     ) throws AwesomeNotificationsException {
+
+        debug = ( 0 != ( applicationContext.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
 
         wContext = new WeakReference<>(applicationContext);
 
