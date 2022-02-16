@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -48,9 +50,14 @@ import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUti
  * AwesomeNotificationsPlugin
  **/
 public class AwesomeNotificationsPlugin
-        extends AwesomeNotificationsExtension
-        implements FlutterPlugin, MethodCallHandler, AwesomeEventListener {
-
+        extends
+            AwesomeNotificationsExtension
+        implements
+            FlutterPlugin,
+            MethodCallHandler,
+            AwesomeEventListener,
+            ActivityAware
+{
     private static final String TAG = "AwesomeNotificationsPlugin";
 
     private MethodChannel pluginChannel;
@@ -112,6 +119,7 @@ public class AwesomeNotificationsPlugin
                     new AwesomeNotifications(
                             applicationContext,
                             this);
+
         } catch (AwesomeNotificationsException e) {
             e.printStackTrace();
         } finally {
@@ -855,5 +863,29 @@ public class AwesomeNotificationsPlugin
             Log.e(TAG, "Attention: there is no valid static method to receive notification action data in background");
 
         result.success(success);
+    }
+
+    @Override
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        if(awesomeNotifications != null)
+            awesomeNotifications
+                    .registerActivity(binding.getActivity());
+    }
+
+    @Override
+    public void onDetachedFromActivityForConfigChanges() {
+
+    }
+
+    @Override
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+        if(awesomeNotifications != null)
+            awesomeNotifications
+                    .registerActivity(binding.getActivity());
+    }
+
+    @Override
+    public void onDetachedFromActivity() {
+
     }
 }

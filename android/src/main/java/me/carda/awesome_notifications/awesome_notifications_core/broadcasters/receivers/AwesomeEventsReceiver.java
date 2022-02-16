@@ -176,7 +176,7 @@ public class AwesomeEventsReceiver {
             notificationReceived.validate(context);
 
             if (AwesomeNotifications.debug)
-                Log.d(TAG, "Notification created");
+                Log.d(TAG, "New notification creation event");
 
             notifyNotificationEvent(Definitions.EVENT_NOTIFICATION_CREATED, notificationReceived);
 
@@ -190,7 +190,7 @@ public class AwesomeEventsReceiver {
             notificationReceived.validate(context);
 
             if (AwesomeNotifications.debug)
-                Log.d(TAG, "Notification displayed");
+                Log.d(TAG, "New notification display event");
 
             notifyNotificationEvent(Definitions.EVENT_NOTIFICATION_DISPLAYED, notificationReceived);
 
@@ -204,7 +204,7 @@ public class AwesomeEventsReceiver {
             actionReceived.validate(context);
 
             if(AwesomeNotifications.debug)
-                Log.d(TAG, "Notification action received");
+                Log.d(TAG, "New notification action event");
 
             notifyActionEvent(Definitions.EVENT_DEFAULT_ACTION, actionReceived);
 
@@ -220,7 +220,7 @@ public class AwesomeEventsReceiver {
             actionReceived.validate(context);
 
             if (AwesomeNotifications.debug)
-                Log.d(TAG, "Notification dismissed");
+                Log.d(TAG, "New notification dismiss event");
 
             notifyActionEvent(Definitions.EVENT_NOTIFICATION_DISMISSED, actionReceived);
 
@@ -234,7 +234,7 @@ public class AwesomeEventsReceiver {
             actionReceived.validate(context);
 
             if(AwesomeNotifications.debug)
-                Log.d(TAG, "Silent action received");
+                Log.d(TAG, "New silent action event");
 
             notifyActionEvent(Definitions.EVENT_SILENT_ACTION, actionReceived);
 
@@ -250,7 +250,7 @@ public class AwesomeEventsReceiver {
             actionReceived.validate(context);
 
             if (AwesomeNotifications.debug)
-                Log.d(TAG, "Background silent action received");
+                Log.d(TAG, "New background silent action event");
 
             notifyActionEvent(Definitions.EVENT_SILENT_ACTION, actionReceived);
 

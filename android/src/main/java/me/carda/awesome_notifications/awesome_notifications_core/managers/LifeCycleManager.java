@@ -13,13 +13,15 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_core.listeners.AwesomeLifeCycleEventListener;
 
-public class LifeCycleManager implements ActivityLifecycleCallbacks {
+public class LifeCycleManager implements LifecycleObserver {
 
     private static final String TAG = "LifeCycleManager";
 
@@ -58,120 +60,89 @@ public class LifeCycleManager implements ActivityLifecycleCallbacks {
         return this;
     }
 
-    public void notify(@NonNull Lifecycle.State eventType, @NonNull Activity activity) {
+    public void notify(@NonNull NotificationLifeCycle lifeCycle) {
         for (AwesomeLifeCycleEventListener listener : listeners)
-            listener.onNewLifeCycleEvent(eventType, activity);
+            listener.onNewLifeCycleEvent(lifeCycle);
     }
 
     // ********************************************************
 
     boolean hasNotStarted = true;
-    public void startListeners(Context applicationContext){
+    public void startListeners(){
         if(hasNotStarted) {
             hasNotStarted = false;
-            ((Application) applicationContext).registerActivityLifecycleCallbacks(this);
+            ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
 
             if(AwesomeNotifications.debug)
                 Log.d(TAG, "LiceCycleManager listener successfully attached to Android");
         }
     }
 
-    private boolean wasNotCreated = true;
-    private boolean hasGoneForeground = false;
-
-    private NotificationLifeCycle oldLifeCycle = null;
-    private Lifecycle.State oldLifeState = null;
-    public void updateAppLifeCycle(NotificationLifeCycle lifeCycle, Lifecycle.State state, Activity activity){
-
-        appLifeCycle = lifeCycle;
-
-        if (appLifeCycle == NotificationLifeCycle.Foreground)
-            hasGoneForeground = true;
-
-        if(AwesomeNotifications.debug)
-            Log.d(TAG, "Android lifeCycle: "+state);
-
-        if(oldLifeCycle != lifeCycle || oldLifeState != state){
-            oldLifeCycle = lifeCycle;
-            oldLifeState = state;
-            notify(state, activity);
+    public void stopListeners(){
+        if(hasNotStarted) {
+            hasNotStarted = false;
+            ProcessLifecycleOwner.get().getLifecycle().removeObserver(this);
 
             if(AwesomeNotifications.debug)
-                Log.d(TAG, "App is now "+lifeCycle);
+                Log.d(TAG, "LiceCycleManager listener successfully removed from Android");
         }
     }
 
-    @Override
-    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+    boolean hasGoneForeground = false;
+    public void updateAppLifeCycle(NotificationLifeCycle lifeCycle){
+        if(appLifeCycle == lifeCycle)
+            return;
+
+        hasGoneForeground =
+                hasGoneForeground ||
+                appLifeCycle == NotificationLifeCycle.Foreground;
+
+        appLifeCycle = lifeCycle;
+        notify(appLifeCycle);
+
+        if(AwesomeNotifications.debug)
+            Log.d(TAG, "App is now "+lifeCycle);
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    public void onCreated() {
         updateAppLifeCycle(
                 hasGoneForeground ?
                         NotificationLifeCycle.Background :
-                        NotificationLifeCycle.AppKilled,
-                Lifecycle.State.CREATED,
-                activity);
+                        NotificationLifeCycle.AppKilled);
     }
 
-    @Override
-    public void onActivityStarted(Activity activity) {
-        if(wasNotCreated){
-            wasNotCreated = false;
-            updateAppLifeCycle(
-                    NotificationLifeCycle.AppKilled,
-                    Lifecycle.State.CREATED,
-                    activity);
-        }
-
+    boolean wasNotCreated = true;
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    public void onStarted() {
         updateAppLifeCycle(
                 hasGoneForeground ?
                         NotificationLifeCycle.Background :
-                        NotificationLifeCycle.AppKilled,
-                Lifecycle.State.STARTED,
-                activity);
+                        NotificationLifeCycle.AppKilled);
     }
 
-    @Override
-    public void onActivityResumed(Activity activity) {
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    public void onResumed() {
         updateAppLifeCycle(
-                NotificationLifeCycle.Foreground,
-                Lifecycle.State.RESUMED,
-                activity);
+                NotificationLifeCycle.Foreground);
     }
 
-    @Override
-    public void onActivityPaused(Activity activity) {
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    public void onPaused() {
         updateAppLifeCycle(
-                NotificationLifeCycle.Foreground,
-                Lifecycle.State.STARTED,
-                activity);
+                NotificationLifeCycle.Foreground);
     }
 
-    @Override
-    public void onActivityStopped(Activity activity) {
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    public void onStopped() {
         updateAppLifeCycle(
-                NotificationLifeCycle.Background,
-                Lifecycle.State.CREATED,
-                activity);
+                NotificationLifeCycle.Background);
     }
 
-    @Override
-    public void onActivityDestroyed(Activity activity) {
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    public void onDestroyed() {
         updateAppLifeCycle(
-                NotificationLifeCycle.AppKilled,
-                Lifecycle.State.DESTROYED,
-                activity);
+                NotificationLifeCycle.AppKilled);
     }
 
-    @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-        Lifecycle.State state =
-                ProcessLifecycleOwner
-                        .get()
-                        .getLifecycle()
-                        .getCurrentState();
-
-        updateAppLifeCycle(
-                NotificationLifeCycle.Background,
-                state,
-                activity);
-    }
 }

@@ -10,17 +10,13 @@ import android.util.Log;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import androidx.lifecycle.Lifecycle;
-
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.AwesomeEventsReceiver;
-import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.ScheduledNotificationReceiver;
 import me.carda.awesome_notifications.awesome_notifications_core.decoders.BitmapResourceDecoder;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundServiceType;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundStartMode;
@@ -66,15 +62,18 @@ import me.carda.awesome_notifications.awesome_notifications_core.utils.ListUtils
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class AwesomeNotifications
-        implements AwesomeNotificationEventListener, AwesomeActionEventListener, AwesomeLifeCycleEventListener {
-
+    implements
+            AwesomeNotificationEventListener,
+            AwesomeActionEventListener,
+            AwesomeLifeCycleEventListener
+{
     private static final String TAG = "AwesomeNotifications";
 
     public static Boolean debug = false;
 
-    private WeakReference<Context> wContext;
+    private final WeakReference<Context> wContext;
+    private final StringUtils stringUtils;
     private Activity applicationActivity;
-    private StringUtils stringUtils;
 
     // ************************** CONSTRUCTOR ***********************************
 
@@ -83,20 +82,31 @@ public class AwesomeNotifications
         @NonNull AwesomeNotificationsExtension extensionClass
     ) throws AwesomeNotificationsException {
 
-        debug = ( 0 != ( applicationContext.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
+        debug = isApplicationInDebug(applicationContext);
 
-        wContext = new WeakReference<>(applicationContext);
+        this.wContext = new WeakReference<>(applicationContext);
 
         stringUtils = StringUtils.getInstance();
 
         LifeCycleManager
                 .getInstance()
                 .subscribe(this)
-                .startListeners(applicationContext);
+                .startListeners();
 
         AbstractModel
                 .defaultValues
                 .putAll(Definitions.initialValues);
+
+        NotificationBuilder
+                .setMediaSession(
+                        new MediaSessionCompat(
+                                applicationContext,
+                                "PUSH_MEDIA"));
+
+        NotificationBuilder
+                .getNewBuilder()
+                .updateMainTargetClassName(
+                        applicationContext);
 
         DefaultsManager.setAwesomeExtensionClassName(
                 applicationContext,
@@ -105,6 +115,10 @@ public class AwesomeNotifications
         loadAwesomeExtensions(
                 applicationContext,
                 stringUtils);
+    }
+
+    public void registerActivity(Activity activity){
+        applicationActivity = activity;
     }
 
     // ******************** LOAD EXTERNAL EXTENSIONS ***************************
@@ -179,27 +193,18 @@ public class AwesomeNotifications
 
     private boolean activityHasStarted = false;
     @Override
-    public void onNewLifeCycleEvent(Lifecycle.State androidLifeCycleState, Activity activity) {
+    public void onNewLifeCycleEvent(NotificationLifeCycle lifeCycle) {
 
-        if(!activityHasStarted && androidLifeCycleState != Lifecycle.State.DESTROYED){
-            applicationActivity = activity;
-            wContext = new WeakReference<>(activity.getApplicationContext());
-        }
+        switch (lifeCycle){
 
-        switch (androidLifeCycleState){
-
-            case RESUMED:
-                PermissionManager
-                        .getInstance()
-                        .handlePermissionResult(
-                                PermissionManager.REQUEST_CODE,
-                                null,
-                                null);
-                break;
-
-            case STARTED:
-                applicationActivity = activity;
-                wContext = new WeakReference<>(activity.getApplicationContext());
+            case Foreground:
+                if(activityHasStarted)
+                    PermissionManager
+                            .getInstance()
+                            .handlePermissionResult(
+                                    PermissionManager.REQUEST_CODE,
+                                    null,
+                                    null);
 
                 if(!activityHasStarted)
                     AwesomeEventsReceiver
@@ -210,18 +215,10 @@ public class AwesomeNotifications
                 activityHasStarted = true;
                 break;
 
-            case CREATED:
-                NotificationBuilder
-                        .setMediaSession(
-                                new MediaSessionCompat(
-                                        activity.getApplicationContext(),
-                                        "PUSH_MEDIA"));
-                NotificationBuilder
-                        .getNewBuilder()
-                        .updateMainTargetClassName(activity);
+            case Background:
                 break;
 
-            case DESTROYED:
+            case AppKilled:
                 if(activityHasStarted) {
                     AwesomeEventsReceiver
                             .getInstance()
@@ -229,12 +226,9 @@ public class AwesomeNotifications
                             .unsubscribeOnActionEvents(this);
 
                     NotificationScheduler
-                            .refreshScheduledNotifications(wContext.get());
+                            .refreshScheduledNotifications(
+                                    wContext.get());
                 }
-                break;
-
-            default:
-                break;
         }
     }
 
@@ -348,6 +342,12 @@ public class AwesomeNotifications
         return ScheduleManager.listSchedules(wContext.get());
     }
 
+    public boolean isApplicationInDebug(@NonNull Context context){
+        return 0 != (
+            context.getApplicationInfo().flags &
+            ApplicationInfo.FLAG_DEBUGGABLE);
+    }
+
     // *****************************  INITIALIZATION FUNCTIONS  **********************************
 
     public void initialize(
@@ -358,8 +358,10 @@ public class AwesomeNotifications
             boolean debug
     ) throws AwesomeNotificationsException {
 
+        Context currentContext = wContext.get();
+
         setDefaults(
-                wContext.get(),
+                currentContext,
                 defaultIconPath,
                 dartCallback);
 
@@ -369,14 +371,14 @@ public class AwesomeNotifications
         if (ListUtils.isNullOrEmpty(channelsData))
             throw new AwesomeNotificationsException("At least one channel is required");
 
-        setChannels(wContext.get(), channelsData);
+        setChannels(currentContext, channelsData);
 
-        captureNotificationActionOnLaunch(wContext.get());
+        captureNotificationActionOnLaunch(currentContext);
 
-        AwesomeNotifications.debug = debug;
+        AwesomeNotifications.debug = debug && isApplicationInDebug(currentContext);
 
         NotificationScheduler
-                .refreshScheduledNotifications(wContext.get());
+                .refreshScheduledNotifications(currentContext);
 
         if (AwesomeNotifications.debug)
             Log.d(TAG, "Awesome Notifications initialized");
@@ -864,7 +866,11 @@ public class AwesomeNotifications
             @Nullable String channelKey,
             @NonNull List<String> permissions,
             @NonNull PermissionCompletionHandler permissionCompletionHandler)
-            throws AwesomeNotificationsException {
+            throws AwesomeNotificationsException
+    {
+        if(applicationActivity == null)
+            throw new AwesomeNotificationsException(
+                    "There is no valid activity registered in Awesome Notifications");
 
         PermissionManager
                 .getInstance()

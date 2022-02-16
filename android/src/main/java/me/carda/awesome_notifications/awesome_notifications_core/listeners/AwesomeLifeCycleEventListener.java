@@ -4,6 +4,8 @@ import android.app.Activity;
 
 import androidx.lifecycle.Lifecycle;
 
+import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationLifeCycle;
+
 public interface AwesomeLifeCycleEventListener {
-    public void onNewLifeCycleEvent(Lifecycle.State AndroidLifeCycleState, Activity activity);
+    public void onNewLifeCycleEvent(NotificationLifeCycle lifeCycle);
 }
