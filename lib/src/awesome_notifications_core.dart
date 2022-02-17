@@ -233,6 +233,7 @@ class AwesomeNotifications {
       NotificationHandler? onNotificationDisplayedMethod,
       ActionHandler? onDismissActionReceivedMethod}) async {
     if (_actionHandler != null) {
+      throw UnsupportedError('static listeners was already defined.');
       print('static methods was already setted.');
       return false;
     }

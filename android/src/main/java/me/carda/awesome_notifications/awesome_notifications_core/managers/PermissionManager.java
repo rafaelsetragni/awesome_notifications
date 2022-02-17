@@ -312,7 +312,11 @@ public class PermissionManager {
                 NotificationPermission permissionEnum = stringUtils.getEnumFromString(NotificationPermission.class, permissionNeeded);
                 String permissionCode = getManifestPermissionCode(permissionEnum);
 
-                if(permissionCode == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M || activity.shouldShowRequestPermissionRationale(permissionCode)) {
+                if(
+                    permissionCode == null ||
+                    Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
+                    activity != null && activity.shouldShowRequestPermissionRationale(permissionCode)
+                ){
                     shouldShowRationalePage(
                             context,
                             channelKey,
@@ -325,7 +329,7 @@ public class PermissionManager {
             }
 
             // System will prompt a standard dialog
-            if(!manifestPermissions.isEmpty()){
+            if(activity != null && !manifestPermissions.isEmpty()){
                 shouldShowAndroidRequestDialog(
                         activity,
                         context,

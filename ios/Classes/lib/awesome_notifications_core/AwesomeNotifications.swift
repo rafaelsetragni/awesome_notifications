@@ -146,22 +146,24 @@ public class AwesomeNotifications:
         notifyActionEvent(fromEventNamed: eventName, withActionReceived: actionReceived)
     }
     
-    private var eventListenersHadStarted = false
+    private var mainAppHasStarted = false
     public func onNewLifeCycleEvent(lifeCycle: NotificationLifeCycle) {
         
         switch lifeCycle {
             
             case .Foreground:
-                PermissionManager
-                    .shared
-                    .handlePermissionResult()
-                
-                do {
-                    try recoverLostEvents()
+                if mainAppHasStarted {
+                    PermissionManager
+                        .shared
+                        .handlePermissionResult()
                 }
-                catch {
-                    Log.e(TAG, "\(error)")
+                else {
+                    AwesomeEventsReceiver
+                        .shared
+                        .subscribeOnNotificationEvents(listener: self)
+                        .subscribeOnActionEvents(listener: self)
                 }
+                mainAppHasStarted = true
                 break
             
             case .Background:
@@ -169,24 +171,14 @@ public class AwesomeNotifications:
                 
             
             case .AppKilled:
-                if !eventListenersHadStarted {
-                    eventListenersHadStarted = true
-                    AwesomeEventsReceiver
-                        .shared
-                        .subscribeOnNotificationEvents(listener: self)
-                        .subscribeOnActionEvents(listener: self)
-                }
-                else {
+                if mainAppHasStarted {
                     AwesomeEventsReceiver
                         .shared
                         .unsubscribeOnNotificationEvents(listener: self)
                         .unsubscribeOnActionEvents(listener: self)
                 }
                 break
-                
         }
-        
-        
     }
     
     // **************************** OBSERVER PATTERN **************************************
@@ -287,17 +279,8 @@ public class AwesomeNotifications:
             .shared
             .actionCallback = actionHandle
         
-        try recoverLostEvents()
-    }
-    
-    var waitingForRecover:Bool = true
-    private func recoverLostEvents() throws {
-        if waitingForRecover && LifeCycleManager
-                                    .shared
-                                    .hasGoneForeground
+        if actionHandle != 0
         {
-            waitingForRecover = false
-            
             try recoverNotificationCreated()
             try recoverNotificationDisplayed()
             try recoverNotificationsDismissed()

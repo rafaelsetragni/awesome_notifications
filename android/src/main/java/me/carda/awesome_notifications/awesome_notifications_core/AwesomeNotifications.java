@@ -2,6 +2,7 @@ package me.carda.awesome_notifications.awesome_notifications_core;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -316,14 +317,12 @@ public class AwesomeNotifications
         bitmapResourceDecoder.execute();
     }
 
-    boolean waitingForRecover = true;
     public void setActionHandle(Long actionCallbackHandle) {
         DefaultsManager.setActionCallbackDispatcher(wContext.get(), actionCallbackHandle);
         DefaultsManager.commitChanges(wContext.get());
 
-        if(waitingForRecover && actionCallbackHandle != 0L){
-            waitingForRecover = false;
-
+        if(actionCallbackHandle != 0L)
+        {
             recoverNotificationCreated(wContext.get());
             recoverNotificationDisplayed(wContext.get());
             recoverNotificationsDismissed(wContext.get());
@@ -868,17 +867,31 @@ public class AwesomeNotifications
             @NonNull PermissionCompletionHandler permissionCompletionHandler)
             throws AwesomeNotificationsException
     {
-        if(applicationActivity == null)
-            throw new AwesomeNotificationsException(
-                    "There is no valid activity registered in Awesome Notifications");
-
+        Activity activity = getActivityFromContext(wContext.get());
         PermissionManager
                 .getInstance()
                 .requestUserPermissions(
-                        applicationActivity,
+                        activity,
                         wContext.get(),
                         channelKey,
                         permissions,
                         permissionCompletionHandler);
+    }
+
+    public Activity getActivityFromContext(Context context)
+    {
+        if (context == null)
+        {
+            return null;
+        }
+        else if (context instanceof ContextWrapper)
+        {
+            if (context instanceof Activity)
+                return (Activity) context;
+            else
+                return getActivityFromContext(((ContextWrapper) context).getBaseContext());
+        }
+
+        return null;
     }
 }

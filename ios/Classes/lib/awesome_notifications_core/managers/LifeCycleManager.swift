@@ -73,12 +73,18 @@ public class LifeCycleManager:
     
     public func subscribe(listener:AwesomeLifeCycleEventListener) -> Self {
         listeners.append(listener)
+        if(AwesomeNotifications.debug){
+            Log.d(TAG, "LiceCycleManager listener successfully attached to iOS")
+        }
         return self
     }
     
     public func unsubscribe(listener:AwesomeLifeCycleEventListener) {
         if let index = listeners.firstIndex(where: {$0 === listener}) {
             listeners.remove(at: index)
+            if(AwesomeNotifications.debug){
+                Log.d(TAG, "LiceCycleManager listener successfully removed from iOS")
+            }
         }
     }
     
@@ -128,6 +134,9 @@ public class LifeCycleManager:
             if _currentLifeCycle != _oldLifeCycle {
                 _oldLifeCycle = _currentLifeCycle
                 notify(lifeCycle: newValue)
+                if AwesomeNotifications.debug {
+                    Log.d(TAG, "App is now "+newValue.rawValue)
+                }
             }
         }
     }

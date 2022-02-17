@@ -10,11 +10,8 @@ import 'package:awesome_notifications/android_foreground_service.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-
 class NotificationController {
-
-  static void initializeNotificationsPlugin(){
-
+  static void initializeNotificationsPlugin() {
     AwesomeNotifications().initialize(
         'resource://drawable/res_app_icon',
         [
@@ -25,13 +22,13 @@ class NotificationController {
               channelDescription: 'Notification channel for basic tests',
               defaultColor: Color(0xFF9D50DD),
               ledColor: Colors.white,
-              importance: NotificationImportance.High
-          ),
+              importance: NotificationImportance.High),
           NotificationChannel(
               channelGroupKey: 'basic_tests',
               channelKey: 'badge_channel',
               channelName: 'Badge indicator notifications',
-              channelDescription: 'Notification channel to activate badge indicator',
+              channelDescription:
+                  'Notification channel to activate badge indicator',
               channelShowBadge: true,
               defaultColor: Color(0xFF9D50DD),
               ledColor: Colors.yellow),
@@ -68,7 +65,8 @@ class NotificationController {
             channelGroupKey: 'chat_tests',
             channelKey: 'chats',
             channelName: 'Chat groups',
-            channelDescription: 'This is a simple example channel of a chat group',
+            channelDescription:
+                'This is a simple example channel of a chat group',
             channelShowBadge: true,
             importance: NotificationImportance.Max,
             ledColor: Colors.white,
@@ -79,7 +77,7 @@ class NotificationController {
               channelKey: 'low_intensity',
               channelName: 'Low intensity notifications',
               channelDescription:
-              'Notification channel for notifications with low intensity',
+                  'Notification channel for notifications with low intensity',
               defaultColor: Colors.green,
               ledColor: Colors.green,
               vibrationPattern: lowVibrationPattern),
@@ -88,7 +86,7 @@ class NotificationController {
               channelKey: 'medium_intensity',
               channelName: 'Medium intensity notifications',
               channelDescription:
-              'Notification channel for notifications with medium intensity',
+                  'Notification channel for notifications with medium intensity',
               defaultColor: Colors.yellow,
               ledColor: Colors.yellow,
               vibrationPattern: mediumVibrationPattern),
@@ -97,7 +95,7 @@ class NotificationController {
               channelKey: 'high_intensity',
               channelName: 'High intensity notifications',
               channelDescription:
-              'Notification channel for notifications with high intensity',
+                  'Notification channel for notifications with high intensity',
               defaultColor: Colors.red,
               ledColor: Colors.red,
               vibrationPattern: highVibrationPattern),
@@ -202,87 +200,108 @@ class NotificationController {
               importance: NotificationImportance.High)
         ],
         channelGroups: [
-          NotificationChannelGroup(channelGroupKey: 'basic_tests', channelGroupName: 'Basic tests'),
-          NotificationChannelGroup(channelGroupKey: 'category_tests', channelGroupName: 'Category tests'),
-          NotificationChannelGroup(channelGroupKey: 'image_tests', channelGroupName: 'Images tests'),
-          NotificationChannelGroup(channelGroupKey: 'schedule_tests', channelGroupName: 'Schedule tests'),
-          NotificationChannelGroup(channelGroupKey: 'chat_tests', channelGroupName: 'Chat tests'),
-          NotificationChannelGroup(channelGroupKey: 'channel_tests', channelGroupName: 'Channel tests'),
-          NotificationChannelGroup(channelGroupKey: 'sound_tests', channelGroupName: 'Sound tests'),
-          NotificationChannelGroup(channelGroupKey: 'vibration_tests', channelGroupName: 'Vibration tests'),
-          NotificationChannelGroup(channelGroupKey: 'privacy_tests', channelGroupName: 'Privacy tests'),
-          NotificationChannelGroup(channelGroupKey: 'layout_tests', channelGroupName: 'Layout tests'),
-          NotificationChannelGroup(channelGroupKey: 'grouping_tests', channelGroupName: 'Grouping tests'),
-          NotificationChannelGroup(channelGroupKey: 'media_player_tests', channelGroupName: 'Media Player tests')
+          NotificationChannelGroup(
+              channelGroupKey: 'basic_tests', channelGroupName: 'Basic tests'),
+          NotificationChannelGroup(
+              channelGroupKey: 'category_tests',
+              channelGroupName: 'Category tests'),
+          NotificationChannelGroup(
+              channelGroupKey: 'image_tests', channelGroupName: 'Images tests'),
+          NotificationChannelGroup(
+              channelGroupKey: 'schedule_tests',
+              channelGroupName: 'Schedule tests'),
+          NotificationChannelGroup(
+              channelGroupKey: 'chat_tests', channelGroupName: 'Chat tests'),
+          NotificationChannelGroup(
+              channelGroupKey: 'channel_tests',
+              channelGroupName: 'Channel tests'),
+          NotificationChannelGroup(
+              channelGroupKey: 'sound_tests', channelGroupName: 'Sound tests'),
+          NotificationChannelGroup(
+              channelGroupKey: 'vibration_tests',
+              channelGroupName: 'Vibration tests'),
+          NotificationChannelGroup(
+              channelGroupKey: 'privacy_tests',
+              channelGroupName: 'Privacy tests'),
+          NotificationChannelGroup(
+              channelGroupKey: 'layout_tests',
+              channelGroupName: 'Layout tests'),
+          NotificationChannelGroup(
+              channelGroupKey: 'grouping_tests',
+              channelGroupName: 'Grouping tests'),
+          NotificationChannelGroup(
+              channelGroupKey: 'media_player_tests',
+              channelGroupName: 'Media Player tests')
         ],
-        debug: true
-    );
+        debug: true);
   }
 
-
-  static String _toSimpleEnum(NotificationLifeCycle lifeCycle) => lifeCycle.toString().split('.').last;
+  static String _toSimpleEnum(NotificationLifeCycle lifeCycle) =>
+      lifeCycle.toString().split('.').last;
 
   /// Use this method to detect when a new notification or a schedule is created
-  static Future <void> onNotificationCreatedMethod(ReceivedNotification receivedNotification) async {
+  static Future<void> onNotificationCreatedMethod(
+      ReceivedNotification receivedNotification) async {
     Fluttertoast.showToast(
-        msg: 'Notification created on ${_toSimpleEnum(receivedNotification.createdLifeCycle!)}',
+        msg:
+            'Notification created on ${_toSimpleEnum(receivedNotification.createdLifeCycle!)}',
         toastLength: Toast.LENGTH_SHORT,
         backgroundColor: Colors.green,
-        gravity: ToastGravity.BOTTOM
-    );
+        gravity: ToastGravity.BOTTOM);
   }
 
   /// Use this method to detect every time that a new notification is displayed
-  static Future <void> onNotificationDisplayedMethod(ReceivedNotification receivedNotification) async {
+  static Future<void> onNotificationDisplayedMethod(
+      ReceivedNotification receivedNotification) async {
     Fluttertoast.showToast(
-        msg: 'Notification displayed on ${_toSimpleEnum(receivedNotification.displayedLifeCycle!)}',
+        msg:
+            'Notification displayed on ${_toSimpleEnum(receivedNotification.displayedLifeCycle!)}',
         toastLength: Toast.LENGTH_SHORT,
         backgroundColor: Colors.blue,
-        gravity: ToastGravity.BOTTOM
-    );
+        gravity: ToastGravity.BOTTOM);
   }
 
   /// Use this method to detect if the user dismissed a notification
-  static Future <void> onDismissActionReceivedMethod(ReceivedAction receivedAction) async {
+  static Future<void> onDismissActionReceivedMethod(
+      ReceivedAction receivedAction) async {
     Fluttertoast.showToast(
-        msg: 'Notification dismissed on ${_toSimpleEnum(receivedAction.dismissedLifeCycle!)}',
+        msg:
+            'Notification dismissed on ${_toSimpleEnum(receivedAction.dismissedLifeCycle!)}',
         toastLength: Toast.LENGTH_SHORT,
         backgroundColor: Colors.orange,
-        gravity: ToastGravity.BOTTOM
-    );
+        gravity: ToastGravity.BOTTOM);
   }
 
   /// Use this method to detect when the user taps on a notification or action button
-  static Future <void> onActionReceivedMethod(ReceivedAction receivedAction) async {
-
+  static Future<void> onActionReceivedMethod(
+      ReceivedAction receivedAction) async {
     bool isSilentAction = receivedAction.actionType == ActionType.SilentAction;
 
     // SilentBackgroundAction runs on background thread and cannot show
     // UI/visual elements
     if (receivedAction.actionType != ActionType.SilentBackgroundAction)
       Fluttertoast.showToast(
-          msg: '${ isSilentAction ? 'Silent action' : 'Action'
-          } received on ${_toSimpleEnum(receivedAction.actionLifeCycle!)}',
+          msg:
+              '${isSilentAction ? 'Silent action' : 'Action'} received on ${_toSimpleEnum(receivedAction.actionLifeCycle!)}',
           toastLength: Toast.LENGTH_SHORT,
           backgroundColor: isSilentAction ? Colors.blueAccent : App.mainColor,
           gravity: ToastGravity.BOTTOM);
 
-    switch (receivedAction.channelKey){
-
+    switch (receivedAction.channelKey) {
       case 'call_channel':
-        receiveCallNotificationAction(receivedAction);
+        await receiveCallNotificationAction(receivedAction);
         break;
 
       case 'alarm_channel':
-        receiveAlarmNotificationAction(receivedAction);
+        await receiveAlarmNotificationAction(receivedAction);
         break;
 
       case 'media_player':
-        receiveMediaNotificationAction(receivedAction);
+        await receiveMediaNotificationAction(receivedAction);
         break;
 
       case 'chats':
-        receiveChatNotificationAction(receivedAction);
+        await receiveChatNotificationAction(receivedAction);
         break;
 
       default:
@@ -294,35 +313,34 @@ class NotificationController {
     }
   }
 
-  static void receiveButtonInputText(ReceivedAction receivedAction) {
+  static Future<void> receiveButtonInputText(
+      ReceivedAction receivedAction) async {
     print('Input Button Message: "${receivedAction.buttonKeyInput}"');
     Fluttertoast.showToast(
         msg: 'Msg: ' + receivedAction.buttonKeyInput,
         backgroundColor: App.mainColor,
         textColor: Colors.white);
-
   }
 
-  static void receiveStandardNotificationAction(ReceivedAction receivedAction) {
-    switch(receivedAction.actionType){
-
+  static Future<void> receiveStandardNotificationAction(
+      ReceivedAction receivedAction) async {
+    switch (receivedAction.actionType) {
       case ActionType.SilentAction:
       case ActionType.SilentBackgroundAction:
         print(receivedAction.toString());
         break;
 
       default:
-        loadSingletonPage(
-            App.navigatorKey.currentState,
+        loadSingletonPage(App.navigatorKey.currentState,
             targetPage: PAGE_NOTIFICATION_DETAILS,
             receivedAction: receivedAction);
         break;
     }
   }
 
-  static void receiveMediaNotificationAction(ReceivedAction receivedAction) {
+  static Future<void> receiveMediaNotificationAction(
+      ReceivedAction receivedAction) async {
     switch (receivedAction.buttonKeyPressed) {
-
       case 'MEDIA_CLOSE':
         MediaPlayerCentral.stop();
         break;
@@ -341,18 +359,16 @@ class NotificationController {
         break;
 
       default:
-        loadSingletonPage(
-            App.navigatorKey.currentState,
-            targetPage: PAGE_MEDIA_DETAILS,
-            receivedAction: receivedAction);
+        loadSingletonPage(App.navigatorKey.currentState,
+            targetPage: PAGE_MEDIA_DETAILS, receivedAction: receivedAction);
         break;
     }
   }
 
-  static Future<void> receiveChatNotificationAction(ReceivedAction receivedAction) async {
-
-    if( receivedAction.buttonKeyPressed == 'REPLY' ){
-      NotificationUtils.createMessagingNotification(
+  static Future<void> receiveChatNotificationAction(
+      ReceivedAction receivedAction) async {
+    if (receivedAction.buttonKeyPressed == 'REPLY') {
+      await NotificationUtils.createMessagingNotification(
         channelKey: 'chats',
         groupKey: 'jhonny_group',
         chatName: 'Jhonny\'s Group',
@@ -360,41 +376,34 @@ class NotificationController {
         largeIcon: 'asset://assets/images/rock-disc.jpg',
         message: receivedAction.buttonKeyInput,
       );
+    } else {
+      loadSingletonPage(App.navigatorKey.currentState,
+          targetPage: PAGE_MEDIA_DETAILS, receivedAction: receivedAction);
     }
-    else {
-      loadSingletonPage(
-          App.navigatorKey.currentState,
-          targetPage: PAGE_MEDIA_DETAILS,
-          receivedAction: receivedAction);
-    }
-
   }
 
-  static void receiveAlarmNotificationAction(ReceivedAction receivedAction) {
-    AndroidForegroundService.stopForeground(receivedAction.id!);
+  static Future<void> receiveAlarmNotificationAction(
+      ReceivedAction receivedAction) async {
+    await AndroidForegroundService.stopForeground(receivedAction.id!);
   }
 
-  static void receiveCallNotificationAction(ReceivedAction receivedAction) {
+  static Future<void> receiveCallNotificationAction(
+      ReceivedAction receivedAction) async {
     switch (receivedAction.buttonKeyPressed) {
-
       case 'REJECT':
-        AndroidForegroundService.stopForeground(receivedAction.id!);
+        await AndroidForegroundService.stopForeground(receivedAction.id!);
         break;
 
       case 'ACCEPT':
-        loadSingletonPage(
-            App.navigatorKey.currentState,
-            targetPage: PAGE_PHONE_CALL,
-            receivedAction: receivedAction);
+        loadSingletonPage(App.navigatorKey.currentState,
+            targetPage: PAGE_PHONE_CALL, receivedAction: receivedAction);
 
-        AndroidForegroundService.stopForeground(receivedAction.id!);
+        await AndroidForegroundService.stopForeground(receivedAction.id!);
         break;
 
       default:
-        loadSingletonPage(
-            App.navigatorKey.currentState,
-            targetPage: PAGE_PHONE_CALL,
-            receivedAction: receivedAction);
+        loadSingletonPage(App.navigatorKey.currentState,
+            targetPage: PAGE_PHONE_CALL, receivedAction: receivedAction);
         break;
     }
   }
