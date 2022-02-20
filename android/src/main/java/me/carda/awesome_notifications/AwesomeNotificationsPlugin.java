@@ -108,9 +108,6 @@ public class AwesomeNotificationsPlugin
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         detachAwesomeNotificationsPlugin(
                 binding.getApplicationContext());
-
-        if (AwesomeNotifications.debug)
-            Log.d(TAG, "Awesome Notifications plugin detached from engine");
     }
 
     private void AttachAwesomeNotificationsPlugin(Context applicationContext, MethodChannel channel) {
@@ -123,6 +120,9 @@ public class AwesomeNotificationsPlugin
                             applicationContext,
                             this);
 
+            if (AwesomeNotifications.debug)
+                Log.d(TAG, "Awesome Notifications plugin attached to Android " + Build.VERSION.SDK_INT);
+
         } catch (AwesomeNotificationsException e) {
             e.printStackTrace();
         }
@@ -133,14 +133,50 @@ public class AwesomeNotificationsPlugin
         pluginChannel.setMethodCallHandler(null);
         pluginChannel = null;
 
-        awesomeNotifications
-                .unsubscribeOnAwesomeNotificationEvents(this)
-                .dispose();
-
+        awesomeNotifications.dispose();
         awesomeNotifications = null;
 
         if (AwesomeNotifications.debug)
-            Log.d(TAG, "Awesome Notifications detached for Android " + Build.VERSION.SDK_INT);
+            Log.d(TAG, "Awesome Notifications plugin detached from Android " + Build.VERSION.SDK_INT);
+    }
+
+    @Override
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        if(awesomeNotifications == null)
+            return;
+
+        binding.addOnNewIntentListener(this);
+        awesomeNotifications
+                .attachAsMainInstance(this);
+    }
+
+    @Override
+    public void onDetachedFromActivityForConfigChanges() {
+    }
+
+    @Override
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+        if(awesomeNotifications == null)
+            return;
+
+        binding.addOnNewIntentListener(this);
+    }
+
+    @Override
+    public void onDetachedFromActivity() {
+        if(awesomeNotifications == null)
+            return;
+
+        awesomeNotifications
+                .detachAsMainInstance(this);
+    }
+
+    @Override
+    public boolean onNewIntent(Intent intent) {
+        if(awesomeNotifications == null)
+            return false;
+        return awesomeNotifications
+                .captureNotificationActionFromIntent(intent);
     }
 
     @Override
@@ -864,32 +900,5 @@ public class AwesomeNotificationsPlugin
             Log.e(TAG, "Attention: there is no valid static method to receive notification action data in background");
 
         result.success(success);
-    }
-
-    @Override
-    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        binding.addOnNewIntentListener(this);
-        if(awesomeNotifications != null)
-            awesomeNotifications.subscribeOnAwesomeNotificationEvents(this);
-    }
-
-    @Override
-    public void onDetachedFromActivityForConfigChanges() {
-    }
-
-    @Override
-    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-    }
-
-    @Override
-    public void onDetachedFromActivity() {
-    }
-
-    @Override
-    public boolean onNewIntent(Intent intent) {
-        if(awesomeNotifications == null)
-            return false;
-        return awesomeNotifications
-                .captureNotificationActionFromIntent(intent);
     }
 }

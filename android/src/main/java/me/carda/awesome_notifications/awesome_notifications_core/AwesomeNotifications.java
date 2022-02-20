@@ -1,7 +1,6 @@
 package me.carda.awesome_notifications.awesome_notifications_core;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -77,6 +76,8 @@ public class AwesomeNotifications
     private final WeakReference<Context> wContext;
     private final StringUtils stringUtils;
 
+    private WeakReference<Activity> wActivity;
+
     // ************************** CONSTRUCTOR ***********************************
 
     public AwesomeNotifications(
@@ -116,6 +117,41 @@ public class AwesomeNotifications
 
         Intent launchIntent = notificationBuilder.getLaunchIntent(applicationContext);
         captureNotificationActionFromIntent(launchIntent);
+    }
+
+    private boolean isTheMainInstance = false;
+    public void attachAsMainInstance(AwesomeEventListener awesomeEventlistener){
+        isTheMainInstance = true;
+
+        subscribeOnAwesomeNotificationEvents(awesomeEventlistener);
+
+        AwesomeEventsReceiver
+                .getInstance()
+                .subscribeOnNotificationEvents(this)
+                .subscribeOnActionEvents(this);
+
+
+        Log.d(TAG, "Awesome notifications ("+this.hashCode()+")  attached to activity");
+    }
+
+    public void detachAsMainInstance(AwesomeEventListener awesomeEventlistener){
+        isTheMainInstance = true;
+
+        unsubscribeOnAwesomeNotificationEvents(awesomeEventlistener);
+
+        AwesomeEventsReceiver
+                .getInstance()
+                .unsubscribeOnNotificationEvents(this)
+                .unsubscribeOnActionEvents(this);
+
+
+        Log.d(TAG, "Awesome notifications ("+this.hashCode()+")  detached from activity");
+    }
+
+    public void dispose(){
+        LifeCycleManager
+                .getInstance()
+                .unsubscribe(this);
     }
 
     // ******************** LOAD EXTERNAL EXTENSIONS ***************************
@@ -168,12 +204,6 @@ public class AwesomeNotifications
         }
     }
 
-    public void dispose(){
-        LifeCycleManager
-                .getInstance()
-                .unsubscribe(this);
-    }
-
     // ********************************************************
 
     /// **************  EVENT INTERFACES  *********************
@@ -188,44 +218,35 @@ public class AwesomeNotifications
         notifyNotificationEvent(eventName, notificationReceived);
     }
 
-    private boolean activityHasStarted = false;
     @Override
     public void onNewLifeCycleEvent(NotificationLifeCycle lifeCycle) {
+
+        if(!isTheMainInstance)
+            return;
 
         switch (lifeCycle){
 
             case Foreground:
-                if(activityHasStarted)
-                    PermissionManager
-                            .getInstance()
-                            .handlePermissionResult(
-                                    PermissionManager.REQUEST_CODE,
-                                    null,
-                                    null);
-
-                if(!activityHasStarted)
-                    AwesomeEventsReceiver
-                            .getInstance()
-                            .subscribeOnNotificationEvents(this)
-                            .subscribeOnActionEvents(this);
-
-                activityHasStarted = true;
+                PermissionManager
+                        .getInstance()
+                        .handlePermissionResult(
+                                PermissionManager.REQUEST_CODE,
+                                null,
+                                null);
                 break;
 
             case Background:
                 break;
 
             case AppKilled:
-                if(activityHasStarted) {
-                    AwesomeEventsReceiver
-                            .getInstance()
-                            .unsubscribeOnNotificationEvents(this)
-                            .unsubscribeOnActionEvents(this);
+                AwesomeEventsReceiver
+                        .getInstance()
+                        .unsubscribeOnNotificationEvents(this)
+                        .unsubscribeOnActionEvents(this);
 
-                    NotificationScheduler
-                            .refreshScheduledNotifications(
-                                    wContext.get());
-                }
+//                NotificationScheduler
+//                        .refreshScheduledNotifications(
+//                                wContext.get());
         }
     }
 
