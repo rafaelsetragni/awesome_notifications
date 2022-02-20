@@ -468,7 +468,7 @@ public class NotificationBuilder {
                                 .send(
                                     context,
                                     this,
-                                    AwesomeNotifications.getApplicationLifeCycle(),
+                                    notificationModel.content.displayedLifeCycle,
                                     notificationModel);
 
                     } catch (Exception e) {

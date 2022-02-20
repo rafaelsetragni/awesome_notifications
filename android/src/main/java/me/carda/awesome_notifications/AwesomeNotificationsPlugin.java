@@ -125,8 +125,6 @@ public class AwesomeNotificationsPlugin
 
         } catch (AwesomeNotificationsException e) {
             e.printStackTrace();
-        } finally {
-            awesomeNotifications.subscribeOnAwesomeNotificationEvents(this);
         }
     }
 
@@ -871,6 +869,8 @@ public class AwesomeNotificationsPlugin
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         binding.addOnNewIntentListener(this);
+        if(awesomeNotifications != null)
+            awesomeNotifications.subscribeOnAwesomeNotificationEvents(this);
     }
 
     @Override
