@@ -384,21 +384,20 @@ class NotificationController {
 
   static Future<void> receiveAlarmNotificationAction(
       ReceivedAction receivedAction) async {
-    await AndroidForegroundService.stopForeground(receivedAction.id!);
+    // Your allarm logic goes here
   }
 
   static Future<void> receiveCallNotificationAction(
       ReceivedAction receivedAction) async {
     switch (receivedAction.buttonKeyPressed) {
       case 'REJECT':
-        await AndroidForegroundService.stopForeground(receivedAction.id!);
+        // Is not necessary to do anything, because the reject button is
+        // already auto dismissible
         break;
 
       case 'ACCEPT':
         loadSingletonPage(App.navigatorKey.currentState,
             targetPage: PAGE_PHONE_CALL, receivedAction: receivedAction);
-
-        await AndroidForegroundService.stopForeground(receivedAction.id!);
         break;
 
       default:

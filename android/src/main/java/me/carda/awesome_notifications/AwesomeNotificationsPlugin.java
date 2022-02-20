@@ -1,18 +1,19 @@
 package me.carda.awesome_notifications;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 
 import io.flutter.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
@@ -22,6 +23,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
+import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
@@ -56,6 +58,7 @@ public class AwesomeNotificationsPlugin
             FlutterPlugin,
             MethodCallHandler,
             AwesomeEventListener,
+            PluginRegistry.NewIntentListener,
             ActivityAware
 {
     private static final String TAG = "AwesomeNotificationsPlugin";
@@ -867,25 +870,26 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        if(awesomeNotifications != null)
-            awesomeNotifications
-                    .registerActivity(binding.getActivity());
+        binding.addOnNewIntentListener(this);
     }
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
-
     }
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        if(awesomeNotifications != null)
-            awesomeNotifications
-                    .registerActivity(binding.getActivity());
     }
 
     @Override
     public void onDetachedFromActivity() {
+    }
 
+    @Override
+    public boolean onNewIntent(Intent intent) {
+        if(awesomeNotifications == null)
+            return false;
+        return awesomeNotifications
+                .captureNotificationActionFromIntent(intent);
     }
 }

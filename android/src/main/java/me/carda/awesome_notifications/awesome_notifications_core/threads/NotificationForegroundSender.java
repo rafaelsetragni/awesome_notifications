@@ -38,7 +38,7 @@ public class NotificationForegroundSender extends NotificationThread<String, Voi
 
     private long startTime = 0L, endTime = 0L;
 
-    private StringUtils stringUtils;
+    private final StringUtils stringUtils;
 
     public static void start(
             @NonNull Context applicationContext,

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +14,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_core.threads.NotificationForegroundSender;
@@ -24,6 +26,8 @@ import me.carda.awesome_notifications.awesome_notifications_core.managers.LifeCy
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationModel;
 
 public class ForegroundService extends Service {
+
+    private static final String TAG = "ForegroundService";
 
     private static final Map<Integer, ForegroundService> serviceStack = new HashMap<>();
     private static final Map<Integer, ForegroundServiceIntent> serviceIntentStack = new HashMap<>();
@@ -102,8 +106,15 @@ public class ForegroundService extends Service {
         @NonNull Integer notificationId
     ){
         ForegroundService foregroundService = serviceStack.remove(notificationId);
-        if(foregroundService != null)
+        if(foregroundService != null) {
             foregroundService.stopSelf();
+            if(AwesomeNotifications.debug)
+                Log.d(TAG, "Foreground service "+ notificationId +" id stopped");
+        }
+        else {
+            if(AwesomeNotifications.debug)
+                Log.d(TAG, "Foreground service "+ notificationId +" id not found");
+        }
     }
 
     @Override

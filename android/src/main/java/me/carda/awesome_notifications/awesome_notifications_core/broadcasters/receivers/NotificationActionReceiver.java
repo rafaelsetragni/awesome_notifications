@@ -9,10 +9,12 @@ import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifica
 import me.carda.awesome_notifications.awesome_notifications_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ActionType;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationLifeCycle;
+import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationSource;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.LifeCycleManager;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.StatusBarManager;
 import me.carda.awesome_notifications.awesome_notifications_core.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.senders.BroadcastSender;
+import me.carda.awesome_notifications.awesome_notifications_core.services.ForegroundService;
 
 public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
 
@@ -20,6 +22,10 @@ public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
 
     @Override
     public void onReceiveBroadcastEvent(final Context context, Intent intent) {
+        receiveActionIntent(context, intent);
+    }
+
+    public static void receiveActionIntent(final Context context, Intent intent){
 
         if(AwesomeNotifications.debug)
             Log.d(TAG, "New action received");
@@ -55,18 +61,19 @@ public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
                             .notificationActionShouldAutoDismiss(actionReceived);
 
         if(shouldAutoDismiss) {
-            StatusBarManager
-                    .getInstance(context)
-                    .dismissNotification(actionReceived.id);
+            if (actionReceived.createdSource == NotificationSource.ForegroundService)
+                ForegroundService
+                        .stop(actionReceived.id);
+            else
+                StatusBarManager
+                        .getInstance(context)
+                        .dismissNotification(actionReceived.id);
         }
         else {
             if (actionReceived.actionType != ActionType.KeepOnTop)
-                // All background notifications are or auto dismissible or keep on top since Android 12
-                // https://developer.android.com/about/versions/12/behavior-changes-all?hl=pt-br#close-system-dialogs-exceptions
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S /*Android 12*/)
-                    StatusBarManager
-                            .getInstance(context)
-                            .closeStatusBar();
+                StatusBarManager
+                        .getInstance(context)
+                        .closeStatusBar(context);
         }
 
         try {
@@ -78,9 +85,9 @@ public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
                             context,
                             actionReceived);
 
-                    if (appLifeCycle != NotificationLifeCycle.Foreground)
+                    /*if (appLifeCycle != NotificationLifeCycle.Foreground)
                         notificationBuilder
-                                .forceBringAppToForeground(context);
+                                .forceBringAppToForeground(context);*/
                     break;
 
                 case KeepOnTop:

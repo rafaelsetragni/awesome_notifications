@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationManagerCompat;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
+import me.carda.awesome_notifications.awesome_notifications_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationLayout;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationModel;
@@ -69,10 +70,14 @@ public class StatusBarManager {
 
     // ********************************************************
 
+    // The status bar cannot be closed anymore from a notification action since Android 12
     // https://developer.android.com/about/versions/12/behavior-changes-all?hl=pt-br#close-system-dialogs-exceptions
-    public void closeStatusBar(){
-        Intent closingIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-        wContext.get().sendBroadcast(closingIntent);
+    // https://developer.android.com/reference/android/content/Intent?hl=pt-br#ACTION_CLOSE_SYSTEM_DIALOGS
+    public void closeStatusBar(Context context){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S /*Android 12*/) {
+            Intent closingIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            wContext.get().sendBroadcast(closingIntent);
+        }
     }
 
     public void showNotificationOnStatusBar(NotificationModel notificationModel, Notification notification){

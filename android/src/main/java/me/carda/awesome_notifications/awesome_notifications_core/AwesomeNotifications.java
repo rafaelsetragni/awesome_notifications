@@ -1,6 +1,7 @@
 package me.carda.awesome_notifications.awesome_notifications_core;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.AwesomeEventsReceiver;
+import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.NotificationActionReceiver;
 import me.carda.awesome_notifications.awesome_notifications_core.decoders.BitmapResourceDecoder;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundServiceType;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundStartMode;
@@ -64,9 +66,9 @@ import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUti
 
 public class AwesomeNotifications
     implements
-            AwesomeNotificationEventListener,
-            AwesomeActionEventListener,
-            AwesomeLifeCycleEventListener
+        AwesomeNotificationEventListener,
+        AwesomeActionEventListener,
+        AwesomeLifeCycleEventListener
 {
     private static final String TAG = "AwesomeNotifications";
 
@@ -74,7 +76,6 @@ public class AwesomeNotifications
 
     private final WeakReference<Context> wContext;
     private final StringUtils stringUtils;
-    private Activity applicationActivity;
 
     // ************************** CONSTRUCTOR ***********************************
 
@@ -84,9 +85,7 @@ public class AwesomeNotifications
     ) throws AwesomeNotificationsException {
 
         debug = isApplicationInDebug(applicationContext);
-
-        this.wContext = new WeakReference<>(applicationContext);
-
+        wContext = new WeakReference<>(applicationContext);
         stringUtils = StringUtils.getInstance();
 
         LifeCycleManager
@@ -98,16 +97,14 @@ public class AwesomeNotifications
                 .defaultValues
                 .putAll(Definitions.initialValues);
 
-        NotificationBuilder
+        NotificationBuilder notificationBuilder =
+            NotificationBuilder
+                .getNewBuilder()
+                .updateMainTargetClassName(applicationContext)
                 .setMediaSession(
                         new MediaSessionCompat(
                                 applicationContext,
                                 "PUSH_MEDIA"));
-
-        NotificationBuilder
-                .getNewBuilder()
-                .updateMainTargetClassName(
-                        applicationContext);
 
         DefaultsManager.setAwesomeExtensionClassName(
                 applicationContext,
@@ -116,10 +113,9 @@ public class AwesomeNotifications
         loadAwesomeExtensions(
                 applicationContext,
                 stringUtils);
-    }
 
-    public void registerActivity(Activity activity){
-        applicationActivity = activity;
+        Intent launchIntent = notificationBuilder.getLaunchIntent(applicationContext);
+        captureNotificationActionFromIntent(launchIntent);
     }
 
     // ******************** LOAD EXTERNAL EXTENSIONS ***************************
@@ -372,8 +368,6 @@ public class AwesomeNotifications
 
         setChannels(currentContext, channelsData);
 
-        captureNotificationActionOnLaunch(currentContext);
-
         AwesomeNotifications.debug = debug && isApplicationInDebug(currentContext);
 
         NotificationScheduler
@@ -535,31 +529,6 @@ public class AwesomeNotifications
                 }
     }
 
-    // *****************************  ACTIONS AT LAUNCH  **********************************
-
-    private void captureNotificationActionOnLaunch(@NonNull Context applicationContext) throws AwesomeNotificationsException {
-
-        String packageName = applicationContext.getPackageName();
-
-        Intent launchIntent =
-                applicationContext
-                        .getPackageManager()
-                        .getLaunchIntentForPackage(packageName);
-
-        if (launchIntent == null)
-            return;
-
-        String actionName = launchIntent.getAction();
-        if (actionName == null)
-            return;
-
-        Boolean isStandardAction = Definitions.SELECT_NOTIFICATION.equals(actionName);
-        Boolean isButtonAction = actionName.startsWith(Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX);
-
-        if (isStandardAction || isButtonAction)
-            receiveNotificationAction(launchIntent, NotificationLifeCycle.AppKilled);
-    }
-
     // *****************************  NOTIFICATION METHODS  **********************************
 
     public boolean createNotification(@NonNull NotificationModel notificationModel) throws AwesomeNotificationsException {
@@ -586,6 +555,30 @@ public class AwesomeNotifications
                         notificationModel);
 
         return true;
+    }
+
+    private void captureNotificationActionFromActivity(Activity startActivity) {
+        if (startActivity == null)
+            return;
+        captureNotificationActionFromIntent(startActivity.getIntent());
+    }
+
+    public boolean captureNotificationActionFromIntent(Intent intent) {
+        if (intent == null)
+            return false;
+
+        String actionName = intent.getAction();
+        if (actionName == null)
+            return false;
+
+        Boolean isStandardAction = Definitions.SELECT_NOTIFICATION.equals(actionName);
+        Boolean isButtonAction = actionName.startsWith(Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX);
+
+        boolean isNotificationAction = isStandardAction || isButtonAction;
+        if (isNotificationAction)
+            NotificationActionReceiver.receiveActionIntent(wContext.get(), intent);
+
+        return isNotificationAction;
     }
 
     // *****************************  CHANNEL METHODS  **********************************
@@ -635,37 +628,6 @@ public class AwesomeNotifications
 
     public void stopForegroundService(Integer notificationId) {
         ForegroundService.stop(notificationId);
-    }
-
-    private Boolean receiveNotificationAction(
-            @NonNull Intent intent,
-            @NonNull NotificationLifeCycle appLifeCycle
-    ) throws AwesomeNotificationsException {
-
-        ActionReceived actionModel =
-                NotificationBuilder
-                        .getNewBuilder()
-                        .receiveNotificationActionFromIntent(
-                                wContext.get(),
-                                intent,
-                                appLifeCycle);
-
-        if (actionModel == null)
-            return false;
-
-        return receiveNotificationAction(actionModel);
-    }
-
-    private Boolean receiveNotificationAction(@NonNull ActionReceived actionModel) throws AwesomeNotificationsException {
-
-        actionModel.validate(wContext.get());
-
-        notifyAwesomeEvent(Definitions.EVENT_DEFAULT_ACTION, actionModel);
-
-        if (AwesomeNotifications.debug)
-            Log.d(TAG, "Notification action received");
-
-        return true;
     }
 
     public Calendar getNextValidDate(@NonNull NotificationScheduleModel scheduleModel, @Nullable Calendar fixedDate) throws AwesomeNotificationsException {

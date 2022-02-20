@@ -19,6 +19,7 @@ import android.os.PowerManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.text.Spanned;
+import android.util.Log;
 
 
 import java.io.Serializable;
@@ -252,19 +253,30 @@ public class NotificationBuilder {
                 notificationModel,
                 channelModel,
                 actionType,
-                NotificationActionReceiver.class
+                actionType == ActionType.Default ?
+                    getMainTargetClass(context) :
+                    NotificationActionReceiver.class
         );
 
         if(actionType == ActionType.Default)
             actionIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        return PendingIntent.getBroadcast(
-                    context,
-                    notificationModel.content.id,
-                    actionIntent,
-                    (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ?
-                            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
-                            PendingIntent.FLAG_UPDATE_CURRENT);
+        return actionType == ActionType.Default ?
+                PendingIntent.getActivity(
+                            context,
+                            notificationModel.content.id,
+                            actionIntent,
+                            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ?
+                                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
+                                    PendingIntent.FLAG_UPDATE_CURRENT)
+                :
+                PendingIntent.getBroadcast(
+                            context,
+                            notificationModel.content.id,
+                            actionIntent,
+                            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ?
+                                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
+                                    PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private PendingIntent getPendingDismissIntent(
@@ -322,14 +334,17 @@ public class NotificationBuilder {
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
+            Log.e(TAG, "Was not possible to resolve the class named '"+className+"'");
+            e.printStackTrace();
             return null;
         }
     }
     
-    public Class getMainTargetClass(Context applicationContext){
-
+    public Class getMainTargetClass(
+            Context applicationContext
+    ){
         if(mainTargetClassName == null)
-            updateMainTargetClassNameFromInitialIntent(applicationContext);
+            updateMainTargetClassName(applicationContext);
 
         if(mainTargetClassName == null)
             mainTargetClassName = applicationContext.getPackageName() + ".MainActivity";
@@ -345,33 +360,27 @@ public class NotificationBuilder {
         String packageName = applicationContext.getPackageName();
         Intent intent = new Intent();
         intent.setPackage(packageName);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        List<ResolveInfo> resolveInfoList = applicationContext
-                .getPackageManager()
-                .queryIntentActivities(intent, 0);
+        List<ResolveInfo> resolveInfoList =
+                applicationContext
+                        .getPackageManager()
+                        .queryIntentActivities(intent, 0);
 
         if(resolveInfoList.size() > 0)
             mainTargetClassName = resolveInfoList.get(0).activityInfo.name;
 
-        if(stringUtils.isNullOrEmpty(mainTargetClassName))
-            updateMainTargetClassNameFromInitialIntent(applicationContext);
-
         return this;
     }
 
-    public static void setMediaSession(MediaSessionCompat mediaSession) {
+    public NotificationBuilder setMediaSession(MediaSessionCompat mediaSession) {
         NotificationBuilder.mediaSession = mediaSession;
+        return this;
     }
 
-    private void updateMainTargetClassNameFromInitialIntent(Context applicationContext) {
-
+    public Intent getLaunchIntent(Context applicationContext){
         String packageName = applicationContext.getPackageName();
-        Intent launchIntent = applicationContext.getPackageManager().getLaunchIntentForPackage(packageName);
-        if(launchIntent != null) return;
-
-        mainTargetClassName = launchIntent
-                .getComponent()
-                .getClassName();
+        return applicationContext.getPackageManager().getLaunchIntentForPackage(packageName);
     }
 
     public ActionReceived buildNotificationActionFromIntent(Context context, Intent intent, NotificationLifeCycle lifeCycle) {
@@ -783,15 +792,19 @@ public class NotificationBuilder {
                 continue;
             }
 
+            ActionType actionType = buttonProperties.actionType;
+
             Intent actionIntent = buildNotificationIntentFromNotificationModel(
-                    context,
-                    originalIntent,
-                    Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX + "_" + buttonProperties.key,
-                    notificationModel,
-                    channel,
-                    buttonProperties.actionType,
+                context,
+                originalIntent,
+                Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX + "_" + buttonProperties.key,
+                notificationModel,
+                channel,
+                buttonProperties.actionType,
+                actionType == ActionType.Default ?
+                    getMainTargetClass(context):
                     NotificationActionReceiver.class
-                );
+            );
 
             if(buttonProperties.actionType == ActionType.Default)
                     actionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -812,13 +825,23 @@ public class NotificationBuilder {
                     actionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 }
 
-                actionPendingIntent = PendingIntent.getBroadcast(
-                        context,
-                        notificationModel.content.id,
-                        actionIntent,
-                        (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ?
-                                PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
-                                PendingIntent.FLAG_UPDATE_CURRENT);
+                actionPendingIntent =
+                    actionType == ActionType.Default ?
+                        PendingIntent.getActivity(
+                                context,
+                                notificationModel.content.id,
+                                actionIntent,
+                                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ?
+                                        PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
+                                        PendingIntent.FLAG_UPDATE_CURRENT)
+                            :
+                        PendingIntent.getBroadcast(
+                                context,
+                                notificationModel.content.id,
+                                actionIntent,
+                                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ?
+                                        PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
+                                        PendingIntent.FLAG_UPDATE_CURRENT);
             }
 
             int iconResource = 0;
