@@ -35,6 +35,10 @@ public class AwesomeEventsReceiver {
         return instance;
     }
 
+    public boolean isEmpty(){
+        return notificationActionListeners.isEmpty();
+    }
+
     // ********************************************************
 
     protected final StringUtils stringUtils;

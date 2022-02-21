@@ -133,6 +133,7 @@ public class AwesomeNotificationsPlugin
         pluginChannel.setMethodCallHandler(null);
         pluginChannel = null;
 
+        awesomeNotifications.detachAsMainInstance(this);
         awesomeNotifications.dispose();
         awesomeNotifications = null;
 
@@ -142,12 +143,9 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        if(awesomeNotifications == null)
-            return;
-
+        Intent launchIntent = binding.getActivity().getIntent();
+        awesomeNotifications.captureNotificationActionFromIntent(launchIntent);
         binding.addOnNewIntentListener(this);
-        awesomeNotifications
-                .attachAsMainInstance(this);
     }
 
     @Override
@@ -156,25 +154,15 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        if(awesomeNotifications == null)
-            return;
-
         binding.addOnNewIntentListener(this);
     }
 
     @Override
     public void onDetachedFromActivity() {
-        if(awesomeNotifications == null)
-            return;
-
-        awesomeNotifications
-                .detachAsMainInstance(this);
     }
 
     @Override
     public boolean onNewIntent(Intent intent) {
-        if(awesomeNotifications == null)
-            return false;
         return awesomeNotifications
                 .captureNotificationActionFromIntent(intent);
     }
@@ -191,6 +179,14 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onMethodCall(@NonNull final MethodCall call, @NonNull final Result result) {
+
+        if (awesomeNotifications == null) {
+            if (AwesomeNotifications.debug)
+                Log.d(TAG, "Awesome notifications is currently not available");
+
+            result.error(call.method, "Awesome notifications is currently not available", null);
+            return;
+        }
 
         try {
 
@@ -893,6 +889,7 @@ public class AwesomeNotificationsPlugin
 
         Long silentCallback = callbackActionObj == null ? 0L : (Long) callbackActionObj;
 
+        awesomeNotifications.attachAsMainInstance(this);
         awesomeNotifications.setActionHandle(silentCallback);
 
         boolean success = silentCallback != 0L;

@@ -38,6 +38,10 @@ public class SwiftAwesomeNotificationsPlugin:
                 usingRegistrar: registrar,
                 throughFlutterChannel: flutterChannel)
     }
+    
+    public func detachFromEngine(for registrar: FlutterPluginRegistrar) {
+        detacheAwesomeNotifications(usingRegistrar: registrar)
+    }
 
     private func AttachAwesomeNotificationsPlugin(
         usingRegistrar registrar: FlutterPluginRegistrar,
@@ -56,17 +60,28 @@ public class SwiftAwesomeNotificationsPlugin:
             Log.e(TAG, "\(error.localizedDescription)")
         }
         
-        awesomeNotifications!
-            .subscribeOnAwesomeNotificationEvents(
-                listener: self)
-        
         registrar.addMethodCallDelegate(self, channel: self.flutterChannel!)
         registrar.addApplicationDelegate(self)
         
         if AwesomeNotifications.debug {
-            Log.d(TAG, "Awesome Notifications attached to engine for iOS \(floor(NSFoundationVersionNumber))")
+            Log.d(TAG, "Awesome Notifications plugin attached to iOS \(floor(NSFoundationVersionNumber))")
             Log.d(TAG, "Awesome Notifications - App Group : \(Definitions.USER_DEFAULT_TAG)")
 		}
+    }
+    
+    private func detacheAwesomeNotifications(
+        usingRegistrar registrar: FlutterPluginRegistrar
+    ){
+        flutterChannel = nil
+        self.registrar = nil
+        
+        awesomeNotifications?.detachAsMainInstance(listener: self)
+        awesomeNotifications?.dispose()
+        awesomeNotifications = nil
+        
+        if AwesomeNotifications.debug {
+            Log.d(TAG, "Awesome Notifications plugin detached from iOS \(floor(NSFoundationVersionNumber))")
+        }
     }
     
     public func onNewAwesomeEvent(eventType: String, content: [String : Any?]) {
@@ -81,6 +96,20 @@ public class SwiftAwesomeNotificationsPlugin:
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        
+        if awesomeNotifications == nil {
+            if AwesomeNotifications.debug {
+                Log.d(TAG, "Awesome notifications is currently not available")
+            }
+            result(
+                FlutterError.init(
+                    code: TAG,
+                    message: "Awesome notifications is currently not available",
+                    details: nil
+                )
+            )
+            return
+        }
 		
 		do {
 		
@@ -236,8 +265,6 @@ public class SwiftAwesomeNotificationsPlugin:
                     details: error.localizedDescription
                 )
             )
-
-            result(false)
         }
     }
     
@@ -819,14 +846,14 @@ public class SwiftAwesomeNotificationsPlugin:
 		result(awesomeNotifications != nil)
     }
     
-    
     private func channelMethodSetActionHandle(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
         let actionHandle:Int64 = platformParameters[Definitions.ACTION_HANDLE] as? Int64 ?? 0
-    
+        
+        awesomeNotifications?.attachAsMainInstance(usingAwesomeEventListener: self)
         try awesomeNotifications?.setActionHandle(actionHandle: actionHandle)
         
-        let success = actionHandle != 0;
+        let success = actionHandle != 0
         if !success {
             Log.e(TAG, "Attention: there is no valid static method to receive notification action data in background");
         }

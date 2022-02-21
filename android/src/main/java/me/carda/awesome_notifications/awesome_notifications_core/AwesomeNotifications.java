@@ -96,6 +96,9 @@ public class AwesomeNotifications
 
         AbstractModel
                 .defaultValues
+                .clear();
+        AbstractModel
+                .defaultValues
                 .putAll(Definitions.initialValues);
 
         NotificationBuilder notificationBuilder =
@@ -114,13 +117,13 @@ public class AwesomeNotifications
         loadAwesomeExtensions(
                 applicationContext,
                 stringUtils);
-
-        Intent launchIntent = notificationBuilder.getLaunchIntent(applicationContext);
-        captureNotificationActionFromIntent(launchIntent);
     }
 
     private boolean isTheMainInstance = false;
     public void attachAsMainInstance(AwesomeEventListener awesomeEventlistener){
+        if (isTheMainInstance)
+            return;
+
         isTheMainInstance = true;
 
         subscribeOnAwesomeNotificationEvents(awesomeEventlistener);
@@ -130,12 +133,14 @@ public class AwesomeNotifications
                 .subscribeOnNotificationEvents(this)
                 .subscribeOnActionEvents(this);
 
-
-        Log.d(TAG, "Awesome notifications ("+this.hashCode()+")  attached to activity");
+        Log.d(TAG, "Awesome notifications ("+this.hashCode()+") attached to activity");
     }
 
     public void detachAsMainInstance(AwesomeEventListener awesomeEventlistener){
-        isTheMainInstance = true;
+        if (!isTheMainInstance)
+            return;
+
+        isTheMainInstance = false;
 
         unsubscribeOnAwesomeNotificationEvents(awesomeEventlistener);
 
@@ -145,7 +150,7 @@ public class AwesomeNotifications
                 .unsubscribeOnActionEvents(this);
 
 
-        Log.d(TAG, "Awesome notifications ("+this.hashCode()+")  detached from activity");
+        Log.d(TAG, "Awesome notifications ("+this.hashCode()+") detached from activity");
     }
 
     public void dispose(){
@@ -239,10 +244,6 @@ public class AwesomeNotifications
                 break;
 
             case AppKilled:
-                AwesomeEventsReceiver
-                        .getInstance()
-                        .unsubscribeOnNotificationEvents(this)
-                        .unsubscribeOnActionEvents(this);
 
 //                NotificationScheduler
 //                        .refreshScheduledNotifications(

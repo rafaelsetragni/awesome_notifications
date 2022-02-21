@@ -21,12 +21,18 @@ public class BroadcastSender {
 
     private static final String TAG = "BroadcastSender";
 
+    private static boolean withoutListenersAvailable(){
+        return
+            LifeCycleManager.getApplicationLifeCycle() == NotificationLifeCycle.AppKilled ||
+            AwesomeEventsReceiver.getInstance().isEmpty();
+    }
+
     public static void sendBroadcastNotificationCreated(Context context, NotificationReceived notificationReceived){
 
         if (notificationReceived != null)
             try {
 
-                if(LifeCycleManager.getApplicationLifeCycle() == NotificationLifeCycle.AppKilled) {
+                if(withoutListenersAvailable()) {
                     CreatedManager.saveCreated(context, notificationReceived);
                     CreatedManager.commitChanges(context);
                 }
@@ -49,7 +55,7 @@ public class BroadcastSender {
         if (notificationReceived != null)
             try {
 
-                if(LifeCycleManager.getApplicationLifeCycle() == NotificationLifeCycle.AppKilled) {
+                if(withoutListenersAvailable()) {
                     DisplayedManager.saveDisplayed(context, notificationReceived);
                     DisplayedManager.commitChanges(context);
                 }
@@ -71,7 +77,7 @@ public class BroadcastSender {
         if (actionReceived != null)
             try {
 
-                if(LifeCycleManager.getApplicationLifeCycle() == NotificationLifeCycle.AppKilled) {
+                if(withoutListenersAvailable()) {
                     DismissedManager.saveDismissed(context, actionReceived);
                     DismissedManager.commitChanges(context);
                 }
@@ -93,7 +99,7 @@ public class BroadcastSender {
         if (actionReceived != null)
             try {
 
-                if(LifeCycleManager.getApplicationLifeCycle() == NotificationLifeCycle.AppKilled) {
+                if(withoutListenersAvailable()) {
                     ActionManager.saveAction(context, actionReceived);
                     ActionManager.commitChanges(context);
                 }

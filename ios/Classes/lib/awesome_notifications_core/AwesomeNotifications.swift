@@ -28,6 +28,8 @@ public class AwesomeNotifications:
     ) throws {
         super.init()
         
+        AwesomeNotifications.debug = isApplicationInDebug()
+        
         if !SwiftUtils.isRunningOnExtension() {
             LifeCycleManager
                 .shared
@@ -103,14 +105,50 @@ public class AwesomeNotifications:
         isExtensionsLoaded = true
     }
     
-    deinit {
+    private var isTheMainInstance = false
+    public func attachAsMainInstance(usingAwesomeEventListener listener: AwesomeEventListener){
+        if self.isTheMainInstance {
+            return
+        }
         
+        self.isTheMainInstance = true
+        
+        subscribeOnAwesomeNotificationEvents(listener: listener)
+        
+        AwesomeEventsReceiver
+            .shared
+            .subscribeOnNotificationEvents(listener: self)
+            .subscribeOnActionEvents(listener: self)
+        
+        Log.d(TAG, "Awesome notifications \(self.hash) attached to app instance");
+    }
+    
+    public func detachAsMainInstance(listener: AwesomeEventListener){
+        if !self.isTheMainInstance {
+            return
+        }
+        
+        self.isTheMainInstance = false
+        
+        unsubscribeOnAwesomeNotificationEvents(listener: listener)
+        
+        AwesomeEventsReceiver
+            .shared
+            .unsubscribeOnNotificationEvents(listener: self)
+            .unsubscribeOnActionEvents(listener: self)
+        
+        Log.d(TAG, "Awesome notifications \(self.hash) detached from app instance");
+    }
+    
+    func dispose(){
         if !SwiftUtils.isRunningOnExtension() {
             LifeCycleManager
                 .shared
                 .unsubscribe(listener: self)
         }
-        
+    }
+    
+    deinit {
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -146,24 +184,18 @@ public class AwesomeNotifications:
         notifyActionEvent(fromEventNamed: eventName, withActionReceived: actionReceived)
     }
     
-    private var mainAppHasStarted = false
     public func onNewLifeCycleEvent(lifeCycle: NotificationLifeCycle) {
+        
+        if !isTheMainInstance {
+            return
+        }
         
         switch lifeCycle {
             
             case .Foreground:
-                if mainAppHasStarted {
-                    PermissionManager
-                        .shared
-                        .handlePermissionResult()
-                }
-                else {
-                    AwesomeEventsReceiver
-                        .shared
-                        .subscribeOnNotificationEvents(listener: self)
-                        .subscribeOnActionEvents(listener: self)
-                }
-                mainAppHasStarted = true
+                PermissionManager
+                    .shared
+                    .handlePermissionResult()
                 break
             
             case .Background:
@@ -171,12 +203,6 @@ public class AwesomeNotifications:
                 
             
             case .AppKilled:
-                if mainAppHasStarted {
-                    AwesomeEventsReceiver
-                        .shared
-                        .unsubscribeOnNotificationEvents(listener: self)
-                        .unsubscribeOnActionEvents(listener: self)
-                }
                 break
         }
     }
@@ -329,6 +355,14 @@ public class AwesomeNotifications:
                 completionHandler([])
             }
         })
+    }
+    
+    public func isApplicationInDebug() -> Bool {
+#if DEBUG
+        return true
+#else
+        return false
+#endif
     }
     
     // *****************************  INITIALIZATION FUNCTIONS  **********************************
