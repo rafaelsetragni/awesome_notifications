@@ -84,10 +84,6 @@ public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
                     BroadcastSender.sendBroadcastDefaultAction(
                             context,
                             actionReceived);
-
-                    /*if (appLifeCycle != NotificationLifeCycle.Foreground)
-                        notificationBuilder
-                                .forceBringAppToForeground(context);*/
                     break;
 
                 case KeepOnTop:
