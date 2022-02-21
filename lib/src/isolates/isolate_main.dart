@@ -78,7 +78,7 @@ Future<bool> receiveSilentAction(Map<String, dynamic> arguments) async {
   final ReceivedAction receivedAction = ReceivedAction().fromMap(actionMap);
 
   try {
-    onActionDataHandle(receivedAction);
+    await onActionDataHandle(receivedAction);
   } catch (e, stacktrace) {
     print("Got an unknown Silent Action callback error: ${e.toString()}");
     print(stacktrace);

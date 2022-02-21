@@ -5,10 +5,10 @@ import 'package:awesome_notifications_example/utils/media_player_central.dart';
 import 'package:awesome_notifications_example/notifications/notifications_util.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/android_foreground_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 
 class NotificationController {
   static void initializeNotificationsPlugin() {
@@ -286,6 +286,13 @@ class NotificationController {
           toastLength: Toast.LENGTH_SHORT,
           backgroundColor: isSilentAction ? Colors.blueAccent : App.mainColor,
           gravity: ToastGravity.BOTTOM);
+    else {
+      print("start");
+      final url = Uri.parse("http://google.com");
+      final re = await http.get(url);
+      print(re.body);
+      print("done");
+    }
 
     switch (receivedAction.channelKey) {
       case 'call_channel':

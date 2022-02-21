@@ -130,28 +130,6 @@ class AwesomeNotifications {
   StreamSubscription? _actionSubscription;
   StreamSubscription? _dismissedSubscription;
 
-  _startEventListeners() {
-    // Ensures that there is at most one subscription
-    _createdSubscription?.cancel();
-    _displayedSubscription?.cancel();
-    _actionSubscription?.cancel();
-    _dismissedSubscription?.cancel();
-
-    // Streams will be keept internally. They are deprecated to use outside.
-    _createdSubscription = createdStream.listen((event) async {
-      if (_createdHandler != null) await _createdHandler!(event);
-    });
-    _displayedSubscription = displayedStream.listen((event) async {
-      if (_displayedHandler != null) await _displayedHandler!(event);
-    });
-    _actionSubscription = actionStream.listen((event) async {
-      if (_actionHandler != null) await _actionHandler!(event);
-    });
-    _dismissedSubscription = dismissedStream.listen((event) async {
-      if (_dismissedHandler != null) await _dismissedHandler!(event);
-    });
-  }
-
   /// SINGLETON METHODS *********************************************
 
   final MethodChannel _channel;
@@ -234,8 +212,6 @@ class AwesomeNotifications {
       ActionHandler? onDismissActionReceivedMethod}) async {
     if (_actionHandler != null) {
       throw UnsupportedError('static listeners was already defined.');
-      print('static methods was already setted.');
-      return false;
     }
 
     final CallbackHandle? actionCallbackReference =
@@ -254,8 +230,6 @@ class AwesomeNotifications {
     _dismissedHandler = onDismissActionReceivedMethod;
     _createdHandler = onNotificationCreatedMethod;
     _displayedHandler = onNotificationDisplayedMethod;
-
-    _startEventListeners();
 
     return result;
   }
@@ -280,19 +254,27 @@ class AwesomeNotifications {
 
     switch (call.method) {
       case CHANNEL_METHOD_NOTIFICATION_CREATED:
-        _createdSubject.sink.add(ReceivedNotification().fromMap(arguments));
+        var received = ReceivedNotification().fromMap(arguments);
+        if (_createdHandler != null) await _createdHandler!(received);
+        _createdSubject.sink.add(received);
         return;
 
       case CHANNEL_METHOD_NOTIFICATION_DISPLAYED:
-        _displayedSubject.sink.add(ReceivedNotification().fromMap(arguments));
+        var received = ReceivedNotification().fromMap(arguments);
+        if (_displayedHandler != null) await _displayedHandler!(received);
+        _displayedSubject.sink.add(received);
         return;
 
       case CHANNEL_METHOD_NOTIFICATION_DISMISSED:
-        _dismissedSubject.sink.add(ReceivedAction().fromMap(arguments));
+        var received = ReceivedAction().fromMap(arguments);
+        if (_dismissedHandler != null) await _dismissedHandler!(received);
+        _dismissedSubject.sink.add(received);
         return;
 
       case CHANNEL_METHOD_DEFAULT_ACTION:
-        _actionSubject.sink.add(ReceivedAction().fromMap(arguments));
+        var received = ReceivedAction().fromMap(arguments);
+        if (_actionHandler != null) await _actionHandler!(received);
+        _actionSubject.sink.add(received);
         return;
 
       case CHANNEL_METHOD_SILENT_ACTION:

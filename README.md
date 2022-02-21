@@ -2,15 +2,16 @@
 # Awesome Notifications - Flutter
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications.jpg)
-<div>
-    
-[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#) [![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#) 
-[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.gg/MP3sEXPTnx) [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](#)
+<div> 
     
 [![pub package](https://img.shields.io/pub/v/awesome_notifications.svg)](https://pub.dev/packages/awesome_notifications)
 [![Likes](https://badges.bar/awesome_notifications/likes)](https://pub.dev/packages/awesome_notifications/score)
 [![popularity](https://badges.bar/awesome_notifications/popularity)](https://pub.dev/packages/awesome_notifications/score)
 [![pub points](https://badges.bar/awesome_notifications/pub%20points)](https://pub.dev/packages/awesome_notifications/score)
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](#)
+    
+[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#) [![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#) 
+[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.gg/MP3sEXPTnx)
 
 ### Features
 
@@ -25,10 +26,12 @@
 <br>
 
 *Some **android** notification examples:*
+
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-android-examples.jpg)
 <br>
 
 *Some **iOS** notification examples **(work in progress)**:*
+
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-ios-examples.jpg)
 <br>
 
@@ -52,6 +55,7 @@ All notifications could be created locally or via Firebase services, with all th
 ## ATTENTION - PLUGIN UNDER CONSTRUCTION
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-atention.jpg)
+
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-progress.jpg)
 
 *Working progress percentages of awesome notifications plugin*
@@ -62,7 +66,7 @@ All notifications could be created locally or via Firebase services, with all th
 
 - Include Web support
 - Finish the companion plugin to enable Firebase Cloud Message with all the awesome features available.
-- Add an option to choose if a notification action should bring the app to foreground or not.
+- Add an option to choose if a notification action should bring the app to foreground or not. (accomplished)
 - Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
 - Video layout and gifs for notifications
 - Carousel layout for notifications
@@ -81,6 +85,20 @@ And all notifications sent while the app was killed are registered and delivered
 
 This way, your Application will receive **all notifications at Flutter level code**.
     
+<br>
+<br>
+
+## Breaking changes for version 0.7.0
+
+* Now it's possible to receive action events without bring the app to foreground. Check our action type's topic to know more.
+* All streams (createdStream, displayedStream, actionStream and dismissedStream) was replaced by `global static methods`. You must replace your old stream methods by static and global methods, in other words, they must be `static Future<void>` and use `async`/`await`.
+<br>(To use context and redirect the user to another page inside static methods, please use flutter navigatorKey or another third party library, such as GetX. Check our "how to do" guide below to know more).
+* Now all the notification events are delivered only after the first setListeners being called.
+* The ButtonType property name was changed to ActionType.
+* The action type `InputField` was deprecated. Now you just need to set the property `requireInputText` to true to achieve the same, but now it works combined with all another action types.
+* The support for `firebase_messaging` plugin is deprecated and will give space to our companion plugins. All other firebase plugins still being supported.
+
+
 <br>
 <br>
 
@@ -337,7 +355,7 @@ To run the examples, follow the steps bellow:
 
 Notifications are received by local code or Push service using native code, so the messages will appears immediately or at schedule time, independent of your application state.
 
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/notification-life-cycle.png)
+<img src="https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/notification-life-cycle.png" alt="Awesome Notifications life cycle" width="1200"/>
 
 <br>
     

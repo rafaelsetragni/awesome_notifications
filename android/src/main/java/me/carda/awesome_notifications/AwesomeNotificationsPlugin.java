@@ -66,7 +66,7 @@ public class AwesomeNotificationsPlugin
     private MethodChannel pluginChannel;
     private AwesomeNotifications awesomeNotifications;
 
-    private StringUtils stringUtils = StringUtils.getInstance();
+    private final StringUtils stringUtils = StringUtils.getInstance();
 
     @Override
     public void loadExternalExtensions(Context context) {
