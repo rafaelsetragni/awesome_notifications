@@ -54,9 +54,9 @@ All notifications could be created locally or via Firebase services, with all th
 
 ## ATTENTION - PLUGIN UNDER CONSTRUCTION
 
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-atention.jpg)
-
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-progress.jpg)
+![image](https://user-images.githubusercontent.com/40064496/155188418-1f906c3d-2940-472d-8897-7dae84cd29c7.png) 
+    
+![image](https://user-images.githubusercontent.com/40064496/155188371-48e22104-8bb8-4f38-ba1a-1795eeb7b81b.png)
 
 *Working progress percentages of awesome notifications plugin*
 
@@ -96,7 +96,7 @@ This way, your Application will receive **all notifications at Flutter level cod
 * Now all the notification events are delivered only after the first setListeners being called.
 * The ButtonType property name was changed to ActionType.
 * The action type `InputField` was deprecated. Now you just need to set the property `requireInputText` to true to achieve the same, but now it works combined with all another action types.
-* The support for `firebase_messaging` plugin is deprecated and will give space to our companion plugins. All other firebase plugins still being supported.
+* The support for `firebase_messaging` plugin is now deprecated, but all other firebase plugins still being supported. You need use the Awesome's FCM companion plugin to achieve all firebase messaging features, without violate the platform rules. This is the only way to fully integrated with awesome notifications, running all in native level.
 
 
 <br>
@@ -355,7 +355,7 @@ To run the examples, follow the steps bellow:
 
 Notifications are received by local code or Push service using native code, so the messages will appears immediately or at schedule time, independent of your application state.
 
-![Awesome Notification's flowchart](https://user-images.githubusercontent.com/40064496/155132100-9c8fe309-c1b0-40d3-96ad-7c3fdb5a9c6c.png)
+![Awesome Notification's flowchart](https://user-images.githubusercontent.com/40064496/155190796-eae6d442-2190-427b-bf28-dc470ea778de.png)
 
 <br>
     
@@ -988,7 +988,8 @@ Main methods to manipulate a notification channel:
 | locked 			    |     NO   | Blocks the user to dismiss the notification                              | bool                  | true or false            | false                     |
 | progress 			    |     NO   | Current value of progress bar (percentage). Null for indeterminate.      | int                   | 0 - 100                  | null                      |
 | ticker 			    |     NO   | Text to be displayed on top of the screen when a notification arrives    | String                | unlimited                |                           |
-
+| actionType (Only for Android) 	|     NO   | Notification action response type                                                   | Enumerator            | ActionType         | Default                 |
+    
 <br>
 <br>
 
@@ -1007,7 +1008,7 @@ Main methods to manipulate a notification channel:
 | autoDismissible    | NO  | Notification should auto cancel when gets tapped by the user                  | bool                  | true or false            | true                    |
 | showInCompactView  | NO  | For MediaPlayer notifications on Android, sets the button as visible in compact view | bool           | true or false            | true                    |
 | isDangerousOption  | NO  | Mark the button as a dangerous option, displaying the text in red             | bool                  | true or false            | false                   |
-| buttonType 	|     NO   | Button action response type                                                   | Enumerator            | ActionButtonType         | Default                 |
+| actionType 	|     NO   | Notification action response type                                                   | Enumerator            | ActionType         | Default                 |
 
 <br>
 <br>
@@ -1069,187 +1070,9 @@ Main methods to manipulate a notification channel:
 | timeZone           |     NO   | Time zone identifier (ISO 8601)                                      | String     | "America/Sao_Paulo", "GMT-08:00" or "UTC" | "UTC" |
 
 
-
 <br>
 <br>
-
-## Using Firebase Services (Optional)
-
-The service used for this tutorial is Firebase Messaging, but you could use any other of your choice.
-
- 1 - To activate the Firebase Cloud Messaging service, please follow the respective step for your desired platform:
-
-### *Android*
-
-First things first, to create your Firebase Cloud Message and send notifications even when your app is terminated (killed), go to the [Firebase Console](https://console.firebase.google.com/) and create a new project.
-
-After that, go to "Cloud Messaging" option and add an "Android app", put the package name of your project (**certifies to put the correct one**) to generate the file ***google-services.json***.
-
-Download the file and place it inside your [app]/android/app/ folder.
-
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/google-json-path.jpg)
-
-Add the classpath to the [project]/android/build.gradle file. (Firebase ones was already added by the plugin)
-
-```editorconfig
-dependencies {
-    classpath 'com.android.tools.build:gradle:3.5.0'
-    // Add the google services classpath
-    classpath 'com.google.gms:google-services:4.3.3'
-}
-```
-
-Add the apply plugin to the [project]/android/app/build.gradle file.
-
-```editorconfig
-// ADD THIS AT THE BOTTOM
-apply plugin: 'com.google.gms.google-services'
-```
-
-<br>
-
-### *iOS*
-
-Based on [https://firebase.flutter.dev/docs/messaging/apple-integration](https://firebase.flutter.dev/docs/messaging/apple-integration)
-
-Go to "Cloud Messaging" option and add an "iOS app", put the package name of your project (**certifies to put the correct one**) to generate the file ***GoogleService-info.plist***.
-
-Download the file and place it inside your [app]/ios/Runner/ folder using XCode. (Do not use Finder to copy and paste the file, use the XCode)
-
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/google-plist-path.jpg)
-
-After that, in your Google Console, go to **General (Gear icon) -> Cloud Messaging -> iOS configuration** and send your **APNs key** and include your **iOS Team ID**. To generate your APNs keys, follow the tutorial bellow:
-
-https://docs.oracle.com/en/cloud/saas/marketing/responsys-develop-mobile/ios/auth-key/
-
-
-<br>
-
-### Enabling Push Notifications in your Dart/Flutter code
-
-(those steps are based on [https://firebase.flutter.dev/docs/messaging/overview/](https://firebase.flutter.dev/docs/messaging/overview/) instructions)
-
-2 - Add the `firebase_core` and `firebase_messaging` dependency to your `pubspec.yaml` file.
-
-```yaml
-dependencies:
-  flutter:
-    sdk: flutter
-  firebase_core: "^1.0.4"
-  firebase_messaging: "^9.1.2"
-```
-
-3 - Download the dependencies with `$ flutter pub get`.
-
-4 - Inside your `main.dart` file, add the follow lines:
-
-```dart
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  AwesomeNotifications().initialize(
-    'resource://drawable/res_app_icon',
-    [
-        // Your notification channels go here
-    ]
-  );
-
-  // Create the initialization for your desired push service here
-  FirebaseApp firebaseApp = await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  runApp(App());
-}
-
-// Declared as global, outside of any class
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
-
-  print("Handling a background message: ${message.messageId}");
-
-  // Use this method to automatically convert the push data, in case you gonna use our data standard
-  AwesomeNotifications().createNotificationFromJsonData(message.data);
-}
-```
-
-Now, firebase messaging should work at any application lifecycle, for any supported platform.
-
-<br>
-
-
-## How to send Push Notifications using Firebase Cloud Messaging plugin (FCM)
-
-To send a notification using Awesome Notifications and FCM Services, you need to send a POST request to the address https://fcm.googleapis.com/fcm/send.
-Due to limitations on Android and iOS, you should send a empty **notification** field and use only the **data** field to send your data, as bellow:
-
-OBS: `actionButtons` and `schedule` are **optional**
-<br>
-OBS 2: ensure to read all the documentation inside [FlutterFire Overview Documentation](https://firebase.flutter.dev/docs/overview)
-<br>
-OBS 3: data only messages are classed as "low priority". Devices can throttle and ignore these messages if your application is in the background, terminated, or a variety of other conditions such as low battery or currently high CPU usage. To help improve delivery, you can bump the priority of messages. Note; this does still not guarantee delivery. More info [here](https://firebase.flutter.dev/docs/messaging/usage/#low-priority-messages)
-<br>
-OBS 4: Again, the background message method of the `firebase_messaging` plug-in runs in the background mode (which falls under iOS background execution rules) that can suspend all of your background executions for an indefinite period of time, for various reasons. Unfortunately, this is a known behavior of iOS and there is nothing to do about it. 15 minutes of delay is the smaller period of time possible between each execution. So, consider that the background method of `firebase_messaging` may not be executed at all or even run entirely out of the expected time.
-<br>
-
-```json
-{
-    "to" : "[YOUR APP TOKEN]",
-    "mutable_content" : true,
-    "content_available": true,
-    "priority": "high",
-    "data" : {
-        "content": {
-            "id": 100,
-            "channelKey": "big_picture",
-            "title": "Huston!\nThe eagle has landed!",
-            "body": "A small step for a man, but a giant leap to Flutter's community!",
-            "notificationLayout": "BigPicture",
-            "largeIcon": "https://media.fstatic.com/kdNpUx4VBicwDuRBnhBrNmVsaKU=/full-fit-in/290x478/media/artists/avatar/2013/08/neil-i-armstrong_a39978.jpeg",
-            "bigPicture": "https://www.dw.com/image/49519617_303.jpg",
-            "showWhen": true,
-            "autoDismissible": true,
-            "privacy": "Private"
-        },
-        "actionButtons": [
-            {
-                "key": "REPLY",
-                "label": "Reply",
-                "autoDismissible": true,
-                "buttonType":  "InputField"
-            },
-            {
-                "key": "ARCHIVE",
-                "label": "Archive",
-                "autoDismissible": true,
-                "isDangerousOption": true
-            }
-        ],
-        "schedule": {
-            "timeZone": "America/New_York",
-            "hour": "10",
-            "minute": "0",
-            "second": "0",
-            "allowWhileIdle": true,
-            "repeat": true
-        }
-    }
-}
-```
-
-Using this pattern, you can create a notification just by calling the method below:
-
-```dart
-AwesomeNotifications().createNotificationFromJsonData(yourReceivedMapData);
-```
-
-You can download a example of how to send Push Notifications through FCM using "Postman" [here](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/Firebase_FCM_Example.postman_collection.json)
-
-
-<br>
-<br>
+    
 
 ## Common Known Issues
 
@@ -1299,20 +1122,6 @@ To know more about it, please visit [Android 12 - Safer component exporting](htt
 
 To know more about it, please visit [Customize which resources to keep](https://developer.android.com/studio/build/shrink-code#keep-resources)
 
-
-##
-
-**Issue:** The name 'DateUtils' is defined in the libraries 'package:awesome_notifications/src/utils/date_utils.dart (via package:awesome_notifications/awesome_notifications.dart)' and 'package:flutter/src/material/date.dart (via package:flutter/material.dart)'.
-
-**Fix:** Use a prefix while importing or hide one of the DateUtils declarations:
-
-```dart
-import 'package:flutter/material.dart' hide DateUtils;
-import 'package:flutter/material.dart' as Material show DateUtils;
-
-DateUtils.utcToLocal(DateTime.now());
-Material.DateUtils.dateOnly(DateTime.now());
-```
 
 ##
 
