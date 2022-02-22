@@ -351,11 +351,11 @@ To run the examples, follow the steps bellow:
 
 <br>
     
-## Notification Life Cycle
+## Awesome Notification's Flowchart
 
 Notifications are received by local code or Push service using native code, so the messages will appears immediately or at schedule time, independent of your application state.
 
-<img src="https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/notification-life-cycle.png" alt="Awesome Notifications life cycle" width="1200"/>
+![Awesome Notification's flowchart](https://user-images.githubusercontent.com/40064496/155132100-9c8fe309-c1b0-40d3-96ad-7c3fdb5a9c6c.png)
 
 <br>
     
