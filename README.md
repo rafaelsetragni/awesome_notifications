@@ -384,9 +384,9 @@ Permissions give transparency to the user of what you pretend to do with your ap
 
 The permissions can be defined in 3 types:
 
-- Normal permissions: Are permissions not considered dangerous and do not require the explicity user consent to be enabled.
-- Execution permissions: Are permissions considered more sensible to the user and you must obtain his explicity consent to use.
-- Special/Dangerous permissions: Are permissions that can harm the user experience or his privacity and you must obtain his explicity consent and, depending of what platform are you running, you must obtain permission from the manufacture itself to use it.
+- Normal permissions: Are permissions not considered dangerous and do not require the explicit user consent to be enabled.
+- Execution permissions: Are permissions considered more sensible to the user and you must obtain his explicit consent to use.
+- Special/Dangerous permissions: Are permissions that can harm the user experience or his privacy and you must obtain his explicit consent and, depending of what platform are you running, you must obtain permission from the manufacture itself to use it.
 
 As a good pratice, consider always to check if the permissions that you're desiring are conceived before create any new notification, independent of platform. To check if the permissions needs the explicity user consent, call the method shouldShowRationaleToRequest. The list of permissions that needs a rationale to the user can be different between platforms and O.S. versions. And if you app does not require extremely the permission to execute what you need, consider to not request the user permission and respect his will.
 
@@ -406,13 +406,13 @@ As a good pratice, consider always to check if the permissions that you're desir
 
 - FullScreenIntent: The ability to show the notifications on pop up even if the user is using another app.
 
-- PreciseAlarms: Precise alarms allows the scheduled notifications to be displayed at the expected time. This permission can be revoke by special device modes, such as baterry save mode, etc. Some manufactures can disable this feature if they decide that your app is consumpting many computational resources and decressing the baterry life (and without changing the permission status for your app). So, you must take in consideration that some schedules can be delayed or even not being displayed, depending of what platform are you running. You can increase the chances to display the notification at correct time, enable this permission and setting the correct notification category, but you never gonna have 100% sure about it.
+- PreciseAlarms: Precise alarms allows the scheduled notifications to be displayed at the expected time. This permission can be revoke by special device modes, such as battery save mode, etc. Some manufactures can disable this feature if they decide that your app is consumpting many computational resources and decressing the baterry life (and without changing the permission status for your app). So, you must take in consideration that some schedules can be delayed or even not being displayed, depending of what platform are you running. You can increase the chances to display the notification at correct time, enable this permission and setting the correct notification category, but you never gonna have 100% sure about it.
 
-- CriticalAlert: Critical alerts is a special permission that allows to play sounds and vibrate for new notifications displayed, even if the device is in Do Not Disturbe / Silent mode. For iOS, you must request Apple a authorization to your app use it.
+- CriticalAlert: Critical alerts is a special permission that allows to play sounds and vibrate for new notifications displayed, even if the device is in Do Not Disturb / Silent mode. For iOS, you must request Apple a authorization to your app use it.
 
-- OverrideDnD: Override DnD allows the notification to decrease the Do Not Disturbe / Silent mode level enable to display critical alerts for Alarm and Call notifications. For Android, you must require the user consent to use it. For iOS, this permission is always enabled with CriticalAlert.
+- OverrideDnD: Override DnD allows the notification to decrease the Do Not Disturb / Silent mode level enable to display critical alerts for Alarm and Call notifications. For Android, you must require the user consent to use it. For iOS, this permission is always enabled with CriticalAlert.
 
-- Provisional: (Only has effect on iOS) The ability to display notifications temporarially without the user consent.
+- Provisional: (Only has effect on iOS) The ability to display notifications temporarily without the user consent.
 
 - Car: The ability to display notifications while the device is in car mode.
 
@@ -428,8 +428,8 @@ A permission can be segregated in 3 different levels:
 ![image](https://user-images.githubusercontent.com/40064496/143137760-32b99fad-5827-4d0e-9d4f-c39c82ca6bfd.png)
 
 
-- Device level: The permissions set at the global device configuration are appliable at any app installed on device, such as disable/enable all notifications, baterry save mode / low power mode and silent / do not disturb mode.
-- Application level: The permissions set at the global app configurations are appliable to any notification in any channel.
+- Device level: The permissions set at the global device configuration are applicable at any app installed on device, such as disable/enable all notifications, battery save mode / low power mode and silent / do not disturb mode.
+- Application level: The permissions set at the global app configurations are applicable to any notification in any channel.
 - Channel level: The permissions set on the channel has effect only for notifications displayed through that specific channel.
 
 <br>
@@ -491,7 +491,7 @@ Bellow there is a full example of how to check if the desired permission is enab
           context: context,
           builder: (context) => AlertDialog(
             backgroundColor: Color(0xfffbfbfb),
-            title: Text('Awesome Notificaitons needs your permission',
+            title: Text('Awesome Notifications needs your permission',
               textAlign: TextAlign.center,
               maxLines: 2,
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
@@ -505,7 +505,7 @@ Bellow there is a full example of how to check if the desired permission is enab
                   fit: BoxFit.fitWidth,
                 ),
                 Text(
-                  'To proceede, you need to enable the permissions above'+
+                  'To proceed, you need to enable the permissions above'+
                       (channelKey?.isEmpty ?? true ? '' : ' on channel $channelKey')+':',
                   maxLines: 2,
                   textAlign: TextAlign.center,
@@ -588,6 +588,22 @@ The notification category is a group of predefined categories that best describe
 
 <br>
 <br>
+
+## Notification's Action Types
+
+The notification action type defines how awesome notifications should handle the user actions.
+OBS: For silent types, its necessary to hold the execution with await keyword, to prevent the isolates to shutdown itself before all work is done.
+
+ * Default: Is the default action type, forcing the app to goes foreground.
+ * SilentAction: Do not forces the app to go foreground, but runs on main thread, accept visual elements and can be interrupt if main app gets terminated.
+ * SilentBackgroundAction: Do not forces the app to go foreground and runs on background, not accepting any visual elements. The execution is done on background thread.
+ * KeepOnTop: Fires the respective action without close the notification status bar and don't bring the app to foreground.
+ * DisabledAction: When pressed, the notification just close itself on the tray, without fires any action event.
+ * DismissAction: Behaves as the same way as a user dismissing action, dismissing the respective notification and firing the dismissMethod. Ignores autoDismissible property.
+ * InputField: (Deprecated) When the button is pressed, it opens a dialog shortcut to send an text response.
+
+<br>
+<br>
     
 ## Notification Structures
 
@@ -597,7 +613,7 @@ To show any images on notification, at any place, you need to include the respec
 
 Layouts can be defined using 4 prefix types:
 
-- Default: The default notification layout. Also, is the layout choosen in case of any failure found on other layouts
+- Default: The default notification layout. Also, is the layout chosen in case of any failure found on other layouts
 - BigPicture: Shows a big picture and/or a small image attached to the notification.
 - BigText: Shows more than 2 lines of text.
 - Inbox: Lists messages or items separated by lines
@@ -617,7 +633,7 @@ Images can be defined using 4 prefix types:
 - Asset: images access through Flutter asset method. **Example**: asset://path/to/image-asset.png
 - Network: images access through internet connection. **Example**: http(s)://url.com/to/image-asset.png
 - File: images access through files stored on device. **Example**: file://path/to/image-asset.png
-- Resource: images access through drawable native resources. On Android, those files are stored inside [project]/android/app/src/main/drawabe folder. **Example**: resource://drawable/res_image-asset.png
+- Resource: images access through drawable native resources. On Android, those files are stored inside [project]/android/app/src/main/drawable folder. **Example**: resource://drawable/res_image-asset.png
 
 OBS: Unfortunately, icons and sounds can be only resource media types.
 <br>
@@ -677,17 +693,17 @@ If the app is terminated (killed):
 ## Scheduling a Notification
 
 Schedules could be created from a UTC or local time zone, and specifying a time interval or setting a calendar filter. Notifications could be scheduled even remotely.
-Atention: for iOS, is not possible to define the correct `displayedDate`, because is not possible to run exactely at same time with the notification schedules when it arives in the user status bar.
+Attention: for iOS, is not possible to define the correct `displayedDate`, because is not possible to run exactly at same time with the notification schedules when it arrives in the user status bar.
 
-To send notifications schedules, you need to instantiate one of the classes bellow in the notificaiton property 'schedule':
+To send notifications schedules, you need to instantiate one of the classes bellow in the notification property 'schedule':
 
-- NotificationCalendar: Creates a notification scheduled to be displayed when the setted date components matchs the current date. If a time component is setted to null, so any value is considered valid to produce the next valid date. Only one value is allowed by each component.
+- NotificationCalendar: Creates a notification scheduled to be displayed when the set date components matches the current date. If a time component is set to null, so any value is considered valid to produce the next valid date. Only one value is allowed by each component.
 - NotificationInterval: Creates a notification scheduled to be displayed at each interval time, starting from the next valid interval.
 - NotificationAndroidCrontab: Creates a notification scheduled to be displayed based on a list of precise dates or a crontab rule, with seconds precision. To know more about how to create a valid crontab rule, take a look at [this article](https://www.baeldung.com/cron-expressions).
 
 Also, all of then could be configured using:
 
-- timeZone: describe wich time zone that schedule is based (valid examples: America/Sao_Paulo, America/Los_Angeles, GMT+01:00, Europe/London, UTC)
+- timeZone: describe which time zone that schedule is based (valid examples: America/Sao_Paulo, America/Los_Angeles, GMT+01:00, Europe/London, UTC)
 - allowWhileIdle: Determines if notification will send, even when the device is in critical situation, such as low battery.
 - repeats: Determines if the schedule should be repeat after be displayed. If there is no more valid date compatible with the schedule rules, the notification is automatically canceled.
 
@@ -777,7 +793,7 @@ But, for some cases where the schedules precision is a MUST requirement, you can
 
 - Set the notification's category to a critical category, such as Alarm, Reminder or Call.
 - Set the `preciseAlarm` property to true. For Android versions greater or equal than 12, you need to explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications` or take the user to the permission page calling `showAlarmPage`.
-- Set `criticalAlerts` channel property and notification content property to true. This feature allows you to show notification and play sounds even when the device is on silent / Do not Disturbe mode. Because of it, this feature is considered highly sensitive and you must request Apple a special authorization to use it. On Android, for versions greater or equal than 11, you need to explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications`.
+- Set `criticalAlerts` channel property and notification content property to true. This feature allows you to show notification and play sounds even when the device is on silent / Do not Disturb mode. Because of it, this feature is considered highly sensitive and you must request Apple a special authorization to use it. On Android, for versions greater or equal than 11, you need to explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications`.
 
 
 To enable precise alarms, you need to add the `SCHEDULE_EXACT_ALARM` permission into your `AndroidManifest.xml` file, inside the `Android/app/src/main/` folder
@@ -812,10 +828,10 @@ For iOS, you must submit a request authorization to Apple to enable it, as descr
 
 ## Old schedule Cron rules (For versions older than 0.0.6)
 
-Due to the way that background task and notification schedules works on iOS, wasn't possible yet to enable officialy all the old Cron features on iOS while the app is in Background and even when the app is terminated (Killed).
+Due to the way that background task and notification schedules works on iOS, wasn't possible yet to enable officially all the old Cron features on iOS while the app is in Background and even when the app is terminated (Killed).
 Thanks to this, the complex schedules based on cron tab rules are only available on Android by the class `NotificationAndroidCrontab`.
 
-A support ticket was opened for Apple in order to resolve this issue, but they dont even care about. You can follow the progress of the process [here](https://github.com/rafaelsetragni/awesome_notifications/issues/16).
+A support ticket was opened for Apple in order to resolve this issue, but they don't even care about. You can follow the progress of the process [here](https://github.com/rafaelsetragni/awesome_notifications/issues/16).
 
 <br>
 
@@ -990,7 +1006,7 @@ Main methods to manipulate a notification channel:
 | enabled 	    |     NO   | On Android, deactivates the button. On iOS, the button disappear              | bool                  | true or false            | true                    |
 | autoDismissible    | NO  | Notification should auto cancel when gets tapped by the user                  | bool                  | true or false            | true                    |
 | showInCompactView  | NO  | For MediaPlayer notifications on Android, sets the button as visible in compact view | bool           | true or false            | true                    |
-| isDangerousOption  | NO  | Mark the button as a dangerous option, displaing the text in red              | bool                  | true or false            | false                   |
+| isDangerousOption  | NO  | Mark the button as a dangerous option, displaying the text in red             | bool                  | true or false            | false                   |
 | buttonType 	|     NO   | Button action response type                                                   | Enumerator            | ActionButtonType         | Default                 |
 
 <br>
@@ -1067,7 +1083,7 @@ The service used for this tutorial is Firebase Messaging, but you could use any 
 
 First things first, to create your Firebase Cloud Message and send notifications even when your app is terminated (killed), go to the [Firebase Console](https://console.firebase.google.com/) and create a new project.
 
-After that, go to "Cloud Messaging" option and add an "Android app", put the packge name of your project (**certifies to put the correct one**) to generate the file ***google-services.json***.
+After that, go to "Cloud Messaging" option and add an "Android app", put the package name of your project (**certifies to put the correct one**) to generate the file ***google-services.json***.
 
 Download the file and place it inside your [app]/android/app/ folder.
 

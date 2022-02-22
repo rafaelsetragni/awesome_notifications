@@ -1,23 +1,23 @@
 /// Defines the notification button's type
-/// [ActionType.Default] Default action type. Force the app to goes foreground
-/// [ActionType.InputField] Button when pressed opens a dialog shortcut to send an text response
-/// [ActionType.DisabledAction] Button when pressed should just close the notification in tray, but do not fires respective action
-/// [ActionType.KeepOnTop] Button, when pressed, fires the respective action without close the notification
+/// [ActionType.Default] Is the default action type, forcing the app to goes foreground.
 /// [ActionType.SilentAction] Do not forces the app to go foreground, but runs on main thread, accept visual elements and can be interrupt if main app gets terminated.
-/// [ActionType.SilentBackgroundAction] Do not forces the app to go foreground and runs on background, not accepting any visual elements. The execution is totally.
-/// [ActionType.DismissAction] Behaves as the same way as a user dismiss action, dismissing the respective notification and firing dismissMethod. Ignores autoDismissible property.
+/// [ActionType.SilentBackgroundAction] Do not forces the app to go foreground and runs on background, not accepting any visual elements. The execution is done on background thread.
+/// [ActionType.KeepOnTop] Fires the respective action without close the notification status bar and don't bring the app to foreground.
+/// [ActionType.DisabledAction] When pressed, the notification just close itself on the tray, without fires any action event.
+/// [ActionType.DismissAction] Behaves as the same way as a user dismissing action, dismissing the respective notification and firing the dismissMethod. Ignores autoDismissible property.
+/// [ActionType.InputField] (Deprecated) When the button is pressed, it opens a dialog shortcut to send an text response.
 enum ActionType {
-  /// Default action type. Force the app to goes foreground
+  /// Is the default action type, forcing the app to goes foreground.
   Default,
 
-  /// Button when pressed opens a dialog shortcut to send an text response
+  /// (Deprecated) When the button is pressed, it opens a dialog shortcut to send an text response.
   @Deprecated('Use the property requireInputText instead.')
   InputField,
 
-  /// Button when pressed should just close the notification in tray, but do not fires respective action
+  /// When pressed, the notification just close itself on the tray, without fires any action event.
   DisabledAction,
 
-  /// Button, when pressed, fires the respective action without close the notification
+  /// Fires the respective action without close the notification status bar and don't bring the app to foreground.
   KeepOnTop,
 
   /// Do not forces the app to go foreground, but runs on main thread, accept visual elements and can be interrupt if main app gets terminated.
