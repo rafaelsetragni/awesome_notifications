@@ -305,12 +305,12 @@ public class NotificationScheduler extends NotificationThread<String, Void, Cale
         for (NotificationModel notificationModel : notificationModels) {
             try {
 
-//                if(isScheduleActiveOnAlarmManager(
-//                    context,
-//                    notificationModel.content.id)
-//                ){
-//                    continue;
-//                }
+                if(isScheduleActiveOnAlarmManager(
+                    context,
+                    notificationModel.content.id)
+                ){
+                    continue;
+                }
 
                 if(notificationModel.schedule.hasNextValidDate()){
                     schedule(context, notificationModel);
