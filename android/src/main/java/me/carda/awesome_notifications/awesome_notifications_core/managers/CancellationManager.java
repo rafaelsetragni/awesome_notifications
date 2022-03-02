@@ -79,7 +79,7 @@ public class CancellationManager {
         if (notificationId == null || notificationId < 0)
             throw new AwesomeNotificationsException("Invalid notification id");
 
-        NotificationScheduler.cancelSchedule(context, notificationId);
+        NotificationScheduler.cancelScheduleById(context, notificationId);
 
         return true;
     }

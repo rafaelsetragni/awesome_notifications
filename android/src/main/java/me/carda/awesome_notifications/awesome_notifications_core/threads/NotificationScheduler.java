@@ -5,7 +5,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
@@ -13,6 +12,7 @@ import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.AlarmManagerCompat;
 
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
@@ -31,7 +31,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.utils.BooleanUt
 import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.IntegerUtils;
 
-public class NotificationScheduler extends NotificationThread<String, Void, Calendar> {
+public class NotificationScheduler extends NotificationThread<Calendar> {
 
     public static String TAG = "NotificationScheduler";
 
@@ -62,7 +62,7 @@ public class NotificationScheduler extends NotificationThread<String, Void, Cale
                 notificationModel.content.createdSource,
                 notificationModel,
                 true
-        ).executeNotificationThread(notificationModel);
+        ).execute(notificationModel);
     }
 
     public static void schedule(
@@ -82,7 +82,7 @@ public class NotificationScheduler extends NotificationThread<String, Void, Cale
                 createdSource,
                 notificationModel,
                 false
-        ).execute();
+        ).execute(notificationModel);
     }
 
     private NotificationScheduler(
@@ -115,7 +115,7 @@ public class NotificationScheduler extends NotificationThread<String, Void, Cale
     /// AsyncTask METHODS BEGIN *********************************
 
     @Override
-    protected Calendar doInBackground(String... parameters) {
+    protected Calendar doInBackground() {
         try {
             Calendar nextValidDate = null;
 
@@ -159,7 +159,7 @@ public class NotificationScheduler extends NotificationThread<String, Void, Cale
                 else {
                     cancelSchedule(
                             wContextReference.get(),
-                            notificationModel.content.id);
+                            notificationModel);
 
                     String now = CalendarUtils.getInstance().getNowStringCalendar();
                     String msg = "Date is not more valid. ("+now+")";
@@ -299,25 +299,26 @@ public class NotificationScheduler extends NotificationThread<String, Void, Cale
     }
 
     public static void refreshScheduledNotifications(Context context) {
-        List<NotificationModel> notificationModels = ScheduleManager.listSchedules(context);
-        if (notificationModels == null || notificationModels.isEmpty()) return;
+        List<String> notificationIds = ScheduleManager.listScheduledIds(context);
+        if (notificationIds.isEmpty()) return;
 
-        for (NotificationModel notificationModel : notificationModels) {
+        for (String id : notificationIds) {
             try {
 
                 if(isScheduleActiveOnAlarmManager(
                     context,
-                    notificationModel.content.id)
+                    Integer.parseInt(id))
                 ){
                     continue;
                 }
 
+                NotificationModel notificationModel = ScheduleManager.getScheduleById(context, id);
                 if(notificationModel.schedule.hasNextValidDate()){
                     schedule(context, notificationModel);
                     continue;
                 }
 
-                ScheduleManager.cancelSchedule(context, notificationModel.content.id);
+                ScheduleManager.removeSchedule(context, notificationModel);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -325,62 +326,94 @@ public class NotificationScheduler extends NotificationThread<String, Void, Cale
         }
     }
 
-    public static void cancelSchedule(Context context, Integer id) {
-        if(context != null){
-            _removeFromAlarm(context, id);
-            ScheduleManager.cancelSchedule(context, id);
-            ScheduleManager.commitChanges(context);
-        }
+    public static void cancelScheduleById(
+        @NonNull Context context, @NonNull Integer id
+    ){
+        _removeFromAlarm(context, id);
+        ScheduleManager.removeScheduleById(context, id.toString());
+        ScheduleManager.commitChanges(context);
     }
 
-    public static void cancelSchedulesByChannelKey(Context context, String channelKey) {
+    public static void cancelSchedule(
+        @NonNull Context context, @NonNull NotificationModel notificationModel
+    ){
+        _removeFromAlarm(context, notificationModel.content.id);
+        ScheduleManager.removeSchedule(context, notificationModel);
+        ScheduleManager.commitChanges(context);
+    }
+
+    public static void cancelSchedulesByChannelKey(
+        @NonNull Context context, @NonNull String channelKey
+    ){
+        List<String> ids = ScheduleManager.listScheduledIdsFromChannel(context, channelKey);
+        _removeAllFromAlarm(context, ids);
         ScheduleManager.cancelSchedulesByChannelKey(context, channelKey);
         ScheduleManager.commitChanges(context);
     }
 
-    public static void cancelSchedulesByGroupKey(Context context, String groupKey) {
+    public static void cancelSchedulesByGroupKey(
+        @NonNull Context context, @NonNull String groupKey
+    ){
+        List<String> ids = ScheduleManager.listScheduledIdsFromGroup(context, groupKey);
+        _removeAllFromAlarm(context, ids);
         ScheduleManager.cancelSchedulesByGroupKey(context, groupKey);
         ScheduleManager.commitChanges(context);
     }
 
-    public static void cancelAllSchedules(Context context) {
-        if(context != null){
-            _removeAllFromAlarm(context);
-            ScheduleManager.cancelAllSchedules(context);
-            ScheduleManager.commitChanges(context);
-        }
+    public static void cancelAllSchedules(@NonNull Context context){
+        List<String> ids = ScheduleManager.listScheduledIds(context);
+        _removeAllFromAlarm(context, ids);
+        ScheduleManager.cancelAllSchedules(context);
+        ScheduleManager.commitChanges(context);
     }
 
-    private static void _removeFromAlarm(Context context, int id) {
-        if(context != null){
-            Intent intent = new Intent(context, ScheduledNotificationReceiver.class);
+    private static void _removeFromAlarm(
+        @NonNull Context context, @NonNull Integer id
+    ){
+        Intent intent = new Intent(context, ScheduledNotificationReceiver.class);
 
+        @SuppressLint("WrongConstant")
+        PendingIntent pendingIntent =
+            PendingIntent
+                .getBroadcast(
+                    context,
+                    id,
+                    intent,
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ?
+                            PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
+                            PendingIntent.FLAG_UPDATE_CURRENT );
+
+        AlarmManager alarmManager = ScheduleManager.getAlarmManager(context);
+        alarmManager.cancel(pendingIntent);
+    }
+
+    private static void _removeAllFromAlarm(
+        @NonNull Context context, @NonNull List<String> ids
+    ){
+        AlarmManager alarmManager = ScheduleManager.getAlarmManager(context);
+        Intent intent = new Intent(context, ScheduledNotificationReceiver.class);
+        int flags =
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ?
+                        PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
+                        PendingIntent.FLAG_UPDATE_CURRENT;
+
+        for(String id : ids){
             @SuppressLint("WrongConstant")
             PendingIntent pendingIntent =
-                PendingIntent
-                    .getBroadcast(
-                        context,
-                        id,
-                        intent,
-                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ?
-                                PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
-                                PendingIntent.FLAG_UPDATE_CURRENT );
+                    PendingIntent
+                            .getBroadcast(
+                                    context,
+                                    Integer.parseInt(id),
+                                    intent,
+                                    flags);
 
-            AlarmManager alarmManager = ScheduleManager.getAlarmManager(context);
             alarmManager.cancel(pendingIntent);
         }
     }
 
-    private static void _removeAllFromAlarm(Context context) {
-        if(context != null){
-            List<NotificationModel> schedules = ScheduleManager.listSchedules(context);
-            for(NotificationModel schedule : schedules){
-                _removeFromAlarm(context, schedule.content.id);
-            }
-        }
-    }
-
-    public static boolean isScheduleActiveOnAlarmManager(Context context, int notificationId) throws AwesomeNotificationsException {
+    public static boolean isScheduleActiveOnAlarmManager(
+        @NonNull Context context, @NonNull Integer notificationId
+    ) throws AwesomeNotificationsException {
 
         if(notificationId < 0)
             throw new AwesomeNotificationsException("Scheduled notification Id is invalid");

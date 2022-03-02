@@ -85,6 +85,8 @@ public class AwesomeNotifications
         @NonNull AwesomeNotificationsExtension extensionClass
     ) throws AwesomeNotificationsException {
 
+        //android.os.Debug.waitForDebugger();
+
         debug = isApplicationInDebug(applicationContext);
         wContext = new WeakReference<>(applicationContext);
         stringUtils = StringUtils.getInstance();

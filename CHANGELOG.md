@@ -1,8 +1,13 @@
+## [0.7.0-beta.2]
+* AsyncTask replaced by Handler/Looper due deprecation in Android 12
+* FULL_WAKE_LOCK replaced by SCREEN_BRIGHT_WAKE_LOCK to improve battery life in Android
+* Implemented research by Android alarm intents to optimize the reschedule process
+* Added id helpers to improve the performance of ScheduleManger's cancelations process in almost 100 times
 ## [0.7.0-beta.1]
 * Added dart isolates to enable to receive background notifications without bring the app to foreground
 * Added silentBackground, silentBackgroundAction, disableAction and dismissAction action types for notifications and buttons
 * InputField type deprecated, as now is possible to combine input buttons with all other action types. Now, to use InputField, please use the property requireInputText
-* Internal architecture rewrote to decrease O.S. interventions, allowing to increase the performance in create and schedules notifications almost 10 times
+* Internal architecture rewrote to decrease O.S. interventions, allowing to increase the performance while create and schedules notifications in almost 10 times
 * Date objects replaced by Calendar type to enable real time zone operations in native layer
 * Added test unit cases to increase test coverage (55% coverage)
 * Network images for foreground services are reactivated

@@ -24,7 +24,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.models.returned
 import me.carda.awesome_notifications.awesome_notifications_core.services.ForegroundService;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
-public class NotificationForegroundSender extends NotificationThread<String, Void, NotificationModel> {
+public class NotificationForegroundSender extends NotificationThread<NotificationModel> {
 
     public static String TAG = "NotificationSender";
 
@@ -62,7 +62,7 @@ public class NotificationForegroundSender extends NotificationThread<String, Voi
             notificationBuilder,
             appLifeCycle,
             foregroundCompletionHandler
-        ).executeNotificationThread(
+        ).execute(
                 foregroundServiceIntent.notificationModel);
     }
 
@@ -92,7 +92,7 @@ public class NotificationForegroundSender extends NotificationThread<String, Voi
     /// AsyncTask METHODS BEGIN *********************************
 
     @Override
-    protected NotificationModel doInBackground(String... parameters) {
+    protected NotificationModel doInBackground() {
 
         NotificationModel notificationModel
                 = foregroundServiceIntent.notificationModel;

@@ -43,92 +43,10 @@ class AwesomeNotifications {
     _handleWebMethodCall(call);
   }
 */
-  /// STREAM CREATION METHODS *********************************************
 
-  final StreamController<ReceivedNotification>
-      // ignore: close_sinks
-      _createdSubject = StreamController<ReceivedNotification>();
+  /// DISPOSE METHODS *********************************************
 
-  final StreamController<ReceivedNotification>
-      // ignore: close_sinks
-      _displayedSubject = StreamController<ReceivedNotification>();
-
-  final StreamController<ReceivedAction>
-      // ignore: close_sinks
-      _actionSubject = StreamController<ReceivedAction>();
-
-  final StreamController<ReceivedAction>
-      // ignore: close_sinks
-      _dismissedSubject = StreamController<ReceivedAction>();
-
-  /// STREAM METHODS *********************************************
-
-  /// Stream to capture all created notifications
-  @Deprecated(
-      'Use static methods instead, calling AwesomeNotifications().setListeners()')
-  Stream<ReceivedNotification> get createdStream {
-    return _createdSubject.stream;
-  }
-
-  /// Stream to capture all notifications displayed on user's screen.
-  @Deprecated(
-      'Use static methods instead, calling AwesomeNotifications().setListeners()')
-  Stream<ReceivedNotification> get displayedStream {
-    return _displayedSubject.stream;
-  }
-
-  /// Stream to capture all notifications dismissed by the user.
-  @Deprecated(
-      'Use static methods instead, calling AwesomeNotifications().setListeners()')
-  Stream<ReceivedAction> get dismissedStream {
-    return _dismissedSubject.stream;
-  }
-
-  /// Stream to capture all actions (tap) over notifications
-  @Deprecated(
-      'Use static methods instead, calling AwesomeNotifications().setListeners()')
-  Stream<ReceivedAction> get actionStream {
-    return _actionSubject.stream;
-  }
-
-  /// SINK METHODS *********************************************
-
-  /// Sink to dispose the stream, if you don't need it anymore.
-  Sink get createdSink {
-    return _createdSubject.sink;
-  }
-
-  /// Sink to dispose the stream, if you don't need it anymore.
-  Sink get displayedSink {
-    return _displayedSubject.sink;
-  }
-
-  /// Sink to dispose the stream, if you don't need it anymore.
-  Sink get dismissedSink {
-    return _dismissedSubject.sink;
-  }
-
-  /// Sink to dispose the stream, if you don't need it anymore.
-  Sink get actionSink {
-    return _actionSubject.sink;
-  }
-
-  /// CLOSE STREAM METHODS *********************************************
-
-  /// Closes definitely all the streams.
-  dispose() {
-    _createdSubject.close();
-    _displayedSubject.close();
-    _dismissedSubject.close();
-    _actionSubject.close();
-  }
-
-  /// BRIDGE BETWEEN LISTENERS AND OBSERV METHODS *********************************************
-
-  StreamSubscription? _createdSubscription;
-  StreamSubscription? _displayedSubscription;
-  StreamSubscription? _actionSubscription;
-  StreamSubscription? _dismissedSubscription;
+  dispose() {}
 
   /// SINGLETON METHODS *********************************************
 
@@ -214,6 +132,11 @@ class AwesomeNotifications {
       throw UnsupportedError('static listeners was already defined.');
     }
 
+    _actionHandler = onActionReceivedMethod;
+    _dismissedHandler = onDismissActionReceivedMethod;
+    _createdHandler = onNotificationCreatedMethod;
+    _displayedHandler = onNotificationDisplayedMethod;
+
     final CallbackHandle? actionCallbackReference =
         PluginUtilities.getCallbackHandle(onActionReceivedMethod);
 
@@ -225,11 +148,6 @@ class AwesomeNotifications {
           'onActionNotificationMethod is not a valid global or static method.');
       return false;
     }
-
-    _actionHandler = onActionReceivedMethod;
-    _dismissedHandler = onDismissActionReceivedMethod;
-    _createdHandler = onNotificationCreatedMethod;
-    _displayedHandler = onNotificationDisplayedMethod;
 
     return result;
   }
@@ -256,25 +174,21 @@ class AwesomeNotifications {
       case CHANNEL_METHOD_NOTIFICATION_CREATED:
         var received = ReceivedNotification().fromMap(arguments);
         if (_createdHandler != null) await _createdHandler!(received);
-        _createdSubject.sink.add(received);
         return;
 
       case CHANNEL_METHOD_NOTIFICATION_DISPLAYED:
         var received = ReceivedNotification().fromMap(arguments);
         if (_displayedHandler != null) await _displayedHandler!(received);
-        _displayedSubject.sink.add(received);
         return;
 
       case CHANNEL_METHOD_NOTIFICATION_DISMISSED:
         var received = ReceivedAction().fromMap(arguments);
         if (_dismissedHandler != null) await _dismissedHandler!(received);
-        _dismissedSubject.sink.add(received);
         return;
 
       case CHANNEL_METHOD_DEFAULT_ACTION:
         var received = ReceivedAction().fromMap(arguments);
         if (_actionHandler != null) await _actionHandler!(received);
-        _actionSubject.sink.add(received);
         return;
 
       case CHANNEL_METHOD_SILENT_ACTION:

@@ -180,14 +180,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  void dispose() {
-    AwesomeNotifications().createdSink.close();
-    AwesomeNotifications().displayedSink.close();
-    AwesomeNotifications().actionSink.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     ThemeData themeData = Theme.of(context);

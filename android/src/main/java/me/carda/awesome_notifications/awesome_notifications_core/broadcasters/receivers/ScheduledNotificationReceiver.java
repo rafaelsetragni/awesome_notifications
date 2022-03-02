@@ -48,7 +48,7 @@ public class ScheduledNotificationReceiver extends AwesomeBroadcastReceiver {
                     NotificationScheduler
                         .cancelSchedule(
                             context,
-                            notificationModel.content.id);
+                            notificationModel);
 
                     if(AwesomeNotifications.debug)
                         Log.d(TAG,

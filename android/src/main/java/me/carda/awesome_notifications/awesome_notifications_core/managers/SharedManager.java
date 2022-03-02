@@ -178,6 +178,25 @@ public class SharedManager<T extends AbstractModel> {
         return false;
     }
 
+    public Boolean removeAll(Context context){
+
+        try {
+            SharedPreferences shared = getSharedInstance(context);
+            SharedPreferences.Editor editor = shared.edit();
+            editor.clear();
+
+            editor.apply();
+
+            return true;
+
+        } catch (AwesomeNotificationsException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.toString());
+        }
+
+        return false;
+    }
+
     private static void commitAsync(final String reference, final SharedPreferences.Editor editor) {
         new AsyncTask<Void, Void, Boolean>() {
             @Override

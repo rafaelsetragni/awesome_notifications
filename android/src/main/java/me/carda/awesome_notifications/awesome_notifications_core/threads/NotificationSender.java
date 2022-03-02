@@ -24,7 +24,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.se
 import me.carda.awesome_notifications.awesome_notifications_core.utils.IntegerUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
-public class NotificationSender extends NotificationThread<String, Void, NotificationReceived> {
+public class NotificationSender extends NotificationThread<NotificationReceived> {
 
     public static String TAG = "NotificationSender";
 
@@ -82,7 +82,7 @@ public class NotificationSender extends NotificationThread<String, Void, Notific
             createdSource,
             notificationModel,
             originalIntent
-        ).executeNotificationThread(notificationModel);
+        ).execute(notificationModel);
     }
 
     private NotificationSender(
@@ -108,7 +108,7 @@ public class NotificationSender extends NotificationThread<String, Void, Notific
     /// AsyncTask METHODS BEGIN *********************************
 
     @Override
-    protected NotificationReceived doInBackground(String... parameters) {
+    protected NotificationReceived doInBackground() {
 
         try {
 

@@ -488,6 +488,19 @@ public class NotificationBuilder {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
     public void wakeUpScreen(Context context){
 
+        String appName = getAppName(context);
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+
+        boolean isScreenOn = Build.VERSION.SDK_INT >= 20 ? pm.isInteractive() : pm.isScreenOn(); // check if screen is on
+        if (!isScreenOn) {
+            PowerManager.WakeLock wl =
+                pm.newWakeLock(
+                    PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                        appName+":"+TAG+":WakeupLock");
+
+            wl.acquire(3000); //set your time in milliseconds
+        }
+        /*
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         boolean isScreenOn = pm.isInteractive();
         if(!isScreenOn)
@@ -495,7 +508,7 @@ public class NotificationBuilder {
             String appName = getAppName(context);
 
             PowerManager.WakeLock wl = pm.newWakeLock(
-                    PowerManager.FULL_WAKE_LOCK |
+                    PowerManager.PARTIAL_WAKE_LOCK |
                     PowerManager.ACQUIRE_CAUSES_WAKEUP |
                     PowerManager.ON_AFTER_RELEASE,
                     appName+":"+TAG+":WakeupLock");
@@ -506,7 +519,7 @@ public class NotificationBuilder {
                     appName+":"+TAG+":WakeupCpuLock");
             wl_cpu.acquire(10000);
             wl_cpu.acquire(10000);
-        }
+        }*/
     }
 
     public void ensureCriticalAlert(Context context) throws AwesomeNotificationsException {

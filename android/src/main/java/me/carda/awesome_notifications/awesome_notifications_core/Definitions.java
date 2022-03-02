@@ -44,6 +44,11 @@ public interface Definitions {
     String SILENT_HANDLE = "silentHandle";
     String BACKGROUND_HANDLE = "bgHandle";
 
+    String SCHEDULER_HELPER_SHARED = "awnot.sh.";
+    String SCHEDULER_HELPER_ALL = "all";
+    String SCHEDULER_HELPER_GROUP = "group";
+    String SCHEDULER_HELPER_CHANNEL = "channel";
+
     String NOTIFICATION_MODEL = "notificationModel";
     String NOTIFICATION_MODEL_CONTENT = "content";
     String NOTIFICATION_MODEL_SCHEDULE = "schedule";
@@ -62,6 +67,9 @@ public interface Definitions {
     String SHARED_DISPLAYED = "displayed";
     String SHARED_DISMISSED = "dismissed";
     String SHARED_SCHEDULED_NOTIFICATIONS = "schedules";
+    String SHARED_SCHEDULED_NOT_IDS = "schedulesIds";
+    String SHARED_SCHEDULED_NOT_GROUPS = "schedulesGroups";
+    String SHARED_SCHEDULED_NOT_CHANNELS = "schedulesChannels";
 
     String CHANNEL_METHOD_INITIALIZE = "initialize";
     String CHANNEL_METHOD_GET_DRAWABLE_DATA = "getDrawableData";
