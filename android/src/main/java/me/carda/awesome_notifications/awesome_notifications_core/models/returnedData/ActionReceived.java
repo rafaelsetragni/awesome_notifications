@@ -27,39 +27,7 @@ public class ActionReceived extends NotificationReceived {
     public ActionReceived(){}
 
     public ActionReceived(NotificationContentModel contentModel){
-
-        this.id = contentModel.id;
-        this.channelKey = contentModel.channelKey;
-        this.title = contentModel.title;
-        this.body = contentModel.body;
-        this.summary = contentModel.summary;
-        this.showWhen = contentModel.showWhen;
-        this.payload = contentModel.payload;
-        this.largeIcon = contentModel.largeIcon;
-        this.bigPicture = contentModel.bigPicture;
-        this.hideLargeIconOnExpand = contentModel.hideLargeIconOnExpand;
-        this.autoDismissible = contentModel.autoDismissible;
-        this.color = contentModel.color;
-        this.backgroundColor = contentModel.backgroundColor;
-        this.progress = contentModel.progress;
-        this.ticker = contentModel.ticker;
-        this.locked = contentModel.locked;
-
-        this.fullScreenIntent = contentModel.fullScreenIntent;
-        this.wakeUpScreen = contentModel.wakeUpScreen;
-        this.category = contentModel.category;
-
-        this.notificationLayout = contentModel.notificationLayout;
-
-        this.displayOnBackground = contentModel.displayOnBackground;
-        this.displayOnForeground = contentModel.displayOnForeground;
-
-        this.displayedLifeCycle = contentModel.displayedLifeCycle;
-        this.displayedDate = contentModel.displayedDate;
-
-        this.createdSource = contentModel.createdSource;
-        this.createdLifeCycle = contentModel.createdLifeCycle;
-        this.createdDate = contentModel.createdDate;
+        super(contentModel);
 
         this.shouldAutoDismiss = this.autoDismissible;
     }

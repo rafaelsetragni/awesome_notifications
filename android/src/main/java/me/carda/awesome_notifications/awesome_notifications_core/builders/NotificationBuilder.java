@@ -267,7 +267,7 @@ public class NotificationBuilder {
                             notificationModel.content.id,
                             actionIntent,
                             (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ?
-                                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
+                                    PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
                                     PendingIntent.FLAG_UPDATE_CURRENT)
                 :
                 PendingIntent.getBroadcast(
@@ -275,7 +275,7 @@ public class NotificationBuilder {
                             notificationModel.content.id,
                             actionIntent,
                             (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ?
-                                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
+                                    PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
                                     PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -300,7 +300,7 @@ public class NotificationBuilder {
                 notificationModel.content.id,
                 deleteIntent,
                 (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ?
-                        PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
+                        PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
                         PendingIntent.FLAG_UPDATE_CURRENT
         );
     }
