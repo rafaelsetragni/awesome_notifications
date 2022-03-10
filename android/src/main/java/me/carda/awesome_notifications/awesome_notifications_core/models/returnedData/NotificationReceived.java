@@ -38,6 +38,9 @@ public class NotificationReceived extends NotificationContentModel {
 
         this.notificationLayout = contentModel.notificationLayout;
 
+        this.displayOnBackground = contentModel.displayOnBackground;
+        this.displayOnForeground = contentModel.displayOnForeground;
+
         this.displayedLifeCycle = contentModel.displayedLifeCycle;
         this.displayedDate = contentModel.displayedDate;
 
