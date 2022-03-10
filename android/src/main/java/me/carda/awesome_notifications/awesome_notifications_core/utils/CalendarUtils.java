@@ -86,32 +86,10 @@ public class CalendarUtils {
         if(calendar == null)
             return null;
 
-        TimeZone timeZone = null;
-        Calendar shiftedCalendar = (Calendar) calendar.clone();
-
-        if(timeZoneId != null){
-            final String regex = "^((\\-|\\+)?(\\d{2}:\\d{2}))|(\\S+)$";
-
-            final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-            final Matcher matcher = pattern.matcher(timeZoneId);
-
-            if(matcher.matches()){
-                if(matcher.group(1) != null) {
-                    timeZone = TimeZone.getTimeZone(
-                            "GMT"+
-                                    (matcher.group(2) == null ? "+" : matcher.group(2))+
-                                    matcher.group(3));
-                }
-                else {
-                    timeZone = TimeZone.getTimeZone(matcher.group(4));
-                }
-            }
-            else {
-                timeZone = getLocalTimeZone();
-            }
-        }
+        TimeZone timeZone = TimeZoneUtils.getInstance().getValidTimeZone(timeZoneId);
 
         if (timeZone != null){
+            Calendar shiftedCalendar = (Calendar) calendar.clone();
             shiftedCalendar.setTimeZone(timeZone);
             return shiftedCalendar;
         }
@@ -120,7 +98,7 @@ public class CalendarUtils {
         }
     }
 
-    public Calendar shiftTimeZone(@NonNull Calendar calendar, @Nullable TimeZone timeZone) {
+    public Calendar shiftTimeZone(@NonNull Calendar calendar, @NonNull TimeZone timeZone) {
         Date date = calendar.getTime();
         long msFromEpochGmt = date.getTime();
 

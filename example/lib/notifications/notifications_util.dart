@@ -537,7 +537,7 @@ class NotificationUtils {
 
   static Future<void> showCallNotification(int id) async {
     String platformVersion = await getPlatformVersion();
-    AndroidForegroundService.startAndroidForegroundService(
+    await AndroidForegroundService.startAndroidForegroundService(
         foregroundStartMode: ForegroundStartMode.stick,
         foregroundServiceType: ForegroundServiceType.phoneCall,
         content: NotificationContent(
@@ -570,22 +570,31 @@ class NotificationUtils {
         ]);
   }
 
-  static Future<void> showAlarmNotification(int id) async {
-    AndroidForegroundService.startForeground(
+  static Future<void> showAlarmNotification({required int id, int secondsToWait = 30, int snoozeSeconds = 30}) async {
+    await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: id,
             channelKey: 'alarm_channel',
             title: 'Alarm is playing',
             body: 'Hey! Wake Up!',
             category: NotificationCategory.Alarm,
-            autoDismissible: true),
+            autoDismissible: true,
+            payload: {
+              'snooze': '$snoozeSeconds'
+            }
+        ),
         actionButtons: [
           NotificationActionButton(
               key: 'SNOOZE',
-              label: 'Snooze for 5 minutes',
+              label: 'Snooze for $snoozeSeconds seconds',
               color: Colors.blue,
+              actionType: ActionType.SilentBackgroundAction,
               autoDismissible: true),
-        ]);
+        ],
+        schedule: NotificationCalendar.fromDate(date:
+            DateTime.now().add(Duration(seconds: secondsToWait))
+        )
+    );
   }
 
   /* *********************************************

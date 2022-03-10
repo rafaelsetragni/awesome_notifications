@@ -61,18 +61,7 @@ public class NotificationBuilder {
             }
         }
         
-        if notificationModel!.schedule != nil {
-            let lastDisplayedDate:RealDateTime? =
-                    DateUtils
-                        .shared
-                        .getLastValidDate(
-                            scheduleModel: notificationModel!.schedule!,
-                            fixedDateTime: RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
-                        )
-            
-            actionReceived.displayedDate = lastDisplayedDate ?? RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
-        }
-        else {
+        if notificationModel!.schedule == nil {
             actionReceived.displayedDate = actionReceived.createdDate
             actionReceived.displayedLifeCycle = actionReceived.createdLifeCycle
         }

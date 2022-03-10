@@ -85,6 +85,11 @@ public class ScheduleManager {
         NotificationModel schedule = getScheduleById(context, id);
         if(schedule != null)
             removeSchedule(context, schedule);
+        else {
+            _removeNotificationFromShared(
+                context,
+                id);
+        }
     }
 
     public static void cancelSchedulesByChannelKey(Context context, String channelKey) {

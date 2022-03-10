@@ -44,10 +44,10 @@ public class NotificationIntervalModel : NotificationScheduleModel {
     public func toMap() -> [String : Any?] {
         var mapData:[String: Any?] = [:]
         
-        if(_timeZone != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] = self._timeZone!.identifier}
+        if(_timeZone != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] = TimeZoneUtils.shared.timeZoneToString(timeZone: self._timeZone)}
         if(createdDate != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_INITIAL_DATE] = self.createdDate!.description}
         if(interval != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_INTERVAL] = self.interval}
-        if(repeats != nil)  {mapData[Definitions.NOTIFICATION_SCHEDULE_REPEATS]  = self.repeats}
+        if(repeats != nil) {mapData[Definitions.NOTIFICATION_SCHEDULE_REPEATS]  = self.repeats}
         
         return mapData
     }

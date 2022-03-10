@@ -89,7 +89,7 @@ public class NotificationCalendarModel : NotificationScheduleModel {
     public func toMap() -> [String : Any?] {
         var mapData:[String: Any?] = [:]
         
-        if(_timeZone != nil)   {mapData[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] = self._timeZone!.identifier}
+        if(_timeZone != nil)   {mapData[Definitions.NOTIFICATION_SCHEDULE_TIMEZONE] = TimeZoneUtils.shared.timeZoneToString(timeZone: self._timeZone)}
         if(_createdDate != nil){mapData[Definitions.NOTIFICATION_CREATED_DATE] = self._createdDate!.description}
 
         if(year != nil)        {mapData[Definitions.NOTIFICATION_SCHEDULE_YEAR]   = self.year}

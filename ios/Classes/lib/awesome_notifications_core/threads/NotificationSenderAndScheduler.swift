@@ -225,6 +225,7 @@ class NotificationSenderAndScheduler {
                     .sendBroadcast(
                         notificationCreated: receivedNotification!,
                         whenFinished: { [self] (created:Bool) in
+                            
                             if scheduled == nil {
                                 BroadcastSender
                                     .shared

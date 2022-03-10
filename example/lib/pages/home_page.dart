@@ -416,10 +416,9 @@ class _HomePageState extends State<HomePage> {
             }),
             SimpleButton('Show alarm notification', onPressed: () {
               Vibration.vibrate(duration: 100);
-              Future.delayed(Duration(seconds: _secondsToCallCategory.toInt()),
-                  () {
-                NotificationUtils.showAlarmNotification(42);
-              });
+              NotificationUtils.showAlarmNotification(
+                id: 42, secondsToWait: _secondsToCallCategory.toInt()
+              );
             }),
             SimpleButton('Stop Alarm / Call',
                 backgroundColor: Colors.red,

@@ -44,6 +44,7 @@ const DART_REVERSE_CHANNEL = 'awesome_notifications_reverse';
 
 const ACTION_HANDLE = 'actionHandle';
 const BACKGROUND_HANDLE = 'bgHandle';
+const RECOVER_DISPLAYED = 'recoverDisplayed';
 
 const CHANNEL_METHOD_INITIALIZE = 'initialize';
 const CHANNEL_METHOD_GET_DRAWABLE_DATA = 'getDrawableData';

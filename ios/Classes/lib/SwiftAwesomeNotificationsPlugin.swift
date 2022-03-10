@@ -14,6 +14,7 @@ public class SwiftAwesomeNotificationsPlugin:
     let TAG = "AwesomeNotificationsPlugin"
     
     var awesomeNotifications:AwesomeNotifications?
+    static var flutterRegistrantCallback: FlutterPluginRegistrantCallback?
     
     public override init() {
         super.init()
@@ -37,6 +38,11 @@ public class SwiftAwesomeNotificationsPlugin:
             .AttachAwesomeNotificationsPlugin(
                 usingRegistrar: registrar,
                 throughFlutterChannel: flutterChannel)
+    }
+    
+    @objc
+    public static func setPluginRegistrantCallback(_ callback: @escaping FlutterPluginRegistrantCallback) {
+        flutterRegistrantCallback = callback
     }
     
     public func detachFromEngine(for registrar: FlutterPluginRegistrar) {
@@ -849,9 +855,13 @@ public class SwiftAwesomeNotificationsPlugin:
     private func channelMethodSetActionHandle(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
         let actionHandle:Int64 = platformParameters[Definitions.ACTION_HANDLE] as? Int64 ?? 0
+        let getLostDisplayed:Bool = platformParameters[Definitions.RECOVER_DISPLAYED] as? Bool ?? false
         
         awesomeNotifications?.attachAsMainInstance(usingAwesomeEventListener: self)
-        try awesomeNotifications?.setActionHandle(actionHandle: actionHandle)
+        try awesomeNotifications?
+                .setActionHandle(
+                        actionHandle: actionHandle,
+                        recoveringLostDisplayed: getLostDisplayed)
         
         let success = actionHandle != 0
         if !success {

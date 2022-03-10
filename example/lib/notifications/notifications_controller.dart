@@ -9,6 +9,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationController {
   static void initializeNotificationsPlugin() {
@@ -275,6 +276,9 @@ class NotificationController {
   /// Use this method to detect when the user taps on a notification or action button
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
+    // Always ensure that all plugins was initialized
+    WidgetsFlutterBinding.ensureInitialized();
+
     bool isSilentAction = receivedAction.actionType == ActionType.SilentAction;
 
     // SilentBackgroundAction runs on background thread and cannot show
@@ -286,13 +290,6 @@ class NotificationController {
           toastLength: Toast.LENGTH_SHORT,
           backgroundColor: isSilentAction ? Colors.blueAccent : App.mainColor,
           gravity: ToastGravity.BOTTOM);
-    else {
-      print("start");
-      final url = Uri.parse("http://google.com");
-      final re = await http.get(url);
-      print(re.body);
-      print("done");
-    }
 
     switch (receivedAction.channelKey) {
       case 'call_channel':
@@ -312,6 +309,14 @@ class NotificationController {
         break;
 
       default:
+        if (isSilentAction) {
+          print("start");
+          final url = Uri.parse("http://google.com");
+          final re = await http.get(url);
+          print(re.body);
+          print("long task done");
+          break;
+        }
         if (!AwesomeStringUtils.isNullOrEmpty(receivedAction.buttonKeyInput))
           receiveButtonInputText(receivedAction);
         else
@@ -391,7 +396,11 @@ class NotificationController {
 
   static Future<void> receiveAlarmNotificationAction(
       ReceivedAction receivedAction) async {
-    // Your allarm logic goes here
+    if (receivedAction.buttonKeyPressed == 'SNOOZE') {
+      /*SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('stringValue', "abc");*/
+      await NotificationUtils.showAlarmNotification(id: receivedAction.id!);
+    }
   }
 
   static Future<void> receiveCallNotificationAction(

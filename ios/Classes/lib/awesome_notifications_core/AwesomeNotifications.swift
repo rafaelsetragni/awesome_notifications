@@ -299,7 +299,7 @@ public class AwesomeNotifications:
     
     // ***************************************************************************************
     
-    public func setActionHandle(actionHandle:Int64) throws {
+    public func setActionHandle(actionHandle:Int64, recoveringLostDisplayed recoverDisplayed: Bool) throws {
         
         DefaultsManager
             .shared

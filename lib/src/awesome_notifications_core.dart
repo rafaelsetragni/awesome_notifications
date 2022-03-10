@@ -21,7 +21,7 @@ class AwesomeNotifications {
   static String? rootNativePath;
 
   static String _utcTimeZoneIdentifier = 'UTC',
-      _localTimeZoneIdentifier = 'UTC';
+      _localTimeZoneIdentifier = DateTime.now().timeZoneName;
 
   static String get utcTimeZoneIdentifier => _utcTimeZoneIdentifier;
   static String get localTimeZoneIdentifier => _localTimeZoneIdentifier;
@@ -140,8 +140,11 @@ class AwesomeNotifications {
     final CallbackHandle? actionCallbackReference =
         PluginUtilities.getCallbackHandle(onActionReceivedMethod);
 
-    bool result = await _channel.invokeMethod(CHANNEL_METHOD_SET_ACTION_HANDLE,
-        {ACTION_HANDLE: actionCallbackReference?.toRawHandle()});
+    bool result =
+        await _channel.invokeMethod(CHANNEL_METHOD_SET_ACTION_HANDLE, {
+      ACTION_HANDLE: actionCallbackReference?.toRawHandle(),
+      RECOVER_DISPLAYED: _displayedHandler != null
+    });
 
     if (!result) {
       print(

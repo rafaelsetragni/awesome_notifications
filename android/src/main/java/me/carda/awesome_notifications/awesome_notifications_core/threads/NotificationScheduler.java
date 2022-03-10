@@ -313,12 +313,16 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
                 }
 
                 NotificationModel notificationModel = ScheduleManager.getScheduleById(context, id);
-                if(notificationModel.schedule.hasNextValidDate()){
+                if(notificationModel == null){
+                    ScheduleManager.removeScheduleById(context, id);
+                }
+                else if(notificationModel.schedule.hasNextValidDate()){
                     schedule(context, notificationModel);
                     continue;
                 }
-
-                ScheduleManager.removeSchedule(context, notificationModel);
+                else {
+                    ScheduleManager.removeSchedule(context, notificationModel);
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();

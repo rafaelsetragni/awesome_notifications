@@ -47,7 +47,10 @@ class MapUtils<T: Any> {
         
         if(T.self == TimeZone.self){
             if let identifier = value as? String {
-                return TimeZone(identifier: identifier) as? T
+                return TimeZoneUtils
+                    .shared
+                    .getValidTimeZone(
+                        fromTimeZoneId: identifier) as? T
             }
         }
         

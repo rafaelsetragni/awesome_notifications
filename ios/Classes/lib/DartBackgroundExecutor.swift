@@ -4,8 +4,9 @@
 //
 //  Created by Rafael Setragni on 04/06/21.
 //
-import Flutter
+import UIKit
 import Foundation
+import Flutter
 
 public class DartBackgroundExecutor: BackgroundExecutor {
     
@@ -15,7 +16,6 @@ public class DartBackgroundExecutor: BackgroundExecutor {
         
     private var backgroundEngine: FlutterEngine?
     private var backgroundChannel: FlutterMethodChannel?
-    private var flutterPluginRegistrantCallback: FlutterPluginRegistrantCallback?
     
     static var registrar: FlutterPluginRegistrar?
     
@@ -45,13 +45,10 @@ public class DartBackgroundExecutor: BackgroundExecutor {
     }
     
     // ************** IOS EVENTS LISTENERS ************************
-    
-    
-    
-    
+        
     var dartCallbackHandle:Int64 = 0
     var silentCallbackHandle:Int64 = 0
-        
+    
     public func runBackgroundProcess(
         silentActionRequest: SilentActionRequest,
         dartCallbackHandle:Int64,
@@ -131,17 +128,19 @@ public class DartBackgroundExecutor: BackgroundExecutor {
             if self.backgroundEngine == nil {
                 Log.d(self.TAG, "Flutter background engine is not available.")
                 self.closeBackgroundIsolate()
-                return
             }
-            
-            self.flutterPluginRegistrantCallback?(self.backgroundEngine!)
-            
-            self.backgroundEngine!.run(
-                withEntrypoint: dartCallbackInfo.callbackName,
-                libraryURI: dartCallbackInfo.callbackLibraryPath)
-            
-            self.initializeReverseMethodChannel(backgroundEngine: self.backgroundEngine!)
-            self.backgroundEngine!.viewController = nil
+            else {
+                
+                self.backgroundEngine!.run(
+                    withEntrypoint: dartCallbackInfo.callbackName,
+                    libraryURI: dartCallbackInfo.callbackLibraryPath)
+                
+                SwiftAwesomeNotificationsPlugin.flutterRegistrantCallback?(
+                    self.backgroundEngine!)
+                
+                self.initializeReverseMethodChannel(
+                    backgroundEngine: self.backgroundEngine!)
+            }
         }
     }
     

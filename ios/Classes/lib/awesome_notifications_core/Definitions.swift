@@ -29,6 +29,7 @@ enum Definitions {
     static let  ACTION_HANDLE = "actionHandle"
     static let  SILENT_HANDLE = "silentHandle"
     static let  BACKGROUND_HANDLE = "bgHandle"
+    static let  RECOVER_DISPLAYED = "recoverScheduledDisplayed"
 
     static let  SHARED_DEFAULTS = "defaults"
     static let  SHARED_MANAGER = "sharedManager"
