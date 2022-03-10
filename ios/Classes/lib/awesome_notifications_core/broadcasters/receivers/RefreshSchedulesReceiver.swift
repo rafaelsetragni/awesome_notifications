@@ -51,18 +51,22 @@ class RefreshSchedulesReceiver {
                     for notificationModel in schedules {
                         var founded = false
                         for activeSchedule in activeSchedules {
-                            if activeSchedule.identifier != String(notificationModel.content!.id!) {
+                            if activeSchedule.identifier == String(notificationModel.content!.id!) {
                                 founded = true
                                 break;
                             }
                         }
                         if(!founded){
-                            _ = ScheduleManager.cancelScheduled(id: notificationModel.content!.id!)
+                            _ = CancellationManager
+                                    .shared
+                                    .cancelSchedule(byId: notificationModel.content!.id!)
                         }
                     }
                 }
             } else {
-                _ = ScheduleManager.cancelAllSchedules();
+                _ = CancellationManager
+                        .shared
+                        .cancelAllSchedules();
             }
         })
     }

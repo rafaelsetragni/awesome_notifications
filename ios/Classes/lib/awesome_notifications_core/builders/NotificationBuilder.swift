@@ -42,9 +42,11 @@ public class NotificationBuilder {
         return  jsonToNotificationModel(jsonData: jsonData)
     }
     
-    public func buildNotificationActionFromJson(jsonData:String?, buttonKeyPressed:String?, userText:String?) -> ActionReceived? {
-        
-        let notificationModel:NotificationModel? = buildNotificationFromJson(jsonData: jsonData)
+    public func buildNotificationActionFromModel(
+        notificationModel:NotificationModel?,
+        buttonKeyPressed:String?,
+        userText:String?
+    ) -> ActionReceived? {
         if notificationModel == nil { return nil }
         let actionReceived:ActionReceived = ActionReceived(
             notificationModel!.content,

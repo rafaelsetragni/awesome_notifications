@@ -124,6 +124,7 @@ enum Definitions {
     static let  BADGE_COUNT = "badgeCount"
     static let  SELECT_NOTIFICATION = "SELECT_NOTIFICATION"
     static let  AWESOME_EXTENSION_CLASS_NAME = "extensionClass"
+    static let  AWESOME_LAST_DISPLAYED_DATE = "lastDisplayedDate"
     static let  NOTIFICATION_BUTTON_ACTION_PREFIX = "ACTION_NOTIFICATION"
     
     static let  INITIALIZE_DEBUG_MODE = "debug"

@@ -28,8 +28,8 @@ public class FlutterBitmapUtils : BitmapUtils {
         if(StringUtils.isNullOrEmpty(mediaPath)){ return nil }
                     
         let key = registrar.lookupKey(forAsset: mediaPath!)
-        let topPath = Bundle.main.path(forResource: key, ofType: nil)!
+        let topPath = Bundle.main.path(forResource: key, ofType: nil)
         
-        return getBitmapFromFile(fromRealPath: topPath)
+        return topPath == nil ? nil : getBitmapFromFile(fromRealPath: topPath!)
     }
 }

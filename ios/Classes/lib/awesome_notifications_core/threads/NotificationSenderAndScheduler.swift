@@ -95,12 +95,6 @@ class NotificationSenderAndScheduler {
     }
     
     private func send() throws {
-        
-        created = notificationModel!
-                            .content!
-                            .registerCreateEvent(
-                                inLifeCycle: appLifeCycle,
-                                fromSource: createdSource)
 
         PermissionManager
             .shared

@@ -46,11 +46,17 @@ public class NotificationActionReceiver {
             return
         }
             
-        guard let actionReceived:ActionReceived =
+        guard
+            let notificationModel:NotificationModel =
                 NotificationBuilder
                     .newInstance()
-                    .buildNotificationActionFromJson(
-                        jsonData: jsonData,
+                    .buildNotificationFromJson(
+                        jsonData: jsonData),
+            let actionReceived:ActionReceived =
+                NotificationBuilder
+                    .newInstance()
+                    .buildNotificationActionFromModel(
+                        notificationModel: notificationModel,
                         buttonKeyPressed: response.actionIdentifier,
                         userText: userText)
         else {
@@ -58,19 +64,23 @@ public class NotificationActionReceiver {
             return
         }
         
+        let currentLifeCycle:NotificationLifeCycle =
+            LifeCycleManager
+                .shared
+                .currentLifeCycle
+        
+        actionReceived.registerLastDisplayedEvent(
+            inLifeCycle: currentLifeCycle,
+            fromNotificationSchedule: notificationModel.schedule
+        )
+        
         if actionReceived.actionType == .DismissAction {
             actionReceived.registerDismissedEvent(
-                withLifeCycle:
-                    LifeCycleManager
-                        .shared
-                        .currentLifeCycle)
+                withLifeCycle: currentLifeCycle)
         }
         else {
             actionReceived.registerActionEvent(
-                withLifeCycle:
-                    LifeCycleManager
-                        .shared
-                        .currentLifeCycle)
+                withLifeCycle: currentLifeCycle)
         }
         
         if #available(iOS 15.0, *), !actionReceived.autoDismissible! {

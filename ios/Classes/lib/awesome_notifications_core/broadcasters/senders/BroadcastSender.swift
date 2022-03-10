@@ -58,6 +58,10 @@ class BroadcastSender {
                     with: notificationReceived)
         }
         
+        DefaultsManager
+            .shared
+            .registerLastDisplayedDate()
+        
         completionHandler(true)
     }
     

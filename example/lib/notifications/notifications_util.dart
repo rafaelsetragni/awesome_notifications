@@ -570,7 +570,8 @@ class NotificationUtils {
         ]);
   }
 
-  static Future<void> showAlarmNotification({required int id, int secondsToWait = 30, int snoozeSeconds = 30}) async {
+  static Future<void> showAlarmNotification(
+      {required int id, int secondsToWait = 30, int snoozeSeconds = 30}) async {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: id,
@@ -579,10 +580,7 @@ class NotificationUtils {
             body: 'Hey! Wake Up!',
             category: NotificationCategory.Alarm,
             autoDismissible: true,
-            payload: {
-              'snooze': '$snoozeSeconds'
-            }
-        ),
+            payload: {'snooze': '$snoozeSeconds'}),
         actionButtons: [
           NotificationActionButton(
               key: 'SNOOZE',
@@ -591,10 +589,10 @@ class NotificationUtils {
               actionType: ActionType.SilentBackgroundAction,
               autoDismissible: true),
         ],
-        schedule: NotificationCalendar.fromDate(date:
-            DateTime.now().add(Duration(seconds: secondsToWait))
-        )
-    );
+        schedule: (secondsToWait < 5)
+            ? null
+            : NotificationCalendar.fromDate(
+                date: DateTime.now().add(Duration(seconds: secondsToWait))));
   }
 
   /* *********************************************

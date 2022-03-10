@@ -109,7 +109,14 @@ public class StatusBarManager {
         if(notificationReceived != nil){
             
             notificationModel.content!.displayedLifeCycle = LifeCycleManager.shared.currentLifeCycle
+            
+            BroadcastSender
+                .shared
+                .sendBroadcast(
+                    notificationDisplayed: notificationReceived!) { success in
                         
+                    }
+            
             let channel:NotificationChannelModel? =
                 ChannelManager
                 .shared

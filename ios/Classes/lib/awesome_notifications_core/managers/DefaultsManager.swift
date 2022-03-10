@@ -45,4 +45,22 @@ class DefaultsManager {
         set { userDefaults.setValue(newValue, forKey: Definitions.AWESOME_EXTENSION_CLASS_NAME) }
     }
     
+    public var lastDisplayedDate:RealDateTime {
+        get {
+            let dateText:String? = userDefaults.object(forKey: Definitions.AWESOME_LAST_DISPLAYED_DATE) as? String
+            return
+                dateText == nil ?
+                    RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone):
+                    RealDateTime.init(
+                            fromDateText: dateText!,
+                            defaultTimeZone: RealDateTime.utcTimeZone)!
+            
+        }
+        set { userDefaults.setValue(newValue.description, forKey: Definitions.AWESOME_LAST_DISPLAYED_DATE) }
+    }
+    
+    
+    public func registerLastDisplayedDate(){
+        self.lastDisplayedDate = RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
+    }
 }

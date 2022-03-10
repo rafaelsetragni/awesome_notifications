@@ -196,6 +196,18 @@ public class AwesomeNotifications:
                 PermissionManager
                     .shared
                     .handlePermissionResult()
+                do {
+                    if (
+                        DefaultsManager
+                            .shared
+                            .actionCallback != 0){
+                        try recoverNotificationsDisplayed(
+                            withReferenceLifeCycle: .Background
+                        )
+                    }
+                } catch {
+                    
+                }
                 break
             
             case .Background:
@@ -307,8 +319,8 @@ public class AwesomeNotifications:
         
         if actionHandle != 0
         {
-            try recoverNotificationCreated()
-            try recoverNotificationDisplayed()
+            try recoverNotificationsCreated()
+            try recoverNotificationsDisplayed(withReferenceLifeCycle: .AppKilled)
             try recoverNotificationsDismissed()
             try recoverNotificationActions()
         }
@@ -343,7 +355,9 @@ public class AwesomeNotifications:
                             }
                         }
                         if(!founded){
-                            _ = ScheduleManager.cancelScheduled(id: notificationModel.content!.id!)
+                            _ = CancellationManager
+                                    .shared
+                                    .cancelSchedule(byId: notificationModel.content!.id!)
                         }
                     }
                 }
@@ -351,7 +365,10 @@ public class AwesomeNotifications:
                 completionHandler(schedules)
                 
             } else {
-                _ = ScheduleManager.cancelAllSchedules();
+                _ = CancellationManager
+                        .shared
+                        .cancelAllSchedules()
+                
                 completionHandler([])
             }
         })
@@ -403,7 +420,7 @@ public class AwesomeNotifications:
     
     // *****************************  RECOVER FUNCTIONS  **********************************
     
-    private func recoverNotificationCreated() throws {
+    private func recoverNotificationsCreated() throws {
         let lostCreated = CreatedManager.listCreated()
         for createdNotification in lostCreated {
             
@@ -419,17 +436,28 @@ public class AwesomeNotifications:
         }
     }
     
-    private func recoverNotificationDisplayed() throws {
+    private func recoverNotificationsDisplayed(
+        withReferenceLifeCycle lifeCycle:NotificationLifeCycle
+    ) throws {
+        
+        let lastRecoveredDate:RealDateTime =
+                        DefaultsManager
+                            .shared
+                            .lastDisplayedDate
+        
         DisplayedManager.reloadLostSchedulesDisplayed(referenceDate: Date())
         
         let lostDisplayed = DisplayedManager.listDisplayed()
         for displayedNotification in lostDisplayed {
             
-            try displayedNotification.validate()
-            
-            notifyNotificationEvent(
-                eventName: Definitions.EVENT_NOTIFICATION_DISPLAYED,
-                notificationReceived: displayedNotification)
+            if(lastRecoveredDate < displayedNotification.displayedDate!){
+                try displayedNotification.validate()
+                displayedNotification.displayedLifeCycle = lifeCycle
+                
+                notifyNotificationEvent(
+                    eventName: Definitions.EVENT_NOTIFICATION_DISPLAYED,
+                    notificationReceived: displayedNotification)
+            }
             
             if !DisplayedManager.removeDisplayed(id: displayedNotification.id!) {
                 Log.e(TAG, "Displayed event \(displayedNotification.id!) could not be cleaned")

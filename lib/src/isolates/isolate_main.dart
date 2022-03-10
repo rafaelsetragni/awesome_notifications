@@ -7,6 +7,9 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 
 void dartIsolateMain() {
   // Initialize state necessary for MethodChannels.
+
+  // Current in tests
+  // DartPluginRegistrant.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
 
   // We establish a new flutter native channel to be able to receive data in

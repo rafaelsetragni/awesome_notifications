@@ -397,8 +397,8 @@ class NotificationController {
   static Future<void> receiveAlarmNotificationAction(
       ReceivedAction receivedAction) async {
     if (receivedAction.buttonKeyPressed == 'SNOOZE') {
-      /*SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('stringValue', "abc");*/
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('stringValue', "abc");
       await NotificationUtils.showAlarmNotification(id: receivedAction.id!);
     }
   }

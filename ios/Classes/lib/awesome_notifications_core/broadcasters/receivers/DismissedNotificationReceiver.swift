@@ -42,11 +42,17 @@ class DismissedNotificationReceiver {
             return
         }
             
-        guard let actionReceived:ActionReceived =
+        guard
+            let notificationModel:NotificationModel =
                 NotificationBuilder
                     .newInstance()
-                    .buildNotificationActionFromJson(
-                        jsonData: jsonData,
+                    .buildNotificationFromJson(
+                        jsonData: jsonData),
+            let actionReceived:ActionReceived =
+                NotificationBuilder
+                    .newInstance()
+                    .buildNotificationActionFromModel(
+                        notificationModel: notificationModel,
                         buttonKeyPressed: nil,
                         userText: nil)
         else {

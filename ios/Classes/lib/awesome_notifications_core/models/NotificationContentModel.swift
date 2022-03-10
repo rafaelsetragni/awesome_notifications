@@ -77,6 +77,30 @@ public class NotificationContentModel : AbstractModel {
                     fromTimeZone: TimeZone(identifier: "UTC"))
     }
     
+    public func registerLastDisplayedEvent(
+        inLifeCycle lifeCycle: NotificationLifeCycle,
+        fromNotificationSchedule schedule: NotificationScheduleModel?
+    ){
+        if self.displayedDate == nil {
+            
+            if schedule == nil {
+                registerDisplayedEvent(
+                    inLifeCycle: lifeCycle
+                )
+            }
+            else {
+                self.displayedLifeCycle = lifeCycle
+                self.displayedDate =
+                    DateUtils
+                        .shared
+                        .getLastValidDate(
+                            scheduleModel: schedule!,
+                            fixedDateTime: RealDateTime.init(
+                                fromTimeZone: TimeZone(identifier: "UTC")))
+            }
+        }
+    }
+    
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
                 
         self.id = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_ID, arguments: arguments)
