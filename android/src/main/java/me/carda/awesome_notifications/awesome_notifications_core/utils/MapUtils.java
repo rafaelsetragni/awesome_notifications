@@ -1,6 +1,6 @@
 package me.carda.awesome_notifications.awesome_notifications_core.utils;
 
-import android.util.Log;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import com.google.common.base.Optional;
 import com.google.common.primitives.Bytes;
@@ -10,8 +10,6 @@ import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import com.google.common.primitives.Shorts;
 
-import java.sql.Time;
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +59,7 @@ public class MapUtils {
             }
         }
         catch (Exception e){
-            Log.d(TAG,"Argument is not a type of " + Optional.class.getSimpleName());
+            Logger.d(TAG,"Argument is not a type of " + Optional.class.getSimpleName());
         }
 
         return Optional.absent();
@@ -168,7 +166,7 @@ public class MapUtils {
             }*/
         }
         catch (Exception e){
-            Log.d(TAG, key + " is not a type of " + Optional.class.getSimpleName());
+            Logger.d(TAG, key + " is not a type of " + Optional.class.getSimpleName());
         }
 
         return Optional.absent();

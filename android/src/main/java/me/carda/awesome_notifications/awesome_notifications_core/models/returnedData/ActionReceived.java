@@ -1,5 +1,7 @@
 package me.carda.awesome_notifications.awesome_notifications_core.models.returnedData;
 
+import android.content.Intent;
+
 import java.util.Calendar;
 import java.util.Map;
 
@@ -26,8 +28,8 @@ public class ActionReceived extends NotificationReceived {
 
     public ActionReceived(){}
 
-    public ActionReceived(NotificationContentModel contentModel){
-        super(contentModel);
+    public ActionReceived(NotificationContentModel contentModel, Intent originalIntent){
+        super(contentModel, originalIntent);
 
         this.shouldAutoDismiss = this.autoDismissible;
     }

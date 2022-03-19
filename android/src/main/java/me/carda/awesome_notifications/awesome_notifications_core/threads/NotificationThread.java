@@ -17,11 +17,10 @@ public abstract class NotificationThread<T>{
     protected abstract void onPostExecute(T received);
 
     public void execute(NotificationModel notificationModel){
-        if(itMustRunOnBackgroundThread(notificationModel)){
+        if(itMustRunOnBackgroundThread(notificationModel))
             runOnBackgroundThread();
-        }
         else
-            this.onPostExecute(this.doInBackground());
+            runOnForegroundThread();
     }
 
     private void runOnBackgroundThread() {
@@ -41,6 +40,24 @@ public abstract class NotificationThread<T>{
                 });
             }
         });
+    }
+
+    private void runOnForegroundThread() {
+        if(Looper.myLooper() == Looper.getMainLooper()) {
+            onPostExecute(doInBackground());
+        }
+        else {
+            final Handler handler = new Handler(Looper.getMainLooper());
+            final NotificationThread<T> threadReference = this;
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    final T response = threadReference.doInBackground();
+                    threadReference.onPostExecute(response);
+                }
+            });
+        }
     }
 
     private boolean itMustRunOnBackgroundThread(NotificationModel notificationModel){

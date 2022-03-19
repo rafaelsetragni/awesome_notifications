@@ -3,7 +3,7 @@ package me.carda.awesome_notifications.awesome_notifications_core.managers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.util.Log;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 
 import java.util.ArrayList;
@@ -32,10 +32,10 @@ public class SharedManager<T extends AbstractModel> {
         this.reference = Definitions.SHARED_MANAGER +"."+ fileIdentifier +"."+ className;
         try {
             hashedReference = stringUtils.digestString(reference);
-            //Log.d(TAG, fileIdentifier+": file initialized = "+ hashedReference);
+            //LogUtils.d(TAG, fileIdentifier+": file initialized = "+ hashedReference);
         } catch (Exception e) {
             this.hashedReference = reference;
-            Log.e(TAG, "SharedManager could not be correctly initialized: "+ e.getMessage());
+            Logger.e(TAG, "SharedManager could not be correctly initialized: "+ e.getMessage());
             e.printStackTrace();
         }
     }
@@ -68,7 +68,7 @@ public class SharedManager<T extends AbstractModel> {
 
         } catch (Exception e){
             e.printStackTrace();
-            Log.e(TAG, e.toString());
+            Logger.e(TAG, e.toString());
         }
     }
 
@@ -93,7 +93,7 @@ public class SharedManager<T extends AbstractModel> {
             }
         } catch (Exception e){
             e.printStackTrace();
-            Log.e(TAG, e.toString());
+            Logger.e(TAG, e.toString());
         }
 
         return returnedList;
@@ -122,7 +122,7 @@ public class SharedManager<T extends AbstractModel> {
 
         } catch (AwesomeNotificationsException e) {
             e.printStackTrace();
-            Log.e(TAG, e.toString());
+            Logger.e(TAG, e.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -149,7 +149,7 @@ public class SharedManager<T extends AbstractModel> {
 
         } catch (AwesomeNotificationsException e) {
             e.printStackTrace();
-            Log.e(TAG, e.toString());
+            Logger.e(TAG, e.toString());
         }
 
         return false;
@@ -172,7 +172,7 @@ public class SharedManager<T extends AbstractModel> {
 
         } catch (AwesomeNotificationsException e) {
             e.printStackTrace();
-            Log.e(TAG, e.toString());
+            Logger.e(TAG, e.toString());
         }
 
         return false;
@@ -191,7 +191,7 @@ public class SharedManager<T extends AbstractModel> {
 
         } catch (AwesomeNotificationsException e) {
             e.printStackTrace();
-            Log.e(TAG, e.toString());
+            Logger.e(TAG, e.toString());
         }
 
         return false;
@@ -207,7 +207,7 @@ public class SharedManager<T extends AbstractModel> {
             @Override
             protected void onPostExecute(Boolean value) {
                 if(!value){
-                    Log.d(reference,"shared data could not be saved");
+                    Logger.d(reference,"shared data could not be saved");
                 }
             }
         }.execute();

@@ -1,5 +1,7 @@
 package me.carda.awesome_notifications.awesome_notifications_core.models.returnedData;
 
+import android.content.Intent;
+
 import java.util.Map;
 
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationContentModel;
@@ -7,13 +9,17 @@ import me.carda.awesome_notifications.awesome_notifications_core.models.Notifica
 // Just created because of Json process
 public class NotificationReceived extends NotificationContentModel {
 
+    public Intent originalIntent;
+
     public NotificationReceived(){}
 
-    public NotificationReceived(NotificationContentModel contentModel){
+    public NotificationReceived(NotificationContentModel contentModel, Intent originalIntent){
         /*
         if(contentModel == null)
             throw new NotificationModelException("Notification Received was lost");
         */
+        this.originalIntent = originalIntent;
+
         this.id = contentModel.id;
         this.channelKey = contentModel.channelKey;
         this.groupKey = contentModel.groupKey;

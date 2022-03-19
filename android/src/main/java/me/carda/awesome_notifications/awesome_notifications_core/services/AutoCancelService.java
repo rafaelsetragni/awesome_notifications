@@ -3,7 +3,7 @@ package me.carda.awesome_notifications.awesome_notifications_core.services;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import androidx.annotation.Nullable;
 
@@ -18,7 +18,7 @@ public class AutoCancelService extends Service {
     }
 
     public void onTaskRemoved(Intent rootIntent) {
-        Log.d(TAG, "TASK END");
+        Logger.d(TAG, "TASK END");
         //unregister listeners
         //do any other cleanup if required
 

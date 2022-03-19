@@ -1,20 +1,9 @@
 package me.carda.awesome_notifications.awesome_notifications_core.utils;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -23,7 +12,6 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 
-import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 
 public class CalendarUtils {

@@ -3,9 +3,8 @@ package me.carda.awesome_notifications.awesome_notifications_core.threads;
 import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
-import android.util.Log;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -131,13 +130,16 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
 
                     notificationModel = showNotification(
                             wContextReference.get(),
-                            notificationModel);
+                            notificationModel,
+                            originalIntent);
                 }
 
                 // Only save DisplayedMethods if notificationModel was created
                 // and displayed successfully
                 if(notificationModel != null)
-                    return new NotificationReceived(notificationModel.content);
+                    return new NotificationReceived(
+                            notificationModel.content,
+                            originalIntent);
             }
 
         } catch (Exception e) {
@@ -174,13 +176,13 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
             if(created) actionsTookList.add("created");
             if(displayed) actionsTookList.add("displayed");
 
-            Log.d(TAG, "Notification "+stringUtils.join(actionsTookList.iterator(), " and ")+" in "+elapsed+"ms");
+            Logger.d(TAG, "Notification "+stringUtils.join(actionsTookList.iterator(), " and ")+" in "+elapsed+"ms");
         }
     }
 
     /// AsyncTask METHODS END *********************************
 
-    public NotificationModel showNotification(Context context, NotificationModel notificationModel) {
+    public NotificationModel showNotification(Context context, NotificationModel notificationModel, Intent originalIntent) {
 
         try {
 
@@ -202,7 +204,7 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
 
                 Notification notification =
                         notificationBuilder
-                            .createNewAndroidNotification(context, null, notificationModel);
+                            .createNewAndroidNotification(context, originalIntent, notificationModel);
 
                 if(
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
@@ -214,7 +216,7 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
                     NotificationModel pushSummary = _buildSummaryGroupNotification(notificationModel);
                     Notification summaryNotification =
                             notificationBuilder
-                                    .createNewAndroidNotification(context, null, pushSummary);
+                                    .createNewAndroidNotification(context, originalIntent, pushSummary);
 
                     StatusBarManager
                         .getInstance(context)

@@ -1,12 +1,6 @@
 package me.carda.awesome_notifications.awesome_notifications_core.managers;
 
-import android.app.Activity;
-import android.app.Application;
-import android.app.Application.ActivityLifecycleCallbacks;
-
-import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +68,7 @@ public class LifeCycleManager implements LifecycleObserver {
             ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
 
             if(AwesomeNotifications.debug)
-                Log.d(TAG, "LiceCycleManager listener successfully attached to Android");
+                Logger.d(TAG, "LiceCycleManager listener successfully attached to Android");
         }
     }
 
@@ -84,7 +78,7 @@ public class LifeCycleManager implements LifecycleObserver {
             ProcessLifecycleOwner.get().getLifecycle().removeObserver(this);
 
             if(AwesomeNotifications.debug)
-                Log.d(TAG, "LiceCycleManager listener successfully removed from Android");
+                Logger.d(TAG, "LiceCycleManager listener successfully removed from Android");
         }
     }
 
@@ -101,7 +95,7 @@ public class LifeCycleManager implements LifecycleObserver {
         notify(appLifeCycle);
 
         if(AwesomeNotifications.debug)
-            Log.d(TAG, "App is now "+lifeCycle);
+            Logger.d(TAG, "App is now "+lifeCycle);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)

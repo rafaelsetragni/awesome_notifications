@@ -2,7 +2,7 @@ package me.carda.awesome_notifications.awesome_notifications_core.broadcasters.r
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 //import com.google.common.reflect.TypeToken;
 
@@ -42,7 +42,8 @@ public class ScheduledNotificationReceiver extends AwesomeBroadcastReceiver {
                     NotificationScheduler
                         .schedule(
                             context,
-                            notificationModel);
+                            notificationModel,
+                            intent);
                 }
                 else {
                     NotificationScheduler
@@ -51,7 +52,7 @@ public class ScheduledNotificationReceiver extends AwesomeBroadcastReceiver {
                             notificationModel);
 
                     if(AwesomeNotifications.debug)
-                        Log.d(TAG,
+                        Logger.d(TAG,
                             "Schedule "+ notificationModel.content.id.toString() +
                                     " finished since repeat option is off");
                 }

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -109,11 +109,11 @@ public class ForegroundService extends Service {
         if(foregroundService != null) {
             foregroundService.stopSelf();
             if(AwesomeNotifications.debug)
-                Log.d(TAG, "Foreground service "+ notificationId +" id stopped");
+                Logger.d(TAG, "Foreground service "+ notificationId +" id stopped");
         }
         else {
             if(AwesomeNotifications.debug)
-                Log.d(TAG, "Foreground service "+ notificationId +" id not found");
+                Logger.d(TAG, "Foreground service "+ notificationId +" id not found");
         }
     }
 

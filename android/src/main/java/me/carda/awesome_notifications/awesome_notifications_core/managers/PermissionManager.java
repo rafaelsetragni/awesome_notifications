@@ -10,7 +10,7 @@ import android.provider.Settings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -683,7 +683,7 @@ public class PermissionManager {
             return;
 
         if(AwesomeNotifications.debug)
-            Log.d(TAG, "New permissions request found waiting for user response");
+            Logger.d(TAG, "New permissions request found waiting for user response");
 
         int retries = 3;
         ActivityCompletionHandler completionHandler;
@@ -709,7 +709,7 @@ public class PermissionManager {
             context.startActivity(intent);
             return true;
         } else {
-            Log.e(TAG, "Activity permission action '"+intent.getAction()+"' not found!");
+            Logger.e(TAG, "Activity permission action '"+intent.getAction()+"' not found!");
             return false;
         }
     }

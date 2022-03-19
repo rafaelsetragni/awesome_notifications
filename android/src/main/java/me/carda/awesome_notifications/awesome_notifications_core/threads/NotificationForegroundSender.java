@@ -3,9 +3,8 @@ package me.carda.awesome_notifications.awesome_notifications_core.threads;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Build;
-import android.util.Log;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import androidx.annotation.NonNull;
 
@@ -123,7 +122,11 @@ public class NotificationForegroundSender extends NotificationThread<Notificatio
         // Only broadcast if notificationModel is valid
         if(notificationModel != null){
 
-            NotificationReceived receivedNotification = new NotificationReceived(notificationModel.content);
+            NotificationReceived receivedNotification =
+                    new NotificationReceived(
+                            notificationModel.content,
+                            null);
+
             receivedNotification.displayedLifeCycle = receivedNotification.displayedLifeCycle == null ?
                     appLifeCycle : receivedNotification.displayedLifeCycle;
 
@@ -145,7 +148,7 @@ public class NotificationForegroundSender extends NotificationThread<Notificatio
 
         if(AwesomeNotifications.debug){
             long elapsed = (endTime - startTime)/1000000;
-            Log.d(TAG, "Notification displayed in "+elapsed+"ms");
+            Logger.d(TAG, "Notification displayed in "+elapsed+"ms");
         }
     }
 

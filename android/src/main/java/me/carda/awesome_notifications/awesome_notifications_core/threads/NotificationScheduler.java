@@ -6,7 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
@@ -40,6 +40,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
     private final NotificationSource createdSource;
     private final NotificationLifeCycle appLifeCycle;
     private NotificationModel notificationModel;
+    private Intent originalIntent;
 
     private Boolean scheduled = false;
     private Boolean rescheduled = false;
@@ -48,7 +49,8 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
 
     public static void schedule(
             Context context,
-            NotificationModel notificationModel
+            NotificationModel notificationModel,
+            Intent originalIntent
     ) throws AwesomeNotificationsException {
 
         if (notificationModel == null)
@@ -61,6 +63,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
                 AwesomeNotifications.getApplicationLifeCycle(),
                 notificationModel.content.createdSource,
                 notificationModel,
+                originalIntent,
                 true
         ).execute(notificationModel);
     }
@@ -81,16 +84,18 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
                 AwesomeNotifications.getApplicationLifeCycle(),
                 createdSource,
                 notificationModel,
+                null,
                 false
         ).execute(notificationModel);
     }
 
     private NotificationScheduler(
-        Context context,
-        NotificationLifeCycle appLifeCycle,
-        NotificationSource createdSource,
-        NotificationModel notificationModel,
-        boolean isReschedule
+            Context context,
+            NotificationLifeCycle appLifeCycle,
+            NotificationSource createdSource,
+            NotificationModel notificationModel,
+            Intent originalIntent,
+            boolean isReschedule
     ) throws AwesomeNotificationsException {
         this.wContextReference = new WeakReference<>(context);
         this.rescheduled = isReschedule;
@@ -98,6 +103,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
         this.appLifeCycle = appLifeCycle;
         this.notificationModel = notificationModel;
         this.startTime = System.nanoTime();
+        this.originalIntent = originalIntent;
 
         this.initialDate =
             CalendarUtils
@@ -163,7 +169,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
 
                     String now = CalendarUtils.getInstance().getNowStringCalendar();
                     String msg = "Date is not more valid. ("+now+")";
-                    Log.d(TAG, msg);
+                    Logger.d(TAG, msg);
                 }
             }
 
@@ -189,9 +195,11 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
                     if (!rescheduled) {
                         BroadcastSender.sendBroadcastNotificationCreated(
                                 wContextReference.get(),
-                                new NotificationReceived(notificationModel.content)
+                                new NotificationReceived(
+                                        notificationModel.content,
+                                        originalIntent)
                         );
-                        Log.d(TAG, "Scheduled created");
+                        Logger.d(TAG, "Scheduled created");
                     }
 
                     ScheduleManager.commitChanges(wContextReference.get());
@@ -201,7 +209,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
 
                     if(AwesomeNotifications.debug){
                         long elapsed = (endTime - startTime)/1000000;
-                        Log.d(TAG, "Notification "+(
+                        Logger.d(TAG, "Notification "+(
                                 rescheduled ? "rescheduled" : "scheduled"
                                 )+" in "+elapsed+"ms");
                     }
@@ -212,7 +220,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
             ScheduleManager.removeSchedule(wContextReference.get(), notificationModel);
             _removeFromAlarm(wContextReference.get(), notificationModel.content.id);
 
-            Log.d(TAG, "Scheduled removed");
+            Logger.d(TAG, "Scheduled removed");
             ScheduleManager.commitChanges(wContextReference.get());
         }
 
@@ -221,7 +229,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
 
         if(AwesomeNotifications.debug){
             long elapsed = (endTime - startTime)/1000000;
-            Log.d(TAG, "Notification schedule removed in "+elapsed+"ms");
+            Logger.d(TAG, "Notification schedule removed in "+elapsed+"ms");
         }
     }
 
@@ -317,7 +325,8 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
                     ScheduleManager.removeScheduleById(context, id);
                 }
                 else if(notificationModel.schedule.hasNextValidDate()){
-                    schedule(context, notificationModel);
+                    // TODO save original intents to be restored later
+                    schedule(context, notificationModel, null);
                     continue;
                 }
                 else {

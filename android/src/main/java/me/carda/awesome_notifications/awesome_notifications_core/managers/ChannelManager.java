@@ -7,7 +7,7 @@ import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import java.util.Arrays;
 import java.util.List;
@@ -75,14 +75,14 @@ public class ChannelManager {
 
         if(stringUtils.isNullOrEmpty(channelKey)) {
             if(AwesomeNotifications.debug)
-                Log.e(TAG, "'"+channelKey+"' cannot be empty or null");
+                Logger.e(TAG, "'"+channelKey+"' cannot be empty or null");
             return null;
         }
 
         NotificationChannelModel channelModel = shared.get(context, Definitions.SHARED_CHANNELS, channelKey);
         if(channelModel == null) {
             if(AwesomeNotifications.debug)
-                Log.e(TAG, "Channel model '"+channelKey+"' was not found");
+                Logger.e(TAG, "Channel model '"+channelKey+"' was not found");
             return null;
         }
 
@@ -92,13 +92,13 @@ public class ChannelManager {
             NotificationChannel androidChannel = getAndroidChannel(context, channelKey);
             if(androidChannel == null) {
                 if(AwesomeNotifications.debug)
-                    Log.e(TAG, "Android native channel '"+channelKey+"' was not found");
+                    Logger.e(TAG, "Android native channel '"+channelKey+"' was not found");
                 return null;
             }
 
             if(androidChannel.getImportance() == NotificationManager.IMPORTANCE_NONE){
                 if(AwesomeNotifications.debug)
-                    Log.e(TAG, "Android native channel '"+channelKey+"' is disabled");
+                    Logger.e(TAG, "Android native channel '"+channelKey+"' is disabled");
             }
 
             updateChannelModelThroughAndroidChannel(channelModel, androidChannel);
@@ -173,7 +173,7 @@ public class ChannelManager {
             shared.commit(context);
 
             if(AwesomeNotifications.debug)
-                Log.d(TAG, "Notification channel "+newChannel.channelName+
+                Logger.d(TAG, "Notification channel "+newChannel.channelName+
                     (oldChannelModel == null ? " created" : " updated"));
         }
         else {
@@ -208,7 +208,7 @@ public class ChannelManager {
 
             setAndroidChannel(context, newChannel, true);
             if(AwesomeNotifications.debug)
-                Log.d(TAG, "Notification channel "+ newChannel.channelName+" created");
+                Logger.d(TAG, "Notification channel "+ newChannel.channelName+" created");
         }
         // updated
         else {
@@ -223,13 +223,13 @@ public class ChannelManager {
                     removeAndroidChannel(context, currentChannelKey, null);
                     setAndroidChannel(context, newChannel, false);
                     if(AwesomeNotifications.debug)
-                        Log.d(TAG, "Notification channel "+ newChannel.channelName+" updated with forceUpdate");
+                        Logger.d(TAG, "Notification channel "+ newChannel.channelName+" updated with forceUpdate");
                 }
                 else
                     if(androidChannelNeedsUpdate(newChannel, actualAndroidChannel)){
                         setAndroidChannel(context, newChannel, true);
                         if(AwesomeNotifications.debug)
-                            Log.d(TAG, "Notification channel "+ newChannel.channelName+" updated");
+                            Logger.d(TAG, "Notification channel "+ newChannel.channelName+" updated");
                     }
             }
             // For cases where forceUpdated was applied
@@ -238,13 +238,13 @@ public class ChannelManager {
                     removeAndroidChannel(context, currentChannelKey, newHashKey);
                     setAndroidChannel(context, newChannel, false);
                     if(AwesomeNotifications.debug)
-                        Log.d(TAG, "Notification channel "+ newChannel.channelName+" updated with forceUpdate");
+                        Logger.d(TAG, "Notification channel "+ newChannel.channelName+" updated with forceUpdate");
                 }
                 else
                     if(androidChannelNeedsUpdate(newChannel, actualAndroidChannel)){
                         setAndroidChannel(context, newChannel, false);
                         if(AwesomeNotifications.debug)
-                            Log.d(TAG, "Notification channel "+ newChannel.channelName+" updated");
+                            Logger.d(TAG, "Notification channel "+ newChannel.channelName+" updated");
                     }
             }
         }
@@ -377,7 +377,7 @@ public class ChannelManager {
             if(channelGroup != null)
                 newAndroidNotificationChannel.setGroup(newChannel.channelGroupKey);
             else
-                Log.e(TAG, "Channel group "+newChannel.channelGroupKey+" does not exist.");
+                Logger.e(TAG, "Channel group "+newChannel.channelGroupKey+" does not exist.");
         }
 
         if(channelGroup != null)

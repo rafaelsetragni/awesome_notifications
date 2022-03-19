@@ -1,7 +1,7 @@
 package me.carda.awesome_notifications.awesome_notifications_core.models;
 
 import android.content.Context;
-import android.util.Log;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,12 +54,12 @@ public class NotificationButtonModel extends AbstractModel {
     private void processRetroCompatibility(Map<String, Object> arguments){
 
         if (arguments.containsKey("autoCancel")) {
-            Log.d("AwesomeNotifications", "autoCancel is deprecated. Please use autoDismissible instead.");
+            Logger.d("AwesomeNotifications", "autoCancel is deprecated. Please use autoDismissible instead.");
             autoDismissible   = getValueOrDefault(arguments, "autoCancel", Boolean.class);
         }
 
         if (arguments.containsKey("buttonType")){
-            Log.d("AwesomeNotifications", "buttonType is deprecated. Please use actionType instead.");
+            Logger.d("AwesomeNotifications", "buttonType is deprecated. Please use actionType instead.");
             actionType = getEnumValueOrDefault(arguments, "buttonType",
                     ActionType.class, ActionType.values());
         }
@@ -70,7 +70,7 @@ public class NotificationButtonModel extends AbstractModel {
     // Retro-compatibility with 0.6.X
     private void adaptInputFieldToRequireText(){
         if (actionType == ActionType.InputField) {
-            Log.d("AwesomeNotifications", "InputField is deprecated. Please use requireInputText instead.");
+            Logger.d("AwesomeNotifications", "InputField is deprecated. Please use requireInputText instead.");
             actionType = ActionType.SilentAction;
             requireInputText = true;
         }

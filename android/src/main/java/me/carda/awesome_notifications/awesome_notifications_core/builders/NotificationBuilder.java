@@ -19,7 +19,6 @@ import android.os.PowerManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.text.Spanned;
-import android.util.Log;
 
 
 import java.io.Serializable;
@@ -38,7 +37,6 @@ import androidx.core.app.RemoteInput;
 import androidx.core.graphics.drawable.IconCompat;
 import androidx.core.text.HtmlCompat;
 
-import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.DismissedNotificationReceiver;
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.NotificationActionReceiver;
@@ -50,6 +48,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.enumerators.Not
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationPermission;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.BadgeManager;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.StatusBarManager;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.ChannelManager;
@@ -64,7 +63,6 @@ import me.carda.awesome_notifications.awesome_notifications_core.models.returned
 import me.carda.awesome_notifications.awesome_notifications_core.threads.NotificationSender;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BitmapUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BooleanUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.HtmlUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.IntegerUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.ListUtils;
@@ -334,7 +332,7 @@ public class NotificationBuilder {
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
-            Log.e(TAG, "Was not possible to resolve the class named '"+className+"'");
+            Logger.e(TAG, "Was not possible to resolve the class named '"+className+"'");
             e.printStackTrace();
             return null;
         }
@@ -409,7 +407,10 @@ public class NotificationBuilder {
             NotificationModel notificationModel = new NotificationModel().fromJson(notificationJson);
             if (notificationModel == null) return null;
 
-            ActionReceived actionModel = new ActionReceived(notificationModel.content);
+            ActionReceived actionModel =
+                    new ActionReceived(
+                        notificationModel.content,
+                        intent);
 
             actionModel.registerUserActionEvent(lifeCycle);
 

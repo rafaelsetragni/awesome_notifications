@@ -2,7 +2,7 @@ package me.carda.awesome_notifications.awesome_notifications_core.services;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
@@ -18,18 +18,18 @@ public class BackgroundService extends JobIntentService {
     @Override
     protected void onHandleWork(@NonNull final Intent intent) {
 
-        Log.d(TAG, "A new Dart background service has started");
+        Logger.d(TAG, "A new Dart background service has started");
 
         Long dartCallbackHandle = getDartCallbackDispatcher(this);
         if (dartCallbackHandle == 0L) {
-            Log.w(TAG, "A background message could not be handled in Dart" +
+            Logger.e(TAG, "A background message could not be handled in Dart" +
                             " because there is no onActionReceivedMethod handler registered.");
             return;
         }
 
         Long silentCallbackHandle = getSilentCallbackDispatcher(this);
         if (silentCallbackHandle == 0L) {
-            Log.w(TAG,"A background message could not be handled in Dart" +
+            Logger.e(TAG,"A background message could not be handled in Dart" +
                             " because there is no dart background handler registered.");
             return;
         }
@@ -42,7 +42,7 @@ public class BackgroundService extends JobIntentService {
                     silentCallbackHandle);
         } catch (AwesomeNotificationsException e) {
             e.printStackTrace();
-            Log.d(TAG, "A new Dart background service could not be executed");
+            Logger.e(TAG, "A new Dart background service could not be executed");
         }
     }
 

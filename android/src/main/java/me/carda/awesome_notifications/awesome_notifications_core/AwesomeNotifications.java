@@ -6,7 +6,6 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.support.v4.media.session.MediaSessionCompat;
-import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -19,6 +18,8 @@ import androidx.annotation.Nullable;
 
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.AwesomeEventsReceiver;
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.NotificationActionReceiver;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
+import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.senders.BroadcastSender;
 import me.carda.awesome_notifications.awesome_notifications_core.decoders.BitmapResourceDecoder;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundServiceType;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundStartMode;
@@ -135,7 +136,7 @@ public class AwesomeNotifications
                 .subscribeOnNotificationEvents(this)
                 .subscribeOnActionEvents(this);
 
-        Log.d(TAG, "Awesome notifications ("+this.hashCode()+") attached to activity");
+        Logger.d(TAG, "Awesome notifications ("+this.hashCode()+") attached to activity");
     }
 
     public void detachAsMainInstance(AwesomeEventListener awesomeEventlistener){
@@ -152,7 +153,7 @@ public class AwesomeNotifications
                 .unsubscribeOnActionEvents(this);
 
 
-        Log.d(TAG, "Awesome notifications ("+this.hashCode()+") detached from activity");
+        Logger.d(TAG, "Awesome notifications ("+this.hashCode()+") detached from activity");
     }
 
     public void dispose(){
@@ -398,7 +399,7 @@ public class AwesomeNotifications
                 .refreshScheduledNotifications(currentContext);
 
         if (AwesomeNotifications.debug)
-            Log.d(TAG, "Awesome Notifications initialized");
+            Logger.d(TAG, "Awesome Notifications initialized");
     }
 
     private void setChannelGroups(
@@ -481,14 +482,14 @@ public class AwesomeNotifications
 
                     created.validate(context);
 
-                    notifyAwesomeEvent(Definitions.EVENT_NOTIFICATION_CREATED, created);
-
                     CreatedManager.removeCreated(context, created.id);
                     CreatedManager.commitChanges(context);
 
+                    BroadcastSender.sendBroadcastNotificationCreated(context, created);
+
                 } catch (AwesomeNotificationsException e) {
                     if (AwesomeNotifications.debug)
-                        Log.d(TAG, String.format("%s", e.getMessage()));
+                        Logger.d(TAG, String.format("%s", e.getMessage()));
                     e.printStackTrace();
                 }
     }
@@ -501,14 +502,14 @@ public class AwesomeNotifications
                 try {
                     displayed.validate(context);
 
-                    notifyAwesomeEvent(Definitions.EVENT_NOTIFICATION_DISPLAYED, displayed);
-
                     DisplayedManager.removeDisplayed(context, displayed.id);
                     DisplayedManager.commitChanges(context);
 
+                    BroadcastSender.sendBroadcastNotificationDisplayed(context, displayed);
+
                 } catch (AwesomeNotificationsException e) {
                     if (AwesomeNotifications.debug)
-                        Log.d(TAG, String.format("%s", e.getMessage()));
+                        Logger.d(TAG, String.format("%s", e.getMessage()));
                     e.printStackTrace();
                 }
     }
@@ -521,14 +522,14 @@ public class AwesomeNotifications
                 try {
                     received.validate(context);
 
-                    notifyAwesomeEvent(Definitions.EVENT_DEFAULT_ACTION, received);
-
                     ActionManager.removeAction(context, received.id);
                     ActionManager.commitChanges(context);
 
+                    BroadcastSender.sendBroadcastDefaultAction(context, received);
+
                 } catch (AwesomeNotificationsException e) {
                     if (AwesomeNotifications.debug)
-                        Log.d(TAG, String.format("%s", e.getMessage()));
+                        Logger.d(TAG, String.format("%s", e.getMessage()));
                     e.printStackTrace();
                 }
     }
@@ -541,14 +542,14 @@ public class AwesomeNotifications
                 try {
                     received.validate(context);
 
-                    notifyAwesomeEvent(Definitions.EVENT_NOTIFICATION_DISMISSED, received);
-
                     DismissedManager.removeDismissed(context, received.id);
                     DismissedManager.commitChanges(context);
 
+                    BroadcastSender.sendBroadcastNotificationDismissed(context, received);
+
                 } catch (AwesomeNotificationsException e) {
                     if (AwesomeNotifications.debug)
-                        Log.d(TAG, String.format("%s", e.getMessage()));
+                        Logger.d(TAG, String.format("%s", e.getMessage()));
                     e.printStackTrace();
                 }
     }

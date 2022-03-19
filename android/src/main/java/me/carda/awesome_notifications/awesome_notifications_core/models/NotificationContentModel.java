@@ -1,7 +1,6 @@
 package me.carda.awesome_notifications.awesome_notifications_core.models;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,6 +17,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.enumerators.Not
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationSource;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.ChannelManager;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BitmapUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
@@ -187,7 +187,7 @@ public class NotificationContentModel extends AbstractModel {
     public void processRetroCompatibility(Map<String, Object> arguments){
 
         if (arguments.containsKey("autoCancel")) {
-            Log.i("AwesomeNotifications", "autoCancel is deprecated. Please use autoDismissible instead.");
+            Logger.i("AwesomeNotifications", "autoCancel is deprecated. Please use autoDismissible instead.");
             autoDismissible   = getValueOrDefault(arguments, "autoCancel", Boolean.class);
         }
     }
