@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:awesome_notifications/src/logs/logger.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -128,9 +129,8 @@ class AwesomeNotifications {
       NotificationHandler? onNotificationCreatedMethod,
       NotificationHandler? onNotificationDisplayedMethod,
       ActionHandler? onDismissActionReceivedMethod}) async {
-    if (_actionHandler != null) {
-      throw UnsupportedError('static listeners was already defined.');
-    }
+    if (_actionHandler != null && _actionHandler != onActionReceivedMethod)
+      Logger.w('Static listener for notifications actions was redefined.');
 
     _actionHandler = onActionReceivedMethod;
     _dismissedHandler = onDismissActionReceivedMethod;
@@ -147,7 +147,7 @@ class AwesomeNotifications {
     });
 
     if (!result) {
-      print(
+      Logger.e(
           'onActionNotificationMethod is not a valid global or static method.');
       return false;
     }
@@ -239,7 +239,7 @@ class AwesomeNotifications {
 
       return wasCreated;
     } on PlatformException catch (error) {
-      print(error);
+      Logger.e(error.message ?? error.code);
     }
     return false;
   }

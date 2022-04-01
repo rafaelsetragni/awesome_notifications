@@ -67,6 +67,7 @@ enum Definitions {
     static let  DART_REVERSE_CHANNEL = "awesome_notifications_reverse"
 
     static let  CHANNEL_METHOD_INITIALIZE = "initialize"
+    static let  CHANNEL_METHOD_REGISTER_PLUGIN_BY_NAME = "registerPluginByName"
     static let  CHANNEL_METHOD_GET_DRAWABLE_DATA = "getDrawableData"
     static let  CHANNEL_METHOD_GET_PLATFORM_VERSION = "getPlatformVersion"
     static let  CHANNEL_METHOD_CREATE_NOTIFICATION = "createNewNotification"

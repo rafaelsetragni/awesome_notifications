@@ -10,7 +10,7 @@ import shared_preferences_ios
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
       GeneratedPluginRegistrant.register(with: self)
-      SwiftAwesomeNotificationsPlugin.setPluginRegistrantCallback { registry in
+      SwiftAwesomeNotificationsPlugin.setPluginRegistrantCallback { registry in          
           SwiftAwesomeNotificationsPlugin.register(
             with: registry.registrar(forPlugin: "io.flutter.plugins.awesomenotifications.AwesomeNotificationsPlugin")!)          
           FLTSharedPreferencesPlugin.register(

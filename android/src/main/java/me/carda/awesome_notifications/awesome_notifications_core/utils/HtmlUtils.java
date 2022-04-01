@@ -47,7 +47,7 @@ public class HtmlUtils {
                     matcher.appendReplacement(stringBuffer,
                             beforeBody + tag + quoteTypeStart + parsedInt.toString() + quoteTypeEnd + afterBody);
                     converted = true;
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 }
             }

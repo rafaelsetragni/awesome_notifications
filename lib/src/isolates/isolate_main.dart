@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:awesome_notifications/src/logs/logger.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -38,10 +39,10 @@ void dartIsolateMain() {
 
 /// This method handle the silent callback as a flutter plugin
 Future<void> channelMethodIsolateShutdown(MethodCall call) async {
-  try {} catch (e) {
-    print(
+  try {} catch (error) {
+    Logger.e(
         "Awesome Notifications FCM: An error occurred in your background messaging handler:");
-    print(e);
+    Logger.e(error.toString());
   }
 }
 
@@ -54,10 +55,10 @@ Future<void> channelMethodIsolateCallbackHandle(MethodCall call) async {
     if (!success)
       throw AwesomeNotificationsException(
           message: 'Silent data could not be recovered');
-  } catch (e) {
-    print(
+  } on Exception catch (error) {
+    Logger.e(
         "Awesome Notifications FCM: An error occurred in your background messaging handler:");
-    print(e);
+    Logger.e(error.toString());
   }
 }
 
@@ -83,8 +84,8 @@ Future<bool> receiveSilentAction(Map<String, dynamic> arguments) async {
   try {
     await onActionDataHandle(receivedAction);
   } catch (e, stacktrace) {
-    print("Got an unknown Silent Action callback error: ${e.toString()}");
-    print(stacktrace);
+    Logger.e("Got an unknown Silent Action callback error: ${e.toString()}");
+    Logger.e(stacktrace.toString());
     return false;
   }
 

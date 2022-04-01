@@ -75,22 +75,32 @@ public class DartBackgroundExecutor: BackgroundExecutor {
     
     public func onMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult){
         
+        switch(call.method){
+            
+            case Definitions.CHANNEL_METHOD_INITIALIZE:
+                dischargeNextSilentExecution()
+                result(true)
+                break
+            
+            default:
+                result(
+                    FlutterError.init(
+                        code: TAG,
+                        message: "\(call.method) not implemented",
+                        details: call.method
+                    )
+                )
+                result(false)
+                break
+        }
+        
         if(call.method == Definitions.CHANNEL_METHOD_INITIALIZE){
             
             dischargeNextSilentExecution()
             result(true)
             
-        } else {
             
-            result(
-                FlutterError.init(
-                    code: TAG,
-                    message: "\(call.method) not implemented",
-                    details: call.method
-                )
-            )
-
-            result(false)
+        } else {
         }
     }
     

@@ -11,9 +11,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class NotificationController {
-  static void initializeNotificationsPlugin() {
-    AwesomeNotifications().initialize(
+class NotificationsController {
+  // ***************************************************************
+  //    INITIALIZATIONS
+  // ***************************************************************
+  static Future<void> initializeNotificationsPlugin() async {
+    await AwesomeNotifications().initialize(
         'resource://drawable/res_app_icon',
         [
           NotificationChannel(
@@ -237,6 +240,22 @@ class NotificationController {
         debug: true);
   }
 
+  static Future<void> initializeNotificationsEventListeners() async {
+    // Only after at least the action method is set, the notification events are delivered
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod: NotificationsController.onActionReceivedMethod,
+        onNotificationCreatedMethod:
+            NotificationsController.onNotificationCreatedMethod,
+        onNotificationDisplayedMethod:
+            NotificationsController.onNotificationDisplayedMethod,
+        onDismissActionReceivedMethod:
+            NotificationsController.onDismissActionReceivedMethod);
+  }
+
+  // ***************************************************************
+  //    NOTIFICATIONS EVENT LISTENERS
+  // ***************************************************************
+
   static String _toSimpleEnum(NotificationLifeCycle lifeCycle) =>
       lifeCycle.toString().split('.').last;
 
@@ -324,6 +343,10 @@ class NotificationController {
         break;
     }
   }
+
+  // ***************************************************************
+  //    NOTIFICATIONS HANDLING METHODS
+  // ***************************************************************
 
   static Future<void> receiveButtonInputText(
       ReceivedAction receivedAction) async {

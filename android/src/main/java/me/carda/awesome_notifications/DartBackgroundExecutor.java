@@ -149,14 +149,7 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
                                                 FlutterCallbackInformation.lookupCallbackInformation(callbackHandle);
 
                                         DartExecutor executor = backgroundFlutterEngine.getDartExecutor();
-                                        DartBackgroundExecutor.this.initializeReverseMethodChannel(executor);
-
-                                        // The pluginRegistrantCallback should only be set in the V1 embedding as
-                                        // plugin registration is done via reflection in the V2 embedding.
-                                        if (pluginRegistrantCallback != null) {
-                                            pluginRegistrantCallback.registerWith(
-                                                    new ShimPluginRegistry(backgroundFlutterEngine));
-                                        }
+                                        initializeReverseMethodChannel(executor);
 
                                         Log.i(TAG, "Executing background FlutterEngine instance.");
                                         DartCallback dartCallback =
@@ -164,7 +157,6 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
                                         executor.executeDartCallback(dartCallback);
                                     }
                                 });
-
                     }
                 };
 
@@ -186,14 +178,12 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
                     new Runnable() {
                         @Override
                         public void run() {
-
                             Log.i(TAG, "Shutting down background FlutterEngine instance.");
 
                             if (backgroundFlutterEngine != null) {
                                 backgroundFlutterEngine.destroy();
                                 backgroundFlutterEngine = null;
                             }
-
                         }
                     };
 
