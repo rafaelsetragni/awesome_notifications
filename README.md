@@ -68,8 +68,8 @@ All notifications could be created locally or via Firebase services, with all th
 - Finish the companion plugin to enable Firebase Cloud Message with all the awesome features available.
 - Add an option to choose if a notification action should bring the app to foreground or not. (accomplished)
 - Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
-- Video layout and gifs for notifications
-- Carousel layout for notifications
+- Replicate Android layouts to iOS
+- Custom layouts and gifs for notifications
     
 <br>
 
