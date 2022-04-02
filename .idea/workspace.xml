@@ -9,21 +9,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/src/logs/logger.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/logs/Logger.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.dart_tool/version" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/version" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.packages" beforeDir="false" afterPath="$PROJECT_DIR$/.packages" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/DartBackgroundExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/DartBackgroundExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/services/BackgroundService.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/services/BackgroundService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/utils/HtmlUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/utils/HtmlUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/logs/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/logs/Logger.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/awesome_notifications.iml" beforeDir="false" afterPath="$PROJECT_DIR$/awesome_notifications.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner/AppDelegate.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner/AppDelegate.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/common_widgets/double_slider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/common_widgets/double_slider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/common_widgets/single_slider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/common_widgets/single_slider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/models/media_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/models/media_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/pages/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/home_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Classes/lib/DartBackgroundExecutor.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/DartBackgroundExecutor.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/Definitions.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/Definitions.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/awesome_notifications.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/AwesomeNotifications.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/AwesomeNotifications.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/broadcasters/receivers/AwesomeEventsReceiver.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/broadcasters/receivers/AwesomeEventsReceiver.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/broadcasters/receivers/NotificationActionReceiver.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/broadcasters/receivers/NotificationActionReceiver.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/builders/NotificationBuilder.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/builders/NotificationBuilder.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/extensions/AwesomeServiceExtension.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/extensions/AwesomeServiceExtension.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/managers/LifeCycleManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/managers/LifeCycleManager.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/managers/PermissionManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/managers/PermissionManager.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/managers/StatusBarManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/managers/StatusBarManager.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationButtonModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationButtonModel.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationCalendarModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationCalendarModel.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationContentModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationContentModel.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationIntervalModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationIntervalModel.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationModel.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/services/BackgroundService.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/services/BackgroundService.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/utils/AudioUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/utils/AudioUtils.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/utils/BitmapUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/utils/BitmapUtils.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/isolates/isolate_main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/isolates/isolate_main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/logs/logger.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/logs/logger.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -31,7 +53,6 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="DartProblemsView" scoped-analysis-mode="DartPackage" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -54,17 +75,17 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/enumerators/ForegroundStartMode.java" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/lib/src/enumerators/android_foreground_service_constants.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/lib/src/enumerators/foreground_service_type.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/lib/android_foreground_service.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/lib/src/enumerators/android_foreground_service_constants.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/enumerators/ForegroundServiceType.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/enumerators/ForegroundStartMode.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/lib/src/enumerators/foreground_service_type.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/src/android_foreground_service/android_foreground_service_core.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/lib/src/definitions.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/src/enumerators/foreground_start_mode.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/models/NotificationCalendarModel.java" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/lib/src/definitions.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/enumerators/ForegroundServiceType.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectId" id="1gdlKvSd5jB5IWDBvSuAgX3lxo8" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -74,7 +95,7 @@
     <option name="showMembers" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="DEBUGGABLE_DEVICE" value="Nexus_5_A12 [emulator-5554]" />
+    <property name="DEBUGGABLE_DEVICE" value="Pixel_2_A9 [emulator-5554]" />
     <property name="DEBUGGABLE_PROCESS" value="me.carda.awesome_notifications_example" />
     <property name="DEBUGGER_ID" value="Java" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
@@ -91,7 +112,7 @@
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../awesome_notifications_fcm" />
-    <property name="settings.editor.selected.configurable" value="dart.settings" />
+    <property name="settings.editor.selected.configurable" value="flutter.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="ReaderModeSettings">
@@ -200,10 +221,35 @@
           <line>523</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/logs/Logger.java</url>
+          <line>21</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java</url>
+          <line>175</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="Dart">
           <url>file://$PROJECT_DIR$/example/lib/pages/home_page.dart</url>
           <line>419</line>
           <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>mock:///awesome_notifications_core.dart</url>
+          <line>132</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>mock:///awesome_notifications_core.dart</url>
+          <line>76</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>mock:///awesome_notifications_core.dart</url>
+          <line>79</line>
+          <option name="timeStamp" value="35" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

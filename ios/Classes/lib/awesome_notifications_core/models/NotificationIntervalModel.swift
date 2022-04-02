@@ -72,7 +72,7 @@ public class NotificationIntervalModel : NotificationScheduleModel {
             return trigger
             
         } catch {
-            debugPrint("\(error)")
+            Logger.e("NotificationIntervalModel", error.localizedDescription)
         }
         return nil
     }

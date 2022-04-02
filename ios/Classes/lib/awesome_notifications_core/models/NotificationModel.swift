@@ -30,7 +30,7 @@ public class NotificationModel : AbstractModel {
         
         }
         catch {
-            print("error " + error.localizedDescription)
+            Logger.e("NotificationModel", error.localizedDescription)
         }
             
         return nil

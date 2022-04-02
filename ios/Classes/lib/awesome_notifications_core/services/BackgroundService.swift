@@ -30,7 +30,7 @@ class BackgroundService {
         SilentBackgroundAction silentAction: ActionReceived,
         withCompletionHandler completionHandler: @escaping (Bool) -> ()
     ){
-        Log.d(TAG, "A new Dart background service has started")
+        Logger.d(TAG, "A new Dart background service has started")
         
         let silentActionRequest:SilentActionRequest =
                 SilentActionRequest(
@@ -41,14 +41,14 @@ class BackgroundService {
         let actionCallback:Int64 = DefaultsManager.shared.actionCallback
         
         if backgroundCallback == 0 {
-            Log.d(TAG,
+            Logger.d(TAG,
                   "A background message could not be handled in Dart because there is no valid background handler register")
             completionHandler(false)
             return
         }
         
         if actionCallback == 0 {
-            Log.d(TAG,
+            Logger.d(TAG,
                   "A background message could not be handled in Dart because there is no valid action callback handler register")
             completionHandler(false)
             return

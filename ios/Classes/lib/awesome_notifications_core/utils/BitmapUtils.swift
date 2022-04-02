@@ -104,7 +104,7 @@ public class BitmapUtils : MediaUtils {
                 return UIImage(data: imageData)
                 
             } catch let error {
-                print("Url error: \(error)")
+                Logger.e("BitmapUtils", error.localizedDescription)
             }
         }
         
@@ -160,7 +160,7 @@ public class BitmapUtils : MediaUtils {
             }
             
         } catch let error {
-            print("File error: \(error)")
+            Logger.e("BitmapUtils", error.localizedDescription)
         }
         
         return nil

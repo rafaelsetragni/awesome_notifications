@@ -24,7 +24,7 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
         if let content = content {
             
             if(!StringUtils.isNullOrEmpty(content.userInfo["gcm.message_id"] as? String)){
-                print("FCM received")
+                Logger.d("AwesomeServiceExtension", "FCM received")
                 
                 let title:String? = content.title
                 let body:String?  = content.body

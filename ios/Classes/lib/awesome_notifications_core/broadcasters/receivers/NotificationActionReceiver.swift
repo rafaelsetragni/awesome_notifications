@@ -104,7 +104,7 @@ public class NotificationActionReceiver {
                                     .mimicPersistentNotification(
                                         notificationModel: notificationModel)
                         } catch {
-                            Log.e(self.TAG, "\(error)")
+                            Logger.e(self.TAG, "\(error)")
                         }
                     }
             }

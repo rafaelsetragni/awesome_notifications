@@ -136,7 +136,7 @@ public class NotificationBuilder {
                 error in // called when message has been sent
 
                 if error != nil {
-                    debugPrint("Error: \(error.debugDescription)")
+                    Logger.e(NotificationBuilder.TAG, error.debugDescription)
                 }
                 else {
                     if(notificationModel.schedule != nil){
@@ -267,7 +267,7 @@ public class NotificationBuilder {
         categoryIdentifier = categoryIdentifier.uppercased()
 
         if(AwesomeNotifications.debug){
-            print("Notification category identifier: " + categoryIdentifier)
+            Logger.d(NotificationBuilder.TAG, "Notification category identifier: " + categoryIdentifier)
         }
         content.categoryIdentifier = categoryIdentifier
         
@@ -539,7 +539,7 @@ public class NotificationBuilder {
                     return imageAttachment
                     
                 } catch {
-                    print("error " + error.localizedDescription)
+                    Logger.e(NotificationBuilder.TAG, error.localizedDescription)
                 }
             }
         }

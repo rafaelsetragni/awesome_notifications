@@ -16,20 +16,27 @@ public class Logger {
         return dateFormat.format(new Date());
     }
 
+    private static String getLastLine(){
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        if(stackTrace.length < 5)
+            return "?";
+        return String.valueOf(stackTrace[4].getLineNumber());
+    }
+
     public static void d(String className, String message){
-        Log.d(className, getCurrentTime() + " - " + message);
+        Log.d("Android: [Awesome Notifications - DEBUG]", message + " (" + className + ":" + getLastLine() + ")");
     }
 
     public static void e(String className, String message){
-        Log.e(className, getCurrentTime() + " - " + message);
+        Log.e("\u001B[31mAndroid: [Awesome Notifications - ERROR]", message + " (" + className + ":" + getLastLine() + ")\u001B[0m");
     }
 
     public static void i(String className, String message){
-        Log.i(className, getCurrentTime() + " - " + message);
+        Log.i("\u001B[34mAndroid: [Awesome Notifications - INFO]",  message +  " (" + className + ")\u001B[0m");
     }
 
     public static void w(String className, String message){
-        Log.w(className, getCurrentTime() + " - " + message);
+        Log.w("\u001B[33mAndroid: [Awesome Notifications - WARNING]",  message +  " (" + className + ":" + getLastLine() + ")\u001B[0m");
     }
 
 }

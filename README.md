@@ -320,6 +320,36 @@ AwesomeNotifications().createNotification(
 
 <br>
 
+## Extra iOS Setup for Background Actions
+
+<br>
+
+On iOS, to use any plugin inside background actions, you will need to manually register each plugin you want. Otherwise, you will face the `MissingPluginException` exception.
+To avoid this, you need to add the following lines to the `didFinishLaunchingWithOptions` method in your iOS project's AppDelegate.m/AppDelegate.swift file:
+
+```Swift
+override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
+      GeneratedPluginRegistrant.register(with: self)
+
+      // This function registers the desired plugins to be used within a notification background action
+      SwiftAwesomeNotificationsPlugin.setPluginRegistrantCallback { registry in          
+          SwiftAwesomeNotificationsPlugin.register(
+            with: registry.registrar(forPlugin: "io.flutter.plugins.awesomenotifications.AwesomeNotificationsPlugin")!)          
+          FLTSharedPreferencesPlugin.register(
+            with: registry.registrar(forPlugin: "io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin")!)
+      }
+
+      return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+```
+
+And you can check how to correctly call each plugin opening the file `GeneratedPluginRegistrant.m`
+
+<br>
+
 ## Video Tutorial
 
 <br>

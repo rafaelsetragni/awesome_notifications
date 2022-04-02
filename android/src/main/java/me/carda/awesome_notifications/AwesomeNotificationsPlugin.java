@@ -33,6 +33,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.enumerators.For
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundStartMode;
 import me.carda.awesome_notifications.awesome_notifications_core.listeners.AwesomeEventListener;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
+import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 import me.carda.awesome_notifications.awesome_notifications_core.decoders.BitmapResourceDecoder;
 import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.BitmapCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.PermissionCompletionHandler;
@@ -101,7 +102,7 @@ public class AwesomeNotificationsPlugin
                 ));
 
         if (AwesomeNotifications.debug)
-            Log.d(TAG, "Awesome Notifications attached to engine for Android " + Build.VERSION.SDK_INT);
+            Logger.d(TAG, "Awesome Notifications attached to engine for Android " + Build.VERSION.SDK_INT);
     }
 
     @Override
@@ -121,7 +122,7 @@ public class AwesomeNotificationsPlugin
                             this);
 
             if (AwesomeNotifications.debug)
-                Log.d(TAG, "Awesome Notifications plugin attached to Android " + Build.VERSION.SDK_INT);
+                Logger.d(TAG, "Awesome Notifications plugin attached to Android " + Build.VERSION.SDK_INT);
 
         } catch (AwesomeNotificationsException e) {
             e.printStackTrace();
@@ -138,7 +139,7 @@ public class AwesomeNotificationsPlugin
         awesomeNotifications = null;
 
         if (AwesomeNotifications.debug)
-            Log.d(TAG, "Awesome Notifications plugin detached from Android " + Build.VERSION.SDK_INT);
+            Logger.d(TAG, "Awesome Notifications plugin detached from Android " + Build.VERSION.SDK_INT);
     }
 
     @Override
@@ -182,7 +183,7 @@ public class AwesomeNotificationsPlugin
 
         if (awesomeNotifications == null) {
             if (AwesomeNotifications.debug)
-                Log.d(TAG, "Awesome notifications is currently not available");
+                Logger.d(TAG, "Awesome notifications is currently not available");
 
             result.error(call.method, "Awesome notifications is currently not available", null);
             return;
@@ -342,7 +343,7 @@ public class AwesomeNotificationsPlugin
 
         } catch (Exception e) {
             if (AwesomeNotifications.debug)
-                Log.d(TAG, String.format("%s", e.getMessage()));
+                Logger.d(TAG, String.format("%s", e.getMessage()));
 
             result.error(call.method, e.getMessage(), e);
             e.printStackTrace();
@@ -444,7 +445,7 @@ public class AwesomeNotificationsPlugin
                         .removeChannel(channelKey);
 
         if (AwesomeNotifications.debug)
-            Log.d(TAG, removed ?
+            Logger.d(TAG, removed ?
                     "Channel removed" :
                     "Channel '" + channelKey + "' not found");
 
@@ -493,7 +494,7 @@ public class AwesomeNotificationsPlugin
         boolean dismissed = awesomeNotifications.dismissNotification(notificationId);
 
         if (AwesomeNotifications.debug)
-            Log.d(TAG, dismissed ?
+            Logger.d(TAG, dismissed ?
                     "Notification " + notificationId + " dismissed" :
                     "Notification " + notificationId + " was not found");
 
@@ -509,7 +510,7 @@ public class AwesomeNotificationsPlugin
         boolean canceled = awesomeNotifications.cancelSchedule(notificationId);
 
         if (AwesomeNotifications.debug)
-            Log.d(TAG, canceled ?
+            Logger.d(TAG, canceled ?
                     "Schedule " + notificationId + " cancelled" :
                     "Schedule " + notificationId + " was not found");
 
@@ -525,7 +526,7 @@ public class AwesomeNotificationsPlugin
         boolean canceled = awesomeNotifications.cancelNotification(notificationId);
 
         if (AwesomeNotifications.debug)
-            Log.d(TAG, canceled ?
+            Logger.d(TAG, canceled ?
                     "Notification " + notificationId + " cancelled" :
                     "Notification " + notificationId + " was not found");
 
@@ -541,7 +542,7 @@ public class AwesomeNotificationsPlugin
         boolean dismissed = awesomeNotifications.dismissNotificationsByChannelKey(channelKey);
 
         if(AwesomeNotifications.debug)
-            Log.d(TAG, dismissed ?
+            Logger.d(TAG, dismissed ?
                     "Notifications from channel " + channelKey + " dismissed" :
                     "Notifications from channel " + channelKey + " not found");
 
@@ -557,7 +558,7 @@ public class AwesomeNotificationsPlugin
         boolean canceled = awesomeNotifications.cancelSchedulesByChannelKey(channelKey);
 
         if(AwesomeNotifications.debug)
-            Log.d(TAG, canceled ?
+            Logger.d(TAG, canceled ?
                     "Scheduled Notifications from channel " + channelKey + " canceled" :
                     "Scheduled Notifications from channel " + channelKey + " not found");
 
@@ -573,7 +574,7 @@ public class AwesomeNotificationsPlugin
         boolean canceled = awesomeNotifications.cancelNotificationsByChannelKey(channelKey);
 
         if(AwesomeNotifications.debug)
-            Log.d(TAG, canceled ?
+            Logger.d(TAG, canceled ?
                     "Notifications and schedules from channel " + channelKey + " canceled" :
                     "Notifications and schedules from channel " + channelKey + " not found");
 
@@ -589,7 +590,7 @@ public class AwesomeNotificationsPlugin
         boolean dismissed = awesomeNotifications.dismissNotificationsByGroupKey(groupKey);
 
         if(AwesomeNotifications.debug)
-            Log.d(TAG, dismissed ?
+            Logger.d(TAG, dismissed ?
                     "Notifications from group " + groupKey + " dismissed" :
                     "Notifications from group " + groupKey + " not found");
 
@@ -605,7 +606,7 @@ public class AwesomeNotificationsPlugin
         boolean canceled = awesomeNotifications.cancelSchedulesByGroupKey(groupKey);
 
         if(AwesomeNotifications.debug)
-            Log.d(TAG, canceled ?
+            Logger.d(TAG, canceled ?
                     "Scheduled Notifications from group " + groupKey + " canceled" :
                     "Scheduled Notifications from group " + groupKey + " not found");
 
@@ -621,7 +622,7 @@ public class AwesomeNotificationsPlugin
         boolean canceled = awesomeNotifications.cancelNotificationsByGroupKey(groupKey);
 
         if(AwesomeNotifications.debug)
-            Log.d(TAG, canceled ?
+            Logger.d(TAG, canceled ?
                     "Notifications and schedules from group " + groupKey + " canceled" :
                     "Notifications and schedules from group " + groupKey + " not found to be");
 
@@ -633,7 +634,7 @@ public class AwesomeNotificationsPlugin
         awesomeNotifications.dismissAllNotifications();
 
         if (AwesomeNotifications.debug)
-            Log.d(TAG, "All notifications was dismissed");
+            Logger.d(TAG, "All notifications was dismissed");
 
         result.success(true);
     }
@@ -643,7 +644,7 @@ public class AwesomeNotificationsPlugin
         awesomeNotifications.cancelAllSchedules();
 
         if (AwesomeNotifications.debug)
-            Log.d(TAG, "All notifications scheduled was cancelled");
+            Logger.d(TAG, "All notifications scheduled was cancelled");
 
         result.success(true);
     }
@@ -653,7 +654,7 @@ public class AwesomeNotificationsPlugin
         awesomeNotifications.cancelAllNotifications();
 
         if (AwesomeNotifications.debug)
-            Log.d(TAG, "All notifications was cancelled");
+            Logger.d(TAG, "All notifications was cancelled");
 
         result.success(true);
     }
@@ -877,7 +878,7 @@ public class AwesomeNotificationsPlugin
                 debug);
 
         if (AwesomeNotifications.debug)
-            Log.d(TAG, "Awesome Notifications Flutter plugin initialized");
+            Logger.d(TAG, "Awesome Notifications Flutter plugin initialized");
 
         result.success(true);
     }
@@ -894,7 +895,7 @@ public class AwesomeNotificationsPlugin
 
         boolean success = silentCallback != 0L;
         if(!success)
-            Log.e(TAG, "Attention: there is no valid static method to receive notification action data in background");
+            Logger.e(TAG, "Attention: there is no valid static method to receive notification action data in background");
 
         result.success(success);
     }

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/widgets.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
@@ -67,6 +65,7 @@ class MediaModel {
         _diskImagePath = diskImagePath,
         isPlaying = false;
 
-  ImageProvider get diskImage => AwesomeBitmapUtils().getFromMediaPath(_diskImagePath);
+  ImageProvider get diskImage =>
+      AwesomeBitmapUtils().getFromMediaPath(_diskImagePath);
   String get diskImagePath => _diskImagePath;
 }

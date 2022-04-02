@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:awesome_notifications_example/common_widgets/led_light.dart';
 import 'package:awesome_notifications_example/common_widgets/seconds_slider.dart';
-import 'package:flutter/material.dart' hide DateUtils;
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -13,7 +13,6 @@ import 'package:awesome_notifications_example/notifications/notifications_util.d
 
 import 'package:awesome_notifications_example/common_widgets/check_button.dart';
 import 'package:awesome_notifications_example/common_widgets/remarkble_text.dart';
-import 'package:awesome_notifications_example/common_widgets/service_control_panel.dart';
 import 'package:awesome_notifications_example/common_widgets/simple_button.dart';
 import 'package:awesome_notifications_example/common_widgets/text_divisor.dart';
 import 'package:awesome_notifications_example/common_widgets/text_note.dart';
@@ -417,8 +416,7 @@ class _HomePageState extends State<HomePage> {
             SimpleButton('Show alarm notification', onPressed: () {
               Vibration.vibrate(duration: 100);
               NotificationUtils.showAlarmNotification(
-                id: 42, secondsToWait: _secondsToCallCategory.toInt()
-              );
+                  id: 42, secondsToWait: _secondsToCallCategory.toInt());
             }),
             SimpleButton('Stop Alarm / Call',
                 backgroundColor: Colors.red,

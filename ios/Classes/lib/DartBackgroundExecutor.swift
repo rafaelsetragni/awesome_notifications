@@ -110,19 +110,19 @@ public class DartBackgroundExecutor: BackgroundExecutor {
     ) {
         
         guard let dartCallbackInfo = FlutterCallbackCache.lookupCallbackInformation(dartCallbackHandle) else {
-            Log.d(TAG, "There is no valid callback info to handle dart channels.")
+            Logger.e(TAG, "There is no valid callback info to handle dart channels.")
             self.closeBackgroundIsolate()
             return
         }
         
         guard FlutterCallbackCache.lookupCallbackInformation(silentCallbackHandle) != nil else {
-            Log.d(TAG, "There is no valid callback info to handle silent data.")
+            Logger.e(TAG, "There is no valid callback info to handle silent data.")
             self.closeBackgroundIsolate()
             return
         }
         
         if(self.backgroundEngine != nil){
-            Log.d(TAG, "Background isolate already started.")
+            Logger.d(TAG, "Background isolate already started.")
             self.closeBackgroundIsolate()
             return
         }
@@ -136,7 +136,7 @@ public class DartBackgroundExecutor: BackgroundExecutor {
             )
             
             if self.backgroundEngine == nil {
-                Log.d(self.TAG, "Flutter background engine is not available.")
+                Logger.e(self.TAG, "Flutter background engine is not available.")
                 self.closeBackgroundIsolate()
             }
             else {
@@ -185,11 +185,11 @@ public class DartBackgroundExecutor: BackgroundExecutor {
 
     func finishDartBackgroundExecution(){
         if (silentDataQueue.count == 0) {
-            Log.i(TAG, "All silent data fetched.")
+            Logger.i(TAG, "All silent data fetched.")
             self.closeBackgroundIsolate()
         }
         else {
-            Log.i(TAG, "Remaining " + String(silentDataQueue.count) + " silents to finish")
+            Logger.i(TAG, "Remaining " + String(silentDataQueue.count) + " silents to finish")
             self.dischargeNextSilentExecution()
         }
     }
@@ -197,7 +197,7 @@ public class DartBackgroundExecutor: BackgroundExecutor {
     func executeDartCallbackInBackgroundIsolate(_ silentDataRequest:SilentActionRequest){
         
         if self.backgroundEngine == nil {
-            Log.i(TAG, "A background message could not be handle since" +
+            Logger.i(TAG, "A background message could not be handle since" +
                     "dart callback handler has not been registered")
         }
         

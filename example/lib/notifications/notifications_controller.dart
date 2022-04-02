@@ -15,7 +15,7 @@ class NotificationsController {
   // ***************************************************************
   //    INITIALIZATIONS
   // ***************************************************************
-  static Future<void> initializeNotificationsPlugin() async {
+  static Future<void> initializeLocalNotifications() async {
     await AwesomeNotifications().initialize(
         'resource://drawable/res_app_icon',
         [

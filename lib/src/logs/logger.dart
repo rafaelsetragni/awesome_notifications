@@ -3,19 +3,28 @@ import 'package:flutter/foundation.dart';
 class Logger {
   Logger._internal();
 
-  static void d(String msg) {
-    debugPrint('[Awesome Notifications - DEBUG]: $msg');
+  static RegExp stackTraceRegex = RegExp(r'#2\s+.*:(\d+):\d+\)');
+  static String _getLastLine() {
+    String stack = StackTrace.current.toString();
+    return stackTraceRegex.firstMatch(stack)?.group(1) ?? '?';
   }
 
-  static void e(String msg) {
-    print('\x1B[31m[Awesome Notifications - ERROR]: $msg\x1B[0m');
+  static void d(String className, String msg) {
+    debugPrint(
+        '[Awesome Notifications - DEBUG]: $msg ($className:${_getLastLine()})');
   }
 
-  static void i(String msg) {
-    print('\x1B[34m[Awesome Notifications - INFO]: $msg\x1B[0m');
+  static void e(String className, String msg) {
+    print(
+        '\x1B[31m[Awesome Notifications - ERROR]: $msg ($className:${_getLastLine()})\x1B[0m');
   }
 
-  static void w(String msg) {
-    print('\x1B[33m[Awesome Notifications - WARNING]: $msg\x1B[0m');
+  static void i(String className, String msg) {
+    print('\x1B[34m[Awesome Notifications - INFO]: $msg ($className)\x1B[0m');
+  }
+
+  static void w(String className, String msg) {
+    print(
+        '\x1B[33m[Awesome Notifications - WARNING]: $msg ($className:${_getLastLine()})\x1B[0m');
   }
 }

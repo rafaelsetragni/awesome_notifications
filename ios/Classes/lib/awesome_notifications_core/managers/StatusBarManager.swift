@@ -96,7 +96,7 @@ public class StatusBarManager {
                 error in // called when message has been sent
 
                 if error != nil {
-                    debugPrint("Error: \(error.debugDescription)")
+                    Logger.e("StatusBarManager", error.debugDescription)
                 }
             }
             

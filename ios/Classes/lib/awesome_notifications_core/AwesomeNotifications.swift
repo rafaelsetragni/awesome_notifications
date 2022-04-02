@@ -120,7 +120,7 @@ public class AwesomeNotifications:
             .subscribeOnNotificationEvents(listener: self)
             .subscribeOnActionEvents(listener: self)
         
-        Log.d(TAG, "Awesome notifications \(self.hash) attached to app instance");
+        Logger.d(TAG, "Awesome notifications \(self.hash) attached to app instance");
     }
     
     public func detachAsMainInstance(listener: AwesomeEventListener){
@@ -137,7 +137,7 @@ public class AwesomeNotifications:
             .unsubscribeOnNotificationEvents(listener: self)
             .unsubscribeOnActionEvents(listener: self)
         
-        Log.d(TAG, "Awesome notifications \(self.hash) detached from app instance");
+        Logger.d(TAG, "Awesome notifications \(self.hash) detached from app instance");
     }
     
     func dispose(){
@@ -409,7 +409,7 @@ public class AwesomeNotifications:
         AwesomeNotifications.debug = debug
         
         if(AwesomeNotifications.debug){
-            Log.d(TAG, "Awesome Notifications initialized")
+            Logger.d(TAG, "Awesome Notifications initialized")
         }
     }
     
@@ -431,7 +431,7 @@ public class AwesomeNotifications:
                 notificationReceived: createdNotification)
             
             if !CreatedManager.removeCreated(id: createdNotification.id!) {
-                Log.e(TAG, "Created event \(createdNotification.id!) could not be cleaned")
+                Logger.e(TAG, "Created event \(createdNotification.id!) could not be cleaned")
             }
         }
     }
@@ -460,7 +460,7 @@ public class AwesomeNotifications:
             }
             
             if !DisplayedManager.removeDisplayed(id: displayedNotification.id!) {
-                Log.e(TAG, "Displayed event \(displayedNotification.id!) could not be cleaned")
+                Logger.e(TAG, "Displayed event \(displayedNotification.id!) could not be cleaned")
             }
         }
     }
@@ -476,7 +476,7 @@ public class AwesomeNotifications:
                 withActionReceived: dismissedNotification)
             
             if !DismissedManager.removeDismissed(id: dismissedNotification.id!) {
-                Log.e(TAG, "Dismissed event \(dismissedNotification.id!) could not be cleaned")
+                Logger.e(TAG, "Dismissed event \(dismissedNotification.id!) could not be cleaned")
             }
         }
     }
@@ -492,7 +492,7 @@ public class AwesomeNotifications:
                 withActionReceived: notificationAction)
             
             if !ActionManager.removeAction(id: notificationAction.id!) {
-                Log.e(TAG, "Action event \(notificationAction.id!) could not be cleaned")
+                Logger.e(TAG, "Action event \(notificationAction.id!) could not be cleaned")
             }
         }
     }
@@ -514,7 +514,7 @@ public class AwesomeNotifications:
                 .refreshSchedules()
         
         if AwesomeNotifications.debug {
-            Log.d(TAG, "Awesome Notifications attached for iOS")
+            Logger.d(TAG, "Awesome Notifications attached for iOS")
         }
     }
     
@@ -764,7 +764,7 @@ public class AwesomeNotifications:
                     .dismissNotification(byId: id)
         
         if AwesomeNotifications.debug {
-            Log.d(TAG, "Notification id \(id) dismissed")
+            Logger.d(TAG, "Notification id \(id) dismissed")
         }
         
         return success

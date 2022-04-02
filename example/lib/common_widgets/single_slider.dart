@@ -1,8 +1,6 @@
 import 'dart:ui' as ui;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class SingleSliderToConfirm extends StatefulWidget {
   /// Height of the slider. Defaults to 70.
@@ -140,7 +138,8 @@ class SingleSliderToConfirmState extends State<SingleSliderToConfirm> {
       int green = widget.backgroundColorEnd!.green;
       int blue = widget.backgroundColorEnd!.blue;
 
-      return Color.alphaBlend(Color.fromRGBO(red, green, blue, percent), widget.backgroundColor);
+      return Color.alphaBlend(
+          Color.fromRGBO(red, green, blue, percent), widget.backgroundColor);
     } else {
       return widget.backgroundColor;
     }
@@ -148,9 +147,6 @@ class SingleSliderToConfirmState extends State<SingleSliderToConfirm> {
 
   @override
   Widget build(BuildContext context) {
-
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
-
     BoxShadow shadow;
     if (widget.shadow == null) {
       shadow = BoxShadow(
@@ -180,8 +176,11 @@ class SingleSliderToConfirmState extends State<SingleSliderToConfirm> {
       width: widget.width,
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
-        borderRadius: widget.backgroundShape ?? BorderRadius.all(Radius.circular(widget.height)),
-        color: widget.backgroundColorEnd != null ? this.calculateBackground() : widget.backgroundColor,
+        borderRadius: widget.backgroundShape ??
+            BorderRadius.all(Radius.circular(widget.height)),
+        color: widget.backgroundColorEnd != null
+            ? this.calculateBackground()
+            : widget.backgroundColor,
         boxShadow: <BoxShadow>[shadow],
       ),
       child: Stack(
@@ -192,19 +191,19 @@ class SingleSliderToConfirmState extends State<SingleSliderToConfirm> {
             right: 10,
             width: widget.width - getPosition() - widget.height,
             child: Column(
-                textBaseline: TextBaseline.ideographic,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    widget.text,
-                    overflow: TextOverflow.clip,
-                    textDirection: ui.TextDirection.rtl,
-                    softWrap: false,
-                    maxLines: 1,
-                    style: style,
-                  ),
-                ],
+              textBaseline: TextBaseline.ideographic,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  widget.text,
+                  overflow: TextOverflow.clip,
+                  textDirection: ui.TextDirection.rtl,
+                  softWrap: false,
+                  maxLines: 1,
+                  style: style,
+                ),
+              ],
             ),
           ),
           AnimatedPositioned(
@@ -213,7 +212,8 @@ class SingleSliderToConfirmState extends State<SingleSliderToConfirm> {
             left: getPosition(),
             top: 0,
             child: GestureDetector(
-              onTapDown: (_) => widget.onTapDown != null ? widget.onTapDown!() : null,
+              onTapDown: (_) =>
+                  widget.onTapDown != null ? widget.onTapDown!() : null,
               onTapUp: (_) => widget.onTapUp != null ? widget.onTapUp!() : null,
               onPanUpdate: (details) {
                 updatePosition(details);
@@ -226,7 +226,8 @@ class SingleSliderToConfirmState extends State<SingleSliderToConfirm> {
                 height: widget.height - 10,
                 width: widget.height - 10,
                 decoration: BoxDecoration(
-                  borderRadius: widget.foregroundShape ?? BorderRadius.all(Radius.circular(widget.height / 2)),
+                  borderRadius: widget.foregroundShape ??
+                      BorderRadius.all(Radius.circular(widget.height / 2)),
                   color: widget.foregroundColor,
                 ),
                 child: widget.sliderButtonContent,

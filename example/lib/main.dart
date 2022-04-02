@@ -11,7 +11,7 @@ import 'package:awesome_notifications_example/notifications/notifications_contro
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  NotificationsController.initializeLocalNotifications();
   runApp(App());
 }
 

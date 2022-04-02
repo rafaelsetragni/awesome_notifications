@@ -39,10 +39,10 @@ void dartIsolateMain() {
 
 /// This method handle the silent callback as a flutter plugin
 Future<void> channelMethodIsolateShutdown(MethodCall call) async {
-  try {} catch (error) {
-    Logger.e(
-        "Awesome Notifications FCM: An error occurred in your background messaging handler:");
-    Logger.e(error.toString());
+  try {} catch (error, stacktrace) {
+    Logger.e("channelMethodIsolateShutdown",
+        "An error occurred in your background messaging handler: $error");
+    Logger.e("receiveSilentAction", stacktrace.toString());
   }
 }
 
@@ -55,10 +55,10 @@ Future<void> channelMethodIsolateCallbackHandle(MethodCall call) async {
     if (!success)
       throw AwesomeNotificationsException(
           message: 'Silent data could not be recovered');
-  } on Exception catch (error) {
-    Logger.e(
-        "Awesome Notifications FCM: An error occurred in your background messaging handler:");
-    Logger.e(error.toString());
+  } on Exception catch (error, stacktrace) {
+    Logger.e("channelMethodIsolateCallbackHandle",
+        "An error occurred in your background messaging handler: $error");
+    Logger.e("receiveSilentAction", stacktrace.toString());
   }
 }
 
@@ -83,9 +83,10 @@ Future<bool> receiveSilentAction(Map<String, dynamic> arguments) async {
 
   try {
     await onActionDataHandle(receivedAction);
-  } catch (e, stacktrace) {
-    Logger.e("Got an unknown Silent Action callback error: ${e.toString()}");
-    Logger.e(stacktrace.toString());
+  } catch (error, stacktrace) {
+    Logger.e("receiveSilentAction",
+        "Got an unknown Silent Action callback error: $error");
+    Logger.e("receiveSilentAction", stacktrace.toString());
     return false;
   }
 

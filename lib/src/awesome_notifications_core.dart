@@ -19,6 +19,7 @@ import 'package:awesome_notifications/src/logs/logger.dart';
 import 'package:awesome_notifications/src/isolates/isolate_main.dart';
 
 class AwesomeNotifications {
+  static String TAG = "AwesomeNotifications";
   static String? rootNativePath;
 
   static String _utcTimeZoneIdentifier = 'UTC',
@@ -130,7 +131,7 @@ class AwesomeNotifications {
       NotificationHandler? onNotificationDisplayedMethod,
       ActionHandler? onDismissActionReceivedMethod}) async {
     if (_actionHandler != null && _actionHandler != onActionReceivedMethod)
-      Logger.w('Static listener for notifications actions was redefined.');
+      Logger.w(TAG, 'Static listener for notifications actions was redefined.');
 
     _actionHandler = onActionReceivedMethod;
     _dismissedHandler = onDismissActionReceivedMethod;
@@ -147,7 +148,7 @@ class AwesomeNotifications {
     });
 
     if (!result) {
-      Logger.e(
+      Logger.e(TAG,
           'onActionNotificationMethod is not a valid global or static method.');
       return false;
     }
@@ -169,6 +170,7 @@ class AwesomeNotifications {
 
   String _silentBGActionTypeKey =
       AwesomeAssertUtils.toSimpleEnumString(ActionType.SilentBackgroundAction)!;
+
   Future<dynamic> _handleMethod(MethodCall call) async {
     Map<String, dynamic> arguments =
         (call.arguments as Map).cast<String, dynamic>();
@@ -239,7 +241,7 @@ class AwesomeNotifications {
 
       return wasCreated;
     } on PlatformException catch (error) {
-      Logger.e(error.message ?? error.code);
+      Logger.e(TAG, error.message ?? error.code);
     }
     return false;
   }
