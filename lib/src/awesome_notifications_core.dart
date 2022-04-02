@@ -461,14 +461,14 @@ class AwesomeNotifications {
     await _channel.invokeMethod(CHANNEL_METHOD_SET_BADGE_COUNT, amount);
   }
 
-  /// Decrement the badge counter
+  /// Increment the badge counter
   Future<int> incrementGlobalBadgeCounter() async {
     final int badgeCount =
         await _channel.invokeMethod(CHANNEL_METHOD_INCREMENT_BADGE_COUNT);
     return badgeCount;
   }
 
-  /// Increment the badge counter
+  /// Decrement the badge counter
   Future<int> decrementGlobalBadgeCounter() async {
     final int badgeCount =
         await _channel.invokeMethod(CHANNEL_METHOD_DECREMENT_BADGE_COUNT);
