@@ -14,6 +14,8 @@ import me.carda.awesome_notifications.awesome_notifications_core.enumerators.Gro
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationImportance;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.AudioUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BitmapUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BooleanUtils;
@@ -21,6 +23,8 @@ import me.carda.awesome_notifications.awesome_notifications_core.utils.CompareUt
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class NotificationChannelModel extends AbstractModel {
+
+    private static final String TAG = "NotificationChannelModel";
 
     public String channelKey;
     public String channelName;
@@ -265,27 +269,62 @@ public class NotificationChannelModel extends AbstractModel {
 
         if(icon != null)
             if(BitmapUtils.getInstance().getMediaSourceType(icon) != MediaSource.Resource)
-                throw new AwesomeNotificationsException("Icon is not a Resource media type");
+                throw ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.INVALID_ARGUMENTS,
+                                "Icon is not a Resource media type");
 
         if(stringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationsException("Channel key cannot be null or empty");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Channel key cannot be null or empty");
 
         if(stringUtils.isNullOrEmpty(channelName))
-            throw new AwesomeNotificationsException("Channel name cannot be null or empty");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Channel name cannot be null or empty");
 
         if(stringUtils.isNullOrEmpty(channelDescription))
-            throw new AwesomeNotificationsException("Channel description cannot be null or empty");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Channel description cannot be null or empty");
 
         if(playSound == null)
-            throw new AwesomeNotificationsException("Play sound selector cannot be null or empty");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Play sound selector cannot be null or empty");
 
         if (ledColor != null && (ledOnMs == null || ledOffMs == null)) {
-            throw new AwesomeNotificationsException("Standard led on and off times cannot be null or empty");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Standard led on and off times cannot be null or empty");
         }
 
         if(BooleanUtils.getInstance().getValue(playSound) && !stringUtils.isNullOrEmpty(soundSource))
             if(!AudioUtils.getInstance().isValidAudio(context, soundSource))
-                throw new AwesomeNotificationsException("Audio media is not valid");
+                throw ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.INVALID_ARGUMENTS,
+                                "Audio media is not valid");
     }
 
     public NotificationChannelModel clone() {

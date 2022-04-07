@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+
+import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.NotificationThreadCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import androidx.annotation.NonNull;
@@ -18,7 +20,6 @@ import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifica
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_core.threads.NotificationForegroundSender;
-import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.ForegroundCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundServiceType;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundStartMode;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
@@ -77,17 +78,18 @@ public class ForegroundService extends Service {
                         NotificationBuilder.getNewBuilder(),
                         serviceIntent,
                         LifeCycleManager.getApplicationLifeCycle(),
-                        new ForegroundCompletionHandler() {
+                        new NotificationThreadCompletionHandler() {
                             @Override
-                            public void handle(@Nullable NotificationModel notificationModel) {
-                                if(notificationModel == null)
+                            public void handle(
+                                    boolean success,
+                                    @Nullable AwesomeNotificationsException exception) {
+                                if(!success)
                                     serviceStack.remove(notificationId);
                             }
                         });
                 return serviceIntent.startMode.toAndroidStartMode();
 
-            } catch (AwesomeNotificationsException e) {
-                e.printStackTrace();
+            } catch (AwesomeNotificationsException ignore) {
             }
         }
 

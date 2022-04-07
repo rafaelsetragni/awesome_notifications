@@ -230,20 +230,15 @@ class AwesomeNotifications {
   }) async {
     _validateId(content.id!);
 
-    try {
-      final bool wasCreated = await _channel.invokeMethod(
-          CHANNEL_METHOD_CREATE_NOTIFICATION,
-          NotificationModel(
-                  content: content,
-                  schedule: schedule,
-                  actionButtons: actionButtons)
-              .toMap());
+    final bool wasCreated = await _channel.invokeMethod(
+        CHANNEL_METHOD_CREATE_NOTIFICATION,
+        NotificationModel(
+                content: content,
+                schedule: schedule,
+                actionButtons: actionButtons)
+            .toMap());
 
-      return wasCreated;
-    } on PlatformException catch (error) {
-      Logger.e(TAG, error.message ?? error.code);
-    }
-    return false;
+    return wasCreated;
   }
 
   Future<bool> createNotificationFromJsonData(
@@ -445,14 +440,14 @@ class AwesomeNotifications {
     await _channel.invokeMethod(CHANNEL_METHOD_SET_BADGE_COUNT, amount);
   }
 
-  /// Decrement the badge counter
+  /// Increment the badge counter
   Future<int> incrementGlobalBadgeCounter() async {
     final int badgeCount =
         await _channel.invokeMethod(CHANNEL_METHOD_INCREMENT_BADGE_COUNT);
     return badgeCount;
   }
 
-  /// Increment the badge counter
+  /// Decrement the badge counter
   Future<int> decrementGlobalBadgeCounter() async {
     final int badgeCount =
         await _channel.invokeMethod(CHANNEL_METHOD_DECREMENT_BADGE_COUNT);

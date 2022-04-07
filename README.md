@@ -2,16 +2,17 @@
 # Awesome Notifications - Flutter
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications.jpg)
-<div> 
+<div>
+
+[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#)
+[![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#)
+[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.gg/MP3sEXPTnx)
     
 [![pub package](https://img.shields.io/pub/v/awesome_notifications.svg)](https://pub.dev/packages/awesome_notifications)
 [![Likes](https://badges.bar/awesome_notifications/likes)](https://pub.dev/packages/awesome_notifications/score)
 [![popularity](https://badges.bar/awesome_notifications/popularity)](https://pub.dev/packages/awesome_notifications/score)
 [![pub points](https://badges.bar/awesome_notifications/pub%20points)](https://pub.dev/packages/awesome_notifications/score)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](#)
-    
-[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#) [![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#) 
-[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.gg/MP3sEXPTnx)
 
 ### Features
 
@@ -68,8 +69,8 @@ All notifications could be created locally or via Firebase services, with all th
 - Finish the companion plugin to enable Firebase Cloud Message with all the awesome features available.
 - Add an option to choose if a notification action should bring the app to foreground or not. (accomplished)
 - Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
-- Replicate Android layouts to iOS
-- Custom layouts and gifs for notifications
+- Replicate Android layouts for iOS
+- Custom layouts for notifications
     
 <br>
 

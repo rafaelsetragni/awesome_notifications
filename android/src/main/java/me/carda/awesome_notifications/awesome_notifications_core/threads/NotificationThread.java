@@ -2,19 +2,29 @@ package me.carda.awesome_notifications.awesome_notifications_core.threads;
 
 import android.os.*;
 
+import androidx.annotation.Nullable;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.MediaSource;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationModel;
-import me.carda.awesome_notifications.awesome_notifications_core.models.returnedData.NotificationReceived;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BitmapUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public abstract class NotificationThread<T>{
 
-    protected abstract T doInBackground();
-    protected abstract void onPostExecute(T received);
+    private final String TAG = "NotificationThread";
+
+    protected abstract T doInBackground() throws Exception;
+    protected abstract T onPostExecute(@Nullable T received) throws AwesomeNotificationsException;
+    protected abstract void whenComplete(@Nullable T returnedValue, @Nullable AwesomeNotificationsException exception);
+
+    public void execute(){
+        runOnBackgroundThread();
+    }
 
     public void execute(NotificationModel notificationModel){
         if(itMustRunOnBackgroundThread(notificationModel))
@@ -31,20 +41,63 @@ public abstract class NotificationThread<T>{
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                final T response = threadReference.doInBackground();
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        threadReference.onPostExecute(response);
-                    }
-                });
+                try{
+                    final T response = threadReference.doInBackground();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            T returnedValue = null;
+                            try{
+                                returnedValue = threadReference.onPostExecute(response);
+                                whenComplete(returnedValue, null);
+                            } catch (AwesomeNotificationsException awesomeException) {
+                                whenComplete(null, awesomeException);
+                            } catch (Exception exception){
+                                whenComplete(
+                                        null,
+                                        ExceptionFactory
+                                                .getInstance()
+                                                .createNewAwesomeException(
+                                                        TAG,
+                                                        ExceptionCode.NOTIFICATION_THREAD_EXCEPTION,
+                                                        exception));
+                            }
+                        }
+                    });
+                } catch (AwesomeNotificationsException awesomeException) {
+                    whenComplete(null, awesomeException);
+                } catch (Exception exception) {
+                    whenComplete(
+                            null,
+                            ExceptionFactory
+                                    .getInstance()
+                                    .createNewAwesomeException(
+                                            TAG,
+                                            ExceptionCode.NOTIFICATION_THREAD_EXCEPTION,
+                                            exception));
+                }
             }
         });
     }
 
     private void runOnForegroundThread() {
         if(Looper.myLooper() == Looper.getMainLooper()) {
-            onPostExecute(doInBackground());
+            T returnedValue = null;
+            try{
+                returnedValue = onPostExecute(doInBackground());
+                whenComplete(returnedValue, null);
+            } catch (AwesomeNotificationsException awesomeException) {
+                whenComplete(null, awesomeException);
+            } catch (Exception exception){
+                whenComplete(
+                        null,
+                        ExceptionFactory
+                                .getInstance()
+                                .createNewAwesomeException(
+                                        TAG,
+                                        ExceptionCode.NOTIFICATION_THREAD_EXCEPTION,
+                                        exception));
+            }
         }
         else {
             final Handler handler = new Handler(Looper.getMainLooper());
@@ -53,8 +106,23 @@ public abstract class NotificationThread<T>{
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    final T response = threadReference.doInBackground();
-                    threadReference.onPostExecute(response);
+                    T returnedValue = null;
+                    try {
+                        final T response = threadReference.doInBackground();
+                        returnedValue = threadReference.onPostExecute(response);
+                        whenComplete(returnedValue, null);
+                    } catch (AwesomeNotificationsException awesomeException) {
+                        whenComplete(null, awesomeException);
+                    } catch (Exception exception){
+                        whenComplete(
+                                null,
+                                ExceptionFactory
+                                        .getInstance()
+                                        .createNewAwesomeException(
+                                                TAG,
+                                                ExceptionCode.NOTIFICATION_THREAD_EXCEPTION,
+                                                exception));
+                    }
                 }
             });
         }

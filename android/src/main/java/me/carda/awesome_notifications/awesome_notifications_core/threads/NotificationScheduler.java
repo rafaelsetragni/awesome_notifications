@@ -6,6 +6,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+
+import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.NotificationThreadCompletionHandler;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import java.lang.ref.WeakReference;
@@ -13,6 +17,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.AlarmManagerCompat;
 
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
@@ -40,21 +45,29 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
     private final NotificationSource createdSource;
     private final NotificationLifeCycle appLifeCycle;
     private NotificationModel notificationModel;
-    private Intent originalIntent;
+    private final Intent originalIntent;
 
     private Boolean scheduled = false;
     private Boolean rescheduled = false;
     private long startTime = 0L, endTime = 0L;
     private final Calendar initialDate;
 
+    private final NotificationThreadCompletionHandler threadCompletionHandler;
+
     public static void schedule(
             Context context,
             NotificationModel notificationModel,
-            Intent originalIntent
+            Intent originalIntent,
+            NotificationThreadCompletionHandler threadCompletionHandler
     ) throws AwesomeNotificationsException {
 
         if (notificationModel == null)
-            throw new AwesomeNotificationsException("Invalid notification content");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid notification content");
 
         notificationModel.validate(context);
 
@@ -64,18 +77,25 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
                 notificationModel.content.createdSource,
                 notificationModel,
                 originalIntent,
-                true
+                true,
+                threadCompletionHandler
         ).execute(notificationModel);
     }
 
     public static void schedule(
         Context context,
         NotificationSource createdSource,
-        NotificationModel notificationModel
+        NotificationModel notificationModel,
+        NotificationThreadCompletionHandler threadCompletionHandler
     ) throws AwesomeNotificationsException {
 
         if (notificationModel == null)
-            throw new AwesomeNotificationsException("Invalid notification content");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid notification content");
 
         notificationModel.validate(context);
 
@@ -85,7 +105,8 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
                 createdSource,
                 notificationModel,
                 null,
-                false
+                false,
+                threadCompletionHandler
         ).execute(notificationModel);
     }
 
@@ -95,7 +116,8 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
             NotificationSource createdSource,
             NotificationModel notificationModel,
             Intent originalIntent,
-            boolean isReschedule
+            boolean isReschedule,
+            NotificationThreadCompletionHandler threadCompletionHandler
     ) throws AwesomeNotificationsException {
         this.wContextReference = new WeakReference<>(context);
         this.rescheduled = isReschedule;
@@ -104,6 +126,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
         this.notificationModel = notificationModel;
         this.startTime = System.nanoTime();
         this.originalIntent = originalIntent;
+        this.threadCompletionHandler = threadCompletionHandler;
 
         this.initialDate =
             CalendarUtils
@@ -121,68 +144,67 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
     /// AsyncTask METHODS BEGIN *********************************
 
     @Override
-    protected Calendar doInBackground() {
-        try {
-            Calendar nextValidDate = null;
+    protected Calendar doInBackground() throws Exception {
+        Calendar nextValidDate = null;
 
-            if(notificationModel != null){
+        if(notificationModel != null){
 
-                if (!ChannelManager
+            if (!ChannelManager
+                    .getInstance()
+                    .isChannelEnabled(
+                            wContextReference.get(),
+                            notificationModel.content.channelKey)
+            )
+                throw ExceptionFactory
                         .getInstance()
-                        .isChannelEnabled(
-                                wContextReference.get(),
-                                notificationModel.content.channelKey)
-                ) {
-                    throw new AwesomeNotificationsException("Channel '" + notificationModel.content.channelKey + "' do not exist or is disabled");
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.INVALID_ARGUMENTS,
+                                "Channel '" + notificationModel.content.channelKey +
+                                "' do not exist or is disabled");
+
+            if(notificationModel.schedule == null)
+                return null;
+
+            scheduled = notificationModel
+                            .content
+                            .registerCreatedEvent(
+                                    appLifeCycle,
+                                    createdSource);
+
+            nextValidDate = notificationModel
+                                .schedule
+                                .getNextValidDate(initialDate);
+
+            if(nextValidDate != null){
+
+                notificationModel = scheduleNotification(
+                        wContextReference.get(),
+                        notificationModel,
+                        nextValidDate);
+
+                if(notificationModel != null){
+                    scheduled = true;
                 }
 
-                if(notificationModel.schedule == null)
-                    return null;
-
-                scheduled = notificationModel
-                                .content
-                                .registerCreatedEvent(
-                                        appLifeCycle,
-                                        createdSource);
-
-                nextValidDate = notificationModel
-                                    .schedule
-                                    .getNextValidDate(initialDate);
-
-                if(nextValidDate != null){
-
-                    notificationModel = scheduleNotification(
-                            wContextReference.get(),
-                            notificationModel,
-                            nextValidDate);
-
-                    if(notificationModel != null){
-                        scheduled = true;
-                    }
-
-                    return nextValidDate;
-                }
-                else {
-                    cancelSchedule(
-                            wContextReference.get(),
-                            notificationModel);
-
-                    String now = CalendarUtils.getInstance().getNowStringCalendar();
-                    String msg = "Date is not more valid. ("+now+")";
-                    Logger.d(TAG, msg);
-                }
+                return nextValidDate;
             }
+            else {
+                cancelSchedule(
+                        wContextReference.get(),
+                        notificationModel);
 
-        } catch (Exception e) {
-            notificationModel = null;
-            e.printStackTrace();
+                String now = CalendarUtils.getInstance().getNowStringCalendar();
+                String msg = "Date is not more valid. ("+now+")";
+                Logger.d(TAG, msg);
+            }
         }
 
         return null;
     }
 
     @Override
-    protected void onPostExecute(Calendar nextValidDate) {
+    protected Calendar onPostExecute(Calendar nextValidDate) {
 
         // Only fire ActionReceived if notificationModel is valid
         if(notificationModel != null){
@@ -213,7 +235,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
                                 rescheduled ? "rescheduled" : "scheduled"
                                 )+" in "+elapsed+"ms");
                     }
-                    return;
+                    return nextValidDate;
                 }
             }
 
@@ -231,6 +253,17 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
             long elapsed = (endTime - startTime)/1000000;
             Logger.d(TAG, "Notification schedule removed in "+elapsed+"ms");
         }
+
+        return null;
+    }
+
+    @Override
+    protected void whenComplete(
+            @Nullable Calendar calendar,
+            @Nullable AwesomeNotificationsException exception
+    ) {
+        if(threadCompletionHandler != null)
+            threadCompletionHandler.handle(exception != null, exception);
     }
 
     /// AsyncTask METHODS END *********************************
@@ -306,35 +339,30 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
         AlarmManagerCompat.setExact(alarmManager, AlarmManager.RTC_WAKEUP, timeMillis, pendingIntent);
     }
 
-    public static void refreshScheduledNotifications(Context context) {
+    public static void refreshScheduledNotifications(
+            Context context
+    ) throws AwesomeNotificationsException {
+
         List<String> notificationIds = ScheduleManager.listScheduledIds(context);
         if (notificationIds.isEmpty()) return;
 
         for (String id : notificationIds) {
-            try {
 
-                if(isScheduleActiveOnAlarmManager(
-                    context,
-                    Integer.parseInt(id))
-                ){
-                    continue;
-                }
+            if(isScheduleActiveOnAlarmManager(
+                context,
+                Integer.parseInt(id)))
+                continue;
 
-                NotificationModel notificationModel = ScheduleManager.getScheduleById(context, id);
-                if(notificationModel == null){
-                    ScheduleManager.removeScheduleById(context, id);
-                }
-                else if(notificationModel.schedule.hasNextValidDate()){
-                    // TODO save original intents to be restored later
-                    schedule(context, notificationModel, null);
-                    continue;
-                }
-                else {
-                    ScheduleManager.removeSchedule(context, notificationModel);
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
+            NotificationModel notificationModel = ScheduleManager.getScheduleById(context, id);
+            if(notificationModel == null){
+                ScheduleManager.removeScheduleById(context, id);
+            }
+            else if(notificationModel.schedule.hasNextValidDate()){
+                // TODO save original intents to be restored later
+                schedule(context, notificationModel, null, null);
+            }
+            else {
+                ScheduleManager.removeSchedule(context, notificationModel);
             }
         }
     }
@@ -425,11 +453,17 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
     }
 
     public static boolean isScheduleActiveOnAlarmManager(
-        @NonNull Context context, @NonNull Integer notificationId
+        @NonNull Context context,
+        @NonNull Integer notificationId
     ) throws AwesomeNotificationsException {
 
         if(notificationId < 0)
-            throw new AwesomeNotificationsException("Scheduled notification Id is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Scheduled notification Id is invalid");
 
         Intent notificationIntent = new Intent(context, ScheduledNotificationReceiver.class);
 

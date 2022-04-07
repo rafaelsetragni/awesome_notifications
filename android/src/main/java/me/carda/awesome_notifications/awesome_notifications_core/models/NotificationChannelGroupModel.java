@@ -7,9 +7,14 @@ import java.util.Map;
 
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class NotificationChannelGroupModel extends AbstractModel {
+
+    private static final String TAG = "NotificationChannelGroupModel";
+
     public String channelGroupName;
     public String channelGroupKey;
 
@@ -47,9 +52,19 @@ public class NotificationChannelGroupModel extends AbstractModel {
     @Override
     public void validate(Context context) throws AwesomeNotificationsException {
         if(stringUtils.isNullOrEmpty(channelGroupName))
-            throw new AwesomeNotificationsException("Channel group name cannot be null or empty");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Channel group name cannot be null or empty");
 
         if(stringUtils.isNullOrEmpty(channelGroupKey))
-            throw new AwesomeNotificationsException("Channel group key cannot be null or empty");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Channel group key cannot be null or empty");
     }
 }

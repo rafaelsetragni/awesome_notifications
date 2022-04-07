@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 
 public class CalendarUtils {
 
@@ -82,7 +84,12 @@ public class CalendarUtils {
             return shiftedCalendar;
         }
         else {
-            throw new AwesomeNotificationsException("Invalid time zone");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid time zone");
         }
     }
 

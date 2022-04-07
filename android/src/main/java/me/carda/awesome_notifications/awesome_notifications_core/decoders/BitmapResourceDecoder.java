@@ -5,15 +5,19 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
 
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.BitmapCompletionHandler;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
+import me.carda.awesome_notifications.awesome_notifications_core.threads.NotificationThread;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BitmapUtils;
 
-public class BitmapResourceDecoder extends AsyncTask<Void, Void, byte[]> {
+public class BitmapResourceDecoder extends NotificationThread<byte[]> {
 
     public static final String TAG = "BitmapResourceDecoder";
 
@@ -26,9 +30,9 @@ public class BitmapResourceDecoder extends AsyncTask<Void, Void, byte[]> {
     private Exception exception;
 
     public BitmapResourceDecoder(
-            Context context,
-            String bitmapReference,
-            BitmapCompletionHandler completionHandler
+            @NonNull Context context,
+            @Nullable String bitmapReference,
+            @NonNull BitmapCompletionHandler completionHandler
     ){
         this.wContextReference = new WeakReference<>(context);
         this.bitmapReference = bitmapReference;
@@ -47,38 +51,41 @@ public class BitmapResourceDecoder extends AsyncTask<Void, Void, byte[]> {
     }
 
     @Override
-    protected byte[] doInBackground(Void... params) {
-
+    protected byte[] doInBackground() throws AwesomeNotificationsException {
         Context context = wContextReference.get();
+        if(context != null) {
+            Bitmap bitmap = BitmapUtils
+                    .getInstance()
+                    .getBitmapFromResource(context, bitmapReference);
 
-        try {
-
-            if(context != null) {
-                Bitmap bitmap = BitmapUtils
+            if(bitmap == null)
+                throw ExceptionFactory
                         .getInstance()
-                        .getBitmapFromResource(context, bitmapReference);
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.BACKGROUND_EXECUTION_EXCEPTION,
+                                "File '"+
+                                        (bitmapReference == null ? "null" : bitmapReference)+
+                                        "' not found or invalid");
 
-                if(bitmap == null)
-                    throw new AwesomeNotificationsException(
-                            "File '"+
-                            (bitmapReference == null ? "null" : bitmapReference)+
-                            "' not found or invalid");
-
-                return convertBitmapToByteArray(
-                        bitmap,
-                        new ByteArrayOutputStream());
-            }
-            else
-                return null;
-
-        } catch (Exception e){
-            exception = e;
-            return null;
+            return convertBitmapToByteArray(
+                    bitmap,
+                    new ByteArrayOutputStream());
         }
+        else
+            return null;
     }
 
     @Override
-    protected void onPostExecute(byte[] byteArray) {
-        completionHandler.handle(byteArray, exception);
+    protected byte[] onPostExecute(byte[] byteArray) {
+        return byteArray;
+    }
+
+    @Override
+    protected void whenComplete(
+            @Nullable byte[] returnedValue,
+            @Nullable AwesomeNotificationsException exception
+    ) {
+        completionHandler.handle(returnedValue, exception);
     }
 }

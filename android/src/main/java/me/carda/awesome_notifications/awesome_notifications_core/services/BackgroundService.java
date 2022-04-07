@@ -2,6 +2,9 @@ package me.carda.awesome_notifications.awesome_notifications_core.services;
 
 import android.content.Context;
 import android.content.Intent;
+
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import androidx.annotation.NonNull;
@@ -21,14 +24,24 @@ public class BackgroundService extends JobIntentService {
 
         Long dartCallbackHandle = getDartCallbackDispatcher(this);
         if (dartCallbackHandle == 0L) {
-            Logger.e(TAG, "A background message could not be handled in Dart" +
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.BACKGROUND_EXECUTION_EXCEPTION,
+                            "A background message could not be handled in Dart" +
                             " because there is no onActionReceivedMethod handler registered.");
             return;
         }
 
         Long silentCallbackHandle = getSilentCallbackDispatcher(this);
         if (silentCallbackHandle == 0L) {
-            Logger.e(TAG,"A background message could not be handled in Dart" +
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.BACKGROUND_EXECUTION_EXCEPTION,
+                            "A background message could not be handled in Dart" +
                             " because there is no dart background handler registered.");
             return;
         }
@@ -40,8 +53,12 @@ public class BackgroundService extends JobIntentService {
                     dartCallbackHandle,
                     silentCallbackHandle);
         } catch (AwesomeNotificationsException e) {
-            e.printStackTrace();
-            Logger.e(TAG, "A new Dart background service could not be executed");
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.BACKGROUND_EXECUTION_EXCEPTION,
+                            "A new Dart background service could not be executed");
         }
     }
 

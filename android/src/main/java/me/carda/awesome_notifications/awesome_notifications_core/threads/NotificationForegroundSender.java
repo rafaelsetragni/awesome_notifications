@@ -4,16 +4,20 @@ import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.os.Build;
+
+import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.NotificationThreadCompletionHandler;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.lang.ref.WeakReference;
 
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.senders.BroadcastSender;
 import me.carda.awesome_notifications.awesome_notifications_core.builders.NotificationBuilder;
-import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.ForegroundCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundServiceType;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationSource;
@@ -33,7 +37,7 @@ public class NotificationForegroundSender extends NotificationThread<Notificatio
     private final ForegroundService.ForegroundServiceIntent foregroundServiceIntent;
     private final NotificationSource createdSource;
     private final NotificationLifeCycle appLifeCycle;
-    private final ForegroundCompletionHandler foregroundCompletionHandler;
+    private final NotificationThreadCompletionHandler threadCompletionHandler;
 
     private long startTime = 0L, endTime = 0L;
 
@@ -44,11 +48,16 @@ public class NotificationForegroundSender extends NotificationThread<Notificatio
             @NonNull NotificationBuilder notificationBuilder,
             @NonNull ForegroundService.ForegroundServiceIntent foregroundServiceIntent,
             @NonNull NotificationLifeCycle appLifeCycle,
-            @NonNull ForegroundCompletionHandler foregroundCompletionHandler
+            @NonNull NotificationThreadCompletionHandler threadCompletionHandler
     ) throws AwesomeNotificationsException {
 
         if(foregroundServiceIntent.notificationModel == null)
-            throw new AwesomeNotificationsException("Notification model is required");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Notification model is required");
 
         foregroundServiceIntent
                 .notificationModel
@@ -60,7 +69,7 @@ public class NotificationForegroundSender extends NotificationThread<Notificatio
             foregroundServiceIntent,
             notificationBuilder,
             appLifeCycle,
-            foregroundCompletionHandler
+            threadCompletionHandler
         ).execute(
                 foregroundServiceIntent.notificationModel);
     }
@@ -71,15 +80,20 @@ public class NotificationForegroundSender extends NotificationThread<Notificatio
             ForegroundService.ForegroundServiceIntent foregroundServiceIntent,
             NotificationBuilder notificationBuilder,
             NotificationLifeCycle appLifeCycle,
-            ForegroundCompletionHandler foregroundCompletionHandler
+            NotificationThreadCompletionHandler threadCompletionHandler
     ) throws AwesomeNotificationsException {
 
         if(foregroundServiceIntent == null)
-            throw new AwesomeNotificationsException("Foreground service intent is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Foreground service intent is invalid");
 
         this.wContextReference = new WeakReference<>(context);
         this.foregroundServiceIntent = foregroundServiceIntent;
-        this.foregroundCompletionHandler = foregroundCompletionHandler;
+        this.threadCompletionHandler = threadCompletionHandler;
         this.notificationBuilder = notificationBuilder;
         this.appLifeCycle = appLifeCycle;
         this.createdSource = NotificationSource.ForegroundService;
@@ -91,33 +105,32 @@ public class NotificationForegroundSender extends NotificationThread<Notificatio
     /// AsyncTask METHODS BEGIN *********************************
 
     @Override
-    protected NotificationModel doInBackground() {
+    protected NotificationModel doInBackground() throws Exception {
 
         NotificationModel notificationModel
                 = foregroundServiceIntent.notificationModel;
 
-        try {
+        notificationModel.content.registerCreatedEvent(appLifeCycle, createdSource);
+        notificationModel.content.registerDisplayedEvent(appLifeCycle);
 
-            notificationModel.content.registerCreatedEvent(appLifeCycle, createdSource);
-            notificationModel.content.registerDisplayedEvent(appLifeCycle);
+        if (
+            stringUtils.isNullOrEmpty(notificationModel.content.title) &&
+            stringUtils.isNullOrEmpty(notificationModel.content.body)
+        )
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "A foreground service requires at least the title or body");
 
-            if (
-                stringUtils.isNullOrEmpty(notificationModel.content.title) &&
-                stringUtils.isNullOrEmpty(notificationModel.content.body)
-            )
-                throw new AwesomeNotificationsException("A foreground service requires at least the title or body");
-
-            return showForegroundNotification(wContextReference.get(), notificationModel);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return showForegroundNotification(wContextReference.get(), notificationModel);
     }
 
     @Override
-    protected void onPostExecute(NotificationModel notificationModel) {
+    protected NotificationModel onPostExecute(
+            NotificationModel notificationModel
+    ) throws AwesomeNotificationsException {
 
         // Only broadcast if notificationModel is valid
         if(notificationModel != null){
@@ -131,17 +144,14 @@ public class NotificationForegroundSender extends NotificationThread<Notificatio
                     appLifeCycle : receivedNotification.displayedLifeCycle;
 
             BroadcastSender.sendBroadcastNotificationCreated(
-                wContextReference.get(),
-                receivedNotification);
+                    wContextReference.get(),
+                    receivedNotification);
 
 
             BroadcastSender.sendBroadcastNotificationDisplayed(
-                wContextReference.get(),
-                receivedNotification);
+                    wContextReference.get(),
+                    receivedNotification);
         }
-
-        this.foregroundCompletionHandler
-                .handle(notificationModel);
 
         if(this.endTime == 0L)
             this.endTime = System.nanoTime();
@@ -150,6 +160,17 @@ public class NotificationForegroundSender extends NotificationThread<Notificatio
             long elapsed = (endTime - startTime)/1000000;
             Logger.d(TAG, "Notification displayed in "+elapsed+"ms");
         }
+
+        return notificationModel;
+    }
+
+    @Override
+    protected void whenComplete(
+            @Nullable NotificationModel notificationModel,
+            @Nullable AwesomeNotificationsException exception
+    ) {
+        if (threadCompletionHandler != null)
+            threadCompletionHandler.handle(notificationModel != null, exception);
     }
 
     /// AsyncTask METHODS END *********************************

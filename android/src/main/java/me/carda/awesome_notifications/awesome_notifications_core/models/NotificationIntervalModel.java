@@ -3,6 +3,7 @@ package me.carda.awesome_notifications.awesome_notifications_core.models;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -11,11 +12,15 @@ import java.util.TimeZone;
 
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BooleanUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class NotificationIntervalModel extends NotificationScheduleModel {
+
+    private static final String TAG = "NotificationIntervalModel";
 
     public Integer interval;
 
@@ -52,14 +57,24 @@ public class NotificationIntervalModel extends NotificationScheduleModel {
     public void validate(Context context) throws AwesomeNotificationsException {
 
         if(interval == null || interval < 0)
-            throw new AwesomeNotificationsException("Interval is required and must be greater than zero");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Interval is required and must be greater than zero");
 
         if(repeats && interval < 60)
-            throw new AwesomeNotificationsException("time interval must be at least 60 if repeating");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "time interval must be at least 60 if repeating");
     }
 
     @Override
-    public Calendar getNextValidDate(@NonNull Calendar fixedNowDate) throws AwesomeNotificationsException {
+    public Calendar getNextValidDate(@Nullable Calendar fixedNowDate) throws AwesomeNotificationsException {
 
         CalendarUtils calendarUtils = CalendarUtils.getInstance();
         BooleanUtils booleanUtils = BooleanUtils.getInstance();

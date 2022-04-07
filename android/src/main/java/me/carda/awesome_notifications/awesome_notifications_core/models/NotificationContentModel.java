@@ -17,6 +17,8 @@ import me.carda.awesome_notifications.awesome_notifications_core.enumerators.Not
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationSource;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.ChannelManager;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BitmapUtils;
@@ -27,6 +29,8 @@ import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUti
 
 @SuppressWarnings("unchecked")
 public class NotificationContentModel extends AbstractModel {
+
+    private static final String TAG = "NotificationContentModel";
 
     public boolean isRefreshNotification = false;
     public boolean isRandomId = false;
@@ -280,7 +284,12 @@ public class NotificationContentModel extends AbstractModel {
         if(ChannelManager
                 .getInstance()
                 .getChannelByKey(context, channelKey) == null)
-            throw new AwesomeNotificationsException("Notification channel '"+channelKey+"' does not exist.");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Notification channel '"+channelKey+"' does not exist.");
 
         validateIcon(context);
 
@@ -298,7 +307,12 @@ public class NotificationContentModel extends AbstractModel {
                 BitmapUtils.getInstance().getMediaSourceType(icon) != MediaSource.Resource ||
                 !BitmapUtils.getInstance().isValidBitmap(context, icon)
             ){
-                throw new AwesomeNotificationsException("Small icon ('"+icon+"') must be a valid media native resource type.");
+                throw ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.INVALID_ARGUMENTS,
+                                "Small icon ('"+icon+"') must be a valid media native resource type.");
             }
         }
     }
@@ -309,7 +323,12 @@ public class NotificationContentModel extends AbstractModel {
             (!stringUtils.isNullOrEmpty(largeIcon) && !BitmapUtils.getInstance().isValidBitmap(context, largeIcon)) ||
             (!stringUtils.isNullOrEmpty(bigPicture) && !BitmapUtils.getInstance().isValidBitmap(context, bigPicture))
         ){
-            throw new AwesomeNotificationsException("Invalid big picture '"+bigPicture+"' or large icon '"+largeIcon+"'");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid big picture '"+bigPicture+"' or large icon '"+largeIcon+"'");
         }
     }
 
@@ -317,6 +336,11 @@ public class NotificationContentModel extends AbstractModel {
         if(
             (!stringUtils.isNullOrEmpty(largeIcon) && !BitmapUtils.getInstance().isValidBitmap(context, largeIcon))
         )
-            throw new AwesomeNotificationsException("Invalid large icon '"+largeIcon+"'");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid large icon '"+largeIcon+"'");
     }
 }

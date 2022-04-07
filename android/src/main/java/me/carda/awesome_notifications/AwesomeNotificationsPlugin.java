@@ -1,11 +1,8 @@
 package me.carda.awesome_notifications;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-
-import io.flutter.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
@@ -29,8 +25,11 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotificationsExtension;
 import me.carda.awesome_notifications.awesome_notifications_core.background.BackgroundExecutor;
+import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.NotificationThreadCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundServiceType;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundStartMode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.listeners.AwesomeEventListener;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
@@ -124,8 +123,16 @@ public class AwesomeNotificationsPlugin
             if (AwesomeNotifications.debug)
                 Logger.d(TAG, "Awesome Notifications plugin attached to Android " + Build.VERSION.SDK_INT);
 
-        } catch (AwesomeNotificationsException e) {
-            e.printStackTrace();
+        } catch (AwesomeNotificationsException ignored) {
+        } catch (Exception exception) {
+            AwesomeNotificationsException ignored =
+                    ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.UNKNOWN_EXCEPTION,
+                                "An exception was found while attaching awesome notifications plugin",
+                                exception);
         }
     }
 
@@ -182,10 +189,17 @@ public class AwesomeNotificationsPlugin
     public void onMethodCall(@NonNull final MethodCall call, @NonNull final Result result) {
 
         if (awesomeNotifications == null) {
-            if (AwesomeNotifications.debug)
-                Logger.d(TAG, "Awesome notifications is currently not available");
-
-            result.error(call.method, "Awesome notifications is currently not available", null);
+            AwesomeNotificationsException awesomeException =
+                    ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.INITIALIZATION_EXCEPTION,
+                                "Awesome notifications is currently not available");
+            result.error(
+                    awesomeException.getCode(),
+                    awesomeException.getMessage(),
+                    awesomeException);
             return;
         }
 
@@ -341,22 +355,43 @@ public class AwesomeNotificationsPlugin
                     result.notImplemented();
             }
 
-        } catch (Exception e) {
-            if (AwesomeNotifications.debug)
-                Logger.d(TAG, String.format("%s", e.getMessage()));
+        } catch (AwesomeNotificationsException awesomeException) {
+            result.error(
+                    awesomeException.getCode(),
+                    awesomeException.getMessage(),
+                    awesomeException);
 
-            result.error(call.method, e.getMessage(), e);
-            e.printStackTrace();
+        } catch (Exception exception) {
+            AwesomeNotificationsException awesomeException =
+                    ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.UNKNOWN_EXCEPTION,
+                                exception);
+
+            result.error(
+                    awesomeException.getCode(),
+                    awesomeException.getMessage(),
+                    awesomeException);
         }
     }
 
     @SuppressWarnings("unchecked")
-    private void channelMethodStartForeground(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodStartForeground(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         Map<String, Object> arguments = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
 
         if(arguments == null)
-            throw new AwesomeNotificationsException("Arguments are missing");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.MISSING_ARGUMENTS,
+                            "Arguments are missing");
 
         NotificationModel notificationModel = new NotificationModel().fromMap(
                 (Map<String, Object>) arguments.get(Definitions.NOTIFICATION_MODEL));
@@ -371,13 +406,28 @@ public class AwesomeNotificationsPlugin
 
 
         if(notificationModel == null)
-            throw new AwesomeNotificationsException("Foreground notification is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Foreground notification is invalid");
 
         if(foregroundStartMode == null)
-            throw new AwesomeNotificationsException("Foreground start type is required");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Foreground start type is required");
 
         if(foregroundServiceType == null)
-            throw new AwesomeNotificationsException("foregroundServiceType is required");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "foregroundServiceType is required");
 
         awesomeNotifications.startForegroundService(
             notificationModel,
@@ -385,45 +435,70 @@ public class AwesomeNotificationsPlugin
             foregroundServiceType);
     }
 
-    private void channelMethodStopForeground(@NonNull final MethodCall call, @NonNull final Result result) {
+    private void channelMethodStopForeground(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
+
         Integer notificationId = call.<Integer>argument(Definitions.NOTIFICATION_ID);
         awesomeNotifications.stopForegroundService(notificationId);
         result.success(null);
     }
 
-    private void channelMethodGetDrawableData(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodGetDrawableData(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         String bitmapReference = call.arguments();
+        if(bitmapReference == null)
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Bitmap reference is required");
 
         awesomeNotifications
                 .getDrawableData(
                     bitmapReference,
                     new BitmapCompletionHandler() {
                         @Override
-                        public void handle(byte[] byteArray, Exception exception) {
-                            if(exception != null){
+                        public void handle(byte[] byteArray, AwesomeNotificationsException exception) {
+                            if(exception != null)
                                 result.error(
-                                        BitmapResourceDecoder.TAG,
+                                        exception.getCode(),
                                         exception.getMessage(),
                                         exception);
-                            }
-                            else {
+                            else
                                 result.success(byteArray);
-                            }
                         }
                     });
     }
 
     @SuppressWarnings("unchecked")
-    private void channelMethodSetChannel(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodSetChannel(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         Map<String, Object> channelData = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
         if (channelData == null)
-            throw new AwesomeNotificationsException("Channel is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Channel data is missing");
 
         NotificationChannelModel channelModel = new NotificationChannelModel().fromMap(channelData);
         if (channelModel == null)
-            throw new AwesomeNotificationsException("Channel is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Channel is invalid");
 
         boolean forceUpdate = BooleanUtils.getInstance().getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
 
@@ -434,11 +509,19 @@ public class AwesomeNotificationsPlugin
         result.success(channelSaved);
     }
 
-    private void channelMethodRemoveChannel(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        String channelKey = call.arguments();
+    private void channelMethodRemoveChannel(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
+        String channelKey = call.arguments();
         if (stringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationsException("Empty channel key");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Empty channel key");
 
         boolean removed =
                 awesomeNotifications
@@ -452,7 +535,10 @@ public class AwesomeNotificationsPlugin
         result.success(removed);
     }
 
-    private void channelMethodGetBadgeCounter(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodGetBadgeCounter(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
         Integer badgeCount =
                 awesomeNotifications
                         .getGlobalBadgeCounter();
@@ -460,36 +546,61 @@ public class AwesomeNotificationsPlugin
         result.success(badgeCount);
     }
 
-    private void channelMethodSetBadgeCounter(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodSetBadgeCounter(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         int count = MapUtils.extractArgument(call.arguments(), Integer.class).or(-1);
         if (count < 0)
-            throw new AwesomeNotificationsException("Invalid Badge value");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid Badge value");
 
         awesomeNotifications.setGlobalBadgeCounter(count);
         result.success(true);
     }
 
-    private void channelMethodResetBadge(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodResetBadge(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
         awesomeNotifications.resetGlobalBadgeCounter();
         result.success(null);
     }
 
-    private void channelMethodIncrementBadge(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodIncrementBadge(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
         int badgeCount = awesomeNotifications.incrementGlobalBadgeCounter();
         result.success(badgeCount);
     }
 
-    private void channelMethodDecrementBadge(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodDecrementBadge(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
         int badgeCount = awesomeNotifications.decrementGlobalBadgeCounter();
         result.success(badgeCount);
     }
 
-    private void channelMethodDismissNotification(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodDismissNotification(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         Integer notificationId = call.arguments();
         if (notificationId == null || notificationId < 0)
-            throw new AwesomeNotificationsException("Invalid id value");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid id value");
 
         boolean dismissed = awesomeNotifications.dismissNotification(notificationId);
 
@@ -501,11 +612,19 @@ public class AwesomeNotificationsPlugin
         result.success(dismissed);
     }
 
-    private void channelMethodCancelSchedule(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodCancelSchedule(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         Integer notificationId = call.arguments();
         if (notificationId == null || notificationId < 0)
-            throw new AwesomeNotificationsException("Invalid id value");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid id value");
 
         boolean canceled = awesomeNotifications.cancelSchedule(notificationId);
 
@@ -517,11 +636,19 @@ public class AwesomeNotificationsPlugin
         result.success(canceled);
     }
 
-    private void channelMethodCancelNotification(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodCancelNotification(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         Integer notificationId = call.arguments();
         if (notificationId == null || notificationId < 0)
-            throw new AwesomeNotificationsException("Invalid id value");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid id value");
 
         boolean canceled = awesomeNotifications.cancelNotification(notificationId);
 
@@ -533,11 +660,19 @@ public class AwesomeNotificationsPlugin
         result.success(canceled);
     }
 
-    private void channelMethodDismissNotificationsByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodDismissNotificationsByChannelKey(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         String channelKey = call.arguments();
         if (stringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationsException("Invalid channel Key value");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid channel Key value");
 
         boolean dismissed = awesomeNotifications.dismissNotificationsByChannelKey(channelKey);
 
@@ -549,11 +684,19 @@ public class AwesomeNotificationsPlugin
         result.success(dismissed);
     }
 
-    private void channelMethodCancelSchedulesByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodCancelSchedulesByChannelKey(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         String channelKey = call.arguments();
         if (stringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationsException("Invalid channel Key value");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid channel Key value");
 
         boolean canceled = awesomeNotifications.cancelSchedulesByChannelKey(channelKey);
 
@@ -565,11 +708,19 @@ public class AwesomeNotificationsPlugin
         result.success(canceled);
     }
 
-    private void channelMethodCancelNotificationsByChannelKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodCancelNotificationsByChannelKey(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         String channelKey = call.arguments();
         if (stringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationsException("Invalid channel Key value");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid channel Key value");
 
         boolean canceled = awesomeNotifications.cancelNotificationsByChannelKey(channelKey);
 
@@ -581,11 +732,19 @@ public class AwesomeNotificationsPlugin
         result.success(canceled);
     }
 
-    private void channelMethodDismissNotificationsByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodDismissNotificationsByGroupKey(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         String groupKey = call.arguments();
         if (stringUtils.isNullOrEmpty(groupKey))
-            throw new AwesomeNotificationsException("Invalid groupKey value");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid groupKey value");
 
         boolean dismissed = awesomeNotifications.dismissNotificationsByGroupKey(groupKey);
 
@@ -597,11 +756,19 @@ public class AwesomeNotificationsPlugin
         result.success(dismissed);
     }
 
-    private void channelMethodCancelSchedulesByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodCancelSchedulesByGroupKey(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         String groupKey = call.arguments();
         if (stringUtils.isNullOrEmpty(groupKey))
-            throw new AwesomeNotificationsException("Invalid groupKey value");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid groupKey value");
 
         boolean canceled = awesomeNotifications.cancelSchedulesByGroupKey(groupKey);
 
@@ -613,11 +780,19 @@ public class AwesomeNotificationsPlugin
         result.success(canceled);
     }
 
-    private void channelMethodCancelNotificationsByGroupKey(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodCancelNotificationsByGroupKey(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         String groupKey = call.arguments();
         if (stringUtils.isNullOrEmpty(groupKey))
-            throw new AwesomeNotificationsException("Invalid groupKey value");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid groupKey value");
 
         boolean canceled = awesomeNotifications.cancelNotificationsByGroupKey(groupKey);
 
@@ -629,7 +804,10 @@ public class AwesomeNotificationsPlugin
         result.success(canceled);
     }
 
-    private void channelMethodDismissAllNotifications(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodDismissAllNotifications(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         awesomeNotifications.dismissAllNotifications();
 
@@ -639,7 +817,10 @@ public class AwesomeNotificationsPlugin
         result.success(true);
     }
 
-    private void channelMethodCancelAllSchedules(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodCancelAllSchedules(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         awesomeNotifications.cancelAllSchedules();
 
@@ -649,7 +830,10 @@ public class AwesomeNotificationsPlugin
         result.success(true);
     }
 
-    private void channelMethodCancelAllNotifications(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodCancelAllNotifications(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         awesomeNotifications.cancelAllNotifications();
 
@@ -659,7 +843,10 @@ public class AwesomeNotificationsPlugin
         result.success(true);
     }
 
-    private void channelMethodListAllSchedules(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodListAllSchedules(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
         List<NotificationModel> activeSchedules =
                 awesomeNotifications.listAllPendingSchedules();
 
@@ -675,25 +862,43 @@ public class AwesomeNotificationsPlugin
     }
 
     @SuppressWarnings("unchecked")
-    private void channelMethodGetNextDate(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodGetNextDate(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
         Map<String, Object> data = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
         if (data == null)
-            throw new AwesomeNotificationsException("Schedule data is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Schedule data is invalid");
 
         Map<String, Object> scheduleData =
                 MapUtils.extractValue(data, Definitions.NOTIFICATION_MODEL_SCHEDULE, Map.class)
                     .orNull();
 
         if (scheduleData == null)
-            throw new AwesomeNotificationsException("Schedule data is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Schedule data is invalid");
 
         NotificationScheduleModel scheduleModel =
                 NotificationScheduleModel
                         .getScheduleModelFromMap(scheduleData);
 
         if (scheduleModel == null)
-            throw new AwesomeNotificationsException("Schedule data is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Schedule data is invalid");
 
         Calendar fixedDate =
                 MapUtils.extractValue(data, Definitions.NOTIFICATION_INITIAL_FIXED_DATE, Calendar.class)
@@ -712,25 +917,37 @@ public class AwesomeNotificationsPlugin
         result.success(finalValidDateString);
     }
 
-    private void channelMethodGetLocalTimeZone(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodGetLocalTimeZone(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
         result.success(
                 awesomeNotifications
                         .getLocalTimeZone());
     }
 
-    private void channelMethodGetUtcTimeZone(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodGetUtcTimeZone(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
         result.success(
                 awesomeNotifications
                         .getUtcTimeZone());
     }
 
-    private void channelIsNotificationAllowed(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelIsNotificationAllowed(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
         result.success(
                 awesomeNotifications
                         .areNotificationsGloballyAllowed());
     }
 
-    private void channelShowNotificationPage(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelShowNotificationPage(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
         String channelKey = call.arguments();
 
         awesomeNotifications
@@ -745,8 +962,10 @@ public class AwesomeNotificationsPlugin
                 );
     }
 
-    private void channelShowAlarmPage(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-
+    private void channelShowAlarmPage(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
         awesomeNotifications
                 .showPreciseAlarmPage(
                     new PermissionCompletionHandler() {
@@ -758,8 +977,10 @@ public class AwesomeNotificationsPlugin
                 );
     }
 
-    private void channelShowGlobalDndPage(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-
+    private void channelShowGlobalDndPage(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
         awesomeNotifications
                 .showDnDGlobalOverridingPage(
                         new PermissionCompletionHandler() {
@@ -772,17 +993,30 @@ public class AwesomeNotificationsPlugin
     }
 
     @SuppressWarnings("unchecked")
-    private void channelMethodCheckPermissions(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodCheckPermissions(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
 
-        Map<String, Object> parameters = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
-        if(parameters == null)
-            throw new AwesomeNotificationsException("Parameters are required");
+        Map<String, Object> arguments = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
+        if(arguments == null)
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.MISSING_ARGUMENTS,
+                            "Arguments are missing");
 
-        String channelKey = (String) parameters.get(Definitions.NOTIFICATION_CHANNEL_KEY);
+        String channelKey = (String) arguments.get(Definitions.NOTIFICATION_CHANNEL_KEY);
 
-        List<String> permissions = (List<String>) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);
+        List<String> permissions = (List<String>) arguments.get(Definitions.NOTIFICATION_PERMISSIONS);
         if(ListUtils.isNullOrEmpty(permissions))
-            throw new AwesomeNotificationsException("Permission list is required");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Permission list is required");
 
         permissions = awesomeNotifications
                         .arePermissionsAllowed(
@@ -793,20 +1027,38 @@ public class AwesomeNotificationsPlugin
     }
 
     @SuppressWarnings("unchecked")
-    private void channelMethodShouldShowRationale(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodShouldShowRationale(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws Exception {
 
-        Map<String, Object> parameters = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
-        if(parameters == null)
-            throw new AwesomeNotificationsException("Parameters are required");
+        Map<String, Object> arguments = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
+        if(arguments == null)
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.MISSING_ARGUMENTS,
+                            "Arguments are missing");
 
-        String channelKey = (String) parameters.get(Definitions.NOTIFICATION_CHANNEL_KEY);
-        List<String> permissions = (List<String>) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);
+        String channelKey = (String) arguments.get(Definitions.NOTIFICATION_CHANNEL_KEY);
+        List<String> permissions = (List<String>) arguments.get(Definitions.NOTIFICATION_PERMISSIONS);
 
         if(permissions == null)
-            throw new AwesomeNotificationsException("Permission list is required");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Permission list is required");
 
         if(permissions.isEmpty())
-            throw new AwesomeNotificationsException("Permission list cannot be empty");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Permission list cannot be empty");
 
         permissions = awesomeNotifications.shouldShowRationale(
                         channelKey,
@@ -816,20 +1068,38 @@ public class AwesomeNotificationsPlugin
     }
 
     @SuppressWarnings("unchecked")
-    private void channelRequestUserPermissions(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelRequestUserPermissions(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws Exception {
 
-        Map<String, Object> parameters = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
-        if(parameters == null)
-            throw new AwesomeNotificationsException("Parameters are required");
+        Map<String, Object> arguments = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
+        if(arguments == null)
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.MISSING_ARGUMENTS,
+                            "Arguments are missing");
 
-        if(!parameters.containsKey(Definitions.NOTIFICATION_PERMISSIONS))
-            throw new AwesomeNotificationsException("Permission list is required");
+        if(!arguments.containsKey(Definitions.NOTIFICATION_PERMISSIONS))
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Permission list is required");
 
-        String channelKey = (String) parameters.get(Definitions.NOTIFICATION_CHANNEL_KEY);
-        List<String> permissions = (List<String>) parameters.get(Definitions.NOTIFICATION_PERMISSIONS);
+        String channelKey = (String) arguments.get(Definitions.NOTIFICATION_CHANNEL_KEY);
+        List<String> permissions = (List<String>) arguments.get(Definitions.NOTIFICATION_PERMISSIONS);
 
         if(ListUtils.isNullOrEmpty(permissions))
-            throw new AwesomeNotificationsException("Permission list is required");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Permission list is required");
 
         awesomeNotifications
                 .requestUserPermissions(
@@ -843,31 +1113,70 @@ public class AwesomeNotificationsPlugin
                     });
     }
 
-    private void channelMethodCreateNotification(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
+    private void channelMethodCreateNotification(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws Exception {
 
-        Map<String, Object> pushData = call.arguments();
-        NotificationModel notificationModel = new NotificationModel().fromMap(pushData);
+        Map<String, Object> arguments = call.arguments();
+        if(arguments == null)
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.MISSING_ARGUMENTS,
+                            "Arguments are missing");
+
+        NotificationModel notificationModel = new NotificationModel().fromMap(arguments);
 
         if (notificationModel == null)
-            throw new AwesomeNotificationsException("Notification content is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Notification content is invalid");
 
-        boolean created = awesomeNotifications.createNotification(notificationModel);
-        result.success(created);
+        awesomeNotifications.createNotification(
+                notificationModel,
+                new NotificationThreadCompletionHandler() {
+                    @Override
+                    public void handle(boolean success, AwesomeNotificationsException exception) {
+                        if (exception != null)
+                            result.error(
+                                    exception.getCode(),
+                                    exception.getLocalizedMessage(),
+                                    exception);
+                        else
+                            result.success(success);
+                    }
+                });
     }
 
     @SuppressWarnings("unchecked")
-    private void channelMethodInitialize(@NonNull final MethodCall call, @NonNull final Result result) throws Exception {
-        Map<String, Object> platformParameters = call.arguments();
+    private void channelMethodInitialize(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws Exception {
 
-        String defaultIconPath = (String) platformParameters.get(Definitions.INITIALIZE_DEFAULT_ICON);
+        Map<String, Object> arguments = call.arguments();
+        if(arguments == null)
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.MISSING_ARGUMENTS,
+                            "Arguments are missing");
 
-        List<Object> channelsData = (List<Object>) platformParameters.get(Definitions.INITIALIZE_CHANNELS);
-        List<Object> channelGroupsData = (List<Object>) platformParameters.get(Definitions.INITIALIZE_CHANNEL_GROUPS);
+        String defaultIconPath = (String) arguments.get(Definitions.INITIALIZE_DEFAULT_ICON);
 
-        Boolean debug = (Boolean) platformParameters.get(Definitions.INITIALIZE_DEBUG_MODE);
+        List<Object> channelsData = (List<Object>) arguments.get(Definitions.INITIALIZE_CHANNELS);
+        List<Object> channelGroupsData = (List<Object>) arguments.get(Definitions.INITIALIZE_CHANNEL_GROUPS);
+
+        Boolean debug = (Boolean) arguments.get(Definitions.INITIALIZE_DEBUG_MODE);
         debug = debug != null && debug;
 
-        Object backgroundCallbackObj = platformParameters.get(Definitions.BACKGROUND_HANDLE);
+        Object backgroundCallbackObj = arguments.get(Definitions.BACKGROUND_HANDLE);
         Long backgroundCallback = backgroundCallbackObj == null ? 0L :(Long) backgroundCallbackObj;
 
         awesomeNotifications.initialize(
@@ -884,18 +1193,33 @@ public class AwesomeNotificationsPlugin
     }
 
     @SuppressWarnings("unchecked")
-    private void channelMethodSetActionHandle(@NonNull MethodCall call, Result result) throws Exception {
-        Map<String, Object> platformParameters = call.arguments();
-        Object callbackActionObj = platformParameters.get(Definitions.ACTION_HANDLE);
+    private void channelMethodSetActionHandle(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws Exception {
 
-        Long silentCallback = callbackActionObj == null ? 0L : (Long) callbackActionObj;
+        Map<String, Object> arguments = call.arguments();
+        if(arguments == null)
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.MISSING_ARGUMENTS,
+                            "Arguments are missing");
+
+        Object callbackActionObj = arguments.get(Definitions.ACTION_HANDLE);
+
+        long silentCallback = callbackActionObj == null ? 0L : (Long) callbackActionObj;
 
         awesomeNotifications.attachAsMainInstance(this);
         awesomeNotifications.setActionHandle(silentCallback);
 
         boolean success = silentCallback != 0L;
         if(!success)
-            Logger.e(TAG, "Attention: there is no valid static method to receive notification action data in background");
+            Logger.w(
+                    TAG,
+                    "Attention: there is no valid static" +
+                            " method to receive notification actions in background");
 
         result.success(success);
     }

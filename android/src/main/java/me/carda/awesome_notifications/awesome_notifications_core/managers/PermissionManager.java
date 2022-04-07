@@ -10,6 +10,9 @@ import android.provider.Settings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import java.util.ArrayList;
@@ -200,7 +203,11 @@ public class PermissionManager {
         return true;
     }
 
-    public boolean isSpecifiedChannelPermissionAllowed(Context context, String channelKey, NotificationPermission permissionEnum) throws AwesomeNotificationsException {
+    public boolean isSpecifiedChannelPermissionAllowed(
+            Context context,
+            String channelKey,
+            NotificationPermission permissionEnum
+    ) throws AwesomeNotificationsException {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/) {
             NotificationChannel channel =
@@ -209,7 +216,12 @@ public class PermissionManager {
                             .getAndroidChannel(context, channelKey);
 
             if(channel == null)
-                throw new AwesomeNotificationsException("Channel "+channelKey+" does not exist.");
+                throw ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.INVALID_ARGUMENTS,
+                                "Channel "+channelKey+" does not exist.");
 
             if(channel.getImportance() != NotificationManager.IMPORTANCE_NONE){
 
@@ -247,7 +259,12 @@ public class PermissionManager {
                             .getChannelByKey(context, channelKey);
 
             if(channelModel == null)
-                throw new AwesomeNotificationsException("Channel "+channelKey+" does not exist.");
+                throw ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.INVALID_ARGUMENTS,
+                                "Channel "+channelKey+" does not exist.");
 
             if(channelModel.importance != NotificationImportance.None){
 
@@ -594,7 +611,7 @@ public class PermissionManager {
         intent.setData(Uri.parse("package:" + context.getPackageName()));
 
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        return startTestedActivity(context, intent);
+        return startVerifiedActivity(context, intent);
     }
 
     private boolean gotoAndroidAppNotificationPage(final Context context){
@@ -614,7 +631,7 @@ public class PermissionManager {
         }
 
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        return startTestedActivity(context, intent);
+        return startVerifiedActivity(context, intent);
     }
 
     private boolean gotoAndroidChannelPage(final Context context, final String channelKey){
@@ -629,7 +646,7 @@ public class PermissionManager {
                     .putExtra(Settings.EXTRA_CHANNEL_ID, channel.getId());
 
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if(startTestedActivity(context, intent))
+            if(startVerifiedActivity(context, intent))
                 return true;
         }
         return gotoAndroidAppNotificationPage(context);
@@ -644,7 +661,7 @@ public class PermissionManager {
             intent.setData(Uri.parse("package:" + context.getPackageName()));
 
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if(startTestedActivity(context, intent))
+            if(startVerifiedActivity(context, intent))
                 return true;
         }
         return gotoAndroidAppNotificationPage(context);
@@ -656,7 +673,7 @@ public class PermissionManager {
             intent = new Intent(
                     Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if(startTestedActivity(context, intent))
+            if(startVerifiedActivity(context, intent))
                 return true;
         }
         return gotoAndroidAppNotificationPage(context);
@@ -703,13 +720,18 @@ public class PermissionManager {
         } while (retries > 0 && completionHandler != null);
     }
 
-    private boolean startTestedActivity(Context context, Intent intent){
+    private boolean startVerifiedActivity(Context context, Intent intent){
         PackageManager packageManager = context.getPackageManager();
         if (intent.resolveActivity(packageManager) != null) {
             context.startActivity(intent);
             return true;
         } else {
-            Logger.e(TAG, "Activity permission action '"+intent.getAction()+"' not found!");
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Activity permission action '"+intent.getAction()+"' not found!");
             return false;
         }
     }

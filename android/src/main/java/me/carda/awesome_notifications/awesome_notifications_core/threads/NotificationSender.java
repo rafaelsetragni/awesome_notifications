@@ -4,6 +4,12 @@ import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+
+import androidx.annotation.Nullable;
+
+import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.NotificationThreadCompletionHandler;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import java.lang.ref.WeakReference;
@@ -35,6 +41,7 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
     private final Intent originalIntent;
 
     private NotificationModel notificationModel;
+    private final NotificationThreadCompletionHandler threadCompletionHandler;
 
     private Boolean created = false;
     private Boolean displayed = false;
@@ -49,7 +56,8 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
             Context context,
             NotificationBuilder notificationBuilder,
             NotificationLifeCycle appLifeCycle,
-            NotificationModel notificationModel
+            NotificationModel notificationModel,
+            NotificationThreadCompletionHandler threadCompletionHandler
     ) throws AwesomeNotificationsException {
 
         NotificationSender.send(
@@ -58,7 +66,8 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
                 notificationModel.content.createdSource,
                 appLifeCycle,
                 notificationModel,
-                null);
+                null,
+                threadCompletionHandler);
     }
 
     public static void send(
@@ -67,11 +76,17 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
         NotificationSource createdSource,
         NotificationLifeCycle appLifeCycle,
         NotificationModel notificationModel,
-        Intent originalIntent
+        Intent originalIntent,
+        NotificationThreadCompletionHandler threadCompletionHandler
     ) throws AwesomeNotificationsException {
 
         if (notificationModel == null )
-            throw new AwesomeNotificationsException("Notification cannot be empty or null");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Notification cannot be empty or null");
 
         new NotificationSender(
             context,
@@ -80,7 +95,8 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
             appLifeCycle,
             createdSource,
             notificationModel,
-            originalIntent
+            originalIntent,
+            threadCompletionHandler
         ).execute(notificationModel);
     }
 
@@ -91,7 +107,8 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
             NotificationLifeCycle appLifeCycle,
             NotificationSource createdSource,
             NotificationModel notificationModel,
-            Intent originalIntent
+            Intent originalIntent,
+            NotificationThreadCompletionHandler threadCompletionHandler
     ){
         this.wContextReference = new WeakReference<>(context);
         this.notificationBuilder = notificationBuilder;
@@ -99,6 +116,7 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
         this.appLifeCycle = appLifeCycle;
         this.notificationModel = notificationModel;
         this.originalIntent = originalIntent;
+        this.threadCompletionHandler = threadCompletionHandler;
 
         this.startTime = System.nanoTime();
         this.stringUtils = stringUtils;
@@ -107,50 +125,45 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
     /// AsyncTask METHODS BEGIN *********************************
 
     @Override
-    protected NotificationReceived doInBackground() {
+    protected NotificationReceived doInBackground() throws Exception {
+        if (notificationModel != null){
 
-        try {
+            created = notificationModel
+                        .content
+                        .registerCreatedEvent(
+                            appLifeCycle,
+                            createdSource);
 
-            if (notificationModel != null){
+            if (
+                !stringUtils.isNullOrEmpty(notificationModel.content.title) ||
+                !stringUtils.isNullOrEmpty(notificationModel.content.body)
+            ){
+                displayed = notificationModel
+                        .content
+                        .registerDisplayedEvent(
+                                appLifeCycle);
 
-                created = notificationModel
-                            .content
-                            .registerCreatedEvent(
-                                appLifeCycle,
-                                createdSource);
-
-                if (
-                    !stringUtils.isNullOrEmpty(notificationModel.content.title) ||
-                    !stringUtils.isNullOrEmpty(notificationModel.content.body)
-                ){
-                    displayed = notificationModel
-                            .content
-                            .registerDisplayedEvent(
-                                    appLifeCycle);
-
-                    notificationModel = showNotification(
-                            wContextReference.get(),
-                            notificationModel,
-                            originalIntent);
-                }
-
-                // Only save DisplayedMethods if notificationModel was created
-                // and displayed successfully
-                if(notificationModel != null)
-                    return new NotificationReceived(
-                            notificationModel.content,
-                            originalIntent);
+                notificationModel = showNotification(
+                        wContextReference.get(),
+                        notificationModel,
+                        originalIntent);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            // Only save DisplayedMethods if notificationModel was created
+            // and displayed successfully
+            if(notificationModel != null)
+                return new NotificationReceived(
+                        notificationModel.content,
+                        originalIntent);
         }
 
         return null;
     }
 
     @Override
-    protected void onPostExecute(NotificationReceived receivedNotification) {
+    protected NotificationReceived onPostExecute(
+            NotificationReceived receivedNotification
+    ) throws AwesomeNotificationsException {
 
         // Only broadcast if notificationModel is valid
         if(receivedNotification != null){
@@ -178,62 +191,70 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
 
             Logger.d(TAG, "Notification "+stringUtils.join(actionsTookList.iterator(), " and ")+" in "+elapsed+"ms");
         }
+
+        return receivedNotification;
+    }
+
+    @Override
+    protected void whenComplete(
+            @Nullable NotificationReceived notificationReceived,
+            @Nullable AwesomeNotificationsException exception
+    ) {
+        if (threadCompletionHandler != null)
+            threadCompletionHandler.handle(notificationReceived != null, exception);
     }
 
     /// AsyncTask METHODS END *********************************
 
-    public NotificationModel showNotification(Context context, NotificationModel notificationModel, Intent originalIntent) {
+    public NotificationModel showNotification(
+            Context context,
+            NotificationModel notificationModel,
+            Intent originalIntent
+    ) throws AwesomeNotificationsException {
 
-        try {
+        NotificationLifeCycle lifeCycle = AwesomeNotifications.getApplicationLifeCycle();
 
-            NotificationLifeCycle lifeCycle = AwesomeNotifications.getApplicationLifeCycle();
+        boolean shouldDisplay = true;
+        switch (lifeCycle){
 
-            boolean shouldDisplay = true;
-            switch (lifeCycle){
+            case Background:
+                shouldDisplay = notificationModel.content.displayOnBackground;
+                break;
 
-                case Background:
-                    shouldDisplay = notificationModel.content.displayOnBackground;
-                    break;
+            case Foreground:
+                shouldDisplay = notificationModel.content.displayOnForeground;
+                break;
+        }
 
-                case Foreground:
-                    shouldDisplay = notificationModel.content.displayOnForeground;
-                    break;
-            }
+        if(shouldDisplay){
 
-            if(shouldDisplay){
+            Notification notification =
+                    notificationBuilder
+                        .createNewAndroidNotification(context, originalIntent, notificationModel);
 
-                Notification notification =
+            if(
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
+                notificationModel.content.notificationLayout == NotificationLayout.Default &&
+                StatusBarManager
+                    .getInstance(context)
+                    .isFirstActiveOnGroupKey(notificationModel.content.groupKey)
+            ){
+                NotificationModel pushSummary = _buildSummaryGroupNotification(notificationModel);
+                Notification summaryNotification =
                         notificationBuilder
-                            .createNewAndroidNotification(context, originalIntent, notificationModel);
-
-                if(
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
-                    notificationModel.content.notificationLayout == NotificationLayout.Default &&
-                    StatusBarManager
-                        .getInstance(context)
-                        .isFirstActiveOnGroupKey(notificationModel.content.groupKey)
-                ){
-                    NotificationModel pushSummary = _buildSummaryGroupNotification(notificationModel);
-                    Notification summaryNotification =
-                            notificationBuilder
-                                    .createNewAndroidNotification(context, originalIntent, pushSummary);
-
-                    StatusBarManager
-                        .getInstance(context)
-                        .showNotificationOnStatusBar(pushSummary, summaryNotification);
-                }
+                                .createNewAndroidNotification(context, originalIntent, pushSummary);
 
                 StatusBarManager
-                        .getInstance(context)
-                        .showNotificationOnStatusBar(notificationModel, notification);
+                    .getInstance(context)
+                    .showNotificationOnStatusBar(pushSummary, summaryNotification);
             }
 
-            return notificationModel;
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            StatusBarManager
+                    .getInstance(context)
+                    .showNotificationOnStatusBar(notificationModel, notification);
         }
-        return null;
+
+        return notificationModel;
     }
 
     private NotificationModel _buildSummaryGroupNotification(NotificationModel original){

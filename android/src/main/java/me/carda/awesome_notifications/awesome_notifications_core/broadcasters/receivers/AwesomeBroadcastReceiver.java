@@ -12,7 +12,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUti
 
 public abstract class AwesomeBroadcastReceiver extends BroadcastReceiver {
 
-    public abstract void onReceiveBroadcastEvent(Context context, Intent intent);
+    public abstract void onReceiveBroadcastEvent(Context context, Intent intent) throws AwesomeNotificationsException;
 
     @Override
     public void onReceive(Context context, Intent intent) {

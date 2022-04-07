@@ -71,7 +71,7 @@ public class BitmapResourceDecoderTest {
                         null,
                         new BitmapCompletionHandler() {
                             @Override
-                            public void handle(byte[] byteArray, Exception exception) {
+                            public void handle(byte[] byteArray, AwesomeNotificationsException exception) {
                             }
                         }
                 ).convertBitmapToByteArray(bitmapMock, mockOutputStream)
@@ -85,7 +85,7 @@ public class BitmapResourceDecoderTest {
                         null,
                         new BitmapCompletionHandler() {
                             @Override
-                            public void handle(byte[] byteArray, Exception exception) {
+                            public void handle(byte[] byteArray, AwesomeNotificationsException exception) {
                             }
                         }
                 ).convertBitmapToByteArray(bitmapMock, mockOutputStream)
@@ -108,7 +108,7 @@ public class BitmapResourceDecoderTest {
                         null,
                         new BitmapCompletionHandler() {
                             @Override
-                            public void handle(byte[] byteArray, Exception exception) {
+                            public void handle(byte[] byteArray, AwesomeNotificationsException exception) {
                             }
                         }
                 ).doInBackground());
@@ -119,7 +119,7 @@ public class BitmapResourceDecoderTest {
                         "",
                         new BitmapCompletionHandler() {
                             @Override
-                            public void handle(byte[] byteArray, Exception exception) {
+                            public void handle(byte[] byteArray, AwesomeNotificationsException exception) {
                             }
                         }
                 ).doInBackground());
@@ -133,7 +133,7 @@ public class BitmapResourceDecoderTest {
                         "",
                         new BitmapCompletionHandler() {
                             @Override
-                            public void handle(byte[] byteArray, Exception exception) {
+                            public void handle(byte[] byteArray, AwesomeNotificationsException exception) {
                             }
                         }
                 ).doInBackground());
@@ -187,7 +187,7 @@ public class BitmapResourceDecoderTest {
                 "resource://drawable/testImage",
                 new BitmapCompletionHandler() {
                     @Override
-                    public void handle(byte[] byteArray, Exception exception) {
+                    public void handle(byte[] byteArray, AwesomeNotificationsException exception) {
                         assertArrayEquals(new byte[]{0,1,2,3}, byteArray);
                         assertNull(exception);
                     }

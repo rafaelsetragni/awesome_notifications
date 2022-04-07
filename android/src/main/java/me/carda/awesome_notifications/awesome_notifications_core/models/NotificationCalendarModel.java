@@ -12,12 +12,16 @@ import androidx.annotation.Nullable;
 
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.CronUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.IntegerUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class NotificationCalendarModel extends NotificationScheduleModel {
+
+    private static final String TAG = "NotificationCalendarModel";
 
     /// Field number for get and set indicating the era, e.g., AD or BC in the Julian calendar
     public Integer era;
@@ -130,40 +134,100 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
             weekOfMonth == null &&
             weekOfYear == null
         )
-            throw new AwesomeNotificationsException("At least one parameter is required");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "At least one parameter is required");
 
         if (era != null && !IntegerUtils.isBetween(era, 0, Integer.MAX_VALUE))
-            throw new AwesomeNotificationsException("Era value is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Era value is invalid");
 
         if (year != null && !IntegerUtils.isBetween(year, 0, Integer.MAX_VALUE))
-            throw new AwesomeNotificationsException("year value is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "year value is invalid");
 
         if (month != null && !IntegerUtils.isBetween(month, 1, 12))
-            throw new AwesomeNotificationsException("month value is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "month value is invalid");
 
         if (day != null && !IntegerUtils.isBetween(day, 1, 31))
-            throw new AwesomeNotificationsException("day value is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "day value is invalid");
 
         if (hour != null && !IntegerUtils.isBetween(hour, 0, 23))
-            throw new AwesomeNotificationsException("hour value is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "hour value is invalid");
 
         if (minute != null && !IntegerUtils.isBetween(minute, 0, 59))
-            throw new AwesomeNotificationsException("minute value is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "minute value is invalid");
 
         if (second != null && !IntegerUtils.isBetween(second, 0, 59))
-            throw new AwesomeNotificationsException("second value is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "second value is invalid");
 
         if (millisecond != null && !IntegerUtils.isBetween(millisecond, 0, 999))
-            throw new AwesomeNotificationsException("millisecond value is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "millisecond value is invalid");
 
         if (weekday != null && !IntegerUtils.isBetween(weekday, 1, 7))
-            throw new AwesomeNotificationsException("weekday value is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "weekday value is invalid");
 
         if (weekOfMonth != null && !IntegerUtils.isBetween(weekOfMonth, 1, 6))
-            throw new AwesomeNotificationsException("weekOfMonth value is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "weekOfMonth value is invalid");
 
         if (weekOfYear != null && !IntegerUtils.isBetween(weekOfYear, 1, 53))
-            throw new AwesomeNotificationsException("weekOfYear value is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "weekOfYear value is invalid");
     }
 
     @Override
@@ -173,7 +237,12 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
     ) throws AwesomeNotificationsException {
 
         if (timeZone == null)
-            throw new AwesomeNotificationsException("Invalid time zone");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid time zone");
 
         String cronExpression =
                 (second == null ? "*" : second.toString()) + " " +

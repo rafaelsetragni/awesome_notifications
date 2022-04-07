@@ -13,6 +13,8 @@ import java.util.TimeZone;
 import javax.annotation.Nullable;
 
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.externalLibs.CronExpression;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
@@ -21,6 +23,8 @@ import me.carda.awesome_notifications.awesome_notifications_core.utils.ListUtils
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class NotificationCrontabModel extends NotificationScheduleModel {
+
+    private static final String TAG = "NotificationCrontabModel";
 
     public Calendar initialDateTime;
     public Calendar expirationDateTime;
@@ -70,7 +74,12 @@ public class NotificationCrontabModel extends NotificationScheduleModel {
             stringUtils.isNullOrEmpty(crontabExpression) &&
             ListUtils.isNullOrEmpty(preciseSchedules)
         )
-            throw new AwesomeNotificationsException("At least one schedule parameter is required");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "At least one schedule parameter is required");
 
         try {
             if(initialDateTime != null && expirationDateTime != null){
@@ -78,21 +87,36 @@ public class NotificationCrontabModel extends NotificationScheduleModel {
                     initialDateTime.equals(expirationDateTime) ||
                     initialDateTime.after(expirationDateTime)
                 )
-                    throw new AwesomeNotificationsException("Expiration date must be greater than initial date");
+                    throw ExceptionFactory
+                            .getInstance()
+                            .createNewAwesomeException(
+                                    TAG,
+                                    ExceptionCode.INVALID_ARGUMENTS,
+                                    "Expiration date must be greater than initial date");
             }
 
             if(crontabExpression != null && !CronExpression.isValidExpression(crontabExpression))
-                throw new AwesomeNotificationsException("Schedule cron expression is invalid");
+                throw ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.INVALID_ARGUMENTS,
+                                "Schedule cron expression is invalid");
 
         } catch (AwesomeNotificationsException e){
             throw e;
         } catch (Exception e){
-            throw new AwesomeNotificationsException("Schedule time is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Schedule time is invalid");
         }
     }
 
     @Override
-    public Calendar getNextValidDate(@NonNull Calendar fixedNowDate) throws AwesomeNotificationsException {
+    public Calendar getNextValidDate(@Nullable Calendar fixedNowDate) throws AwesomeNotificationsException {
 
         try {
             CalendarUtils calendarUtils = CalendarUtils.getInstance();
@@ -149,7 +173,12 @@ public class NotificationCrontabModel extends NotificationScheduleModel {
         } catch (AwesomeNotificationsException e){
             throw e;
         } catch (Exception e){
-            throw new AwesomeNotificationsException("Schedule time is invalid");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Schedule time is invalid");
         }
     }
 }

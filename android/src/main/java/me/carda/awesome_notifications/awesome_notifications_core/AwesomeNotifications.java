@@ -17,7 +17,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.AwesomeEventsReceiver;
+import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.AwesomeExceptionReceiver;
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.NotificationActionReceiver;
+import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.NotificationThreadCompletionHandler;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.senders.BroadcastSender;
 import me.carda.awesome_notifications.awesome_notifications_core.decoders.BitmapResourceDecoder;
@@ -184,13 +188,15 @@ public class AwesomeNotifications
                         extensionClass);
 
                 isExtensionsLoaded = true;
-                return;
 
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                throw ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.CLASS_NOT_FOUND,
+                                "Awesome plugin reference '"+extensionClassReference+"' was not found.");
             }
-
-        throw new AwesomeNotificationsException("Awesome plugin reference is invalid or not found");
     }
 
     public static void loadAwesomeExtensions(
@@ -206,9 +212,12 @@ public class AwesomeNotifications
             isExtensionsLoaded = true;
 
         } catch (IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
-            throw new AwesomeNotificationsException(
-                    "Awesome plugin extensions could not be loaded.");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INITIALIZATION_EXCEPTION,
+                            "Awesome plugin extensions could not be loaded.");
         }
     }
 
@@ -329,13 +338,11 @@ public class AwesomeNotifications
     }
 
     public void getDrawableData(String bitmapReference, BitmapCompletionHandler completionHandler){
-        BitmapResourceDecoder bitmapResourceDecoder =
-                new BitmapResourceDecoder(
-                        wContext.get(),
-                        bitmapReference,
-                        completionHandler);
-
-        bitmapResourceDecoder.execute();
+        new BitmapResourceDecoder(
+                wContext.get(),
+                bitmapReference,
+                completionHandler
+            ).execute();
     }
 
     public void setActionHandle(Long actionCallbackHandle) {
@@ -357,7 +364,7 @@ public class AwesomeNotifications
                 0L : Long.parseLong(defaults.silentDataCallback);
     }
 
-    public List<NotificationModel> listAllPendingSchedules(){
+    public List<NotificationModel> listAllPendingSchedules() throws AwesomeNotificationsException {
         NotificationScheduler.refreshScheduledNotifications(wContext.get());
         return ScheduleManager.listSchedules(wContext.get());
     }
@@ -389,7 +396,12 @@ public class AwesomeNotifications
             setChannelGroups(wContext.get(), channelGroupsData);
 
         if (ListUtils.isNullOrEmpty(channelsData))
-            throw new AwesomeNotificationsException("At least one channel is required");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INITIALIZATION_EXCEPTION,
+                            "At least one channel is required");
 
         setChannels(currentContext, channelsData);
 
@@ -405,7 +417,7 @@ public class AwesomeNotifications
     private void setChannelGroups(
             @NonNull Context context,
             @NonNull List<Object> channelGroupsData)
-                throws AwesomeNotificationsException {
+    throws AwesomeNotificationsException {
 
         List<NotificationChannelGroupModel> channelGroups = new ArrayList<>();
 
@@ -419,8 +431,12 @@ public class AwesomeNotifications
                 if (channelGroup != null) {
                     channelGroups.add(channelGroup);
                 } else {
-                    throw new AwesomeNotificationsException(
-                            "Invalid channel group: " + JsonUtils.toJson(channelData));
+                    throw ExceptionFactory
+                            .getInstance()
+                            .createNewAwesomeException(
+                                    TAG,
+                                    ExceptionCode.INITIALIZATION_EXCEPTION,
+                                    "Invalid channel group: " + JsonUtils.toJson(channelData));
                 }
             }
 
@@ -435,7 +451,7 @@ public class AwesomeNotifications
     private void setChannels(
             @NonNull Context context,
             @NonNull List<Object> channelsData)
-                throws AwesomeNotificationsException {
+    throws AwesomeNotificationsException {
 
         List<NotificationChannelModel> channels = new ArrayList<>();
         boolean forceUpdate = false;
@@ -450,7 +466,12 @@ public class AwesomeNotifications
                 if (channelModel != null) {
                     channels.add(channelModel);
                 } else {
-                    throw new AwesomeNotificationsException("Invalid channel: " + JsonUtils.toJson(channelData));
+                    throw ExceptionFactory
+                            .getInstance()
+                            .createNewAwesomeException(
+                                    TAG,
+                                    ExceptionCode.INVALID_ARGUMENTS,
+                                    "Invalid channel: " + JsonUtils.toJson(channelData));
                 }
             }
 
@@ -556,12 +577,17 @@ public class AwesomeNotifications
 
     // *****************************  NOTIFICATION METHODS  **********************************
 
-    public boolean createNotification(@NonNull NotificationModel notificationModel) throws AwesomeNotificationsException {
+    public void createNotification(@NonNull NotificationModel notificationModel, NotificationThreadCompletionHandler threadCompletionHandler) throws AwesomeNotificationsException {
 
         if (!PermissionManager
                 .getInstance()
                 .areNotificationsGloballyAllowed(wContext.get()))
-            throw new AwesomeNotificationsException("Notifications are disabled");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Notifications are disabled");
 
         if (notificationModel.schedule == null)
             NotificationSender
@@ -571,15 +597,15 @@ public class AwesomeNotifications
                         NotificationSource.Local,
                         AwesomeNotifications.getApplicationLifeCycle(),
                         notificationModel,
-                        null);
+                        null,
+                        threadCompletionHandler);
         else
             NotificationScheduler
                     .schedule(
                         wContext.get(),
                         NotificationSource.Schedule,
-                        notificationModel);
-
-        return true;
+                        notificationModel,
+                        threadCompletionHandler);
     }
 
     private void captureNotificationActionFromActivity(Activity startActivity) {

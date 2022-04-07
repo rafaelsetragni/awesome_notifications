@@ -1,4 +1,8 @@
-## [0.7.0-beta.2]
+## [0.7.0-beta.3]
+* All exceptions was standarized with distinct exception codes to improve native error handling through PlatformException
+* New exception receiver implemented to handling all native exceptions and provide a better integration with firebase analytics.
+* Stopforeground method by id was fixed since last version
+### [0.7.0-beta.2]
 * AsyncTask replaced by Handler/Looper due deprecation in Android 12
 * FULL_WAKE_LOCK replaced by SCREEN_BRIGHT_WAKE_LOCK to improve battery life in Android
 * Implemented research by Android alarm intents to optimize the reschedule process

@@ -40,6 +40,7 @@ import androidx.core.text.HtmlCompat;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.DismissedNotificationReceiver;
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.NotificationActionReceiver;
+import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.NotificationThreadCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ActionType;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.GroupSort;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationImportance;
@@ -48,7 +49,8 @@ import me.carda.awesome_notifications.awesome_notifications_core.enumerators.Not
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationPermission;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
-import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.BadgeManager;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.StatusBarManager;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.ChannelManager;
@@ -115,7 +117,11 @@ public class NotificationBuilder {
         context.startActivity(startActivity);
     }
 
-    public ActionReceived receiveNotificationActionFromIntent(Context context, Intent intent, NotificationLifeCycle appLifeCycle) {
+    public ActionReceived receiveNotificationActionFromIntent(
+            Context context,
+            Intent intent,
+            NotificationLifeCycle appLifeCycle
+    ) throws AwesomeNotificationsException {
 
         ActionReceived actionReceived
             = buildNotificationActionFromIntent(context, intent, appLifeCycle);
@@ -146,14 +152,22 @@ public class NotificationBuilder {
                         .getChannelByKey(context, notificationModel.content.channelKey);
 
         if (channelModel == null)
-            throw new AwesomeNotificationsException(
-                    "Channel '" + notificationModel.content.channelKey + "' does not exist");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Channel '" + notificationModel.content.channelKey + "' does not exist");
 
         if (!ChannelManager
                 .getInstance()
                 .isChannelEnabled(context, notificationModel.content.channelKey))
-            throw new AwesomeNotificationsException(
-                    "Channel '" + notificationModel.content.channelKey + "' is disabled");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INSUFFICIENT_PERMISSIONS,
+                            "Channel '" + notificationModel.content.channelKey + "' is disabled");
 
         NotificationCompat.Builder builder =
                 getNotificationBuilderFromModel(
@@ -332,8 +346,12 @@ public class NotificationBuilder {
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
-            Logger.e(TAG, "Was not possible to resolve the class named '"+className+"'");
-            e.printStackTrace();
+            ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CLASS_NOT_FOUND,
+                            "Was not possible to resolve the class named '"+className+"'");
             return null;
         }
     }
@@ -381,7 +399,7 @@ public class NotificationBuilder {
         return applicationContext.getPackageManager().getLaunchIntentForPackage(packageName);
     }
 
-    public ActionReceived buildNotificationActionFromIntent(Context context, Intent intent, NotificationLifeCycle lifeCycle) {
+    public ActionReceived buildNotificationActionFromIntent(Context context, Intent intent, NotificationLifeCycle lifeCycle) throws AwesomeNotificationsException {
         String buttonKeyPressed = intent.getAction();
 
         if (buttonKeyPressed == null) return null;
@@ -440,7 +458,8 @@ public class NotificationBuilder {
                     updateRemoteHistoryOnActiveNotification(
                             context,
                             notificationModel,
-                            actionModel);
+                            actionModel,
+                            null);
             }
 
             return actionModel;
@@ -448,7 +467,12 @@ public class NotificationBuilder {
         return null;
     }
 
-    public void updateRemoteHistoryOnActiveNotification(Context context, NotificationModel notificationModel, ActionReceived actionModel) {
+    public void updateRemoteHistoryOnActiveNotification(
+            Context context,
+            NotificationModel notificationModel,
+            ActionReceived actionModel,
+            NotificationThreadCompletionHandler completionHandler
+    ) throws AwesomeNotificationsException {
         if(
             !stringUtils.isNullOrEmpty(actionModel.buttonKeyInput) &&
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.N /*Android 7*/
@@ -463,18 +487,14 @@ public class NotificationBuilder {
                 case ProgressBar:
                 case MediaPlayer:
                 case Default:
-                    try {
-                        notificationModel.remoteHistory = actionModel.buttonKeyInput;
-                        NotificationSender
-                                .send(
-                                    context,
-                                    this,
-                                    notificationModel.content.displayedLifeCycle,
-                                    notificationModel);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    notificationModel.remoteHistory = actionModel.buttonKeyInput;
+                    NotificationSender
+                        .send(
+                            context,
+                            this,
+                            notificationModel.content.displayedLifeCycle,
+                            notificationModel,
+                            completionHandler);
                     break;
             }
         }
@@ -1249,8 +1269,12 @@ public class NotificationBuilder {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R /*Android 11*/){
 
             if(mediaSession == null)
-                throw new AwesomeNotificationsException(
-                        "There is no valid media session available");
+                throw ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.INITIALIZATION_EXCEPTION,
+                                "There is no valid media session available");
 
             mediaSession.setMetadata(
                     new MediaMetadataCompat.Builder()

@@ -29,7 +29,11 @@ import io.flutter.view.FlutterCallbackInformation;
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.background.BackgroundExecutor;
+import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.AwesomeExceptionReceiver;
 import me.carda.awesome_notifications.awesome_notifications_core.builders.NotificationBuilder;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.LifeCycleManager;
 import me.carda.awesome_notifications.awesome_notifications_core.models.returnedData.ActionReceived;
 
@@ -197,7 +201,12 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
                 Intent intent = silentDataQueue.take();
                 executeDartCallbackInBackgroundIsolate(intent);
             } catch (Exception e) {
-                e.printStackTrace();
+                ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.BACKGROUND_EXECUTION_EXCEPTION,
+                                e);
             }
         }
         else {
@@ -236,7 +245,7 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
             }
         };
 
-    public void executeDartCallbackInBackgroundIsolate(Intent intent) {
+    public void executeDartCallbackInBackgroundIsolate(Intent intent) throws AwesomeNotificationsException {
 
         if (backgroundFlutterEngine == null) {
             Log.i( TAG,"A background message could not be handled since " +

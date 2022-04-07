@@ -26,6 +26,10 @@ import androidx.annotation.NonNull;
 
 import javax.annotation.Nullable;
 
+import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.AwesomeExceptionReceiver;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
+
 public class BitmapUtils extends MediaUtils {
 
     public static final String TAG = "BitmapUtils";
@@ -140,7 +144,7 @@ public class BitmapUtils extends MediaUtils {
         return null;
     }
 
-    public Bitmap roundBitmap(Bitmap bitmap) {
+    public Bitmap roundBitmap(@NonNull Bitmap bitmap) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
                 bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
@@ -152,13 +156,21 @@ public class BitmapUtils extends MediaUtils {
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(color);
-        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
-                bitmap.getWidth() / 2, paint);
+
+        float bitmapWidth = bitmap.getWidth();
+        float bitmapHeight = bitmap.getHeight();
+
+        if(bitmapWidth <= 0 || bitmapHeight <= 0)
+            return bitmap;
+        else{
+            bitmapWidth /= 2;
+            bitmapHeight /= 2;
+        }
+
+        canvas.drawCircle(bitmapWidth, bitmapHeight, bitmapWidth, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
-        //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
-        //return _bmp;
+
         return output;
     }
 
@@ -169,8 +181,14 @@ public class BitmapUtils extends MediaUtils {
         try {
             File imageFile = new File(bitmapPath);
             bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception originalException) {
+            ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "The image file '"+bitmapPath+"' is invalid",
+                            originalException);
         }
 
         return bitmap;

@@ -24,7 +24,7 @@ public class Logger {
     }
 
     public static void d(String className, String message){
-        Log.d("Android: [Awesome Notifications - DEBUG]", message + " (" + className + ":" + getLastLine() + ")");
+        Log.d("\u001B[32mAndroid: [Awesome Notifications - DEBUG]", message + " (" + className + ":" + getLastLine() + ")\u001B[0m");
     }
 
     public static void e(String className, String message){
@@ -36,7 +36,7 @@ public class Logger {
     }
 
     public static void w(String className, String message){
-        Log.w("\u001B[33mAndroid: [Awesome Notifications - WARNING]",  message +  " (" + className + ":" + getLastLine() + ")\u001B[0m");
+        Log.w("\u001B[33mAndroid: [Awesome Notifications - WARNING]", message + " (" + className + ":" + getLastLine() + ")\u001B[0m");
     }
 
 }

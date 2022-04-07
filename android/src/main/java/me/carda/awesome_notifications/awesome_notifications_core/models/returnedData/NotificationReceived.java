@@ -14,10 +14,7 @@ public class NotificationReceived extends NotificationContentModel {
     public NotificationReceived(){}
 
     public NotificationReceived(NotificationContentModel contentModel, Intent originalIntent){
-        /*
-        if(contentModel == null)
-            throw new NotificationModelException("Notification Received was lost");
-        */
+
         this.originalIntent = originalIntent;
 
         this.id = contentModel.id;

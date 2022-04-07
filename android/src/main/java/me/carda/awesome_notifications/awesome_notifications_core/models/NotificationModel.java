@@ -9,9 +9,13 @@ import java.util.Map;
 
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class NotificationModel extends AbstractModel {
+
+    private static final String TAG = "NotificationModel";
 
     public boolean groupSummary = false;
     public String remoteHistory;
@@ -128,7 +132,12 @@ public class NotificationModel extends AbstractModel {
 
     public void validate(Context context) throws AwesomeNotificationsException {
         if(this.content == null)
-            throw new AwesomeNotificationsException("Push Notification content cannot be null or empty");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Notification content is required");
 
         this.content.validate(context);
 

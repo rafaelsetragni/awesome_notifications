@@ -10,6 +10,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.senders.BroadcastSender;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.StatusBarManager;
 import me.carda.awesome_notifications.awesome_notifications_core.models.returnedData.ActionReceived;
@@ -29,13 +30,17 @@ public class DismissedNotificationReceiver extends AwesomeBroadcastReceiver
                     AwesomeNotifications
                         .getApplicationLifeCycle();
 
-            ActionReceived actionReceived
-                    = NotificationBuilder
-                            .getNewBuilder()
-                            .buildNotificationActionFromIntent(
-                                    context,
-                                    intent,
-                                    appLifeCycle);
+            ActionReceived actionReceived = null;
+            try {
+                actionReceived = NotificationBuilder
+                        .getNewBuilder()
+                        .buildNotificationActionFromIntent(
+                                context,
+                                intent,
+                                appLifeCycle);
+            } catch (AwesomeNotificationsException e) {
+                e.printStackTrace();
+            }
 
             if(actionReceived == null) {
                 if(AwesomeNotifications.debug)

@@ -4,8 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 
 public abstract class BackgroundExecutor {
+
+    private static final String TAG = "BackgroundExecutor";
 
     private static BackgroundExecutor runningInstance;
 
@@ -34,8 +38,12 @@ public abstract class BackgroundExecutor {
         try {
 
             if(awesomeBackgroundExecutorClass == null)
-                throw new AwesomeNotificationsException(
-                        "There is no valid background executor available to run.");
+                throw ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.INITIALIZATION_EXCEPTION,
+                                "There is no valid background executor available to run.");
 
             if(runningInstance == null || runningInstance.isDone()) {
 
@@ -51,12 +59,22 @@ public abstract class BackgroundExecutor {
                     silentIntent
             )){
                 runningInstance = null;
-                throw new AwesomeNotificationsException(
-                        "The background executor could not be started.");
+                throw ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.BACKGROUND_EXECUTION_EXCEPTION,
+                                "The background executor could not be started.");
             }
 
         } catch (IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.BACKGROUND_EXECUTION_EXCEPTION,
+                            String.format("%s", e.getLocalizedMessage()),
+                            e);
         }
     }
 }

@@ -15,6 +15,7 @@ import 'package:awesome_notifications/awesome_notifications.dart' as Utils
 import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart';
 import 'package:awesome_notifications_example/utils/media_player_central.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /* *********************************************
@@ -308,12 +309,16 @@ class NotificationUtils {
   ************************************************ */
 
   static Future<void> showBasicNotification(int id) async {
-    await AwesomeNotifications().createNotification(
-        content: NotificationContent(
-            id: id,
-            channelKey: 'basic_channel',
-            title: 'Simple Notification',
-            body: 'Simple body'));
+    try {
+      bool success = await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+              id: id,
+              channelKey: 'basic_channel',
+              title: 'Simple Notification',
+              body: 'Simple body'));
+    } on PlatformException catch (exception) {
+      debugPrint('$exception');
+    }
   }
 
   static Future<void> showNotificationFromJson(

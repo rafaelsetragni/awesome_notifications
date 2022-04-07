@@ -1,6 +1,9 @@
 package me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers;
 
 import android.content.Context;
+
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import java.util.ArrayList;
@@ -64,7 +67,7 @@ public class AwesomeEventsReceiver {
     private void notifyNotificationEvent(String eventName, NotificationReceived notificationReceived) {
 
         if(AwesomeNotifications.debug && notificationEventListeners.isEmpty())
-            Logger.e(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new notification events");
+            Logger.w(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new notification events");
 
         for (AwesomeNotificationEventListener listener : notificationEventListeners)
             listener.onNewNotificationReceived(eventName, notificationReceived);
@@ -92,7 +95,7 @@ public class AwesomeEventsReceiver {
     private void notifyActionEvent(String eventName, ActionReceived actionReceived) {
 
         if(AwesomeNotifications.debug && notificationEventListeners.isEmpty())
-            Logger.e(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new action events");
+            Logger.w(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new action events");
 
         for (AwesomeActionEventListener listener : notificationActionListeners)
             listener.onNewActionReceived(eventName, actionReceived);
@@ -104,7 +107,7 @@ public class AwesomeEventsReceiver {
 
         if(notificationEventListeners.isEmpty()) {
             if(AwesomeNotifications.debug)
-                Logger.e(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new notification events");
+                Logger.w(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new notification events");
             return;
         }
 
@@ -136,7 +139,7 @@ public class AwesomeEventsReceiver {
 
         if(notificationEventListeners.isEmpty()) {
             if(AwesomeNotifications.debug)
-                Logger.e(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new action events");
+                Logger.w(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new action events");
             return;
         }
 
@@ -184,7 +187,12 @@ public class AwesomeEventsReceiver {
             notifyNotificationEvent(Definitions.EVENT_NOTIFICATION_CREATED, notificationReceived);
 
         } catch (Exception e) {
-            throw new AwesomeNotificationsException(e.getMessage());
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.EVENT_EXCEPTION,
+                            e);
         }
     }
 
@@ -198,7 +206,12 @@ public class AwesomeEventsReceiver {
             notifyNotificationEvent(Definitions.EVENT_NOTIFICATION_DISPLAYED, notificationReceived);
 
         } catch (Exception e) {
-            throw new AwesomeNotificationsException(e.getMessage());
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.EVENT_EXCEPTION,
+                            e);
         }
     }
 
@@ -228,11 +241,16 @@ public class AwesomeEventsReceiver {
             notifyActionEvent(Definitions.EVENT_NOTIFICATION_DISMISSED, actionReceived);
 
         } catch (Exception e) {
-            throw new AwesomeNotificationsException(e.getMessage());
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.EVENT_EXCEPTION,
+                            e);
         }
     }
 
-    private void onBroadcastSilentActionNotification(Context context, ActionReceived actionReceived) {
+    private void onBroadcastSilentActionNotification(Context context, ActionReceived actionReceived) throws AwesomeNotificationsException {
         try {
             actionReceived.validate(context);
 
@@ -242,9 +260,12 @@ public class AwesomeEventsReceiver {
             notifyActionEvent(Definitions.EVENT_SILENT_ACTION, actionReceived);
 
         } catch (Exception e) {
-            if(AwesomeNotifications.debug)
-                Logger.d(TAG, String.format("%s", e.getMessage()));
-            e.printStackTrace();
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.EVENT_EXCEPTION,
+                            e);
         }
     }
 
@@ -258,7 +279,12 @@ public class AwesomeEventsReceiver {
             notifyActionEvent(Definitions.EVENT_SILENT_ACTION, actionReceived);
 
         } catch (Exception e) {
-            throw new AwesomeNotificationsException(e.getMessage());
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.EVENT_EXCEPTION,
+                            e);
         }
     }
 }

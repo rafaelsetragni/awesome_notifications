@@ -1,6 +1,9 @@
 package me.carda.awesome_notifications.awesome_notifications_core.models;
 
 import android.content.Context;
+
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import java.util.HashMap;
@@ -12,6 +15,8 @@ import me.carda.awesome_notifications.awesome_notifications_core.exceptions.Awes
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class NotificationButtonModel extends AbstractModel {
+
+    private static final String TAG = "NotificationButtonModel";
 
     public String key;
     public String icon;
@@ -110,9 +115,19 @@ public class NotificationButtonModel extends AbstractModel {
     @Override
     public void validate(Context context) throws AwesomeNotificationsException {
         if(stringUtils.isNullOrEmpty(key))
-            throw new AwesomeNotificationsException("Button action key cannot be null or empty");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Button action key cannot be null or empty");
 
         if(stringUtils.isNullOrEmpty(label))
-            throw new AwesomeNotificationsException("Button label cannot be null or empty");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Button label cannot be null or empty");
     }
 }

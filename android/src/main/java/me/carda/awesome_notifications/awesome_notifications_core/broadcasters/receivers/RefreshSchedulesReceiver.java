@@ -3,12 +3,15 @@ package me.carda.awesome_notifications.awesome_notifications_core.broadcasters.r
 import android.content.Context;
 import android.content.Intent;
 
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.threads.NotificationScheduler;
 
 public class RefreshSchedulesReceiver extends AwesomeBroadcastReceiver
 {
     @Override
-    public void onReceiveBroadcastEvent(final Context context, Intent intent) {
+    public void onReceiveBroadcastEvent(
+            final Context context, Intent intent
+    ) throws AwesomeNotificationsException {
 
         String action = intent.getAction();
         if (action != null) {

@@ -3,6 +3,7 @@ package me.carda.awesome_notifications.awesome_notifications_core.broadcasters.r
 import android.content.Context;
 import android.content.Intent;
 
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
@@ -36,17 +37,24 @@ public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
             = LifeCycleManager
                 .getApplicationLifeCycle();
 
-        ActionReceived actionReceived
-            = notificationBuilder
+        ActionReceived actionReceived = null;
+        try {
+            actionReceived = notificationBuilder
                 .buildNotificationActionFromIntent(
                     context,
                     intent,
                     appLifeCycle);
+        } catch (AwesomeNotificationsException e) {
+            e.printStackTrace();
+        }
 
         // In case there is not a valid notification intent
         if (actionReceived == null) {
             if(AwesomeNotifications.debug)
-                Logger.e(TAG, "The action received do not contain any awesome notification data and was discarded");
+                Logger.w(
+                        TAG,
+                        "The action received do not contain any awesome " +
+                        "notification data and was discarded");
             return;
         }
 

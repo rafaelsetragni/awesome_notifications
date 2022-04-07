@@ -3,6 +3,9 @@ package me.carda.awesome_notifications.awesome_notifications_core.managers;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.threads.NotificationScheduler;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BitmapUtils;
@@ -34,7 +37,12 @@ public class CancellationManager {
     public boolean dismissNotification(@NonNull final Context context, Integer notificationId) throws AwesomeNotificationsException {
 
         if (notificationId == null || notificationId < 0)
-            throw new AwesomeNotificationsException("Invalid notification id");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid notification id");
 
         StatusBarManager
                 .getInstance(context)
@@ -46,7 +54,12 @@ public class CancellationManager {
     public boolean dismissNotificationsByChannelKey(@NonNull final Context context, @NonNull final String channelKey) throws AwesomeNotificationsException {
 
         if(stringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationsException("Invalid channel key");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid channel key");
 
         StatusBarManager
                 .getInstance(context)
@@ -58,7 +71,12 @@ public class CancellationManager {
     public boolean dismissNotificationsByGroupKey(@NonNull final Context context, @NonNull final String groupKey) throws AwesomeNotificationsException {
 
         if(stringUtils.isNullOrEmpty(groupKey))
-            throw new AwesomeNotificationsException("Invalid group key");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid group key");
 
         StatusBarManager
                 .getInstance(context)
@@ -77,7 +95,12 @@ public class CancellationManager {
     public boolean cancelSchedule(@NonNull final Context context, Integer notificationId) throws AwesomeNotificationsException {
 
         if (notificationId == null || notificationId < 0)
-            throw new AwesomeNotificationsException("Invalid notification id");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid notification id");
 
         NotificationScheduler.cancelScheduleById(context, notificationId);
 
@@ -87,7 +110,12 @@ public class CancellationManager {
     public boolean cancelSchedulesByChannelKey(@NonNull final Context context, @NonNull final String channelKey) throws AwesomeNotificationsException {
 
         if(stringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationsException("Invalid channel key");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid channel key");
 
         NotificationScheduler.cancelSchedulesByChannelKey(context, channelKey);
 
@@ -97,7 +125,12 @@ public class CancellationManager {
     public boolean cancelSchedulesByGroupKey(@NonNull final Context context, @NonNull final String groupKey) throws AwesomeNotificationsException {
 
         if(stringUtils.isNullOrEmpty(groupKey))
-            throw new AwesomeNotificationsException("Invalid group key");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid group key");
 
         NotificationScheduler.cancelSchedulesByGroupKey(context, groupKey);
 
@@ -111,7 +144,12 @@ public class CancellationManager {
     public boolean cancelNotification(@NonNull final Context context, Integer notificationId) throws AwesomeNotificationsException {
 
         if (notificationId == null || notificationId < 0)
-            throw new AwesomeNotificationsException("Invalid notification id");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid notification id");
 
         cancelSchedule(context, notificationId);
         dismissNotification(context, notificationId);
@@ -122,7 +160,12 @@ public class CancellationManager {
     public boolean cancelNotificationsByChannelKey(@NonNull final Context context, @NonNull final String channelKey) throws AwesomeNotificationsException {
 
         if(stringUtils.isNullOrEmpty(channelKey))
-            throw new AwesomeNotificationsException("Invalid channel key");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid channel key");
 
         dismissNotificationsByChannelKey(context, channelKey);
         cancelSchedulesByChannelKey(context, channelKey);
@@ -133,7 +176,12 @@ public class CancellationManager {
     public boolean cancelNotificationsByGroupKey(@NonNull final Context context, @NonNull final String groupKey) throws AwesomeNotificationsException {
 
         if(stringUtils.isNullOrEmpty(groupKey))
-            throw new AwesomeNotificationsException("Invalid group key");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            "Invalid group key");
 
         dismissNotificationsByGroupKey(context, groupKey);
         cancelSchedulesByGroupKey(context, groupKey);

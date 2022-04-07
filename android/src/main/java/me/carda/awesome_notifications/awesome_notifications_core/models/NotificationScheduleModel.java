@@ -62,7 +62,7 @@ public abstract class NotificationScheduleModel extends AbstractModel {
     }
 
     @Nullable
-    public abstract Calendar getNextValidDate(@NonNull Calendar fixedNowDate) throws AwesomeNotificationsException;
+    public abstract Calendar getNextValidDate(@Nullable Calendar fixedNowDate) throws AwesomeNotificationsException;
 
     @NonNull
     public Boolean hasNextValidDate() throws AwesomeNotificationsException {

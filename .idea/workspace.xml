@@ -9,44 +9,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/logs/Logger.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/version" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/version" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.packages" beforeDir="false" afterPath="$PROJECT_DIR$/.packages" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/logs/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/logs/Logger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/awesome_notifications.iml" beforeDir="false" afterPath="$PROJECT_DIR$/awesome_notifications.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/common_widgets/double_slider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/common_widgets/double_slider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/common_widgets/single_slider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/common_widgets/single_slider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/models/media_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/models/media_model.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/pages/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/home_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/DartBackgroundExecutor.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/DartBackgroundExecutor.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/AwesomeNotifications.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/AwesomeNotifications.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/broadcasters/receivers/AwesomeEventsReceiver.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/broadcasters/receivers/AwesomeEventsReceiver.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/broadcasters/receivers/NotificationActionReceiver.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/broadcasters/receivers/NotificationActionReceiver.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/builders/NotificationBuilder.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/builders/NotificationBuilder.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/extensions/AwesomeServiceExtension.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/extensions/AwesomeServiceExtension.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/managers/LifeCycleManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/managers/LifeCycleManager.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/managers/PermissionManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/managers/PermissionManager.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/managers/StatusBarManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/managers/StatusBarManager.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationButtonModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationButtonModel.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationCalendarModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationCalendarModel.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationContentModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationContentModel.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationIntervalModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationIntervalModel.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/models/NotificationModel.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/services/BackgroundService.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/services/BackgroundService.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/utils/AudioUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/utils/AudioUtils.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/utils/BitmapUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/awesome_notifications_core/utils/BitmapUtils.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/managers/ChannelManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/awesome_notifications_core/managers/ChannelManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/isolates/isolate_main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/isolates/isolate_main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/logs/logger.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/logs/logger.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

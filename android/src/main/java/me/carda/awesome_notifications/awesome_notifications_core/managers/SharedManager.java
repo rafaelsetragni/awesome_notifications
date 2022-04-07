@@ -3,6 +3,9 @@ package me.carda.awesome_notifications.awesome_notifications_core.managers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 
@@ -35,8 +38,12 @@ public class SharedManager<T extends AbstractModel> {
             //LogUtils.d(TAG, fileIdentifier+": file initialized = "+ hashedReference);
         } catch (Exception e) {
             this.hashedReference = reference;
-            Logger.e(TAG, "SharedManager could not be correctly initialized: "+ e.getMessage());
-            e.printStackTrace();
+            ExceptionFactory
+                .getInstance()
+                .createNewAwesomeException(
+                        TAG,
+                        ExceptionCode.INITIALIZATION_EXCEPTION,
+                        "SharedManager could not be correctly initialized: "+ e.getMessage());
         }
     }
 
@@ -48,7 +55,12 @@ public class SharedManager<T extends AbstractModel> {
         );
 
         if(preferences == null){
-            throw new AwesomeNotificationsException("SharedPreferences.getSharedPreferences return null");
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.SHARED_PREFERENCE_NOT_AVAILABLE,
+                            "SharedPreferences.getSharedPreferences is not available");
         }
 
         return preferences;
@@ -67,8 +79,13 @@ public class SharedManager<T extends AbstractModel> {
             commitAsync(reference, editor);
 
         } catch (Exception e){
-            e.printStackTrace();
-            Logger.e(TAG, e.toString());
+            ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INITIALIZATION_EXCEPTION,
+                            e.getLocalizedMessage(),
+                            e);
         }
     }
 
@@ -92,8 +109,12 @@ public class SharedManager<T extends AbstractModel> {
                 }
             }
         } catch (Exception e){
-            e.printStackTrace();
-            Logger.e(TAG, e.toString());
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.INVALID_ARGUMENTS,
+                            e);
         }
 
         return returnedList;
@@ -120,11 +141,14 @@ public class SharedManager<T extends AbstractModel> {
 
             return returnedObject;
 
-        } catch (AwesomeNotificationsException e) {
-            e.printStackTrace();
-            Logger.e(TAG, e.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (AwesomeNotificationsException ignore) {
+        } catch (Exception exception) {
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.SHARED_PREFERENCE_NOT_AVAILABLE,
+                            exception);
         }
 
         return null;
@@ -147,9 +171,14 @@ public class SharedManager<T extends AbstractModel> {
 
             return true;
 
-        } catch (AwesomeNotificationsException e) {
-            e.printStackTrace();
-            Logger.e(TAG, e.toString());
+        } catch (AwesomeNotificationsException ignore) {
+        } catch (Exception exception) {
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.SHARED_PREFERENCE_NOT_AVAILABLE,
+                            exception);
         }
 
         return false;
@@ -170,9 +199,14 @@ public class SharedManager<T extends AbstractModel> {
 
             return true;
 
-        } catch (AwesomeNotificationsException e) {
-            e.printStackTrace();
-            Logger.e(TAG, e.toString());
+        } catch (AwesomeNotificationsException ignore) {
+        } catch (Exception exception) {
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.SHARED_PREFERENCE_NOT_AVAILABLE,
+                            exception);
         }
 
         return false;
@@ -189,9 +223,14 @@ public class SharedManager<T extends AbstractModel> {
 
             return true;
 
-        } catch (AwesomeNotificationsException e) {
-            e.printStackTrace();
-            Logger.e(TAG, e.toString());
+        } catch (AwesomeNotificationsException ignore) {
+        } catch (Exception exception) {
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.SHARED_PREFERENCE_NOT_AVAILABLE,
+                            exception);
         }
 
         return false;

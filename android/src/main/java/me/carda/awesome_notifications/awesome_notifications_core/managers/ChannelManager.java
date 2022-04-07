@@ -7,6 +7,9 @@ import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 import java.util.Arrays;
@@ -75,14 +78,14 @@ public class ChannelManager {
 
         if(stringUtils.isNullOrEmpty(channelKey)) {
             if(AwesomeNotifications.debug)
-                Logger.e(TAG, "'"+channelKey+"' cannot be empty or null");
+                Logger.w(TAG, "'"+channelKey+"' cannot be empty or null");
             return null;
         }
 
         NotificationChannelModel channelModel = shared.get(context, Definitions.SHARED_CHANNELS, channelKey);
         if(channelModel == null) {
             if(AwesomeNotifications.debug)
-                Logger.e(TAG, "Channel model '"+channelKey+"' was not found");
+                Logger.w(TAG, "Channel model '"+channelKey+"' was not found");
             return null;
         }
 
@@ -92,13 +95,13 @@ public class ChannelManager {
             NotificationChannel androidChannel = getAndroidChannel(context, channelKey);
             if(androidChannel == null) {
                 if(AwesomeNotifications.debug)
-                    Logger.e(TAG, "Android native channel '"+channelKey+"' was not found");
+                    Logger.w(TAG, "Android native channel '"+channelKey+"' was not found");
                 return null;
             }
 
             if(androidChannel.getImportance() == NotificationManager.IMPORTANCE_NONE){
                 if(AwesomeNotifications.debug)
-                    Logger.e(TAG, "Android native channel '"+channelKey+"' is disabled");
+                    Logger.w(TAG, "Android native channel '"+channelKey+"' is disabled");
             }
 
             updateChannelModelThroughAndroidChannel(channelModel, androidChannel);
@@ -371,16 +374,21 @@ public class ChannelManager {
         newAndroidNotificationChannel.setDescription(newChannel.channelDescription);
 
         NotificationChannelGroupModel channelGroup = null;
-        if(!stringUtils.isNullOrEmpty(newChannel.channelGroupKey)){
+        if (!stringUtils.isNullOrEmpty(newChannel.channelGroupKey)) {
             channelGroup = ChannelGroupManager.getChannelGroupByKey(context, newChannel.channelGroupKey);
 
             if(channelGroup != null)
                 newAndroidNotificationChannel.setGroup(newChannel.channelGroupKey);
             else
-                Logger.e(TAG, "Channel group "+newChannel.channelGroupKey+" does not exist.");
+                ExceptionFactory
+                        .getInstance()
+                        .registerNewAwesomeException(
+                                TAG,
+                                ExceptionCode.INVALID_ARGUMENTS,
+                                "Channel group "+newChannel.channelGroupKey+" does not exist.");
         }
 
-        if(channelGroup != null)
+        if (channelGroup != null)
             newAndroidNotificationChannel.setGroup(newChannel.channelGroupKey);
 
         if (newChannel.playSound) {
