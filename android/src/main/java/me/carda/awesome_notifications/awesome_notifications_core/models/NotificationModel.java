@@ -136,8 +136,9 @@ public class NotificationModel extends AbstractModel {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Notification content is required");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Notification content is required",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationContent");
 
         this.content.validate(context);
 

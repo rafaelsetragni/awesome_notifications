@@ -66,8 +66,9 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid notification content");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid notification content",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".notificationModel");
 
         notificationModel.validate(context);
 
@@ -94,8 +95,9 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid notification content");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid notification content",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".notificationModel");
 
         notificationModel.validate(context);
 
@@ -159,9 +161,11 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
                         .getInstance()
                         .createNewAwesomeException(
                                 TAG,
-                                ExceptionCode.INVALID_ARGUMENTS,
+                                ExceptionCode.CODE_INVALID_ARGUMENTS,
                                 "Channel '" + notificationModel.content.channelKey +
-                                "' do not exist or is disabled");
+                                        "' do not exist or is disabled",
+                                ExceptionCode.DETAILED_INSUFFICIENT_PERMISSIONS+
+                                        ".channel."+notificationModel.content.channelKey);
 
             if(notificationModel.schedule == null)
                 return null;
@@ -204,7 +208,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
     }
 
     @Override
-    protected Calendar onPostExecute(Calendar nextValidDate) {
+    protected Calendar onPostExecute(Calendar nextValidDate) throws AwesomeNotificationsException {
 
         // Only fire ActionReceived if notificationModel is valid
         if(notificationModel != null){
@@ -369,7 +373,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
 
     public static void cancelScheduleById(
         @NonNull Context context, @NonNull Integer id
-    ){
+    ) throws AwesomeNotificationsException {
         _removeFromAlarm(context, id);
         ScheduleManager.removeScheduleById(context, id.toString());
         ScheduleManager.commitChanges(context);
@@ -377,7 +381,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
 
     public static void cancelSchedule(
         @NonNull Context context, @NonNull NotificationModel notificationModel
-    ){
+    ) throws AwesomeNotificationsException {
         _removeFromAlarm(context, notificationModel.content.id);
         ScheduleManager.removeSchedule(context, notificationModel);
         ScheduleManager.commitChanges(context);
@@ -385,7 +389,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
 
     public static void cancelSchedulesByChannelKey(
         @NonNull Context context, @NonNull String channelKey
-    ){
+    ) throws AwesomeNotificationsException {
         List<String> ids = ScheduleManager.listScheduledIdsFromChannel(context, channelKey);
         _removeAllFromAlarm(context, ids);
         ScheduleManager.cancelSchedulesByChannelKey(context, channelKey);
@@ -394,14 +398,14 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
 
     public static void cancelSchedulesByGroupKey(
         @NonNull Context context, @NonNull String groupKey
-    ){
+    ) throws AwesomeNotificationsException {
         List<String> ids = ScheduleManager.listScheduledIdsFromGroup(context, groupKey);
         _removeAllFromAlarm(context, ids);
         ScheduleManager.cancelSchedulesByGroupKey(context, groupKey);
         ScheduleManager.commitChanges(context);
     }
 
-    public static void cancelAllSchedules(@NonNull Context context){
+    public static void cancelAllSchedules(@NonNull Context context) throws AwesomeNotificationsException {
         List<String> ids = ScheduleManager.listScheduledIds(context);
         _removeAllFromAlarm(context, ids);
         ScheduleManager.cancelAllSchedules(context);
@@ -462,8 +466,9 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Scheduled notification Id is invalid");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Scheduled notification Id is invalid",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".notificationId");
 
         Intent notificationIntent = new Intent(context, ScheduledNotificationReceiver.class);
 

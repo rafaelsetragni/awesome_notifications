@@ -8,7 +8,6 @@ import me.carda.awesome_notifications.awesome_notifications_core.exceptions.Exce
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 
 public abstract class BackgroundExecutor {
-
     private static final String TAG = "BackgroundExecutor";
 
     private static BackgroundExecutor runningInstance;
@@ -36,17 +35,17 @@ public abstract class BackgroundExecutor {
     ) throws AwesomeNotificationsException {
 
         try {
-
             if(awesomeBackgroundExecutorClass == null)
                 throw ExceptionFactory
                         .getInstance()
                         .createNewAwesomeException(
                                 TAG,
-                                ExceptionCode.INITIALIZATION_EXCEPTION,
-                                "There is no valid background executor available to run.");
+                                ExceptionCode.CODE_INITIALIZATION_EXCEPTION,
+                                "There is no valid background executor available to run.",
+                                ExceptionCode.DETAILED_INSUFFICIENT_REQUIREMENTS
+                                        +".backgroundExecutorClass");
 
             if(runningInstance == null || runningInstance.isDone()) {
-
                 runningInstance =
                         awesomeBackgroundExecutorClass.newInstance();
 
@@ -63,8 +62,10 @@ public abstract class BackgroundExecutor {
                         .getInstance()
                         .createNewAwesomeException(
                                 TAG,
-                                ExceptionCode.BACKGROUND_EXECUTION_EXCEPTION,
-                                "The background executor could not be started.");
+                                ExceptionCode.CODE_BACKGROUND_EXECUTION_EXCEPTION,
+                                "The background executor could not be started.",
+                                ExceptionCode.DETAILED_INSUFFICIENT_REQUIREMENTS
+                                        +".backgroundExecutor.run");
             }
 
         } catch (IllegalAccessException | InstantiationException e) {
@@ -72,7 +73,7 @@ public abstract class BackgroundExecutor {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.BACKGROUND_EXECUTION_EXCEPTION,
+                            ExceptionCode.CODE_BACKGROUND_EXECUTION_EXCEPTION,
                             String.format("%s", e.getLocalizedMessage()),
                             e);
         }

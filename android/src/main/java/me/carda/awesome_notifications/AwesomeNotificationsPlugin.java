@@ -33,7 +33,6 @@ import me.carda.awesome_notifications.awesome_notifications_core.exceptions.Exce
 import me.carda.awesome_notifications.awesome_notifications_core.listeners.AwesomeEventListener;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
-import me.carda.awesome_notifications.awesome_notifications_core.decoders.BitmapResourceDecoder;
 import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.BitmapCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.PermissionCompletionHandler;
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationModel;
@@ -130,7 +129,7 @@ public class AwesomeNotificationsPlugin
                         .getInstance()
                         .createNewAwesomeException(
                                 TAG,
-                                ExceptionCode.UNKNOWN_EXCEPTION,
+                                ExceptionCode.CODE_UNKNOWN_EXCEPTION,
                                 "An exception was found while attaching awesome notifications plugin",
                                 exception);
         }
@@ -179,7 +178,10 @@ public class AwesomeNotificationsPlugin
     public void onNewAwesomeEvent(String eventType, Map<String, Object> content) {
         if (pluginChannel != null){
             if(Definitions.EVENT_SILENT_ACTION.equals(eventType)){
-                content.put(Definitions.ACTION_HANDLE, awesomeNotifications.getActionHandle());
+                try {
+                    content.put(Definitions.ACTION_HANDLE, awesomeNotifications.getActionHandle());
+                } catch (AwesomeNotificationsException ignore) {
+                }
             }
             pluginChannel.invokeMethod(eventType, content);
         }
@@ -194,12 +196,13 @@ public class AwesomeNotificationsPlugin
                         .getInstance()
                         .createNewAwesomeException(
                                 TAG,
-                                ExceptionCode.INITIALIZATION_EXCEPTION,
-                                "Awesome notifications is currently not available");
+                                ExceptionCode.CODE_INITIALIZATION_EXCEPTION,
+                                "Awesome notifications is currently not available",
+                                ExceptionCode.DETAILED_INITIALIZATION_FAILED+".awesomeNotifications.core");
             result.error(
                     awesomeException.getCode(),
                     awesomeException.getMessage(),
-                    awesomeException);
+                    awesomeException.getDetailedCode());
             return;
         }
 
@@ -359,7 +362,7 @@ public class AwesomeNotificationsPlugin
             result.error(
                     awesomeException.getCode(),
                     awesomeException.getMessage(),
-                    awesomeException);
+                    awesomeException.getDetailedCode());
 
         } catch (Exception exception) {
             AwesomeNotificationsException awesomeException =
@@ -367,13 +370,14 @@ public class AwesomeNotificationsPlugin
                         .getInstance()
                         .createNewAwesomeException(
                                 TAG,
-                                ExceptionCode.UNKNOWN_EXCEPTION,
+                                ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                                ExceptionCode.DETAILED_UNEXPECTED_ERROR+"."+exception.getClass().getSimpleName(),
                                 exception);
 
             result.error(
                     awesomeException.getCode(),
                     awesomeException.getMessage(),
-                    awesomeException);
+                    awesomeException.getDetailedCode());
         }
     }
 
@@ -390,8 +394,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.MISSING_ARGUMENTS,
-                            "Arguments are missing");
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Arguments are missing",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS);
 
         NotificationModel notificationModel = new NotificationModel().fromMap(
                 (Map<String, Object>) arguments.get(Definitions.NOTIFICATION_MODEL));
@@ -410,24 +415,27 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Foreground notification is invalid");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Foreground notification is invalid",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationModel");
 
         if(foregroundStartMode == null)
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Foreground start type is required");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Foreground start type is required",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".foreground.startType");
 
         if(foregroundServiceType == null)
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "foregroundServiceType is required");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "foregroundServiceType is required",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".foreground.serviceType");
 
         awesomeNotifications.startForegroundService(
             notificationModel,
@@ -456,8 +464,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Bitmap reference is required");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Bitmap reference is required",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".bitmapReference");
 
         awesomeNotifications
                 .getDrawableData(
@@ -469,7 +478,7 @@ public class AwesomeNotificationsPlugin
                                 result.error(
                                         exception.getCode(),
                                         exception.getMessage(),
-                                        exception);
+                                        exception.getDetailedCode());
                             else
                                 result.success(byteArray);
                         }
@@ -488,8 +497,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Channel data is missing");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Channel data is missing",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.data");
 
         NotificationChannelModel channelModel = new NotificationChannelModel().fromMap(channelData);
         if (channelModel == null)
@@ -497,8 +507,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Channel is invalid");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Channel data is invalid",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.data");
 
         boolean forceUpdate = BooleanUtils.getInstance().getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
 
@@ -520,8 +531,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Empty channel key");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Empty channel key",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.key");
 
         boolean removed =
                 awesomeNotifications
@@ -557,8 +569,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid Badge value");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid Badge value",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".badge.value");
 
         awesomeNotifications.setGlobalBadgeCounter(count);
         result.success(true);
@@ -599,8 +612,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid id value");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid id value",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.id");
 
         boolean dismissed = awesomeNotifications.dismissNotification(notificationId);
 
@@ -623,8 +637,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid id value");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid id value",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.id");
 
         boolean canceled = awesomeNotifications.cancelSchedule(notificationId);
 
@@ -647,8 +662,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid id value");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid id value",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.id");
 
         boolean canceled = awesomeNotifications.cancelNotification(notificationId);
 
@@ -671,8 +687,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid channel Key value");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid channel Key value",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.channelKey");
 
         boolean dismissed = awesomeNotifications.dismissNotificationsByChannelKey(channelKey);
 
@@ -695,8 +712,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid channel Key value");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid channel Key value",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.channelKey");
 
         boolean canceled = awesomeNotifications.cancelSchedulesByChannelKey(channelKey);
 
@@ -719,8 +737,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid channel Key value");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid channel Key value",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.channelKey");
 
         boolean canceled = awesomeNotifications.cancelNotificationsByChannelKey(channelKey);
 
@@ -743,8 +762,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid groupKey value");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid groupKey value",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.groupKey");
 
         boolean dismissed = awesomeNotifications.dismissNotificationsByGroupKey(groupKey);
 
@@ -767,8 +787,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid groupKey value");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid groupKey value",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.groupKey");
 
         boolean canceled = awesomeNotifications.cancelSchedulesByGroupKey(groupKey);
 
@@ -791,8 +812,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid groupKey value");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid groupKey value",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.groupKey");
 
         boolean canceled = awesomeNotifications.cancelNotificationsByGroupKey(groupKey);
 
@@ -873,8 +895,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Schedule data is invalid");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Schedule data is invalid",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".schedule.data");
 
         Map<String, Object> scheduleData =
                 MapUtils.extractValue(data, Definitions.NOTIFICATION_MODEL_SCHEDULE, Map.class)
@@ -885,8 +908,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Schedule data is invalid");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Schedule data is invalid",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".schedule.data");
 
         NotificationScheduleModel scheduleModel =
                 NotificationScheduleModel
@@ -897,8 +921,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Schedule data is invalid");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Schedule data is invalid",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".schedule.data");
 
         Calendar fixedDate =
                 MapUtils.extractValue(data, Definitions.NOTIFICATION_INITIAL_FIXED_DATE, Calendar.class)
@@ -1004,8 +1029,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.MISSING_ARGUMENTS,
-                            "Arguments are missing");
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Arguments are missing",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS);
 
         String channelKey = (String) arguments.get(Definitions.NOTIFICATION_CHANNEL_KEY);
 
@@ -1015,8 +1041,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Permission list is required");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Permission list is required",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList");
 
         permissions = awesomeNotifications
                         .arePermissionsAllowed(
@@ -1038,8 +1065,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.MISSING_ARGUMENTS,
-                            "Arguments are missing");
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Arguments are missing",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS);
 
         String channelKey = (String) arguments.get(Definitions.NOTIFICATION_CHANNEL_KEY);
         List<String> permissions = (List<String>) arguments.get(Definitions.NOTIFICATION_PERMISSIONS);
@@ -1049,16 +1077,18 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Permission list is required");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Permission list is required",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList");
 
         if(permissions.isEmpty())
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Permission list cannot be empty");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Permission list cannot be empty",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList");
 
         permissions = awesomeNotifications.shouldShowRationale(
                         channelKey,
@@ -1079,16 +1109,18 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.MISSING_ARGUMENTS,
-                            "Arguments are missing");
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Arguments are missing",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS);
 
         if(!arguments.containsKey(Definitions.NOTIFICATION_PERMISSIONS))
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Permission list is required");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Permission list is required",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList");
 
         String channelKey = (String) arguments.get(Definitions.NOTIFICATION_CHANNEL_KEY);
         List<String> permissions = (List<String>) arguments.get(Definitions.NOTIFICATION_PERMISSIONS);
@@ -1098,8 +1130,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Permission list is required");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Permission list is required",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList");
 
         awesomeNotifications
                 .requestUserPermissions(
@@ -1124,8 +1157,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.MISSING_ARGUMENTS,
-                            "Arguments are missing");
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Arguments are missing",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS);
 
         NotificationModel notificationModel = new NotificationModel().fromMap(arguments);
 
@@ -1134,8 +1168,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Notification content is invalid");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Notification content is invalid",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".notificationModel.data");
 
         awesomeNotifications.createNotification(
                 notificationModel,
@@ -1146,7 +1181,7 @@ public class AwesomeNotificationsPlugin
                             result.error(
                                     exception.getCode(),
                                     exception.getLocalizedMessage(),
-                                    exception);
+                                    exception.getDetailedCode());
                         else
                             result.success(success);
                     }
@@ -1165,8 +1200,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.MISSING_ARGUMENTS,
-                            "Arguments are missing");
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Arguments are missing",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS);
 
         String defaultIconPath = (String) arguments.get(Definitions.INITIALIZE_DEFAULT_ICON);
 
@@ -1204,8 +1240,9 @@ public class AwesomeNotificationsPlugin
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.MISSING_ARGUMENTS,
-                            "Arguments are missing");
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Arguments are missing",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS);
 
         Object callbackActionObj = arguments.get(Definitions.ACTION_HANDLE);
 

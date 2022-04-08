@@ -4,6 +4,7 @@ import android.content.Context;
 
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotificationsExtension;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.models.DefaultsModel;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
@@ -17,62 +18,62 @@ public class DefaultsManager {
                     DefaultsModel.class,
                     "DefaultsModel");
 
-    private static void saveDefault(Context context, DefaultsModel defaults) {
+    private static void saveDefault(Context context, DefaultsModel defaults) throws AwesomeNotificationsException {
         shared.set(context, Definitions.SHARED_DEFAULTS, "Defaults", defaults);
     }
 
-    public static DefaultsModel getDefaults(Context context){
+    public static DefaultsModel getDefaults(Context context) throws AwesomeNotificationsException {
         if (instance == null)
             instance = shared.get(context, Definitions.SHARED_DEFAULTS, "Defaults");
 
         return instance == null ? new DefaultsModel() : instance;
     }
 
-    public static String getDefaultIcon(Context context){
+    public static String getDefaultIcon(Context context) throws AwesomeNotificationsException {
         DefaultsModel defaults = getDefaults(context);
         return (defaults != null) ? defaults.appIcon : null;
     }
 
-    public static void setDefaultIcon(Context context, String appIcon){
+    public static void setDefaultIcon(Context context, String appIcon) throws AwesomeNotificationsException {
         DefaultsModel defaults = getDefaults(context);
         defaults.appIcon = appIcon;
         saveDefault(context, defaults);
     }
 
-    public static Long getSilentCallbackDispatcher(Context context) {
+    public static Long getSilentCallbackDispatcher(Context context) throws AwesomeNotificationsException {
         DefaultsModel defaults = getDefaults(context);
         return Long.parseLong(defaults.silentDataCallback);
     }
 
-    public static void setActionCallbackDispatcher(Context context, Long silentDataCallback) {
+    public static void setActionCallbackDispatcher(Context context, Long silentDataCallback) throws AwesomeNotificationsException {
         DefaultsModel defaults = getDefaults(context);
         defaults.silentDataCallback = silentDataCallback.toString();
         saveDefault(context, defaults);
     }
 
-    public static Long getDartCallbackDispatcher(Context context) {
+    public static Long getDartCallbackDispatcher(Context context) throws AwesomeNotificationsException {
         DefaultsModel defaults = getDefaults(context);
         return Long.parseLong(defaults.reverseDartCallback);
     }
 
-    public static void setDartCallbackDispatcher(Context context, Long reverseDartCallback) {
+    public static void setDartCallbackDispatcher(Context context, Long reverseDartCallback) throws AwesomeNotificationsException {
         DefaultsModel defaults = getDefaults(context);
         defaults.reverseDartCallback = reverseDartCallback.toString();
         saveDefault(context, defaults);
     }
 
-    public static String getAwesomeExtensionClassName(Context context) {
+    public static String getAwesomeExtensionClassName(Context context) throws AwesomeNotificationsException {
         DefaultsModel defaults = getDefaults(context);
         return defaults.backgroundHandleClass;
     }
 
-    public static void setAwesomeExtensionClassName(Context context, Class<? extends AwesomeNotificationsExtension> backgroundHandleClass) {
+    public static void setAwesomeExtensionClassName(Context context, Class<? extends AwesomeNotificationsExtension> backgroundHandleClass) throws AwesomeNotificationsException {
         DefaultsModel defaults = getDefaults(context);
         defaults.backgroundHandleClass = backgroundHandleClass.getName();
         saveDefault(context, defaults);
     }
 
-    public static void commitChanges(Context context){
+    public static void commitChanges(Context context) throws AwesomeNotificationsException {
         shared.commit(context);
     }
 }

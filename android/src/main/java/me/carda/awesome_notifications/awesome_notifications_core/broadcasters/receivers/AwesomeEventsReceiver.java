@@ -191,7 +191,8 @@ public class AwesomeEventsReceiver {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.EVENT_EXCEPTION,
+                            ExceptionCode.CODE_EVENT_EXCEPTION,
+                            ExceptionCode.DETAILED_UNEXPECTED_ERROR,
                             e);
         }
     }
@@ -210,7 +211,8 @@ public class AwesomeEventsReceiver {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.EVENT_EXCEPTION,
+                            ExceptionCode.CODE_EVENT_EXCEPTION,
+                            ExceptionCode.DETAILED_UNEXPECTED_ERROR,
                             e);
         }
     }
@@ -245,7 +247,8 @@ public class AwesomeEventsReceiver {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.EVENT_EXCEPTION,
+                            ExceptionCode.CODE_EVENT_EXCEPTION,
+                            ExceptionCode.DETAILED_UNEXPECTED_ERROR,
                             e);
         }
     }
@@ -264,7 +267,8 @@ public class AwesomeEventsReceiver {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.EVENT_EXCEPTION,
+                            ExceptionCode.CODE_EVENT_EXCEPTION,
+                            ExceptionCode.DETAILED_UNEXPECTED_ERROR,
                             e);
         }
     }
@@ -283,7 +287,8 @@ public class AwesomeEventsReceiver {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.EVENT_EXCEPTION,
+                            ExceptionCode.CODE_EVENT_EXCEPTION,
+                            ExceptionCode.DETAILED_UNEXPECTED_ERROR,
                             e);
         }
     }

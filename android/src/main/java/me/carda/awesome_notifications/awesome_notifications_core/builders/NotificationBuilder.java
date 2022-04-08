@@ -156,8 +156,9 @@ public class NotificationBuilder {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Channel '" + notificationModel.content.channelKey + "' does not exist");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Channel '" + notificationModel.content.channelKey + "' does not exist",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.notFound."+notificationModel.content.channelKey);
 
         if (!ChannelManager
                 .getInstance()
@@ -166,8 +167,9 @@ public class NotificationBuilder {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INSUFFICIENT_PERMISSIONS,
-                            "Channel '" + notificationModel.content.channelKey + "' is disabled");
+                            ExceptionCode.CODE_INSUFFICIENT_PERMISSIONS,
+                            "Channel '" + notificationModel.content.channelKey + "' is disabled",
+                            ExceptionCode.DETAILED_INSUFFICIENT_PERMISSIONS+".channel.disabled."+notificationModel.content.channelKey);
 
         NotificationCompat.Builder builder =
                 getNotificationBuilderFromModel(
@@ -348,10 +350,11 @@ public class NotificationBuilder {
         } catch (ClassNotFoundException e) {
             ExceptionFactory
                     .getInstance()
-                    .createNewAwesomeException(
+                    .registerNewAwesomeException(
                             TAG,
-                            ExceptionCode.CLASS_NOT_FOUND,
-                            "Was not possible to resolve the class named '"+className+"'");
+                            ExceptionCode.CODE_CLASS_NOT_FOUND,
+                            "Was not possible to resolve the class named '"+className+"'",
+                            ExceptionCode.DETAILED_CLASS_NOT_FOUND+"."+className);
             return null;
         }
     }
@@ -938,7 +941,7 @@ public class NotificationBuilder {
         builder.setSound(uri);
     }
 
-    private void setSmallIcon(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
+    private void setSmallIcon(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) throws AwesomeNotificationsException {
         if (!stringUtils.isNullOrEmpty(notificationModel.content.icon)) {
             builder.setSmallIcon(bitmapUtils.getDrawableResourceId(context, notificationModel.content.icon));
         } else if (!stringUtils.isNullOrEmpty(channelModel.icon)) {
@@ -1273,8 +1276,9 @@ public class NotificationBuilder {
                         .getInstance()
                         .createNewAwesomeException(
                                 TAG,
-                                ExceptionCode.INITIALIZATION_EXCEPTION,
-                                "There is no valid media session available");
+                                ExceptionCode.CODE_INITIALIZATION_EXCEPTION,
+                                "There is no valid media session available",
+                                ExceptionCode.DETAILED_INSUFFICIENT_REQUIREMENTS);
 
             mediaSession.setMetadata(
                     new MediaMetadataCompat.Builder()

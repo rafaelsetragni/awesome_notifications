@@ -56,8 +56,9 @@ public class NotificationForegroundSender extends NotificationThread<Notificatio
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Notification model is required");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Notification model is required",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".foreground.notificationModel");
 
         foregroundServiceIntent
                 .notificationModel
@@ -88,8 +89,9 @@ public class NotificationForegroundSender extends NotificationThread<Notificatio
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Foreground service intent is invalid");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Foreground service intent is invalid",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".foreground.intent");
 
         this.wContextReference = new WeakReference<>(context);
         this.foregroundServiceIntent = foregroundServiceIntent;
@@ -121,8 +123,9 @@ public class NotificationForegroundSender extends NotificationThread<Notificatio
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "A foreground service requires at least the title or body");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "A foreground service requires at least the title or body",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".foreground.intent");
 
         return showForegroundNotification(wContextReference.get(), notificationModel);
     }

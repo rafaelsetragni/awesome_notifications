@@ -56,15 +56,17 @@ public class NotificationChannelGroupModel extends AbstractModel {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Channel group name cannot be null or empty");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Channel group name cannot be null or empty",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channelGroup.name");
 
         if(stringUtils.isNullOrEmpty(channelGroupKey))
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Channel group key cannot be null or empty");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Channel group key cannot be null or empty",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channelGroup.key");
     }
 }

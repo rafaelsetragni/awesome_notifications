@@ -2,13 +2,9 @@ package me.carda.awesome_notifications.awesome_notifications_core.models;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.annotation.Nullable;
 
@@ -20,7 +16,6 @@ import me.carda.awesome_notifications.awesome_notifications_core.exceptions.Awes
 import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.CronUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.ListUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class NotificationCrontabModel extends NotificationScheduleModel {
 
@@ -78,8 +73,9 @@ public class NotificationCrontabModel extends NotificationScheduleModel {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "At least one schedule parameter is required");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "At least one schedule parameter is required",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS);
 
         try {
             if(initialDateTime != null && expirationDateTime != null){
@@ -91,8 +87,9 @@ public class NotificationCrontabModel extends NotificationScheduleModel {
                             .getInstance()
                             .createNewAwesomeException(
                                     TAG,
-                                    ExceptionCode.INVALID_ARGUMENTS,
-                                    "Expiration date must be greater than initial date");
+                                    ExceptionCode.CODE_INVALID_ARGUMENTS,
+                                    "Expiration date must be greater than initial date",
+                                    ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".periodOrder");
             }
 
             if(crontabExpression != null && !CronExpression.isValidExpression(crontabExpression))
@@ -100,8 +97,9 @@ public class NotificationCrontabModel extends NotificationScheduleModel {
                         .getInstance()
                         .createNewAwesomeException(
                                 TAG,
-                                ExceptionCode.INVALID_ARGUMENTS,
-                                "Schedule cron expression is invalid");
+                                ExceptionCode.CODE_INVALID_ARGUMENTS,
+                                "Schedule cron expression is invalid",
+                                ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".crontabExpression");
 
         } catch (AwesomeNotificationsException e){
             throw e;
@@ -110,8 +108,9 @@ public class NotificationCrontabModel extends NotificationScheduleModel {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Schedule time is invalid");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Schedule time is invalid",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".scheduleTime");
         }
     }
 
@@ -177,8 +176,9 @@ public class NotificationCrontabModel extends NotificationScheduleModel {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Schedule time is invalid");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Schedule time is invalid",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCrontab");
         }
     }
 }

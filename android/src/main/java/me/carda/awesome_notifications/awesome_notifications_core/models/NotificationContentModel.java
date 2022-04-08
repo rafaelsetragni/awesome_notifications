@@ -288,8 +288,9 @@ public class NotificationContentModel extends AbstractModel {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Notification channel '"+channelKey+"' does not exist.");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Notification channel '"+channelKey+"' does not exist.",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel."+channelKey);
 
         validateIcon(context);
 
@@ -311,8 +312,9 @@ public class NotificationContentModel extends AbstractModel {
                         .getInstance()
                         .createNewAwesomeException(
                                 TAG,
-                                ExceptionCode.INVALID_ARGUMENTS,
-                                "Small icon ('"+icon+"') must be a valid media native resource type.");
+                                ExceptionCode.CODE_INVALID_ARGUMENTS,
+                                "Small icon ('"+icon+"') must be a valid media native resource type.",
+                                ExceptionCode.DETAILED_INVALID_ARGUMENTS+".smallIcon");
             }
         }
     }
@@ -327,8 +329,9 @@ public class NotificationContentModel extends AbstractModel {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid big picture '"+bigPicture+"' or large icon '"+largeIcon+"'");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid big picture '"+bigPicture+"' or large icon '"+largeIcon+"'",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".bigPicture");
         }
     }
 
@@ -340,7 +343,8 @@ public class NotificationContentModel extends AbstractModel {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid large icon '"+largeIcon+"'");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid large icon '"+largeIcon+"'",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".largeIcon");
     }
 }

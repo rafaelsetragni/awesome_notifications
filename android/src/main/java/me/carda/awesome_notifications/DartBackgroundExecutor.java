@@ -18,7 +18,6 @@ import io.flutter.FlutterInjector;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.dart.DartExecutor;
 import io.flutter.embedding.engine.dart.DartExecutor.DartCallback;
-import io.flutter.embedding.engine.plugins.shim.ShimPluginRegistry;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -29,7 +28,6 @@ import io.flutter.view.FlutterCallbackInformation;
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.background.BackgroundExecutor;
-import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.AwesomeExceptionReceiver;
 import me.carda.awesome_notifications.awesome_notifications_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
@@ -105,7 +103,18 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
                 result.notImplemented();
             }
         } catch (Exception e) {
-            result.error("error", "Dart background error: " + e.getMessage(), null);
+            AwesomeNotificationsException awesomeException =
+                ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                            "An unexpected exception was found in a silent background execution",
+                            ExceptionCode.DETAILED_UNEXPECTED_ERROR);
+            result.error(
+                    awesomeException.getCode(),
+                    awesomeException.getMessage(),
+                    awesomeException.getDetailedCode());
         }
     }
 
@@ -203,9 +212,10 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
             } catch (Exception e) {
                 ExceptionFactory
                         .getInstance()
-                        .createNewAwesomeException(
+                        .registerNewAwesomeException(
                                 TAG,
-                                ExceptionCode.BACKGROUND_EXECUTION_EXCEPTION,
+                                ExceptionCode.CODE_BACKGROUND_EXECUTION_EXCEPTION,
+                                ExceptionCode.DETAILED_UNEXPECTED_ERROR+".background.silentExecution",
                                 e);
             }
         }

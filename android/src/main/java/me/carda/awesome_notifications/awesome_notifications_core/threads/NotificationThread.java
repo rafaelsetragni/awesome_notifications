@@ -59,7 +59,8 @@ public abstract class NotificationThread<T>{
                                                 .getInstance()
                                                 .createNewAwesomeException(
                                                         TAG,
-                                                        ExceptionCode.NOTIFICATION_THREAD_EXCEPTION,
+                                                        ExceptionCode.CODE_NOTIFICATION_THREAD_EXCEPTION,
+                                                        ExceptionCode.DETAILED_UNEXPECTED_ERROR,
                                                         exception));
                             }
                         }
@@ -73,7 +74,8 @@ public abstract class NotificationThread<T>{
                                     .getInstance()
                                     .createNewAwesomeException(
                                             TAG,
-                                            ExceptionCode.NOTIFICATION_THREAD_EXCEPTION,
+                                            ExceptionCode.CODE_NOTIFICATION_THREAD_EXCEPTION,
+                                            ExceptionCode.DETAILED_UNEXPECTED_ERROR,
                                             exception));
                 }
             }
@@ -95,7 +97,8 @@ public abstract class NotificationThread<T>{
                                 .getInstance()
                                 .createNewAwesomeException(
                                         TAG,
-                                        ExceptionCode.NOTIFICATION_THREAD_EXCEPTION,
+                                        ExceptionCode.CODE_NOTIFICATION_THREAD_EXCEPTION,
+                                        ExceptionCode.DETAILED_UNEXPECTED_ERROR,
                                         exception));
             }
         }
@@ -120,7 +123,8 @@ public abstract class NotificationThread<T>{
                                         .getInstance()
                                         .createNewAwesomeException(
                                                 TAG,
-                                                ExceptionCode.NOTIFICATION_THREAD_EXCEPTION,
+                                                ExceptionCode.CODE_NOTIFICATION_THREAD_EXCEPTION,
+                                                ExceptionCode.DETAILED_UNEXPECTED_ERROR,
                                                 exception));
                     }
                 }

@@ -220,8 +220,9 @@ public class PermissionManager {
                         .getInstance()
                         .createNewAwesomeException(
                                 TAG,
-                                ExceptionCode.INVALID_ARGUMENTS,
-                                "Channel "+channelKey+" does not exist.");
+                                ExceptionCode.CODE_INVALID_ARGUMENTS,
+                                "Channel "+channelKey+" does not exist.",
+                                ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.key");
 
             if(channel.getImportance() != NotificationManager.IMPORTANCE_NONE){
 
@@ -263,8 +264,9 @@ public class PermissionManager {
                         .getInstance()
                         .createNewAwesomeException(
                                 TAG,
-                                ExceptionCode.INVALID_ARGUMENTS,
-                                "Channel "+channelKey+" does not exist.");
+                                ExceptionCode.CODE_INVALID_ARGUMENTS,
+                                "Channel "+channelKey+" does not exist.",
+                                ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.key");
 
             if(channelModel.importance != NotificationImportance.None){
 
@@ -456,7 +458,7 @@ public class PermissionManager {
         permissionCompletionHandler.handle(permissionsNeeded);
     }
 
-    private void updateChannelModelThroughPermissions(final Context context, final @NonNull String channelKey, final @NonNull List<String> permissionsNeeded) {
+    private void updateChannelModelThroughPermissions(final Context context, final @NonNull String channelKey, final @NonNull List<String> permissionsNeeded) throws AwesomeNotificationsException {
 
         // For Android 8 and above, channels are updated at every load process
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O /*Android 8*/)
@@ -730,8 +732,9 @@ public class PermissionManager {
                     .getInstance()
                     .registerNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Activity permission action '"+intent.getAction()+"' not found!");
+                            ExceptionCode.CODE_PAGE_NOT_FOUND,
+                            "Activity permission action '"+intent.getAction()+"' not found!",
+                            ExceptionCode.DETAILED_PAGE_NOT_FOUND+".permissionPage."+intent.getAction());
             return false;
         }
     }

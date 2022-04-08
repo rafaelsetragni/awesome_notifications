@@ -63,7 +63,7 @@ public class ChannelManager {
 
     // ********************************************************
 
-    public Boolean removeChannel(Context context, String channelKey) {
+    public Boolean removeChannel(Context context, String channelKey) throws AwesomeNotificationsException {
 
         NotificationChannelModel channelModel = getChannelByKey(context, channelKey);
 
@@ -74,7 +74,7 @@ public class ChannelManager {
         return shared.remove(context, Definitions.SHARED_CHANNELS, channelKey);
     }
 
-    public NotificationChannelModel getChannelByKey(Context context, String channelKey){
+    public NotificationChannelModel getChannelByKey(Context context, String channelKey) throws AwesomeNotificationsException {
 
         if(stringUtils.isNullOrEmpty(channelKey)) {
             if(AwesomeNotifications.debug)
@@ -121,15 +121,15 @@ public class ChannelManager {
         channelModel.importance = NotificationImportance.fromAndroidImportance(androidChannel.getImportance());
     }
 
-    public List<NotificationChannelModel> listChannels(Context context) {
+    public List<NotificationChannelModel> listChannels(Context context) throws AwesomeNotificationsException {
         return shared.getAllObjects(context, Definitions.SHARED_CHANNELS);
     }
 
-    public void commitChanges(Context context){
+    public void commitChanges(Context context) throws AwesomeNotificationsException {
         shared.commit(context);
     }
 
-    public boolean isChannelEnabled(Context context, String channelKey){
+    public boolean isChannelEnabled(Context context, String channelKey) throws AwesomeNotificationsException {
 
         if (stringUtils.isNullOrEmpty(channelKey)) return false;
 
@@ -192,7 +192,7 @@ public class ChannelManager {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O /*Android 8*/)
-    private void saveAndroidChannel(Context context, NotificationChannelModel oldChannelModel, NotificationChannelModel newChannel, Boolean forceUpdate) {
+    private void saveAndroidChannel(Context context, NotificationChannelModel oldChannelModel, NotificationChannelModel newChannel, Boolean forceUpdate) throws AwesomeNotificationsException {
 
         String newHashKey = newChannel.getChannelHashKey(context, false);
 
@@ -359,7 +359,7 @@ public class ChannelManager {
     }
 
     @RequiresApi(api =  Build.VERSION_CODES.O /*Android 8*/)
-    public void setAndroidChannel(Context context, NotificationChannelModel newChannel, boolean firstChannel) {
+    public void setAndroidChannel(Context context, NotificationChannelModel newChannel, boolean firstChannel) throws AwesomeNotificationsException {
 
         NotificationManager notificationManager = getAndroidNotificationManager(context);
 
@@ -384,8 +384,9 @@ public class ChannelManager {
                         .getInstance()
                         .registerNewAwesomeException(
                                 TAG,
-                                ExceptionCode.INVALID_ARGUMENTS,
-                                "Channel group "+newChannel.channelGroupKey+" does not exist.");
+                                ExceptionCode.CODE_INVALID_ARGUMENTS,
+                                "Channel group "+newChannel.channelGroupKey+" does not exist.",
+                                ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channelGroup."+newChannel.channelGroupKey);
         }
 
         if (channelGroup != null)

@@ -2,7 +2,6 @@ package me.carda.awesome_notifications.awesome_notifications_core.decoders;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,10 +62,11 @@ public class BitmapResourceDecoder extends NotificationThread<byte[]> {
                         .getInstance()
                         .createNewAwesomeException(
                                 TAG,
-                                ExceptionCode.BACKGROUND_EXECUTION_EXCEPTION,
+                                ExceptionCode.CODE_BACKGROUND_EXECUTION_EXCEPTION,
                                 "File '"+
                                         (bitmapReference == null ? "null" : bitmapReference)+
-                                        "' not found or invalid");
+                                        "' not found or invalid",
+                                ExceptionCode.DETAILED_INVALID_ARGUMENTS+".bitmap.reference");
 
             return convertBitmapToByteArray(
                     bitmap,

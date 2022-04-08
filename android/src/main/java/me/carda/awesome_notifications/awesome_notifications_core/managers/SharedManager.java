@@ -2,11 +2,9 @@ package me.carda.awesome_notifications.awesome_notifications_core.managers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
-import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
 
 
 import java.util.ArrayList;
@@ -38,12 +36,14 @@ public class SharedManager<T extends AbstractModel> {
             //LogUtils.d(TAG, fileIdentifier+": file initialized = "+ hashedReference);
         } catch (Exception e) {
             this.hashedReference = reference;
+            // TODO change register exception to throw exception
             ExceptionFactory
                 .getInstance()
-                .createNewAwesomeException(
+                .registerNewAwesomeException(
                         TAG,
-                        ExceptionCode.INITIALIZATION_EXCEPTION,
-                        "SharedManager could not be correctly initialized: "+ e.getMessage());
+                        ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
+                        "SharedManager could not be correctly initialized: "+ e.getMessage(),
+                        ExceptionCode.DETAILED_INITIALIZATION_FAILED+"."+reference);
         }
     }
 
@@ -51,16 +51,16 @@ public class SharedManager<T extends AbstractModel> {
 
         SharedPreferences preferences = context.getSharedPreferences(
                 context.getPackageName() + "." + hashedReference,
-                Context.MODE_PRIVATE
-        );
+                Context.MODE_PRIVATE);
 
         if(preferences == null){
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.SHARED_PREFERENCE_NOT_AVAILABLE,
-                            "SharedPreferences.getSharedPreferences is not available");
+                            ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
+                            "SharedPreferences.getSharedPreferences is not available",
+                            ExceptionCode.DETAILED_SHARED_PREFERENCES+".getSharedInstance");
         }
 
         return preferences;
@@ -70,7 +70,7 @@ public class SharedManager<T extends AbstractModel> {
         return tag+'_'+referenceKey;
     }
 
-    public void commit(Context context){
+    public void commit(Context context) throws AwesomeNotificationsException {
         try {
 
             SharedPreferences shared = getSharedInstance(context);
@@ -79,18 +79,18 @@ public class SharedManager<T extends AbstractModel> {
             commitAsync(reference, editor);
 
         } catch (Exception e){
-            ExceptionFactory
+            throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INITIALIZATION_EXCEPTION,
-                            e.getLocalizedMessage(),
+                            ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
+                            ExceptionCode.DETAILED_SHARED_PREFERENCES+".commit",
                             e);
         }
     }
 
     @SuppressWarnings("unchecked")
-    public List<T> getAllObjects(Context context, String tag){
+    public List<T> getAllObjects(Context context, String tag) throws AwesomeNotificationsException {
         List<T> returnedList = new ArrayList<>();
         try {
             SharedPreferences shared = getSharedInstance(context);
@@ -109,11 +109,12 @@ public class SharedManager<T extends AbstractModel> {
                 }
             }
         } catch (Exception e){
-            ExceptionFactory
+            throw ExceptionFactory
                     .getInstance()
-                    .registerNewAwesomeException(
+                    .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
+                            ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
+                            ExceptionCode.DETAILED_SHARED_PREFERENCES+".getAllObjects",
                             e);
         }
 
@@ -121,7 +122,7 @@ public class SharedManager<T extends AbstractModel> {
     }
 
     @SuppressWarnings("unchecked")
-    public T get(Context context, String tag, String referenceKey){
+    public T get(Context context, String tag, String referenceKey) throws AwesomeNotificationsException {
 
         try {
             SharedPreferences shared = getSharedInstance(context);
@@ -141,20 +142,20 @@ public class SharedManager<T extends AbstractModel> {
 
             return returnedObject;
 
-        } catch (AwesomeNotificationsException ignore) {
+        } catch (AwesomeNotificationsException awesomeException) {
+            throw awesomeException;
         } catch (Exception exception) {
-            ExceptionFactory
+            throw ExceptionFactory
                     .getInstance()
-                    .registerNewAwesomeException(
+                    .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.SHARED_PREFERENCE_NOT_AVAILABLE,
+                            ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
+                            ExceptionCode.DETAILED_SHARED_PREFERENCES+".get",
                             exception);
         }
-
-        return null;
     }
 
-    public Boolean set(Context context, String tag, String referenceKey, T data){
+    public Boolean set(Context context, String tag, String referenceKey, T data) throws AwesomeNotificationsException {
 
         try {
 
@@ -171,20 +172,20 @@ public class SharedManager<T extends AbstractModel> {
 
             return true;
 
-        } catch (AwesomeNotificationsException ignore) {
-        } catch (Exception exception) {
-            ExceptionFactory
+        } catch (AwesomeNotificationsException awesomeException) {
+            throw awesomeException;
+        } catch (Exception e) {
+            throw ExceptionFactory
                     .getInstance()
-                    .registerNewAwesomeException(
+                    .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.SHARED_PREFERENCE_NOT_AVAILABLE,
-                            exception);
+                            ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
+                            ExceptionCode.DETAILED_SHARED_PREFERENCES+".set",
+                            e);
         }
-
-        return false;
     }
 
-    public Boolean remove(Context context, String tag, String referenceKey){
+    public Boolean remove(Context context, String tag, String referenceKey) throws AwesomeNotificationsException {
 
         try {
 
@@ -199,20 +200,20 @@ public class SharedManager<T extends AbstractModel> {
 
             return true;
 
-        } catch (AwesomeNotificationsException ignore) {
-        } catch (Exception exception) {
-            ExceptionFactory
+        } catch (AwesomeNotificationsException awesomeException) {
+            throw awesomeException;
+        } catch (Exception e) {
+            throw ExceptionFactory
                     .getInstance()
-                    .registerNewAwesomeException(
+                    .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.SHARED_PREFERENCE_NOT_AVAILABLE,
-                            exception);
+                            ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
+                            ExceptionCode.DETAILED_SHARED_PREFERENCES+".remove",
+                            e);
         }
-
-        return false;
     }
 
-    public Boolean removeAll(Context context){
+    public Boolean removeAll(Context context) throws AwesomeNotificationsException {
 
         try {
             SharedPreferences shared = getSharedInstance(context);
@@ -223,20 +224,29 @@ public class SharedManager<T extends AbstractModel> {
 
             return true;
 
-        } catch (AwesomeNotificationsException ignore) {
-        } catch (Exception exception) {
-            ExceptionFactory
+        } catch (AwesomeNotificationsException awesomeException) {
+            throw awesomeException;
+        } catch (Exception e) {
+            throw ExceptionFactory
                     .getInstance()
-                    .registerNewAwesomeException(
+                    .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.SHARED_PREFERENCE_NOT_AVAILABLE,
-                            exception);
+                            ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
+                            ExceptionCode.DETAILED_SHARED_PREFERENCES+".removeAll",
+                            e);
         }
-
-        return false;
     }
 
-    private static void commitAsync(final String reference, final SharedPreferences.Editor editor) {
+    private static void commitAsync(final String reference, final SharedPreferences.Editor editor) throws AwesomeNotificationsException {
+        if(!editor.commit())
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
+                            "Android function editor.commit failed",
+                            ExceptionCode.DETAILED_SHARED_PREFERENCES+".commitAsync");
+        /*
         new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(Void... voids) {
@@ -246,9 +256,15 @@ public class SharedManager<T extends AbstractModel> {
             @Override
             protected void onPostExecute(Boolean value) {
                 if(!value){
-                    Logger.d(reference,"shared data could not be saved");
+                    ExceptionFactory
+                            .getInstance()
+                            .registerNewAwesomeException(
+                                    TAG,
+                                    ExceptionCode.SHARED_PREFERENCES_NOT_AVAILABLE,
+                                    "Android function editor.commit failed",
+                                    ExceptionCode.DETAILED_SHARED_PREFERENCES+".commitAsync");
                 }
             }
-        }.execute();
+        }.execute();*/
     }
 }

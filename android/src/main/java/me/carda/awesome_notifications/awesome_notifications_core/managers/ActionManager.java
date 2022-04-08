@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.List;
 
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
@@ -17,23 +18,23 @@ public class ActionManager {
                     ActionReceived.class,
                     "ActionReceived");
 
-    public static Boolean removeAction(Context context, Integer id) {
+    public static Boolean removeAction(Context context, Integer id) throws AwesomeNotificationsException {
         return shared.remove(context, Definitions.SHARED_DISMISSED, id.toString());
     }
 
-    public static List<ActionReceived> listActions(Context context) {
+    public static List<ActionReceived> listActions(Context context) throws AwesomeNotificationsException {
         return shared.getAllObjects(context, Definitions.SHARED_DISMISSED);
     }
 
-    public static void saveAction(Context context, ActionReceived received) {
+    public static void saveAction(Context context, ActionReceived received) throws AwesomeNotificationsException {
         shared.set(context, Definitions.SHARED_DISMISSED, received.id.toString(), received);
     }
 
-    public static ActionReceived getActionByKey(Context context, Integer id){
+    public static ActionReceived getActionByKey(Context context, Integer id) throws AwesomeNotificationsException {
         return shared.get(context, Definitions.SHARED_DISMISSED, id.toString());
     }
 
-    public static void clearAllActions(Context context) {
+    public static void clearAllActions(Context context) throws AwesomeNotificationsException {
         List<ActionReceived> receivedList = shared.getAllObjects(context, Definitions.SHARED_DISMISSED);
         if (receivedList != null){
             for (ActionReceived received : receivedList) {
@@ -42,7 +43,7 @@ public class ActionManager {
         }
     }
 
-    public static void commitChanges(Context context){
+    public static void commitChanges(Context context) throws AwesomeNotificationsException {
         shared.commit(context);
     }
 }

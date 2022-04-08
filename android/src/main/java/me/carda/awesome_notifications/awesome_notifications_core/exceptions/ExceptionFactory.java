@@ -25,19 +25,22 @@ public class ExceptionFactory {
     public AwesomeNotificationsException createNewAwesomeException(
             @NonNull String className,
             @NonNull String code,
-            @NonNull String message
+            @NonNull String message,
+            @NonNull String detailedCode
     ) {
         return createNewAwesomeException(
                 className,
                 new AwesomeNotificationsException(
                         code,
-                        message));
+                        message,
+                        detailedCode));
     }
 
     public AwesomeNotificationsException createNewAwesomeException(
             @NonNull String className,
             @NonNull String code,
             @NonNull String message,
+            @NonNull String detailedCode,
             @NonNull Exception originalException
     ) {
         return createNewAwesomeException(
@@ -45,12 +48,14 @@ public class ExceptionFactory {
                 new AwesomeNotificationsException(
                         code,
                         message,
+                        detailedCode,
                         originalException));
     }
 
     public AwesomeNotificationsException createNewAwesomeException(
             @NonNull String className,
             @NonNull String code,
+            @NonNull String detailedCode,
             @NonNull Exception e
     ) {
         return createNewAwesomeException(
@@ -58,25 +63,29 @@ public class ExceptionFactory {
                 new AwesomeNotificationsException(
                         code,
                         String.format("%s", e.getLocalizedMessage()),
+                        detailedCode,
                         e));
     }
 
     public void registerNewAwesomeException(
             @NonNull String className,
             @NonNull String code,
-            @NonNull String message
+            @NonNull String message,
+            @NonNull String detailedCode
     ) {
         registerAwesomeException(
                 className,
                 new AwesomeNotificationsException(
                         code,
-                        message));
+                        message,
+                        detailedCode));
     }
 
     public void registerNewAwesomeException(
             @NonNull String className,
             @NonNull String code,
             @NonNull String message,
+            @NonNull String detailedCode,
             @NonNull Exception originalException
     ) {
         registerAwesomeException(
@@ -84,12 +93,14 @@ public class ExceptionFactory {
                 new AwesomeNotificationsException(
                         code,
                         message,
+                        detailedCode,
                         originalException));
     }
 
     public void registerNewAwesomeException(
             @NonNull String className,
             @NonNull String code,
+            @NonNull String detailedCode,
             @NonNull Exception e
     ) {
         registerAwesomeException(
@@ -97,6 +108,7 @@ public class ExceptionFactory {
                 new AwesomeNotificationsException(
                         code,
                         String.format("%s", e.getLocalizedMessage()),
+                        detailedCode,
                         e));
     }
 

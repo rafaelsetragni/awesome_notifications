@@ -2,13 +2,10 @@ package me.carda.awesome_notifications.awesome_notifications_core.models;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
-import java.util.TimeZone;
 
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
@@ -16,7 +13,6 @@ import me.carda.awesome_notifications.awesome_notifications_core.exceptions.Exce
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.BooleanUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class NotificationIntervalModel extends NotificationScheduleModel {
 
@@ -61,16 +57,18 @@ public class NotificationIntervalModel extends NotificationScheduleModel {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Interval is required and must be greater than zero");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Interval is required and must be greater than zero",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationInterval.interval");
 
         if(repeats && interval < 60)
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "time interval must be at least 60 if repeating");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "time interval must be at least 60 if repeating",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationInterval.interval");
     }
 
     @Override

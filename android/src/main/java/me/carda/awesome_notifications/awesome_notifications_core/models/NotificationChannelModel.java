@@ -273,48 +273,54 @@ public class NotificationChannelModel extends AbstractModel {
                         .getInstance()
                         .createNewAwesomeException(
                                 TAG,
-                                ExceptionCode.INVALID_ARGUMENTS,
-                                "Icon is not a Resource media type");
+                                ExceptionCode.CODE_INVALID_ARGUMENTS,
+                                "Icon is not a Resource media type",
+                                ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationContent");
 
         if(stringUtils.isNullOrEmpty(channelKey))
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Channel key cannot be null or empty");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Channel key cannot be null or empty",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.key");
 
         if(stringUtils.isNullOrEmpty(channelName))
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Channel name cannot be null or empty");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Channel name cannot be null or empty",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.name");
 
         if(stringUtils.isNullOrEmpty(channelDescription))
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Channel description cannot be null or empty");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Channel description cannot be null or empty",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.description");
 
         if(playSound == null)
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Play sound selector cannot be null or empty");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Play sound selector cannot be null or empty",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.playSound");
 
         if (ledColor != null && (ledOnMs == null || ledOffMs == null)) {
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Standard led on and off times cannot be null or empty");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Standard led on and off times cannot be null or empty",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.led");
         }
 
         if(BooleanUtils.getInstance().getValue(playSound) && !stringUtils.isNullOrEmpty(soundSource))
@@ -323,8 +329,9 @@ public class NotificationChannelModel extends AbstractModel {
                         .getInstance()
                         .createNewAwesomeException(
                                 TAG,
-                                ExceptionCode.INVALID_ARGUMENTS,
-                                "Audio media is not valid");
+                                ExceptionCode.CODE_INVALID_ARGUMENTS,
+                                "Audio media is not valid",
+                                ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.sound");
     }
 
     public NotificationChannelModel clone() {

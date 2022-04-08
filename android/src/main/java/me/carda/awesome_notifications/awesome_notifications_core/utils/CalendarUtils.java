@@ -88,8 +88,9 @@ public class CalendarUtils {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid time zone");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid time zone",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".calendar.timeZone");
         }
     }
 

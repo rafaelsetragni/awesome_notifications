@@ -85,8 +85,9 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Notification cannot be empty or null");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Notification cannot be empty or null",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".sender.notificationModel");
 
         new NotificationSender(
             context,

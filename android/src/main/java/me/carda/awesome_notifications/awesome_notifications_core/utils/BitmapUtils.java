@@ -26,7 +26,6 @@ import androidx.annotation.NonNull;
 
 import javax.annotation.Nullable;
 
-import me.carda.awesome_notifications.awesome_notifications_core.broadcasters.receivers.AwesomeExceptionReceiver;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 
@@ -186,7 +185,7 @@ public class BitmapUtils extends MediaUtils {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
                             "The image file '"+bitmapPath+"' is invalid",
                             originalException);
         }

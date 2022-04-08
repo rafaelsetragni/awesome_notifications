@@ -10,6 +10,7 @@ import java.util.List;
 
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.builders.NotificationBuilder;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.threads.NotificationScheduler;
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationChannelModel;
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationModel;
@@ -24,11 +25,11 @@ public class ScheduleManager {
                     NotificationModel.class,
                     "NotificationModel");
 
-    public static List<NotificationModel> listSchedules(Context context) {
+    public static List<NotificationModel> listSchedules(Context context) throws AwesomeNotificationsException {
         return shared.getAllObjects(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS);
     }
 
-    public static NotificationModel getScheduleById(Context context, String Id){
+    public static NotificationModel getScheduleById(Context context, String Id) throws AwesomeNotificationsException {
         return shared.get(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS, Id);
     }
 
@@ -44,7 +45,7 @@ public class ScheduleManager {
         return _getHelper(context, Definitions.SCHEDULER_HELPER_GROUP, groupKey);
     }
 
-    public static Boolean removeSchedule(Context context, NotificationModel notificationModel) {
+    public static Boolean removeSchedule(Context context, NotificationModel notificationModel) throws AwesomeNotificationsException {
         String targetId = notificationModel.content.id.toString();
 
         boolean successHelper =
@@ -62,7 +63,7 @@ public class ScheduleManager {
         return successHelper && successShared;
     }
 
-    public static Boolean saveSchedule(Context context, NotificationModel notificationModel) {
+    public static Boolean saveSchedule(Context context, NotificationModel notificationModel) throws AwesomeNotificationsException {
         String targetId = notificationModel.content.id.toString();
 
         boolean successHelper =
@@ -81,7 +82,7 @@ public class ScheduleManager {
         return successHelper && successShared;
     }
 
-    public static void removeScheduleById(Context context, String id) {
+    public static void removeScheduleById(Context context, String id) throws AwesomeNotificationsException {
         NotificationModel schedule = getScheduleById(context, id);
         if(schedule != null)
             removeSchedule(context, schedule);
@@ -92,7 +93,7 @@ public class ScheduleManager {
         }
     }
 
-    public static void cancelSchedulesByChannelKey(Context context, String channelKey) {
+    public static void cancelSchedulesByChannelKey(Context context, String channelKey) throws AwesomeNotificationsException {
         List<String> allIds = _getHelper(context, Definitions.SCHEDULER_HELPER_ALL, "");
         List<String> channelIds = _getHelper(context, Definitions.SCHEDULER_HELPER_CHANNEL, channelKey);
 
@@ -107,7 +108,7 @@ public class ScheduleManager {
         _removeHelper(context, Definitions.SCHEDULER_HELPER_CHANNEL, channelKey);
     }
 
-    public static void cancelSchedulesByGroupKey(Context context, String groupKey) {
+    public static void cancelSchedulesByGroupKey(Context context, String groupKey) throws AwesomeNotificationsException {
         List<String> allIds = _getHelper(context, Definitions.SCHEDULER_HELPER_ALL, "");
         List<String> groupIds = _getHelper(context, Definitions.SCHEDULER_HELPER_GROUP, groupKey);
 
@@ -122,7 +123,7 @@ public class ScheduleManager {
         _removeHelper(context, Definitions.SCHEDULER_HELPER_GROUP, groupKey);
     }
 
-    public static void cancelAllSchedules(Context context) {
+    public static void cancelAllSchedules(Context context) throws AwesomeNotificationsException {
         shared.removeAll(context);
         _removeAllHelpers(context, Definitions.SCHEDULER_HELPER_ALL);
         _removeAllHelpers(context, Definitions.SCHEDULER_HELPER_CHANNEL);
@@ -144,15 +145,15 @@ public class ScheduleManager {
         return true;
     }
 
-    public static void commitChanges(Context context){
+    public static void commitChanges(Context context) throws AwesomeNotificationsException {
         shared.commit(context);
     }
 
-    private static boolean _setNotificationOnShared(Context context, String id, NotificationModel notificationModel){
+    private static boolean _setNotificationOnShared(Context context, String id, NotificationModel notificationModel) throws AwesomeNotificationsException {
         return shared.set(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS, id, notificationModel);
     }
 
-    private static boolean _removeNotificationFromShared(Context context, String targetId){
+    private static boolean _removeNotificationFromShared(Context context, String targetId) throws AwesomeNotificationsException {
         return shared.remove(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS, targetId);
     }
 

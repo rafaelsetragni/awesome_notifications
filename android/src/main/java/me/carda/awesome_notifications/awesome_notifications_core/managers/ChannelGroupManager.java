@@ -22,11 +22,11 @@ public class ChannelGroupManager {
                     NotificationChannelGroupModel.class,
                     "NotificationChannelGroup");
 
-    public static Boolean removeChannelGroup(Context context, String channelGroupKey) {
+    public static Boolean removeChannelGroup(Context context, String channelGroupKey) throws AwesomeNotificationsException {
         return shared.remove(context, Definitions.SHARED_CHANNEL_GROUP, channelGroupKey);
     }
 
-    public static List<NotificationChannelGroupModel> listChannelGroup(Context context) {
+    public static List<NotificationChannelGroupModel> listChannelGroup(Context context) throws AwesomeNotificationsException {
         return shared.getAllObjects(context, Definitions.SHARED_CHANNEL_GROUP);
     }
 
@@ -42,11 +42,11 @@ public class ChannelGroupManager {
         }
     }
 
-    public static NotificationChannelGroupModel getChannelGroupByKey(Context context, String channelGroupKey){
+    public static NotificationChannelGroupModel getChannelGroupByKey(Context context, String channelGroupKey) throws AwesomeNotificationsException {
         return shared.get(context, Definitions.SHARED_CHANNEL_GROUP, channelGroupKey);
     }
 
-    public static void cancelAllChannelGroup(Context context) {
+    public static void cancelAllChannelGroup(Context context) throws AwesomeNotificationsException {
         List<NotificationChannelGroupModel> channelGroupList = shared.getAllObjects(context, Definitions.SHARED_CHANNEL_GROUP);
         if (channelGroupList != null){
             for (NotificationChannelGroupModel channelGroup : channelGroupList) {
@@ -55,13 +55,13 @@ public class ChannelGroupManager {
         }
     }
 
-    public static void cancelChannelGroup(Context context, String channelGroupKey) {
+    public static void cancelChannelGroup(Context context, String channelGroupKey) throws AwesomeNotificationsException {
         NotificationChannelGroupModel channelGroup = getChannelGroupByKey(context, channelGroupKey);
         if(channelGroup !=null)
             removeChannelGroup(context, channelGroupKey);
     }
 
-    public static void commitChanges(Context context){
+    public static void commitChanges(Context context) throws AwesomeNotificationsException {
         shared.commit(context);
     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.List;
 
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.models.returnedData.NotificationReceived;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
@@ -17,23 +18,23 @@ public class DisplayedManager {
                     NotificationReceived.class,
                     "NotificationReceived");
 
-    public static Boolean removeDisplayed(Context context, Integer id) {
+    public static Boolean removeDisplayed(Context context, Integer id) throws AwesomeNotificationsException {
         return shared.remove(context, Definitions.SHARED_DISPLAYED, id.toString());
     }
 
-    public static List<NotificationReceived> listDisplayed(Context context) {
+    public static List<NotificationReceived> listDisplayed(Context context) throws AwesomeNotificationsException {
         return shared.getAllObjects(context, Definitions.SHARED_DISPLAYED);
     }
 
-    public static void saveDisplayed(Context context, NotificationReceived received) {
+    public static void saveDisplayed(Context context, NotificationReceived received) throws AwesomeNotificationsException {
         shared.set(context, Definitions.SHARED_DISPLAYED, received.id.toString(), received);
     }
 
-    public static NotificationReceived getDisplayedByKey(Context context, Integer id){
+    public static NotificationReceived getDisplayedByKey(Context context, Integer id) throws AwesomeNotificationsException {
         return shared.get(context, Definitions.SHARED_DISPLAYED, id.toString());
     }
 
-    public static void cancelAllDisplayed(Context context) {
+    public static void cancelAllDisplayed(Context context) throws AwesomeNotificationsException {
         List<NotificationReceived> displayedList = shared.getAllObjects(context, Definitions.SHARED_DISPLAYED);
         if(displayedList != null)
             for(NotificationReceived displayed : displayedList){
@@ -41,13 +42,13 @@ public class DisplayedManager {
             }
     }
 
-    public static void cancelDisplayed(Context context, Integer id) {
+    public static void cancelDisplayed(Context context, Integer id) throws AwesomeNotificationsException {
         NotificationReceived received = getDisplayedByKey(context, id);
         if(received != null)
             removeDisplayed(context, received.id);
     }
 
-    public static void commitChanges(Context context){
+    public static void commitChanges(Context context) throws AwesomeNotificationsException {
         shared.commit(context);
     }
 }

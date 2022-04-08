@@ -8,7 +8,6 @@ import me.carda.awesome_notifications.awesome_notifications_core.exceptions.Exce
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.threads.NotificationScheduler;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.BitmapUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class CancellationManager {
@@ -41,8 +40,9 @@ public class CancellationManager {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid notification id");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid notification id",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationId");
 
         StatusBarManager
                 .getInstance(context)
@@ -58,8 +58,9 @@ public class CancellationManager {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid channel key");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid channel key",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channelKey");
 
         StatusBarManager
                 .getInstance(context)
@@ -75,8 +76,9 @@ public class CancellationManager {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid group key");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid group key",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".groupKey");
 
         StatusBarManager
                 .getInstance(context)
@@ -99,8 +101,9 @@ public class CancellationManager {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid notification id");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid notification id",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationId");
 
         NotificationScheduler.cancelScheduleById(context, notificationId);
 
@@ -114,8 +117,9 @@ public class CancellationManager {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid channel key");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid channel key",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channelKey");
 
         NotificationScheduler.cancelSchedulesByChannelKey(context, channelKey);
 
@@ -129,15 +133,16 @@ public class CancellationManager {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid group key");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid group key",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".groupKey");
 
         NotificationScheduler.cancelSchedulesByGroupKey(context, groupKey);
 
         return true;
     }
 
-    public void cancelAllSchedules(@NonNull final Context context) {
+    public void cancelAllSchedules(@NonNull final Context context) throws AwesomeNotificationsException {
         NotificationScheduler.cancelAllSchedules(context);
     }
 
@@ -148,8 +153,9 @@ public class CancellationManager {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid notification id");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid notification id",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationId");
 
         cancelSchedule(context, notificationId);
         dismissNotification(context, notificationId);
@@ -164,8 +170,9 @@ public class CancellationManager {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid channel key");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid channel key",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channelKey");
 
         dismissNotificationsByChannelKey(context, channelKey);
         cancelSchedulesByChannelKey(context, channelKey);
@@ -180,8 +187,9 @@ public class CancellationManager {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.INVALID_ARGUMENTS,
-                            "Invalid group key");
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Invalid group key",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".groupKey");
 
         dismissNotificationsByGroupKey(context, groupKey);
         cancelSchedulesByGroupKey(context, groupKey);
@@ -190,7 +198,7 @@ public class CancellationManager {
     }
 
 
-    public void cancelAllNotifications(@NonNull final Context context) {
+    public void cancelAllNotifications(@NonNull final Context context) throws AwesomeNotificationsException {
 
         dismissAllNotifications(context);
         cancelAllSchedules(context);
