@@ -73,8 +73,34 @@ public class NotificationBuilder {
     
     public func createNotification(_ notificationModel:NotificationModel, content:UNMutableNotificationContent?) throws -> NotificationModel? {
         
-        guard let channel = ChannelManager.shared.getChannelByKey(channelKey: notificationModel.content!.channelKey!) else {
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Channel '\(notificationModel.content!.channelKey!)' does not exist or is disabled")
+        guard let channelkey:String = notificationModel.content!.channelKey else {
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: NotificationIntervalModel.TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Channel key is required",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.key")
+        }
+        
+        guard let channel = ChannelManager.shared.getChannelByKey(channelKey: channelkey) else {
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: NotificationIntervalModel.TAG,
+                        code: ExceptionCode.CODE_INSUFFICIENT_PERMISSIONS,
+                        message: "Channel '\(channelkey)' does not exist",
+                        detailedCode: ExceptionCode.DETAILED_INSUFFICIENT_PERMISSIONS+".channel.notFound.\(channelkey)")
+        }
+        
+        if !ChannelManager.shared.isNotificationChannelActive(channel: channel) {
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: NotificationIntervalModel.TAG,
+                        code: ExceptionCode.CODE_INSUFFICIENT_PERMISSIONS,
+                        message: "Channel '\(channelkey)' is disabled",
+                        detailedCode: ExceptionCode.DETAILED_INSUFFICIENT_PERMISSIONS+".channel.disabled.\(channelkey)")
         }
 
         notificationModel.content!.groupKey = getGroupKey(notificationModel: notificationModel, channel: channel)

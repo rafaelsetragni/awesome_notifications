@@ -135,107 +135,29 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
                     .createNewAwesomeException(
                             TAG,
                             ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "At least one parameter is required",
+                            "At least one time condition is required",
                             ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar");
 
-        if (era != null && !IntegerUtils.isBetween(era, 0, Integer.MAX_VALUE))
+        if (
+           era != null && IntegerUtils.isBetween(era, 0, Integer.MAX_VALUE) ||
+           year != null && IntegerUtils.isBetween(year, 0, Integer.MAX_VALUE) ||
+           month != null && IntegerUtils.isBetween(month, 1, 12) ||
+           day != null && IntegerUtils.isBetween(day, 1, 31) ||
+           hour != null && IntegerUtils.isBetween(hour, 0, 23) ||
+           minute != null && IntegerUtils.isBetween(minute, 0, 59) ||
+           second != null && IntegerUtils.isBetween(second, 0, 59) ||
+           millisecond != null && IntegerUtils.isBetween(millisecond, 0, 999) ||
+           weekday != null && IntegerUtils.isBetween(weekday, 1, 7) ||
+           weekOfMonth != null && IntegerUtils.isBetween(weekOfMonth, 1, 6) ||
+           weekOfYear != null && IntegerUtils.isBetween(weekOfYear, 1, 53)
+        )
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
                             ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "Era value is invalid",
-                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar.era");
-
-        if (year != null && !IntegerUtils.isBetween(year, 0, Integer.MAX_VALUE))
-            throw ExceptionFactory
-                    .getInstance()
-                    .createNewAwesomeException(
-                            TAG,
-                            ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "year value is invalid",
-                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar.year");
-
-        if (month != null && !IntegerUtils.isBetween(month, 1, 12))
-            throw ExceptionFactory
-                    .getInstance()
-                    .createNewAwesomeException(
-                            TAG,
-                            ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "month value is invalid",
-                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar.month");
-
-        if (day != null && !IntegerUtils.isBetween(day, 1, 31))
-            throw ExceptionFactory
-                    .getInstance()
-                    .createNewAwesomeException(
-                            TAG,
-                            ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "day value is invalid",
-                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar.day");
-
-        if (hour != null && !IntegerUtils.isBetween(hour, 0, 23))
-            throw ExceptionFactory
-                    .getInstance()
-                    .createNewAwesomeException(
-                            TAG,
-                            ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "hour value is invalid",
-                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar.hour");
-
-        if (minute != null && !IntegerUtils.isBetween(minute, 0, 59))
-            throw ExceptionFactory
-                    .getInstance()
-                    .createNewAwesomeException(
-                            TAG,
-                            ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "minute value is invalid",
-                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar.minute");
-
-        if (second != null && !IntegerUtils.isBetween(second, 0, 59))
-            throw ExceptionFactory
-                    .getInstance()
-                    .createNewAwesomeException(
-                            TAG,
-                            ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "second value is invalid",
-                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar.second");
-
-        if (millisecond != null && !IntegerUtils.isBetween(millisecond, 0, 999))
-            throw ExceptionFactory
-                    .getInstance()
-                    .createNewAwesomeException(
-                            TAG,
-                            ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "millisecond value is invalid",
-                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar.millisecond");
-
-        if (weekday != null && !IntegerUtils.isBetween(weekday, 1, 7))
-            throw ExceptionFactory
-                    .getInstance()
-                    .createNewAwesomeException(
-                            TAG,
-                            ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "weekday value is invalid",
-                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar.weekday");
-
-        if (weekOfMonth != null && !IntegerUtils.isBetween(weekOfMonth, 1, 6))
-            throw ExceptionFactory
-                    .getInstance()
-                    .createNewAwesomeException(
-                            TAG,
-                            ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "weekOfMonth value is invalid",
-                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar.weekOfMonth");
-
-        if (weekOfYear != null && !IntegerUtils.isBetween(weekOfYear, 1, 53))
-            throw ExceptionFactory
-                    .getInstance()
-                    .createNewAwesomeException(
-                            TAG,
-                            ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "weekOfYear value is invalid",
-                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar.weekOfYear");
+                            "The time conditions are invalid",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar");
     }
 
     @Override

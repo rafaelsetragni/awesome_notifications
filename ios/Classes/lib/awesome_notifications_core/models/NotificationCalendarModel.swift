@@ -118,7 +118,13 @@ public class NotificationCalendarModel : NotificationScheduleModel {
             weekOfMonth == nil &&
             weekOfYear == nil
         ){
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "At least one parameter is required")
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: NotificationIntervalModel.TAG,
+                    code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                    message: "At least one time condition is required",
+                    detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar")
         }
 
         if(!(
@@ -132,7 +138,13 @@ public class NotificationCalendarModel : NotificationScheduleModel {
             IntUtils.isBetween(self.weekOfMonth ?? 1, min: 1, max: 6) &&
             IntUtils.isBetween(self.weekOfYear ?? 1, min: 1, max: 53)
         )){
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Calendar values are invalid")
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: NotificationIntervalModel.TAG,
+                    code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                    message: "The time conditions are invalid",
+                    detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar")
         }
     }
 

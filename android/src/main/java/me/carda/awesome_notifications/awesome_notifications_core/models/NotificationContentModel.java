@@ -280,6 +280,14 @@ public class NotificationContentModel extends AbstractModel {
 
     @Override
     public void validate(Context context) throws AwesomeNotificationsException {
+        if(id == null)
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Notification id is required",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".notificationContent.id");
 
         if(ChannelManager
                 .getInstance()
@@ -290,13 +298,47 @@ public class NotificationContentModel extends AbstractModel {
                             TAG,
                             ExceptionCode.CODE_INVALID_ARGUMENTS,
                             "Notification channel '"+channelKey+"' does not exist.",
-                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel."+channelKey);
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationContent."+channelKey);
 
         validateIcon(context);
+
+        switch(notificationLayout){
+            
+            case NotificationLayout.Default:
+                break;
+                
+            case NotificationLayout.BigPicture:
+                validateRequiredImages();
+                break;
+            
+            case NotificationLayout.Messaging:
+                break;
+                
+            case NotificationLayout.MessagingGroup:
+                break;
+                
+            case NotificationLayout.BigText:
+                break;
+                
+            case NotificationLayout.ProgressBar:
+                break;
+            
+            case NotificationLayout.MediaPlayer:
+                break;
+                    
+            case NotificationLayout.Inbox:
+                break;
+                
+            default:
+                notificationLayout = NotificationLayout.Default;
+                break;
+
+        }
 
         if (notificationLayout == NotificationLayout.BigPicture)
             validateBigPicture(context);
 
+        validateBigPicture(context);
         validateLargeIcon(context);
 
     }
@@ -319,32 +361,42 @@ public class NotificationContentModel extends AbstractModel {
         }
     }
 
-    private void validateBigPicture(Context context) throws AwesomeNotificationsException {
-        if(
-            (stringUtils.isNullOrEmpty(largeIcon) && stringUtils.isNullOrEmpty(bigPicture)) ||
-            (!stringUtils.isNullOrEmpty(largeIcon) && !BitmapUtils.getInstance().isValidBitmap(context, largeIcon)) ||
-            (!stringUtils.isNullOrEmpty(bigPicture) && !BitmapUtils.getInstance().isValidBitmap(context, bigPicture))
-        ){
+    private void validateRequiredImages(Context context) throws AwesomeNotificationsException {
+        if(stringUtils.isNullOrEmpty(largeIcon) && stringUtils.isNullOrEmpty(bigPicture))
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "Invalid big picture '"+bigPicture+"' or large icon '"+largeIcon+"'",
-                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".bigPicture");
-        }
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "bigPicture or largeIcon is required",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".image.required");
     }
 
-    private void validateLargeIcon(Context context) throws AwesomeNotificationsException {
+    private void validateBigPicture(Context context) throws AwesomeNotificationsException {  
         if(
-            (!stringUtils.isNullOrEmpty(largeIcon) && !BitmapUtils.getInstance().isValidBitmap(context, largeIcon))
+            !stringUtils.isNullOrEmpty(bigPicture) && 
+            !BitmapUtils.getInstance().isValidBitmap(context, bigPicture)
         )
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
                             ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "Invalid large icon '"+largeIcon+"'",
-                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".largeIcon");
+                            "bigPicture is invalid",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".invalid.bigPicture");
+    }
+
+    private void validateLargeIcon(Context context) throws AwesomeNotificationsException {
+        if(
+            !stringUtils.isNullOrEmpty(largeIcon) && 
+            !BitmapUtils.getInstance().isValidBitmap(context, largeIcon)
+        )
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "largeIcon is invalid",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".invalid.largeIcon");
     }
 }

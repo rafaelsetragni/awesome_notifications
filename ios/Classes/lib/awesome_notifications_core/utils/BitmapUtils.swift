@@ -96,9 +96,13 @@ public class BitmapUtils : MediaUtils {
                 // from EXC_RESOURCE_RESOURCE_TYPE_MEMORY fatal exception
                 
                 if SwiftUtils.isRunningOnExtension() && imageData.count > 1048576 {
-                    throw AwesomeNotificationsException
-                        .invalidRequiredFields(
-                            msg: "Notification image '\( String(describing: bitmapUri))' exceeds 1Mb")
+                    throw ExceptionFactory
+                        .shared
+                        .createNewAwesomeException(
+                            className: TAG,
+                            code: ExceptionCode.CODE_INVALID_IMAGE,
+                            message: "Notification image '\( String(describing: bitmapUri))' exceeds 1Mb",
+                            detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".image.sizeLimit")
                 }
                 
                 return UIImage(data: imageData)

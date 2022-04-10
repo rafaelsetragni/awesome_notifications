@@ -316,6 +316,8 @@ class NotificationUtils {
               channelKey: 'basic_channel',
               title: 'Simple Notification',
               body: 'Simple body'));
+
+      debugPrint(success ? 'Notification created successfully' : '');
     } on PlatformException catch (exception) {
       debugPrint('$exception');
     }

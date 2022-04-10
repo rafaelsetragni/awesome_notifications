@@ -119,8 +119,8 @@ public class NotificationButtonModel extends AbstractModel {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "Button action key cannot be null or empty",
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Button key is required",
                             ExceptionCode.DETAILED_INVALID_ARGUMENTS+".button.actionKey");
 
         if(stringUtils.isNullOrEmpty(label))
@@ -128,8 +128,8 @@ public class NotificationButtonModel extends AbstractModel {
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "Button label cannot be null or empty",
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Button label is required",
                             ExceptionCode.DETAILED_INVALID_ARGUMENTS+".button.label");
     }
 }

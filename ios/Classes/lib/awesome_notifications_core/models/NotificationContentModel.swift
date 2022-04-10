@@ -8,6 +8,8 @@
 import Foundation
 
 public class NotificationContentModel : AbstractModel {
+    
+    static let TAG = "NotificationContentModel"
 
     var id: Int?
     var channelKey: String?
@@ -206,29 +208,36 @@ public class NotificationContentModel : AbstractModel {
     public func validate() throws {
 
         if(IntUtils.isNullOrEmpty(id)){
-            throw AwesomeNotificationsException.invalidRequiredFields(
-                msg: "id cannot be null or empty")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: NotificationContentModel.TAG,
+                        code: ExceptionCode.CODE_MISSING_ARGUMENTS,
+                        message: "Notification id is required",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".notificationContent.id")
         }
         
-        if(StringUtils.isNullOrEmpty(channelKey)){
-            throw AwesomeNotificationsException.invalidRequiredFields(
-                msg: "channelKey cannot be null or empty")
+        guard let channelKey:String = channelKey else {
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: NotificationContentModel.TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "channelKey cannot be null or empty",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationContent.channelKey")
+        }
+        
+        if(ChannelManager.shared.getChannelByKey(channelKey: channelKey) == nil){
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: NotificationContentModel.TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Notification channel '\(channelKey)' does not exist.",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationContent.\(channelKey)")
         }
 
-        if(!StringUtils.isNullOrEmpty(icon)){
-            if(
-                BitmapUtils.shared.getMediaSourceType(mediaPath: icon) != MediaSource.Resource
-            ){
-                let iconError = icon ?? "[invalid icon]"
-                throw AwesomeNotificationsException.invalidRequiredFields(
-                    msg: "Small icon +\(iconError)+ must be a valid media native resource type.")
-            }
-        }
-        
-        if(notificationLayout == nil){
-            throw AwesomeNotificationsException.invalidRequiredFields(
-                msg: "notificationLayout cannot be null or empty")
-        }
+        try validateIcon(icon)
         
         switch notificationLayout {
             
@@ -236,13 +245,13 @@ public class NotificationContentModel : AbstractModel {
                 break
                 
             case .BigPicture:
+                try validateRequiredImages()
+                break
             
-                if(bigPicture == nil && largeIcon == nil){
-                    throw AwesomeNotificationsException.invalidRequiredFields(
-                        msg: "bigPicture or largeIcon needs to be not empty")
-                }
-                try validateBigPicture()
-                try validateLargeIcon()
+            case .Messaging:
+                break
+                
+            case .MessagingGroup:
                 break
                 
             case .BigText:
@@ -257,24 +266,65 @@ public class NotificationContentModel : AbstractModel {
             case .Inbox:
                 break
                 
-            case .Messaging:
-                break
-                
             default:
                 notificationLayout = NotificationLayout.Default
                 break
+        }
+        
+        try validateBigPicture()
+        try validateLargeIcon()
+    }
+    
+    private func validateRequiredImages() throws {
+        if bigPicture == nil && largeIcon == nil {
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: NotificationContentModel.TAG,
+                        code: ExceptionCode.CODE_MISSING_ARGUMENTS,
+                        message: "bigPicture or largeIcon is required",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".image.required")
+        }
+    }
+    
+    private func validateIcon(_ icon:String?) throws {
+        if StringUtils.isNullOrEmpty(icon) {
+            return
+        }
+        
+        let mediaType:MediaSource = BitmapUtils.shared.getMediaSourceType(mediaPath: icon)
+        if mediaType != MediaSource.Resource {
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: NotificationContentModel.TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Small icon +\(icon ?? "[invalid icon]")+ must be a valid media native resource type.",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".smallIcon.invalid")
         }
     }
     
     private func validateBigPicture() throws {
         if(bigPicture != nil && !BitmapUtils.shared.isValidBitmap(bigPicture)){
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "invalid bigPicture")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: NotificationContentModel.TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "bigPicture is invalid",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".invalid.bigPicture")
         }
     }
     
     private func validateLargeIcon() throws {
         if(largeIcon != nil && !BitmapUtils.shared.isValidBitmap(largeIcon)){
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "invalid largeIcon")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: NotificationContentModel.TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "largeIcon is invalid",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".invalid.largeIcon")
         }
     }
 }

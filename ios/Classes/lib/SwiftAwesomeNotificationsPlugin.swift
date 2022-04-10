@@ -104,16 +104,23 @@ public class SwiftAwesomeNotificationsPlugin:
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         
         if awesomeNotifications == nil {
-            if AwesomeNotifications.debug {
-                Logger.d(TAG, "Awesome notifications is currently not available")
-            }
+            let exception:AwesomeNotificationsException
+                = ExceptionFactory
+                        .shared
+                        .createNewAwesomeException(
+                            className: TAG,
+                            code: ExceptionCode.CODE_INITIALIZATION_EXCEPTION,
+                            message: "Awesome notifications is currently not available",
+                            detailedCode: ExceptionCode.DETAILED_INITIALIZATION_FAILED+".awesomeNotifications.core")
+            
             result(
                 FlutterError.init(
-                    code: TAG,
-                    message: "Awesome notifications is currently not available",
-                    details: nil
+                    code: exception.code,
+                    message: exception.message,
+                    details: exception.detailedCode
                 )
             )
+            
             return
         }
 		
@@ -262,13 +269,29 @@ public class SwiftAwesomeNotificationsPlugin:
 					return
 			}
 
-        } catch {
-
+        } catch let awesomeError as AwesomeNotificationsException {
             result(
                 FlutterError.init(
-                    code: TAG,
-                    message: "\(error)",
-                    details: error.localizedDescription
+                    code: awesomeError.code,
+                    message: awesomeError.message,
+                    details: awesomeError.detailedCode
+                )
+            )
+        } catch {
+            let exception =
+                ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                        detailedCode: ExceptionCode.DETAILED_UNEXPECTED_ERROR+".",
+                        originalException: error)
+            
+            result(
+                FlutterError.init(
+                    code: exception.code,
+                    message: exception.message,
+                    details: exception.detailedCode
                 )
             )
         }
@@ -293,8 +316,13 @@ public class SwiftAwesomeNotificationsPlugin:
     private func channelMethodSetChannel(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
 		guard let channelData:[String:Any?] = call.arguments as? [String:Any?]
         else {
-            throw AwesomeNotificationsException
-                .invalidRequiredFields(msg: "Channel is invalid")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Channel data is invalid",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.data")
         }
                 
 		let channel:NotificationChannelModel =
@@ -306,7 +334,7 @@ public class SwiftAwesomeNotificationsPlugin:
                             .setChannel(channel: channel) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.d(TAG, "Channel \(updated ? "" : "wasn't ")updated")
+            Logger.e(TAG, "Channel \(updated ? "" : "wasn't ")updated")
         }
 		
 		result(updated)
@@ -316,8 +344,13 @@ public class SwiftAwesomeNotificationsPlugin:
 	
 		guard let channelKey:String = call.arguments as? String
         else {
-            throw AwesomeNotificationsException
-                .invalidRequiredFields(msg: "Empty channel key")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Empty channel key",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.key")
 		}
         
         if awesomeNotifications?
@@ -345,8 +378,13 @@ public class SwiftAwesomeNotificationsPlugin:
     private func channelMethodSetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let ammount:Int = call.arguments as? Int
         else {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(msg: "Invalid Badge value")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Invalid Badge value",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".badge.value")
         }
         
         awesomeNotifications?
@@ -377,8 +415,13 @@ public class SwiftAwesomeNotificationsPlugin:
     private func channelMethodDismissNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         let notificationId:Int? = call.arguments as? Int
         if notificationId == nil || notificationId! < 0 {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(msg: "Invalid id value")
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: TAG,
+                    code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                    message: "Invalid id value",
+                    detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.id")
         }
         
         let dismissed =
@@ -397,8 +440,13 @@ public class SwiftAwesomeNotificationsPlugin:
     private func channelMethodCancelSchedule(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         let notificationId:Int? = call.arguments as? Int
         if notificationId == nil || notificationId! < 0 {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(msg: "Invalid id value")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Invalid id value",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.id")
         }
         
         let cancelled =
@@ -417,8 +465,13 @@ public class SwiftAwesomeNotificationsPlugin:
     private func channelMethodCancelNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         let notificationId:Int? = call.arguments as? Int
         if notificationId == nil || notificationId! < 0 {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(msg: "Invalid id value")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Invalid id value",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.id")
         }
         
         let cancelled =
@@ -436,8 +489,13 @@ public class SwiftAwesomeNotificationsPlugin:
 
     private func channelMethodDismissNotificationsByChannelKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let channelKey:String = call.arguments as? String else {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(msg: "Invalid channel Key value")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Invalid channel key value",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.channelKey")
         }
         
         let success =
@@ -455,8 +513,13 @@ public class SwiftAwesomeNotificationsPlugin:
 
     private func channelMethodCancelSchedulesByChannelKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let channelKey:String = call.arguments as? String else {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(msg: "Invalid channel Key value")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Invalid channel key value",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.channelKey")
         }
         
         let success =
@@ -474,8 +537,13 @@ public class SwiftAwesomeNotificationsPlugin:
 
     private func channelMethodCancelNotificationsByChannelKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let channelKey:String = call.arguments as? String else {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(msg: "Invalid channel Key value")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Invalid channel key value",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.channelKey")
         }
         
         let success =
@@ -493,8 +561,13 @@ public class SwiftAwesomeNotificationsPlugin:
 
     private func channelMethodDismissNotificationsByGroupKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let groupKey:String = call.arguments as? String else {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(msg: "Invalid group Key value")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Invalid group key value",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.groupKey")
         }
         
         let success =
@@ -512,8 +585,13 @@ public class SwiftAwesomeNotificationsPlugin:
 
     private func channelMethodCancelSchedulesByGroupKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let groupKey:String = call.arguments as? String else {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(msg: "Invalid group Key value")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Invalid group key value",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.groupKey")
         }
         
         let success =
@@ -531,8 +609,13 @@ public class SwiftAwesomeNotificationsPlugin:
 
     private func channelMethodCancelNotificationsByGroupKey(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let groupKey:String = call.arguments as? String else {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(msg: "Invalid group Key value")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Invalid group key value",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.groupKey")
         }
         
         let success =
@@ -682,17 +765,34 @@ public class SwiftAwesomeNotificationsPlugin:
     private func channelMethodCheckPermissions(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let platformParameters:[String:Any?] = call.arguments as? [String:Any?]
         else {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(msg: "Parameters are required")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_MISSING_ARGUMENTS,
+                        message: "Arguments are missing",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS)
         }
         
         let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
         guard let permissions:[String] = platformParameters[Definitions.NOTIFICATION_PERMISSIONS] as? [String] else {
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Permission list is required",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList")
         }
 
         if(permissions.isEmpty){
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Permission list is required",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList")
         }
         
         awesomeNotifications?
@@ -707,17 +807,34 @@ public class SwiftAwesomeNotificationsPlugin:
     private func channelMethodShouldShowRationale(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let platformParameters:[String:Any?] = call.arguments as? [String:Any?]
         else {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(msg: "Parameters are required")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_MISSING_ARGUMENTS,
+                        message: "Arguments are missing",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS)
         }
         
         let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
         guard let permissions:[String] = platformParameters[Definitions.NOTIFICATION_PERMISSIONS] as? [String] else {
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Permission list is required",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList")
         }
 
         if(permissions.isEmpty){
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Permission list is required",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList")
         }
 
         awesomeNotifications?
@@ -732,17 +849,34 @@ public class SwiftAwesomeNotificationsPlugin:
     private func channelMethodRequestNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let platformParameters:[String:Any?] = call.arguments as? [String:Any?]
         else {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(msg: "Parameters are required")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_MISSING_ARGUMENTS,
+                        message: "Arguments are missing",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS)
         }
         
         let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
         guard let permissions:[String] = platformParameters[Definitions.NOTIFICATION_PERMISSIONS] as? [String] else {
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list is required")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Permission list is required",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList")
         }
 
         if(permissions.isEmpty){
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Permission list cannot be empty")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Permission list is required",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList")
         }
         
         try awesomeNotifications?
@@ -758,8 +892,13 @@ public class SwiftAwesomeNotificationsPlugin:
         let pushData:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
         guard let notificationModel = NotificationModel().fromMap(arguments: pushData) as? NotificationModel
         else {
-            throw AwesomeNotificationsException
-                .invalidRequiredFields(msg: "Notification content is invalid")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Notification content is invalid",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".notificationModel.data")
         }
         
         try awesomeNotifications?
@@ -769,33 +908,26 @@ public class SwiftAwesomeNotificationsPlugin:
                     
                     if error != nil {
                         let flutterError:FlutterError?
-                        if let notificationError = error as? AwesomeNotificationsException {
-                            switch notificationError {
-                                case AwesomeNotificationsException.notificationNotAuthorized:
-                                    flutterError = FlutterError.init(
-                                        code: "notificationNotAuthorized",
-                                        message: "Notifications are disabled",
-                                        details: nil
-                                    )
-                                case AwesomeNotificationsException.cronException:
-                                    flutterError = FlutterError.init(
-                                        code: "cronException",
-                                        message: notificationError.localizedDescription,
-                                        details: nil
-                                    )
-                                default:
-                                    flutterError = FlutterError.init(
-                                        code: "exception",
-                                        message: "Unknow error",
-                                        details: notificationError.localizedDescription
-                                    )
-                            }
+                        if let awesomeException = error as? AwesomeNotificationsException {
+                            flutterError = FlutterError.init(
+                                code: awesomeException.code,
+                                message: awesomeException.message,
+                                details: awesomeException.detailedCode
+                            )
                         }
                         else {
+                            let awesomeException = ExceptionFactory
+                                .shared
+                                .createNewAwesomeException(
+                                    className: self.TAG,
+                                    code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                                    message: "Notification content is invalid",
+                                    detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".notificationModel.data")
+                            
                             flutterError = FlutterError.init(
-                                code: error.debugDescription,
-                                message: error?.localizedDescription,
-                                details: nil
+                                code: awesomeException.code,
+                                message: awesomeException.message,
+                                details: awesomeException.detailedCode
                             )
                         }
                         result(flutterError)
@@ -811,31 +943,46 @@ public class SwiftAwesomeNotificationsPlugin:
     
     private func channelMethodInitialize(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         let platformParameters:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
+        if platformParameters.isEmpty {
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_MISSING_ARGUMENTS,
+                        message: "Arguments are missing",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS)
+        }
         
 		let defaultIconPath:String? = platformParameters[Definitions.INITIALIZE_DEFAULT_ICON] as? String
         let debug:Bool = platformParameters[Definitions.INITIALIZE_DEBUG_MODE] as? Bool ?? false
         let dartBgHandle:Int64 = platformParameters[Definitions.BACKGROUND_HANDLE] as? Int64 ?? 0
         
         var channels:[NotificationChannelModel] = []
-		guard let channelsData:[Any] = platformParameters[Definitions.INITIALIZE_CHANNELS] as? [Any]
-        else {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(msg: "Notification channels are required")
-        }
+        let channelsData:[Any] = platformParameters[Definitions.INITIALIZE_CHANNELS] as? [Any] ?? []
         
         for channelData in channelsData {
             guard let channelMap = channelData as? [String : Any?]
             else {
-                throw AwesomeNotificationsException
-                            .invalidRequiredFields(msg: "Notification channel `\(channelsData)` is invalid")
+                throw ExceptionFactory
+                        .shared
+                        .createNewAwesomeException(
+                            className: TAG,
+                            code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            message: "Notification channel `\(channelsData)` is invalid",
+                            detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.invalid.\(channelsData)")
             }
             
             guard let channel:NotificationChannelModel =
                             NotificationChannelModel()
                                 .fromMap(arguments: channelMap) as? NotificationChannelModel
             else {
-                throw AwesomeNotificationsException
-                            .invalidRequiredFields(msg: "Notification channel `\(channelsData)` is invalid")
+                throw ExceptionFactory
+                        .shared
+                        .createNewAwesomeException(
+                            className: TAG,
+                            code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            message: "Notification channel `\(channelsData)` is invalid",
+                            detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.invalid.\(channelsData)")
             }
             
             channels.append(channel)

@@ -60,9 +60,13 @@ public class AwesomeNotifications:
                     .shared
                     .extensionClassName
         else {
-            throw AwesomeNotificationsException
-                .invalidRequiredFields(
-                    msg: "Awesome plugin reference is invalid or not found")
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: TAG,
+                    code: ExceptionCode.CODE_CLASS_NOT_FOUND,
+                    message: "Awesome's plugin extension reference was not found.",
+                    detailedCode: ExceptionCode.DETAILED_INITIALIZATION_FAILED+".awesomeNotifications.extensions")
         }
 
         guard let extensionClass:AnyClass =
@@ -70,17 +74,25 @@ public class AwesomeNotifications:
                     .main
                     .classNamed(extensionClass)
         else {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(
-                            msg: "Awesome plugin reference is invalid or not found")
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: TAG,
+                    code: ExceptionCode.CODE_CLASS_NOT_FOUND,
+                    message: "Awesome's plugin extension reference '\(extensionClass)' was not found.",
+                    detailedCode: ExceptionCode.DETAILED_INITIALIZATION_FAILED+".awesomeNotifications.extensions")
         }
         
         guard let awesomeExtension:AwesomeNotificationsExtension =
                 (extensionClass as! NSObject.Type).initialize() as? AwesomeNotificationsExtension
         else {
-            throw AwesomeNotificationsException
-                        .invalidRequiredFields(
-                            msg: "Awesome plugin reference is invalid or not found")
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: TAG,
+                    code: ExceptionCode.CODE_CLASS_NOT_FOUND,
+                    message: "Awesome's plugin extension reference '\(extensionClass)' was not found.",
+                    detailedCode: ExceptionCode.DETAILED_INITIALIZATION_FAILED+".awesomeNotifications.extensions")
         }
         
         try loadAwesomeExtensions(
@@ -396,8 +408,13 @@ public class AwesomeNotifications:
             backgroundHandle: backgroundHandle)
         
         if ListUtils.isNullOrEmpty(channels) {
-            throw AwesomeNotificationsException
-                .invalidRequiredFields(msg: "At least one channel is required");
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INITIALIZATION_EXCEPTION,
+                        message: "At least one channel is required",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".channelList")
         }
         
         for channel in channels {

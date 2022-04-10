@@ -9,6 +9,8 @@ import Foundation
 
 public class NotificationIntervalModel : NotificationScheduleModel {
     
+    static let TAG = "NotificationIntervalModel"
+    
     var _createdDate:RealDateTime?
     var _timeZone:TimeZone?
     
@@ -54,12 +56,24 @@ public class NotificationIntervalModel : NotificationScheduleModel {
     
     public func validate() throws {
         
-        if(IntUtils.isNullOrEmpty(interval) || interval! <= 0){
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Interval cannot be null, empty or zero")
+        if(IntUtils.isNullOrEmpty(interval) || interval! <= 5){
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: NotificationIntervalModel.TAG,
+                    code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                    message: "Interval is required and must be greater than 5",
+                    detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationInterval.interval")
         }
 
         if((repeats ?? false) && interval! < 60){
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "time interval must be at least 60 if repeating");
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: NotificationIntervalModel.TAG,
+                    code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                    message: "time interval must be at least 60 if repeating",
+                    detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationInterval.interval")
         }
     }
     

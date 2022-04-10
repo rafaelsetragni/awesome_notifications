@@ -89,13 +89,23 @@ public class NotificationButtonModel : AbstractModel {
     public func validate() throws {
         
         if(StringUtils.isNullOrEmpty(key)){
-            throw AwesomeNotificationsException.invalidRequiredFields(
-                msg: "Button action key cannot be null or empty")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: NotificationButtonModel.TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Button key is required",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".button.actionKey")
         }
 
         if(StringUtils.isNullOrEmpty(label)){
-            throw AwesomeNotificationsException.invalidRequiredFields(
-                msg: "Button label cannot be null or empty")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: NotificationButtonModel.TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Button label is required",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".button.label")
         }
     }
 }

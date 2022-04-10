@@ -194,7 +194,7 @@ public class AwesomeNotifications
                         .createNewAwesomeException(
                                 TAG,
                                 ExceptionCode.CODE_CLASS_NOT_FOUND,
-                                "Awesome plugin reference '"+extensionClassReference+"' was not found.",
+                                "Awesome's plugin extension reference '"+extensionClassReference+"' was not found.",
                                 ExceptionCode.DETAILED_INITIALIZATION_FAILED+".awesomeNotifications.extensions");
             }
     }

@@ -8,7 +8,9 @@
 import Foundation
 
 public class NotificationModel : AbstractModel {
-        
+    
+    private static let TAG = "NotificationModel"
+    
     var content:NotificationContentModel?
     var actionButtons:[NotificationButtonModel]?
     var schedule:NotificationScheduleModel?
@@ -70,7 +72,13 @@ public class NotificationModel : AbstractModel {
             map[Definitions.NOTIFICATION_INITIAL_DATE_TIME] != nil ||
             map[Definitions.NOTIFICATION_EXPIRATION_DATE_TIME] != nil
         ){
-            throw AwesomeNotificationsException.invalidRequiredFields(msg: "Crontab schedules are not available for iOS")
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: NotificationModel.TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Crontab schedules are not available for iOS",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".crontab.ios")
         }
         
         if map["interval"] != nil {

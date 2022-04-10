@@ -159,31 +159,48 @@ public class NotificationChannelModel : AbstractModel {
     
     public func validate() throws {
         
-        if(StringUtils.isNullOrEmpty(channelKey)){
-            throw AwesomeNotificationsException.invalidRequiredFields(
-                msg: "channelKey cannot be null or empty")
+        if StringUtils.isNullOrEmpty(channelKey) {
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: NotificationIntervalModel.TAG,
+                    code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                    message: "Channel key cannot be null or empty",
+                    detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.key")
         }
 
-        if(StringUtils.isNullOrEmpty(channelName)){
-            throw AwesomeNotificationsException.invalidRequiredFields(
-                msg: "channelName cannot be null or empty")
+        if StringUtils.isNullOrEmpty(channelName) {
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: NotificationIntervalModel.TAG,
+                    code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                    message: "Channel name cannot be null or empty",
+                    detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.name")
         }
 
-        if(StringUtils.isNullOrEmpty(channelDescription)){
-            throw AwesomeNotificationsException.invalidRequiredFields(
-                msg: "channelDescription cannot be null or empty")
+        if StringUtils.isNullOrEmpty(channelDescription) {
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: NotificationIntervalModel.TAG,
+                    code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                    message: "Channel description cannot be null or empty",
+                    detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.description")
         }
         
         if(
             BooleanUtils.getValue(value: playSound, defaultValue: false) &&
             !StringUtils.isNullOrEmpty(soundSource)
         ){
-            if #available(iOS 10.0, *) {
-                if(!AudioUtils.shared.isValidSound(soundSource)){
-                    throw AwesomeNotificationsException.invalidRequiredFields(msg: "Audio media is not valid")
-                }
-            } else {
-                // Fallback on earlier versions
+            if(!AudioUtils.shared.isValidSound(soundSource)){
+                throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: NotificationIntervalModel.TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Audio media is not valid",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.description")
             }
         }
     }

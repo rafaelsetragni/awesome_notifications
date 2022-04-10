@@ -105,7 +105,13 @@ class NotificationSenderAndScheduler {
                     self.execute()
                 }
                 else {
-                    throw AwesomeNotificationsException.notificationNotAuthorized
+                    throw ExceptionFactory
+                            .shared
+                            .createNewAwesomeException(
+                                className: NotificationIntervalModel.TAG,
+                                code: ExceptionCode.CODE_INSUFFICIENT_PERMISSIONS,
+                                message: "Notifications are disabled",
+                                detailedCode: ExceptionCode.DETAILED_INSUFFICIENT_PERMISSIONS+".global")
                 }
             } catch {
                 self.completion(false, nil, error)

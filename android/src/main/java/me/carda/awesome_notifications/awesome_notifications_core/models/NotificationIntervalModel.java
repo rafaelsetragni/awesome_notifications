@@ -52,13 +52,13 @@ public class NotificationIntervalModel extends NotificationScheduleModel {
     @Override
     public void validate(Context context) throws AwesomeNotificationsException {
 
-        if(interval == null || interval < 0)
+        if(interval == null || interval < 5)
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
                             ExceptionCode.CODE_INVALID_ARGUMENTS,
-                            "Interval is required and must be greater than zero",
+                            "Interval is required and must be greater than 5",
                             ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationInterval.interval");
 
         if(repeats && interval < 60)
