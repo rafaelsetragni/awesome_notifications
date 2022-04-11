@@ -9,6 +9,7 @@ import Foundation
 
 class DefaultsManager {
     
+    static let TAG = "DefaultsManager"
     let userDefaults:UserDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)!
     
     // ************** SINGLETON PATTERN ***********************
@@ -48,13 +49,25 @@ class DefaultsManager {
     public var lastDisplayedDate:RealDateTime {
         get {
             let dateText:String? = userDefaults.object(forKey: Definitions.AWESOME_LAST_DISPLAYED_DATE) as? String
-            return
-                dateText == nil ?
-                    RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone):
-                    RealDateTime.init(
-                            fromDateText: dateText!,
-                            defaultTimeZone: RealDateTime.utcTimeZone)!
             
+            Logger.d(DefaultsManager.TAG, "Awesome Notifications - UTC timezone : \(RealDateTime.utcTimeZone)")
+            Logger.d(DefaultsManager.TAG, "Awesome Notifications - Local timezone : \(DateUtils.shared.localTimeZone)")
+            
+            guard let dateText:String = dateText else {
+                return RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
+            }
+            
+            Logger.d(DefaultsManager.TAG, "Awesome Notifications - last displayed date : \(dateText)")
+            
+            guard let lastDate:RealDateTime =
+                                    RealDateTime.init(
+                                        fromDateText: dateText,
+                                        defaultTimeZone: RealDateTime.utcTimeZone)
+            else {
+                return RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
+            }
+            
+            return lastDate
         }
         set { userDefaults.setValue(newValue.description, forKey: Definitions.AWESOME_LAST_DISPLAYED_DATE) }
     }
