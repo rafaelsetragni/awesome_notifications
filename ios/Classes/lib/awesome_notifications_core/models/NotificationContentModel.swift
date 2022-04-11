@@ -239,38 +239,14 @@ public class NotificationContentModel : AbstractModel {
 
         try validateIcon(icon)
         
-        switch notificationLayout {
-            
-            case .Default:
-                break
-                
-            case .BigPicture:
+        if notificationLayout == nil {
+            notificationLayout = .Default
+        } else {
+            if notificationLayout == .BigPicture {
                 try validateRequiredImages()
-                break
-            
-            case .Messaging:
-                break
-                
-            case .MessagingGroup:
-                break
-                
-            case .BigText:
-                break
-                
-            case .ProgressBar:
-                break
-            
-            case .MediaPlayer:
-                break
-                    
-            case .Inbox:
-                break
-                
-            default:
-                notificationLayout = NotificationLayout.Default
-                break
+            }
         }
-        
+
         try validateBigPicture()
         try validateLargeIcon()
     }

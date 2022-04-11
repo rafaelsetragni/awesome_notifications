@@ -302,41 +302,13 @@ public class NotificationContentModel extends AbstractModel {
 
         validateIcon(context);
 
-        switch(notificationLayout){
-            
-            case NotificationLayout.Default:
-                break;
-                
-            case NotificationLayout.BigPicture:
-                validateRequiredImages();
-                break;
-            
-            case NotificationLayout.Messaging:
-                break;
-                
-            case NotificationLayout.MessagingGroup:
-                break;
-                
-            case NotificationLayout.BigText:
-                break;
-                
-            case NotificationLayout.ProgressBar:
-                break;
-            
-            case NotificationLayout.MediaPlayer:
-                break;
-                    
-            case NotificationLayout.Inbox:
-                break;
-                
-            default:
-                notificationLayout = NotificationLayout.Default;
-                break;
-
+        if(notificationLayout == null) {
+            notificationLayout = NotificationLayout.Default;
+        } else {
+            if(notificationLayout == NotificationLayout.BigPicture) {
+                validateRequiredImages(context);
+            }
         }
-
-        if (notificationLayout == NotificationLayout.BigPicture)
-            validateBigPicture(context);
 
         validateBigPicture(context);
         validateLargeIcon(context);
