@@ -998,13 +998,16 @@ public class NotificationBuilder {
                     contentModel.largeIcon
             );
 
-            List<NotificationMessageModel> messages =  messagingQueue.get(messageQueueKey);
+            List<NotificationMessageModel> messages = contentModel.messages!=null?contentModel.messages: messagingQueue.get(messageQueueKey);
+
 
             if(messages == null)
                 messages = new ArrayList<>();
 
-            messages.add(currentMessage);
-            messagingQueue.put(messageQueueKey, messages);
+            if(contentModel.messages!=null) {
+                messages.add(currentMessage);
+                messagingQueue.put(messageQueueKey, messages);
+            }
 
             contentModel.id = firstNotificationId;
             contentModel.messages = messages;
