@@ -1186,16 +1186,20 @@ public class NotificationBuilder {
                     contentModel.largeIcon
             );
 
-            List<NotificationMessageModel> messages =  messagingQueue.get(messageQueueKey);
-
-            if(messages == null)
-                messages = new ArrayList<>();
-
-            messages.add(currentMessage);
-            messagingQueue.put(messageQueueKey, messages);
+            if(contentModel.messages == null) {
+                List<NotificationMessageModel> messages =  messagingQueue.get(messageQueueKey);
+                                
+                if (messages == null)
+                    messages = new ArrayList<>();
+                
+                messages.add(currentMessage);
+                messagingQueue.put(messageQueueKey, messages);
+                
+                
+                contentModel.messages = messages;
+            }
 
             contentModel.id = firstNotificationId;
-            contentModel.messages = messages;
 
             NotificationCompat.MessagingStyle messagingStyle =
                     new NotificationCompat.MessagingStyle(contentModel.summary);
