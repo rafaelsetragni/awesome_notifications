@@ -1159,7 +1159,7 @@ public class NotificationBuilder {
                 contentModel.groupKey : channelModel.groupKey;
     }
 
-    public final ConcurrentHashMap<String, List<NotificationMessageModel>> messagingQueue = new ConcurrentHashMap<String, List<NotificationMessageModel>>();
+    public static final ConcurrentHashMap<String, List<NotificationMessageModel>> messagingQueue = new ConcurrentHashMap<String, List<NotificationMessageModel>>();
 
     @SuppressWarnings("unchecked")
     private Boolean setMessagingLayout(Context context, boolean isGrouping, NotificationContentModel contentModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) throws AwesomeNotificationsException {
