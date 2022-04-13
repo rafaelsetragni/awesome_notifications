@@ -1209,11 +1209,12 @@ public class NotificationBuilder {
 
                     Person.Builder personBuilder =  new Person.Builder()
                             .setName(message.title);
-
-                    if(!stringUtils.isNullOrEmpty(contentModel.largeIcon)){
+                    
+                    String personIcon = message.largeIcon != null? message.largeIcon :contentModel.largeIcon;
+                    if(!stringUtils.isNullOrEmpty(personIcon)){
                         Bitmap largeIcon = bitmapUtils.getBitmapFromSource(
                                 context,
-                                contentModel.largeIcon,
+                                personIcon,
                                 contentModel.roundedLargeIcon);
                         if(largeIcon != null)
                             personBuilder.setIcon(
