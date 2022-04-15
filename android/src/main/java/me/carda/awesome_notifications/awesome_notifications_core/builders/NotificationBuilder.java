@@ -1159,7 +1159,7 @@ public class NotificationBuilder {
                 contentModel.groupKey : channelModel.groupKey;
     }
 
-    public final ConcurrentHashMap<String, List<NotificationMessageModel>> messagingQueue = new ConcurrentHashMap<String, List<NotificationMessageModel>>();
+    public static final ConcurrentHashMap<String, List<NotificationMessageModel>> messagingQueue = new ConcurrentHashMap<String, List<NotificationMessageModel>>();
 
     @SuppressWarnings("unchecked")
     private Boolean setMessagingLayout(Context context, boolean isGrouping, NotificationContentModel contentModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) throws AwesomeNotificationsException {
@@ -1186,16 +1186,20 @@ public class NotificationBuilder {
                     contentModel.largeIcon
             );
 
-            List<NotificationMessageModel> messages =  messagingQueue.get(messageQueueKey);
-
-            if(messages == null)
-                messages = new ArrayList<>();
-
-            messages.add(currentMessage);
-            messagingQueue.put(messageQueueKey, messages);
+            if(contentModel.messages == null) {
+                List<NotificationMessageModel> messages =  messagingQueue.get(messageQueueKey);
+                                
+                if (messages == null)
+                    messages = new ArrayList<>();
+                
+                messages.add(currentMessage);
+                messagingQueue.put(messageQueueKey, messages);
+                
+                
+                contentModel.messages = messages;
+            }
 
             contentModel.id = firstNotificationId;
-            contentModel.messages = messages;
 
             NotificationCompat.MessagingStyle messagingStyle =
                     new NotificationCompat.MessagingStyle(contentModel.summary);
@@ -1205,11 +1209,12 @@ public class NotificationBuilder {
 
                     Person.Builder personBuilder =  new Person.Builder()
                             .setName(message.title);
-
-                    if(!stringUtils.isNullOrEmpty(contentModel.largeIcon)){
+                    
+                    String personIcon = message.largeIcon != null? message.largeIcon :contentModel.largeIcon;
+                    if(!stringUtils.isNullOrEmpty(personIcon)){
                         Bitmap largeIcon = bitmapUtils.getBitmapFromSource(
                                 context,
-                                contentModel.largeIcon,
+                                personIcon,
                                 contentModel.roundedLargeIcon);
                         if(largeIcon != null)
                             personBuilder.setIcon(
