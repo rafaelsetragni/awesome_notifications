@@ -1,7 +1,11 @@
 ## [0.7.0-beta.3]
 * All exceptions have been standardized with distinct exception codes to improve native error handling via PlatformException
 * New exception catcher implemented to handle all native exceptions and provide better integration with Firebase Analytics.
-* StopForeground method by id was fixed
+* StopForeground method by id was fixed on Android
+* Background actions improved on iOS to hold long tasks
+* Background actions improved on iOS to increase UI performance through background threads
+* Added console performance mesures for iOS
+* Added warning messages for non implemented layouts on iOS
 ### [0.7.0-beta.2]
 * AsyncTask replaced by Handler/Looper due deprecation in Android 12
 * FULL_WAKE_LOCK replaced by SCREEN_BRIGHT_WAKE_LOCK to improve battery life in Android

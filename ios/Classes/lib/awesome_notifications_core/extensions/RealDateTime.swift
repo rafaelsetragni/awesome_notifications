@@ -86,7 +86,7 @@ public class RealDateTime: Equatable, Comparable {
     
     static func stringToDate(_ dateTime:String?, timeZone:TimeZone?) -> Date? {
         
-        if(StringUtils.isNullOrEmpty(dateTime)){ return nil }
+        if(StringUtils.shared.isNullOrEmpty(dateTime)){ return nil }
         
         guard let safeDateTime:String = dateTime else { return nil }
         

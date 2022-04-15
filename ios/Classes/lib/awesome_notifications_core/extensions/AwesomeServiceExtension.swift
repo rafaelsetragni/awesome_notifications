@@ -23,7 +23,7 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
 
         if let content = content {
             
-            if(!StringUtils.isNullOrEmpty(content.userInfo["gcm.message_id"] as? String)){
+            if(!StringUtils.shared.isNullOrEmpty(content.userInfo["gcm.message_id"] as? String)){
                 Logger.d("AwesomeServiceExtension", "FCM received")
                 
                 let title:String? = content.title
@@ -45,7 +45,7 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
                     notificationModel!.content!.body = body
                     notificationModel!.content!.playSound = true
                     
-                    if !StringUtils.isNullOrEmpty(image) {
+                    if !StringUtils.shared.isNullOrEmpty(image) {
                         notificationModel!.content!.notificationLayout = NotificationLayout.BigPicture
                         notificationModel!.content!.bigPicture = image
                     }
@@ -71,11 +71,11 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
                         notificationModel: notificationModel!,
                         content: content)
                 
-                if StringUtils.isNullOrEmpty(title) {
+                if StringUtils.shared.isNullOrEmpty(title) {
                     content.title = notificationModel?.content?.title ?? ""
                 }
                 
-                if StringUtils.isNullOrEmpty(body) {
+                if StringUtils.shared.isNullOrEmpty(body) {
                     content.body = notificationModel?.content?.body ?? ""
                 }
                 

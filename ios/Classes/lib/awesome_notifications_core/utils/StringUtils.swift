@@ -8,12 +8,29 @@
 import Foundation
 
 public class StringUtils {
+    
+    let TAG = "StringUtils"
+    
+    // ************** SINGLETON PATTERN ***********************
+    
+    static var instance:StringUtils?
+    public static var shared:StringUtils {
+        get {
+            StringUtils.instance = StringUtils.instance ?? StringUtils()
+            return StringUtils.instance!
+        }
+    }
+    init(){}
+    
+    // ************** SINGLETON PATTERN ***********************
 
-    public static func isNullOrEmpty(_ value:String?) -> Bool {
-        return value?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true
+    public func isNullOrEmpty(_ value:String?, considerWhiteSpaceAsEmpty:Bool = true) -> Bool {
+        return considerWhiteSpaceAsEmpty ?
+            value?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true :
+            value?.isEmpty ?? true
     }
     
-    public static func random(length: Int) -> String {
+    public func random(length: Int) -> String {
         let letters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let len = UInt32(letters.length)
 

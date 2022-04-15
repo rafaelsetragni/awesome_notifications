@@ -25,7 +25,7 @@ public class FlutterBitmapUtils : BitmapUtils {
         
         let mediaPath:String? = cleanMediaPath(mediaPath)
 
-        if(StringUtils.isNullOrEmpty(mediaPath)){ return nil }
+        if(StringUtils.shared.isNullOrEmpty(mediaPath)){ return nil }
                     
         let key = registrar.lookupKey(forAsset: mediaPath!)
         let topPath = Bundle.main.path(forResource: key, ofType: nil)

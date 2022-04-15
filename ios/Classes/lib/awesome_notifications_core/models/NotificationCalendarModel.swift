@@ -12,6 +12,8 @@ public class NotificationCalendarModel : NotificationScheduleModel {
     var _createdDate:RealDateTime?
     var _timeZone:TimeZone?
     
+    public init(){}
+    
     /// Initial reference date from schedule
     public var createdDate:RealDateTime? { get{
         return _createdDate

@@ -5,7 +5,7 @@
 //  Created by Rafael Setragni on 05/03/21.
 //
 
-enum DefaultRingtoneType : String, CaseIterable {
+public enum DefaultRingtoneType : String, CaseIterable {
     
     case Ringtone = "Ringtone"
     case Notification = "Notification"

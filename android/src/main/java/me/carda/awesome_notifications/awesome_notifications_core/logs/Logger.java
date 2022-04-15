@@ -9,6 +9,12 @@ import java.util.Locale;
 
 public class Logger {
 
+    private static final String redColor = "\u001B[31m";
+    private static final String greenColor = "\u001B[32m";
+    private static final String blueColor = "\u001B[34m";
+    private static final String yellowColor = "\u001B[33m";
+    private static final String resetColor = "\u001B[0m";
+
     private static final DateFormat dateFormat =
             new SimpleDateFormat("yyyy/MM/dd HH:mm:ss (z)", Locale.US);
 
@@ -24,19 +30,19 @@ public class Logger {
     }
 
     public static void d(String className, String message){
-        Log.d("\u001B[32mAndroid: [Awesome Notifications - DEBUG]", message + " (" + className + ":" + getLastLine() + ")\u001B[0m");
+        Log.d(greenColor+"Android: [Awesome Notifications - DEBUG]", message + " (" + className + ":" + getLastLine() + ")" + resetColor);
     }
 
     public static void e(String className, String message){
-        Log.e("\u001B[31mAndroid: [Awesome Notifications - ERROR]", message + " (" + className + ":" + getLastLine() + ")\u001B[0m");
+        Log.e(redColor+"Android: [Awesome Notifications - ERROR]", message + " (" + className + ":" + getLastLine() + ")" + resetColor);
     }
 
     public static void i(String className, String message){
-        Log.i("\u001B[34mAndroid: [Awesome Notifications - INFO]",  message +  " (" + className + ")\u001B[0m");
+        Log.i(blueColor+"Android: [Awesome Notifications - INFO]",  message +  " (" + className + ")" + resetColor);
     }
 
     public static void w(String className, String message){
-        Log.w("\u001B[33mAndroid: [Awesome Notifications - WARNING]", message + " (" + className + ":" + getLastLine() + ")\u001B[0m");
+        Log.w(yellowColor+"Android: [Awesome Notifications - WARNING]", message + " (" + className + ":" + getLastLine() + ")" + resetColor);
     }
 
 }

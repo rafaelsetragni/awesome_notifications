@@ -53,7 +53,7 @@ class AwesomeEventsReceiver {
         with notificationReceived: NotificationReceived
     ){
         if AwesomeNotifications.debug && actionEventListeners.isEmpty {
-            Logger.e(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new notification events")
+            Logger.e(TAG, "New event \(eventName) ignored, as there is no listeners waiting for new notification events")
         }
         
         for listener in notificationEventListeners {
@@ -90,7 +90,7 @@ class AwesomeEventsReceiver {
         with actionReceived: ActionReceived
     ){
         if AwesomeNotifications.debug && actionEventListeners.isEmpty {
-            Logger.e(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new action events")
+            Logger.e(TAG, "New event \(eventName) ignored, as there is no listeners waiting for new action events")
         }
             
         for listener in actionEventListeners {
@@ -109,7 +109,7 @@ class AwesomeEventsReceiver {
     ){
         if notificationEventListeners.isEmpty {
             if AwesomeNotifications.debug {
-                Logger.e(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new notification events")
+                Logger.e(TAG, "New event \(eventName) ignored, as there is no listeners waiting for new notification events")
             }
             return
         }
@@ -141,7 +141,7 @@ class AwesomeEventsReceiver {
     ){
         if notificationEventListeners.isEmpty {
             if AwesomeNotifications.debug {
-                Logger.e(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new action events")
+                Logger.e(TAG, "New event \(eventName) ignored, as there is no listeners waiting for new action events")
             }
             return
         }

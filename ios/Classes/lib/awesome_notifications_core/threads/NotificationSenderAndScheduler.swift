@@ -8,7 +8,7 @@
 import Foundation
 
 @available(iOS 10.0, *)
-class NotificationSenderAndScheduler {
+public class NotificationSenderAndScheduler {
 
     public static let TAG: String = "NotificationSender"
 
@@ -18,8 +18,11 @@ class NotificationSenderAndScheduler {
     private var content:            UNMutableNotificationContent?
     
     private var refreshNotification:Bool = false
-    private var created:    Bool = false
-    private var scheduled:  RealDateTime?
+    private var created:   Bool = false
+    private var scheduled: RealDateTime?
+    private var startTime: DispatchTime
+    
+    private var originalUserInfo:[AnyHashable:Any]?
     
     private var completion: ((Bool, UNMutableNotificationContent?, Error?) -> ())
     
@@ -92,6 +95,7 @@ class NotificationSenderAndScheduler {
         self.notificationModel = notificationModel
         self.appLifeCycle = appLifeCycle
         self.completion = completion
+        self.startTime = DispatchTime.now()
     }
     
     private func send() throws {
@@ -160,8 +164,8 @@ class NotificationSenderAndScheduler {
                 var receivedNotification: NotificationReceived? = nil
 
                 if (
-                    !StringUtils.isNullOrEmpty(notificationModel!.content!.title) ||
-                    !StringUtils.isNullOrEmpty(notificationModel!.content!.body)
+                    !StringUtils.shared.isNullOrEmpty(notificationModel!.content!.title) ||
+                    !StringUtils.shared.isNullOrEmpty(notificationModel!.content!.body)
                 ){
                     notificationModel = try showNotification(notificationModel!)
 
@@ -227,6 +231,7 @@ class NotificationSenderAndScheduler {
                         whenFinished: { [self] (created:Bool) in
                             
                             if scheduled == nil {
+                                printElapsedTime(scheduled: false)
                                 BroadcastSender
                                     .shared
                                     .sendBroadcast(
@@ -236,6 +241,7 @@ class NotificationSenderAndScheduler {
                                         })
                             }
                             else {
+                                printElapsedTime(scheduled: true)
                                 DisplayedManager
                                     .saveScheduledToDisplay(
                                         received: receivedNotification!)
@@ -246,6 +252,7 @@ class NotificationSenderAndScheduler {
             else {
                 
                 if scheduled == nil {
+                    printElapsedTime(scheduled: false)
                     BroadcastSender
                         .shared
                         .sendBroadcast(
@@ -255,6 +262,7 @@ class NotificationSenderAndScheduler {
                             })
                 }
                 else {
+                    printElapsedTime(scheduled: true)
                     DisplayedManager
                         .saveScheduledToDisplay(
                             received: receivedNotification!)
@@ -265,6 +273,19 @@ class NotificationSenderAndScheduler {
         else {
             completion(false, nil, nil)
         }
+    }
+    
+    private func printElapsedTime(scheduled:Bool){
+        if !AwesomeNotifications.debug {
+            return
+        }
+        
+        let endTime = DispatchTime.now()
+        let nanoTime = endTime.uptimeNanoseconds - startTime.uptimeNanoseconds
+        let timeInterval:Double = Double(nanoTime) / 1_000_000
+        Logger.d(
+            BackgroundService.TAG,
+            "Notification \(scheduled ? "scheduled" : "displayed") in \(timeInterval.rounded())ms")
     }
 
     /// AsyncTask METHODS END *********************************

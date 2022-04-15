@@ -27,7 +27,7 @@ public class AudioUtils: MediaUtils {
         
     public func getSoundFromSource(SoundPath:String?) -> UNNotificationSound? {
         
-        if(StringUtils.isNullOrEmpty(SoundPath)){ return nil }
+        if(StringUtils.shared.isNullOrEmpty(SoundPath)){ return nil }
         
         switch(getMediaSourceType(mediaPath: SoundPath)){
                 
@@ -81,7 +81,7 @@ public class AudioUtils: MediaUtils {
     func getSoundFromUrl(_ SoundUri:String) -> UNNotificationSound? {
         let SoundUri:String? = cleanMediaPath(mediaPath: SoundUri)
         
-        if !StringUtils.isNullOrEmpty(SoundUri) {
+        if !StringUtils.shared.isNullOrEmpty(SoundUri) {
 
             //do {
                 return UNNotificationSound.default
@@ -97,7 +97,7 @@ public class AudioUtils: MediaUtils {
     func getSoundFromFile(_ mediaPath:String) -> UNNotificationSound? {
         let mediaPath:String? = cleanMediaPath(mediaPath)
         
-        if(StringUtils.isNullOrEmpty(mediaPath)){ return nil }
+        if(StringUtils.shared.isNullOrEmpty(mediaPath)){ return nil }
         
         return getSoundFromFile(fromRealPath: mediaPath!)
     }
@@ -167,7 +167,7 @@ public class AudioUtils: MediaUtils {
     /*
      public func isValidSound(_ mediaPath:String? ) -> Bool {
          
-         if(!StringUtils.isNullOrEmpty(mediaPath)){
+         if(!StringUtils.shared.isNullOrEmpty(mediaPath)){
              
              if(MediaUtils.matchMediaType(regex: Definitions.MEDIA_VALID_NETWORK, mediaPath: mediaPath)){
                  return true
