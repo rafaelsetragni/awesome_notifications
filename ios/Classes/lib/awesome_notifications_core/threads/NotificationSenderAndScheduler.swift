@@ -230,6 +230,10 @@ public class NotificationSenderAndScheduler {
                         notificationCreated: receivedNotification!,
                         whenFinished: { [self] (created:Bool) in
                             
+                            if created && scheduled == nil && receivedNotification?.id != nil {
+                                removePastSchedule(withId:receivedNotification!.id!)
+                            }
+                            
                             if scheduled == nil {
                                 printElapsedTime(scheduled: false)
                                 BroadcastSender
@@ -250,6 +254,10 @@ public class NotificationSenderAndScheduler {
                         })
             }
             else {
+                
+                if created && scheduled == nil && receivedNotification?.id != nil {
+                    removePastSchedule(withId:receivedNotification!.id!)
+                }
                 
                 if scheduled == nil {
                     printElapsedTime(scheduled: false)
@@ -273,6 +281,12 @@ public class NotificationSenderAndScheduler {
         else {
             completion(false, nil, nil)
         }
+    }
+    
+    private func removePastSchedule(withId id:Int){
+        _ = ScheduleManager
+            .shared
+            .remove(referenceKey: String(id))
     }
     
     private func printElapsedTime(scheduled:Bool){

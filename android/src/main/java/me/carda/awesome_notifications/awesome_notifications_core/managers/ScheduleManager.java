@@ -82,7 +82,7 @@ public class ScheduleManager {
         return successHelper && successShared;
     }
 
-    public static void removeScheduleById(Context context, String id) throws AwesomeNotificationsException {
+    public static void cancelScheduleById(Context context, String id) throws AwesomeNotificationsException {
         NotificationModel schedule = getScheduleById(context, id);
         if(schedule != null)
             removeSchedule(context, schedule);
