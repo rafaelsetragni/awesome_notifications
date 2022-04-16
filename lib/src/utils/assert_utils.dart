@@ -71,7 +71,7 @@ class AwesomeAssertUtils {
                   .firstMatch(valueCasted);
 
           if (match != null)
-            return DateFormat("yyyy-MM-dd HH:mm:ss Z")
+            return DateFormat("yyyy-MM-dd HH:mm:ss Z","en")
                 .parseUTC(match.group(0)!)
                 .toLocal();
 
