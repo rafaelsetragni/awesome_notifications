@@ -30,7 +30,7 @@ class DateUtils {
 
     public func stringToDate(_ dateTime:String?, timeZone:String?) -> Date? {
         
-        if(StringUtils.isNullOrEmpty(dateTime)){ return nil }
+        if(StringUtils.shared.isNullOrEmpty(dateTime)){ return nil }
         
         guard let safeDateTime:String = dateTime else { return nil }
         

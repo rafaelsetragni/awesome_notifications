@@ -10,19 +10,25 @@ import os.log
 
 public class Logger {
     
-    static func d(_ className:String, _ message:String, line: Int = #line){
-        os_log("Swift: [AWESOME NOTIFICATIONS - DEBUG] %@ (%@:%d)", type: .debug, message, className, line)
+    static let redColor = "\u{001B}[0;31m"
+    static let greenColor = "\u{001B}[0;32m"
+    static let blueColor = "\u{001B}[0;34m"
+    static let yellowColor = "\u{001B}[0;33m"
+    static let resetColor = "\u{001B}[0;0m"
+    
+    static public func d(_ className:String, _ message:String, line: Int = #line){
+        os_log("%@Swift: [AWESOME NOTIFICATIONS - DEBUG] %@ (%@:%d)%@", type: .debug, greenColor, message, className, line, resetColor)
     }
     
-    static func e(_ className:String, _ message:String, line: Int = #line){
-        os_log("Swift: [AWESOME NOTIFICATIONS - ERROR] %@ (%@:%d)", type: .error, message, className, line)
+    static public func e(_ className:String, _ message:String, line: Int = #line){
+        os_log("%@Swift: [AWESOME NOTIFICATIONS - ERROR] %@ (%@:%d)%@", type: .error, redColor, message, className, line, resetColor)
     }
     
-    static func i(_ className:String, _ message:String, line: Int = #line){
-        os_log("Swift: [AWESOME NOTIFICATIONS - INFO] %@ (%@:%d)", type: .info, message, className, line)
+    static public func i(_ className:String, _ message:String, line: Int = #line){
+        os_log("%@Swift: [AWESOME NOTIFICATIONS - INFO] %@ (%@:%d)%@", type: .info, blueColor, message, className, line, resetColor)
     }
     
-    static func w(_ className:String, _ message:String, line: Int = #line){
-        os_log("Swift: [AWESOME NOTIFICATIONS - WARNING] %@ (%@:%d)", type: .fault, message, className, line)
+    static public func w(_ className:String, _ message:String, line: Int = #line){
+        os_log("%@Swift: [AWESOME NOTIFICATIONS - WARNING] %@ (%@:%d)%@", type: .fault, yellowColor, message, className, line, resetColor)
     }
 }

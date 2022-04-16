@@ -11,12 +11,14 @@ public class NotificationModel : AbstractModel {
     
     private static let TAG = "NotificationModel"
     
-    var content:NotificationContentModel?
-    var actionButtons:[NotificationButtonModel]?
-    var schedule:NotificationScheduleModel?
-    var importance:NotificationImportance?
+    public var content:NotificationContentModel?
+    public var actionButtons:[NotificationButtonModel]?
+    public var schedule:NotificationScheduleModel?
+    public var importance:NotificationImportance?
     
-    var nextValidDate:RealDateTime?
+    public var nextValidDate:RealDateTime?
+    
+    public init(){}
     
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         

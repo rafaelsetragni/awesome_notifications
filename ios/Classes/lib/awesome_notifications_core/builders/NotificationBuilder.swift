@@ -29,7 +29,7 @@ public class NotificationBuilder {
     }
     
     public func jsonToNotificationModel(jsonData:String?) -> NotificationModel? {
-        if StringUtils.isNullOrEmpty(jsonData) { return nil }
+        if StringUtils.shared.isNullOrEmpty(jsonData) { return nil }
         
         let data:[String:Any?]? = JsonUtils.fromJson(jsonData)
         if data == nil { return nil }
@@ -53,7 +53,7 @@ public class NotificationBuilder {
             buttonKeyPressed: buttonKeyPressed,
             buttonKeyInput: userText)
         
-        if notificationModel!.actionButtons != nil && !StringUtils.isNullOrEmpty(buttonKeyPressed) {
+        if notificationModel!.actionButtons != nil && !StringUtils.shared.isNullOrEmpty(buttonKeyPressed) {
             for button:NotificationButtonModel in notificationModel!.actionButtons! {
                 if button.key == buttonKeyPressed {
                     actionReceived.autoDismissible = button.autoDismissible
@@ -237,7 +237,7 @@ public class NotificationBuilder {
     
     private func createActionButtonsAndCategory(notificationModel:NotificationModel, content:UNMutableNotificationContent){
         
-        var categoryIdentifier:String = StringUtils.isNullOrEmpty(content.categoryIdentifier) ?
+        var categoryIdentifier:String = StringUtils.shared.isNullOrEmpty(content.categoryIdentifier) ?
             Definitions.DEFAULT_CATEGORY_IDENTIFIER : content.categoryIdentifier
         
         var actions:[UNNotificationAction] = []
@@ -305,7 +305,7 @@ public class NotificationBuilder {
         
         
         // Only calls setNotificationCategories when its necessary to update or create it
-        if(StringUtils.isNullOrEmpty(lastHash)){
+        if(StringUtils.shared.isNullOrEmpty(lastHash)){
             
             userDefaults!.set(categoryHashIdentifier, forKey: "registered")
             
@@ -404,12 +404,12 @@ public class NotificationBuilder {
             case .Default, .High, .Max:
             if (notificationModel.content!.playSound ?? false) && (channel.playSound ?? false) {
                 
-                if(!StringUtils.isNullOrEmpty(notificationModel.content!.customSound)){
+                if(!StringUtils.shared.isNullOrEmpty(notificationModel.content!.customSound)){
                     content.sound = AudioUtils.shared.getSoundFromSource(SoundPath: notificationModel.content!.customSound!)
                     return
                 }
                 
-                if(!StringUtils.isNullOrEmpty(channel.soundSource)){
+                if(!StringUtils.shared.isNullOrEmpty(channel.soundSource)){
                     content.sound = AudioUtils.shared.getSoundFromSource(SoundPath: channel.soundSource!)
                     return
                 }
@@ -483,7 +483,7 @@ public class NotificationBuilder {
     private func setGrouping(notificationModel:NotificationModel, channel:NotificationChannelModel, content:UNMutableNotificationContent){
 
         let groupKey:String? = getGroupKey(notificationModel: notificationModel, channel: channel)
-        if(!StringUtils.isNullOrEmpty(groupKey)){
+        if(!StringUtils.shared.isNullOrEmpty(groupKey)){
             content.threadIdentifier = groupKey!
         }
     }
@@ -538,7 +538,7 @@ public class NotificationBuilder {
         
         //let dimensionLimit:CGFloat = 1038.0
         		
-        if !StringUtils.isNullOrEmpty(bitmapSource) {
+        if !StringUtils.shared.isNullOrEmpty(bitmapSource) {
             
             if let image:UIImage =
                 BitmapUtils
@@ -575,7 +575,7 @@ public class NotificationBuilder {
     private func setBigPictureLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "BigPicture"
         
-        if(!StringUtils.isNullOrEmpty(notificationModel.content?.bigPicture)){
+        if(!StringUtils.shared.isNullOrEmpty(notificationModel.content?.bigPicture)){
             
             if let attachment:UNNotificationAttachment =
                 getBitmapAttatchment(
@@ -587,7 +587,7 @@ public class NotificationBuilder {
             }
         }
         
-        if(!StringUtils.isNullOrEmpty(notificationModel.content?.largeIcon)){
+        if(!StringUtils.shared.isNullOrEmpty(notificationModel.content?.largeIcon)){
             
             if let attachment:UNNotificationAttachment =
                     getBitmapAttatchment(
@@ -601,22 +601,27 @@ public class NotificationBuilder {
     
     private func setBigTextLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "BigText"
+        Logger.w(NotificationBuilder.TAG, "BigText layout are not available yet for iOS")
     }
     
     private func setProgressBarLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "ProgressBar"
+        Logger.w(NotificationBuilder.TAG, "ProgressBar layout are not available yet for iOS")
     }
     
     private func setIndeterminateBarLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "IndeterminateBar"
+        Logger.w(NotificationBuilder.TAG, "IndeterminateBar layout are not available yet for iOS")
     }
     
     private func setMediaPlayerLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "MediaPlayer"
+        Logger.w(NotificationBuilder.TAG, "MediaPlayer layout are not available yet for iOS")
     }
     
     private func setInboxLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "Inbox"
+        Logger.w(NotificationBuilder.TAG, "Imbox layout are not available yet for iOS")
     }
     
     private func setMessagingLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent, isGrouping:Bool) {

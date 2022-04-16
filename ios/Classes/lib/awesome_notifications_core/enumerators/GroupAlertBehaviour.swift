@@ -1,4 +1,4 @@
-enum GroupAlertBehaviour : String, CaseIterable {
+public enum GroupAlertBehaviour : String, CaseIterable {
     
     case All = "All"
     case Summary = "Summary"

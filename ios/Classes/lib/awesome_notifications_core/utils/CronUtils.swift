@@ -27,8 +27,8 @@ public final class CronUtils {
     ) -> Date? {
 
         if(
-            StringUtils.isNullOrEmpty(initialDateTime) &&
-            StringUtils.isNullOrEmpty(crontabRule))
+            StringUtils.shared.isNullOrEmpty(initialDateTime) &&
+            StringUtils.shared.isNullOrEmpty(crontabRule))
         { return nil }
 
         var now:Date, delayedNow:Date
@@ -56,7 +56,7 @@ public final class CronUtils {
         switch (now.compare(initialScheduleDay!)) {
 
             case .orderedDescending: // if initial date is not a repetition and is in the past, do not show
-                if(StringUtils.isNullOrEmpty(crontabRule))
+                if(StringUtils.shared.isNullOrEmpty(crontabRule))
                 { return nil }
                 break
 
@@ -64,7 +64,7 @@ public final class CronUtils {
                 break
             
             case .orderedAscending: // if initial date is in future, shows in future
-                if(StringUtils.isNullOrEmpty(crontabRule))
+                if(StringUtils.shared.isNullOrEmpty(crontabRule))
                 { return initialScheduleDay }
                 break
             
@@ -74,7 +74,7 @@ public final class CronUtils {
 
         delayedNow = applyToleranceDate(now);
 
-        if (!StringUtils.isNullOrEmpty(crontabRule)) {
+        if (!StringUtils.shared.isNullOrEmpty(crontabRule)) {
 
             if(CronExpression.validate(cronExpression: crontabRule!)) {
                 

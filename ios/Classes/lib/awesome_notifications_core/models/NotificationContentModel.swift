@@ -11,48 +11,50 @@ public class NotificationContentModel : AbstractModel {
     
     static let TAG = "NotificationContentModel"
 
-    var id: Int?
-    var channelKey: String?
-    var groupKey: String?
-    var title: String?
-    var body: String?
-    var summary: String?
-    var showWhen: Bool?
+    public var id: Int?
+    public var channelKey: String?
+    public var groupKey: String?
+    public var title: String?
+    public var body: String?
+    public var summary: String?
+    public var showWhen: Bool?
     
-    var actionButtons:[NotificationButtonModel]?
-    var payload:[String:String?]?
+    public var actionButtons:[NotificationButtonModel]?
+    public var payload:[String:String?]?
     
-    var wakeUpScreen: Bool?
-    var playSound: Bool?
-    var customSound: String?
-    var locked: Bool?
-    var icon: String?
-    var largeIcon: String?
-    var bigPicture: String?
-    var hideLargeIconOnExpand: Bool?
-    var autoDismissible: Bool?
-    var displayOnForeground: Bool?
-    var displayOnBackground: Bool?
-    var color: Int64?
-    var backgroundColor: Int64?
-    var progress: Int?
-    var ticker: String?
+    public var wakeUpScreen: Bool?
+    public var playSound: Bool?
+    public var customSound: String?
+    public var locked: Bool?
+    public var icon: String?
+    public var largeIcon: String?
+    public var bigPicture: String?
+    public var hideLargeIconOnExpand: Bool?
+    public var autoDismissible: Bool?
+    public var displayOnForeground: Bool?
+    public var displayOnBackground: Bool?
+    public var color: Int64?
+    public var backgroundColor: Int64?
+    public var progress: Int?
+    public var ticker: String?
 
-    var roundedLargeIcon: Bool?
-    var roundedBigPicture: Bool?
+    public var roundedLargeIcon: Bool?
+    public var roundedBigPicture: Bool?
     
-    var actionType: ActionType?
+    public var actionType: ActionType?
     
-    var privacy: NotificationPrivacy?
-    var privateMessage: String?
+    public var privacy: NotificationPrivacy?
+    public var privateMessage: String?
 
-    var notificationLayout: NotificationLayout?
+    public var notificationLayout: NotificationLayout?
 
-    var createdSource: NotificationSource?
-    var createdLifeCycle: NotificationLifeCycle?
-    var displayedLifeCycle: NotificationLifeCycle?
-    var createdDate: RealDateTime?
-    var displayedDate: RealDateTime?
+    public var createdSource: NotificationSource?
+    public var createdLifeCycle: NotificationLifeCycle?
+    public var displayedLifeCycle: NotificationLifeCycle?
+    public var createdDate: RealDateTime?
+    public var displayedDate: RealDateTime?
+    
+    public init(){}
     
     func registerCreateEvent(
         inLifeCycle lifeCycle: NotificationLifeCycle,
@@ -264,7 +266,7 @@ public class NotificationContentModel : AbstractModel {
     }
     
     private func validateIcon(_ icon:String?) throws {
-        if StringUtils.isNullOrEmpty(icon) {
+        if StringUtils.shared.isNullOrEmpty(icon) {
             return
         }
         

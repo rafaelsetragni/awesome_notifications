@@ -18,12 +18,11 @@ public class AwesomeNotifications:
     let TAG = "AwesomeNotifications"
     
     public static var debug:Bool = false
-    var initialValues:[String : Any?] = [:]
+    static var initialValues:[String : Any?] = [:]
     
     // ************************** CONSTRUCTOR ***********************************
         
     public init(
-        extensionReference: AwesomeNotificationsExtension,
         usingFlutterRegistrar registrar:FlutterPluginRegistrar
     ) throws {
         super.init()
@@ -37,84 +36,21 @@ public class AwesomeNotifications:
                 .startListeners()
         }
         
-        self.initialValues.removeAll()
-        self.initialValues.merge(
-            Definitions.initialValues,
-            uniquingKeysWith: { (current, _) in current })
-        
-        try loadAwesomeExtensions(
-            usingFlutterRegistrar: registrar,
-            withExtension: extensionReference)
-        
+        AwesomeNotifications.loadDefaults()        
         activateiOSNotifications()
     }
     
-    var isExtensionsLoaded = false
-    private func loadAwesomeExtensions(
-        usingFlutterRegistrar registrar:FlutterPluginRegistrar
-    ) throws {
-        if isExtensionsLoaded { return }
-        
-        guard let extensionClass:String =
-                DefaultsManager
-                    .shared
-                    .extensionClassName
-        else {
-            throw ExceptionFactory
-                .shared
-                .createNewAwesomeException(
-                    className: TAG,
-                    code: ExceptionCode.CODE_CLASS_NOT_FOUND,
-                    message: "Awesome's plugin extension reference was not found.",
-                    detailedCode: ExceptionCode.DETAILED_INITIALIZATION_FAILED+".awesomeNotifications.extensions")
+    static var areDefaultsLoaded = false
+    public static func loadDefaults(){
+        if areDefaultsLoaded {
+            return
         }
-
-        guard let extensionClass:AnyClass =
-                Bundle
-                    .main
-                    .classNamed(extensionClass)
-        else {
-            throw ExceptionFactory
-                .shared
-                .createNewAwesomeException(
-                    className: TAG,
-                    code: ExceptionCode.CODE_CLASS_NOT_FOUND,
-                    message: "Awesome's plugin extension reference '\(extensionClass)' was not found.",
-                    detailedCode: ExceptionCode.DETAILED_INITIALIZATION_FAILED+".awesomeNotifications.extensions")
-        }
+        areDefaultsLoaded = true
         
-        guard let awesomeExtension:AwesomeNotificationsExtension =
-                (extensionClass as! NSObject.Type).initialize() as? AwesomeNotificationsExtension
-        else {
-            throw ExceptionFactory
-                .shared
-                .createNewAwesomeException(
-                    className: TAG,
-                    code: ExceptionCode.CODE_CLASS_NOT_FOUND,
-                    message: "Awesome's plugin extension reference '\(extensionClass)' was not found.",
-                    detailedCode: ExceptionCode.DETAILED_INITIALIZATION_FAILED+".awesomeNotifications.extensions")
-        }
-        
-        try loadAwesomeExtensions(
-                usingFlutterRegistrar: registrar,
-                withExtension: awesomeExtension)
-    }
-    
-    private func loadAwesomeExtensions(
-        usingFlutterRegistrar registrar:FlutterPluginRegistrar,
-        withExtension awesomePlugin: AwesomeNotificationsExtension
-    ) throws {
-        if isExtensionsLoaded { return }
-        
-        DefaultsManager
-            .shared
-            .extensionClassName = String(describing: awesomePlugin.self)
-        
-        awesomePlugin
-            .loadExternalExtensions(
-                usingFlutterRegistrar: registrar)
-        
-        isExtensionsLoaded = true
+        initialValues.removeAll()
+        initialValues.merge(
+            Definitions.initialValues,
+            uniquingKeysWith: { (current, _) in current })
     }
     
     private var isTheMainInstance = false
@@ -165,9 +101,6 @@ public class AwesomeNotifications:
     }
     
     func activateiOSNotifications(){
-        if !SwiftUtils.isRunningOnExtension() {
-            UIApplication.shared.registerForRemoteNotifications()
-        }
         
         let categoryObject = UNNotificationCategory(
             identifier: Definitions.DEFAULT_CATEGORY_IDENTIFIER,
@@ -467,7 +400,12 @@ public class AwesomeNotifications:
         let lostDisplayed = DisplayedManager.listDisplayed()
         for displayedNotification in lostDisplayed {
             
-            if(lastRecoveredDate < displayedNotification.displayedDate!){
+            guard let displayedDate:RealDateTime = displayedNotification.displayedDate ?? displayedNotification.createdDate
+            else {
+                continue
+            }
+            
+            if(lastRecoveredDate < displayedDate){
                 try displayedNotification.validate()
                 displayedNotification.displayedLifeCycle = lifeCycle
                 
@@ -524,7 +462,6 @@ public class AwesomeNotifications:
         
         // Set ourselves as the UNUserNotificationCenter delegate, but also preserve any existing delegate...
         let notificationCenter = UNUserNotificationCenter.current()
-        _originalNotificationCenterDelegate = notificationCenter.delegate
         notificationCenter.delegate = self
         
         RefreshSchedulesReceiver()
@@ -534,7 +471,7 @@ public class AwesomeNotifications:
             Logger.d(TAG, "Awesome Notifications attached for iOS")
         }
     }
-    
+        
     @available(iOS 10.0, *)
     public func userNotificationCenter(
         _ center: UNUserNotificationCenter,

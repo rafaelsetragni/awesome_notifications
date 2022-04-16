@@ -1,8 +1,8 @@
 public class AwesomeNotificationsException: Error {
-    let className:String
-    let code:String
-    let message:String
-    let detailedCode:String
+    public let className:String
+    public let code:String
+    public let message:String
+    public let detailedCode:String
     
     init(className:String, code:String, message:String, detailedCode:String){
         self.className = className

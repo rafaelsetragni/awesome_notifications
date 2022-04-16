@@ -83,32 +83,33 @@ public class NotificationActionReceiver {
                 withLifeCycle: currentLifeCycle)
         }
         
-        if #available(iOS 15.0, *), !actionReceived.autoDismissible! {
-            if let notificationModel:NotificationModel =
-                    NotificationBuilder
-                        .newInstance()
-                        .buildNotificationFromJson(
-                            jsonData: jsonData)
-            {
-                let isOutOfFocus =
-                        LifeCycleManager
-                            .shared
-                            .isOutOfFocus
-                
-                DispatchQueue
-                    .global(qos: .background)
-                    .asyncAfter(deadline: .now() +
-                                (isOutOfFocus ? 1.5 : 0)) {
-                        do {
-                            try NotificationSenderAndScheduler
-                                    .mimicPersistentNotification(
-                                        notificationModel: notificationModel)
-                        } catch {
-                            Logger.e(self.TAG, "\(error)")
-                        }
-                    }
-            }
-        }
+// Feature deactivated, because this is not the expected iOS notification behavior
+//        if #available(iOS 15.0, *), !actionReceived.autoDismissible! {
+//            if let notificationModel:NotificationModel =
+//                    NotificationBuilder
+//                        .newInstance()
+//                        .buildNotificationFromJson(
+//                            jsonData: jsonData)
+//            {
+//                let isOutOfFocus =
+//                        LifeCycleManager
+//                            .shared
+//                            .isOutOfFocus
+//
+//                DispatchQueue
+//                    .global(qos: .background)
+//                    .asyncAfter(deadline: .now() +
+//                                (isOutOfFocus ? 1.5 : 0)) {
+//                        do {
+//                            try NotificationSenderAndScheduler
+//                                    .mimicPersistentNotification(
+//                                        notificationModel: notificationModel)
+//                        } catch {
+//                            Logger.e(self.TAG, "\(error)")
+//                        }
+//                    }
+//            }
+//        }
         
         switch actionReceived.actionType! {
             

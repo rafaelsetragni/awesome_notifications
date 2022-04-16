@@ -42,6 +42,8 @@ public class NotificationChannelModel : AbstractModel {
 
     var defaultPrivacy: NotificationPrivacy?
     
+    public init(){}
+    
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         
         self.channelKey         = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_CHANNEL_KEY, arguments: arguments)
@@ -159,7 +161,7 @@ public class NotificationChannelModel : AbstractModel {
     
     public func validate() throws {
         
-        if StringUtils.isNullOrEmpty(channelKey) {
+        if StringUtils.shared.isNullOrEmpty(channelKey) {
             throw ExceptionFactory
                 .shared
                 .createNewAwesomeException(
@@ -169,7 +171,7 @@ public class NotificationChannelModel : AbstractModel {
                     detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.key")
         }
 
-        if StringUtils.isNullOrEmpty(channelName) {
+        if StringUtils.shared.isNullOrEmpty(channelName) {
             throw ExceptionFactory
                 .shared
                 .createNewAwesomeException(
@@ -179,7 +181,7 @@ public class NotificationChannelModel : AbstractModel {
                     detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.name")
         }
 
-        if StringUtils.isNullOrEmpty(channelDescription) {
+        if StringUtils.shared.isNullOrEmpty(channelDescription) {
             throw ExceptionFactory
                 .shared
                 .createNewAwesomeException(
@@ -191,7 +193,7 @@ public class NotificationChannelModel : AbstractModel {
         
         if(
             BooleanUtils.getValue(value: playSound, defaultValue: false) &&
-            !StringUtils.isNullOrEmpty(soundSource)
+            !StringUtils.shared.isNullOrEmpty(soundSource)
         ){
             if(!AudioUtils.shared.isValidSound(soundSource)){
                 throw ExceptionFactory
