@@ -22,6 +22,8 @@ public class NotificationButtonModel : AbstractModel {
     var isDangerousOption:Bool?
     var actionType:ActionType?
     
+    public init(){}
+    
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         if(arguments == nil){ return self }
        
@@ -88,7 +90,7 @@ public class NotificationButtonModel : AbstractModel {
     
     public func validate() throws {
         
-        if(StringUtils.isNullOrEmpty(key)){
+        if(StringUtils.shared.isNullOrEmpty(key)){
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
@@ -98,7 +100,7 @@ public class NotificationButtonModel : AbstractModel {
                         detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".button.actionKey")
         }
 
-        if(StringUtils.isNullOrEmpty(label)){
+        if(StringUtils.shared.isNullOrEmpty(label)){
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(

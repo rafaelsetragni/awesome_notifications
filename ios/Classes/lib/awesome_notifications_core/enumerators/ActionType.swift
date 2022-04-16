@@ -1,4 +1,4 @@
-enum ActionType : String, CaseIterable {
+public enum ActionType : String, CaseIterable {
     
     case Default = "Default"
     case DisabledAction = "DisabledAction"

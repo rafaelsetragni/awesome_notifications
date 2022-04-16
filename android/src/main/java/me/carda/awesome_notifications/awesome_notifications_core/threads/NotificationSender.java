@@ -22,6 +22,7 @@ import me.carda.awesome_notifications.awesome_notifications_core.enumerators.Not
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationSource;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.managers.ScheduleManager;
 import me.carda.awesome_notifications.awesome_notifications_core.managers.StatusBarManager;
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationModel;
 import me.carda.awesome_notifications.awesome_notifications_core.models.returnedData.NotificationReceived;
@@ -169,10 +170,15 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
         // Only broadcast if notificationModel is valid
         if(receivedNotification != null){
 
-            if(created)
+            if(created) {
+                ScheduleManager.cancelScheduleById(
+                        wContextReference.get(),
+                        String.valueOf(receivedNotification.id));
+
                 BroadcastSender.sendBroadcastNotificationCreated(
-                    wContextReference.get(),
-                    receivedNotification);
+                        wContextReference.get(),
+                        receivedNotification);
+            }
 
             if(displayed)
                 BroadcastSender.sendBroadcastNotificationDisplayed(

@@ -25,7 +25,7 @@ public class BitmapUtils : MediaUtils {
     
     public func getBitmapFromSource(bitmapPath:String?, roundedBitpmap:Bool) -> UIImage? {
         
-        if(StringUtils.isNullOrEmpty(bitmapPath)){ return nil }
+        if(StringUtils.shared.isNullOrEmpty(bitmapPath)){ return nil }
         
         var resultedImage:UIImage? = nil
         switch(getMediaSourceType(mediaPath: bitmapPath)){
@@ -86,7 +86,7 @@ public class BitmapUtils : MediaUtils {
     func getBitmapFromUrl(_ bitmapUri:String) -> UIImage? {
         let bitmapUri:String? = BitmapUtils.shared.cleanMediaPath(bitmapUri)
         
-        if !StringUtils.isNullOrEmpty(bitmapUri), let url = URL(string: bitmapUri!) {
+        if !StringUtils.shared.isNullOrEmpty(bitmapUri), let url = URL(string: bitmapUri!) {
 
             do {
                 
@@ -148,7 +148,7 @@ public class BitmapUtils : MediaUtils {
     func getBitmapFromFile(_ mediaPath:String) -> UIImage? {
         let mediaPath:String? = cleanMediaPath(mediaPath)
         
-        if(StringUtils.isNullOrEmpty(mediaPath)){ return nil }
+        if(StringUtils.shared.isNullOrEmpty(mediaPath)){ return nil }
         
         return getBitmapFromFile(fromRealPath: mediaPath!)
     }
@@ -226,7 +226,7 @@ public class BitmapUtils : MediaUtils {
     /*
      func isValidBitmap(_ mediaPath:String? ) -> Bool {
          
-         if(!StringUtils.isNullOrEmpty(mediaPath)){
+         if(!StringUtils.shared.isNullOrEmpty(mediaPath)){
              
              if(MediaUtils.matchMediaType(regex: Definitions.MEDIA_VALID_NETWORK, mediaPath: mediaPath)){
                  return true

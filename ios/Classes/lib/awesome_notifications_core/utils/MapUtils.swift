@@ -7,7 +7,7 @@
 
 import Foundation
 
-class MapUtils<T: Any> {
+public class MapUtils<T: Any> {
     
     public static func isNullOrEmptyKey(map: [String : Any?], key: String) -> Bool {
 

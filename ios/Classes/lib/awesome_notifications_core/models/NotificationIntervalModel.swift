@@ -33,6 +33,8 @@ public class NotificationIntervalModel : NotificationScheduleModel {
     /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
     var repeats:Bool?
     
+    public init(){}
+    
     public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
         
         self._timeZone = MapUtils<TimeZone>.getValueOrDefault(reference: Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, arguments: arguments)

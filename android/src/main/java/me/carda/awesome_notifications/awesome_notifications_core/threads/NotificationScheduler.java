@@ -359,7 +359,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
 
             NotificationModel notificationModel = ScheduleManager.getScheduleById(context, id);
             if(notificationModel == null){
-                ScheduleManager.removeScheduleById(context, id);
+                ScheduleManager.cancelScheduleById(context, id);
             }
             else if(notificationModel.schedule.hasNextValidDate()){
                 // TODO save original intents to be restored later
@@ -375,7 +375,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
         @NonNull Context context, @NonNull Integer id
     ) throws AwesomeNotificationsException {
         _removeFromAlarm(context, id);
-        ScheduleManager.removeScheduleById(context, id.toString());
+        ScheduleManager.cancelScheduleById(context, id.toString());
         ScheduleManager.commitChanges(context);
     }
 

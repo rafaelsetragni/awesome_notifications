@@ -298,7 +298,9 @@ class NotificationsController {
     // Always ensure that all plugins was initialized
     WidgetsFlutterBinding.ensureInitialized();
 
-    bool isSilentAction = receivedAction.actionType == ActionType.SilentAction;
+    bool isSilentAction =
+        receivedAction.actionType == ActionType.SilentAction ||
+            receivedAction.actionType == ActionType.SilentBackgroundAction;
 
     // SilentBackgroundAction runs on background thread and cannot show
     // UI/visual elements
@@ -329,7 +331,9 @@ class NotificationsController {
 
       default:
         if (isSilentAction) {
+          print(receivedAction.toString());
           print("start");
+          await Future.delayed(Duration(seconds: 4));
           final url = Uri.parse("http://google.com");
           final re = await http.get(url);
           print(re.body);
@@ -359,18 +363,8 @@ class NotificationsController {
 
   static Future<void> receiveStandardNotificationAction(
       ReceivedAction receivedAction) async {
-    switch (receivedAction.actionType) {
-      case ActionType.SilentAction:
-      case ActionType.SilentBackgroundAction:
-        print(receivedAction.toString());
-        break;
-
-      default:
-        loadSingletonPage(App.navigatorKey.currentState,
-            targetPage: PAGE_NOTIFICATION_DETAILS,
-            receivedAction: receivedAction);
-        break;
-    }
+    loadSingletonPage(App.navigatorKey.currentState,
+        targetPage: PAGE_NOTIFICATION_DETAILS, receivedAction: receivedAction);
   }
 
   static Future<void> receiveMediaNotificationAction(

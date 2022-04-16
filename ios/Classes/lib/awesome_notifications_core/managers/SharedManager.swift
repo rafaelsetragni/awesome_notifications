@@ -38,14 +38,14 @@ public class SharedManager {
     
     public func set(_ data:[String:Any?]?, referenceKey:String) {
         refreshObjects()
-        if(StringUtils.isNullOrEmpty(referenceKey) || data == nil){ return }
+        if(StringUtils.shared.isNullOrEmpty(referenceKey) || data == nil){ return }
         objectList[referenceKey] = data!
         updateObjects()
     }
     
     public func remove(referenceKey:String) -> Bool {
         refreshObjects()
-        if(StringUtils.isNullOrEmpty(referenceKey)){ return false }
+        if(StringUtils.shared.isNullOrEmpty(referenceKey)){ return false }
         
         objectList.removeValue(forKey: referenceKey)
         updateObjects()
