@@ -46,7 +46,7 @@ public class CancellationManager {
 
         StatusBarManager
                 .getInstance(context)
-                .dismissNotification(notificationId);
+                .dismissNotification(context, notificationId);
 
         return true;
     }
@@ -64,7 +64,7 @@ public class CancellationManager {
 
         StatusBarManager
                 .getInstance(context)
-                .dismissNotificationsByChannelKey(channelKey);
+                .dismissNotificationsByChannelKey(context, channelKey);
 
         return true;
     }
@@ -82,16 +82,15 @@ public class CancellationManager {
 
         StatusBarManager
                 .getInstance(context)
-                .dismissNotificationsByGroupKey(groupKey);
+                .dismissNotificationsByGroupKey(context, groupKey);
 
         return true;
     }
 
-    public void dismissAllNotifications(@NonNull final Context context) {
-
+    public void dismissAllNotifications(@NonNull final Context context) throws AwesomeNotificationsException {
         StatusBarManager
                 .getInstance(context)
-                .dismissAllNotifications();
+                .dismissAllNotifications(context);
     }
 
     public boolean cancelSchedule(@NonNull final Context context, Integer notificationId) throws AwesomeNotificationsException {

@@ -67,12 +67,12 @@ public class NotificationButtonModel : AbstractModel {
     func _processRetroCompatibility(fromArguments arguments: [String : Any?]?){
         
         if arguments?["autoCancel"] != nil {
-            Logger.d(NotificationButtonModel.TAG, "autoCancel is deprecated. Please use autoDismissible instead.")
+            Logger.w(NotificationButtonModel.TAG, "autoCancel is deprecated. Please use autoDismissible instead.")
             autoDismissible = MapUtils<Bool>.getValueOrDefault(reference: "autoCancel", arguments: arguments)
         }
 
         if arguments?["buttonType"] != nil {
-            Logger.d(NotificationButtonModel.TAG, "buttonType is deprecated. Please use actionType instead.")            
+            Logger.w(NotificationButtonModel.TAG, "buttonType is deprecated. Please use actionType instead.")            
             actionType = EnumUtils<ActionType>.getEnumOrDefault(reference: "buttonType", arguments: arguments)
         }
         

@@ -59,12 +59,12 @@ public class NotificationButtonModel extends AbstractModel {
     private void processRetroCompatibility(Map<String, Object> arguments){
 
         if (arguments.containsKey("autoCancel")) {
-            Logger.d("AwesomeNotifications", "autoCancel is deprecated. Please use autoDismissible instead.");
+            Logger.w("AwesomeNotifications", "autoCancel is deprecated. Please use autoDismissible instead.");
             autoDismissible   = getValueOrDefault(arguments, "autoCancel", Boolean.class);
         }
 
         if (arguments.containsKey("buttonType")){
-            Logger.d("AwesomeNotifications", "buttonType is deprecated. Please use actionType instead.");
+            Logger.w("AwesomeNotifications", "buttonType is deprecated. Please use actionType instead.");
             actionType = getEnumValueOrDefault(arguments, "buttonType",
                     ActionType.class, ActionType.values());
         }

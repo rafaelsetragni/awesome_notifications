@@ -21,7 +21,7 @@ public class DismissedNotificationReceiver extends AwesomeBroadcastReceiver
     static String TAG = "DismissedNotificationReceiver";
 
     @Override
-    public void onReceiveBroadcastEvent(Context context, Intent intent) {
+    public void onReceiveBroadcastEvent(Context context, Intent intent) throws Exception {
 
         String action = intent.getAction();
         if (action != null && action.equals(Definitions.DISMISSED_NOTIFICATION)) {
@@ -55,7 +55,7 @@ public class DismissedNotificationReceiver extends AwesomeBroadcastReceiver
             // In this case, the notification is always dismissed
             StatusBarManager
                 .getInstance(context)
-                .unregisterActiveNotification(actionReceived.id);
+                .unregisterActiveNotification(context, actionReceived.id);
 
 
             BroadcastSender

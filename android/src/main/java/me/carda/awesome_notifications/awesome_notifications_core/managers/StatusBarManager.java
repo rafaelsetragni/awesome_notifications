@@ -26,6 +26,8 @@ import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
 import me.carda.awesome_notifications.awesome_notifications_core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.awesome_notifications_core.enumerators.NotificationLayout;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationModel;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
@@ -34,8 +36,6 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 public class StatusBarManager {
 
     private static final String TAG = "CancellationManager";
-
-    private WeakReference<Context> wContext;
 
     private final StringUtils stringUtils;
 
@@ -49,8 +49,6 @@ public class StatusBarManager {
 
     private StatusBarManager(@NonNull final Context context, @NonNull StringUtils stringUtils){
         this.stringUtils = stringUtils;
-
-        wContext = new WeakReference<>(context);
 
         preferences = context.getSharedPreferences(
                 context.getPackageName() + "." + stringUtils.digestString(TAG),
@@ -76,31 +74,31 @@ public class StatusBarManager {
     public void closeStatusBar(Context context){
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S /*Android 12*/) {
             Intent closingIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-            wContext.get().sendBroadcast(closingIntent);
+            context.sendBroadcast(closingIntent);
         }
     }
 
-    public void showNotificationOnStatusBar(NotificationModel notificationModel, Notification notification){
+    public void showNotificationOnStatusBar(@NonNull Context context, NotificationModel notificationModel, Notification notification) throws Exception {
 
         registerActiveNotification(notificationModel, notificationModel.content.id);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationManager notificationManager = getNotificationManager();
+            NotificationManager notificationManager = getNotificationManager(context);
             notificationManager.notify(notificationModel.content.id, notification);
         }
         else {
-            NotificationManagerCompat notificationManagerCompat = getAdaptedOldNotificationManager();
+            NotificationManagerCompat notificationManagerCompat = getAdaptedOldNotificationManager(context);
             notificationManagerCompat.notify(String.valueOf(notificationModel.content.id), notificationModel.content.id, notification);
         }
     }
 
-    public void dismissNotification(Integer id) {
+    public void dismissNotification(Context context, Integer id) throws AwesomeNotificationsException {
 
         String idKey = id.toString();
         int idKeyValue = Integer.parseInt(idKey);
 
         if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O /*Android 8*/) {
-            NotificationManager notificationManager = getNotificationManager();
+            NotificationManager notificationManager = getNotificationManager(context);
 
             notificationManager.cancel(idKey, idKeyValue);
             notificationManager.cancel(idKeyValue);
@@ -109,55 +107,53 @@ public class StatusBarManager {
             String groupKey = getIndexActiveNotificationGroup(idKey);
             if (!groupKey.equals("")) {
                 try {
-                    dismissNotificationsByGroupKey(groupKey);
+                    dismissNotificationsByGroupKey(context, groupKey);
                 } catch (AwesomeNotificationsException ignored) {
                 }
             }
         }
         else {
-            NotificationManagerCompat notificationManager = getAdaptedOldNotificationManager();
+            NotificationManagerCompat notificationManager = getAdaptedOldNotificationManager(context);
 
             notificationManager.cancel(idKey, idKeyValue);
             notificationManager.cancel(idKeyValue);
         }
 
-        unregisterActiveNotification(id);
+        unregisterActiveNotification(context, id);
     }
 
-    public boolean dismissNotificationsByChannelKey(@NonNull final String channelKey) throws AwesomeNotificationsException {
+    public boolean dismissNotificationsByChannelKey(@NonNull Context context, @NonNull final String channelKey) throws AwesomeNotificationsException {
 
         List<String> notificationIds = unregisterActiveChannelKey(channelKey);
 
         if (notificationIds != null)
             for (String idKey : notificationIds)
-                dismissNotification(Integer.parseInt(idKey));
+                dismissNotification(context, Integer.parseInt(idKey));
 
         return notificationIds != null;
     }
 
-    public boolean dismissNotificationsByGroupKey(@NonNull final String groupKey) throws AwesomeNotificationsException {
+    public boolean dismissNotificationsByGroupKey(@NonNull Context context, @NonNull final String groupKey) throws AwesomeNotificationsException {
 
         List<String> notificationIds = unregisterActiveGroupKey(groupKey);
 
         if (notificationIds != null)
             for (String idKey : notificationIds)
-                dismissNotification(Integer.parseInt(idKey));
+                dismissNotification(context, Integer.parseInt(idKey));
 
         return notificationIds != null;
     }
 
-    public void dismissAllNotifications() {
+    public void dismissAllNotifications(@NonNull Context context) throws AwesomeNotificationsException {
 
         if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O /*Android 8*/) {
-            NotificationManagerCompat notificationManager = getAdaptedOldNotificationManager();
+            NotificationManagerCompat notificationManager = getAdaptedOldNotificationManager(context);
             notificationManager.cancelAll();
         }
         else {
             NotificationManager notificationManager
                     = (NotificationManager)
-                            wContext
-                            .get()
-                            .getSystemService(Context.NOTIFICATION_SERVICE);
+                            context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             notificationManager.cancelAll();
         }
@@ -186,16 +182,49 @@ public class StatusBarManager {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private NotificationManager getNotificationManager() {
-        return (NotificationManager) wContext.get().getSystemService(Context.NOTIFICATION_SERVICE);
+    private NotificationManager getNotificationManager(@NonNull Context context) throws AwesomeNotificationsException {
+        try {
+            return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        } catch (Exception exception) {
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Notification Service is not available",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".notificationService",
+                            exception);
+        }
     }
 
-    private NotificationManagerCompat getAdaptedOldNotificationManager() {
-        return NotificationManagerCompat.from(wContext.get());
+    private NotificationManagerCompat getAdaptedOldNotificationManager(@NonNull Context context) throws AwesomeNotificationsException {
+        try {
+            return NotificationManagerCompat.from(context);
+        } catch (Exception exception) {
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Notification Manager is not available",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".notificationManager",
+                            exception);
+        }
     }
 
-    private void setIndexActiveNotificationChannel(SharedPreferences.Editor editor, String idKey, String channelKey){
-        editor.putString("ic:"+idKey, channelKey);
+    private void setIndexActiveNotificationChannel(SharedPreferences.Editor editor, String idKey, String channelKey) throws AwesomeNotificationsException {
+        try {
+            editor.putString("ic:"+idKey, channelKey);
+        } catch (Exception exception) {
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Shared preferences is not available",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".sharedPreferences",
+                            exception);
+        }
     }
 
     private String getIndexActiveNotificationChannel(String idKey){
@@ -230,7 +259,7 @@ public class StatusBarManager {
         editor.remove("cl:"+idKey);
     }
 
-    private void registerActiveNotification(@NonNull NotificationModel notificationModel, int id){
+    private void registerActiveNotification(@NonNull NotificationModel notificationModel, int id) throws Exception {
 
         String idKey = String.valueOf(id);
         String groupKey = !stringUtils.isNullOrEmpty(notificationModel.content.groupKey) ? notificationModel.content.groupKey : "";
@@ -266,7 +295,7 @@ public class StatusBarManager {
         updateActiveMapIntoPreferences(editor, type, map);
     }
 
-    public void unregisterActiveNotification(int notificationId){
+    public void unregisterActiveNotification(Context context, int notificationId) throws AwesomeNotificationsException {
 
         SharedPreferences.Editor editor = preferences.edit();
 
@@ -289,7 +318,7 @@ public class StatusBarManager {
                         // For collapsed layouts, where the group has 1 left notification,
                         // the missing summary orphan group should be removed
                         if(!isCollapsedLayout && listToRemove.size() == 1)
-                            dismissNotification(Integer.parseInt(listToRemove.get(0)));
+                            dismissNotification(context, Integer.parseInt(listToRemove.get(0)));
                     }
                 }
             }

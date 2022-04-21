@@ -136,8 +136,8 @@ public class AwesomeNotifications
 
         AwesomeEventsReceiver
                 .getInstance()
-                .subscribeOnNotificationEvents(this)
-                .subscribeOnActionEvents(this);
+                .subscribeOnActionEvents(this)
+                .subscribeOnNotificationEvents(this);
 
         Logger.d(TAG, "Awesome notifications ("+this.hashCode()+") attached to activity");
     }
@@ -613,13 +613,13 @@ public class AwesomeNotifications
                         threadCompletionHandler);
     }
 
-    private void captureNotificationActionFromActivity(Activity startActivity) {
+    private void captureNotificationActionFromActivity(Activity startActivity) throws Exception {
         if (startActivity == null)
             return;
         captureNotificationActionFromIntent(startActivity.getIntent());
     }
 
-    public boolean captureNotificationActionFromIntent(Intent intent) {
+    public boolean captureNotificationActionFromIntent(Intent intent) throws Exception {
         if (intent == null)
             return false;
 
@@ -791,7 +791,7 @@ public class AwesomeNotifications
                 .cancelNotificationsByGroupKey(wContext.get(), groupKey);
     }
 
-    public void dismissAllNotifications() {
+    public void dismissAllNotifications() throws AwesomeNotificationsException {
         CancellationManager
                 .getInstance()
                 .dismissAllNotifications(wContext.get());

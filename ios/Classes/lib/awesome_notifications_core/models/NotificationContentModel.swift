@@ -202,7 +202,7 @@ public class NotificationContentModel : AbstractModel {
     
     func _processRetroCompatibility(fromArguments arguments: [String : Any?]?){
         if arguments?["autoCancel"] != nil {
-            Logger.d(NotificationButtonModel.TAG, "autoCancel is deprecated. Please use autoDismissible instead.")
+            Logger.w(NotificationButtonModel.TAG, "autoCancel is deprecated. Please use autoDismissible instead.")
             autoDismissible = MapUtils<Bool>.getValueOrDefault(reference: "autoCancel", arguments: arguments)
         }
     }

@@ -22,11 +22,11 @@ public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
     public static String TAG = "NotificationActionReceiver";
 
     @Override
-    public void onReceiveBroadcastEvent(final Context context, Intent intent) {
+    public void onReceiveBroadcastEvent(final Context context, Intent intent) throws Exception {
         receiveActionIntent(context, intent);
     }
 
-    public static void receiveActionIntent(final Context context, Intent intent){
+    public static void receiveActionIntent(final Context context, Intent intent) throws Exception {
 
         if(AwesomeNotifications.debug)
             Logger.d(TAG, "New action received");
@@ -75,7 +75,7 @@ public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
             else
                 StatusBarManager
                         .getInstance(context)
-                        .dismissNotification(actionReceived.id);
+                        .dismissNotification(context, actionReceived.id);
         }
         else {
             if (actionReceived.actionType != ActionType.KeepOnTop)

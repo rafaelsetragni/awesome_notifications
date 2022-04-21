@@ -121,7 +121,7 @@ public class NotificationBuilder {
             Context context,
             Intent intent,
             NotificationLifeCycle appLifeCycle
-    ) throws AwesomeNotificationsException {
+    ) throws Exception {
 
         ActionReceived actionReceived
             = buildNotificationActionFromIntent(context, intent, appLifeCycle);
@@ -130,7 +130,7 @@ public class NotificationBuilder {
             if (notificationActionShouldAutoDismiss(actionReceived))
                 StatusBarManager
                         .getInstance(context)
-                        .dismissNotification(actionReceived.id);
+                        .dismissNotification(context, actionReceived.id);
 
             if (actionReceived.actionType == ActionType.DisabledAction)
                 return null;

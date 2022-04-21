@@ -150,9 +150,19 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        Intent launchIntent = binding.getActivity().getIntent();
-        awesomeNotifications.captureNotificationActionFromIntent(launchIntent);
-        binding.addOnNewIntentListener(this);
+        try {
+            Intent launchIntent = binding.getActivity().getIntent();
+            awesomeNotifications.captureNotificationActionFromIntent(launchIntent);
+            binding.addOnNewIntentListener(this);
+        } catch(Exception exception) {
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                            ExceptionCode.DETAILED_UNEXPECTED_ERROR+".fcm."+exception.getClass().getSimpleName(),
+                            exception);
+        }
     }
 
     @Override
@@ -170,8 +180,19 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public boolean onNewIntent(Intent intent) {
-        return awesomeNotifications
-                .captureNotificationActionFromIntent(intent);
+        try{
+            return awesomeNotifications
+                    .captureNotificationActionFromIntent(intent);
+        } catch (Exception exception) {
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                            ExceptionCode.DETAILED_UNEXPECTED_ERROR+".fcm."+exception.getClass().getSimpleName(),
+                            exception);
+            return false;
+        }
     }
 
     @Override
@@ -388,7 +409,6 @@ public class AwesomeNotificationsPlugin
     ) throws AwesomeNotificationsException {
 
         Map<String, Object> arguments = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
-
         if(arguments == null)
             throw ExceptionFactory
                     .getInstance()

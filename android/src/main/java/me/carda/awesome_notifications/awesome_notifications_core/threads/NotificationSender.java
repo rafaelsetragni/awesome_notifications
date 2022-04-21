@@ -217,7 +217,7 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
             Context context,
             NotificationModel notificationModel,
             Intent originalIntent
-    ) throws AwesomeNotificationsException {
+    ) throws Exception {
 
         NotificationLifeCycle lifeCycle = AwesomeNotifications.getApplicationLifeCycle();
 
@@ -253,12 +253,12 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
 
                 StatusBarManager
                     .getInstance(context)
-                    .showNotificationOnStatusBar(pushSummary, summaryNotification);
+                    .showNotificationOnStatusBar(context, pushSummary, summaryNotification);
             }
 
             StatusBarManager
                     .getInstance(context)
-                    .showNotificationOnStatusBar(notificationModel, notification);
+                    .showNotificationOnStatusBar(context, notificationModel, notification);
         }
 
         return notificationModel;
