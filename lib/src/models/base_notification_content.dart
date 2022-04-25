@@ -13,7 +13,7 @@ class BaseNotificationContent extends Model {
   String? _body;
   String? _summary;
   bool? _showWhen;
-  Map<String, String>? _payload;
+  Map<String, String?>? _payload;
   String? _icon;
   String? _largeIcon;
   String? _bigPicture;
@@ -46,7 +46,7 @@ class BaseNotificationContent extends Model {
   String? get body => _body;
   String? get summary => _summary;
   bool? get showWhen => _showWhen;
-  Map<String, String>? get payload => _payload;
+  Map<String, String?>? get payload => _payload;
   String? get icon => _icon;
   String? get largeIcon => _largeIcon;
   String? get bigPicture => _bigPicture;
@@ -135,7 +135,7 @@ class BaseNotificationContent extends Model {
       bool autoDismissible = true,
       Color? color,
       Color? backgroundColor,
-      Map<String, String>? payload,
+      Map<String, String?>? payload,
       String? customSound,
       bool roundedLargeIcon = false,
       bool roundedBigPicture = false,
@@ -245,10 +245,9 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_BIG_PICTURE: _bigPicture,
       NOTIFICATION_CUSTOM_SOUND: _customSound,
       NOTIFICATION_AUTO_DISMISSIBLE: _autoDismissible,
-      NOTIFICATION_PRIVACY: AwesomeAssertUtils.toSimpleEnumString(_privacy),
-      NOTIFICATION_CATEGORY: AwesomeAssertUtils.toSimpleEnumString(_category),
-      NOTIFICATION_ACTION_TYPE:
-          AwesomeAssertUtils.toSimpleEnumString(_actionType),
+      NOTIFICATION_PRIVACY: _privacy?.name,
+      NOTIFICATION_CATEGORY: _category?.name,
+      NOTIFICATION_ACTION_TYPE: _actionType?.name,
       NOTIFICATION_COLOR: _color?.value,
       NOTIFICATION_BACKGROUND_COLOR: _backgroundColor?.value,
       NOTIFICATION_WAKE_UP_SCREEN: _wakeUpScreen,
@@ -256,12 +255,9 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_CRITICAL_ALERT: _criticalAlert,
       NOTIFICATION_ROUNDED_LARGE_ICON: _roundedLargeIcon,
       NOTIFICATION_ROUNDED_BIG_PICTURE: _roundedBigPicture,
-      NOTIFICATION_CREATED_SOURCE:
-          AwesomeAssertUtils.toSimpleEnumString(createdSource),
-      NOTIFICATION_CREATED_LIFECYCLE:
-          AwesomeAssertUtils.toSimpleEnumString(createdLifeCycle),
-      NOTIFICATION_DISPLAYED_LIFECYCLE:
-          AwesomeAssertUtils.toSimpleEnumString(displayedLifeCycle),
+      NOTIFICATION_CREATED_SOURCE: createdSource?.name,
+      NOTIFICATION_CREATED_LIFECYCLE: createdLifeCycle?.name,
+      NOTIFICATION_DISPLAYED_LIFECYCLE: displayedLifeCycle?.name,
       NOTIFICATION_CREATED_DATE: createdDate,
       NOTIFICATION_DISPLAYED_DATE: displayedDate
     };

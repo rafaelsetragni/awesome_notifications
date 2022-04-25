@@ -6,9 +6,8 @@ import 'package:awesome_notifications/src/models/model.dart';
 import 'package:intl/intl.dart';
 
 class AwesomeAssertUtils {
-  static String? toSimpleEnumString<T>(T e) {
-    if (e == null) return null;
-    return e.toString().split('.')[1];
+  static String? toSimpleEnumString<T extends Enum>(T? e) {
+    return e?.name;
   }
 
   static bool isNullOrEmptyOrInvalid(dynamic value, Type T) {
@@ -158,7 +157,7 @@ class AwesomeAssertUtils {
     }
   }
 
-  static T? extractEnum<T>(String reference, Map dataMap, List<T> values) {
+  static T? extractEnum<T extends Enum>(String reference, Map dataMap, List<T> values) {
     T? defaultValue = _getDefaultValue(reference, T);
     dynamic value = dataMap[reference];
 
@@ -168,13 +167,10 @@ class AwesomeAssertUtils {
 
     String castedValue = value;
     castedValue = castedValue.trim();
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(castedValue, String))
-      return defaultValue;
-
     return enumToString<T>(castedValue, values, defaultValue ?? values.first);
   }
 
-  static T? enumToString<T>(String enumValue, List<T> values, T? defaultValue) {
+  static T? enumToString<T extends Enum>(String enumValue, List<T> values, T? defaultValue) {
     for (final enumerator in values) {
       if (AwesomeAssertUtils.toSimpleEnumString(enumerator)!.toLowerCase() ==
           enumValue.toLowerCase()) return enumerator;

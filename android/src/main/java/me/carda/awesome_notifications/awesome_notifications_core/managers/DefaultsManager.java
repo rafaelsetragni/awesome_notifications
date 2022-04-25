@@ -2,10 +2,15 @@ package me.carda.awesome_notifications.awesome_notifications_core.managers;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotificationsExtension;
 import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
+import me.carda.awesome_notifications.awesome_notifications_core.enumerators.MediaSource;
 import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.awesome_notifications_core.models.DefaultsModel;
+import me.carda.awesome_notifications.awesome_notifications_core.utils.BitmapUtils;
 import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
 
 public class DefaultsManager {
@@ -17,6 +22,32 @@ public class DefaultsManager {
                     "DefaultsManager",
                     DefaultsModel.class,
                     "DefaultsModel");
+
+    public static void saveDefault(
+        @NonNull Context context,
+        @Nullable String defaultIconPath,
+        @Nullable Long dartCallback
+    ) throws AwesomeNotificationsException {
+        if (BitmapUtils.getInstance().getMediaSourceType(defaultIconPath) != MediaSource.Resource)
+            defaultIconPath = null;
+
+        DefaultsModel defaults = getDefaults(context);
+
+        if (defaults == null) {
+            defaults = new DefaultsModel(
+                    defaultIconPath,
+                    dartCallback,
+                    null,
+                    null);
+        }
+        else {
+            defaults.appIcon = defaultIconPath;
+            defaults.reverseDartCallback = dartCallback == null ? null : dartCallback.toString();
+        }
+
+        saveDefault(context, defaults);
+
+    }
 
     private static void saveDefault(Context context, DefaultsModel defaults) throws AwesomeNotificationsException {
         shared.set(context, Definitions.SHARED_DEFAULTS, "Defaults", defaults);

@@ -72,6 +72,7 @@ public interface Definitions {
     String SHARED_SCHEDULED_NOT_CHANNELS = "schedulesChannels";
 
     String CHANNEL_METHOD_INITIALIZE = "initialize";
+    String CHANNEL_METHOD_PUSH_NEXT_DATA = "pushNext";
     String CHANNEL_METHOD_GET_DRAWABLE_DATA = "getDrawableData";
     String CHANNEL_METHOD_ENABLE_WAKELOCK = "enableWakelock";
     String CHANNEL_METHOD_CREATE_NOTIFICATION = "createNewNotification";
@@ -113,7 +114,7 @@ public interface Definitions {
     String CHANNEL_METHOD_DISMISS_ALL_NOTIFICATIONS = "dismissAllNotifications";
     String CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = "cancelAllSchedules";
     String CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = "cancelAllNotifications";
-    String CHANNEL_METHOD_SILENCED_CALLBACK = "isolateCallbackReference";
+    String CHANNEL_METHOD_SILENT_CALLBACK = "silentCallbackReference";
     String CHANNEL_METHOD_SET_ACTION_HANDLE = "setActionHandle";
 
     String CHANNEL_METHOD_START_FOREGROUND = "startForeground";

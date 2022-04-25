@@ -30,19 +30,19 @@ public class Logger {
     }
 
     public static void d(String className, String message){
-        Log.d(greenColor+"Android: [Awesome Notifications - DEBUG]", message + " (" + className + ":" + getLastLine() + ")" + resetColor);
+        Log.d(greenColor+"[Awesome Notifications]", "Android: " + message + " (" + className + ":" + getLastLine() + ")" + resetColor);
     }
 
     public static void e(String className, String message){
-        Log.e(redColor+"Android: [Awesome Notifications - ERROR]", message + " (" + className + ":" + getLastLine() + ")" + resetColor);
+        Log.e(redColor+"[Awesome Notifications]", "Android: " + message + " (" + className + ":" + getLastLine() + ")" + resetColor);
     }
 
     public static void i(String className, String message){
-        Log.i(blueColor+"Android: [Awesome Notifications - INFO]",  message +  " (" + className + ")" + resetColor);
+        Log.i(blueColor+"[Awesome Notifications]",  "Android: " + message +  " (" + className + ":" + getLastLine() + ")" + resetColor);
     }
 
     public static void w(String className, String message){
-        Log.w(yellowColor+"Android: [Awesome Notifications - WARNING]", message + " (" + className + ":" + getLastLine() + ")" + resetColor);
+        Log.w(yellowColor+"[Awesome Notifications]", "Android: " + message + " (" + className + ":" + getLastLine() + ")" + resetColor);
     }
 
 }

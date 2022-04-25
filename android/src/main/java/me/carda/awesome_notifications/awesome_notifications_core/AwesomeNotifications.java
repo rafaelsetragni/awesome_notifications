@@ -120,7 +120,7 @@ public class AwesomeNotifications
                 applicationContext,
                 extensionClass.getClass());
 
-        loadAwesomeExtensions(
+        loadExtensions(
                 applicationContext,
                 stringUtils);
     }
@@ -169,7 +169,7 @@ public class AwesomeNotifications
 
     public static boolean isExtensionsLoaded = false;
     @SuppressWarnings("unchecked")
-    public static void loadAwesomeExtensions(
+    public static void loadExtensions(
         @NonNull Context context,
         StringUtils stringUtils
     ) throws AwesomeNotificationsException {
@@ -182,7 +182,7 @@ public class AwesomeNotifications
                 Class extensionClass =
                         Class.forName(extensionClassReference);
 
-                loadAwesomeExtensions(
+                loadExtensions(
                         context,
                         extensionClass);
 
@@ -199,7 +199,7 @@ public class AwesomeNotifications
             }
     }
 
-    public static void loadAwesomeExtensions(
+    public static void loadExtensions(
             @NonNull Context context,
             @NonNull Class<? extends AwesomeNotificationsExtension> extensionClass
     ) throws AwesomeNotificationsException {
@@ -379,21 +379,25 @@ public class AwesomeNotifications
     // *****************************  INITIALIZATION FUNCTIONS  **********************************
 
     public void initialize(
-            @Nullable String defaultIconPath,
-            @Nullable List<Object> channelsData,
-            @Nullable List<Object> channelGroupsData,
-            Long dartCallback,
-            boolean debug
+        @Nullable String defaultIconPath,
+        @Nullable List<Object> channelsData,
+        @Nullable List<Object> channelGroupsData,
+        @NonNull Long dartCallback,
+        boolean debug
     ) throws AwesomeNotificationsException {
 
         Context currentContext = wContext.get();
 
-        setDefaults(
-                currentContext,
-                defaultIconPath,
-                dartCallback);
+        DefaultsManager
+                .saveDefault(
+                        currentContext,
+                        defaultIconPath,
+                        dartCallback);
 
-        if (ListUtils.isNullOrEmpty(channelGroupsData))
+        DefaultsManager
+                .commitChanges(currentContext);
+
+        if (!ListUtils.isNullOrEmpty(channelGroupsData))
             setChannelGroups(wContext.get(), channelGroupsData);
 
         if (ListUtils.isNullOrEmpty(channelsData))
@@ -484,16 +488,6 @@ public class AwesomeNotifications
             channelManager.saveChannel(context, channelModel, true, forceUpdate);
 
         channelManager.commitChanges(context);
-    }
-
-    private void setDefaults(@NonNull Context context, @Nullable String defaultIcon, Long dartCallbackHandle) throws AwesomeNotificationsException {
-
-        if (BitmapUtils.getInstance().getMediaSourceType(defaultIcon) != MediaSource.Resource)
-            defaultIcon = null;
-
-        DefaultsManager.setDefaultIcon(context, defaultIcon);
-        DefaultsManager.setDartCallbackDispatcher(context, dartCallbackHandle);
-        DefaultsManager.commitChanges(context);
     }
 
     // *****************************  RECOVER FUNCTIONS  **********************************

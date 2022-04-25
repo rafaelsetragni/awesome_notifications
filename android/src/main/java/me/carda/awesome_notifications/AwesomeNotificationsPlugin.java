@@ -124,25 +124,25 @@ public class AwesomeNotificationsPlugin
 
         } catch (AwesomeNotificationsException ignored) {
         } catch (Exception exception) {
-            AwesomeNotificationsException ignored =
-                    ExceptionFactory
-                        .getInstance()
-                        .createNewAwesomeException(
-                                TAG,
-                                ExceptionCode.CODE_UNKNOWN_EXCEPTION,
-                                "An exception was found while attaching awesome notifications plugin",
-                                exception);
+            ExceptionFactory
+                .getInstance()
+                .registerNewAwesomeException(
+                        TAG,
+                        ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                        "An exception was found while attaching awesome notifications plugin",
+                        exception);
         }
     }
 
     private void detachAwesomeNotificationsPlugin(Context applicationContext) {
-
         pluginChannel.setMethodCallHandler(null);
         pluginChannel = null;
 
-        awesomeNotifications.detachAsMainInstance(this);
-        awesomeNotifications.dispose();
-        awesomeNotifications = null;
+        if (awesomeNotifications != null) {
+            awesomeNotifications.detachAsMainInstance(this);
+            awesomeNotifications.dispose();
+            awesomeNotifications = null;
+        }
 
         if (AwesomeNotifications.debug)
             Logger.d(TAG, "Awesome Notifications plugin detached from Android " + Build.VERSION.SDK_INT);

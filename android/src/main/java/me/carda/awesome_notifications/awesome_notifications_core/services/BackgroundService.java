@@ -55,16 +55,7 @@ public class BackgroundService extends JobIntentService {
                     dartCallbackHandle,
                     silentCallbackHandle);
 
-        } catch (AwesomeNotificationsException e) {
-            ExceptionFactory
-                    .getInstance()
-                    .registerNewAwesomeException(
-                            TAG,
-                            ExceptionCode.CODE_BACKGROUND_EXECUTION_EXCEPTION,
-                            "A new Dart background service could not be executed",
-                            e.getDetailedCode(),
-                            e);
-
+        } catch (AwesomeNotificationsException ignored) {
         } catch (Exception e) {
             ExceptionFactory
                     .getInstance()

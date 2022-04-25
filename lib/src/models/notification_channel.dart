@@ -152,15 +152,11 @@ class NotificationChannel extends Model {
       NOTIFICATION_LED_ON_MS: ledOnMs,
       NOTIFICATION_LED_OFF_MS: ledOffMs,
       NOTIFICATION_GROUP_KEY: groupKey,
-      NOTIFICATION_GROUP_SORT: AwesomeAssertUtils.toSimpleEnumString(groupSort),
-      NOTIFICATION_GROUP_ALERT_BEHAVIOR:
-          AwesomeAssertUtils.toSimpleEnumString(groupAlertBehavior),
-      NOTIFICATION_DEFAULT_PRIVACY:
-          AwesomeAssertUtils.toSimpleEnumString(defaultPrivacy),
-      NOTIFICATION_IMPORTANCE:
-          AwesomeAssertUtils.toSimpleEnumString(importance),
-      NOTIFICATION_DEFAULT_RINGTONE_TYPE:
-          AwesomeAssertUtils.toSimpleEnumString(defaultRingtoneType),
+      NOTIFICATION_GROUP_SORT: groupSort?.name,
+      NOTIFICATION_GROUP_ALERT_BEHAVIOR: groupAlertBehavior?.name,
+      NOTIFICATION_DEFAULT_PRIVACY: defaultPrivacy?.name,
+      NOTIFICATION_IMPORTANCE: importance?.name,
+      NOTIFICATION_DEFAULT_RINGTONE_TYPE: defaultRingtoneType?.name,
       NOTIFICATION_LOCKED: locked,
       NOTIFICATION_CHANNEL_CRITICAL_ALERTS: criticalAlerts,
       NOTIFICATION_ONLY_ALERT_ONCE: onlyAlertOnce
@@ -192,20 +188,20 @@ class NotificationChannel extends Model {
     this.enableLights = AwesomeAssertUtils.extractValue(
         NOTIFICATION_ENABLE_LIGHTS, dataMap, bool);
 
-    this.importance = AwesomeAssertUtils.extractEnum(
+    this.importance = AwesomeAssertUtils.extractEnum<NotificationImportance>(
         NOTIFICATION_IMPORTANCE, dataMap, NotificationImportance.values);
-    this.defaultPrivacy = AwesomeAssertUtils.extractEnum(
+    this.defaultPrivacy = AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
         NOTIFICATION_DEFAULT_PRIVACY, dataMap, NotificationPrivacy.values);
-    this.defaultRingtoneType = AwesomeAssertUtils.extractEnum(
+    this.defaultRingtoneType = AwesomeAssertUtils.extractEnum<DefaultRingtoneType>(
         NOTIFICATION_DEFAULT_RINGTONE_TYPE,
         dataMap,
         DefaultRingtoneType.values);
 
     this.groupKey = AwesomeAssertUtils.extractValue(
         NOTIFICATION_GROUP_KEY, dataMap, String);
-    this.groupSort = AwesomeAssertUtils.extractEnum(
+    this.groupSort = AwesomeAssertUtils.extractEnum<GroupSort>(
         NOTIFICATION_GROUP_SORT, dataMap, GroupSort.values);
-    this.groupAlertBehavior = AwesomeAssertUtils.extractEnum(
+    this.groupAlertBehavior = AwesomeAssertUtils.extractEnum<GroupAlertBehavior>(
         NOTIFICATION_GROUP_ALERT_BEHAVIOR, dataMap, GroupAlertBehavior.values);
 
     this.icon =

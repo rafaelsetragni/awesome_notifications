@@ -2,6 +2,9 @@ package me.carda.awesome_notifications.awesome_notifications_core.models;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,10 +23,18 @@ public class DefaultsModel extends AbstractModel {
         super(StringUtils.getInstance());
     }
 
-    public DefaultsModel(String defaultAppIcon, String dartCallbackHandle){
+    public DefaultsModel(
+            @Nullable String defaultAppIcon,
+            @Nullable Long reverseDartCallback,
+            @Nullable Long silentDataCallback,
+            @Nullable String backgroundHandleClass
+    ){
         super(StringUtils.getInstance());
+
         this.appIcon = defaultAppIcon;
-        this.reverseDartCallback = dartCallbackHandle;
+        this.silentDataCallback = silentDataCallback == null ? null : silentDataCallback.toString();
+        this.reverseDartCallback = reverseDartCallback == null ? null : reverseDartCallback.toString();
+        this.backgroundHandleClass = backgroundHandleClass;
     }
 
     @Override

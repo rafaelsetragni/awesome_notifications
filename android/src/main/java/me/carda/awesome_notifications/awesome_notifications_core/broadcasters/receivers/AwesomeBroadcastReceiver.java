@@ -26,7 +26,7 @@ public abstract class AwesomeBroadcastReceiver extends BroadcastReceiver {
                     .defaultValues
                     .putAll(Definitions.initialValues);
 
-            AwesomeNotifications.loadAwesomeExtensions(
+            AwesomeNotifications.loadExtensions(
                     context,
                     StringUtils.getInstance());
 
