@@ -651,6 +651,8 @@ public class PermissionManager {
 
             if(channel != null)
                 intent.putExtra(Settings.EXTRA_CHANNEL_ID, channel.getId());
+            else if (!stringUtils.isNullOrEmpty(channelKey))
+                intent.putExtra(Settings.EXTRA_CHANNEL_ID, channelKey);
 
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if(startVerifiedActivity(context, intent))
