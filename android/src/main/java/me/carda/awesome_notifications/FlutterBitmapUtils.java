@@ -10,7 +10,7 @@ import android.os.Build;
 import java.io.InputStream;
 
 import io.flutter.view.FlutterMain;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.BitmapUtils;
+import me.carda.awesome_notifications.core.utils.BitmapUtils;
 
 public class FlutterBitmapUtils extends BitmapUtils {
 

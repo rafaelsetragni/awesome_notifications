@@ -22,30 +22,30 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
-import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
-import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotificationsExtension;
-import me.carda.awesome_notifications.awesome_notifications_core.background.BackgroundExecutor;
-import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.NotificationThreadCompletionHandler;
-import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundServiceType;
-import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundStartMode;
-import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
-import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
-import me.carda.awesome_notifications.awesome_notifications_core.listeners.AwesomeEventListener;
-import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
-import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
-import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.BitmapCompletionHandler;
-import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.PermissionCompletionHandler;
-import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationModel;
-import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationScheduleModel;
-import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.core.AwesomeNotifications;
+import me.carda.awesome_notifications.core.AwesomeNotificationsExtension;
+import me.carda.awesome_notifications.core.background.BackgroundExecutor;
+import me.carda.awesome_notifications.core.completion_handlers.NotificationThreadCompletionHandler;
+import me.carda.awesome_notifications.core.enumerators.ForegroundServiceType;
+import me.carda.awesome_notifications.core.enumerators.ForegroundStartMode;
+import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+import me.carda.awesome_notifications.core.listeners.AwesomeEventListener;
+import me.carda.awesome_notifications.core.Definitions;
+import me.carda.awesome_notifications.core.logs.Logger;
+import me.carda.awesome_notifications.core.completion_handlers.BitmapCompletionHandler;
+import me.carda.awesome_notifications.core.completion_handlers.PermissionCompletionHandler;
+import me.carda.awesome_notifications.core.models.NotificationModel;
+import me.carda.awesome_notifications.core.models.NotificationScheduleModel;
+import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 
-import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationChannelModel;
+import me.carda.awesome_notifications.core.models.NotificationChannelModel;
 
-import me.carda.awesome_notifications.awesome_notifications_core.utils.BooleanUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.ListUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.MapUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
+import me.carda.awesome_notifications.core.utils.BooleanUtils;
+import me.carda.awesome_notifications.core.utils.CalendarUtils;
+import me.carda.awesome_notifications.core.utils.ListUtils;
+import me.carda.awesome_notifications.core.utils.MapUtils;
+import me.carda.awesome_notifications.core.utils.StringUtils;
 
 /**
  * AwesomeNotificationsPlugin

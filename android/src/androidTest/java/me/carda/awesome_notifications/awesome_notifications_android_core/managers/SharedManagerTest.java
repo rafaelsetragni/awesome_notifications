@@ -1,4 +1,4 @@
-package me.carda.awesome_notifications.awesome_notifications_core.managers;
+package me.carda.awesome_notifications.core.managers;
 
 import static org.junit.Assert.*;
 
@@ -13,10 +13,10 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
-import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
-import me.carda.awesome_notifications.awesome_notifications_core.models.AbstractModel;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
+import me.carda.awesome_notifications.core.Definitions;
+import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.core.models.AbstractModel;
+import me.carda.awesome_notifications.core.utils.StringUtils;
 
 public class SharedManagerTest {
 

@@ -1,14 +1,12 @@
-package me.carda.awesome_notifications.awesome_notifications_core.managers;
+package me.carda.awesome_notifications.core.managers;
 
 import android.content.Context;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import androidx.test.InstrumentationRegistry;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static org.junit.Assert.*;
 
