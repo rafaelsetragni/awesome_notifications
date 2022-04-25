@@ -636,7 +636,10 @@ public class PermissionManager {
         return startVerifiedActivity(context, intent);
     }
 
-    private boolean gotoAndroidChannelPage(final Context context, final String channelKey){
+    private boolean gotoAndroidChannelPage(
+            @NonNull final Context context,
+            @NonNull final String channelKey
+    ){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel =
                     ChannelManager
@@ -644,8 +647,10 @@ public class PermissionManager {
                             .getAndroidChannel(context, channelKey);
 
             Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
-                    .putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName())
-                    .putExtra(Settings.EXTRA_CHANNEL_ID, channel.getId());
+                    .putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
+
+            if(channel != null)
+                intent.putExtra(Settings.EXTRA_CHANNEL_ID, channel.getId());
 
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if(startVerifiedActivity(context, intent))
@@ -654,7 +659,9 @@ public class PermissionManager {
         return gotoAndroidAppNotificationPage(context);
     }
 
-    private boolean gotoPreciseAlarmPage(final Context context){
+    private boolean gotoPreciseAlarmPage(
+            @NonNull final Context context
+    ){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S /*Android 12*/) {
             final Intent intent = new Intent();
 
@@ -669,7 +676,9 @@ public class PermissionManager {
         return gotoAndroidAppNotificationPage(context);
     }
 
-    private boolean gotoControlsDnDPage(final Context context){
+    private boolean gotoControlsDnDPage(
+            @NonNull final Context context
+    ){
         final Intent intent;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             intent = new Intent(
@@ -681,7 +690,11 @@ public class PermissionManager {
         return gotoAndroidAppNotificationPage(context);
     }
 
-    public boolean handlePermissionResult(final int requestCode, final String[] permissions, final int[] grantResults) {
+    public boolean handlePermissionResult(
+            final int requestCode,
+            final String[] permissions,
+            final int[] grantResults
+    ) {
         if(requestCode != REQUEST_CODE)
             return false;
 
