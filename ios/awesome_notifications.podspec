@@ -19,7 +19,7 @@ A complete solution to create Local Notifications and Push Notifications, throug
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
     'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64',
-    'ENABLE_BITCODE' => 'NO',
+    'ENABLE_BITCODE' => 'YES',
     'APPLICATION_EXTENSION_API_ONLY' => 'NO'
   }
   s.swift_version = '5.0'
