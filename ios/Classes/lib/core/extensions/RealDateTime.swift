@@ -17,7 +17,7 @@ public class RealDateTime: Equatable, Comparable {
         get { return currentDateComponents }
     }
     
-    static var utcTimeZone = TimeZone(secondsFromGMT: 0)!
+    public static var utcTimeZone = TimeZone(secondsFromGMT: 0)!
     
     public var timeZone:TimeZone! {
         get {

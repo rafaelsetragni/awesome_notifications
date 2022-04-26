@@ -7,9 +7,9 @@
 
 import Foundation
 
-class EnumUtils<T: CaseIterable> {
+public class EnumUtils<T: CaseIterable> {
 
-    static func fromString(_ value: String?) -> T {
+    public static func fromString(_ value: String?) -> T {
         return T.allCases.first{ "\($0)" == (value ?? "") } ?? T.allCases.first!
     }
     
