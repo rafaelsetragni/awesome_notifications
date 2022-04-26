@@ -22,30 +22,30 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
-import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
-import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotificationsExtension;
-import me.carda.awesome_notifications.awesome_notifications_core.background.BackgroundExecutor;
-import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.NotificationThreadCompletionHandler;
-import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundServiceType;
-import me.carda.awesome_notifications.awesome_notifications_core.enumerators.ForegroundStartMode;
-import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
-import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
-import me.carda.awesome_notifications.awesome_notifications_core.listeners.AwesomeEventListener;
-import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
-import me.carda.awesome_notifications.awesome_notifications_core.logs.Logger;
-import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.BitmapCompletionHandler;
-import me.carda.awesome_notifications.awesome_notifications_core.completion_handlers.PermissionCompletionHandler;
-import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationModel;
-import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationScheduleModel;
-import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.core.AwesomeNotifications;
+import me.carda.awesome_notifications.core.AwesomeNotificationsExtension;
+import me.carda.awesome_notifications.core.background.BackgroundExecutor;
+import me.carda.awesome_notifications.core.completion_handlers.NotificationThreadCompletionHandler;
+import me.carda.awesome_notifications.core.enumerators.ForegroundServiceType;
+import me.carda.awesome_notifications.core.enumerators.ForegroundStartMode;
+import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+import me.carda.awesome_notifications.core.listeners.AwesomeEventListener;
+import me.carda.awesome_notifications.core.Definitions;
+import me.carda.awesome_notifications.core.logs.Logger;
+import me.carda.awesome_notifications.core.completion_handlers.BitmapCompletionHandler;
+import me.carda.awesome_notifications.core.completion_handlers.PermissionCompletionHandler;
+import me.carda.awesome_notifications.core.models.NotificationModel;
+import me.carda.awesome_notifications.core.models.NotificationScheduleModel;
+import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 
-import me.carda.awesome_notifications.awesome_notifications_core.models.NotificationChannelModel;
+import me.carda.awesome_notifications.core.models.NotificationChannelModel;
 
-import me.carda.awesome_notifications.awesome_notifications_core.utils.BooleanUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.CalendarUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.ListUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.MapUtils;
-import me.carda.awesome_notifications.awesome_notifications_core.utils.StringUtils;
+import me.carda.awesome_notifications.core.utils.BooleanUtils;
+import me.carda.awesome_notifications.core.utils.CalendarUtils;
+import me.carda.awesome_notifications.core.utils.ListUtils;
+import me.carda.awesome_notifications.core.utils.MapUtils;
+import me.carda.awesome_notifications.core.utils.StringUtils;
 
 /**
  * AwesomeNotificationsPlugin
@@ -124,25 +124,25 @@ public class AwesomeNotificationsPlugin
 
         } catch (AwesomeNotificationsException ignored) {
         } catch (Exception exception) {
-            AwesomeNotificationsException ignored =
-                    ExceptionFactory
-                        .getInstance()
-                        .createNewAwesomeException(
-                                TAG,
-                                ExceptionCode.CODE_UNKNOWN_EXCEPTION,
-                                "An exception was found while attaching awesome notifications plugin",
-                                exception);
+            ExceptionFactory
+                .getInstance()
+                .registerNewAwesomeException(
+                        TAG,
+                        ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                        "An exception was found while attaching awesome notifications plugin",
+                        exception);
         }
     }
 
     private void detachAwesomeNotificationsPlugin(Context applicationContext) {
-
         pluginChannel.setMethodCallHandler(null);
         pluginChannel = null;
 
-        awesomeNotifications.detachAsMainInstance(this);
-        awesomeNotifications.dispose();
-        awesomeNotifications = null;
+        if (awesomeNotifications != null) {
+            awesomeNotifications.detachAsMainInstance(this);
+            awesomeNotifications.dispose();
+            awesomeNotifications = null;
+        }
 
         if (AwesomeNotifications.debug)
             Logger.d(TAG, "Awesome Notifications plugin detached from Android " + Build.VERSION.SDK_INT);
@@ -150,9 +150,19 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        Intent launchIntent = binding.getActivity().getIntent();
-        awesomeNotifications.captureNotificationActionFromIntent(launchIntent);
-        binding.addOnNewIntentListener(this);
+        try {
+            Intent launchIntent = binding.getActivity().getIntent();
+            awesomeNotifications.captureNotificationActionFromIntent(launchIntent);
+            binding.addOnNewIntentListener(this);
+        } catch(Exception exception) {
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                            ExceptionCode.DETAILED_UNEXPECTED_ERROR+".fcm."+exception.getClass().getSimpleName(),
+                            exception);
+        }
     }
 
     @Override
@@ -170,8 +180,19 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public boolean onNewIntent(Intent intent) {
-        return awesomeNotifications
-                .captureNotificationActionFromIntent(intent);
+        try{
+            return awesomeNotifications
+                    .captureNotificationActionFromIntent(intent);
+        } catch (Exception exception) {
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                            ExceptionCode.DETAILED_UNEXPECTED_ERROR+".fcm."+exception.getClass().getSimpleName(),
+                            exception);
+            return false;
+        }
     }
 
     @Override
@@ -388,7 +409,6 @@ public class AwesomeNotificationsPlugin
     ) throws AwesomeNotificationsException {
 
         Map<String, Object> arguments = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
-
         if(arguments == null)
             throw ExceptionFactory
                     .getInstance()

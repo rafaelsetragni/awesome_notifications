@@ -7,15 +7,15 @@
   
     <application>
 
-        <receiver android:name=".awesome_notifications_core.broadcasters.receivers.DismissedNotificationReceiver"
+        <receiver android:name=".core.broadcasters.receivers.DismissedNotificationReceiver"
             android:exported="false"/>
-        <receiver android:name=".awesome_notifications_core.broadcasters.receivers.ScheduledNotificationReceiver"
+        <receiver android:name=".core.broadcasters.receivers.ScheduledNotificationReceiver"
             android:exported="true"/>
-        <receiver android:name=".awesome_notifications_core.broadcasters.receivers.NotificationActionReceiver"
+        <receiver android:name=".core.broadcasters.receivers.NotificationActionReceiver"
             android:exported="false"/>
 
         <receiver
-            android:name=".awesome_notifications_core.broadcasters.receivers.RefreshSchedulesReceiver"
+            android:name=".core.broadcasters.receivers.RefreshSchedulesReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -29,7 +29,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".awesome_notifications_core.services.BackgroundService"
+        <service android:name=".core.services.BackgroundService"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="false"/>
 

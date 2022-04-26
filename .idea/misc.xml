@@ -5,6 +5,7 @@
   </component>
   <component name="ProjectPlainTextFileTypeManager">
     <file url="file://$PROJECT_DIR$/CHANGELOG.md" />
+    <file url="file://$PROJECT_DIR$/example/lib/notifications/firebase_controller.dart" />
     <file url="file://$PROJECT_DIR$/example/README.md" />
     <file url="file://$PROJECT_DIR$/README.md" />
   </component>

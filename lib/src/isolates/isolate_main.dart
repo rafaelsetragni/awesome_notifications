@@ -20,8 +20,8 @@ void dartIsolateMain() {
   // This is where we handle background silent events
   _channel.setMethodCallHandler((MethodCall call) async {
     switch (call.method) {
-      case CHANNEL_METHOD_ISOLATE_CALLBACK:
-        await channelMethodIsolateCallbackHandle(call);
+      case CHANNEL_METHOD_SILENT_CALLBACK:
+        await channelMethodSilentCallbackHandle(call);
         break;
 
       case CHANNEL_METHOD_ISOLATE_SHUTDOWN:
@@ -34,7 +34,7 @@ void dartIsolateMain() {
   });
 
   // for last, the native channel is initialize to allow to call CHANNEL_METHOD_SILENCED_CALLBACK
-  _channel.invokeMethod<void>(CHANNEL_METHOD_INITIALIZE);
+  _channel.invokeMethod<void>(CHANNEL_METHOD_PUSH_NEXT_DATA);
 }
 
 /// This method handle the silent callback as a flutter plugin
@@ -47,7 +47,7 @@ Future<void> channelMethodIsolateShutdown(MethodCall call) async {
 }
 
 /// This method handle the silent callback as a flutter plugin
-Future<void> channelMethodIsolateCallbackHandle(MethodCall call) async {
+Future<void> channelMethodSilentCallbackHandle(MethodCall call) async {
   try {
     bool success = await receiveSilentAction(
         (call.arguments as Map).cast<String, dynamic>());
@@ -56,7 +56,7 @@ Future<void> channelMethodIsolateCallbackHandle(MethodCall call) async {
       throw AwesomeNotificationsException(
           message: 'Silent data could not be recovered');
   } on Exception catch (error, stacktrace) {
-    Logger.e("channelMethodIsolateCallbackHandle",
+    Logger.e("channelMethodSilentCallbackHandle",
         "An error occurred in your background messaging handler: $error");
     Logger.e("receiveSilentAction", stacktrace.toString());
   }

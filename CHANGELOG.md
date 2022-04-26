@@ -7,6 +7,8 @@
 * Background actions improved on iOS to increase UI performance through background threads
 * Added console performance mesures for iOS
 * Added warning messages for non implemented layouts on iOS
+* Payload changed to support null values
+* Documentation improved
 ### [0.7.0-beta.2]
 * AsyncTask replaced by Handler/Looper due deprecation in Android 12
 * FULL_WAKE_LOCK replaced by SCREEN_BRIGHT_WAKE_LOCK to improve battery life in Android

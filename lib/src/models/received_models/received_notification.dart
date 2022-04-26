@@ -13,13 +13,13 @@ class ReceivedNotification extends BaseNotificationContent {
     displayedDate = AwesomeAssertUtils.extractValue(
         NOTIFICATION_DISPLAYED_DATE, dataMap, DateTime);
 
-    createdSource = AwesomeAssertUtils.extractEnum(
+    createdSource = AwesomeAssertUtils.extractEnum<NotificationSource>(
         NOTIFICATION_CREATED_SOURCE, dataMap, NotificationSource.values);
 
-    createdLifeCycle = AwesomeAssertUtils.extractEnum(
+    createdLifeCycle = AwesomeAssertUtils.extractEnum<NotificationLifeCycle>(
         NOTIFICATION_CREATED_LIFECYCLE, dataMap, NotificationLifeCycle.values);
 
-    displayedLifeCycle = AwesomeAssertUtils.extractEnum(
+    displayedLifeCycle = AwesomeAssertUtils.extractEnum<NotificationLifeCycle>(
         NOTIFICATION_DISPLAYED_LIFECYCLE,
         dataMap,
         NotificationLifeCycle.values);
@@ -32,12 +32,9 @@ class ReceivedNotification extends BaseNotificationContent {
     Map<String, dynamic> map = super.toMap();
     return map
       ..addAll({
-        NOTIFICATION_CREATED_SOURCE:
-            AwesomeAssertUtils.toSimpleEnumString(createdSource),
-        NOTIFICATION_CREATED_LIFECYCLE:
-            AwesomeAssertUtils.toSimpleEnumString(createdLifeCycle),
-        NOTIFICATION_DISPLAYED_LIFECYCLE:
-            AwesomeAssertUtils.toSimpleEnumString(displayedLifeCycle),
+        NOTIFICATION_CREATED_SOURCE: createdSource?.name,
+        NOTIFICATION_CREATED_LIFECYCLE: createdLifeCycle?.name,
+        NOTIFICATION_DISPLAYED_LIFECYCLE: displayedLifeCycle?.name,
         NOTIFICATION_CREATED_DATE:
             AwesomeDateUtils.parseDateToString(createdDate),
         NOTIFICATION_DISPLAYED_DATE:

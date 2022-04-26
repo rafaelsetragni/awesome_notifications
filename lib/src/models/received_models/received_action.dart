@@ -19,10 +19,10 @@ class ReceivedAction extends ReceivedNotification {
   ReceivedAction fromMap(Map<String, dynamic> dataMap) {
     super.fromMap(dataMap);
 
-    actionLifeCycle = AwesomeAssertUtils.extractEnum(
+    actionLifeCycle = AwesomeAssertUtils.extractEnum<NotificationLifeCycle>(
         NOTIFICATION_ACTION_LIFECYCLE, dataMap, NotificationLifeCycle.values);
 
-    dismissedLifeCycle = AwesomeAssertUtils.extractEnum(
+    dismissedLifeCycle = AwesomeAssertUtils.extractEnum<NotificationLifeCycle>(
         NOTIFICATION_DISMISSED_LIFE_CYCLE,
         dataMap,
         NotificationLifeCycle.values);
@@ -50,10 +50,8 @@ class ReceivedAction extends ReceivedNotification {
             AwesomeDateUtils.parseDateToString(actionDate),
         NOTIFICATION_DISMISSED_DATE:
             AwesomeDateUtils.parseDateToString(dismissedDate),
-        NOTIFICATION_ACTION_LIFECYCLE:
-            AwesomeAssertUtils.toSimpleEnumString(actionLifeCycle),
-        NOTIFICATION_DISMISSED_LIFE_CYCLE:
-            AwesomeAssertUtils.toSimpleEnumString(dismissedLifeCycle),
+        NOTIFICATION_ACTION_LIFECYCLE: actionLifeCycle?.name,
+        NOTIFICATION_DISMISSED_LIFE_CYCLE: dismissedLifeCycle?.name,
         NOTIFICATION_BUTTON_KEY_PRESSED: buttonKeyPressed,
         NOTIFICATION_BUTTON_KEY_INPUT: buttonKeyInput
       });

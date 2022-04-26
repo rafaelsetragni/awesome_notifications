@@ -1004,6 +1004,7 @@ Main methods to manipulate a notification channel:
 | title 			 	|     NO   | The title of notification                                                | String                | unlimited                |                           |
 | body 			 	    |     NO   | The body content of notification                                         | String                | unlimited                |                           |
 | summary 		 	    |     NO   | A summary to be displayed when the content is protected by privacy       | String                | unlimited                |                           |
+| category 		 	    |     NO   | The notification category that best describes the nature of the notification for O.S.       | Enumerator                | NotificationCategory                |                           |
 | showWhen 		 	    |     NO   | Hide/show the time elapsed since notification was displayed              | bool                  | true or false            | true                      |
 | displayOnForeground   |     NO   | Hide/show the notification if the app is in the Foreground (streams are preserved )  | bool      | true or false            | true                      |
 | displayOnBackground   |     NO   | Hide/show the notification if the app is in the Background (streams are preserved )  | bool      | true or false            | true                      |

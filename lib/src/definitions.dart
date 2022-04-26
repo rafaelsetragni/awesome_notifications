@@ -47,6 +47,7 @@ const BACKGROUND_HANDLE = 'bgHandle';
 const RECOVER_DISPLAYED = 'recoverDisplayed';
 
 const CHANNEL_METHOD_INITIALIZE = 'initialize';
+const CHANNEL_METHOD_PUSH_NEXT_DATA = 'pushNext';
 const CHANNEL_METHOD_GET_DRAWABLE_DATA = 'getDrawableData';
 const CHANNEL_METHOD_GET_PLATFORM_VERSION = 'getPlatformVersion';
 
@@ -138,7 +139,7 @@ const NOTIFICATION_ICON_RESOURCE_ID = 'iconResourceId';
 const NOTIFICATION_ID = 'id';
 const NOTIFICATION_LAYOUT = 'notificationLayout';
 
-const CHANNEL_METHOD_ISOLATE_CALLBACK = 'isolateCallbackReference';
+const CHANNEL_METHOD_SILENT_CALLBACK = 'silentCallbackReference';
 const CHANNEL_METHOD_ISOLATE_SHUTDOWN = 'isolateShutdown';
 const CHANNEL_METHOD_DART_CALLBACK = 'dartCallbackReference';
 

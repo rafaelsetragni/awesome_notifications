@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -25,15 +24,16 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.view.FlutterCallbackInformation;
 
-import me.carda.awesome_notifications.awesome_notifications_core.AwesomeNotifications;
-import me.carda.awesome_notifications.awesome_notifications_core.Definitions;
-import me.carda.awesome_notifications.awesome_notifications_core.background.BackgroundExecutor;
-import me.carda.awesome_notifications.awesome_notifications_core.builders.NotificationBuilder;
-import me.carda.awesome_notifications.awesome_notifications_core.exceptions.AwesomeNotificationsException;
-import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionCode;
-import me.carda.awesome_notifications.awesome_notifications_core.exceptions.ExceptionFactory;
-import me.carda.awesome_notifications.awesome_notifications_core.managers.LifeCycleManager;
-import me.carda.awesome_notifications.awesome_notifications_core.models.returnedData.ActionReceived;
+import me.carda.awesome_notifications.core.AwesomeNotifications;
+import me.carda.awesome_notifications.core.Definitions;
+import me.carda.awesome_notifications.core.background.BackgroundExecutor;
+import me.carda.awesome_notifications.core.builders.NotificationBuilder;
+import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+import me.carda.awesome_notifications.core.logs.Logger;
+import me.carda.awesome_notifications.core.managers.LifeCycleManager;
+import me.carda.awesome_notifications.core.models.returnedData.ActionReceived;
 
 /**
  * An background execution abstraction which handles initializing a background isolate running a
@@ -96,7 +96,7 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
     public void onMethodCall(MethodCall call, @NonNull Result result) {
         String method = call.method;
         try {
-            if (method.equals(Definitions.CHANNEL_METHOD_INITIALIZE)) {
+            if (method.equals(Definitions.CHANNEL_METHOD_PUSH_NEXT_DATA)) {
                 dischargeNextSilentExecution();
                 result.success(true);
             } else {
@@ -121,7 +121,7 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
     public void runBackgroundThread(final Long callbackHandle) {
 
         if (backgroundFlutterEngine != null) {
-            Log.e(TAG, "Background isolate already started.");
+            Logger.e(TAG, "Background isolate already started.");
             return;
         }
 
@@ -138,7 +138,7 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
                     @Override
                     public void run() {
 
-                        Log.i(TAG, "Initializing Flutter global instance.");
+                        Logger.i(TAG, "Initializing Flutter global instance.");
 
                         FlutterInjector.instance().flutterLoader().startInitialization(applicationContext.getApplicationContext());
                         FlutterInjector.instance().flutterLoader().ensureInitializationCompleteAsync(
@@ -151,7 +151,7 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
                                         String appBundlePath = FlutterInjector.instance().flutterLoader().findAppBundlePath();
                                         AssetManager assets = applicationContext.getApplicationContext().getAssets();
 
-                                        Log.i(TAG, "Creating background FlutterEngine instance.");
+                                        Logger.i(TAG, "Creating background FlutterEngine instance.");
                                         backgroundFlutterEngine =
                                                 new FlutterEngine(applicationContext.getApplicationContext());
 
@@ -161,13 +161,24 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
                                         FlutterCallbackInformation flutterCallback =
                                                 FlutterCallbackInformation.lookupCallbackInformation(callbackHandle);
 
-                                        DartExecutor executor = backgroundFlutterEngine.getDartExecutor();
-                                        initializeReverseMethodChannel(executor);
+                                        if (flutterCallback == null){
+                                            ExceptionFactory
+                                                    .getInstance()
+                                                    .registerNewAwesomeException(
+                                                            TAG,
+                                                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                                                            "The flutter background reference for dart background action is invalid",
+                                                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".FlutterCallbackInformation");
+                                        }
+                                        else {
+                                            DartExecutor executor = backgroundFlutterEngine.getDartExecutor();
+                                            initializeReverseMethodChannel(executor);
 
-                                        Log.i(TAG, "Executing background FlutterEngine instance.");
-                                        DartCallback dartCallback =
-                                                new DartCallback(assets, appBundlePath, flutterCallback);
-                                        executor.executeDartCallback(dartCallback);
+                                            Logger.i(TAG, "Executing background FlutterEngine instance.");
+                                            DartCallback dartCallback =
+                                                    new DartCallback(assets, appBundlePath, flutterCallback);
+                                            executor.executeDartCallback(dartCallback);
+                                        }
                                     }
                                 });
                     }
@@ -191,12 +202,14 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
                     new Runnable() {
                         @Override
                         public void run() {
-                            Log.i(TAG, "Shutting down background FlutterEngine instance.");
+                            Logger.i(TAG, "Shutting down background FlutterEngine instance.");
 
                             if (backgroundFlutterEngine != null) {
                                 backgroundFlutterEngine.destroy();
                                 backgroundFlutterEngine = null;
                             }
+
+                            Logger.i(TAG, "FlutterEngine instance terminated.");
                         }
                     };
 
@@ -227,12 +240,12 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
     private void finishDartBackgroundExecution(){
         if(silentDataQueue.isEmpty()) {
             if(AwesomeNotifications.debug)
-                Log.i(TAG, "All silent data fetched.");
+                Logger.i(TAG, "All silent data fetched.");
             closeBackgroundIsolate();
         }
         else {
             if (AwesomeNotifications.debug)
-                Log.i(TAG, "Remaining " + silentDataQueue.size() + " silents to finish");
+                Logger.i(TAG, "Remaining " + silentDataQueue.size() + " silents to finish");
             dischargeNextSilentExecution();
         }
     }
@@ -258,7 +271,7 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
     public void executeDartCallbackInBackgroundIsolate(Intent intent) throws AwesomeNotificationsException {
 
         if (backgroundFlutterEngine == null) {
-            Log.i( TAG,"A background message could not be handled since " +
+            Logger.i( TAG,"A background message could not be handled since " +
                     "dart callback handler has not been registered.");
             return;
         }
@@ -279,12 +292,12 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
 
             // Handle the message event in Dart.
             backgroundChannel.invokeMethod(
-                Definitions.CHANNEL_METHOD_SILENCED_CALLBACK,
+                Definitions.CHANNEL_METHOD_SILENT_CALLBACK,
                 actionData,
                 dartChannelResultHandle);
 
         } else {
-            Log.e(TAG, "Action Notification model not found inside Intent content.");
+            Logger.e(TAG, "Silent data model not found inside Intent content.");
             finishDartBackgroundExecution();
         }
     }

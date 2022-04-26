@@ -107,7 +107,7 @@ class NotificationActionButton extends Model {
         NOTIFICATION_SHOW_IN_COMPACT_VIEW, dataMap, bool);
     _isDangerousOption = AwesomeAssertUtils.extractValue(
         NOTIFICATION_IS_DANGEROUS_OPTION, dataMap, bool);
-    _actionType = AwesomeAssertUtils.extractEnum(
+    _actionType = AwesomeAssertUtils.extractEnum<ActionType>(
         NOTIFICATION_ACTION_TYPE, dataMap, ActionType.values);
 
     _color =
@@ -126,7 +126,7 @@ class NotificationActionButton extends Model {
 
     if (dataMap.containsKey("buttonType")) {
       developer.log("buttonType is deprecated. Please use actionType instead.");
-      _actionType = AwesomeAssertUtils.extractEnum(
+      _actionType = AwesomeAssertUtils.extractEnum<ActionType>(
           "buttonType", dataMap, ActionType.values);
     }
 
@@ -155,8 +155,7 @@ class NotificationActionButton extends Model {
       NOTIFICATION_AUTO_DISMISSIBLE: _autoDismissible,
       NOTIFICATION_SHOW_IN_COMPACT_VIEW: _showInCompactView,
       NOTIFICATION_IS_DANGEROUS_OPTION: _isDangerousOption,
-      NOTIFICATION_ACTION_TYPE:
-          AwesomeAssertUtils.toSimpleEnumString(_actionType),
+      NOTIFICATION_ACTION_TYPE: _actionType?.name,
       NOTIFICATION_COLOR: _color?.value
     };
   }

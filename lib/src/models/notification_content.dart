@@ -68,7 +68,7 @@ class NotificationContent extends BaseNotificationContent {
       Color? backgroundColor,
       ActionType actionType = ActionType.Default,
       NotificationLayout notificationLayout = NotificationLayout.Default,
-      Map<String, String>? payload,
+      Map<String, String?>? payload,
       NotificationCategory? category,
       bool hideLargeIconOnExpand = false,
       bool locked = false,
@@ -120,7 +120,7 @@ class NotificationContent extends BaseNotificationContent {
     _locked =
         AwesomeAssertUtils.extractValue(NOTIFICATION_LOCKED, mapData, bool);
 
-    _notificationLayout = AwesomeAssertUtils.extractEnum(
+    _notificationLayout = AwesomeAssertUtils.extractEnum<NotificationLayout>(
         NOTIFICATION_LAYOUT, mapData, NotificationLayout.values);
 
     _displayOnForeground = AwesomeAssertUtils.extractValue(
@@ -147,8 +147,7 @@ class NotificationContent extends BaseNotificationContent {
         NOTIFICATION_PROGRESS: _progress,
         NOTIFICATION_TICKER: _ticker,
         NOTIFICATION_LOCKED: _locked,
-        NOTIFICATION_LAYOUT:
-            AwesomeAssertUtils.toSimpleEnumString(_notificationLayout),
+        NOTIFICATION_LAYOUT: _notificationLayout?.name,
         NOTIFICATION_DISPLAY_ON_FOREGROUND: _displayOnForeground,
         NOTIFICATION_DISPLAY_ON_BACKGROUND: _displayOnBackground,
       });
