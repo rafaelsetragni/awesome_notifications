@@ -50,27 +50,22 @@ public enum NotificationPrivacy implements SafeEnum {
         int stringLength = reference.length();
         if (stringLength == 0) return null;
 
-        if(valueList == null) return null;
-        for (NotificationPrivacy candidate : valueList) {
-            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
-                return candidate;
-            }
-        }
+//        if(valueList == null) return null;
+//        for (NotificationPrivacy candidate : valueList) {
+//            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
+//                return candidate;
+//            }
+//        }
 
-//    public static NotificationPrivacy getSafeEnum(String name) {
-//        if (name == null) return null;
-//        int stringLength = name.length();
-//        if (stringLength == 0) return null;
-//
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 's')){
-//            return Secret;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 1, 'u')){
-//            return Public;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 1, 'r')){
-//            return Private;
-//        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 's')){
+            return Secret;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 1, 'u')){
+            return Public;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 1, 'r')){
+            return Private;
+        }
         return null;
     }
 }

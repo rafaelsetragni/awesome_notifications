@@ -26,36 +26,31 @@ public enum NotificationLayout implements SafeEnum {
         int stringLength = reference.length();
         if (stringLength == 0) return null;
 
-        if(valueList == null) return null;
-        for (NotificationLayout candidate : valueList) {
-            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
-                return candidate;
-            }
-        }
+//        if(valueList == null) return null;
+//        for (NotificationLayout candidate : valueList) {
+//            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
+//                return candidate;
+//            }
+//        }
 
-//    public static NotificationLayout getSafeEnum(String name) {
-//        if (name == null) return null;
-//        int stringLength = name.length();
-//        if (stringLength == 0) return null;
-//
-//        if (SafeEnum.charMatches(name, stringLength, 0, 'd')){
-//            return Default;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'b')){
-//            if(SafeEnum.charMatches(name, stringLength, 3, 'p')) return BigPicture;
-//            return BigText;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'm')){
-//            if(SafeEnum.charMatches(name, stringLength, 2, 'd')) return MediaPlayer;
-//            if(SafeEnum.charMatches(name, stringLength, 9, 'g')) return MessagingGroup;
-//            return Messaging;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'i')){
-//            return Inbox;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'p')){
-//            return ProgressBar;
-//        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'd')){
+            return Default;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'b')){
+            if(SafeEnum.charMatches(reference, stringLength, 3, 'p')) return BigPicture;
+            return BigText;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'm')){
+            if(SafeEnum.charMatches(reference, stringLength, 2, 'd')) return MediaPlayer;
+            if(SafeEnum.charMatches(reference, stringLength, 9, 'g')) return MessagingGroup;
+            return Messaging;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'i')){
+            return Inbox;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'p')){
+            return ProgressBar;
+        }
         return null;
     }
 }

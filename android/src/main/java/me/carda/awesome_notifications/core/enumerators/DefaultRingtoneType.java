@@ -21,24 +21,22 @@ public enum DefaultRingtoneType implements SafeEnum {
         int stringLength = reference.length();
         if (stringLength == 0) return null;
 
-        if(valueList == null) return null;
-        for (DefaultRingtoneType candidate : valueList) {
-            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
-                return candidate;
-            }
+//        if(valueList == null) return null;
+//        for (DefaultRingtoneType candidate : valueList) {
+//            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
+//                return candidate;
+//            }
+//        }
+
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'n')){
+            return Notification;
         }
-//        if (name == null) return null;
-//        int stringLength = name.length();
-//        if (stringLength == 0) return null;
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'n')){
-//            return Notification;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'r')){
-//            return Ringtone;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'a')){
-//            return Alarm;
-//        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'r')){
+            return Ringtone;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'a')){
+            return Alarm;
+        }
         return null;
     }
 }

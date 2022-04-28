@@ -66,48 +66,42 @@ public enum NotificationPermission implements SafeEnum {
         int stringLength = reference.length();
         if (stringLength == 0) return null;
 
-        if(valueList == null) return null;
-        for (NotificationPermission candidate : valueList) {
-            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
-                return candidate;
-            }
+//        if(valueList == null) return null;
+//        for (NotificationPermission candidate : valueList) {
+//            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
+//                return candidate;
+//            }
+//        }
+
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'a')){
+            return Alert;
         }
-
-//    public static NotificationPermission getSafeEnum(String name) {
-//        if (name == null) return null;
-//        int stringLength = name.length();
-//        if (stringLength == 0) return null;
-//
-//        if (SafeEnum.charMatches(name, stringLength, 0, 'a')){
-//            return Alert;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 's')){
-//            return Sound;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'b')){
-//            return Badge;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'v')){
-//            return Vibration;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'p')){
-//            if (SafeEnum.charMatches(name, stringLength, 2, 'e')) return PreciseAlarms;
-//            return Provisional;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'o')){
-//            return OverrideDnD;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'c')){
-//            if (SafeEnum.charMatches(name, stringLength, 1, 'r')) return CriticalAlert;
-//            return Car;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'l')){
-//            return Light;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'f')){
-//            return FullScreenIntent;
-//        }
-
+        if (SafeEnum.charMatches(reference, stringLength, 0, 's')){
+            return Sound;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'b')){
+            return Badge;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'v')){
+            return Vibration;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'p')){
+            if (SafeEnum.charMatches(reference, stringLength, 2, 'e')) return PreciseAlarms;
+            return Provisional;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'o')){
+            return OverrideDnD;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'c')){
+            if (SafeEnum.charMatches(reference, stringLength, 1, 'r')) return CriticalAlert;
+            return Car;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'l')){
+            return Light;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'f')){
+            return FullScreenIntent;
+        }
         return null;
     }
 }

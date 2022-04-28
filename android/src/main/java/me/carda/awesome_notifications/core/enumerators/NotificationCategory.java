@@ -41,58 +41,54 @@ public enum NotificationCategory implements SafeEnum {
         int stringLength = reference.length();
         if (stringLength == 0) return null;
 
-        if(valueList == null) return null;
-        for (NotificationCategory candidate : valueList) {
-            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
-                return candidate;
-            }
-        }
+//        if(valueList == null) return null;
+//        for (NotificationCategory candidate : valueList) {
+//            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
+//                return candidate;
+//            }
+//        }
 
-//    public static NotificationCategory getSafeEnum(String name) {
-//        if (name == null) return null;
-//        int stringLength = name.length();
-//        if (stringLength == 0) return null;
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'a')){
-//            return Alarm;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'c')){
-//            return Call;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'm')){
-//            if(SafeEnum.charMatches(name, stringLength, 1, 'e')) return Message;
-//            return MissedCall;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'r')){
-//            if(SafeEnum.charMatches(name, stringLength, 2, 'c')) return Recommendation;
-//            return Reminder;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'l')){
-//            return LocalSharing;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'n')){
-//            return Navigation;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'p')){
-//            if(SafeEnum.charMatches(name, stringLength, 3, 'g')) return Progress;
-//            return Promo;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'e')){
-//            if(SafeEnum.charMatches(name, stringLength, 1, 'm')) return Email;
-//            if(SafeEnum.charMatches(name, stringLength, 6, 'r')) return Error;
-//            return Event;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 's')){
-//            if(SafeEnum.charMatches(name, stringLength, 1, 'e')) return Service;
-//            if(SafeEnum.charMatches(name, stringLength, 2, 'c')) return Social;
-//            if(SafeEnum.charMatches(name, stringLength, 1, 't')) return Status;
-//            return StopWatch;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'w')){
-//            return Workout;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 't')){
-//            return Transport;
-//        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'a')){
+            return Alarm;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'c')){
+            return Call;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'm')){
+            if(SafeEnum.charMatches(reference, stringLength, 1, 'e')) return Message;
+            return MissedCall;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'r')){
+            if(SafeEnum.charMatches(reference, stringLength, 2, 'c')) return Recommendation;
+            return Reminder;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'l')){
+            return LocalSharing;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'n')){
+            return Navigation;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'p')){
+            if(SafeEnum.charMatches(reference, stringLength, 3, 'g')) return Progress;
+            return Promo;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'e')){
+            if(SafeEnum.charMatches(reference, stringLength, 1, 'm')) return Email;
+            if(SafeEnum.charMatches(reference, stringLength, 1, 'r')) return Error;
+            return Event;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 's')){
+            if(SafeEnum.charMatches(reference, stringLength, 1, 'e')) return Service;
+            if(SafeEnum.charMatches(reference, stringLength, 1, 'o')) return Social;
+            if(SafeEnum.charMatches(reference, stringLength, 2, 'a')) return Status;
+            return StopWatch;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'w')){
+            return Workout;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 't')){
+            return Transport;
+        }
         return null;
     }
 }

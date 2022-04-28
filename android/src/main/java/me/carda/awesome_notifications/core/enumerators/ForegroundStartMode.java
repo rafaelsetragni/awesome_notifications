@@ -39,28 +39,24 @@ public enum ForegroundStartMode implements SafeEnum {
         int stringLength = reference.length();
         if (stringLength == 0) return null;
 
-        if(valueList == null) return null;
-        for (ForegroundStartMode candidate : valueList) {
-            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
-                return candidate;
-            }
-        }
+//        if(valueList == null) return null;
+//        for (ForegroundStartMode candidate : valueList) {
+//            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
+//                return candidate;
+//            }
+//        }
 
-//    public static ForegroundStartMode getSafeEnum(String name) {
-//        if (name == null) return null;
-//        int stringLength = name.length();
-//        if (stringLength == 0) return null;
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 's')){
-//            if(SafeEnum.charMatches(name, stringLength, 5, 'c'))
-//                return stickCompatibility;
-//            return stick;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'n')){
-//            return notStick;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'd')){
-//            return deliverIntent;
-//        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 's')){
+            if(SafeEnum.charMatches(reference, stringLength, 5, 'c'))
+                return stickCompatibility;
+            return stick;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'n')){
+            return notStick;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'd')){
+            return deliverIntent;
+        }
         return null;
     }
 }

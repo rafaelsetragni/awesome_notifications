@@ -23,32 +23,28 @@ public enum MediaSource implements SafeEnum {
         int stringLength = reference.length();
         if (stringLength == 0) return null;
 
-        if(valueList == null) return null;
-        for (MediaSource candidate : valueList) {
-            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
-                return candidate;
-            }
-        }
+//        if(valueList == null) return null;
+//        for (MediaSource candidate : valueList) {
+//            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
+//                return candidate;
+//            }
+//        }
 
-//    public static MediaSource getSafeEnum(String name) {
-//        if (name == null) return null;
-//        int stringLength = name.length();
-//        if (stringLength == 0) return null;
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'n')){
-//            return Network;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'a')){
-//            return Asset;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'r')){
-//            return Resource;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'f')){
-//            return File;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'u')){
-//            return Unknown;
-//        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'n')){
+            return Network;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'a')){
+            return Asset;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'r')){
+            return Resource;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'f')){
+            return File;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'u')){
+            return Unknown;
+        }
         return null;
     }
 }

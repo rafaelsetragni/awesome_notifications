@@ -23,28 +23,23 @@ public enum NotificationSource implements SafeEnum {
         int stringLength = reference.length();
         if (stringLength == 0) return null;
 
-        if(valueList == null) return null;
-        for (NotificationSource candidate : valueList) {
-            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
-                return candidate;
-            }
-        }
+//        if(valueList == null) return null;
+//        for (NotificationSource candidate : valueList) {
+//            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
+//                return candidate;
+//            }
+//        }
 
-//    public static NotificationSource getSafeEnum(String name) {
-//        if (name == null) return null;
-//        int stringLength = name.length();
-//        if (stringLength == 0) return null;
-//
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'l')){
-//            return Local;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'f')){
-//            if (SafeEnum.charMatches(name, stringLength, 1, 'o')) return ForegroundService;
-//            return Firebase;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 's')){
-//            return Schedule;
-//        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'l')){
+            return Local;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'f')){
+            if (SafeEnum.charMatches(reference, stringLength, 1, 'o')) return ForegroundService;
+            return Firebase;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 's')){
+            return Schedule;
+        }
         return null;
     }
 }

@@ -22,23 +22,19 @@ public enum GroupSort implements SafeEnum {
         int stringLength = reference.length();
         if (stringLength == 0) return null;
 
-        if(valueList == null) return null;
-        for (GroupSort candidate : valueList) {
-            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
-                return candidate;
-            }
-        }
+//        if(valueList == null) return null;
+//        for (GroupSort candidate : valueList) {
+//            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
+//                return candidate;
+//            }
+//        }
 
-//    public static GroupSort getSafeEnum(String name) {
-//        if (name == null) return null;
-//        int stringLength = name.length();
-//        if (stringLength == 0) return null;
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'a')){
-//            return Asc;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'd')){
-//            return Desc;
-//        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'a')){
+            return Asc;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'd')){
+            return Desc;
+        }
         return null;
     }
 }

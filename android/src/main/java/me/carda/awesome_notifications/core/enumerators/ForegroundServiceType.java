@@ -62,37 +62,35 @@ public enum ForegroundServiceType implements SafeEnum {
         int stringLength = reference.length();
         if (stringLength == 0) return null;
 
-        if(valueList == null) return null;
-        for (ForegroundServiceType candidate : valueList) {
-            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
-                return candidate;
-            }
+//        if(valueList == null) return null;
+//        for (ForegroundServiceType candidate : valueList) {
+//            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
+//                return candidate;
+//            }
+//        }
+
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'p')){
+            return phoneCall;
         }
-//        if (name == null) return null;
-//        int stringLength = name.length();
-//        if (stringLength == 0) return null;
-//        if (SafeEnum.charMatches(name, stringLength, 0, 'p')){
-//            return phoneCall;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'n')){
-//            return none;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'c')){
-//            if(SafeEnum.charMatches(name, stringLength, 1, 'a')) return camera;
-//            return connectedDevice;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'm')){
-//            if(SafeEnum.charMatches(name, stringLength, 1, 'i')) return microphone;
-//            if(SafeEnum.charMatches(name, stringLength, 6, 'l')) return mediaPlayback;
-//            if(SafeEnum.charMatches(name, stringLength, 6, 'r')) return mediaProjection;
-//            return manifest;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'd')){
-//            return dataSync;
-//        }
-//        else if (SafeEnum.charMatches(name, stringLength, 0, 'l')){
-//            return location;
-//        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'n')){
+            return none;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'c')){
+            if(SafeEnum.charMatches(reference, stringLength, 1, 'a')) return camera;
+            return connectedDevice;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'm')){
+            if(SafeEnum.charMatches(reference, stringLength, 1, 'i')) return microphone;
+            if(SafeEnum.charMatches(reference, stringLength, 5, 'l')) return mediaPlayback;
+            if(SafeEnum.charMatches(reference, stringLength, 5, 'r')) return mediaProjection;
+            return manifest;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'd')){
+            return dataSync;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'l')){
+            return location;
+        }
         return null;
     }
 }
