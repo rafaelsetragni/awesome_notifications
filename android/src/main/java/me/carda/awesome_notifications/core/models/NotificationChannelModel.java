@@ -2,6 +2,7 @@ package me.carda.awesome_notifications.core.models;
 
 import android.content.Context;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,11 +17,15 @@ import me.carda.awesome_notifications.core.enumerators.NotificationPrivacy;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+
 import me.carda.awesome_notifications.core.utils.AudioUtils;
 import me.carda.awesome_notifications.core.utils.BitmapUtils;
 import me.carda.awesome_notifications.core.utils.BooleanUtils;
+import me.carda.awesome_notifications.core.utils.CalendarUtils;
 import me.carda.awesome_notifications.core.utils.CompareUtils;
+import me.carda.awesome_notifications.core.utils.EnumUtils;
 import me.carda.awesome_notifications.core.utils.StringUtils;
+import me.carda.awesome_notifications.core.utils.TimeZoneUtils;
 
 public class NotificationChannelModel extends AbstractModel {
 
@@ -64,10 +69,12 @@ public class NotificationChannelModel extends AbstractModel {
 
     public NotificationPrivacy defaultPrivacy;
 
-    private static StringUtils stringUtils;
     public NotificationChannelModel(){
-        super(StringUtils.getInstance());
-        stringUtils = stringUtils.getInstance();
+        super(
+                StringUtils.getInstance(),
+                EnumUtils.getInstance(),
+                CalendarUtils.getInstance(),
+                TimeZoneUtils.getInstance());
     }
 
     public void refreshIconResource(Context context){
@@ -141,117 +148,65 @@ public class NotificationChannelModel extends AbstractModel {
     @Override
     public NotificationChannelModel fromMap(Map<String, Object> arguments) {
 
-        iconResourceId = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON_RESOURCE_ID, Integer.class);
-        icon           = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON, String.class);
-
-        defaultColor    = getValueOrDefault(arguments, Definitions.NOTIFICATION_DEFAULT_COLOR, Long.class);
-
-        channelKey         = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_KEY, String.class);
-        channelName        = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_NAME, String.class);
-        channelDescription = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_DESCRIPTION, String.class);
-        channelShowBadge   = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE, Boolean.class);
-
-        channelGroupKey    = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_GROUP_KEY, String.class);
-
-        playSound = getValueOrDefault(arguments, Definitions.NOTIFICATION_PLAY_SOUND, Boolean.class);
-        soundSource = getValueOrDefault(arguments, Definitions.NOTIFICATION_SOUND_SOURCE, String.class);
-
-        criticalAlerts   = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS, Boolean.class);
-
-        enableVibration  = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLE_VIBRATION, Boolean.class);
-        vibrationPattern = getValueOrDefault(arguments, Definitions.NOTIFICATION_VIBRATION_PATTERN, long[].class);
-
-        ledColor     = getValueOrDefault(arguments, Definitions.NOTIFICATION_LED_COLOR, Integer.class);
-        enableLights = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLE_LIGHTS, Boolean.class);
-        ledOnMs      = getValueOrDefault(arguments, Definitions.NOTIFICATION_LED_ON_MS, Integer.class);
-        ledOffMs     = getValueOrDefault(arguments, Definitions.NOTIFICATION_LED_OFF_MS, Integer.class);
-
-        importance =
-                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_IMPORTANCE, NotificationImportance.class, NotificationImportance.values());
-
-        groupSort =
-                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_SORT, GroupSort.class, GroupSort.values());
-
-        groupAlertBehavior =
-                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR, GroupAlertBehaviour.class, GroupAlertBehaviour.values());
-
-        defaultPrivacy =
-                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_DEFAULT_PRIVACY, NotificationPrivacy.class, NotificationPrivacy.values());
-
-        defaultRingtoneType =
-                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, DefaultRingtoneType.class, DefaultRingtoneType.values());
-
-        groupKey = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_KEY, String.class);
-
-        locked = getValueOrDefault(arguments, Definitions.NOTIFICATION_LOCKED, Boolean.class);
-        onlyAlertOnce = getValueOrDefault(arguments, Definitions.NOTIFICATION_ONLY_ALERT_ONCE, Boolean.class);
+        iconResourceId      = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON_RESOURCE_ID, Integer.class, null);
+        icon                = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON, String.class, null);
+        defaultColor        = getValueOrDefault(arguments, Definitions.NOTIFICATION_DEFAULT_COLOR, Long.class, 0xFF000000L);
+        channelKey          = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_KEY, String.class, "miscellaneous");
+        channelName         = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_NAME, String.class, "Notifications");
+        channelDescription  = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_DESCRIPTION, String.class, "Notifications");
+        channelShowBadge    = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE, Boolean.class, false);
+        channelGroupKey     = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_GROUP_KEY, String.class, null);
+        playSound           = getValueOrDefault(arguments, Definitions.NOTIFICATION_PLAY_SOUND, Boolean.class, true);
+        soundSource         = getValueOrDefault(arguments, Definitions.NOTIFICATION_SOUND_SOURCE, String.class, null);
+        criticalAlerts      = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS, Boolean.class, false);
+        enableVibration     = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLE_VIBRATION, Boolean.class, true);
+        vibrationPattern    = getValueOrDefault(arguments, Definitions.NOTIFICATION_VIBRATION_PATTERN, long[].class, null);
+        ledColor            = getValueOrDefault(arguments, Definitions.NOTIFICATION_LED_COLOR, Integer.class, 0xFFFFFFFF);
+        enableLights        = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLE_LIGHTS, Boolean.class, true);
+        ledOnMs             = getValueOrDefault(arguments, Definitions.NOTIFICATION_LED_ON_MS, Integer.class, 300);
+        ledOffMs            = getValueOrDefault(arguments, Definitions.NOTIFICATION_LED_OFF_MS, Integer.class, 700);
+        importance          = getValueOrDefault(arguments, Definitions.NOTIFICATION_IMPORTANCE, NotificationImportance.class, NotificationImportance.Default);
+        groupSort           = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_SORT, GroupSort.class, GroupSort.Desc);
+        groupAlertBehavior  = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR, GroupAlertBehaviour.class, GroupAlertBehaviour.All);
+        defaultPrivacy      = getValueOrDefault(arguments, Definitions.NOTIFICATION_DEFAULT_PRIVACY, NotificationPrivacy.class, NotificationPrivacy.Private);
+        defaultRingtoneType = getValueOrDefault(arguments, Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, DefaultRingtoneType.class, DefaultRingtoneType.Notification);
+        groupKey            = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_KEY, String.class, null);
+        locked              = getValueOrDefault(arguments, Definitions.NOTIFICATION_LOCKED, Boolean.class, false);
+        onlyAlertOnce       = getValueOrDefault(arguments, Definitions.NOTIFICATION_ONLY_ALERT_ONCE, Boolean.class, false);
 
         return this;
     }
 
     public Map<String, Object> toMap(){
-        Map<String, Object> returnedObject = new HashMap<>();
+        Map<String, Object> dataMap = new HashMap<>();
 
-        returnedObject.put(Definitions.NOTIFICATION_ICON_RESOURCE_ID, this.iconResourceId);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ICON_RESOURCE_ID, dataMap, this.iconResourceId);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ICON, dataMap, this.icon);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_DEFAULT_COLOR, dataMap, this.defaultColor);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CHANNEL_KEY, dataMap, this.channelKey);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CHANNEL_NAME, dataMap, this.channelName);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CHANNEL_DESCRIPTION, dataMap, this.channelDescription);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE, dataMap, this.channelShowBadge);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CHANNEL_GROUP_KEY, dataMap, this.channelGroupKey);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_PLAY_SOUND, dataMap, this.playSound);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SOUND_SOURCE, dataMap, this.soundSource);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ENABLE_VIBRATION, dataMap, this.enableVibration);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_VIBRATION_PATTERN, dataMap, this.vibrationPattern);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ENABLE_LIGHTS, dataMap, this.enableLights);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_LED_COLOR, dataMap, this.ledColor);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_LED_ON_MS, dataMap, this.ledOnMs);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_LED_OFF_MS, dataMap, this.ledOffMs);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_GROUP_KEY, dataMap, this.groupKey);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_GROUP_SORT, dataMap, this.groupSort);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_IMPORTANCE, dataMap, this.importance);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR, dataMap, this.groupAlertBehavior);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_DEFAULT_PRIVACY, dataMap, this.defaultPrivacy);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, dataMap, this.defaultRingtoneType);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_LOCKED, dataMap, this.locked);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ONLY_ALERT_ONCE, dataMap, this.onlyAlertOnce);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS, dataMap, this.criticalAlerts);
 
-        returnedObject.put(Definitions.NOTIFICATION_ICON, this.icon);
-
-        returnedObject.put(Definitions.NOTIFICATION_DEFAULT_COLOR, this.defaultColor);
-            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_KEY, this.channelKey);
-            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_NAME, this.channelName);
-            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_DESCRIPTION, this.channelDescription);
-        if(this.channelShowBadge != null)
-            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE, this.channelShowBadge);
-
-        if(this.channelGroupKey != null)
-            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_GROUP_KEY, this.channelGroupKey);
-
-        if(this.playSound != null)
-            returnedObject.put(Definitions.NOTIFICATION_PLAY_SOUND, this.playSound);
-        if(this.soundSource != null)
-            returnedObject.put(Definitions.NOTIFICATION_SOUND_SOURCE, this.soundSource);
-
-        if(this.enableVibration != null)
-            returnedObject.put(Definitions.NOTIFICATION_ENABLE_VIBRATION, this.enableVibration);
-        if(this.vibrationPattern != null)
-            returnedObject.put(Definitions.NOTIFICATION_VIBRATION_PATTERN, this.vibrationPattern);
-
-        if(this.enableLights != null)
-            returnedObject.put(Definitions.NOTIFICATION_ENABLE_LIGHTS, this.enableLights);
-        if(this.ledColor != null)
-            returnedObject.put(Definitions.NOTIFICATION_LED_COLOR, this.ledColor);
-        if(this.ledOnMs != null)
-            returnedObject.put(Definitions.NOTIFICATION_LED_ON_MS, this.ledOnMs);
-        if(this.ledOffMs != null)
-            returnedObject.put(Definitions.NOTIFICATION_LED_OFF_MS, this.ledOffMs);
-
-        if(this.groupKey != null)
-            returnedObject.put(Definitions.NOTIFICATION_GROUP_KEY, this.groupKey);
-
-        if(this.groupSort != null)
-            returnedObject.put(Definitions.NOTIFICATION_GROUP_SORT, this.groupSort.toString());
-
-        if(this.importance != null)
-            returnedObject.put(Definitions.NOTIFICATION_IMPORTANCE, this.importance.toString());
-
-        if(this.groupAlertBehavior != null)
-            returnedObject.put(Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR, this.groupAlertBehavior.toString());
-
-        if(this.defaultPrivacy != null)
-            returnedObject.put(Definitions.NOTIFICATION_DEFAULT_PRIVACY, this.defaultPrivacy.toString());
-
-        if(this.defaultRingtoneType != null)
-            returnedObject.put(Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, this.defaultRingtoneType.toString());
-
-        if(this.locked != null)
-            returnedObject.put(Definitions.NOTIFICATION_LOCKED, this.locked);
-        if(this.onlyAlertOnce != null)
-            returnedObject.put(Definitions.NOTIFICATION_ONLY_ALERT_ONCE, this.onlyAlertOnce);
-
-        if(this.criticalAlerts != null && this.criticalAlerts)
-            returnedObject.put(Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS, this.criticalAlerts);
-
-        return returnedObject;
+        return dataMap;
     }
 
     @Override

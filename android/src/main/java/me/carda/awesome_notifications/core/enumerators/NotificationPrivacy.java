@@ -4,23 +4,33 @@ import android.app.Notification;
 
 import androidx.annotation.Nullable;
 
-public enum NotificationPrivacy {
+public enum NotificationPrivacy implements SafeEnum {
 
     /**
      * Notification visibility: Do not reveal any part of this notification on a secure lockscreen.
      */
-    Secret,
+    Secret("Secret"),
 
     /**
      * Notification visibility: Show this notification on all lockscreens, but conceal sensitive or
      * private information on secure lockscreens.
      */
-    Private,
+    Private("Private"),
 
     /**
      * Notification visibility: Show this notification on every lockscreens.
      */
-    Public;
+    Public("Public");
+
+    private final String safeName;
+    NotificationPrivacy(final String safeName){
+        this.safeName = safeName;
+    }
+
+    @Override
+    public String getSafeName() {
+        return safeName;
+    }
 
     public static int toAndroidPrivacy(@Nullable NotificationPrivacy importance){
         switch (importance == null ? NotificationPrivacy.Private : importance){
@@ -32,5 +42,35 @@ public enum NotificationPrivacy {
             default:
                 return Notification.VISIBILITY_PRIVATE;
         }
+    }
+
+    static NotificationPrivacy[] valueList = NotificationPrivacy.class.getEnumConstants();
+    public static NotificationPrivacy getSafeEnum(String reference) {
+        if (reference == null) return null;
+        int stringLength = reference.length();
+        if (stringLength == 0) return null;
+
+        if(valueList == null) return null;
+        for (NotificationPrivacy candidate : valueList) {
+            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
+                return candidate;
+            }
+        }
+
+//    public static NotificationPrivacy getSafeEnum(String name) {
+//        if (name == null) return null;
+//        int stringLength = name.length();
+//        if (stringLength == 0) return null;
+//
+//        else if (SafeEnum.charMatches(name, stringLength, 0, 's')){
+//            return Secret;
+//        }
+//        else if (SafeEnum.charMatches(name, stringLength, 1, 'u')){
+//            return Public;
+//        }
+//        else if (SafeEnum.charMatches(name, stringLength, 1, 'r')){
+//            return Private;
+//        }
+        return null;
     }
 }

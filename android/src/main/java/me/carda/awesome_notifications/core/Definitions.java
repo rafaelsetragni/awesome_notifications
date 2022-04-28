@@ -249,7 +249,6 @@ public interface Definitions {
     String NOTIFICATION_BG_HANDLE_CLASS = "bgHandleClass";
 
     Map<String, Object> initialValues = new HashMap<String, Object>(){{
-        put(Definitions.FIREBASE_ENABLED, true);
         put(Definitions.NOTIFICATION_SCHEDULE_REPEATS, true);
         put(Definitions.NOTIFICATION_ID, 0);
         put(Definitions.NOTIFICATION_IMPORTANCE, NotificationImportance.Default);

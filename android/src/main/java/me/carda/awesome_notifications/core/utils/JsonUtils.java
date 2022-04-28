@@ -3,6 +3,7 @@ package me.carda.awesome_notifications.core.utils;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
+
+
 
 public class JsonUtils {
 

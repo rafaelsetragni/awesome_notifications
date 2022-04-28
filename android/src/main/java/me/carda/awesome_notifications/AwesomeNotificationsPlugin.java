@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -30,6 +31,7 @@ import me.carda.awesome_notifications.core.enumerators.ForegroundServiceType;
 import me.carda.awesome_notifications.core.enumerators.ForegroundStartMode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+
 import me.carda.awesome_notifications.core.listeners.AwesomeEventListener;
 import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.logs.Logger;
@@ -152,7 +154,8 @@ public class AwesomeNotificationsPlugin
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         try {
             Intent launchIntent = binding.getActivity().getIntent();
-            awesomeNotifications.captureNotificationActionFromIntent(launchIntent);
+            if(awesomeNotifications != null && launchIntent != null)
+                awesomeNotifications.captureNotificationActionFromIntent(launchIntent);
             binding.addOnNewIntentListener(this);
         } catch(Exception exception) {
             ExceptionFactory
@@ -200,7 +203,8 @@ public class AwesomeNotificationsPlugin
         if (pluginChannel != null){
             if(Definitions.EVENT_SILENT_ACTION.equals(eventType)){
                 try {
-                    content.put(Definitions.ACTION_HANDLE, awesomeNotifications.getActionHandle());
+                    Long actionHandle = (awesomeNotifications != null) ? awesomeNotifications.getActionHandle() : null;
+                    content.put(Definitions.ACTION_HANDLE, actionHandle);
                 } catch (AwesomeNotificationsException ignore) {
                 }
             }
@@ -421,15 +425,6 @@ public class AwesomeNotificationsPlugin
         NotificationModel notificationModel = new NotificationModel().fromMap(
                 (Map<String, Object>) arguments.get(Definitions.NOTIFICATION_MODEL));
 
-        ForegroundStartMode foregroundStartMode =
-                NotificationModel.getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_SERVICE_START_MODE,
-                        ForegroundStartMode.class, ForegroundStartMode.values());
-
-        ForegroundServiceType foregroundServiceType =
-                NotificationModel.getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_FOREGROUND_SERVICE_TYPE,
-                        ForegroundServiceType.class, ForegroundServiceType.values());
-
-
         if(notificationModel == null)
             throw ExceptionFactory
                     .getInstance()
@@ -438,6 +433,14 @@ public class AwesomeNotificationsPlugin
                             ExceptionCode.CODE_INVALID_ARGUMENTS,
                             "Foreground notification is invalid",
                             ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationModel");
+
+        ForegroundStartMode foregroundStartMode =
+                notificationModel.getValueOrDefault(arguments, Definitions.NOTIFICATION_SERVICE_START_MODE,
+                        ForegroundStartMode.class, ForegroundStartMode.stick);
+
+        ForegroundServiceType foregroundServiceType =
+                notificationModel.getValueOrDefault(arguments, Definitions.NOTIFICATION_FOREGROUND_SERVICE_TYPE,
+                        ForegroundServiceType.class, ForegroundServiceType.none);
 
         if(foregroundStartMode == null)
             throw ExceptionFactory
@@ -531,7 +534,9 @@ public class AwesomeNotificationsPlugin
                             "Channel data is invalid",
                             ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.data");
 
-        boolean forceUpdate = BooleanUtils.getInstance().getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
+        Object forceUpdateObject = channelData.get(Definitions.CHANNEL_FORCE_UPDATE);
+        boolean forceUpdate =
+                forceUpdateObject != null && Boolean.parseBoolean(forceUpdateObject.toString());
 
         boolean channelSaved =
                 awesomeNotifications

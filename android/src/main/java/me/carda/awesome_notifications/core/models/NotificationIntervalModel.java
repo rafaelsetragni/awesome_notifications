@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+
 import me.carda.awesome_notifications.core.utils.BooleanUtils;
 import me.carda.awesome_notifications.core.utils.CalendarUtils;
 
@@ -25,18 +27,18 @@ public class NotificationIntervalModel extends NotificationScheduleModel {
     public NotificationIntervalModel fromMap(Map<String, Object> arguments) {
         super.fromMap(arguments);
 
-        interval = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_INTERVAL, Integer.class);
+        interval = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_INTERVAL, Integer.class, null);
 
         return this;
     }
 
     @Override
     public Map<String, Object> toMap(){
-        Map<String, Object> returnedObject = super.toMap();
+        Map<String, Object> dataMap = super.toMap();
 
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_INTERVAL, interval);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_INTERVAL, dataMap, interval);
 
-        return returnedObject;
+        return dataMap;
     }
 
     @Override

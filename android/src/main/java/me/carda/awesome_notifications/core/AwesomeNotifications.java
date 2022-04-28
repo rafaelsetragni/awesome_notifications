@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.support.v4.media.session.MediaSessionCompat;
 
+import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ import me.carda.awesome_notifications.core.broadcasters.receivers.NotificationAc
 import me.carda.awesome_notifications.core.completion_handlers.NotificationThreadCompletionHandler;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+
 import me.carda.awesome_notifications.core.logs.Logger;
 import me.carda.awesome_notifications.core.broadcasters.senders.BroadcastSender;
 import me.carda.awesome_notifications.core.decoders.BitmapResourceDecoder;
@@ -466,7 +469,9 @@ public class AwesomeNotifications
                 @SuppressWarnings("unchecked")
                 Map<String, Object> channelData = (Map<String, Object>) channelDataObject;
                 NotificationChannelModel channelModel = new NotificationChannelModel().fromMap(channelData);
-                forceUpdate = BooleanUtils.getInstance().getValue((Boolean) channelData.get(Definitions.CHANNEL_FORCE_UPDATE));
+
+                Object forceUpdateObject = channelData.get(Definitions.CHANNEL_FORCE_UPDATE);
+                forceUpdate = forceUpdateObject != null && Boolean.parseBoolean(forceUpdateObject.toString());
 
                 if (channelModel != null) {
                     channels.add(channelModel);

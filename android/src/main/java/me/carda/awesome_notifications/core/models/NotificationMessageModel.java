@@ -2,12 +2,17 @@ package me.carda.awesome_notifications.core.models;
 
 import android.content.Context;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
+
+import me.carda.awesome_notifications.core.utils.CalendarUtils;
+import me.carda.awesome_notifications.core.utils.EnumUtils;
 import me.carda.awesome_notifications.core.utils.StringUtils;
+import me.carda.awesome_notifications.core.utils.TimeZoneUtils;
 
 public class NotificationMessageModel extends AbstractModel {
 
@@ -17,11 +22,20 @@ public class NotificationMessageModel extends AbstractModel {
     public Long timestamp;
 
     public NotificationMessageModel(){
-        super(StringUtils.getInstance());
+        super(
+                StringUtils.getInstance(),
+                EnumUtils.getInstance(),
+                CalendarUtils.getInstance(),
+                TimeZoneUtils.getInstance());
     }
 
     public NotificationMessageModel(String title, String message, String largeIcon){
-        super(StringUtils.getInstance());
+        super(
+                StringUtils.getInstance(),
+                EnumUtils.getInstance(),
+                CalendarUtils.getInstance(),
+                TimeZoneUtils.getInstance());
+
         this.title = title;
         this.message = message;
         this.largeIcon = largeIcon;
@@ -31,24 +45,24 @@ public class NotificationMessageModel extends AbstractModel {
     @Override
     public NotificationMessageModel fromMap(Map<String, Object> arguments) {
 
-        title   = getValueOrDefault(arguments, Definitions.NOTIFICATION_TITLE, String.class);
-        message = getValueOrDefault(arguments, Definitions.NOTIFICATION_MESSAGES, String.class);
-        largeIcon = getValueOrDefault(arguments, Definitions.NOTIFICATION_LARGE_ICON, String.class);
-        timestamp = getValueOrDefault(arguments, Definitions.NOTIFICATION_TIMESTAMP, Long.class);
+        title     = getValueOrDefault(arguments, Definitions.NOTIFICATION_TITLE, String.class, null);
+        message   = getValueOrDefault(arguments, Definitions.NOTIFICATION_MESSAGES, String.class, null);
+        largeIcon = getValueOrDefault(arguments, Definitions.NOTIFICATION_LARGE_ICON, String.class, null);
+        timestamp = getValueOrDefault(arguments, Definitions.NOTIFICATION_TIMESTAMP, Long.class, null);
 
         return this;
     }
 
     @Override
     public Map<String, Object> toMap() {
-        Map<String, Object> returnedObject = new HashMap<>();
+        Map<String, Object> dataMap = new HashMap<>();
 
-        returnedObject.put(Definitions.NOTIFICATION_TITLE, title);
-        returnedObject.put(Definitions.NOTIFICATION_MESSAGES, message);
-        returnedObject.put(Definitions.NOTIFICATION_LARGE_ICON, largeIcon);
-        returnedObject.put(Definitions.NOTIFICATION_TIMESTAMP, timestamp);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_TITLE, dataMap, title);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_MESSAGES, dataMap, message);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_LARGE_ICON, dataMap, largeIcon);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_TIMESTAMP, dataMap, timestamp);
 
-        return returnedObject;
+        return dataMap;
     }
 
     @Override

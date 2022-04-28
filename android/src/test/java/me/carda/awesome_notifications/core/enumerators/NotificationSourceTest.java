@@ -14,6 +14,5 @@ public class NotificationSourceTest {
         assertEquals(errorMessage, 1, NotificationSource.Schedule.ordinal());
         assertEquals(errorMessage, 2, NotificationSource.ForegroundService.ordinal());
         assertEquals(errorMessage, 3, NotificationSource.Firebase.ordinal());
-        assertEquals(errorMessage, 4, NotificationSource.OneSignal.ordinal());
     }
 }

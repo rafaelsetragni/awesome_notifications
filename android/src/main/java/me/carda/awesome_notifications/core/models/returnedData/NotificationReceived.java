@@ -2,7 +2,9 @@ package me.carda.awesome_notifications.core.models.returnedData;
 
 import android.content.Intent;
 
+import java.io.Serializable;
 import java.util.Map;
+
 
 import me.carda.awesome_notifications.core.models.NotificationContentModel;
 

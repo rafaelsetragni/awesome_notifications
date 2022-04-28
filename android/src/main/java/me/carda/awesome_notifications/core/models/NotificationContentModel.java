@@ -1,7 +1,9 @@
 package me.carda.awesome_notifications.core.models;
 
 import android.content.Context;
+import android.graphics.Color;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -19,13 +21,16 @@ import me.carda.awesome_notifications.core.enumerators.NotificationSource;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+
 import me.carda.awesome_notifications.core.logs.Logger;
 import me.carda.awesome_notifications.core.managers.ChannelManager;
 import me.carda.awesome_notifications.core.utils.BitmapUtils;
 import me.carda.awesome_notifications.core.utils.CalendarUtils;
+import me.carda.awesome_notifications.core.utils.EnumUtils;
 import me.carda.awesome_notifications.core.utils.ListUtils;
 import me.carda.awesome_notifications.core.utils.MapUtils;
 import me.carda.awesome_notifications.core.utils.StringUtils;
+import me.carda.awesome_notifications.core.utils.TimeZoneUtils;
 
 @SuppressWarnings("unchecked")
 public class NotificationContentModel extends AbstractModel {
@@ -56,8 +61,8 @@ public class NotificationContentModel extends AbstractModel {
     public Boolean autoDismissible;
     public Boolean displayOnForeground;
     public Boolean displayOnBackground;
-    public Long color;
-    public Long backgroundColor;
+    public Integer color;
+    public Integer backgroundColor;
     public Integer progress;
     public String ticker;
 
@@ -81,7 +86,11 @@ public class NotificationContentModel extends AbstractModel {
     public NotificationCategory category;
 
     public NotificationContentModel(){
-        super(StringUtils.getInstance());
+        super(
+                StringUtils.getInstance(),
+                EnumUtils.getInstance(),
+                CalendarUtils.getInstance(),
+                TimeZoneUtils.getInstance());
     }
 
     public boolean registerCreatedEvent(NotificationLifeCycle lifeCycle, NotificationSource createdSource){
@@ -111,78 +120,44 @@ public class NotificationContentModel extends AbstractModel {
 
         processRetroCompatibility(arguments);
 
-        id = getValueOrDefault(arguments, Definitions.NOTIFICATION_ID, Integer.class);
+        id                    = getValueOrDefault(arguments, Definitions.NOTIFICATION_ID, Integer.class, 0);
+        actionType            = getValueOrDefault(arguments, Definitions.NOTIFICATION_ACTION_TYPE, ActionType.class, ActionType.Default);
+        createdDate           = getValueOrDefault(arguments, Definitions.NOTIFICATION_CREATED_DATE, Calendar.class, null);
+        displayedDate         = getValueOrDefault(arguments, Definitions.NOTIFICATION_DISPLAYED_DATE, Calendar.class, null);
+        createdLifeCycle      = getValueOrDefault(arguments, Definitions.NOTIFICATION_CREATED_LIFECYCLE, NotificationLifeCycle.class, null);
+        displayedLifeCycle    = getValueOrDefault(arguments, Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE, NotificationLifeCycle.class, null);
+        createdSource         = getValueOrDefault(arguments, Definitions.NOTIFICATION_CREATED_SOURCE, NotificationSource.class, NotificationSource.Local);
+        channelKey            = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_KEY, String.class, "miscellaneous");
+        color                 = getValueOrDefault(arguments, Definitions.NOTIFICATION_COLOR, Integer.class, null);
+        backgroundColor       = getValueOrDefault(arguments, Definitions.NOTIFICATION_BACKGROUND_COLOR, Integer.class, null);
+        title                 = getValueOrDefault(arguments, Definitions.NOTIFICATION_TITLE, String.class, null);
+        body                  = getValueOrDefault(arguments, Definitions.NOTIFICATION_BODY, String.class, null);
+        summary               = getValueOrDefault(arguments, Definitions.NOTIFICATION_SUMMARY, String.class, null);
+        playSound             = getValueOrDefault(arguments, Definitions.NOTIFICATION_PLAY_SOUND, Boolean.class, true);
+        customSound           = getValueOrDefault(arguments, Definitions.NOTIFICATION_CUSTOM_SOUND, String.class, null);
+        wakeUpScreen          = getValueOrDefault(arguments, Definitions.NOTIFICATION_WAKE_UP_SCREEN, Boolean.class, false);
+        fullScreenIntent      = getValueOrDefault(arguments, Definitions.NOTIFICATION_FULL_SCREEN_INTENT, Boolean.class, false);
+        showWhen              = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_WHEN, Boolean.class, true);
+        locked                = getValueOrDefault(arguments, Definitions.NOTIFICATION_LOCKED, Boolean.class, false);
+        displayOnForeground   = getValueOrDefault(arguments, Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, Boolean.class, true);
+        displayOnBackground   = getValueOrDefault(arguments, Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, Boolean.class, true);
+        hideLargeIconOnExpand = getValueOrDefault(arguments, Definitions.NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND, Boolean.class, false);
+        notificationLayout    = getValueOrDefault(arguments, Definitions.NOTIFICATION_LAYOUT, NotificationLayout.class, NotificationLayout.Default);
+        privacy               = getValueOrDefault(arguments, Definitions.NOTIFICATION_PRIVACY, NotificationPrivacy.class, NotificationPrivacy.Private);
+        category              = getValueOrDefault(arguments, Definitions.NOTIFICATION_CATEGORY, NotificationCategory.class, null);
+        privateMessage        = getValueOrDefault(arguments, Definitions.NOTIFICATION_PRIVATE_MESSAGE, String.class, null);
+        icon                  = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON, String.class, null);
+        largeIcon             = getValueOrDefault(arguments, Definitions.NOTIFICATION_LARGE_ICON, String.class, null);
+        bigPicture            = getValueOrDefault(arguments, Definitions.NOTIFICATION_BIG_PICTURE, String.class, null);
+        payload               = getValueOrDefault(arguments, Definitions.NOTIFICATION_PAYLOAD, Map.class, null);
+        autoDismissible       = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSIBLE, Boolean.class, true);
+        progress              = getValueOrDefault(arguments, Definitions.NOTIFICATION_PROGRESS, Integer.class, null);
+        groupKey              = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_KEY, String.class, null);
+        ticker                = getValueOrDefault(arguments, Definitions.NOTIFICATION_TICKER, String.class, "ticker");
+        roundedLargeIcon      = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, Boolean.class, false);
+        roundedBigPicture     = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, Boolean.class, false);
 
-        actionType = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_ACTION_TYPE,
-                ActionType.class, ActionType.values());
-
-        createdDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_CREATED_DATE, Calendar.class)
-                            .orNull();
-
-        displayedDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_DISPLAYED_DATE, Calendar.class)
-                            .orNull();
-
-        createdLifeCycle = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_CREATED_LIFECYCLE,
-                NotificationLifeCycle.class, NotificationLifeCycle.values());
-
-        displayedLifeCycle = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE,
-                NotificationLifeCycle.class, NotificationLifeCycle.values());
-
-        createdSource = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_CREATED_SOURCE,
-                NotificationSource.class, NotificationSource.values());
-
-        channelKey = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_KEY, String.class);
-        color = getValueOrDefault(arguments, Definitions.NOTIFICATION_COLOR, Long.class);
-        backgroundColor = getValueOrDefault(arguments, Definitions.NOTIFICATION_BACKGROUND_COLOR, Long.class);
-
-
-        title = getValueOrDefault(arguments, Definitions.NOTIFICATION_TITLE, String.class);
-        body  = getValueOrDefault(arguments, Definitions.NOTIFICATION_BODY, String.class);
-        summary = getValueOrDefault(arguments, Definitions.NOTIFICATION_SUMMARY, String.class);
-
-        playSound = getValueOrDefault(arguments, Definitions.NOTIFICATION_PLAY_SOUND, Boolean.class);
-        customSound = getValueOrDefault(arguments, Definitions.NOTIFICATION_CUSTOM_SOUND, String.class);
-
-        wakeUpScreen = getValueOrDefault(arguments, Definitions.NOTIFICATION_WAKE_UP_SCREEN, Boolean.class);
-        fullScreenIntent = getValueOrDefault(arguments, Definitions.NOTIFICATION_FULL_SCREEN_INTENT, Boolean.class);
-
-        showWhen = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_WHEN, Boolean.class);
-        locked = getValueOrDefault(arguments, Definitions.NOTIFICATION_LOCKED, Boolean.class);
-
-        displayOnForeground = getValueOrDefault(arguments, Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, Boolean.class);
-        displayOnBackground = getValueOrDefault(arguments, Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, Boolean.class);
-
-        hideLargeIconOnExpand = getValueOrDefault(arguments, Definitions.NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND, Boolean.class);
-
-        notificationLayout =
-                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_LAYOUT, NotificationLayout.class, NotificationLayout.values());
-
-        privacy =
-                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_PRIVACY, NotificationPrivacy.class, NotificationPrivacy.values());
-
-        category =
-                getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_CATEGORY, NotificationCategory.class, NotificationCategory.values());
-
-        privateMessage = getValueOrDefault(arguments, Definitions.NOTIFICATION_PRIVATE_MESSAGE, String.class);
-
-        icon  = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON, String.class);
-        largeIcon  = getValueOrDefault(arguments, Definitions.NOTIFICATION_LARGE_ICON, String.class);
-        bigPicture = getValueOrDefault(arguments, Definitions.NOTIFICATION_BIG_PICTURE, String.class);
-
-        payload = getValueOrDefault(arguments, Definitions.NOTIFICATION_PAYLOAD, Map.class);
-
-        autoDismissible = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSIBLE, Boolean.class);
-
-        progress    = getValueOrDefault(arguments, Definitions.NOTIFICATION_PROGRESS, Integer.class);
-
-        groupKey = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_KEY, String.class);
-
-        ticker = getValueOrDefault(arguments, Definitions.NOTIFICATION_TICKER, String.class);
-
-        messages = mapToMessages(getValueOrDefault(arguments, Definitions.NOTIFICATION_MESSAGES, List.class));
-
-        roundedLargeIcon = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, Boolean.class);
-        roundedBigPicture = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, Boolean.class);
+        messages = mapToMessages(getValueOrDefault(arguments, Definitions.NOTIFICATION_MESSAGES, List.class, null));
 
         return this;
     }
@@ -192,7 +167,7 @@ public class NotificationContentModel extends AbstractModel {
 
         if (arguments.containsKey("autoCancel")) {
             Logger.i("AwesomeNotifications", "autoCancel is deprecated. Please use autoDismissible instead.");
-            autoDismissible   = getValueOrDefault(arguments, "autoCancel", Boolean.class);
+            autoDismissible   = getValueOrDefault(arguments, "autoCancel", Boolean.class, true);
         }
     }
 
@@ -200,49 +175,45 @@ public class NotificationContentModel extends AbstractModel {
     public Map<String, Object> toMap(){
         Map<String, Object> returnedObject = new HashMap<>();
 
-        CalendarUtils calendarUtils = CalendarUtils.getInstance();
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ID, returnedObject, this.id);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_RANDOM_ID, returnedObject, this.isRandomId);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_TITLE, returnedObject, this.title);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_BODY, returnedObject, this.body);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SUMMARY, returnedObject, this.summary);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SHOW_WHEN, returnedObject, this.showWhen);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_WAKE_UP_SCREEN, returnedObject, this.wakeUpScreen);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_FULL_SCREEN_INTENT, returnedObject, this.fullScreenIntent);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ACTION_TYPE, returnedObject, this.actionType);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_LOCKED, returnedObject, this.locked);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_PLAY_SOUND, returnedObject, this.playSound);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CUSTOM_SOUND, returnedObject, this.customSound);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_TICKER, returnedObject, this.ticker);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_PAYLOAD, returnedObject, this.payload);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, returnedObject, this.autoDismissible);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_LAYOUT, returnedObject, this.notificationLayout);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CREATED_SOURCE, returnedObject, this.createdSource);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CREATED_LIFECYCLE, returnedObject, this.createdLifeCycle);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE, returnedObject, this.displayedLifeCycle);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_DISPLAYED_DATE, returnedObject, this.displayedDate);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CREATED_DATE, returnedObject,this.createdDate);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CHANNEL_KEY, returnedObject, this.channelKey);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CATEGORY, returnedObject, this.category);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, returnedObject, this.autoDismissible);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, returnedObject, this.displayOnForeground);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, returnedObject, this.displayOnBackground);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_COLOR, returnedObject, this.color);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_BACKGROUND_COLOR, returnedObject, this.backgroundColor);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ICON, returnedObject, this.icon);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_LARGE_ICON, returnedObject, this.largeIcon);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_BIG_PICTURE, returnedObject, this.bigPicture);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_PROGRESS, returnedObject, this.progress);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_GROUP_KEY, returnedObject, this.groupKey);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_PRIVACY, returnedObject, this.privacy);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_PRIVATE_MESSAGE, returnedObject, this.privateMessage);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, returnedObject, this.roundedLargeIcon);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, returnedObject, this.roundedBigPicture);
 
-        putDataOnMapObject(Definitions.NOTIFICATION_ID, returnedObject, this.id);
-        putDataOnMapObject(Definitions.NOTIFICATION_ID, returnedObject, this.id);
-        putDataOnMapObject(Definitions.NOTIFICATION_RANDOM_ID, returnedObject, this.isRandomId);
-        putDataOnMapObject(Definitions.NOTIFICATION_TITLE, returnedObject, this.title);
-        putDataOnMapObject(Definitions.NOTIFICATION_BODY, returnedObject, this.body);
-        putDataOnMapObject(Definitions.NOTIFICATION_SUMMARY, returnedObject, this.summary);
-        putDataOnMapObject(Definitions.NOTIFICATION_SHOW_WHEN, returnedObject, this.showWhen);
-        putDataOnMapObject(Definitions.NOTIFICATION_WAKE_UP_SCREEN, returnedObject, this.wakeUpScreen);
-        putDataOnMapObject(Definitions.NOTIFICATION_FULL_SCREEN_INTENT, returnedObject, this.fullScreenIntent);
-        putDataOnMapObject(Definitions.NOTIFICATION_ACTION_TYPE, returnedObject, this.actionType);
-        putDataOnMapObject(Definitions.NOTIFICATION_LOCKED, returnedObject, this.locked);
-        putDataOnMapObject(Definitions.NOTIFICATION_PLAY_SOUND, returnedObject, this.playSound);
-        putDataOnMapObject(Definitions.NOTIFICATION_CUSTOM_SOUND, returnedObject, this.customSound);
-        putDataOnMapObject(Definitions.NOTIFICATION_TICKER, returnedObject, this.ticker);
-        putDataOnMapObject(Definitions.NOTIFICATION_PAYLOAD, returnedObject, this.payload);
-        putDataOnMapObject(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, returnedObject, this.autoDismissible);
-        putDataOnMapObject(Definitions.NOTIFICATION_LAYOUT, returnedObject, this.notificationLayout);
-        putDataOnMapObject(Definitions.NOTIFICATION_CREATED_SOURCE, returnedObject, this.createdSource);
-        putDataOnMapObject(Definitions.NOTIFICATION_CREATED_LIFECYCLE, returnedObject, this.createdLifeCycle);
-        putDataOnMapObject(Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE, returnedObject, this.displayedLifeCycle);
-        putDataOnMapObject(Definitions.NOTIFICATION_DISPLAYED_DATE, returnedObject, calendarUtils.calendarToString(this.displayedDate));
-        putDataOnMapObject(Definitions.NOTIFICATION_CREATED_DATE, returnedObject, calendarUtils.calendarToString(this.createdDate));
-        putDataOnMapObject(Definitions.NOTIFICATION_CHANNEL_KEY, returnedObject, this.channelKey);
-        putDataOnMapObject(Definitions.NOTIFICATION_CATEGORY, returnedObject, this.category);
-        putDataOnMapObject(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, returnedObject, this.autoDismissible);
-        putDataOnMapObject(Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND, returnedObject, this.displayOnForeground);
-        putDataOnMapObject(Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND, returnedObject, this.displayOnBackground);
-        putDataOnMapObject(Definitions.NOTIFICATION_COLOR, returnedObject, this.color);
-        putDataOnMapObject(Definitions.NOTIFICATION_BACKGROUND_COLOR, returnedObject, this.backgroundColor);
-        putDataOnMapObject(Definitions.NOTIFICATION_ICON, returnedObject, this.icon);
-        putDataOnMapObject(Definitions.NOTIFICATION_LARGE_ICON, returnedObject, this.largeIcon);
-        putDataOnMapObject(Definitions.NOTIFICATION_BIG_PICTURE, returnedObject, this.bigPicture);
-        putDataOnMapObject(Definitions.NOTIFICATION_PROGRESS, returnedObject, this.progress);
-        putDataOnMapObject(Definitions.NOTIFICATION_GROUP_KEY, returnedObject, this.groupKey);
-        putDataOnMapObject(Definitions.NOTIFICATION_PRIVACY, returnedObject, this.privacy);
-        putDataOnMapObject(Definitions.NOTIFICATION_PRIVATE_MESSAGE, returnedObject, this.privateMessage);
-
-        putDataOnMapObject(Definitions.NOTIFICATION_MESSAGES, returnedObject, messagesToMap(this.messages));
-
-        putDataOnMapObject(Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, returnedObject, this.roundedLargeIcon);
-        putDataOnMapObject(Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, returnedObject, this.roundedBigPicture);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_MESSAGES, returnedObject, this.messages);
 
         return returnedObject;
     }

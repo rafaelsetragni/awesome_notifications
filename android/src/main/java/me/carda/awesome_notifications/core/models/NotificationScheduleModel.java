@@ -2,6 +2,7 @@ package me.carda.awesome_notifications.core.models;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +12,10 @@ import javax.annotation.Nullable;
 
 import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
+
 import me.carda.awesome_notifications.core.utils.BooleanUtils;
 import me.carda.awesome_notifications.core.utils.CalendarUtils;
+import me.carda.awesome_notifications.core.utils.EnumUtils;
 import me.carda.awesome_notifications.core.utils.MapUtils;
 import me.carda.awesome_notifications.core.utils.TimeZoneUtils;
 import me.carda.awesome_notifications.core.utils.StringUtils;
@@ -28,37 +31,35 @@ public abstract class NotificationScheduleModel extends AbstractModel {
     public Boolean preciseAlarm;
 
     public NotificationScheduleModel() {
-        super(StringUtils.getInstance());
+        super(
+                StringUtils.getInstance(),
+                EnumUtils.getInstance(),
+                CalendarUtils.getInstance(),
+                TimeZoneUtils.getInstance());
     }
 
     @NonNull
     public NotificationScheduleModel fromMap(Map<String, Object> arguments) {
-        timeZone = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, TimeZone.class);
-
-        createdDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_CREATED_DATE, Calendar.class)
-                .or(CalendarUtils.getInstance().getCurrentCalendar());
-
-        repeats = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_REPEATS, Boolean.class);
-        allowWhileIdle = getValueOrDefault(arguments, Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, Boolean.class);
-
-        preciseAlarm = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_PRECISE_ALARM, Boolean.class);
+        timeZone       = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, TimeZone.class, TimeZone.getDefault());
+        createdDate    = getValueOrDefault(arguments, Definitions.NOTIFICATION_CREATED_DATE, Calendar.class, null);
+        repeats        = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_REPEATS, Boolean.class, false);
+        allowWhileIdle = getValueOrDefault(arguments, Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, Boolean.class, false);
+        preciseAlarm   = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_PRECISE_ALARM, Boolean.class, false);
 
         return this;
     }
 
     @Override
     public Map<String, Object> toMap(){
-        Map<String, Object> returnedObject = new HashMap<>();
+        Map<String, Object> dataMap = new HashMap<>();
 
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, TimeZoneUtils.getInstance().timeZoneToString(timeZone));
-        returnedObject.put(Definitions.NOTIFICATION_CREATED_DATE, CalendarUtils.getInstance().calendarToString(createdDate));
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, dataMap, timeZone);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CREATED_DATE, dataMap, createdDate);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_REPEATS, dataMap, repeats);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, dataMap, allowWhileIdle);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_PRECISE_ALARM, dataMap, preciseAlarm);
 
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_REPEATS, repeats);
-        returnedObject.put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, allowWhileIdle);
-
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_PRECISE_ALARM, preciseAlarm);
-
-        return returnedObject;
+        return dataMap;
     }
 
     @Nullable

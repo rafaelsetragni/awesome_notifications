@@ -1,5 +1,8 @@
 package me.carda.awesome_notifications.core.utils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import me.carda.awesome_notifications.core.logs.Logger;
 
 import com.google.common.base.Optional;
@@ -49,7 +52,9 @@ public class MapUtils {
         return map == null || map.isEmpty();
     }
 
-    public static <T> Optional<T> extractArgument(Object object, Class<T> expectedClass){
+    public static <T> Optional<T> extractArgument(
+            @Nullable Object object,
+            @NonNull Class<T> expectedClass){
         if(object == null)
             return Optional.absent();
 

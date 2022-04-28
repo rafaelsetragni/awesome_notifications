@@ -2,12 +2,14 @@ package me.carda.awesome_notifications.core.models.returnedData;
 
 import android.content.Intent;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Map;
 
 import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
+
 import me.carda.awesome_notifications.core.models.NotificationContentModel;
 import me.carda.awesome_notifications.core.utils.CalendarUtils;
 import me.carda.awesome_notifications.core.utils.MapUtils;
@@ -60,35 +62,28 @@ public class ActionReceived extends NotificationReceived {
 
     @Override
     public Map<String, Object> toMap(){
-        Map<String, Object> returnedObject = super.toMap();
+        Map<String, Object> dataMap = super.toMap();
 
-        returnedObject.put(Definitions.NOTIFICATION_ACTION_LIFECYCLE,
-                this.actionLifeCycle != null ? this.actionLifeCycle.toString() : null);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ACTION_LIFECYCLE, dataMap, actionLifeCycle);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_DISMISSED_LIFECYCLE, dataMap, dismissedLifeCycle);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_BUTTON_KEY_PRESSED, dataMap, buttonKeyPressed);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_BUTTON_KEY_INPUT, dataMap, buttonKeyInput);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ACTION_DATE, dataMap, actionDate);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_DISMISSED_DATE, dataMap, dismissedDate);
 
-        returnedObject.put(Definitions.NOTIFICATION_DISMISSED_LIFECYCLE,
-                this.dismissedLifeCycle != null ? this.dismissedLifeCycle.toString() : null);
-
-        returnedObject.put(Definitions.NOTIFICATION_BUTTON_KEY_PRESSED, this.buttonKeyPressed);
-        returnedObject.put(Definitions.NOTIFICATION_BUTTON_KEY_INPUT, this.buttonKeyInput);
-        returnedObject.put(Definitions.NOTIFICATION_ACTION_DATE,  CalendarUtils.getInstance().calendarToString(this.actionDate));
-        returnedObject.put(Definitions.NOTIFICATION_DISMISSED_DATE, CalendarUtils.getInstance().calendarToString(this.dismissedDate));
-
-        return returnedObject;
+        return dataMap;
     }
 
     @Override
     public ActionReceived fromMap(Map<String, Object> arguments) {
         super.fromMap(arguments);
 
-        buttonKeyPressed = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_BUTTON_KEY_PRESSED, String.class).orNull();
-        buttonKeyInput = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_BUTTON_KEY_INPUT, String.class).orNull();
-        actionDate    = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_ACTION_DATE, Calendar.class).orNull();
-        dismissedDate = MapUtils.extractValue(arguments, Definitions.NOTIFICATION_DISMISSED_DATE, Calendar.class).orNull();
-
-        actionLifeCycle = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_ACTION_LIFECYCLE,
-                NotificationLifeCycle.class, NotificationLifeCycle.values());
-        dismissedLifeCycle = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_DISMISSED_LIFECYCLE,
-                NotificationLifeCycle.class, NotificationLifeCycle.values());
+        buttonKeyPressed   = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_KEY_PRESSED, String.class, null);
+        buttonKeyInput     = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_KEY_INPUT, String.class, null);
+        actionDate         = getValueOrDefault(arguments, Definitions.NOTIFICATION_ACTION_DATE, Calendar.class, null);
+        dismissedDate      = getValueOrDefault(arguments, Definitions.NOTIFICATION_DISMISSED_DATE, Calendar.class, null);
+        actionLifeCycle    = getValueOrDefault(arguments, Definitions.NOTIFICATION_ACTION_LIFECYCLE, NotificationLifeCycle.class, null);
+        dismissedLifeCycle = getValueOrDefault(arguments, Definitions.NOTIFICATION_DISMISSED_LIFECYCLE, NotificationLifeCycle.class, null);
 
         return this;
     }

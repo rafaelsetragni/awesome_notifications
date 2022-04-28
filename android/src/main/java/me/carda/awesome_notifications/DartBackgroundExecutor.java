@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.os.Handler;
 import android.os.Looper;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -31,9 +32,11 @@ import me.carda.awesome_notifications.core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+
 import me.carda.awesome_notifications.core.logs.Logger;
 import me.carda.awesome_notifications.core.managers.LifeCycleManager;
 import me.carda.awesome_notifications.core.models.returnedData.ActionReceived;
+import me.carda.awesome_notifications.core.utils.SerializableUtils;
 
 /**
  * An background execution abstraction which handles initializing a background isolate running a
@@ -288,7 +291,9 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
         if(actionReceived != null){
 
             final Map<String, Object> actionData = actionReceived.toMap();
-            actionData.put(Definitions.ACTION_HANDLE, silentCallbackHandle);
+            actionData.put(
+                    Definitions.ACTION_HANDLE,
+                    silentCallbackHandle);
 
             // Handle the message event in Dart.
             backgroundChannel.invokeMethod(

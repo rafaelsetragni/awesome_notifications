@@ -3,13 +3,18 @@ package me.carda.awesome_notifications.core.enumerators;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-public enum NotificationImportance {
-    None,
-    Min,
-    Low,
-    Default,
-    High,
-    Max;
+public enum NotificationImportance implements SafeEnum {
+    None("None"),
+    Min("Min"),
+    Low("Low"),
+    Default("Default"),
+    High("High"),
+    Max("Max");
+
+    private final String safeName;
+    NotificationImportance(final String safeName){
+        this.safeName = safeName;
+    }
 
     public static int toAndroidPriority(@Nullable NotificationImportance importance){
         switch (importance == null ? NotificationImportance.Default : importance){
@@ -47,5 +52,46 @@ public enum NotificationImportance {
         if(ordinal < 0) ordinal = 0;
         if(ordinal > 5) ordinal = 5;
         return NotificationImportance.values()[ordinal];
+    }
+
+    @Override
+    public String getSafeName() {
+        return safeName;
+    }
+
+    static NotificationImportance[] valueList = NotificationImportance.class.getEnumConstants();
+    public static NotificationImportance getSafeEnum(String reference) {
+        if (reference == null) return null;
+        int stringLength = reference.length();
+        if (stringLength == 0) return null;
+
+        if(valueList == null) return null;
+        for (NotificationImportance candidate : valueList) {
+            if (candidate.getSafeName().equalsIgnoreCase(reference)) {
+                return candidate;
+            }
+        }
+
+//    public static NotificationImportance getSafeEnum(String name) {
+//        if (name == null) return null;
+//        int stringLength = name.length();
+//        if (stringLength == 0) return null;
+//        else if (SafeEnum.charMatches(name, stringLength, 0, 'h')){
+//            return High;
+//        }
+//        else if (SafeEnum.charMatches(name, stringLength, 0, 'd')){
+//            return Default;
+//        }
+//        else if (SafeEnum.charMatches(name, stringLength, 0, 'l')){
+//            return Low;
+//        }
+//        else if (SafeEnum.charMatches(name, stringLength, 0, 'm')){
+//            if (SafeEnum.charMatches(name, stringLength, 1, 'a')) return Max;
+//            return Min;
+//        }
+//        else if (SafeEnum.charMatches(name, stringLength, 0, 'n')){
+//            return None;
+//        }
+        return null;
     }
 }

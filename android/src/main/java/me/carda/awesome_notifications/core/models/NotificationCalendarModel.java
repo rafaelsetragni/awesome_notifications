@@ -2,6 +2,7 @@ package me.carda.awesome_notifications.core.models;
 
 import android.content.Context;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+
 import me.carda.awesome_notifications.core.utils.CronUtils;
 import me.carda.awesome_notifications.core.utils.IntegerUtils;
 
@@ -49,41 +51,41 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
     public NotificationCalendarModel fromMap(Map<String, Object> arguments) {
         super.fromMap(arguments);
 
-        era = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_ERA, Integer.class);
-        year = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_YEAR, Integer.class);
-        month = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_MONTH, Integer.class);
-        day = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_DAY, Integer.class);
-        hour = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_HOUR, Integer.class);
-        minute = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_MINUTE, Integer.class);
-        second = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_SECOND, Integer.class);
-        millisecond = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_MILLISECOND, Integer.class);
-        weekday = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_WEEKDAY, Integer.class);
-        weekOfMonth = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_WEEKOFMONTH, Integer.class);
-        weekOfYear = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_WEEKOFYEAR, Integer.class);
-
-        weekday = weekDayISO8601ToStandard(weekday);
+        era         = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_ERA, Integer.class, null);
+        year        = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_YEAR, Integer.class, null);
+        month       = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_MONTH, Integer.class, null);
+        day         = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_DAY, Integer.class, null);
+        hour        = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_HOUR, Integer.class, null);
+        minute      = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_MINUTE, Integer.class, null);
+        second      = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_SECOND, Integer.class, null);
+        millisecond = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_MILLISECOND, Integer.class, null);
+        weekday     = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_WEEKDAY, Integer.class, null);
+        weekOfMonth = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_WEEKOFMONTH, Integer.class, null);
+        weekOfYear  = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_WEEKOFYEAR, Integer.class, null);
+        weekday     = weekDayISO8601ToStandard(weekday);
 
         return this;
     }
 
     @Override
     public Map<String, Object> toMap() {
-        Map<String, Object> returnedObject = super.toMap();
+        Map<String, Object> dataMap = super.toMap();
 
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_ERA, era);
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_YEAR, year);
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_MONTH, month);
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_DAY, day);
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_HOUR, hour);
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_MINUTE, minute);
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_SECOND, second);
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_MILLISECOND, millisecond);
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_WEEKOFMONTH, weekOfMonth);
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_WEEKOFYEAR, weekOfYear);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_ERA, dataMap, era);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_YEAR, dataMap, year);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_MONTH, dataMap, month);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_DAY, dataMap, day);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_HOUR, dataMap, hour);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_MINUTE, dataMap, minute);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_SECOND, dataMap, second);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_MILLISECOND, dataMap, millisecond);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_WEEKOFMONTH, dataMap, weekOfMonth);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_WEEKOFYEAR, dataMap, weekOfYear);
 
-        returnedObject.put(Definitions.NOTIFICATION_SCHEDULE_WEEKDAY, weekDayStandardToISO8601(weekday));
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_WEEKDAY, dataMap,
+                weekDayStandardToISO8601(weekday));
 
-        return returnedObject;
+        return dataMap;
     }
 
     static Integer weekDayISO8601ToStandard(@Nullable Integer weekdayISOValue) {

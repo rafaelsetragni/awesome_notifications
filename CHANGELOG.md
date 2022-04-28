@@ -1,21 +1,23 @@
 ## [0.7.0-beta.3]
+* Coverage extended to Android 12L (SDK 32)
 * All exceptions have been standardized with distinct exception codes to improve native error handling via PlatformException
 * New exception catcher implemented to handle all native exceptions and provide better integration with Firebase Analytics.
 * StopForeground method by id was fixed on Android
 * Message layout grouping fixed (https://github.com/rafaelsetragni/awesome_notifications/pull/466)
 * Background actions improved on iOS to hold long tasks
 * Background actions improved on iOS to increase UI performance through background threads
-* Added console performance mesures for iOS
+* Added console performance measures for iOS
 * Added warning messages for non implemented layouts on iOS
-* Payload changed to support null values
+* Notification's payload attribute changed to support null values
+* awesome_notifications_core package renamed to core to reduce import's path length
 * Documentation improved
 ### [0.7.0-beta.2]
 * AsyncTask replaced by Handler/Looper due deprecation in Android 12
 * FULL_WAKE_LOCK replaced by SCREEN_BRIGHT_WAKE_LOCK to improve battery life in Android
 * Implemented research by Android alarm intents to optimize the reschedule process
-* Added id helpers to improve the performance of ScheduleManger's cancelations process in almost 100 times
+* Added id helpers to improve the performance of ScheduleManger's cancellations process in almost 100 times
 ## [0.7.0-beta.1]
-* Added dart isolates to enable to receive background notifications without bring the app to foreground
+* Added dart isolates to allow receiving background notifications without bring the app to foreground
 * Added silentBackground, silentBackgroundAction, disableAction and dismissAction action types for notifications and buttons
 * InputField type deprecated, as now is possible to combine input buttons with all other action types. Now, to use InputField, please use the property requireInputText
 * Internal architecture rewrote to decrease O.S. interventions, allowing to increase the performance while create and schedules notifications in almost 10 times

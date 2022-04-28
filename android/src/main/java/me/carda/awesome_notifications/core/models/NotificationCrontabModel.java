@@ -2,6 +2,7 @@ package me.carda.awesome_notifications.core.models;
 
 import android.content.Context;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import javax.annotation.Nullable;
 import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+
 import me.carda.awesome_notifications.core.externalLibs.CronExpression;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.utils.CalendarUtils;
@@ -31,25 +33,24 @@ public class NotificationCrontabModel extends NotificationScheduleModel {
     public NotificationCrontabModel fromMap(Map<String, Object> arguments) {
         super.fromMap(arguments);
 
-        initialDateTime = getValueOrDefault(arguments, Definitions.NOTIFICATION_INITIAL_DATE_TIME, Calendar.class);
-        expirationDateTime = getValueOrDefault(arguments, Definitions.NOTIFICATION_EXPIRATION_DATE_TIME, Calendar.class);
-        crontabExpression = getValueOrDefault(arguments, Definitions.NOTIFICATION_CRONTAB_EXPRESSION, String.class);
-        preciseSchedules = getValueOrDefault(arguments, Definitions.NOTIFICATION_PRECISE_SCHEDULES, List.class);
+        initialDateTime    = getValueOrDefault(arguments, Definitions.NOTIFICATION_INITIAL_DATE_TIME, Calendar.class, null);
+        expirationDateTime = getValueOrDefault(arguments, Definitions.NOTIFICATION_EXPIRATION_DATE_TIME, Calendar.class, null);
+        crontabExpression  = getValueOrDefault(arguments, Definitions.NOTIFICATION_CRONTAB_EXPRESSION, String.class, null);
+        preciseSchedules   = getValueOrDefault(arguments, Definitions.NOTIFICATION_PRECISE_SCHEDULES, List.class, null);
 
         return this;
     }
 
     @Override
     public Map<String, Object> toMap(){
-        Map<String, Object> returnedObject = super.toMap();
-        CalendarUtils calendarUtils = CalendarUtils.getInstance();
+        Map<String, Object> dataMap = super.toMap();
 
-        returnedObject.put(Definitions.NOTIFICATION_INITIAL_DATE_TIME, calendarUtils.calendarToString(initialDateTime));
-        returnedObject.put(Definitions.NOTIFICATION_EXPIRATION_DATE_TIME, calendarUtils.calendarToString(expirationDateTime));
-        returnedObject.put(Definitions.NOTIFICATION_CRONTAB_EXPRESSION, crontabExpression);
-        returnedObject.put(Definitions.NOTIFICATION_PRECISE_SCHEDULES, preciseSchedules);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_INITIAL_DATE_TIME, dataMap, initialDateTime);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_EXPIRATION_DATE_TIME, dataMap, expirationDateTime);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CRONTAB_EXPRESSION, dataMap, crontabExpression);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_PRECISE_SCHEDULES, dataMap, preciseSchedules);
 
-        return returnedObject;
+        return dataMap;
     }
 
     @Override

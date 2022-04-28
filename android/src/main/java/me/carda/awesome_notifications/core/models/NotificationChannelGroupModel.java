@@ -2,6 +2,7 @@ package me.carda.awesome_notifications.core.models;
 
 import android.content.Context;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +10,11 @@ import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+
+import me.carda.awesome_notifications.core.utils.CalendarUtils;
+import me.carda.awesome_notifications.core.utils.EnumUtils;
 import me.carda.awesome_notifications.core.utils.StringUtils;
+import me.carda.awesome_notifications.core.utils.TimeZoneUtils;
 
 public class NotificationChannelGroupModel extends AbstractModel {
 
@@ -19,24 +24,28 @@ public class NotificationChannelGroupModel extends AbstractModel {
     public String channelGroupKey;
 
     public NotificationChannelGroupModel(){
-        super(StringUtils.getInstance());
+        super(
+                StringUtils.getInstance(),
+                EnumUtils.getInstance(),
+                CalendarUtils.getInstance(),
+                TimeZoneUtils.getInstance());
     }
 
     @Override
     public NotificationChannelGroupModel fromMap(Map<String, Object> arguments) {
-        channelGroupName = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_GROUP_NAME, String.class);
-        channelGroupKey = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_GROUP_KEY, String.class);
+        channelGroupName = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_GROUP_NAME, String.class, null);
+        channelGroupKey  = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_GROUP_KEY, String.class, null);
 
         return this;
     }
 
     public Map<String, Object> toMap(){
-        Map<String, Object> returnedObject = new HashMap<>();
+        Map<String, Object> dataMap = new HashMap<>();
 
-        returnedObject.put(Definitions.NOTIFICATION_CHANNEL_GROUP_NAME, this.channelGroupName);
-        returnedObject.put(Definitions.NOTIFICATION_CHANNEL_GROUP_KEY, this.channelGroupKey);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CHANNEL_GROUP_NAME, dataMap, this.channelGroupName);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_CHANNEL_GROUP_KEY, dataMap, this.channelGroupKey);
 
-        return returnedObject;
+        return dataMap;
     }
 
     @Override

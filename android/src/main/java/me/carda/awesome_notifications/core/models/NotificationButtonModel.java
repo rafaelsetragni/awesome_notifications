@@ -2,17 +2,23 @@ package me.carda.awesome_notifications.core.models;
 
 import android.content.Context;
 
+import me.carda.awesome_notifications.core.enumerators.SafeEnum;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+
 import me.carda.awesome_notifications.core.logs.Logger;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.enumerators.ActionType;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.core.utils.CalendarUtils;
+import me.carda.awesome_notifications.core.utils.EnumUtils;
 import me.carda.awesome_notifications.core.utils.StringUtils;
+import me.carda.awesome_notifications.core.utils.TimeZoneUtils;
 
 public class NotificationButtonModel extends AbstractModel {
 
@@ -30,7 +36,11 @@ public class NotificationButtonModel extends AbstractModel {
     public ActionType actionType;
 
     public NotificationButtonModel(){
-        super(StringUtils.getInstance());
+        super(
+                StringUtils.getInstance(),
+                EnumUtils.getInstance(),
+                CalendarUtils.getInstance(),
+                TimeZoneUtils.getInstance());
     }
 
     @Override
@@ -38,19 +48,16 @@ public class NotificationButtonModel extends AbstractModel {
 
         processRetroCompatibility(arguments);
 
-        key        = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_KEY, String.class);
-        icon       = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_ICON, String.class);
-        label      = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_LABEL, String.class);
-        color      = getValueOrDefault(arguments, Definitions.NOTIFICATION_COLOR, Integer.class);
-
-        actionType = getEnumValueOrDefault(arguments, Definitions.NOTIFICATION_ACTION_TYPE,
-                ActionType.class, ActionType.values());
-
-        enabled    = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLED, Boolean.class);
-        requireInputText  = getValueOrDefault(arguments, Definitions.NOTIFICATION_REQUIRE_INPUT_TEXT, Boolean.class);
-        isDangerousOption = getValueOrDefault(arguments, Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, Boolean.class);
-        autoDismissible   = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSIBLE, Boolean.class);
-        showInCompactView = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, Boolean.class);
+        key               = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_KEY, String.class, null);
+        icon              = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_ICON, String.class, null);
+        label             = getValueOrDefault(arguments, Definitions.NOTIFICATION_BUTTON_LABEL, String.class, null);
+        color             = getValueOrDefault(arguments, Definitions.NOTIFICATION_COLOR, Integer.class, null);
+        actionType        = getValueOrDefault(arguments, Definitions.NOTIFICATION_ACTION_TYPE, ActionType.class, ActionType.Default);
+        enabled           = getValueOrDefault(arguments, Definitions.NOTIFICATION_ENABLED, Boolean.class, true);
+        requireInputText  = getValueOrDefault(arguments, Definitions.NOTIFICATION_REQUIRE_INPUT_TEXT, Boolean.class, true);
+        isDangerousOption = getValueOrDefault(arguments, Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, Boolean.class, false);
+        autoDismissible   = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSIBLE, Boolean.class, true);
+        showInCompactView = getValueOrDefault(arguments, Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, Boolean.class, false);
 
         return this;
     }
@@ -60,13 +67,12 @@ public class NotificationButtonModel extends AbstractModel {
 
         if (arguments.containsKey("autoCancel")) {
             Logger.w("AwesomeNotifications", "autoCancel is deprecated. Please use autoDismissible instead.");
-            autoDismissible   = getValueOrDefault(arguments, "autoCancel", Boolean.class);
+            autoDismissible   = getValueOrDefault(arguments, "autoCancel", Boolean.class, true);
         }
 
         if (arguments.containsKey("buttonType")){
             Logger.w("AwesomeNotifications", "buttonType is deprecated. Please use actionType instead.");
-            actionType = getEnumValueOrDefault(arguments, "buttonType",
-                    ActionType.class, ActionType.values());
+            actionType = getValueOrDefault(arguments, "buttonType", ActionType.class, ActionType.Default);
         }
 
         adaptInputFieldToRequireText();
@@ -83,23 +89,21 @@ public class NotificationButtonModel extends AbstractModel {
 
     @Override
     public Map<String, Object> toMap() {
-        Map<String, Object> returnedObject = new HashMap<>();
+        Map<String, Object> dataMap = new HashMap<>();
 
-        returnedObject.put(Definitions.NOTIFICATION_BUTTON_KEY, key);
-        returnedObject.put(Definitions.NOTIFICATION_BUTTON_ICON, icon);
-        returnedObject.put(Definitions.NOTIFICATION_BUTTON_LABEL, label);
-        returnedObject.put(Definitions.NOTIFICATION_COLOR, color);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_BUTTON_KEY, dataMap, key);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_BUTTON_KEY, dataMap, key);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_BUTTON_ICON, dataMap, icon);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_BUTTON_LABEL, dataMap, label);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_COLOR, dataMap, color);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ACTION_TYPE, dataMap, actionType);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_ENABLED, dataMap, enabled);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_REQUIRE_INPUT_TEXT, dataMap, requireInputText);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, dataMap, autoDismissible);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, dataMap, showInCompactView);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, dataMap, isDangerousOption);
 
-        returnedObject.put(Definitions.NOTIFICATION_ACTION_TYPE,
-                this.actionType != null ? this.actionType.toString() : ActionType.Default.toString());
-
-        returnedObject.put(Definitions.NOTIFICATION_ENABLED, enabled);
-        returnedObject.put(Definitions.NOTIFICATION_REQUIRE_INPUT_TEXT, requireInputText);
-        returnedObject.put(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, autoDismissible);
-        returnedObject.put(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, showInCompactView);
-        returnedObject.put(Definitions.NOTIFICATION_IS_DANGEROUS_OPTION, isDangerousOption);
-
-        return returnedObject;
+        return dataMap;
     }
 
     @Override

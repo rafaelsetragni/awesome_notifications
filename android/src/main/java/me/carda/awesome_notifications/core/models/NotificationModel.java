@@ -2,6 +2,10 @@ package me.carda.awesome_notifications.core.models;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +15,11 @@ import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+
+import me.carda.awesome_notifications.core.utils.CalendarUtils;
+import me.carda.awesome_notifications.core.utils.EnumUtils;
 import me.carda.awesome_notifications.core.utils.StringUtils;
+import me.carda.awesome_notifications.core.utils.TimeZoneUtils;
 
 public class NotificationModel extends AbstractModel {
 
@@ -25,47 +33,37 @@ public class NotificationModel extends AbstractModel {
     public List<NotificationButtonModel> actionButtons;
 
     public NotificationModel(){
-        super(StringUtils.getInstance());
+        super(
+            StringUtils.getInstance(),
+            EnumUtils.getInstance(),
+            CalendarUtils.getInstance(),
+            TimeZoneUtils.getInstance());
     }
 
     public NotificationModel ClonePush(){
-        NotificationModel newPush = new NotificationModel();
-        newPush.fromMap(this.toMap());
-        return newPush;
+        return new NotificationModel().fromMap(this.toMap());
     }
 
     @Override
+    @Nullable
     public NotificationModel fromMap(Map<String, Object> parameters){
-
-        content = extractNotificationContent(Definitions.NOTIFICATION_MODEL_CONTENT, parameters);
-
-        // required
+        content = extractNotificationContent(parameters);
         if(content == null) return null;
 
-        schedule = extractNotificationSchedule(Definitions.NOTIFICATION_MODEL_SCHEDULE, parameters);
-        actionButtons = extractNotificationButtons(Definitions.NOTIFICATION_MODEL_BUTTONS, parameters);
+        schedule = extractNotificationSchedule(parameters);
+        actionButtons = extractNotificationButtons(parameters);
 
         return this;
     }
 
     @Override
     public Map<String, Object> toMap(){
-
         if(content == null) return null;
-        Map<String, Object> dataMap = new HashMap<String, Object>();
+        Map<String, Object> dataMap = new HashMap<>();
 
-        dataMap.put(Definitions.NOTIFICATION_MODEL_CONTENT, content.toMap());
-
-        if(schedule != null)
-            dataMap.put(Definitions.NOTIFICATION_MODEL_SCHEDULE, schedule.toMap());
-
-        if(actionButtons != null && !actionButtons.isEmpty()){
-            List<Object> buttonsData = new ArrayList<>();
-            for(NotificationButtonModel button : actionButtons){
-                buttonsData.add(button.toMap());
-            }
-            dataMap.put(Definitions.NOTIFICATION_MODEL_BUTTONS, buttonsData);
-        }
+        putDataOnSerializedMap(Definitions.NOTIFICATION_MODEL_CONTENT, dataMap, content);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_MODEL_SCHEDULE, dataMap, schedule);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_MODEL_BUTTONS, dataMap, actionButtons);
 
         return dataMap;
     }
@@ -80,9 +78,11 @@ public class NotificationModel extends AbstractModel {
         return (NotificationModel) super.templateFromJson(json);
     }
 
-    private static NotificationContentModel extractNotificationContent(String reference, Map<String, Object> parameters) {
-        if(parameters == null || !parameters.containsKey(reference)) return null;
-        Object obj = parameters.get(reference);
+    private static NotificationContentModel extractNotificationContent(
+            @NonNull Map<String, Object> parameters
+    ){
+        if(!parameters.containsKey(Definitions.NOTIFICATION_MODEL_CONTENT)) return null;
+        Object obj = parameters.get(Definitions.NOTIFICATION_MODEL_CONTENT);
 
         if(!(obj instanceof Map<?,?>)) return null;
 
@@ -93,9 +93,11 @@ public class NotificationModel extends AbstractModel {
         else return new NotificationContentModel().fromMap(map);
     }
 
-    private static NotificationScheduleModel extractNotificationSchedule(String reference, Map<String, Object> parameters) {
-        if(parameters == null || !parameters.containsKey(reference)) return null;
-        Object obj = parameters.get(reference);
+    private static NotificationScheduleModel extractNotificationSchedule(
+            @NonNull Map<String, Object> parameters
+    ){
+        if(!parameters.containsKey(Definitions.NOTIFICATION_MODEL_SCHEDULE)) return null;
+        Object obj = parameters.get(Definitions.NOTIFICATION_MODEL_SCHEDULE);
 
         if(!(obj instanceof Map<?,?>)) return null;
 
@@ -106,9 +108,11 @@ public class NotificationModel extends AbstractModel {
     }
 
     @SuppressWarnings("unchecked")
-    private static List<NotificationButtonModel> extractNotificationButtons(String reference, Map<String, Object> parameters) {
-        if(parameters == null || !parameters.containsKey(reference)) return null;
-        Object obj = parameters.get(reference);
+    private static List<NotificationButtonModel> extractNotificationButtons(
+            @NonNull Map<String, Object> parameters
+    ){
+        if(!parameters.containsKey(Definitions.NOTIFICATION_MODEL_BUTTONS)) return null;
+        Object obj = parameters.get(Definitions.NOTIFICATION_MODEL_BUTTONS);
 
         if(!(obj instanceof List<?>)) return null;
         List<Object> actionButtonsData = (List<Object>) obj;
@@ -130,7 +134,9 @@ public class NotificationModel extends AbstractModel {
         return actionButtons;
     }
 
-    public void validate(Context context) throws AwesomeNotificationsException {
+    public void validate(
+            Context context
+    ) throws AwesomeNotificationsException {
         if(this.content == null)
             throw ExceptionFactory
                     .getInstance()
