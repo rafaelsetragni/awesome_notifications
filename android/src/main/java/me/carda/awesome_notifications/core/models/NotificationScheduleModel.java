@@ -30,13 +30,7 @@ public abstract class NotificationScheduleModel extends AbstractModel {
     public Boolean allowWhileIdle;
     public Boolean preciseAlarm;
 
-    public NotificationScheduleModel() {
-        super(
-                StringUtils.getInstance(),
-                EnumUtils.getInstance(),
-                CalendarUtils.getInstance(),
-                TimeZoneUtils.getInstance());
-    }
+    public NotificationScheduleModel() {}
 
     @NonNull
     public NotificationScheduleModel fromMap(Map<String, Object> arguments) {

@@ -23,13 +23,7 @@ public class DefaultsModel extends AbstractModel {
     public String reverseDartCallback = "0";
     public String backgroundHandleClass;
 
-    public DefaultsModel(){
-        super(
-                StringUtils.getInstance(),
-                EnumUtils.getInstance(),
-                CalendarUtils.getInstance(),
-                TimeZoneUtils.getInstance());
-    }
+    public DefaultsModel(){}
 
     public DefaultsModel(
             @Nullable String defaultAppIcon,
@@ -37,12 +31,6 @@ public class DefaultsModel extends AbstractModel {
             @Nullable Long silentDataCallback,
             @Nullable String backgroundHandleClass
     ){
-        super(
-                StringUtils.getInstance(),
-                EnumUtils.getInstance(),
-                CalendarUtils.getInstance(),
-                TimeZoneUtils.getInstance());
-
         this.appIcon = defaultAppIcon;
         this.silentDataCallback = silentDataCallback == null ? null : silentDataCallback.toString();
         this.reverseDartCallback = reverseDartCallback == null ? null : reverseDartCallback.toString();

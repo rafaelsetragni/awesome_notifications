@@ -32,13 +32,7 @@ public class NotificationModel extends AbstractModel {
     public NotificationScheduleModel schedule;
     public List<NotificationButtonModel> actionButtons;
 
-    public NotificationModel(){
-        super(
-            StringUtils.getInstance(),
-            EnumUtils.getInstance(),
-            CalendarUtils.getInstance(),
-            TimeZoneUtils.getInstance());
-    }
+    public NotificationModel(){}
 
     public NotificationModel ClonePush(){
         return new NotificationModel().fromMap(this.toMap());

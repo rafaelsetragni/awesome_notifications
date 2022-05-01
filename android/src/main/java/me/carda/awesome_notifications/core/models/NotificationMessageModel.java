@@ -21,20 +21,9 @@ public class NotificationMessageModel extends AbstractModel {
     public String largeIcon;
     public Long timestamp;
 
-    public NotificationMessageModel(){
-        super(
-                StringUtils.getInstance(),
-                EnumUtils.getInstance(),
-                CalendarUtils.getInstance(),
-                TimeZoneUtils.getInstance());
-    }
+    public NotificationMessageModel(){}
 
     public NotificationMessageModel(String title, String message, String largeIcon){
-        super(
-                StringUtils.getInstance(),
-                EnumUtils.getInstance(),
-                CalendarUtils.getInstance(),
-                TimeZoneUtils.getInstance());
 
         this.title = title;
         this.message = message;

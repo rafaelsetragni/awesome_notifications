@@ -59,4 +59,12 @@ public class SerializableUtils {
     public <T extends TimeZone> Object serializeTimeZone(T value) {
         return timeZoneUtils.timeZoneToString(value);
     }
+
+    public Calendar deserializeCalendar(String value) {
+        return calendarUtils.calendarFromString(value);
+    }
+
+    public TimeZone deserializeTimeZone(String value) {
+        return timeZoneUtils.getValidTimeZone(value);
+    }
 }

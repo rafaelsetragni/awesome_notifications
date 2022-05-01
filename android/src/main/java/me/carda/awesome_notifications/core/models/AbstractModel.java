@@ -51,26 +51,18 @@ import me.carda.awesome_notifications.core.utils.StringUtils;
 import me.carda.awesome_notifications.core.utils.TimeZoneUtils;
 
 public abstract class AbstractModel implements Cloneable {
-
-    protected final EnumUtils enumUtils;
-    protected final StringUtils stringUtils;
-    protected final CalendarUtils calendarUtils;
-    protected final TimeZoneUtils timeZoneUtils;
     protected final SerializableUtils serializableUtils;
+    protected final StringUtils stringUtils;
 
     public static Map<String, Object> defaultValues = new HashMap<>();
 
-    protected AbstractModel(
-            @NonNull StringUtils stringUtils,
-            @NonNull EnumUtils enumUtils,
-            @NonNull CalendarUtils calendarUtils,
-            @NonNull TimeZoneUtils timeZoneUtils
-    ){
-        this.enumUtils = enumUtils;
-        this.stringUtils = stringUtils;
-        this.calendarUtils = calendarUtils;
-        this.timeZoneUtils = timeZoneUtils;
+    protected AbstractModel(){
         this.serializableUtils = SerializableUtils.getInstance();
+        this.stringUtils = StringUtils.getInstance();
+    }
+    protected AbstractModel(SerializableUtils serializableUtils, StringUtils stringUtils){
+        this.serializableUtils = serializableUtils;
+        this.stringUtils = stringUtils;
     }
 
     public abstract AbstractModel fromMap(Map<String, Object> arguments);
@@ -84,7 +76,7 @@ public abstract class AbstractModel implements Cloneable {
     }
 
     protected AbstractModel templateFromJson(String json) {
-        if(stringUtils.isNullOrEmpty(json)) return null;
+        if(json == null || json.isEmpty()) return null;
         Map<String, Object> map = JsonUtils.fromJson(json);
         return this.fromMap(map);
     }
@@ -442,7 +434,7 @@ public abstract class AbstractModel implements Cloneable {
         Object value = map.get(reference);
         if(value == null) return defaultValue;
 
-        return timeZoneUtils.getValidTimeZone((String) value);
+        return serializableUtils.deserializeTimeZone((String) value);
     }
 
     public Calendar getValueOrDefault(
@@ -455,7 +447,7 @@ public abstract class AbstractModel implements Cloneable {
         if(value == null) return defaultValue;
 
         if(value instanceof String)
-            return calendarUtils.calendarFromString((String) value);
+            return serializableUtils.deserializeCalendar((String) value);
 
         return defaultValue;
     }

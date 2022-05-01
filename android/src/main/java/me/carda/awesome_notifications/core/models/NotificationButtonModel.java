@@ -35,14 +35,6 @@ public class NotificationButtonModel extends AbstractModel {
     public Boolean isDangerousOption;
     public ActionType actionType;
 
-    public NotificationButtonModel(){
-        super(
-                StringUtils.getInstance(),
-                EnumUtils.getInstance(),
-                CalendarUtils.getInstance(),
-                TimeZoneUtils.getInstance());
-    }
-
     @Override
     public NotificationButtonModel fromMap(Map<String, Object> arguments) {
 

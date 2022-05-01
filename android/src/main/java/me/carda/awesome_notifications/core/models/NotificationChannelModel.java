@@ -69,14 +69,6 @@ public class NotificationChannelModel extends AbstractModel {
 
     public NotificationPrivacy defaultPrivacy;
 
-    public NotificationChannelModel(){
-        super(
-                StringUtils.getInstance(),
-                EnumUtils.getInstance(),
-                CalendarUtils.getInstance(),
-                TimeZoneUtils.getInstance());
-    }
-
     public void refreshIconResource(Context context){
         if(iconResourceId == null && icon != null){
             if(BitmapUtils.getInstance().getMediaSourceType(icon) == MediaSource.Resource) {

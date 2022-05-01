@@ -85,14 +85,6 @@ public class NotificationContentModel extends AbstractModel {
 
     public NotificationCategory category;
 
-    public NotificationContentModel(){
-        super(
-                StringUtils.getInstance(),
-                EnumUtils.getInstance(),
-                CalendarUtils.getInstance(),
-                TimeZoneUtils.getInstance());
-    }
-
     public boolean registerCreatedEvent(NotificationLifeCycle lifeCycle, NotificationSource createdSource){
 
         // Creation register can only happen once

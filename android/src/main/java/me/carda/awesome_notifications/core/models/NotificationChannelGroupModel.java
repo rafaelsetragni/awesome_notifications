@@ -23,14 +23,6 @@ public class NotificationChannelGroupModel extends AbstractModel {
     public String channelGroupName;
     public String channelGroupKey;
 
-    public NotificationChannelGroupModel(){
-        super(
-                StringUtils.getInstance(),
-                EnumUtils.getInstance(),
-                CalendarUtils.getInstance(),
-                TimeZoneUtils.getInstance());
-    }
-
     @Override
     public NotificationChannelGroupModel fromMap(Map<String, Object> arguments) {
         channelGroupName = getValueOrDefault(arguments, Definitions.NOTIFICATION_CHANNEL_GROUP_NAME, String.class, null);
