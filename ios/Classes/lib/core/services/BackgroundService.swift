@@ -27,40 +27,73 @@ class BackgroundService {
     
     public func enqueue(
         SilentBackgroundAction silentAction: ActionReceived,
-        withCompletionHandler completionHandler: @escaping (Bool) -> ()
+        withCompletionHandler completionHandler: @escaping (Bool, Error?) -> ()
     ){
+        let start = DispatchTime.now()
         Logger.d(BackgroundService.TAG, "A new Dart background service has started")
         
-        let backgroundCallback:Int64 = DefaultsManager.shared.backgroundCallback
-        let actionCallback:Int64 = DefaultsManager.shared.actionCallback
-        
-        if backgroundCallback == 0 {
-            Logger.d(BackgroundService.TAG,
-                  "A background message could not be handled in Dart because there is no valid background handler register")
-            completionHandler(false)
-            return
+        let completionWithTimer:(Bool, Error?) -> () = { (success, error) in
+            let end = DispatchTime.now()
+            let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
+            let timeInterval:Double = Double(nanoTime) / 1_000_000
+            Logger.d(BackgroundService.TAG, "Background action finished in \(timeInterval.rounded())ms")
+            
+            completionHandler(success, error)
         }
         
-        if actionCallback == 0 {
-            Logger.d(BackgroundService.TAG,
-                  "A background message could not be handled in Dart because there is no valid action callback handler register")
-            completionHandler(false)
-            return
-        }
-        
-        if Thread.isMainThread {
-            mainThreadServiceExecution(
-                SilentBackgroundAction: silentAction,
-                backgroundCallback: backgroundCallback,
-                actionCallback: actionCallback,
-                withCompletionHandler: completionHandler)
-        }
-        else {
-            backgroundThreadServiceExecution(
-                SilentBackgroundAction: silentAction,
-                backgroundCallback: backgroundCallback,
-                actionCallback: actionCallback,
-                withCompletionHandler: completionHandler)
+        do {
+            let backgroundCallback:Int64 = DefaultsManager.shared.backgroundCallback
+            let actionCallback:Int64 = DefaultsManager.shared.actionCallback
+            
+            if backgroundCallback == 0 {
+                throw ExceptionFactory
+                        .shared
+                        .createNewAwesomeException(
+                            className: BackgroundService.TAG,
+                            code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            message: "A background message could not be handled in Dart because there is no valid background handler register",
+                            detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".enqueue.backgroundCallback")
+            }
+            
+            if actionCallback == 0 {
+                throw ExceptionFactory
+                        .shared
+                        .createNewAwesomeException(
+                            className: BackgroundService.TAG,
+                            code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            message: "A background message could not be handled in Dart because there is no valid action callback handler register",
+                            detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".enqueue.backgroundCallback")
+            }
+            
+            if Thread.isMainThread {
+                mainThreadServiceExecution(
+                    SilentBackgroundAction: silentAction,
+                    backgroundCallback: backgroundCallback,
+                    actionCallback: actionCallback,
+                    withCompletionHandler: completionWithTimer)
+            }
+            else {
+                try backgroundThreadServiceExecution(
+                    SilentBackgroundAction: silentAction,
+                    backgroundCallback: backgroundCallback,
+                    actionCallback: actionCallback,
+                    withCompletionHandler: completionWithTimer)
+            }
+            
+        } catch {
+            if error is AwesomeNotificationsException {
+                completionWithTimer(false, error)
+            } else {
+                completionWithTimer(
+                    false,
+                    ExceptionFactory
+                        .shared
+                        .createNewAwesomeException(
+                            className: BackgroundService.TAG,
+                            code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            message: "A background message could not be handled in Dart because there is no valid background handler register",
+                            detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".enqueue.backgroundCallback"))
+            }
         }
     }
     
@@ -68,20 +101,13 @@ class BackgroundService {
         SilentBackgroundAction silentAction: ActionReceived,
         backgroundCallback:Int64,
         actionCallback:Int64,
-        withCompletionHandler completionHandler: @escaping (Bool) -> ()
+        withCompletionHandler completionHandler: @escaping (Bool, Error?) -> ()
     ){
-        let start = DispatchTime.now()
         let silentActionRequest:SilentActionRequest =
                 SilentActionRequest(
                     actionReceived: silentAction,
                     handler: { success in
-                        
-                        let end = DispatchTime.now()
-                        let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
-                        let timeInterval:Double = Double(nanoTime) / 1_000_000
-                        Logger.d(BackgroundService.TAG, "Background action finished in \(timeInterval.rounded())ms")
-                        
-                        completionHandler(success)
+                        completionHandler(success, nil)
                     })
         
         DartBackgroundExecutor
@@ -90,19 +116,17 @@ class BackgroundService {
                 silentActionRequest: silentActionRequest,
                 dartCallbackHandle: backgroundCallback,
                 silentCallbackHandle: actionCallback)
-        
     }
     
     func backgroundThreadServiceExecution(
         SilentBackgroundAction silentAction: ActionReceived,
         backgroundCallback:Int64,
         actionCallback:Int64,
-        withCompletionHandler completionHandler: @escaping (Bool) -> ()
-    ){
-        let start = DispatchTime.now()
+        withCompletionHandler completionHandler: @escaping (Bool, Error?) -> ()
+    ) throws {
         let group = DispatchGroup()
-        
         group.enter()
+        
         let silentActionRequest:SilentActionRequest =
                 SilentActionRequest(
                     actionReceived: silentAction,
@@ -121,20 +145,18 @@ class BackgroundService {
             }
             
         }
-        workItem.perform()
         
+        workItem.perform()
         if group.wait(timeout: DispatchTime.now() + .seconds(10)) == .timedOut {
-            Logger.e(BackgroundService.TAG, "Background action service reached timeout limit")
             workItem.cancel()
-            completionHandler(false)
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: BackgroundService.TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Background silent push service reached timeout limit",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".mainThreadServiceExecution.timeout")
         }
-        else {
-            completionHandler(true)
-        }
-        let end = DispatchTime.now()
-        let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds // <<<<< Difference in nano seconds (UInt64)
-        let timeInterval:Double = Double(nanoTime) / 1_000_000_000 // Technically could overflow for long running tests
-        Logger.d(BackgroundService.TAG, "Background action finished in \(timeInterval.rounded())ms")
     }
     
 }

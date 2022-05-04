@@ -67,7 +67,7 @@ class BroadcastSender {
     
     public func sendBroadcast(
         actionReceived: ActionReceived,
-        whenFinished completionHandler: @escaping (Bool) -> Void
+        whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
         if LifeCycleManager.shared.currentLifeCycle == .AppKilled {
             ActionManager.saveAction(received: actionReceived)
@@ -80,12 +80,12 @@ class BroadcastSender {
                     with: actionReceived)
         }
         
-        completionHandler(true)
+        completionHandler(true, nil)
     }
     
     public func sendBroadcast(
         notificationDismissed actionReceived: ActionReceived,
-        whenFinished completionHandler: @escaping (Bool) -> Void
+        whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
         if LifeCycleManager.shared.currentLifeCycle == .AppKilled {
             DismissedManager.saveDismissed(received: actionReceived)
@@ -98,12 +98,12 @@ class BroadcastSender {
                     with: actionReceived)
         }
         
-        completionHandler(true)
+        completionHandler(true, nil)
     }
     
     public func sendBroadcast(
         silentAction: ActionReceived,
-        whenFinished completionHandler: @escaping (Bool) -> Void
+        whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
         AwesomeEventsReceiver
             .shared
@@ -111,12 +111,12 @@ class BroadcastSender {
                 named: Definitions.BROADCAST_SILENT_ACTION,
                 with: silentAction)
         
-        completionHandler(true)
+        completionHandler(true, nil)
     }
     
     public func sendBroadcast(
         backgroundAction: ActionReceived,
-        whenFinished completionHandler: @escaping (Bool) -> Void
+        whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
         AwesomeEventsReceiver
             .shared
@@ -124,12 +124,12 @@ class BroadcastSender {
                 named: Definitions.BROADCAST_BACKGROUND_ACTION,
                 with: backgroundAction)
         
-        completionHandler(true)
+        completionHandler(true, nil)
     }
     
     public func enqueue(
         silentAction actionReceived: ActionReceived,
-        whenFinished completionHandler: @escaping (Bool) -> Void
+        whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
         BackgroundService
             .shared
@@ -140,7 +140,7 @@ class BroadcastSender {
     
     public func enqueue(
         silentBackgroundAction actionReceived: ActionReceived,
-        whenFinished completionHandler: @escaping (Bool) -> Void
+        whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
         BackgroundService
             .shared

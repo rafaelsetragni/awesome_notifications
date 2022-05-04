@@ -76,7 +76,7 @@ public class DartBackgroundExecutor: BackgroundExecutor {
         
         switch(call.method){
             
-            case Definitions.CHANNEL_METHOD_INITIALIZE:
+        case Definitions.CHANNEL_METHOD_PUSH_NEXT:
                 dischargeNextSilentExecution()
                 result(true)
                 break
@@ -173,6 +173,7 @@ public class DartBackgroundExecutor: BackgroundExecutor {
         self.backgroundEngine = nil
         
         self.backgroundChannel = nil
+        Logger.i(TAG, "FlutterEngine instance terminated.")
     }
     
     func dischargeNextSilentExecution(){
@@ -204,7 +205,7 @@ public class DartBackgroundExecutor: BackgroundExecutor {
         silentData[Definitions.ACTION_HANDLE] = self.silentCallbackHandle
         
         backgroundChannel?.invokeMethod(
-            Definitions.CHANNEL_METHOD_SILENCED_CALLBACK,
+            Definitions.CHANNEL_METHOD_SILENT_CALLBACK,
             arguments: silentData,
             result: { flutterResult in
                 silentDataRequest.handler(true)

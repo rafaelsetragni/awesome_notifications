@@ -601,7 +601,6 @@ public class NotificationBuilder {
     
     private func setBigTextLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "BigText"
-        Logger.w(NotificationBuilder.TAG, "BigText layout are not available yet for iOS")
     }
     
     private func setProgressBarLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {

@@ -25,11 +25,11 @@ public class RealDateTime: Equatable, Comparable {
         }
     }
     
-    init(fromDateComponents dateComponents: DateComponents){
+    public init(fromDateComponents dateComponents: DateComponents){
         self.currentDateComponents = dateComponents
     }
     
-    init(fromTimeZone timeZone: TimeZone?){
+    public init(fromTimeZone timeZone: TimeZone?){
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timeZone ?? TimeZone.current
         currentDateComponents = calendar.dateComponents(RealDateTime.units, from: Date())

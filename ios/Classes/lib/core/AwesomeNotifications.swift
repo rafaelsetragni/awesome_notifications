@@ -478,45 +478,69 @@ public class AwesomeNotifications:
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ){
-        switch response.actionIdentifier {
-        
-            case UNNotificationDismissActionIdentifier.description:
-                DismissedNotificationReceiver
+        do {
+            switch response.actionIdentifier {
+            
+                case UNNotificationDismissActionIdentifier.description:
+                    try DismissedNotificationReceiver
+                        .shared
+                        .addNewDismissEvent(
+                            fromResponse: response,
+                            whenFinished: { (success:Bool, error:Error?) in
+                                
+                                if !success && self._originalNotificationCenterDelegate != nil {
+                                    self._originalNotificationCenterDelegate!
+                                        .userNotificationCenter?(
+                                            center,
+                                            didReceive: response,
+                                            withCompletionHandler: completionHandler)
+                                }
+                                else {
+                                    completionHandler()
+                                }
+                            })
+                    
+                default:
+                    try NotificationActionReceiver
+                        .shared
+                        .addNewActionEvent(
+                            fromResponse: response,
+                            whenFinished: { (success:Bool, error:Error?) in
+                                
+                                if !success && self._originalNotificationCenterDelegate != nil {
+                                    self._originalNotificationCenterDelegate!
+                                        .userNotificationCenter?(
+                                            center,
+                                            didReceive: response,
+                                            withCompletionHandler: completionHandler)
+                                }
+                                else {
+                                    completionHandler()
+                                }
+                            })
+            }
+        } catch {
+            if !(error is AwesomeNotificationsException) {
+                ExceptionFactory
                     .shared
-                    .addNewDismissEvent(
-                        fromResponse: response,
-                        whenFinished: { (sucessfulyReceived:Bool) in
-                            
-                            if !sucessfulyReceived && self._originalNotificationCenterDelegate != nil {
-                                self._originalNotificationCenterDelegate?
-                                    .userNotificationCenter?(
-                                        center,
-                                        didReceive: response,
-                                        withCompletionHandler: completionHandler)
-                            }
-                            else {
-                                completionHandler()
-                            }
-                        })
-                
-            default:
-                NotificationActionReceiver
-                    .shared
-                    .addNewActionEvent(
-                        fromResponse: response,
-                        whenFinished: { (sucessfulyReceived:Bool) in
-                            
-                            if !sucessfulyReceived && self._originalNotificationCenterDelegate != nil {
-                                self._originalNotificationCenterDelegate?
-                                    .userNotificationCenter?(
-                                        center,
-                                        didReceive: response,
-                                        withCompletionHandler: completionHandler)
-                            }
-                            else {
-                                completionHandler()
-                            }
-                        })
+                    .registerNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                        message: "An unknow exception was found while receiving a notification action",
+                        detailedCode: ExceptionCode.DETAILED_UNEXPECTED_ERROR,
+                        originalException: error)
+            }
+            
+            if self._originalNotificationCenterDelegate != nil {
+                self._originalNotificationCenterDelegate!
+                    .userNotificationCenter?(
+                        center,
+                        didReceive: response,
+                        withCompletionHandler: completionHandler)
+            }
+            else {
+                completionHandler()
+            }
         }
     }
     

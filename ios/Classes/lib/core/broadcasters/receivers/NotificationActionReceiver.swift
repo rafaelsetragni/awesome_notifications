@@ -27,8 +27,8 @@ public class NotificationActionReceiver {
     
     public func addNewActionEvent(
         fromResponse response: UNNotificationResponse,
-        whenFinished completionHandler: @escaping (Bool) -> Void
-    ){
+        whenFinished completionHandler: @escaping (Bool, Error?) -> Void
+    ) throws {
      
         var userText:String?
         if let textResponse = response as? UNTextInputNotificationResponse {
@@ -42,8 +42,13 @@ public class NotificationActionReceiver {
                             .content
                             .userInfo[Definitions.NOTIFICATION_JSON] as? String
         else {
-            completionHandler(false)
-            return
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: TAG,
+                    code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                    message: "The action content doesn't contain any awesome information",
+                    detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".addNewActionEvent.jsonData")
         }
             
         guard
@@ -60,8 +65,13 @@ public class NotificationActionReceiver {
                         buttonKeyPressed: response.actionIdentifier,
                         userText: userText)
         else {
-            completionHandler(false)
-            return
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: TAG,
+                    code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                    message: "The action content doesn't contain any valid awesome content",
+                    detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".addNewActionEvent.actionReceived")
         }
         
         let currentLifeCycle:NotificationLifeCycle =
@@ -172,11 +182,11 @@ public class NotificationActionReceiver {
                 break
                 
             case .DisabledAction:
-                completionHandler(true)
+                completionHandler(true, nil)
                 break
             
             default:
-                completionHandler(true)
+                completionHandler(true, nil)
                 break
         }
     }

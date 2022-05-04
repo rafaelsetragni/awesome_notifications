@@ -29,8 +29,8 @@ class DismissedNotificationReceiver {
     
     public func addNewDismissEvent(
         fromResponse response: UNNotificationResponse,
-        whenFinished completionHandler: @escaping (Bool) -> Void
-    ){
+        whenFinished completionHandler: @escaping (Bool, Error?) -> Void
+    ) throws {
         guard let jsonData:String =
                 response
                     .notification
@@ -38,8 +38,13 @@ class DismissedNotificationReceiver {
                     .content
                     .userInfo[Definitions.NOTIFICATION_JSON] as? String
         else {
-            completionHandler(false)
-            return
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: TAG,
+                    code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                    message: "The dismiss content doesn't contain any awesome information",
+                    detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".addNewDismissEvent.jsonData")
         }
             
         guard
@@ -48,7 +53,7 @@ class DismissedNotificationReceiver {
                     .newInstance()
                     .buildNotificationFromJson(
                         jsonData: jsonData),
-            let actionReceived:ActionReceived =
+            let dismissedReceived:ActionReceived =
                 NotificationBuilder
                     .newInstance()
                     .buildNotificationActionFromModel(
@@ -56,11 +61,16 @@ class DismissedNotificationReceiver {
                         buttonKeyPressed: nil,
                         userText: nil)
         else {
-            completionHandler(false)
-            return
+            throw ExceptionFactory
+                .shared
+                .createNewAwesomeException(
+                    className: TAG,
+                    code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                    message: "The dismiss content doesn't contain any valid awesome content",
+                    detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".addNewDismissEvent.dismissedReceived")
         }
         
-        actionReceived.registerDismissedEvent(
+        dismissedReceived.registerDismissedEvent(
             withLifeCycle:
                 LifeCycleManager
                     .shared
@@ -69,7 +79,7 @@ class DismissedNotificationReceiver {
         BroadcastSender
             .shared
             .sendBroadcast(
-                notificationDismissed: actionReceived,
+                notificationDismissed: dismissedReceived,
                 whenFinished: completionHandler)
     }
 }
