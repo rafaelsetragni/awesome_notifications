@@ -17,7 +17,20 @@ public class AwesomeNotifications:
     
     let TAG = "AwesomeNotifications"
     
-    public static var debug:Bool = false
+    static var _debug:Bool? = nil
+    static var debug:Bool {
+        get {
+            if _debug == nil {
+                _debug = DefaultsManager.shared.debug
+            }
+            return _debug!
+        }
+        set {
+            _debug = newValue
+            DefaultsManager.shared.debug = newValue
+        }
+    }
+    
     static var initialValues:[String : Any?] = [:]
     
     // ************************** CONSTRUCTOR ***********************************
@@ -460,9 +473,8 @@ public class AwesomeNotifications:
     
     @objc public func didFinishLaunch(_ application: UIApplication) {
         
-        // Set ourselves as the UNUserNotificationCenter delegate, but also preserve any existing delegate...
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.delegate = self
+        UNUserNotificationCenter.current().delegate = self
+        UIApplication.shared.registerForRemoteNotifications()
         
         RefreshSchedulesReceiver()
                 .refreshSchedules()
@@ -472,6 +484,35 @@ public class AwesomeNotifications:
         }
     }
         
+    @available(iOS 10.0, *)
+    public func application(
+        _ application: UIApplication,
+        didFailToRegisterForRemoteNotificationsWithError error: Error
+    ){
+        Logger.d(TAG, "TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE")
+        print(error)
+    }
+    
+    @available(iOS 10.0, *)
+    public func application(
+        _ application: UIApplication,
+        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+    ){
+        Logger.d(TAG, "TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE")
+        print(deviceToken)
+    }
+    
+    @available(iOS 10.0, *)
+    public func application(
+        _ application: UIApplication,
+        didReceiveRemoteNotification userInfo: [AnyHashable : Any],
+        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
+    ) {
+        Logger.d(TAG, "TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE")
+        print(userInfo)
+        completionHandler(.newData)
+    }
+    
     @available(iOS 10.0, *)
     public func userNotificationCenter(
         _ center: UNUserNotificationCenter,
@@ -602,6 +643,8 @@ public class AwesomeNotifications:
             }
         }
     }
+    
+    // *****************************  EXTRACT NOTIFICATION METHODS  **********************************
     
     private func extractNotificationJsonMap(fromContent content: UNNotificationContent) -> [String : Any?]{
         

@@ -51,6 +51,7 @@ public class AwesomeExceptionReceiver  {
         fromClassName className:String,
         withAwesomeException awesomeException:AwesomeNotificationsException
     ){
+        Logger.e(TAG, awesomeException.message)
         for listener in eventListeners {
             listener.onNewAwesomeException(
                 fromClassName: className,

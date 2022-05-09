@@ -1,9 +1,9 @@
 
+#if !ACTION_EXTENSION
 import UIKit
 import Flutter
 import UserNotifications
 
-#if !ACTION_EXTENSION
 public class SwiftAwesomeNotificationsPlugin:
                 NSObject,
                 FlutterPlugin,
@@ -1023,7 +1023,7 @@ public class SwiftAwesomeNotificationsPlugin:
         
         let success = actionHandle != 0
         if !success {
-            Logger.e(SwiftAwesomeNotificationsPlugin.TAG, "Attention: there is no valid static method to receive notification action data in background");
+            Logger.e(SwiftAwesomeNotificationsPlugin.TAG, "Attention: there is no valid static method to receive notification action data in background")
         }
         
         result(success)

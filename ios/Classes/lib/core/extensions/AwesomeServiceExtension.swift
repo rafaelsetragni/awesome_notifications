@@ -63,6 +63,18 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
                     
                     notificationModel = NotificationModel().fromMap(arguments: mapData) as? NotificationModel
                     
+                    if StringUtils.shared.isNullOrEmpty(notificationModel?.content?.title, considerWhiteSpaceAsEmpty: true) {
+                        notificationModel!.content!.title = title
+                    }
+                    
+                    if StringUtils.shared.isNullOrEmpty(notificationModel?.content?.body, considerWhiteSpaceAsEmpty: true) {
+                        notificationModel!.content!.body = body
+                    }
+                    
+                    if !StringUtils.shared.isNullOrEmpty(image) {
+                        notificationModel!.content!.notificationLayout = NotificationLayout.BigPicture
+                        notificationModel!.content!.bigPicture = image
+                    }
                 }
                 
                 NotificationBuilder

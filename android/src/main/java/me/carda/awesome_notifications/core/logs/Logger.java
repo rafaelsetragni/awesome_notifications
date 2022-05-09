@@ -11,7 +11,7 @@ public class Logger {
 
     private static final String redColor = "\u001B[31m";
     private static final String greenColor = "\u001B[32m";
-    private static final String blueColor = "\u001B[34m";
+    private static final String blueColor = "\u001B[94m";
     private static final String yellowColor = "\u001B[33m";
     private static final String resetColor = "\u001B[0m";
 
@@ -30,19 +30,19 @@ public class Logger {
     }
 
     public static void d(String className, String message){
-        Log.d(greenColor+"[Awesome Notifications]", "Android: " + message + " (" + className + ":" + getLastLine() + ")" + resetColor);
+        Log.d("Android: "+greenColor+"[Awesome Notifications]"+resetColor,  message + " (" + className + ":" + getLastLine() + ")");
     }
 
     public static void e(String className, String message){
-        Log.e(redColor+"[Awesome Notifications]", "Android: " + message + " (" + className + ":" + getLastLine() + ")" + resetColor);
+        Log.e("Android: "+redColor+"[Awesome Notifications]", message + " (" + className + ":" + getLastLine() + ")" + resetColor);
     }
 
     public static void i(String className, String message){
-        Log.i(blueColor+"[Awesome Notifications]",  "Android: " + message +  " (" + className + ":" + getLastLine() + ")" + resetColor);
+        Log.i("Android: "+blueColor+"[Awesome Notifications]",  message +  " (" + className + ":" + getLastLine() + ")" + resetColor);
     }
 
     public static void w(String className, String message){
-        Log.w(yellowColor+"[Awesome Notifications]", "Android: " + message + " (" + className + ":" + getLastLine() + ")" + resetColor);
+        Log.w("Android: "+yellowColor+"[Awesome Notifications]", message + " (" + className + ":" + getLastLine() + ")" + resetColor);
     }
 
 }

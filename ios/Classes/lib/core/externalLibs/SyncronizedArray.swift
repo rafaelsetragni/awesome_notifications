@@ -247,7 +247,7 @@ public extension SynchronizedArray {
     /// Removes all elements from the array.
     ///
     /// - Parameter completion: The handler with the removed elements.
-    public func removeAll(completion: (([Element]) -> Void)? = nil) {
+    func removeAll(completion: (([Element]) -> Void)? = nil) {
         queue.async(flags: .barrier) {
             let elements = self.array
             self.array.removeAll()

@@ -26,6 +26,11 @@ class DefaultsManager {
     
     // ********************************************************
     
+    public var debug:Bool {
+        get { return Bool(userDefaults.object(forKey: Definitions.INITIALIZE_DEBUG_MODE) as? Bool ?? false) }
+        set { userDefaults.setValue(newValue, forKey: Definitions.INITIALIZE_DEBUG_MODE) }
+    }
+    
     public var actionCallback:Int64 {
         get { return Int64(userDefaults.object(forKey: Definitions.ACTION_HANDLE) as? Int64 ?? 0) }
         set { userDefaults.setValue(newValue, forKey: Definitions.ACTION_HANDLE) }

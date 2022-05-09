@@ -22,10 +22,10 @@ public enum Definitions {
     public static let  BROADCAST_DEFAULT_ACTION = "broadcast.awesome_notifications.DEFAULT_ACTION"
     public static let  BROADCAST_BACKGROUND_ACTION = "broadcast.awesome_notifications.BACKGROUND_ACTION"
     public static let  EXTRA_BROADCAST_MESSAGE = "notification"
-    
+ 
     public static let  ACTION_HANDLE = "actionHandle"
-    public static let  SILENT_HANDLE = "silentHandle"
-    public static let  BACKGROUND_HANDLE = "bgHandle"
+    public static let  SILENT_HANDLE = "awesomeSilentHandle"
+    public static let  BACKGROUND_HANDLE = "awesomeDartBGHandle"
     public static let  RECOVER_DISPLAYED = "recoverScheduledDisplayed"
 
     public static let  SHARED_DEFAULTS = "defaults"

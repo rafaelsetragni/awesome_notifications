@@ -4,12 +4,12 @@
 //
 //  Created by Rafael Setragni on 04/06/21.
 //
+#if !ACTION_EXTENSION
 import UIKit
 import Foundation
 import Flutter
 
 public class DartBackgroundExecutor: BackgroundExecutor {
-    
     private let TAG = "DartBackgroundExecutor"
     
     public let silentDataQueue:SynchronizedArray = SynchronizedArray<SilentActionRequest>()
@@ -214,4 +214,4 @@ public class DartBackgroundExecutor: BackgroundExecutor {
         )
     }
 }
-
+#endif
