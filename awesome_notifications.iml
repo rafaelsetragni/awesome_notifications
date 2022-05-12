@@ -134,6 +134,9 @@
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/awesome_notifications/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/awesome_notifications/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/awesome_notifications/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/awesome_notifications/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/awesome_notifications/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/awesome_notifications/build" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 30 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -192,17 +192,21 @@ class NotificationChannel extends Model {
         NOTIFICATION_IMPORTANCE, dataMap, NotificationImportance.values);
     this.defaultPrivacy = AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
         NOTIFICATION_DEFAULT_PRIVACY, dataMap, NotificationPrivacy.values);
-    this.defaultRingtoneType = AwesomeAssertUtils.extractEnum<DefaultRingtoneType>(
-        NOTIFICATION_DEFAULT_RINGTONE_TYPE,
-        dataMap,
-        DefaultRingtoneType.values);
+    this.defaultRingtoneType =
+        AwesomeAssertUtils.extractEnum<DefaultRingtoneType>(
+            NOTIFICATION_DEFAULT_RINGTONE_TYPE,
+            dataMap,
+            DefaultRingtoneType.values);
 
     this.groupKey = AwesomeAssertUtils.extractValue(
         NOTIFICATION_GROUP_KEY, dataMap, String);
     this.groupSort = AwesomeAssertUtils.extractEnum<GroupSort>(
         NOTIFICATION_GROUP_SORT, dataMap, GroupSort.values);
-    this.groupAlertBehavior = AwesomeAssertUtils.extractEnum<GroupAlertBehavior>(
-        NOTIFICATION_GROUP_ALERT_BEHAVIOR, dataMap, GroupAlertBehavior.values);
+    this.groupAlertBehavior =
+        AwesomeAssertUtils.extractEnum<GroupAlertBehavior>(
+            NOTIFICATION_GROUP_ALERT_BEHAVIOR,
+            dataMap,
+            GroupAlertBehavior.values);
 
     this.icon =
         AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, dataMap, String);

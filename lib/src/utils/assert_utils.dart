@@ -157,7 +157,8 @@ class AwesomeAssertUtils {
     }
   }
 
-  static T? extractEnum<T extends Enum>(String reference, Map dataMap, List<T> values) {
+  static T? extractEnum<T extends Enum>(
+      String reference, Map dataMap, List<T> values) {
     T? defaultValue = _getDefaultValue(reference, T);
     dynamic value = dataMap[reference];
 
@@ -170,7 +171,8 @@ class AwesomeAssertUtils {
     return enumToString<T>(castedValue, values, defaultValue ?? values.first);
   }
 
-  static T? enumToString<T extends Enum>(String enumValue, List<T> values, T? defaultValue) {
+  static T? enumToString<T extends Enum>(
+      String enumValue, List<T> values, T? defaultValue) {
     for (final enumerator in values) {
       if (AwesomeAssertUtils.toSimpleEnumString(enumerator)!.toLowerCase() ==
           enumValue.toLowerCase()) return enumerator;
