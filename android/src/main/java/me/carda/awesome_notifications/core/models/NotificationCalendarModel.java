@@ -141,17 +141,17 @@ public class NotificationCalendarModel extends NotificationScheduleModel {
                             ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationCalendar");
 
         if (
-           era != null && IntegerUtils.isBetween(era, 0, Integer.MAX_VALUE) ||
-           year != null && IntegerUtils.isBetween(year, 0, Integer.MAX_VALUE) ||
-           month != null && IntegerUtils.isBetween(month, 1, 12) ||
-           day != null && IntegerUtils.isBetween(day, 1, 31) ||
-           hour != null && IntegerUtils.isBetween(hour, 0, 23) ||
-           minute != null && IntegerUtils.isBetween(minute, 0, 59) ||
-           second != null && IntegerUtils.isBetween(second, 0, 59) ||
-           millisecond != null && IntegerUtils.isBetween(millisecond, 0, 999) ||
-           weekday != null && IntegerUtils.isBetween(weekday, 1, 7) ||
-           weekOfMonth != null && IntegerUtils.isBetween(weekOfMonth, 1, 6) ||
-           weekOfYear != null && IntegerUtils.isBetween(weekOfYear, 1, 53)
+           era != null && !IntegerUtils.isBetween(era, 0, Integer.MAX_VALUE) ||
+           year != null && !IntegerUtils.isBetween(year, 0, Integer.MAX_VALUE) ||
+           month != null && !IntegerUtils.isBetween(month, 1, 12) ||
+           day != null && !IntegerUtils.isBetween(day, 1, 31) ||
+           hour != null && !IntegerUtils.isBetween(hour, 0, 23) ||
+           minute != null && !IntegerUtils.isBetween(minute, 0, 59) ||
+           second != null && !IntegerUtils.isBetween(second, 0, 59) ||
+           millisecond != null && !IntegerUtils.isBetween(millisecond, 0, 999) ||
+           weekday != null && !IntegerUtils.isBetween(weekday, 1, 7) ||
+           weekOfMonth != null && !IntegerUtils.isBetween(weekOfMonth, 1, 6) ||
+           weekOfYear != null && !IntegerUtils.isBetween(weekOfYear, 1, 53)
         )
             throw ExceptionFactory
                     .getInstance()
