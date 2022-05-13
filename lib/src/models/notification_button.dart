@@ -134,6 +134,7 @@ class NotificationActionButton extends Model {
   }
 
   void _adaptInputFieldToRequireText() {
+    // ignore: deprecated_member_use_from_same_package
     if (_actionType == ActionType.InputField) {
       developer.log(
           "InputField is deprecated. Please use requireInputText instead.");

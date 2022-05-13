@@ -1,5 +1,4 @@
 import '../../android_foreground_service.dart';
-import 'foreground_service_type.dart';
 
 /// Static helper class that contains all relevant
 /// Android foreground service related constants.

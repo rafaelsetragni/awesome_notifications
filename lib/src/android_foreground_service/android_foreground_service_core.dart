@@ -99,7 +99,7 @@ class AndroidForegroundService {
   /// will do nothing.
   ///
   /// It is sufficient to call this method once to stop the
-  /// foreground service, even if [startForeground] was called
+  /// foreground service, even if [startAndroidForegroundService] was called
   /// multiple times.
   ///
   /// On any platform other than Android, this is a no-op and does nothing,

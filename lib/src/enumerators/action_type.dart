@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use_from_same_package
 /// Defines the notification button's type
 /// [ActionType.Default] Is the default action type, forcing the app to goes foreground.
 /// [ActionType.SilentAction] Do not forces the app to go foreground, but runs on main thread, accept visual elements and can be interrupt if main app gets terminated.

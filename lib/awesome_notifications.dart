@@ -44,7 +44,6 @@ export 'src/definitions.dart';
 
 import 'package:awesome_notifications/src/models/received_models/received_action.dart';
 import 'package:awesome_notifications/src/models/received_models/received_notification.dart';
-import 'package:awesome_notifications/src/logs/logger.dart';
 
 /// Method structure to listen to an incoming action with dart
 typedef Future<void> ActionHandler(ReceivedAction receivedAction);

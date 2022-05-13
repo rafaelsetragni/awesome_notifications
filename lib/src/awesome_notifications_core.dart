@@ -14,12 +14,12 @@ import 'package:flutter/foundation.dart';
 //import 'dart:html' as html;
 //import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications/src/logs/logger.dart';
 import 'package:awesome_notifications/src/isolates/isolate_main.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 class AwesomeNotifications {
-  static String TAG = "AwesomeNotifications";
+  static String tag = "AwesomeNotifications";
   static String? rootNativePath;
 
   static String _utcTimeZoneIdentifier = 'UTC',
@@ -131,7 +131,7 @@ class AwesomeNotifications {
       NotificationHandler? onNotificationDisplayedMethod,
       ActionHandler? onDismissActionReceivedMethod}) async {
     if (_actionHandler != null && _actionHandler != onActionReceivedMethod)
-      Logger.w(TAG, 'Static listener for notifications actions was redefined.');
+      Logger.w(tag, 'Static listener for notifications actions was redefined.');
 
     _actionHandler = onActionReceivedMethod;
     _dismissedHandler = onDismissActionReceivedMethod;
@@ -148,7 +148,7 @@ class AwesomeNotifications {
     });
 
     if (!result) {
-      Logger.e(TAG,
+      Logger.e(tag,
           'onActionNotificationMethod is not a valid global or static method.');
       return false;
     }
