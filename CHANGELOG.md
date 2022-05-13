@@ -1,3 +1,7 @@
+## [0.7.0-beta.3+1]
+* Fixed NotificationCalendar's inverted error "The time conditions are invalid"
+* Documentation improved with new imports and observations with common found issues during beta phase
+* Dart source code cleaned to improve pub points
 ## [0.7.0-beta.3]
 * Coverage extended to Android 12L (SDK 32)
 * All exceptions have been standardized with distinct exception codes to improve native error handling via PlatformException

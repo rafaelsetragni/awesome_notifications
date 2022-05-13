@@ -258,6 +258,24 @@ class _MyAppState extends State<MyApp> {
 }
 ```
 
+OBS: Note that the example below is not a valid static or global method. You can retrieve the current context from the NavigatorKey instance, declared on MaterialApp widget, at any time.
+```Dart
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod: (ReceivedAction receivedAction){
+            NotificationController.onActionReceivedMethod(context, receivedAction);
+        },
+        onNotificationCreatedMethod: (ReceivedNotification receivedNotification){
+            NotificationController.onNotificationCreatedMethod(context, receivedNotification);
+        },
+        onNotificationDisplayedMethod: (ReceivedNotification receivedNotification){
+            NotificationController.onNotificationDisplayedMethod(context, receivedNotification);
+        },
+        onDismissActionReceivedMethod: (ReceivedAction receivedAction){
+            NotificationController.onDismissActionReceivedMethod(context, receivedAction);
+        },
+    );
+```
+
 5. Create in any place or class, the static methods to capture the respective notification events
 
 ```dart
@@ -329,6 +347,11 @@ On iOS, to use any plugin inside background actions, you will need to manually r
 To avoid this, you need to add the following lines to the `didFinishLaunchingWithOptions` method in your iOS project's AppDelegate.m/AppDelegate.swift file:
 
 ```Swift
+import Flutter
+import awesome_notifications
+import shared_preferences_ios
+//import all_other_plugins_that_i_need
+
 override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
