@@ -407,7 +407,7 @@ class NotificationsController {
       );
     } else {
       loadSingletonPage(App.navigatorKey.currentState,
-          targetPage: PAGE_MEDIA_DETAILS, receivedAction: receivedAction);
+          targetPage: PAGE_NOTIFICATION_DETAILS, receivedAction: receivedAction);
     }
   }
 

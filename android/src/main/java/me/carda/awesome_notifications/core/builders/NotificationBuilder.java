@@ -1168,79 +1168,77 @@ public class NotificationBuilder {
 
         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M /*Android 6*/) {
 
-            String messageQueueKey = groupKey + (isGrouping ? ".Gr" : "");
+        String messageQueueKey = groupKey + (isGrouping ? ".Gr" : "");
 
-            int firstNotificationId = contentModel.id;
-            List<String> groupIDs = StatusBarManager
-                    .getInstance(context)
-                    .activeNotificationsGroup.get(groupKey);
+        int firstNotificationId = contentModel.id;
+        List<String> groupIDs = StatusBarManager
+                .getInstance(context)
+                .activeNotificationsGroup.get(groupKey);
 
-            if(groupIDs == null || groupIDs.size() == 0)
-                messagingQueue.remove(messageQueueKey);
-            else
-                firstNotificationId = Integer.parseInt(groupIDs.get(0));
+        if(groupIDs == null || groupIDs.size() == 0)
+            messagingQueue.remove(messageQueueKey);
+        else
+            firstNotificationId = Integer.parseInt(groupIDs.get(0));
 
-            NotificationMessageModel currentMessage = new NotificationMessageModel(
-                    (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) ?
-                            contentModel.title : contentModel.summary,
-                    contentModel.body,
-                    contentModel.largeIcon
-            );
+        NotificationMessageModel currentMessage = new NotificationMessageModel(
+                (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) ?
+                        contentModel.title : contentModel.summary,
+                contentModel.body,
+                contentModel.largeIcon
+        );
 
-            if(contentModel.messages == null) {
-                List<NotificationMessageModel> messages =  messagingQueue.get(messageQueueKey);
-                                
-                if (messages == null)
-                    messages = new ArrayList<>();
-                
-                messages.add(currentMessage);
-                messagingQueue.put(messageQueueKey, messages);
-                
-                
-                contentModel.messages = messages;
-            }
+        List<NotificationMessageModel> messages = contentModel.messages;
+        if(ListUtils.isNullOrEmpty(messages)) {
+            messages = messagingQueue.get(messageQueueKey);
+            if (messages == null)
+                messages = new ArrayList<>();
+        }
 
-            contentModel.id = firstNotificationId;
+        messages.add(currentMessage);
+        messagingQueue.put(messageQueueKey, messages);
 
-            NotificationCompat.MessagingStyle messagingStyle =
-                    new NotificationCompat.MessagingStyle(contentModel.summary);
+        contentModel.id = firstNotificationId;
+        contentModel.messages = messages;
 
-            for(NotificationMessageModel message : contentModel.messages) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P /*Android 9*/) {
+        NotificationCompat.MessagingStyle messagingStyle =
+                new NotificationCompat.MessagingStyle(contentModel.summary);
 
-                    Person.Builder personBuilder =  new Person.Builder()
-                            .setName(message.title);
-                    
-                    String personIcon = message.largeIcon != null? message.largeIcon :contentModel.largeIcon;
-                    if(!stringUtils.isNullOrEmpty(personIcon)){
-                        Bitmap largeIcon = bitmapUtils.getBitmapFromSource(
-                                context,
-                                personIcon,
-                                contentModel.roundedLargeIcon);
-                        if(largeIcon != null)
-                            personBuilder.setIcon(
-                                    IconCompat.createWithBitmap(largeIcon));
-                    }
+        for(NotificationMessageModel message : contentModel.messages) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P /*Android 9*/) {
 
-                    Person person = personBuilder.build();
+                Person.Builder personBuilder =  new Person.Builder()
+                        .setName(message.title);
 
-                    messagingStyle.addMessage(
-                            message.message, message.timestamp, person);
-                } else {
-                    messagingStyle.addMessage(
-                            message.message, message.timestamp, message.title);
+                String personIcon = message.largeIcon != null? message.largeIcon :contentModel.largeIcon;
+                if(!stringUtils.isNullOrEmpty(personIcon)){
+                    Bitmap largeIcon = bitmapUtils.getBitmapFromSource(
+                            context,
+                            personIcon,
+                            contentModel.roundedLargeIcon);
+                    if(largeIcon != null)
+                        personBuilder.setIcon(
+                                IconCompat.createWithBitmap(largeIcon));
                 }
-            }
 
-            if (
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.P /*Android 9*/ &&
-                !stringUtils.isNullOrEmpty(contentModel.summary)
-            ){
-                messagingStyle.setConversationTitle(contentModel.summary);
-                messagingStyle.setGroupConversation(isGrouping);
-            }
+                Person person = personBuilder.build();
 
-            builder.setStyle((NotificationCompat.Style) messagingStyle);
+                messagingStyle.addMessage(
+                        message.message, message.timestamp, person);
+            } else {
+                messagingStyle.addMessage(
+                        message.message, message.timestamp, message.title);
+            }
+        }
+
+        if (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.P /*Android 9*/ &&
+            !stringUtils.isNullOrEmpty(contentModel.summary)
+        ){
+            messagingStyle.setConversationTitle(contentModel.summary);
+            messagingStyle.setGroupConversation(isGrouping);
+        }
+
+        builder.setStyle((NotificationCompat.Style) messagingStyle);
         /*}
         else {
             if(stringUtils.isNullOrEmpty(groupKey)){
