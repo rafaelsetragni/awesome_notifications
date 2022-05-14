@@ -222,6 +222,7 @@ class RoundedButton extends StatelessWidget {
     return SizedBox(
       height: size,
       width: size,
+      // ignore: deprecated_member_use
       child: FlatButton(
         padding: EdgeInsets.all(15 / 64 * size),
         shape: const RoundedRectangleBorder(

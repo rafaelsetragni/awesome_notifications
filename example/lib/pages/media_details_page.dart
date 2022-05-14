@@ -197,6 +197,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
     ThemeData themeData = Theme.of(context);
 
     isLighten =
+        // ignore: deprecated_member_use
         isLighten ?? themeData.accentColorBrightness == Brightness.light;
     mainColor = mainColor ?? themeData.backgroundColor;
     contrastColor = contrastColor ?? (isLighten! ? Colors.black : Colors.white);
@@ -209,6 +210,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
     return Theme(
         data: Theme.of(context).copyWith(
             primaryColor: mainColor,
+            // ignore: deprecated_member_use
             accentColor: contrastColor,
             scaffoldBackgroundColor: mainColor,
             disabledColor: contrastColor?.withOpacity(0.25),

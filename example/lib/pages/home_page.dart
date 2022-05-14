@@ -186,6 +186,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
+          // ignore: deprecated_member_use
           brightness: Brightness.light,
           title: Image.asset(
               'assets/images/awesome-notifications-logo-color.png',
