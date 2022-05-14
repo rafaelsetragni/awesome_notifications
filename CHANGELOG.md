@@ -1,3 +1,6 @@
+## [0.7.0-beta.3+2]
+* Fixed empty title and body for messaging layout
+* Removed Java cast warnings for cases where's a previous type checking.
 ## [0.7.0-beta.3+1]
 * Fixed NotificationCalendar's inverted error "The time conditions are invalid"
 * Documentation improved with new imports and observations with common found issues during beta phase

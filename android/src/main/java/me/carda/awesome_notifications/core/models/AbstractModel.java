@@ -588,6 +588,7 @@ public abstract class AbstractModel implements Cloneable {
         return defaultValue;
     }
 
+    @SuppressWarnings("unchecked")
     public long[] getValueOrDefault(
             @NonNull Map<String, Object> map,
             @NonNull String reference,
@@ -621,6 +622,7 @@ public abstract class AbstractModel implements Cloneable {
         return defaultValue;
     }
 
+    @SuppressWarnings("unchecked")
     public Map getValueOrDefault(
             @NonNull Map<String, Object> map,
             @NonNull String reference,
