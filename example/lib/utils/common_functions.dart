@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'dart:io';
 
 import 'dart:math' as math;
@@ -23,14 +22,14 @@ Future<String> saveAssetOnDisk(ImageProvider image, String fileName) async {
   return filePath;
 }
 
-void lockScreenPortrait(){
+void lockScreenPortrait() {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 }
 
-void unlockScreenPortrait(){
+void unlockScreenPortrait() {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft,
@@ -64,11 +63,12 @@ String printDuration(Duration? duration) {
   return "$twoDigitMinutes:$twoDigitSeconds";
 }
 
-void loadSingletonPage(NavigatorState? navigatorState, {required String targetPage, required ReceivedAction receivedAction}){
+void loadSingletonPage(NavigatorState? navigatorState,
+    {required String targetPage, required ReceivedAction receivedAction}) {
   // Avoid to open the notification details page over another details page already opened
   // Navigate into pages, avoiding to open the notification details page over another details page already opened
   navigatorState?.pushNamedAndRemoveUntil(targetPage,
-          (route) => (route.settings.name != targetPage) || route.isFirst,
+      (route) => (route.settings.name != targetPage) || route.isFirst,
       arguments: receivedAction);
 }
 
@@ -77,8 +77,7 @@ Future<String> downloadAndSaveImageOnDisk(String url, String fileName) async {
   var filePath = '${directory.path}/$fileName';
   var file = File(filePath);
 
-
-  if(!await file.exists()){
+  if (!await file.exists()) {
     var response = await http.get(Uri.parse(url));
     await file.writeAsBytes(response.bodyBytes);
   }
