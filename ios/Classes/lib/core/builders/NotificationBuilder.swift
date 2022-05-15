@@ -157,10 +157,7 @@ public class NotificationBuilder {
             let trigger:UNNotificationTrigger? = nextDate == nil ? nil : notificationModel.schedule?.getUNNotificationTrigger()
             let request = UNNotificationRequest(identifier: notificationModel.content!.id!.description, content: content, trigger: trigger)
             
-            UNUserNotificationCenter.current().add(request)
-            {
-                error in // called when message has been sent
-
+            UNUserNotificationCenter.current().add(request) { error in 
                 if error != nil {
                     Logger.e(NotificationBuilder.TAG, error.debugDescription)
                 }

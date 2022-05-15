@@ -9,7 +9,7 @@ import Foundation
 
 public class NotificationChannelModel : AbstractModel {
     
-    var channelKey: String?
+    public var channelKey: String?
     var channelName: String?
     var channelDescription: String?
     var channelShowBadge: Bool?

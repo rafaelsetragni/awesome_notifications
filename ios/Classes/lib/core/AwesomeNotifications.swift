@@ -483,35 +483,6 @@ public class AwesomeNotifications:
             Logger.d(TAG, "Awesome Notifications attached for iOS")
         }
     }
-        
-    @available(iOS 10.0, *)
-    public func application(
-        _ application: UIApplication,
-        didFailToRegisterForRemoteNotificationsWithError error: Error
-    ){
-        Logger.d(TAG, "TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE")
-        print(error)
-    }
-    
-    @available(iOS 10.0, *)
-    public func application(
-        _ application: UIApplication,
-        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
-    ){
-        Logger.d(TAG, "TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE")
-        print(deviceToken)
-    }
-    
-    @available(iOS 10.0, *)
-    public func application(
-        _ application: UIApplication,
-        didReceiveRemoteNotification userInfo: [AnyHashable : Any],
-        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
-    ) {
-        Logger.d(TAG, "TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE")
-        print(userInfo)
-        completionHandler(.newData)
-    }
     
     @available(iOS 10.0, *)
     public func userNotificationCenter(
@@ -639,7 +610,7 @@ public class AwesomeNotifications:
                         withCompletionHandler: completionHandler)
             }
             else {
-                completionHandler([])
+                completionHandler([.alert, .badge, .sound])
             }
         }
     }

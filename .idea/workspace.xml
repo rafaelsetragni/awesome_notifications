@@ -8,7 +8,14 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="" />
+    <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/AwesomeNotifications.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/AwesomeNotifications.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/Definitions.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/Definitions.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/builders/NotificationBuilder.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/builders/NotificationBuilder.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/extensions/BundleExtension.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/extensions/BundleExtension.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/models/NotificationChannelModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/models/NotificationChannelModel.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/threads/NotificationSenderAndScheduler.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/threads/NotificationSenderAndScheduler.swift" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

@@ -1,4 +1,3 @@
-
 public enum Definitions {
     public static let  USER_DEFAULT_TAG = "group.AwesomeNotifications." + Bundle.main.getBundleName()
     

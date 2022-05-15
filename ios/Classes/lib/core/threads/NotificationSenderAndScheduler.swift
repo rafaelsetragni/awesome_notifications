@@ -106,7 +106,7 @@ public class NotificationSenderAndScheduler {
             
             do{
                 if (allowed){
-                    self.execute()
+                    try self.execute()
                 }
                 else {
                     throw ExceptionFactory
@@ -123,10 +123,10 @@ public class NotificationSenderAndScheduler {
         })
     }
 
-    private func execute(){
+    private func execute() throws {
         //DispatchQueue.global(qos: .background).async {
             
-            let notificationReceived:NotificationReceived? = self.doInBackground()
+            let notificationReceived:NotificationReceived? = try self.doInBackground()
 
             //DispatchQueue.main.async {
                 self.onPostExecute(receivedNotification: notificationReceived)
@@ -136,7 +136,7 @@ public class NotificationSenderAndScheduler {
     
     /// AsyncTask METHODS BEGIN *********************************
 
-    private func doInBackground() -> NotificationReceived? {
+    private func doInBackground() throws -> NotificationReceived?{
         
         do {
 
