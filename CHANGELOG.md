@@ -1,3 +1,8 @@
+## [0.7.0-beta.4]
+* iOS notification actions improved to gain more performance and ensure the fast first opening
+* iOS notification builder refactored to ensure the category creation before the notification display
+* iOS notification builder refactored to ensure the completion handle order for push notifications
+* Fixed displayOnForeground e displayOnBackground for iOS
 ## [0.7.0-beta.3+2]
 * Fixed empty title and body for messaging layout
 * Removed Java cast warnings for cases where's a previous type checking.

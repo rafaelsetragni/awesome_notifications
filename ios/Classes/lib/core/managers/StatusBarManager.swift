@@ -131,7 +131,7 @@ public class StatusBarManager {
     ){
         
         if !self.shouldDisplay(notificationReceived: notificationReceived) {
-            completionHandler(true, false)
+            completionHandler(false, false)
             return
         }
         

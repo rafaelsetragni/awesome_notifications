@@ -29,7 +29,7 @@ class BroadcastSender {
         notificationCreated notificationReceived: NotificationReceived,
         whenFinished completionHandler: @escaping (Bool) -> Void
     ){
-        if LifeCycleManager.shared.currentLifeCycle == .AppKilled {
+        if SwiftUtils.isRunningOnExtension() || LifeCycleManager.shared.currentLifeCycle == .AppKilled {
             CreatedManager.saveCreated(received: notificationReceived)
         }
         else {
@@ -47,7 +47,7 @@ class BroadcastSender {
         notificationDisplayed notificationReceived: NotificationReceived,
         whenFinished completionHandler: @escaping (Bool) -> Void
     ){
-        if LifeCycleManager.shared.currentLifeCycle == .AppKilled {
+        if SwiftUtils.isRunningOnExtension() || LifeCycleManager.shared.currentLifeCycle == .AppKilled {
             DisplayedManager.saveDisplayed(received: notificationReceived)
         }
         else {
@@ -69,8 +69,9 @@ class BroadcastSender {
         actionReceived: ActionReceived,
         whenFinished completionHandler: @escaping (Bool, Error?) -> Void
     ){
-        if LifeCycleManager.shared.currentLifeCycle == .AppKilled {
+        if !ActionManager.recovered { //LifeCycleManager.shared.currentLifeCycle == .AppKilled
             ActionManager.saveAction(received: actionReceived)
+            Logger.i(TAG, "action saved")
         }
         else {
             AwesomeEventsReceiver
@@ -78,6 +79,7 @@ class BroadcastSender {
                 .addActionEvent(
                     named: Definitions.BROADCAST_DEFAULT_ACTION,
                     with: actionReceived)
+            Logger.i(TAG, "action broadcasted")
         }
         
         completionHandler(true, nil)

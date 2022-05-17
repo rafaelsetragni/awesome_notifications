@@ -10,5 +10,3 @@ public enum NotificationLayout : String, CaseIterable {
   case MediaPlayer = "MediaPlayer"
   
 }
-
-// pascualoto cnpj  - recovery grupo - Guilerme 0800-772-3331

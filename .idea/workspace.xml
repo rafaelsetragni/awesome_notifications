@@ -9,12 +9,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/AwesomeNotifications.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/AwesomeNotifications.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/Definitions.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/Definitions.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/broadcasters/receivers/NotificationActionReceiver.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/broadcasters/receivers/NotificationActionReceiver.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/broadcasters/senders/BroadcastSender.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/broadcasters/senders/BroadcastSender.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/builders/NotificationBuilder.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/builders/NotificationBuilder.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/extensions/BundleExtension.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/extensions/BundleExtension.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/models/NotificationChannelModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/models/NotificationChannelModel.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/enumerators/NotificationLayout.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/enumerators/NotificationLayout.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/managers/ActionManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/managers/ActionManager.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/managers/LifeCycleManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/managers/LifeCycleManager.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/managers/StatusBarManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/managers/StatusBarManager.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/models/NotificationContentModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/models/NotificationContentModel.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/threads/NotificationSenderAndScheduler.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/threads/NotificationSenderAndScheduler.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/utils/SwiftUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/utils/SwiftUtils.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

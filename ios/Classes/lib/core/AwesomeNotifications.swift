@@ -116,7 +116,7 @@ public class AwesomeNotifications:
     func activateiOSNotifications(){
         
         let categoryObject = UNNotificationCategory(
-            identifier: Definitions.DEFAULT_CATEGORY_IDENTIFIER,
+            identifier: Definitions.DEFAULT_CATEGORY_IDENTIFIER.uppercased(),
             actions: [],
             intentIdentifiers: [],
             options: .customDismissAction
@@ -275,13 +275,16 @@ public class AwesomeNotifications:
             .shared
             .actionCallback = actionHandle
         
-        if actionHandle != 0
-        {
-            try recoverNotificationsCreated()
-            try recoverNotificationsDisplayed(withReferenceLifeCycle: .AppKilled)
-            try recoverNotificationsDismissed()
-            try recoverNotificationActions()
+        if actionHandle != 0 {
+            try recoverLostEvents()
         }
+    }
+    
+    public func recoverLostEvents() throws {
+        try recoverNotificationsCreated()
+        try recoverNotificationsDisplayed(withReferenceLifeCycle: .AppKilled)
+        try recoverNotificationsDismissed()
+        try recoverNotificationActions()
     }
     
     public func getActionHandle() -> Int64 {
@@ -450,7 +453,7 @@ public class AwesomeNotifications:
     }
     
     private func recoverNotificationActions() throws {
-        let lostActions = ActionManager.listActions()
+        let lostActions = ActionManager.recoverActions()
         for notificationAction in lostActions {
             
             try notificationAction.validate()
@@ -490,6 +493,7 @@ public class AwesomeNotifications:
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ){
+        Logger.e(TAG, "Notification Category Identifier (action): \(response.notification.request.content.categoryIdentifier)")
         do {
             switch response.actionIdentifier {
             
@@ -611,6 +615,21 @@ public class AwesomeNotifications:
             }
             else {
                 completionHandler([.alert, .badge, .sound])
+            }
+        }
+        
+        do {
+            try recoverLostEvents()
+        } catch {
+            if !(error is AwesomeNotificationsException) {
+                ExceptionFactory
+                    .shared
+                    .registerNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                        message: "An unknow exception was found while displaying a notification in foreground",
+                        detailedCode: ExceptionCode.DETAILED_UNEXPECTED_ERROR,
+                        originalException: error)
             }
         }
     }

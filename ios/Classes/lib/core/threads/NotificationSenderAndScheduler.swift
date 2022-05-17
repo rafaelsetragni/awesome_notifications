@@ -24,8 +24,6 @@ public class NotificationSenderAndScheduler {
     
     private var originalUserInfo:[AnyHashable:Any]?
     
-    private var completion: ((Bool, UNMutableNotificationContent?, Error?) -> ())
-    
     public static func send(
         createdSource: NotificationSource,
         notificationModel: NotificationModel,
@@ -38,9 +36,8 @@ public class NotificationSenderAndScheduler {
                 notificationModel: notificationModel,
                 content: nil,
                 isRefreshNotification: false,
-                appLifeCycle: appLifeCycle,
-                completion: completion
-            ).send()
+                appLifeCycle: appLifeCycle
+            ).send(completion: completion)
     }
     
     public static func send(
@@ -55,9 +52,8 @@ public class NotificationSenderAndScheduler {
                 notificationModel: notificationModel,
                 content: content,
                 isRefreshNotification: false,
-                appLifeCycle: appLifeCycle,
-                completion: completion
-            ).send()
+                appLifeCycle: appLifeCycle
+            ).send(completion: completion)
     }
     
     // Its only possible to mimic the persistent notification on iOS > 15
@@ -72,10 +68,9 @@ public class NotificationSenderAndScheduler {
                 notificationModel: notificationModel,
                 content: nil,
                 isRefreshNotification: true,
-                appLifeCycle: notificationModel.content!.createdLifeCycle!,
-                completion: { _, __, ___ in
-                }
-            ).send()
+                appLifeCycle: notificationModel.content!.createdLifeCycle!
+            ).send(completion: { _, __, ___ in
+            })
     }
     
     private init(
@@ -83,8 +78,7 @@ public class NotificationSenderAndScheduler {
         notificationModel: NotificationModel,
         content: UNMutableNotificationContent?,
         isRefreshNotification: Bool,
-        appLifeCycle: NotificationLifeCycle,
-        completion: @escaping (Bool, UNMutableNotificationContent?, Error?) -> ()
+        appLifeCycle: NotificationLifeCycle
     ){
         self.createdSource =
             createdSource == .Local  && notificationModel.schedule != nil ?
@@ -94,11 +88,10 @@ public class NotificationSenderAndScheduler {
         self.content = content
         self.notificationModel = notificationModel
         self.appLifeCycle = appLifeCycle
-        self.completion = completion
         self.startTime = DispatchTime.now()
     }
     
-    private func send() throws {
+    private func send(completion: @escaping (Bool, UNMutableNotificationContent?, Error?) -> ()) throws {
 
         PermissionManager
             .shared
@@ -106,7 +99,7 @@ public class NotificationSenderAndScheduler {
             
             do{
                 if (allowed){
-                    try self.execute()
+                    try self.execute(completion: completion)
                 }
                 else {
                     throw ExceptionFactory
@@ -118,103 +111,106 @@ public class NotificationSenderAndScheduler {
                                 detailedCode: ExceptionCode.DETAILED_INSUFFICIENT_PERMISSIONS+".global")
                 }
             } catch {
-                self.completion(false, nil, error)
+                completion(false, nil, error)
             }
         })
     }
 
-    private func execute() throws {
-        //DispatchQueue.global(qos: .background).async {
-            
-            let notificationReceived:NotificationReceived? = try self.doInBackground()
-
-            //DispatchQueue.main.async {
-                self.onPostExecute(receivedNotification: notificationReceived)
-            //}
-        //}
+    private func execute(
+        completion: @escaping (Bool, UNMutableNotificationContent?, Error?) -> ()
+    ) throws {
+        try self.doInBackground(completion: { notificationReceived in
+            self.onPostExecute(
+                receivedNotification: notificationReceived,
+                completion: completion
+            )
+        })
     }
     
     /// AsyncTask METHODS BEGIN *********************************
 
-    private func doInBackground() throws -> NotificationReceived?{
+    private func doInBackground(
+        completion: @escaping (NotificationReceived?) -> ()
+    ) throws {
+        guard let notificationModel = self.notificationModel else {
+            completion(nil)
+            return
+        }
+            
+        if (notificationModel.content!.id ?? -1) < 0 {
+            notificationModel.content!.id = IntUtils.generateNextRandomId();
+        }
         
-        do {
-
-            if (notificationModel != nil){
-                
-                if ((notificationModel!.content!.id ?? -1) < 0){
-                    notificationModel!.content!.id = IntUtils.generateNextRandomId();
-                }
-                
-                try self.notificationModel!.validate()
-                
-                self.created =
-                    self.notificationModel!
-                        .content!
-                        .registerCreateEvent(
-                            inLifeCycle: self.appLifeCycle,
-                            fromSource: self.createdSource)
-                
-                if self.notificationModel!.schedule != nil {
-                    let timeZone:TimeZone = self.notificationModel!.schedule!.timeZone ?? TimeZone.current
-                    self.notificationModel!.schedule!.timeZone = timeZone
-                    self.notificationModel!.schedule!.createdDate = RealDateTime.init(fromTimeZone: timeZone)
-                }
-
-                var receivedNotification: NotificationReceived? = nil
-
-                if (
-                    !StringUtils.shared.isNullOrEmpty(notificationModel!.content!.title) ||
-                    !StringUtils.shared.isNullOrEmpty(notificationModel!.content!.body)
-                ){
-                    notificationModel = try showNotification(notificationModel!)
-
-                    // Only save DisplayedMethods if notificationModel was created and displayed successfully
-                    if(notificationModel != nil){
-                        
-                        let now = RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
-                        
-                        if notificationModel!.nextValidDate == nil {
-                            notificationModel!.content!.displayedDate = notificationModel!.content!.createdDate
-                            notificationModel!.content!.displayedLifeCycle = notificationModel!.content!.createdLifeCycle
-                        }
-                        else {
-                            scheduled = notificationModel!.nextValidDate
-                            notificationModel!.content!.displayedDate =
-                                scheduled?.shiftTimeZone(toTimeZone: RealDateTime.utcTimeZone) ??
-                                notificationModel!.content!.displayedDate
-                            
-                            if notificationModel!.nextValidDate! <= now {
-                                notificationModel!.content!.displayedLifeCycle = self.appLifeCycle
-                            }
-                            else {
-                                notificationModel!.content!.displayedLifeCycle = NotificationLifeCycle.AppKilled
-                            }
-                        }
-                        
-                        receivedNotification = NotificationReceived(notificationModel!.content)
-
-                        receivedNotification!.displayedLifeCycle =
-                            receivedNotification!.displayedLifeCycle ?? self.appLifeCycle
-                    }
-
-                } else {
-                    receivedNotification = NotificationReceived(notificationModel!.content);
-                }
-
-                return receivedNotification;
-            }
-
-        } catch {
-            completion(false, nil, error)
+        try notificationModel.validate()
+        
+        self.created =
+            notificationModel
+                .content!
+                .registerCreateEvent(
+                    inLifeCycle: self.appLifeCycle,
+                    fromSource: self.createdSource)
+        
+        if notificationModel.schedule != nil {
+            let timeZone:TimeZone = self.notificationModel!.schedule!.timeZone ?? TimeZone.current
+            notificationModel.schedule!.timeZone = timeZone
+            notificationModel.schedule!.createdDate = RealDateTime.init(fromTimeZone: timeZone)
         }
 
-        notificationModel = nil
-        return nil
+        var receivedNotification: NotificationReceived? = nil
+        if (
+            !StringUtils.shared.isNullOrEmpty(notificationModel.content!.title) ||
+            !StringUtils.shared.isNullOrEmpty(notificationModel.content!.body)
+        ){
+            try showNotification(
+                notificationModel,
+                completion:  { [self] notificationModel in
+                    
+                    // Only save DisplayedMethods if notificationModel was created and displayed successfully
+                    guard let notificationModel:NotificationModel = notificationModel
+                    else {
+                        completion(nil)
+                        return
+                    }
+                        
+                    let now = RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
+                    
+                    if notificationModel.nextValidDate == nil {
+                        notificationModel.content!.displayedDate = notificationModel.content!.createdDate
+                        notificationModel.content!.displayedLifeCycle = notificationModel.content!.createdLifeCycle
+                    }
+                    else {
+                        scheduled = notificationModel.nextValidDate
+                        notificationModel.content!.displayedDate =
+                            scheduled?.shiftTimeZone(toTimeZone: RealDateTime.utcTimeZone) ??
+                            notificationModel.content!.displayedDate
+                        
+                        if notificationModel.nextValidDate! <= now {
+                            notificationModel.content!.displayedLifeCycle = self.appLifeCycle
+                        }
+                        else {
+                            notificationModel.content!.displayedLifeCycle = NotificationLifeCycle.AppKilled
+                        }
+                    }
+                    
+                    receivedNotification = NotificationReceived(notificationModel.content)
+                    receivedNotification?.registerDisplayedEvent(inLifeCycle: self.appLifeCycle)
+
+                    receivedNotification!.displayedLifeCycle =
+                        receivedNotification!.displayedLifeCycle ?? self.appLifeCycle
+                    
+                    completion(receivedNotification)
+                })
+            return
+        } else {
+            receivedNotification = NotificationReceived(notificationModel.content)
+        }
+        completion(receivedNotification)
     }
 
-    private func onPostExecute(receivedNotification:NotificationReceived?) {
-
+    private func onPostExecute(
+        receivedNotification:NotificationReceived?,
+        completion: @escaping (Bool, UNMutableNotificationContent?, Error?) -> ()
+    ){
         if refreshNotification {
             completion(true, content, nil)
             return
@@ -304,11 +300,16 @@ public class NotificationSenderAndScheduler {
 
     /// AsyncTask METHODS END *********************************
 
-    public func showNotification(_ notificationModel:NotificationModel) throws -> NotificationModel? {
-        
-        return try NotificationBuilder
-                        .newInstance()
-                        .createNotification(notificationModel, content: content)
+    public func showNotification(
+        _ notificationModel:NotificationModel,
+        completion: @escaping (NotificationModel?) -> ()
+    ) throws {
+        try NotificationBuilder
+                .newInstance()
+                .createNotification(
+                        notificationModel,
+                        content: content,
+                        completion: completion)
     }
 
 }

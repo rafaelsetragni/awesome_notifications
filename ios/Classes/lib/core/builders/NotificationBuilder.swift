@@ -10,7 +10,7 @@ import Foundation
 @available(iOS 10.0, *)
 public class NotificationBuilder {
     
-    private static let TAG = "NotificationBuilder"
+    private let TAG = "NotificationBuilder"
     
     // ************** FACTORY PATTERN ***********************
 
@@ -48,6 +48,7 @@ public class NotificationBuilder {
         userText:String?
     ) -> ActionReceived? {
         if notificationModel == nil { return nil }
+        
         let actionReceived:ActionReceived = ActionReceived(
             notificationModel!.content,
             buttonKeyPressed: buttonKeyPressed,
@@ -71,7 +72,11 @@ public class NotificationBuilder {
         return actionReceived
     }
     
-    public func createNotification(_ notificationModel:NotificationModel, content:UNMutableNotificationContent?) throws -> NotificationModel? {
+    public func createNotification(
+        _ notificationModel:NotificationModel,
+        content:UNMutableNotificationContent?,
+        completion: @escaping (NotificationModel?) -> ()
+    ) throws {
         
         guard let channelkey:String = notificationModel.content!.channelKey else {
             throw ExceptionFactory
@@ -106,86 +111,97 @@ public class NotificationBuilder {
         notificationModel.content!.groupKey = getGroupKey(notificationModel: notificationModel, channel: channel)
 
         let nextDate:RealDateTime? = getNextScheduleDate(notificationModel: notificationModel)
-        
-        if(notificationModel.schedule == nil || nextDate != nil){
-            
-            let content = content ?? buildNotificationContentFromModel(notificationModel: notificationModel)
-            
-            setTitle(notificationModel: notificationModel, channel: channel, content: content)
-            setBody(notificationModel: notificationModel, content: content)
-            setSummary(notificationModel: notificationModel, content: content)
-
-            setGrouping(notificationModel: notificationModel, channel: channel, content: content)
-            
-            setVisibility(notificationModel: notificationModel, channel: channel, content: content)
-            setShowWhen(notificationModel: notificationModel, content: content)
-            setBadgeIndicator(notificationModel: notificationModel, channel: channel, content: content)
-            
-            setAutoCancel(notificationModel: notificationModel, content: content)
-            setTicker(notificationModel: notificationModel, content: content)
-            
-            setOnlyAlertOnce(notificationModel: notificationModel, channel: channel, content: content)
-            
-            setLockedNotification(notificationModel: notificationModel, channel: channel, content: content)
-            setImportance(channel: channel, notificationModel: notificationModel,content: content)
-            
-            setSound(notificationModel: notificationModel, channel: channel, content: content)
-            setVibrationPattern(channel: channel, content: content)
-            
-            setLights(channel: channel, content: content)
-            
-            setSmallIcon(channel: channel, content: content)
-            setLargeIcon(notificationModel: notificationModel, content: content)
-            
-            setLayoutColor(notificationModel: notificationModel, channel: channel, content: content)
-            
-            setLayout(notificationModel: notificationModel, content: content)
-            
-            createActionButtonsAndCategory(notificationModel: notificationModel, content: content)
-            
-            setWakeUpScreen(notificationModel: notificationModel, content: content)
-            setCriticalAlert(channel: channel, content: content)
-            
-            setUserInfoContent(notificationModel: notificationModel, content: content)
-            
-            if SwiftUtils.isRunningOnExtension() {
-                return notificationModel
-            }
-            
-            notificationModel.nextValidDate = nextDate
-            
-            let trigger:UNNotificationTrigger? = nextDate == nil ? nil : notificationModel.schedule?.getUNNotificationTrigger()
-            let request = UNNotificationRequest(identifier: notificationModel.content!.id!.description, content: content, trigger: trigger)
-            
-            UNUserNotificationCenter.current().add(request) { error in 
-                if error != nil {
-                    Logger.e(NotificationBuilder.TAG, error.debugDescription)
-                }
-                else {
-                    if(notificationModel.schedule != nil){
-                        
-                        notificationModel.schedule!.timeZone =
-                            notificationModel.schedule!.timeZone ?? TimeZone.current
-                        notificationModel.schedule!.createdDate = RealDateTime(
-                            fromTimeZone: notificationModel.schedule!.timeZone!)
-                        
-                        if (nextDate != nil){
-                            ScheduleManager.saveSchedule(notification: notificationModel, nextDate: nextDate!.date)
-                        } else {
-                            _ = ScheduleManager.removeSchedule(id: notificationModel.content!.id!)
-                        }
-                    }
-                }
-            }
-            return notificationModel
+        if notificationModel.schedule != nil && nextDate == nil {
+            _ = ScheduleManager.removeSchedule(id: notificationModel.content!.id!)
+            completion(nil)
+            return
         }
-        else {
-            if(notificationModel.schedule != nil){
+            
+        let content = content ?? buildNotificationContentFromModel(notificationModel: notificationModel)
+        
+        setTitle(notificationModel: notificationModel, channel: channel, content: content)
+        setBody(notificationModel: notificationModel, content: content)
+        setSummary(notificationModel: notificationModel, content: content)
+
+        setGrouping(notificationModel: notificationModel, channel: channel, content: content)
+        
+        setVisibility(notificationModel: notificationModel, channel: channel, content: content)
+        setShowWhen(notificationModel: notificationModel, content: content)
+        setBadgeIndicator(notificationModel: notificationModel, channel: channel, content: content)
+        
+        setAutoCancel(notificationModel: notificationModel, content: content)
+        setTicker(notificationModel: notificationModel, content: content)
+        
+        setOnlyAlertOnce(notificationModel: notificationModel, channel: channel, content: content)
+        
+        setLockedNotification(notificationModel: notificationModel, channel: channel, content: content)
+        setImportance(channel: channel, notificationModel: notificationModel,content: content)
+        
+        setSound(notificationModel: notificationModel, channel: channel, content: content)
+        setVibrationPattern(channel: channel, content: content)
+        
+        setLights(channel: channel, content: content)
+        
+        setSmallIcon(channel: channel, content: content)
+        setLargeIcon(notificationModel: notificationModel, content: content)
+        
+        setLayoutColor(notificationModel: notificationModel, channel: channel, content: content)
+        
+        setLayout(notificationModel: notificationModel, content: content)
+        
+        let category:UNNotificationCategory =
+            createActionButtonsAndCategory(
+                notificationModel: notificationModel,
+                content: content)
+        
+        setWakeUpScreen(notificationModel: notificationModel, content: content)
+        setCriticalAlert(channel: channel, content: content)
+        
+        setUserInfoContent(notificationModel: notificationModel, content: content)
+        
+        notificationModel.nextValidDate = nextDate
+        
+        let trigger:UNNotificationTrigger? = nextDate == nil ? nil : notificationModel.schedule?.getUNNotificationTrigger()
+        let request = UNNotificationRequest(identifier: notificationModel.content!.id!.description, content: content, trigger: trigger)
+                
+        var previousCategories:[UNNotificationCategory] = []
+        previousCategories.append(contentsOf: [category])
+        UNUserNotificationCenter.current().setNotificationCategories(Set(previousCategories))            
+        Logger.e(TAG, "Notification Category Identifier: \(category.identifier)")
+        
+        if(notificationModel.schedule != nil){
+            
+            notificationModel.schedule!.timeZone =
+                notificationModel.schedule!.timeZone ?? TimeZone.current
+            notificationModel.schedule!.createdDate = RealDateTime(
+                fromTimeZone: notificationModel.schedule!.timeZone!)
+            
+            if (nextDate != nil){
+                ScheduleManager.saveSchedule(notification: notificationModel, nextDate: nextDate!.date)
+            } else {
                 _ = ScheduleManager.removeSchedule(id: notificationModel.content!.id!)
             }
         }
         
-        return nil
+        if SwiftUtils.isRunningOnExtension() {
+            completion(notificationModel)
+            return
+        }
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            if error != nil {
+                ExceptionFactory
+                        .shared
+                        .registerNewAwesomeException(
+                            className: NotificationIntervalModel.TAG,
+                            code: ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                            message: "Notification could not be created",
+                            detailedCode: ExceptionCode.DETAILED_UNEXPECTED_ERROR+".createNotification",
+                            originalException: error!)
+                completion(nil)
+            }
+            completion(notificationModel)
+        }
     }
     
     private func dateToCalendarTrigger(targetDate:Date?) -> UNCalendarNotificationTrigger? {
@@ -205,7 +221,7 @@ public class NotificationBuilder {
         
         let pushData = notificationModel.toMap()
         let jsonData = JsonUtils.toJson(pushData)
-
+        
         content.userInfo[Definitions.NOTIFICATION_JSON] = jsonData
         content.userInfo[Definitions.NOTIFICATION_ID] = notificationModel.content!.id!
         content.userInfo[Definitions.NOTIFICATION_CHANNEL_KEY] = notificationModel.content!.channelKey!
@@ -232,21 +248,15 @@ public class NotificationBuilder {
         }
     }
     
-    private func createActionButtonsAndCategory(notificationModel:NotificationModel, content:UNMutableNotificationContent){
+    private func createActionButtonsAndCategory(notificationModel:NotificationModel, content:UNMutableNotificationContent) -> UNNotificationCategory{
         
         var categoryIdentifier:String = StringUtils.shared.isNullOrEmpty(content.categoryIdentifier) ?
             Definitions.DEFAULT_CATEGORY_IDENTIFIER : content.categoryIdentifier
         
         var actions:[UNNotificationAction] = []
-        var dynamicCategory:[String] = []
-        var dynamicLabels:[String] = []
+        var dynamicCategory:[String] = [categoryIdentifier]
         
         if(notificationModel.actionButtons != nil){
-            
-            var temporaryCategory:[String] = []
-            
-            dynamicCategory.append(content.categoryIdentifier)
-            
             for button in notificationModel.actionButtons! {
                 
                 let action:UNNotificationAction?
@@ -262,61 +272,39 @@ public class NotificationBuilder {
                 
                 if button.requireInputText ?? false {
                     action = UNTextInputNotificationAction(
-                        identifier: button.key!,
+                        identifier:
+                            button.actionType == .DismissAction
+                                    ? UNNotificationDismissActionIdentifier.description
+                                    : button.key!,
                         title: button.label!,
                         options: options
                     )
                 }
                 else {
                     action = UNNotificationAction(
-                        identifier: button.key!,
+                        identifier:
+                            button.actionType == .DismissAction
+                                    ? UNNotificationDismissActionIdentifier.description
+                                    : button.key!,
                         title: button.label!,
                         options: options
                     )
                 }
                 
-                temporaryCategory.append(button.key!)
-                dynamicLabels.append(
-                    button.label! +
-                    (button.actionType?.rawValue ?? "default"))
+                dynamicCategory.append("\(button.key ?? "")(\(button.label ?? ""))")
                 actions.append(action!)
             }
-            
-            dynamicCategory.append(contentsOf: temporaryCategory)
-            
-            categoryIdentifier = dynamicCategory.joined(separator: ",")
         }
         
-        categoryIdentifier = categoryIdentifier.uppercased()
-
-        if(AwesomeNotifications.debug){
-            Logger.d(NotificationBuilder.TAG, "Notification category identifier: " + categoryIdentifier)
-        }
+        categoryIdentifier = dynamicCategory.joined(separator: ",").uppercased()
+        
         content.categoryIdentifier = categoryIdentifier
-        
-        dynamicLabels.append(contentsOf: dynamicCategory)
-        let categoryHashIdentifier = dynamicLabels.joined(separator: ",").md5
-                
-        let userDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)
-        let lastHash = userDefaults!.string(forKey: categoryHashIdentifier)
-        
-        
-        // Only calls setNotificationCategories when its necessary to update or create it
-        if(StringUtils.shared.isNullOrEmpty(lastHash)){
-            
-            userDefaults!.set(categoryHashIdentifier, forKey: "registered")
-            
-            let categoryObject = UNNotificationCategory(
-                identifier: categoryIdentifier,
-                actions: actions,
-                intentIdentifiers: [],
-                options: .customDismissAction
-            )
-            
-            UNUserNotificationCenter.current().getNotificationCategories(completionHandler: { results in
-                UNUserNotificationCenter.current().setNotificationCategories(results.union([categoryObject]))
-            })
-        }
+        return UNNotificationCategory(
+            identifier: categoryIdentifier,
+            actions: actions,
+            intentIdentifiers: [],
+            options: .customDismissAction
+        )
     }
     
     private func getNextScheduleDate(notificationModel:NotificationModel?) -> RealDateTime? {
@@ -562,7 +550,7 @@ public class NotificationBuilder {
                     return imageAttachment
                     
                 } catch {
-                    Logger.e(NotificationBuilder.TAG, error.localizedDescription)
+                    Logger.e(TAG, error.localizedDescription)
                 }
             }
         }
@@ -602,22 +590,22 @@ public class NotificationBuilder {
     
     private func setProgressBarLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "ProgressBar"
-        Logger.w(NotificationBuilder.TAG, "ProgressBar layout are not available yet for iOS")
+        Logger.w(TAG, "ProgressBar layout are not available yet for iOS")
     }
     
     private func setIndeterminateBarLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "IndeterminateBar"
-        Logger.w(NotificationBuilder.TAG, "IndeterminateBar layout are not available yet for iOS")
+        Logger.w(TAG, "IndeterminateBar layout are not available yet for iOS")
     }
     
     private func setMediaPlayerLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "MediaPlayer"
-        Logger.w(NotificationBuilder.TAG, "MediaPlayer layout are not available yet for iOS")
+        Logger.w(TAG, "MediaPlayer layout are not available yet for iOS")
     }
     
     private func setInboxLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent) {
         content.categoryIdentifier = "Inbox"
-        Logger.w(NotificationBuilder.TAG, "Imbox layout are not available yet for iOS")
+        Logger.w(TAG, "Imbox layout are not available yet for iOS")
     }
     
     private func setMessagingLayout(notificationModel:NotificationModel, content:UNMutableNotificationContent, isGrouping:Bool) {
@@ -631,3 +619,22 @@ public class NotificationBuilder {
     }
     
 }
+
+//func awaitExectution(timeoutInSeconds: Int = 0, completion: @escaping ( DispatchGroup ) -> Void){
+//    let group = DispatchGroup()
+//    group.enter()
+//
+//    let workItem:DispatchWorkItem = DispatchWorkItem {
+//        DispatchQueue(label: UUID().uuidString).async {
+//            completion(group)
+//        }
+//    }
+//
+//    workItem.perform()
+//    if timeoutInSeconds == 0 {
+//        group.wait()
+//    }
+//    else {
+//        _ = group.wait(timeout: DispatchTime.now() + .seconds(timeoutInSeconds))
+//    }
+//}

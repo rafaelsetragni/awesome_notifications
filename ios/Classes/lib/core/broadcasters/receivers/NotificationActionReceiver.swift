@@ -62,7 +62,9 @@ public class NotificationActionReceiver {
                     .newInstance()
                     .buildNotificationActionFromModel(
                         notificationModel: notificationModel,
-                        buttonKeyPressed: response.actionIdentifier,
+                        buttonKeyPressed:
+                            response.actionIdentifier == UNNotificationDefaultActionIdentifier.description ?
+                            "" : response.actionIdentifier,
                         userText: userText)
         else {
             throw ExceptionFactory
@@ -81,6 +83,7 @@ public class NotificationActionReceiver {
         
         actionReceived.registerLastDisplayedEvent(
             inLifeCycle: currentLifeCycle,
+            fromNotificationResponse: response,
             fromNotificationSchedule: notificationModel.schedule
         )
         

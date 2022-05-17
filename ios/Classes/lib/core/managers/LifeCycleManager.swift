@@ -101,21 +101,13 @@ public class LifeCycleManager:
     
     public var currentLifeCycle: NotificationLifeCycle {
         get {
-            if _currentLifeCycle == nil {
-                if !SwiftUtils.isRunningOnExtension() {
-                    _currentLifeCycle = .AppKilled
-                }
-                else {
-                    if let rawName =
-                            LifeCycleManager
-                                ._userDefaults?
-                                .string(forKey: referenceKey)
-                    {
-                        _currentLifeCycle = EnumUtils.fromString(rawName)
-                    }
-                    else {
-                        _currentLifeCycle = NotificationLifeCycle.AppKilled
-                    }
+            if SwiftUtils.isRunningOnExtension() {
+                if let rawName =
+                        LifeCycleManager
+                            ._userDefaults?
+                            .string(forKey: referenceKey)
+                {
+                    _currentLifeCycle = EnumUtils.fromString(rawName)
                 }
             }
             return _currentLifeCycle ?? NotificationLifeCycle.AppKilled

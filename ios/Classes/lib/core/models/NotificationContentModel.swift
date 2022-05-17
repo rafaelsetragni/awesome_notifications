@@ -83,9 +83,13 @@ public class NotificationContentModel : AbstractModel {
     
     public func registerLastDisplayedEvent(
         inLifeCycle lifeCycle: NotificationLifeCycle,
+        fromNotificationResponse response: UNNotificationResponse,
         fromNotificationSchedule schedule: NotificationScheduleModel?
     ){
-        if self.displayedDate == nil {
+        if displayedDate == nil {
+            displayedDate = RealDateTime.init(
+                fromDate: response.notification.date,
+                inTimeZone: DateUtils.shared.utcTimeZone)
             
             if schedule == nil {
                 registerDisplayedEvent(
@@ -93,14 +97,13 @@ public class NotificationContentModel : AbstractModel {
                 )
             }
             else {
-                self.displayedLifeCycle = lifeCycle
-                self.displayedDate =
-                    DateUtils
-                        .shared
-                        .getLastValidDate(
-                            scheduleModel: schedule!,
-                            fixedDateTime: RealDateTime.init(
-                                fromTimeZone: TimeZone(identifier: "UTC")))
+                displayedLifeCycle = lifeCycle
+//                    DateUtils
+//                        .shared
+//                        .getLastValidDate(
+//                            scheduleModel: schedule!,
+//                            fixedDateTime: RealDateTime.init(
+//                                fromTimeZone: TimeZone(identifier: "UTC")))
             }
         }
     }
