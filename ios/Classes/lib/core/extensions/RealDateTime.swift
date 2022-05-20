@@ -35,18 +35,18 @@ public class RealDateTime: Equatable, Comparable {
         currentDateComponents = calendar.dateComponents(RealDateTime.units, from: Date())
     }
     
-    convenience init() {
+    public convenience init() {
         self.init(fromTimeZone: RealDateTime.utcTimeZone)
     }
     
-    convenience init(fromDate date: Date, inTimeZone timeZone: TimeZone) {
+    public convenience init(fromDate date: Date, inTimeZone timeZone: TimeZone) {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timeZone
         let dateComponents = calendar.dateComponents(RealDateTime.units, from: date)
         self.init(fromDateComponents: dateComponents)
     }
     
-    convenience init?(fromDateText date: String, inTimeZone timeZone: TimeZone) {
+    public convenience init?(fromDateText date: String, inTimeZone timeZone: TimeZone) {
         guard let date = RealDateTime.stringToDate(date, timeZone: timeZone)
         else {
             return nil
@@ -54,7 +54,7 @@ public class RealDateTime: Equatable, Comparable {
         self.init(fromDate: date, inTimeZone: timeZone)
     }
     
-    convenience init?(fromDateText date: String, inTimeZone timeZoneId: String) {
+    public convenience init?(fromDateText date: String, inTimeZone timeZoneId: String) {
         guard let timeZone = TimeZone(identifier: timeZoneId)
         else {
             return nil
@@ -62,7 +62,7 @@ public class RealDateTime: Equatable, Comparable {
         self.init(fromDateText: date, inTimeZone: timeZone)
     }
     
-    convenience init?(fromDateText textDate: String, defaultTimeZone timeZone: TimeZone?) {
+    public convenience init?(fromDateText textDate: String, defaultTimeZone timeZone: TimeZone?) {
         let matches = textDate.matchList("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})( (\\S+))?")
         if !matches.isEmpty {
             if matches[0][2].isEmpty {

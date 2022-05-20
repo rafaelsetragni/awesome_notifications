@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DateUtils {
+public class DateUtils {
     
     let TAG = "DateUtils"
     
