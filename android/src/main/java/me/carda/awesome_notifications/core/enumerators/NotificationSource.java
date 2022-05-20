@@ -5,7 +5,9 @@ public enum NotificationSource implements SafeEnum {
     Local("Local"),
     Schedule("Schedule"),
     ForegroundService("ForegroundService"),
-    Firebase("Firebase");
+    Firebase("Firebase"),
+    OneSignal("OneSignal"),
+    CallKit("CallKit");
 
     private final String safeName;
     NotificationSource(final String safeName){
