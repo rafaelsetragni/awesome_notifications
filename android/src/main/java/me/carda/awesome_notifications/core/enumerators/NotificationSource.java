@@ -42,6 +42,12 @@ public enum NotificationSource implements SafeEnum {
         if (SafeEnum.charMatches(reference, stringLength, 0, 's')){
             return Schedule;
         }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'c')){
+            return CallKit;
+        }
+        if (SafeEnum.charMatches(reference, stringLength, 0, 'o')){
+            return OneSignal;
+        }
         return null;
     }
 }
