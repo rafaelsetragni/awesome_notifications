@@ -9,4 +9,5 @@ import Foundation
 
 public protocol AwesomeActionEventListener: AnyObject {
     func onNewActionReceived(fromEventNamed eventName:String, withActionReceived actionReceived:ActionReceived)
+    func onNewActionReceivedWithInterruption(fromEventNamed eventName:String, withActionReceived actionReceived:ActionReceived) -> Bool
 }

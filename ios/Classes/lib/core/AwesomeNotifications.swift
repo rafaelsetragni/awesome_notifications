@@ -142,6 +142,10 @@ public class AwesomeNotifications:
         notifyActionEvent(fromEventNamed: eventName, withActionReceived: actionReceived)
     }
     
+    public func onNewActionReceivedWithInterruption(fromEventNamed eventName: String, withActionReceived actionReceived: ActionReceived) -> Bool {
+        return false
+    }
+    
     public func onNewLifeCycleEvent(lifeCycle: NotificationLifeCycle) {
         
         if !isTheMainInstance {

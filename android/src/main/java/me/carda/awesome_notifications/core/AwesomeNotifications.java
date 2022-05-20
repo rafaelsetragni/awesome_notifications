@@ -233,6 +233,11 @@ public class AwesomeNotifications
     }
 
     @Override
+    public boolean onNewActionReceivedWithInterruption(String eventName, ActionReceived actionReceived) {
+        return false;
+    }
+
+    @Override
     public void onNewNotificationReceived(String eventName, NotificationReceived notificationReceived) {
         notifyNotificationEvent(eventName, notificationReceived);
     }

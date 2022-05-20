@@ -97,6 +97,12 @@ public class AwesomeEventsReceiver {
         if(AwesomeNotifications.debug && notificationEventListeners.isEmpty())
             Logger.w(TAG, "New event "+eventName+" ignored, as there is no listeners waiting for new action events");
 
+        boolean interrupted = false;
+        for (AwesomeActionEventListener listener : notificationActionListeners)
+            interrupted = interrupted || listener.onNewActionReceivedWithInterruption(eventName, actionReceived);
+        
+        if (interrupted) return;
+        
         for (AwesomeActionEventListener listener : notificationActionListeners)
             listener.onNewActionReceived(eventName, actionReceived);
     }

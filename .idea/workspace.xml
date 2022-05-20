@@ -10,6 +10,12 @@
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/core/AwesomeNotifications.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/core/AwesomeNotifications.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/AwesomeEventsReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/AwesomeEventsReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/core/listeners/AwesomeActionEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/core/listeners/AwesomeActionEventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/AwesomeNotifications.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/AwesomeNotifications.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/broadcasters/receivers/AwesomeEventsReceiver.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/broadcasters/receivers/AwesomeEventsReceiver.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/core/listeners/AwesomeActionEventListener.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/core/listeners/AwesomeActionEventListener.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,14 +44,14 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/lib/android_foreground_service.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/src/enumerators/android_foreground_service_constants.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/src/android_foreground_service/android_foreground_service_core.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/lib/src/enumerators/foreground_service_type.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/lib/src/definitions.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/src/enumerators/foreground_start_mode.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/lib/src/enumerators/foreground_service_type.dart" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectId" id="1gdlKvSd5jB5IWDBvSuAgX3lxo8" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />

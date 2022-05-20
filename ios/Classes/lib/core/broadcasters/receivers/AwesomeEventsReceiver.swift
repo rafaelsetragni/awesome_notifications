@@ -92,7 +92,18 @@ class AwesomeEventsReceiver {
         if AwesomeNotifications.debug && actionEventListeners.isEmpty {
             Logger.e(TAG, "New event \(eventName) ignored, as there is no listeners waiting for new action events")
         }
-            
+        
+        var interrupted:Bool = false
+        for listener in actionEventListeners {
+            interrupted = interrupted || listener.onNewActionReceivedWithInterruption(
+                                                    fromEventNamed: eventName,
+                                                    withActionReceived: actionReceived)
+        }
+        
+        if interrupted {
+            return
+        }
+        
         for listener in actionEventListeners {
             listener.onNewActionReceived(
                 fromEventNamed: eventName,
