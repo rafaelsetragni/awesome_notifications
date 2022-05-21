@@ -7,10 +7,8 @@
 
 import Foundation
 
-class AwesomeEventsReceiver {
-    
+public class AwesomeEventsReceiver {
     private let TAG = "AwesomeEventsReceiver"
-    
     
     // **************************** SINGLETON PATTERN *************************************
     

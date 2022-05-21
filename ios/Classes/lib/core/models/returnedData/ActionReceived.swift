@@ -9,13 +9,13 @@ import Foundation
 
 public class ActionReceived : NotificationReceived {
     
-    var buttonKeyPressed: String?
-    var buttonKeyInput: String?
+    public var buttonKeyPressed: String?
+    public var buttonKeyInput: String?
 
-    var actionLifeCycle: NotificationLifeCycle?
-    var dismissedLifeCycle: NotificationLifeCycle?
-    var actionDate: RealDateTime?
-    var dismissedDate: RealDateTime?
+    public var actionLifeCycle: NotificationLifeCycle?
+    public var dismissedLifeCycle: NotificationLifeCycle?
+    public var actionDate: RealDateTime?
+    public var dismissedDate: RealDateTime?
     
     override init(_ contentModel:NotificationContentModel?){
         super.init(contentModel)
