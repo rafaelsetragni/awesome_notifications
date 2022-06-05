@@ -1,6 +1,6 @@
 ## [0.7.0-beta.4]
 * iOS notification actions improved to gain more performance and ensure the fast first opening
-* iOS notification builder refactored to ensure the category creation before the notification display
+* iOS notification builder refactored to ensure the ios category creation before the notification being displayed
 * iOS notification builder refactored to ensure the completion handle order for push notifications
 * Fixed displayOnForeground e displayOnBackground for iOS
 ## [0.7.0-beta.3+2]

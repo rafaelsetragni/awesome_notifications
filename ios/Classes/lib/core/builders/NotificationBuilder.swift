@@ -167,7 +167,7 @@ public class NotificationBuilder {
         var previousCategories:[UNNotificationCategory] = []
         previousCategories.append(contentsOf: [category])
         UNUserNotificationCenter.current().setNotificationCategories(Set(previousCategories))            
-        Logger.e(TAG, "Notification Category Identifier: \(category.identifier)")
+        Logger.d(TAG, "Notification Category Identifier: \(category.identifier)")
         
         if(notificationModel.schedule != nil){
             
