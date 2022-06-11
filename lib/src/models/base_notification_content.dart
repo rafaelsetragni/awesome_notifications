@@ -214,7 +214,7 @@ class BaseNotificationContent extends Model {
     _backgroundColor = AwesomeAssertUtils.extractValue(
         NOTIFICATION_BACKGROUND_COLOR, mapData, Color);
 
-    _payload = AwesomeAssertUtils.extractMap<String, String>(
+    _payload = AwesomeAssertUtils.extractMap<String, String?>(
         mapData, NOTIFICATION_PAYLOAD);
 
     return this;
