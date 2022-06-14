@@ -1,11 +1,10 @@
 package me.carda.awesome_notifications.core.utils;
 
-import org.checkerframework.checker.nullness.compatqual.NullableDecl;
-
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class ListUtils {
-    public static boolean isNullOrEmpty(@NullableDecl List<?> list){
+    public static boolean isNullOrEmpty(@Nullable List<?> list){
         return list == null || list.isEmpty();
     }
 
