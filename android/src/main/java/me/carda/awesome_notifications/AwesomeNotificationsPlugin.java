@@ -295,6 +295,10 @@ public class AwesomeNotificationsPlugin
                     channelMethodGetUtcTimeZone(call, result);
                     return;
 
+                case Definitions.CHANNEL_METHOD_GET_APP_LIFE_CYCLE:
+                    channelMethodGetLifeCycle(call, result);
+                    return;
+
                 case Definitions.CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL:
                     channelMethodSetChannel(call, result);
                     return;
@@ -983,6 +987,16 @@ public class AwesomeNotificationsPlugin
         result.success(
                 awesomeNotifications
                         .getUtcTimeZone());
+    }
+
+    private void channelMethodGetLifeCycle(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
+        result.success(
+                awesomeNotifications
+                    .getApplicationLifeCycle()
+                    .getSafeName());
     }
 
     private void channelIsNotificationAllowed(

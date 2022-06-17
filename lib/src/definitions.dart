@@ -110,6 +110,8 @@ const CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER = 'getUtcTimeZoneIdentifier';
 const CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER =
     'getLocalTimeZoneIdentifier';
 
+const CHANNEL_METHOD_GET_APP_LIFE_CYCLE = 'getAppLifeCycle';
+
 const CHANNEL_METHOD_START_FOREGROUND = 'startForeground';
 const CHANNEL_METHOD_STOP_FOREGROUND = 'stopForeground';
 

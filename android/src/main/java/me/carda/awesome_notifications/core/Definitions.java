@@ -101,6 +101,8 @@ public interface Definitions {
     String CHANNEL_METHOD_DECREMENT_BADGE_COUNT = "decBadgeCount";
     String CHANNEL_METHOD_RESET_BADGE = "resetBadge";
 
+    String CHANNEL_METHOD_GET_APP_LIFE_CYCLE = "getAppLifeCycle";
+
     String CHANNEL_METHOD_GET_NEXT_DATE = "getNextDate";
     String CHANNEL_METHOD_DISMISS_NOTIFICATION = "dismissNotification";
     String CHANNEL_METHOD_CANCEL_NOTIFICATION = "cancelNotification";
