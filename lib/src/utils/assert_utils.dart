@@ -5,6 +5,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications/src/models/model.dart';
 import 'package:intl/intl.dart';
 
+const String _dateFormat = "yyyy-MM-dd HH:mm:ss Z";
 class AwesomeAssertUtils {
   static String? toSimpleEnumString<T extends Enum>(T? e) {
     return e?.name;
@@ -65,17 +66,11 @@ class AwesomeAssertUtils {
 
       switch (T) {
         case DateTime:
-          final RegExpMatch? match =
-              RegExp(r'^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})( (\S+))?$')
-                  .firstMatch(valueCasted);
-
-          if (match != null)
-            return DateFormat("yyyy-MM-dd HH:mm:ss Z")
-                .parseUTC(match.group(0)!)
-                .toLocal();
-
-          return defaultValue;
-
+          try{
+              return DateFormat(_dateFormat).parse(valueCasted,true);
+          }catch(err){
+              return defaultValue;
+          }
         case String:
           return valueCasted;
 
