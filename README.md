@@ -1233,7 +1233,7 @@ To see more information about each type, please go to https://github.com/rafaels
 <br>
 
 ## Android Foreground Services
-This is an optional feature to enable you to start an Android freground service with a notification from this plugin. Since it is optional it was moved to a second library you can import as follows:
+This is an optional feature to enable you to start an Android foreground service with a notification from this plugin. Since it is optional it was moved to a second library you can import as follows:
 ```dart
 import 'package:awesome_notifications/android_foreground_service.dart';
 ```
