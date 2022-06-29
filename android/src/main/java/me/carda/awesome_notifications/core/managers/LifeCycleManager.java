@@ -38,8 +38,6 @@ public class LifeCycleManager implements LifecycleObserver {
         return instance;
     }
 
-    // ********************************************************
-
     // ************** OBSERVER PATTERN ************************
 
     List<AwesomeLifeCycleEventListener> listeners = new ArrayList<>();
@@ -61,25 +59,24 @@ public class LifeCycleManager implements LifecycleObserver {
 
     // ********************************************************
 
-    boolean hasNotStarted = true;
+    boolean hasStarted = false;
     public void startListeners(){
-        if(hasNotStarted) {
-            hasNotStarted = false;
-            ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
+        if(hasStarted) return;
+        hasStarted = true;
 
-            if(AwesomeNotifications.debug)
-                Logger.d(TAG, "LiceCycleManager listener successfully attached to Android");
-        }
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
+
+        if(AwesomeNotifications.debug)
+            Logger.d(TAG, "LiceCycleManager listener successfully attached to Android");
     }
 
     public void stopListeners(){
-        if(hasNotStarted) {
-            hasNotStarted = false;
-            ProcessLifecycleOwner.get().getLifecycle().removeObserver(this);
+        if(!hasStarted) return;
+        hasStarted = false;
+        ProcessLifecycleOwner.get().getLifecycle().removeObserver(this);
 
-            if(AwesomeNotifications.debug)
-                Logger.d(TAG, "LiceCycleManager listener successfully removed from Android");
-        }
+        if(AwesomeNotifications.debug)
+            Logger.d(TAG, "LiceCycleManager listener successfully removed from Android");
     }
 
     boolean hasGoneForeground = false;
