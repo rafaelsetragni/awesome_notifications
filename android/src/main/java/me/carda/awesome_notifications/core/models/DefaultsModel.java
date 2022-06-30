@@ -52,8 +52,8 @@ public class DefaultsModel extends AbstractModel {
         Map<String, Object> dataMap = new HashMap<>();
 
         putDataOnSerializedMap(Definitions.NOTIFICATION_APP_ICON, dataMap, appIcon);
-        putDataOnSerializedMap(Definitions.SILENT_HANDLE, dataMap, "0");
-        putDataOnSerializedMap(Definitions.BACKGROUND_HANDLE, dataMap, "0");
+        putDataOnSerializedMap(Definitions.SILENT_HANDLE, dataMap, silentDataCallback);
+        putDataOnSerializedMap(Definitions.BACKGROUND_HANDLE, dataMap, reverseDartCallback);
         putDataOnSerializedMap(Definitions.NOTIFICATION_BG_HANDLE_CLASS, dataMap, backgroundHandleClass);
 
         return dataMap;
