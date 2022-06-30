@@ -498,10 +498,9 @@ class AwesomeNotifications {
 
   /// Get the current Local time zone identifier
   Future<NotificationLifeCycle> getAppLifeCycle() async {
-    final String? lifeCycleRaw = await _channel
-        .invokeMethod(CHANNEL_METHOD_GET_APP_LIFE_CYCLE);
-    return NotificationLifeCycle
-        .values
+    final String? lifeCycleRaw =
+        await _channel.invokeMethod(CHANNEL_METHOD_GET_APP_LIFE_CYCLE);
+    return NotificationLifeCycle.values
         .firstWhere((e) => e.name == lifeCycleRaw);
   }
 

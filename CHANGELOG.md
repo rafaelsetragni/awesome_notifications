@@ -1,3 +1,7 @@
+## [0.7.0-beta.5]
+* Fixed zero being saved instead of the actual handles for silent background actions
+* Added getLifeCycle function to return the current life cycle state of awesome notifications
+* Added optional value for payload data
 ## [0.7.0-beta.4]
 * iOS notification actions improved to gain more performance and ensure the fast first opening
 * iOS notification builder refactored to ensure the ios category creation before the notification being displayed

@@ -6,6 +6,7 @@ import 'package:awesome_notifications/src/models/model.dart';
 import 'package:intl/intl.dart';
 
 const String _dateFormat = "yyyy-MM-dd HH:mm:ss Z";
+
 class AwesomeAssertUtils {
   static String? toSimpleEnumString<T extends Enum>(T? e) {
     return e?.name;
@@ -66,10 +67,10 @@ class AwesomeAssertUtils {
 
       switch (T) {
         case DateTime:
-          try{
-              return DateFormat(_dateFormat).parse(valueCasted,true);
-          }catch(err){
-              return defaultValue;
+          try {
+            return DateFormat(_dateFormat).parse(valueCasted, true);
+          } catch (err) {
+            return defaultValue;
           }
         case String:
           return valueCasted;
