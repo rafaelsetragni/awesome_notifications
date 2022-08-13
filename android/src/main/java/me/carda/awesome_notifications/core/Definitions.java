@@ -42,7 +42,7 @@ public interface Definitions {
 
     String ACTION_HANDLE = "actionHandle";
     String SILENT_HANDLE = "silentHandle";
-    String BACKGROUND_HANDLE = "bgHandle";
+    String BACKGROUND_HANDLE = "awesomeDartBGHandle";
 
     String SCHEDULER_HELPER_SHARED = "awnot.sh.";
     String SCHEDULER_HELPER_ALL = "all";
