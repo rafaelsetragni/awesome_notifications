@@ -229,7 +229,7 @@ class AwesomeNotifications {
   void _validateId(int id) {
     if (id > 0x7FFFFFFF || id < -0x80000000) {
       throw ArgumentError(
-          'The id field must be the limited to 32-bit size integer');
+          'The id field must be limited to a 32-bit size integer');
     }
   }
 
