@@ -858,10 +858,10 @@ public class NotificationBuilder {
             PendingIntent actionPendingIntent = null;
             if (buttonProperties.enabled) {
 
-                if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N){
-                    actionIntent.setAction(Intent.ACTION_MAIN);
-                    actionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                }
+//                if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N){
+//                    actionIntent.setAction(Intent.ACTION_MAIN);
+//                    actionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                }
 
                 actionPendingIntent =
                     actionType == ActionType.Default ?

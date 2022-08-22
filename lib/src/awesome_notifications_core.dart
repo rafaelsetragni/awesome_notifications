@@ -176,27 +176,27 @@ class AwesomeNotifications {
         (call.arguments as Map).cast<String, dynamic>();
 
     switch (call.method) {
-      case CHANNEL_METHOD_NOTIFICATION_CREATED:
+      case EVENT_NOTIFICATION_CREATED:
         var received = ReceivedNotification().fromMap(arguments);
         if (_createdHandler != null) await _createdHandler!(received);
         return;
 
-      case CHANNEL_METHOD_NOTIFICATION_DISPLAYED:
+      case EVENT_NOTIFICATION_DISPLAYED:
         var received = ReceivedNotification().fromMap(arguments);
         if (_displayedHandler != null) await _displayedHandler!(received);
         return;
 
-      case CHANNEL_METHOD_NOTIFICATION_DISMISSED:
+      case EVENT_NOTIFICATION_DISMISSED:
         var received = ReceivedAction().fromMap(arguments);
         if (_dismissedHandler != null) await _dismissedHandler!(received);
         return;
 
-      case CHANNEL_METHOD_DEFAULT_ACTION:
+      case EVENT_DEFAULT_ACTION:
         var received = ReceivedAction().fromMap(arguments);
         if (_actionHandler != null) await _actionHandler!(received);
         return;
 
-      case CHANNEL_METHOD_SILENT_ACTION:
+      case EVENT_SILENT_ACTION:
         if (arguments[NOTIFICATION_ACTION_TYPE] == _silentBGActionTypeKey) {
           compute(receiveSilentAction, arguments);
         } else {

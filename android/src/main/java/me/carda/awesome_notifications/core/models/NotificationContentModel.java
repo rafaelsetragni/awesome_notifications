@@ -88,7 +88,7 @@ public class NotificationContentModel extends AbstractModel {
     public boolean registerCreatedEvent(NotificationLifeCycle lifeCycle, NotificationSource createdSource){
 
         // Creation register can only happen once
-        if(this.createdSource == null){
+        if(this.createdDate == null){
 
             this.createdDate = CalendarUtils.getInstance().getCurrentCalendar();
             this.createdLifeCycle = lifeCycle;

@@ -66,11 +66,11 @@ const CHANNEL_METHOD_NEW_FCM_TOKEN = 'newTokenReceived';
 
 const CHANNEL_METHOD_CREATE_NOTIFICATION = 'createNewNotification';
 
-const CHANNEL_METHOD_NOTIFICATION_CREATED = 'notificationCreated';
-const CHANNEL_METHOD_NOTIFICATION_DISPLAYED = 'notificationDisplayed';
-const CHANNEL_METHOD_NOTIFICATION_DISMISSED = 'notificationDismissed';
-const CHANNEL_METHOD_DEFAULT_ACTION = 'defaultAction';
-const CHANNEL_METHOD_SILENT_ACTION = 'silentAction';
+const EVENT_NOTIFICATION_CREATED = 'notificationCreated';
+const EVENT_NOTIFICATION_DISPLAYED = 'notificationDisplayed';
+const EVENT_NOTIFICATION_DISMISSED = 'notificationDismissed';
+const EVENT_DEFAULT_ACTION = 'defaultAction';
+const EVENT_SILENT_ACTION = 'silentAction';
 
 const CHANNEL_METHOD_NOTIFICATION_AT_LAUNCH = 'notificationAtLaunch';
 

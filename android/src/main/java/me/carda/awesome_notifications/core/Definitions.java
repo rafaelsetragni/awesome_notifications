@@ -14,19 +14,16 @@ import me.carda.awesome_notifications.core.utils.CalendarUtils;
 
 public interface Definitions {
 
-    String CHANNEL_FLUTTER_PLUGIN = "awesome_notifications";
-    String DART_REVERSE_CHANNEL = "awesome_notifications_reverse";
-
     String AWESOME_FOREGROUND_ID = "me.carda.awesome_notifications.notifications.system.services.ForegroundService$StartParameter";
     String BROADCAST_FCM_TOKEN = "me.carda.awesome_notifications.notifications.system.services.firebase.TOKEN";
     String EXTRA_BROADCAST_FCM_TOKEN = "token";
     String EXTRA_ANDROID_MEDIA_BUTTON = "android.intent.action.MEDIA_BUTTON";
+
     String MEDIA_VALID_NETWORK = "^((http|https):\\/\\/)(www\\.)?[a-zA-Z0-9@:%.\\-_\\\\+~#?&\\/\\/=]{2,2048}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%.\\-_\\\\+~#?&\\/=]*)$";
     String MEDIA_VALID_FILE = "^file?:\\/\\/";
     String MEDIA_VALID_ASSET = "^asset?:\\/\\/";
     String MEDIA_VALID_RESOURCE = "^resource?:\\/\\/";
 
-    String BADGE_COUNT = "badgeCount";
     String INITIALIZE_DEBUG_MODE = "debug";
     String INITIALIZE_DEFAULT_ICON = "defaultIcon";
     String INITIALIZE_CHANNELS = "initializeChannels";
@@ -40,6 +37,10 @@ public interface Definitions {
     String BROADCAST_BACKGROUND_ACTION ="broadcast.awesome_notifications.BACKGROUND_ACTION";
     String EXTRA_BROADCAST_MESSAGE = "notification";
 
+    String CHANNEL_FLUTTER_PLUGIN = "awesome_notifications";
+    String DART_REVERSE_CHANNEL = "awesome_notifications_reverse";
+
+    String BADGE_COUNT = "badgeCount";
     String ACTION_HANDLE = "actionHandle";
     String SILENT_HANDLE = "silentHandle";
     String BACKGROUND_HANDLE = "awesomeDartBGHandle";
@@ -259,7 +260,6 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR, GroupAlertBehaviour.All);
         put(Definitions.NOTIFICATION_DEFAULT_PRIVACY, NotificationPrivacy.Private);
         //put(Definitions.NOTIFICATION_PRIVACY, NotificationPrivacy.Private);
-        put(Definitions.NOTIFICATION_CHANNEL_KEY, "miscellaneous");
         put(Definitions.NOTIFICATION_CHANNEL_DESCRIPTION, "Notifications");
         put(Definitions.NOTIFICATION_CHANNEL_NAME, "Notifications");
         put(Definitions.NOTIFICATION_CHANNEL_SHOW_BADGE, false);

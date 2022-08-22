@@ -119,9 +119,9 @@ Bellow are the obligatory requirements that your app must meet to use awesome_no
 
 ### Android
 
-Is required the minimum android SDK to 21 (Android 5.0 Lollipop) and Java compile SDK Version to 31 (Android 12.0 S). You can change the `minSdkVersion` to 21 and the `compileSdkVersion` to 31, inside the file build.gradle in "android/app" folder.
+Is required the minimum android SDK to 21 (Android 5.0 Lollipop) and Java compiled SDK Version to 33 (Android 13). You can change the `minSdkVersion` to 21 and the `compileSdkVersion` to 33, inside the file build.gradle in "android/app" folder.
 
-Also, to turn your app fully compatible with Android 12 (SDK 31), you need to add the attribute `android:exported="true"` to any \<activity\>, \<activity-alias\>, \<service\>, or \<receiver\> components that have \<intent-filter\> declared inside in the app’s AndroidManifest.xml file, and thats turns valid for every other flutter packages that you're using.
+Also, to turn your app fully compatible with Android 12 (SDK 31), you need to add the attribute `android:exported="true"` to any \<activity\>, \<activity-alias\>, \<service\>, or \<receiver\> components that have \<intent-filter\> declared inside in the app’s AndroidManifest.xml file, and that's turns required for every other flutter packages that you're using.
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
