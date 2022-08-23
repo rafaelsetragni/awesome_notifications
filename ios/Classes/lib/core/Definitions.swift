@@ -230,7 +230,6 @@ public enum Definitions {
         Definitions.NOTIFICATION_ACTION_LIFECYCLE: NotificationLifeCycle.AppKilled,
         Definitions.NOTIFICATION_DISPLAY_ON_FOREGROUND: true,
         Definitions.NOTIFICATION_DISPLAY_ON_BACKGROUND: true,
-        Definitions.NOTIFICATION_CHANNEL_KEY: "miscellaneous",
         Definitions.NOTIFICATION_CHANNEL_DESCRIPTION: "Notifications",
         Definitions.NOTIFICATION_CHANNEL_NAME: "Notifications",
         Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE: DefaultRingtoneType.Notification,
