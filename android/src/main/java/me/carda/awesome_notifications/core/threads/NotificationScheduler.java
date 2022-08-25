@@ -277,7 +277,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
         if(nextValidDate != null){
 
             String notificationDetailsJson = notificationModel.toJson();
-            Intent notificationIntent = new Intent(context, ScheduledNotificationReceiver.class);
+            Intent notificationIntent = new Intent(context, AwesomeNotifications.scheduleReceiverClass);
             notificationIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
 
             notificationIntent.putExtra(Definitions.NOTIFICATION_ID, notificationModel.content.id);
@@ -415,7 +415,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
     private static void _removeFromAlarm(
         @NonNull Context context, @NonNull Integer id
     ){
-        Intent intent = new Intent(context, ScheduledNotificationReceiver.class);
+        Intent intent = new Intent(context, AwesomeNotifications.scheduleReceiverClass);
 
         @SuppressLint("WrongConstant")
         PendingIntent pendingIntent =
@@ -436,7 +436,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
         @NonNull Context context, @NonNull List<String> ids
     ){
         AlarmManager alarmManager = ScheduleManager.getAlarmManager(context);
-        Intent intent = new Intent(context, ScheduledNotificationReceiver.class);
+        Intent intent = new Intent(context, AwesomeNotifications.scheduleReceiverClass);
         int flags =
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ?
                         PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
@@ -470,7 +470,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
                             "Scheduled notification Id is invalid",
                             ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".notificationId");
 
-        Intent notificationIntent = new Intent(context, ScheduledNotificationReceiver.class);
+        Intent notificationIntent = new Intent(context, AwesomeNotifications.scheduleReceiverClass);
 
         @SuppressLint("WrongConstant")
         PendingIntent pendingIntent1 =

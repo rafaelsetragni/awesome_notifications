@@ -3,6 +3,7 @@ package me.carda.awesome_notifications.core.services;
 import android.content.Context;
 import android.content.Intent;
 
+import me.carda.awesome_notifications.core.AwesomeNotifications;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.core.logs.Logger;
@@ -13,15 +14,17 @@ import me.carda.awesome_notifications.core.background.BackgroundExecutor;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.managers.DefaultsManager;
 
-public class BackgroundService extends JobIntentService {
-
+public abstract class AwesomeBackgroundService extends JobIntentService {
     private static final String TAG = "BackgroundService";
+
+    public abstract void initializeExternalPlugins(Context context) throws Exception;
 
     @Override
     protected void onHandleWork(@NonNull final Intent intent) {
-
         Logger.d(TAG, "A new Dart background service has started");
         try {
+            initializeExternalPlugins(this);
+            AwesomeNotifications.initialize(this);
 
             Long dartCallbackHandle = getDartCallbackDispatcher(this);
             if (dartCallbackHandle == 0L) {

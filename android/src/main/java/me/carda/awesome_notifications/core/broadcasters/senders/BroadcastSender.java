@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.core.app.JobIntentService;
+
+import me.carda.awesome_notifications.core.AwesomeNotifications;
 import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.core.broadcasters.receivers.AwesomeEventsReceiver;
@@ -15,7 +17,7 @@ import me.carda.awesome_notifications.core.managers.DisplayedManager;
 import me.carda.awesome_notifications.core.managers.LifeCycleManager;
 import me.carda.awesome_notifications.core.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.core.models.returnedData.NotificationReceived;
-import me.carda.awesome_notifications.core.services.BackgroundService;
+import me.carda.awesome_notifications.core.services.AwesomeBackgroundService;
 
 public class BroadcastSender {
 
@@ -158,11 +160,11 @@ public class BroadcastSender {
                                 originalIntent,
                                 previousAction,
                                 actionReceived,
-                                BackgroundService.class);
+                                AwesomeNotifications.backgroundServiceClass);
 
         JobIntentService.enqueueWork(
                 context,
-                BackgroundService.class,
+                AwesomeNotifications.backgroundServiceClass,
                 42,
                 serviceIntent);
     }
@@ -177,11 +179,11 @@ public class BroadcastSender {
                                 originalIntent,
                                 previousAction,
                                 actionReceived,
-                                BackgroundService.class);
+                                AwesomeNotifications.backgroundServiceClass);
 
         JobIntentService.enqueueWork(
                 context,
-                BackgroundService.class,
+                AwesomeNotifications.backgroundServiceClass,
                 42,
                 serviceIntent);
     }

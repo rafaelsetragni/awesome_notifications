@@ -13,23 +13,16 @@ import me.carda.awesome_notifications.core.models.AbstractModel;
 import me.carda.awesome_notifications.core.utils.StringUtils;
 
 public abstract class AwesomeBroadcastReceiver extends BroadcastReceiver {
-
     private static final String TAG = "AwesomeBroadcastReceiver";
 
     public abstract void onReceiveBroadcastEvent(Context context, Intent intent) throws Exception;
+    public abstract void initializeExternalPlugins(Context context) throws Exception;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         try {
-            if (AbstractModel.defaultValues.isEmpty())
-                AbstractModel
-                    .defaultValues
-                    .putAll(Definitions.initialValues);
-
-            AwesomeNotifications.loadExtensions(
-                    context,
-                    StringUtils.getInstance());
-
+            initializeExternalPlugins(context);
+            AwesomeNotifications.initialize(context);
             onReceiveBroadcastEvent(context, intent);
         } catch (AwesomeNotificationsException e) {
             e.printStackTrace();

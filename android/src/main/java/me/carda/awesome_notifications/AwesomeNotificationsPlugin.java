@@ -53,8 +53,6 @@ import me.carda.awesome_notifications.core.utils.StringUtils;
  * AwesomeNotificationsPlugin
  **/
 public class AwesomeNotificationsPlugin
-        extends
-            AwesomeNotificationsExtension
         implements
             FlutterPlugin,
             MethodCallHandler,
@@ -68,12 +66,6 @@ public class AwesomeNotificationsPlugin
     private AwesomeNotifications awesomeNotifications;
 
     private final StringUtils stringUtils = StringUtils.getInstance();
-
-    @Override
-    public void loadExternalExtensions(Context context) {
-        FlutterBitmapUtils.extendCapabilities();
-        BackgroundExecutor.setBackgroundExecutorClass(DartBackgroundExecutor.class);
-    }
 
     // https://flutter.dev/docs/development/packages-and-plugins/plugin-api-migration
     // FOR OLDER FLUTTER VERSIONS (1.11 releases and bellow)
@@ -116,10 +108,8 @@ public class AwesomeNotificationsPlugin
         pluginChannel.setMethodCallHandler(this);
 
         try {
-            awesomeNotifications =
-                    new AwesomeNotifications(
-                            applicationContext,
-                            this);
+            AwesomeNotificationsFlutterExtension.initialize();
+            awesomeNotifications = new AwesomeNotifications(applicationContext);
 
             if (AwesomeNotifications.debug)
                 Logger.d(TAG, "Awesome Notifications plugin attached to Android " + Build.VERSION.SDK_INT);

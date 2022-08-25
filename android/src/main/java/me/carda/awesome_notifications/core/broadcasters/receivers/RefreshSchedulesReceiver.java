@@ -6,7 +6,7 @@ import android.content.Intent;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.threads.NotificationScheduler;
 
-public class RefreshSchedulesReceiver extends AwesomeBroadcastReceiver
+public abstract class RefreshSchedulesReceiver extends AwesomeBroadcastReceiver
 {
     @Override
     public void onReceiveBroadcastEvent(

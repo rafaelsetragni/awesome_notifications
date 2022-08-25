@@ -14,7 +14,7 @@ import me.carda.awesome_notifications.core.threads.NotificationScheduler;
 import me.carda.awesome_notifications.core.threads.NotificationSender;
 import me.carda.awesome_notifications.core.utils.StringUtils;
 
-public class ScheduledNotificationReceiver extends AwesomeBroadcastReceiver {
+public abstract class ScheduledNotificationReceiver extends AwesomeBroadcastReceiver {
 
     static String TAG = "ScheduledNotificationReceiver";
 

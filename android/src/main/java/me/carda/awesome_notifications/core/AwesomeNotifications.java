@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.support.v4.media.session.MediaSessionCompat;
 
-import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,7 +60,6 @@ import me.carda.awesome_notifications.core.models.NotificationScheduleModel;
 import me.carda.awesome_notifications.core.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.core.models.returnedData.NotificationReceived;
 import me.carda.awesome_notifications.core.services.ForegroundService;
-import me.carda.awesome_notifications.core.utils.BooleanUtils;
 import me.carda.awesome_notifications.core.utils.CalendarUtils;
 import me.carda.awesome_notifications.core.utils.JsonUtils;
 import me.carda.awesome_notifications.core.utils.ListUtils;
@@ -83,14 +80,15 @@ public class AwesomeNotifications
 
     private WeakReference<Activity> wActivity;
 
+    public static Class actionReceiverClass;
+    public static Class dismissReceiverClass;
+    public static Class scheduleReceiverClass;
+    public static Class backgroundServiceClass;
+
     // ************************** CONSTRUCTOR ***********************************
 
-    public AwesomeNotifications(
-        @NonNull Context applicationContext,
-        @NonNull AwesomeNotificationsExtension extensionClass
-    ) throws AwesomeNotificationsException {
-
-        //android.os.Debug.waitForDebugger();
+    public AwesomeNotifications(@NonNull Context applicationContext)
+            throws AwesomeNotificationsException {
 
         debug = isApplicationInDebug(applicationContext);
         wContext = new WeakReference<>(applicationContext);
@@ -101,29 +99,17 @@ public class AwesomeNotifications
                 .subscribe(this)
                 .startListeners();
 
-        AbstractModel
-                .defaultValues
-                .clear();
-        AbstractModel
-                .defaultValues
-                .putAll(Definitions.initialValues);
+        initialize(applicationContext);
 
-        NotificationBuilder notificationBuilder =
-            NotificationBuilder
-                .getNewBuilder()
-                .updateMainTargetClassName(applicationContext)
-                .setMediaSession(
-                        new MediaSessionCompat(
-                                applicationContext,
-                                "PUSH_MEDIA"));
+        NotificationBuilder
+            .getNewBuilder()
+            .updateMainTargetClassName(applicationContext)
+            .setMediaSession(
+                    new MediaSessionCompat(
+                            applicationContext,
+                            "PUSH_MEDIA"));
 
-        DefaultsManager.setAwesomeExtensionClassName(
-                applicationContext,
-                extensionClass.getClass());
 
-        loadExtensions(
-                applicationContext,
-                stringUtils);
     }
 
     private boolean isTheMainInstance = false;
@@ -166,61 +152,32 @@ public class AwesomeNotifications
                 .unsubscribe(this);
     }
 
-    // ******************** LOAD EXTERNAL EXTENSIONS ***************************
+    // ******************** INITIALIZATION METHOD ***************************
 
-    public static boolean isExtensionsLoaded = false;
-    @SuppressWarnings("unchecked")
-    public static void loadExtensions(
-        @NonNull Context context,
-        StringUtils stringUtils
+    public static AwesomeNotificationsExtension awesomeExtensions;
+    public static boolean areExtensionsLoaded = false;
+
+    public static void initialize(
+        @NonNull Context context
     ) throws AwesomeNotificationsException {
+        if(areExtensionsLoaded) return;
 
-        if(isExtensionsLoaded) return;
+        if (AbstractModel.defaultValues.isEmpty())
+            AbstractModel
+                    .defaultValues
+                    .putAll(Definitions.initialValues);
 
-        String extensionClassReference = DefaultsManager.getAwesomeExtensionClassName(context);
-        if(!stringUtils.isNullOrEmpty(extensionClassReference))
-            try {
-                Class extensionClass =
-                        Class.forName(extensionClassReference);
-
-                loadExtensions(
-                        context,
-                        extensionClass);
-
-                isExtensionsLoaded = true;
-
-            } catch (ClassNotFoundException e) {
-                throw ExceptionFactory
-                        .getInstance()
-                        .createNewAwesomeException(
-                                TAG,
-                                ExceptionCode.CODE_CLASS_NOT_FOUND,
-                                "Awesome's plugin extension reference '"+extensionClassReference+"' was not found.",
-                                ExceptionCode.DETAILED_INITIALIZATION_FAILED+".awesomeNotifications.extensions");
-            }
-    }
-
-    public static void loadExtensions(
-            @NonNull Context context,
-            @NonNull Class<? extends AwesomeNotificationsExtension> extensionClass
-    ) throws AwesomeNotificationsException {
-
-        if(isExtensionsLoaded) return;
-
-        try {
-            AwesomeNotificationsExtension awesomePlugin = extensionClass.newInstance();
-            awesomePlugin.loadExternalExtensions(context);
-            isExtensionsLoaded = true;
-
-        } catch (IllegalAccessException | InstantiationException e) {
+        if(awesomeExtensions == null)
             throw ExceptionFactory
                     .getInstance()
                     .createNewAwesomeException(
                             TAG,
-                            ExceptionCode.CODE_INITIALIZATION_EXCEPTION,
-                            "Awesome plugin extensions could not be loaded.",
+                            ExceptionCode.CODE_CLASS_NOT_FOUND,
+                            "Awesome's plugin extension reference was not found.",
                             ExceptionCode.DETAILED_INITIALIZATION_FAILED+".awesomeNotifications.extensions");
-        }
+
+        awesomeExtensions.loadExternalExtensions(context);
+        areExtensionsLoaded = true;
     }
 
     // ********************************************************

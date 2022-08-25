@@ -37,6 +37,7 @@ import androidx.core.app.RemoteInput;
 import androidx.core.graphics.drawable.IconCompat;
 import androidx.core.text.HtmlCompat;
 
+import me.carda.awesome_notifications.core.AwesomeNotifications;
 import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.broadcasters.receivers.DismissedNotificationReceiver;
 import me.carda.awesome_notifications.core.broadcasters.receivers.NotificationActionReceiver;
@@ -270,7 +271,7 @@ public class NotificationBuilder {
                 actionType,
                 actionType == ActionType.Default ?
                     getMainTargetClass(context) :
-                    NotificationActionReceiver.class
+                    AwesomeNotifications.actionReceiverClass
         );
 
         if(actionType == ActionType.Default)
@@ -307,7 +308,7 @@ public class NotificationBuilder {
                 notificationModel,
                 channelModel,
                 notificationModel.content.actionType,
-                DismissedNotificationReceiver.class
+                AwesomeNotifications.dismissReceiverClass
         );
 
         return PendingIntent.getBroadcast(
@@ -841,7 +842,7 @@ public class NotificationBuilder {
                 buttonProperties.actionType,
                 actionType == ActionType.Default ?
                     getMainTargetClass(context):
-                    NotificationActionReceiver.class
+                    AwesomeNotifications.actionReceiverClass
             );
 
             if(buttonProperties.actionType == ActionType.Default)

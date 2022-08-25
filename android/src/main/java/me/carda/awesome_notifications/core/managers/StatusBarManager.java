@@ -65,7 +65,7 @@ public class StatusBarManager {
 
     // ********************************************************
 
-    // The status bar cannot be closed anymore from a notification action since Android 12
+    // The status bar cannot be closed from a notification action since Android 12
     // https://developer.android.com/about/versions/12/behavior-changes-all?hl=pt-br#close-system-dialogs-exceptions
     // https://developer.android.com/reference/android/content/Intent?hl=pt-br#ACTION_CLOSE_SYSTEM_DIALOGS
     public void closeStatusBar(Context context){

@@ -17,7 +17,7 @@ import me.carda.awesome_notifications.core.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.core.broadcasters.senders.BroadcastSender;
 import me.carda.awesome_notifications.core.services.ForegroundService;
 
-public class NotificationActionReceiver extends AwesomeBroadcastReceiver {
+public abstract class NotificationActionReceiver extends AwesomeBroadcastReceiver {
 
     public static String TAG = "NotificationActionReceiver";
 

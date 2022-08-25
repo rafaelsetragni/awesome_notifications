@@ -1,9 +1,7 @@
 package me.carda.awesome_notifications.core.broadcasters.receivers;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 
 import me.carda.awesome_notifications.core.AwesomeNotifications;
 import me.carda.awesome_notifications.core.Definitions;
@@ -15,8 +13,7 @@ import me.carda.awesome_notifications.core.logs.Logger;
 import me.carda.awesome_notifications.core.managers.StatusBarManager;
 import me.carda.awesome_notifications.core.models.returnedData.ActionReceived;
 
-@TargetApi(Build.VERSION_CODES.CUPCAKE)
-public class DismissedNotificationReceiver extends AwesomeBroadcastReceiver
+public abstract class DismissedNotificationReceiver extends AwesomeBroadcastReceiver
 {
     static String TAG = "DismissedNotificationReceiver";
 
@@ -56,7 +53,6 @@ public class DismissedNotificationReceiver extends AwesomeBroadcastReceiver
             StatusBarManager
                 .getInstance(context)
                 .unregisterActiveNotification(context, actionReceived.id);
-
 
             BroadcastSender
                 .sendBroadcastNotificationDismissed(context, actionReceived);
