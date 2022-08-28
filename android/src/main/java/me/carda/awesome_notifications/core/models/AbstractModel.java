@@ -362,6 +362,9 @@ public abstract class AbstractModel implements Cloneable {
         if(value instanceof String)
             return NotificationLayout.getSafeEnum((String) value);
 
+        if(value instanceof NotificationLayout)
+            return (NotificationLayout) value;
+
         return defaultValue;
     }
 
@@ -376,6 +379,9 @@ public abstract class AbstractModel implements Cloneable {
 
         if(value instanceof String)
             return NotificationLifeCycle.getSafeEnum((String) value);
+
+        if(value instanceof NotificationLifeCycle)
+            return (NotificationLifeCycle) value;
 
         return defaultValue;
     }
@@ -392,6 +398,9 @@ public abstract class AbstractModel implements Cloneable {
         if(value instanceof String)
             return NotificationPermission.getSafeEnum((String) value);
 
+        if(value instanceof NotificationPermission)
+            return (NotificationPermission) value;
+
         return defaultValue;
     }
 
@@ -407,6 +416,9 @@ public abstract class AbstractModel implements Cloneable {
         if(value instanceof String)
             return NotificationPrivacy.getSafeEnum((String) value);
 
+        if(value instanceof NotificationPrivacy)
+            return (NotificationPrivacy) value;
+
         return defaultValue;
     }
 
@@ -421,6 +433,9 @@ public abstract class AbstractModel implements Cloneable {
 
         if(value instanceof String)
             return NotificationSource.getSafeEnum((String) value);
+
+        if(value instanceof NotificationSource)
+            return (NotificationSource) value;
 
         return defaultValue;
     }
