@@ -10,10 +10,10 @@ import me.carda.awesome_notifications.core.background.BackgroundExecutor;
 import me.carda.awesome_notifications.core.logs.Logger;
 import me.carda.awesome_notifications.core.services.AwesomeBackgroundService;
 
-class AwesomeNotificationsFlutterExtension extends AwesomeNotificationsExtension {
+public class AwesomeNotificationsFlutterExtension extends AwesomeNotificationsExtension {
     private static final String TAG = "AwesomeNotificationsFlutterExtension";
 
-    static void initialize(){
+    public static void initialize(){
         if(AwesomeNotifications.awesomeExtensions != null) return;
 
         AwesomeNotifications.actionReceiverClass = DartNotificationActionReceiver.class;
