@@ -34,6 +34,10 @@ public class LifeCycleManager:
     
     var _listening = false
     public func startListeners(){
+        if _listening {
+            return
+        }
+
         _listening = true
         
         NotificationCenter.default.addObserver(
