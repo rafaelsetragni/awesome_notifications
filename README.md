@@ -63,7 +63,7 @@ All notifications could be created locally or via Firebase services, with all th
 
 <br>
 
-### Next steps
+## Next steps
 
 - Include Web support
 - Finish the companion plugin to enable Firebase Cloud Message with all the awesome features available.
