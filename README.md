@@ -77,7 +77,7 @@ All notifications could be created locally or via Firebase services, with all th
 ## Donate via PayPal
 
 Help us to improve and maintain our work with donations of any amount, via Paypal.
-Your donation will be mainly used to purchase new devices and equipment, which we will use to test and ensure that our plugins works correctly on all platforms and their respective versions.
+Your donation will be mainly used to purchase new devices and equipments, which we will use to test and ensure that our plugins works correctly on all platforms and their respective versions.
 
 <a href="https://www.paypal.com/donate/?business=9BKB6ZCQLLMZY&no_recurring=0&item_name=Help+us+to+improve+and+maintain+Awesome+Notifications+with+donations+of+any+amount.&currency_code=USD">
   <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" width="250px"/>
