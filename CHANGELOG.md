@@ -1,3 +1,5 @@
+## [0.7.0-beta.6+1]
+* Inclusion of the Donate with PayPal section
 ## [0.7.0-beta.6]
 * Fixed out of sync definition values between Flutter, Android and iOS
 * Coverage extended to Android 13 (SDK 33), without the new request dialog (temporary)
