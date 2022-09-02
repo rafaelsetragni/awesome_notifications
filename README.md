@@ -86,6 +86,15 @@ Your donation will be mainly used to purchase new devices and equipments, which 
 <br>
 <br>
 
+## Discord Chat Server 
+
+To stay tuned with new updates and get our community support, please subscribe into our Discord Chat Server:
+
+[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.gg/MP3sEXPTnx)<br>https://discord.gg/MP3sEXPTnx
+
+<br>
+<br>
+
 ## Main Philosophy
 
 Considering all the many different devices available, with different hardware and software resources, this plugin ALWAYS shows the notification, trying to use the maximum resources available. If the resource is not available, the notification ignores that specific resource, but shows the rest of notification anyway.
@@ -111,14 +120,6 @@ This way, your Application will receive **all notifications at Flutter level cod
 * The action type `InputField` was deprecated. Now you just need to set the property `requireInputText` to true to achieve the same, but now it works combined with all another action types.
 * The support for `firebase_messaging` plugin is now deprecated, but all other firebase plugins still being supported. You need use the Awesome's FCM companion plugin to achieve all firebase messaging features, without violate the platform rules. This is the only way to fully integrated with awesome notifications, running all in native level.
 
-
-<br>
-<br>
-
-## Discord Chat Server
-
-To stay tuned with new updates and get our community support, please subscribe into our Discord Chat Server:
-https://discord.gg/MP3sEXPTnx
 
 <br>
 <br>
