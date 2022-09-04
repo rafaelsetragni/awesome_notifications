@@ -1,5 +1,7 @@
 <div align=center>
 
+---
+
 <img src="md-assets/banner.png" alt="Awesome Notifications">
 
 ---
@@ -8,7 +10,7 @@
 ![Firebase](https://img.shields.io/badge/Compatible%20with%20Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
 [![Discord](https://img.shields.io/badge/Discord-%237289DA.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/MP3sEXPTnx)
 [![Open Source](https://img.shields.io/badge/Open%20Source-black.svg?style=for-the-badge&logo=Github)](https://github.com/rafaelsetragni/awesome_notifications)
-[![Donate](https://img.shields.io/badge/Donate-white.svg?style=for-the-badge&logo=PayPal)]()
+[![Donate](https://img.shields.io/badge/Donate-white.svg?style=for-the-badge&logo=PayPal)](https://www.paypal.com/donate/?business=9BKB6ZCQLLMZY&no_recurring=0&item_name=Help+us+to+improve+and+maintain+Awesome+Notifications+with+donations+of+any+amount.&currency_code=USD)
 
 [![Pub Version](https://img.shields.io/pub/v/awesome_notifications.svg?style=for-the-badge)](https://pub.dev/packages/awesome_notifications)
 [![Pub Likes](https://img.shields.io/pub/likes/awesome_notifications.svg?style=for-the-badge)](https://pub.dev/packages/awesome_notifications/score)
@@ -86,7 +88,9 @@ For the moment, this plugin only supports Android and iOS, but we plan supportin
 
 We're maintaining Awesome Notifications in our free time, so if you want to support us and help us maintaining our work, you can donate any amount on PayPal. Your donations will be used in purchasing new devices and equipment necessary for testing and maintaining Awesome Notifications, as well as our other plugins.
 
-
+<a href="https://www.paypal.com/donate/?business=9BKB6ZCQLLMZY&no_recurring=0&item_name=Help+us+to+improve+and+maintain+Awesome+Notifications+with+donations+of+any+amount.&currency_code=USD">
+  <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" width="200px"/>
+</a>
 
 ---
 ## Migration Guide
