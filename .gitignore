@@ -1,9 +1,10 @@
-example/ios/Runner/GoogleService-Info.plist
-
 # See https://www.dartlang.org/guides/libraries/private-files
 
 # Files and directories created by pub
 .dart_tool/
+
+# MacOS unnecessary file.
+.DS_Store 
 .packages
 build/
 # If you're building an application, you may want to check-in your pubspec.lock
@@ -27,3 +28,4 @@ doc/api/
 
 .flutter-plugins
 .flutter-plugins-dependencies
+example/ios/Runner/GoogleService-Info.plist
