@@ -338,7 +338,7 @@ Here are some examples that you can check out to understand how to use Awesome N
 
 Ashley Novik from the [Reso Coder](https://resocoder.com) team did a great job showcasing a use-case for `awesome_notifications`. You can check out the tutorial below.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/JAq9fVn3X7U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![Watch it on YouTube](https://img.youtube.com/vi/JAq9fVn3X7U/maxresdefault.jpg)](https://youtu.be/JAq9fVn3X7U)
 
 ### Complete Example
 
