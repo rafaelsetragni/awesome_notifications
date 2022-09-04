@@ -46,6 +46,7 @@
 * Added test unit cases to increase test coverage (55% coverage)
 * Network images for foreground services are reactivated
 * Upgraded external dependencies to become compatible with Flutter 2.10
+
 ## [0.6.21]
 * Added customSound feature for Android (only applicable for versions older than Android 8 (Oreo))
 * Type parameter T removed from AwesomeAssertUtils to allows it to be compatible with Flutter web parser.
@@ -106,6 +107,7 @@
 * Added error handling for image assets (iOS)
 * Added video tutorial into README file
 * Version numbering has changed to better translate the stage of development for future releases.
+
 ## [0.0.6+12]
 * Added showInCompactView property for MediaPlayer buttons
 * Added support to multiple subscriptions on created, displayed, action and dismissed stream
@@ -151,6 +153,7 @@
 * Schedule feature downgraded due to iOS official developer's incapacity and SO limitations (could be reactivated manually).
 * Added an example to how to integrate awesome_notification with firebase_messaging plugin.
 * Documentation improved
+
 ## [0.0.5+8]
 * FCM service with comments removed for iOS.
 ## [0.0.5+7]

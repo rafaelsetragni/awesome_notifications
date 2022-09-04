@@ -1,12 +1,9 @@
-import 'dart:ui';
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
+import 'dart:ui';
 
-import 'package:flutter/widgets.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
-
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/src/isolates/isolate_main.dart';
 // In order to *not* need this ignore, consider extracting the "web" version
 // of your plugin as a separate package, instead of inlining it in the same
 // package as the core of your plugin.
@@ -15,8 +12,9 @@ import 'package:flutter/foundation.dart';
 //import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'package:awesome_notifications/src/logs/logger.dart';
-import 'package:awesome_notifications/src/isolates/isolate_main.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 class AwesomeNotifications {
   static String tag = "AwesomeNotifications";

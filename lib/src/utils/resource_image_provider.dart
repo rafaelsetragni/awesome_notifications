@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'dart:ui' as ui show Codec;
 
 import 'package:awesome_notifications/src/awesome_notifications_core.dart';
@@ -60,7 +59,7 @@ class ResourceImage extends ImageProvider<ResourceImage> {
   }
 
   @override
-  int get hashCode => hashValues(drawablePath.hashCode, scale);
+  int get hashCode => Object.hash(drawablePath.hashCode, scale);
 
   @override
   String toString() =>
