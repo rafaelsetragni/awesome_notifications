@@ -27,7 +27,7 @@ dependencies:
   font_awesome_flutter: ^9.0.0
   fluttertoast: ^8.0.3
   http: ^0.13.1
-  path_provider: ^2.0.1
+  path_provider: ^2.0.8
   shared_preferences: ^2.0.5
   numberpicker: ^2.0.1
   giffy_dialog: ^1.8.0
