@@ -223,12 +223,14 @@ class RoundedButton extends StatelessWidget {
       height: size,
       width: size,
       // ignore: deprecated_member_use
-      child: FlatButton(
-        padding: EdgeInsets.all(15 / 64 * size),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(100)),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          padding: EdgeInsets.all(15 / 64 * size),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(100)),
+          ),
         ),
-        color: color,
         onPressed: press,
         child: icon,
       ),
