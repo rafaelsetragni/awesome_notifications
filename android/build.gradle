@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.4'
+        classpath 'com.android.tools.build:gradle:7.2.2'
     }
 }
 
@@ -16,6 +16,7 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -57,6 +58,9 @@ allprojects {
 }
 
 dependencies {
+    implementation project(':android_core')
+//    implementation "me.carda:androidcore:0.0.2-alpha.1"
+
     implementation "androidx.core:core:1.8.0"
     implementation "com.google.code.gson:gson:2.8.9"
     implementation "com.google.guava:guava:31.1-android"

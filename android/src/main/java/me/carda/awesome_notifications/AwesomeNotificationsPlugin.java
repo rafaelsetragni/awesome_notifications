@@ -37,6 +37,7 @@ import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.logs.Logger;
 import me.carda.awesome_notifications.core.completion_handlers.BitmapCompletionHandler;
 import me.carda.awesome_notifications.core.completion_handlers.PermissionCompletionHandler;
+import me.carda.awesome_notifications.core.managers.PermissionManager;
 import me.carda.awesome_notifications.core.models.NotificationModel;
 import me.carda.awesome_notifications.core.models.NotificationScheduleModel;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
@@ -56,13 +57,60 @@ public class AwesomeNotificationsPlugin
         implements
             FlutterPlugin,
             MethodCallHandler,
-            AwesomeEventListener,
             PluginRegistry.NewIntentListener,
             ActivityAware
 {
     private static final String TAG = "AwesomeNotificationsPlugin";
 
+    private ActivityPluginBinding activityBinding;
+    private PluginRegistry.RequestPermissionsResultListener permissionsResultListener =
+        new PluginRegistry.RequestPermissionsResultListener() {
+            @Override
+            public boolean onRequestPermissionsResult(
+                    final int requestCode,
+                    @NonNull final String[] permissions,
+                    @NonNull final int[] grantResults
+            ) {
+                PermissionManager
+                        .getInstance()
+                        .handlePermissionResult(
+                                requestCode,
+                                permissions,
+                                grantResults);
+                return true;
+            }
+        };
+
+    private PluginRegistry.ActivityResultListener activityResultListener =
+        new PluginRegistry.ActivityResultListener() {
+            @Override
+            public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+                PermissionManager
+                        .getInstance()
+                        .handleActivityResult(
+                                requestCode,
+                                resultCode,
+                                data);
+                return true;
+            }
+        };
+
     private MethodChannel pluginChannel;
+    private final AwesomeEventListener awesomeEventListener = new AwesomeEventListener() {
+        @Override
+        public void onNewAwesomeEvent(String eventType, Map<String, Object> content) {
+            if (pluginChannel != null){
+                if(Definitions.EVENT_SILENT_ACTION.equals(eventType)){
+                    try {
+                        Long actionHandle = (awesomeNotifications != null) ? awesomeNotifications.getActionHandle() : null;
+                        content.put(Definitions.ACTION_HANDLE, actionHandle);
+                    } catch (AwesomeNotificationsException ignore) {
+                    }
+                }
+                pluginChannel.invokeMethod(eventType, content);
+            }
+        }
+    };
     private AwesomeNotifications awesomeNotifications;
 
     private final StringUtils stringUtils = StringUtils.getInstance();
@@ -131,7 +179,7 @@ public class AwesomeNotificationsPlugin
         pluginChannel = null;
 
         if (awesomeNotifications != null) {
-            awesomeNotifications.detachAsMainInstance(this);
+            awesomeNotifications.detachAsMainInstance(awesomeEventListener);
             awesomeNotifications.dispose();
             awesomeNotifications = null;
         }
@@ -143,10 +191,14 @@ public class AwesomeNotificationsPlugin
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         try {
+            activityBinding = binding;
+            activityBinding.addRequestPermissionsResultListener(permissionsResultListener);
+            activityBinding.addActivityResultListener(activityResultListener);
+
             Intent launchIntent = binding.getActivity().getIntent();
             if(awesomeNotifications != null && launchIntent != null)
                 awesomeNotifications.captureNotificationActionFromIntent(launchIntent);
-            binding.addOnNewIntentListener(this);
+            activityBinding.addOnNewIntentListener(this);
         } catch(Exception exception) {
             ExceptionFactory
                     .getInstance()
@@ -160,15 +212,24 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
+        activityBinding.removeRequestPermissionsResultListener(permissionsResultListener);
+        activityBinding.removeActivityResultListener(activityResultListener);
+        activityBinding = null;
     }
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        binding.addOnNewIntentListener(this);
+        activityBinding = binding;
+        activityBinding.addRequestPermissionsResultListener(permissionsResultListener);
+        activityBinding.addActivityResultListener(activityResultListener);
+        activityBinding.addOnNewIntentListener(this);
     }
 
     @Override
     public void onDetachedFromActivity() {
+        activityBinding.removeRequestPermissionsResultListener(permissionsResultListener);
+        activityBinding.removeActivityResultListener(activityResultListener);
+        activityBinding = null;
     }
 
     @Override
@@ -185,20 +246,6 @@ public class AwesomeNotificationsPlugin
                             ExceptionCode.DETAILED_UNEXPECTED_ERROR+".fcm."+exception.getClass().getSimpleName(),
                             exception);
             return false;
-        }
-    }
-
-    @Override
-    public void onNewAwesomeEvent(String eventType, Map<String, Object> content) {
-        if (pluginChannel != null){
-            if(Definitions.EVENT_SILENT_ACTION.equals(eventType)){
-                try {
-                    Long actionHandle = (awesomeNotifications != null) ? awesomeNotifications.getActionHandle() : null;
-                    content.put(Definitions.ACTION_HANDLE, actionHandle);
-                } catch (AwesomeNotificationsException ignore) {
-                }
-            }
-            pluginChannel.invokeMethod(eventType, content);
         }
     }
 
@@ -1165,6 +1212,7 @@ public class AwesomeNotificationsPlugin
 
         awesomeNotifications
                 .requestUserPermissions(
+                    activityBinding.getActivity(),
                     channelKey,
                     permissions,
                     new PermissionCompletionHandler() {
@@ -1277,7 +1325,7 @@ public class AwesomeNotificationsPlugin
 
         long silentCallback = callbackActionObj == null ? 0L : (Long) callbackActionObj;
 
-        awesomeNotifications.attachAsMainInstance(this);
+        awesomeNotifications.attachAsMainInstance(awesomeEventListener);
         awesomeNotifications.setActionHandle(silentCallback);
 
         boolean success = silentCallback != 0L;
