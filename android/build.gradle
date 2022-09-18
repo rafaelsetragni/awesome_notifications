@@ -58,8 +58,8 @@ allprojects {
 }
 
 dependencies {
-    implementation project(':android_core')
-//    implementation "me.carda:androidcore:0.0.2-alpha.1"
+//    implementation project(':android_core')
+    implementation "me.carda:androidcore:0.0.2-alpha.2"
 
     implementation "androidx.core:core:1.8.0"
     implementation "com.google.code.gson:gson:2.8.9"
