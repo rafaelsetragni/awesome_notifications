@@ -7,6 +7,7 @@
 
 @available(iOS 10.0, *)
 open class AwesomeServiceExtension: UNNotificationServiceExtension {
+    let TAG = "AwesomeServiceExtension"
     
     var contentHandler: ((UNNotificationContent) -> Void)?
     var content: UNMutableNotificationContent?
@@ -23,8 +24,10 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
 
         if let content = content {
             
+            AwesomeNotifications.initialize()
+            
             if(!StringUtils.shared.isNullOrEmpty(content.userInfo["gcm.message_id"] as? String)){
-                Logger.d("AwesomeServiceExtension", "FCM received")
+                Logger.d(TAG, "New push notification received")
                 
                 let title:String? = content.title
                 let body:String?  = content.body
@@ -35,12 +38,18 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
                 }
                 
                 if content.userInfo[Definitions.NOTIFICATION_MODEL_CONTENT] == nil {
+                    Logger.d(TAG, "Notification translated to awesome content")
                     
                     notificationModel = NotificationModel()
                     notificationModel!.content = NotificationContentModel()
                     
                     notificationModel!.content!.id = IntUtils.generateNextRandomId();
-                    notificationModel!.content!.channelKey = "basic_channel"
+                    notificationModel!.content!.channelKey = ChannelManager
+                        .shared
+                        .listChannels()
+                        .first?
+                        .channelKey ?? "basic_channel"
+                    
                     notificationModel!.content!.title = title
                     notificationModel!.content!.body = body
                     notificationModel!.content!.playSound = true

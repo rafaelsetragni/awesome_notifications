@@ -1,4 +1,3 @@
-
 Pod::Spec.new do |s|
   s.name             = 'awesome_notifications'
   s.version          = '0.0.3'
@@ -10,8 +9,12 @@ A complete solution to create Local Notifications and Push Notifications, throug
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Rafael Setragni' => 'rafaelsetra@gmail.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.source_files     = 'Classes/**/*'
   s.static_framework = true
+  s.subspec 'AWCore' do |core|
+        core.name         = 'AWCore'
+        core.source_files = "AWCore/core/**/*"
+  end
   s.dependency 'Flutter'
   s.platform = :ios, '10.0'
 

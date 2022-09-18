@@ -13,8 +13,8 @@ public class AwesomeNotifications:
         AwesomeNotificationEventListener,
         AwesomeLifeCycleEventListener,
         UIApplicationDelegate,
-        UNUserNotificationCenterDelegate {
-    
+        UNUserNotificationCenterDelegate
+{
     let TAG = "AwesomeNotifications"
     
     static var _debug:Bool? = nil
@@ -33,11 +33,11 @@ public class AwesomeNotifications:
     
     static var initialValues:[String : Any?] = [:]
     
+    static var awesomeExtensions:AwesomeNotificationsExtension?
+    
     // ************************** CONSTRUCTOR ***********************************
         
-    public init(
-        usingFlutterRegistrar registrar:FlutterPluginRegistrar
-    ) throws {
+    public override init() {
         super.init()
         
         AwesomeNotifications.debug = isApplicationInDebug()
@@ -49,21 +49,28 @@ public class AwesomeNotifications:
                 .startListeners()
         }
         
-        AwesomeNotifications.loadDefaults()        
         activateiOSNotifications()
     }
     
     static var areDefaultsLoaded = false
-    public static func loadDefaults(){
+    public static func loadExtensions() throws {
         if areDefaultsLoaded {
             return
         }
-        areDefaultsLoaded = true
         
-        initialValues.removeAll()
-        initialValues.merge(
-            Definitions.initialValues,
-            uniquingKeysWith: { (current, _) in current })
+        if AwesomeNotifications.awesomeExtensions == nil {
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: "SwiftLoadDefaults",
+                        code: ExceptionCode.CODE_INITIALIZATION_EXCEPTION,
+                        message: "Awesome's plugin extension reference was not found.",
+                        detailedCode: ExceptionCode.DETAILED_INITIALIZATION_FAILED+".awesomeNotifications.extensions")
+        }
+        
+        AwesomeNotifications.awesomeExtensions!.loadExternalExtensions()
+        
+        areDefaultsLoaded = true
     }
     
     private var isTheMainInstance = false

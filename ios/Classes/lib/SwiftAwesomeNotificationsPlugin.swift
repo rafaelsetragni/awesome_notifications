@@ -12,27 +12,12 @@ public class SwiftAwesomeNotificationsPlugin:
 {
     static let TAG = "AwesomeNotificationsPlugin"
     
-    var awesomeNotifications:AwesomeNotifications?
     static var flutterRegistrantCallback: FlutterPluginRegistrantCallback?
+    var awesomeNotifications:AwesomeNotifications?
+    var flutterChannel:FlutterMethodChannel?
     
     public override init() {
         super.init()
-    }
-    
-    var registrar:FlutterPluginRegistrar?
-    var flutterChannel:FlutterMethodChannel?
-    
-    static var areExtensionsLoaded = false
-    public static func loadExternalExtensions(usingFlutterRegistrar registrar:FlutterPluginRegistrar){
-        if areExtensionsLoaded {
-            return
-        }
-        areExtensionsLoaded = true
-        
-        AwesomeNotifications.loadDefaults() 
-        FlutterAudioUtils.extendCapabilities(usingFlutterRegistrar: registrar)
-        FlutterBitmapUtils.extendCapabilities(usingFlutterRegistrar: registrar)
-        DartBackgroundExecutor.extendCapabilities(usingFlutterRegistrar: registrar)
     }
         
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -60,34 +45,31 @@ public class SwiftAwesomeNotificationsPlugin:
         throughFlutterChannel channel: FlutterMethodChannel
     ){
         flutterChannel = channel
-        self.registrar = registrar
         
         do {
-            try awesomeNotifications =
-                AwesomeNotifications(
-                    usingFlutterRegistrar: registrar)
+            DartAwesomeNotificationsExtension.registrar = registrar
+            DartAwesomeNotificationsExtension.initialize()
             
-            SwiftAwesomeNotificationsPlugin
-                .loadExternalExtensions(usingFlutterRegistrar: registrar)
+            try AwesomeNotifications.loadExtensions()
+            awesomeNotifications = AwesomeNotifications()
+            
+            registrar.addMethodCallDelegate(self, channel: self.flutterChannel!)
+            registrar.addApplicationDelegate(self)
+            
+            if AwesomeNotifications.debug {
+                Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications plugin attached to iOS \(floor(NSFoundationVersionNumber))")
+                Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications - App Group : \(Definitions.USER_DEFAULT_TAG)")
+            }
         }
         catch {
             Logger.e(SwiftAwesomeNotificationsPlugin.TAG, error.localizedDescription)
         }
-        
-        registrar.addMethodCallDelegate(self, channel: self.flutterChannel!)
-        registrar.addApplicationDelegate(self)
-        
-        if AwesomeNotifications.debug {
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications plugin attached to iOS \(floor(NSFoundationVersionNumber))")
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications - App Group : \(Definitions.USER_DEFAULT_TAG)")
-		}
     }
     
     private func detacheAwesomeNotifications(
         usingRegistrar registrar: FlutterPluginRegistrar
     ){
         flutterChannel = nil
-        self.registrar = nil
         
         awesomeNotifications?.detachAsMainInstance(listener: self)
         awesomeNotifications?.dispose()

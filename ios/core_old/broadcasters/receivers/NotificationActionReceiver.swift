@@ -35,29 +35,74 @@ public class NotificationActionReceiver {
             userText =  textResponse.userText
         }
         
-        guard let jsonData:String =
-                        response
-                            .notification
-                            .request
-                            .content
-                            .userInfo[Definitions.NOTIFICATION_JSON] as? String
-        else {
-            throw ExceptionFactory
-                .shared
-                .createNewAwesomeException(
-                    className: TAG,
-                    code: ExceptionCode.CODE_INVALID_ARGUMENTS,
-                    message: "The action content doesn't contain any awesome information",
-                    detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".addNewActionEvent.jsonData")
-        }
-            
-        guard
-            let notificationModel:NotificationModel =
+        var notificationModel:NotificationModel? = nil
+        
+        if let jsonData:String =
+            response
+                .notification
+                .request
+                .content
+                .userInfo[Definitions.NOTIFICATION_JSON] as? String
+        {
+            notificationModel =
                 NotificationBuilder
                     .newInstance()
                     .buildNotificationFromJson(
-                        jsonData: jsonData),
-            let actionReceived:ActionReceived =
+                        jsonData: jsonData)
+        }
+        else {
+            if response
+                .notification
+                .request
+                .content
+                .userInfo["gcm.message_id"] == nil
+            {
+                throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "The action content doesn't contain any awesome information",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".addNewActionEvent.jsonData")
+            }
+            
+            let title:String? = response.notification.request.content.title
+            let body:String? = response.notification.request.content.body
+            
+            if StringUtils.shared.isNullOrEmpty(title) && StringUtils.shared.isNullOrEmpty(body) {
+                throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "The action content doesn't contain any awesome information",
+                        detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS + ".addNewActionEvent.jsonData")
+            }
+            
+            let date:Date = response.notification.date
+            let image:String? = (response
+                .notification
+                .request
+                .content
+                .userInfo["fcm_options"] as? [String : Any?])?["image"] as? String
+            
+            notificationModel = NotificationModel()
+            notificationModel!.content = NotificationContentModel()
+            notificationModel!.content!.id = -1
+            notificationModel!.content!.title = title
+            notificationModel!.content!.body = body
+            notificationModel!.content!.createdDate = RealDateTime
+                .init(fromDate: date, inTimeZone: DateUtils.shared.utcTimeZone)
+            notificationModel!.content!.displayedDate =
+                notificationModel!.content!.createdDate
+            
+            if image != nil {
+                notificationModel!.content!.notificationLayout = .BigPicture
+                notificationModel!.content!.bigPicture = image
+            }
+        }
+            
+        guard let actionReceived:ActionReceived =
                 NotificationBuilder
                     .newInstance()
                     .buildNotificationActionFromModel(
@@ -84,7 +129,7 @@ public class NotificationActionReceiver {
         actionReceived.registerLastDisplayedEvent(
             inLifeCycle: currentLifeCycle,
             fromNotificationResponse: response,
-            fromNotificationSchedule: notificationModel.schedule
+            fromNotificationSchedule: notificationModel!.schedule
         )
         
         if actionReceived.actionType == .DismissAction {

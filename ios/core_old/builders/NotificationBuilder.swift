@@ -69,6 +69,10 @@ public class NotificationBuilder {
             actionReceived.displayedLifeCycle = actionReceived.createdLifeCycle
         }
         
+        if actionReceived.actionType == nil {
+            actionReceived.actionType = .Default
+        }
+        
         return actionReceived
     }
     

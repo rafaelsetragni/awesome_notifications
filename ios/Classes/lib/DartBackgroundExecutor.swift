@@ -29,19 +29,13 @@ public class DartBackgroundExecutor: BackgroundExecutor {
     
     private var actionReceived:ActionReceived?
     
-    // ************** SINGLETON PATTERN ***********************
+    // ************** Awesome Extensions ***********************
     
-    static var instance:DartBackgroundExecutor?
-    public static var shared:DartBackgroundExecutor {
-        get {
-            DartBackgroundExecutor.instance =
-                DartBackgroundExecutor.instance ?? DartBackgroundExecutor()
-            return DartBackgroundExecutor.instance!
-        }
-    }
+    public required init(){}
     
     public static func extendCapabilities(usingFlutterRegistrar registrar:FlutterPluginRegistrar){
-        BitmapUtils.instance = FlutterBitmapUtils(registrar: registrar)
+        self.registrar = registrar
+        AwesomeNotifications.backgroundClassType = DartBackgroundExecutor.self
     }
     
     // ************** IOS EVENTS LISTENERS ************************
@@ -50,7 +44,7 @@ public class DartBackgroundExecutor: BackgroundExecutor {
     var silentCallbackHandle:Int64 = 0
     
     public func runBackgroundProcess(
-        silentActionRequest: SilentActionRequest,
+        silentActionRequest:SilentActionRequest,
         dartCallbackHandle:Int64,
         silentCallbackHandle:Int64
     ){
@@ -131,28 +125,36 @@ public class DartBackgroundExecutor: BackgroundExecutor {
     func createNewFlutterEngine(
         dartCallbackInfo:FlutterCallbackInformation
     ){
-        self.backgroundEngine = FlutterEngine(
-            name: "AwesomeNotificationsBgEngine",
-            project: nil,
-            allowHeadlessExecution: true
-        )
-        
-        if self.backgroundEngine == nil {
-            Logger.e(self.TAG, "Flutter background engine is not available.")
-            self.closeBackgroundIsolate()
-        }
-        else {
-            self.backgroundEngine!.run(
-                withEntrypoint: dartCallbackInfo.callbackName,
-                libraryURI: dartCallbackInfo.callbackLibraryPath)
+        do {
             
-            SwiftAwesomeNotificationsPlugin
-                .flutterRegistrantCallback?(self.backgroundEngine!)
+            self.backgroundEngine = FlutterEngine(
+                name: "AwesomeNotificationsBgEngine",
+                project: nil,
+                allowHeadlessExecution: true
+            )
             
-            AwesomeNotifications.loadDefaults()
+            if self.backgroundEngine == nil {
+                Logger.e(self.TAG, "Flutter background engine is not available.")
+                self.closeBackgroundIsolate()
+            }
+            else {
+                self.backgroundEngine!.run(
+                    withEntrypoint: dartCallbackInfo.callbackName,
+                    libraryURI: dartCallbackInfo.callbackLibraryPath)
+                
+                SwiftAwesomeNotificationsPlugin
+                    .flutterRegistrantCallback?(self.backgroundEngine!)
+                
+                DartAwesomeNotificationsExtension.setRegistrar(flutterEngine: backgroundEngine)
+                DartAwesomeNotificationsExtension.initialize()
+                try AwesomeNotifications.loadExtensions()
+                
+                self.initializeReverseMethodChannel(
+                    backgroundEngine: self.backgroundEngine!)
+            }
             
-            self.initializeReverseMethodChannel(
-                backgroundEngine: self.backgroundEngine!)
+        } catch {
+            Logger.e(TAG, error.localizedDescription)
         }
     }
     
