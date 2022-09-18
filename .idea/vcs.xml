@@ -2,6 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ios/AWCore" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/example/android/android_core" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/example/android/app/core/src/main/java/me/carda/awesome_notifications/core" vcs="Git" />
   </component>
