@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AwnCore
 
 @available(iOS 10.0, *)
 public class FlutterBitmapUtils : BitmapUtils {
@@ -21,7 +22,7 @@ public class FlutterBitmapUtils : BitmapUtils {
         BitmapUtils.instance = FlutterBitmapUtils(registrar: registrar)
     }
     
-    override func getBitmapFromAsset(_ mediaPath:String) -> UIImage? {
+    open override func getBitmapFromAsset(_ mediaPath:String) -> UIImage? {
         
         let mediaPath:String? = cleanMediaPath(mediaPath)
 

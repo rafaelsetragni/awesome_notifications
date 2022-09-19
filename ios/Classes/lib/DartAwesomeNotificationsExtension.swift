@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AwnCore
 
 public class DartAwesomeNotificationsExtension: AwesomeNotificationsExtension {
     
@@ -36,10 +37,7 @@ public class DartAwesomeNotificationsExtension: AwesomeNotificationsExtension {
             return
         }
         
-        AwesomeNotifications.initialValues.removeAll()
-        AwesomeNotifications.initialValues.merge(
-                Definitions.initialValues,
-                uniquingKeysWith: { (current, _) in current })
+        AwesomeNotifications.initialize()
         
         if DartAwesomeNotificationsExtension.registrar != nil {
             FlutterAudioUtils.extendCapabilities(

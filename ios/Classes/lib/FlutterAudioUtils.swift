@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AwnCore
 
 @available(iOS 10.0, *)
 public class FlutterAudioUtils : AudioUtils {
@@ -21,7 +22,7 @@ public class FlutterAudioUtils : AudioUtils {
         AudioUtils.instance = FlutterAudioUtils(registrar:registrar)
     }
     
-    override func getSoundFromAsset(_ mediaPath:String) -> UNNotificationSound? {
+    open override func getSoundFromAsset(_ mediaPath:String) -> UNNotificationSound? {
         
         let mediaPath:String? = cleanMediaPath(mediaPath)
 

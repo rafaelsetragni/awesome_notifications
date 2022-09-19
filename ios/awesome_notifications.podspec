@@ -11,11 +11,8 @@ A complete solution to create Local Notifications and Push Notifications, throug
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
   s.static_framework = true
-  s.subspec 'AWCore' do |core|
-        core.name         = 'AWCore'
-        core.source_files = "AWCore/core/**/*"
-  end
   s.dependency 'Flutter'
+  s.dependency 'AwnCore'
   s.platform = :ios, '10.0'
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.

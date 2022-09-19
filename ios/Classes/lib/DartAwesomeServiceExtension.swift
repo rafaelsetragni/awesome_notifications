@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import AwnCore
 
 open class DartAwesomeServiceExtension: AwesomeServiceExtension {
     
-    public override func didReceive(
+    open override func didReceive(
         _ request: UNNotificationRequest,
         withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void
     ){
