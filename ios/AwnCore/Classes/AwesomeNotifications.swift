@@ -18,7 +18,7 @@ public class AwesomeNotifications:
     let TAG = "AwesomeNotifications"
     
     static var _debug:Bool? = nil
-    static var debug:Bool {
+    public static var debug:Bool {
         get {
             if _debug == nil {
                 _debug = DefaultsManager.shared.debug
@@ -33,7 +33,8 @@ public class AwesomeNotifications:
     
     static var initialValues:[String : Any?] = [:]
     
-    static var awesomeExtensions:AwesomeNotificationsExtension?
+    public static var awesomeExtensions:AwesomeNotificationsExtension?
+    public static var backgroundClassType:BackgroundExecutor.Type?
     
     // ************************** CONSTRUCTOR ***********************************
         
@@ -108,12 +109,19 @@ public class AwesomeNotifications:
         Logger.d(TAG, "Awesome notifications \(self.hash) detached from app instance");
     }
     
-    func dispose(){
+    public func dispose(){
         if !SwiftUtils.isRunningOnExtension() {
             LifeCycleManager
                 .shared
                 .unsubscribe(listener: self)
         }
+    }
+    
+    public func initialize() {
+        AwesomeNotifications.initialValues.removeAll()
+        AwesomeNotifications.initialValues.merge(
+                Definitions.initialValues,
+                uniquingKeysWith: { (current, _) in current })
     }
     
     deinit {
@@ -504,7 +512,7 @@ public class AwesomeNotifications:
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ){
-        Logger.e(TAG, "Notification Category Identifier (action): \(response.notification.request.content.categoryIdentifier)")
+        Logger.d(TAG, "Notification Category Identifier (action): \(response.notification.request.content.categoryIdentifier)")
         do {
             switch response.actionIdentifier {
             

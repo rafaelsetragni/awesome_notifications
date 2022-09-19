@@ -15,7 +15,7 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
     var notificationModel: NotificationModel?
     
 
-    public override func didReceive(
+    open override func didReceive(
         _ request: UNNotificationRequest,
         withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void
     ){

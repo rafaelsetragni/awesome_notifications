@@ -8,6 +8,8 @@ import Foundation
 
 public protocol BackgroundExecutor {
     
+    init()
+    
     var isRunning:Bool { get }
     var isNotRunning:Bool { get }
         

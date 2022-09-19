@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class MediaUtils {
+open class MediaUtils {
 
     func matchMediaType(regex:String, mediaPath:String?) -> Bool {
         return matchMediaType(regex:regex, mediaPath:mediaPath, filterEmpty:true);

@@ -6,20 +6,20 @@
 //
 import Foundation
 
-public class BitmapUtils : MediaUtils {
+open class BitmapUtils : MediaUtils {
     
     let TAG = "BitmapUtils"
     
     // ************** SINGLETON PATTERN ***********************
     
-    static var instance:BitmapUtils?
+    public static var instance:BitmapUtils?
     public static var shared:BitmapUtils {
         get {
             BitmapUtils.instance = BitmapUtils.instance ?? BitmapUtils()
             return BitmapUtils.instance!
         }
     }
-    override init(){}
+    public override init(){}
     
     // ********************************************************
     
@@ -53,7 +53,7 @@ public class BitmapUtils : MediaUtils {
         return resultedImage
     }
     
-    func cleanMediaPath(_ mediaPath:String?) -> String? {
+    open func cleanMediaPath(_ mediaPath:String?) -> String? {
          if(mediaPath != nil){
              var mediaPath = mediaPath
              
@@ -83,7 +83,7 @@ public class BitmapUtils : MediaUtils {
          return nil
     }
     
-    func getBitmapFromUrl(_ bitmapUri:String) -> UIImage? {
+    open func getBitmapFromUrl(_ bitmapUri:String) -> UIImage? {
         let bitmapUri:String? = BitmapUtils.shared.cleanMediaPath(bitmapUri)
         
         if !StringUtils.shared.isNullOrEmpty(bitmapUri), let url = URL(string: bitmapUri!) {
@@ -153,7 +153,7 @@ public class BitmapUtils : MediaUtils {
         return getBitmapFromFile(fromRealPath: mediaPath!)
     }
     
-    func getBitmapFromFile(fromRealPath realPath:String) -> UIImage? {
+    open func getBitmapFromFile(fromRealPath realPath:String) -> UIImage? {
         
         do {
             
@@ -170,11 +170,11 @@ public class BitmapUtils : MediaUtils {
         return nil
     }
     
-    func getBitmapFromAsset(_ mediaPath:String) -> UIImage? {
+    open func getBitmapFromAsset(_ mediaPath:String) -> UIImage? {
         return nil
     }
     
-    func getBitmapFromResource(_ mediaPath:String) -> UIImage? {
+    open func getBitmapFromResource(_ mediaPath:String) -> UIImage? {
         var mediaPath:String? = cleanMediaPath(mediaPath)
         
         if mediaPath!.replaceRegex("^.*\\/([^\\/]+)$", replaceWith: "$1") {
@@ -183,7 +183,7 @@ public class BitmapUtils : MediaUtils {
         return nil
     }
     
-    func roundUiImage(_ image:UIImage) -> UIImage? {
+    open func roundUiImage(_ image:UIImage) -> UIImage? {
         let rect = CGRect(origin: .zero, size: image.size)
         let format = image.imageRendererFormat
         format.opaque = false
@@ -193,7 +193,7 @@ public class BitmapUtils : MediaUtils {
         }
     }
     
-    func isValidBitmap(_ mediaPath:String?) -> Bool {
+    open func isValidBitmap(_ mediaPath:String?) -> Bool {
         
         if(mediaPath != nil){
             

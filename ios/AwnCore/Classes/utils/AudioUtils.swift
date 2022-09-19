@@ -8,20 +8,20 @@
 import Foundation
 
 @available(iOS 10.0, *)
-public class AudioUtils: MediaUtils {
+open class AudioUtils: MediaUtils {
     
     let TAG = "AudioUtils"
     
     // ************** SINGLETON PATTERN ***********************
     
-    static var instance:AudioUtils?
+    public static var instance:AudioUtils?
     public static var shared:AudioUtils {
         get {
             AudioUtils.instance = AudioUtils.instance ?? AudioUtils()
             return AudioUtils.instance!
         }
     }
-    override init(){}
+    public override init(){}
     
     // ********************************************************
         
@@ -48,7 +48,7 @@ public class AudioUtils: MediaUtils {
         }
     }
     
-    func cleanMediaPath(_ mediaPath:String?) -> String? {
+    open func cleanMediaPath(_ mediaPath:String?) -> String? {
          if(mediaPath != nil){
              var mediaPath = mediaPath
              
@@ -78,7 +78,7 @@ public class AudioUtils: MediaUtils {
          return nil
     }
     
-    func getSoundFromUrl(_ SoundUri:String) -> UNNotificationSound? {
+    open func getSoundFromUrl(_ SoundUri:String) -> UNNotificationSound? {
         let SoundUri:String? = cleanMediaPath(mediaPath: SoundUri)
         
         if !StringUtils.shared.isNullOrEmpty(SoundUri) {
@@ -94,7 +94,7 @@ public class AudioUtils: MediaUtils {
         return nil
     }
     
-    func getSoundFromFile(_ mediaPath:String) -> UNNotificationSound? {
+    open func getSoundFromFile(_ mediaPath:String) -> UNNotificationSound? {
         let mediaPath:String? = cleanMediaPath(mediaPath)
         
         if(StringUtils.shared.isNullOrEmpty(mediaPath)){ return nil }
@@ -102,7 +102,7 @@ public class AudioUtils: MediaUtils {
         return getSoundFromFile(fromRealPath: mediaPath!)
     }
     
-    func getSoundFromFile(fromRealPath mediaPath:String) -> UNNotificationSound? {
+    open func getSoundFromFile(fromRealPath mediaPath:String) -> UNNotificationSound? {
         if FileManager.default.fileExists(atPath: mediaPath) {
             return UNNotificationSound(named: UNNotificationSoundName(rawValue: mediaPath))
         }
@@ -110,11 +110,11 @@ public class AudioUtils: MediaUtils {
         return UNNotificationSound.default
     }
     
-    func getSoundFromAsset(_ mediaPath:String) -> UNNotificationSound? {
+    open func getSoundFromAsset(_ mediaPath:String) -> UNNotificationSound? {
         return nil
     }
     
-    func getSoundFromResource(_ mediaPath:String) -> UNNotificationSound? {
+    open func getSoundFromResource(_ mediaPath:String) -> UNNotificationSound? {
         var mediaPath:String? = cleanMediaPath(mediaPath)
         
         //do {

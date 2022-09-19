@@ -110,8 +110,12 @@ class BackgroundService {
                         completionHandler(success, nil)
                     })
         
-        DartBackgroundExecutor
-            .shared
+        let backgroundExecutor:BackgroundExecutor =
+                AwesomeNotifications
+                    .backgroundClassType!
+                    .init()
+        
+        backgroundExecutor
             .runBackgroundProcess(
                 silentActionRequest: silentActionRequest,
                 dartCallbackHandle: backgroundCallback,
@@ -136,8 +140,13 @@ class BackgroundService {
         
         let workItem:DispatchWorkItem = DispatchWorkItem {
             DispatchQueue.global(qos: .background).async {
-                DartBackgroundExecutor
-                    .shared
+                
+                let backgroundExecutor:BackgroundExecutor =
+                        AwesomeNotifications
+                            .backgroundClassType!
+                            .init()
+                
+                backgroundExecutor
                     .runBackgroundProcess(
                         silentActionRequest: silentActionRequest,
                         dartCallbackHandle: backgroundCallback,
