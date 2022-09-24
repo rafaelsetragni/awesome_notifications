@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 
+@pragma("vm:entry-point")
 void dartIsolateMain() {
   // Initialize state necessary for MethodChannels.
 
@@ -38,6 +39,7 @@ void dartIsolateMain() {
 }
 
 /// This method handle the silent callback as a flutter plugin
+@pragma("vm:entry-point")
 Future<void> channelMethodIsolateShutdown(MethodCall call) async {
   try {} catch (error, stacktrace) {
     Logger.e("channelMethodIsolateShutdown",

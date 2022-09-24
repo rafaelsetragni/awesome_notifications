@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'awesome_notifications'
-  s.version          = '0.0.3'
+  s.version          = '0.0.4'
   s.summary          = 'A complete solution to create Local Notifications and Push Notifications, throught Firebase or another services, using Flutter.'
   s.description      = <<-DESC
 A complete solution to create Local Notifications and Push Notifications, throught Firebase or another services, using Flutter.
@@ -12,8 +12,8 @@ A complete solution to create Local Notifications and Push Notifications, throug
   s.source_files     = 'Classes/**/*'
   s.static_framework = true
   s.dependency 'Flutter'
-  s.dependency 'AwnCore'
-  s.platform = :ios, '10.0'
+  s.dependency 'IosAwnCore', '0.7.0-alpha.2'
+  s.platform = :ios, '11.0'
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
   s.pod_target_xcconfig = {

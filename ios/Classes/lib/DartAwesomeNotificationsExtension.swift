@@ -5,8 +5,9 @@
 //  Created by CardaDev on 29/08/22.
 //
 
+import Flutter
 import Foundation
-import AwnCore
+import IosAwnCore
 
 public class DartAwesomeNotificationsExtension: AwesomeNotificationsExtension {
     

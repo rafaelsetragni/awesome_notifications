@@ -5,8 +5,9 @@
 //  Created by CardaDev on 03/02/22.
 //
 
+import Flutter
 import Foundation
-import AwnCore
+import IosAwnCore
 
 @available(iOS 10.0, *)
 public class FlutterAudioUtils : AudioUtils {

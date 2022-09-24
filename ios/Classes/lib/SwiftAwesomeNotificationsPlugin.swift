@@ -3,7 +3,7 @@
 import UIKit
 import Flutter
 import UserNotifications
-import AwnCore
+import IosAwnCore
 
 public class SwiftAwesomeNotificationsPlugin:
                 NSObject,
@@ -40,7 +40,7 @@ public class SwiftAwesomeNotificationsPlugin:
     public func detachFromEngine(for registrar: FlutterPluginRegistrar) {
         detacheAwesomeNotifications(usingRegistrar: registrar)
     }
-
+    
     private func AttachAwesomeNotificationsPlugin(
         usingRegistrar registrar: FlutterPluginRegistrar,
         throughFlutterChannel channel: FlutterMethodChannel

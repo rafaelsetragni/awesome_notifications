@@ -9,9 +9,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e193cc25-4aee-4ee7-85e6-38b386ea7f1b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/AwnCore.podspec" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/AwnCore.podspec" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/AwnCore/Classes/ReplaceMe.swift" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Example/AwnCore.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Example/AwnCore.xcodeproj/project.pbxproj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ios/Scripts/AwesomeFcmPodFile.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/awesome_notifications.iml" beforeDir="false" afterPath="$PROJECT_DIR$/awesome_notifications.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/DartAwesomeNotificationsExtension.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/DartAwesomeNotificationsExtension.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/DartAwesomeServiceExtension.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/DartBackgroundExecutor.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/DartBackgroundExecutor.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/FlutterAudioUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/FlutterAudioUtils.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/FlutterBitmapUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/FlutterBitmapUtils.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/awesome_notifications.podspec" beforeDir="false" afterPath="$PROJECT_DIR$/ios/awesome_notifications.podspec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/isolates/isolate_main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/isolates/isolate_main.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +92,7 @@
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/ios/Classes/lib/core" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/ios" />
     <property name="settings.editor.selected.configurable" value="flutter.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
@@ -90,11 +101,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/ios" />
       <recent name="$PROJECT_DIR$/ios/Classes/lib/core" />
       <recent name="E:\plugins\awesome_notifications\android\src\main\java\me\carda\awesome_notifications" />
       <recent name="E:\plugins\awesome_notifications\lib\src\exceptions" />
       <recent name="E:\plugins\awesome_notifications\lib\src" />
-      <recent name="E:\plugins\awesome_notifications\test" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\plugins\awesome_notifications\lib\src\enumerators" />
@@ -210,11 +221,6 @@
           <url>file://$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/core/builders/NotificationBuilder.java</url>
           <line>1170</line>
           <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/src/awesome_notifications_core.dart</url>
-          <line>314</line>
-          <option name="timeStamp" value="43" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
