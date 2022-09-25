@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/src/models/base_notification_content.dart';
+import '../definitions.dart';
+import '../enumerators/action_type.dart';
+import '../enumerators/notification_category.dart';
+import '../enumerators/notification_layout.dart';
+import '../utils/assert_utils.dart';
+import 'base_notification_content.dart';
 
 /// Main content of notification
 /// If notification has no [body] or [title], it will only be created, but not displayed to the user (background notification).

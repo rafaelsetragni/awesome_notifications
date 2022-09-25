@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:awesome_notifications/src/logs/logger.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
+import '../../awesome_notifications.dart';
+import '../logs/logger.dart';
 
 @pragma("vm:entry-point")
 void dartIsolateMain() {
@@ -54,9 +54,10 @@ Future<void> channelMethodSilentCallbackHandle(MethodCall call) async {
     bool success = await receiveSilentAction(
         (call.arguments as Map).cast<String, dynamic>());
 
-    if (!success)
-      throw AwesomeNotificationsException(
+    if (!success) {
+      throw const AwesomeNotificationsException(
           message: 'Silent data could not be recovered');
+    }
   } on Exception catch (error, stacktrace) {
     Logger.e("channelMethodSilentCallbackHandle",
         "An error occurred in your background messaging handler: $error");

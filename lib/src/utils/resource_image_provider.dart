@@ -1,9 +1,9 @@
-import 'dart:typed_data';
 import 'dart:ui' as ui show Codec;
 
-import 'package:awesome_notifications/src/awesome_notifications_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import '../../awesome_notifications.dart';
 
 /// Decodes the given [Uint8List] buffer as an image, associating it with the
 /// given scale.
@@ -43,11 +43,8 @@ class ResourceImage extends ImageProvider<ResourceImage> {
 
   Future<ui.Codec> _loadAsync(ResourceImage key, DecoderCallback decode) async {
     assert(key == this);
-    Uint8List? bytes;
-
-    AwesomeNotifications awesomeNotifications = AwesomeNotifications();
-    bytes = await awesomeNotifications.getDrawableData(this.drawablePath);
-
+    Uint8List? bytes =
+        await AwesomeNotifications().getDrawableData(drawablePath);
     return decode(bytes!);
   }
 

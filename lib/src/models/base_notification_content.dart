@@ -1,8 +1,16 @@
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/src/utils/html_utils.dart';
+import '../definitions.dart';
+import '../enumerators/action_type.dart';
+import '../enumerators/notification_category.dart';
+import '../enumerators/notification_life_cycle.dart';
+import '../enumerators/notification_privacy.dart';
+import '../enumerators/notification_source.dart';
+import '../exceptions/awesome_exception.dart';
+import '../utils/assert_utils.dart';
+import '../utils/bitmap_utils.dart';
+import '../utils/html_utils.dart';
 import 'model.dart';
 
 class BaseNotificationContent extends Model {
@@ -289,9 +297,11 @@ class BaseNotificationContent extends Model {
 
   @override
   void validate() {
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_id, int))
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_id, int)) {
       throw AwesomeNotificationsException(message: 'Property id is required');
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_channelKey, String))
+    }
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_channelKey, String)) {
       throw AwesomeNotificationsException(message: 'Channel Key is required');
+    }
   }
 }

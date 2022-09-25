@@ -171,7 +171,7 @@ awesome_notifications: any # Any attribute updates automatically your source to 
 2. import the plugin package to your dart code
 
 ```dart
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/i_awesome_notifications.dart';
 ```
 
 3. Initialize the plugin on main.dart, before MaterialApp widget (preferentially inside main() method), with at least one native icon and one channel

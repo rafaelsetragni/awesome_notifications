@@ -21,7 +21,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="Awesome Notifications for Flutter">
+        android:label="AwN">
 
         <activity
             android:name=".MainActivity"

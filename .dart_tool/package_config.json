@@ -44,8 +44,20 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "flutter_lints",
+      "rootUri": "file:///Users/rafaelsetragni/Development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "flutter_test",
       "rootUri": "file:///Users/rafaelsetragni/Development/flutter/packages/flutter_test",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_web_plugins",
+      "rootUri": "file:///Users/rafaelsetragni/Development/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -54,6 +66,12 @@
       "rootUri": "file:///Users/rafaelsetragni/Development/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "js",
+      "rootUri": "file:///Users/rafaelsetragni/Development/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
     },
     {
       "name": "lints",
@@ -86,8 +104,8 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "platform",
-      "rootUri": "file:///Users/rafaelsetragni/Development/flutter/.pub-cache/hosted/pub.dartlang.org/platform-3.0.2",
+      "name": "plugin_platform_interface",
+      "rootUri": "file:///Users/rafaelsetragni/Development/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.1.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -143,10 +161,10 @@
       "name": "awesome_notifications",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     }
   ],
-  "generated": "2022-09-20T19:14:25.193541Z",
+  "generated": "2022-09-25T00:43:38.761665Z",
   "generator": "pub",
   "generatorVersion": "2.18.1"
 }

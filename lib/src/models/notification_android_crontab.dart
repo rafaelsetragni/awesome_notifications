@@ -1,5 +1,5 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/src/utils/list_utils.dart';
+import '../../awesome_notifications.dart';
+import '../utils/list_utils.dart';
 
 class NotificationAndroidCrontab extends NotificationSchedule {
   DateTime? _initialDateTime;

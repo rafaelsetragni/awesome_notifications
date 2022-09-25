@@ -1,5 +1,5 @@
 /// Provides mechanisms to start and stop an Android foreground service,
-/// while utilizing [awesome_notifications `NotificationModel`](https://pub.dev/documentation/awesome_notifications/latest/awesome_notifications/NotificationModel-class.html).
+/// while utilizing [awesome_notifications.dart `NotificationModel`](https://pub.dev/documentation/awesome_notifications/latest/awesome_notifications/NotificationModel-class.html).
 library android_foreground_service;
 
 export 'src/enumerators/android_foreground_service_constants.dart';

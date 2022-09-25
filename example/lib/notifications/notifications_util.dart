@@ -1648,14 +1648,10 @@ class NotificationUtils {
           id: -1,
           channelKey: 'scheduled',
           title: 'Just in time!',
-          body: 'This notification was schedule to shows at ' +
-              (Utils.AwesomeDateUtils.parseDateToString(
+          body: 'This notification was schedule to shows at ${Utils.AwesomeDateUtils.parseDateToString(
                       scheduleTime.toLocal()) ??
-                  '?') +
-              ' $timeZoneIdentifier (' +
-              (Utils.AwesomeDateUtils.parseDateToString(scheduleTime.toUtc()) ??
-                  '?') +
-              ' utc)',
+                  '?'} $timeZoneIdentifier (${Utils.AwesomeDateUtils.parseDateToString(scheduleTime.toUtc()) ??
+                  '?'} utc)',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/delivery.jpeg',
           payload: {'uuid': 'uuid-test'},

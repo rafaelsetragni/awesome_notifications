@@ -304,13 +304,14 @@ class NotificationsController {
 
     // SilentBackgroundAction runs on background thread and cannot show
     // UI/visual elements
-    if (receivedAction.actionType != ActionType.SilentBackgroundAction)
+    if (receivedAction.actionType != ActionType.SilentBackgroundAction) {
       Fluttertoast.showToast(
           msg:
               '${isSilentAction ? 'Silent action' : 'Action'} received on ${_toSimpleEnum(receivedAction.actionLifeCycle!)}',
           toastLength: Toast.LENGTH_SHORT,
           backgroundColor: isSilentAction ? Colors.blueAccent : App.mainColor,
           gravity: ToastGravity.BOTTOM);
+    }
 
     switch (receivedAction.channelKey) {
       case 'call_channel':

@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/i_awesome_notifications.dart';
 import 'package:awesome_notifications/src/models/model.dart';
 import 'package:intl/intl.dart';
+
+import '../definitions.dart';
+import 'string_utils.dart';
 
 const String _dateFormat = "yyyy-MM-dd HH:mm:ss Z";
 

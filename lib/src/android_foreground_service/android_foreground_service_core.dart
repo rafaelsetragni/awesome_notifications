@@ -2,18 +2,21 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
 
-import '../../awesome_notifications.dart';
+import '../definitions.dart';
 import '../enumerators/foreground_start_mode.dart';
 import '../enumerators/foreground_service_type.dart';
 import '../enumerators/android_foreground_service_constants.dart';
+import '../models/notification_button.dart';
+import '../models/notification_content.dart';
+import '../models/notification_model.dart';
+import '../utils/assert_utils.dart';
 
 /// Static helper class that provides methods to start and stop a foreground service.
 ///
 /// On any platform other than Android, all methods in this class are no-ops and do nothing,
 /// so it is safe to call them without a platform check.
 class AndroidForegroundService {
-  static const MethodChannel _channel =
-      const MethodChannel(CHANNEL_FLUTTER_PLUGIN);
+  static const MethodChannel _channel = MethodChannel(CHANNEL_FLUTTER_PLUGIN);
 
   /// Starts the foreground service with the given `notification`, which content must not be `null`.
   ///

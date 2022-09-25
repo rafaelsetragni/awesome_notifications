@@ -2,52 +2,6 @@
   <library name="Flutter Plugins" type="FlutterPluginsLibraryType">
     <CLASSES />
     <JAVADOC />
-    <SOURCES>
-      <root url="file://$PROJECT_DIR$" />
-      <root url="file://$PROJECT_DIR$/android/build/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/android/src/androidTest/java" />
-      <root url="file://$PROJECT_DIR$/android/src/main/java" />
-      <root url="file://$PROJECT_DIR$/android/src/test/java" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/app/generated/not_namespaced_r_class_sources/debug/r" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/app/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/app/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/awesome_notifications/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/awesome_notifications/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/firebase_core/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/firebase_messaging/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/fluttertoast/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/fluttertoast/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/path_provider/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/path_provider/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/shared_preferences/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/shared_preferences/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/url_launcher/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/complete-example/build/url_launcher/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/example/android/app/src/main/java" />
-      <root url="file://$PROJECT_DIR$/example/android/awesome_notifications_core/src/androidTest/java" />
-      <root url="file://$PROJECT_DIR$/example/android/awesome_notifications_core/src/test/java" />
-      <root url="file://$PROJECT_DIR$/example/build/app/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/example/build/app/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/example/build/awesome_notifications/generated/source/buildConfig/androidTest/debug" />
-      <root url="file://$PROJECT_DIR$/example/build/awesome_notifications/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/example/build/awesome_notifications/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/example/build/device_info/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/example/build/device_info/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/example/build/firebase_core/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/example/build/firebase_core/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/example/build/firebase_messaging/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/example/build/firebase_messaging/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/example/build/fluttertoast/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/example/build/fluttertoast/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/example/build/path_provider/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/example/build/path_provider/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/example/build/request_permission/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/example/build/shared_preferences/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/example/build/shared_preferences/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/example/build/url_launcher/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/example/build/url_launcher/generated/source/buildConfig/release" />
-      <root url="file://$PROJECT_DIR$/example/build/vibration/generated/source/buildConfig/debug" />
-      <root url="file://$PROJECT_DIR$/example/build/vibration/generated/source/buildConfig/release" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

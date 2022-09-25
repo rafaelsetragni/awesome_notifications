@@ -1,6 +1,8 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/i_awesome_notifications.dart';
 
 import '../../android_foreground_service.dart';
+import '../models/notification_button.dart';
+import '../models/notification_content.dart';
 
 /// Static helper class that provides methods to start and stop a foreground service.
 ///
