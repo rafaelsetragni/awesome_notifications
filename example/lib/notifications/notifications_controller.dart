@@ -260,6 +260,7 @@ class NotificationsController {
       lifeCycle.toString().split('.').last;
 
   /// Use this method to detect when a new notification or a schedule is created
+  @pragma("vm:entry-point")
   static Future<void> onNotificationCreatedMethod(
       ReceivedNotification receivedNotification) async {
     Fluttertoast.showToast(
@@ -271,6 +272,7 @@ class NotificationsController {
   }
 
   /// Use this method to detect every time that a new notification is displayed
+  @pragma("vm:entry-point")
   static Future<void> onNotificationDisplayedMethod(
       ReceivedNotification receivedNotification) async {
     Fluttertoast.showToast(
@@ -282,6 +284,7 @@ class NotificationsController {
   }
 
   /// Use this method to detect if the user dismissed a notification
+  @pragma("vm:entry-point")
   static Future<void> onDismissActionReceivedMethod(
       ReceivedAction receivedAction) async {
     Fluttertoast.showToast(
@@ -293,6 +296,7 @@ class NotificationsController {
   }
 
   /// Use this method to detect when the user taps on a notification or action button
+  @pragma("vm:entry-point")
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
     // Always ensure that all plugins was initialized

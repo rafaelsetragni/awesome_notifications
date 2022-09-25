@@ -1,10 +1,11 @@
 group 'me.carda.awesome_notifications'
-version '1.0'
+version '0.7.0-alpha.5'
 
 buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 
     dependencies {
@@ -58,8 +59,8 @@ allprojects {
 }
 
 dependencies {
-//    implementation project(':android_core')
-    implementation "me.carda:androidcore:0.0.2-alpha.2"
+//    implementation project(':awn_core')
+    implementation "me.carda:androidcore:0.7.0-alpha.5"
 
     implementation "androidx.core:core:1.8.0"
     implementation "com.google.code.gson:gson:2.8.9"

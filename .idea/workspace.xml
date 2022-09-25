@@ -5,1128 +5,155 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="41ea92a4-a454-4b62-89b7-d4c6aa33afb4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.pubignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/.pubignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_for_Android.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__android_test_mock.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_activity_activity_1_1_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_annotation_annotation_1_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_annotation_annotation_1_3_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_annotation_annotation_experimental_1_1_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_appcompat_appcompat_1_1_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_appcompat_appcompat_resources_1_1_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_common_2_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_runtime_2_1_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_testing_2_1_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_asynclayoutinflater_asynclayoutinflater_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_collection_collection_1_0_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_collection_collection_1_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_coordinatorlayout_coordinatorlayout_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_core_core_1_3_1_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_core_core_1_7_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cursoradapter_cursoradapter_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_customview_customview_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_documentfile_documentfile_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_drawerlayout_drawerlayout_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_fragment_fragment_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_fragment_fragment_1_2_5_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_interpolator_interpolator_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_ui_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_core_utils_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_legacy_legacy_support_v4_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_common_2_2_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_common_2_3_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_common_2_4_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_common_java8_2_2_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_common_java8_2_4_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_2_2_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_2_4_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_core_2_2_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_core_2_4_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_process_2_2_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_process_2_4_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_reactivestreams_2_2_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_reactivestreams_2_4_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_runtime_2_2_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_runtime_2_3_1_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_runtime_2_4_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_service_2_2_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_service_2_4_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_2_2_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_2_4_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_savedstate_2_2_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_savedstate_2_4_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_loader_loader_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_localbroadcastmanager_localbroadcastmanager_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_localbroadcastmanager_localbroadcastmanager_1_1_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_media_media_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_print_print_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_savedstate_savedstate_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_slidingpanelayout_slidingpanelayout_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_startup_startup_runtime_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_swiperefreshlayout_swiperefreshlayout_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_core_1_4_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_ext_junit_1_1_3_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_monitor_1_1_0_alpha3_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_monitor_1_4_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_runner_1_1_0_alpha3_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_runner_1_4_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_test_services_storage_1_4_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_1_1_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_animated_1_1_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_versionedparcelable_versionedparcelable_1_1_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_versionedparcelable_versionedparcelable_1_1_1_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_viewpager_viewpager_1_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_findbugs_jsr305_3_0_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_gson_gson_2_8_5.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_gson_gson_2_8_6.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_errorprone_error_prone_annotations_2_3_4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_failureaccess_1_0_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_guava_30_1_android.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_listenablefuture_9999_0_empty_to_avoid_conflict_with_guava.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_j2objc_j2objc_annotations_1_3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__junit_junit_4_12.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__junit_junit_4_13_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__me_leolin_ShortcutBadger_1_1_22_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__net_bytebuddy_byte_buddy_1_10_18.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__net_bytebuddy_byte_buddy_agent_1_10_18.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__net_sf_kxml_kxml2_2_3_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_checkerframework_checker_compat_qual_2_5_5.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_hamcrest_hamcrest_core_1_3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_annotations_13_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_1_5_30.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_common_1_5_30.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_mockito_mockito_core_2_19_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_mockito_mockito_core_3_6_28.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_mockito_mockito_inline_3_6_28.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_objenesis_objenesis_2_6.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_objenesis_objenesis_3_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_reactivestreams_reactive_streams_1_0_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__pub_devrel_easypermissions_3_0_0_aar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/markdown-navigator-enh.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/markdown-navigator.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/example_lib_main_dart.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.metadata" beforeDir="false" afterPath="$PROJECT_DIR$/.metadata" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/awesome_notifications.iml" beforeDir="false" afterPath="$PROJECT_DIR$/awesome_notifications.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/AutofillStrikeDatabase/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/AutofillStrikeDatabase/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/AutofillStrikeDatabase/LOG.old" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/BudgetDatabase/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/BudgetDatabase/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/BudgetDatabase/LOG.old" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/data_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/data_1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/data_2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/data_3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000002" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000003" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000004" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000005" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000006" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000007" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000008" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000009" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00000a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00000b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00000c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00000d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00000e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00000f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000010" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000011" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000012" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000013" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000014" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000015" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000016" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000017" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000018" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000019" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00001a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00001b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00001c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00001d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00001e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00001f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000020" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000021" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000022" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000023" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000024" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000025" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000026" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000027" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000028" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000029" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00002a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00002b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00002c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00002d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00002e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00002f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000030" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000031" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000032" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000033" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000034" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000035" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000036" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000037" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000038" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000039" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00003a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00003b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00003c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00003d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00003e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00003f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000041" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000042" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000043" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000044" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000045" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000046" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000047" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000049" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00004a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00004b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00004c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00004d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00004e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00004f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000050" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000051" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000052" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000053" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000054" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000055" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000056" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000057" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000058" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000059" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00005a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00005b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00005c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00005d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00005e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00005f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000060" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000061" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000062" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000063" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000064" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000065" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000066" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000067" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000068" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000069" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00006a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00006b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00006c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00006d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00006e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00006f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000070" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000071" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000072" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000073" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000074" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000075" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000076" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000077" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000078" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000079" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00007a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00007b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00007c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00007d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00007e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00007f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000080" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000081" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000082" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000083" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000084" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000085" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000086" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000087" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000089" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00008a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00008b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00008c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00008d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00008e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00008f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000090" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000091" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000092" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000093" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000094" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000095" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000096" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000097" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000098" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_000099" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00009a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00009b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00009c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00009d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00009e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_00009f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000a0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000a1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000a2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000a3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000a4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000a5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000a6" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000a7" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000a8" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000a9" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000aa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000ab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000ac" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000ad" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000ae" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000af" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000b0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000b1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000b2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000b3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000b4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000b5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000b6" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000b7" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000b8" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000b9" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000ba" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000bb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000bc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000bd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000be" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000bf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000c0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000c1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000c2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/f_0000c3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cache/index" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/001a9ea82858b394_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/008334d932b8efd4_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/01c486cd65919c72_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/01f6d181ab8bcc10_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/02279e11372cf4f6_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/023ec0132b82c926_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/023fa0d4efb179f4_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/0449261a915f00d2_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/04c564a8f7cc215a_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/04dd541dbbd02df7_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/072cda29b1b3bdea_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/08480be973c8b3e1_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/08b21094c685066f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/0a23301b6c0d0175_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/0a24f469054ba663_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/0a4bbe6a3d428d21_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/0a7bec1542ced8b0_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/0ab218d63a873027_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/0b0057cac29ac717_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/0b405b12ba9f6636_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/0bd46ff556dd6ee7_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/0c6278c4e6a1106d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/0d10d26927fe0c7f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/0d631788cffa7377_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/0fbdbc2fb21bfa2d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/0fff978adaccbaa2_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/10e16b16120179ae_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/11196d8b2e2cc180_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/118850b82372f001_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/127d3a8e6fb9cf85_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/129869bbaf034020_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/13502bc03bd3317d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/146ac5f841be8906_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/14dc0927a1ffe97d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/15a185b3d7d06ca5_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/15f683da8a065277_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/1676b99ecb94fe71_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/16dbb81824e8271b_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/187c14da3ad4fd01_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/197eeafe4e6e152c_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/1a148bf0b4b78f3d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/1ab2eed815fc4d60_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/1c10631113bbb1d3_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/1d6844c32620a1a4_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/1dc0d592326ec13f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/1eb2333d2efc5de7_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/1f8a318c1db4991e_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/2080f51e215d4916_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/22866089be08be8a_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/228789fe29f78ba8_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/23a647b623a9dde3_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/257c1c12d73e6181_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/25d4ab28a7797765_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/27f6ecc134cffc63_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/2862ae70d21ca457_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/29b3132b1a53b7f1_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/29eb2b995daeca72_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/2b097b065de59593_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/2c5595dc9a47618f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/2c96793ff82a0e41_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/2c9f00716dc044b9_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/2d852fc0a78c02bf_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/2dc1063c25a91822_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/2f67d2149d31a755_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/30946a0e8751c630_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/30a3659a220ea1c2_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/326d8da8853939f7_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/32d8c7330f23ffad_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/32ef7017f16ed391_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/32f0c7dbe9500632_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/336c98b9abfd8f09_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/3508eb4df3e5e9d3_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/3874678d0de2d85c_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/39a488281ad1dcf5_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/3a096d98a98e32ba_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/3a7f50f2a3966eb4_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/3aa41af35ea5184d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/3dd1a86787136d99_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/3e34bbecca513bb7_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/3e64209d6e2ed63a_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/3f42bde51c3752f1_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/41d297c0884c1ae5_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/428c6beed529de26_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/42a981224d574c4a_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/442a895599ae2f98_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/448a03cbc8233909_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/449878611c8b7a23_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/4499a4e4f8dc34fa_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/449caf0abb6a77ff_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/474f7e16ca9b36ad_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/47e2907b5ed22323_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/4908399ab0bfc758_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/495a16f5e404ce17_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/4a4b9315cc1f8100_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/4a86f08baba0031d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/4a95846b24b8195f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/4bb76fcc39ffe6a5_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/4cae84eba2e7300d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/4cc98e09e6ea2a21_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/4d359f80d2c0de0d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/4e3889939c352af1_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/50343fd74ecdae37_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/50a0c0c5cd562cd9_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/5129e2c946b009ab_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/51842e7f7492fc02_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/51b0bcafd8b2b2eb_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/51f788ce6c338288_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/52a551b72c555243_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/5432eb0a499d705e_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/5484b4f74877febc_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/576aa98e6e76cae4_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/5805a77cba23d5bf_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/583b021d3fc50f7d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/5b4c59ec0e6e818c_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/5b622ba29f2ccc9b_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/5b8d8f083c985abd_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/5c1688dc846826fb_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/5de5858c2c0b9267_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/5e1a2dac7820310e_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/5e5819b169962e06_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/5f55c47bb27857be_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/603e85eef139ea6f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/60b49774063a722e_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/614354d66b23c409_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6198f4de15528e44_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/62aaed8170b58a4f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6480ad0a4bb0968c_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6495f1ce0a683165_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/649a9b05ebab5876_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/65e1831e6f11b91f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/663572b60554e5e7_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/684d01b0dc36c3f7_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/68dc6d55c586ebe8_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/695ea1b82204a61c_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/697730955ba2a2ce_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6990b4bca850e880_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6a290f182d686274_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6a55a70e5c948481_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6b914ed364f8b4d4_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6db5cf5566406768_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6e10ad18ffb34c74_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6e6795ae25a1a441_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6e9a74067a5dffa0_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6eeb86c7d65b980f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6f04e9de1a7b6716_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6f4687f528f70ecb_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/6fb20452b159e64e_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/713e79de76b990a2_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/7253d4d3c357ad0a_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/72f41a0a6fb90ea6_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/73254c3ae2b115c1_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/737d027019c8cca3_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/738022a3a8421499_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/760acff07524c639_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/76cf91f05431b6d3_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/7794797a5edd9bbb_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/77d1a72c13faf85b_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/77f69945146e5bff_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/786142c58024ab6d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/78ad62ec29188ca9_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/797eae83760e447c_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/7acb1667eda3338d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/7b583cd9a2f7f0bd_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/7dc81206b9ba8093_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/7eb844d67177679d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/8026187a1ffcb79c_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/803680c45e3abf6d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/81dd09a9af5abafd_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/831967794ac39514_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/83929d5c97384c19_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/83a32d66e226688c_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/83db1b3ef0853a61_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/84583df37f976370_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/84fffcfebd298b17_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/85e9411234910ebb_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/86075a6fefa844f7_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/8663e247eb271729_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/868940ad4b418fe9_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/86b8febb2d5f7847_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/8749e096230fcb3f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/88a302229c244011_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/88aa543f1ec8bfc5_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/88be81685073b263_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/89e3c88975d6fcd7_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/8acd2d7c4c7506a2_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/8ae34cd8aa34c01e_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/8b466e75b359db03_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/8b701519440fe1cf_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/8c2368aedc8e5339_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/8c3e4b6e34198a8e_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/8da9cd4059ed0912_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/8dfa3852b0f8b555_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/8ea5e7b661365f45_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/8ea91bfb8b9d0246_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/8fa5fff4c6a47b14_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/903919f79aa369c8_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/908a385f9961b60a_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/90b468b0946ae632_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/91b55cc872540ece_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/91e32fd84820c412_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/92b378c61211572c_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/93c1a05bf3265b97_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/93f38118285da922_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/94116f6ac0053306_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/94c067a1aca0ff9b_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/951a733c634bbdc4_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/95b15bba3f9c2bd3_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/95b25a6fba19b0bc_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/95fadf880c3aa1ff_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/97d05e3180826bdf_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/98c313ddedb319f5_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/9a1f94fb2e860a39_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/9c4516e9fd5bb04a_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/9cf78939eb4ba28f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/9d4f4d9f8129931b_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/9dbd8ec3658ade6a_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/9f15d7b9feeac442_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/9fb774a0910b041a_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/9fd6778671eced0e_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a1b08c736324a94d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a22b6d98da024ec3_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a2a7937966920d72_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a2cc0b2e769b437b_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a3155a02fc361d11_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a3c387b02da1e089_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a4090edae6a232da_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a4f7e7900718dc7f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a633af63ba90e2f3_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a6803d62d026a36b_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a6c1ed8361ba62fb_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a7b6a2423d7238fd_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a7b76d76a08ac570_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a7dc936dfff2f700_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a89938f417bb0e12_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/a97de70ba3694520_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/aa04c68c92e7c510_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/ac811385531be583_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/aee311b841a600b1_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/af4564638cd7df7c_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/af5ee45647c94f7e_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/af88c5418bd4cacc_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/b22234f7001ba5fe_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/b25c87c6b0d3ba8f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/b284cb48f8291152_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/b37b5b002e05d78f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/b498ec2dab3e336c_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/b643cf453cbc9980_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/b7105a1de7ba2a04_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/b728ffc07edbd9aa_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/b7d392490e02a399_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/b93ca4eb759506f2_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/b9fa3bdb013bb25e_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/ba6009c7b34faeb1_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/ba6a666aeaec573d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/baa6a0ff9223fcae_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/bba61a5e5ba4965a_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/bbfcf0ae964ef341_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/bc116bf2ec052171_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/bd2f715dcdb7bde9_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/bf09db6eb46cbab9_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/bf1d779e41b02e96_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/bffd3565b804f2c7_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/c0adefc0b5626bed_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/c0ee94050a82519b_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/c1c8d978687eb002_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/c2231c084da73cc5_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/c3f5ae804cad6cc6_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/c3f78a7470528777_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/c4809b7cab767d00_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/c4928bbbdae705ee_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/c58d3c0a1cd3db80_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/c7ce0ecca0965c6f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/c85763ccd7e53166_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/ca08c426f3c92fae_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/cb9e1757e890f770_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/cc501ba4e420e2dc_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/cce4d9cfbea659d1_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/ccff8e9fe9d8cbee_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/cdaa2af3aa3c6592_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/ce9729061f5cb58f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/cea490a4292e0656_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/cf20b252dc14a29d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/cff8f8b41d9653c9_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/d070582461d85a22_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/d0a1fc727df7f03e_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/d0c18c6877e90844_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/d15a0b2e9ca23944_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/d17d123a0e93ada3_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/d3f03295da88a4d7_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/d4e58eaa8e619fa2_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/d5b4e22535b4ad93_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/d601b19f926211af_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/d62eda3a046348be_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/d78e3c2577812990_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/d796d0e5b5953d05_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/d879a9cdd0635ee2_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/d952bae1597c9700_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/db79fee47d42872b_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/dc0b272761cdd7fc_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/dc7b0c93b573991d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/dd42729b5280dbaa_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e0473cbb59562ae3_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e14e7ca8d215a61e_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e18cec406ee744b7_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e1ec64dc0c10426a_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e2627e6de3369dfd_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e33437436027a205_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e3961d7fc07f1b57_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e3a79f29361a2125_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e41efd118366ea8a_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e64ae17d321103ba_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e6502ed6889733fb_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e66686997949d509_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e829b427352417eb_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e943a3b449595e96_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/e97e9467950701e4_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/eb5c088a10c201fc_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/ec4d3d8f76845ba7_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/ec6a4798c07f1b64_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/ed3a9531a6604bd2_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/edc83c55ccc1d225_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/eddc582af23ae8fe_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/ee1789be2f6012b3_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/ee522a855dc4863c_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f00db24f6a60c3f4_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f0a70d73c540549e_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f0add38443762d32_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f0c349ffb87240c4_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f125d2acb5edda33_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f1340090412b55c3_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f184160245019fff_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f1a89710f8036f98_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f32ac8de538f2f1b_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f4b21085d3ce8107_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f4d5a81dc85b47d5_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f62813e20f0645c8_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f6665452910b0cef_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f76006e380dd341a_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f7976d23f3dba463_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f7d6e283c78df9fe_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f7e8f45658727c7c_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f86b2af9dd58213f_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f9a9f8570ec7cd39_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/f9dcfc98f7257024_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/fa6e90e5152df7a7_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/faf90f9828bc0e51_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/fb0ab89f82ee7bf5_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/fb2fe05c3231e6ed_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/fb63b7ad1b33aa7e_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/fb8d3b3576df01b3_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/fc0bf71f3ff2e7a3_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/fc7c80554e4d772b_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/fc7fe1517f6a3b4d_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/fca88848edf2e2b1_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/fcbfc61d88458988_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/fd51ee3e75eb8efc_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/fe82ccba8d568641_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/fe92629bfda6e212_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/ff8834b9958b8ce9_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/index" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/js/index-dir/the-real-index" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/wasm/index" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Code Cache/wasm/index-dir/the-real-index" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Collections/collectionsSQLite" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Collections/collectionsSQLite-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cookies" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Cookies-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Edge Profile Picture.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/EdgePushStorageWithConnectTokenAndKey/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/EdgePushStorageWithConnectTokenAndKey/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/EdgePushStorageWithWinRt/000003.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/EdgePushStorageWithWinRt/CURRENT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/EdgePushStorageWithWinRt/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/EdgePushStorageWithWinRt/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/EdgePushStorageWithWinRt/LOG.old" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/EdgePushStorageWithWinRt/MANIFEST-000001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Extension State/000003.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Extension State/CURRENT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Extension State/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Extension State/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Extension State/MANIFEST-000001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Favicons" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Favicons-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Feature Engagement Tracker/AvailabilityDB/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Feature Engagement Tracker/AvailabilityDB/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Feature Engagement Tracker/EventDB/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Feature Engagement Tracker/EventDB/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/GPUCache/data_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/GPUCache/data_1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/GPUCache/data_2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/GPUCache/data_3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/GPUCache/index" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/History" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/History Provider Cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/History-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Local Extension Settings/jdiccldimpdaibmpdkjnbmckianbfold/000003.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Local Extension Settings/jdiccldimpdaibmpdkjnbmckianbfold/CURRENT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Local Extension Settings/jdiccldimpdaibmpdkjnbmckianbfold/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Local Extension Settings/jdiccldimpdaibmpdkjnbmckianbfold/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Local Extension Settings/jdiccldimpdaibmpdkjnbmckianbfold/MANIFEST-000001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Local Storage/leveldb/000003.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Local Storage/leveldb/CURRENT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Local Storage/leveldb/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Local Storage/leveldb/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Local Storage/leveldb/MANIFEST-000001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Login Data" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Login Data-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Media History" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Media History-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Microsoft Edge.lnk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Network Action Predictor" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Network Action Predictor-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Network Persistent State" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Preferences" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/PreferredApps" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Reporting and NEL" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Reporting and NEL-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Secure Preferences" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Session Storage/000003.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Session Storage/CURRENT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Session Storage/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Session Storage/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Session Storage/MANIFEST-000001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Sessions/Session_13264468447791412" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Sessions/Tabs_13264468492018552" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Shortcuts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Shortcuts-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Site Characteristics Database/000003.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Site Characteristics Database/CURRENT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Site Characteristics Database/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Site Characteristics Database/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Site Characteristics Database/MANIFEST-000001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Cache/data_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Cache/data_1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Cache/data_2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Cache/data_3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Cache/index" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Code Cache/js/index" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Code Cache/js/index-dir/the-real-index" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Code Cache/wasm/index" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Code Cache/wasm/index-dir/the-real-index" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/GPUCache/data_0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/GPUCache/data_1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/GPUCache/data_2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/GPUCache/data_3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/GPUCache/index" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Local Storage/leveldb/000003.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Local Storage/leveldb/CURRENT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Local Storage/leveldb/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Local Storage/leveldb/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Local Storage/leveldb/MANIFEST-000001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Network Persistent State" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Reporting and NEL" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Reporting and NEL-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Session Storage/000003.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Session Storage/CURRENT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Session Storage/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Session Storage/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/Session Storage/MANIFEST-000001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Storage/ext/ihmafllikibpmigkcoadcmckbfhibefp/def/TransportSecurity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Sync Data/LevelDB/000003.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Sync Data/LevelDB/CURRENT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Sync Data/LevelDB/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Sync Data/LevelDB/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Sync Data/LevelDB/MANIFEST-000001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Sync Data/Logs/cv_debug.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Sync Data/Nigori.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Top Sites" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Top Sites-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/TransportSecurity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Visited Links" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Web Data" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/Web Data-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/data_reduction_proxy_leveldb/000003.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/data_reduction_proxy_leveldb/CURRENT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/data_reduction_proxy_leveldb/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/data_reduction_proxy_leveldb/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/data_reduction_proxy_leveldb/MANIFEST-000002" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/heavy_ad_intervention_opt_out.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/heavy_ad_intervention_opt_out.db-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/load_statistics.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/previews_opt_out.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/previews_opt_out.db-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/shared_proto_db/000003.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/shared_proto_db/CURRENT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/shared_proto_db/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/shared_proto_db/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/shared_proto_db/MANIFEST-000001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/shared_proto_db/metadata/000003.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/shared_proto_db/metadata/CURRENT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/shared_proto_db/metadata/LOCK" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/shared_proto_db/metadata/LOG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/chrome-device/Default/shared_proto_db/metadata/MANIFEST-000001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/11e6ce610340a7a8ffe9fdc9fc3a3dff/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/11e6ce610340a7a8ffe9fdc9fc3a3dff/android_aot_bundle_release_android-arm.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/11e6ce610340a7a8ffe9fdc9fc3a3dff/android_aot_release_android-arm.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/11e6ce610340a7a8ffe9fdc9fc3a3dff/aot_android_asset_bundle.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/11e6ce610340a7a8ffe9fdc9fc3a3dff/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/11e6ce610340a7a8ffe9fdc9fc3a3dff/armeabi-v7a/app.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/11e6ce610340a7a8ffe9fdc9fc3a3dff/flutter_android_aot_bundle_release_android-arm.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/11e6ce610340a7a8ffe9fdc9fc3a3dff/flutter_android_aot_release_android-arm.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/11e6ce610340a7a8ffe9fdc9fc3a3dff/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/11e6ce610340a7a8ffe9fdc9fc3a3dff/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/11e6ce610340a7a8ffe9fdc9fc3a3dff/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/11e6ce610340a7a8ffe9fdc9fc3a3dff/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/11e6ce610340a7a8ffe9fdc9fc3a3dff/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1371888624f8f81296d9479b51f103dc/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1371888624f8f81296d9479b51f103dc/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1371888624f8f81296d9479b51f103dc/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1371888624f8f81296d9479b51f103dc/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1371888624f8f81296d9479b51f103dc/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1371888624f8f81296d9479b51f103dc/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1371888624f8f81296d9479b51f103dc/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1371888624f8f81296d9479b51f103dc/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/14ad5dab18ba5ac637521039c3b24a01/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/14ad5dab18ba5ac637521039c3b24a01/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/14ad5dab18ba5ac637521039c3b24a01/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/14ad5dab18ba5ac637521039c3b24a01/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/14ad5dab18ba5ac637521039c3b24a01/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/14ad5dab18ba5ac637521039c3b24a01/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/14ad5dab18ba5ac637521039c3b24a01/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/14ad5dab18ba5ac637521039c3b24a01/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/15618af8c97fa7807b05b9dcae60e1d4/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/15618af8c97fa7807b05b9dcae60e1d4/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/15618af8c97fa7807b05b9dcae60e1d4/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/15618af8c97fa7807b05b9dcae60e1d4/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/15618af8c97fa7807b05b9dcae60e1d4/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/15618af8c97fa7807b05b9dcae60e1d4/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/15618af8c97fa7807b05b9dcae60e1d4/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/15618af8c97fa7807b05b9dcae60e1d4/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1769514eb4a5a4e59b938ffc35df9918/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1769514eb4a5a4e59b938ffc35df9918/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1769514eb4a5a4e59b938ffc35df9918/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1769514eb4a5a4e59b938ffc35df9918/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1769514eb4a5a4e59b938ffc35df9918/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1769514eb4a5a4e59b938ffc35df9918/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1769514eb4a5a4e59b938ffc35df9918/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1769514eb4a5a4e59b938ffc35df9918/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1e528cf593f6d6b6df9ed3238853f64d/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1e528cf593f6d6b6df9ed3238853f64d/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1e528cf593f6d6b6df9ed3238853f64d/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1e528cf593f6d6b6df9ed3238853f64d/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1e528cf593f6d6b6df9ed3238853f64d/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1e528cf593f6d6b6df9ed3238853f64d/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1e528cf593f6d6b6df9ed3238853f64d/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/1e528cf593f6d6b6df9ed3238853f64d/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/26e61d5041ece8bae6217a2e81bf096e/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/26e61d5041ece8bae6217a2e81bf096e/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/26e61d5041ece8bae6217a2e81bf096e/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/26e61d5041ece8bae6217a2e81bf096e/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/26e61d5041ece8bae6217a2e81bf096e/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/26e61d5041ece8bae6217a2e81bf096e/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/26e61d5041ece8bae6217a2e81bf096e/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/26e61d5041ece8bae6217a2e81bf096e/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/302613a42b9c862ee673a0d16675e81b/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/302613a42b9c862ee673a0d16675e81b/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/302613a42b9c862ee673a0d16675e81b/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/302613a42b9c862ee673a0d16675e81b/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/302613a42b9c862ee673a0d16675e81b/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/302613a42b9c862ee673a0d16675e81b/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/302613a42b9c862ee673a0d16675e81b/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/302613a42b9c862ee673a0d16675e81b/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/33142f106fc8a57c2246c566de370a3d/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/33142f106fc8a57c2246c566de370a3d/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/33142f106fc8a57c2246c566de370a3d/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/33142f106fc8a57c2246c566de370a3d/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/33142f106fc8a57c2246c566de370a3d/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/33142f106fc8a57c2246c566de370a3d/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/33142f106fc8a57c2246c566de370a3d/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/33142f106fc8a57c2246c566de370a3d/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/36bd25f9b7e065138b790da81e4c19b7/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/36bd25f9b7e065138b790da81e4c19b7/android_aot_bundle_release_android-arm.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/36bd25f9b7e065138b790da81e4c19b7/android_aot_release_android-arm.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/36bd25f9b7e065138b790da81e4c19b7/aot_android_asset_bundle.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/36bd25f9b7e065138b790da81e4c19b7/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/36bd25f9b7e065138b790da81e4c19b7/armeabi-v7a/app.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/36bd25f9b7e065138b790da81e4c19b7/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/36bd25f9b7e065138b790da81e4c19b7/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/36bd25f9b7e065138b790da81e4c19b7/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/36bd25f9b7e065138b790da81e4c19b7/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/36bd25f9b7e065138b790da81e4c19b7/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/41a7913f24b7c361151e44c6741ffab5/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/41a7913f24b7c361151e44c6741ffab5/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/41a7913f24b7c361151e44c6741ffab5/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/41a7913f24b7c361151e44c6741ffab5/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/41a7913f24b7c361151e44c6741ffab5/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/41a7913f24b7c361151e44c6741ffab5/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/41a7913f24b7c361151e44c6741ffab5/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/41a7913f24b7c361151e44c6741ffab5/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/45044bd73b707392470fde2a84cd7162/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/45044bd73b707392470fde2a84cd7162/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/45044bd73b707392470fde2a84cd7162/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/45044bd73b707392470fde2a84cd7162/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/45044bd73b707392470fde2a84cd7162/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/45044bd73b707392470fde2a84cd7162/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/45044bd73b707392470fde2a84cd7162/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/45044bd73b707392470fde2a84cd7162/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/629ec0064e68524e1e0d6700f89ceb2d/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/629ec0064e68524e1e0d6700f89ceb2d/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/629ec0064e68524e1e0d6700f89ceb2d/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/629ec0064e68524e1e0d6700f89ceb2d/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/629ec0064e68524e1e0d6700f89ceb2d/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/629ec0064e68524e1e0d6700f89ceb2d/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/629ec0064e68524e1e0d6700f89ceb2d/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/629ec0064e68524e1e0d6700f89ceb2d/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/670f48bc36e352052d042e5e5895eedc/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/670f48bc36e352052d042e5e5895eedc/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/670f48bc36e352052d042e5e5895eedc/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/670f48bc36e352052d042e5e5895eedc/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/670f48bc36e352052d042e5e5895eedc/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/670f48bc36e352052d042e5e5895eedc/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/670f48bc36e352052d042e5e5895eedc/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/670f48bc36e352052d042e5e5895eedc/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/6afcf4a6a9a941383dd9b37bdd093da8/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/6afcf4a6a9a941383dd9b37bdd093da8/android_aot_bundle_release_android-arm.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/6afcf4a6a9a941383dd9b37bdd093da8/android_aot_release_android-arm.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/6afcf4a6a9a941383dd9b37bdd093da8/aot_android_asset_bundle.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/6afcf4a6a9a941383dd9b37bdd093da8/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/6afcf4a6a9a941383dd9b37bdd093da8/armeabi-v7a/app.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/6afcf4a6a9a941383dd9b37bdd093da8/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/6afcf4a6a9a941383dd9b37bdd093da8/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/6afcf4a6a9a941383dd9b37bdd093da8/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/6afcf4a6a9a941383dd9b37bdd093da8/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/6afcf4a6a9a941383dd9b37bdd093da8/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/72beeae5ec36fc19dedd1b1d9d980997/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/72beeae5ec36fc19dedd1b1d9d980997/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/72beeae5ec36fc19dedd1b1d9d980997/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/72beeae5ec36fc19dedd1b1d9d980997/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/72beeae5ec36fc19dedd1b1d9d980997/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/72beeae5ec36fc19dedd1b1d9d980997/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/72beeae5ec36fc19dedd1b1d9d980997/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/72beeae5ec36fc19dedd1b1d9d980997/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/7a4ee282f86a7cb690615d4f5af3a3dc/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/7a4ee282f86a7cb690615d4f5af3a3dc/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/7a4ee282f86a7cb690615d4f5af3a3dc/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/7a4ee282f86a7cb690615d4f5af3a3dc/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/7a4ee282f86a7cb690615d4f5af3a3dc/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/7a4ee282f86a7cb690615d4f5af3a3dc/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/7a4ee282f86a7cb690615d4f5af3a3dc/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/7a4ee282f86a7cb690615d4f5af3a3dc/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/8e4ba288d3597ea4d85534cc733f7789/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/8e4ba288d3597ea4d85534cc733f7789/android_aot_bundle_release_android-arm.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/8e4ba288d3597ea4d85534cc733f7789/android_aot_release_android-arm.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/8e4ba288d3597ea4d85534cc733f7789/aot_android_asset_bundle.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/8e4ba288d3597ea4d85534cc733f7789/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/8e4ba288d3597ea4d85534cc733f7789/armeabi-v7a/app.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/8e4ba288d3597ea4d85534cc733f7789/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/8e4ba288d3597ea4d85534cc733f7789/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/8e4ba288d3597ea4d85534cc733f7789/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/8e4ba288d3597ea4d85534cc733f7789/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/8e4ba288d3597ea4d85534cc733f7789/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a35d04f381dfc40d41ea1d08e67b23ce/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a35d04f381dfc40d41ea1d08e67b23ce/android_aot_bundle_release_android-arm.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a35d04f381dfc40d41ea1d08e67b23ce/android_aot_release_android-arm.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a35d04f381dfc40d41ea1d08e67b23ce/aot_android_asset_bundle.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a35d04f381dfc40d41ea1d08e67b23ce/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a35d04f381dfc40d41ea1d08e67b23ce/armeabi-v7a/app.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a35d04f381dfc40d41ea1d08e67b23ce/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a35d04f381dfc40d41ea1d08e67b23ce/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a35d04f381dfc40d41ea1d08e67b23ce/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a35d04f381dfc40d41ea1d08e67b23ce/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a35d04f381dfc40d41ea1d08e67b23ce/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/_composite.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/android_aot_bundle_release_android-arm.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/android_aot_bundle_release_android-arm64.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/android_aot_bundle_release_android-x64.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/android_aot_release_android-arm.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/android_aot_release_android-arm64.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/android_aot_release_android-x64.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/aot_android_asset_bundle.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/arm64-v8a/app.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/armeabi-v7a/app.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/a4fe61cbe13eb60894e657968375ab6e/x86_64/app.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ac7ec62533fb1e128092a91e55b632ec/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ac7ec62533fb1e128092a91e55b632ec/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ac7ec62533fb1e128092a91e55b632ec/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ac7ec62533fb1e128092a91e55b632ec/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ac7ec62533fb1e128092a91e55b632ec/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ac7ec62533fb1e128092a91e55b632ec/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ac7ec62533fb1e128092a91e55b632ec/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ac7ec62533fb1e128092a91e55b632ec/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/b51f5d15a6904fd7b111fd97243005f2/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/b51f5d15a6904fd7b111fd97243005f2/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/b51f5d15a6904fd7b111fd97243005f2/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/b51f5d15a6904fd7b111fd97243005f2/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/b51f5d15a6904fd7b111fd97243005f2/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/b51f5d15a6904fd7b111fd97243005f2/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/b51f5d15a6904fd7b111fd97243005f2/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/b51f5d15a6904fd7b111fd97243005f2/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/c75c05392fa48aba46c05c714ff1bfb0/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/c75c05392fa48aba46c05c714ff1bfb0/android_aot_bundle_release_android-arm.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/c75c05392fa48aba46c05c714ff1bfb0/android_aot_release_android-arm.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/c75c05392fa48aba46c05c714ff1bfb0/aot_android_asset_bundle.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/c75c05392fa48aba46c05c714ff1bfb0/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/c75c05392fa48aba46c05c714ff1bfb0/armeabi-v7a/app.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/c75c05392fa48aba46c05c714ff1bfb0/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/c75c05392fa48aba46c05c714ff1bfb0/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/c75c05392fa48aba46c05c714ff1bfb0/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/c75c05392fa48aba46c05c714ff1bfb0/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/c75c05392fa48aba46c05c714ff1bfb0/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ca89c3b9eb8e553549f2ff59caff047e/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ca89c3b9eb8e553549f2ff59caff047e/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ca89c3b9eb8e553549f2ff59caff047e/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ca89c3b9eb8e553549f2ff59caff047e/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ca89c3b9eb8e553549f2ff59caff047e/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ca89c3b9eb8e553549f2ff59caff047e/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ca89c3b9eb8e553549f2ff59caff047e/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ccbfa04a2882e1720bf9616f6de078f4/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ccbfa04a2882e1720bf9616f6de078f4/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ccbfa04a2882e1720bf9616f6de078f4/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ccbfa04a2882e1720bf9616f6de078f4/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ccbfa04a2882e1720bf9616f6de078f4/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ccbfa04a2882e1720bf9616f6de078f4/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ccbfa04a2882e1720bf9616f6de078f4/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ccbfa04a2882e1720bf9616f6de078f4/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/d35f67fc9bb367e29ba473f6cd5d02ba/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/d35f67fc9bb367e29ba473f6cd5d02ba/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/d35f67fc9bb367e29ba473f6cd5d02ba/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/d35f67fc9bb367e29ba473f6cd5d02ba/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/d35f67fc9bb367e29ba473f6cd5d02ba/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/d35f67fc9bb367e29ba473f6cd5d02ba/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/d35f67fc9bb367e29ba473f6cd5d02ba/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/d35f67fc9bb367e29ba473f6cd5d02ba/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/dc59fcae5d323d015f8cafa997982bf3/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/dc59fcae5d323d015f8cafa997982bf3/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/dc59fcae5d323d015f8cafa997982bf3/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/dc59fcae5d323d015f8cafa997982bf3/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/dc59fcae5d323d015f8cafa997982bf3/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/dc59fcae5d323d015f8cafa997982bf3/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/dc59fcae5d323d015f8cafa997982bf3/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/dc59fcae5d323d015f8cafa997982bf3/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/de0711790291d26bfcb97df137e01ccb/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/de0711790291d26bfcb97df137e01ccb/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/de0711790291d26bfcb97df137e01ccb/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/de0711790291d26bfcb97df137e01ccb/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/de0711790291d26bfcb97df137e01ccb/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/de0711790291d26bfcb97df137e01ccb/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/de0711790291d26bfcb97df137e01ccb/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/de0711790291d26bfcb97df137e01ccb/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/e7dcdf681eaec80f71e74a51465ab156/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/e7dcdf681eaec80f71e74a51465ab156/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/e7dcdf681eaec80f71e74a51465ab156/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/e7dcdf681eaec80f71e74a51465ab156/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/e7dcdf681eaec80f71e74a51465ab156/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/e7dcdf681eaec80f71e74a51465ab156/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/e7dcdf681eaec80f71e74a51465ab156/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/e7dcdf681eaec80f71e74a51465ab156/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ffa025444f27cdb9cd650556135883d0/.filecache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ffa025444f27cdb9cd650556135883d0/app.dill" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ffa025444f27cdb9cd650556135883d0/debug_android_application.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ffa025444f27cdb9cd650556135883d0/flutter_assets.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ffa025444f27cdb9cd650556135883d0/gen_localizations.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ffa025444f27cdb9cd650556135883d0/kernel_snapshot.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ffa025444f27cdb9cd650556135883d0/kernel_snapshot.stamp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/flutter_build/ffa025444f27cdb9cd650556135883d0/outputs.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/package_config.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/package_config_subset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.dart_tool/version" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/complete-example/.packages" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/example/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/example/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/datasources/firebase_datasource.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/consumer-rules.pro" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/jitpack.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/proguard-rules.pro" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/androidTest/java/me/carda/awesome_notifications/core/ExampleInstrumentedTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/AwesomeNotifications.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/AwesomeNotificationsExtension.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/Definitions.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/background/BackgroundExecutor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/AwesomeBroadcastReceiver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/AwesomeEventsReceiver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/AwesomeExceptionReceiver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/DismissedNotificationReceiver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/NotificationActionReceiver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/RefreshSchedulesReceiver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/ScheduledNotificationReceiver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/senders/BroadcastSender.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/builders/NotificationBuilder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/completion_handlers/ActivityCompletionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/completion_handlers/BitmapCompletionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/completion_handlers/NotificationThreadCompletionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/completion_handlers/PermissionCompletionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/decoders/BitmapResourceDecoder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/ActionType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/DefaultRingtoneType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/ForegroundServiceType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/ForegroundStartMode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/GroupAlertBehaviour.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/GroupSort.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/LogLevel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/MediaSource.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/NotificationCategory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/NotificationImportance.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/NotificationLayout.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/NotificationLifeCycle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/NotificationPermission.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/NotificationPrivacy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/NotificationSource.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/enumerators/SafeEnum.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/exceptions/AwesomeNotificationsException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/exceptions/ExceptionCode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/exceptions/ExceptionFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/externalLibs/CronExpression.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/externalLibs/SuperCronExpression.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/listeners/AwesomeActionEventListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/listeners/AwesomeEventListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/listeners/AwesomeExceptionListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/listeners/AwesomeLifeCycleEventListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/listeners/AwesomeNotificationEventListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/logs/Logger.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/managers/ActionManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/managers/BadgeManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/managers/CancellationManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/managers/ChannelGroupManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/managers/ChannelManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/managers/CreatedManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/managers/DefaultsManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/managers/DismissedManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/managers/DisplayedManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/managers/LifeCycleManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/managers/PermissionManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/managers/ScheduleManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/managers/SharedManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/managers/StatusBarManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/models/AbstractModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/models/DefaultsModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/models/NotificationButtonModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/models/NotificationCalendarModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/models/NotificationChannelGroupModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/models/NotificationChannelModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/models/NotificationContentModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/models/NotificationCrontabModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/models/NotificationIntervalModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/models/NotificationMessageModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/models/NotificationModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/models/NotificationScheduleModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/models/returnedData/ActionReceived.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/models/returnedData/NotificationReceived.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/services/AutoCancelService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/services/AwesomeBackgroundService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/services/ForegroundService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationForegroundSender.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationScheduler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationSender.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationThread.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/AudioUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/BitmapUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/BooleanUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/CalendarUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/CompareUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/CronUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/EnumUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/HtmlUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/IntegerUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/JsonUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/ListUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/MapUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/MediaUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/SerializableUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/StringUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/ThreadUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/main/java/me/carda/awesome_notifications/core/utils/TimeZoneUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/android_core/src/test/java/me/carda/awesome_notifications/core/ExampleUnitTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/AwesomeNotifications.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/AwesomeNotifications.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/AwesomeExceptionReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/AwesomeExceptionReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/senders/BroadcastSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/senders/BroadcastSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/builders/NotificationBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/builders/NotificationBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/completion_handlers/NotificationThreadCompletionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/completion_handlers/NotificationThreadCompletionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/exceptions/AwesomeNotificationsException.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/exceptions/AwesomeNotificationsException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/exceptions/ExceptionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/exceptions/ExceptionFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/ChannelManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/ChannelManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/PermissionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/PermissionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/ScheduleManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/ScheduleManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/SharedManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/SharedManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/StatusBarManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/StatusBarManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationForegroundSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationForegroundSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/utils/AudioUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/utils/AudioUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/utils/BitmapUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/utils/BitmapUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/settings.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/notifications/notifications_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/notifications/notifications_util.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/pages/firebase_test_page.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/routes/routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/routes/routes.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/linux/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/example/linux/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/linux/flutter/generated_plugin_registrant.h" beforeDir="false" afterPath="$PROJECT_DIR$/example/linux/flutter/generated_plugin_registrant.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/linux/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/example/linux/flutter/generated_plugins.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/test/widget_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/test/widget_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/web/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/web/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/example/web/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/android_foreground_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/android_foreground_service.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/example/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/windows/flutter/generated_plugin_registrant.h" beforeDir="false" afterPath="$PROJECT_DIR$/example/windows/flutter/generated_plugin_registrant.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/example/windows/flutter/generated_plugins.cmake" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/awesome_notifications.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/android_foreground_service/android_foreground_service_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/android_foreground_service/android_foreground_service_core.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/android_foreground_service/android_foreground_service_web.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/android_foreground_service/android_foreground_service_web.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/awesome_notifications_core.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/awesome_notifications_web.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/isolates/isolate_main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/isolates/isolate_main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/base_notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/base_notification_content.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_android_crontab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_android_crontab.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_calendar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_calendar.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_channel.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_content.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_interval.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_interval.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/received_models/push_notification.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/received_models/push_notification.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/received_models/received_action.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/received_models/received_action.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/received_models/received_notification.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/received_models/received_notification.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/resource_image_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/resource_image_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/awesome_notifications_platform.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications_platform.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/awesome_notifications_web.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications_web.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/awesome_notifications_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/awesome_notifications_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/extraction_values_test.dart" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1137,14 +164,13 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$USER_HOME$/Development/flutter/bin/cache/pkg/sky_engine/lib/io/platform.dart" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/lib/awesome_notifications_web.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/lib/awesome_notifications_empty.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/README.md" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/lib/i_awesome_notifications.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/pubspec.yaml" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/src/models/notification_android_crontab.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/lib/awesome_notifications_empty.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/lib/awesome_notifications_web.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/lib/i_awesome_notifications.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/awesome_notifications_core.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/README.md" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -1163,6 +189,7 @@
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/example" />
+    <property name="settings.editor.selected.configurable" value="flutter.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
@@ -1200,5 +227,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

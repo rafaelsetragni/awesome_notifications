@@ -20,52 +20,28 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   }
 
   @override
-  Future<void> cancel(int id) {
-    // TODO: implement cancel
-    throw UnimplementedError();
-  }
+  Future<void> cancel(int id) async {}
 
   @override
-  Future<void> cancelAll() {
-    // TODO: implement cancelAll
-    throw UnimplementedError();
-  }
+  Future<void> cancelAll() async {}
 
   @override
-  Future<void> cancelAllSchedules() {
-    // TODO: implement cancelAllSchedules
-    throw UnimplementedError();
-  }
+  Future<void> cancelAllSchedules() async {}
 
   @override
-  Future<void> cancelNotificationsByChannelKey(String channelKey) {
-    // TODO: implement cancelNotificationsByChannelKey
-    throw UnimplementedError();
-  }
+  Future<void> cancelNotificationsByChannelKey(String channelKey) async {}
 
   @override
-  Future<void> cancelNotificationsByGroupKey(String groupKey) {
-    // TODO: implement cancelNotificationsByGroupKey
-    throw UnimplementedError();
-  }
+  Future<void> cancelNotificationsByGroupKey(String groupKey) async {}
 
   @override
-  Future<void> cancelSchedule(int id) {
-    // TODO: implement cancelSchedule
-    throw UnimplementedError();
-  }
+  Future<void> cancelSchedule(int id) async {}
 
   @override
-  Future<void> cancelSchedulesByChannelKey(String channelKey) {
-    // TODO: implement cancelSchedulesByChannelKey
-    throw UnimplementedError();
-  }
+  Future<void> cancelSchedulesByChannelKey(String channelKey) async {}
 
   @override
-  Future<void> cancelSchedulesByGroupKey(String groupKey) {
-    // TODO: implement cancelSchedulesByGroupKey
-    throw UnimplementedError();
-  }
+  Future<void> cancelSchedulesByGroupKey(String groupKey) async {}
 
   @override
   Future<List<NotificationPermission>> checkPermissionList(
@@ -76,127 +52,98 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
         NotificationPermission.Sound,
         NotificationPermission.Vibration,
         NotificationPermission.Light
-      ]}) {
-    // TODO: implement checkPermissionList
-    throw UnimplementedError();
+      ]}) async {
+    return [];
   }
 
   @override
   Future<bool> createNotification(
       {required NotificationContent content,
       NotificationSchedule? schedule,
-      List<NotificationActionButton>? actionButtons}) {
-    // TODO: implement createNotification
-    throw UnimplementedError();
+      List<NotificationActionButton>? actionButtons}) async {
+    return false;
   }
 
   @override
-  Future<bool> createNotificationFromJsonData(Map<String, dynamic> mapData) {
-    // TODO: implement createNotificationFromJsonData
-    throw UnimplementedError();
+  Future<bool> createNotificationFromJsonData(
+      Map<String, dynamic> mapData) async {
+    return false;
   }
 
   @override
-  Future<int> decrementGlobalBadgeCounter() {
-    // TODO: implement decrementGlobalBadgeCounter
-    throw UnimplementedError();
+  Future<int> decrementGlobalBadgeCounter() async {
+    return 0;
   }
 
   @override
-  Future<void> dismiss(int id) {
-    // TODO: implement dismiss
-    throw UnimplementedError();
+  Future<void> dismiss(int id) async {}
+
+  @override
+  Future<void> dismissAllNotifications() async {}
+
+  @override
+  Future<void> dismissNotificationsByChannelKey(String channelKey) async {}
+
+  @override
+  Future<void> dismissNotificationsByGroupKey(String groupKey) async {}
+
+  @override
+  Future<NotificationLifeCycle> getAppLifeCycle() async {
+    return NotificationLifeCycle.AppKilled;
   }
 
   @override
-  Future<void> dismissAllNotifications() {
-    // TODO: implement dismissAllNotifications
-    throw UnimplementedError();
+  Future<Uint8List?> getDrawableData(String drawablePath) async {
+    return null;
   }
 
   @override
-  Future<void> dismissNotificationsByChannelKey(String channelKey) {
-    // TODO: implement dismissNotificationsByChannelKey
-    throw UnimplementedError();
+  Future<int> getGlobalBadgeCounter() async {
+    return 0;
   }
 
   @override
-  Future<void> dismissNotificationsByGroupKey(String groupKey) {
-    // TODO: implement dismissNotificationsByGroupKey
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<NotificationLifeCycle> getAppLifeCycle() {
-    // TODO: implement getAppLifeCycle
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Uint8List?> getDrawableData(String drawablePath) {
-    // TODO: implement getDrawableData
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<int> getGlobalBadgeCounter() {
-    // TODO: implement getGlobalBadgeCounter
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<String> getLocalTimeZoneIdentifier() {
-    // TODO: implement getLocalTimeZoneIdentifier
-    throw UnimplementedError();
+  Future<String> getLocalTimeZoneIdentifier() async {
+    return AwesomeNotifications.localTimeZoneIdentifier;
   }
 
   @override
   Future<DateTime?> getNextDate(NotificationSchedule schedule,
-      {DateTime? fixedDate}) {
-    // TODO: implement getNextDate
-    throw UnimplementedError();
+      {DateTime? fixedDate}) async {
+    return null;
   }
 
   @override
-  Future<String> getUtcTimeZoneIdentifier() {
-    // TODO: implement getUtcTimeZoneIdentifier
-    throw UnimplementedError();
+  Future<String> getUtcTimeZoneIdentifier() async {
+    return AwesomeNotifications.utcTimeZoneIdentifier;
   }
 
   @override
-  Future<int> incrementGlobalBadgeCounter() {
-    // TODO: implement incrementGlobalBadgeCounter
-    throw UnimplementedError();
+  Future<int> incrementGlobalBadgeCounter() async {
+    return 0;
   }
 
   @override
   Future<bool> initialize(
       String? defaultIcon, List<NotificationChannel> channels,
-      {List<NotificationChannelGroup>? channelGroups, bool debug = false}) {
-    // TODO: implement initialize
-    throw UnimplementedError();
+      {List<NotificationChannelGroup>? channelGroups,
+      bool debug = false}) async {
+    return false;
   }
 
   @override
-  Future<bool> isNotificationAllowed() {
-    // TODO: implement isNotificationAllowed
-    throw UnimplementedError();
+  Future<bool> isNotificationAllowed() async {
+    return false;
   }
 
   @override
-  Future<List<NotificationModel>> listScheduledNotifications() {
-    // TODO: implement listScheduledNotifications
-    throw UnimplementedError();
+  Future<List<NotificationModel>> listScheduledNotifications() async {
+    return [];
   }
 
   @override
-  // TODO: implement localTimeZoneIdentifier
-  String get localTimeZoneIdentifierName => throw UnimplementedError();
-
-  @override
-  Future<bool> removeChannel(String channelKey) {
-    // TODO: implement removeChannel
-    throw UnimplementedError();
+  Future<bool> removeChannel(String channelKey) async {
+    return false;
   }
 
   @override
@@ -208,38 +155,27 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
         NotificationPermission.Badge,
         NotificationPermission.Vibration,
         NotificationPermission.Light
-      ]}) {
-    // TODO: implement requestPermissionToSendNotifications
-    throw UnimplementedError();
+      ]}) async {
+    return false;
   }
 
   @override
-  Future<void> resetGlobalBadge() {
-    // TODO: implement resetGlobalBadge
-    throw UnimplementedError();
-  }
+  Future<void> resetGlobalBadge() async {}
 
   @override
   Future<void> setChannel(NotificationChannel notificationChannel,
-      {bool forceUpdate = false}) {
-    // TODO: implement setChannel
-    throw UnimplementedError();
-  }
+      {bool forceUpdate = false}) async {}
 
   @override
-  Future<void> setGlobalBadgeCounter(int? amount) {
-    // TODO: implement setGlobalBadgeCounter
-    throw UnimplementedError();
-  }
+  Future<void> setGlobalBadgeCounter(int? amount) async {}
 
   @override
   Future<bool> setListeners(
       {required ActionHandler onActionReceivedMethod,
       NotificationHandler? onNotificationCreatedMethod,
       NotificationHandler? onNotificationDisplayedMethod,
-      ActionHandler? onDismissActionReceivedMethod}) {
-    // TODO: implement setListeners
-    throw UnimplementedError();
+      ActionHandler? onDismissActionReceivedMethod}) async {
+    return false;
   }
 
   @override
@@ -251,32 +187,19 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
         NotificationPermission.Sound,
         NotificationPermission.Vibration,
         NotificationPermission.Light
-      ]}) {
-    // TODO: implement shouldShowRationaleToRequest
-    throw UnimplementedError();
+      ]}) async {
+    return [];
   }
 
   @override
-  Future<void> showAlarmPage() {
-    // TODO: implement showAlarmPage
-    throw UnimplementedError();
-  }
+  Future<void> showAlarmPage() async {}
 
   @override
-  Future<void> showGlobalDndOverridePage() {
-    // TODO: implement showGlobalDndOverridePage
-    throw UnimplementedError();
-  }
+  Future<void> showGlobalDndOverridePage() async {}
 
   @override
-  Future<void> showNotificationConfigPage({String? channelKey}) {
-    // TODO: implement showNotificationConfigPage
-    throw UnimplementedError();
-  }
+  Future<void> showNotificationConfigPage({String? channelKey}) async {}
 
   @override
-  dispose() {
-    // TODO: implement dispose
-    throw UnimplementedError();
-  }
+  dispose() async {}
 }

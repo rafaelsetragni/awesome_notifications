@@ -53,10 +53,10 @@ export 'src/utils/string_utils.dart';
 export 'src/definitions.dart';
 
 /// Method structure to listen to an incoming action with dart
-typedef Future<void> ActionHandler(ReceivedAction receivedAction);
+typedef ActionHandler = Future<void> Function(ReceivedAction receivedAction);
 
 /// Method structure to listen to an notification event with dart
-typedef Future<void> NotificationHandler(
+typedef NotificationHandler = Future<void> Function(
     ReceivedNotification receivedNotification);
 
 // Pause and Play vibration sequences

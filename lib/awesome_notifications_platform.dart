@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:awesome_notifications/i_awesome_notifications.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'awesome_notifications_core.dart';
+import 'awesome_notifications_empty.dart';
 
 abstract class AwesomeNotificationsPlatform extends PlatformInterface
     implements IAwesomeNotifications {
@@ -10,7 +13,13 @@ abstract class AwesomeNotificationsPlatform extends PlatformInterface
 
   static final Object _token = Object();
 
-  static AwesomeNotificationsPlatform _instance = AwesomeNotificationsCore();
+  static AwesomeNotificationsPlatform _instance = Platform.isIOS
+      ? AwesomeNotificationsCore()
+      : Platform.isAndroid
+          ? AwesomeNotificationsCore()
+          :
+          // TODO: Missing implementation
+          AwesomeNotificationsEmpty();
 
   /// The default instance of [AwesomeNotificationsPlatform] to use.
   ///
