@@ -89,11 +89,11 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "me.carda.awesome_notifications" "\0"
+            VALUE "CompanyName", "me.carda" "\0"
             VALUE "FileDescription", "awesome_notifications_example" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "awesome_notifications_example" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022 me.carda.awesome_notifications. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2022 me.carda. All rights reserved." "\0"
             VALUE "OriginalFilename", "awesome_notifications_example.exe" "\0"
             VALUE "ProductName", "awesome_notifications_example" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"

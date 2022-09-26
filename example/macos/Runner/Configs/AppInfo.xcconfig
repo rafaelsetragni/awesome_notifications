@@ -8,7 +8,7 @@
 PRODUCT_NAME = awesome_notifications_example
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = me.carda.awesomenotifications.awesomeNotificationsExample
+PRODUCT_BUNDLE_IDENTIFIER = me.carda.awesomeNotificationsExample
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2022 me.carda.awesome_notifications. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2022 me.carda. All rights reserved.

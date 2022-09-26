@@ -2,13 +2,10 @@ package me.carda.awesome_notifications;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-
 import me.carda.awesome_notifications.core.AwesomeNotifications;
 import me.carda.awesome_notifications.core.AwesomeNotificationsExtension;
 import me.carda.awesome_notifications.core.background.BackgroundExecutor;
 import me.carda.awesome_notifications.core.logs.Logger;
-import me.carda.awesome_notifications.core.services.AwesomeBackgroundService;
 
 public class AwesomeNotificationsFlutterExtension extends AwesomeNotificationsExtension {
     private static final String TAG = "AwesomeNotificationsFlutterExtension";

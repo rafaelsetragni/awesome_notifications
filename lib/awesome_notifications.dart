@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'awesome_notifications_platform.dart';
 import 'i_awesome_notifications.dart';
 import 'src/enumerators/notification_life_cycle.dart';
 import 'src/enumerators/notification_permission.dart';
@@ -52,6 +51,8 @@ export 'src/utils/resource_image_provider.dart';
 export 'src/utils/string_utils.dart';
 export 'src/definitions.dart';
 
+import 'awesome_notifications_platform_interface.dart';
+
 /// Method structure to listen to an incoming action with dart
 typedef ActionHandler = Future<void> Function(ReceivedAction receivedAction);
 
@@ -62,11 +63,12 @@ typedef NotificationHandler = Future<void> Function(
 // Pause and Play vibration sequences
 Int64List lowVibrationPattern = Int64List.fromList([0, 200, 200, 200]);
 Int64List mediumVibrationPattern =
-    Int64List.fromList([0, 500, 200, 200, 200, 200]);
+Int64List.fromList([0, 500, 200, 200, 200, 200]);
 Int64List highVibrationPattern =
-    Int64List.fromList([0, 1000, 200, 200, 200, 200, 200, 200]);
+Int64List.fromList([0, 1000, 200, 200, 200, 200, 200, 200]);
 
 class AwesomeNotifications implements IAwesomeNotifications {
+
   static int get maxID => 2147483647;
   static String localTimeZoneIdentifier = 'UTC';
   static String utcTimeZoneIdentifier = DateTime.now().timeZoneName;
@@ -118,13 +120,13 @@ class AwesomeNotifications implements IAwesomeNotifications {
   @override
   Future<List<NotificationPermission>> checkPermissionList(
       {String? channelKey,
-      List<NotificationPermission> permissions = const [
-        NotificationPermission.Badge,
-        NotificationPermission.Alert,
-        NotificationPermission.Sound,
-        NotificationPermission.Vibration,
-        NotificationPermission.Light
-      ]}) {
+        List<NotificationPermission> permissions = const [
+          NotificationPermission.Badge,
+          NotificationPermission.Alert,
+          NotificationPermission.Sound,
+          NotificationPermission.Vibration,
+          NotificationPermission.Light
+        ]}) {
     return AwesomeNotificationsPlatform.instance
         .checkPermissionList(channelKey: channelKey, permissions: permissions);
   }
@@ -132,8 +134,8 @@ class AwesomeNotifications implements IAwesomeNotifications {
   @override
   Future<bool> createNotification(
       {required NotificationContent content,
-      NotificationSchedule? schedule,
-      List<NotificationActionButton>? actionButtons}) {
+        NotificationSchedule? schedule,
+        List<NotificationActionButton>? actionButtons}) {
     return AwesomeNotificationsPlatform.instance.createNotification(
         content: content, schedule: schedule, actionButtons: actionButtons);
   }
@@ -240,13 +242,13 @@ class AwesomeNotifications implements IAwesomeNotifications {
   @override
   Future<bool> requestPermissionToSendNotifications(
       {String? channelKey,
-      List<NotificationPermission> permissions = const [
-        NotificationPermission.Alert,
-        NotificationPermission.Sound,
-        NotificationPermission.Badge,
-        NotificationPermission.Vibration,
-        NotificationPermission.Light
-      ]}) {
+        List<NotificationPermission> permissions = const [
+          NotificationPermission.Alert,
+          NotificationPermission.Sound,
+          NotificationPermission.Badge,
+          NotificationPermission.Vibration,
+          NotificationPermission.Light
+        ]}) {
     return AwesomeNotificationsPlatform.instance
         .requestPermissionToSendNotifications(
       channelKey: channelKey,
@@ -274,9 +276,9 @@ class AwesomeNotifications implements IAwesomeNotifications {
   @override
   Future<bool> setListeners(
       {required ActionHandler onActionReceivedMethod,
-      NotificationHandler? onNotificationCreatedMethod,
-      NotificationHandler? onNotificationDisplayedMethod,
-      ActionHandler? onDismissActionReceivedMethod}) {
+        NotificationHandler? onNotificationCreatedMethod,
+        NotificationHandler? onNotificationDisplayedMethod,
+        ActionHandler? onDismissActionReceivedMethod}) {
     return AwesomeNotificationsPlatform.instance.setListeners(
       onActionReceivedMethod: onActionReceivedMethod,
       onNotificationCreatedMethod: onNotificationCreatedMethod,
@@ -288,13 +290,13 @@ class AwesomeNotifications implements IAwesomeNotifications {
   @override
   Future<List<NotificationPermission>> shouldShowRationaleToRequest(
       {String? channelKey,
-      List<NotificationPermission> permissions = const [
-        NotificationPermission.Badge,
-        NotificationPermission.Alert,
-        NotificationPermission.Sound,
-        NotificationPermission.Vibration,
-        NotificationPermission.Light
-      ]}) {
+        List<NotificationPermission> permissions = const [
+          NotificationPermission.Badge,
+          NotificationPermission.Alert,
+          NotificationPermission.Sound,
+          NotificationPermission.Vibration,
+          NotificationPermission.Light
+        ]}) {
     return AwesomeNotificationsPlatform.instance.shouldShowRationaleToRequest(
       channelKey: channelKey,
       permissions: permissions,

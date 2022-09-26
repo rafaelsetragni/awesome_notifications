@@ -2,13 +2,13 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/awesome_notifications_core.dart';
+import 'package:awesome_notifications/awesome_notifications_platform_interface.dart';
+import 'package:awesome_notifications/awesome_notifications_method_channel.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockAwesomeNotificationsPlatform
     with MockPlatformInterfaceMixin
-    implements AwesomeNotifications {
-
+    implements AwesomeNotificationsPlatform {
   @override
   Future<void> cancel(int id) {
     // TODO: implement cancel
@@ -142,6 +142,12 @@ class MockAwesomeNotificationsPlatform
   }
 
   @override
+  Future<String?> getPlatformVersion() {
+    // TODO: implement getPlatformVersion
+    throw UnimplementedError();
+  }
+
+  @override
   Future<String> getUtcTimeZoneIdentifier() {
     // TODO: implement getUtcTimeZoneIdentifier
     throw UnimplementedError();
@@ -170,14 +176,6 @@ class MockAwesomeNotificationsPlatform
     // TODO: implement listScheduledNotifications
     throw UnimplementedError();
   }
-
-  @override
-  // TODO: implement localTimeZoneIdentifier
-  String get localTimeZoneIdentifierName => throw UnimplementedError();
-
-  @override
-  // TODO: implement maxID
-  int get maxID => throw UnimplementedError();
 
   @override
   Future<bool> removeChannel(String channelKey) {
@@ -241,17 +239,17 @@ class MockAwesomeNotificationsPlatform
 }
 
 void main() {
-  // final AwesomeNotifications initialPlatform = AwesomeNotifications.instance;
+  final AwesomeNotificationsPlatform initialPlatform = AwesomeNotificationsPlatform.instance;
 
-  test('$AwesomeNotificationsCore is the default instance', () {
-    // expect(initialPlatform, isInstanceOf<AwesomeNotificationsCore>());
+  test('$MethodChannelAwesomeNotifications is the default instance', () {
+    expect(initialPlatform, isInstanceOf<MethodChannelAwesomeNotifications>());
   });
 
   test('getPlatformVersion', () async {
-    // AwesomeNotifications awesomeNotificationsPlugin = AwesomeNotifications();
-    // MockAwesomeNotificationsPlatform fakePlatform = MockAwesomeNotificationsPlatform();
-    // AwesomeNotifications.instance = fakePlatform;
+    AwesomeNotifications awesomeNotificationsPlugin = AwesomeNotifications();
+    MockAwesomeNotificationsPlatform fakePlatform = MockAwesomeNotificationsPlatform();
+    AwesomeNotificationsPlatform.instance = fakePlatform;
 
-    //expect(await awesomeNotificationsPlugin.getPlatformVersion(), '42');
+    // expect(await awesomeNotificationsPlugin.getPlatformVersion(), '42');
   });
 }

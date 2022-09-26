@@ -1,9 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:awesome_notifications/awesome_notifications_core.dart';
+import 'package:awesome_notifications/awesome_notifications_method_channel.dart';
 
 void main() {
-  AwesomeNotificationsCore platform = AwesomeNotificationsCore();
+  MethodChannelAwesomeNotifications platform = MethodChannelAwesomeNotifications();
   const MethodChannel channel = MethodChannel('awesome_notifications');
 
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +19,6 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    //expect(await platform.getPlatformVersion(), '42');
+    expect(await platform.getPlatformVersion(), '42');
   });
 }

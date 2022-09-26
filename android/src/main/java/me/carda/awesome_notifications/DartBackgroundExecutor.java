@@ -6,13 +6,12 @@ import android.content.res.AssetManager;
 import android.os.Handler;
 import android.os.Looper;
 
-import java.io.Serializable;
+import androidx.annotation.NonNull;
+
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import androidx.annotation.NonNull;
 
 import io.flutter.FlutterInjector;
 import io.flutter.embedding.engine.FlutterEngine;
@@ -24,7 +23,6 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.view.FlutterCallbackInformation;
-
 import me.carda.awesome_notifications.core.AwesomeNotifications;
 import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.background.BackgroundExecutor;
@@ -32,11 +30,9 @@ import me.carda.awesome_notifications.core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
-
 import me.carda.awesome_notifications.core.logs.Logger;
 import me.carda.awesome_notifications.core.managers.LifeCycleManager;
 import me.carda.awesome_notifications.core.models.returnedData.ActionReceived;
-import me.carda.awesome_notifications.core.utils.SerializableUtils;
 
 /**
  * An background execution abstraction which handles initializing a background isolate running a
