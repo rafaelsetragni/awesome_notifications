@@ -16,10 +16,10 @@ void dartIsolateMain() {
 
   // We establish a new flutter native channel to be able to receive data in
   // inverse direction
-  const MethodChannel _channel = MethodChannel(DART_REVERSE_CHANNEL);
+  const MethodChannel channel = MethodChannel(DART_REVERSE_CHANNEL);
 
   // This is where we handle background silent events
-  _channel.setMethodCallHandler((MethodCall call) async {
+  channel.setMethodCallHandler((MethodCall call) async {
     switch (call.method) {
       case CHANNEL_METHOD_SILENT_CALLBACK:
         await channelMethodSilentCallbackHandle(call);
@@ -35,7 +35,7 @@ void dartIsolateMain() {
   });
 
   // for last, the native channel is initialize to allow to call CHANNEL_METHOD_SILENCED_CALLBACK
-  _channel.invokeMethod<void>(CHANNEL_METHOD_PUSH_NEXT_DATA);
+  channel.invokeMethod<void>(CHANNEL_METHOD_PUSH_NEXT_DATA);
 }
 
 /// This method handle the silent callback as a flutter plugin

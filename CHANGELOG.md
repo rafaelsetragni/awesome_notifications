@@ -1,6 +1,8 @@
+## [0.7.0-beta.7+1]
+* Fix to change the plugin domain name
 ## [0.7.0-beta.7]
-* Added new flutter plugin standards to turn compatible with all platforms
-* Android and iOS core successfully extracted to be reused on remote repositories
+* Added new Flutter plugin architecture to make it compatible with all available platforms
+* Android and iOS core successfully extracted to be reused in remote repositories and other languages
 ## [0.7.0-beta.6+1]
 * Inclusion of the Donate with PayPal section
 ## [0.7.0-beta.6]

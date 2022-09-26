@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+// ignore_for_file: avoid_print
 class Logger {
   Logger._internal();
 

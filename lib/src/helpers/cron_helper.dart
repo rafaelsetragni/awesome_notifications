@@ -72,11 +72,11 @@ class CronHelper {
 
   /// Generates a Cron expression to be played only on workweek days from now
   String workweekDay({required DateTime referenceDateTime}) {
-    return DateFormat('s m H ? * ').format(referenceDateTime) + '$MON-$FRI *';
+    return '${DateFormat('s m H ? * ').format(referenceDateTime)}$MON-$FRI *';
   }
 
   /// Generates a Cron expression to be played only on weekend days from now
   String weekendDay({required DateTime referenceDateTime}) {
-    return DateFormat('s m H ? * ').format(referenceDateTime) + '$SAT,$SUN *';
+    return '${DateFormat('s m H ? * ').format(referenceDateTime)}$SAT,$SUN *';
   }
 }
