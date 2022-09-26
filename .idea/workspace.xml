@@ -7,124 +7,17 @@
     <list default="true" id="90f153b2-27cc-4b8f-8201-8a3571b86189" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.metadata" beforeDir="false" afterPath="$PROJECT_DIR$/.metadata" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/$CACHE_FILE$" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/caches/build_file_checksums.ser" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/codeStyles/Project.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/sonarlint/issuestore/index.pb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/gradle.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/androidTest/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/SharedManagerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/androidTest/java/me/carda/awesome_notifications/awesome_notifications_android_core/managers/StatusBarManagerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsFlutterExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsFlutterExtension.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/DartBackgroundExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/DartBackgroundExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/AwesomeNotificationsPluginTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/TestEnum.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/TestModel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/TestUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/decoders/BitmapResourceDecoderTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/enumerators/ActionTypeTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/enumerators/DefaultRingtoneTypeTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/enumerators/GroupAlertBehaviourTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/enumerators/GroupSortTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/enumerators/MediaSourceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/enumerators/NotificationCategoryTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/enumerators/NotificationImportanceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/enumerators/NotificationLayoutTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/enumerators/NotificationLifeCycleTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/enumerators/NotificationPermissionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/enumerators/NotificationPrivacyTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/enumerators/NotificationSourceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/managers/BadgeManagerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/managers/LifeCycleManagerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/models/AbstractModelTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/models/DefaultsModelTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/models/NotificationButtonModelTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/models/NotificationCalendarModelTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/models/NotificationChannelGroupModelTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/models/NotificationChannelModelTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/models/NotificationContentModelTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/models/NotificationCrontabModelTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/models/NotificationIntervalModelTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/models/NotificationMessageModelTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/models/NotificationModelTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/models/NotificationScheduleModelTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/models/returnedData/ActionReceivedTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/models/returnedData/NotificationReceivedTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/services/AutoCancelServiceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/services/ForegroundServiceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/utils/AudioUtilsTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/utils/BitmapUtilsTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/utils/BooleanUtilsTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/utils/CalendarUtilsTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/utils/CompareUtilsTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/utils/CronUtilsTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/utils/DateUtilsTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/utils/HtmlUtilsTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/utils/IntegerUtilsTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/utils/JsonUtilsTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/utils/ListUtilsTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/utils/MapUtilsTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/utils/MediaUtilsTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/me/carda/awesome_notifications/core/utils/StringUtilsTest.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/awesome_notifications.iml" beforeDir="false" afterPath="$PROJECT_DIR$/awesome_notifications.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/.metadata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/.pubignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/proguard-rules.pro" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/debug/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/debug/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/kotlin/me/carda/awesome_notifications_example/MainActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/kotlin/me/carda/example/MainActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/values-night/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/values-night/styles.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/res/values/styles.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/profile/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/profile/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/settings.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/settings_aar.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/common_widgets/led_light.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/common_widgets/led_light.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/generated_plugin_registrant.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/linux/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/example/linux/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/macos/Flutter/Flutter-Debug.xcconfig" beforeDir="false" afterPath="$PROJECT_DIR$/example/macos/Flutter/Flutter-Debug.xcconfig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/macos/Flutter/Flutter-Release.xcconfig" beforeDir="false" afterPath="$PROJECT_DIR$/example/macos/Flutter/Flutter-Release.xcconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/macos/Podfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/macos/Runner/Configs/AppInfo.xcconfig" beforeDir="false" afterPath="$PROJECT_DIR$/example/macos/Runner/Configs/AppInfo.xcconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/test/widget_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/test/widget_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/example/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/windows/runner/Runner.rc" beforeDir="false" afterPath="$PROJECT_DIR$/example/windows/runner/Runner.rc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/awesome_notifications.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/awesome_notifications_core.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/awesome_notifications_empty.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications_empty.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/awesome_notifications_platform.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/awesome_notifications_web.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications_web.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/SwiftAwesomeNotificationsPlugin.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/awesome_notifications.podspec" beforeDir="false" afterPath="$PROJECT_DIR$/ios/awesome_notifications.podspec" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/awesome_notifications_method_channel_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/awesome_notifications_method_channel_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/awesome_notifications_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/awesome_notifications_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,6 +26,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2FHZODEHBOi0YzoNXbgKA4Rm7fa" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -148,7 +44,7 @@
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/example/lib" />
-    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="settings.editor.selected.configurable" value="flutter.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">

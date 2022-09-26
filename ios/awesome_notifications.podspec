@@ -17,7 +17,7 @@ A complete solution to create Local Notifications and Push Notifications, throug
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
   s.pod_target_xcconfig = {
-    'DEFINES_MODULE' => 'YES',
+    'DEFINES_MODULE' => 'NO',
     'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64',
     'ENABLE_BITCODE' => 'NO',
     'APPLICATION_EXTENSION_API_ONLY' => 'NO'
