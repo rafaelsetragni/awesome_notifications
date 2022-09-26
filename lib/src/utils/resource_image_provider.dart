@@ -1,4 +1,5 @@
 import 'dart:ui' as ui show Codec;
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ import '../../awesome_notifications.dart';
 /// The provided [bytes] buffer should not be changed after it is provided
 /// to a [ResourceImage]. To provide an [ImageStream] that represents an image
 /// that changes over time, consider creating a new subclass of [ImageProvider]
-/// whose [load] method returns a subclass of [ImageStreamCompleter] that can
+/// whose [loadBuffer] method returns a subclass of [ImageStreamCompleter] that can
 /// handle providing multiple images.
 ///
 /// See also:
@@ -34,18 +35,25 @@ class ResourceImage extends ImageProvider<ResourceImage> {
   }
 
   @override
-  ImageStreamCompleter load(ResourceImage key, DecoderCallback decode) {
+  @protected
+  ImageStreamCompleter loadBuffer(ResourceImage key, DecoderBufferCallback decode) {
     return MultiFrameImageStreamCompleter(
       codec: _loadAsync(key, decode),
       scale: key.scale,
     );
   }
 
-  Future<ui.Codec> _loadAsync(ResourceImage key, DecoderCallback decode) async {
+  Future<ui.Codec> _loadAsync(ResourceImage key, DecoderBufferCallback decode) async {
     assert(key == this);
     Uint8List? bytes =
         await AwesomeNotifications().getDrawableData(drawablePath);
-    return decode(bytes!);
+
+    if (bytes?.lengthInBytes == 0) {
+      throw Exception('image is invalid');
+    }
+
+    final ImmutableBuffer buffer = await ImmutableBuffer.fromUint8List(bytes!);
+    return decode(buffer);
   }
 
   @override
