@@ -1,5 +1,3 @@
-import 'package:awesome_notifications/i_awesome_notifications.dart';
-
 import '../../android_foreground_service.dart';
 import '../models/notification_button.dart';
 import '../models/notification_content.dart';

@@ -1,4 +1,3 @@
-import 'package:awesome_notifications/i_awesome_notifications.dart';
 import 'package:awesome_notifications/src/models/received_models/received_notification.dart';
 
 import '../../definitions.dart';
@@ -19,6 +18,7 @@ class ReceivedAction extends ReceivedNotification {
   ReceivedAction();
 
   /// Imports data from a serializable object
+  @override
   ReceivedAction fromMap(Map<String, dynamic> dataMap) {
     super.fromMap(dataMap);
 
@@ -45,6 +45,7 @@ class ReceivedAction extends ReceivedNotification {
   }
 
   /// Exports all content into a serializable object
+  @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
     return map

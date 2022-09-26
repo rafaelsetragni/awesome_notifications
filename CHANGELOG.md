@@ -1,3 +1,5 @@
+## [0.7.0-beta.7+2]
+* Modifications made according lint warnings to increase pub.dev score
 ## [0.7.0-beta.7+1]
 * Fix to change the plugin domain name
 ## [0.7.0-beta.7]

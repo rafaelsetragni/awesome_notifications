@@ -175,19 +175,19 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   }
 
   @override
-  NotificationAndroidCrontab? fromMap(Map<String, dynamic> dataMap) {
-    super.fromMap(dataMap);
+  NotificationAndroidCrontab? fromMap(Map<String, dynamic> mapData) {
+    super.fromMap(mapData);
 
     _crontabExpression = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CRONTAB_EXPRESSION, dataMap, DateTime);
+        NOTIFICATION_CRONTAB_EXPRESSION, mapData, DateTime);
     _initialDateTime = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_INITIAL_DATE_TIME, dataMap, DateTime);
+        NOTIFICATION_INITIAL_DATE_TIME, mapData, DateTime);
     _expirationDateTime = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_EXPIRATION_DATE_TIME, dataMap, DateTime);
+        NOTIFICATION_EXPIRATION_DATE_TIME, mapData, DateTime);
 
-    if (dataMap[NOTIFICATION_PRECISE_SCHEDULES] is List) {
+    if (mapData[NOTIFICATION_PRECISE_SCHEDULES] is List) {
       List<String> schedules =
-          List<String>.from(dataMap[NOTIFICATION_PRECISE_SCHEDULES]);
+          List<String>.from(mapData[NOTIFICATION_PRECISE_SCHEDULES]);
       _preciseSchedules = [];
 
       for (String schedule in schedules) {
@@ -242,7 +242,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   @override
   void validate() {
     if (_crontabExpression == null && _preciseSchedules == null) {
-      throw AwesomeNotificationsException(
+      throw const AwesomeNotificationsException(
           message:
               'At least crontabExpression or preciseSchedules is requried');
     }

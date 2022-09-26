@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:awesome_notifications/i_awesome_notifications.dart';
 import 'package:flutter/material.dart';
 
 import '../definitions.dart';
@@ -141,6 +140,7 @@ class NotificationChannel extends Model {
         AwesomeBitmapUtils().getMediaSource(icon!) == MediaSource.Resource);
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       NOTIFICATION_ICON: icon,
@@ -170,65 +170,66 @@ class NotificationChannel extends Model {
     };
   }
 
-  NotificationChannel fromMap(Map<String, dynamic> dataMap) {
+  @override
+  NotificationChannel fromMap(Map<String, dynamic> mapData) {
     channelKey = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CHANNEL_KEY, dataMap, String);
+        NOTIFICATION_CHANNEL_KEY, mapData, String);
     channelName = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CHANNEL_NAME, dataMap, String);
+        NOTIFICATION_CHANNEL_NAME, mapData, String);
     channelDescription = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CHANNEL_DESCRIPTION, dataMap, String);
+        NOTIFICATION_CHANNEL_DESCRIPTION, mapData, String);
     channelShowBadge = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CHANNEL_SHOW_BADGE, dataMap, bool);
+        NOTIFICATION_CHANNEL_SHOW_BADGE, mapData, bool);
 
     channelGroupKey = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CHANNEL_GROUP_KEY, dataMap, String);
+        NOTIFICATION_CHANNEL_GROUP_KEY, mapData, String);
 
     playSound =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_PLAY_SOUND, dataMap, bool);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_PLAY_SOUND, mapData, bool);
     soundSource = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SOUND_SOURCE, dataMap, String);
+        NOTIFICATION_SOUND_SOURCE, mapData, String);
 
     enableVibration = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_ENABLE_VIBRATION, dataMap, bool);
+        NOTIFICATION_ENABLE_VIBRATION, mapData, bool);
     vibrationPattern = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_VIBRATION_PATTERN, dataMap, Int64List);
+        NOTIFICATION_VIBRATION_PATTERN, mapData, Int64List);
     enableLights = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_ENABLE_LIGHTS, dataMap, bool);
+        NOTIFICATION_ENABLE_LIGHTS, mapData, bool);
 
     importance = AwesomeAssertUtils.extractEnum<NotificationImportance>(
-        NOTIFICATION_IMPORTANCE, dataMap, NotificationImportance.values);
+        NOTIFICATION_IMPORTANCE, mapData, NotificationImportance.values);
     defaultPrivacy = AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
-        NOTIFICATION_DEFAULT_PRIVACY, dataMap, NotificationPrivacy.values);
+        NOTIFICATION_DEFAULT_PRIVACY, mapData, NotificationPrivacy.values);
     defaultRingtoneType = AwesomeAssertUtils.extractEnum<DefaultRingtoneType>(
         NOTIFICATION_DEFAULT_RINGTONE_TYPE,
-        dataMap,
+        mapData,
         DefaultRingtoneType.values);
 
     groupKey = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_GROUP_KEY, dataMap, String);
+        NOTIFICATION_GROUP_KEY, mapData, String);
     groupSort = AwesomeAssertUtils.extractEnum<GroupSort>(
-        NOTIFICATION_GROUP_SORT, dataMap, GroupSort.values);
+        NOTIFICATION_GROUP_SORT, mapData, GroupSort.values);
     groupAlertBehavior = AwesomeAssertUtils.extractEnum<GroupAlertBehavior>(
-        NOTIFICATION_GROUP_ALERT_BEHAVIOR, dataMap, GroupAlertBehavior.values);
+        NOTIFICATION_GROUP_ALERT_BEHAVIOR, mapData, GroupAlertBehavior.values);
 
-    icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, dataMap, String);
+    icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, mapData, String);
     locked =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_LOCKED, dataMap, bool);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_LOCKED, mapData, bool);
     onlyAlertOnce = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_ONLY_ALERT_ONCE, dataMap, bool);
+        NOTIFICATION_ONLY_ALERT_ONCE, mapData, bool);
 
     defaultColor = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_DEFAULT_COLOR, dataMap, Color);
+        NOTIFICATION_DEFAULT_COLOR, mapData, Color);
     ledColor =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_LED_COLOR, dataMap, Color);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_LED_COLOR, mapData, Color);
 
     ledOnMs =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_LED_ON_MS, dataMap, int);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_LED_ON_MS, mapData, int);
     ledOffMs =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_LED_OFF_MS, dataMap, int);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_LED_OFF_MS, mapData, int);
 
     criticalAlerts = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CHANNEL_CRITICAL_ALERTS, dataMap, bool);
+        NOTIFICATION_CHANNEL_CRITICAL_ALERTS, mapData, bool);
 
     return this;
   }

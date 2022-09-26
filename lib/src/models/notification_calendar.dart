@@ -100,29 +100,29 @@ class NotificationCalendar extends NotificationSchedule {
   }
 
   @override
-  NotificationCalendar? fromMap(Map<String, dynamic> dataMap) {
+  NotificationCalendar? fromMap(Map<String, dynamic> mapData) {
     era = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_ERA, dataMap, int);
+        NOTIFICATION_SCHEDULE_ERA, mapData, int);
     year = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_YEAR, dataMap, int);
+        NOTIFICATION_SCHEDULE_YEAR, mapData, int);
     month = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_MONTH, dataMap, int);
+        NOTIFICATION_SCHEDULE_MONTH, mapData, int);
     day = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_DAY, dataMap, int);
+        NOTIFICATION_SCHEDULE_DAY, mapData, int);
     hour = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_HOUR, dataMap, int);
+        NOTIFICATION_SCHEDULE_HOUR, mapData, int);
     minute = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_MINUTE, dataMap, int);
+        NOTIFICATION_SCHEDULE_MINUTE, mapData, int);
     second = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_SECOND, dataMap, int);
+        NOTIFICATION_SCHEDULE_SECOND, mapData, int);
     weekday = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_WEEKDAY, dataMap, int);
+        NOTIFICATION_SCHEDULE_WEEKDAY, mapData, int);
     weekOfMonth = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_WEEKOFMONTH, dataMap, int);
+        NOTIFICATION_SCHEDULE_WEEKOFMONTH, mapData, int);
     weekOfYear = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_WEEKOFYEAR, dataMap, int);
+        NOTIFICATION_SCHEDULE_WEEKOFYEAR, mapData, int);
 
-    super.fromMap(dataMap);
+    super.fromMap(mapData);
 
     try {
       validate();

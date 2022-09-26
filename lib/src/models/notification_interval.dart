@@ -23,11 +23,11 @@ class NotificationInterval extends NotificationSchedule {
             preciseAlarm: preciseAlarm);
 
   @override
-  NotificationInterval? fromMap(Map<String, dynamic> dataMap) {
-    super.fromMap(dataMap);
+  NotificationInterval? fromMap(Map<String, dynamic> mapData) {
+    super.fromMap(mapData);
 
     interval = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_INTERVAL, dataMap, String);
+        NOTIFICATION_SCHEDULE_INTERVAL, mapData, String);
 
     try {
       validate();

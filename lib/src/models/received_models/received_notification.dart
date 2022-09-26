@@ -1,4 +1,3 @@
-import 'package:awesome_notifications/i_awesome_notifications.dart';
 import 'package:awesome_notifications/src/models/base_notification_content.dart';
 
 import '../../definitions.dart';
@@ -10,30 +9,32 @@ import '../../utils/date_utils.dart';
 /// All received details of a notification created or displayed on the system
 /// The data field
 class ReceivedNotification extends BaseNotificationContent {
-  ReceivedNotification fromMap(Map<String, dynamic> dataMap) {
-    super.fromMap(dataMap);
+  @override
+  ReceivedNotification fromMap(Map<String, dynamic> mapData) {
+    super.fromMap(mapData);
 
     createdDate = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CREATED_DATE, dataMap, DateTime);
+        NOTIFICATION_CREATED_DATE, mapData, DateTime);
 
     displayedDate = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_DISPLAYED_DATE, dataMap, DateTime);
+        NOTIFICATION_DISPLAYED_DATE, mapData, DateTime);
 
     createdSource = AwesomeAssertUtils.extractEnum<NotificationSource>(
-        NOTIFICATION_CREATED_SOURCE, dataMap, NotificationSource.values);
+        NOTIFICATION_CREATED_SOURCE, mapData, NotificationSource.values);
 
     createdLifeCycle = AwesomeAssertUtils.extractEnum<NotificationLifeCycle>(
-        NOTIFICATION_CREATED_LIFECYCLE, dataMap, NotificationLifeCycle.values);
+        NOTIFICATION_CREATED_LIFECYCLE, mapData, NotificationLifeCycle.values);
 
     displayedLifeCycle = AwesomeAssertUtils.extractEnum<NotificationLifeCycle>(
         NOTIFICATION_DISPLAYED_LIFECYCLE,
-        dataMap,
+        mapData,
         NotificationLifeCycle.values);
 
     return this;
   }
 
   /// Exports all content into a serializable object
+  @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
     return map

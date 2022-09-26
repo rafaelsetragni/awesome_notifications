@@ -91,27 +91,27 @@ class NotificationActionButton extends Model {
   }
 
   @override
-  NotificationActionButton? fromMap(Map<String, dynamic> dataMap) {
-    _processRetroCompatibility(dataMap);
-    _key = AwesomeAssertUtils.extractValue(NOTIFICATION_KEY, dataMap, String);
-    _icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, dataMap, String);
+  NotificationActionButton? fromMap(Map<String, dynamic> mapData) {
+    _processRetroCompatibility(mapData);
+    _key = AwesomeAssertUtils.extractValue(NOTIFICATION_KEY, mapData, String);
+    _icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, mapData, String);
     _label = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_BUTTON_LABEL, dataMap, String);
+        NOTIFICATION_BUTTON_LABEL, mapData, String);
     _enabled =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_ENABLED, dataMap, bool);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_ENABLED, mapData, bool);
     _requireInputText = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_REQUIRE_INPUT_TEXT, dataMap, bool);
+        NOTIFICATION_REQUIRE_INPUT_TEXT, mapData, bool);
     _autoDismissible = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_AUTO_DISMISSIBLE, dataMap, bool);
+        NOTIFICATION_AUTO_DISMISSIBLE, mapData, bool);
     _showInCompactView = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SHOW_IN_COMPACT_VIEW, dataMap, bool);
+        NOTIFICATION_SHOW_IN_COMPACT_VIEW, mapData, bool);
     _isDangerousOption = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_IS_DANGEROUS_OPTION, dataMap, bool);
+        NOTIFICATION_IS_DANGEROUS_OPTION, mapData, bool);
     _actionType = AwesomeAssertUtils.extractEnum<ActionType>(
-        NOTIFICATION_ACTION_TYPE, dataMap, ActionType.values);
+        NOTIFICATION_ACTION_TYPE, mapData, ActionType.values);
 
     _color =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_COLOR, dataMap, Color);
+        AwesomeAssertUtils.extractValue(NOTIFICATION_COLOR, mapData, Color);
 
     return this;
   }
@@ -163,22 +163,27 @@ class NotificationActionButton extends Model {
 
   @override
   void validate() {
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_key, String))
-      throw AwesomeNotificationsException(message: 'key id is requried');
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_label, String))
-      throw AwesomeNotificationsException(message: 'label id is requried');
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_autoDismissible, bool))
-      throw AwesomeNotificationsException(
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_key, String)) {
+      throw const AwesomeNotificationsException(message: 'key id is requried');
+    }
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_label, String)) {
+      throw const AwesomeNotificationsException(message: 'label id is requried');
+    }
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_autoDismissible, bool)) {
+      throw const AwesomeNotificationsException(
           message: 'autoDismissible id is requried');
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_showInCompactView, bool))
-      throw AwesomeNotificationsException(
+    }
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_showInCompactView, bool)) {
+      throw const AwesomeNotificationsException(
           message: 'showInCompactView id is requried');
+    }
 
     // For action buttons, it's only allowed resource media types
     if (!AwesomeStringUtils.isNullOrEmpty(_icon) &&
-        AwesomeBitmapUtils().getMediaSource(_icon!) != MediaSource.Resource)
-      throw AwesomeNotificationsException(
+        AwesomeBitmapUtils().getMediaSource(_icon!) != MediaSource.Resource) {
+      throw const AwesomeNotificationsException(
           message:
               'icons for action buttons must be a native resource media type');
+    }
   }
 }

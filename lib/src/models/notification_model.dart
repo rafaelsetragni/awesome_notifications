@@ -35,6 +35,7 @@ class NotificationModel extends Model {
         _actionButtons = actionButtons;
 
   /// Imports data from a serializable object
+  @override
   NotificationModel? fromMap(Map<String, dynamic> mapData) {
     try {
       assert(mapData.containsKey(NOTIFICATION_CONTENT) &&
@@ -43,11 +44,11 @@ class NotificationModel extends Model {
       Map<String, dynamic> contentData =
           Map<String, dynamic>.from(mapData[NOTIFICATION_CONTENT]);
 
-      this._content =
+      _content =
           NotificationContent(id: 0, channelKey: '').fromMap(contentData);
       if (_content == null) return null;
 
-      this._content!.validate();
+      _content!.validate();
 
       if (mapData.containsKey(NOTIFICATION_SCHEDULE)) {
         Map<String, dynamic> scheduleData =
@@ -87,6 +88,7 @@ class NotificationModel extends Model {
   }
 
   /// Exports all content into a serializable object
+  @override
   Map<String, dynamic> toMap() {
     List<Map<String, dynamic>> actionButtonsData = [];
     if (_actionButtons != null) {
@@ -106,7 +108,8 @@ class NotificationModel extends Model {
 
   /// Validates if the models has all the requirements to be considerated valid
   void validate() {
-    if (_content == null)
-      throw AwesomeNotificationsException(message: 'content is required.');
+    if (_content == null) {
+      throw const AwesomeNotificationsException(message: 'content is required.');
+    }
   }
 }

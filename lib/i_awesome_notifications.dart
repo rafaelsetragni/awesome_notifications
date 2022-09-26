@@ -35,13 +35,6 @@ abstract class IAwesomeNotifications {
   /// Decode a native drawable resource into a Uint8List to be used by Flutter widgets
   Future<Uint8List?> getDrawableData(String drawablePath);
 
-  void _validateId(int id) {
-    if (id > 0x7FFFFFFF || id < -0x80000000) {
-      throw ArgumentError(
-          'The id field must be the limited to 32-bit size integer');
-    }
-  }
-
   /// LOCAL NOTIFICATION METHODS *********************************************
 
   /// Creates a new notification.

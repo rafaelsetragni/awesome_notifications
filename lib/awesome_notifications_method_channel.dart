@@ -13,7 +13,7 @@ import 'src/logs/logger.dart';
 
 /// An implementation of [AwesomeNotificationsPlatform] that uses method channels.
 class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
-  String TAG = 'MethodChannelAwesomeNotifications';
+  String tag = 'MethodChannelAwesomeNotifications';
 
   /// The method channel used to interact with the native platform.
   @visibleForTesting
@@ -384,7 +384,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
         NotificationHandler? onNotificationDisplayedMethod,
         ActionHandler? onDismissActionReceivedMethod}) async {
     if (actionHandler != null && actionHandler != onActionReceivedMethod) {
-      Logger.w(TAG, 'Static listener for notifications actions was redefined.');
+      Logger.w(tag, 'Static listener for notifications actions was redefined.');
     }
 
     actionHandler = onActionReceivedMethod;
@@ -402,7 +402,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     });
 
     if (!result) {
-      Logger.e(TAG,
+      Logger.e(tag,
           'onActionNotificationMethod is not a valid global or static method.');
       return false;
     }
