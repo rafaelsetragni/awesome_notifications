@@ -36,14 +36,16 @@ class ResourceImage extends ImageProvider<ResourceImage> {
 
   @override
   @protected
-  ImageStreamCompleter loadBuffer(ResourceImage key, DecoderBufferCallback decode) {
+  ImageStreamCompleter loadBuffer(
+      ResourceImage key, DecoderBufferCallback decode) {
     return MultiFrameImageStreamCompleter(
       codec: _loadAsync(key, decode),
       scale: key.scale,
     );
   }
 
-  Future<ui.Codec> _loadAsync(ResourceImage key, DecoderBufferCallback decode) async {
+  Future<ui.Codec> _loadAsync(
+      ResourceImage key, DecoderBufferCallback decode) async {
     assert(key == this);
     Uint8List? bytes =
         await AwesomeNotifications().getDrawableData(drawablePath);

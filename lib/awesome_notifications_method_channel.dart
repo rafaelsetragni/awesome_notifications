@@ -21,7 +21,8 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
   @override
   Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
+    final version =
+        await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
 
@@ -79,13 +80,13 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<List<NotificationPermission>> checkPermissionList(
       {String? channelKey,
-        List<NotificationPermission> permissions = const [
-          NotificationPermission.Badge,
-          NotificationPermission.Alert,
-          NotificationPermission.Sound,
-          NotificationPermission.Vibration,
-          NotificationPermission.Light
-        ]}) async {
+      List<NotificationPermission> permissions = const [
+        NotificationPermission.Badge,
+        NotificationPermission.Alert,
+        NotificationPermission.Sound,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light
+      ]}) async {
     List<Object?> permissionList = _listPermissionToListString(permissions);
 
     permissionList = await methodChannel.invokeMethod(
@@ -100,16 +101,16 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<bool> createNotification(
       {required NotificationContent content,
-        NotificationSchedule? schedule,
-        List<NotificationActionButton>? actionButtons}) async {
+      NotificationSchedule? schedule,
+      List<NotificationActionButton>? actionButtons}) async {
     _validateId(content.id!);
 
     final bool wasCreated = await methodChannel.invokeMethod(
         CHANNEL_METHOD_CREATE_NOTIFICATION,
         NotificationModel(
-            content: content,
-            schedule: schedule,
-            actionButtons: actionButtons)
+                content: content,
+                schedule: schedule,
+                actionButtons: actionButtons)
             .toMap());
 
     return wasCreated;
@@ -136,7 +137,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
       // Invalid Notification
       NotificationModel? notificationModel =
-      NotificationModel().fromMap(mapData);
+          NotificationModel().fromMap(mapData);
       if (notificationModel == null) {
         throw Exception('Notification map data is invalid');
       }
@@ -153,7 +154,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<int> decrementGlobalBadgeCounter() async {
     final int badgeCount =
-    await methodChannel.invokeMethod(CHANNEL_METHOD_DECREMENT_BADGE_COUNT);
+        await methodChannel.invokeMethod(CHANNEL_METHOD_DECREMENT_BADGE_COUNT);
     return badgeCount;
   }
 
@@ -183,7 +184,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<NotificationLifeCycle> getAppLifeCycle() async {
     final String? lifeCycleRaw =
-    await methodChannel.invokeMethod(CHANNEL_METHOD_GET_APP_LIFE_CYCLE);
+        await methodChannel.invokeMethod(CHANNEL_METHOD_GET_APP_LIFE_CYCLE);
     return NotificationLifeCycle.values
         .firstWhere((e) => e.name == lifeCycleRaw);
   }
@@ -201,7 +202,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<int> getGlobalBadgeCounter() async {
     final int badgeCount =
-    await methodChannel.invokeMethod(CHANNEL_METHOD_GET_BADGE_COUNT);
+        await methodChannel.invokeMethod(CHANNEL_METHOD_GET_BADGE_COUNT);
     return badgeCount;
   }
 
@@ -218,7 +219,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     fixedDate ??= DateTime.now().toUtc();
     Map parameters = {
       NOTIFICATION_INITIAL_FIXED_DATE:
-      AwesomeDateUtils.parseDateToString(fixedDate),
+          AwesomeDateUtils.parseDateToString(fixedDate),
       NOTIFICATION_SCHEDULE: schedule.toMap()
     };
 
@@ -240,7 +241,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<int> incrementGlobalBadgeCounter() async {
     final int badgeCount =
-    await methodChannel.invokeMethod(CHANNEL_METHOD_INCREMENT_BADGE_COUNT);
+        await methodChannel.invokeMethod(CHANNEL_METHOD_INCREMENT_BADGE_COUNT);
     return badgeCount;
   }
 
@@ -248,7 +249,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   Future<bool> initialize(
       String? defaultIcon, List<NotificationChannel> channels,
       {List<NotificationChannelGroup>? channelGroups,
-        bool debug = false}) async {
+      bool debug = false}) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     methodChannel.setMethodCallHandler(_handleMethod);
@@ -278,7 +279,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     }
 
     final CallbackHandle? dartCallbackReference =
-    PluginUtilities.getCallbackHandle(dartIsolateMain);
+        PluginUtilities.getCallbackHandle(dartIsolateMain);
 
     var result = await methodChannel.invokeMethod(CHANNEL_METHOD_INITIALIZE, {
       INITIALIZE_DEBUG_MODE: debug,
@@ -307,13 +308,13 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   Future<List<NotificationModel>> listScheduledNotifications() async {
     List<NotificationModel> scheduledNotifications = [];
     List<Object>? returned =
-    await methodChannel.invokeListMethod(CHANNEL_METHOD_LIST_ALL_SCHEDULES);
+        await methodChannel.invokeListMethod(CHANNEL_METHOD_LIST_ALL_SCHEDULES);
     if (returned != null) {
       for (Object object in returned) {
         if (object is Map) {
           try {
             NotificationModel notificationModel =
-            NotificationModel().fromMap(Map<String, dynamic>.from(object))!;
+                NotificationModel().fromMap(Map<String, dynamic>.from(object))!;
             scheduledNotifications.add(notificationModel);
           } catch (e) {
             return [];
@@ -334,17 +335,17 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<bool> requestPermissionToSendNotifications(
       {String? channelKey,
-        List<NotificationPermission> permissions = const [
-          NotificationPermission.Alert,
-          NotificationPermission.Sound,
-          NotificationPermission.Badge,
-          NotificationPermission.Vibration,
-          NotificationPermission.Light
-        ]}) async {
+      List<NotificationPermission> permissions = const [
+        NotificationPermission.Alert,
+        NotificationPermission.Sound,
+        NotificationPermission.Badge,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light
+      ]}) async {
     final List<String> permissionList = [];
     for (final permission in permissions) {
       String? permissionValue =
-      AwesomeAssertUtils.toSimpleEnumString(permission);
+          AwesomeAssertUtils.toSimpleEnumString(permission);
       if (permissionValue != null) permissionList.add(permissionValue);
     }
 
@@ -380,9 +381,9 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<bool> setListeners(
       {required ActionHandler onActionReceivedMethod,
-        NotificationHandler? onNotificationCreatedMethod,
-        NotificationHandler? onNotificationDisplayedMethod,
-        ActionHandler? onDismissActionReceivedMethod}) async {
+      NotificationHandler? onNotificationCreatedMethod,
+      NotificationHandler? onNotificationDisplayedMethod,
+      ActionHandler? onDismissActionReceivedMethod}) async {
     if (actionHandler != null && actionHandler != onActionReceivedMethod) {
       Logger.w(tag, 'Static listener for notifications actions was redefined.');
     }
@@ -393,10 +394,10 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     displayedHandler = onNotificationDisplayedMethod;
 
     final CallbackHandle? actionCallbackReference =
-    PluginUtilities.getCallbackHandle(onActionReceivedMethod);
+        PluginUtilities.getCallbackHandle(onActionReceivedMethod);
 
     bool result =
-    await methodChannel.invokeMethod(CHANNEL_METHOD_SET_ACTION_HANDLE, {
+        await methodChannel.invokeMethod(CHANNEL_METHOD_SET_ACTION_HANDLE, {
       ACTION_HANDLE: actionCallbackReference?.toRawHandle(),
       RECOVER_DISPLAYED: displayedHandler != null
     });
@@ -413,13 +414,13 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<List<NotificationPermission>> shouldShowRationaleToRequest(
       {String? channelKey,
-        List<NotificationPermission> permissions = const [
-          NotificationPermission.Badge,
-          NotificationPermission.Alert,
-          NotificationPermission.Sound,
-          NotificationPermission.Vibration,
-          NotificationPermission.Light
-        ]}) async {
+      List<NotificationPermission> permissions = const [
+        NotificationPermission.Badge,
+        NotificationPermission.Alert,
+        NotificationPermission.Sound,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light
+      ]}) async {
     List<Object?> permissionList = _listPermissionToListString(permissions);
 
     permissionList = await methodChannel.invokeMethod(
@@ -448,11 +449,11 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }
 
   final String _silentBGActionTypeKey =
-  AwesomeAssertUtils.toSimpleEnumString(ActionType.SilentBackgroundAction)!;
+      AwesomeAssertUtils.toSimpleEnumString(ActionType.SilentBackgroundAction)!;
 
   Future<dynamic> _handleMethod(MethodCall call) async {
     Map<String, dynamic> arguments =
-    (call.arguments as Map).cast<String, dynamic>();
+        (call.arguments as Map).cast<String, dynamic>();
 
     switch (call.method) {
       case EVENT_NOTIFICATION_CREATED:
@@ -500,7 +501,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     List<Object?> permissionList = [];
     for (final permission in permissions) {
       String? permissionValue =
-      AwesomeAssertUtils.toSimpleEnumString(permission);
+          AwesomeAssertUtils.toSimpleEnumString(permission);
       if (permissionValue != null) permissionList.add(permissionValue);
     }
     return permissionList;
@@ -511,8 +512,8 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     List<NotificationPermission> lockedPermissions = [];
     for (final permission in permissionList) {
       NotificationPermission? permissionValue =
-      AwesomeAssertUtils.enumToString<NotificationPermission>(
-          permission.toString(), NotificationPermission.values, null);
+          AwesomeAssertUtils.enumToString<NotificationPermission>(
+              permission.toString(), NotificationPermission.values, null);
       if (permissionValue != null) lockedPermissions.add(permissionValue);
     }
     return lockedPermissions;

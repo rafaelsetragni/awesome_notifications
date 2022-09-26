@@ -109,7 +109,8 @@ class NotificationModel extends Model {
   /// Validates if the models has all the requirements to be considerated valid
   void validate() {
     if (_content == null) {
-      throw const AwesomeNotificationsException(message: 'content is required.');
+      throw const AwesomeNotificationsException(
+          message: 'content is required.');
     }
   }
 }

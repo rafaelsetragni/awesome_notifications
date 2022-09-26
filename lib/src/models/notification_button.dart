@@ -167,7 +167,8 @@ class NotificationActionButton extends Model {
       throw const AwesomeNotificationsException(message: 'key id is requried');
     }
     if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_label, String)) {
-      throw const AwesomeNotificationsException(message: 'label id is requried');
+      throw const AwesomeNotificationsException(
+          message: 'label id is requried');
     }
     if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_autoDismissible, bool)) {
       throw const AwesomeNotificationsException(

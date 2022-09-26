@@ -6,19 +6,20 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'awesome_notifications_empty.dart';
 import 'awesome_notifications_method_channel.dart';
 
-abstract class AwesomeNotificationsPlatform extends PlatformInterface implements IAwesomeNotifications {
+abstract class AwesomeNotificationsPlatform extends PlatformInterface
+    implements IAwesomeNotifications {
   /// Constructs a AwesomeNotificationsPlatform.
   AwesomeNotificationsPlatform() : super(token: _token);
 
   static final Object _token = Object();
 
-  static AwesomeNotificationsPlatform _instance =  Platform.isIOS
-    ? MethodChannelAwesomeNotifications()
-    : Platform.isAndroid
+  static AwesomeNotificationsPlatform _instance = Platform.isIOS
       ? MethodChannelAwesomeNotifications()
-      :
-      // TODO: Missing implementation
-      AwesomeNotificationsEmpty();
+      : Platform.isAndroid
+          ? MethodChannelAwesomeNotifications()
+          :
+          // TODO: Missing implementation
+          AwesomeNotificationsEmpty();
 
   /// The default instance of [AwesomeNotificationsPlatform] to use.
   ///

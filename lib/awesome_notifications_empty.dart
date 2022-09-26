@@ -5,7 +5,8 @@ import 'package:awesome_notifications/i_awesome_notifications.dart';
 import 'awesome_notifications.dart';
 import 'awesome_notifications_platform_interface.dart';
 
-class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform implements IAwesomeNotifications {
+class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
+    implements IAwesomeNotifications {
   @override
   Future<void> cancel(int id) async {}
 

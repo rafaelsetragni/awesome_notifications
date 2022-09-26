@@ -6,8 +6,8 @@ class AwesomeMapUtils {
     JsonEncoder encoder = const JsonEncoder.withIndent('  ');
 
     // display map in alphabetic order
-    final sortedData = SplayTreeMap<String, dynamic>.from(
-        mapData, (a, b) => a.compareTo(b));
+    final sortedData =
+        SplayTreeMap<String, dynamic>.from(mapData, (a, b) => a.compareTo(b));
     String prettyPrint = encoder.convert(sortedData);
 
     return prettyPrint;

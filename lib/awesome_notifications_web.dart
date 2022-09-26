@@ -46,21 +46,21 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   @override
   Future<List<NotificationPermission>> checkPermissionList(
       {String? channelKey,
-        List<NotificationPermission> permissions = const [
-          NotificationPermission.Badge,
-          NotificationPermission.Alert,
-          NotificationPermission.Sound,
-          NotificationPermission.Vibration,
-          NotificationPermission.Light
-        ]}) async {
+      List<NotificationPermission> permissions = const [
+        NotificationPermission.Badge,
+        NotificationPermission.Alert,
+        NotificationPermission.Sound,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light
+      ]}) async {
     return [];
   }
 
   @override
   Future<bool> createNotification(
       {required NotificationContent content,
-        NotificationSchedule? schedule,
-        List<NotificationActionButton>? actionButtons}) async {
+      NotificationSchedule? schedule,
+      List<NotificationActionButton>? actionButtons}) async {
     return false;
   }
 
@@ -127,7 +127,7 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   Future<bool> initialize(
       String? defaultIcon, List<NotificationChannel> channels,
       {List<NotificationChannelGroup>? channelGroups,
-        bool debug = false}) async {
+      bool debug = false}) async {
     return false;
   }
 
@@ -149,13 +149,13 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   @override
   Future<bool> requestPermissionToSendNotifications(
       {String? channelKey,
-        List<NotificationPermission> permissions = const [
-          NotificationPermission.Alert,
-          NotificationPermission.Sound,
-          NotificationPermission.Badge,
-          NotificationPermission.Vibration,
-          NotificationPermission.Light
-        ]}) async {
+      List<NotificationPermission> permissions = const [
+        NotificationPermission.Alert,
+        NotificationPermission.Sound,
+        NotificationPermission.Badge,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light
+      ]}) async {
     return false;
   }
 
@@ -172,22 +172,22 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   @override
   Future<bool> setListeners(
       {required ActionHandler onActionReceivedMethod,
-        NotificationHandler? onNotificationCreatedMethod,
-        NotificationHandler? onNotificationDisplayedMethod,
-        ActionHandler? onDismissActionReceivedMethod}) async {
+      NotificationHandler? onNotificationCreatedMethod,
+      NotificationHandler? onNotificationDisplayedMethod,
+      ActionHandler? onDismissActionReceivedMethod}) async {
     return false;
   }
 
   @override
   Future<List<NotificationPermission>> shouldShowRationaleToRequest(
       {String? channelKey,
-        List<NotificationPermission> permissions = const [
-          NotificationPermission.Badge,
-          NotificationPermission.Alert,
-          NotificationPermission.Sound,
-          NotificationPermission.Vibration,
-          NotificationPermission.Light
-        ]}) async {
+      List<NotificationPermission> permissions = const [
+        NotificationPermission.Badge,
+        NotificationPermission.Alert,
+        NotificationPermission.Sound,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light
+      ]}) async {
     return [];
   }
 

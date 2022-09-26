@@ -1,3 +1,5 @@
+## [0.7.0-beta.7+4]
+* Run dart format over Lib to increase pub.dev score
 ## [0.7.0-beta.7+3]
 * Dart support decreased to support version 2.18.0.
 * DecoderCallback replaced by DecoderBufferCallback due flutter deprecation for resource images

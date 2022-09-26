@@ -298,10 +298,12 @@ class BaseNotificationContent extends Model {
   @override
   void validate() {
     if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_id, int)) {
-      throw const AwesomeNotificationsException(message: 'Property id is required');
+      throw const AwesomeNotificationsException(
+          message: 'Property id is required');
     }
     if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_channelKey, String)) {
-      throw const AwesomeNotificationsException(message: 'Channel Key is required');
+      throw const AwesomeNotificationsException(
+          message: 'Channel Key is required');
     }
   }
 }
