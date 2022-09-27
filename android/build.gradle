@@ -39,7 +39,7 @@ android {
 
 dependencies {
 //    implementation project(':awn_core')
-    implementation "me.carda:androidcore:0.7.0-alpha.5"
+    implementation "me.carda:androidcore:0.7.0-alpha.6"
 
     implementation "androidx.core:core:1.8.0"
     implementation "com.google.code.gson:gson:2.8.9"

@@ -1,3 +1,5 @@
+## [0.7.0-beta.7+5]
+* Android core dependency updated to 0.7.0-alpha.7+6
 ## [0.7.0-beta.7+4]
 * Run dart format over Lib to increase pub.dev score
 ## [0.7.0-beta.7+3]
