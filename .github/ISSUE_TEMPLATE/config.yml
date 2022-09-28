@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: ❓ Ask a Question
+    url: https://github.com/firebase/flutterfire/discussions/new?category=q-a
+    about: Ask the community for help.
+  - name: 📣 Show and tell
+    url: https://github.com/firebase/flutterfire/discussions/new?category=show-and-tell
+    about: Share with us what you've built with Awesome Notifications.
