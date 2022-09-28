@@ -29,9 +29,9 @@ To help us to understand your issue, provide with your bug report all the releva
 
 OBS: To post a source code in your issue, please use the markdown below:
 
-\`\`\`Dart <br>
-//Your source code goes here <br>
-\`\`\` <br>
+```Dart
+// Your source code goes here
+```
 
 ## **3 - How To Reproduce the Error**
 
