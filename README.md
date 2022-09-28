@@ -50,7 +50,7 @@ All notifications could be created locally or via Firebase services, with all th
 
 <br>
 
-## ATTENTION - PLUGIN UNDER CONSTRUCTION
+## ⚠️ ATTENTION - PLUGIN UNDER CONSTRUCTION
 
 ![image](https://user-images.githubusercontent.com/40064496/155188418-1f906c3d-2940-472d-8897-7dae84cd29c7.png) 
     
@@ -60,7 +60,7 @@ All notifications could be created locally or via Firebase services, with all th
 
 <br>
 
-## ATTENTION - FIREBASE CLOUD MESSAGE (FCM)
+## ⚠️ ATTENTION - FIREBASE CLOUD MESSAGE (FCM) ✉️
     
 The support for `firebase_messaging` plugin is now deprecated, but all other firebase plugins are still being supported. To use FCM services with Awesome Notifications, you need use the [Awesome Notifications FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm).
     
