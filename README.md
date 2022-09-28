@@ -60,6 +60,12 @@ All notifications could be created locally or via Firebase services, with all th
 
 <br>
 
+## ATTENTION - FIREBASE CLOUD MESSAGE (FCM)
+    
+The support for `firebase_messaging` plugin is now deprecated, but all other firebase plugins still being supported. To use FCM services with Awesome Notifications, you need use the [Awesome Notifications FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm) to achieve all firebase messaging features + all awesome notifications features, without violate the platform rules.
+    
+<br>
+    
 ## Next steps
 
 - Include Web support
@@ -117,7 +123,7 @@ This way, your Application will receive **all notifications at Flutter level cod
 * Now all the notification events are delivered only after the first setListeners being called.
 * The ButtonType property name was changed to ActionType.
 * The action type `InputField` was deprecated. Now you just need to set the property `requireInputText` to true to achieve the same, but now it works combined with all another action types.
-* The support for `firebase_messaging` plugin is now deprecated, but all other firebase plugins still being supported. You need use the Awesome's FCM companion plugin to achieve all firebase messaging features, without violate the platform rules. This is the only way to fully integrated with awesome notifications, running all in native level.
+* The support for `firebase_messaging` plugin is now deprecated, but all other firebase plugins still being supported. You need use the [Awesome's FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm) to achieve all firebase messaging features, without violate the platform rules. This is the only way to fully integrated with awesome notifications, running all in native level.
 
 
 <br>
