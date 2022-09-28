@@ -71,7 +71,7 @@ All notifications could be created locally or via Firebase services, with all th
     
 <br>
 
-## Donate via PayPal
+## Donate via PayPal or BuyMeACoffee
 
 Help us to improve and maintain our work with donations of any amount, via Paypal.
 Your donation will be mainly used to purchase new devices and equipments, which we will use to test and ensure that our plugins works correctly on all platforms and their respective versions.
@@ -79,7 +79,9 @@ Your donation will be mainly used to purchase new devices and equipments, which 
 <a href="https://www.paypal.com/donate/?business=9BKB6ZCQLLMZY&no_recurring=0&item_name=Help+us+to+improve+and+maintain+Awesome+Notifications+with+donations+of+any+amount.&currency_code=USD">
   <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" width="250px"/>
 </a>
-
+    
+<a href="https://www.buymeacoffee.com/rafaelsetragni" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+    
 <br>
 <br>
 
@@ -87,7 +89,7 @@ Your donation will be mainly used to purchase new devices and equipments, which 
 
 To stay tuned with new updates and get our community support, please subscribe into our Discord Chat Server:
 
-[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.gg/MP3sEXPTnx)<br>https://discord.gg/MP3sEXPTnx
+[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.gg/MP3sEXPTnx)<br>https://discord.gg/3eJuAGqZKy
 
 <br>
 <br>
