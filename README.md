@@ -62,7 +62,9 @@ All notifications could be created locally or via Firebase services, with all th
 
 ## ATTENTION - FIREBASE CLOUD MESSAGE (FCM)
     
-The support for `firebase_messaging` plugin is now deprecated, but all other firebase plugins still being supported. To use FCM services with Awesome Notifications, you need use the [Awesome Notifications FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm) to achieve all firebase messaging features + all awesome notifications features, without violate the platform rules.
+The support for `firebase_messaging` plugin is now deprecated, but all other firebase plugins are still being supported. To use FCM services with Awesome Notifications, you need use the [Awesome Notifications FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm).
+    
+This is the only way to achieve all firebase push notification features + all awesome notifications features without violate the platform rules, using workarounds with silent push notifications.
     
 <br>
     
