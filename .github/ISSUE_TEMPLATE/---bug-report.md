@@ -21,7 +21,7 @@ OBS: avoid to use the expression **"is not working"** or **"is working"** or any
 
 To help us to understand your issue, provide with your bug report all the relevant informations, such as:
 
-* Your plugins list inside the file `pubspec.yaml`
+* Your plugins list inside the file `pubspec.yaml` (at least all notification plugins)
 * What platform did you found the issue
 * How are you initializing the plugin
 * How are you creating the notification
@@ -41,7 +41,7 @@ Steps to reproduce the behavior:
 3. Scroll down to '....'
 4. See error
 
-...or you can provide us a simple example app on GitHub with the issue already reproduced.
+...or if you prefer, you can provide us a simple example app on GitHub with the issue already reproduced instead of the steps 2 and 3.
 
 ## **4 - Expected behavior**
 A clear and concise description of what you expected to happen.
