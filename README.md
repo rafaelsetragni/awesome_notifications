@@ -112,7 +112,7 @@ This way, your Application will receive **all notifications at Flutter level cod
 ## Breaking changes for version 0.7.0
 
 * Now it's possible to receive action events without bring the app to foreground. Check our action type's topic to know more.
-* All streams (createdStream, displayedStream, actionStream and dismissedStream) was replaced by `global static methods`. You must replace your old stream methods by static and global methods, in other words, they must be `static Future<void>` and use `async`/`await`.
+* All streams (createdStream, displayedStream, actionStream and dismissedStream) was replaced by `global static methods`. You must replace your old stream methods by static and global methods, in other words, they must be `static Future<void>` and use `async`/`await` and you MUST use `@pragma("vm:entry-point")` to preserve dart addressing.
 <br>(To use context and redirect the user to another page inside static methods, please use flutter navigatorKey or another third party library, such as GetX. Check our "how to do" guide below to know more).
 * Now all the notification events are delivered only after the first setListeners being called.
 * The ButtonType property name was changed to ActionType.
