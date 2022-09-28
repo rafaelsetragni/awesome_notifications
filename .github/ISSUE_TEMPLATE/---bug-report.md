@@ -15,7 +15,7 @@ To report a bug and help us to provide the solution as fast as possible, please 
 
 A clear and concise description of what the bug is. 
 
-OBS: avoid to use the expression **"is not working"** or **"is working"** or any other variation. These expressions can mean anything and at same time doesn´t bring any useful information. As soon you rewrite these expressions, you gonna naturally be more precise and clear.
+OBS: avoid to use the expression **"its not working"** or **"is working"** or any other variation. These expressions can mean anything and at same time doesn´t bring any useful information. As soon you rewrite these expressions, you naturally going to be more precise and clear.
 
 ## **2 - Provide us as much information as possible**
 
