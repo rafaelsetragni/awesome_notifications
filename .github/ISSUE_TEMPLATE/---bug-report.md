@@ -27,6 +27,12 @@ To help us to understand your issue, provide with your bug report all the releva
 * How are you creating the notification
 * The output of `flutter doctor` command
 
+OBS: To post a source code in your issue, please use the markdown below:
+
+\`\`\`Dart <br>
+//Your source code goes here <br>
+\`\`\` <br>
+
 ## **3 - How To Reproduce the Error**
 
 Steps to reproduce the behavior:
