@@ -23,6 +23,7 @@ To help us to understand your issue, provide with your bug report all the releva
 
 * Your plugins list inside the file `pubspec.yaml` (at least all notification plugins)
 * What platform did you found the issue
+* What devices did you found the issue
 * How are you initializing the plugin
 * How are you creating the notification
 * The output of `flutter doctor` command
