@@ -2,7 +2,7 @@
 name: "⚠️ Bug Report"
 about: Report a bug with existing Awesome Notifications features.
 title: ''
-labels: bug
+labels: bug, in triage
 assignees: ''
 
 ---
