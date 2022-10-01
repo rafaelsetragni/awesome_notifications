@@ -13,11 +13,7 @@ import 'src/logs/logger.dart';
 
 /// An implementation of [AwesomeNotificationsPlatform] that uses method channels.
 class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
-<<<<<<< Updated upstream
-  String tag = 'MethodChannelAwesomeNotifications';
-=======
   final String tag = 'MethodChannelAwesomeNotifications';
->>>>>>> Stashed changes
 
   /// The method channel used to interact with the native platform.
   @visibleForTesting
