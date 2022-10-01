@@ -55,9 +55,9 @@ class NotificationChannel extends Model {
   bool? criticalAlerts;
 
   NotificationChannel(
-      {required String this.channelKey,
-      required String this.channelName,
-      required String this.channelDescription,
+      {required this.channelKey,
+      required this.channelName,
+      required this.channelDescription,
       this.channelGroupKey,
       this.channelShowBadge,
       this.importance,

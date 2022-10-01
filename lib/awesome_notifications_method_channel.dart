@@ -19,13 +19,6 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @visibleForTesting
   final methodChannel = const MethodChannel('awesome_notifications');
 
-  @override
-  Future<String?> getPlatformVersion() async {
-    final version =
-        await methodChannel.invokeMethod<String>('getPlatformVersion');
-    return version;
-  }
-
   ActionHandler? actionHandler;
   ActionHandler? dismissedHandler;
   NotificationHandler? createdHandler;
