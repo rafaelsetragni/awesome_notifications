@@ -3,23 +3,35 @@
 // import 'package:firebase_messaging/firebase_messaging.dart';
 // import 'package:awesome_notifications_example/notifications/firebase_controller.dart';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 
 import 'package:awesome_notifications_example/routes/routes.dart';
 import 'package:awesome_notifications_example/themes/themes_controller.dart';
 import 'package:awesome_notifications_example/notifications/notifications_controller.dart';
+import 'package:flutter/services.dart';
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationsController.initializeLocalNotifications();
-  runApp(App());
+  App.initialCallAction = await NotificationsController
+      .interceptInitialCallActionRequest();
+
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+
+  runApp(const App());
 }
 
 class App extends StatefulWidget {
-  App();
+  const App({super.key});
 
+  static ReceivedAction? initialCallAction;
   static String name = 'Awesome Notifications - Example App';
-  static Color mainColor = Color(0xFF9D50DD);
+  static Color mainColor = const Color(0xFF9D50DD);
 
   // The navigator key is necessary to navigate using static methods
   static final GlobalKey<NavigatorState> navigatorKey =
@@ -40,11 +52,15 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    String initialRoute = App.initialCallAction == null
+        ? PAGE_HOME
+        : PAGE_PHONE_CALL;
+    debugPrint('initialRoute: $initialRoute');
     return MaterialApp(
       title: App.name,
       color: App.mainColor,
       navigatorKey: App.navigatorKey,
-      initialRoute: PAGE_HOME,
+      initialRoute: initialRoute,
       routes: materialRoutes,
       builder: (context, child) => MediaQuery(
         data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),

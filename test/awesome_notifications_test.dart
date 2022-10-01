@@ -236,6 +236,14 @@ class MockAwesomeNotificationsPlatform
     // TODO: implement showNotificationConfigPage
     throw UnimplementedError();
   }
+
+  @override
+  Future<ReceivedAction?> getInitialNotificationAction({
+    bool removeFromActionEvents = false
+  }) {
+    // TODO: implement getInitialNotificationAction
+    throw UnimplementedError();
+  }
 }
 
 void main() {

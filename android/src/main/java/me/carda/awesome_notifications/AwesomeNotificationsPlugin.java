@@ -36,6 +36,7 @@ import me.carda.awesome_notifications.core.managers.PermissionManager;
 import me.carda.awesome_notifications.core.models.NotificationChannelModel;
 import me.carda.awesome_notifications.core.models.NotificationModel;
 import me.carda.awesome_notifications.core.models.NotificationScheduleModel;
+import me.carda.awesome_notifications.core.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.core.utils.CalendarUtils;
 import me.carda.awesome_notifications.core.utils.ListUtils;
 import me.carda.awesome_notifications.core.utils.MapUtils;
@@ -54,7 +55,7 @@ public class AwesomeNotificationsPlugin
     private static final String TAG = "AwesomeNotificationsPlugin";
 
     private ActivityPluginBinding activityBinding;
-    private PluginRegistry.RequestPermissionsResultListener permissionsResultListener =
+    private final PluginRegistry.RequestPermissionsResultListener permissionsResultListener =
         new PluginRegistry.RequestPermissionsResultListener() {
             @Override
             public boolean onRequestPermissionsResult(
@@ -72,7 +73,7 @@ public class AwesomeNotificationsPlugin
             }
         };
 
-    private PluginRegistry.ActivityResultListener activityResultListener =
+    private final PluginRegistry.ActivityResultListener activityResultListener =
         new PluginRegistry.ActivityResultListener() {
             @Override
             public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -309,6 +310,10 @@ public class AwesomeNotificationsPlugin
 
                 case Definitions.CHANNEL_METHOD_LIST_ALL_SCHEDULES:
                     channelMethodListAllSchedules(call, result);
+                    return;
+
+                case Definitions.CHANNEL_METHOD_GET_INITIAL_ACTION:
+                    channelMethodGetInitialAction(call, result);
                     return;
 
                 case Definitions.CHANNEL_METHOD_GET_NEXT_DATE:
@@ -938,6 +943,20 @@ public class AwesomeNotificationsPlugin
             }
 
         result.success(listSerialized);
+    }
+
+    private void channelMethodGetInitialAction(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
+        boolean removeFromEvents = !Boolean.FALSE.equals(call.arguments());
+        ActionReceived actionReceived = awesomeNotifications
+                .getInitialNotificationAction(removeFromEvents);
+
+        if (actionReceived == null)
+            result.success(null);
+        else
+            result.success(actionReceived.toMap());
     }
 
     @SuppressWarnings("unchecked")

@@ -86,6 +86,13 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
   }
 
   @override
+  Future<ReceivedAction?> getInitialNotificationAction({
+    bool removeFromActionEvents = false
+  }) async {
+    return null;
+  }
+
+  @override
   Future<int> getGlobalBadgeCounter() async {
     return 0;
   }
@@ -175,27 +182,20 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
         NotificationPermission.Sound,
         NotificationPermission.Vibration,
         NotificationPermission.Light
-      ]}) {
-    // TODO: implement shouldShowRationaleToRequest
-    throw UnimplementedError();
+      ]}) async {
+    return [];
   }
 
   @override
-  Future<void> showAlarmPage() {
-    // TODO: implement showAlarmPage
-    throw UnimplementedError();
+  Future<void> showAlarmPage() async {
   }
 
   @override
-  Future<void> showGlobalDndOverridePage() {
-    // TODO: implement showGlobalDndOverridePage
-    throw UnimplementedError();
+  Future<void> showGlobalDndOverridePage() async {
   }
 
   @override
-  Future<void> showNotificationConfigPage({String? channelKey}) {
-    // TODO: implement showNotificationConfigPage
-    throw UnimplementedError();
+  Future<void> showNotificationConfigPage({String? channelKey}) async {
   }
 
   @override

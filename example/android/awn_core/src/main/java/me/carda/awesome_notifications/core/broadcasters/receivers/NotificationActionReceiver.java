@@ -19,6 +19,7 @@ import me.carda.awesome_notifications.core.services.ForegroundService;
 public abstract class NotificationActionReceiver extends AwesomeBroadcastReceiver {
 
     public static String TAG = "NotificationActionReceiver";
+    public static ActionReceived initialActionReceived;
 
     @Override
     public void onReceiveBroadcastEvent(final Context context, Intent intent) throws Exception {
@@ -55,6 +56,13 @@ public abstract class NotificationActionReceiver extends AwesomeBroadcastReceive
                         "The action received do not contain any awesome " +
                         "notification data and was discarded");
             return;
+        }
+
+        if (
+            actionReceived.actionLifeCycle == NotificationLifeCycle.AppKilled &&
+            actionReceived.actionType == ActionType.Default
+        ){
+            initialActionReceived = actionReceived;
         }
 
         if(actionReceived.actionType == ActionType.DismissAction)

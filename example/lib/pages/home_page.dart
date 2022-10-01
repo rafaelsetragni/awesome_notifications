@@ -20,6 +20,8 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:vibration/vibration.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -64,12 +66,12 @@ class _HomePageState extends State<HomePage> {
         context: context,
         initialDate: now,
         firstDate: now,
-        lastDate: now.add(Duration(days: 365)));
+        lastDate: now.add(const Duration(days: 365)));
 
     if (newDate != null) {
       timeOfDay = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay.fromDateTime(now.add(Duration(minutes: 1))),
+        initialTime: TimeOfDay.fromDateTime(now.add(const Duration(minutes: 1))),
       );
 
       if (timeOfDay != null) {
@@ -93,7 +95,7 @@ class _HomePageState extends State<HomePage> {
         builder: (BuildContext context) => StatefulBuilder(
             builder: (BuildContext context, StateSetter setModalState) =>
                 AlertDialog(
-                  title: Text("Choose the new badge amount"),
+                  title: const Text("Choose the new badge amount"),
                   content: NumberPicker(
                       value: _pickAmount,
                       minValue: 0,
@@ -102,13 +104,13 @@ class _HomePageState extends State<HomePage> {
                           setModalState(() => _pickAmount = newValue)),
                   actions: [
                     TextButton(
-                      child: Text("Cancel"),
+                      child: const Text("Cancel"),
                       onPressed: () {
                         Navigator.of(context).pop(null);
                       },
                     ),
                     TextButton(
-                      child: Text("OK"),
+                      child: const Text("OK"),
                       onPressed: () {
                         Navigator.of(context).pop(_pickAmount);
                       },
@@ -195,7 +197,7 @@ class _HomePageState extends State<HomePage> {
           elevation: 10,
         ),
         body: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
           children: <Widget>[
             /* ******************************************************************** */
 
@@ -254,7 +256,7 @@ class _HomePageState extends State<HomePage> {
             TextDivisor(title: 'Global Permission to send Notifications'),
             PermissionIndicator(
                 name: null, allowed: globalNotificationsAllowed),
-            TextNote(
+            const TextNote(
                 'To send local and push notifications, it is necessary to obtain the user\'s consent. Keep in mind that he user consent can be revoked at any time.\n\n'
                 '* Android: notifications are enabled by default and are considered not dangerous.\n'
                 '* iOS: notifications are not enabled by default and you must explicitly request it to the user.'),
@@ -311,7 +313,7 @@ class _HomePageState extends State<HomePage> {
                   allowed: scheduleChannelPermissions[
                       NotificationPermission.CriticalAlert]!),
             ]),
-            TextNote(
+            const TextNote(
                 'To send local and push notifications, it is necessary to obtain the user\'s consent. Keep in mind that he user consent can be revoked at any time.\n\n'
                 '* OBS: if the feature is not available on device, it will be considered enabled by default.\n'),
             SimpleButton('Open Schedule channel\'s permission page',
@@ -319,7 +321,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () =>
                     NotificationUtils.redirectToScheduledChannelsPage()
                         .then((_) => refreshPermissionsIcons())),
-            SimpleButton('Request full permissons for Schedule\'s channel',
+            SimpleButton('Request full permissions for Schedule\'s channel',
                 enabled: !schedulesFullControl,
                 onPressed: () =>
                     NotificationUtils.requestFullScheduleChannelPermissions(
@@ -337,9 +339,9 @@ class _HomePageState extends State<HomePage> {
               PermissionIndicator(
                   name: 'Override DnD', allowed: isOverrideDnDEnabled),
             ]),
-            TextNote(
-                'Dangerous permissions are permissions that can be disabled by default and you must obtain the user\'s consent explicity to enable. Keep in mind that he user consent can be revoked at any time.\n\n'
-                '* Android: override DnD mode is disabled by default. When the permission is granted, the DnD device state is downgraded every time when a new critical notification is displayed and all notifications are being fully supressed by DnD.\n'
+            const TextNote(
+                'Dangerous permissions are permissions that can be disabled by default and you must obtain the user\'s consent explicit to enable. Keep in mind that he user consent can be revoked at any time.\n\n'
+                '* Android: override DnD mode is disabled by default. When the permission is granted, the DnD device state is downgraded every time when a new critical notification is displayed and all notifications are being fully suppressed by DnD.\n'
                 '* iOS: override DnD is automatically enabled with Critical Alert\'s permission.'),
             SimpleButton('Request Precise Alarms mode',
                 enabled: !isPreciseAlarmEnabled,
@@ -355,7 +357,7 @@ class _HomePageState extends State<HomePage> {
                         .then((isAllowed) => setState(() {
                               refreshPermissionsIcons();
                             }))),
-            SimpleButton('Request to Override Do not Disturbe mode (Android)',
+            SimpleButton('Request to Override Do not Disturb mode (Android)',
                 enabled: !isOverrideDnDEnabled,
                 onPressed: () =>
                     NotificationUtils.requestOverrideDndPermission(context)
@@ -374,7 +376,7 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Basic Notifications'),
-            TextNote('A simple and fast notification to fresh start.\n\n'
+            const TextNote('A simple and fast notification to fresh start.\n\n'
                 'Tap on notification when it appears on your system tray to go to Details page.'),
             SimpleButton('Show the most basic notification',
                 onPressed: () => NotificationUtils.showBasicNotification(1)),
@@ -398,8 +400,12 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Notification\'s Special Category'),
-            TextNote(
-                'The notification category is a group of predefined categories that best describe the nature of the notification and may be used by some systems for ranking, delay or filter the notifications. Its highly recommended to correctly categorize your notifications..\n\n'
+            const TextNote(
+                'The notification category is a group of predefined categories '
+                    'that best describe the nature of the notification and may '
+                    'be used by some systems for ranking, delay or filter the '
+                    'notifications. Its highly recommended to correctly '
+                    'categorize your notifications..\n\n'
                 'Slide the bar above to add some delay on notification.'),
             SecondsSlider(
                 steps: 12,
@@ -409,10 +415,8 @@ class _HomePageState extends State<HomePage> {
                 }),
             SimpleButton('Show call notification', onPressed: () {
               Vibration.vibrate(duration: 100);
-              Future.delayed(Duration(seconds: _secondsToCallCategory.toInt()),
-                  () {
-                NotificationUtils.showCallNotification(42);
-              });
+                NotificationUtils
+                    .showCallNotification(42,_secondsToCallCategory.toInt());
             }),
             SimpleButton('Show alarm notification', onPressed: () {
               Vibration.vibrate(duration: 100);
@@ -428,18 +432,23 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Big Picture Notifications'),
-            TextNote(
-                'To show any images on notification, at any place, you need to include the respective source prefix before the path.'
+            const TextNote(
+                'To show any images on notification, at any place, you need '
+                    'to include the respective source prefix before the path.'
                 '\n\n'
                 'Images can be defined using 4 prefix types:'
                 '\n\n'
-                '* Asset: images access through Flutter asset method.\n\t Example:\n\t asset://path/to/image-asset.png'
+                '* Asset: images access through Flutter asset method.\n\t '
+                    'Example:\n\t asset://path/to/image-asset.png'
                 '\n\n'
-                '* Network: images access through internet connection.\n\t Example:\n\t http(s)://url.com/to/image-asset.png'
+                '* Network: images access through internet connection.\n\t '
+                    'Example:\n\t http(s)://url.com/to/image-asset.png'
                 '\n\n'
-                '* File: images access through files stored on device.\n\t Example:\n\t file://path/to/image-asset.png'
+                '* File: images access through files stored on device.\n\t '
+                    'Example:\n\t file://path/to/image-asset.png'
                 '\n\n'
-                '* Resource: images access through drawable native resources.\n\t Example:\n\t resource://url.com/to/image-asset.png'),
+                '* Resource: images access through drawable native resources.\n\t '
+                    'Example:\n\t resource://url.com/to/image-asset.png'),
             SimpleButton('Show large icon notification',
                 onPressed: () =>
                     NotificationUtils.showLargeIconNotification(2)),
@@ -474,7 +483,7 @@ class _HomePageState extends State<HomePage> {
             TextDivisor(
                 title:
                     'Emojis ${Emojis.smile_alien}${Emojis.transport_air_rocket}'),
-            TextNote(
+            const TextNote(
                 'To send local and push notifications with emojis, use the class Emoji concatenated with your text.\n\n'
                 'Attention: not all Emojis work with all platforms. Please, test the specific emoji before using it in production.'),
             SimpleButton('Show notification with emojis',
@@ -488,8 +497,8 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Locked Notifications (onGoing - Android)'),
-            TextNote(
-                'To send local or push locked notification, that users cannot dismiss it swiping it, set the "locked" property to true.\n\n' +
+            const TextNote(
+                'To send local or push locked notification, that users cannot dismiss it swiping it, set the "locked" property to true.\n\n'
                     "Attention: Notification's content locked property has priority over the Channel's one."),
             SimpleButton('Send/Update the locked notification',
                 onPressed: () => NotificationUtils.showLockedNotification(2)),
@@ -499,7 +508,7 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Android Foreground Service'),
-            TextNote('This feature is only available for Android devices.'),
+            const TextNote('This feature is only available for Android devices.'),
             SimpleButton('Start foreground service',
                 onPressed: () =>
                     NotificationUtils.startForegroundServiceNotification(9999)),
@@ -510,7 +519,7 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Notification Importance (Priority)'),
-            TextNote(
+            const TextNote(
                 'To change the importance level of notifications, please set the importance in the respective channel.\n\n'
                 'The possible importance levels are the following:\n\n'
                 'Max: Makes a sound and appears as a heads-up notification.\n'
@@ -545,7 +554,7 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Action Buttons'),
-            TextNote('Action buttons can be used in four types:'
+            const TextNote('Action buttons can be used in four types:'
                 '\n\n'
                 '* Default: after user taps, the notification bar is closed and an action event is fired.'
                 '\n\n'
@@ -554,7 +563,7 @@ class _HomePageState extends State<HomePage> {
                 '* DisabledAction: after user taps, the notification bar is closed, but the respective action event is not fired.'
                 '\n\n'
                 '* KeepOnTop: after user taps, the notification bar is not closed, but an action event is fired.'),
-            TextNote(
+            const TextNote(
                 'Since Android Nougat, icons are only displayed on media layout. The icon media needs to be a native resource type.'),
             SimpleButton(
                 'Show notification with\nsimple Action buttons (one disabled)',
@@ -589,7 +598,7 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Badge Indicator'),
-            TextNote(
+            const TextNote(
                 '"Badge" is an indicator of how many notifications (or anything else) that have not been viewed by the user (iOS and some versions of Android) '
                 'or even a reminder of new things arrived (Android native).\n\n'
                 'For platforms that show the global indicator over the app icon, is highly recommended to erase this annoying counter as soon '
@@ -635,11 +644,11 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Vibration Patterns'),
-            TextNote(
+            const TextNote(
                 'The NotificationModel plugin has 3 vibration patters as example, but you perfectly can create your own patter.'
                 '\n'
                 'The patter is made by a list of big integer, separated between ON and OFF duration in milliseconds.'),
-            TextNote(
+            const TextNote(
                 'A vibration pattern pre-configured in a channel could be updated at any time using the method NotificationModel.setChannel'),
             SimpleButton('Show plain notification with low vibration pattern',
                 onPressed: () =>
@@ -663,7 +672,7 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Notification Channels'),
-            TextNote(
+            const TextNote(
                 'The channel is a category identifier which notifications are pre-configured and organized before sent.'
                 '\n\n'
                 'On Android, since Oreo version, the notification channel is mandatory and can be managed by the user on your app config page.\n'
@@ -685,9 +694,9 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'LEDs and Colors'),
-            TextNote(
+            const TextNote(
                 'The led colors and the default layout color are independent'),
-            TextNote('Some devices need to be locked to activate LED lights.'
+            const TextNote('Some devices need to be locked to activate LED lights.'
                 '\n'
                 'If that is your case, please delay the notification to give to you enough time.'),
             CheckButton('Delay notifications for 5 seconds', delayLEDTests,
@@ -719,7 +728,7 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Wake Up Locked Screen Notifications'),
-            TextNote(
+            const TextNote(
                 'Wake Up Locked Screen notifications are notifications that can wake up the device screen to call the user attention, if the device is on lock screen.\n\n'
                 'To enable this feature on Android, is necessary to add the WAKE_LOCK permission into your AndroidManifest.xml file. For iOS, this is the default behavior for high priority channels.'),
             SecondsSlider(
@@ -740,9 +749,9 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Full Screen Intent Notifications'),
-            TextNote(
+            const TextNote(
                 'Full-Screen Intents are notifications that can launch in full-screen mode. They are indicate since Android 9 to receiving calls and alarm features.\n\n'
-                'To enable this feature on Android, is necessary to add the USE_FULL_SCREEN_INTENT permission into your AndroidManifest.xml file and explicity request the user permission since Android 11. For iOS, this option has no effect.'),
+                'To enable this feature on Android, is necessary to add the USE_FULL_SCREEN_INTENT permission into your AndroidManifest.xml file and explicit request the user permission since Android 11. For iOS, this option has no effect.'),
             SimpleButton(
                 'Schedule notification with full screen locked screen option',
                 onPressed: () =>
@@ -817,8 +826,8 @@ class _HomePageState extends State<HomePage> {
                     .then((timeZone) => showDialog(
                         context: context,
                         builder: (_) => AlertDialog(
-                            backgroundColor: Color(0xfffbfbfb),
-                            title: Center(child: Text('Current Time Zone')),
+                            backgroundColor: const Color(0xfffbfbfb),
+                            title: const Center(child: Text('Current Time Zone')),
                             content: SizedBox(
                                 height: 80.0,
                                 child: Center(
@@ -834,8 +843,8 @@ class _HomePageState extends State<HomePage> {
                     .then((timeZone) => showDialog(
                         context: context,
                         builder: (_) => AlertDialog(
-                            backgroundColor: Color(0xfffbfbfb),
-                            title: Center(child: Text('UTC Time Zone')),
+                            backgroundColor: const Color(0xfffbfbfb),
+                            title: const Center(child: Text('UTC Time Zone')),
                             content: SizedBox(
                                 height: 80.0,
                                 child: Center(
@@ -873,8 +882,10 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Get Next Schedule Date'),
-            TextNote(
-                'This is a simple example to show how to query the next valid schedule date. The date components follow the ISO 8601 standard.'),
+            const TextNote(
+                'This is a simple example to show how to query the next valid '
+                    'schedule date. The date components follow the ISO 8601 '
+                    'standard.'),
             SimpleButton('Get next Monday after date', onPressed: () async {
               DateTime? referenceDate =
                   await pickScheduleDate(context, isUtc: false);
@@ -891,22 +902,23 @@ class _HomePageState extends State<HomePage> {
                   .getNextDate(schedule, fixedDate: referenceDate);
 
               late String response;
-              if (nextValidDate == null)
+              if (nextValidDate == null) {
                 response = 'There is no more valid date for this schedule';
-              else
+              } else {
                 response = AwesomeDateUtils.parseDateToString(
                     nextValidDate.toUtc(),
                     format: 'dd/MM/yyyy')!;
+              }
 
               showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
-                        title: Text("Next valid schedule"),
+                        title: const Text("Next valid schedule"),
                         content: SizedBox(
                             height: 50, child: Center(child: Text(response))),
                         actions: [
                           TextButton(
-                            child: Text("OK"),
+                            child: const Text("OK"),
                             onPressed: () {
                               Navigator.of(context).pop(null);
                             },
@@ -918,12 +930,16 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Media Player'),
-            TextNote(
-                'The media player its just emulated and was built to help me to check if the notification media control contemplates the dev demands, such as sync state, etc.'
+            const TextNote(
+                'The media player its just emulated and was built to help me to '
+                    'check if the notification media control contemplates the '
+                    'dev demands, such as sync state, etc.'
                 '\n\n'
-                'The layout itself was built just for fun, you can use it as you wish for.'
+                'The layout itself was built just for fun, you can use it as '
+                    'you wish for.'
                 '\n\n'
-                'ATENTION: There is no media reproducing in any place, its just a Timer to pretend a time passing.'),
+                'ATTENTION: There is no media reproducing in any place, its '
+                    'just a Timer to pretend a time passing.'),
             SimpleButton('Show media player',
                 onPressed: () =>
                     Navigator.pushNamed(context, PAGE_MEDIA_DETAILS)),
@@ -1018,15 +1034,15 @@ class _HomePageState extends State<HomePage> {
                 labelColor: Colors.white,
                 onPressed: () =>
                     NotificationUtils.cancelNotificationsByGroupKey('grouped')),
-            SimpleButton('Dismiss all notifications',
+            const SimpleButton('Dismiss all notifications',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: NotificationUtils.dismissAllNotifications),
-            SimpleButton('Cancel all active schedules',
+            const SimpleButton('Cancel all active schedules',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: NotificationUtils.cancelAllSchedules),
-            SimpleButton('Cancel all notifications and schedules',
+            const SimpleButton('Cancel all notifications and schedules',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,
                 onPressed: NotificationUtils.cancelAllNotifications),
@@ -1046,13 +1062,13 @@ class PermissionIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       width: 125,
       child: Column(
         children: [
           (name != null)
-              ? Text(name! + ':', textAlign: TextAlign.center)
-              : SizedBox(),
+              ? Text('${name!}:', textAlign: TextAlign.center)
+              : const SizedBox(),
           Text(allowed ? 'Allowed' : 'Not allowed',
               style: TextStyle(color: allowed ? Colors.green : Colors.red)),
           LedLight(allowed)

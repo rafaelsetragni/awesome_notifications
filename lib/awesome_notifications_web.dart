@@ -98,6 +98,13 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   }
 
   @override
+  Future<ReceivedAction?> getInitialNotificationAction({
+    bool removeFromActionEvents = false
+  }) async {
+    return null;
+  }
+
+  @override
   Future<int> getGlobalBadgeCounter() async {
     return 0;
   }

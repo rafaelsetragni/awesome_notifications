@@ -544,11 +544,12 @@ class NotificationUtils {
       NOTIFICATION'S SPECIAL CATEGORIES
   ************************************************ */
 
-  static Future<void> showCallNotification(int id) async {
+  static Future<void> showCallNotification(int id, int timeToWait) async {
     String platformVersion = await getPlatformVersion();
-    await AndroidForegroundService.startAndroidForegroundService(
-        foregroundStartMode: ForegroundStartMode.stick,
-        foregroundServiceType: ForegroundServiceType.phoneCall,
+    await AwesomeNotifications().createNotification(
+    // await AndroidForegroundService.startAndroidForegroundService(
+    //     foregroundStartMode: ForegroundStartMode.stick,
+    //     foregroundServiceType: ForegroundServiceType.phoneCall,
         content: NotificationContent(
             id: id,
             channelKey: 'call_channel',
@@ -560,7 +561,7 @@ class NotificationUtils {
             fullScreenIntent: true,
             autoDismissible: false,
             backgroundColor: (platformVersion == 'Android-31')
-                ? Color(0x00796a)
+                ? const Color(0xFF00796a)
                 : Colors.white,
             payload: {'username': 'Little Mary'}),
         actionButtons: [
@@ -576,7 +577,11 @@ class NotificationUtils {
               actionType: ActionType.SilentAction,
               isDangerousOption: true,
               autoDismissible: true),
-        ]);
+        ],
+        schedule: NotificationInterval(
+            interval: timeToWait
+        )
+    );
   }
 
   static Future<void> showAlarmNotification(

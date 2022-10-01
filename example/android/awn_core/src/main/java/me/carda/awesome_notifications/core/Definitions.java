@@ -91,6 +91,7 @@ public interface Definitions {
     String CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = "showNotificationPage";
     String CHANNEL_METHOD_SHOW_ALARM_PAGE = "showAlarmPage";
     String CHANNEL_METHOD_SHOW_GLOBAL_DND_PAGE = "showGlobalDndPage";
+    String CHANNEL_METHOD_GET_INITIAL_ACTION = "getInitialAction";
     String CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed";
     String CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications";
     String CHANNEL_METHOD_CHECK_PERMISSIONS = "checkPermissions";

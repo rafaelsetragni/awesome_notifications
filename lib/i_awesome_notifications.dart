@@ -46,7 +46,19 @@ abstract class IAwesomeNotifications {
     List<NotificationActionButton>? actionButtons,
   });
 
+  /// Creates a new notification based on a map similar to the map produced by
+  /// toMap method
   Future<bool> createNotificationFromJsonData(Map<String, dynamic> mapData);
+
+  /// Gets the notification action that launched the app. If the app
+  /// wasn't launched by a notification, so it returns null. This method does
+  /// not depend on setListeners being called first.
+  /// [removeFromActionEvents] when set to true, prevents the same action from
+  /// being delivered in the method onActionMethod, in case it hasn't already
+  /// happened
+  Future<ReceivedAction?> getInitialNotificationAction({
+    bool removeFromActionEvents = false
+  });
 
   /// Opens the app notifications page
   Future<void> showNotificationConfigPage({String? channelKey});

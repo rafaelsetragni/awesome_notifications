@@ -24,7 +24,7 @@ class NotificationsController {
               channelKey: 'basic_channel',
               channelName: 'Basic notifications',
               channelDescription: 'Notification channel for basic tests',
-              defaultColor: Color(0xFF9D50DD),
+              defaultColor: const Color(0xFF9D50DD),
               ledColor: Colors.white,
               importance: NotificationImportance.High),
           NotificationChannel(
@@ -34,14 +34,14 @@ class NotificationsController {
               channelDescription:
                   'Notification channel to activate badge indicator',
               channelShowBadge: true,
-              defaultColor: Color(0xFF9D50DD),
+              defaultColor: const Color(0xFF9D50DD),
               ledColor: Colors.yellow),
           NotificationChannel(
               channelGroupKey: 'category_tests',
               channelKey: 'call_channel',
               channelName: 'Calls Channel',
               channelDescription: 'Channel with call ringtone',
-              defaultColor: Color(0xFF9D50DD),
+              defaultColor: const Color(0xFF9D50DD),
               importance: NotificationImportance.Max,
               ledColor: Colors.white,
               channelShowBadge: true,
@@ -52,7 +52,7 @@ class NotificationsController {
               channelKey: 'alarm_channel',
               channelName: 'Alarms Channel',
               channelDescription: 'Channel with alarm ringtone',
-              defaultColor: Color(0xFF9D50DD),
+              defaultColor: const Color(0xFF9D50DD),
               importance: NotificationImportance.Max,
               ledColor: Colors.white,
               channelShowBadge: true,
@@ -63,7 +63,7 @@ class NotificationsController {
               channelKey: 'updated_channel',
               channelName: 'Channel to update',
               channelDescription: 'Notifications with not updated channel',
-              defaultColor: Color(0xFF9D50DD),
+              defaultColor: const Color(0xFF9D50DD),
               ledColor: Colors.white),
           NotificationChannel(
             channelGroupKey: 'chat_tests',
@@ -74,7 +74,7 @@ class NotificationsController {
             channelShowBadge: true,
             importance: NotificationImportance.Max,
             ledColor: Colors.white,
-            defaultColor: Color(0xFF9D50DD),
+            defaultColor: const Color(0xFF9D50DD),
           ),
           NotificationChannel(
               channelGroupKey: 'vibration_tests',
@@ -148,8 +148,8 @@ class NotificationsController {
               channelKey: 'big_picture',
               channelName: 'Big pictures',
               channelDescription: 'Notifications with big and beautiful images',
-              defaultColor: Color(0xFF9D50DD),
-              ledColor: Color(0xFF9D50DD),
+              defaultColor: const Color(0xFF9D50DD),
+              ledColor: const Color(0xFF9D50DD),
               vibrationPattern: lowVibrationPattern,
               importance: NotificationImportance.High),
           NotificationChannel(
@@ -165,16 +165,16 @@ class NotificationsController {
               channelKey: 'inbox',
               channelName: 'Inbox notifications',
               channelDescription: 'Notifications with inbox layout',
-              defaultColor: Color(0xFF9D50DD),
-              ledColor: Color(0xFF9D50DD),
+              defaultColor: const Color(0xFF9D50DD),
+              ledColor: const Color(0xFF9D50DD),
               vibrationPattern: mediumVibrationPattern),
           NotificationChannel(
             channelGroupKey: 'schedule_tests',
             channelKey: 'scheduled',
             channelName: 'Scheduled notifications',
             channelDescription: 'Notifications with schedule functionality',
-            defaultColor: Color(0xFF9D50DD),
-            ledColor: Color(0xFF9D50DD),
+            defaultColor: const Color(0xFF9D50DD),
+            ledColor: const Color(0xFF9D50DD),
             vibrationPattern: lowVibrationPattern,
             importance: NotificationImportance.High,
             defaultRingtoneType: DefaultRingtoneType.Alarm,
@@ -319,7 +319,9 @@ class NotificationsController {
 
     switch (receivedAction.channelKey) {
       case 'call_channel':
-        await receiveCallNotificationAction(receivedAction);
+        if (receivedAction.actionLifeCycle != NotificationLifeCycle.AppKilled){
+          await receiveCallNotificationAction(receivedAction);
+        }
         break;
 
       case 'alarm_channel':
@@ -336,19 +338,20 @@ class NotificationsController {
 
       default:
         if (isSilentAction) {
-          print(receivedAction.toString());
-          print("start");
-          await Future.delayed(Duration(seconds: 4));
+          debugPrint(receivedAction.toString());
+          debugPrint("start");
+          await Future.delayed(const Duration(seconds: 4));
           final url = Uri.parse("http://google.com");
           final re = await http.get(url);
-          print(re.body);
-          print("long task done");
+          debugPrint(re.body);
+          debugPrint("long task done");
           break;
         }
-        if (!AwesomeStringUtils.isNullOrEmpty(receivedAction.buttonKeyInput))
+        if (!AwesomeStringUtils.isNullOrEmpty(receivedAction.buttonKeyInput)) {
           receiveButtonInputText(receivedAction);
-        else
+        } else {
           receiveStandardNotificationAction(receivedAction);
+        }
         break;
     }
   }
@@ -359,9 +362,9 @@ class NotificationsController {
 
   static Future<void> receiveButtonInputText(
       ReceivedAction receivedAction) async {
-    print('Input Button Message: "${receivedAction.buttonKeyInput}"');
+    debugPrint('Input Button Message: "${receivedAction.buttonKeyInput}"');
     Fluttertoast.showToast(
-        msg: 'Msg: ' + receivedAction.buttonKeyInput,
+        msg: 'Msg: ${receivedAction.buttonKeyInput}',
         backgroundColor: App.mainColor,
         textColor: Colors.white);
   }
@@ -443,5 +446,12 @@ class NotificationsController {
             targetPage: PAGE_PHONE_CALL, receivedAction: receivedAction);
         break;
     }
+  }
+
+  static Future<ReceivedAction?> interceptInitialCallActionRequest() async {
+    ReceivedAction? receivedAction = await AwesomeNotifications()
+        .getInitialNotificationAction();
+    if(receivedAction?.channelKey == 'call_channel') return receivedAction;
+    return null;
   }
 }

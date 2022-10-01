@@ -609,6 +609,21 @@ public class AwesomeNotifications
         return isNotificationAction;
     }
 
+    public ActionReceived getInitialNotificationAction(
+            @NonNull boolean removeActionEvent
+    ) throws AwesomeNotificationsException {
+        if (!removeActionEvent) {
+            return NotificationActionReceiver.initialActionReceived;
+        }
+        if(NotificationActionReceiver.initialActionReceived == null) return null;
+
+        Context context = wContext.get();
+        ActionManager.removeAction(context, NotificationActionReceiver.initialActionReceived.id);
+        ActionManager.commitChanges(context);
+
+        return NotificationActionReceiver.initialActionReceived;
+    }
+
     // *****************************  CHANNEL METHODS  **********************************
 
     public boolean setChannel(@NonNull NotificationChannelModel channelModel, boolean forceUpdate)

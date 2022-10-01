@@ -3,11 +3,14 @@ import 'dart:async';
 import 'package:awesome_notifications/android_foreground_service.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications_example/common_widgets/single_slider.dart';
+import 'package:awesome_notifications_example/notifications/notifications_controller.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vibration/vibration.dart';
+
+import '../notifications/notifications_util.dart';
 
 class PhoneCallPage extends StatefulWidget {
 
@@ -25,10 +28,11 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
   Duration _secondsElapsed = Duration.zero;
 
   void startCallingTimer() {
-    const oneSec = const Duration(seconds: 1);
+    const oneSec = Duration(seconds: 1);
+    NotificationUtils.cancelNotification(widget.receivedAction.id!);
     AndroidForegroundService.stopForeground(widget.receivedAction.id!);
 
-    _timer = new Timer.periodic(
+    _timer = Timer.periodic(
       oneSec, (Timer timer) {
           setState(() {
             _secondsElapsed += oneSec;
@@ -39,6 +43,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
 
   void finishCall(){
     Vibration.vibrate(duration: 100);
+    NotificationUtils.cancelNotification(widget.receivedAction.id!);
     AndroidForegroundService.stopForeground(widget.receivedAction.id!);
     Navigator.pop(context);
   }
@@ -47,14 +52,16 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
   void initState() {
     lockScreenPortrait();
     super.initState();
-    if(widget.receivedAction.buttonKeyPressed == 'ACCEPT')
+    if(widget.receivedAction.buttonKeyPressed == 'ACCEPT') {
       startCallingTimer();
+    }
   }
 
   @override
   void dispose() {
     _timer?.cancel();
     unlockScreenPortrait();
+    NotificationUtils.cancelNotification(widget.receivedAction.id!);
     AndroidForegroundService.stopForeground(widget.receivedAction.id!);
     super.dispose();
   }
@@ -76,7 +83,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
               fit: BoxFit.cover,
             ),
             // Black Layer
-            DecoratedBox(
+            const DecoratedBox(
               decoration: BoxDecoration(color: Colors.black45),
             ),
             Padding(
@@ -87,7 +94,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
                   children: [
                     Text(
                       widget.receivedAction.payload?['username']?.replaceAll(r'\s+', r'\n')
-                      ?? 'Unknow',
+                      ?? 'Unknown',
                       maxLines: 4,
                       style: themeData
                           .textTheme
@@ -102,7 +109,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
                         .headline6
                         ?.copyWith(color: Colors.white54, fontSize: _timer == null ? 20 : 12),
                     ),
-                    SizedBox(height: 50),
+                    const SizedBox(height: 50),
                     _timer == null ?
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -114,7 +121,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
                             ),
                             child: Column(
                               children: [
-                                Icon(FontAwesomeIcons.solidClock, color: Colors.white54),
+                                const Icon(FontAwesomeIcons.solidClock, color: Colors.white54),
                                 Text('Reminder me', style:  themeData
                                     .textTheme
                                     .headline6
@@ -122,7 +129,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
                               ],
                             )
                           ),
-                          SizedBox(),
+                          const SizedBox(),
                           TextButton(
                             onPressed: (){},
                             style: ButtonStyle(
@@ -130,7 +137,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
                             ),
                             child: Column(
                               children: [
-                                Icon(FontAwesomeIcons.solidEnvelope, color: Colors.white54),
+                                const Icon(FontAwesomeIcons.solidEnvelope, color: Colors.white54),
                                 Text('Message', style:  themeData
                                     .textTheme
                                     .headline6
@@ -139,11 +146,11 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
                             ),
                           )
                         ],
-                      ) : SizedBox(),
-                    Spacer(),
+                      ) : const SizedBox(),
+                    const Spacer(),
                     Container(
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
+                      padding: const EdgeInsets.all(15),
+                      decoration: const BoxDecoration(
                         color: Colors.black54,
                         borderRadius: BorderRadius.all(Radius.circular(45)),
                       ),
@@ -154,7 +161,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
                           RoundedButton(
                             press: finishCall,
                             color: Colors.red,
-                            icon: Icon(FontAwesomeIcons.phoneAlt, color: Colors.white),
+                            icon: const Icon(FontAwesomeIcons.phoneAlt, color: Colors.white),
                           ),
                           SingleSliderToConfirm(
                             onConfirmation: (){
@@ -172,23 +179,25 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
                             sliderButtonContent: RoundedButton(
                               press: (){},
                               color: Colors.white,
-                              icon: Icon(FontAwesomeIcons.phoneAlt, color: Colors.green),
+                              icon: const Icon(FontAwesomeIcons.phoneAlt, color: Colors.green),
                             ),
                           )
                         ] :
                         [
                           RoundedButton(
                             press: (){},
-                            icon: Icon(FontAwesomeIcons.microphone),
+                            color: Colors.white,
+                            icon: const Icon(FontAwesomeIcons.microphone, color: Colors.black),
                           ),
                           RoundedButton(
                             press: finishCall,
                             color: Colors.red,
-                            icon: Icon(FontAwesomeIcons.phoneAlt, color: Colors.white),
+                            icon: const Icon(FontAwesomeIcons.phoneAlt, color: Colors.white),
                           ),
                           RoundedButton(
                             press: (){},
-                            icon: Icon(FontAwesomeIcons.volumeUp),
+                            color: Colors.white,
+                            icon: const Icon(FontAwesomeIcons.volumeUp, color: Colors.black),
                           ),
                         ],
                       ),

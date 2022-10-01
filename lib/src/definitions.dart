@@ -1,3 +1,4 @@
+// ignore_for_file: constant_identifier_names
 import 'package:awesome_notifications/src/enumerators/action_type.dart';
 import 'package:awesome_notifications/src/enumerators/default_ringtone_type.dart';
 import 'package:awesome_notifications/src/enumerators/group_alert_behaviour.dart';
@@ -49,6 +50,7 @@ const RECOVER_DISPLAYED = 'recoverScheduledDisplayed';
 const CHANNEL_METHOD_INITIALIZE = 'initialize';
 const CHANNEL_METHOD_PUSH_NEXT_DATA = 'pushNext';
 const CHANNEL_METHOD_GET_DRAWABLE_DATA = 'getDrawableData';
+const CHANNEL_METHOD_GET_INITIAL_ACTION = 'getInitialAction';
 const CHANNEL_METHOD_GET_PLATFORM_VERSION = 'getPlatformVersion';
 
 const CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = 'showNotificationPage';

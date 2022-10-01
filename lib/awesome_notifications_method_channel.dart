@@ -13,7 +13,11 @@ import 'src/logs/logger.dart';
 
 /// An implementation of [AwesomeNotificationsPlatform] that uses method channels.
 class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
+<<<<<<< Updated upstream
   String tag = 'MethodChannelAwesomeNotifications';
+=======
+  final String tag = 'MethodChannelAwesomeNotifications';
+>>>>>>> Stashed changes
 
   /// The method channel used to interact with the native platform.
   @visibleForTesting
@@ -190,6 +194,19 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     if (result2 == null) return null;
 
     return result2;
+  }
+
+  @override
+  Future<ReceivedAction?> getInitialNotificationAction({
+    bool removeFromActionEvents = false
+  }) async {
+    dynamic returnedData = await methodChannel.invokeMethod(
+        CHANNEL_METHOD_GET_INITIAL_ACTION, removeFromActionEvents);
+    if (returnedData == null) return null;
+
+    Map<String, dynamic>? actionData = Map<String, dynamic>.from(returnedData);
+    ReceivedAction? receivedAction = ReceivedAction().fromMap(actionData);
+    return receivedAction;
   }
 
   @override
