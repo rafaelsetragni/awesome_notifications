@@ -20,6 +20,7 @@ const EXTRA_BROADCAST_MESSAGE = 'notification';
 const INITIALIZE_DEBUG_MODE = "debug";
 const INITIALIZE_DEFAULT_ICON = "defaultIcon";
 const INITIALIZE_CHANNELS = "initializeChannels";
+const INITIALIZE_CLEAR_STORED_ACTIONS = "clearStoredActions";
 const INITIALIZE_CHANNELS_GROUPS = "initializeChannelGroups";
 
 const NOTIFICATION_CONTENT = "content";
@@ -49,6 +50,7 @@ const RECOVER_DISPLAYED = 'recoverScheduledDisplayed';
 
 const CHANNEL_METHOD_INITIALIZE = 'initialize';
 const CHANNEL_METHOD_PUSH_NEXT_DATA = 'pushNext';
+const CHANNEL_METHOD_CLEAR_STORED_ACTION = 'clearStoredActions';
 const CHANNEL_METHOD_GET_DRAWABLE_DATA = 'getDrawableData';
 const CHANNEL_METHOD_GET_INITIAL_ACTION = 'getInitialAction';
 const CHANNEL_METHOD_GET_PLATFORM_VERSION = 'getPlatformVersion';

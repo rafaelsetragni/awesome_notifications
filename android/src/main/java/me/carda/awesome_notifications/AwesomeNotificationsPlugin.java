@@ -225,7 +225,7 @@ public class AwesomeNotificationsPlugin
     }
 
     @Override
-    public boolean onNewIntent(Intent intent) {
+    public boolean onNewIntent(@NonNull Intent intent) {
         try{
             return awesomeNotifications
                     .captureNotificationActionFromIntent(intent);
@@ -314,6 +314,10 @@ public class AwesomeNotificationsPlugin
 
                 case Definitions.CHANNEL_METHOD_GET_INITIAL_ACTION:
                     channelMethodGetInitialAction(call, result);
+                    return;
+
+                case Definitions.CHANNEL_METHOD_CLEAR_STORED_ACTION:
+                    channelMethodClearStoredActions(call, result);
                     return;
 
                 case Definitions.CHANNEL_METHOD_GET_NEXT_DATE:
@@ -957,6 +961,14 @@ public class AwesomeNotificationsPlugin
             result.success(null);
         else
             result.success(actionReceived.toMap());
+    }
+
+    private void channelMethodClearStoredActions(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
+        awesomeNotifications.clearStoredActions();
+        result.success(null);
     }
 
     @SuppressWarnings("unchecked")

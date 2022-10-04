@@ -115,8 +115,6 @@ public class AwesomeNotifications
                     new MediaSessionCompat(
                             applicationContext,
                             "PUSH_MEDIA"));
-
-
     }
 
     private boolean isTheMainInstance = false;
@@ -585,6 +583,10 @@ public class AwesomeNotifications
                         threadCompletionHandler);
     }
 
+    public void clearStoredActions() throws AwesomeNotificationsException {
+        ActionManager.clearAllActions(wContext.get());
+    }
+
     private void captureNotificationActionFromActivity(Activity startActivity) throws Exception {
         if (startActivity == null)
             return;
@@ -612,16 +614,15 @@ public class AwesomeNotifications
     public ActionReceived getInitialNotificationAction(
             @NonNull boolean removeActionEvent
     ) throws AwesomeNotificationsException {
-        if (!removeActionEvent) {
-            return NotificationActionReceiver.initialActionReceived;
-        }
-        if(NotificationActionReceiver.initialActionReceived == null) return null;
+        ActionReceived initialActionReceived = ActionManager.getInitialActionReceived();
+        if (!removeActionEvent) return initialActionReceived;
+        if(initialActionReceived == null) return null;
 
         Context context = wContext.get();
-        ActionManager.removeAction(context, NotificationActionReceiver.initialActionReceived.id);
+        ActionManager.removeAction(context, initialActionReceived.id);
         ActionManager.commitChanges(context);
 
-        return NotificationActionReceiver.initialActionReceived;
+        return initialActionReceived;
     }
 
     // *****************************  CHANNEL METHODS  **********************************

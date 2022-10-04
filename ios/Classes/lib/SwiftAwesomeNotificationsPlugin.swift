@@ -164,10 +164,14 @@ public class SwiftAwesomeNotificationsPlugin:
 				case Definitions.CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL:
                     try channelMethodSetChannel(call: call, result: result)
 					return
-					
-				case Definitions.CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL:
+                
+                case Definitions.CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL:
                     try channelMethodRemoveChannel(call: call, result: result)
-					return
+                    return
+                    
+                case Definitions.CHANNEL_METHOD_GET_INITIAL_ACTION:
+                    try channelMethodGetInitialAction(call: call, result: result)
+                    return
 					
 				case Definitions.CHANNEL_METHOD_GET_BADGE_COUNT:
                     try channelMethodGetBadgeCounter(call: call, result: result)
@@ -361,6 +365,21 @@ public class SwiftAwesomeNotificationsPlugin:
             }
             result(false)
         }
+    }
+    
+    private func channelMethodGetInitialAction(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        let removeFromEvents:Bool = call.arguments as? Bool ?? false
+        
+        guard let initialAction:ActionReceived =
+                awesomeNotifications?
+                    .getInitialAction(
+                        removeFromEvents: removeFromEvents)
+        else {
+            result(nil)
+            return
+        }
+        
+        result(initialAction.toMap())
     }
     
     private func channelMethodGetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {

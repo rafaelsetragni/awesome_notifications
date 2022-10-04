@@ -546,6 +546,8 @@ class NotificationUtils {
 
   static Future<void> showCallNotification(int id, int timeToWait) async {
     String platformVersion = await getPlatformVersion();
+    // Schedule only for test purposes. For real applications, you MUST
+    // create call or alarm notifications using AndroidForegroundService.
     await AwesomeNotifications().createNotification(
     // await AndroidForegroundService.startAndroidForegroundService(
     //     foregroundStartMode: ForegroundStartMode.stick,

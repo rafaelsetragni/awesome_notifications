@@ -2,6 +2,7 @@ package me.carda.awesome_notifications.core.models;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.HashMap;

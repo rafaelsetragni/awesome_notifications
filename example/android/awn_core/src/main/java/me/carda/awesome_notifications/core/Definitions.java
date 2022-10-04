@@ -25,6 +25,7 @@ public interface Definitions {
     String MEDIA_VALID_RESOURCE = "^resource?:\\/\\/";
 
     String INITIALIZE_DEBUG_MODE = "debug";
+    String INITIALIZE_STORE_INITIAL_ACTION = "storeInitialAction";
     String INITIALIZE_DEFAULT_ICON = "defaultIcon";
     String INITIALIZE_CHANNELS = "initializeChannels";
     String INITIALIZE_CHANNEL_GROUPS = "initializeChannelGroups";
@@ -43,6 +44,7 @@ public interface Definitions {
     String BADGE_COUNT = "badgeCount";
     String ACTION_HANDLE = "actionHandle";
     String SILENT_HANDLE = "silentHandle";
+    String STORE_INITIAL_ACTION = "storeInitialAction";
     String BACKGROUND_HANDLE = "awesomeDartBGHandle";
 
     String SCHEDULER_HELPER_SHARED = "awnot.sh.";
@@ -92,6 +94,7 @@ public interface Definitions {
     String CHANNEL_METHOD_SHOW_ALARM_PAGE = "showAlarmPage";
     String CHANNEL_METHOD_SHOW_GLOBAL_DND_PAGE = "showGlobalDndPage";
     String CHANNEL_METHOD_GET_INITIAL_ACTION = "getInitialAction";
+    String CHANNEL_METHOD_CLEAR_STORED_ACTION = "clearStoredActions";
     String CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed";
     String CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications";
     String CHANNEL_METHOD_CHECK_PERMISSIONS = "checkPermissions";
