@@ -397,6 +397,48 @@ override func application(
 
 And you can check how to correctly call each plugin opening the file `GeneratedPluginRegistrant.m`
 
+Also, depending of how you implemented your background actions, you may find a situation where the execution is happening inside an isolate without a valid context to redirect the user.
+For this cases, you need to use `ReceivePort` and `SendPort` to send the execution/data between isolates on Flutter. Initialize your `ReceivePort` inside the plugin initialization (which only happens on main app) and then, as soon you receive a isolate execution, redirect it entirely with `SendPort`.
+
+In the initialization of your notification_controller.dart:
+```Dart
+    ReceivePort port = ReceivePort();
+    IsolateNameServer.registerPortWithName(
+      port,
+      'background_not_action',
+    );
+
+    port.listen((var received) async {
+        _handleBackgroundAction(received);
+    });
+    
+    _initialized = true;
+```
+
+In your backgroundActionMethod:
+```Dart
+  static Future<void> onSilentActionHandle(ReceivedAction received) async {
+    print('On new background action received: ${received.toMap()}');
+
+    if (!_initialized) {
+      SendPort? uiSendPort = IsolateNameServer.lookupPortByName('background_not_action');
+      if (uiSendPort != null) {
+        print('Background action running on parallel isolate without valid context. Redirecting');
+        uiSendPort.send(received);
+        return;
+      }
+    }
+    
+    print('Background action running on main isolate');
+    await _handleBackgroundAction(received);
+  }
+
+  static Future<void> _handleBackgroundAction(ReceivedAction received) async {
+    // Your background action handle
+  }
+
+```
+
 <br>
 
 ## Video Tutorial
