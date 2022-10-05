@@ -141,7 +141,7 @@ Bellow are the obligatory requirements that your app must meet to use awesome_no
 
 Is required the minimum android SDK to 21 (Android 5.0 Lollipop) and Java compiled SDK Version to 33 (Android 13). You can change the `minSdkVersion` to 21 and the `compileSdkVersion` to 33, inside the file build.gradle in "android/app" folder.
 
-Also, to turn your app fully compatible with Android 12 (SDK 31), you need to add the attribute `android:exported="true"` to any \<activity\>, \<activity-alias\>, \<service\>, or \<receiver\> components that have \<intent-filter\> declared inside in the app’s AndroidManifest.xml file, and that's turns required for every other flutter packages that you're using.
+Also, to turn your app fully compatible with Android 13 (SDK 33), you need to add the attribute `android:exported="true"` to any \<activity\>, \<activity-alias\>, \<service\>, or \<receiver\> components that have \<intent-filter\> declared inside in the app’s AndroidManifest.xml file, and that's turns required for every other flutter packages that you're using.
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -161,7 +161,7 @@ Also, to turn your app fully compatible with Android 12 (SDK 31), you need to ad
 
 ### iOS
 
-Is required the minimum iOS version to 10. You can change the minimum app version through xCode, Project Runner (clicking on the app icon) > Info > Deployment Target  and changing the option "ios minimum deployment target" to 10.0
+Is required the minimum iOS version to 11. You can change the minimum app version through xCode, Project Runner (clicking on the app icon) > Info > Deployment Target  and changing the option "ios minimum deployment target" to 11.0
 
 <br>
 
@@ -362,6 +362,63 @@ AwesomeNotifications().createNotification(
 
 **THATS IT! CONGRATZ MY FRIEND!!!**
 
+
+## Important notes
+
+1. In case you need to capture the user notification action before calling the method `setListeners`, you can call the method `getInitialNotificationAction` at any moment.
+In case your app was started by an user notification action, `getInitialNotificationAction` will return the respective `ActionReceived` object. Otherwise will return null.
+OBS: This method does not affect the results from `onActionReceivedMethod`, except if you set `removeFromActionEvents` to `true`.
+
+```dart
+void main() async {
+    ReceivedAction? receivedAction = await AwesomeNotifications().getInitialNotificationAction();
+    if(receivedAction?.channelKey == 'call_channel') redirectToCallPage();
+    else redirectToHomePage();
+}
+```
+
+2. In case you need to redirect the user after a `silentAction` or `silentBackgroundAction` event, you may face the situation where you are running inside an dart Isolate with no valid Context to redirect the user.
+For these cases, you need to use `ReceivePort` and `SendPort` to switch execution between the isolates. Just create a `ReceivePort` inside your initialization process (which only occurs in main isolated), and then, inside your `onActionReceivedMethod`, use `SendPort` to send the execution to the listening `ReceivePort`.
+
+
+In the initialization of your notification_controller.dart:
+```Dart
+    ReceivePort port = ReceivePort();
+    IsolateNameServer.registerPortWithName(
+      port,
+      'background_notification_action',
+    );
+
+    port.listen((var received) async {
+        _handleBackgroundAction(received);
+    });
+    
+    _initialized = true;
+```
+
+In your backgroundActionMethod:
+```Dart
+  static Future<void> onSilentActionHandle(ReceivedAction received) async {
+    print('On new background action received: ${received.toMap()}');
+
+    if (!_initialized) {
+      SendPort? uiSendPort = IsolateNameServer.lookupPortByName('background_notification_action');
+      if (uiSendPort != null) {
+        print('Background action running on parallel isolate without valid context. Redirecting execution');
+        uiSendPort.send(received);
+        return;
+      }
+    }
+    
+    print('Background action running on main isolate');
+    await _handleBackgroundAction(received);
+  }
+
+  static Future<void> _handleBackgroundAction(ReceivedAction received) async {
+    // Your background action handle
+  }
+```
+
 <br>
 
 ## Extra iOS Setup for Background Actions
@@ -396,48 +453,6 @@ override func application(
 ```
 
 And you can check how to correctly call each plugin opening the file `GeneratedPluginRegistrant.m`
-
-Also, depending of how you implemented your background actions, you may find a situation where the execution is happening inside an isolate without a valid context to redirect the user.
-For this cases, you need to use `ReceivePort` and `SendPort` to send the execution/data between isolates on Flutter. Initialize your `ReceivePort` inside the plugin initialization (which only happens on main app) and then, as soon you receive a isolate execution, redirect it entirely with `SendPort`.
-
-In the initialization of your notification_controller.dart:
-```Dart
-    ReceivePort port = ReceivePort();
-    IsolateNameServer.registerPortWithName(
-      port,
-      'background_not_action',
-    );
-
-    port.listen((var received) async {
-        _handleBackgroundAction(received);
-    });
-    
-    _initialized = true;
-```
-
-In your backgroundActionMethod:
-```Dart
-  static Future<void> onSilentActionHandle(ReceivedAction received) async {
-    print('On new background action received: ${received.toMap()}');
-
-    if (!_initialized) {
-      SendPort? uiSendPort = IsolateNameServer.lookupPortByName('background_not_action');
-      if (uiSendPort != null) {
-        print('Background action running on parallel isolate without valid context. Redirecting');
-        uiSendPort.send(received);
-        return;
-      }
-    }
-    
-    print('Background action running on main isolate');
-    await _handleBackgroundAction(received);
-  }
-
-  static Future<void> _handleBackgroundAction(ReceivedAction received) async {
-    // Your background action handle
-  }
-
-```
 
 <br>
 
