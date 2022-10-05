@@ -6,7 +6,7 @@
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#)
 [![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#)
-[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.gg/MP3sEXPTnx)
+[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.awesome-notifications.carda.me)
     
 [![pub package](https://img.shields.io/pub/v/awesome_notifications.svg)](https://pub.dev/packages/awesome_notifications)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](#)
@@ -71,7 +71,7 @@ This is the only way to achieve all firebase push notification features + all aw
 ## Next steps
 
 - Include Web support
-- Finish the companion plugin to enable Firebase Cloud Message with all the awesome features available.
+- Finish the add-on plugin to enable Firebase Cloud Message with all the awesome features available. (accomplished)
 - Add an option to choose if a notification action should bring the app to foreground or not. (accomplished)
 - Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
 - Replicate Android layouts for iOS
@@ -97,7 +97,7 @@ Your donation will be mainly used to purchase new devices and equipments, which 
 
 To stay tuned with new updates and get our community support, please subscribe into our Discord Chat Server:
 
-[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.gg/MP3sEXPTnx)<br>https://discord.gg/3eJuAGqZKy
+[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.awesome-notifications.carda.me)<br>https://discord.awesome-notifications.carda.me
 
 <br>
 <br>
@@ -161,7 +161,7 @@ Also, to turn your app fully compatible with Android 13 (SDK 33), you need to ad
 
 ### iOS
 
-Is required the minimum iOS version to 11. You can change the minimum app version through xCode, Project Runner (clicking on the app icon) > Info > Deployment Target  and changing the option "ios minimum deployment target" to 11.0
+Is required the minimum iOS version to 11. You can change the minimum app version through xCode, in your Project view, click on Runner > Info > Deployment Target and change the option "ios minimum deployment target" to 11.0
 
 <br>
 
@@ -178,7 +178,7 @@ awesome_notifications: any # Any attribute updates automatically your source to 
 2. import the plugin package to your dart code
 
 ```dart
-import 'package:awesome_notifications/i_awesome_notifications.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 ```
 
 3. Initialize the plugin on main.dart, before MaterialApp widget (preferentially inside main() method), with at least one native icon and one channel
@@ -367,7 +367,8 @@ AwesomeNotifications().createNotification(
 
 1. In case you need to capture the user notification action before calling the method `setListeners`, you can call the method `getInitialNotificationAction` at any moment.
 In case your app was started by an user notification action, `getInitialNotificationAction` will return the respective `ActionReceived` object. Otherwise will return null.
-OBS: This method does not affect the results from `onActionReceivedMethod`, except if you set `removeFromActionEvents` to `true`.
+
+OBS: `getInitialNotificationAction` method does not affect the results from `onActionReceivedMethod`, except if you set `removeFromActionEvents` to `true`.
 
 ```dart
 void main() async {
@@ -494,25 +495,31 @@ Notifications are received by local code or Push service using native code, so t
 ![Awesome Notification's flowchart](https://user-images.githubusercontent.com/40064496/155190796-eae6d442-2190-427b-bf28-dc470ea778de.png)
 
 <br>
-    
-## Flutter Streams
 
-The Flutter code will be called as soon as possible using [Dart Streams](https://dart.dev/tutorials/language/streams).
 
-**createdStream**: Fires when a notification is created
-**displayedStream**: Fires when a notification is displayed on system status bar
-**actionStream**: Fires when a notification is tapped by the user
-**dismissedStream**: Fires when a notification is dismissed by the user
+## Notification Events
 
-<br>
+The notification events are only delivered after `setListeners` method being called, and they are not always delivered at same time as they happen.
+The awesome notifications event methods available to track your notifications are:
+
+**onNotificationCreatedMethod (optional)**: Fires when a notification is created
+**onNotificationDisplayedMethod (optional)**: Fires when a notification is displayed on system status bar
+**onActionReceivedMethod (required)**: Fires when a notification is tapped by the user
+**onDismissedActionReceivedMethod (optional)**: Fires when a notification is dismissed by the user (sometimes the OS denies the deliver)
+
+Delivery conditions:
 
 | Platform    | App in Foreground | App in Background | App Terminated (Killed) |
-| ----------: | ----------------- | ----------------- | ----------------------- |
-| **Android** | Fires all streams immediately after occurs | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes on Foreground, but fires `actionStream` immediately after occurs |
-| **iOS**     | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the app returns to Foreground, but fires `actionStream` immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes on Foreground, but fires `actionStream` immediately after occurs |
+| ----------- | ----------------- | ----------------- | ----------------------- |
+| **Android** | Fires all events immediately after occurs | Fires all events immediately after occurs | Store events to be fired when app is on Foreground or Background |
+| **iOS**     | Fires all events immediately after occurs | Store events to be fired when app is on Foreground | Store events to be fired when app is on Foreground |
+
+
+Exception: **onActionReceivedMethod** fires all events immediately after occurs in any application life cycle, for all Platforms.
 
 <br>
 <br>
+
 
 ## Permissions
 
@@ -732,11 +739,11 @@ OBS: For silent types, its necessary to hold the execution with await keyword, t
 
  * Default: Is the default action type, forcing the app to goes foreground.
  * SilentAction: Do not forces the app to go foreground, but runs on main thread, accept visual elements and can be interrupt if main app gets terminated.
- * SilentBackgroundAction: Do not forces the app to go foreground and runs on background, not accepting any visual elements. The execution is done on background thread.
+ * SilentBackgroundAction: Do not forces the app to go foreground and runs on background, not accepting any visual element. The execution is done on an exclusive dart isolate.
  * KeepOnTop: Fires the respective action without close the notification status bar and don't bring the app to foreground.
  * DisabledAction: When pressed, the notification just close itself on the tray, without fires any action event.
- * DismissAction: Behaves as the same way as a user dismissing action, dismissing the respective notification and firing the dismissMethod. Ignores autoDismissible property.
- * InputField: (Deprecated) When the button is pressed, it opens a dialog shortcut to send an text response.
+ * DismissAction: Behaves as the same way as a user dismissing action, but dismissing the respective notification and firing the onDismissActionReceivedMethod. Ignores autoDismissible property.
+ * InputField: (Deprecated) When the button is pressed, it opens a dialog shortcut to send an text response. Use the property `requireInputText` instead.
 
 <br>
 <br>
@@ -775,6 +782,7 @@ OBS: Unfortunately, icons and sounds can be only resource media types.
 <br>
 OBS 2: To protect your native resources on Android against minification, please include the prefix "res_" in your resource file names. The use of the tag `shrinkResources false` inside build.gradle or the command `flutter build apk --no-shrink` is not recommended.
 To know more about it, please visit [Shrink, obfuscate, and optimize your app](https://developer.android.com/studio/build/shrink-code)
+
 <br>
 
 
@@ -791,37 +799,6 @@ The possible importance levels are the following:
 - None: disable the respective channel.
 
 OBS: Unfortunately, the channel's importance can only be defined on first time. After that, it cannot be changed.
-
-<br>
-
-
-### Notification Action Button Types
-
-
-Notifications action buttons could be classified in 4 types:
-
-- Default: after user taps, the notification bar is closed and an action event is fired.
-- InputField: after user taps, a input text field is displayed to capture input by the user.
-- DisabledAction: after user taps, the notification bar is closed, but the respective action event is not fired.
-- KeepOnTop: after user taps, the notification bar is not closed, but an action event is fired.
-
-<br>
-
-
-|  Android           | App in Foreground | App in Background | App Terminated (Killed) |
-| -----------------: | ----------------- | ----------------- | ----------------------- |
-| **Default**        | keeps the app in foreground | brings the app to foreground | brings the app to foreground |
-| **InputField**     | keeps the app in foreground | brings the app to foreground | brings the app to foreground |
-| **DisabledAction** | keeps the app in foreground | keeps the app in background  | keeps the app terminated |
-| **KeepOnTop**      | keeps the app in foreground | keeps the app in background  | keeps the app terminated |
-
-<br>
-
-If the app is terminated (killed):
-- Default: Wake up the app.
-- InputField: Wake up the app.
-- DisabledAction: Does not Wake up the app.
-- KeepOnTop: Does not Wake up the app.
 
 <br>
 
