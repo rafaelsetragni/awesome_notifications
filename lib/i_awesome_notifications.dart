@@ -56,9 +56,8 @@ abstract class IAwesomeNotifications {
   /// [removeFromActionEvents] when set to true, prevents the same action from
   /// being delivered in the method onActionMethod, in case it hasn't already
   /// happened
-  Future<ReceivedAction?> getInitialNotificationAction({
-    bool removeFromActionEvents = false
-  });
+  Future<ReceivedAction?> getInitialNotificationAction(
+      {bool removeFromActionEvents = false});
 
   /// Opens the app notifications page
   Future<void> showNotificationConfigPage({String? channelKey});

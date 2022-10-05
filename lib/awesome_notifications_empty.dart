@@ -86,9 +86,8 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
   }
 
   @override
-  Future<ReceivedAction?> getInitialNotificationAction({
-    bool removeFromActionEvents = false
-  }) async {
+  Future<ReceivedAction?> getInitialNotificationAction(
+      {bool removeFromActionEvents = false}) async {
     return null;
   }
 
@@ -187,16 +186,13 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
   }
 
   @override
-  Future<void> showAlarmPage() async {
-  }
+  Future<void> showAlarmPage() async {}
 
   @override
-  Future<void> showGlobalDndOverridePage() async {
-  }
+  Future<void> showGlobalDndOverridePage() async {}
 
   @override
-  Future<void> showNotificationConfigPage({String? channelKey}) async {
-  }
+  Future<void> showNotificationConfigPage({String? channelKey}) async {}
 
   @override
   dispose() {}

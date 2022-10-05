@@ -193,9 +193,8 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }
 
   @override
-  Future<ReceivedAction?> getInitialNotificationAction({
-    bool removeFromActionEvents = false
-  }) async {
+  Future<ReceivedAction?> getInitialNotificationAction(
+      {bool removeFromActionEvents = false}) async {
     dynamic returnedData = await methodChannel.invokeMethod(
         CHANNEL_METHOD_GET_INITIAL_ACTION, removeFromActionEvents);
     if (returnedData == null) return null;

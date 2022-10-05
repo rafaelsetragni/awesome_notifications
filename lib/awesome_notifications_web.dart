@@ -98,9 +98,8 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   }
 
   @override
-  Future<ReceivedAction?> getInitialNotificationAction({
-    bool removeFromActionEvents = false
-  }) async {
+  Future<ReceivedAction?> getInitialNotificationAction(
+      {bool removeFromActionEvents = false}) async {
     return null;
   }
 

@@ -188,7 +188,8 @@ class AwesomeNotifications implements IAwesomeNotifications {
   }
 
   @override
-  Future<ReceivedAction?> getInitialNotificationAction({bool removeFromActionEvents = false}) {
+  Future<ReceivedAction?> getInitialNotificationAction(
+      {bool removeFromActionEvents = false}) {
     return AwesomeNotificationsPlatform.instance.getInitialNotificationAction();
   }
 

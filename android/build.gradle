@@ -1,5 +1,5 @@
 group 'me.carda.awesome_notifications'
-version '0.7.0-alpha.5'
+version '0.7.0'
 
 buildscript {
     repositories {
@@ -38,8 +38,8 @@ android {
 }
 
 dependencies {
-    implementation project(':awn_core')
-//    implementation "me.carda:androidcore:0.7.0-alpha.5"
+//    implementation project(':awn_core')
+    implementation "me.carda:androidcore:0.7.0"
 
     implementation "androidx.core:core:1.8.0"
     implementation "com.google.code.gson:gson:2.8.9"
