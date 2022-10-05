@@ -15,17 +15,17 @@ enum ActionType {
   @Deprecated('Use the property requireInputText instead.')
   InputField,
 
-  /// When pressed, the notification just close itself on the tray, without fires any action event.
+  /// When pressed, the notification just close itself on the tray, without being dismissed and without fire any action event.
   DisabledAction,
 
   /// Fires the respective action without close the notification status bar and don't bring the app to foreground.
   KeepOnTop,
 
-  /// Do not forces the app to go foreground, but runs on main thread, accept visual elements and can be interrupt if main app gets terminated.
+  /// Do not forces the app to go foreground, runs on main isolate, accept visual elements and can be interrupt if main app gets terminated.
   SilentAction,
 
-  /// Do not forces the app to go foreground and runs on background, not accepting any visual elements. The execution is totally
-  /// apart from app lifecycle and will not be interrupt if the app goes terminated / killed.
+  /// Do not forces the app to go foreground and runs on an exclusive dart isolate and do not accept any visual element.
+  /// The execution is totally apart from app lifecycle and will not be interrupt if the app goes terminated / killed.
   SilentBackgroundAction,
 
   /// Behaves as the same way as a user dismiss action, dismissing the respective notification
