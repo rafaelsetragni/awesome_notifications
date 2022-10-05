@@ -1,14 +1,14 @@
 PODS:
   - awesome_notifications (0.0.5):
     - Flutter
-    - IosAwnCore (= 0.7.0)
+    - IosAwnCore (= 0.7.1)
   - device_info (0.0.1):
     - Flutter
   - Flutter (1.0.0)
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - IosAwnCore (0.7.0)
+  - IosAwnCore (0.7.1)
   - path_provider_ios (0.0.1):
     - Flutter
   - shared_preferences_ios (0.0.1):
@@ -53,17 +53,17 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/vibration/ios"
 
 SPEC CHECKSUMS:
-  awesome_notifications: 577ebaa4bf7a7f2a7ce2f5ae7ab01c1c4c467e09
+  awesome_notifications: 5e8d47907a4b29c182e5732b5ee224ca838f6802
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
-  IosAwnCore: 5410a6dd02d4182ec6626b93d460e2997d0ad4d1
+  IosAwnCore: fd348a51573643e26a194fe20fc78e4190dcadf6
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
 
-PODFILE CHECKSUM: c249632a3e8e1c0e878342a0beb116499b348c60
+PODFILE CHECKSUM: 8f69bd6e30716cc51439574c7edb9fdc3d779b52
 
 COCOAPODS: 1.11.3

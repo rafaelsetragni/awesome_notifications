@@ -1,3 +1,10 @@
+## [0.7.0+1]
+* iOS core dependency updated to version 0.7.1 to match FCM add-on plugin
+## [0.7.0]
+* Initial release of Awesome Notifications version 0.7.0
+## [0.7.0-beta.7+6]
+* Android core dependency updated to 0.7.0-alpha.7+6
+* Added getInitialNotificationAction method
 ## [0.7.0-beta.7+5]
 * Android core dependency updated to 0.7.0-alpha.7+6
 ## [0.7.0-beta.7+4]
