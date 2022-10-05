@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: ❓ Ask a Question
+    url: https://github.com/rafaelsetragni/awesome_notifications/discussions/new?category=q-a
+    about: Ask the community for help.
+  - name: 📣 Publish your work
+    url: https://github.com/rafaelsetragni/awesome_notifications/discussions/new?category=show-and-tell
+    about: Share with us what you've built with Awesome Notifications.
