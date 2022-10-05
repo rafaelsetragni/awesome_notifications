@@ -1,21 +1,31 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
-import 'package:awesome_notifications/src/models/notification_schedule.dart';
-import 'package:awesome_notifications/src/utils/assert_utils.dart';
-import 'package:awesome_notifications/src/utils/list_utils.dart';
+import '../../awesome_notifications.dart';
+import '../utils/list_utils.dart';
 
 class NotificationAndroidCrontab extends NotificationSchedule {
+  DateTime? _initialDateTime;
+  DateTime? _expirationDateTime;
+  List<DateTime>? _preciseSchedules;
+  String? _crontabExpression;
+
   ///  The initial limit date that an schedule is considered valid (YYYY-MM-DD hh:mm:ss)
-  DateTime? initialDateTime;
+  DateTime? get initialDateTime {
+    return _initialDateTime;
+  }
 
   /// The final limit date that an schedule is considered valid (YYYY-MM-DD hh:mm:ss)
-  DateTime? expirationDateTime;
+  DateTime? get expirationDateTime {
+    return _expirationDateTime;
+  }
 
   /// List of precise valid schedule dates
-  List<DateTime>? preciseSchedules;
+  List<DateTime>? get preciseSchedules {
+    return _preciseSchedules;
+  }
 
   /// Crontab expression as repetition rule (with seconds precision), as described in https://www.baeldung.com/cron-expressions
-  String? crontabExpression;
+  String? get crontabExpression {
+    return _crontabExpression;
+  }
 
   /// Notification Schedule based on crontab rules or a list of valid dates.
   /// [initialDate]: The initial limit date that an schedule is considered valid (YYYY-MM-DD hh:mm:ss)
@@ -27,15 +37,19 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   /// [preciseAlarm] Requires maximum precision to schedule notifications at exact time, but may use more battery. Requires the explicit user consent for Android 12 and beyond.
   /// [timeZone] time zone identifier as reference of this schedule date. (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
   NotificationAndroidCrontab(
-      {this.initialDateTime,
-      this.expirationDateTime,
-      this.preciseSchedules,
-      this.crontabExpression,
+      {DateTime? initialDateTime,
+      DateTime? expirationDateTime,
+      List<DateTime>? preciseSchedules,
+      String? crontabExpression,
       String? timeZone,
       bool allowWhileIdle = false,
       bool repeats = false,
       bool preciseAlarm = false})
-      : super(
+      : _initialDateTime = initialDateTime,
+        _expirationDateTime = expirationDateTime,
+        _preciseSchedules = preciseSchedules,
+        _crontabExpression = crontabExpression,
+        super(
             timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
             repeats: repeats,
@@ -52,8 +66,8 @@ class NotificationAndroidCrontab extends NotificationSchedule {
                 : AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
             repeats: false) {
-    this.initialDateTime = date;
-    this.crontabExpression = CronHelper().atDate(referenceDateTime: date);
+    _initialDateTime = date;
+    _crontabExpression = CronHelper().atDate(referenceDateTime: date);
   }
 
   /// Generates a Cron expression to be played only once at year based on a date reference
@@ -65,7 +79,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
                 : AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
             repeats: false) {
-    this.crontabExpression =
+    _crontabExpression =
         CronHelper().yearly(referenceDateTime: referenceDateTime);
   }
 
@@ -78,7 +92,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
                 : AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
             repeats: false) {
-    this.crontabExpression =
+    _crontabExpression =
         CronHelper().monthly(referenceDateTime: referenceDateTime);
   }
 
@@ -91,7 +105,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
                 : AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
             repeats: false) {
-    this.crontabExpression =
+    _crontabExpression =
         CronHelper().monthly(referenceDateTime: referenceDateTime);
   }
 
@@ -104,7 +118,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
                 : AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
             repeats: false) {
-    this.crontabExpression =
+    _crontabExpression =
         CronHelper().monthly(referenceDateTime: referenceDateTime);
   }
 
@@ -117,7 +131,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
                 : AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
             repeats: false) {
-    this.crontabExpression =
+    _crontabExpression =
         CronHelper().monthly(referenceDateTime: referenceDateTime);
   }
 
@@ -130,7 +144,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
                 : AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
             repeats: false) {
-    this.crontabExpression =
+    _crontabExpression =
         CronHelper().minutely(initialSecond: referenceDateTime.second);
   }
 
@@ -143,7 +157,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
                 : AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
             repeats: false) {
-    this.crontabExpression =
+    _crontabExpression =
         CronHelper().monthly(referenceDateTime: referenceDateTime);
   }
 
@@ -156,30 +170,30 @@ class NotificationAndroidCrontab extends NotificationSchedule {
                 : AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
             repeats: false) {
-    this.crontabExpression =
+    _crontabExpression =
         CronHelper().monthly(referenceDateTime: referenceDateTime);
   }
 
   @override
-  NotificationAndroidCrontab? fromMap(Map<String, dynamic> dataMap) {
-    super.fromMap(dataMap);
+  NotificationAndroidCrontab? fromMap(Map<String, dynamic> mapData) {
+    super.fromMap(mapData);
 
-    this.crontabExpression = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CRONTAB_EXPRESSION, dataMap, DateTime);
-    this.initialDateTime = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_INITIAL_DATE_TIME, dataMap, DateTime);
-    this.expirationDateTime = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_EXPIRATION_DATE_TIME, dataMap, DateTime);
+    _crontabExpression = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_CRONTAB_EXPRESSION, mapData, DateTime);
+    _initialDateTime = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_INITIAL_DATE_TIME, mapData, DateTime);
+    _expirationDateTime = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_EXPIRATION_DATE_TIME, mapData, DateTime);
 
-    if (dataMap[NOTIFICATION_PRECISE_SCHEDULES] is List) {
+    if (mapData[NOTIFICATION_PRECISE_SCHEDULES] is List) {
       List<String> schedules =
-          List<String>.from(dataMap[NOTIFICATION_PRECISE_SCHEDULES]);
-      preciseSchedules = [];
+          List<String>.from(mapData[NOTIFICATION_PRECISE_SCHEDULES]);
+      _preciseSchedules = [];
 
       for (String schedule in schedules) {
         DateTime? scheduleDate = AwesomeDateUtils.parseStringToDate(schedule);
         if (scheduleDate != null) {
-          preciseSchedules!.add(scheduleDate);
+          _preciseSchedules!.add(scheduleDate);
         }
       }
     }
@@ -197,18 +211,18 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> dataMap = super.toMap()
       ..addAll({
-        NOTIFICATION_CRONTAB_EXPRESSION: this.crontabExpression,
+        NOTIFICATION_CRONTAB_EXPRESSION: _crontabExpression,
         NOTIFICATION_INITIAL_DATE_TIME:
-            AwesomeDateUtils.parseDateToString(this.initialDateTime),
+            AwesomeDateUtils.parseDateToString(_initialDateTime),
         NOTIFICATION_EXPIRATION_DATE_TIME:
-            AwesomeDateUtils.parseDateToString(this.expirationDateTime),
+            AwesomeDateUtils.parseDateToString(_expirationDateTime),
         NOTIFICATION_PRECISE_SCHEDULES: null
       });
 
-    if (!AwesomeListUtils.isNullOrEmpty(preciseSchedules)) {
+    if (!AwesomeListUtils.isNullOrEmpty(_preciseSchedules)) {
       List<String> schedulesMap = [];
 
-      for (DateTime schedule in preciseSchedules!) {
+      for (DateTime schedule in _preciseSchedules!) {
         String? scheduleDate = AwesomeDateUtils.parseDateToString(schedule);
         if (scheduleDate != null) {
           schedulesMap.add(scheduleDate);
@@ -227,8 +241,8 @@ class NotificationAndroidCrontab extends NotificationSchedule {
 
   @override
   void validate() {
-    if (crontabExpression == null && preciseSchedules == null) {
-      throw AwesomeNotificationsException(
+    if (_crontabExpression == null && _preciseSchedules == null) {
+      throw const AwesomeNotificationsException(
           message:
               'At least crontabExpression or preciseSchedules is requried');
     }

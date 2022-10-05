@@ -1,4 +1,5 @@
-import 'package:awesome_notifications/src/enumerators/action_button_type.dart';
+// ignore_for_file: constant_identifier_names
+import 'package:awesome_notifications/src/enumerators/action_type.dart';
 import 'package:awesome_notifications/src/enumerators/default_ringtone_type.dart';
 import 'package:awesome_notifications/src/enumerators/group_alert_behaviour.dart';
 import 'package:awesome_notifications/src/enumerators/group_sort.dart';
@@ -9,25 +10,25 @@ import 'package:flutter/material.dart';
 import 'enumerators/notification_layout.dart';
 
 const BROADCAST_FCM_TOKEN =
-    'me.carda.awesome_notifications.services.firebase.TOKEN';
+    'me.carda.awesome_notifications.notifications.system.services.firebase.TOKEN';
 const EXTRA_BROADCAST_FCM_TOKEN = 'token';
 
 const BROADCAST_MESSAGE =
-    'me.carda.awesome_notifications.services.firebase.NOTIFICATION';
+    'me.carda.awesome_notifications.notifications.system.services.firebase.NOTIFICATION';
 const EXTRA_BROADCAST_MESSAGE = 'notification';
 
 const INITIALIZE_DEBUG_MODE = "debug";
 const INITIALIZE_DEFAULT_ICON = "defaultIcon";
 const INITIALIZE_CHANNELS = "initializeChannels";
+const INITIALIZE_CLEAR_STORED_ACTIONS = "clearStoredActions";
 const INITIALIZE_CHANNELS_GROUPS = "initializeChannelGroups";
 
 const NOTIFICATION_CONTENT = "content";
 const NOTIFICATION_SCHEDULE = "schedule";
 const NOTIFICATION_BUTTONS = "actionButtons";
 
-const FOREGROUND_NOTIFICATION_DATA = "notificationData";
-const FOREGROUND_START_TYPE = "startType";
-const FOREGROUND_HAS_FOREGROUND = "hasForegroundServiceType";
+const FOREGROUND_NOTIFICATION_MODEL = "notificationModel";
+const FOREGROUND_START_MODE = "startMode";
 const FOREGROUND_SERVICE_TYPE = "foregroundServiceType";
 
 const APP_LIFECYCLE_FOREGROUND = 'FOREGROUND';
@@ -41,9 +42,17 @@ const PUSH_SOURCE_LOCAL_NOTIFICATION = 'Local';
 const SHARED_PREFERENCES_KEY = 'notification_plugin_cache';
 
 const CHANNEL_FLUTTER_PLUGIN = 'awesome_notifications';
+const DART_REVERSE_CHANNEL = 'awesome_notifications_reverse';
+
+const ACTION_HANDLE = 'actionHandle';
+const BACKGROUND_HANDLE = 'awesomeDartBGHandle';
+const RECOVER_DISPLAYED = 'recoverScheduledDisplayed';
 
 const CHANNEL_METHOD_INITIALIZE = 'initialize';
+const CHANNEL_METHOD_PUSH_NEXT_DATA = 'pushNext';
+const CHANNEL_METHOD_CLEAR_STORED_ACTION = 'clearStoredActions';
 const CHANNEL_METHOD_GET_DRAWABLE_DATA = 'getDrawableData';
+const CHANNEL_METHOD_GET_INITIAL_ACTION = 'getInitialAction';
 const CHANNEL_METHOD_GET_PLATFORM_VERSION = 'getPlatformVersion';
 
 const CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = 'showNotificationPage';
@@ -61,10 +70,11 @@ const CHANNEL_METHOD_NEW_FCM_TOKEN = 'newTokenReceived';
 
 const CHANNEL_METHOD_CREATE_NOTIFICATION = 'createNewNotification';
 
-const CHANNEL_METHOD_NOTIFICATION_CREATED = 'notificationCreated';
-const CHANNEL_METHOD_NOTIFICATION_DISPLAYED = 'notificationDisplayed';
-const CHANNEL_METHOD_NOTIFICATION_DISMISSED = 'notificationDismissed';
-const CHANNEL_METHOD_ACTION_RECEIVED = 'receivedAction';
+const EVENT_NOTIFICATION_CREATED = 'notificationCreated';
+const EVENT_NOTIFICATION_DISPLAYED = 'notificationDisplayed';
+const EVENT_NOTIFICATION_DISMISSED = 'notificationDismissed';
+const EVENT_DEFAULT_ACTION = 'defaultAction';
+const EVENT_SILENT_ACTION = 'silentAction';
 
 const CHANNEL_METHOD_NOTIFICATION_AT_LAUNCH = 'notificationAtLaunch';
 
@@ -76,6 +86,7 @@ const CHANNEL_METHOD_INCREMENT_BADGE_COUNT = 'incBadgeCount';
 const CHANNEL_METHOD_DECREMENT_BADGE_COUNT = 'decBadgeCount';
 const CHANNEL_METHOD_RESET_BADGE = 'resetBadge';
 
+const CHANNEL_METHOD_SET_ACTION_HANDLE = 'setActionHandle';
 const CHANNEL_METHOD_DISMISS_NOTIFICATION = 'dismissNotification';
 const CHANNEL_METHOD_CANCEL_NOTIFICATION = 'cancelNotification';
 const CHANNEL_METHOD_CANCEL_SCHEDULE = 'cancelSchedule';
@@ -102,6 +113,8 @@ const CHANNEL_FORCE_UPDATE = "forceUpdate";
 const CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER = 'getUtcTimeZoneIdentifier';
 const CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER =
     'getLocalTimeZoneIdentifier';
+
+const CHANNEL_METHOD_GET_APP_LIFE_CYCLE = 'getAppLifeCycle';
 
 const CHANNEL_METHOD_START_FOREGROUND = 'startForeground';
 const CHANNEL_METHOD_STOP_FOREGROUND = 'stopForeground';
@@ -131,6 +144,10 @@ const NOTIFICATION_ICON_RESOURCE_ID = 'iconResourceId';
 
 const NOTIFICATION_ID = 'id';
 const NOTIFICATION_LAYOUT = 'notificationLayout';
+
+const CHANNEL_METHOD_SILENT_CALLBACK = 'silentCallbackReference';
+const CHANNEL_METHOD_ISOLATE_SHUTDOWN = 'isolateShutdown';
+const CHANNEL_METHOD_DART_CALLBACK = 'dartCallbackReference';
 
 const NOTIFICATION_DISPLAY_ON_FOREGROUND = 'displayOnForeground';
 const NOTIFICATION_DISPLAY_ON_BACKGROUND = 'displayOnBackground';
@@ -179,8 +196,9 @@ const NOTIFICATION_BUTTON_LABEL = 'label';
 const NOTIFICATION_BUTTON_KEY_PRESSED = 'buttonKeyPressed';
 const NOTIFICATION_BUTTON_KEY_INPUT = 'buttonKeyInput';
 const NOTIFICATION_BUTTON_INPUT = 'buttonKeyInput';
-const NOTIFICATION_BUTTON_TYPE = 'buttonType';
+const NOTIFICATION_ACTION_TYPE = 'actionType';
 const NOTIFICATION_ENABLED = "enabled";
+const NOTIFICATION_REQUIRE_INPUT_TEXT = "requireInputText";
 const NOTIFICATION_IS_DANGEROUS_OPTION = "isDangerousOption";
 
 const NOTIFICATION_PAYLOAD = 'payload';
@@ -258,9 +276,11 @@ class Definitions {
     NOTIFICATION_IMPORTANCE: NotificationImportance.Default,
     NOTIFICATION_LAYOUT: NotificationLayout.Default,
     NOTIFICATION_DEFAULT_PRIVACY: NotificationPrivacy.Private,
-    NOTIFICATION_BUTTON_TYPE: ActionButtonType.Default,
+    NOTIFICATION_ACTION_TYPE: ActionType.Default,
     NOTIFICATION_PRIVACY: NotificationPrivacy.Private,
     NOTIFICATION_DEFAULT_RINGTONE_TYPE: DefaultRingtoneType.Notification,
+    NOTIFICATION_DISPLAY_ON_FOREGROUND: true,
+    NOTIFICATION_DISPLAY_ON_BACKGROUND: true,
     NOTIFICATION_CHANNEL_DESCRIPTION: 'Notifications',
     NOTIFICATION_CHANNEL_NAME: 'Notifications',
     NOTIFICATION_SHOW_WHEN: true,
@@ -285,6 +305,7 @@ class Definitions {
     NOTIFICATION_BUTTON_KEY_INPUT: '',
     NOTIFICATION_IS_DANGEROUS_OPTION: false,
     NOTIFICATION_WAKE_UP_SCREEN: false,
+    NOTIFICATION_FULL_SCREEN_INTENT: false,
     NOTIFICATION_CRITICAL_ALERT: false,
     NOTIFICATION_CHANNEL_CRITICAL_ALERTS: false,
     NOTIFICATION_ROUNDED_LARGE_ICON: false,

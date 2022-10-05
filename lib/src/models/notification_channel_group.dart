@@ -4,21 +4,29 @@ import 'package:awesome_notifications/src/models/model.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
 class NotificationChannelGroup extends Model {
-  String? channelGroupkey;
-  String? channelGroupName;
+  String? _channelGroupKey;
+  String? _channelGroupName;
+
+  String? get channelGroupKey {
+    return _channelGroupKey;
+  }
+
+  String? get channelGroupName {
+    return _channelGroupName;
+  }
 
   NotificationChannelGroup(
-      {required String channelGroupkey, required String channelGroupName}) {
-    this.channelGroupkey = channelGroupkey;
-    this.channelGroupName = channelGroupName;
+      {required String channelGroupKey, required String channelGroupName}) {
+    _channelGroupKey = channelGroupKey;
+    _channelGroupName = channelGroupName;
   }
 
   @override
-  NotificationChannelGroup? fromMap(Map<String, dynamic> dataMap) {
-    channelGroupkey = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CHANNEL_GROUP_KEY, dataMap, String);
-    channelGroupName = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CHANNEL_GROUP_NAME, dataMap, String);
+  NotificationChannelGroup? fromMap(Map<String, dynamic> mapData) {
+    _channelGroupKey = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_CHANNEL_GROUP_KEY, mapData, String);
+    _channelGroupName = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_CHANNEL_GROUP_NAME, mapData, String);
 
     return this;
   }
@@ -26,18 +34,20 @@ class NotificationChannelGroup extends Model {
   @override
   Map<String, dynamic> toMap() {
     return {
-      NOTIFICATION_CHANNEL_GROUP_KEY: channelGroupkey,
-      NOTIFICATION_CHANNEL_GROUP_NAME: channelGroupName
+      NOTIFICATION_CHANNEL_GROUP_KEY: _channelGroupKey,
+      NOTIFICATION_CHANNEL_GROUP_NAME: _channelGroupName
     };
   }
 
   @override
   void validate() {
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(channelGroupkey, String))
-      throw AwesomeNotificationsException(
-          message: 'channelGroupkey is requried');
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(channelGroupName, String))
-      throw AwesomeNotificationsException(
-          message: 'channelGroupName is requried');
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_channelGroupKey, String)) {
+      throw const AwesomeNotificationsException(
+          message: 'channelGroupKey is required');
+    }
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_channelGroupName, String)) {
+      throw const AwesomeNotificationsException(
+          message: 'channelGroupName is required');
+    }
   }
 }

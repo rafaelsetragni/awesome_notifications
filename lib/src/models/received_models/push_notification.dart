@@ -1,4 +1,7 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
+import '../notification_button.dart';
+import '../notification_content.dart';
+import '../notification_model.dart';
+import '../notification_schedule.dart';
 
 @Deprecated('PushNotification class was deprecated, since '
     'all push features will be moved to the companion plugin. '

@@ -1,20 +1,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="me.carda.awesome_notifications">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
-  
+
     <application>
 
-        <receiver android:name=".notifications.broadcastReceivers.DismissedNotificationReceiver"
-            android:exported="false"/>
-        <receiver android:name=".notifications.broadcastReceivers.ScheduledNotificationReceiver"
-            android:exported="false"/>
-        <receiver android:name=".notifications.broadcastReceivers.KeepOnTopActionReceiver"
-            android:exported="false"/>
+        <receiver android:name=".DartNotificationActionReceiver"
+            android:exported="true"/>
+
+        <receiver android:name=".DartDismissedNotificationReceiver"
+            android:exported="true"/>
+
+        <receiver android:name=".DartScheduledNotificationReceiver"
+            android:exported="true"/>
+
         <receiver
-            android:name=".notifications.broadcastReceivers.RefreshSchedulesReceiver"
-            android:exported="false">
+            android:name=".DartRefreshSchedulesReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -25,6 +31,17 @@
                 <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED"/>
             </intent-filter>
         </receiver>
+
+        <service android:name=".DartBackgroundService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="false"/>
+
+        <service
+            android:name="me.carda.awesome_notifications.core.services.ForegroundService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="phoneCall"
+            android:stopWithTask="true" />
 
     </application>
 </manifest>

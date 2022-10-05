@@ -1,7 +1,4 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
-import 'package:awesome_notifications/src/models/notification_schedule.dart';
-import 'package:awesome_notifications/src/utils/assert_utils.dart';
+import '../../awesome_notifications.dart';
 
 class NotificationCalendar extends NotificationSchedule {
   /// Field number for get and set indicating the era, e.g., AD or BC in the Julian calendar
@@ -75,7 +72,11 @@ class NotificationCalendar extends NotificationSchedule {
             timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
             repeats: repeats,
-            preciseAlarm: preciseAlarm);
+            preciseAlarm: preciseAlarm) {
+    if (weekOfMonth != null) {
+      throw UnimplementedError("weekOfMonth is not fully implemented yet");
+    }
+  }
 
   /// Initialize a notification schedule calendar based on a date object
   NotificationCalendar.fromDate(
@@ -90,38 +91,38 @@ class NotificationCalendar extends NotificationSchedule {
             allowWhileIdle: allowWhileIdle,
             repeats: repeats,
             preciseAlarm: preciseAlarm) {
-    this.year = date.year;
-    this.month = date.month;
-    this.day = date.day;
-    this.hour = date.hour;
-    this.minute = date.minute;
-    this.second = date.second;
+    year = date.year;
+    month = date.month;
+    day = date.day;
+    hour = date.hour;
+    minute = date.minute;
+    second = date.second;
   }
 
   @override
-  NotificationCalendar? fromMap(Map<String, dynamic> dataMap) {
-    this.era = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_ERA, dataMap, int);
-    this.year = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_YEAR, dataMap, int);
-    this.month = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_MONTH, dataMap, int);
-    this.day = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_DAY, dataMap, int);
-    this.hour = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_HOUR, dataMap, int);
-    this.minute = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_MINUTE, dataMap, int);
-    this.second = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_SECOND, dataMap, int);
-    this.weekday = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_WEEKDAY, dataMap, int);
-    this.weekOfMonth = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_WEEKOFMONTH, dataMap, int);
-    this.weekOfYear = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_WEEKOFYEAR, dataMap, int);
+  NotificationCalendar? fromMap(Map<String, dynamic> mapData) {
+    era = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_ERA, mapData, int);
+    year = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_YEAR, mapData, int);
+    month = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_MONTH, mapData, int);
+    day = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_DAY, mapData, int);
+    hour = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_HOUR, mapData, int);
+    minute = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_MINUTE, mapData, int);
+    second = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_SECOND, mapData, int);
+    weekday = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_WEEKDAY, mapData, int);
+    weekOfMonth = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_WEEKOFMONTH, mapData, int);
+    weekOfYear = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_WEEKOFYEAR, mapData, int);
 
-    super.fromMap(dataMap);
+    super.fromMap(mapData);
 
     try {
       validate();
@@ -136,16 +137,16 @@ class NotificationCalendar extends NotificationSchedule {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> dataMap = super.toMap()
       ..addAll({
-        NOTIFICATION_SCHEDULE_ERA: this.era,
-        NOTIFICATION_SCHEDULE_YEAR: this.year,
-        NOTIFICATION_SCHEDULE_MONTH: this.month,
-        NOTIFICATION_SCHEDULE_DAY: this.day,
-        NOTIFICATION_SCHEDULE_HOUR: this.hour,
-        NOTIFICATION_SCHEDULE_MINUTE: this.minute,
-        NOTIFICATION_SCHEDULE_SECOND: this.second,
-        NOTIFICATION_SCHEDULE_WEEKDAY: this.weekday,
-        NOTIFICATION_SCHEDULE_WEEKOFMONTH: this.weekOfMonth,
-        NOTIFICATION_SCHEDULE_WEEKOFYEAR: this.weekOfYear
+        NOTIFICATION_SCHEDULE_ERA: era,
+        NOTIFICATION_SCHEDULE_YEAR: year,
+        NOTIFICATION_SCHEDULE_MONTH: month,
+        NOTIFICATION_SCHEDULE_DAY: day,
+        NOTIFICATION_SCHEDULE_HOUR: hour,
+        NOTIFICATION_SCHEDULE_MINUTE: minute,
+        NOTIFICATION_SCHEDULE_SECOND: second,
+        NOTIFICATION_SCHEDULE_WEEKDAY: weekday,
+        NOTIFICATION_SCHEDULE_WEEKOFMONTH: weekOfMonth,
+        NOTIFICATION_SCHEDULE_WEEKOFYEAR: weekOfYear
       });
 
     return dataMap;
@@ -158,31 +159,37 @@ class NotificationCalendar extends NotificationSchedule {
 
   @override
   void validate() {
-    if (this.era == null &&
-        this.year == null &&
-        this.month == null &&
-        this.day == null &&
-        this.hour == null &&
-        this.minute == null &&
-        this.second == null &&
-        this.weekday == null &&
-        this.weekOfMonth == null &&
-        this.weekOfYear == null)
-      throw AwesomeNotificationsException(
+    if (era == null &&
+        year == null &&
+        month == null &&
+        day == null &&
+        hour == null &&
+        minute == null &&
+        second == null &&
+        weekday == null &&
+        weekOfMonth == null &&
+        weekOfYear == null) {
+      throw const AwesomeNotificationsException(
           message: 'At least one shedule time condition is required.');
+    }
 
-    if ((this.era ?? 0) < 0 ||
-        (this.year ?? 0) < 0 ||
-        (this.month ?? 0) < 0 ||
-        (this.day ?? 0) < 0 ||
-        (this.hour ?? 0) < 0 ||
-        (this.minute ?? 0) < 0 ||
-        (this.second ?? 0) < 0 ||
-        (this.weekday ?? 0) < 0 ||
-        (this.weekOfMonth ?? 0) < 0 ||
-        (this.weekOfYear ?? 0) < 0)
-      throw AwesomeNotificationsException(
+    if (weekOfMonth != null) {
+      throw UnimplementedError("weekOfMonth is not fully implemented yet");
+    }
+
+    if ((era ?? 0) < 0 ||
+        (year ?? 0) < 0 ||
+        (month ?? 0) < 0 ||
+        (day ?? 0) < 0 ||
+        (hour ?? 0) < 0 ||
+        (minute ?? 0) < 0 ||
+        (second ?? 0) < 0 ||
+        (weekday ?? 0) < 0 ||
+        (weekOfMonth ?? 0) < 0 ||
+        (weekOfYear ?? 0) < 0) {
+      throw const AwesomeNotificationsException(
           message:
               'A shedule time condition must be greater or equal to zero.');
+    }
   }
 }

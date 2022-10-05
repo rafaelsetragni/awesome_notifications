@@ -3,14 +3,13 @@
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications.jpg)
 <div>
-    
-[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#) [![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#) 
-[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.gg/MP3sEXPTnx) [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](#)
+
+[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#)
+[![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#)
+[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.awesome-notifications.carda.me)
     
 [![pub package](https://img.shields.io/pub/v/awesome_notifications.svg)](https://pub.dev/packages/awesome_notifications)
-[![Likes](https://badges.bar/awesome_notifications/likes)](https://pub.dev/packages/awesome_notifications/score)
-[![popularity](https://badges.bar/awesome_notifications/popularity)](https://pub.dev/packages/awesome_notifications/score)
-[![pub points](https://badges.bar/awesome_notifications/pub%20points)](https://pub.dev/packages/awesome_notifications/score)
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](#)
 
 ### Features
 
@@ -25,10 +24,12 @@
 <br>
 
 *Some **android** notification examples:*
+
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-android-examples.jpg)
 <br>
 
 *Some **iOS** notification examples **(work in progress)**:*
+
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-ios-examples.jpg)
 <br>
 
@@ -49,24 +50,56 @@ All notifications could be created locally or via Firebase services, with all th
 
 <br>
 
-## ATENTION - PLUGIN UNDER CONSTRUCTION
+## ⚠️ ATTENTION - PLUGIN UNDER CONSTRUCTION
 
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-atention.jpg)
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-progress.jpg)
+![image](https://user-images.githubusercontent.com/40064496/155188418-1f906c3d-2940-472d-8897-7dae84cd29c7.png) 
+    
+![image](https://user-images.githubusercontent.com/40064496/155188371-48e22104-8bb8-4f38-ba1a-1795eeb7b81b.png)
 
 *Working progress percentages of awesome notifications plugin*
 
 <br>
 
-### Next steps
+## ⚠️ ATTENTION - FIREBASE CLOUD MESSAGE (FCM) ✉️
+    
+The support for `firebase_messaging` plugin is now deprecated, but all other firebase plugins are still being supported. To use FCM services with Awesome Notifications, you need use the [Awesome Notifications FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm).
+    
+This is the only way to achieve all firebase push notification features + all awesome notifications features without violate the platform rules, using workarounds with silent push notifications.
+    
+<br>
+    
+## Next steps
 
 - Include Web support
-- Finish the companion plugin to enable Firebase Cloud Message with all the awesome features available.
-- Add an option to choose if a notification action should bring the app to foreground or not.
+- Finish the add-on plugin to enable Firebase Cloud Message with all the awesome features available. (accomplished)
+- Add an option to choose if a notification action should bring the app to foreground or not. (accomplished)
 - Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
-- Video layout and gifs for notifications
-- Carousel layout for notifications
+- Replicate Android layouts for iOS
+- Custom layouts for notifications
     
+<br>
+
+## Donate via PayPal or BuyMeACoffee
+
+Help us to improve and maintain our work with donations of any amount, via Paypal.
+Your donation will be mainly used to purchase new devices and equipments, which we will use to test and ensure that our plugins works correctly on all platforms and their respective versions.
+
+<a href="https://www.paypal.com/donate/?business=9BKB6ZCQLLMZY&no_recurring=0&item_name=Help+us+to+improve+and+maintain+Awesome+Notifications+with+donations+of+any+amount.&currency_code=USD">
+  <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" width="250px"/>
+</a>
+    
+<a href="https://www.buymeacoffee.com/rafaelsetragni" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+    
+<br>
+<br>
+
+## Discord Chat Server 
+
+To stay tuned with new updates and get our community support, please subscribe into our Discord Chat Server:
+
+[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.awesome-notifications.carda.me)<br>https://discord.awesome-notifications.carda.me
+
+<br>
 <br>
 
 ## Main Philosophy
@@ -84,10 +117,16 @@ This way, your Application will receive **all notifications at Flutter level cod
 <br>
 <br>
 
-## Discord Chat Server
+## Breaking changes for version 0.7.0
 
-To stay tuned with new updates and get our community support, please subscribe into our Discord Chat Server:
-https://discord.gg/MP3sEXPTnx
+* Now it's possible to receive action events without bring the app to foreground. Check our action type's topic to know more.
+* All streams (createdStream, displayedStream, actionStream and dismissedStream) was replaced by `global static methods`. You must replace your old stream methods by static and global methods, in other words, they must be `static Future<void>` and use `async`/`await` and you MUST use `@pragma("vm:entry-point")` to preserve dart addressing.
+<br>(To use context and redirect the user to another page inside static methods, please use flutter navigatorKey or another third party library, such as GetX. Check our "how to do" guide below to know more).
+* Now all the notification events are delivered only after the first setListeners being called.
+* The ButtonType property name was changed to ActionType.
+* The action type `InputField` was deprecated. Now you just need to set the property `requireInputText` to true to achieve the same, but now it works combined with all another action types.
+* The support for `firebase_messaging` plugin is now deprecated, but all other firebase plugins still being supported. You need use the [Awesome's FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm) to achieve all firebase messaging features, without violate the platform rules. This is the only way to fully integrated with awesome notifications, running all in native level.
+
 
 <br>
 <br>
@@ -100,9 +139,9 @@ Bellow are the obligatory requirements that your app must meet to use awesome_no
 
 ### Android
 
-Is required the minimum android SDK to 21 (Android 5.0 Lollipop) and Java compile SDK Version to 31 (Android 12.0 S). You can change the `minSdkVersion` to 21 and the `compileSdkVersion` to 31, inside the file build.gradle in "android/app" folder.
+Is required the minimum android SDK to 21 (Android 5.0 Lollipop) and Java compiled SDK Version to 33 (Android 13). You can change the `minSdkVersion` to 21 and the `compileSdkVersion` to 33, inside the file build.gradle in "android/app" folder.
 
-Also, to turn your app fully compatible with Android 12 (SDK 31), you need to add the attribute `android:exported="true"` to any \<activity\>, \<activity-alias\>, \<service\>, or \<receiver\> components that have \<intent-filter\> declared inside in the app’s AndroidManifest.xml file, and thats turns valid for every other flutter packages that you're using.
+Also, to turn your app fully compatible with Android 13 (SDK 33), you need to add the attribute `android:exported="true"` to any \<activity\>, \<activity-alias\>, \<service\>, or \<receiver\> components that have \<intent-filter\> declared inside in the app’s AndroidManifest.xml file, and that's turns required for every other flutter packages that you're using.
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -122,7 +161,7 @@ Also, to turn your app fully compatible with Android 12 (SDK 31), you need to ad
 
 ### iOS
 
-Is required the minimum iOS version to 10. You can change the minimum app version through xCode, Project Runner (clicking on the app icon) > Info > Deployment Target  and changing the option "ios minimum deployment target" to 10.0
+Is required the minimum iOS version to 11. You can change the minimum app version through xCode, in your Project view, click on Runner > Info > Deployment Target and change the option "ios minimum deployment target" to 11.0
 
 <br>
 
@@ -160,14 +199,141 @@ AwesomeNotifications().initialize(
   // Channel groups are only visual and are not required
   channelGroups: [
     NotificationChannelGroup(
-        channelGroupkey: 'basic_channel_group',
+        channelGroupKey: 'basic_channel_group',
         channelGroupName: 'Basic group')
   ],
   debug: true
 );
 ```
 
-4. Request the user authorization to send local and push notifications (Remember to show a dialog alert to the user before call this request)
+4. Inside the MaterialApp widget, create your named routes and set your global navigator key. Also, inside initState, initialize your static listeners methods to capture notification's actions.
+OBS 1: With the navigator key, you can redirect pages and get context even inside static classes.
+OBS 2: Only after setListeners being called, the notification events starts to be delivered.
+
+```dart
+class MyApp extends StatefulWidget {
+
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  static const String name = 'Awesome Notifications - Example App';
+  static const Color mainColor = Colors.deepPurple;
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+
+    // Only after at least the action method is set, the notification events are delivered
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod:         NotificationController.onActionReceivedMethod,
+        onNotificationCreatedMethod:    NotificationController.onNotificationCreatedMethod,
+        onNotificationDisplayedMethod:  NotificationController.onNotificationDisplayedMethod,
+        onDismissActionReceivedMethod:  NotificationController.onDismissActionReceivedMethod
+    );
+
+    super.initState();
+  }
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+
+      // The navigator key is necessary to allow to navigate through static methods
+      navigatorKey: MyApp.navigatorKey,
+
+      title: MyApp.name,
+      color: MyApp.mainColor,
+
+      initialRoute: '/',
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(builder: (context) =>
+                MyHomePage(title: MyApp.name)
+            );
+
+          case '/notification-page':
+            return MaterialPageRoute(builder: (context) {
+              final ReceivedAction receivedAction = settings
+                  .arguments as ReceivedAction;
+              return MyNotificationPage(receivedAction: receivedAction);
+            });
+
+          default:
+            assert(false, 'Page ${settings.name} not found');
+            return null;
+        }
+      },
+
+      theme: ThemeData(
+          primarySwatch: Colors.deepPurple
+      ),
+    );
+  }
+}
+```
+
+OBS: Note that the example below is not a valid static or global method. You can retrieve the current context from the NavigatorKey instance, declared on MaterialApp widget, at any time.
+```Dart
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod: (ReceivedAction receivedAction){
+            NotificationController.onActionReceivedMethod(context, receivedAction);
+        },
+        onNotificationCreatedMethod: (ReceivedNotification receivedNotification){
+            NotificationController.onNotificationCreatedMethod(context, receivedNotification);
+        },
+        onNotificationDisplayedMethod: (ReceivedNotification receivedNotification){
+            NotificationController.onNotificationDisplayedMethod(context, receivedNotification);
+        },
+        onDismissActionReceivedMethod: (ReceivedAction receivedAction){
+            NotificationController.onDismissActionReceivedMethod(context, receivedAction);
+        },
+    );
+```
+
+5. Create in any place or class, the static methods to capture the respective notification events.
+OBS: You need to use `@pragma("vm:entry-point")` in each static method to identify to the Flutter engine that the dart address will be called from native and should be preserved.
+
+```dart
+class NotificationController {
+
+  /// Use this method to detect when a new notification or a schedule is created
+  @pragma("vm:entry-point")
+  static Future <void> onNotificationCreatedMethod(ReceivedNotification receivedNotification) async {
+    // Your code goes here
+  }
+
+  /// Use this method to detect every time that a new notification is displayed
+  @pragma("vm:entry-point")
+  static Future <void> onNotificationDisplayedMethod(ReceivedNotification receivedNotification) async {
+    // Your code goes here
+  }
+
+  /// Use this method to detect if the user dismissed a notification
+  @pragma("vm:entry-point")
+  static Future <void> onDismissActionReceivedMethod(ReceivedAction receivedAction) async {
+    // Your code goes here
+  }
+
+  /// Use this method to detect when the user taps on a notification or action button
+  @pragma("vm:entry-point")
+  static Future <void> onActionReceivedMethod(ReceivedAction receivedAction) async {
+    // Your code goes here
+
+    // Navigate into pages, avoiding to open the notification details page over another details page already opened
+    MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil('/notification-page',
+            (route) => (route.settings.name != '/notification-page') || route.isFirst,
+        arguments: receivedAction);
+  }
+}
+```
+
+6. Request the user authorization to send local and push notifications (Remember to show a dialog alert to the user before call this request)
 
 ```dart
 AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
@@ -180,26 +346,7 @@ AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
 });
 ```
 
-5. On your main page, before MaterialApp widget, starts to listen the notification actions (to detect tap)
-
-```dart
-AwesomeNotifications().actionStream.listen(
-    (ReceivedNotification receivedNotification){
-
-        Navigator.of(context).pushNamed(
-            '/NotificationPage',
-            arguments: {
-                // your page params. I recommend you to pass the
-                // entire *receivedNotification* object
-                id: receivedNotification.id
-            }
-        );
-
-    }
-);
-```
-
-6. In any place of your app, create a new notification
+7. In any place of your app, create a new notification
 
 ```dart
 AwesomeNotifications().createNotification(
@@ -207,12 +354,106 @@ AwesomeNotifications().createNotification(
       id: 10,
       channelKey: 'basic_channel',
       title: 'Simple Notification',
-      body: 'Simple body'
+      body: 'Simple body',
+      actionType: ActionType.Default
   )
 );
 ```
 
 **THATS IT! CONGRATZ MY FRIEND!!!**
+
+
+## Important notes
+
+1. In case you need to capture the user notification action before calling the method `setListeners`, you can call the method `getInitialNotificationAction` at any moment.
+In case your app was started by an user notification action, `getInitialNotificationAction` will return the respective `ActionReceived` object. Otherwise will return null.
+
+OBS: `getInitialNotificationAction` method does not affect the results from `onActionReceivedMethod`, except if you set `removeFromActionEvents` to `true`.
+
+```dart
+void main() async {
+    ReceivedAction? receivedAction = await AwesomeNotifications().getInitialNotificationAction();
+    if(receivedAction?.channelKey == 'call_channel') redirectToCallPage();
+    else redirectToHomePage();
+}
+```
+
+2. In case you need to redirect the user after a `silentAction` or `silentBackgroundAction` event, you may face the situation where you are running inside an dart Isolate with no valid Context to redirect the user.
+For these cases, you need to use `ReceivePort` and `SendPort` to switch execution between the isolates. Just create a `ReceivePort` inside your initialization process (which only occurs in main isolated), and then, inside your `onActionReceivedMethod`, use `SendPort` to send the execution to the listening `ReceivePort`.
+
+
+In the initialization of your notification_controller.dart:
+```Dart
+    ReceivePort port = ReceivePort();
+    IsolateNameServer.registerPortWithName(
+      port,
+      'background_notification_action',
+    );
+
+    port.listen((var received) async {
+        _handleBackgroundAction(received);
+    });
+    
+    _initialized = true;
+```
+
+In your backgroundActionMethod:
+```Dart
+  static Future<void> onSilentActionHandle(ReceivedAction received) async {
+    print('On new background action received: ${received.toMap()}');
+
+    if (!_initialized) {
+      SendPort? uiSendPort = IsolateNameServer.lookupPortByName('background_notification_action');
+      if (uiSendPort != null) {
+        print('Background action running on parallel isolate without valid context. Redirecting execution');
+        uiSendPort.send(received);
+        return;
+      }
+    }
+    
+    print('Background action running on main isolate');
+    await _handleBackgroundAction(received);
+  }
+
+  static Future<void> _handleBackgroundAction(ReceivedAction received) async {
+    // Your background action handle
+  }
+```
+
+<br>
+
+## Extra iOS Setup for Background Actions
+
+<br>
+
+On iOS, to use any plugin inside background actions, you will need to manually register each plugin you want. Otherwise, you will face the `MissingPluginException` exception.
+To avoid this, you need to add the following lines to the `didFinishLaunchingWithOptions` method in your iOS project's AppDelegate.m/AppDelegate.swift file:
+
+```Swift
+import Flutter
+import awesome_notifications
+import shared_preferences_ios
+//import all_other_plugins_that_i_need
+
+override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
+      GeneratedPluginRegistrant.register(with: self)
+
+      // This function registers the desired plugins to be used within a notification background action
+      SwiftAwesomeNotificationsPlugin.setPluginRegistrantCallback { registry in          
+          SwiftAwesomeNotificationsPlugin.register(
+            with: registry.registrar(forPlugin: "io.flutter.plugins.awesomenotifications.AwesomeNotificationsPlugin")!)          
+          FLTSharedPreferencesPlugin.register(
+            with: registry.registrar(forPlugin: "io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin")!)
+      }
+
+      return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+```
+
+And you can check how to correctly call each plugin opening the file `GeneratedPluginRegistrant.m`
 
 <br>
 
@@ -247,32 +488,38 @@ To run the examples, follow the steps bellow:
 
 <br>
     
-## Notification Life Cycle
+## Awesome Notification's Flowchart
 
 Notifications are received by local code or Push service using native code, so the messages will appears immediately or at schedule time, independent of your application state.
 
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/notification-life-cycle.png)
+![Awesome Notification's flowchart](https://user-images.githubusercontent.com/40064496/155190796-eae6d442-2190-427b-bf28-dc470ea778de.png)
 
 <br>
-    
-## Flutter Streams
 
-The Flutter code will be called as soon as possible using [Dart Streams](https://dart.dev/tutorials/language/streams).
 
-**createdStream**: Fires when a notification is created
-**displayedStream**: Fires when a notification is displayed on system status bar
-**actionStream**: Fires when a notification is tapped by the user
-**dismissedStream**: Fires when a notification is dismissed by the user
+## Notification Events
 
-<br>
+The notification events are only delivered after `setListeners` method being called, and they are not always delivered at same time as they happen.
+The awesome notifications event methods available to track your notifications are:
+
+**onNotificationCreatedMethod (optional)**: Fires when a notification is created
+**onNotificationDisplayedMethod (optional)**: Fires when a notification is displayed on system status bar
+**onActionReceivedMethod (required)**: Fires when a notification is tapped by the user
+**onDismissedActionReceivedMethod (optional)**: Fires when a notification is dismissed by the user (sometimes the OS denies the deliver)
+
+Delivery conditions:
 
 | Platform    | App in Foreground | App in Background | App Terminated (Killed) |
-| ----------: | ----------------- | ----------------- | ----------------------- |
-| **Android** | Fires all streams immediately after occurs | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes on Foreground, but fires `actionStream` immediately after occurs |
-| **iOS**     | Fires all streams immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the app returns to Foreground, but fires `actionStream` immediately after occurs | Fires `createdStream`, `displayedStream` and `dismissedStream` after the plugin initializes on Foreground, but fires `actionStream` immediately after occurs |
+| ----------- | ----------------- | ----------------- | ----------------------- |
+| **Android** | Fires all events immediately after occurs | Fires all events immediately after occurs | Store events to be fired when app is on Foreground or Background |
+| **iOS**     | Fires all events immediately after occurs | Store events to be fired when app is on Foreground | Store events to be fired when app is on Foreground |
+
+
+Exception: **onActionReceivedMethod** fires all events immediately after occurs in any application life cycle, for all Platforms.
 
 <br>
 <br>
+
 
 ## Permissions
 
@@ -280,9 +527,9 @@ Permissions give transparency to the user of what you pretend to do with your ap
 
 The permissions can be defined in 3 types:
 
-- Normal permissions: Are permissions not considered dangerous and do not require the explicity user consent to be enabled.
-- Execution permissions: Are permissions considered more sensible to the user and you must obtain his explicity consent to use.
-- Special/Dangerous permissions: Are permissions that can harm the user experience or his privacity and you must obtain his explicity consent and, depending of what platform are you running, you must obtain permission from the manufacture itself to use it.
+- Normal permissions: Are permissions not considered dangerous and do not require the explicit user consent to be enabled.
+- Execution permissions: Are permissions considered more sensible to the user and you must obtain his explicit consent to use.
+- Special/Dangerous permissions: Are permissions that can harm the user experience or his privacy and you must obtain his explicit consent and, depending of what platform are you running, you must obtain permission from the manufacture itself to use it.
 
 As a good pratice, consider always to check if the permissions that you're desiring are conceived before create any new notification, independent of platform. To check if the permissions needs the explicity user consent, call the method shouldShowRationaleToRequest. The list of permissions that needs a rationale to the user can be different between platforms and O.S. versions. And if you app does not require extremely the permission to execute what you need, consider to not request the user permission and respect his will.
 
@@ -302,13 +549,13 @@ As a good pratice, consider always to check if the permissions that you're desir
 
 - FullScreenIntent: The ability to show the notifications on pop up even if the user is using another app.
 
-- PreciseAlarms: Precise alarms allows the scheduled notifications to be displayed at the expected time. This permission can be revoke by special device modes, such as baterry save mode, etc. Some manufactures can disable this feature if they decide that your app is consumpting many computational resources and decressing the baterry life (and without changing the permission status for your app). So, you must take in consideration that some schedules can be delayed or even not being displayed, depending of what platform are you running. You can increase the chances to display the notification at correct time, enable this permission and setting the correct notification category, but you never gonna have 100% sure about it.
+- PreciseAlarms: Precise alarms allows the scheduled notifications to be displayed at the expected time. This permission can be revoke by special device modes, such as battery save mode, etc. Some manufactures can disable this feature if they decide that your app is consumpting many computational resources and decressing the baterry life (and without changing the permission status for your app). So, you must take in consideration that some schedules can be delayed or even not being displayed, depending of what platform are you running. You can increase the chances to display the notification at correct time, enable this permission and setting the correct notification category, but you never gonna have 100% sure about it.
 
-- CriticalAlert: Critical alerts is a special permission that allows to play sounds and vibrate for new notifications displayed, even if the device is in Do Not Disturbe / Silent mode. For iOS, you must request Apple a authorization to your app use it.
+- CriticalAlert: Critical alerts is a special permission that allows to play sounds and vibrate for new notifications displayed, even if the device is in Do Not Disturb / Silent mode. For iOS, you must request Apple a authorization to your app use it.
 
-- OverrideDnD: Override DnD allows the notification to decrease the Do Not Disturbe / Silent mode level enable to display critical alerts for Alarm and Call notifications. For Android, you must require the user consent to use it. For iOS, this permission is always enabled with CriticalAlert.
+- OverrideDnD: Override DnD allows the notification to decrease the Do Not Disturb / Silent mode level enable to display critical alerts for Alarm and Call notifications. For Android, you must require the user consent to use it. For iOS, this permission is always enabled with CriticalAlert.
 
-- Provisional: (Only has effect on iOS) The ability to display notifications temporarially without the user consent.
+- Provisional: (Only has effect on iOS) The ability to display notifications temporarily without the user consent.
 
 - Car: The ability to display notifications while the device is in car mode.
 
@@ -324,8 +571,8 @@ A permission can be segregated in 3 different levels:
 ![image](https://user-images.githubusercontent.com/40064496/143137760-32b99fad-5827-4d0e-9d4f-c39c82ca6bfd.png)
 
 
-- Device level: The permissions set at the global device configuration are appliable at any app installed on device, such as disable/enable all notifications, baterry save mode / low power mode and silent / do not disturb mode.
-- Application level: The permissions set at the global app configurations are appliable to any notification in any channel.
+- Device level: The permissions set at the global device configuration are applicable at any app installed on device, such as disable/enable all notifications, battery save mode / low power mode and silent / do not disturb mode.
+- Application level: The permissions set at the global app configurations are applicable to any notification in any channel.
 - Channel level: The permissions set on the channel has effect only for notifications displayed through that specific channel.
 
 <br>
@@ -387,7 +634,7 @@ Bellow there is a full example of how to check if the desired permission is enab
           context: context,
           builder: (context) => AlertDialog(
             backgroundColor: Color(0xfffbfbfb),
-            title: Text('Awesome Notificaitons needs your permission',
+            title: Text('Awesome Notifications needs your permission',
               textAlign: TextAlign.center,
               maxLines: 2,
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
@@ -401,7 +648,7 @@ Bellow there is a full example of how to check if the desired permission is enab
                   fit: BoxFit.fitWidth,
                 ),
                 Text(
-                  'To proceede, you need to enable the permissions above'+
+                  'To proceed, you need to enable the permissions above'+
                       (channelKey?.isEmpty ?? true ? '' : ' on channel $channelKey')+':',
                   maxLines: 2,
                   textAlign: TextAlign.center,
@@ -484,6 +731,22 @@ The notification category is a group of predefined categories that best describe
 
 <br>
 <br>
+
+## Notification's Action Types
+
+The notification action type defines how awesome notifications should handle the user actions.
+OBS: For silent types, its necessary to hold the execution with await keyword, to prevent the isolates to shutdown itself before all work is done.
+
+ * Default: Is the default action type, forcing the app to goes foreground.
+ * SilentAction: Do not forces the app to go foreground, but runs on main thread, accept visual elements and can be interrupt if main app gets terminated.
+ * SilentBackgroundAction: Do not forces the app to go foreground and runs on background, not accepting any visual element. The execution is done on an exclusive dart isolate.
+ * KeepOnTop: Fires the respective action without close the notification status bar and don't bring the app to foreground.
+ * DisabledAction: When pressed, the notification just close itself on the tray, without fires any action event.
+ * DismissAction: Behaves as the same way as a user dismissing action, but dismissing the respective notification and firing the onDismissActionReceivedMethod. Ignores autoDismissible property.
+ * InputField: (Deprecated) When the button is pressed, it opens a dialog shortcut to send an text response. Use the property `requireInputText` instead.
+
+<br>
+<br>
     
 ## Notification Structures
 
@@ -493,7 +756,7 @@ To show any images on notification, at any place, you need to include the respec
 
 Layouts can be defined using 4 prefix types:
 
-- Default: The default notification layout. Also, is the layout choosen in case of any failure found on other layouts
+- Default: The default notification layout. Also, is the layout chosen in case of any failure found on other layouts
 - BigPicture: Shows a big picture and/or a small image attached to the notification.
 - BigText: Shows more than 2 lines of text.
 - Inbox: Lists messages or items separated by lines
@@ -513,12 +776,13 @@ Images can be defined using 4 prefix types:
 - Asset: images access through Flutter asset method. **Example**: asset://path/to/image-asset.png
 - Network: images access through internet connection. **Example**: http(s)://url.com/to/image-asset.png
 - File: images access through files stored on device. **Example**: file://path/to/image-asset.png
-- Resource: images access through drawable native resources. On Android, those files are stored inside [project]/android/app/src/main/drawabe folder. **Example**: resource://drawable/res_image-asset.png
+- Resource: images access through drawable native resources. On Android, those files are stored inside [project]/android/app/src/main/drawable folder. **Example**: resource://drawable/res_image-asset.png
 
 OBS: Unfortunately, icons and sounds can be only resource media types.
 <br>
 OBS 2: To protect your native resources on Android against minification, please include the prefix "res_" in your resource file names. The use of the tag `shrinkResources false` inside build.gradle or the command `flutter build apk --no-shrink` is not recommended.
 To know more about it, please visit [Shrink, obfuscate, and optimize your app](https://developer.android.com/studio/build/shrink-code)
+
 <br>
 
 
@@ -539,51 +803,20 @@ OBS: Unfortunately, the channel's importance can only be defined on first time. 
 <br>
 
 
-### Notification Action Button Types
-
-
-Notifications action buttons could be classified in 4 types:
-
-- Default: after user taps, the notification bar is closed and an action event is fired.
-- InputField: after user taps, a input text field is displayed to capture input by the user.
-- DisabledAction: after user taps, the notification bar is closed, but the respective action event is not fired.
-- KeepOnTop: after user taps, the notification bar is not closed, but an action event is fired.
-
-<br>
-
-
-|  Android           | App in Foreground | App in Background | App Terminated (Killed) |
-| -----------------: | ----------------- | ----------------- | ----------------------- |
-| **Default**        | keeps the app in foreground | brings the app to foreground | brings the app to foreground |
-| **InputField**     | keeps the app in foreground | brings the app to foreground | brings the app to foreground |
-| **DisabledAction** | keeps the app in foreground | keeps the app in background  | keeps the app terminated |
-| **KeepOnTop**      | keeps the app in foreground | keeps the app in background  | keeps the app terminated |
-
-<br>
-
-If the app is terminated (killed):
-- Default: Wake up the app.
-- InputField: Wake up the app.
-- DisabledAction: Does not Wake up the app.
-- KeepOnTop: Does not Wake up the app.
-
-<br>
-
-
 ## Scheduling a Notification
 
 Schedules could be created from a UTC or local time zone, and specifying a time interval or setting a calendar filter. Notifications could be scheduled even remotely.
-Atention: for iOS, is not possible to define the correct `displayedDate`, because is not possible to run exactely at same time with the notification schedules when it arives in the user status bar.
+Attention: for iOS, is not possible to define the correct `displayedDate`, because is not possible to run exactly at same time with the notification schedules when it arrives in the user status bar.
 
-To send notifications schedules, you need to instantiate one of the classes bellow in the notificaiton property 'schedule':
+To send notifications schedules, you need to instantiate one of the classes bellow in the notification property 'schedule':
 
-- NotificationCalendar: Creates a notification scheduled to be displayed when the setted date components matchs the current date. If a time component is setted to null, so any value is considered valid to produce the next valid date. Only one value is allowed by each component.
+- NotificationCalendar: Creates a notification scheduled to be displayed when the set date components matches the current date. If a time component is set to null, so any value is considered valid to produce the next valid date. Only one value is allowed by each component.
 - NotificationInterval: Creates a notification scheduled to be displayed at each interval time, starting from the next valid interval.
 - NotificationAndroidCrontab: Creates a notification scheduled to be displayed based on a list of precise dates or a crontab rule, with seconds precision. To know more about how to create a valid crontab rule, take a look at [this article](https://www.baeldung.com/cron-expressions).
 
 Also, all of then could be configured using:
 
-- timeZone: describe wich time zone that schedule is based (valid examples: America/Sao_Paulo, America/Los_Angeles, GMT+01:00, Europe/London, UTC)
+- timeZone: describe which time zone that schedule is based (valid examples: America/Sao_Paulo, America/Los_Angeles, GMT+01:00, Europe/London, UTC)
 - allowWhileIdle: Determines if notification will send, even when the device is in critical situation, such as low battery.
 - repeats: Determines if the schedule should be repeat after be displayed. If there is no more valid date compatible with the schedule rules, the notification is automatically canceled.
 
@@ -673,7 +906,7 @@ But, for some cases where the schedules precision is a MUST requirement, you can
 
 - Set the notification's category to a critical category, such as Alarm, Reminder or Call.
 - Set the `preciseAlarm` property to true. For Android versions greater or equal than 12, you need to explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications` or take the user to the permission page calling `showAlarmPage`.
-- Set `criticalAlerts` channel property and notification content property to true. This feature allows you to show notification and play sounds even when the device is on silent / Do not Disturbe mode. Because of it, this feature is considered highly sensitive and you must request Apple a special authorization to use it. On Android, for versions greater or equal than 11, you need to explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications`.
+- Set `criticalAlerts` channel property and notification content property to true. This feature allows you to show notification and play sounds even when the device is on silent / Do not Disturb mode. Because of it, this feature is considered highly sensitive and you must request Apple a special authorization to use it. On Android, for versions greater or equal than 11, you need to explicitly request the user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications`.
 
 
 To enable precise alarms, you need to add the `SCHEDULE_EXACT_ALARM` permission into your `AndroidManifest.xml` file, inside the `Android/app/src/main/` folder
@@ -708,10 +941,10 @@ For iOS, you must submit a request authorization to Apple to enable it, as descr
 
 ## Old schedule Cron rules (For versions older than 0.0.6)
 
-Due to the way that background task and notification schedules works on iOS, wasn't possible yet to enable officialy all the old Cron features on iOS while the app is in Background and even when the app is terminated (Killed).
+Due to the way that background task and notification schedules works on iOS, wasn't possible yet to enable officially all the old Cron features on iOS while the app is in Background and even when the app is terminated (Killed).
 Thanks to this, the complex schedules based on cron tab rules are only available on Android by the class `NotificationAndroidCrontab`.
 
-A support ticket was opened for Apple in order to resolve this issue, but they dont even care about. You can follow the progress of the process [here](https://github.com/rafaelsetragni/awesome_notifications/issues/16).
+A support ticket was opened for Apple in order to resolve this issue, but they don't even care about. You can follow the progress of the process [here](https://github.com/rafaelsetragni/awesome_notifications/issues/16).
 
 <br>
 
@@ -853,9 +1086,10 @@ Main methods to manipulate a notification channel:
 | title 			 	|     NO   | The title of notification                                                | String                | unlimited                |                           |
 | body 			 	    |     NO   | The body content of notification                                         | String                | unlimited                |                           |
 | summary 		 	    |     NO   | A summary to be displayed when the content is protected by privacy       | String                | unlimited                |                           |
+| category 		 	    |     NO   | The notification category that best describes the nature of the notification for O.S.       | Enumerator                | NotificationCategory                |                           |
 | showWhen 		 	    |     NO   | Hide/show the time elapsed since notification was displayed              | bool                  | true or false            | true                      |
 | displayOnForeground   |     NO   | Hide/show the notification if the app is in the Foreground (streams are preserved )  | bool      | true or false            | true                      |
-| displayOnBackground   |     NO   | Hide/show the notification if the app is in the Background (streams are preserved )  | bool      | true or false            | true                      |
+| displayOnBackground   |     NO   | Hide/show the notification if the app is in the Background (streams are preserved ). OBS: Only available for iOS with background special permissions  | bool      | true or false            | true                      |
 | icon 		            |     NO   | Small icon to be displayed on the top of notification (Android only)     | String                | must be a resource image |                           |
 | largeIcon 		 	|     NO   | Large icon displayed at right middle of compact notification             | String                | unlimited                |                           |
 | bigPicture 		 	|     NO   | Big image displayed on expanded notification                             | String                | unlimited                |                           |
@@ -868,7 +1102,8 @@ Main methods to manipulate a notification channel:
 | locked 			    |     NO   | Blocks the user to dismiss the notification                              | bool                  | true or false            | false                     |
 | progress 			    |     NO   | Current value of progress bar (percentage). Null for indeterminate.      | int                   | 0 - 100                  | null                      |
 | ticker 			    |     NO   | Text to be displayed on top of the screen when a notification arrives    | String                | unlimited                |                           |
-
+| actionType (Only for Android) 	|     NO   | Notification action response type                                                   | Enumerator            | ActionType         | Default                 |
+    
 <br>
 <br>
 
@@ -886,8 +1121,8 @@ Main methods to manipulate a notification channel:
 | enabled 	    |     NO   | On Android, deactivates the button. On iOS, the button disappear              | bool                  | true or false            | true                    |
 | autoDismissible    | NO  | Notification should auto cancel when gets tapped by the user                  | bool                  | true or false            | true                    |
 | showInCompactView  | NO  | For MediaPlayer notifications on Android, sets the button as visible in compact view | bool           | true or false            | true                    |
-| isDangerousOption  | NO  | Mark the button as a dangerous option, displaing the text in red              | bool                  | true or false            | false                   |
-| buttonType 	|     NO   | Button action response type                                                   | Enumerator            | ActionButtonType         | Default                 |
+| isDangerousOption  | NO  | Mark the button as a dangerous option, displaying the text in red             | bool                  | true or false            | false                   |
+| actionType 	|     NO   | Notification action response type                                                   | Enumerator            | ActionType         | Default                 |
 
 <br>
 <br>
@@ -949,187 +1184,9 @@ Main methods to manipulate a notification channel:
 | timeZone           |     NO   | Time zone identifier (ISO 8601)                                      | String     | "America/Sao_Paulo", "GMT-08:00" or "UTC" | "UTC" |
 
 
-
 <br>
 <br>
-
-## Using Firebase Services (Optional)
-
-The service used for this tutorial is Firebase Messaging, but you could use any other of your choice.
-
- 1 - To activate the Firebase Cloud Messaging service, please follow the respective step for your desired platform:
-
-### *Android*
-
-First things first, to create your Firebase Cloud Message and send notifications even when your app is terminated (killed), go to the [Firebase Console](https://console.firebase.google.com/) and create a new project.
-
-After that, go to "Cloud Messaging" option and add an "Android app", put the packge name of your project (**certifies to put the correct one**) to generate the file ***google-services.json***.
-
-Download the file and place it inside your [app]/android/app/ folder.
-
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/google-json-path.jpg)
-
-Add the classpath to the [project]/android/build.gradle file. (Firebase ones was already added by the plugin)
-
-```editorconfig
-dependencies {
-    classpath 'com.android.tools.build:gradle:3.5.0'
-    // Add the google services classpath
-    classpath 'com.google.gms:google-services:4.3.3'
-}
-```
-
-Add the apply plugin to the [project]/android/app/build.gradle file.
-
-```editorconfig
-// ADD THIS AT THE BOTTOM
-apply plugin: 'com.google.gms.google-services'
-```
-
-<br>
-
-### *iOS*
-
-Based on [https://firebase.flutter.dev/docs/messaging/apple-integration](https://firebase.flutter.dev/docs/messaging/apple-integration)
-
-Go to "Cloud Messaging" option and add an "iOS app", put the package name of your project (**certifies to put the correct one**) to generate the file ***GoogleService-info.plist***.
-
-Download the file and place it inside your [app]/ios/Runner/ folder using XCode. (Do not use Finder to copy and paste the file, use the XCode)
-
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/google-plist-path.jpg)
-
-After that, in your Google Console, go to **General (Gear icon) -> Cloud Messaging -> iOS configuration** and send your **APNs key** and include your **iOS Team ID**. To generate your APNs keys, follow the tutorial bellow:
-
-https://docs.oracle.com/en/cloud/saas/marketing/responsys-develop-mobile/ios/auth-key/
-
-
-<br>
-
-### Enabling Push Notifications in your Dart/Flutter code
-
-(those steps are based on [https://firebase.flutter.dev/docs/messaging/overview/](https://firebase.flutter.dev/docs/messaging/overview/) instructions)
-
-2 - Add the `firebase_core` and `firebase_messaging` dependency to your `pubspec.yaml` file.
-
-```yaml
-dependencies:
-  flutter:
-    sdk: flutter
-  firebase_core: "^1.0.4"
-  firebase_messaging: "^9.1.2"
-```
-
-3 - Download the dependencies with `$ flutter pub get`.
-
-4 - Inside your `main.dart` file, add the follow lines:
-
-```dart
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  AwesomeNotifications().initialize(
-    'resource://drawable/res_app_icon',
-    [
-        // Your notification channels go here
-    ]
-  );
-
-  // Create the initialization for your desired push service here
-  FirebaseApp firebaseApp = await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  runApp(App());
-}
-
-// Declared as global, outside of any class
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
-
-  print("Handling a background message: ${message.messageId}");
-
-  // Use this method to automatically convert the push data, in case you gonna use our data standard
-  AwesomeNotifications().createNotificationFromJsonData(message.data);
-}
-```
-
-Now, firebase messaging should work at any application lifecycle, for any supported platform.
-
-<br>
-
-
-## How to send Push Notifications using Firebase Cloud Messaging plugin (FCM)
-
-To send a notification using Awesome Notifications and FCM Services, you need to send a POST request to the address https://fcm.googleapis.com/fcm/send.
-Due to limitations on Android and iOS, you should send a empty **notification** field and use only the **data** field to send your data, as bellow:
-
-OBS: `actionButtons` and `schedule` are **optional**
-<br>
-OBS 2: ensure to read all the documentation inside [FlutterFire Overview Documentation](https://firebase.flutter.dev/docs/overview)
-<br>
-OBS 3: data only messages are classed as "low priority". Devices can throttle and ignore these messages if your application is in the background, terminated, or a variety of other conditions such as low battery or currently high CPU usage. To help improve delivery, you can bump the priority of messages. Note; this does still not guarantee delivery. More info [here](https://firebase.flutter.dev/docs/messaging/usage/#low-priority-messages)
-<br>
-OBS 4: Again, the background message method of the `firebase_messaging` plug-in runs in the background mode (which falls under iOS background execution rules) that can suspend all of your background executions for an indefinite period of time, for various reasons. Unfortunately, this is a known behavior of iOS and there is nothing to do about it. 15 minutes of delay is the smaller period of time possible between each execution. So, consider that the background method of `firebase_messaging` may not be executed at all or even run entirely out of the expected time.
-<br>
-
-```json
-{
-    "to" : "[YOUR APP TOKEN]",
-    "mutable_content" : true,
-    "content_available": true,
-    "priority": "high",
-    "data" : {
-        "content": {
-            "id": 100,
-            "channelKey": "big_picture",
-            "title": "Huston!\nThe eagle has landed!",
-            "body": "A small step for a man, but a giant leap to Flutter's community!",
-            "notificationLayout": "BigPicture",
-            "largeIcon": "https://media.fstatic.com/kdNpUx4VBicwDuRBnhBrNmVsaKU=/full-fit-in/290x478/media/artists/avatar/2013/08/neil-i-armstrong_a39978.jpeg",
-            "bigPicture": "https://www.dw.com/image/49519617_303.jpg",
-            "showWhen": true,
-            "autoDismissible": true,
-            "privacy": "Private"
-        },
-        "actionButtons": [
-            {
-                "key": "REPLY",
-                "label": "Reply",
-                "autoDismissible": true,
-                "buttonType":  "InputField"
-            },
-            {
-                "key": "ARCHIVE",
-                "label": "Archive",
-                "autoDismissible": true,
-                "isDangerousOption": true
-            }
-        ],
-        "schedule": {
-            "timeZone": "America/New_York",
-            "hour": "10",
-            "minute": "0",
-            "second": "0",
-            "allowWhileIdle": true,
-            "repeat": true
-        }
-    }
-}
-```
-
-Using this pattern, you can create a notification just by calling the method below:
-
-```dart
-AwesomeNotifications().createNotificationFromJsonData(yourReceivedMapData);
-```
-
-You can download a example of how to send Push Notifications through FCM using "Postman" [here](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/Firebase_FCM_Example.postman_collection.json)
-
-
-<br>
-<br>
+    
 
 ## Common Known Issues
 
@@ -1182,20 +1239,6 @@ To know more about it, please visit [Customize which resources to keep](https://
 
 ##
 
-**Issue:** The name 'DateUtils' is defined in the libraries 'package:awesome_notifications/src/utils/date_utils.dart (via package:awesome_notifications/awesome_notifications.dart)' and 'package:flutter/src/material/date.dart (via package:flutter/material.dart)'.
-
-**Fix:** Use a prefix while importing or hide one of the DateUtils declarations:
-
-```dart
-import 'package:flutter/material.dart' hide DateUtils;
-import 'package:flutter/material.dart' as Material show DateUtils;
-
-DateUtils.utcToLocal(DateTime.now());
-Material.DateUtils.dateOnly(DateTime.now());
-```
-
-##
-
 **Issue:** While my app is in background mode or terminated, my push notifications are successfully sent by `firebase_messaging`, but nothing happens in my background messaging handle
 
 **Fix:** The background message method of the `firebase_messaging` plug-in runs in the background mode (which falls under iOS background execution rules) that can suspend all of your background executions for an indefinite period of time, for various reasons. Unfortunately, this is a known behavior of iOS and there is nothing to do about it. 15 minutes of delay is the smaller period of time possible between each execution. So, consider that the background method of `firebase_messaging` may not be executed at all or even run entirely out of the expected time.
@@ -1233,7 +1276,8 @@ To see more information about each type, please go to https://github.com/rafaels
 <br>
 
 ## Android Foreground Services
-This is an optional feature to enable you to start an Android freground service with a notification from this plugin. Since it is optional it was moved to a second library you can import as follows:
+
+This is an optional feature to enable you to start an Android foreground service with a notification from this plugin. Since it is optional it was moved to a second library you can import as follows:
 ```dart
 import 'package:awesome_notifications/android_foreground_service.dart';
 ```
@@ -1245,18 +1289,20 @@ In your `AndroidManifest.xml` inside the `<manifest>` tag add:
 ```
 Next, you have to add the `<service>` tag to your `AndroidManifest.xml`. Inside your `<application>` tag add
 ```xml
- <service   android:name="me.carda.awesome_notifications.services.ForegroundService"
-            android:enabled="true"            
-            android:exported="false"
-            android:stopWithTask="true"
-            android:foregroundServiceType=As you like
+ <service android:name="me.carda.awesome_notifications.awesome_notifications_core.services.ForegroundService"
+          android:enabled="true"            
+          android:exported="false"
+          android:stopWithTask="true"
+          android:foregroundServiceType=AllServiceTypesThatYouChosen
 ></service>
 ```
 
 And finally, to create the notification as foreground service, use the method startForeground and set the notification category to Service:
 
 ```Dart
-    AndroidForegroundService.startForeground(
+    AndroidForegroundService.startAndroidForegroundService(
+      foregroundStartMode: ForegroundStartMode.stick,
+      foregroundServiceType: ForegroundServiceType.phoneCall,
       content: NotificationContent(
           id: 2341234,
           body: 'Service is running!',

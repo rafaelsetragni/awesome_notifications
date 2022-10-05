@@ -32,32 +32,34 @@ abstract class NotificationSchedule extends Model {
   /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
   bool repeats;
 
-  NotificationSchedule? fromMap(Map<String, dynamic> dataMap) {
-    this.timeZone = AwesomeAssertUtils.extractValue(
-            NOTIFICATION_SCHEDULE_TIMEZONE, dataMap, String) ??
+  @override
+  NotificationSchedule? fromMap(Map<String, dynamic> mapData) {
+    timeZone = AwesomeAssertUtils.extractValue(
+            NOTIFICATION_SCHEDULE_TIMEZONE, mapData, String) ??
         false;
 
-    this.allowWhileIdle = AwesomeAssertUtils.extractValue(
-            NOTIFICATION_ALLOW_WHILE_IDLE, dataMap, bool) ??
+    allowWhileIdle = AwesomeAssertUtils.extractValue(
+            NOTIFICATION_ALLOW_WHILE_IDLE, mapData, bool) ??
         false;
 
-    this.repeats = AwesomeAssertUtils.extractValue(
-            NOTIFICATION_SCHEDULE_REPEATS, dataMap, bool) ??
+    repeats = AwesomeAssertUtils.extractValue(
+            NOTIFICATION_SCHEDULE_REPEATS, mapData, bool) ??
         false;
 
-    this.preciseAlarm = AwesomeAssertUtils.extractValue(
-            NOTIFICATION_SCHEDULE_PRECISE_ALARM, dataMap, bool) ??
+    preciseAlarm = AwesomeAssertUtils.extractValue(
+            NOTIFICATION_SCHEDULE_PRECISE_ALARM, mapData, bool) ??
         false;
 
     return this;
   }
 
+  @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> dataMap = {
-      NOTIFICATION_SCHEDULE_TIMEZONE: this.timeZone,
-      NOTIFICATION_ALLOW_WHILE_IDLE: this.allowWhileIdle,
-      NOTIFICATION_SCHEDULE_REPEATS: this.repeats,
-      NOTIFICATION_SCHEDULE_PRECISE_ALARM: this.preciseAlarm
+      NOTIFICATION_SCHEDULE_TIMEZONE: timeZone,
+      NOTIFICATION_ALLOW_WHILE_IDLE: allowWhileIdle,
+      NOTIFICATION_SCHEDULE_REPEATS: repeats,
+      NOTIFICATION_SCHEDULE_PRECISE_ALARM: preciseAlarm
     };
 
     return dataMap;

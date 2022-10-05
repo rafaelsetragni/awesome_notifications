@@ -1,6 +1,75 @@
+## [0.7.0+1]
+* iOS core dependency updated to version 0.7.1 to match FCM add-on plugin
+## [0.7.0]
+* Initial release of Awesome Notifications version 0.7.0
+## [0.7.0-beta.7+6]
+* Android core dependency updated to 0.7.0-alpha.7+6
+* Added getInitialNotificationAction method
+## [0.7.0-beta.7+5]
+* Android core dependency updated to 0.7.0-alpha.7+6
+## [0.7.0-beta.7+4]
+* Run dart format over Lib to increase pub.dev score
+## [0.7.0-beta.7+3]
+* Dart support decreased to support version 2.18.0.
+* DecoderCallback replaced by DecoderBufferCallback due flutter deprecation for resource images
+## [0.7.0-beta.7+2]
+* Modifications made according lint warnings to increase pub.dev score
+## [0.7.0-beta.7+1]
+* Fix to change the plugin domain name
+## [0.7.0-beta.7]
+* Added new Flutter plugin architecture to make it compatible with all available platforms
+* Android and iOS core successfully extracted to be reused in remote repositories and other languages
+## [0.7.0-beta.6+1]
+* Inclusion of the Donate with PayPal section
+## [0.7.0-beta.6]
+* Fixed out of sync definition values between Flutter, Android and iOS
+* Coverage extended to Android 13 (SDK 33), without the new request dialog (temporary)
+## [0.7.0-beta.5]
+* Fixed zero being saved instead of the actual handles for silent background actions
+* Added getLifeCycle function to return the current life cycle state of awesome notifications
+* Added optional value for payload data
+## [0.7.0-beta.4]
+* iOS notification actions improved to gain more performance and ensure the fast first opening
+* iOS notification builder refactored to ensure the ios category creation before the notification being displayed
+* iOS notification builder refactored to ensure the completion handle order for push notifications
+* Fixed displayOnForeground e displayOnBackground for iOS
+## [0.7.0-beta.3+2]
+* Fixed empty title and body for messaging layout
+* Removed Java cast warnings for cases where's a previous type checking.
+## [0.7.0-beta.3+1]
+* Fixed NotificationCalendar's inverted error "The time conditions are invalid"
+* Documentation improved with new imports and observations with common found issues during beta phase
+* Dart source code cleaned to improve pub points
+## [0.7.0-beta.3]
+* Coverage extended to Android 12L (SDK 32)
+* All exceptions have been standardized with distinct exception codes to improve native error handling via PlatformException
+* New exception catcher implemented to handle all native exceptions and provide better integration with Firebase Analytics.
+* StopForeground method by id was fixed on Android
+* Message layout grouping fixed (https://github.com/rafaelsetragni/awesome_notifications/pull/466)
+* Background actions improved on iOS to hold long tasks
+* Background actions improved on iOS to increase UI performance through background threads
+* Added console performance measures for iOS
+* Added warning messages for non implemented layouts on iOS
+* Notification's payload attribute changed to support null values
+* awesome_notifications_core package renamed to core to reduce import's path length
+* Documentation improved
+### [0.7.0-beta.2]
+* AsyncTask replaced by Handler/Looper due deprecation in Android 12
+* FULL_WAKE_LOCK replaced by SCREEN_BRIGHT_WAKE_LOCK to improve battery life in Android
+* Implemented research by Android alarm intents to optimize the reschedule process
+* Added id helpers to improve the performance of ScheduleManger's cancellations process in almost 100 times
+## [0.7.0-beta.1]
+* Added dart isolates to allow receiving background notifications without bring the app to foreground
+* Added silentBackground, silentBackgroundAction, disableAction and dismissAction action types for notifications and buttons
+* InputField type deprecated, as now is possible to combine input buttons with all other action types. Now, to use InputField, please use the property requireInputText
+* Internal architecture rewrote to decrease O.S. interventions, allowing to increase the performance while create and schedules notifications in almost 10 times
+* Date objects replaced by Calendar type to enable real time zone operations in native layer
+* Added test unit cases to increase test coverage (55% coverage)
+* Network images for foreground services are reactivated
+* Upgraded external dependencies to become compatible with Flutter 2.10
 ## [0.6.21]
 * Added customSound feature for Android (only applicable for versions older than Android 8 (Oreo))
-* Type parameter T removed for AwessomeAssertUtils to allows it to be compatible with Flutter web parser.
+* Type parameter T removed from AwesomeAssertUtils to allows it to be compatible with Flutter web parser.
 ## [0.6.20]
 * Added rounded images for large icon and big picture
 * Added bool value extraction for Map objects in dart
@@ -9,9 +78,9 @@
 ## [0.6.19]
 * Added sound extension for notifications with categories Alarm and Call
 * Added call notification behavior (stay floating on screen and keep playing the sound in loop) for Call category
-* Added CancellationManager to reorganize all dismiss and cancelation methods in a single place
+* Added CancellationManager to reorganize all dismiss and cancellation methods in a single place
 * Created StatusBarManager to manage which notifications are currently active, improving performance and extending support to Android 5.0 Lollipop (SDK 21)
-* Notification layouts BigPicture, Messsaging and MessagingGroup improved to be more performatic and to reuses network connection data
+* Notification layouts BigPicture, Messaging and MessagingGroup improved to be more performative and to reuses network connection data
 * Added history box to notification's reply buttons on Android 8.0 to 12.0
 * iOS swift completion handlers modified to allow display notifications from another plugins
 ## [0.6.18+2]
@@ -22,7 +91,7 @@
 * Added Channel's Group feature for Android
 * Added notification's category feature for Android
 * Added fullScreenIntent permission and content option to allow to show notifications in full screen mode.
-* Added PreciseAlarms permission and sheculde option to allow to show scheduled notifications with more precision.
+* Added PreciseAlarms permission and schedule option to allow to show scheduled notifications with more precision.
 * Added showPage methods to provide shortcuts to channel permissions page and alarm permission page.
 * Added shouldShowRationale method for android to check if the requested permissions require user intervention to be enable.
 * Added request permissions methods to demand the users permissions considered dangerous by the system.
@@ -60,9 +129,9 @@
 * Version numbering has changed to better translate the stage of development for future releases.
 ## [0.0.6+12]
 * Added showInCompactView property for MediaPlayer buttons
-* Added support to multiple subscriptions on created, displayed, action and dissmissed stream
+* Added support to multiple subscriptions on created, displayed, action and dismissed stream
 * Removed channel key from Android Badge methods, because the segregation in channel keys was never used (now is all global)
-* Added increment and decrement badge methods (more performatic)
+* Added increment and decrement badge methods (more performative)
 ## [0.0.6+11]
 * Fix Android reschedules on startup process (issue #285)
 * Improved Android channels to manage another package channels and convert then to the new standard, using channelKey as hashKey produced from digest channel content
@@ -85,7 +154,7 @@
 * Added debug option on initialize method to lower the debug verbose if not necessary
 * Leveled error messages and error handling for iOS and Android platforms
 ## [0.0.6+4]
-* Added native firebase handling for willpresent notification method
+* Added native firebase handling for will present notification method
 * Added fixedDate to getNextDate on iOS
 * Added .aiff example files with more quality
 * Adjust weekday to work with ISO 8601

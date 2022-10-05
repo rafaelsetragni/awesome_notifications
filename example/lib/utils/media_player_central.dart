@@ -72,6 +72,7 @@ class MediaPlayerCentral {
     return _playlist.length == 0 ? null : _playlist[_index];
   }
 
+  static bool get isEmpty => _playlist.isEmpty;
   static bool get hasAnyMedia => _playlist.isNotEmpty;
   static bool get hasNextMedia => hasAnyMedia && index < _playlist.length - 1;
   static bool get hasPreviousMedia => hasAnyMedia && index > 0;

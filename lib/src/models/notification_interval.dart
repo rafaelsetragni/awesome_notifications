@@ -1,7 +1,4 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
-import 'package:awesome_notifications/src/models/notification_schedule.dart';
-import 'package:awesome_notifications/src/utils/assert_utils.dart';
+import '../../awesome_notifications.dart';
 
 class NotificationInterval extends NotificationSchedule {
   /// Field number for get and set indicating the amount of seconds between each repetition (greater than 0).
@@ -14,7 +11,7 @@ class NotificationInterval extends NotificationSchedule {
   /// [preciseAlarm] Requires maximum precision to schedule notifications at exact time, but may use more battery. Requires the explicit user consent for Android 12 and beyond.
   /// [timeZone] time zone identifier as reference of this schedule date. (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
   NotificationInterval(
-      {required int interval,
+      {required this.interval,
       String? timeZone,
       bool allowWhileIdle = false,
       bool repeats = false,
@@ -23,16 +20,14 @@ class NotificationInterval extends NotificationSchedule {
             timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
             repeats: repeats,
-            preciseAlarm: preciseAlarm) {
-    this.interval = interval;
-  }
+            preciseAlarm: preciseAlarm);
 
   @override
-  NotificationInterval? fromMap(Map<String, dynamic> dataMap) {
-    super.fromMap(dataMap);
+  NotificationInterval? fromMap(Map<String, dynamic> mapData) {
+    super.fromMap(mapData);
 
-    this.interval = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_INTERVAL, dataMap, String);
+    interval = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_INTERVAL, mapData, String);
 
     try {
       validate();
@@ -46,7 +41,7 @@ class NotificationInterval extends NotificationSchedule {
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
-    return map..addAll({NOTIFICATION_SCHEDULE_INTERVAL: this.interval});
+    return map..addAll({NOTIFICATION_SCHEDULE_INTERVAL: interval});
   }
 
   @override
@@ -56,12 +51,14 @@ class NotificationInterval extends NotificationSchedule {
 
   @override
   void validate() {
-    if ((this.interval ?? -1) < 0)
-      throw AwesomeNotificationsException(
+    if ((interval ?? -1) < 0) {
+      throw const AwesomeNotificationsException(
           message: 'interval must be greater or equal to zero.');
+    }
 
-    if (this.repeats && (this.interval ?? 0) < 60)
-      throw AwesomeNotificationsException(
+    if (repeats && (interval ?? 0) < 60) {
+      throw const AwesomeNotificationsException(
           message: 'time interval must be greater or equal to 60 if repeating');
+    }
   }
 }

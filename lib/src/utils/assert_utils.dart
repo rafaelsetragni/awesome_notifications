@@ -1,12 +1,17 @@
-import 'package:awesome_notifications/src/definitions.dart';
-import 'package:awesome_notifications/src/models/model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:awesome_notifications/src/models/model.dart';
+import 'package:intl/intl.dart';
+
+import '../definitions.dart';
+import 'string_utils.dart';
+
+const String _dateFormat = "yyyy-MM-dd HH:mm:ss Z";
+
 class AwesomeAssertUtils {
-  static String? toSimpleEnumString<T>(T e) {
-    if (e == null) return null;
-    return e.toString().split('.')[1];
+  static String? toSimpleEnumString<T extends Enum>(T? e) {
+    return e?.name;
   }
 
   static bool isNullOrEmptyOrInvalid(dynamic value, Type T) {
@@ -23,12 +28,12 @@ class AwesomeAssertUtils {
   }
 
   static List<Map<String, Object>>? toListMap<T extends Model>(List<T>? list) {
-    if (list == null || list.length == 0) return null;
+    if (list?.isEmpty ?? true) return null;
 
     List<Map<String, Object>> returnList = [];
-    list.forEach((element) {
+    for (var element in list!) {
       returnList.add(Map<String, Object>.from(element.toMap()));
-    });
+    }
 
     return returnList;
   }
@@ -59,8 +64,16 @@ class AwesomeAssertUtils {
 
     if (value is String) {
       String valueCasted = value;
+      if (AwesomeStringUtils.isNullOrEmpty(valueCasted,
+          considerWhiteSpaceAsEmpty: true)) return defaultValue;
 
       switch (T) {
+        case DateTime:
+          try {
+            return DateFormat(_dateFormat).parse(valueCasted, true);
+          } catch (err) {
+            return defaultValue;
+          }
         case String:
           return valueCasted;
 
@@ -119,21 +132,19 @@ class AwesomeAssertUtils {
         break;
 
       case bool:
-        return value ?? defaultValue;
+        return value ?? defaultValue ?? false;
     }
 
-    if (value == null || value.runtimeType.hashCode != T.hashCode)
-      return defaultValue;
+    if (value.runtimeType.hashCode != T.hashCode) return defaultValue;
 
-    return null;
+    return defaultValue;
   }
 
   static extractMap<T, C>(Map dataMap, String reference) {
     Map? defaultValue = _getDefaultValue(reference, Map);
-    if (defaultValue != null) return defaultValue;
 
     dynamic value = dataMap[reference];
-    if (value == null || !(value is Map)) return defaultValue;
+    if (value == null || value is! Map) return defaultValue;
 
     try {
       Map<T, C> castedValue = Map<T, C>.from(value);
@@ -143,21 +154,22 @@ class AwesomeAssertUtils {
     }
   }
 
-  static T? extractEnum<T>(String reference, Map dataMap, List<T> values) {
+  static T? extractEnum<T extends Enum>(
+      String reference, Map dataMap, List<T> values) {
     T? defaultValue = _getDefaultValue(reference, T);
     dynamic value = dataMap[reference];
 
-    if (value == null || !(value is String)) return defaultValue;
+    if (value is T) return value;
+
+    if (value == null || value is! String) return defaultValue;
 
     String castedValue = value;
     castedValue = castedValue.trim();
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(castedValue, String))
-      return defaultValue;
-
     return enumToString<T>(castedValue, values, defaultValue ?? values.first);
   }
 
-  static T? enumToString<T>(String enumValue, List<T> values, T? defaultValue) {
+  static T? enumToString<T extends Enum>(
+      String enumValue, List<T> values, T? defaultValue) {
     for (final enumerator in values) {
       if (AwesomeAssertUtils.toSimpleEnumString(enumerator)!.toLowerCase() ==
           enumValue.toLowerCase()) return enumerator;
@@ -176,12 +188,12 @@ class AwesomeAssertUtils {
     if (mapData == null || mapData is List<Map<String, dynamic>>) return null;
 
     List<Map<String, dynamic>> listMapData = List.from(mapData as List);
-    if (listMapData.length <= 0) return null;
+    if (listMapData.isEmpty) return null;
 
     List<T> actionButtons = [];
-    listMapData.forEach((actionButtonData) {
-      return actionButtons.add(newModel().fromMap(actionButtonData));
-    });
+    for (var actionButtonData in listMapData) {
+      actionButtons.add(newModel().fromMap(actionButtonData));
+    }
 
     return actionButtons;
   }

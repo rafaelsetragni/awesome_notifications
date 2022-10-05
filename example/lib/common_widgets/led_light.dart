@@ -17,7 +17,7 @@ class LedLight extends StatelessWidget {
           height: 15.0,
           decoration: BoxDecoration(
               color: lightColor,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
                   bottomLeft: Radius.circular(10),
@@ -28,7 +28,7 @@ class LedLight extends StatelessWidget {
                   color: lightColor.withOpacity(0.5),
                   spreadRadius: 5,
                   blurRadius: 7,
-                  offset: Offset(0, 1), // changes position of shadow
+                  offset: const Offset(0, 1), // changes position of shadow
                 ),
               ]
           )

@@ -7,8 +7,8 @@
 /// [PreciseAlarms] Precise alarms allows the scheduled notifications to be displayed at the expected time. This permission can be revoke by special device modes, such as baterry save mode, etc. Some manufactures can disable this feature if they decide that your app is consumpting many computational resources and decressing the baterry life (and without changing the permission status for your app). So, you must take in consideration that some schedules can be delayed or even not being displayed, depending of what platform are you running. You can increase the chances to display the notification at correct time, enable this permission and setting the correct notification category, but you never gonna have 100% sure about it.
 /// [FullScreenIntent] The ability to show the notifications on pop up even if the user is using another app.
 /// [CriticalAlert] Critical alerts is a special permission that allows to play sounds and vibrate for new notifications displayed, even if the device is in Do Not Disturbe / Silent mode. For iOS, you must request Apple a authorization to your app use it.
-/// [OverrideDnD] Override DnD allows the notification to decrease the Do Not Disturbe / Silent mode level enable to display critical alerts for Alarm and Call notifications. For Android, you must require the user consent to use it. For iOS, this permission is always enabled with CriticalAlert.
-/// [Provisional] (Only has effect on iOS) The ability to display notifications temporarially without the user consent.
+/// [OverrideDnD] Override DnD allows the notification to decrease the "Do Not Disturbe"/ Silent mode level enable to display critical alerts for Alarm and Call notifications. For Android, you must require the user consent to use it. For iOS, this permission is always enabled with CriticalAlert.
+/// [Provisional] (Only has effect on iOS) The ability to display notifications for a period of time without the user consent.
 /// [Car] The ability to display notifications while the device is in car mode.
 enum NotificationPermission {
   /// [Alert] Alerts are notifications with high priority that pops up on the user screen. Notifications with normal priority only shows the icon on status bar.
@@ -35,7 +35,7 @@ enum NotificationPermission {
   /// [CriticalAlert] Critical alerts is a special permission that allows to play sounds and vibrate for new notifications displayed, even if the device is in Do Not Disturbe / Silent mode. For iOS, you must request Apple a authorization to your app use it.
   CriticalAlert,
 
-  /// [OverrideDnD] Override DnD allows the notification to decrease the Do Not Disturbe / Silent mode level enable to display critical alerts for Alarm and Call notifications. For Android, you must require the user consent to use it. For iOS, this permission is always enabled with CriticalAlert.
+  /// [OverrideDnD] Override DnD allows the notification to decrease the "Do Not Disturbe"/ Silent mode level enable to display critical alerts for Alarm and Call notifications. For Android, you must require the user consent to use it. For iOS, this permission is always enabled with CriticalAlert.
   OverrideDnD,
 
   /// [Provisional] (Only has effect on iOS) The ability to display notifications temporarially without the user consent.
