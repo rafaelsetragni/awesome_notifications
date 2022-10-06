@@ -1,3 +1,8 @@
+## [0.7.1]
+* Flutter sdk dependency decreased from 2.18 to 2.12 to support old flutter applications
+* Fixed get interface for FcmSilentData.createdLifeCycle value
+* Added switch imports for Dart:io and Dart:html to improve web support
+* Awesome web portal urls updated
 ## [0.7.0+1]
 * iOS core dependency updated to version 0.7.1 to match FCM add-on plugin
 ## [0.7.0]

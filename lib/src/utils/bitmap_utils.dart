@@ -1,6 +1,5 @@
-import 'dart:io';
-
-import 'package:awesome_notifications/src/utils/media_abstract_utils.dart';
+import 'package:awesome_notifications/src/utils/media_abstract_utils.dart'
+    if (dart.library.html) 'package:awesome_notifications/src/utils/media_abstract_utils_web.dart';
 import 'package:awesome_notifications/src/utils/resource_image_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -19,11 +18,6 @@ class AwesomeBitmapUtils extends AwesomeMediaUtils {
   @override
   ImageProvider getFromMediaAsset(String mediaPath) {
     return AssetImage(cleanMediaPath(mediaPath));
-  }
-
-  @override
-  ImageProvider getFromMediaFile(String mediaPath) {
-    return FileImage(File(cleanMediaPath(mediaPath)));
   }
 
   @override

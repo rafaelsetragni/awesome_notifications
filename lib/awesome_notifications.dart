@@ -51,7 +51,8 @@ export 'src/utils/resource_image_provider.dart';
 export 'src/utils/string_utils.dart';
 export 'src/definitions.dart';
 
-import 'awesome_notifications_platform_interface.dart';
+import 'awesome_notifications_platform_interface.dart'
+    if (dart.library.html) 'awesome_notifications_web_interface.dart';
 
 /// Method structure to listen to an incoming action with dart
 typedef ActionHandler = Future<void> Function(ReceivedAction receivedAction);

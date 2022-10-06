@@ -161,10 +161,10 @@
       "name": "awesome_notifications",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "2.12"
     }
   ],
-  "generated": "2022-10-02T15:50:29.735887Z",
+  "generated": "2022-10-05T23:16:05.856185Z",
   "generator": "pub",
   "generatorVersion": "2.18.2"
 }

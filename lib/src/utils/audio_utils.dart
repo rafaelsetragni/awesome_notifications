@@ -1,4 +1,5 @@
-import 'package:awesome_notifications/src/utils/media_abstract_utils.dart';
+import 'package:awesome_notifications/src/utils/media_abstract_utils.dart'
+    if (dart.library.html) 'package:awesome_notifications/src/utils/media_abstract_utils_web.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeAudioUtils extends AwesomeMediaUtils {
