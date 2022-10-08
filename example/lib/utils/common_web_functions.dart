@@ -1,5 +1,5 @@
+import 'package:universal_io/io.dart' as uio;
 
-import 'dart:io';
 import 'dart:math' as math;
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/services.dart';
@@ -10,16 +10,7 @@ import 'package:device_info/device_info.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<String> saveAssetOnDisk(ImageProvider image, String fileName) async {
-  Directory directory = await getApplicationDocumentsDirectory();
-  String filePath = '${directory.path}/$fileName';
-  File newFile = File(filePath);
-
-  if (!await newFile.exists()) {
-    BitmapHelper bitmapHelper = await BitmapHelper.fromProvider(image);
-    await newFile.writeAsBytes(bitmapHelper.content);
-  }
-
-  return filePath;
+  return '';
 }
 
 void lockScreenPortrait() {
@@ -39,13 +30,13 @@ void unlockScreenPortrait() {
 }
 
 Future<String> getPlatformVersion() async {
-  if (Platform.isAndroid) {
+  if (uio.Platform.isAndroid) {
     var androidInfo = await DeviceInfoPlugin().androidInfo;
     var sdkInt = androidInfo.version.sdkInt;
     return 'Android-$sdkInt';
   }
 
-  if (Platform.isIOS) {
+  if (uio.Platform.isIOS) {
     var iosInfo = await DeviceInfoPlugin().iosInfo;
     var systemName = iosInfo.systemName;
     var version = iosInfo.systemVersion;
@@ -75,7 +66,7 @@ void loadSingletonPage(NavigatorState? navigatorState,
 Future<String> downloadAndSaveImageOnDisk(String url, String fileName) async {
   var directory = await getApplicationDocumentsDirectory();
   var filePath = '${directory.path}/$fileName';
-  var file = File(filePath);
+  var file = uio.File(filePath);
 
   if (!await file.exists()) {
     var response = await http.get(Uri.parse(url));

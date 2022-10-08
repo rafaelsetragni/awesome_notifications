@@ -1,8 +1,8 @@
-import 'dart:io';
-
 import 'package:http/http.dart' show Client, Response;
 import 'package:flutter/cupertino.dart';
-import 'package:awesome_notifications_example/utils/common_functions.dart';
+import 'package:awesome_notifications_example/utils/common_functions.dart' if (dart.library.html)
+'package:awesome_notifications_example/utils/common_web_functions.dart';
+import 'package:universal_io/io.dart';
 import 'datasource.dart';
 
 class HttpDataSource extends DataSource {
@@ -60,10 +60,10 @@ class HttpDataSource extends DataSource {
         return response;
       } on HttpException catch (_) {
         tries--;
-        sleep(Duration(milliseconds: 500));
+        await Future.delayed(const Duration(milliseconds: 500));
       } on Exception catch (_) {
         tries--;
-        sleep(Duration(milliseconds: 500));
+        await Future.delayed(const Duration(milliseconds: 500));
       }
     } while (tries > 0);
 

@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -11,11 +10,12 @@ import 'package:flutter/material.dart';
 // TO AVOID CONFLICT WITH MATERIAL DATE UTILS CLASS
 import 'package:awesome_notifications/awesome_notifications.dart'
     hide AwesomeDateUtils;
-import 'package:awesome_notifications/awesome_notifications.dart' as Utils
+import 'package:awesome_notifications/awesome_notifications.dart' as utils
     show AwesomeDateUtils;
 
 import 'package:awesome_notifications_example/models/media_model.dart';
-import 'package:awesome_notifications_example/utils/common_functions.dart';
+import 'package:awesome_notifications_example/utils/common_functions.dart' if (dart.library.html)
+'package:awesome_notifications_example/utils/common_web_functions.dart';
 import 'package:awesome_notifications_example/utils/media_player_central.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -1108,7 +1108,7 @@ class NotificationUtils {
 
     //String newFilePath = await saveImageOnDisk(AssetImage('assets/images/happy-dogs.jpg'),'newTestImage.jpg');
     newFilePath = newFilePath.replaceFirst('/', '');
-    String finalFilePath = 'file://' + (newFilePath);
+    String finalFilePath = 'file://$newFilePath';
 
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
@@ -1502,13 +1502,13 @@ class NotificationUtils {
             title: 'Little Jhonny',
             body: 'Hey dude! Look what i found!'));
 
-    sleep(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
 
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: 2, channelKey: 'grouped', title: 'Cyclano', body: 'What?'));
 
-    sleep(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
 
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
@@ -1517,7 +1517,7 @@ class NotificationUtils {
             title: 'Little Jhonny',
             body: 'This push notifications plugin is amazing!'));
 
-    sleep(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
 
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
@@ -1526,7 +1526,7 @@ class NotificationUtils {
             title: 'Little Jhonny',
             body: 'Its perfect!'));
 
-    sleep(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
 
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
@@ -1655,9 +1655,9 @@ class NotificationUtils {
           id: -1,
           channelKey: 'scheduled',
           title: 'Just in time!',
-          body: 'This notification was schedule to shows at ${Utils.AwesomeDateUtils.parseDateToString(
+          body: 'This notification was schedule to shows at ${utils.AwesomeDateUtils.parseDateToString(
                       scheduleTime.toLocal()) ??
-                  '?'} $timeZoneIdentifier (${Utils.AwesomeDateUtils.parseDateToString(scheduleTime.toUtc()) ??
+                  '?'} $timeZoneIdentifier (${utils.AwesomeDateUtils.parseDateToString(scheduleTime.toUtc()) ??
                   '?'} utc)',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/delivery.jpeg',

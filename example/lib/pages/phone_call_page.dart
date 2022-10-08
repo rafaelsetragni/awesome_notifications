@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:awesome_notifications/android_foreground_service.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications_example/common_widgets/single_slider.dart';
-import 'package:awesome_notifications_example/notifications/notifications_controller.dart';
-import 'package:awesome_notifications_example/utils/common_functions.dart';
+import 'package:awesome_notifications_example/utils/common_functions.dart' if (dart.library.html)
+'package:awesome_notifications_example/utils/common_web_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
