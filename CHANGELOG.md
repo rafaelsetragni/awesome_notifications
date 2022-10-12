@@ -1,3 +1,7 @@
+## [0.7.3]
+* Added badge parameter into notification's content to set the app badge value through notifications
+* Added deep merge method into MapUtils to allow notification content combinations
+* Flutter minimal version was increased to 2.14 due DecoderCallback deprecation
 ## [0.7.2]
 * Media Style dependencies upgraded
 ## [0.7.1]

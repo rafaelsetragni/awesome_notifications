@@ -247,6 +247,7 @@ public interface Definitions {
     String NOTIFICATION_BIG_PICTURE = "bigPicture";
     String NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND = "hideLargeIconOnExpand";
     String NOTIFICATION_PROGRESS = "progress";
+    String NOTIFICATION_BADGE = "badge";
     String NOTIFICATION_ENABLE_LIGHTS = "enableLights";
     String NOTIFICATION_LED_COLOR = "ledColor";
     String NOTIFICATION_LED_ON_MS = "ledOnMs";
@@ -285,7 +286,6 @@ public interface Definitions {
         put(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, true);
         put(Definitions.NOTIFICATION_DEFAULT_RINGTONE_TYPE, DefaultRingtoneType.Notification);
         put(Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, CalendarUtils.getInstance().getLocalTimeZone().toString());
-        put(Definitions.NOTIFICATION_TICKER, "ticker");
         put(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, false);
         put(Definitions.NOTIFICATION_ONLY_ALERT_ONCE, false);
         put(Definitions.NOTIFICATION_SHOW_IN_COMPACT_VIEW, true);

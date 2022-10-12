@@ -389,23 +389,29 @@ class NotificationUtils {
       BADGE NOTIFICATIONS
   ************************************************ */
 
-  static Future<void> showBadgeNotification(int id) async {
+  static Future<void> showBadgeNotification(int id, {int? badgeAmount}) async {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: id,
+            badge: badgeAmount,
             channelKey: 'badge_channel',
             title: 'Badge test notification',
-            body: 'This notification does activate badge indicator'),
+            body: 'This notification does activate badge indicator',
+            payload: {
+              'content 1': 'value'
+            }
+        ),
         schedule: NotificationInterval(
             interval: 5,
             timeZone:
                 await AwesomeNotifications().getLocalTimeZoneIdentifier()));
   }
 
-  static Future<void> showWithoutBadgeNotification(int id) async {
+  static Future<void> showWithoutBadgeNotification(int id, {int? badgeAmount}) async {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: id,
+            badge: badgeAmount,
             channelKey: 'basic_channel',
             title: 'Badge test notification',
             body: 'This notification does not activate badge indicator'),

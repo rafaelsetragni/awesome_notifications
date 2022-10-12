@@ -11,7 +11,7 @@ import 'base_notification_content.dart';
 /// If notification has no [body] or [title], it will only be created, but not displayed to the user (background notification).
 class NotificationContent extends BaseNotificationContent {
   bool? _hideLargeIconOnExpand;
-  int? _progress;
+  int? _progress, _badge;
   String? _ticker;
 
   NotificationLayout? _notificationLayout;
@@ -27,6 +27,10 @@ class NotificationContent extends BaseNotificationContent {
 
   int? get progress {
     return _progress;
+  }
+
+  int? get badge {
+    return _badge;
   }
 
   String? get ticker {
@@ -76,12 +80,14 @@ class NotificationContent extends BaseNotificationContent {
       bool hideLargeIconOnExpand = false,
       bool locked = false,
       int? progress,
+      int? badge,
       String? ticker,
       bool displayOnForeground = true,
       bool displayOnBackground = true})
       : _hideLargeIconOnExpand = hideLargeIconOnExpand,
         _progress = progress,
         _ticker = ticker,
+        _badge = badge,
         _notificationLayout = notificationLayout,
         _displayOnForeground = displayOnForeground,
         _displayOnBackground = displayOnBackground,
@@ -118,6 +124,8 @@ class NotificationContent extends BaseNotificationContent {
 
     _progress =
         AwesomeAssertUtils.extractValue(NOTIFICATION_PROGRESS, mapData, int);
+    _badge =
+        AwesomeAssertUtils.extractValue(NOTIFICATION_BADGE, mapData, int);
     _ticker =
         AwesomeAssertUtils.extractValue(NOTIFICATION_TICKER, mapData, String);
     _locked =
@@ -148,6 +156,7 @@ class NotificationContent extends BaseNotificationContent {
       ..addAll({
         NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND: _hideLargeIconOnExpand,
         NOTIFICATION_PROGRESS: _progress,
+        NOTIFICATION_BADGE: _badge,
         NOTIFICATION_TICKER: _ticker,
         NOTIFICATION_LOCKED: _locked,
         NOTIFICATION_LAYOUT: _notificationLayout?.name,

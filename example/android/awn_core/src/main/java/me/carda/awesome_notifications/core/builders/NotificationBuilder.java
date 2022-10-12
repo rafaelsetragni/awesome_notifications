@@ -24,6 +24,7 @@ import android.text.Spanned;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.media.app.NotificationCompat.MediaStyle;
 import androidx.core.app.Person;
 import androidx.core.app.RemoteInput;
 import androidx.core.graphics.drawable.IconCompat;
@@ -352,7 +353,7 @@ public class NotificationBuilder {
             return null;
         }
     }
-    
+
     public Class getMainTargetClass(
             Context applicationContext
     ){
@@ -723,13 +724,18 @@ public class NotificationBuilder {
 
     private void setTicker(NotificationModel notificationModel, NotificationCompat.Builder builder) {
         String tickerValue;
-        tickerValue = stringUtils.getValueOrDefault(notificationModel.content.ticker, null);
+        tickerValue = stringUtils.getValueOrDefault(notificationModel.content.ticker, "");
         tickerValue = stringUtils.getValueOrDefault(tickerValue, notificationModel.content.summary);
         tickerValue = stringUtils.getValueOrDefault(tickerValue, notificationModel.content.body);
+        tickerValue = stringUtils.getValueOrDefault(tickerValue, notificationModel.content.title);
         builder.setTicker(tickerValue);
     }
 
     private void setBadge(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
+        if (notificationModel.content.badge != null){
+            BadgeManager.getInstance().setGlobalBadgeCounter(context, notificationModel.content.badge);
+            return;
+        }
         if (!notificationModel.groupSummary && BooleanUtils.getInstance().getValue(channelModel.channelShowBadge)) {
             BadgeManager.getInstance().incrementGlobalBadgeCounter(context);
             builder.setNumber(1);
@@ -851,11 +857,6 @@ public class NotificationBuilder {
             PendingIntent actionPendingIntent = null;
             if (buttonProperties.enabled) {
 
-//                if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N){
-//                    actionIntent.setAction(Intent.ACTION_MAIN);
-//                    actionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                }
-
                 actionPendingIntent =
                     actionType == ActionType.Default ?
                         PendingIntent.getActivity(
@@ -951,9 +952,9 @@ public class NotificationBuilder {
                 } else {
                     try {
                         int defaultResource = context.getResources().getIdentifier(
-                                "ic_launcher",
-                                "mipmap",
-                                AwesomeNotifications.getPackageName(context)
+                            "ic_launcher",
+                            "mipmap",
+                            AwesomeNotifications.getPackageName(context)
                         );
 
                         if (defaultResource > 0) {
@@ -1289,7 +1290,8 @@ public class NotificationBuilder {
         }
 
         builder.setStyle(
-                new androidx.media.app.NotificationCompat.MediaStyle()
+                new MediaStyle()
+                        .setMediaSession(mediaSession.getSessionToken())
                         .setShowActionsInCompactView(showInCompactView)
                         .setShowCancelButton(true));
 

@@ -607,13 +607,18 @@ class _HomePageState extends State<HomePage> {
                 'with "badge" set to TRUE.\n\n'
                 'OBS: Some Android distributions provide badge counter over the app icon, similar to iOS (LG, Samsung, HTC, Sony, etc).'),
             SimpleButton(
-                'Shows a notification with a badge indicator channel activate',
+                'Show notification with\nbadge indicator channel activate',
                 onPressed: () => NotificationUtils.showBadgeNotification(
                     Random().nextInt(100))),
             SimpleButton(
-                'Shows a notification with a badge indicator channel deactivate',
+                'Show notification with\nbadge indicator channel deactivate',
                 onPressed: () => NotificationUtils.showWithoutBadgeNotification(
                     Random().nextInt(100))),
+            SimpleButton(
+                'Show notification, setting\nthe badge indicator to 999',
+                onPressed: () => NotificationUtils.showBadgeNotification(
+                    Random().nextInt(100),
+                    badgeAmount: 999)),
             SimpleButton('Read the badge indicator', onPressed: () async {
               int amount = await NotificationUtils.getBadgeIndicator();
               Fluttertoast.showToast(msg: 'Badge count: $amount');

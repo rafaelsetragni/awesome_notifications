@@ -57,6 +57,7 @@ public class NotificationContentModel extends AbstractModel {
     public Integer color;
     public Integer backgroundColor;
     public Integer progress;
+    public Integer badge;
     public String ticker;
 
     public Boolean roundedLargeIcon;
@@ -137,8 +138,9 @@ public class NotificationContentModel extends AbstractModel {
         payload               = getValueOrDefault(arguments, Definitions.NOTIFICATION_PAYLOAD, Map.class, null);
         autoDismissible       = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSIBLE, Boolean.class, true);
         progress              = getValueOrDefault(arguments, Definitions.NOTIFICATION_PROGRESS, Integer.class, null);
+        badge                 = getValueOrDefault(arguments, Definitions.NOTIFICATION_BADGE, Integer.class, null);
         groupKey              = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_KEY, String.class, null);
-        ticker                = getValueOrDefault(arguments, Definitions.NOTIFICATION_TICKER, String.class, "ticker");
+        ticker                = getValueOrDefault(arguments, Definitions.NOTIFICATION_TICKER, String.class, null);
         roundedLargeIcon      = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, Boolean.class, false);
         roundedBigPicture     = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, Boolean.class, false);
 
@@ -192,6 +194,7 @@ public class NotificationContentModel extends AbstractModel {
         putDataOnSerializedMap(Definitions.NOTIFICATION_LARGE_ICON, returnedObject, this.largeIcon);
         putDataOnSerializedMap(Definitions.NOTIFICATION_BIG_PICTURE, returnedObject, this.bigPicture);
         putDataOnSerializedMap(Definitions.NOTIFICATION_PROGRESS, returnedObject, this.progress);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_BADGE, returnedObject, this.badge);
         putDataOnSerializedMap(Definitions.NOTIFICATION_GROUP_KEY, returnedObject, this.groupKey);
         putDataOnSerializedMap(Definitions.NOTIFICATION_PRIVACY, returnedObject, this.privacy);
         putDataOnSerializedMap(Definitions.NOTIFICATION_PRIVATE_MESSAGE, returnedObject, this.privateMessage);

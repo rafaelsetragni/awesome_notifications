@@ -244,6 +244,7 @@ const NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND = 'hideLargeIconOnExpand';
 const NOTIFICATION_SHOW_PROGRESS = 'showProgress';
 const NOTIFICATION_MAX_PROGRESS = 'maxProgress';
 const NOTIFICATION_PROGRESS = 'progress';
+const NOTIFICATION_BADGE = 'badge';
 const NOTIFICATION_INDETERMINATE = 'indeterminate';
 const NOTIFICATION_PERSON = 'person';
 const NOTIFICATION_CONVERSATION_TITLE = 'conversationTitle';

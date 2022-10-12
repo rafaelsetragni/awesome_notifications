@@ -2,9 +2,9 @@ package me.carda.awesome_notifications.core;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.media.session.MediaSession;
 import android.support.v4.media.session.MediaSessionCompat;
 
 import androidx.annotation.NonNull;

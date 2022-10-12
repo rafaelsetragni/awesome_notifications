@@ -12,6 +12,7 @@ import com.google.common.primitives.Longs;
 import com.google.common.primitives.Shorts;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -175,6 +176,28 @@ public class MapUtils {
         }
 
         return Optional.absent();
+    }
+
+    // This is fancier than Map.putAll(Map)
+    @SuppressWarnings("rawtypes")
+    public static Map deepMerge(@Nullable Map original, @Nullable Map newMap) {
+        if (original == null) {
+            if (newMap == null) return null;
+            return new HashMap<>(newMap);
+        }
+        if (newMap == null) return new HashMap<>(original);
+
+        original = new HashMap<>(original);
+        for (Object key : newMap.keySet()) {
+            if (newMap.get(key) instanceof Map && original.get(key) instanceof Map) {
+                Map originalChild = (Map) original.get(key);
+                Map newChild = (Map) newMap.get(key);
+                original.put(key, deepMerge(originalChild, newChild));
+            } else {
+                original.put(key, newMap.get(key));
+            }
+        }
+        return original;
     }
 
 }
