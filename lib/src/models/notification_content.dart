@@ -124,8 +124,7 @@ class NotificationContent extends BaseNotificationContent {
 
     _progress =
         AwesomeAssertUtils.extractValue(NOTIFICATION_PROGRESS, mapData, int);
-    _badge =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_BADGE, mapData, int);
+    _badge = AwesomeAssertUtils.extractValue(NOTIFICATION_BADGE, mapData, int);
     _ticker =
         AwesomeAssertUtils.extractValue(NOTIFICATION_TICKER, mapData, String);
     _locked =
