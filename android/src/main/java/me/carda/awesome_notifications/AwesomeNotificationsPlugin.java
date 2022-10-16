@@ -1312,7 +1312,7 @@ public class AwesomeNotificationsPlugin
         debug = debug != null && debug;
 
         Object backgroundCallbackObj = arguments.get(Definitions.BACKGROUND_HANDLE);
-        Long backgroundCallback = backgroundCallbackObj == null ? 0L :(Long) backgroundCallbackObj;
+        Long backgroundCallback = backgroundCallbackObj == null ? 0L :((Number) backgroundCallbackObj).longValue();
 
         awesomeNotifications.initialize(
                 defaultIconPath,
@@ -1345,7 +1345,7 @@ public class AwesomeNotificationsPlugin
 
         Object callbackActionObj = arguments.get(Definitions.ACTION_HANDLE);
 
-        long silentCallback = callbackActionObj == null ? 0L : (Long) callbackActionObj;
+        long silentCallback = callbackActionObj == null ? 0L : ((Number) callbackActionObj).longValue();
 
         awesomeNotifications.attachAsMainInstance(awesomeEventListener);
         awesomeNotifications.setActionHandle(silentCallback);

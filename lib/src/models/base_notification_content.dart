@@ -291,9 +291,9 @@ class BaseNotificationContent extends Model {
     return AwesomeBitmapUtils().cleanMediaPath(_largeIcon!);
   }
 
-  String? get titleWithoutHtml => AwesomeHtmlUtils.removeAllHtmlTags(_title)!;
+  String? get titleWithoutHtml => AwesomeHtmlUtils.removeAllHtmlTags(_title);
 
-  String? get bodyWithoutHtml => AwesomeHtmlUtils.removeAllHtmlTags(_body)!;
+  String? get bodyWithoutHtml => AwesomeHtmlUtils.removeAllHtmlTags(_body);
 
   @override
   void validate() {
