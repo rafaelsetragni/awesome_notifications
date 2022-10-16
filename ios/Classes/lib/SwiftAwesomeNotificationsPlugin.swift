@@ -370,16 +370,12 @@ public class SwiftAwesomeNotificationsPlugin:
     private func channelMethodGetInitialAction(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         let removeFromEvents:Bool = call.arguments as? Bool ?? false
         
-        guard let initialAction:ActionReceived =
-                awesomeNotifications?
-                    .getInitialAction(
-                        removeFromEvents: removeFromEvents)
-        else {
-            result(nil)
-            return
-        }
-        
-        result(initialAction.toMap())
+        awesomeNotifications?
+            .getInitialAction(
+                removeFromEvents: removeFromEvents,
+                completionHandler: { actionReceived in
+                    result(actionReceived?.toMap())
+                })
     }
     
     private func channelMethodGetBadgeCounter(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
