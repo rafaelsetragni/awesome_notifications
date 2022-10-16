@@ -11,13 +11,11 @@ import 'package:awesome_notifications_example/themes/themes_controller.dart';
 import 'package:awesome_notifications_example/notifications/notifications_controller.dart';
 import 'package:flutter/services.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationsController.initializeLocalNotifications();
-  App.initialCallAction = await NotificationsController
-      .interceptInitialCallActionRequest();
+  App.initialCallAction =
+      await NotificationsController.interceptInitialCallActionRequest();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -52,9 +50,8 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    String initialRoute = App.initialCallAction == null
-        ? PAGE_HOME
-        : PAGE_PHONE_CALL;
+    String initialRoute =
+        App.initialCallAction == null ? PAGE_HOME : PAGE_PHONE_CALL;
     debugPrint('initialRoute: $initialRoute');
     return MaterialApp(
       title: App.name,

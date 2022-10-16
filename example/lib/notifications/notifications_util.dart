@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -14,8 +15,8 @@ import 'package:awesome_notifications/awesome_notifications.dart' as utils
     show AwesomeDateUtils;
 
 import 'package:awesome_notifications_example/models/media_model.dart';
-import 'package:awesome_notifications_example/utils/common_functions.dart' if (dart.library.html)
-'package:awesome_notifications_example/utils/common_web_functions.dart';
+import 'package:awesome_notifications_example/utils/common_functions.dart'
+    if (dart.library.html) 'package:awesome_notifications_example/utils/common_web_functions.dart';
 import 'package:awesome_notifications_example/utils/media_player_central.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -397,17 +398,15 @@ class NotificationUtils {
             channelKey: 'badge_channel',
             title: 'Badge test notification',
             body: 'This notification does activate badge indicator',
-            payload: {
-              'content 1': 'value'
-            }
-        ),
+            payload: {'content 1': 'value'}),
         schedule: NotificationInterval(
             interval: 5,
             timeZone:
                 await AwesomeNotifications().getLocalTimeZoneIdentifier()));
   }
 
-  static Future<void> showWithoutBadgeNotification(int id, {int? badgeAmount}) async {
+  static Future<void> showWithoutBadgeNotification(int id,
+      {int? badgeAmount}) async {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: id,
@@ -555,9 +554,9 @@ class NotificationUtils {
     // Schedule only for test purposes. For real applications, you MUST
     // create call or alarm notifications using AndroidForegroundService.
     await AwesomeNotifications().createNotification(
-    // await AndroidForegroundService.startAndroidForegroundService(
-    //     foregroundStartMode: ForegroundStartMode.stick,
-    //     foregroundServiceType: ForegroundServiceType.phoneCall,
+        // await AndroidForegroundService.startAndroidForegroundService(
+        //     foregroundStartMode: ForegroundStartMode.stick,
+        //     foregroundServiceType: ForegroundServiceType.phoneCall,
         content: NotificationContent(
             id: id,
             channelKey: 'call_channel',
@@ -586,10 +585,7 @@ class NotificationUtils {
               isDangerousOption: true,
               autoDismissible: true),
         ],
-        schedule: NotificationInterval(
-            interval: timeToWait
-        )
-    );
+        schedule: NotificationInterval(interval: timeToWait));
   }
 
   static Future<void> showAlarmNotification(
@@ -1661,10 +1657,8 @@ class NotificationUtils {
           id: -1,
           channelKey: 'scheduled',
           title: 'Just in time!',
-          body: 'This notification was schedule to shows at ${utils.AwesomeDateUtils.parseDateToString(
-                      scheduleTime.toLocal()) ??
-                  '?'} $timeZoneIdentifier (${utils.AwesomeDateUtils.parseDateToString(scheduleTime.toUtc()) ??
-                  '?'} utc)',
+          body:
+              'This notification was schedule to shows at ${utils.AwesomeDateUtils.parseDateToString(scheduleTime.toLocal()) ?? '?'} $timeZoneIdentifier (${utils.AwesomeDateUtils.parseDateToString(scheduleTime.toUtc()) ?? '?'} utc)',
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: 'asset://assets/images/delivery.jpeg',
           payload: {'uuid': 'uuid-test'},
@@ -1690,41 +1684,62 @@ class NotificationUtils {
             payload: {'uuid': 'uuid-test'}));
   }
 
+  static int currentStep = 0;
+  static Timer? udpateNotificationAfter1Second;
   static Future<void> showProgressNotification(int id) async {
-    var maxStep = 10;
-    for (var simulatedStep = 1; simulatedStep <= maxStep + 1; simulatedStep++) {
-      await Future.delayed(Duration(seconds: 1), () async {
-        if (simulatedStep > maxStep) {
-          await AwesomeNotifications().createNotification(
-              content: NotificationContent(
-                  id: id,
-                  channelKey: 'progress_bar',
-                  title: 'Download finished',
-                  body: 'filename.txt',
-                  category: NotificationCategory.Progress,
-                  payload: {
-                    'file': 'filename.txt',
-                    'path': '-rmdir c://ruwindows/system32/huehuehue'
-                  },
-                  locked: false));
-        } else {
-          await AwesomeNotifications().createNotification(
-              content: NotificationContent(
-                  id: id,
-                  channelKey: 'progress_bar',
-                  title:
-                      'Downloading fake file in progress ($simulatedStep of $maxStep)',
-                  body: 'filename.txt',
-                  category: NotificationCategory.Progress,
-                  payload: {
-                    'file': 'filename.txt',
-                    'path': '-rmdir c://ruwindows/system32/huehuehue'
-                  },
-                  notificationLayout: NotificationLayout.ProgressBar,
-                  progress: min((simulatedStep / maxStep * 100).round(), 100),
-                  locked: true));
-        }
+    int maxStep = 10;
+    int fragmentation = 4;
+    for (var simulatedStep = 1;
+        simulatedStep <= maxStep * fragmentation + 1;
+        simulatedStep++) {
+      currentStep = simulatedStep;
+      await Future.delayed(Duration(milliseconds: 1000 ~/ fragmentation));
+      if (udpateNotificationAfter1Second != null) continue;
+      udpateNotificationAfter1Second = Timer(const Duration(seconds: 1), () {
+        _updateCurrentProgressBar(
+            id: id,
+            simulatedStep: currentStep,
+            maxStep: maxStep * fragmentation);
+        udpateNotificationAfter1Second?.cancel();
+        udpateNotificationAfter1Second = null;
       });
+    }
+  }
+
+  static void _updateCurrentProgressBar({
+    required int id,
+    required int simulatedStep,
+    required int maxStep,
+  }) {
+    if (simulatedStep < maxStep) {
+      AwesomeNotifications().createNotification(
+          content: NotificationContent(
+              id: id,
+              channelKey: 'progress_bar',
+              title: 'Download finished',
+              body: 'filename.txt',
+              category: NotificationCategory.Progress,
+              payload: {
+                'file': 'filename.txt',
+                'path': '-rmdir c://ruwindows/system32/huehuehue'
+              },
+              locked: false));
+    } else {
+      int progress = min((simulatedStep / maxStep * 100).round(), 100);
+      AwesomeNotifications().createNotification(
+          content: NotificationContent(
+              id: id,
+              channelKey: 'progress_bar',
+              title: 'Downloading fake file in progress ($progress%)',
+              body: 'filename.txt',
+              category: NotificationCategory.Progress,
+              payload: {
+                'file': 'filename.txt',
+                'path': '-rmdir c://ruwindows/system32/huehuehue'
+              },
+              notificationLayout: NotificationLayout.ProgressBar,
+              progress: progress,
+              locked: true));
     }
   }
 
