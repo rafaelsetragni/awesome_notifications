@@ -25,7 +25,8 @@ public class BroadcastSender {
     private static boolean withoutListenersAvailable(){
         return
             LifeCycleManager.getApplicationLifeCycle() == NotificationLifeCycle.AppKilled ||
-            AwesomeEventsReceiver.getInstance().isEmpty();
+            AwesomeEventsReceiver.getInstance().isEmpty() ||
+            !AwesomeEventsReceiver.getInstance().isReadyToReceiveEvents();
     }
 
     public static void sendBroadcastNotificationCreated(Context context, NotificationReceived notificationReceived){
