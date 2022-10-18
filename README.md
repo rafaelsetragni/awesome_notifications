@@ -545,7 +545,7 @@ To run and debug the Example App, follow the steps bellow:
 
 Notifications are received by local code or Push service using native code, so the messages will appears immediately or at schedule time, independent of your application is running or not.
 
-![Awesome Notification's flowchart](https://user-images.githubusercontent.com/40064496/195579280-55efb3e5-f3c5-4b0d-93c8-d307a53353ee.png)
+![Awesome Notification's flowchart](https://user-images.githubusercontent.com/40064496/196239879-eba4606a-a391-4989-8693-875c23fdde6f.png)
 
 <br>
 
