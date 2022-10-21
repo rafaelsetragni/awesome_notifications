@@ -70,7 +70,7 @@ public class AwesomeEventsReceiver {
         if (listener instanceof AwesomeNotifications){
             boolean hasAwesome = false;
             for (AwesomeNotificationEventListener awnListener : notificationEventListeners) {
-                if (listener instanceof AwesomeNotifications) {
+                if (awnListener instanceof AwesomeNotifications) {
                     hasAwesome = true;
                 }
             }
