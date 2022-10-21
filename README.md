@@ -153,15 +153,13 @@ This way, your Application will receive **all notifications at Flutter level cod
 
 <br>
 
-## Initial Requirements
+## Initial Configurations
+
+Bellow are the obligatory configurations that your app must meet to use awesome_notifications:
 
 <br>
-    
-Bellow are the obligatory requirements that your app must meet to use awesome_notifications:
 
-<br>
-
-### 🤖 Android
+### 🤖 Configuring Android
 
 1 - Is required the minimum android SDK to 21 (Android 5.0 Lollipop) and Java compiled SDK Version to 33 (Android 13). You can change the `minSdkVersion` to 21 and the `compileSdkVersion` to 33, inside the file `build.gradle`, located inside "android/app/" folder.
 ```Gradle
@@ -196,7 +194,7 @@ Also, to turn your app fully compatible with Android 13 (SDK 33), you need to ad
 <br>
 <br>
 
-### 🍎 iOS
+### 🍎 Configuring iOS
 
 To use Awesome Notifications and build your app correctly, you need to ensure to set some `build settings` options for your app targets. In your project view, click on *Runner -> Target Runner -> Build settings*...  
 
