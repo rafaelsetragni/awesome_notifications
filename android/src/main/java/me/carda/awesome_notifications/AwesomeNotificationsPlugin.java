@@ -184,13 +184,14 @@ public class AwesomeNotificationsPlugin
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         try {
             activityBinding = binding;
+
+            if(awesomeNotifications != null)
+                awesomeNotifications.attachToActivity(binding.getActivity());
+
             activityBinding.addRequestPermissionsResultListener(permissionsResultListener);
             activityBinding.addActivityResultListener(activityResultListener);
-
-            Intent launchIntent = binding.getActivity().getIntent();
-            if(awesomeNotifications != null && launchIntent != null)
-                awesomeNotifications.captureNotificationActionFromIntent(launchIntent);
             activityBinding.addOnNewIntentListener(this);
+
         } catch(Exception exception) {
             ExceptionFactory
                     .getInstance()
@@ -204,6 +205,9 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
+        if(awesomeNotifications != null)
+            awesomeNotifications.detachFromActivity(activityBinding.getActivity());
+
         activityBinding.removeRequestPermissionsResultListener(permissionsResultListener);
         activityBinding.removeActivityResultListener(activityResultListener);
         activityBinding = null;
@@ -211,6 +215,9 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+        if(awesomeNotifications != null)
+            awesomeNotifications.attachToActivity(binding.getActivity());
+
         activityBinding = binding;
         activityBinding.addRequestPermissionsResultListener(permissionsResultListener);
         activityBinding.addActivityResultListener(activityResultListener);
@@ -219,6 +226,9 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onDetachedFromActivity() {
+        if(awesomeNotifications != null)
+            awesomeNotifications.detachFromActivity(activityBinding.getActivity());
+
         activityBinding.removeRequestPermissionsResultListener(permissionsResultListener);
         activityBinding.removeActivityResultListener(activityResultListener);
         activityBinding = null;
