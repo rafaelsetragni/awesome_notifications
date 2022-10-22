@@ -189,9 +189,7 @@ public class AwesomeNotificationsPlugin
             activityBinding.addActivityResultListener(activityResultListener);
 
             if(awesomeNotifications != null){
-                Intent launchIntent = binding.getActivity().getIntent();
-                if(launchIntent != null)
-                    awesomeNotifications.captureNotificationActionFromIntent(launchIntent);
+                awesomeNotifications.captureNotificationActionFromActivity(binding.getActivity());
             }
 
             activityBinding.addOnNewIntentListener(this);
@@ -211,6 +209,7 @@ public class AwesomeNotificationsPlugin
     public void onDetachedFromActivityForConfigChanges() {
         activityBinding.removeRequestPermissionsResultListener(permissionsResultListener);
         activityBinding.removeActivityResultListener(activityResultListener);
+        activityBinding.removeOnNewIntentListener(this);
         activityBinding = null;
     }
 
@@ -226,6 +225,7 @@ public class AwesomeNotificationsPlugin
     public void onDetachedFromActivity() {
         activityBinding.removeRequestPermissionsResultListener(permissionsResultListener);
         activityBinding.removeActivityResultListener(activityResultListener);
+        activityBinding.removeOnNewIntentListener(this);
         activityBinding = null;
     }
 

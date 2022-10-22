@@ -26,6 +26,10 @@ public abstract class NotificationActionReceiver extends AwesomeBroadcastReceive
     }
 
     public static void receiveActionIntent(final Context context, Intent intent) throws Exception {
+        receiveActionIntent(context, intent, false);
+    }
+
+    public static void receiveActionIntent(final Context context, Intent intent, boolean onInitialization) throws Exception {
 
         if(AwesomeNotifications.debug)
             Logger.d(TAG, "New action received");
@@ -90,7 +94,8 @@ public abstract class NotificationActionReceiver extends AwesomeBroadcastReceive
                 case Default:
                     BroadcastSender.sendBroadcastDefaultAction(
                             context,
-                            actionReceived);
+                            actionReceived,
+                            onInitialization);
                     break;
 
                 case KeepOnTop:

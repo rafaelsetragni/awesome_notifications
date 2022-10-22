@@ -520,7 +520,7 @@ public class AwesomeNotifications
                     ActionManager.removeAction(context, received.id);
                     ActionManager.commitChanges(context);
 
-                    BroadcastSender.sendBroadcastDefaultAction(context, received);
+                    BroadcastSender.sendBroadcastDefaultAction(context, received, false);
 
                 } catch (AwesomeNotificationsException e) {
                     if (AwesomeNotifications.debug)
@@ -587,13 +587,17 @@ public class AwesomeNotifications
         ActionManager.clearAllActions(wContext.get());
     }
 
-    private void captureNotificationActionFromActivity(Activity startActivity) throws Exception {
+    public boolean captureNotificationActionFromActivity(Activity startActivity) throws Exception {
         if (startActivity == null)
-            return;
-        captureNotificationActionFromIntent(startActivity.getIntent());
+            return false;
+        return captureNotificationActionFromIntent(startActivity.getIntent(), true);
     }
 
     public boolean captureNotificationActionFromIntent(Intent intent) throws Exception {
+        return captureNotificationActionFromIntent(intent, false);
+    }
+
+    public boolean captureNotificationActionFromIntent(Intent intent, boolean onInitialization) throws Exception {
         if (intent == null)
             return false;
 
@@ -606,7 +610,7 @@ public class AwesomeNotifications
 
         boolean isNotificationAction = isStandardAction || isButtonAction;
         if (isNotificationAction)
-            NotificationActionReceiver.receiveActionIntent(wContext.get(), intent);
+            NotificationActionReceiver.receiveActionIntent(wContext.get(), intent, onInitialization);
 
         return isNotificationAction;
     }

@@ -97,9 +97,13 @@ public class BroadcastSender {
             }
     }
 
-    public static void sendBroadcastDefaultAction(Context context, ActionReceived actionReceived){
+    public static void sendBroadcastDefaultAction(Context context, ActionReceived actionReceived, boolean onInitialization){
         if (actionReceived != null)
             try {
+
+                if(onInitialization){
+                    ActionManager.setInitialNotificationAction(context, actionReceived);
+                }
 
                 if(withoutListenersAvailable()) {
                     ActionManager.saveAction(context, actionReceived);

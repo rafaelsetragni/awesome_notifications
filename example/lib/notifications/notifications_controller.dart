@@ -1,4 +1,4 @@
-import 'package:awesome_notifications_example/main.dart';
+import 'package:awesome_notifications_example/main_complete.dart';
 import 'package:awesome_notifications_example/routes/routes.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart' if (dart.library.html)
 'package:awesome_notifications_example/utils/common_web_functions.dart';

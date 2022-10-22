@@ -37,13 +37,11 @@ public class ActionManager {
 //        return shared.getAllObjects(context, Definitions.SHARED_DISMISSED);
     }
 
+    public static void setInitialNotificationAction(Context context, ActionReceived received){
+        initialActionReceived = received;
+    }
+
     public static void saveAction(Context context, ActionReceived received) throws AwesomeNotificationsException {
-        if (
-            received.actionLifeCycle == NotificationLifeCycle.AppKilled &&
-            received.actionType == ActionType.Default
-        ){
-            initialActionReceived = received;
-        }
         actionCache.put(received.id, received);
 //        shared.set(context, Definitions.SHARED_DISMISSED, received.id.toString(), received);
     }

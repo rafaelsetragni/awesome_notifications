@@ -161,13 +161,14 @@ Bellow are the obligatory configurations that your app must meet to use awesome_
 
 ### 🤖 Configuring Android
 
-1 - Is required the minimum android SDK to 21 (Android 5.0 Lollipop) and Java compiled SDK Version to 33 (Android 13). You can change the `minSdkVersion` to 21 and the `compileSdkVersion` to 33, inside the file `build.gradle`, located inside "android/app/" folder.
+1 - Is required the minimum android SDK to 21 (Android 5.0 Lollipop) and Java compiled SDK Version to 33 (Android 13). You can change the `minSdkVersion` to 21 and the `compileSdkVersion` and `targetSdkVersion` to 33, inside the file `build.gradle`, located inside "android/app/" folder.
 ```Gradle
 android {
     compileSdkVersion 33
 
     defaultConfig {
         minSdkVersion 21
+        targetSdkVersion 33
         ...
     }
     ...

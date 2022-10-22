@@ -2,13 +2,24 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
+  // Always initialize Awesome Notifications
   await NotificationController.initializeLocalNotifications();
-  runApp(const App());
+  runApp(const MyApp());
 }
 
+
+///  *********************************************
+///     NOTIFICATION CONTROLLER
+///  *********************************************
+///
 class NotificationController {
   static ReceivedAction? initialAction;
 
+
+  ///  *********************************************
+  ///     INITIALIZATIONS
+  ///  *********************************************
+  ///
   static Future<void> initializeLocalNotifications() async {
     await AwesomeNotifications().initialize(
         'resource://drawable/res_app_icon',//null,//
@@ -31,24 +42,38 @@ class NotificationController {
     );
   }
 
+
+  ///  *********************************************
+  ///     NOTIFICATION EVENTS LISTENER
+  ///  *********************************************
+  ///  Notifications events are only delivered after call this method
   static Future<void> startListeningNotificationEvents() async {
     AwesomeNotifications()
         .setListeners(onActionReceivedMethod: onActionReceivedMethod);
   }
 
+
+  ///  *********************************************
+  ///     NOTIFICATION EVENTS
+  ///  *********************************************
+  ///
   @pragma('vm:entry-point')
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
-    App.navigatorKey.currentState?.pushNamedAndRemoveUntil(
+    MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil(
         '/notification-page',
             (route) =>
         (route.settings.name != '/notification-page') || route.isFirst,
         arguments: receivedAction);
   }
 
+  ///  *********************************************
+  ///     REQUESTING NOTIFICATION PERMISSIONS
+  ///  *********************************************
+  ///
   static Future<bool> displayNotificationRationale() async {
     bool userAuthorized = false;
-    BuildContext context = App.navigatorKey.currentContext!;
+    BuildContext context = MyApp.navigatorKey.currentContext!;
     await showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -105,6 +130,11 @@ class NotificationController {
         await AwesomeNotifications().requestPermissionToSendNotifications();
   }
 
+
+  ///  *********************************************
+  ///     NOTIFICATION CREATION METHODS
+  ///  *********************************************
+  ///
   static Future<void> createNewNotification() async {
     bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
 
@@ -134,8 +164,13 @@ class NotificationController {
   }
 }
 
-class App extends StatefulWidget {
-  const App({super.key});
+
+///  *********************************************
+///     MAIN WIDGET
+///  *********************************************
+///
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
 
   // The navigator key is necessary to navigate using static methods
   static final GlobalKey<NavigatorState> navigatorKey =
@@ -144,10 +179,10 @@ class App extends StatefulWidget {
   static Color mainColor = const Color(0xFF9D50DD);
 
   @override
-  State<App> createState() => _AppState();
+  State<MyApp> createState() => _AppState();
 }
 
-class _AppState extends State<App> {
+class _AppState extends State<MyApp> {
   // This widget is the root of your application.
 
   static const String routeHome = '/', routeNotification = '/notification-page';
@@ -191,7 +226,7 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Awesome Notifications - Simple Example',
-      navigatorKey: App.navigatorKey,
+      navigatorKey: MyApp.navigatorKey,
       onGenerateInitialRoutes: onGenerateInitialRoutes,
       onGenerateRoute: onGenerateRoute,
       theme: ThemeData(
@@ -201,6 +236,11 @@ class _AppState extends State<App> {
   }
 }
 
+
+///  *********************************************
+///     HOME PAGE
+///  *********************************************
+///
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
   final String title;
@@ -235,6 +275,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+
+///  *********************************************
+///     NOTIFICATION PAGE
+///  *********************************************
+///
 class NotificationPage extends StatelessWidget {
   const NotificationPage({Key? key, required this.receivedAction})
       : super(key: key);

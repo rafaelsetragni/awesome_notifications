@@ -1,5 +1,7 @@
 ## [0.7.4]
+* Added single page example on pub.dev
 * Fixed getInitialNotificationAction for larger projects with intense initial loading
+* Fixed background action definition label for iOS
 * Documentation updated and improved
 ## [0.7.3]
 * Added badge parameter into notification's content to set the app badge value through notifications
