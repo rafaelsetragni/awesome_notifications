@@ -1,3 +1,6 @@
+## [0.7.4]
+* Fixed getInitialNotificationAction for larger projects with intense initial loading
+* Documentation updated and improved
 ## [0.7.3]
 * Added badge parameter into notification's content to set the app badge value through notifications
 * Added deep merge method into MapUtils to allow notification content combinations
