@@ -185,11 +185,15 @@ public class AwesomeNotificationsPlugin
         try {
             activityBinding = binding;
 
-            if(awesomeNotifications != null)
-                awesomeNotifications.attachToActivity(binding.getActivity());
-
             activityBinding.addRequestPermissionsResultListener(permissionsResultListener);
             activityBinding.addActivityResultListener(activityResultListener);
+
+            if(awesomeNotifications != null){
+                Intent launchIntent = binding.getActivity().getIntent();
+                if(launchIntent != null)
+                    awesomeNotifications.captureNotificationActionFromIntent(launchIntent);
+            }
+
             activityBinding.addOnNewIntentListener(this);
 
         } catch(Exception exception) {
@@ -205,9 +209,6 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
-        if(awesomeNotifications != null)
-            awesomeNotifications.detachFromActivity(activityBinding.getActivity());
-
         activityBinding.removeRequestPermissionsResultListener(permissionsResultListener);
         activityBinding.removeActivityResultListener(activityResultListener);
         activityBinding = null;
@@ -215,9 +216,6 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        if(awesomeNotifications != null)
-            awesomeNotifications.attachToActivity(binding.getActivity());
-
         activityBinding = binding;
         activityBinding.addRequestPermissionsResultListener(permissionsResultListener);
         activityBinding.addActivityResultListener(activityResultListener);
@@ -226,9 +224,6 @@ public class AwesomeNotificationsPlugin
 
     @Override
     public void onDetachedFromActivity() {
-        if(awesomeNotifications != null)
-            awesomeNotifications.detachFromActivity(activityBinding.getActivity());
-
         activityBinding.removeRequestPermissionsResultListener(permissionsResultListener);
         activityBinding.removeActivityResultListener(activityResultListener);
         activityBinding = null;

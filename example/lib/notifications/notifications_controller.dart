@@ -13,6 +13,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationsController {
+  static ReceivedAction? initialCallAction;
+
   // ***************************************************************
   //    INITIALIZATIONS
   // ***************************************************************
@@ -449,10 +451,12 @@ class NotificationsController {
     }
   }
 
-  static Future<ReceivedAction?> interceptInitialCallActionRequest() async {
+  static Future<void> interceptInitialCallActionRequest() async {
     ReceivedAction? receivedAction = await AwesomeNotifications()
         .getInitialNotificationAction();
-    if(receivedAction?.channelKey == 'call_channel') return receivedAction;
-    return null;
+
+    if(receivedAction?.channelKey == 'call_channel') {
+      initialCallAction = receivedAction;
+    }
   }
 }

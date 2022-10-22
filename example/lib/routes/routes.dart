@@ -7,6 +7,7 @@ import 'package:awesome_notifications_example/pages/notification_details_page.da
 import 'package:awesome_notifications_example/pages/home_page.dart';
 
 import '../main.dart';
+import '../notifications/notifications_controller.dart';
 
 const String PAGE_HOME = '/';
 const String PAGE_MEDIA_DETAILS = '/media-details';
@@ -23,7 +24,7 @@ Map<String, WidgetBuilder> materialRoutes = {
   PAGE_PHONE_CALL: (context) {
     ReceivedAction? receivedAction =
         ModalRoute.of(context)!.settings.arguments == null
-            ? App.initialCallAction
+            ? NotificationsController.initialCallAction
             : ModalRoute.of(context)!.settings.arguments as ReceivedAction;
 
     return PhoneCallPage(receivedAction: receivedAction!);

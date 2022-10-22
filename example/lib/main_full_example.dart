@@ -13,9 +13,8 @@ import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  NotificationsController.initializeLocalNotifications();
-  App.initialCallAction =
-      await NotificationsController.interceptInitialCallActionRequest();
+  await NotificationsController.initializeLocalNotifications();
+  await NotificationsController.interceptInitialCallActionRequest();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -27,7 +26,6 @@ void main() async {
 class App extends StatefulWidget {
   const App({super.key});
 
-  static ReceivedAction? initialCallAction;
   static String name = 'Awesome Notifications - Example App';
   static Color mainColor = const Color(0xFF9D50DD);
 
@@ -51,8 +49,11 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     String initialRoute =
-        App.initialCallAction == null ? PAGE_HOME : PAGE_PHONE_CALL;
+        NotificationsController.initialCallAction == null
+            ? PAGE_HOME
+            : PAGE_PHONE_CALL;
     debugPrint('initialRoute: $initialRoute');
+
     return MaterialApp(
       title: App.name,
       color: App.mainColor,

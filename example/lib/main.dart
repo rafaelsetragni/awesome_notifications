@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 Future<void> main() async {
   await NotificationController.initializeLocalNotifications();
-  runApp(const MyApp());
+  runApp(const App());
 }
 
 class NotificationController {
@@ -24,7 +24,11 @@ class NotificationController {
               ledColor: Colors.deepPurple)
         ],
         debug: true);
-    initialAction = await AwesomeNotifications().getInitialNotificationAction();
+
+    // Get initial notification action is optional
+    initialAction = await AwesomeNotifications().getInitialNotificationAction(
+      removeFromActionEvents: false
+    );
   }
 
   static Future<void> startListeningNotificationEvents() async {
@@ -35,7 +39,7 @@ class NotificationController {
   @pragma('vm:entry-point')
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
-    MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil(
+    App.navigatorKey.currentState?.pushNamedAndRemoveUntil(
         '/notification-page',
             (route) =>
         (route.settings.name != '/notification-page') || route.isFirst,
@@ -44,7 +48,7 @@ class NotificationController {
 
   static Future<bool> displayNotificationRationale() async {
     bool userAuthorized = false;
-    BuildContext context = MyApp.navigatorKey.currentContext!;
+    BuildContext context = App.navigatorKey.currentContext!;
     await showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -130,18 +134,20 @@ class NotificationController {
   }
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class App extends StatefulWidget {
+  const App({super.key});
 
   // The navigator key is necessary to navigate using static methods
   static final GlobalKey<NavigatorState> navigatorKey =
   GlobalKey<NavigatorState>();
 
+  static Color mainColor = const Color(0xFF9D50DD);
+
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<App> createState() => _AppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _AppState extends State<App> {
   // This widget is the root of your application.
 
   static const String routeHome = '/', routeNotification = '/notification-page';
@@ -185,7 +191,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Awesome Notifications - Simple Example',
-      navigatorKey: MyApp.navigatorKey,
+      navigatorKey: App.navigatorKey,
       onGenerateInitialRoutes: onGenerateInitialRoutes,
       onGenerateRoute: onGenerateRoute,
       theme: ThemeData(
