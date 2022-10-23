@@ -180,7 +180,7 @@ To stay tuned with new updates and get our community support, please subscribe i
 
 # 🔶 Main Philosophy
 
-Considering all the many different devices available, with different hardware and software resources, this plugin ALWAYS shows the notification, trying to use the maximum resources available. If the resource is not available, the notification ignores that specific resource, but shows the rest of notification anyway.
+Considering all the many different devices available, with different hardware and software resources, this plugin ALWAYS shows the notification, trying to use all features available. If the feature is not available, the notification ignores that specific feature, but shows the rest of notification anyway.
 
 **Example**: If the device has LED colored lights, use it. Otherwise, ignore the lights, but shows the notification with all another resources available. In last case, shows at least the most basic notification.
 
