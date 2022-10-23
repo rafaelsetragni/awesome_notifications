@@ -15,12 +15,12 @@
 
 - Create **Local Notifications** on Android, iOS and Web using Flutter.
 - Send **Push Notifications** using add-on plugins, as [awesome_notifications_fcm]()
-- Easy to use and highly customizable.
 - Add **images**, **sounds**, **emoticons**, **buttons** and different layouts on your notifications.
+- Easy to use and highly customizable.
 - Notifications could be created at **any moment** (on Foreground, Background or even when the application is terminated/killed).
 - **High trustworthy** on receive notifications in any Application lifecycle.
-- Notifications are received on **Flutter level code** when they are created, displayed, dismissed or even tapped by the user.
-- Notifications could be **scheduled** repeatedly or not, with seconds precision.
+- Notifications events are received on **Flutter level code** when they are created, displayed, dismissed or even tapped by the user.
+- Notifications could be **scheduled** repeatedly or not, with second precision.
 <br>
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-android-examples.jpg)
@@ -90,7 +90,7 @@ This is the only way to achieve all firebase push notification features + all aw
 - Finish the add-on plugin to enable Firebase Cloud Message with all the awesome features available. (accomplished)
 - Add an option to choose if a notification action should bring the app to foreground or not. (accomplished)
 - Include support for another push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
-- Replicate Android layouts for iOS
+- Replicate all Android layouts for iOS (almost accomplished)
 - Custom layouts for notifications
     
 <br>
@@ -437,7 +437,7 @@ void main() async {
 }
 ```
 
-2 . In case you need to redirect the user after a `silentAction` or `silentBackgroundAction` event, you may face the situation where you are running inside an dart Isolate with no valid Context to redirect the user.
+3 . In case you need to redirect the user after a `silentAction` or `silentBackgroundAction` event, you may face the situation where you are running inside an dart Isolate with no valid Context to redirect the user.
 For these cases, you need to use `ReceivePort` and `SendPort` to switch execution between the isolates. Just create a `ReceivePort` inside your initialization process (which only occurs in main isolated), and then, inside your `onActionReceivedMethod`, use `SendPort` to send the execution to the listening `ReceivePort`.
 
 
@@ -478,6 +478,10 @@ In your backgroundActionMethod:
     // Your background action handle
   }
 ```
+
+<br>
+
+4. On Android, if you press the back button until leave the app and then reopen it using the "Recent apps list" *`THE LAST APP INITIALIZATION WILL BE REPEATED`*. So, if your app was started up by a notification, in this exclusive case the notification action will be repeated. As you know the business logic of your app, you need to decide if that notification action can be repeated or if it must be ignored.
 
 <br>
 <br>
@@ -544,10 +548,10 @@ To run and debug the Example App, follow the steps bellow:
 
 Notifications are received by local code or Push service using native code, so the messages will appears immediately or at schedule time, independent of your application is running or not.
 
-![Awesome Notification's flowchart](https://user-images.githubusercontent.com/40064496/196239879-eba4606a-a391-4989-8693-875c23fdde6f.png)
+![Awesome Notification's flowchart](https://user-images.githubusercontent.com/40064496/197368144-7bfcee7e-644a-4bdc-80f1-b4d38c2eaaff.png)
 
 <br>
-
+<br>
 
 # ⚡️ Notification Events
 
@@ -938,9 +942,10 @@ For iOS, you must submit a request authorization to Apple to enable it, as descr
 ## 📝 Important Notes:
 
 1. Schedules may be severaly delayed or denied if the device/application is in battery saver mode or locked to perform background tasks. Teach your users with a good rationale to not set these modes and tell them the consequences of doing so. Some battery saving modes may differ between manufacturers, for example Samsung and Xiaomi (the last one sets the battery saving mode automatically for each new app installed).
-2. If your app doesn't need to be as accurate to display schedule notifications, don't request for exact notifications. Be reasonable.
-3. Remember to categorize your notifications correctly to avoid scheduling delays.
-4. Critical alerts are still under development and should not be used in production mode.
+2. If you're running your app in debug mode, right after close it all schedules may be erased by Android OS. Thats happen to ensure the same execution in debug mode for each debug startup. To make schedule tests on Android while terminated, remember to open your app without debug it.
+3. If your app doesn't need to be as accurate to display schedule notifications, don't request for exact notifications. Be reasonable.
+4. Remember to categorize your notifications correctly to avoid scheduling delays.
+5. Critical alerts are still under development and should not be used in production mode.
 
 <br>
 

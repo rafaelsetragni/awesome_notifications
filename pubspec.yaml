@@ -1,10 +1,10 @@
 name: awesome_notifications
-description: A complete solution for Flutter applications to create Local Notifications and Push Notifications using Firebase or another services.
-version: 0.7.3
+description: A complete solution to create Local and Push Notifications (Firebase Messaging), customizing buttons, images, sounds, emoticons and applying many different layouts for Flutter apps.
+version: 0.7.4
 repository: https://github.com/rafaelsetragni/awesome_notifications
 
 environment:
-  sdk: '>=2.14.0 <3.0.0'
+  sdk: '>=2.17.0 <3.0.0'
   flutter: ">=2.5.0"
 
 dependencies:
