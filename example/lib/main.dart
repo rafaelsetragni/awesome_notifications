@@ -7,7 +7,6 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-
 ///  *********************************************
 ///     NOTIFICATION CONTROLLER
 ///  *********************************************
@@ -15,14 +14,13 @@ Future<void> main() async {
 class NotificationController {
   static ReceivedAction? initialAction;
 
-
   ///  *********************************************
   ///     INITIALIZATIONS
   ///  *********************************************
   ///
   static Future<void> initializeLocalNotifications() async {
     await AwesomeNotifications().initialize(
-        'resource://drawable/res_app_icon',//null,//
+        null, //'resource://drawable/res_app_icon',//
         [
           NotificationChannel(
               channelKey: 'alerts',
@@ -37,11 +35,9 @@ class NotificationController {
         debug: true);
 
     // Get initial notification action is optional
-    initialAction = await AwesomeNotifications().getInitialNotificationAction(
-      removeFromActionEvents: false
-    );
+    initialAction = await AwesomeNotifications()
+        .getInitialNotificationAction(removeFromActionEvents: false);
   }
-
 
   ///  *********************************************
   ///     NOTIFICATION EVENTS LISTENER
@@ -52,7 +48,6 @@ class NotificationController {
         .setListeners(onActionReceivedMethod: onActionReceivedMethod);
   }
 
-
   ///  *********************************************
   ///     NOTIFICATION EVENTS
   ///  *********************************************
@@ -62,8 +57,8 @@ class NotificationController {
       ReceivedAction receivedAction) async {
     MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil(
         '/notification-page',
-            (route) =>
-        (route.settings.name != '/notification-page') || route.isFirst,
+        (route) =>
+            (route.settings.name != '/notification-page') || route.isFirst,
         arguments: receivedAction);
   }
 
@@ -130,27 +125,25 @@ class NotificationController {
         await AwesomeNotifications().requestPermissionToSendNotifications();
   }
 
-
   ///  *********************************************
   ///     NOTIFICATION CREATION METHODS
   ///  *********************************************
   ///
   static Future<void> createNewNotification() async {
     bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
-
-    if (!isAllowed) {
-      isAllowed = await displayNotificationRationale();
-    }
-
+    if (!isAllowed) isAllowed = await displayNotificationRationale();
     if (!isAllowed) return;
 
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: -1, // -1 is replaced by a random number
             channelKey: 'alerts',
-            title: 'Notification test',
-            body: 'This is just a notification test',
-            bigPicture: 'asset://assets/images/balloons-in-sky.jpg',
+            title: "Huston! The eagle has landed!",
+            body:
+                "A small step for a man, but a giant leap to Flutter's community!",
+            bigPicture: 'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
+            largeIcon: 'https://storage.googleapis.com/cms-storage-bucket/0dbfcc7a59cd1cf16282.png',
+            //'asset://assets/images/balloons-in-sky.jpg',
             notificationLayout: NotificationLayout.BigPicture,
             payload: {'notificationId': '1234567890'}),
         actionButtons: [
@@ -162,8 +155,46 @@ class NotificationController {
               isDangerousOption: true)
         ]);
   }
-}
 
+  static Future<void> scheduleNewNotification() async {
+    bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isAllowed) isAllowed = await displayNotificationRationale();
+    if (!isAllowed) return;
+
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: -1, // -1 is replaced by a random number
+            channelKey: 'alerts',
+            title: "Huston! The eagle has landed!",
+            body:
+            "A small step for a man, but a giant leap to Flutter's community!",
+            bigPicture: 'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
+            largeIcon: 'https://storage.googleapis.com/cms-storage-bucket/0dbfcc7a59cd1cf16282.png',
+            //'asset://assets/images/balloons-in-sky.jpg',
+            notificationLayout: NotificationLayout.BigPicture,
+            payload: {'notificationId': '1234567890'}),
+        actionButtons: [
+          NotificationActionButton(key: 'REDIRECT', label: 'Redirect'),
+          NotificationActionButton(
+              key: 'DISMISS',
+              label: 'Dismiss',
+              actionType: ActionType.DismissAction,
+              isDangerousOption: true)
+        ],
+        schedule: NotificationCalendar.fromDate(
+            date: DateTime.now().add(const Duration(seconds: 10))
+        )
+    );
+  }
+
+  static Future<void> resetBadgeCounter() async {
+    await AwesomeNotifications().resetGlobalBadge();
+  }
+
+  static Future<void> cancelNotifications() async {
+    await AwesomeNotifications().cancelAll();
+  }
+}
 
 ///  *********************************************
 ///     MAIN WIDGET
@@ -174,7 +205,7 @@ class MyApp extends StatefulWidget {
 
   // The navigator key is necessary to navigate using static methods
   static final GlobalKey<NavigatorState> navigatorKey =
-  GlobalKey<NavigatorState>();
+      GlobalKey<NavigatorState>();
 
   static Color mainColor = const Color(0xFF9D50DD);
 
@@ -197,7 +228,7 @@ class _AppState extends State<MyApp> {
     List<Route<dynamic>> pageStack = [];
     pageStack.add(MaterialPageRoute(
         builder: (_) =>
-        const MyHomePage(title: 'Awesome Notifications Example App')));
+            const MyHomePage(title: 'Awesome Notifications Example App')));
     if (initialRouteName == routeNotification &&
         NotificationController.initialAction != null) {
       pageStack.add(MaterialPageRoute(
@@ -212,7 +243,7 @@ class _AppState extends State<MyApp> {
       case routeHome:
         return MaterialPageRoute(
             builder: (_) =>
-            const MyHomePage(title: 'Awesome Notifications Example App'));
+                const MyHomePage(title: 'Awesome Notifications Example App'));
 
       case routeNotification:
         ReceivedAction receivedAction = settings.arguments as ReceivedAction;
@@ -235,7 +266,6 @@ class _AppState extends State<MyApp> {
     );
   }
 }
-
 
 ///  *********************************************
 ///     HOME PAGE
@@ -261,20 +291,50 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: const <Widget>[
             Text(
-              'Push the button to create a new notification',
+              'Push the buttons below to create new notifications',
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => NotificationController.createNewNotification(),
-        tooltip: 'Create New notification',
-        child: const Icon(Icons.outgoing_mail),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(width: 20),
+            FloatingActionButton(
+              heroTag: '1',
+              onPressed: () => NotificationController.createNewNotification(),
+              tooltip: 'Create New notification',
+              child: const Icon(Icons.outgoing_mail),
+            ),
+            const SizedBox(width: 10),
+            FloatingActionButton(
+              heroTag: '2',
+              onPressed: () => NotificationController.scheduleNewNotification(),
+              tooltip: 'Schedule New notification',
+              child: const Icon(Icons.access_time_outlined),
+            ),
+            const SizedBox(width: 10),
+            FloatingActionButton(
+              heroTag: '3',
+              onPressed: () => NotificationController.resetBadgeCounter(),
+              tooltip: 'Reset badge counter',
+              child: const Icon(Icons.exposure_zero),
+            ),
+            const SizedBox(width: 10),
+            FloatingActionButton(
+              heroTag: '4',
+              onPressed: () => NotificationController.cancelNotifications(),
+              tooltip: 'Cancel all notifications',
+              child: const Icon(Icons.delete_forever),
+            ),
+          ],
+        ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
-
 
 ///  *********************************************
 ///     NOTIFICATION PAGE
@@ -288,6 +348,12 @@ class NotificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool hasLargeIcon = receivedAction.largeIconImage != null;
+    bool hasBigPicture = receivedAction.bigPictureImage != null;
+    double bigPictureSize = MediaQuery.of(context).size.height * .4;
+    double largeIconSize =
+        MediaQuery.of(context).size.height * (hasBigPicture ? .12 : .2);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(receivedAction.title ?? receivedAction.body ?? ''),
@@ -298,39 +364,82 @@ class NotificationPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (receivedAction.bigPictureImage != null)
-              FadeInImage(
-                placeholder: const AssetImage('assets/images/placeholder.gif'),
-                height: MediaQuery.of(context).size.height * .4,
-                width: MediaQuery.of(context).size.width,
-                image: receivedAction.bigPictureImage!,
-                fit: BoxFit.cover,
-              ),
+            SizedBox(
+                height:
+                    hasBigPicture ? bigPictureSize + 40 : largeIconSize + 60,
+                child: hasBigPicture
+                    ? Stack(
+                        children: [
+                          if (hasBigPicture)
+                            FadeInImage(
+                              placeholder: const NetworkImage(
+                                  'https://cdn.syncfusion.com/content/images/common/placeholder.gif'),
+                              //AssetImage('assets/images/placeholder.gif'),
+                              height: bigPictureSize,
+                              width: MediaQuery.of(context).size.width,
+                              image: receivedAction.bigPictureImage!,
+                              fit: BoxFit.cover,
+                            ),
+                          if (hasLargeIcon)
+                            Positioned(
+                              bottom: 15,
+                              left: 20,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(largeIconSize)),
+                                child: FadeInImage(
+                                  placeholder: const NetworkImage(
+                                      'https://cdn.syncfusion.com/content/images/common/placeholder.gif'),
+                                  //AssetImage('assets/images/placeholder.gif'),
+                                  height: largeIconSize,
+                                  width: largeIconSize,
+                                  image: receivedAction.largeIconImage!,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            )
+                        ],
+                      )
+                    : Center(
+                        child: ClipRRect(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(largeIconSize)),
+                          child: FadeInImage(
+                            placeholder: const NetworkImage(
+                                'https://cdn.syncfusion.com/content/images/common/placeholder.gif'),
+                            //AssetImage('assets/images/placeholder.gif'),
+                            height: largeIconSize,
+                            width: largeIconSize,
+                            image: receivedAction.largeIconImage!,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.only(bottom: 20.0, left: 20, right: 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   RichText(
                       text: TextSpan(children: [
-                        if (receivedAction.title?.isNotEmpty ?? false)
-                          TextSpan(
-                            text: receivedAction.title!,
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                        if ((receivedAction.title?.isNotEmpty ?? false) &&
-                            (receivedAction.body?.isNotEmpty ?? false))
-                          TextSpan(
-                            text: '\n\n',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        if (receivedAction.body?.isNotEmpty ?? false)
-                          TextSpan(
-                            text: receivedAction.body!,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                      ]))
+                    if (receivedAction.title?.isNotEmpty ?? false)
+                      TextSpan(
+                        text: receivedAction.title!,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    if ((receivedAction.title?.isNotEmpty ?? false) &&
+                        (receivedAction.body?.isNotEmpty ?? false))
+                      TextSpan(
+                        text: '\n\n',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    if (receivedAction.body?.isNotEmpty ?? false)
+                      TextSpan(
+                        text: receivedAction.body!,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                  ]))
                 ],
               ),
             ),

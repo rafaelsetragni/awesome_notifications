@@ -52,7 +52,7 @@ All notifications could be created locally or via Firebase services, with all th
 
 <br>
 
-## ⚠️ ATTENTION - PLUGIN UNDER DEVELOPMENT
+# 🛑 ATTENTION - PLUGIN UNDER DEVELOPMENT
     
 ![image](https://user-images.githubusercontent.com/40064496/155188371-48e22104-8bb8-4f38-ba1a-1795eeb7b81b.png)
 
@@ -61,25 +61,24 @@ All notifications could be created locally or via Firebase services, with all th
 <br>
 <br>
 
-# ⚠️ ATTENTION ⚠️ <br> Users from `flutter_local_notifications` plugin
+# 🛑 ATTENTION <br> Users from `flutter_local_notifications` plugin
 
-This plugin contains all features available in `flutter_local_notifications` plugin + all Awesome Notification features. Because of this, `awesome_notifications` plugin is incompatible with `flutter_local_notifications`, as both plugins will compete each other to accquire global notification resources.
+`awesome_notifications` plugin is incompatible with `flutter_local_notifications`, as both plugins will compete each other to accquire global notification resources to send notifications and to receive notification actions.
 
-So, you **MUST not use** `flutter_local_notifications` with `awesome_notifications_fcm`.
-    
-To migrate **flutter_local_notifications** to **awesome_notifications_fcm**, please take a look at:  
-[How to migrate flutter_local_notifications plugin]().
+So, you **MUST not use** `flutter_local_notifications` with `awesome_notifications`. Awesome Notifications contains all features available in `flutter_local_notifications` plugin and more, so you can replace totally `flutter_local_notifications` in your project.
 
 
 <br>
 
-# ⚠️ ATTENTION ⚠️ <br> Users from `firebase_messaging` plugin
+# 🛑 ATTENTION <br> Users from `firebase_messaging` plugin
     
-The support for `firebase_messaging` plugin is now deprecated, but all other firebase plugins are still being supported. To use FCM services with Awesome Notifications, you need use the [Awesome Notifications FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm).
-    
-So, you **MUST not use** `firebase_messaging` with `awesome_notifications`.
+The support for `firebase_messaging` plugin is now deprecated, but all other firebase plugins are still being supported. And this happened by the same reason as `flutter_local_notifications`, as both plugins will compete each other to accquire global notification resources.
 
-This is the only way to achieve all firebase push notification features + all awesome notifications features without violate the platform rules, using workarounds with silent push notifications.
+To use FCM services with Awesome Notifications, you need use the [Awesome Notifications FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm).
+
+Only using [awesome_notifications_fcm](https://pub.dev/packages/awesome_notifications_fcm) you will be capable to achieve all Firebase Cloud Messaging features + all Awesome Notifications features. To keep using firebase_messaging, you gonna need to do workarounds with silent push notifications, and this is disrecommended to display visual notifications and will result in several background penalities to your application.
+    
+So, you **MUST not use** `firebase_messaging` with `awesome_notifications`. Use `awesome_notifications` with `awesome_notifications_fcm` instead.
     
 <br>
 <br>
@@ -118,6 +117,66 @@ To stay tuned with new updates and get our community support, please subscribe i
 
 <br>
 <br>
+<br>
+
+# 📙 Table of Contents
+
+- [Awesome Notifications for Flutter](#awesome-notifications-for-flutter)
+    - [Features](#features)
+  - [Notification Types Available](#notification-types-available)
+- [🛑 ATTENTION - PLUGIN UNDER DEVELOPMENT](#-attention---plugin-under-development)
+- [🛑 ATTENTION <br> Users from `flutter_local_notifications` plugin](#-attention--users-from-flutter_local_notifications-plugin)
+- [🛑 ATTENTION <br> Users from `firebase_messaging` plugin](#-attention--users-from-firebase_messaging-plugin)
+- [✅ Next steps](#-next-steps)
+- [💰 Donate via PayPal or BuyMeACoffee](#-donate-via-paypal-or-buymeacoffee)
+- [💬 Discord Chat Server](#-discord-chat-server)
+- [📙 Table of Contents](#-table-of-contents)
+- [🔶 Main Philosophy](#-main-philosophy)
+- [🚚 Migrating from version 0.6.X to 0.7.X<br>Breaking changes](#-migrating-from-version-06x-to-07xbreaking-changes)
+- [🛠 Getting Started](#-getting-started)
+  - [Initial Configurations](#initial-configurations)
+    - [🤖 Configuring Android](#-configuring-android)
+    - [🍎 Configuring iOS](#-configuring-ios)
+- [📨 How to show Local Notifications](#-how-to-show-local-notifications)
+  - [📝 Important notes](#-important-notes)
+- [🍎⁺ Extra iOS Setup for Background Actions](#-extra-ios-setup-for-background-actions)
+- [📱 Example Apps](#-example-apps)
+- [🔷 Awesome Notification's Flowchart](#-awesome-notifications-flowchart)
+- [⚡️ Notification Events](#️-notification-events)
+- [👊 Notification Action Types](#-notification-action-types)
+- [🟦 Notification's Category](#-notifications-category)
+- [👮‍♀️ Requesting Permissions](#️-requesting-permissions)
+    - [Notification's Permissions:](#notifications-permissions)
+    - [Notification's Permission Level](#notifications-permission-level)
+    - [Full example on how to request permissions](#full-example-on-how-to-request-permissions)
+- [📅 Scheduling a Notification](#-scheduling-a-notification)
+  - [⏰ Schedule Precision](#-schedule-precision)
+  - [📝 Important Notes:](#-important-notes-1)
+  - [Old schedule Cron rules (For versions older than 0.0.6)](#old-schedule-cron-rules-for-versions-older-than-006)
+- [⌛️ Progress Bar Notifications (Only for Android)](#️-progress-bar-notifications-only-for-android)
+- [😃 Emojis (Emoticons)](#-emojis-emoticons)
+- [🔆 Wake Up Screen Notifications](#-wake-up-screen-notifications)
+- [🖥 Full Screen Notifications (only for Android)](#-full-screen-notifications-only-for-android)
+- [📡 Notification channels](#-notification-channels)
+  - [📝 Important Notes:](#-important-notes-2)
+- [🏗 Notification Structures](#-notification-structures)
+  - [NotificationContent ("content" in Push data) - (required)](#notificationcontent-content-in-push-data---required)
+  - [NotificationActionButton ("actionButtons" in Push data) - (optional)](#notificationactionbutton-actionbuttons-in-push-data---optional)
+  - [Schedules](#schedules)
+    - [NotificationInterval ("schedule" in Push data) - (optional)](#notificationinterval-schedule-in-push-data---optional)
+    - [NotificationCalendar ("schedule" in Push data) - (optional)](#notificationcalendar-schedule-in-push-data---optional)
+    - [NotificationAndroidCrontab (Only for Android)("schedule" in Push data) - (optional)](#notificationandroidcrontab-only-for-androidschedule-in-push-data---optional)
+  - [Notification Layout Types](#notification-layout-types)
+  - [Media Source Types](#media-source-types)
+  - [Notification Importance (Android's channel)](#notification-importance-androids-channel)
+  - [Common Known Issues](#common-known-issues)
+- [Android Foreground Services (Optional)](#android-foreground-services-optional)
+    - [IMPORTANT](#important)
+    - [Foreground Services behaviour on platforms other than Android](#foreground-services-behaviour-on-platforms-other-than-android)
+
+
+<br>
+<br>
 
 # 🔶 Main Philosophy
 
@@ -138,7 +197,7 @@ This way, your Application will receive **all notifications at Flutter level cod
 
 * Now it's possible to receive action events without bring the app to foreground. Check our action type's topic to know more.
 * All streams (createdStream, displayedStream, actionStream and dismissedStream) was replaced by `global static methods`. You must replace your old stream methods by static and global methods, in other words, they must be `static Future<void>` and use `async`/`await` and you MUST use `@pragma("vm:entry-point")` to preserve dart addressing.
-<br>(To use context and redirect the user to another page inside static methods, please use flutter navigatorKey or another third party library, such as GetX. Check our "how to do" guide below to know more).
+<br>(To use context and redirect the user to another page inside static methods, please use flutter navigatorKey or another third party library, such as GetX. Check our [How to show Local Notifications](#-how-to-show-local-notifications) topic to know more).
 * Now all the notification events are delivered only after the first setListeners being called.
 * The ButtonType class was renamed to ActionType.
 * The action type `InputField` is deprecated. Now you just need to set the property `requireInputText` to true to achieve the same, but now it works combined with all another action types.
@@ -147,7 +206,6 @@ This way, your Application will receive **all notifications at Flutter level cod
 
 <br>
 <br>
-
 
 # 🛠 Getting Started
 
@@ -526,12 +584,17 @@ And you can check how to correctly call each plugin opening the file `GeneratedP
 
 <br>
 
-With the example bellow, you can check all the features and how to use the Awesome Notifications in pratice.
+With the examples bellow, you can check all the features and how to use the Awesome Notifications in pratice. The Simple Example app contains the basic structure to use Awesome Notifications, and the Complete Example App contains all Awesome Notification features to test.
 
-Complete example with all the features available:
-https://github.com/rafaelsetragni/awesome_notifications
+To run and debug the Simple Example App, follow the steps bellow:
 
-To run and debug the Example App, follow the steps bellow:
+1. Create a new Flutter project with at least Android and iOS
+2. Copy the example content at https://pub.dev/packages/awesome_notifications/example
+3. Paste the content inside the `main.dart` file
+4. Debug the application with a real device or emulator
+
+
+To run and debug the Complete Example App, follow the steps bellow:
 
 1. Install GitHub software in your local machine. I strongly recommend to use [GitHub Desktop](https://desktop.github.com/).
 2. Go to one of our GitHub repositories
@@ -576,7 +639,7 @@ Exception: **onActionReceivedMethod** fires all events immediately after occurs 
 <br>
 <br>
 
-## 👊 Notification Action Types
+# 👊 Notification Action Types
 
 The notification action type defines how awesome notifications should handle the user actions.
 OBS: For silent types, its necessary to hold the execution with await keyword, to prevent the isolates to shutdown itself before all work is done.
@@ -592,7 +655,7 @@ OBS: For silent types, its necessary to hold the execution with await keyword, t
 <br>
 <br>
 
-## 🟦 Notification's Category
+# 🟦 Notification's Category
 
 The notification category is a group of predefined categories that best describe the nature of the notification and may be used by some systems for ranking, delay or filter the notifications. Its highly recommended to correctly categorize your notifications.
 
