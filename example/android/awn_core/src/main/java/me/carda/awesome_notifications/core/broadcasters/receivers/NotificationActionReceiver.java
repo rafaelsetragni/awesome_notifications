@@ -15,6 +15,7 @@ import me.carda.awesome_notifications.core.managers.LifeCycleManager;
 import me.carda.awesome_notifications.core.managers.StatusBarManager;
 import me.carda.awesome_notifications.core.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.core.services.ForegroundService;
+import me.carda.awesome_notifications.core.utils.StringUtils;
 
 public abstract class NotificationActionReceiver extends AwesomeBroadcastReceiver {
 
@@ -81,7 +82,10 @@ public abstract class NotificationActionReceiver extends AwesomeBroadcastReceive
                         .dismissNotification(context, actionReceived.id);
         }
         else {
-            if (actionReceived.actionType != ActionType.KeepOnTop)
+            if (
+                StringUtils.getInstance().isNullOrEmpty(actionReceived.buttonKeyInput) &&
+                actionReceived.actionType != ActionType.KeepOnTop
+            )
                 StatusBarManager
                         .getInstance(context)
                         .closeStatusBar(context);

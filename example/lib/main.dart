@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 Future<void> main() async {
   // Always initialize Awesome Notifications
@@ -27,6 +28,8 @@ class NotificationController {
               channelName: 'Alerts',
               channelDescription: 'Notification tests as alerts',
               playSound: true,
+              onlyAlertOnce: true,
+              groupAlertBehavior: GroupAlertBehavior.Children,
               importance: NotificationImportance.High,
               defaultPrivacy: NotificationPrivacy.Private,
               defaultColor: Colors.deepPurple,
@@ -55,11 +58,22 @@ class NotificationController {
   @pragma('vm:entry-point')
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
-    MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil(
-        '/notification-page',
-        (route) =>
-            (route.settings.name != '/notification-page') || route.isFirst,
-        arguments: receivedAction);
+
+    if(
+      receivedAction.actionType == ActionType.SilentAction ||
+      receivedAction.actionType == ActionType.SilentBackgroundAction
+    ){
+      // For background actions, you must hold the execution until the end
+      print('Message sent via notification input: "${receivedAction.buttonKeyInput}"');
+      await executeLongTaskInBackground();
+    }
+    else {
+      MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil(
+          '/notification-page',
+              (route) =>
+          (route.settings.name != '/notification-page') || route.isFirst,
+          arguments: receivedAction);
+    }
   }
 
   ///  *********************************************
@@ -126,6 +140,18 @@ class NotificationController {
   }
 
   ///  *********************************************
+  ///     BACKGROUND TASKS TEST
+  ///  *********************************************
+  static Future<void> executeLongTaskInBackground() async {
+    print("starting long task");
+    await Future.delayed(const Duration(seconds: 4));
+    final url = Uri.parse("http://google.com");
+    final re = await http.get(url);
+    print(re.body);
+    print("long task done");
+  }
+
+  ///  *********************************************
   ///     NOTIFICATION CREATION METHODS
   ///  *********************************************
   ///
@@ -138,7 +164,7 @@ class NotificationController {
         content: NotificationContent(
             id: -1, // -1 is replaced by a random number
             channelKey: 'alerts',
-            title: "Huston! The eagle has landed!",
+            title: 'Huston! The eagle has landed!',
             body:
                 "A small step for a man, but a giant leap to Flutter's community!",
             bigPicture: 'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
@@ -148,6 +174,12 @@ class NotificationController {
             payload: {'notificationId': '1234567890'}),
         actionButtons: [
           NotificationActionButton(key: 'REDIRECT', label: 'Redirect'),
+          NotificationActionButton(
+              key: 'REPLY',
+              label: 'Reply Message',
+              requireInputText: true,
+              actionType: ActionType.SilentAction
+          ),
           NotificationActionButton(
               key: 'DISMISS',
               label: 'Dismiss',
@@ -167,12 +199,14 @@ class NotificationController {
             channelKey: 'alerts',
             title: "Huston! The eagle has landed!",
             body:
-            "A small step for a man, but a giant leap to Flutter's community!",
+                "A small step for a man, but a giant leap to Flutter's community!",
             bigPicture: 'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
             largeIcon: 'https://storage.googleapis.com/cms-storage-bucket/0dbfcc7a59cd1cf16282.png',
             //'asset://assets/images/balloons-in-sky.jpg',
             notificationLayout: NotificationLayout.BigPicture,
-            payload: {'notificationId': '1234567890'}),
+            payload: {
+              'notificationId': '1234567890'
+            }),
         actionButtons: [
           NotificationActionButton(key: 'REDIRECT', label: 'Redirect'),
           NotificationActionButton(
@@ -182,9 +216,7 @@ class NotificationController {
               isDangerousOption: true)
         ],
         schedule: NotificationCalendar.fromDate(
-            date: DateTime.now().add(const Duration(seconds: 10))
-        )
-    );
+            date: DateTime.now().add(const Duration(seconds: 10))));
   }
 
   static Future<void> resetBadgeCounter() async {

@@ -1,7 +1,8 @@
 ## [0.7.4]
 * Added single page example on pub.dev
+* Fixed background action definition labels for iOS
 * Fixed getInitialNotificationAction for larger projects with intense initial loading
-* Fixed background action definition label for iOS
+* Notifications with reply buttons now do not close the status bar after send text messages
 * Documentation updated and improved
 ## [0.7.3]
 * Added badge parameter into notification's content to set the app badge value through notifications
