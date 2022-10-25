@@ -184,13 +184,16 @@ public class AwesomeNotificationsPlugin
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         try {
             activityBinding = binding;
+
             activityBinding.addRequestPermissionsResultListener(permissionsResultListener);
             activityBinding.addActivityResultListener(activityResultListener);
 
-            Intent launchIntent = binding.getActivity().getIntent();
-            if(awesomeNotifications != null && launchIntent != null)
-                awesomeNotifications.captureNotificationActionFromIntent(launchIntent);
+            if(awesomeNotifications != null){
+                awesomeNotifications.captureNotificationActionFromActivity(binding.getActivity());
+            }
+
             activityBinding.addOnNewIntentListener(this);
+
         } catch(Exception exception) {
             ExceptionFactory
                     .getInstance()
@@ -206,6 +209,7 @@ public class AwesomeNotificationsPlugin
     public void onDetachedFromActivityForConfigChanges() {
         activityBinding.removeRequestPermissionsResultListener(permissionsResultListener);
         activityBinding.removeActivityResultListener(activityResultListener);
+        activityBinding.removeOnNewIntentListener(this);
         activityBinding = null;
     }
 
@@ -221,6 +225,7 @@ public class AwesomeNotificationsPlugin
     public void onDetachedFromActivity() {
         activityBinding.removeRequestPermissionsResultListener(permissionsResultListener);
         activityBinding.removeActivityResultListener(activityResultListener);
+        activityBinding.removeOnNewIntentListener(this);
         activityBinding = null;
     }
 

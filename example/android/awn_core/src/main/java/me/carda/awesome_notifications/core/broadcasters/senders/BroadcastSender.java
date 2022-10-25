@@ -25,7 +25,8 @@ public class BroadcastSender {
     private static boolean withoutListenersAvailable(){
         return
             LifeCycleManager.getApplicationLifeCycle() == NotificationLifeCycle.AppKilled ||
-            AwesomeEventsReceiver.getInstance().isEmpty();
+            AwesomeEventsReceiver.getInstance().isEmpty() ||
+            !AwesomeEventsReceiver.getInstance().isReadyToReceiveEvents();
     }
 
     public static void sendBroadcastNotificationCreated(Context context, NotificationReceived notificationReceived){
@@ -96,9 +97,13 @@ public class BroadcastSender {
             }
     }
 
-    public static void sendBroadcastDefaultAction(Context context, ActionReceived actionReceived){
+    public static void sendBroadcastDefaultAction(Context context, ActionReceived actionReceived, boolean onInitialization){
         if (actionReceived != null)
             try {
+
+                if(onInitialization){
+                    ActionManager.setInitialNotificationAction(context, actionReceived);
+                }
 
                 if(withoutListenersAvailable()) {
                     ActionManager.saveAction(context, actionReceived);

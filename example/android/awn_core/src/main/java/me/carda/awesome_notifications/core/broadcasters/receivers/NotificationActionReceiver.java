@@ -15,6 +15,7 @@ import me.carda.awesome_notifications.core.managers.LifeCycleManager;
 import me.carda.awesome_notifications.core.managers.StatusBarManager;
 import me.carda.awesome_notifications.core.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.core.services.ForegroundService;
+import me.carda.awesome_notifications.core.utils.StringUtils;
 
 public abstract class NotificationActionReceiver extends AwesomeBroadcastReceiver {
 
@@ -26,6 +27,10 @@ public abstract class NotificationActionReceiver extends AwesomeBroadcastReceive
     }
 
     public static void receiveActionIntent(final Context context, Intent intent) throws Exception {
+        receiveActionIntent(context, intent, false);
+    }
+
+    public static void receiveActionIntent(final Context context, Intent intent, boolean onInitialization) throws Exception {
 
         if(AwesomeNotifications.debug)
             Logger.d(TAG, "New action received");
@@ -77,7 +82,10 @@ public abstract class NotificationActionReceiver extends AwesomeBroadcastReceive
                         .dismissNotification(context, actionReceived.id);
         }
         else {
-            if (actionReceived.actionType != ActionType.KeepOnTop)
+            if (
+                StringUtils.getInstance().isNullOrEmpty(actionReceived.buttonKeyInput) &&
+                actionReceived.actionType != ActionType.KeepOnTop
+            )
                 StatusBarManager
                         .getInstance(context)
                         .closeStatusBar(context);
@@ -90,7 +98,8 @@ public abstract class NotificationActionReceiver extends AwesomeBroadcastReceive
                 case Default:
                     BroadcastSender.sendBroadcastDefaultAction(
                             context,
-                            actionReceived);
+                            actionReceived,
+                            onInitialization);
                     break;
 
                 case KeepOnTop:

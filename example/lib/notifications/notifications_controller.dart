@@ -1,4 +1,4 @@
-import 'package:awesome_notifications_example/main.dart';
+import 'package:awesome_notifications_example/main_complete.dart';
 import 'package:awesome_notifications_example/routes/routes.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart' if (dart.library.html)
 'package:awesome_notifications_example/utils/common_web_functions.dart';
@@ -13,6 +13,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationsController {
+  static ReceivedAction? initialCallAction;
+
   // ***************************************************************
   //    INITIALIZATIONS
   // ***************************************************************
@@ -449,10 +451,12 @@ class NotificationsController {
     }
   }
 
-  static Future<ReceivedAction?> interceptInitialCallActionRequest() async {
+  static Future<void> interceptInitialCallActionRequest() async {
     ReceivedAction? receivedAction = await AwesomeNotifications()
         .getInitialNotificationAction();
-    if(receivedAction?.channelKey == 'call_channel') return receivedAction;
-    return null;
+
+    if(receivedAction?.channelKey == 'call_channel') {
+      initialCallAction = receivedAction;
+    }
   }
 }

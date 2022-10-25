@@ -23,6 +23,7 @@ public class AwesomeEventsReceiver {
 
     // ************** SINGLETON PATTERN ***********************
 
+    private static boolean isAwesomeCoreAttached = false;
     private static AwesomeEventsReceiver instance;
 
     private AwesomeEventsReceiver(StringUtils stringUtils){
@@ -40,6 +41,10 @@ public class AwesomeEventsReceiver {
         return notificationActionListeners.isEmpty();
     }
 
+    public boolean isReadyToReceiveEvents(){
+        return isAwesomeCoreAttached;
+    }
+
     // ********************************************************
 
     protected final StringUtils stringUtils;
@@ -50,6 +55,10 @@ public class AwesomeEventsReceiver {
     public AwesomeEventsReceiver subscribeOnNotificationEvents(AwesomeNotificationEventListener listener) {
         notificationEventListeners.add(listener);
 
+        if (listener instanceof AwesomeNotifications){
+            isAwesomeCoreAttached = true;
+        }
+
         if(AwesomeNotifications.debug)
             Logger.d(TAG, listener.getClass().getSimpleName() + " subscribed to receive notification events");
 
@@ -57,6 +66,16 @@ public class AwesomeEventsReceiver {
     }
     public AwesomeEventsReceiver unsubscribeOnNotificationEvents(AwesomeNotificationEventListener listener) {
         notificationEventListeners.remove(listener);
+
+        if (listener instanceof AwesomeNotifications){
+            boolean hasAwesome = false;
+            for (AwesomeNotificationEventListener awnListener : notificationEventListeners) {
+                if (awnListener instanceof AwesomeNotifications) {
+                    hasAwesome = true;
+                }
+            }
+            isAwesomeCoreAttached = hasAwesome;
+        }
 
         if(AwesomeNotifications.debug)
             Logger.d(TAG, listener.getClass().getSimpleName() + " unsubscribed from notification events");

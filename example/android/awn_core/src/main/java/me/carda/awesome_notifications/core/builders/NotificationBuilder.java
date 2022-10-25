@@ -135,6 +135,9 @@ public class NotificationBuilder {
     }
 
     public boolean notificationActionShouldAutoDismiss(ActionReceived actionReceived){
+        if (!StringUtils.getInstance().isNullOrEmpty(actionReceived.buttonKeyInput)){
+            return false;
+        }
         return actionReceived.shouldAutoDismiss && actionReceived.autoDismissible;
     }
 
@@ -452,7 +455,9 @@ public class NotificationBuilder {
                 else
                     actionModel.buttonKeyInput = "";
 
-                if (!stringUtils.isNullOrEmpty(actionModel.buttonKeyInput))
+                if (
+                    !stringUtils.isNullOrEmpty(actionModel.buttonKeyInput)
+                )
                     updateRemoteHistoryOnActiveNotification(
                             context,
                             notificationModel,
@@ -926,7 +931,11 @@ public class NotificationBuilder {
 
         Uri uri = null;
 
-        if (!notificationModel.content.isRefreshNotification && BooleanUtils.getInstance().getValue(channelModel.playSound)) {
+        if (
+            !notificationModel.content.isRefreshNotification &&
+            notificationModel.remoteHistory == null &&
+            BooleanUtils.getInstance().getValue(channelModel.playSound)
+        ) {
             String soundSource = stringUtils.isNullOrEmpty(notificationModel.content.customSound) ? channelModel.soundSource : notificationModel.content.customSound;
             uri = ChannelManager
                     .getInstance()

@@ -68,7 +68,9 @@ void loadSingletonPage(NavigatorState? navigatorState,
   // Avoid to open the notification details page over another details page already opened
   // Navigate into pages, avoiding to open the notification details page over another details page already opened
   navigatorState?.pushNamedAndRemoveUntil(targetPage,
-      (route) => (route.settings.name != targetPage) || route.isFirst,
+      (route) {
+        return (route.settings.name != targetPage) || route.isFirst;
+      },
       arguments: receivedAction);
 }
 

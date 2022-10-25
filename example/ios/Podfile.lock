@@ -1,14 +1,14 @@
 PODS:
   - awesome_notifications (0.0.5):
     - Flutter
-    - IosAwnCore
+    - IosAwnCore (= 0.7.3)
   - device_info (0.0.1):
     - Flutter
   - Flutter (1.0.0)
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - IosAwnCore (0.7.1)
+  - IosAwnCore (0.7.3)
   - path_provider_ios (0.0.1):
     - Flutter
   - shared_preferences_ios (0.0.1):
@@ -24,7 +24,6 @@ DEPENDENCIES:
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
-  - IosAwnCore (from `../../../IosAwnCore/`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -32,6 +31,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - IosAwnCore
     - Toast
 
 EXTERNAL SOURCES:
@@ -43,8 +43,6 @@ EXTERNAL SOURCES:
     :path: Flutter
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
-  IosAwnCore:
-    :path: "../../../IosAwnCore/"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
   shared_preferences_ios:
@@ -55,17 +53,17 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/vibration/ios"
 
 SPEC CHECKSUMS:
-  awesome_notifications: c4cda63f52f51eb453d2aad6199959638435c3c5
+  awesome_notifications: d63d9a25f126860f9a600850d99772237895b3ba
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
-  IosAwnCore: fd348a51573643e26a194fe20fc78e4190dcadf6
+  IosAwnCore: 6494e0e174d49f04f513e8a002187be226889a37
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
 
-PODFILE CHECKSUM: 0c3af0a2847f7432797803500c2b3041267f3aeb
+PODFILE CHECKSUM: 8f69bd6e30716cc51439574c7edb9fdc3d779b52
 
 COCOAPODS: 1.11.3
