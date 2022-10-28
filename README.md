@@ -6,10 +6,10 @@
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#)
 [![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#)
-[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.awesome-notifications.carda.me)
-    
-[![pub package](https://img.shields.io/pub/v/awesome_notifications.svg)](https://pub.dev/packages/awesome_notifications)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](#)
+
+[![Discord Shield](https://discordapp.com/api/guilds/888523488376279050/widget.png?style=shield)](https://discord.awesome-notifications.carda.me)
+[![pub package](https://img.shields.io/pub/v/awesome_notifications.svg)](https://pub.dev/packages/awesome_notifications)
 
 ### Features
 
@@ -113,7 +113,7 @@ Your donation will be mainly used to purchase new devices and equipments, which 
 
 To stay tuned with new updates and get our community support, please subscribe into our Discord Chat Server:
 
-[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.awesome-notifications.carda.me)<br>https://discord.awesome-notifications.carda.me
+[![Discord Banner 3](https://discordapp.com/api/guilds/888523488376279050/widget.png?style=banner3)](https://discord.awesome-notifications.carda.me)
 
 <br>
 <br>
