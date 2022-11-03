@@ -197,13 +197,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
         }
       }
     }
-
-    try {
-      validate();
-    } catch (e) {
-      rethrow;
-    }
-
+    validate();
     return this;
   }
 
