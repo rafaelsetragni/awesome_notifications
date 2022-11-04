@@ -179,7 +179,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
     super.fromMap(mapData);
 
     _crontabExpression = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CRONTAB_EXPRESSION, mapData, DateTime);
+        NOTIFICATION_CRONTAB_EXPRESSION, mapData, String);
     _initialDateTime = AwesomeAssertUtils.extractValue(
         NOTIFICATION_INITIAL_DATE_TIME, mapData, DateTime);
     _expirationDateTime = AwesomeAssertUtils.extractValue(
@@ -197,13 +197,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
         }
       }
     }
-
-    try {
-      validate();
-    } catch (e) {
-      return null;
-    }
-
+    validate();
     return this;
   }
 
