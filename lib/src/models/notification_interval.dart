@@ -27,7 +27,7 @@ class NotificationInterval extends NotificationSchedule {
     super.fromMap(mapData);
 
     interval = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_INTERVAL, mapData, String);
+        NOTIFICATION_SCHEDULE_INTERVAL, mapData, int);
 
     try {
       validate();
