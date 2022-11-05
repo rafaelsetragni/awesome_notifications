@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/src/definitions.dart';
 import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
 import 'package:awesome_notifications/src/models/model.dart';
+import 'package:awesome_notifications/src/models/notification_android_crontab.dart';
 import 'package:awesome_notifications/src/models/notification_button.dart';
 import 'package:awesome_notifications/src/models/notification_calendar.dart';
 import 'package:awesome_notifications/src/models/notification_content.dart';
@@ -56,13 +57,16 @@ class NotificationModel extends Model {
 
         if (scheduleData.containsKey(NOTIFICATION_SCHEDULE_INTERVAL)) {
           _schedule = NotificationInterval(interval: 0).fromMap(scheduleData);
+        } else if (scheduleData.containsKey(NOTIFICATION_CRONTAB_EXPRESSION)) {
+          _schedule = NotificationAndroidCrontab().fromMap(scheduleData);
         } else {
           _schedule = NotificationCalendar().fromMap(scheduleData);
         }
         _schedule?.validate();
       }
 
-      if (mapData.containsKey(NOTIFICATION_BUTTONS)) {
+      if (mapData.containsKey(NOTIFICATION_BUTTONS) &&
+          mapData[NOTIFICATION_BUTTONS] != null) {
         _actionButtons = [];
         List<dynamic> actionButtonsData =
             List<dynamic>.from(mapData[NOTIFICATION_BUTTONS]);
