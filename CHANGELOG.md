@@ -1,3 +1,10 @@
+## [0.7.5]
+* Added inexact schedules
+* Added delayTolerance to schedules
+* Example app improved with ReceivePort and SendPort
+* Fixes for schedule map conversions
+## [0.7.4+1]
+* Discord markdown links updated on pub.dev
 ## [0.7.4]
 * Added single page example on pub.dev
 * Fixed background action definition labels for iOS

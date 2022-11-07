@@ -1277,17 +1277,17 @@ Also, this operation has the negative effect of automatically closing all active
 
 * Is necessary at least one *required attribute
 
-| Attribute     | Required | Description                                                                   | Type                  | Value Limits             | Default value           |
-| ------------- | -------- | ----------------------------------------------------------------------------- | --------------------- | -----------------------  | ----------------------- |
-| key 		    |    YES   | Text key to identifies what action the user took when tapped the notification | String                | unlimited                |                         |
-| label 		|   *YES   | Text to be displayed over the action button                                   | String                | unlimited                |                         |
-| icon 		    |   *YES   | Icon to be displayed inside the button                                        | String                | must be a resource image |                         |
-| color 		|     NO   | Label text color (only for Android)                                           | Color                 | 0x000000 to 0xFFFFFF     |                         |
-| enabled 	    |     NO   | On Android, deactivates the button. On iOS, the button disappear              | bool                  | true or false            | true                    |
-| autoDismissible    | NO  | Notification should auto cancel when gets tapped by the user                  | bool                  | true or false            | true                    |
-| showInCompactView  | NO  | For MediaPlayer notifications on Android, sets the button as visible in compact view | bool           | true or false            | true                    |
-| isDangerousOption  | NO  | Mark the button as a dangerous option, displaying the text in red             | bool                  | true or false            | false                   |
-| actionType 	|     NO   | Notification action response type                                                   | Enumerator            | ActionType         | Default                 |
+| Attribute          | Required | Description                                                                   | Type                  | Value Limits                 | Default value           |
+|--------------------|----------| ----------------------------------------------------------------------------- | --------------------- |------------------------------| ----------------------- |
+| key 		          | YES      | Text key to identifies what action the user took when tapped the notification | String                | unlimited                    |                         |
+| label 		      | *YES     | Text to be displayed over the action button                                   | String                | unlimited                    |                         |
+| icon 		      | *YES     | Icon to be displayed inside the button                                        | String                | must be a resource image     |                         |
+| color 		      | NO       | Label text color (only for Android)                                           | Color                 | 0x000000 to 0xFFFFFF         |                         |
+| enabled 	          | NO       | On Android, deactivates the button. On iOS, the button disappear              | bool                  | true or false                | true                    |
+| autoDismissible    | NO       | Notification should auto cancel when gets tapped by the user                  | bool                  | true or false                | true                    |
+| showInCompactView  | NO       | For MediaPlayer notifications on Android, sets the button as visible in compact view | bool           | true or false                | true                    |
+| isDangerousOption  | NO       | Mark the button as a dangerous option, displaying the text in red             | bool                  | true or false                | false                   |
+| actionType 	      | NO       | Notification action response type                                             | Enumerator            | ActionType           Default |
 
 <br>
 <br>
@@ -1299,13 +1299,17 @@ Also, this operation has the negative effect of automatically closing all active
 ### NotificationInterval ("schedule" in Push data) - (optional)
 <br>
 
-| Attribute       | Required | Description                                                                | Type            | Value Limits / Format | Default value   |
-| --------------- | -------- | -------------------------------------------------------------------------- | --------------- | --------------------- | --------------- |
-| interval        |    YES   | Time interval between each notification (minimum of 60 sec case repeating) | Int (seconds)   | Positive unlimited    |                 |
-| allowWhileIdle  |     NO   | Displays the notification, even when the device is low battery             | bool            | true or false         | false           |
-| repeats         |     NO   | Defines if the notification should play only once or keeps repeating       | bool            | true or false         | false           |
-| timeZone        |     NO   | Time zone identifier (ISO 8601)                                            | String          | "America/Sao_Paulo", "GMT-08:00" or "UTC" | "UTC" |
+| Attribute      | Required | Description                                                                                                                  | Type          | Value Limits / Format                     | Default value   |
+|----------------| -------- |------------------------------------------------------------------------------------------------------------------------------|---------------|-------------------------------------------| --------------- |
+| interval       |    YES   | Time interval between each notification (minimum of 60 sec case repeating)                                                   | Int (seconds) | Positive unlimited                        |                 |
+| allowWhileIdle |     NO   | Displays the notification, even when the device is low battery                                                               | bool          | true or false                             | false           |
+| repeats        |     NO   | Defines if the notification should play only once or keeps repeating                                                         | bool          | true or false                             | false           |
+| preciseAlarm   |     NO   | Require schedules to be precise, even when the device is low battery. Requires explicit permission in Android 12 and beyond. | bool          | true or false                             | false           |
+| delayTolerance |     NO   | Set the delay tolerance for inexact schedules                                                                                | bool          | 600000 or greater                         | 600000          |
+| timeZone       |     NO   | Time zone identifier (ISO 8601)                                                                                              | String        | "America/Sao_Paulo", "GMT-08:00" or "UTC" | "UTC" |
 
+/// Displays the notification at precise date, even when the device is low battery. Requires explicit permission in Android 12 and beyond.
+bool preciseAlarm;
 <br>
 
 ### NotificationCalendar ("schedule" in Push data) - (optional)
@@ -1315,20 +1319,22 @@ Also, this operation has the negative effect of automatically closing all active
 * If the calendar time condition is not defined, then any value is considered valid in the filtering process for the respective time component
 
 | Attribute       	 | Required | Description                                                          | Type       | Value Limits / Format | Default value   |
-| ------------------ | -------- | -------------------------------------------------------------------- | ---------- | --------------------- | --------------- |
-| era,               |   *YES   | Schedule era condition                                               | Integer    | 0 - 99999             |                 |
-| year,              |   *YES   | Schedule year condition                                              | Integer    | 0 - 99999             |                 |
-| month,             |   *YES   | Schedule month condition                                             | Integer    | 1 - 12                |                 |
-| day,               |   *YES   | Schedule day condition                                               | Integer    | 1 - 31                |                 |
-| hour,              |   *YES   | Schedule hour condition                                              | Integer    | 0 - 23                |                 |
-| minute,            |   *YES   | Schedule minute condition                                            | Integer    | 0 - 59                |                 |
-| second,            |   *YES   | Schedule second condition                                            | Integer    | 0 - 59                |                 |
-| weekday,           |   *YES   | Schedule weekday condition                                           | Integer    | 1 - 7                 |                 |
-| weekOfMonth,       |   *YES   | Schedule weekOfMonth condition                                       | Integer    | 1 - 6                 |                 |
-| weekOfYear,        |   *YES   | Schedule weekOfYear condition                                        | Integer    | 1 - 53                |                 |
-| allowWhileIdle     |     NO   | Displays the notification, even when the device is low battery       | bool       | true or false         | false           |
-| repeats            |     NO   | Defines if the notification should play only once or keeps repeating | bool       | true or false         | false           |
-| timeZone           |     NO   | Time zone identifier (ISO 8601)                                      | String     | "America/Sao_Paulo", "GMT-08:00" or "UTC" | "UTC" |
+|-------------------| -------- | -------------------------------------------------------------------- | ---------- | --------------------- | --------------- |
+| era,              |   *YES   | Schedule era condition                                               | Integer    | 0 - 99999             |                 |
+| year,             |   *YES   | Schedule year condition                                              | Integer    | 0 - 99999             |                 |
+| month,            |   *YES   | Schedule month condition                                             | Integer    | 1 - 12                |                 |
+| day,              |   *YES   | Schedule day condition                                               | Integer    | 1 - 31                |                 |
+| hour,             |   *YES   | Schedule hour condition                                              | Integer    | 0 - 23                |                 |
+| minute,           |   *YES   | Schedule minute condition                                            | Integer    | 0 - 59                |                 |
+| second,           |   *YES   | Schedule second condition                                            | Integer    | 0 - 59                |                 |
+| weekday,          |   *YES   | Schedule weekday condition                                           | Integer    | 1 - 7                 |                 |
+| weekOfMonth,      |   *YES   | Schedule weekOfMonth condition                                       | Integer    | 1 - 6                 |                 |
+| weekOfYear,       |   *YES   | Schedule weekOfYear condition                                        | Integer    | 1 - 53                |                 |
+| allowWhileIdle    |     NO   | Displays the notification, even when the device is low battery       | bool       | true or false         | false           |
+| delayTolerance    |     NO   | Set the delay tolerance for inexact schedules                        | bool       | 600000 or greater     | 600000          |
+| preciseAlarm      |     NO   | Require schedules to be precise, even when the device is low battery. Requires explicit permission in Android 12 and beyond. | bool          | true or false                             | false           |
+| repeats           |     NO   | Defines if the notification should play only once or keeps repeating | bool       | true or false         | false           |
+| timeZone          |     NO   | Time zone identifier (ISO 8601)                                      | String     | "America/Sao_Paulo", "GMT-08:00" or "UTC" | "UTC" |
 
 <br>
 
@@ -1338,15 +1344,17 @@ Also, this operation has the negative effect of automatically closing all active
 * Is necessary at least one *required attribute
 * Cron expression must respect the format (with seconds precision) as described in [this article](https://www.baeldung.com/cron-expressions)
 
-| Attribute       	 | Required | Description                                                          | Type             | Value Limits / Format | Default value   |
-| ------------------ | -------- | -------------------------------------------------------------------- | ---------------- | --------------------- | --------------- |
-| initialDateTime    |     NO   | Initial limit date of valid dates (does not fire any notification)   | String           | YYYY-MM-DD hh:mm:ss   |                 |
-| expirationDateTime |     NO   | Final limit date of valid dates (does not fire any notification)     | String           | YYYY-MM-DD hh:mm:ss   |                 |
-| crontabExpression  |   *YES   | Crontab rule to generate new valid dates (with seconds precision)    | bool             | true or false         | false           |
-| preciseSchedules   |   *YES   | List of precise valid dates to fire                                  | bool             | true or false         | false           |
-| allowWhileIdle     |     NO   | Displays the notification, even when the device is low battery       | bool             | true or false         | false           |
-| repeats            |     NO   | Defines if the notification should play only once or keeps repeating | bool             | true or false         | false           |
-| timeZone           |     NO   | Time zone identifier (ISO 8601)                                      | String     | "America/Sao_Paulo", "GMT-08:00" or "UTC" | "UTC" |
+| Attribute       	  | Required | Description                                                            | Type         | Value Limits / Format | Default value   |
+|--------------------| -------- |------------------------------------------------------------------------|--------------| --------------------- | --------------- |
+| initialDateTime    |     NO   | Initial limit date of valid dates (does not fire any notification)     | String       | YYYY-MM-DD hh:mm:ss   |                 |
+| expirationDateTime |     NO   | Final limit date of valid dates (does not fire any notification)       | String       | YYYY-MM-DD hh:mm:ss   |                 |
+| crontabExpression  |   *YES   | Crontab rule to generate new valid dates (with seconds precision)      | bool         | true or false         | false           |
+| preciseSchedules   |   *YES   | List of precise valid dates to fire                                    | bool         | true or false         | false           |
+| allowWhileIdle     |     NO   | Displays the notification, even when the device is low battery         | bool         | true or false         | false           |
+| delayTolerance     |     NO   | Set the delay tolerance for inexact schedules                          | bool         | 600000 or greater     | 600000          |
+| preciseAlarm       |     NO   | Require schedules to be precise, even when the device is low battery. Requires explicit permission in Android 12 and beyond. | bool          | true or false                             | false           |
+| repeats            |     NO   | Defines if the notification should play only once or keeps repeating   | bool         | true or false         | false           |
+| timeZone           |     NO   | Time zone identifier (ISO 8601)                                        | String       | "America/Sao_Paulo", "GMT-08:00" or "UTC" | "UTC" |
 
 
 <br>

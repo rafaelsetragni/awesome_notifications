@@ -13,7 +13,8 @@ abstract class NotificationSchedule extends Model {
       {required this.timeZone,
       this.allowWhileIdle = false,
       this.repeats = false,
-      this.preciseAlarm = false});
+      this.preciseAlarm = false,
+      this.delayTolerance = 600000});
 
   String? _createdDate;
 
@@ -26,8 +27,11 @@ abstract class NotificationSchedule extends Model {
   /// Displays the notification, even when the device is low battery
   bool allowWhileIdle;
 
-  /// Displays the notification at precise date, even when the device is low battery. Requires explicity permission in Android 12 and beyond.
+  /// Require schedules to be precise, even when the device is low battery. Requires explicit permission in Android 12 and beyond.
   bool preciseAlarm;
+
+  /// Delay tolerance in milliseconds to schedule notifications being displayed. The minimum tolerance for inexact schedules is 600.000 (10 minutes).
+  int delayTolerance;
 
   /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
   bool repeats;
@@ -47,8 +51,12 @@ abstract class NotificationSchedule extends Model {
             NOTIFICATION_SCHEDULE_REPEATS, mapData, bool) ??
         false;
 
+    delayTolerance = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_SCHEDULE_DELAY_TOLERANCE, mapData, int) ??
+        false;
+
     preciseAlarm = AwesomeAssertUtils.extractValue(
-            NOTIFICATION_SCHEDULE_PRECISE_ALARM, mapData, bool) ??
+        NOTIFICATION_SCHEDULE_PRECISE_ALARM, mapData, bool) ??
         false;
 
     return this;
@@ -60,7 +68,8 @@ abstract class NotificationSchedule extends Model {
       NOTIFICATION_SCHEDULE_TIMEZONE: timeZone,
       NOTIFICATION_ALLOW_WHILE_IDLE: allowWhileIdle,
       NOTIFICATION_SCHEDULE_REPEATS: repeats,
-      NOTIFICATION_SCHEDULE_PRECISE_ALARM: preciseAlarm
+      NOTIFICATION_SCHEDULE_PRECISE_ALARM: preciseAlarm,
+      NOTIFICATION_SCHEDULE_DELAY_TOLERANCE: delayTolerance
     };
 
     return dataMap;
