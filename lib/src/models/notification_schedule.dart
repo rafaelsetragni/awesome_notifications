@@ -32,6 +32,7 @@ abstract class NotificationSchedule extends Model {
   /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
   bool repeats;
 
+  /// Returns null if  invalid mapData is provided
   @override
   NotificationSchedule? fromMap(Map<String, dynamic> mapData) {
     timeZone = AwesomeAssertUtils.extractValue(
