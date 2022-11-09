@@ -43,15 +43,15 @@ flutter:
         pluginClass: AwesomeNotificationsPlugin
       ios:
         pluginClass: AwesomeNotificationsPlugin
-      linux:
-        pluginClass: AwesomeNotificationsPlugin
-      macos:
-        pluginClass: AwesomeNotificationsPlugin
-      windows:
-        pluginClass: AwesomeNotificationsPluginCApi
-      web:
-        pluginClass: AwesomeNotificationsWeb
-        fileName: awesome_notifications_web.dart
+      # linux:
+      #   pluginClass: AwesomeNotificationsPlugin
+      # macos:
+      #   pluginClass: AwesomeNotificationsPlugin
+      # windows:
+      #   pluginClass: AwesomeNotificationsPluginCApi
+      # web:
+      #   pluginClass: AwesomeNotificationsWeb
+      #   fileName: awesome_notifications_web.dart
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
