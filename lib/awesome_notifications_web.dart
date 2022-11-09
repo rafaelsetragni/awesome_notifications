@@ -13,7 +13,9 @@ import 'awesome_notifications_web_interface.dart';
 /// A web implementation of the AwesomeNotificationsPlatform of the AwesomeNotifications plugin.
 class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   /// Constructs a AwesomeNotificationsWeb
-  AwesomeNotificationsWeb();
+  AwesomeNotificationsWeb() {
+    throw Exception("Platform Not Supported!");
+  }
 
   static void registerWith(Registrar registrar) {
     AwesomeNotificationsPlatform.instance = AwesomeNotificationsWeb();

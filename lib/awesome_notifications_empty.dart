@@ -7,6 +7,10 @@ import 'awesome_notifications_platform_interface.dart';
 
 class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
     implements IAwesomeNotifications {
+  AwesomeNotificationsEmpty() {
+    throw Exception("Platform Not Supported!");
+  }
+  
   @override
   Future<void> cancel(int id) async {}
 

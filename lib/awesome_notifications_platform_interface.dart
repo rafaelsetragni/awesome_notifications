@@ -13,13 +13,10 @@ abstract class AwesomeNotificationsPlatform extends PlatformInterface
 
   static final Object _token = Object();
 
-  static AwesomeNotificationsPlatform _instance = Platform.isIOS
+  static AwesomeNotificationsPlatform _instance = Platform.isIOS || Platform.isAndroid
       ? MethodChannelAwesomeNotifications()
-      : Platform.isAndroid
-          ? MethodChannelAwesomeNotifications()
-          :
-          // TODO: Missing implementation
-          AwesomeNotificationsEmpty();
+      // TODO: Missing implementation
+      : AwesomeNotificationsEmpty();
 
   /// The default instance of [AwesomeNotificationsPlatform] to use.
   ///
