@@ -67,7 +67,7 @@ export function Hero() {
               <div className="mt-8 flex gap-4 md:justify-center lg:justify-start">
                 {/* <Button href="/">Get started</Button> */}
                 <Button
-                  href="https://github.com/rafaelsetragni/awesome_notifications#readme"
+                  href="https://github.com/rafaelsetragni/awesome_notifications"
                   variant="secondary"
                   target="_blank"
                   rel="noreferrer"

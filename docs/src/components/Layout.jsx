@@ -128,7 +128,7 @@ function Header({ navigation }) {
       <div className="relative flex basis-0 justify-end gap-6 sm:gap-8 md:flex-grow">
         <ThemeSelector className="relative z-10" />
         <Link
-          href="https://github.com/rafaelsetragni/awesome_notifications#readme"
+          href="https://github.com/rafaelsetragni/awesome_notifications"
           target="_blank"
           rel="noreferrer"
           className="group"
