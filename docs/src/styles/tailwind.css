@@ -1,0 +1,14 @@
+@import 'tailwindcss/base';
+@import './fonts.css';
+@import './docsearch.css';
+@import './prism.css';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.prose .badges {
+  @apply w-full items-center sm:h-16 flex flex-col sm:flex-row sm:flex my-12 justify-center sm:!space-x-10 !space-y-2 sm:!space-y-0;
+}
+
+.prose .badges * {
+  @apply sm:mx-0 h-20 sm:h-full !border-none !no-underline !shadow-none !p-0 !m-0;
+}
