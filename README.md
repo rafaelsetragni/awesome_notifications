@@ -14,7 +14,7 @@
 ### Features
 
 - Create **Local Notifications** on Android, iOS and Web using Flutter.
-- Send **Push Notifications** using add-on plugins, as [awesome_notifications_fcm]()
+- Send **Push Notifications** using add-on plugins, as [awesome_notifications_fcm](https://pub.dev/packages/awesome_notifications_fcm)
 - Add **images**, **sounds**, **emoticons**, **buttons** and different layouts on your notifications.
 - Easy to use and highly customizable.
 - Notifications could be created at **any moment** (on Foreground, Background or even when the application is terminated/killed).
