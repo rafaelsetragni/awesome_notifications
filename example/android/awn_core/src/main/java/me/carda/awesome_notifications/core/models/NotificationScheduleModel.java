@@ -28,11 +28,15 @@ public abstract class NotificationScheduleModel extends AbstractModel {
 
     @NonNull
     public NotificationScheduleModel fromMap(Map<String, Object> arguments) {
+        CalendarUtils calendarUtils = CalendarUtils.getInstance();
         timeZone       = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_TIMEZONE, TimeZone.class, TimeZone.getDefault());
         createdDate    = getValueOrDefault(arguments, Definitions.NOTIFICATION_CREATED_DATE, Calendar.class, null);
         repeats        = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_REPEATS, Boolean.class, false);
         allowWhileIdle = getValueOrDefault(arguments, Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, Boolean.class, false);
         preciseAlarm   = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_PRECISE_ALARM, Boolean.class, false);
+        createdDate    = calendarUtils.calendarFromString(
+            getValueOrDefault(arguments, Definitions.NOTIFICATION_CREATED_DATE, String.class, null)
+        );
 
         return this;
     }
