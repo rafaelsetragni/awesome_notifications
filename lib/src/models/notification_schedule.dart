@@ -16,7 +16,7 @@ abstract class NotificationSchedule extends Model {
       this.repeats = false,
       this.preciseAlarm = false});
 
-  DateTime? _createdDate;
+  DateTime? _createdDate = DateTime.now();
 
   /// Reference
   DateTime? get createdDate => _createdDate;
