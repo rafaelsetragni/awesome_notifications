@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications/src/models/model.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
@@ -15,10 +16,10 @@ abstract class NotificationSchedule extends Model {
       this.repeats = false,
       this.preciseAlarm = false});
 
-  String? _createdDate;
+  DateTime? _createdDate;
 
   /// Reference
-  String? get createdDate => _createdDate;
+  DateTime? get createdDate => _createdDate;
 
   /// Full time zone identifier to schedule a notification, in english (ex: America/Sao_Paulo, America/New_York, Europe/Helsinki or GMT-07:00)
   String timeZone;
@@ -51,6 +52,10 @@ abstract class NotificationSchedule extends Model {
             NOTIFICATION_SCHEDULE_PRECISE_ALARM, mapData, bool) ??
         false;
 
+    _createdDate = AwesomeDateUtils.parseStringToDate(
+        AwesomeAssertUtils.extractValue(
+            NOTIFICATION_CREATED_DATE, mapData, String));
+
     return this;
   }
 
@@ -60,7 +65,8 @@ abstract class NotificationSchedule extends Model {
       NOTIFICATION_SCHEDULE_TIMEZONE: timeZone,
       NOTIFICATION_ALLOW_WHILE_IDLE: allowWhileIdle,
       NOTIFICATION_SCHEDULE_REPEATS: repeats,
-      NOTIFICATION_SCHEDULE_PRECISE_ALARM: preciseAlarm
+      NOTIFICATION_SCHEDULE_PRECISE_ALARM: preciseAlarm,
+      NOTIFICATION_CREATED_DATE: AwesomeDateUtils.parseDateToString(createdDate),
     };
 
     return dataMap;
