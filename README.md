@@ -554,7 +554,9 @@ To avoid this, you need to add the following lines to the `didFinishLaunchingWit
 ```Swift
 import Flutter
 import awesome_notifications
-import shared_preferences_ios
+import shared_preferences_foundation
+// for older versions of shared_preferences less than version < 2.0.17 use below 
+//import shared_preferences_ios
 //import all_other_plugins_that_i_need
 
 override func application(
@@ -567,7 +569,7 @@ override func application(
       SwiftAwesomeNotificationsPlugin.setPluginRegistrantCallback { registry in          
           SwiftAwesomeNotificationsPlugin.register(
             with: registry.registrar(forPlugin: "io.flutter.plugins.awesomenotifications.AwesomeNotificationsPlugin")!)          
-          FLTSharedPreferencesPlugin.register(
+          SharedPreferencesPlugin.register(
             with: registry.registrar(forPlugin: "io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin")!)
       }
 
