@@ -153,7 +153,7 @@ To stay tuned with new updates and get our community support, please subscribe i
   - [⏰ Schedule Precision](#-schedule-precision)
   - [📝 Important Notes:](#-important-notes-1)
   - [Old schedule Cron rules (For versions older than 0.0.6)](#old-schedule-cron-rules-for-versions-older-than-006)
-- [⌛️ Progress Bar Notifications (Only for Android)](#️-progress-bar-notifications-only-for-android)
+- [⌛️ Progress Bar Notifications (Only for Android)](#-progress-bar-notifications-only-for-android)
 - [😃 Emojis (Emoticons)](#-emojis-emoticons)
 - [🔆 Wake Up Screen Notifications](#-wake-up-screen-notifications)
 - [🖥 Full Screen Notifications (only for Android)](#-full-screen-notifications-only-for-android)
@@ -213,7 +213,7 @@ This way, your Application will receive **all notifications events at Flutter le
 
 ## Initial Configurations
 
-Bellow are the obligatory configurations that your app must meet to use awesome_notifications:
+Below are the obligatory configurations that your app must meet to use awesome_notifications:
 
 <br>
 
@@ -584,9 +584,9 @@ And you can check how to correctly call each plugin opening the file `GeneratedP
 
 <br>
 
-With the examples bellow, you can check all the features and how to use the Awesome Notifications in pratice. The Simple Example app contains the basic structure to use Awesome Notifications, and the Complete Example App contains all Awesome Notification features to test.
+With the examples below, you can check all the features and how to use the Awesome Notifications in pratice. The Simple Example app contains the basic structure to use Awesome Notifications, and the Complete Example App contains all Awesome Notification features to test.
 
-To run and debug the Simple Example App, follow the steps bellow:
+To run and debug the Simple Example App, follow the steps below:
 
 1. Create a new Flutter project with at least Android and iOS
 2. Copy the example content at https://pub.dev/packages/awesome_notifications/example
@@ -594,7 +594,7 @@ To run and debug the Simple Example App, follow the steps bellow:
 4. Debug the application with a real device or emulator
 
 
-To run and debug the Complete Example App, follow the steps bellow:
+To run and debug the Complete Example App, follow the steps below:
 
 1. Install GitHub software in your local machine. I strongly recommend to use [GitHub Desktop](https://desktop.github.com/).
 2. Go to one of our GitHub repositories
@@ -872,7 +872,7 @@ Below is a complete example of how to check if the desired permission is enabled
 Schedules could be created from a UTC or local time zone, and specifying a time interval or setting a calendar filter. Notifications could be scheduled even remotely.
 Attention: for iOS, is not possible to define the correct `displayedDate`, because is not possible to run exactly at same time with the notification schedules when it arrives in the user status bar.
 
-To send notifications schedules, you need to instantiate one of the classes bellow in the notification property 'schedule':
+To send notifications schedules, you need to instantiate one of the classes below in the notification property 'schedule':
 
 - NotificationCalendar: Creates a notification scheduled to be displayed when the set date components matches the current date. If a time component is set to null, so any value is considered valid to produce the next valid date. Only one value is allowed by each component.
 - NotificationInterval: Creates a notification scheduled to be displayed at each interval time, starting from the next valid interval.
