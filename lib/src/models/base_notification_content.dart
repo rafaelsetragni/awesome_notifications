@@ -32,6 +32,7 @@ class BaseNotificationContent extends Model {
   bool? _criticalAlert;
   Color? _color;
   Color? _backgroundColor;
+  int? _timeoutAfter;
   NotificationPrivacy? _privacy;
   NotificationCategory? _category;
 
@@ -64,6 +65,7 @@ class BaseNotificationContent extends Model {
   bool? get fullScreenIntent => _fullScreenIntent;
   bool? get criticalAlert => _criticalAlert;
   Color? get color => _color;
+  int? get timeoutAfter => _timeoutAfter;
   Color? get backgroundColor => _backgroundColor;
   NotificationPrivacy? get privacy => _privacy;
   NotificationCategory? get category => _category;
@@ -143,6 +145,7 @@ class BaseNotificationContent extends Model {
       bool autoDismissible = true,
       Color? color,
       Color? backgroundColor,
+      int? timeoutAfter,
       Map<String, String?>? payload,
       String? customSound,
       bool roundedLargeIcon = false,
@@ -165,6 +168,7 @@ class BaseNotificationContent extends Model {
         _category = category,
         _color = color,
         _backgroundColor = backgroundColor,
+        _timeoutAfter = timeoutAfter,
         _payload = payload,
         _customSound = customSound,
         _roundedLargeIcon = roundedLargeIcon,
@@ -221,6 +225,9 @@ class BaseNotificationContent extends Model {
         AwesomeAssertUtils.extractValue(NOTIFICATION_COLOR, mapData, Color);
     _backgroundColor = AwesomeAssertUtils.extractValue(
         NOTIFICATION_BACKGROUND_COLOR, mapData, Color);
+
+    _timeoutAfter = AwesomeAssertUtils.extractValue(
+        NOTIFICATION_TIMEOUT_AFTER, mapData, int);
 
     _payload = AwesomeAssertUtils.extractMap<String, String?>(
         mapData, NOTIFICATION_PAYLOAD);
@@ -305,5 +312,7 @@ class BaseNotificationContent extends Model {
       throw const AwesomeNotificationsException(
           message: 'Channel Key is required');
     }
+
+    if((_timeoutAfter ?? 0) < 1) _timeoutAfter = null;
   }
 }

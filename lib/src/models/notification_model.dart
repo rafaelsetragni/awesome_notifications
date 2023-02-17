@@ -6,111 +6,132 @@ import 'package:awesome_notifications/src/models/notification_button.dart';
 import 'package:awesome_notifications/src/models/notification_calendar.dart';
 import 'package:awesome_notifications/src/models/notification_content.dart';
 import 'package:awesome_notifications/src/models/notification_interval.dart';
+import 'package:awesome_notifications/src/models/notification_localization.dart';
 import 'package:awesome_notifications/src/models/notification_schedule.dart';
 
-/// Reference Model to create a new notification
-/// [schedule] and [actionButtons] are optional
+/// A model class representing a single notification instance.
+///
+/// The [NotificationModel] class encapsulates all the information needed to
+/// display a single notification, including the notification's content, schedule,
+/// action buttons, and localizations. Each instance of the class represents a
+/// single notification that can be displayed to the user.
 class NotificationModel extends Model {
   NotificationContent? _content;
   NotificationSchedule? _schedule;
   List<NotificationActionButton>? _actionButtons;
+  Map<String, NotificationLocalization>? _localizations;
 
-  NotificationContent? get content {
-    return _content;
-  }
+  /// The content of the notification.
+  NotificationContent? get content => _content;
 
-  NotificationSchedule? get schedule {
-    return _schedule;
-  }
+  /// The schedule to display the notification.
+  NotificationSchedule? get schedule => _schedule;
 
-  List<NotificationActionButton>? get actionButtons {
-    return _actionButtons;
-  }
+  /// The action buttons for the notification.
+  List<NotificationActionButton>? get actionButtons => _actionButtons;
 
-  NotificationModel(
-      {NotificationContent? content,
-      NotificationSchedule? schedule,
-      List<NotificationActionButton>? actionButtons})
-      : _content = content,
+  /// The localizations for the notification.
+  Map<String, NotificationLocalization>? get localizations => _localizations;
+
+  /// Creates a new instance of the [NotificationModel] class with the given
+  /// content, schedule, action buttons, and localizations.
+  NotificationModel({
+    NotificationContent? content,
+    NotificationSchedule? schedule,
+    List<NotificationActionButton>? actionButtons,
+    Map<String, NotificationLocalization>? localizations,
+  })  : _content = content,
         _schedule = schedule,
-        _actionButtons = actionButtons;
+        _actionButtons = actionButtons,
+        _localizations = localizations;
 
   /// Imports data from a serializable object
   @override
   NotificationModel? fromMap(Map<String, dynamic> mapData) {
     try {
-      assert(mapData.containsKey(NOTIFICATION_CONTENT) &&
-          mapData[NOTIFICATION_CONTENT] is Map);
-
-      Map<String, dynamic> contentData =
-          Map<String, dynamic>.from(mapData[NOTIFICATION_CONTENT]);
-
-      _content =
-          NotificationContent(id: 0, channelKey: '').fromMap(contentData);
-      if (_content == null) return null;
-
-      _content!.validate();
-
-      if (mapData.containsKey(NOTIFICATION_SCHEDULE)) {
-        Map<String, dynamic> scheduleData =
-            Map<String, dynamic>.from(mapData[NOTIFICATION_SCHEDULE]);
-
-        if (scheduleData.containsKey(NOTIFICATION_SCHEDULE_INTERVAL)) {
-          _schedule = NotificationInterval(interval: 0).fromMap(scheduleData);
-        } else if (scheduleData.containsKey(NOTIFICATION_CRONTAB_EXPRESSION)) {
-          _schedule = NotificationAndroidCrontab().fromMap(scheduleData);
-        } else {
-          _schedule = NotificationCalendar().fromMap(scheduleData);
-        }
-        _schedule?.validate();
-      }
-
-      if (mapData.containsKey(NOTIFICATION_BUTTONS) &&
-          mapData[NOTIFICATION_BUTTONS] != null) {
-        _actionButtons = [];
-        List<dynamic> actionButtonsData =
-            List<dynamic>.from(mapData[NOTIFICATION_BUTTONS]);
-
-        for (dynamic buttonData in actionButtonsData) {
-          Map<String, dynamic> actionButtonData =
-              Map<String, dynamic>.from(buttonData);
-
-          NotificationActionButton button =
-              NotificationActionButton(label: '', key: '')
-                  .fromMap(actionButtonData) as NotificationActionButton;
-          button.validate();
-
-          _actionButtons!.add(button);
-        }
-        assert(_actionButtons!.isNotEmpty);
-      }
+      _content = _extractContentFromMap(mapData);
+      _schedule = _extractScheduleFromMap(mapData);
+      _actionButtons = _extractButtonsFromMap(mapData);
+      _localizations = _extractLocalizationsFromMap(mapData);
     } catch (e) {
       return null;
     }
-
     return this;
+  }
+
+  NotificationContent _extractContentFromMap(Map<String, dynamic> mapData) {
+    assert(mapData[NOTIFICATION_CONTENT] is Map);
+    assert(mapData[NOTIFICATION_SCHEDULE].isNotEmpty);
+
+    NotificationContent? content =
+        NotificationContent(id: 0, channelKey: '').fromMap(mapData);
+    assert (content != null);
+
+    return content!..validate();
+  }
+
+  NotificationSchedule? _extractScheduleFromMap(Map<String, dynamic> mapData) {
+    if (!mapData[NOTIFICATION_SCHEDULE] is Map) return null;
+    if (mapData[NOTIFICATION_SCHEDULE].isEmpty) return null;
+
+    Map<String, dynamic> scheduleData =
+        Map<String, dynamic>.from(mapData[NOTIFICATION_SCHEDULE]);
+
+    if (scheduleData.containsKey(NOTIFICATION_SCHEDULE_INTERVAL)) {
+      return NotificationInterval(interval: 0).fromMap(scheduleData)?..validate();
+    }
+
+    if (scheduleData.containsKey(NOTIFICATION_CRONTAB_EXPRESSION)) {
+      return NotificationAndroidCrontab().fromMap(scheduleData)?..validate();
+    }
+
+    return NotificationCalendar().fromMap(scheduleData)?..validate();
+  }
+
+  List<NotificationActionButton>? _extractButtonsFromMap(Map<String, dynamic> mapData) {
+    if (!mapData[NOTIFICATION_BUTTONS] is List) return null;
+    if (mapData[NOTIFICATION_BUTTONS].isEmpty) return null;
+
+    return (<dynamic>[
+      for (dynamic buttonData in mapData[NOTIFICATION_BUTTONS])
+        NotificationActionButton(label: '', key: '').fromMap(buttonData)?..validate()
+    ]..removeWhere((element) => element == null)) as List<NotificationActionButton>;
+  }
+
+  Map<String, NotificationLocalization>? _extractLocalizationsFromMap(Map<String, dynamic> mapData) {
+    if (!mapData[NOTIFICATION_LOCALIZATIONS] is Map<String, dynamic>) return null;
+    if (mapData[NOTIFICATION_LOCALIZATIONS].isEmpty) return null;
+
+    return (
+      <String, dynamic>{
+      for (MapEntry<String, dynamic> entry in mapData[NOTIFICATION_LOCALIZATIONS].entries)
+        if (entry.value is Map<String, dynamic>)
+          entry.key: NotificationLocalization().fromMap(entry.value)?..validate()
+      }..removeWhere((key, value) => value == null)
+    ) as Map<String, NotificationLocalization>;
   }
 
   /// Exports all content into a serializable object
   @override
-  Map<String, dynamic> toMap() {
-    List<Map<String, dynamic>> actionButtonsData = [];
-    if (_actionButtons != null) {
-      for (NotificationActionButton button in _actionButtons!) {
-        Map<String, dynamic> data = button.toMap();
-        if (data.isNotEmpty) actionButtonsData.add(data);
-      }
-    }
-    return {
-      'content': _content?.toMap() ?? {},
-      'schedule': _schedule?.toMap() ?? {},
-      'actionButtons': actionButtonsData.isEmpty ? null : actionButtonsData
+  Map<String, dynamic> toMap() => {
+      NOTIFICATION_CONTENT: _content?.toMap() ?? {},
+      if (_schedule != null)
+        NOTIFICATION_SCHEDULE: _schedule!.toMap(),
+      if (_actionButtons?.isNotEmpty ?? false)
+        NOTIFICATION_BUTTONS: [
+          for (NotificationActionButton button in _actionButtons!)
+            button.toMap()
+        ],
+      if (_localizations?.isNotEmpty ?? false)
+        NOTIFICATION_LOCALIZATIONS: {
+            for (MapEntry<String, NotificationLocalization> localization in _localizations!.entries)
+              localization.key: localization.value.toMap()
+        },
     };
-  }
 
   @override
 
-  /// Validates if the models has all the requirements to be considerated valid
+  /// Validates if the models has all the requirements to be considered valid
   void validate() {
     if (_content == null) {
       throw const AwesomeNotificationsException(

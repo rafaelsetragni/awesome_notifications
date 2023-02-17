@@ -31,8 +31,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   universal_io: ^2.0.4
 
-  font_awesome_flutter: ^9.0.0
-  fluttertoast: ^8.0.3
+  font_awesome_flutter: ^10.4.0
+  fluttertoast: ^8.1.3
   http: ^0.13.1
   path_provider: ^2.0.11
   shared_preferences: ^2.0.5
@@ -41,7 +41,7 @@ dependencies:
   vibration: ^1.7.4-nullsafety.0
   device_info: ^2.0.3
   url_launcher: ^6.0.3
-  intl: ^0.17.0
+  intl: ^0.18.0
   palette_generator: ^0.3.0
 
 dev_dependencies:
@@ -55,7 +55,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
-  flutter_launcher_icons: ^0.9.0
+  flutter_launcher_icons: ^0.11.0
 
 flutter_icons:
   ios: true

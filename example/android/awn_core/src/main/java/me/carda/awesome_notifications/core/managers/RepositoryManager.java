@@ -9,28 +9,29 @@ import java.util.Map;
 
 import me.carda.awesome_notifications.core.AwesomeNotifications;
 import me.carda.awesome_notifications.core.Definitions;
+import me.carda.awesome_notifications.core.databases.SQLitePrimitivesDB;
+import me.carda.awesome_notifications.core.databases.SqLiteCypher;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.core.models.AbstractModel;
 import me.carda.awesome_notifications.core.utils.StringUtils;
 
-public class SharedManager<T extends AbstractModel> {
-    private Class<T> clazz;
-    private String className;
+public class RepositoryManager<T extends AbstractModel> {
+    private final Class<T> clazz;
 
-    private static String TAG = "SharedManager";
+    private static final String TAG = "SharedManager";
     private static String packageName;
 
-    private String reference;
-    private String hashedReference = "default";
-    private StringUtils stringUtils;
+    private SQLitePrimitivesDB sqLitePrimitives;
 
-    public SharedManager(StringUtils stringUtils, String fileIdentifier, Class<T> targetClass, String className){
+    private String hashedReference = "default";
+    private final StringUtils stringUtils;
+
+    public RepositoryManager(StringUtils stringUtils, String fileIdentifier, Class<T> targetClass, String className){
         this.clazz = targetClass;
         this.stringUtils = stringUtils;
-        this.className = className;
-        this.reference = Definitions.SHARED_MANAGER +"."+ fileIdentifier +"."+ className;
+        String reference = Definitions.SHARED_MANAGER + "." + fileIdentifier + "." + className;
         try {
             hashedReference = stringUtils.digestString(reference);
             //LogUtils.d(TAG, fileIdentifier+": file initialized = "+ hashedReference);
@@ -43,12 +44,13 @@ public class SharedManager<T extends AbstractModel> {
                         TAG,
                         ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
                         "SharedManager could not be correctly initialized: "+ e.getMessage(),
-                        ExceptionCode.DETAILED_INITIALIZATION_FAILED+"."+reference);
+                        ExceptionCode.DETAILED_INITIALIZATION_FAILED+"."+ reference);
         }
     }
 
-    private SharedPreferences getSharedInstance(Context context) throws AwesomeNotificationsException {
+    private SQLitePrimitivesDB getDbInstance(Context context) throws AwesomeNotificationsException {
 
+        SqLiteCypher.initializeEncryption(context);
         if(packageName == null)
             packageName = AwesomeNotifications.getPackageName(context);
 
@@ -66,7 +68,48 @@ public class SharedManager<T extends AbstractModel> {
                             ExceptionCode.DETAILED_SHARED_PREFERENCES+".getSharedInstance");
         }
 
-        return preferences;
+        if (sqLitePrimitives == null) {
+            sqLitePrimitives = SQLitePrimitivesDB.getInstance(context);
+        }
+
+        // CONVERSION FROM SHARED PREFERENCES TO SQLITE
+        return convertOldSharedPreferencesIntoSqLite(context, preferences);
+    }
+
+    private SQLitePrimitivesDB convertOldSharedPreferencesIntoSqLite(
+            Context context,
+            SharedPreferences preferences
+    ) throws AwesomeNotificationsException {
+        boolean isConvertedTable = sqLitePrimitives.getBoolean(
+                context, "conv", hashedReference, false);
+        if (isConvertedTable) return sqLitePrimitives;
+
+        if (sqLitePrimitives.stringCount(context, hashedReference) == 0) {
+            try {
+                Map<String, ?> tempMap = preferences.getAll();
+                if(tempMap != null){
+                    for (Map.Entry<String, ?> entry : tempMap.entrySet()) {
+                        String key = entry.getKey();
+                        Object value = entry.getValue();
+
+                        if(value instanceof String){
+                            sqLitePrimitives.setString(context, hashedReference, key, (String) value);
+                        }
+                    }
+                }
+            } catch (Exception e){
+                throw ExceptionFactory
+                        .getInstance()
+                        .createNewAwesomeException(
+                                TAG,
+                                ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
+                                ExceptionCode.DETAILED_SHARED_PREFERENCES+".getAllObjects",
+                                e);
+            }
+        }
+
+        sqLitePrimitives.setBoolean(context, "conv", hashedReference, true);
+        return sqLitePrimitives;
     }
 
     private String generateSharedKey(String tag, String referenceKey){
@@ -76,10 +119,8 @@ public class SharedManager<T extends AbstractModel> {
     public void commit(Context context) throws AwesomeNotificationsException {
         try {
 
-            SharedPreferences shared = getSharedInstance(context);
-            SharedPreferences.Editor editor = shared.edit();
-
-            commitAsync(reference, editor);
+            SQLitePrimitivesDB primitivesDB = getDbInstance(context);
+            primitivesDB.commit(context);
 
         } catch (Exception e){
             throw ExceptionFactory
@@ -96,9 +137,8 @@ public class SharedManager<T extends AbstractModel> {
     public List<T> getAllObjects(Context context, String tag) throws AwesomeNotificationsException {
         List<T> returnedList = new ArrayList<>();
         try {
-            SharedPreferences shared = getSharedInstance(context);
-
-            Map<String, ?> tempMap = shared.getAll();
+            SQLitePrimitivesDB primitivesDB = getDbInstance(context);
+            Map<String, String> tempMap = primitivesDB.getAllStringValues(context, tag);
 
             if(tempMap != null){
                 for (Map.Entry<String, ?> entry : tempMap.entrySet()) {
@@ -128,10 +168,8 @@ public class SharedManager<T extends AbstractModel> {
     public T get(Context context, String tag, String referenceKey) throws AwesomeNotificationsException {
 
         try {
-            SharedPreferences shared = getSharedInstance(context);
-
-            String sharedKey = generateSharedKey(tag, referenceKey);
-            String json = shared.getString(sharedKey, null);
+            SQLitePrimitivesDB primitivesDB = getDbInstance(context);
+            String json = primitivesDB.getString(context, tag, referenceKey, null);
 
             T returnedObject = null;
             if (!stringUtils.isNullOrEmpty(json)) {
@@ -161,18 +199,8 @@ public class SharedManager<T extends AbstractModel> {
     public Boolean set(Context context, String tag, String referenceKey, T data) throws AwesomeNotificationsException {
 
         try {
-
-            SharedPreferences shared = getSharedInstance(context);
-
-            String sharedKey = generateSharedKey(tag, referenceKey);
-
-            String json = data.toJson();
-
-            SharedPreferences.Editor editor = shared.edit();
-
-            editor.putString(sharedKey, json);
-            editor.apply();
-
+            SQLitePrimitivesDB primitivesDB = getDbInstance(context);
+            primitivesDB.setString(context, tag, referenceKey, data.toJson());
             return true;
 
         } catch (AwesomeNotificationsException awesomeException) {
@@ -191,16 +219,8 @@ public class SharedManager<T extends AbstractModel> {
     public Boolean remove(Context context, String tag, String referenceKey) throws AwesomeNotificationsException {
 
         try {
-
-            SharedPreferences shared = getSharedInstance(context);
-
-            String sharedKey = generateSharedKey(tag, referenceKey);
-
-            SharedPreferences.Editor editor = shared.edit();
-            editor.remove(sharedKey);
-
-            editor.apply();
-
+            SQLitePrimitivesDB primitivesDB = getDbInstance(context);
+            primitivesDB.removeString(context, tag, referenceKey);
             return true;
 
         } catch (AwesomeNotificationsException awesomeException) {
@@ -216,15 +236,11 @@ public class SharedManager<T extends AbstractModel> {
         }
     }
 
-    public Boolean removeAll(Context context) throws AwesomeNotificationsException {
+    public Boolean removeAll(Context context, String tag) throws AwesomeNotificationsException {
 
         try {
-            SharedPreferences shared = getSharedInstance(context);
-            SharedPreferences.Editor editor = shared.edit();
-            editor.clear();
-
-            editor.apply();
-
+            SQLitePrimitivesDB primitivesDB = getDbInstance(context);
+            primitivesDB.removeAllString(context, tag);
             return true;
 
         } catch (AwesomeNotificationsException awesomeException) {

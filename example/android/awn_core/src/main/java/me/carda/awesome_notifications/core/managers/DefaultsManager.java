@@ -16,8 +16,8 @@ import me.carda.awesome_notifications.core.utils.StringUtils;
 public class DefaultsManager {
 
     private static DefaultsModel instance;
-    private static final SharedManager<DefaultsModel> shared
-            = new SharedManager<>(
+    private static final RepositoryManager<DefaultsModel> shared
+            = new RepositoryManager<>(
                     StringUtils.getInstance(),
                     "DefaultsManager",
                     DefaultsModel.class,

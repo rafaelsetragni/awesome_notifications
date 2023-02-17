@@ -147,8 +147,8 @@ class AwesomeAssertUtils {
     if (value == null || value is! Map) return defaultValue;
 
     try {
-      Map<T, C> castedValue = Map<T, C>.from(value);
-      return castedValue.isEmpty ? defaultValue : castedValue;
+      if(value.isEmpty) return defaultValue;
+      return Map<T, C>.from(value);
     } catch (e) {
       return defaultValue;
     }

@@ -135,6 +135,7 @@ class NotificationContent extends BaseNotificationContent {
 
     _displayOnForeground = AwesomeAssertUtils.extractValue(
         NOTIFICATION_DISPLAY_ON_FOREGROUND, mapData, bool);
+
     _displayOnBackground = AwesomeAssertUtils.extractValue(
         NOTIFICATION_DISPLAY_ON_BACKGROUND, mapData, bool);
 

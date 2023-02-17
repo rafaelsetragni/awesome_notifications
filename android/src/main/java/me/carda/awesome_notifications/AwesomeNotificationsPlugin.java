@@ -369,6 +369,14 @@ public class AwesomeNotificationsPlugin
                     channelMethodResetBadge(call, result);
                     return;
 
+                case Definitions.CHANNEL_METHOD_SET_LOCALIZATION:
+                    channelMethodSetLocalization(call, result);
+                    return;
+
+                case Definitions.CHANNEL_METHOD_GET_LOCALIZATION:
+                    channelMethodGetLocalization(call, result);
+                    return;
+
                 case Definitions.CHANNEL_METHOD_DISMISS_NOTIFICATION:
                     channelMethodDismissNotification(call, result);
                     return;
@@ -670,6 +678,23 @@ public class AwesomeNotificationsPlugin
     ) throws AwesomeNotificationsException {
         int badgeCount = awesomeNotifications.decrementGlobalBadgeCounter();
         result.success(badgeCount);
+    }
+
+    private void channelMethodSetLocalization(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
+        String languageCode = call.arguments();
+        boolean success = awesomeNotifications.setLocalization(languageCode);
+        result.success(success);
+    }
+
+    private void channelMethodGetLocalization(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
+        String languageCode = awesomeNotifications.getLocalization();
+        result.success(languageCode);
     }
 
     private void channelMethodDismissNotification(

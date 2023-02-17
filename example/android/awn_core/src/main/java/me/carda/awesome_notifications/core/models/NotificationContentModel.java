@@ -58,6 +58,7 @@ public class NotificationContentModel extends AbstractModel {
     public Integer backgroundColor;
     public Integer progress;
     public Integer badge;
+    public Integer timeoutAfter;
     public String ticker;
 
     public Boolean roundedLargeIcon;
@@ -135,16 +136,17 @@ public class NotificationContentModel extends AbstractModel {
         icon                  = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON, String.class, null);
         largeIcon             = getValueOrDefault(arguments, Definitions.NOTIFICATION_LARGE_ICON, String.class, null);
         bigPicture            = getValueOrDefault(arguments, Definitions.NOTIFICATION_BIG_PICTURE, String.class, null);
-        payload               = getValueOrDefault(arguments, Definitions.NOTIFICATION_PAYLOAD, Map.class, null);
+        payload               = getValueOrDefaultMap(arguments, Definitions.NOTIFICATION_PAYLOAD, null);
         autoDismissible       = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSIBLE, Boolean.class, true);
         progress              = getValueOrDefault(arguments, Definitions.NOTIFICATION_PROGRESS, Integer.class, null);
         badge                 = getValueOrDefault(arguments, Definitions.NOTIFICATION_BADGE, Integer.class, null);
+        timeoutAfter          = getValueOrDefault(arguments, Definitions.NOTIFICATION_TIMEOUT_AFTER, Integer.class, null);
         groupKey              = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_KEY, String.class, null);
         ticker                = getValueOrDefault(arguments, Definitions.NOTIFICATION_TICKER, String.class, null);
         roundedLargeIcon      = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, Boolean.class, false);
         roundedBigPicture     = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, Boolean.class, false);
 
-        messages = mapToMessages(getValueOrDefault(arguments, Definitions.NOTIFICATION_MESSAGES, List.class, null));
+        messages = mapToMessages(getValueOrDefaultList(arguments, Definitions.NOTIFICATION_MESSAGES, null));
 
         return this;
     }
@@ -195,6 +197,7 @@ public class NotificationContentModel extends AbstractModel {
         putDataOnSerializedMap(Definitions.NOTIFICATION_BIG_PICTURE, returnedObject, this.bigPicture);
         putDataOnSerializedMap(Definitions.NOTIFICATION_PROGRESS, returnedObject, this.progress);
         putDataOnSerializedMap(Definitions.NOTIFICATION_BADGE, returnedObject, this.badge);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_TIMEOUT_AFTER, returnedObject, this.timeoutAfter);
         putDataOnSerializedMap(Definitions.NOTIFICATION_GROUP_KEY, returnedObject, this.groupKey);
         putDataOnSerializedMap(Definitions.NOTIFICATION_PRIVACY, returnedObject, this.privacy);
         putDataOnSerializedMap(Definitions.NOTIFICATION_PRIVATE_MESSAGE, returnedObject, this.privateMessage);
@@ -247,6 +250,8 @@ public class NotificationContentModel extends AbstractModel {
                             ExceptionCode.CODE_MISSING_ARGUMENTS,
                             "Notification id is required",
                             ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".notificationContent.id");
+
+        if(timeoutAfter != null && timeoutAfter < 1) timeoutAfter = null;
 
         if(ChannelManager
                 .getInstance()

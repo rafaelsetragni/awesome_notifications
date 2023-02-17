@@ -14,6 +14,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import me.carda.awesome_notifications.core.broadcasters.receivers.AwesomeEventsReceiver;
@@ -25,6 +26,7 @@ import me.carda.awesome_notifications.core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.core.completion_handlers.BitmapCompletionHandler;
 import me.carda.awesome_notifications.core.completion_handlers.NotificationThreadCompletionHandler;
 import me.carda.awesome_notifications.core.completion_handlers.PermissionCompletionHandler;
+import me.carda.awesome_notifications.core.databases.SQLitePrimitivesDB;
 import me.carda.awesome_notifications.core.decoders.BitmapResourceDecoder;
 import me.carda.awesome_notifications.core.enumerators.ForegroundServiceType;
 import me.carda.awesome_notifications.core.enumerators.ForegroundStartMode;
@@ -48,6 +50,7 @@ import me.carda.awesome_notifications.core.managers.DefaultsManager;
 import me.carda.awesome_notifications.core.managers.DismissedManager;
 import me.carda.awesome_notifications.core.managers.DisplayedManager;
 import me.carda.awesome_notifications.core.managers.LifeCycleManager;
+import me.carda.awesome_notifications.core.managers.LocalizationManager;
 import me.carda.awesome_notifications.core.managers.PermissionManager;
 import me.carda.awesome_notifications.core.managers.ScheduleManager;
 import me.carda.awesome_notifications.core.models.AbstractModel;
@@ -709,6 +712,21 @@ public class AwesomeNotifications
 
     public int decrementGlobalBadgeCounter() {
         return BadgeManager.getInstance().decrementGlobalBadgeCounter(wContext.get());
+    }
+
+    public boolean setLocalization(String languageCode){
+        return LocalizationManager
+                .getInstance()
+                .setLocalization(
+                    wContext.get(),
+                    languageCode
+                );
+    }
+
+    public String getLocalization(){
+        return LocalizationManager
+                .getInstance()
+                .getLocalization(wContext.get());
     }
 
     public boolean dismissNotification(

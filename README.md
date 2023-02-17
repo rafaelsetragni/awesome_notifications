@@ -1004,11 +1004,12 @@ For iOS, you must submit a request authorization to Apple to enable it, as descr
 
 ## 📝 Important Notes:
 
-1. Schedules may be severaly delayed or denied if the device/application is in battery saver mode or locked to perform background tasks. Teach your users with a good rationale to not set these modes and tell them the consequences of doing so. Some battery saving modes may differ between manufacturers, for example Samsung and Xiaomi (the last one sets the battery saving mode automatically for each new app installed).
-2. If you're running your app in debug mode, right after close it all schedules may be erased by Android OS. Thats happen to ensure the same execution in debug mode for each debug startup. To make schedule tests on Android while terminated, remember to open your app without debug it.
-3. If your app doesn't need to be as accurate to display schedule notifications, don't request for exact notifications. Be reasonable.
-4. Remember to categorize your notifications correctly to avoid scheduling delays.
-5. Critical alerts are still under development and should not be used in production mode.
+1. Schedules may be severely delayed or denied if the device/application is in battery saver mode or locked to perform background tasks. Teach your users with a good rationale to not set these modes and tell them the consequences of doing so. Some battery saving modes may differ between manufacturers, for example Samsung and Xiaomi (the last one sets the battery saving mode automatically for each new app installed).
+2. On iOS you can only schedule 64 notifications per app. On Android you can schedule up to 500 notifications per app.
+3. If you're running your app in debug mode, right after close it all schedules may be erased by Android OS. That's happen to ensure the same execution in debug mode for each debug startup. To make schedule tests on Android while terminated, remember to open your app without debug it.
+4. If your app doesn't need to be as accurate to display schedule notifications, don't request for exact notifications. Be reasonable.
+5. Remember to categorize your notifications correctly to avoid scheduling delays.
+6. Critical alerts are still under development and should not be used in production mode.
 
 <br>
 
@@ -1023,9 +1024,9 @@ A support ticket was opened for Apple in order to resolve this issue, but they d
 
 # ⌛️ Progress Bar Notifications (Only for Android)
 
-To show progress bar using local notifications, you need to create a notification with Layout `ProgressBar` and set a progress ammount between 0 and 100, or set it's progress as indeterminated.
+To show progress bar using local notifications, you need to create a notification with Layout `ProgressBar` and set a progress amount between 0 and 100, or set it's progress as undetermined.
 
-To update your notificaiton progress you need to create a new notification with same id and you MUST not exceed 1 second between each update, otherwise your notifications will be randomly blocked by O.S.
+To update your notification progress you need to create a new notification with same id and you MUST not exceed 1 second between each update, otherwise your notifications will be randomly blocked by O.S.
 
 Below is an example of how to update your progress notification:
 

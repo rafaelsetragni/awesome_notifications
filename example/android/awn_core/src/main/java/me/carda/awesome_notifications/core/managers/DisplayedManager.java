@@ -11,8 +11,8 @@ import me.carda.awesome_notifications.core.utils.StringUtils;
 
 public class DisplayedManager {
 
-    private static final SharedManager<NotificationReceived> shared
-            = new SharedManager<>(
+    private static final RepositoryManager<NotificationReceived> shared
+            = new RepositoryManager<>(
                     StringUtils.getInstance(),
                     "DisplayedManager",
                     NotificationReceived.class,

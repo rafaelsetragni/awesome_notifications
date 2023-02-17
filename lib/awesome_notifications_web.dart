@@ -5,6 +5,7 @@
 //import 'dart:html' as html show window;
 import 'dart:typed_data';
 
+import 'package:awesome_notifications/src/models/notification_localization.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'awesome_notifications.dart';
@@ -60,7 +61,9 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   Future<bool> createNotification(
       {required NotificationContent content,
       NotificationSchedule? schedule,
-      List<NotificationActionButton>? actionButtons}) async {
+      List<NotificationActionButton>? actionButtons,
+      Map<String, NotificationLocalization>? localizations,
+    }) async {
     return false;
   }
 
@@ -133,7 +136,8 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   Future<bool> initialize(
       String? defaultIcon, List<NotificationChannel> channels,
       {List<NotificationChannelGroup>? channelGroups,
-      bool debug = false}) async {
+      bool debug = false,
+      String? languageCode}) async {
     return false;
   }
 
@@ -205,6 +209,16 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
 
   @override
   Future<void> showNotificationConfigPage({String? channelKey}) async {}
+
+  @override
+  Future<String> getLocalization() async {
+    return '';
+  }
+
+  @override
+  Future<bool> setLocalization({required String? languageCode}) async {
+    return false;
+  }
 
   @override
   dispose() async {}

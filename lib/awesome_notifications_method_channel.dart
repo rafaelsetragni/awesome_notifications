@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:awesome_notifications/src/models/notification_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -95,7 +96,8 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   Future<bool> createNotification(
       {required NotificationContent content,
       NotificationSchedule? schedule,
-      List<NotificationActionButton>? actionButtons}) async {
+      List<NotificationActionButton>? actionButtons,
+      Map<String, NotificationLocalization>? localizations,}) async {
     _validateId(content.id!);
 
     final bool wasCreated = await methodChannel.invokeMethod(
@@ -254,7 +256,8 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   Future<bool> initialize(
       String? defaultIcon, List<NotificationChannel> channels,
       {List<NotificationChannelGroup>? channelGroups,
-      bool debug = false}) async {
+      bool debug = false,
+      String? languageCode}) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     methodChannel.setMethodCallHandler(_handleMethod);
@@ -453,12 +456,25 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
         CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE, channelKey);
   }
 
+  @override
+  Future<String> getLocalization() async {
+    return await methodChannel.invokeMethod(CHANNEL_METHOD_GET_LOCALIZATION);
+  }
+
+  @override
+  Future<bool> setLocalization({required String? languageCode}) async {
+    return await methodChannel.invokeMethod(
+        CHANNEL_METHOD_GET_LOCALIZATION,
+        languageCode
+    );
+  }
+
   final String _silentBGActionTypeKey =
-      AwesomeAssertUtils.toSimpleEnumString(ActionType.SilentBackgroundAction)!;
+  AwesomeAssertUtils.toSimpleEnumString(ActionType.SilentBackgroundAction)!;
 
   Future<dynamic> _handleMethod(MethodCall call) async {
     Map<String, dynamic> arguments =
-        (call.arguments as Map).cast<String, dynamic>();
+    (call.arguments as Map).cast<String, dynamic>();
 
     switch (call.method) {
       case EVENT_NOTIFICATION_CREATED:
@@ -506,7 +522,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     List<Object?> permissionList = [];
     for (final permission in permissions) {
       String? permissionValue =
-          AwesomeAssertUtils.toSimpleEnumString(permission);
+      AwesomeAssertUtils.toSimpleEnumString(permission);
       if (permissionValue != null) permissionList.add(permissionValue);
     }
     return permissionList;
@@ -517,16 +533,13 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     List<NotificationPermission> lockedPermissions = [];
     for (final permission in permissionList) {
       NotificationPermission? permissionValue =
-          AwesomeAssertUtils.enumToString<NotificationPermission>(
-              permission.toString(), NotificationPermission.values, null);
+      AwesomeAssertUtils.enumToString<NotificationPermission>(
+          permission.toString(), NotificationPermission.values, null);
       if (permissionValue != null) lockedPermissions.add(permissionValue);
     }
     return lockedPermissions;
   }
 
   @override
-  dispose() {
-    // TODO: implement dispose
-    throw UnimplementedError();
-  }
+  dispose() {}
 }

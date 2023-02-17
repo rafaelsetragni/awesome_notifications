@@ -482,16 +482,65 @@ class _HomePageState extends State<HomePage> {
 
             TextDivisor(
                 title:
-                    'Emojis ${Emojis.smile_alien}${Emojis.transport_air_rocket}'),
+                'Emojis ${Emojis.smile_alien}${Emojis.transport_air_rocket}'),
             const TextNote(
                 'To send local and push notifications with emojis, use the class Emoji concatenated with your text.\n\n'
-                'Attention: not all Emojis work with all platforms. Please, test the specific emoji before using it in production.'),
+                    'Attention: not all Emojis work with all platforms. Please, test the specific emoji before using it in production.'),
             SimpleButton('Show notification with emojis',
                 onPressed: () => NotificationUtils.showEmojiNotification(1)),
             SimpleButton(
               'Go to complete Emojis list (web)',
               onPressed: () => externalUrl(
                   'https://unicode.org/emoji/charts/full-emoji-list.html'),
+            ),
+
+            /* ******************************************************************** */
+
+            TextDivisor(
+                title:
+                'Translations ${Emojis.smile_alien}${Emojis.transport_air_rocket}'),
+            const TextNote(
+                'Notification translations allow developers to show notification '
+                    'content in different languages based on the user\'s language preference. '
+                    'The NotificationModel provides a localizations field, which is a '
+                    'Map<String, NotificationLocalization> that contains a list of '
+                    'NotificationLocalization instances for each available language, '
+                    'indexed by their respective language code (e.g., "en", "pt-br"). '
+                    'If the current language, set by the setLocalization methods or '
+                    'the current language in system settings, matches with a defined '
+                    'translation in the notification, all contents defined in the translation '
+                    'will replace the original content. Otherwise, the original '
+                    'content will be preserved.'
+            ),
+            SimpleButton('Show original notification',
+                onPressed: () => NotificationUtils.showTranslatedNotification(
+                    1, languageCode: null
+                )
+            ),
+            SimpleButton('Show notification in brazilian portuguese 🇧🇷',
+                onPressed: () => NotificationUtils.showTranslatedNotification(
+                    1, languageCode: "pt-br"
+                )
+            ),
+            SimpleButton('Show notification in portuguese 🇵🇹',
+                onPressed: () => NotificationUtils.showTranslatedNotification(
+                    1, languageCode: "pt"
+                )
+            ),
+            SimpleButton('Show notification in Korean 🇰🇷',
+                onPressed: () => NotificationUtils.showTranslatedNotification(
+                    1, languageCode: "ko"
+                )
+            ),
+            SimpleButton('Show notification in Spanish 🇪🇸',
+                onPressed: () => NotificationUtils.showTranslatedNotification(
+                    1, languageCode: "es"
+                )
+            ),
+            SimpleButton('Show notification in Germany 🇩🇪',
+                onPressed: () => NotificationUtils.showTranslatedNotification(
+                    1, languageCode: "de"
+                )
             ),
 
             /* ******************************************************************** */

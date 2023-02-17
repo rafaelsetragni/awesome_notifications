@@ -6,8 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.common.primitives.Longs;
+import com.google.common.reflect.TypeToken;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -610,33 +612,32 @@ public abstract class AbstractModel implements Cloneable {
         return defaultValue;
     }
 
-    public List getValueOrDefault(
+    public <T> List<T> getValueOrDefaultList(
             @NonNull Map<String, Object> map,
             @NonNull String reference,
-            @NonNull Class<List> type,
-            @Nullable List defaultValue
+            @Nullable List<T> defaultValue
     ){
         Object value = map.get(reference);
         if(value == null) return defaultValue;
 
-        if(value instanceof List)
-            return (List)value;
+        Type mapType = new TypeToken<List<T>>(){}.getType();
+        if(mapType.equals(value.getClass()))
+            return (List<T>) value;
 
         return defaultValue;
     }
 
-    @SuppressWarnings("unchecked")
-    public Map getValueOrDefault(
+    public <T, K> Map<T, K> getValueOrDefaultMap(
             @NonNull Map<String, Object> map,
             @NonNull String reference,
-            @NonNull Class<Map> type,
-            @Nullable Map defaultValue
+            @Nullable Map<T, K> defaultValue
     ){
         Object value = map.get(reference);
         if(value == null) return defaultValue;
 
-        if(value instanceof Map)
-            return (Map) value;
+        Type mapType = new TypeToken<Map<T, K>>(){}.getType();
+        if(mapType.equals(value.getClass()))
+            return (Map<T, K>) value;
 
         return defaultValue;
     }

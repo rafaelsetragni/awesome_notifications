@@ -2,6 +2,9 @@ package me.carda.awesome_notifications.core.models;
 
 import android.content.Context;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +16,6 @@ import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.core.logs.Logger;
 
 public class NotificationButtonModel extends AbstractModel {
-
     private static final String TAG = "NotificationButtonModel";
 
     public String key;

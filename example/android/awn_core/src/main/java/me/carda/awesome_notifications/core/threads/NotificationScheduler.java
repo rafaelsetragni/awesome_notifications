@@ -19,6 +19,7 @@ import me.carda.awesome_notifications.core.AwesomeNotifications;
 import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.broadcasters.senders.BroadcastSender;
 import me.carda.awesome_notifications.core.completion_handlers.NotificationThreadCompletionHandler;
+import me.carda.awesome_notifications.core.enumerators.NotificationCategory;
 import me.carda.awesome_notifications.core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.core.enumerators.NotificationSource;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
@@ -320,6 +321,8 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
 //    }
 
     private void scheduleNotificationWithAlarmManager(Context context, NotificationModel notificationModel, Calendar nextValidDate, PendingIntent pendingIntent) {
+        if(notificationModel.schedule == null) return;
+
         AlarmManager alarmManager = ScheduleManager.getAlarmManager(context);
         long timeMillis = nextValidDate.getTimeInMillis();
 
@@ -327,17 +330,46 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
             BooleanUtils.getInstance().getValue(notificationModel.schedule.preciseAlarm) &&
             ScheduleManager.isPreciseAlarmGloballyAllowed(alarmManager)
         ) {
-            AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(timeMillis, pendingIntent);
-            alarmManager.setAlarmClock(info, pendingIntent);
+            if (notificationModel.content.category == NotificationCategory.Alarm) {
+                AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(timeMillis, pendingIntent);
+                alarmManager.setAlarmClock(info, pendingIntent);
+            } else {
+                if (BooleanUtils.getInstance().getValue(notificationModel.schedule.allowWhileIdle)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmManager.setExactAndAllowWhileIdle(
+                                AlarmManager.RTC_WAKEUP,
+                                timeMillis,
+                                pendingIntent);
+                        return;
+                    }
+                }
+                alarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,
+                        timeMillis,
+                        pendingIntent);
+            }
             return;
+        }
+
+        if(notificationModel.schedule.delayTolerance == null) {
+            notificationModel.schedule.delayTolerance = 0;
         }
 
         if (BooleanUtils.getInstance().getValue(notificationModel.schedule.allowWhileIdle)) {
-            AlarmManagerCompat.setExactAndAllowWhileIdle(alarmManager, AlarmManager.RTC_WAKEUP, timeMillis, pendingIntent);
-            return;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        timeMillis,
+                        pendingIntent);
+                return;
+            }
         }
 
-        AlarmManagerCompat.setExact(alarmManager, AlarmManager.RTC_WAKEUP, timeMillis, pendingIntent);
+        alarmManager.setWindow(
+                AlarmManager.RTC,
+                timeMillis,
+                notificationModel.schedule.delayTolerance,
+                pendingIntent);
     }
 
     public static void refreshScheduledNotifications(

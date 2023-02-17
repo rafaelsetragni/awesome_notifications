@@ -444,6 +444,104 @@ class NotificationUtils {
   }
 
   /* *********************************************
+      TRANSLATED NOTIFICATIONS
+  ************************************************ */
+
+
+  static Future<void> showTranslatedNotification(int id, {required languageCode}) async {
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: id,
+            channelKey: 'basic_channel',
+            title: 'This title is written in english',
+            body: 'Now it is really easy to translate a notification content, '
+                'including images and buttons!',
+            summary: 'Awesome Notifications Translations',
+            notificationLayout: NotificationLayout.BigPicture,
+            bigPicture: 'asset://assets/images/awn-rocks-en.jpg',
+            largeIcon: 'asset://assets/images/american.jpg',
+            payload: {'uuid': 'user-profile-uuid'}),
+        actionButtons: [
+          NotificationActionButton(
+              key: 'AGREED1', label: 'I agree', autoDismissible: true),
+          NotificationActionButton(
+              key: 'AGREED2', label: 'I agree too', autoDismissible: true),
+        ],
+        localizations: {
+          'pt-br' : NotificationLocalization(
+              title: 'Este título está escrito em português do Brasil!',
+              body: 'Agora é muito fácil traduzir o conteúdo das notificações, '
+                  'incluindo imagens e botões',
+              summary: 'Traduções Awesome Notifications',
+              bigPicture: 'asset://assets/images/awn-rocks-pt-br.jpg',
+              largeIcon: 'asset://assets/images/brazilian.jpg',
+              buttonLabels: {
+                'AGREED1': 'Eu concordo!',
+                'AGREED2': 'Eu concordo também!'
+              }
+          ),
+          'zh': NotificationLocalization(
+              title: '这个标题是用中文写的',
+              body: '现在，轻松翻译通知内容，包括图像和按钮！',
+              summary: '',
+              bigPicture: 'asset://assets/images/awn-rocks-zh.jpg',
+              largeIcon: 'asset://assets/images/chinese.jpg',
+              buttonLabels: {
+                'AGREED1': '我同意',
+                'AGREED2': '我也同意'
+              }
+          ),
+          'ko': NotificationLocalization(
+              title: '이 타이틀은 한국어로 작성되었습니다',
+              body: '이제 이미지 및 버튼을 포함한 알림 콘텐츠를 쉽게 번역할 수 있습니다!',
+              summary: '',
+              bigPicture: 'asset://assets/images/awn-rocks-ko.jpg',
+              largeIcon: 'asset://assets/images/korean.jpg',
+              buttonLabels: {
+                'AGREED1': '동의합니다',
+                'AGREED2': '저도 동의합니다'
+              }
+          ),
+          'de': NotificationLocalization(
+              title: 'Dieser Titel ist in Deutsch geschrieben',
+              body: 'Jetzt ist es wirklich einfach, den Inhalt einer Benachrichtigung zu übersetzen, '
+                  'einschließlich Bilder und Schaltflächen!',
+              summary: '',
+              bigPicture: 'asset://assets/images/awn-rocks-de.jpg',
+              largeIcon: 'asset://assets/images/german.jpg',
+              buttonLabels: {
+                'AGREED1': 'Ich stimme zu',
+                'AGREED2': 'Ich stimme auch zu'
+              }
+          ),
+          'pt': NotificationLocalization(
+              title: 'Este título está escrito em português de Portugal!',
+              body: 'Agora é muito fácil traduzir o conteúdo das notificações, '
+                  'incluindo imagens e botões!',
+              summary: 'Traduções Awesome Notifications',
+              bigPicture: 'asset://assets/images/awn-rocks-pt.jpg',
+              largeIcon: 'asset://assets/images/portugal.jpg',
+              buttonLabels: {
+                'AGREED1': 'Eu concordo!',
+                'AGREED2': 'Eu concordo também!'
+              }
+          ),
+          'es': NotificationLocalization(
+              title: 'Este título está escrito en español!',
+              body: 'Ahora es muy fácil traducir el contenido de las notificaciones, '
+                  'incluyendo imágenes y botones.',
+              summary: 'Traducciones de Awesome Notifications',
+              bigPicture: 'asset://assets/images/awn-rocks-es.jpg',
+              largeIcon: 'asset://assets/images/spanish.jpg',
+              buttonLabels: {
+                'AGREED1': 'Estoy de acuerdo',
+                'AGREED2': 'También estoy de acuerdo'
+              }
+          ),
+        });
+  }
+
+  /* *********************************************
       ACTION BUTTONS NOTIFICATIONS
   ************************************************ */
 

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:awesome_notifications/src/models/notification_localization.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications/awesome_notifications_platform_interface.dart';
@@ -64,7 +65,12 @@ class MockAwesomeNotificationsPlatform
   }
 
   @override
-  Future<bool> createNotification({required NotificationContent content, NotificationSchedule? schedule, List<NotificationActionButton>? actionButtons}) {
+  Future<bool> createNotification({
+    required NotificationContent content,
+    NotificationSchedule? schedule,
+    List<NotificationActionButton>? actionButtons,
+    Map<String, NotificationLocalization>? localizations,
+  }) {
     // TODO: implement createNotification
     throw UnimplementedError();
   }
@@ -160,7 +166,14 @@ class MockAwesomeNotificationsPlatform
   }
 
   @override
-  Future<bool> initialize(String? defaultIcon, List<NotificationChannel> channels, {List<NotificationChannelGroup>? channelGroups, bool debug = false}) {
+  Future<bool> initialize(
+      String? defaultIcon,
+      List<NotificationChannel> channels, {
+        List<NotificationChannelGroup>? channelGroups,
+        String? languageCode,
+        bool debug = false,
+      }
+  ) {
     // TODO: implement initialize
     throw UnimplementedError();
   }
@@ -242,6 +255,18 @@ class MockAwesomeNotificationsPlatform
     bool removeFromActionEvents = false
   }) {
     // TODO: implement getInitialNotificationAction
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String> getLocalization() {
+    // TODO: implement getLocalization
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> setLocalization({required String? languageCode}) {
+    // TODO: implement setLocalization
     throw UnimplementedError();
   }
 }

@@ -25,6 +25,7 @@ public class NotificationModel extends AbstractModel {
     public NotificationContentModel content;
     public NotificationScheduleModel schedule;
     public List<NotificationButtonModel> actionButtons;
+    public Map<String, NotificationLocalizationModel> localizations;
 
     public NotificationModel(){}
 
