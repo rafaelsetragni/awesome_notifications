@@ -34,7 +34,7 @@ public class NotificationCrontabModel extends NotificationScheduleModel {
         initialDateTime    = getValueOrDefault(arguments, Definitions.NOTIFICATION_INITIAL_DATE_TIME, Calendar.class, null);
         expirationDateTime = getValueOrDefault(arguments, Definitions.NOTIFICATION_EXPIRATION_DATE_TIME, Calendar.class, null);
         crontabExpression  = getValueOrDefault(arguments, Definitions.NOTIFICATION_CRONTAB_EXPRESSION, String.class, null);
-        preciseSchedules   = getValueOrDefault(arguments, Definitions.NOTIFICATION_PRECISE_SCHEDULES, List.class, null);
+        preciseSchedules   = getValueOrDefaultList(arguments, Definitions.NOTIFICATION_PRECISE_SCHEDULES, null);
 
         return this;
     }
