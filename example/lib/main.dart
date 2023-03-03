@@ -50,9 +50,10 @@ class NotificationController {
   static Future<void> initializeIsolateReceivePort() async {
     receivePort = ReceivePort('Notification action port in main isolate')
       ..listen(
-              (silentData) => onActionReceivedImplementationMethod(silentData)
+            (silentData) => onActionReceivedImplementationMethod(silentData)
       );
 
+    // This initialization only happens on main isolate
     IsolateNameServer.registerPortWithName(
         receivePort!.sendPort,
         'notification_action_port'
@@ -86,7 +87,8 @@ class NotificationController {
     }
     else {
       // this process is only necessary when you need to redirect the user
-      // to a new page or use a valid context
+      // to a new page or use a valid context, since parallel isolates do not
+      // have valid context, so you need redirect the execution to main isolate
       if (receivePort == null) {
         print('onActionReceivedMethod was called inside a parallel dart isolate.');
         SendPort? sendPort = IsolateNameServer.lookupPortByName(

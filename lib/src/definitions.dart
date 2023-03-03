@@ -83,6 +83,8 @@ const EVENT_SILENT_ACTION = 'silentAction';
 const CHANNEL_METHOD_NOTIFICATION_AT_LAUNCH = 'notificationAtLaunch';
 
 const CHANNEL_METHOD_LIST_ALL_SCHEDULES = 'listAllSchedules';
+const CHANNEL_METHOD_IS_NOTIFICATION_ACTIVE = 'isNotificationActive';
+const CHANNEL_METHOD_GET_ALL_ACTIVE_NOTIFICATION_IDS = 'getAllActiveNotificationIds';
 
 const CHANNEL_METHOD_GET_BADGE_COUNT = 'getBadgeCount';
 const CHANNEL_METHOD_SET_BADGE_COUNT = 'setBadgeCount';

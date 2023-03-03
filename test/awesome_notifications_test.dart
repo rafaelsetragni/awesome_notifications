@@ -269,6 +269,18 @@ class MockAwesomeNotificationsPlatform
     // TODO: implement setLocalization
     throw UnimplementedError();
   }
+
+  @override
+  Future<List<int>> getAllActiveNotificationIdsOnStatusBar() {
+    // TODO: implement getAllActiveNotificationIdsOnStatusBar
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> isNotificationActiveOnStatusBar({required int id}) {
+    // TODO: implement isNotificationActiveOnStatusBar
+    throw UnimplementedError();
+  }
 }
 
 void main() {

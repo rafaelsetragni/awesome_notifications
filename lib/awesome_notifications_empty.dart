@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:awesome_notifications/i_awesome_notifications.dart';
-import 'package:awesome_notifications/src/models/notification_localization.dart';
 
 import 'awesome_notifications.dart';
 import 'awesome_notifications_platform_interface.dart';
@@ -124,7 +123,7 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
       String? defaultIcon, List<NotificationChannel> channels,
       {List<NotificationChannelGroup>? channelGroups,
       bool debug = false,
-      String? languageCode}) async {
+      String? languageCode,}) async {
     return true;
   }
 
@@ -205,6 +204,16 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
   @override
   Future<bool> setLocalization({required String? languageCode}) async {
     return false;
+  }
+
+  @override
+  Future<bool> isNotificationActiveOnStatusBar({required int id}) async {
+    return false;
+  }
+
+  @override
+  Future<List<int>> getAllActiveNotificationIdsOnStatusBar() async {
+    return [];
   }
 
   @override

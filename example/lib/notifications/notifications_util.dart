@@ -449,6 +449,7 @@ class NotificationUtils {
 
 
   static Future<void> showTranslatedNotification(int id, {required languageCode}) async {
+    await AwesomeNotifications().setLocalization(languageCode: languageCode);
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: id,
@@ -471,7 +472,7 @@ class NotificationUtils {
           'pt-br' : NotificationLocalization(
               title: 'Este título está escrito em português do Brasil!',
               body: 'Agora é muito fácil traduzir o conteúdo das notificações, '
-                  'incluindo imagens e botões',
+                  'incluindo imagens e botões!',
               summary: 'Traduções Awesome Notifications',
               bigPicture: 'asset://assets/images/awn-rocks-pt-br.jpg',
               largeIcon: 'asset://assets/images/brazilian.jpg',
@@ -520,7 +521,7 @@ class NotificationUtils {
                   'incluindo imagens e botões!',
               summary: 'Traduções Awesome Notifications',
               bigPicture: 'asset://assets/images/awn-rocks-pt.jpg',
-              largeIcon: 'asset://assets/images/portugal.jpg',
+              largeIcon: 'asset://assets/images/portuguese.jpg',
               buttonLabels: {
                 'AGREED1': 'Eu concordo!',
                 'AGREED2': 'Eu concordo também!'
@@ -539,6 +540,7 @@ class NotificationUtils {
               }
           ),
         });
+    await AwesomeNotifications().setLocalization(languageCode: null);
   }
 
   /* *********************************************

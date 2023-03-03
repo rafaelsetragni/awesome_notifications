@@ -40,7 +40,7 @@ abstract class IAwesomeNotifications {
       {
         List<NotificationChannelGroup>? channelGroups,
         bool debug = false,
-        String? languageCode
+        String? languageCode,
       });
 
   /// Defines the global or static methods that will receive notification events.
@@ -126,7 +126,7 @@ abstract class IAwesomeNotifications {
     required NotificationContent content,
     NotificationSchedule? schedule,
     List<NotificationActionButton>? actionButtons,
-    Map<String, NotificationLocalization> localizations,
+    Map<String, NotificationLocalization>? localizations,
   });
 
   /// Creates a new notification based on a map that is similar to the map
@@ -243,6 +243,29 @@ abstract class IAwesomeNotifications {
   /// the `showNotificationConfigPage()` method to prompt the user to enable
   /// notifications for the app.
   Future<bool> isNotificationAllowed();
+
+  /// Checks whether a notification with the specified ID is currently active on the device's status bar.
+  ///
+  /// This method takes an integer id argument representing the ID of the notification
+  /// to be checked. It returns a [Future] that resolves to a [bool] value indicating
+  /// whether the specified notification is currently active on the device's status bar.
+  /// If the notification is active, the value will be true. If the notification is
+  /// not active, the value will be false.
+  ///
+  /// This method can be used to check whether a specific notification is currently being
+  /// displayed on the device's status bar. If the notification is not active, you may want
+  /// to take appropriate action, such as re-creating the notification or displaying a message
+  /// to the user.
+  ///
+  /// Note: In order to use this method, you need to have the appropriate permissions
+  /// set in your AndroidManifest.xml file. Specifically, you need to have the
+  /// [android.permission.ACCESS_NOTIFICATION_POLICY] permission declared in your manifest
+  /// in order to access the device's notification policy.
+  Future<bool> isNotificationActiveOnStatusBar({
+    required int id
+  });
+
+  Future<List<int>> getAllActiveNotificationIdsOnStatusBar();
 
   /// Requests permission from the user to send notifications from the app.
   ///

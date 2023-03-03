@@ -19,14 +19,19 @@ public class LocalizationManager {
 
     public boolean setLocalization(Context context, String languageCode){
         try {
+            if (languageCode == null) {
+                Locale currentLocale = context.getResources().getConfiguration().locale;
+                languageCode = currentLocale.toLanguageTag().toLowerCase();
+            }
             SQLitePrimitivesDB
                     .getInstance(context)
                     .setString(
-                            context,
-                            "localization",
-                            "languageCode",
-                            languageCode.toLowerCase()
+                        context,
+                        "localization",
+                        "languageCode",
+                        languageCode.toLowerCase()
                     );
+            return true;
         } catch (Exception e) {
             ExceptionFactory
                     .getInstance()
@@ -37,7 +42,6 @@ public class LocalizationManager {
                             ExceptionCode.DETAILED_INSUFFICIENT_PERMISSIONS+".setLocalization");
             return false;
         }
-        return true;
     }
 
     public String getLocalization(Context context){
@@ -45,7 +49,7 @@ public class LocalizationManager {
 
         try {
             Locale currentLocale = context.getResources().getConfiguration().locale;
-            languageCode = currentLocale.getLanguage().toLowerCase();
+            languageCode = currentLocale.toLanguageTag().toLowerCase();
             languageCode = SQLitePrimitivesDB
                     .getInstance(context)
                     .getString(

@@ -65,8 +65,8 @@ class NotificationLocalization extends Model {
     title = AwesomeAssertUtils.extractValue(NOTIFICATION_TITLE, mapData, String);
     body = AwesomeAssertUtils.extractValue(NOTIFICATION_BODY, mapData, String);
     summary = AwesomeAssertUtils.extractValue(NOTIFICATION_SUMMARY, mapData, String);
-    largeIcon = AwesomeAssertUtils.extractValue(NOTIFICATION_BIG_PICTURE, mapData, String);
-    bigPicture = AwesomeAssertUtils.extractValue(NOTIFICATION_LARGE_ICON, mapData, String);
+    largeIcon = AwesomeAssertUtils.extractValue(NOTIFICATION_LARGE_ICON, mapData, String);
+    bigPicture = AwesomeAssertUtils.extractValue(NOTIFICATION_BIG_PICTURE, mapData, String);
 
     buttonLabels =
       mapData[NOTIFICATION_BUTTON_LABELS] is Map
@@ -87,14 +87,19 @@ class NotificationLocalization extends Model {
   Map<String, dynamic> toMap() => {
     if(title?.isNotEmpty ?? false)
       NOTIFICATION_TITLE: title,
+
     if(body?.isNotEmpty ?? false)
       NOTIFICATION_BODY: body,
+
     if(summary?.isNotEmpty ?? false)
       NOTIFICATION_SUMMARY: summary,
-    if(largeIcon?.isNotEmpty ?? false)
-      NOTIFICATION_BIG_PICTURE: largeIcon,
+
+    if(bigPicture?.isNotEmpty ?? false)
+      NOTIFICATION_BIG_PICTURE: bigPicture,
+
     if(largeIcon?.isNotEmpty ?? false)
       NOTIFICATION_LARGE_ICON: largeIcon,
+
     if(buttonLabels?.isNotEmpty ?? false)
       NOTIFICATION_BUTTON_LABELS: buttonLabels,
   };

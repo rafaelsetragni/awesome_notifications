@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:ui';
 
-import 'package:awesome_notifications/src/models/notification_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -105,7 +104,8 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
         NotificationModel(
                 content: content,
                 schedule: schedule,
-                actionButtons: actionButtons)
+                actionButtons: actionButtons,
+                localizations: localizations)
             .toMap());
 
     return wasCreated;
@@ -128,6 +128,11 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
       if (mapData[NOTIFICATION_BUTTONS] is String) {
         mapData[NOTIFICATION_BUTTONS] =
             json.decode(mapData[NOTIFICATION_BUTTONS]);
+      }
+
+      if (mapData[NOTIFICATION_LOCALIZATIONS] is String) {
+        mapData[NOTIFICATION_LOCALIZATIONS] =
+            json.decode(mapData[NOTIFICATION_LOCALIZATIONS]);
       }
 
       // Invalid Notification
@@ -257,7 +262,8 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
       String? defaultIcon, List<NotificationChannel> channels,
       {List<NotificationChannelGroup>? channelGroups,
       bool debug = false,
-      String? languageCode}) async {
+      String? languageCode,
+  }) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     methodChannel.setMethodCallHandler(_handleMethod);
@@ -463,10 +469,27 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
   @override
   Future<bool> setLocalization({required String? languageCode}) async {
-    return await methodChannel.invokeMethod(
-        CHANNEL_METHOD_GET_LOCALIZATION,
+    var success = await methodChannel.invokeMethod(
+        CHANNEL_METHOD_SET_LOCALIZATION,
         languageCode
     );
+    return success;
+  }
+
+  @override
+  Future<bool> isNotificationActiveOnStatusBar({required int id}) async {
+    var success = await methodChannel.invokeMethod(
+        CHANNEL_METHOD_IS_NOTIFICATION_ACTIVE,
+        id
+    );
+    return success;
+  }
+
+  @override
+  Future<List<int>> getAllActiveNotificationIdsOnStatusBar() async {
+    return await methodChannel.invokeMethod(
+        CHANNEL_METHOD_GET_ALL_ACTIVE_NOTIFICATION_IDS
+    ) ?? [];
   }
 
   final String _silentBGActionTypeKey =

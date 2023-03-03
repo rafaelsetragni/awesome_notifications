@@ -498,7 +498,7 @@ class _HomePageState extends State<HomePage> {
 
             TextDivisor(
                 title:
-                'Translations ${Emojis.smile_alien}${Emojis.transport_air_rocket}'),
+                'Translations 🈳🈂️'),
             const TextNote(
                 'Notification translations allow developers to show notification '
                     'content in different languages based on the user\'s language preference. '
@@ -512,9 +512,14 @@ class _HomePageState extends State<HomePage> {
                     'will replace the original content. Otherwise, the original '
                     'content will be preserved.'
             ),
-            SimpleButton('Show original notification',
+            SimpleButton('Show notification using system default',
                 onPressed: () => NotificationUtils.showTranslatedNotification(
                     1, languageCode: null
+                )
+            ),
+            SimpleButton('Show notification in english 🇺🇸',
+                onPressed: () => NotificationUtils.showTranslatedNotification(
+                    1, languageCode: "en"
                 )
             ),
             SimpleButton('Show notification in brazilian portuguese 🇧🇷',
@@ -525,6 +530,11 @@ class _HomePageState extends State<HomePage> {
             SimpleButton('Show notification in portuguese 🇵🇹',
                 onPressed: () => NotificationUtils.showTranslatedNotification(
                     1, languageCode: "pt"
+                )
+            ),
+            SimpleButton('Show notification in chinese 🇨🇳',
+                onPressed: () => NotificationUtils.showTranslatedNotification(
+                    1, languageCode: "zh"
                 )
             ),
             SimpleButton('Show notification in Korean 🇰🇷',

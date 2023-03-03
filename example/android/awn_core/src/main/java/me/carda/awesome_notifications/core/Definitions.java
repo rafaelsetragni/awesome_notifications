@@ -56,6 +56,7 @@ public interface Definitions {
     String NOTIFICATION_MODEL_CONTENT = "content";
     String NOTIFICATION_MODEL_SCHEDULE = "schedule";
     String NOTIFICATION_MODEL_BUTTONS = "actionButtons";
+    String NOTIFICATION_MODEL_LOCALIZATIONS = "localizations";
     String NOTIFICATION_SILENT_ACTION = "silentAction";
     String NOTIFICATION_RECEIVED_ACTION = "receivedAction";
 
@@ -107,6 +108,8 @@ public interface Definitions {
     String CHANNEL_METHOD_RESET_BADGE = "resetBadge";
 
     String CHANNEL_METHOD_GET_APP_LIFE_CYCLE = "getAppLifeCycle";
+    String CHANNEL_METHOD_IS_NOTIFICATION_ACTIVE = "isNotificationActive";
+    String CHANNEL_METHOD_GET_ALL_ACTIVE_NOTIFICATION_IDS = "getAllActiveNotificationIds";
 
     String CHANNEL_METHOD_GET_NEXT_DATE = "getNextDate";
     String CHANNEL_METHOD_DISMISS_NOTIFICATION = "dismissNotification";
@@ -165,6 +168,7 @@ public interface Definitions {
     String NOTIFICATION_SCHEDULE_WEEKOFYEAR = "weekOfYear";
     String NOTIFICATION_SCHEDULE_INTERVAL = "interval";
     String NOTIFICATION_SCHEDULE_REPEATS = "repeats";
+    String ACTIVE_NOTIFICATION_IDS = "activeNotificationIds";
 
     String NOTIFICATION_CREATED_SOURCE = "createdSource";
     String NOTIFICATION_CREATED_LIFECYCLE = "createdLifeCycle";

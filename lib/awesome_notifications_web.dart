@@ -137,7 +137,8 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
       String? defaultIcon, List<NotificationChannel> channels,
       {List<NotificationChannelGroup>? channelGroups,
       bool debug = false,
-      String? languageCode}) async {
+      String? languageCode,
+      }) async {
     return false;
   }
 
@@ -218,6 +219,16 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   @override
   Future<bool> setLocalization({required String? languageCode}) async {
     return false;
+  }
+
+  @override
+  Future<bool> isNotificationActiveOnStatusBar({required int id}) async {
+    return false;
+  }
+
+  @override
+  Future<List<int>> getAllActiveNotificationIdsOnStatusBar() async {
+    return [];
   }
 
   @override

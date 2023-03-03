@@ -141,7 +141,10 @@ class AwesomeNotifications implements IAwesomeNotifications {
       List<NotificationActionButton>? actionButtons,
         Map<String, NotificationLocalization>? localizations,}) {
     return AwesomeNotificationsPlatform.instance.createNotification(
-        content: content, schedule: schedule, actionButtons: actionButtons);
+        content: content,
+        schedule: schedule,
+        actionButtons: actionButtons,
+        localizations: localizations);
   }
 
   @override
@@ -229,10 +232,16 @@ class AwesomeNotifications implements IAwesomeNotifications {
   Future<bool> initialize(
       String? defaultIcon, List<NotificationChannel> channels,
       {List<NotificationChannelGroup>? channelGroups, bool debug = false,
-        String? languageCode}) {
-    return AwesomeNotificationsPlatform.instance.initialize(
-        defaultIcon, channels,
-        channelGroups: channelGroups, debug: debug);
+        String? languageCode,
+      }) {
+    return AwesomeNotificationsPlatform
+        .instance
+        .initialize(
+            defaultIcon, channels,
+            channelGroups: channelGroups,
+            languageCode: languageCode,
+            debug: debug
+        );
   }
 
   @override
@@ -340,5 +349,19 @@ class AwesomeNotifications implements IAwesomeNotifications {
     return AwesomeNotificationsPlatform
         .instance
         .setLocalization(languageCode: languageCode);
+  }
+
+  @override
+  Future<bool> isNotificationActiveOnStatusBar({required int id}) {
+    return AwesomeNotificationsPlatform
+        .instance
+        .isNotificationActiveOnStatusBar(id: id);
+  }
+
+  @override
+  Future<List<int>> getAllActiveNotificationIdsOnStatusBar() {
+    return AwesomeNotificationsPlatform
+        .instance
+        .getAllActiveNotificationIdsOnStatusBar();
   }
 }

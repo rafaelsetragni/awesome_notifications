@@ -41,6 +41,7 @@ public class NotificationModel extends AbstractModel {
 
         schedule = extractNotificationSchedule(parameters);
         actionButtons = extractNotificationButtons(parameters);
+        localizations = extractNotificationLocalizations(parameters);
 
         return this;
     }
@@ -53,6 +54,7 @@ public class NotificationModel extends AbstractModel {
         putDataOnSerializedMap(Definitions.NOTIFICATION_MODEL_CONTENT, dataMap, content);
         putDataOnSerializedMap(Definitions.NOTIFICATION_MODEL_SCHEDULE, dataMap, schedule);
         putDataOnSerializedMap(Definitions.NOTIFICATION_MODEL_BUTTONS, dataMap, actionButtons);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_MODEL_LOCALIZATIONS, dataMap, localizations);
 
         return dataMap;
     }
@@ -121,6 +123,28 @@ public class NotificationModel extends AbstractModel {
         if(actionButtons.isEmpty()) return null;
 
         return actionButtons;
+    }
+
+    private Map<String, NotificationLocalizationModel> extractNotificationLocalizations(Map<String, Object> parameters) {
+        if(!parameters.containsKey(Definitions.NOTIFICATION_MODEL_LOCALIZATIONS)) return null;
+        Object obj = parameters.get(Definitions.NOTIFICATION_MODEL_LOCALIZATIONS);
+
+        if(!(obj instanceof Map<?,?>)) return null;
+        Map<String, Object> localizationsData = (Map<String, Object>) obj;
+        if (localizationsData == null) return null;
+
+        Map<String, NotificationLocalizationModel> localizationModels = new HashMap<>();
+        for (Map.Entry<String, Object> entry: localizationsData.entrySet()) {
+            if(!(entry.getValue() instanceof Map<?,?>)) continue;
+            Map<String, Object> localizationData = (Map<String, Object>) entry.getValue();
+            NotificationLocalizationModel localizationModel =
+                    new NotificationLocalizationModel().fromMap(localizationData);
+            if(localizationModel == null) continue;
+            localizationModels.put(entry.getKey(), localizationModel);
+        }
+
+        if (localizationModels.isEmpty()) return null;
+        return localizationModels;
     }
 
     public void validate(
