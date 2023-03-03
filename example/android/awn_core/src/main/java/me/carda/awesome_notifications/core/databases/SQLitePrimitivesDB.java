@@ -146,8 +146,9 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
 //        onCreate(db);
     }
 
-    public void setBoolean(Context context, String tag, String key, boolean value) {
+    public boolean setBoolean(Context context, String tag, String key, boolean value) {
         try (SQLiteDatabase db = getWritableDatabase(context)) {
+            if (db == null) return false;
             db.beginTransaction();
             ContentValues values = new ContentValues();
             values.put(TAG, tag);
@@ -162,11 +163,12 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
+        return true;
     }
 
-    public void setInt(Context context, String tag, String key, int value) {
+    public boolean setInt(Context context, String tag, String key, int value) {
         try (SQLiteDatabase db = getWritableDatabase(context)) {
-            db.beginTransaction();
+            if (db == null) return false;
             ContentValues values = new ContentValues();
             values.put(TAG, tag);
             values.put(KEY, key);
@@ -180,10 +182,12 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
+        return true;
     }
 
-    public void setLong(Context context, String tag, String key, long value) {
+    public boolean setLong(Context context, String tag, String key, long value) {
         try (SQLiteDatabase db = getWritableDatabase(context)) {
+            if (db == null) return false;
             db.beginTransaction();
             ContentValues values = new ContentValues();
             values.put(TAG, tag);
@@ -198,10 +202,12 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
+        return true;
     }
 
-    public void setFloat(Context context, String tag, String key, float value) {
+    public boolean setFloat(Context context, String tag, String key, float value) {
         try (SQLiteDatabase db = getWritableDatabase(context)) {
+            if (db == null) return false;
             db.beginTransaction();
             ContentValues values = new ContentValues();
             values.put(TAG, tag);
@@ -216,10 +222,12 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
+        return true;
     }
 
-    public void setString(Context context, String tag, String key, String value) {
+    public boolean setString(Context context, String tag, String key, String value) {
         try (SQLiteDatabase db = getWritableDatabase(context)) {
+            if (db == null) return false;
             db.beginTransaction();
             ContentValues values = new ContentValues();
             values.put(TAG, tag);
@@ -234,6 +242,7 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
             db.endTransaction();
         }
+        return true;
     }
 
     public int getInt(Context context, String tag, String key, int defaultValue) {
@@ -335,6 +344,7 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
         String sqlQuery = "SELECT " + KEY + ", " + VALUE + " FROM " + tableName + " WHERE " + TAG + " = ?";
 
         try (SQLiteDatabase db = getReadableDatabase(context)) {
+            if (db == null) return values;
             try (Cursor cursor = db.rawQuery(sqlQuery, new String[]{tag})) {
                 if (cursor.moveToFirst()) {
                     do {
@@ -411,6 +421,7 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
             iSetAll<T> setterValue
     ){
         try (SQLiteDatabase db = getWritableDatabase(context)) {
+            if (db == null) return;
             db.beginTransaction();
             for (Map.Entry<String, T> entry : values.entrySet()) {
                 ContentValues contentValues = new ContentValues();
@@ -435,14 +446,16 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
     public void removeBoolean(Context context, String tag, String key){ remove(context, TABLE_BOOLEAN, tag, key); }
     public void removeLong(Context context, String tag, String key){ remove(context, TABLE_LONG, tag, key); }
 
-    private void remove(Context context, String tableName, String tag, String key) {
+    private boolean remove(Context context, String tableName, String tag, String key) {
         try (SQLiteDatabase db = getWritableDatabase(context)) {
+            if (db == null) return false;
             db.delete(
                 tableName,
                 TAG + " = ? AND " + KEY + " = ?",
                 new String[]{tag, key}
             );
         }
+        return true;
     }
 
     public void removeAllString(Context context, String tag){ removeAll(context, TABLE_STRING, tag); }
@@ -451,10 +464,12 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
     public void removeAllBoolean(Context context, String tag){ removeAll(context, TABLE_BOOLEAN, tag); }
     public void removeAllLong(Context context, String tag){ removeAll(context, TABLE_LONG, tag); }
 
-    private void removeAll(Context context, String tableName, String tag) {
+    private boolean removeAll(Context context, String tableName, String tag) {
         try (SQLiteDatabase db = getWritableDatabase(context)) {
+            if (db == null) return false;
             db.delete(tableName, TAG + " = ?", new String[]{tag});
         }
+        return true;
     }
 
     public void commit(Context context) {
