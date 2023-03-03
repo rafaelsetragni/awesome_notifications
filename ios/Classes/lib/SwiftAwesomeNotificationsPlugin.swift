@@ -47,7 +47,7 @@ public class SwiftAwesomeNotificationsPlugin:
     ){
         flutterChannel = channel
         
-        do {
+        do {            
             DartAwesomeNotificationsExtension.registrar = registrar
             DartAwesomeNotificationsExtension.initialize()
             
@@ -57,9 +57,17 @@ public class SwiftAwesomeNotificationsPlugin:
             registrar.addMethodCallDelegate(self, channel: self.flutterChannel!)
             registrar.addApplicationDelegate(self)
             
-            if AwesomeNotifications.debug {
-                Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications plugin attached to iOS \(floor(NSFoundationVersionNumber))")
-                Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications - App Group : \(Definitions.USER_DEFAULT_TAG)")
+            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications plugin attached to iOS \(floor(NSFoundationVersionNumber))")
+            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications - App Group : \(Definitions.USER_DEFAULT_TAG)")
+            
+            if !Definitions.USER_DEFAULT_TAG.starts(with: "group.") {
+                throw ExceptionFactory
+                        .shared
+                        .createNewAwesomeException(
+                            className: SwiftAwesomeNotificationsPlugin.TAG,
+                            code: ExceptionCode.CODE_INITIALIZATION_EXCEPTION,
+                            message: "Your App Group name \"\(Definitions.USER_DEFAULT_TAG)\" is invalid. It must starts with \"group.\"",
+                            detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".customAppGroup")
             }
         }
         catch {
@@ -196,9 +204,13 @@ public class SwiftAwesomeNotificationsPlugin:
                 case Definitions.CHANNEL_METHOD_DISMISS_NOTIFICATION:
                     try channelMethodDismissNotification(call: call, result: result)
                     return
+                
+                case Definitions.CHANNEL_METHOD_SET_LOCALIZATION:
+                    try channelMethodSetLocalization(call: call, result: result)
+                    return
                     
-                case Definitions.CHANNEL_METHOD_CANCEL_SCHEDULE:
-                    try channelMethodCancelSchedule(call: call, result: result)
+                case Definitions.CHANNEL_METHOD_GET_LOCALIZATION:
+                    try channelMethodGetLocalization(call: call, result: result)
                     return
                     
                 case Definitions.CHANNEL_METHOD_CANCEL_NOTIFICATION:
@@ -419,6 +431,20 @@ public class SwiftAwesomeNotificationsPlugin:
         awesomeNotifications?
             .resetGlobalBadgeCounter()
         result(nil)
+    }
+    
+    private func channelMethodSetLocalization(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        guard let languageCode:String? = call.arguments as? String? else {
+            result(false)
+            return
+        }
+        let success = awesomeNotifications?.setLocalization(languageCode: languageCode) ?? false
+        result(success)
+    }
+    
+    private func channelMethodGetLocalization(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        let languageCode:String? = awesomeNotifications?.getLocalization()
+        result(languageCode)
     }
     
     private func channelMethodDismissNotification(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
