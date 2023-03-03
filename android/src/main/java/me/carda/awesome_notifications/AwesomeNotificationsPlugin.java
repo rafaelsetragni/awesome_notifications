@@ -309,6 +309,14 @@ public class AwesomeNotificationsPlugin
                     channelRequestUserPermissions(call, result);
                     return;
 
+                case Definitions.CHANNEL_METHOD_IS_NOTIFICATION_ACTIVE:
+                    channelMethodIsNotificationActiveOnStatusBar(call, result);
+                    return;
+
+                case Definitions.CHANNEL_METHOD_GET_ALL_ACTIVE_NOTIFICATION_IDS:
+                    channelMethodGetAllActiveNotificationIdsOnStatusBar(call, result);
+                    return;
+
                 case Definitions.CHANNEL_METHOD_CREATE_NOTIFICATION:
                     channelMethodCreateNotification(call, result);
                     return;
@@ -1273,6 +1281,30 @@ public class AwesomeNotificationsPlugin
                             result.success(missingPermissions);
                         }
                     });
+    }
+
+    private void channelMethodIsNotificationActiveOnStatusBar(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws Exception {
+        Integer id = call.arguments();
+        if(id == null)
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Id is required",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS);
+
+        result.success(awesomeNotifications.isNotificationActiveOnStatusBar(id));
+    }
+
+    private void channelMethodGetAllActiveNotificationIdsOnStatusBar(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws Exception {
+        result.success(awesomeNotifications.getAllActiveNotificationIdsOnStatusBar());
     }
 
     private void channelMethodCreateNotification(

@@ -10,9 +10,12 @@ import android.support.v4.media.session.MediaSessionCompat;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -53,6 +56,7 @@ import me.carda.awesome_notifications.core.managers.LifeCycleManager;
 import me.carda.awesome_notifications.core.managers.LocalizationManager;
 import me.carda.awesome_notifications.core.managers.PermissionManager;
 import me.carda.awesome_notifications.core.managers.ScheduleManager;
+import me.carda.awesome_notifications.core.managers.StatusBarManager;
 import me.carda.awesome_notifications.core.models.AbstractModel;
 import me.carda.awesome_notifications.core.models.DefaultsModel;
 import me.carda.awesome_notifications.core.models.NotificationChannelGroupModel;
@@ -698,7 +702,6 @@ public class AwesomeNotifications
     }
 
     public void setGlobalBadgeCounter(@NonNull Integer count) {
-        // Android resets badges automatically when all notifications are cleared
         BadgeManager.getInstance().setGlobalBadgeCounter(wContext.get(), count);
     }
 
@@ -904,5 +907,22 @@ public class AwesomeNotifications
                         channelKey,
                         permissions,
                         permissionCompletionHandler);
+    }
+
+    public boolean isNotificationActiveOnStatusBar(
+            @NotNull int id
+    ) throws AwesomeNotificationsException
+    {
+        return StatusBarManager
+                .getInstance(wContext.get())
+                .isNotificationActiveOnStatusBar(id);
+    }
+
+    public Collection<Integer> getAllActiveNotificationIdsOnStatusBar(
+    ) throws AwesomeNotificationsException
+    {
+        return StatusBarManager
+                .getInstance(wContext.get())
+                .getAllActiveNotificationIdsOnStatusBar();
     }
 }
