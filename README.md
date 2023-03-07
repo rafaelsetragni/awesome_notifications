@@ -1047,10 +1047,10 @@ Future<void> showProgressNotification(int id) async {
           _updateCurrentProgressBar(
             id: id,
             simulatedStep: currentStep,
-            maxStep: maxStep * fragmentation));
+            maxStep: maxStep * fragmentation);
           udpateNotificationAfter1Second?.cancel();
           udpateNotificationAfter1Second = null;
-        }
+        });
   }
 }
 
@@ -1059,7 +1059,7 @@ void _updateCurrentProgressBar({
   required int simulatedStep,
   required int maxStep,
 }) {
-  if (simulatedStep < maxStep) {
+  if (simulatedStep > maxStep) {
     AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: id,
