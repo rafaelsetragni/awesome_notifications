@@ -135,11 +135,12 @@ class AwesomeNotifications implements IAwesomeNotifications {
   }
 
   @override
-  Future<bool> createNotification(
-      {required NotificationContent content,
-      NotificationSchedule? schedule,
-      List<NotificationActionButton>? actionButtons,
-        Map<String, NotificationLocalization>? localizations,}) {
+  Future<bool> createNotification({
+    required NotificationContent content,
+    NotificationSchedule? schedule,
+    List<NotificationActionButton>? actionButtons,
+    Map<String, NotificationLocalization>? localizations,
+  }) {
     return AwesomeNotificationsPlatform.instance.createNotification(
         content: content,
         schedule: schedule,
@@ -230,18 +231,15 @@ class AwesomeNotifications implements IAwesomeNotifications {
 
   @override
   Future<bool> initialize(
-      String? defaultIcon, List<NotificationChannel> channels,
-      {List<NotificationChannelGroup>? channelGroups, bool debug = false,
-        String? languageCode,
-      }) {
-    return AwesomeNotificationsPlatform
-        .instance
-        .initialize(
-            defaultIcon, channels,
-            channelGroups: channelGroups,
-            languageCode: languageCode,
-            debug: debug
-        );
+    String? defaultIcon,
+    List<NotificationChannel> channels, {
+    List<NotificationChannelGroup>? channelGroups,
+    bool debug = false,
+    String? languageCode,
+  }) {
+    return AwesomeNotificationsPlatform.instance.initialize(
+        defaultIcon, channels,
+        channelGroups: channelGroups, languageCode: languageCode, debug: debug);
   }
 
   @override
@@ -346,22 +344,19 @@ class AwesomeNotifications implements IAwesomeNotifications {
 
   @override
   Future<bool> setLocalization({required String? languageCode}) async {
-    return AwesomeNotificationsPlatform
-        .instance
+    return AwesomeNotificationsPlatform.instance
         .setLocalization(languageCode: languageCode);
   }
 
   @override
   Future<bool> isNotificationActiveOnStatusBar({required int id}) {
-    return AwesomeNotificationsPlatform
-        .instance
+    return AwesomeNotificationsPlatform.instance
         .isNotificationActiveOnStatusBar(id: id);
   }
 
   @override
   Future<List<int>> getAllActiveNotificationIdsOnStatusBar() {
-    return AwesomeNotificationsPlatform
-        .instance
+    return AwesomeNotificationsPlatform.instance
         .getAllActiveNotificationIdsOnStatusBar();
   }
 }

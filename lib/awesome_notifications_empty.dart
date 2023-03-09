@@ -45,11 +45,12 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
   }
 
   @override
-  Future<bool> createNotification(
-      {required NotificationContent content,
-      NotificationSchedule? schedule,
-      List<NotificationActionButton>? actionButtons,
-        Map<String, NotificationLocalization>? localizations,}) async {
+  Future<bool> createNotification({
+    required NotificationContent content,
+    NotificationSchedule? schedule,
+    List<NotificationActionButton>? actionButtons,
+    Map<String, NotificationLocalization>? localizations,
+  }) async {
     return false;
   }
 
@@ -120,10 +121,12 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
 
   @override
   Future<bool> initialize(
-      String? defaultIcon, List<NotificationChannel> channels,
-      {List<NotificationChannelGroup>? channelGroups,
-      bool debug = false,
-      String? languageCode,}) async {
+    String? defaultIcon,
+    List<NotificationChannel> channels, {
+    List<NotificationChannelGroup>? channelGroups,
+    bool debug = false,
+    String? languageCode,
+  }) async {
     return true;
   }
 

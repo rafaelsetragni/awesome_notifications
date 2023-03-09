@@ -1820,8 +1820,7 @@ class NotificationUtils {
             id: -1,
             channelKey: 'scheduled',
             title: 'Notification at exactly every single minute',
-            body:
-                'This notification was schedule to repeat at every single minute at clock.',
+            body: 'This notification was schedule to repeat at every single minute at clock.',
             notificationLayout: NotificationLayout.BigPicture,
             bigPicture: 'asset://assets/images/melted-clock.png'),
         schedule: NotificationCalendar(

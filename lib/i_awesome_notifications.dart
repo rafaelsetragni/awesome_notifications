@@ -36,12 +36,12 @@ abstract class IAwesomeNotifications {
   /// This method returns a [Future] that resolves to `true` if the initialization
   /// was successful, or `false` if an error occurred.
   Future<bool> initialize(
-      String? defaultIcon, List<NotificationChannel> channels,
-      {
-        List<NotificationChannelGroup>? channelGroups,
-        bool debug = false,
-        String? languageCode,
-      });
+    String? defaultIcon,
+    List<NotificationChannel> channels, {
+    List<NotificationChannelGroup>? channelGroups,
+    bool debug = false,
+    String? languageCode,
+  });
 
   /// Defines the global or static methods that will receive notification events.
   /// Only after set at least one method, the notification's events will be delivered.
@@ -261,9 +261,7 @@ abstract class IAwesomeNotifications {
   /// set in your AndroidManifest.xml file. Specifically, you need to have the
   /// [android.permission.ACCESS_NOTIFICATION_POLICY] permission declared in your manifest
   /// in order to access the device's notification policy.
-  Future<bool> isNotificationActiveOnStatusBar({
-    required int id
-  });
+  Future<bool> isNotificationActiveOnStatusBar({required int id});
 
   Future<List<int>> getAllActiveNotificationIdsOnStatusBar();
 
@@ -402,9 +400,9 @@ abstract class IAwesomeNotifications {
   /// parameter is set to `true`, the channel will be updated using a new key
   /// managed by the plugin. This should only be used in emergency situations.
   Future<void> setChannel(
-      NotificationChannel notificationChannel, {
-        bool forceUpdate = false,
-      });
+    NotificationChannel notificationChannel, {
+    bool forceUpdate = false,
+  });
 
   /// Removes a notification channel with the specified [channelKey].
   ///

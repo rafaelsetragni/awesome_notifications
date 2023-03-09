@@ -92,11 +92,12 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }
 
   @override
-  Future<bool> createNotification(
-      {required NotificationContent content,
-      NotificationSchedule? schedule,
-      List<NotificationActionButton>? actionButtons,
-      Map<String, NotificationLocalization>? localizations,}) async {
+  Future<bool> createNotification({
+    required NotificationContent content,
+    NotificationSchedule? schedule,
+    List<NotificationActionButton>? actionButtons,
+    Map<String, NotificationLocalization>? localizations,
+  }) async {
     _validateId(content.id!);
 
     final bool wasCreated = await methodChannel.invokeMethod(
@@ -259,10 +260,11 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
   @override
   Future<bool> initialize(
-      String? defaultIcon, List<NotificationChannel> channels,
-      {List<NotificationChannelGroup>? channelGroups,
-      bool debug = false,
-      String? languageCode,
+    String? defaultIcon,
+    List<NotificationChannel> channels, {
+    List<NotificationChannelGroup>? channelGroups,
+    bool debug = false,
+    String? languageCode,
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -468,34 +470,30 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<bool> setLocalization({required String? languageCode}) async {
     var success = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_SET_LOCALIZATION,
-        languageCode
-    );
+        CHANNEL_METHOD_SET_LOCALIZATION, languageCode);
     return success;
   }
 
   @override
   Future<bool> isNotificationActiveOnStatusBar({required int id}) async {
     var success = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_IS_NOTIFICATION_ACTIVE,
-        id
-    );
+        CHANNEL_METHOD_IS_NOTIFICATION_ACTIVE, id);
     return success;
   }
 
   @override
   Future<List<int>> getAllActiveNotificationIdsOnStatusBar() async {
-    return await methodChannel.invokeMethod(
-        CHANNEL_METHOD_GET_ALL_ACTIVE_NOTIFICATION_IDS
-    ) ?? [];
+    return await methodChannel
+            .invokeMethod(CHANNEL_METHOD_GET_ALL_ACTIVE_NOTIFICATION_IDS) ??
+        [];
   }
 
   final String _silentBGActionTypeKey =
-  AwesomeAssertUtils.toSimpleEnumString(ActionType.SilentBackgroundAction)!;
+      AwesomeAssertUtils.toSimpleEnumString(ActionType.SilentBackgroundAction)!;
 
   Future<dynamic> _handleMethod(MethodCall call) async {
     Map<String, dynamic> arguments =
-    (call.arguments as Map).cast<String, dynamic>();
+        (call.arguments as Map).cast<String, dynamic>();
 
     switch (call.method) {
       case EVENT_NOTIFICATION_CREATED:
@@ -543,7 +541,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     List<Object?> permissionList = [];
     for (final permission in permissions) {
       String? permissionValue =
-      AwesomeAssertUtils.toSimpleEnumString(permission);
+          AwesomeAssertUtils.toSimpleEnumString(permission);
       if (permissionValue != null) permissionList.add(permissionValue);
     }
     return permissionList;
@@ -554,8 +552,8 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     List<NotificationPermission> lockedPermissions = [];
     for (final permission in permissionList) {
       NotificationPermission? permissionValue =
-      AwesomeAssertUtils.enumToString<NotificationPermission>(
-          permission.toString(), NotificationPermission.values, null);
+          AwesomeAssertUtils.enumToString<NotificationPermission>(
+              permission.toString(), NotificationPermission.values, null);
       if (permissionValue != null) lockedPermissions.add(permissionValue);
     }
     return lockedPermissions;
