@@ -44,7 +44,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
       String? timeZone,
       bool allowWhileIdle = false,
       bool repeats = false,
-      bool preciseAlarm = false})
+      bool preciseAlarm = true})
       : _initialDateTime = initialDateTime,
         _expirationDateTime = expirationDateTime,
         _preciseSchedules = preciseSchedules,

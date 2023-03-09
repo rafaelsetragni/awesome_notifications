@@ -61,27 +61,30 @@ class NotificationModel extends Model {
 
   NotificationContent _extractContentFromMap(Map<String, dynamic> mapData) {
     assert(mapData[NOTIFICATION_CONTENT] is Map);
-    assert(mapData[NOTIFICATION_SCHEDULE].isNotEmpty);
 
     NotificationContent? content =
-        NotificationContent(id: 0, channelKey: '').fromMap(mapData);
+        NotificationContent(id: 0, channelKey: '')
+            .fromMap(Map<String, dynamic>.from(mapData[NOTIFICATION_CONTENT]));
     assert (content != null);
 
     return content!..validate();
   }
 
   NotificationSchedule? _extractScheduleFromMap(Map<String, dynamic> mapData) {
-    if (!mapData[NOTIFICATION_SCHEDULE] is Map) return null;
+    if (mapData[NOTIFICATION_SCHEDULE] is! Map) return null;
     if (mapData[NOTIFICATION_SCHEDULE].isEmpty) return null;
 
     Map<String, dynamic> scheduleData =
-        Map<String, dynamic>.from(mapData[NOTIFICATION_SCHEDULE]);
+        Map<String, dynamic>.from(Map<String, dynamic>.from(mapData[NOTIFICATION_SCHEDULE]));
 
     if (scheduleData.containsKey(NOTIFICATION_SCHEDULE_INTERVAL)) {
       return NotificationInterval(interval: 0).fromMap(scheduleData)?..validate();
     }
 
-    if (scheduleData.containsKey(NOTIFICATION_CRONTAB_EXPRESSION)) {
+    if (
+      scheduleData.containsKey(NOTIFICATION_CRONTAB_EXPRESSION) ||
+      scheduleData.containsKey(NOTIFICATION_PRECISE_SCHEDULES)
+    ) {
       return NotificationAndroidCrontab().fromMap(scheduleData)?..validate();
     }
 
@@ -89,17 +92,18 @@ class NotificationModel extends Model {
   }
 
   List<NotificationActionButton>? _extractButtonsFromMap(Map<String, dynamic> mapData) {
-    if (!mapData[NOTIFICATION_BUTTONS] is List) return null;
+    if (mapData[NOTIFICATION_BUTTONS] is! List) return null;
     if (mapData[NOTIFICATION_BUTTONS].isEmpty) return null;
 
     return (<dynamic>[
       for (dynamic buttonData in mapData[NOTIFICATION_BUTTONS])
-        NotificationActionButton(label: '', key: '').fromMap(buttonData)?..validate()
+        NotificationActionButton(label: '', key: '')
+            .fromMap(Map<String, dynamic>.from(buttonData))?..validate()
     ]..removeWhere((element) => element == null)) as List<NotificationActionButton>;
   }
 
   Map<String, NotificationLocalization>? _extractLocalizationsFromMap(Map<String, dynamic> mapData) {
-    if (!mapData[NOTIFICATION_LOCALIZATIONS] is Map<String, dynamic>) return null;
+    if (mapData[NOTIFICATION_LOCALIZATIONS] is! Map<String, dynamic>) return null;
     if (mapData[NOTIFICATION_LOCALIZATIONS].isEmpty) return null;
 
     return (

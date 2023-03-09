@@ -15,7 +15,7 @@ class NotificationInterval extends NotificationSchedule {
       String? timeZone,
       bool allowWhileIdle = false,
       bool repeats = false,
-      bool preciseAlarm = false})
+      bool preciseAlarm = true})
       : super(
             timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,

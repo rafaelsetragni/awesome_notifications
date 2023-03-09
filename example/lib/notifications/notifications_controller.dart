@@ -1,4 +1,4 @@
-import 'package:awesome_notifications_example/main_complete.dart';
+import 'package:awesome_notifications_example/main.dart';
 import 'package:awesome_notifications_example/routes/routes.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart' if (dart.library.html)
 'package:awesome_notifications_example/utils/common_web_functions.dart';
@@ -280,11 +280,13 @@ class NotificationsController {
   @pragma("vm:entry-point")
   static Future<void> onNotificationDisplayedMethod(
       ReceivedNotification receivedNotification) async {
-    var message = 'Notification displayed on ${
-        _toSimpleEnum(receivedNotification.displayedLifeCycle!)}';
-    print(message);
+    var message1 = 'Notification displayed on ${receivedNotification.displayedLifeCycle?.name}';
+    var message2 = 'Notification displayed at ${receivedNotification.displayedDate}';
+
+    print(message1);
+    print(message2);
     Fluttertoast.showToast(
-        msg: message,
+        msg: message1,
         toastLength: Toast.LENGTH_SHORT,
         backgroundColor: Colors.blue,
         gravity: ToastGravity.BOTTOM);

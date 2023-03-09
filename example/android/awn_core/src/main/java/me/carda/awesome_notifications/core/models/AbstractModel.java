@@ -10,10 +10,13 @@ import com.google.common.reflect.TypeToken;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -152,12 +155,22 @@ public abstract class AbstractModel implements Cloneable {
 
         List<Object> response = new ArrayList<>();
         for (Object object : value){
-            if (object instanceof AbstractModel)
+            if (object instanceof AbstractModel) {
                 response.add(((AbstractModel) object).toMap());
-            if (object instanceof SafeEnum)
+                continue;
+            }
+            if (object instanceof SafeEnum) {
                 response.add(((SafeEnum) object).getSafeName());
-            if (object instanceof Serializable)
+                continue;
+            }
+            if (object instanceof Calendar) {
+                response.add(SerializableUtils.getInstance().serializeCalendar((Calendar) object));
+                continue;
+            }
+            if (object instanceof Serializable){
                 response.add(object);
+                continue;
+            }
         }
         mapData.put(
                 reference,
@@ -610,6 +623,28 @@ public abstract class AbstractModel implements Cloneable {
             return (long[]) value;
 
         return defaultValue;
+    }
+
+    public List<Calendar> getValueOrDefaultCalendarList(
+            @NonNull Map<String, Object> map,
+            @NonNull String reference,
+            @Nullable List<Calendar> defaultValue
+    ){
+        Object value = map.get(reference);
+        if(value == null) return defaultValue;
+
+        if (!List.class.isAssignableFrom(value.getClass())) {
+            return defaultValue;
+        }
+
+        List<String> dateStrings = (List) value;
+        List<Calendar> calendars = new ArrayList<>();
+
+        for (String dateString : dateStrings) {
+            Calendar calendar = serializableUtils.deserializeCalendar(dateString);
+            calendars.add(calendar);
+        }
+        return calendars;
     }
 
     public <T> List<T> getValueOrDefaultList(

@@ -10,7 +10,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
@@ -271,6 +275,7 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
         T execute(Cursor cursor, int index);
     }
 
+    @NonNull
     private <T> T getRow(
             Context context,
             String tableName,
@@ -284,6 +289,7 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
                 " AND "+KEY+" = ?";
 
         try (SQLiteDatabase db = getReadableDatabase(context)) {
+            if (db == null) return defaultValue;
             try (Cursor cursor = db.rawQuery(sqlQuery, new String[]{tag, key})) {
                 T value = defaultValue;
                 if (cursor.moveToNext()) {
@@ -294,17 +300,75 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
         }
     }
 
+    public Map<String, Integer> getIntsStartingWith(Context context, String tag, String key) {
+        return getRowsStartingWith(context, TABLE_INT, tag, key, Cursor::getInt);
+    }
 
+    public Map<String, Long> getLongsStartingWith(Context context, String tag, String key) {
+        return getRowsStartingWith(context, TABLE_LONG, tag, key, Cursor::getLong);
+    }
+
+    public Map<String, Float> getFloatsStartingWith(Context context, String tag, String key) {
+        return getRowsStartingWith(context, TABLE_FLOAT, tag, key, Cursor::getFloat);
+    }
+
+    public Map<String, Boolean> getBooleansStartingWith(Context context, String tag, String key) {
+        return getRowsStartingWith(context, TABLE_BOOLEAN, tag, key,
+                (cursor, index) -> cursor.getInt(index) == 1
+        );
+    }
+
+    public Map<String, String> getStringsStartingWith(Context context, String tag, String key) {
+        return getRowsStartingWith(context, TABLE_STRING, tag, key, Cursor::getString);
+    }
+
+    @NonNull
+    private <T> Map<String, T>  getRowsStartingWith(
+            Context context,
+            String tableName,
+            String tag,
+            String key,
+            iGetRow<T> getterValue
+    ){
+        String sqlQuery = "SELECT "+VALUE+" FROM "+tableName+
+                " WHERE "+TAG+" = ?"+
+                " AND "+KEY+" like ?%";
+
+        Map<String, T> values = new HashMap<>();
+        try (SQLiteDatabase db = getReadableDatabase(context)) {
+            if (db == null) return values;
+            try (Cursor cursor = db.rawQuery(sqlQuery, new String[]{tag, key})) {
+                if (cursor.moveToFirst()) {
+                    do {
+                        values.put(
+                                cursor.getString(0),
+                                getterValue.execute(cursor, 1)
+                        );
+                    } while (cursor.moveToNext());
+                }
+                return values;
+            }
+        }
+    }
+
+
+    @NonNull
     public int stringCount(Context context, String tag) { return countRows(context, tag, TABLE_STRING); }
+    @NonNull
     public int floatCount(Context context, String tag) { return countRows(context, tag, TABLE_FLOAT); }
+    @NonNull
     public int intCount(Context context, String tag) { return countRows(context, tag, TABLE_INT); }
+    @NonNull
     public int booleanCount(Context context, String tag) { return countRows(context, tag, TABLE_BOOLEAN); }
+    @NonNull
     public int longCount(Context context, String tag) { return countRows(context, tag, TABLE_LONG); }
 
+    @NonNull
     private int countRows(Context context, String tag, String tableName) {
         String sqlQuery = "SELECT count(*) FROM "+tableName+
                 " WHERE "+TAG+" = ?";
         try (SQLiteDatabase db = getReadableDatabase(context)) {
+            if (db == null) return 0;
             try (Cursor cursor = db.rawQuery(sqlQuery, new String[]{tag})) {
                 int count = 0;
                 if (cursor.moveToNext()) {
@@ -315,22 +379,27 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
         }
     }
 
+    @NonNull
     public Map<String, String> getAllStringValues(Context context, String tag) {
         return getAll(context, tag, TABLE_STRING, (iGetAll<String>) Cursor::getString);
     }
 
+    @NonNull
     public Map<String, Float> getAllFloatValues(Context context, String tag) {
         return getAll(context, tag, TABLE_FLOAT, (iGetAll<Float>) Cursor::getFloat);
     }
 
+    @NonNull
     public Map<String, Integer> getAllIntValues(Context context, String tag) {
         return getAll(context, tag, TABLE_INT, (iGetAll<Integer>) Cursor::getInt);
     }
 
+    @NonNull
     public Map<String, Boolean> getAllBooleanValues(Context context, String tag) {
         return getAll(context, tag, TABLE_BOOLEAN, (iGetAll<Boolean>) (cursor, index) -> cursor.getInt(index) == 1);
     }
 
+    @NonNull
     public Map<String, Long> getAllLongValues(Context context, String tag) {
         return getAll(context, tag, TABLE_LONG, (iGetAll<Long>) Cursor::getLong);
     }
@@ -339,6 +408,7 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
         T execute(Cursor cursor, int index);
     }
 
+    @NonNull
     private <T> Map<String, T> getAll(Context context, String tag, String tableName, iGetAll<T> getterValue) {
         Map<String, T> values = new HashMap<>();
         String sqlQuery = "SELECT " + KEY + ", " + VALUE + " FROM " + tableName + " WHERE " + TAG + " = ?";

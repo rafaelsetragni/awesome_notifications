@@ -58,33 +58,6 @@ class _HomePageState extends State<HomePage> {
 
   String packageName = 'me.carda.awesome_notifications_example';
 
-  Future<DateTime?> pickScheduleDate(BuildContext context,
-      {required bool isUtc}) async {
-    TimeOfDay? timeOfDay;
-    DateTime now = isUtc ? DateTime.now().toUtc() : DateTime.now();
-    DateTime? newDate = await showDatePicker(
-        context: context,
-        initialDate: now,
-        firstDate: now,
-        lastDate: now.add(const Duration(days: 365)));
-
-    if (newDate != null) {
-      timeOfDay = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(now.add(const Duration(minutes: 1))),
-      );
-
-      if (timeOfDay != null) {
-        return isUtc
-            ? DateTime.utc(newDate.year, newDate.month, newDate.day,
-                timeOfDay.hour, timeOfDay.minute)
-            : DateTime(newDate.year, newDate.month, newDate.day, timeOfDay.hour,
-                timeOfDay.minute);
-      }
-    }
-    return null;
-  }
-
   int _pickAmount = 50;
   Future<int?> pickBadgeCounter(BuildContext context, int initialAmount) async {
     setState(() => _pickAmount = initialAmount);
@@ -184,7 +157,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     ThemeData themeData = Theme.of(context);
-
+    bool isAndroid = Theme.of(context).platform == TargetPlatform.android;
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -853,7 +826,7 @@ class _HomePageState extends State<HomePage> {
             SimpleButton('Schedule notification with local time zone',
                 onPressed: () async {
               DateTime? pickedDate =
-                  await pickScheduleDate(context, isUtc: false);
+                  await NotificationUtils.pickScheduleDate(context, isUtc: false);
               if (pickedDate != null) {
                 NotificationUtils.showNotificationAtSchedulePreciseDate(
                     pickedDate);
@@ -862,7 +835,7 @@ class _HomePageState extends State<HomePage> {
             SimpleButton('Schedule notification with utc time zone',
                 onPressed: () async {
               DateTime? pickedDate =
-                  await pickScheduleDate(context, isUtc: true);
+                  await NotificationUtils.pickScheduleDate(context, isUtc: true);
               if (pickedDate != null) {
                 NotificationUtils.showNotificationAtSchedulePreciseDate(
                     pickedDate);
@@ -874,11 +847,15 @@ class _HomePageState extends State<HomePage> {
             ),
             SimpleButton(
               'Show notifications repeatedly in 10 sec, spaced 5 sec from each other for 1 minute (only for Android)',
-              onPressed: () => NotificationUtils.repeatMultiple5Crontab(),
+              onPressed: isAndroid
+                  ? () => NotificationUtils.repeatMultiple5Crontab()
+                  : null,
             ),
             SimpleButton(
               'Show notification with 3 precise times (only for Android)',
-              onPressed: () => NotificationUtils.repeatPreciseThreeTimes(),
+              onPressed: isAndroid
+                  ? () => NotificationUtils.repeatPreciseThreeTimes()
+                  : null,
             ),
             SimpleButton(
               'Show notification at every single minute o\'clock',
@@ -950,46 +927,10 @@ class _HomePageState extends State<HomePage> {
                 'This is a simple example to show how to query the next valid '
                     'schedule date. The date components follow the ISO 8601 '
                     'standard.'),
-            SimpleButton('Get next Monday after date', onPressed: () async {
-              DateTime? referenceDate =
-                  await pickScheduleDate(context, isUtc: false);
-
-              NotificationSchedule schedule = NotificationCalendar(
-                  weekday: DateTime.monday,
-                  hour: 0,
-                  minute: 0,
-                  second: 0,
-                  timeZone: AwesomeNotifications.localTimeZoneIdentifier);
-              //NotificationCalendar.fromDate(date: expectedDate);
-
-              DateTime? nextValidDate = await AwesomeNotifications()
-                  .getNextDate(schedule, fixedDate: referenceDate);
-
-              late String response;
-              if (nextValidDate == null) {
-                response = 'There is no more valid date for this schedule';
-              } else {
-                response = AwesomeDateUtils.parseDateToString(
-                    nextValidDate.toUtc(),
-                    format: 'dd/MM/yyyy')!;
-              }
-
-              showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                        title: const Text("Next valid schedule"),
-                        content: SizedBox(
-                            height: 50, child: Center(child: Text(response))),
-                        actions: [
-                          TextButton(
-                            child: const Text("OK"),
-                            onPressed: () {
-                              Navigator.of(context).pop(null);
-                            },
-                          )
-                        ],
-                      ));
-            }),
+            SimpleButton(
+                'Get next Monday after date',
+                onPressed: () => NotificationUtils.getNextValidMonday(context)
+            ),
 
             /* ******************************************************************** */
 
@@ -1015,11 +956,16 @@ class _HomePageState extends State<HomePage> {
             /* ******************************************************************** */
 
             TextDivisor(title: 'Progress Notifications'),
-            SimpleButton('Show indeterminate progress notification',
-                onPressed: () =>
-                    NotificationUtils.showIndeterminateProgressNotification(9)),
+            SimpleButton('Show indeterminate progress notification (Only for Android)',
+                onPressed: isAndroid
+                    ? () => NotificationUtils.showIndeterminateProgressNotification(9)
+                    : null
+            ),
             SimpleButton('Show progress notification - updates every second',
-                onPressed: () => NotificationUtils.showProgressNotification(9)),
+                onPressed: isAndroid
+                    ? () => NotificationUtils.showProgressNotification(9)
+                    : null
+            ),
             SimpleButton('Cancel notification',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,

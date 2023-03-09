@@ -2,14 +2,18 @@ package me.carda.awesome_notifications.core.managers;
 
 import android.content.Context;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.Calendar;
 import java.util.List;
 
 import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.models.returnedData.ActionReceived;
+import me.carda.awesome_notifications.core.models.returnedData.NotificationReceived;
 import me.carda.awesome_notifications.core.utils.StringUtils;
 
-public class DismissedManager {
+public class DismissedManager extends EventManager {
 
     private static final RepositoryManager<ActionReceived> shared
             = new RepositoryManager<>(
@@ -18,38 +22,81 @@ public class DismissedManager {
                     ActionReceived.class,
                     "ActionReceived");
 
-    public static Boolean removeDismissed(Context context, Integer id) throws AwesomeNotificationsException {
-        return shared.remove(context, Definitions.SHARED_DISMISSED, id.toString());
+    // ************** SINGLETON PATTERN ***********************
+
+    private static DismissedManager instance;
+
+    private DismissedManager(){}
+    public static DismissedManager getInstance() {
+        if (instance == null)
+            instance = new DismissedManager();
+        return instance;
     }
 
-    public static List<ActionReceived> listDismisses(Context context) throws AwesomeNotificationsException {
+    // ************** SINGLETON PATTERN ***********************
+
+
+
+    public boolean saveDismissed(
+            @NonNull Context context,
+            @NonNull ActionReceived received
+    ) throws AwesomeNotificationsException {
+        return shared.set(
+                context,
+                Definitions.SHARED_DISMISSED,
+                _getKeyByIdAndDate(received.id, received.dismissedDate),
+                received);
+    }
+
+    public List<ActionReceived> listDismisses(
+            @NonNull Context context
+    ) throws AwesomeNotificationsException {
         return shared.getAllObjects(context, Definitions.SHARED_DISMISSED);
     }
 
-    public static void saveDismissed(Context context, ActionReceived received) throws AwesomeNotificationsException {
-        shared.set(context, Definitions.SHARED_DISMISSED, received.id.toString(), received);
+    public List<ActionReceived> getDismissedByKey(
+            @NonNull Context context,
+            @NonNull Integer id
+    ) throws AwesomeNotificationsException {
+        return shared.getAllObjectsStartingWith(
+                context,
+                Definitions.SHARED_DISMISSED,
+                _getKeyById(id));
     }
 
-    public static ActionReceived getDismissedByKey(Context context, Integer id) throws AwesomeNotificationsException {
-        return shared.get(context, Definitions.SHARED_DISMISSED, id.toString());
+    public NotificationReceived getDismissedByIdAndDate(
+            @NonNull Context context,
+            @NonNull Integer id,
+            @NonNull Calendar dismissedDate
+    ) throws AwesomeNotificationsException {
+        return shared.get(
+                context,
+                Definitions.SHARED_DISMISSED,
+                _getKeyByIdAndDate(id, dismissedDate));
     }
 
-    public static void clearAllDismissed(Context context) throws AwesomeNotificationsException {
-        List<ActionReceived> receivedList = shared.getAllObjects(context, Definitions.SHARED_DISMISSED);
-        if (receivedList != null){
-            for (ActionReceived received : receivedList) {
-                cancelDismissed(context, received.id);
-            }
-        }
+    public boolean clearDismissed(
+            @NonNull Context context,
+            @NonNull Integer id,
+            @NonNull Calendar dismissedDate
+    ) throws AwesomeNotificationsException {
+        return shared.remove(
+                context,
+                Definitions.SHARED_DISMISSED,
+                _getKeyByIdAndDate(id, dismissedDate));
     }
 
-    public static void cancelDismissed(Context context, Integer id) throws AwesomeNotificationsException {
-        ActionReceived received = getDismissedByKey(context, id);
-        if(received !=null)
-            removeDismissed(context, received.id);
+    public boolean clearAllDismissed(
+            @NonNull Context context
+    ) throws AwesomeNotificationsException {
+        return shared.removeAll(
+                context,
+                Definitions.SHARED_DISMISSED);
     }
 
-    public static void commitChanges(Context context) throws AwesomeNotificationsException {
-        shared.commit(context);
+    public boolean commitChanges(
+            @NonNull Context context
+    ) throws AwesomeNotificationsException {
+        return shared.commit(context);
     }
 }

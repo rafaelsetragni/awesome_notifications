@@ -8,57 +8,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="90f153b2-27cc-4b8f-8201-8a3571b86189" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/EventManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/me/carda/awesome_notifications/AwesomeNotificationsPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/AwesomeNotifications.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/AwesomeNotifications.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/Definitions.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/Definitions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/builders/NotificationBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/builders/NotificationBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/DismissedNotificationReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/DismissedNotificationReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/NotificationActionReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/receivers/NotificationActionReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/senders/BroadcastSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/broadcasters/senders/BroadcastSender.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/databases/SQLitePrimitivesDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/databases/SQLitePrimitivesDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/LocalizationManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/LocalizationManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/StatusBarManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/StatusBarManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/databases/SQLiteSchedulesDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/databases/SQLiteSchedulesDB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/ActionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/ActionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/CreatedManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/CreatedManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/DismissedManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/DismissedManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/DisplayedManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/DisplayedManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/RepositoryManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/RepositoryManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/ScheduleManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/managers/ScheduleManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/models/AbstractModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/models/AbstractModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/models/NotificationCrontabModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/models/NotificationCrontabModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/models/NotificationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/models/NotificationModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/assets/images/awn-rocks-zu.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/example/assets/images/awn-rocks-zh.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationForegroundSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationForegroundSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/awn_core/src/main/java/me/carda/awesome_notifications/core/threads/NotificationSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/mains.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/main_complete.dart" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/notifications/notifications_util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/notifications/notifications_util.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/pages/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/home_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/themes/themes_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/themes/themes_controller.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/test/widget_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/test/widget_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/AwesomeNotifications.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/AwesomeNotifications.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/Definitions.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/Definitions.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/broadcasters/receivers/NotificationActionReceiver.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/broadcasters/receivers/NotificationActionReceiver.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/broadcasters/senders/BroadcastSender.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/broadcasters/senders/BroadcastSender.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/builders/NotificationBuilder.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/builders/NotificationBuilder.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/extensions/AwesomeServiceExtension.swift" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/extensions/StringExtension.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/extensions/StringExtension.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/managers/ActionManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/managers/ActionManager.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/managers/BadgeManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/managers/BadgeManager.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/managers/DefaultsManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/managers/DefaultsManager.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/managers/PermissionManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/managers/PermissionManager.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/models/NotificationContentModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/models/NotificationContentModel.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/models/NotificationIntervalModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/models/NotificationIntervalModel.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/models/NotificationModel.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/models/NotificationModel.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/threads/NotificationSenderAndScheduler.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/threads/NotificationSenderAndScheduler.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/utils/MapUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/utils/MapUtils.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/AwnCore/Classes/utils/SwiftUtils.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/AwnCore/Classes/utils/SwiftUtils.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/lib/SwiftAwesomeNotificationsPlugin.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/awesome_notifications.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/awesome_notifications_empty.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications_empty.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/awesome_notifications_method_channel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications_method_channel.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/awesome_notifications_web.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications_web.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/i_awesome_notifications.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/i_awesome_notifications.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/definitions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/definitions.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_localization.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_localization.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/awesome_notifications_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/awesome_notifications_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_android_crontab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_android_crontab.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_calendar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_calendar.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_interval.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_interval.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_schedule.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_schedule.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +59,7 @@
     <setting file="file://$PROJECT_DIR$/CHANGELOG.md" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/example/ios/Pods/IosAwnCore/IosAwnCore/Classes/broadcasters/senders/BroadcastSender.swift" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/example/lib/main.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/example/lib/main_complete.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/example/lib/mains.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ios/AwnCore/Classes/broadcasters/senders/BroadcastSender.swift" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ios/AwnCore/Classes/managers/DefaultsManager.swift" root0="FORCE_HIGHLIGHTING" />
@@ -96,19 +76,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;com.intellij.openapi.externalSystem.service.settings.ExternalSystemGroupConfigurable&quot;: &quot;ALL&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;debugger.dataViews&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cidr.known.project.marker": "true",
+    "com.intellij.openapi.externalSystem.service.settings.ExternalSystemGroupConfigurable": "ALL",
+    "dart.analysis.tool.window.visible": "false",
+    "io.flutter.reload.alreadyRun": "true",
+    "settings.editor.selected.configurable": "debugger.dataViews",
+    "show.migrate.to.gradle.popup": "false"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/example/lib/utils" />
@@ -176,11 +156,11 @@
       <method v="2" />
     </configuration>
     <configuration name="Complete Example" type="FlutterRunConfigurationType" factoryName="Flutter">
-      <option name="filePath" value="$PROJECT_DIR$/example/lib/main_complete.dart" />
+      <option name="filePath" value="$PROJECT_DIR$/example/lib/main.dart" />
       <method v="2" />
     </configuration>
     <configuration name="Simple Example" type="FlutterRunConfigurationType" factoryName="Flutter">
-      <option name="filePath" value="$PROJECT_DIR$/example/lib/main.dart" />
+      <option name="filePath" value="$PROJECT_DIR$/example/lib/mains.dart" />
       <method v="2" />
     </configuration>
     <list>

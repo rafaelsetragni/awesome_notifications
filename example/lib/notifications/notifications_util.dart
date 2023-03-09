@@ -1645,6 +1645,7 @@ class NotificationUtils {
   static Future<void> listScheduledNotifications(BuildContext context) async {
     List<NotificationModel> activeSchedules =
         await AwesomeNotifications().listScheduledNotifications();
+
     for (NotificationModel schedule in activeSchedules) {
       debugPrint('pending notification: ['
           'id: ${schedule.content!.id}, '
@@ -1668,6 +1669,75 @@ class NotificationUtils {
         );
       },
     );
+  }
+
+
+  static Future<DateTime?> pickScheduleDate(BuildContext context,
+      {required bool isUtc}) async {
+    TimeOfDay? timeOfDay;
+    DateTime now = isUtc ? DateTime.now().toUtc() : DateTime.now();
+    DateTime? newDate = await showDatePicker(
+        context: context,
+        initialDate: now,
+        firstDate: now,
+        lastDate: now.add(const Duration(days: 365)));
+
+    if (newDate != null) {
+      timeOfDay = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(now.add(const Duration(minutes: 1))),
+      );
+
+      if (timeOfDay != null) {
+        return isUtc
+            ? DateTime.utc(newDate.year, newDate.month, newDate.day,
+            timeOfDay.hour, timeOfDay.minute)
+            : DateTime(newDate.year, newDate.month, newDate.day, timeOfDay.hour,
+            timeOfDay.minute);
+      }
+    }
+    return null;
+  }
+
+  static Future<void> getNextValidMonday(BuildContext context) async {
+    DateTime? referenceDate =
+    await pickScheduleDate(context, isUtc: false);
+
+    NotificationSchedule schedule = NotificationCalendar(
+        weekday: DateTime.monday,
+        hour: 0,
+        minute: 0,
+        second: 0,
+        timeZone: AwesomeNotifications.localTimeZoneIdentifier);
+    //NotificationCalendar.fromDate(date: expectedDate);
+
+    DateTime? nextValidDate = await AwesomeNotifications()
+        .getNextDate(schedule, fixedDate: referenceDate);
+
+    late String response;
+    if (nextValidDate == null) {
+      response = 'There is no more valid date for this schedule';
+    } else {
+      response = utils.AwesomeDateUtils.parseDateToString(
+          nextValidDate.toUtc(),
+          format: 'dd/MM/yyyy')!;
+    }
+
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text("Next valid schedule"),
+          content: SizedBox(
+              height: 50, child: Center(child: Text(response))),
+          actions: [
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop(null);
+              },
+            )
+          ],
+        ));
   }
 
   static Future<String> getCurrentTimeZone() {
@@ -1699,6 +1769,7 @@ class NotificationUtils {
   }
 
   static Future<void> repeatMultiple5Crontab() async {
+    var nowDate = DateTime.now();
     String localTimeZone =
         await AwesomeNotifications().getLocalTimeZoneIdentifier();
     await AwesomeNotifications().createNotification(
@@ -1709,15 +1780,18 @@ class NotificationUtils {
             body:
                 'This notification was schedule to repeat at every 5 seconds.'),
         schedule: NotificationAndroidCrontab(
-            initialDateTime: DateTime.now().add(Duration(seconds: 10)).toUtc(),
+            initialDateTime: nowDate.copyWith().add(const Duration(seconds: 10)).toUtc(),
             expirationDateTime:
-                DateTime.now().add(Duration(seconds: 10, minutes: 1)).toUtc(),
+            nowDate.copyWith().add(const Duration(seconds: 10, minutes: 1)).toUtc(),
             crontabExpression: '/5 * * * * ? *',
             timeZone: localTimeZone,
-            repeats: true));
+            repeats: true,
+            preciseAlarm: true
+        ));
   }
 
   static Future<void> repeatPreciseThreeTimes() async {
+    var nowDate = DateTime.now();
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: -1,
@@ -1725,12 +1799,17 @@ class NotificationUtils {
             title: 'Notification scheduled to play precisely 3 times',
             body: 'This notification was schedule to play precisely 3 times.',
             notificationLayout: NotificationLayout.BigPicture,
+            category: NotificationCategory.Alarm,
             bigPicture: 'asset://assets/images/melted-clock.png'),
-        schedule: NotificationAndroidCrontab(preciseSchedules: [
-          DateTime.now().add(Duration(seconds: 10)).toUtc(),
-          DateTime.now().add(Duration(seconds: 25)).toUtc(),
-          DateTime.now().add(Duration(seconds: 45)).toUtc()
-        ], repeats: true));
+        schedule: NotificationAndroidCrontab(
+            preciseSchedules: [
+              nowDate.copyWith().add(const Duration(seconds: 1)).toUtc(),
+              nowDate.copyWith().add(const Duration(seconds: 25)).toUtc(),
+              nowDate.copyWith().add(const Duration(seconds: 45)).toUtc()
+            ],
+            repeats: true,
+            preciseAlarm: true
+        ));
   }
 
   static Future<void> repeatMinuteNotificationOClock() async {

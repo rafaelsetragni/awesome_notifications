@@ -13,13 +13,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
 
 public class SQLiteSchedulesDB extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "AwesomeSchedulesDB.db";
+    private static final String DATABASE_NAME = "AwesomeSchedules.db";
 
     private static final String TABLE_NAME = "schedules";
     private static final String COLUMN_ID = "id";
@@ -59,6 +61,7 @@ public class SQLiteSchedulesDB extends SQLiteOpenHelper {
         super(context, databasePath, null, DATABASE_VERSION);
     }
 
+    @Nullable
     private SQLiteDatabase getWritableDatabase(Context context) {
         try {
             return super.getWritableDatabase();
@@ -75,6 +78,7 @@ public class SQLiteSchedulesDB extends SQLiteOpenHelper {
         return null;
     }
 
+    @Nullable
     private SQLiteDatabase getReadableDatabase(Context context) {
         try {
             return super.getReadableDatabase();
@@ -94,7 +98,7 @@ public class SQLiteSchedulesDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
-                + COLUMN_ID + " TEXT PRIMARY KEY,"
+                + COLUMN_ID + " INTEGER PRIMARY KEY,"
                 + COLUMN_GROUP_KEY + " TEXT,"
                 + COLUMN_CHANNEL_KEY + " TEXT,"
                 + COLUMN_CONTENT + " TEXT"
@@ -119,12 +123,13 @@ public class SQLiteSchedulesDB extends SQLiteOpenHelper {
 
     public synchronized void saveSchedule(
             Context context,
-            String id,
+            Integer id,
             String channelKey,
             String groupKey,
             String content
     ) {
         try (SQLiteDatabase db = this.getWritableDatabase(context)) {
+            if (db == null) return;
             db.beginTransaction();
             ContentValues values = new ContentValues();
             values.put(COLUMN_ID, id);
@@ -142,17 +147,18 @@ public class SQLiteSchedulesDB extends SQLiteOpenHelper {
         }
     }
 
-    public Map<String, String> getAllSchedules(Context context) {
-        Map<String, String> schedules = new HashMap<>();
+    public Map<Integer, String> getAllSchedules(Context context) {
+        Map<Integer, String> schedules = new HashMap<>();
 
         // Select all query
         String selectQuery = "SELECT " + COLUMN_ID + ", " + COLUMN_CONTENT + " FROM " + TABLE_NAME;
 
         try (SQLiteDatabase db = this.getReadableDatabase(context)) {
+            if (db == null) return schedules;
             try (Cursor cursor = db.rawQuery(selectQuery, null)) {
                 if (cursor.moveToFirst()) {
                     do {
-                        schedules.put(cursor.getString(0), cursor.getString(1));
+                        schedules.put(cursor.getInt(0), cursor.getString(1));
                     } while (cursor.moveToNext());
                 }
                 return schedules;
@@ -160,18 +166,19 @@ public class SQLiteSchedulesDB extends SQLiteOpenHelper {
         }
     }
 
-    public Map<String, String> getScheduleById(Context context, String id) {
-        Map<String, String> schedule = new HashMap<>();
+    public Map<Integer, String> getScheduleById(Context context, Integer id) {
+        Map<Integer, String> schedule = new HashMap<>();
 
         // Select all query
         String selectQuery = "SELECT " + COLUMN_ID + ", " + COLUMN_CONTENT +
                 " FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
 
         try (SQLiteDatabase db = this.getReadableDatabase(context)) {
-            try (Cursor cursor = db.rawQuery(selectQuery, new String[]{id})) {
+            if (db == null) return schedule;
+            try (Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(id)})) {
                 if (cursor.moveToFirst()) {
                     do {
-                        schedule.put(cursor.getString(0), cursor.getString(1));
+                        schedule.put(cursor.getInt(0), cursor.getString(1));
                     } while (cursor.moveToNext());
                 }
                 return schedule;
@@ -179,18 +186,19 @@ public class SQLiteSchedulesDB extends SQLiteOpenHelper {
         }
     }
 
-    public Map<String, String> getSchedulesByChannelKey(Context context, String channelKey) {
-        Map<String, String> schedules = new HashMap<>();
+    public Map<Integer, String> getSchedulesByChannelKey(Context context, String channelKey) {
+        Map<Integer, String> schedules = new HashMap<>();
 
         // Select all query
         String selectQuery = "SELECT " + COLUMN_ID + ", " + COLUMN_CONTENT +
                 " FROM " + TABLE_NAME + " WHERE " + COLUMN_CHANNEL_KEY + " = ?";
 
         try (SQLiteDatabase db = this.getReadableDatabase(context)) {
+            if (db == null) return schedules;
             try (Cursor cursor = db.rawQuery(selectQuery, new String[]{channelKey})) {
                 if (cursor.moveToFirst()) {
                     do {
-                        schedules.put(cursor.getString(0), cursor.getString(1));
+                        schedules.put(cursor.getInt(0), cursor.getString(1));
                     } while (cursor.moveToNext());
                 }
                 return schedules;
@@ -198,19 +206,20 @@ public class SQLiteSchedulesDB extends SQLiteOpenHelper {
         }
     }
 
-    public Map<String, String> getSchedulesByGroupKey(Context context, String groupKey) {
-        Map<String, String> schedules = new HashMap<>();
+    public Map<Integer, String> getSchedulesByGroupKey(Context context, String groupKey) {
+        Map<Integer, String> schedules = new HashMap<>();
 
         // Select all query
         String selectQuery = "SELECT " + COLUMN_ID + ", " + COLUMN_CONTENT +
                 " FROM " + TABLE_NAME + " WHERE " + COLUMN_GROUP_KEY + " = ?";
 
         try (SQLiteDatabase db = this.getReadableDatabase(context)) {
+            if (db == null) return schedules;
             try (Cursor cursor = db.rawQuery(selectQuery, new String[]{groupKey})) {
                 // Looping through all rows and adding to list
                 if (cursor.moveToFirst()) {
                     do {
-                        schedules.put(cursor.getString(0), cursor.getString(1));
+                        schedules.put(cursor.getInt(0), cursor.getString(1));
                     } while (cursor.moveToNext());
                 }
                 return schedules;
@@ -218,10 +227,11 @@ public class SQLiteSchedulesDB extends SQLiteOpenHelper {
         }
     }
 
-    public synchronized void removeScheduleById(Context context, String id) {
+    public synchronized void removeScheduleById(Context context, Integer id) {
         try (SQLiteDatabase db = this.getWritableDatabase(context)){
+            if (db == null) return;
             db.beginTransaction();
-            db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{id});
+            db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
             db.setTransactionSuccessful();
             db.endTransaction();
         }
@@ -229,6 +239,7 @@ public class SQLiteSchedulesDB extends SQLiteOpenHelper {
 
     public synchronized void removeSchedulesByChannelKey(Context context, String channelKey) {
         try (SQLiteDatabase db = this.getWritableDatabase(context)) {
+            if (db == null) return;
             db.beginTransaction();
             db.delete(TABLE_NAME, COLUMN_CHANNEL_KEY + " = ?", new String[]{channelKey});
             db.setTransactionSuccessful();
@@ -238,6 +249,7 @@ public class SQLiteSchedulesDB extends SQLiteOpenHelper {
 
     public synchronized void removeSchedulesByGroupKey(Context context, String groupKey) {
         try (SQLiteDatabase db = this.getWritableDatabase(context)){
+            if (db == null) return;
             db.beginTransaction();
             db.delete(TABLE_NAME, COLUMN_GROUP_KEY + " = ?", new String[]{groupKey});
             db.setTransactionSuccessful();
@@ -247,6 +259,7 @@ public class SQLiteSchedulesDB extends SQLiteOpenHelper {
 
     public synchronized void removeAllSchedules(Context context) {
         try (SQLiteDatabase db = this.getWritableDatabase(context)){
+            if (db == null) return;
             db.beginTransaction();
             db.execSQL("DELETE FROM " + TABLE_NAME);
             db.setTransactionSuccessful();

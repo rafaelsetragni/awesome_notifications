@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../main_complete.dart';
+import '../main.dart';
 
 enum Themes { light, dark }
 

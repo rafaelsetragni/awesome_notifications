@@ -66,7 +66,7 @@ class NotificationCalendar extends NotificationSchedule {
     this.weekOfYear,
     String? timeZone,
     bool allowWhileIdle = false,
-    bool preciseAlarm = false,
+    bool preciseAlarm = true,
     bool repeats = false,
   }) : super(
             timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,

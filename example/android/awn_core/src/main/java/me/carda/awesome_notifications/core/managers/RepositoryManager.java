@@ -3,6 +3,8 @@ package me.carda.awesome_notifications.core.managers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +30,12 @@ public class RepositoryManager<T extends AbstractModel> {
     private String hashedReference = "default";
     private final StringUtils stringUtils;
 
-    public RepositoryManager(StringUtils stringUtils, String fileIdentifier, Class<T> targetClass, String className){
+    public RepositoryManager(
+            @NonNull StringUtils stringUtils,
+            @NonNull String fileIdentifier,
+            @NonNull Class<T> targetClass,
+            @NonNull String className
+    ){
         this.clazz = targetClass;
         this.stringUtils = stringUtils;
         String reference = Definitions.SHARED_MANAGER + "." + fileIdentifier + "." + className;
@@ -48,7 +55,9 @@ public class RepositoryManager<T extends AbstractModel> {
         }
     }
 
-    private SQLitePrimitivesDB getDbInstance(Context context) throws AwesomeNotificationsException {
+    private SQLitePrimitivesDB getDbInstance(
+            @NonNull Context context
+    ) throws AwesomeNotificationsException {
 
         SqLiteCypher.initializeEncryption(context);
         if(packageName == null)
@@ -77,8 +86,8 @@ public class RepositoryManager<T extends AbstractModel> {
     }
 
     private SQLitePrimitivesDB convertOldSharedPreferencesIntoSqLite(
-            Context context,
-            SharedPreferences preferences
+            @NonNull Context context,
+            @NonNull SharedPreferences preferences
     ) throws AwesomeNotificationsException {
         boolean isConvertedTable = sqLitePrimitives.getBoolean(
                 context, "conv", hashedReference, false);
@@ -116,11 +125,14 @@ public class RepositoryManager<T extends AbstractModel> {
         return tag+'_'+referenceKey;
     }
 
-    public void commit(Context context) throws AwesomeNotificationsException {
+    public boolean commit(
+            @NonNull Context context
+    ) throws AwesomeNotificationsException {
         try {
 
             SQLitePrimitivesDB primitivesDB = getDbInstance(context);
             primitivesDB.commit(context);
+            return true;
 
         } catch (Exception e){
             throw ExceptionFactory
@@ -134,21 +146,29 @@ public class RepositoryManager<T extends AbstractModel> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<T> getAllObjects(Context context, String tag) throws AwesomeNotificationsException {
+    public List<T> getAllObjects(
+            @NonNull Context context,
+            @NonNull String tag
+    ) throws AwesomeNotificationsException {
         List<T> returnedList = new ArrayList<>();
         try {
             SQLitePrimitivesDB primitivesDB = getDbInstance(context);
             Map<String, String> tempMap = primitivesDB.getAllStringValues(context, tag);
 
-            if(tempMap != null){
-                for (Map.Entry<String, ?> entry : tempMap.entrySet()) {
-                    String key = entry.getKey();
-                    Object value = entry.getValue();
-
-                    if(key.startsWith(tag) && value instanceof String){
-                        T object = clazz.newInstance();
-                        returnedList.add((T) object.fromJson((String) value));
-                    }
+            for (Map.Entry<String, ?> entry : tempMap.entrySet()) {
+                Object value = entry.getValue();
+                if(!(value instanceof String)) continue;
+                try {
+                    T object = clazz.newInstance();
+                    returnedList.add((T) object.fromJson((String) value));
+                } catch (Exception e){
+                    ExceptionFactory
+                        .getInstance()
+                        .registerNewAwesomeException(
+                                TAG,
+                                ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
+                                ExceptionCode.DETAILED_SHARED_PREFERENCES+".getAllObjects",
+                                e);
                 }
             }
         } catch (Exception e){
@@ -165,7 +185,59 @@ public class RepositoryManager<T extends AbstractModel> {
     }
 
     @SuppressWarnings("unchecked")
-    public T get(Context context, String tag, String referenceKey) throws AwesomeNotificationsException {
+    public List<T> getAllObjectsStartingWith(
+            @NonNull Context context,
+            @NonNull String tag,
+            @NonNull String fractionalKey
+    ) throws AwesomeNotificationsException {
+        List<T> returnedList = new ArrayList<>();
+        try {
+            SQLitePrimitivesDB primitivesDB = getDbInstance(context);
+            Map<String, String> tempMap = primitivesDB
+                    .getStringsStartingWith(context, tag, fractionalKey);
+
+            for (Map.Entry<String, ?> entry : tempMap.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+
+                if (key.startsWith(tag)) {
+                    T object = null;
+                    try {
+                        object = clazz.newInstance();
+                    } catch (InstantiationException | IllegalAccessException e) {
+                        ExceptionFactory
+                            .getInstance()
+                            .registerNewAwesomeException(
+                                    TAG,
+                                    ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                                    ExceptionCode.DETAILED_SHARED_PREFERENCES+".getAllObjectsStartingWith",
+                                    e);
+                    }
+                    if (object != null) {
+                        returnedList.add((T) object.fromJson((String) value));
+                    }
+                }
+            }
+        } catch (Exception e){
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
+                            ExceptionCode.DETAILED_SHARED_PREFERENCES+".getAllObjectsStartingWith",
+                            e);
+        }
+
+        return returnedList;
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public T get(
+            @NonNull Context context,
+            @NonNull String tag,
+            @NonNull String referenceKey
+    ) throws AwesomeNotificationsException {
 
         try {
             SQLitePrimitivesDB primitivesDB = getDbInstance(context);
@@ -196,7 +268,12 @@ public class RepositoryManager<T extends AbstractModel> {
         }
     }
 
-    public Boolean set(Context context, String tag, String referenceKey, T data) throws AwesomeNotificationsException {
+    public Boolean set(
+            @NonNull Context context,
+            @NonNull String tag,
+            @NonNull String referenceKey,
+            @NonNull T data
+    ) throws AwesomeNotificationsException {
 
         try {
             SQLitePrimitivesDB primitivesDB = getDbInstance(context);
@@ -216,7 +293,11 @@ public class RepositoryManager<T extends AbstractModel> {
         }
     }
 
-    public Boolean remove(Context context, String tag, String referenceKey) throws AwesomeNotificationsException {
+    public Boolean remove(
+            @NonNull Context context,
+            @NonNull String tag,
+            @NonNull String referenceKey
+    ) throws AwesomeNotificationsException {
 
         try {
             SQLitePrimitivesDB primitivesDB = getDbInstance(context);
@@ -236,7 +317,10 @@ public class RepositoryManager<T extends AbstractModel> {
         }
     }
 
-    public Boolean removeAll(Context context, String tag) throws AwesomeNotificationsException {
+    public Boolean removeAll(
+            @NonNull Context context,
+            @NonNull String tag
+    ) throws AwesomeNotificationsException {
 
         try {
             SQLitePrimitivesDB primitivesDB = getDbInstance(context);
@@ -256,7 +340,10 @@ public class RepositoryManager<T extends AbstractModel> {
         }
     }
 
-    private static void commitAsync(final String reference, final SharedPreferences.Editor editor) throws AwesomeNotificationsException {
+    private void commitAsync(
+            @NonNull String reference,
+            SharedPreferences.Editor editor
+    ) throws AwesomeNotificationsException {
         if(!editor.commit())
             throw ExceptionFactory
                     .getInstance()

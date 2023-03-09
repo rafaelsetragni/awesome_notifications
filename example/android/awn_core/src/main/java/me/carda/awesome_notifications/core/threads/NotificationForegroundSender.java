@@ -145,14 +145,17 @@ public class NotificationForegroundSender extends NotificationThread<Notificatio
             receivedNotification.displayedLifeCycle = receivedNotification.displayedLifeCycle == null ?
                     appLifeCycle : receivedNotification.displayedLifeCycle;
 
-            BroadcastSender.sendBroadcastNotificationCreated(
-                    wContextReference.get(),
-                    receivedNotification);
+            BroadcastSender
+                    .getInstance()
+                    .sendBroadcastNotificationCreated(
+                            wContextReference.get(),
+                            receivedNotification);
 
-
-            BroadcastSender.sendBroadcastNotificationDisplayed(
-                    wContextReference.get(),
-                    receivedNotification);
+            BroadcastSender
+                    .getInstance()
+                    .sendBroadcastNotificationDisplayed(
+                            wContextReference.get(),
+                            receivedNotification);
         }
 
         if(this.endTime == 0L)

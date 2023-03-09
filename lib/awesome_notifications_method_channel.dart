@@ -326,13 +326,11 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     if (returned != null) {
       for (Object object in returned) {
         if (object is Map) {
-          try {
-            NotificationModel notificationModel =
-                NotificationModel().fromMap(Map<String, dynamic>.from(object))!;
-            scheduledNotifications.add(notificationModel);
-          } catch (e) {
-            return [];
-          }
+          NotificationModel? notificationModel =
+              NotificationModel().fromMap(Map<String, dynamic>.from(object));
+          if (notificationModel == null) continue;
+
+          scheduledNotifications.add(notificationModel);
         }
       }
     }
