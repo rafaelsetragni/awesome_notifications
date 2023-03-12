@@ -1,14 +1,19 @@
 ## [0.7.5]
-* Adds inexact schedules
-* Adds delayTolerance to schedules
-* Adds SQLite database to replace SharedPreferences on Android
-* Adds methods to list all active notification IDs 
-* Adds methods to check if the notification id is current active
-* Adds translation feature to notifications based on app configurations or custom configurations
-* Adds AwnAppGroupName property on info.plist to support custom App Group names on iOS
-* Improves example app with ReceivePort and SendPort
-* Fixes schedule map conversions for interval notifications with repeat option on Android
-* Fixes onCreated and onDisplayed calling events for Notification Target Extensions on iOS
+### Added
+* Translation feature to notifications based on app configurations or custom configurations
+* AwnAppGroupName property on info.plist to support custom App Group names on iOS
+* Support for inexact schedules
+* delayTolerance parameter to schedules to provide a tolerance for delayed notifications
+* Methods to list all active notification IDs
+* Methods to check if a notification ID is currently active
+### Improved
+* SQLite database to replace SharedPreferences on Android
+* Ability for displayed notification events to fire in the exact amount that they had displayed to the user, even with the same ID
+* Example app with ReceivePort and SendPort
+### Fixed
+* schedule map conversions for interval notifications with repeat option on Android
+* onCreated and onDisplayed calling events for Notification Target Extensions on iOS
+
 ## [0.7.4+1]
 * Updates Discord markdown links on pub.dev
 ## [0.7.4]
