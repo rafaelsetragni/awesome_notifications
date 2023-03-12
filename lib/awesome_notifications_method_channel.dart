@@ -305,8 +305,13 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
       BACKGROUND_HANDLE: dartCallbackReference!.toRawHandle()
     });
 
+    if (languageCode != null) {
+      await setLocalization(languageCode: languageCode);
+    }
+
     AwesomeNotifications.localTimeZoneIdentifier = await methodChannel
         .invokeMethod(CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER);
+
     AwesomeNotifications.utcTimeZoneIdentifier = await methodChannel
         .invokeMethod(CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER);
 
