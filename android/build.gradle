@@ -1,5 +1,5 @@
 group 'me.carda.awesome_notifications'
-version '0.7.5-pre.1'
+version '0.7.5-pre.2'
 
 buildscript {
     repositories {
@@ -39,7 +39,7 @@ android {
 
 dependencies {
 //    implementation project(':awn_core')
-    implementation 'me.carda:androidcore:0.7.11-pre.1'
+    implementation 'me.carda:androidcore:0.7.11-pre.2'
 
     implementation 'com.google.guava:guava:31.1-android'
 
