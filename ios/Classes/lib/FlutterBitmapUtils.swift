@@ -19,7 +19,7 @@ public class FlutterBitmapUtils : BitmapUtils {
         super.init()
     }
     
-    public static func extendCapabilities(usingFlutterRegistrar registrar:FlutterPluginRegistrar){
+    public static func extendCapabilities(usingFlutterRegistrar registrar:FlutterPluginRegistrar?){
         BitmapUtils.instance = FlutterBitmapUtils(registrar: registrar)
     }
     
