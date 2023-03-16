@@ -8,7 +8,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="90f153b2-27cc-4b8f-8201-8a3571b86189" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/example/lib/main_complete.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/mains.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/themes/themes_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/themes/themes_controller.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +38,7 @@
     <setting file="file://$PROJECT_DIR$/example/ios/Podfile" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/example/ios/Pods/IosAwnCore/IosAwnCore/Classes/broadcasters/senders/BroadcastSender.swift" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/example/lib/main.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/example/lib/mains.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/example/lib/main_complete.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/example/pubspec.yaml" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ios/AwnCore/Classes/broadcasters/senders/BroadcastSender.swift" root0="FORCE_HIGHLIGHTING" />
@@ -134,11 +140,11 @@
       <method v="2" />
     </configuration>
     <configuration name="Complete Example" type="FlutterRunConfigurationType" factoryName="Flutter">
-      <option name="filePath" value="$PROJECT_DIR$/example/lib/main.dart" />
+      <option name="filePath" value="$PROJECT_DIR$/example/lib/main_complete.dart" />
       <method v="2" />
     </configuration>
     <configuration name="Simple Example" type="FlutterRunConfigurationType" factoryName="Flutter">
-      <option name="filePath" value="$PROJECT_DIR$/example/lib/mains.dart" />
+      <option name="filePath" value="$PROJECT_DIR$/example/lib/main.dart" />
       <method v="2" />
     </configuration>
     <list>
