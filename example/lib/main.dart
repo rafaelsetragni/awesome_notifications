@@ -52,14 +52,11 @@ class NotificationController {
   static Future<void> initializeIsolateReceivePort() async {
     receivePort = ReceivePort('Notification action port in main isolate')
       ..listen(
-            (silentData) => onActionReceivedImplementationMethod(silentData)
-      );
+          (silentData) => onActionReceivedImplementationMethod(silentData));
 
     // This initialization only happens on main isolate
     IsolateNameServer.registerPortWithName(
-        receivePort!.sendPort,
-        'notification_action_port'
-    );
+        receivePort!.sendPort, 'notification_action_port');
   }
 
   ///  *********************************************
@@ -78,24 +75,21 @@ class NotificationController {
   @pragma('vm:entry-point')
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
-
-    if(
-        receivedAction.actionType == ActionType.SilentAction ||
-        receivedAction.actionType == ActionType.SilentBackgroundAction
-    ){
+    if (receivedAction.actionType == ActionType.SilentAction ||
+        receivedAction.actionType == ActionType.SilentBackgroundAction) {
       // For background actions, you must hold the execution until the end
-      print('Message sent via notification input: "${receivedAction.buttonKeyInput}"');
+      print(
+          'Message sent via notification input: "${receivedAction.buttonKeyInput}"');
       await executeLongTaskInBackground();
-    }
-    else {
+    } else {
       // this process is only necessary when you need to redirect the user
       // to a new page or use a valid context, since parallel isolates do not
       // have valid context, so you need redirect the execution to main isolate
       if (receivePort == null) {
-        print('onActionReceivedMethod was called inside a parallel dart isolate.');
-        SendPort? sendPort = IsolateNameServer.lookupPortByName(
-            'notification_action_port'
-        );
+        print(
+            'onActionReceivedMethod was called inside a parallel dart isolate.');
+        SendPort? sendPort =
+            IsolateNameServer.lookupPortByName('notification_action_port');
 
         if (sendPort != null) {
           print('Redirecting the execution to main isolate process.');
@@ -109,13 +103,12 @@ class NotificationController {
   }
 
   static Future<void> onActionReceivedImplementationMethod(
-      ReceivedAction receivedAction
-  ) async {
-      MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil(
-          '/notification-page',
-              (route) =>
-          (route.settings.name != '/notification-page') || route.isFirst,
-          arguments: receivedAction);
+      ReceivedAction receivedAction) async {
+    MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil(
+        '/notification-page',
+        (route) =>
+            (route.settings.name != '/notification-page') || route.isFirst,
+        arguments: receivedAction);
   }
 
   ///  *********************************************
@@ -220,8 +213,7 @@ class NotificationController {
               key: 'REPLY',
               label: 'Reply Message',
               requireInputText: true,
-              actionType: ActionType.SilentAction
-          ),
+              actionType: ActionType.SilentAction),
           NotificationActionButton(
               key: 'DISMISS',
               label: 'Dismiss',
@@ -236,40 +228,13 @@ class NotificationController {
     if (!isAllowed) return;
 
     await myNotifyScheduleInHours(
-      title: 'test',
-      msg: 'test message',
-      heroThumbUrl: 'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
-      hoursFromNow: 5,
-      username: 'test user',
-      repeatNotif: false
-    );
-
-    return;
-
-    await AwesomeNotifications().createNotification(
-        content: NotificationContent(
-            id: -1, // -1 is replaced by a random number
-            channelKey: 'alerts',
-            title: "Huston! The eagle has landed!",
-            body:
-                "A small step for a man, but a giant leap to Flutter's community!",
-            bigPicture: 'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
-            largeIcon: 'https://storage.googleapis.com/cms-storage-bucket/0dbfcc7a59cd1cf16282.png',
-            //'asset://assets/images/balloons-in-sky.jpg',
-            notificationLayout: NotificationLayout.BigPicture,
-            payload: {
-              'notificationId': '1234567890'
-            }),
-        actionButtons: [
-          NotificationActionButton(key: 'REDIRECT', label: 'Redirect'),
-          NotificationActionButton(
-              key: 'DISMISS',
-              label: 'Dismiss',
-              actionType: ActionType.DismissAction,
-              isDangerousOption: true)
-        ],
-        schedule: NotificationCalendar.fromDate(
-            date: DateTime.now().add(const Duration(seconds: 10))));
+        title: 'test',
+        msg: 'test message',
+        heroThumbUrl:
+            'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
+        hoursFromNow: 5,
+        username: 'test user',
+        repeatNotif: false);
   }
 
   static Future<void> resetBadgeCounter() async {
@@ -549,10 +514,7 @@ Future<void> myNotifyScheduleInHours({
   required String msg,
   bool repeatNotif = false,
 }) async {
-  var nowDate = DateTime.now().add(Duration(
-    hours: hoursFromNow,
-    seconds: 5
-  ));
+  var nowDate = DateTime.now().add(Duration(hours: hoursFromNow, seconds: 5));
   await AwesomeNotifications().createNotification(
     schedule: NotificationCalendar(
       //weekday: nowDate.day,
@@ -562,6 +524,8 @@ Future<void> myNotifyScheduleInHours({
       repeats: repeatNotif,
       //allowWhileIdle: true,
     ),
+    // schedule: NotificationCalendar.fromDate(
+    //    date: DateTime.now().add(const Duration(seconds: 10))),
     content: NotificationContent(
       id: -1,
       channelKey: 'basic_channel',
