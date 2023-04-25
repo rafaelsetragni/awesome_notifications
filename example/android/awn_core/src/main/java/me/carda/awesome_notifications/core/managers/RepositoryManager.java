@@ -146,6 +146,7 @@ public class RepositoryManager<T extends AbstractModel> {
     }
 
     @SuppressWarnings("unchecked")
+    @NonNull
     public List<T> getAllObjects(
             @NonNull Context context,
             @NonNull String tag

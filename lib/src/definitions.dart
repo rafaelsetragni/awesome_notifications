@@ -45,7 +45,10 @@ const SHARED_PREFERENCES_KEY = 'notification_plugin_cache';
 const CHANNEL_FLUTTER_PLUGIN = 'awesome_notifications';
 const DART_REVERSE_CHANNEL = 'awesome_notifications_reverse';
 
+const CREATED_HANDLE = 'createdHandle';
+const DISPLAYED_HANDLE = 'displayedHandle';
 const ACTION_HANDLE = 'actionHandle';
+const DISMISSED_HANDLE = 'dismissedHandle';
 const BACKGROUND_HANDLE = 'awesomeDartBGHandle';
 const RECOVER_DISPLAYED = 'recoverScheduledDisplayed';
 
@@ -92,7 +95,7 @@ const CHANNEL_METHOD_INCREMENT_BADGE_COUNT = 'incBadgeCount';
 const CHANNEL_METHOD_DECREMENT_BADGE_COUNT = 'decBadgeCount';
 const CHANNEL_METHOD_RESET_BADGE = 'resetBadge';
 
-const CHANNEL_METHOD_SET_ACTION_HANDLE = 'setActionHandle';
+const CHANNEL_METHOD_SET_EVENT_HANDLES = 'setEventHandles';
 const CHANNEL_METHOD_DISMISS_NOTIFICATION = 'dismissNotification';
 const CHANNEL_METHOD_CANCEL_NOTIFICATION = 'cancelNotification';
 const CHANNEL_METHOD_CANCEL_SCHEDULE = 'cancelSchedule';

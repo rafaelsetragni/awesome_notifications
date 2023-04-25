@@ -72,7 +72,7 @@ public class DisplayedManager extends EventManager {
                 _getKeyByIdAndDate(id, displayedDate));
     }
 
-    public Boolean clearDisplayed(
+    public Boolean removeDisplayed(
             @NonNull Context context,
             @NonNull Integer id,
             @NonNull Calendar displayedDate
@@ -83,7 +83,7 @@ public class DisplayedManager extends EventManager {
                 _getKeyByIdAndDate(id, displayedDate));
     }
 
-    public boolean clearAllDisplayed(
+    public boolean removeAllDisplayed(
             @NonNull Context context
     ) throws AwesomeNotificationsException {
         return shared.removeAll(

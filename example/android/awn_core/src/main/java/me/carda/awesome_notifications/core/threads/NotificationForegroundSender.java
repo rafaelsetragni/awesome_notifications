@@ -187,7 +187,7 @@ public class NotificationForegroundSender extends NotificationThread<Notificatio
             NotificationLifeCycle lifeCycle = AwesomeNotifications.getApplicationLifeCycle();
 
             if(
-                (lifeCycle == NotificationLifeCycle.AppKilled) ||
+                (lifeCycle == NotificationLifeCycle.Terminated) ||
                 (lifeCycle == NotificationLifeCycle.Foreground && notificationModel.content.displayOnForeground) ||
                 (lifeCycle == NotificationLifeCycle.Background && notificationModel.content.displayOnBackground)
             ){

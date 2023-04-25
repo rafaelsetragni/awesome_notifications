@@ -34,6 +34,8 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
     private static final String KEY = "key";
     private static final String VALUE = "value";
 
+    private static final Object concurrencyLock = new Object();
+
     private SQLitePrimitivesDB(Context context, String databasePath) {
         super(context, databasePath, null, DATABASE_VERSION);
     }
@@ -151,124 +153,144 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
     }
 
     public boolean setBoolean(Context context, String tag, String key, boolean value) {
-        try (SQLiteDatabase db = getWritableDatabase(context)) {
-            if (db == null) return false;
-            db.beginTransaction();
-            ContentValues values = new ContentValues();
-            values.put(TAG, tag);
-            values.put(KEY, key);
-            values.put(VALUE, value ? 1 : 0);
-            db.insertWithOnConflict(
-                TABLE_BOOLEAN,
-                null,
-                values,
-                SQLiteDatabase.CONFLICT_REPLACE
-            );
-            db.setTransactionSuccessful();
-            db.endTransaction();
+        synchronized (concurrencyLock) {
+            try (SQLiteDatabase db = getWritableDatabase(context)) {
+                if (db == null) return false;
+                db.beginTransaction();
+                ContentValues values = new ContentValues();
+                values.put(TAG, tag);
+                values.put(KEY, key);
+                values.put(VALUE, value ? 1 : 0);
+                db.insertWithOnConflict(
+                        TABLE_BOOLEAN,
+                        null,
+                        values,
+                        SQLiteDatabase.CONFLICT_REPLACE
+                );
+                db.setTransactionSuccessful();
+                db.endTransaction();
+            }
         }
         return true;
     }
 
     public boolean setInt(Context context, String tag, String key, int value) {
-        try (SQLiteDatabase db = getWritableDatabase(context)) {
-            if (db == null) return false;
-            ContentValues values = new ContentValues();
-            values.put(TAG, tag);
-            values.put(KEY, key);
-            values.put(VALUE, value);
-            db.insertWithOnConflict(
-                TABLE_INT,
-                null,
-                values,
-                SQLiteDatabase.CONFLICT_REPLACE
-            );
-            db.setTransactionSuccessful();
-            db.endTransaction();
+        synchronized (concurrencyLock) {
+            try (SQLiteDatabase db = getWritableDatabase(context)) {
+                if (db == null) return false;
+                ContentValues values = new ContentValues();
+                values.put(TAG, tag);
+                values.put(KEY, key);
+                values.put(VALUE, value);
+                db.insertWithOnConflict(
+                        TABLE_INT,
+                        null,
+                        values,
+                        SQLiteDatabase.CONFLICT_REPLACE
+                );
+                db.setTransactionSuccessful();
+                db.endTransaction();
+            }
         }
         return true;
     }
 
     public boolean setLong(Context context, String tag, String key, long value) {
-        try (SQLiteDatabase db = getWritableDatabase(context)) {
-            if (db == null) return false;
-            db.beginTransaction();
-            ContentValues values = new ContentValues();
-            values.put(TAG, tag);
-            values.put(KEY, key);
-            values.put(VALUE, value);
-            db.insertWithOnConflict(
-                TABLE_LONG,
-                null,
-                values,
-                SQLiteDatabase.CONFLICT_REPLACE
-            );
-            db.setTransactionSuccessful();
-            db.endTransaction();
+        synchronized (concurrencyLock) {
+            try (SQLiteDatabase db = getWritableDatabase(context)) {
+                if (db == null) return false;
+                db.beginTransaction();
+                ContentValues values = new ContentValues();
+                values.put(TAG, tag);
+                values.put(KEY, key);
+                values.put(VALUE, value);
+                db.insertWithOnConflict(
+                        TABLE_LONG,
+                        null,
+                        values,
+                        SQLiteDatabase.CONFLICT_REPLACE
+                );
+                db.setTransactionSuccessful();
+                db.endTransaction();
+            }
         }
         return true;
     }
 
     public boolean setFloat(Context context, String tag, String key, float value) {
-        try (SQLiteDatabase db = getWritableDatabase(context)) {
-            if (db == null) return false;
-            db.beginTransaction();
-            ContentValues values = new ContentValues();
-            values.put(TAG, tag);
-            values.put(KEY, key);
-            values.put(VALUE, value);
-            db.insertWithOnConflict(
-                TABLE_FLOAT,
-                null,
-                values,
-                SQLiteDatabase.CONFLICT_REPLACE
-            );
-            db.setTransactionSuccessful();
-            db.endTransaction();
+        synchronized (concurrencyLock) {
+            try (SQLiteDatabase db = getWritableDatabase(context)) {
+                if (db == null) return false;
+                db.beginTransaction();
+                ContentValues values = new ContentValues();
+                values.put(TAG, tag);
+                values.put(KEY, key);
+                values.put(VALUE, value);
+                db.insertWithOnConflict(
+                        TABLE_FLOAT,
+                        null,
+                        values,
+                        SQLiteDatabase.CONFLICT_REPLACE
+                );
+                db.setTransactionSuccessful();
+                db.endTransaction();
+            }
         }
         return true;
     }
 
     public boolean setString(Context context, String tag, String key, String value) {
-        try (SQLiteDatabase db = getWritableDatabase(context)) {
-            if (db == null) return false;
-            db.beginTransaction();
-            ContentValues values = new ContentValues();
-            values.put(TAG, tag);
-            values.put(KEY, key);
-            values.put(VALUE, value);
-            db.insertWithOnConflict(
-                TABLE_STRING,
-                null,
-                values,
-                SQLiteDatabase.CONFLICT_REPLACE
-            );
-            db.setTransactionSuccessful();
-            db.endTransaction();
+        synchronized (concurrencyLock) {
+            try (SQLiteDatabase db = getWritableDatabase(context)) {
+                if (db == null) return false;
+                db.beginTransaction();
+                ContentValues values = new ContentValues();
+                values.put(TAG, tag);
+                values.put(KEY, key);
+                values.put(VALUE, value);
+                db.insertWithOnConflict(
+                        TABLE_STRING,
+                        null,
+                        values,
+                        SQLiteDatabase.CONFLICT_REPLACE
+                );
+                db.setTransactionSuccessful();
+                db.endTransaction();
+            }
         }
         return true;
     }
 
     public int getInt(Context context, String tag, String key, int defaultValue) {
-        return getRow(context, TABLE_INT, tag, key, defaultValue, Cursor::getInt);
+        synchronized (concurrencyLock) {
+            return getRow(context, TABLE_INT, tag, key, defaultValue, Cursor::getInt);
+        }
     }
 
     public long getLong(Context context, String tag, String key, long defaultValue) {
-        return getRow(context, TABLE_LONG, tag, key, defaultValue, Cursor::getLong);
+        synchronized (concurrencyLock) {
+            return getRow(context, TABLE_LONG, tag, key, defaultValue, Cursor::getLong);
+        }
     }
 
     public float getFloat(Context context, String tag, String key, float defaultValue) {
-        return getRow(context, TABLE_FLOAT, tag, key, defaultValue, Cursor::getFloat);
+        synchronized (concurrencyLock) {
+            return getRow(context, TABLE_FLOAT, tag, key, defaultValue, Cursor::getFloat);
+        }
     }
 
     public boolean getBoolean(Context context, String tag, String key, boolean defaultValue) {
-        return getRow(context, TABLE_BOOLEAN, tag, key, defaultValue,
-            (cursor, index) -> cursor.getInt(index) == 1
-        );
+        synchronized (concurrencyLock) {
+            return getRow(context, TABLE_BOOLEAN, tag, key, defaultValue,
+                    (cursor, index) -> cursor.getInt(index) == 1
+            );
+        }
     }
 
     public String getString(Context context, String tag, String key, String defaultValue) {
-        return getRow(context, TABLE_STRING, tag, key, defaultValue, Cursor::getString);
+        synchronized (concurrencyLock) {
+            return getRow(context, TABLE_STRING, tag, key, defaultValue, Cursor::getString);
+        }
     }
 
     private interface iGetRow<T> {
@@ -301,25 +323,35 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
     }
 
     public Map<String, Integer> getIntsStartingWith(Context context, String tag, String key) {
-        return getRowsStartingWith(context, TABLE_INT, tag, key, Cursor::getInt);
+        synchronized (concurrencyLock) {
+            return getRowsStartingWith(context, TABLE_INT, tag, key, Cursor::getInt);
+        }
     }
 
     public Map<String, Long> getLongsStartingWith(Context context, String tag, String key) {
-        return getRowsStartingWith(context, TABLE_LONG, tag, key, Cursor::getLong);
+        synchronized (concurrencyLock) {
+            return getRowsStartingWith(context, TABLE_LONG, tag, key, Cursor::getLong);
+        }
     }
 
     public Map<String, Float> getFloatsStartingWith(Context context, String tag, String key) {
-        return getRowsStartingWith(context, TABLE_FLOAT, tag, key, Cursor::getFloat);
+        synchronized (concurrencyLock) {
+            return getRowsStartingWith(context, TABLE_FLOAT, tag, key, Cursor::getFloat);
+        }
     }
 
     public Map<String, Boolean> getBooleansStartingWith(Context context, String tag, String key) {
-        return getRowsStartingWith(context, TABLE_BOOLEAN, tag, key,
-                (cursor, index) -> cursor.getInt(index) == 1
-        );
+        synchronized (concurrencyLock) {
+            return getRowsStartingWith(context, TABLE_BOOLEAN, tag, key,
+                    (cursor, index) -> cursor.getInt(index) == 1
+            );
+        }
     }
 
     public Map<String, String> getStringsStartingWith(Context context, String tag, String key) {
-        return getRowsStartingWith(context, TABLE_STRING, tag, key, Cursor::getString);
+        synchronized (concurrencyLock) {
+            return getRowsStartingWith(context, TABLE_STRING, tag, key, Cursor::getString);
+        }
     }
 
     @NonNull
@@ -353,15 +385,35 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
 
 
     @NonNull
-    public int stringCount(Context context, String tag) { return countRows(context, tag, TABLE_STRING); }
+    public int stringCount(Context context, String tag) {
+        synchronized (concurrencyLock) {
+            return countRows(context, tag, TABLE_STRING);
+        }
+    }
     @NonNull
-    public int floatCount(Context context, String tag) { return countRows(context, tag, TABLE_FLOAT); }
+    public int floatCount(Context context, String tag) {
+        synchronized (concurrencyLock) {
+            return countRows(context, tag, TABLE_FLOAT);
+        }
+    }
     @NonNull
-    public int intCount(Context context, String tag) { return countRows(context, tag, TABLE_INT); }
+    public int intCount(Context context, String tag) {
+        synchronized (concurrencyLock) {
+            return countRows(context, tag, TABLE_INT);
+        }
+    }
     @NonNull
-    public int booleanCount(Context context, String tag) { return countRows(context, tag, TABLE_BOOLEAN); }
+    public int booleanCount(Context context, String tag) {
+        synchronized (concurrencyLock) {
+            return countRows(context, tag, TABLE_BOOLEAN);
+        }
+    }
     @NonNull
-    public int longCount(Context context, String tag) { return countRows(context, tag, TABLE_LONG); }
+    public int longCount(Context context, String tag) {
+        synchronized (concurrencyLock) {
+            return countRows(context, tag, TABLE_LONG);
+        }
+    }
 
     @NonNull
     private int countRows(Context context, String tag, String tableName) {
@@ -381,27 +433,37 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
 
     @NonNull
     public Map<String, String> getAllStringValues(Context context, String tag) {
-        return getAll(context, tag, TABLE_STRING, (iGetAll<String>) Cursor::getString);
+        synchronized (concurrencyLock) {
+            return getAll(context, tag, TABLE_STRING, (iGetAll<String>) Cursor::getString);
+        }
     }
 
     @NonNull
     public Map<String, Float> getAllFloatValues(Context context, String tag) {
-        return getAll(context, tag, TABLE_FLOAT, (iGetAll<Float>) Cursor::getFloat);
+        synchronized (concurrencyLock) {
+            return getAll(context, tag, TABLE_FLOAT, (iGetAll<Float>) Cursor::getFloat);
+        }
     }
 
     @NonNull
     public Map<String, Integer> getAllIntValues(Context context, String tag) {
-        return getAll(context, tag, TABLE_INT, (iGetAll<Integer>) Cursor::getInt);
+        synchronized (concurrencyLock) {
+            return getAll(context, tag, TABLE_INT, (iGetAll<Integer>) Cursor::getInt);
+        }
     }
 
     @NonNull
     public Map<String, Boolean> getAllBooleanValues(Context context, String tag) {
-        return getAll(context, tag, TABLE_BOOLEAN, (iGetAll<Boolean>) (cursor, index) -> cursor.getInt(index) == 1);
+        synchronized (concurrencyLock) {
+            return getAll(context, tag, TABLE_BOOLEAN, (iGetAll<Boolean>) (cursor, index) -> cursor.getInt(index) == 1);
+        }
     }
 
     @NonNull
     public Map<String, Long> getAllLongValues(Context context, String tag) {
-        return getAll(context, tag, TABLE_LONG, (iGetAll<Long>) Cursor::getLong);
+        synchronized (concurrencyLock) {
+            return getAll(context, tag, TABLE_LONG, (iGetAll<Long>) Cursor::getLong);
+        }
     }
 
     private interface iGetAll<T> {
@@ -430,53 +492,63 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
     }
 
     public void setAllIntValues(Context context, String tag, Map<String, Integer> intValues) {
-        setAll(
-            context,
-            tag,
-            TABLE_INT,
-            intValues,
-            ((contentValues, value) -> contentValues.put(VALUE, value))
-        );
+        synchronized (concurrencyLock) {
+            setAll(
+                    context,
+                    tag,
+                    TABLE_INT,
+                    intValues,
+                    ((contentValues, value) -> contentValues.put(VALUE, value))
+            );
+        }
     }
 
     public void setAllStringValues(Context context, String tag, Map<String, String> stringValues) {
-        setAll(
-            context,
-            tag,
-            TABLE_STRING,
-            stringValues,
-            ((contentValues, value) -> contentValues.put(VALUE, value))
-        );
+        synchronized (concurrencyLock) {
+            setAll(
+                    context,
+                    tag,
+                    TABLE_STRING,
+                    stringValues,
+                    ((contentValues, value) -> contentValues.put(VALUE, value))
+            );
+        }
     }
 
     public void setAllFloatValues(Context context, String tag, Map<String, Float> floatValues) {
-        setAll(
-            context,
-            tag,
-            TABLE_FLOAT,
-            floatValues,
-            ((contentValues, value) -> contentValues.put(VALUE, value))
-        );
+        synchronized (concurrencyLock) {
+            setAll(
+                    context,
+                    tag,
+                    TABLE_FLOAT,
+                    floatValues,
+                    ((contentValues, value) -> contentValues.put(VALUE, value))
+            );
+        }
     }
 
     public void setAllBooleanValues(Context context, String tag, Map<String, Boolean> booleanValues) {
-        setAll(
-            context,
-            tag,
-            TABLE_BOOLEAN,
-            booleanValues,
-            ((contentValues, value) -> contentValues.put(VALUE, value ? 1 : 0))
-        );
+        synchronized (concurrencyLock) {
+            setAll(
+                    context,
+                    tag,
+                    TABLE_BOOLEAN,
+                    booleanValues,
+                    ((contentValues, value) -> contentValues.put(VALUE, value ? 1 : 0))
+            );
+        }
     }
 
     public void setAllLongValues(Context context, String tag, Map<String, Long> longValues) {
-        setAll(
-            context,
-            tag,
-            TABLE_LONG,
-            longValues,
-            ((contentValues, value) -> contentValues.put(VALUE, value))
-        );
+        synchronized (concurrencyLock) {
+            setAll(
+                    context,
+                    tag,
+                    TABLE_LONG,
+                    longValues,
+                    ((contentValues, value) -> contentValues.put(VALUE, value))
+            );
+        }
     }
 
     private interface iSetAll<T> {
@@ -510,11 +582,35 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
         }
     }
 
-    public void removeString(Context context, String tag, String key){ remove(context, TABLE_STRING, tag, key); }
-    public void removeFloat(Context context, String tag, String key){ remove(context, TABLE_FLOAT, tag, key); }
-    public void removeInt(Context context, String tag, String key){ remove(context, TABLE_INT, tag, key); }
-    public void removeBoolean(Context context, String tag, String key){ remove(context, TABLE_BOOLEAN, tag, key); }
-    public void removeLong(Context context, String tag, String key){ remove(context, TABLE_LONG, tag, key); }
+    public void removeString(Context context, String tag, String key){
+        synchronized (concurrencyLock) {
+            remove(context, TABLE_STRING, tag, key);
+        }
+    }
+
+    public void removeFloat(Context context, String tag, String key){
+        synchronized (concurrencyLock) {
+            remove(context, TABLE_FLOAT, tag, key);
+        }
+    }
+
+    public void removeInt(Context context, String tag, String key){
+        synchronized (concurrencyLock) {
+            remove(context, TABLE_INT, tag, key);
+        }
+    }
+
+    public void removeBoolean(Context context, String tag, String key){
+        synchronized (concurrencyLock) {
+            remove(context, TABLE_BOOLEAN, tag, key);
+        }
+    }
+
+    public void removeLong(Context context, String tag, String key){
+        synchronized (concurrencyLock) {
+            remove(context, TABLE_LONG, tag, key);
+        }
+    }
 
     private boolean remove(Context context, String tableName, String tag, String key) {
         try (SQLiteDatabase db = getWritableDatabase(context)) {
@@ -528,11 +624,35 @@ public class SQLitePrimitivesDB extends SQLiteOpenHelper {
         return true;
     }
 
-    public void removeAllString(Context context, String tag){ removeAll(context, TABLE_STRING, tag); }
-    public void removeAllFloat(Context context, String tag){ removeAll(context, TABLE_FLOAT, tag); }
-    public void removeAllInt(Context context, String tag){ removeAll(context, TABLE_INT, tag); }
-    public void removeAllBoolean(Context context, String tag){ removeAll(context, TABLE_BOOLEAN, tag); }
-    public void removeAllLong(Context context, String tag){ removeAll(context, TABLE_LONG, tag); }
+    public void removeAllString(Context context, String tag){
+        synchronized (concurrencyLock) {
+            removeAll(context, TABLE_STRING, tag);
+        }
+    }
+
+    public void removeAllFloat(Context context, String tag){
+        synchronized (concurrencyLock) {
+            removeAll(context, TABLE_FLOAT, tag);
+        }
+    }
+
+    public void removeAllInt(Context context, String tag){
+        synchronized (concurrencyLock) {
+            removeAll(context, TABLE_INT, tag);
+        }
+    }
+
+    public void removeAllBoolean(Context context, String tag){
+        synchronized (concurrencyLock) {
+            removeAll(context, TABLE_BOOLEAN, tag);
+        }
+    }
+
+    public void removeAllLong(Context context, String tag){
+        synchronized (concurrencyLock) {
+            removeAll(context, TABLE_LONG, tag);
+        }
+    }
 
     private boolean removeAll(Context context, String tableName, String tag) {
         try (SQLiteDatabase db = getWritableDatabase(context)) {

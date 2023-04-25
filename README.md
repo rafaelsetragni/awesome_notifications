@@ -1511,7 +1511,12 @@ NotificationContent (
 | ticker                | NO       | The text to display in the ticker when the notification arrives                                          | String                | Unlimited                 | -             |
 | actionType (Only for Android) | NO | Specifies the type of action that should be taken when the user taps on the body of the notification.  | Enumerator            | NotificationActionType    | NotificationActionType.Default |
 
+<br>
 
+## 📝 Notification Content's Important Notes:
+
+1. Custom vibrations are only available for Android devices.
+2. ProgressBar and Inbox layouts are only available for Android devices.
     
 <br>
 <br>

@@ -828,14 +828,34 @@ public class NotificationBuilder {
         String lowercaseLanguageCode = languageCode.toLowerCase(Locale.ROOT);
         if (localizations.containsKey(lowercaseLanguageCode)) return lowercaseLanguageCode;
 
+        lowercaseLanguageCode = lowercaseLanguageCode
+                .replace("-", "_");
+
         Set<String> sortedSet = new TreeSet<>(new DescendingComparator());
         sortedSet.addAll(localizations.keySet());
+        String exactWord = null, keyStartedWith = null, codeStartedWith = null;
         for (String key : sortedSet) {
-            String lowercaseKey = key.toLowerCase(Locale.ROOT);
-            if (lowercaseKey.equals(lowercaseLanguageCode)) return key;
-            if (lowercaseKey.startsWith(lowercaseLanguageCode + "-")) return key;
-            if (lowercaseLanguageCode.startsWith(lowercaseKey + "-")) return key;
+            String lowercaseKey = key
+                    .toLowerCase(Locale.ROOT)
+                    .replace("-", "_");
+
+            if (lowercaseKey.equals(lowercaseLanguageCode)) {
+                exactWord = key;
+                continue;
+            }
+            if (lowercaseKey.startsWith(lowercaseLanguageCode + "_")) {
+                keyStartedWith = key;
+                continue;
+            }
+            if (lowercaseLanguageCode.startsWith(lowercaseKey + "_")) {
+                codeStartedWith = key;
+            }
         }
+
+        if (StringUtils.getInstance().isNullOrEmpty(exactWord)) return exactWord;
+        if (StringUtils.getInstance().isNullOrEmpty(keyStartedWith)) return keyStartedWith;
+        if (StringUtils.getInstance().isNullOrEmpty(codeStartedWith)) return codeStartedWith;
+
         return null;
     }
 
@@ -1047,7 +1067,9 @@ public class NotificationBuilder {
         } else if (!stringUtils.isNullOrEmpty(channelModel.icon)) {
             builder.setSmallIcon(bitmapUtils.getDrawableResourceId(context, channelModel.icon));
         } else {
-            String defaultIcon = DefaultsManager.getDefaultIcon(context);
+            String defaultIcon = DefaultsManager
+                    .getInstance(context)
+                    .getDefaultIcon(context);
 
             if (stringUtils.isNullOrEmpty(defaultIcon)) {
 

@@ -2,9 +2,6 @@ package me.carda.awesome_notifications.core.models;
 
 import android.content.Context;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
 import java.util.HashMap;
 import java.util.Map;
 

@@ -48,6 +48,16 @@ public class StatusBarManager extends NotificationListenerService {
 
     // ************** SINGLETON PATTERN ***********************
 
+    public StatusBarManager(){
+        this.stringUtils = StringUtils.getInstance();
+        preferences = this.getSharedPreferences(
+                AwesomeNotifications.getPackageName(this) + "." + stringUtils.digestString(TAG),
+                Context.MODE_PRIVATE);
+
+        activeNotificationsGroup = loadNotificationIdFromPreferences("group");
+        activeNotificationsChannel = loadNotificationIdFromPreferences("channel");
+    }
+
     private static StatusBarManager instance;
 
     private StatusBarManager(@NonNull final Context context, @NonNull StringUtils stringUtils){
@@ -553,7 +563,7 @@ public class StatusBarManager extends NotificationListenerService {
     }
 
     public Collection<Integer> getAllActiveNotificationIdsOnStatusBar() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             List<Integer> activeIds = _getAllActiveIdsWithoutServices();
             if (activeIds != null) return activeIds;
         }
@@ -566,7 +576,7 @@ public class StatusBarManager extends NotificationListenerService {
     }
 
     public boolean isNotificationActiveOnStatusBar(int id) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return getIsNotificationActiveWithoutServices(id);
         }
 

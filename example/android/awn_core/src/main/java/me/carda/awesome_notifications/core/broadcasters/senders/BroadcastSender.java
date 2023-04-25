@@ -19,6 +19,7 @@ import me.carda.awesome_notifications.core.managers.CreatedManager;
 import me.carda.awesome_notifications.core.managers.DismissedManager;
 import me.carda.awesome_notifications.core.managers.DisplayedManager;
 import me.carda.awesome_notifications.core.managers.LifeCycleManager;
+import me.carda.awesome_notifications.core.managers.LostEventsManager;
 import me.carda.awesome_notifications.core.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.core.models.returnedData.NotificationReceived;
 
@@ -39,23 +40,26 @@ public class BroadcastSender {
 
     // ************** SINGLETON PATTERN ***********************
 
-    private boolean withoutListenersAvailable(){
+    private boolean isWithoutListenersAvailable(){
         return
-            LifeCycleManager.getApplicationLifeCycle() == NotificationLifeCycle.AppKilled ||
+            LifeCycleManager.getApplicationLifeCycle() == NotificationLifeCycle.Terminated ||
             AwesomeEventsReceiver.getInstance().isEmpty() ||
             !AwesomeEventsReceiver.getInstance().isReadyToReceiveEvents();
     }
 
     public void sendBroadcastNotificationCreated(
             @NonNull Context context,
-            @Nullable NotificationReceived notificationReceived
+            @Nullable NotificationReceived createdReceived
     ){
-        if (notificationReceived == null) return;
+        if (createdReceived == null) return;
         try {
 
-            if(withoutListenersAvailable()) {
-                CreatedManager.getInstance().saveCreated(context, notificationReceived);
-                CreatedManager.getInstance().commitChanges(context);
+            if (isWithoutListenersAvailable()) {
+                LostEventsManager
+                        .getInstance()
+                        .saveCreated(
+                                context,
+                                createdReceived);
             }
             else {
                 AwesomeEventsReceiver
@@ -63,7 +67,7 @@ public class BroadcastSender {
                         .addNotificationEvent(
                                 context,
                                 Definitions.BROADCAST_CREATED_NOTIFICATION,
-                                notificationReceived);
+                                createdReceived);
             }
 
         } catch (Exception e) {
@@ -73,14 +77,17 @@ public class BroadcastSender {
 
     public void sendBroadcastNotificationDisplayed(
             @NonNull Context context,
-            @Nullable NotificationReceived notificationReceived
+            @Nullable NotificationReceived displayedReceived
     ){
-        if (notificationReceived == null) return;
+        if (displayedReceived == null) return;
         try {
 
-            if(withoutListenersAvailable()) {
-                DisplayedManager.getInstance().saveDisplayed(context, notificationReceived);
-                DisplayedManager.getInstance().commitChanges(context);
+            if (isWithoutListenersAvailable()) {
+                LostEventsManager
+                        .getInstance()
+                        .saveDisplayed(
+                                context,
+                                displayedReceived);
             }
             else {
                 AwesomeEventsReceiver
@@ -88,7 +95,7 @@ public class BroadcastSender {
                         .addNotificationEvent(
                                 context,
                                 Definitions.BROADCAST_DISPLAYED_NOTIFICATION,
-                                notificationReceived);
+                                displayedReceived);
             }
 
         } catch (Exception e) {
@@ -98,14 +105,17 @@ public class BroadcastSender {
 
     public void sendBroadcastNotificationDismissed(
             @NonNull Context context,
-            @Nullable ActionReceived actionReceived
+            @Nullable ActionReceived dismissedReceived
     ){
-        if (actionReceived == null) return;
+        if (dismissedReceived == null) return;
         try {
 
-            if(withoutListenersAvailable()) {
-                DismissedManager.getInstance().saveDismissed(context, actionReceived);
-                DismissedManager.getInstance().commitChanges(context);
+            if (isWithoutListenersAvailable()) {
+                LostEventsManager
+                        .getInstance()
+                        .saveDismissed(
+                                context,
+                                dismissedReceived);
             }
             else {
                 AwesomeEventsReceiver
@@ -113,7 +123,7 @@ public class BroadcastSender {
                         .addAwesomeActionEvent(
                                 context,
                                 Definitions.BROADCAST_DISMISSED_NOTIFICATION,
-                                actionReceived);
+                                dismissedReceived);
             }
 
         } catch (Exception e) {
@@ -130,12 +140,19 @@ public class BroadcastSender {
         try {
 
             if(onInitialization){
-                ActionManager.getInstance().setInitialNotificationAction(context, actionReceived);
+                ActionManager
+                        .getInstance()
+                        .setInitialNotificationAction(
+                                context,
+                                actionReceived);
             }
 
-            if(withoutListenersAvailable()) {
-                ActionManager.getInstance().saveAction(context, actionReceived);
-                ActionManager.getInstance().commitChanges(context);
+            if(isWithoutListenersAvailable()) {
+                ActionManager
+                        .getInstance()
+                        .saveAction(
+                                context,
+                                actionReceived);
             }
             else {
                 AwesomeEventsReceiver

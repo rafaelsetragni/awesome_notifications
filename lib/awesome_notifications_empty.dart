@@ -79,7 +79,7 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
 
   @override
   Future<NotificationLifeCycle> getAppLifeCycle() async {
-    return NotificationLifeCycle.AppKilled;
+    return NotificationLifeCycle.Terminated;
   }
 
   @override

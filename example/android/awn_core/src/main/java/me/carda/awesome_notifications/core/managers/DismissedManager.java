@@ -75,7 +75,7 @@ public class DismissedManager extends EventManager {
                 _getKeyByIdAndDate(id, dismissedDate));
     }
 
-    public boolean clearDismissed(
+    public boolean removeDismissed(
             @NonNull Context context,
             @NonNull Integer id,
             @NonNull Calendar dismissedDate
@@ -86,7 +86,7 @@ public class DismissedManager extends EventManager {
                 _getKeyByIdAndDate(id, dismissedDate));
     }
 
-    public boolean clearAllDismissed(
+    public boolean removeAllDismissed(
             @NonNull Context context
     ) throws AwesomeNotificationsException {
         return shared.removeAll(

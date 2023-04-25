@@ -16,11 +16,6 @@ abstract class NotificationSchedule extends Model {
       this.preciseAlarm = false,
       this.delayTolerance = 600000});
 
-  String? _createdDate;
-
-  /// Reference
-  String? get createdDate => _createdDate;
-
   /// Full time zone identifier to schedule a notification, in english (ex: America/Sao_Paulo, America/New_York, Europe/Helsinki or GMT-07:00)
   String timeZone;
 

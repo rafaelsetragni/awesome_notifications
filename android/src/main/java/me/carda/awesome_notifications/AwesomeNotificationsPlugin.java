@@ -273,8 +273,8 @@ public class AwesomeNotificationsPlugin
                     channelMethodInitialize(call, result);
                     return;
 
-                case Definitions.CHANNEL_METHOD_SET_ACTION_HANDLE:
-                    channelMethodSetActionHandle(call, result);
+                case Definitions.CHANNEL_METHOD_SET_EVENT_HANDLES:
+                    channelMethodSetEventsHandle(call, result);
                     return;
 
                 case Definitions.CHANNEL_METHOD_GET_DRAWABLE_DATA:
@@ -1374,7 +1374,8 @@ public class AwesomeNotificationsPlugin
         debug = debug != null && debug;
 
         Object backgroundCallbackObj = arguments.get(Definitions.BACKGROUND_HANDLE);
-        Long backgroundCallback = backgroundCallbackObj == null ? 0L :((Number) backgroundCallbackObj).longValue();
+        Long backgroundCallback = backgroundCallbackObj == null
+                ? 0L :((Number) backgroundCallbackObj).longValue();
 
         awesomeNotifications.initialize(
                 defaultIconPath,
@@ -1390,7 +1391,7 @@ public class AwesomeNotificationsPlugin
     }
 
     @SuppressWarnings("unchecked")
-    private void channelMethodSetActionHandle(
+    private void channelMethodSetEventsHandle(
             @NonNull final MethodCall call,
             @NonNull final Result result
     ) throws Exception {
@@ -1405,14 +1406,28 @@ public class AwesomeNotificationsPlugin
                             "Arguments are missing",
                             ExceptionCode.DETAILED_REQUIRED_ARGUMENTS);
 
+        Object callbackCreatedObj = arguments.get(Definitions.CREATED_HANDLE);
+        Object callbackDisplayedObj = arguments.get(Definitions.DISPLAYED_HANDLE);
         Object callbackActionObj = arguments.get(Definitions.ACTION_HANDLE);
+        Object callbackDismissedObj = arguments.get(Definitions.DISMISSED_HANDLE);
 
-        long silentCallback = callbackActionObj == null ? 0L : ((Number) callbackActionObj).longValue();
+        long createdCallback = callbackCreatedObj == null
+                ? 0L : ((Number) callbackCreatedObj).longValue();
+        long displayedCallback = callbackDisplayedObj == null
+                ? 0L : ((Number) callbackDisplayedObj).longValue();
+        long actionCallback = callbackActionObj == null
+                ? 0L : ((Number) callbackActionObj).longValue();
+        long dismissedCallback = callbackDismissedObj == null
+                ? 0L : ((Number) callbackDismissedObj).longValue();
 
         awesomeNotifications.attachAsMainInstance(awesomeEventListener);
-        awesomeNotifications.setActionHandle(silentCallback);
+        awesomeNotifications.setEventsHandle(
+                createdCallback,
+                displayedCallback,
+                actionCallback,
+                dismissedCallback);
 
-        boolean success = silentCallback != 0L;
+        boolean success = actionCallback != 0L;
         if(!success)
             Logger.w(
                     TAG,

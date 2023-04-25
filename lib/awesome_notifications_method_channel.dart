@@ -412,13 +412,31 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     createdHandler = onNotificationCreatedMethod;
     displayedHandler = onNotificationDisplayedMethod;
 
+    final CallbackHandle? createdCallbackReference =
+        onNotificationCreatedMethod != null
+          ? PluginUtilities.getCallbackHandle(onNotificationCreatedMethod)
+          : null;
+
+    final CallbackHandle? displayedCallbackReference =
+    onNotificationDisplayedMethod != null
+          ? PluginUtilities.getCallbackHandle(onNotificationDisplayedMethod)
+          : null;
+
     final CallbackHandle? actionCallbackReference =
         PluginUtilities.getCallbackHandle(onActionReceivedMethod);
 
+    final CallbackHandle? dismissedCallbackReference =
+        onDismissActionReceivedMethod != null
+          ? PluginUtilities.getCallbackHandle(onDismissActionReceivedMethod)
+          : null;
+
     bool result =
-        await methodChannel.invokeMethod(CHANNEL_METHOD_SET_ACTION_HANDLE, {
+        await methodChannel.invokeMethod(
+            CHANNEL_METHOD_SET_EVENT_HANDLES, {
+      CREATED_HANDLE: createdCallbackReference?.toRawHandle(),
+      DISPLAYED_HANDLE: displayedCallbackReference?.toRawHandle(),
       ACTION_HANDLE: actionCallbackReference?.toRawHandle(),
-      RECOVER_DISPLAYED: displayedHandler != null
+      DISMISSED_HANDLE: dismissedCallbackReference?.toRawHandle()
     });
 
     if (!result) {

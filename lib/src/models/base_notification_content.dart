@@ -238,9 +238,16 @@ class BaseNotificationContent extends Model {
   void _processRetroCompatibility(Map<String, dynamic> dataMap) {
     if (dataMap.containsKey("autoCancel")) {
       developer
-          .log("autoCancel is deprecated. Please use autoDismissible instead.");
+          .log("autoCancel is now deprecated. Please use autoDismissible instead.");
       _autoDismissible =
           AwesomeAssertUtils.extractValue("autoCancel", dataMap, bool);
+    }
+    for(MapEntry<String, dynamic> entry in dataMap.entries) {
+      if (entry.value == 'AppKilled') {
+        developer
+            .log("AppKilled is now deprecated. Please use Terminated instead.");
+        dataMap[entry.key] == NotificationLifeCycle.Terminated.name;
+      }
     }
   }
 

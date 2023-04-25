@@ -46,6 +46,7 @@ public class CreatedManager extends EventManager {
                 received);
     }
 
+    @NonNull
     public List<NotificationReceived> listCreated(
             @NonNull Context context
     ) throws AwesomeNotificationsException {
@@ -73,7 +74,7 @@ public class CreatedManager extends EventManager {
                 _getKeyByIdAndDate(id, createdDate));
     }
 
-    public boolean clearCreated(
+    public boolean removeCreated(
             @NonNull Context context,
             @NonNull Integer id,
             @NonNull Calendar createdDate
@@ -84,7 +85,7 @@ public class CreatedManager extends EventManager {
                 _getKeyByIdAndDate(id, createdDate));
     }
 
-    public boolean clearAllCreated(
+    public boolean removeAllCreated(
             @NonNull Context context
     ) throws AwesomeNotificationsException {
         return shared.removeAll(

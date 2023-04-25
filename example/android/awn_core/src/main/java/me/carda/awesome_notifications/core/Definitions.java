@@ -43,6 +43,9 @@ public interface Definitions {
 
     String BADGE_COUNT = "badgeCount";
     String ACTION_HANDLE = "actionHandle";
+    String CREATED_HANDLE = "createdHandle";
+    String DISPLAYED_HANDLE = "displayedHandle";
+    String DISMISSED_HANDLE = "dismissedHandle";
     String SILENT_HANDLE = "silentHandle";
     String STORE_INITIAL_ACTION = "storeInitialAction";
     String BACKGROUND_HANDLE = "awesomeDartBGHandle";
@@ -125,7 +128,7 @@ public interface Definitions {
     String CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = "cancelAllSchedules";
     String CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = "cancelAllNotifications";
     String CHANNEL_METHOD_SILENT_CALLBACK = "silentCallbackReference";
-    String CHANNEL_METHOD_SET_ACTION_HANDLE = "setActionHandle";
+    String CHANNEL_METHOD_SET_EVENT_HANDLES = "setEventHandles";
 
     String CHANNEL_METHOD_START_FOREGROUND = "startForeground";
     String CHANNEL_METHOD_STOP_FOREGROUND = "stopForeground";

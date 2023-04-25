@@ -105,7 +105,7 @@ public abstract class NotificationActionReceiver extends AwesomeBroadcastReceive
                     break;
 
                 case KeepOnTop:
-                    if (appLifeCycle != NotificationLifeCycle.AppKilled)
+                    if (appLifeCycle != NotificationLifeCycle.Terminated)
                         BroadcastSender
                                 .getInstance()
                                 .sendBroadcastBackgroundAction(
@@ -122,7 +122,7 @@ public abstract class NotificationActionReceiver extends AwesomeBroadcastReceive
                     break;
 
                 case SilentAction:
-                    if (appLifeCycle != NotificationLifeCycle.AppKilled)
+                    if (appLifeCycle != NotificationLifeCycle.Terminated)
                         BroadcastSender
                                 .getInstance()
                                 .sendBroadcastSilentAction(

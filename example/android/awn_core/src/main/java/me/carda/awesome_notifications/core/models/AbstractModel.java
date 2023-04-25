@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 
 import com.google.common.primitives.Longs;
 import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -48,6 +49,7 @@ public abstract class AbstractModel implements Cloneable {
     protected final StringUtils stringUtils;
 
     public static Map<String, Object> defaultValues = new HashMap<>();
+    private Gson gson = new Gson();
 
     protected AbstractModel(){
         this.serializableUtils = SerializableUtils.getInstance();
@@ -651,30 +653,38 @@ public abstract class AbstractModel implements Cloneable {
             @NonNull Map<String, Object> map,
             @NonNull String reference,
             @Nullable List<T> defaultValue
-    ){
+    ) {
         Object value = map.get(reference);
-        if(value == null) return defaultValue;
+        if (value == null) {
+            return defaultValue;
+        }
 
-        Type mapType = new TypeToken<List<T>>(){}.getType();
-        if(mapType.equals(value.getClass()))
-            return (List<T>) value;
-
-        return defaultValue;
+        Type listType = new TypeToken<List<T>>(){}.getType();
+        try {
+            List<T> list = gson.fromJson(gson.toJson(value), listType);
+            return list != null ? list : defaultValue;
+        } catch (Exception e) {
+            return defaultValue;
+        }
     }
 
     public <T, K> Map<T, K> getValueOrDefaultMap(
             @NonNull Map<String, Object> map,
             @NonNull String reference,
             @Nullable Map<T, K> defaultValue
-    ){
+    ) {
         Object value = map.get(reference);
-        if(value == null) return defaultValue;
+        if (value == null) {
+            return defaultValue;
+        }
 
         Type mapType = new TypeToken<Map<T, K>>(){}.getType();
-        if(mapType.equals(value.getClass()))
-            return (Map<T, K>) value;
-
-        return defaultValue;
+        try {
+            Map<T, K> mapObj = gson.fromJson(gson.toJson(value), mapType);
+            return mapObj != null ? mapObj : defaultValue;
+        } catch (Exception e) {
+            return defaultValue;
+        }
     }
 
     public abstract void validate(Context context) throws AwesomeNotificationsException;

@@ -45,15 +45,6 @@ public class ActionManager extends EventManager {
 //        shared.set(context, Definitions.SHARED_DISMISSED, received.id.toString(), received);
     }
 
-    public boolean clearAction(
-            @NonNull Context context,
-            @NonNull Integer id
-    ) throws AwesomeNotificationsException {
-        actionCache.remove(id);
-        return true;
-//        return shared.remove(context, Definitions.SHARED_DISMISSED, id.toString());
-    }
-
     public List<ActionReceived> listActions(
             @NonNull Context context
     ) throws AwesomeNotificationsException {
@@ -76,7 +67,16 @@ public class ActionManager extends EventManager {
 //        return shared.get(context, Definitions.SHARED_DISMISSED, id.toString());
     }
 
-    public boolean clearAllActions(
+    public boolean removeAction(
+            @NonNull Context context,
+            @NonNull Integer id
+    ) throws AwesomeNotificationsException {
+        actionCache.remove(id);
+        return true;
+//        return shared.remove(context, Definitions.SHARED_DISMISSED, id.toString());
+    }
+
+    public boolean removeAllActions(
             @NonNull Context context
     ) throws AwesomeNotificationsException {
 //        List<ActionReceived> receivedList = shared.getAllObjects(context, Definitions.SHARED_DISMISSED);

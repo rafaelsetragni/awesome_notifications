@@ -333,7 +333,7 @@ class NotificationsController {
 
     switch (receivedAction.channelKey) {
       case 'call_channel':
-        if (receivedAction.actionLifeCycle != NotificationLifeCycle.AppKilled){
+        if (receivedAction.actionLifeCycle != NotificationLifeCycle.Terminated){
           await receiveCallNotificationAction(receivedAction);
         }
         break;
