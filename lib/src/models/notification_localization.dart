@@ -1,7 +1,6 @@
 import '../../awesome_notifications.dart';
 import 'model.dart';
 
-
 /// A model class that represents a set of localized strings for a notification,
 /// including the title, body, summary, large icon, big picture, and button labels.
 ///
@@ -59,22 +58,26 @@ class NotificationLocalization extends Model {
   /// the parsed data. If the [mapData] parameter is null, empty or invalid,
   /// this method will return `null`.
   @override
-    NotificationLocalization? fromMap(Map<String, dynamic> mapData) {
+  NotificationLocalization? fromMap(Map<String, dynamic> mapData) {
     if (mapData.isEmpty) return null;
 
-    title = AwesomeAssertUtils.extractValue(NOTIFICATION_TITLE, mapData, String);
-    body = AwesomeAssertUtils.extractValue(NOTIFICATION_BODY, mapData, String);
-    summary = AwesomeAssertUtils.extractValue(NOTIFICATION_SUMMARY, mapData, String);
-    largeIcon = AwesomeAssertUtils.extractValue(NOTIFICATION_LARGE_ICON, mapData, String);
-    bigPicture = AwesomeAssertUtils.extractValue(NOTIFICATION_BIG_PICTURE, mapData, String);
+    title =
+        AwesomeAssertUtils.extractValue<String>(NOTIFICATION_TITLE, mapData);
+    body = AwesomeAssertUtils.extractValue<String>(NOTIFICATION_BODY, mapData);
+    summary =
+        AwesomeAssertUtils.extractValue<String>(NOTIFICATION_SUMMARY, mapData);
+    largeIcon = AwesomeAssertUtils.extractValue<String>(
+        NOTIFICATION_LARGE_ICON, mapData);
+    bigPicture = AwesomeAssertUtils.extractValue<String>(
+        NOTIFICATION_BIG_PICTURE, mapData);
 
-    buttonLabels =
-      mapData[NOTIFICATION_BUTTON_LABELS] is Map
-          ? {
-            for (MapEntry entry in (mapData[NOTIFICATION_BUTTON_LABELS] as Map).entries)
+    buttonLabels = mapData[NOTIFICATION_BUTTON_LABELS] is Map
+        ? {
+            for (MapEntry entry
+                in (mapData[NOTIFICATION_BUTTON_LABELS] as Map).entries)
               entry.key.toString(): entry.value.toString()
           }
-          : null;
+        : null;
     return this;
   }
 
@@ -85,24 +88,15 @@ class NotificationLocalization extends Model {
   /// returns the created map.
   @override
   Map<String, dynamic> toMap() => {
-    if(title?.isNotEmpty ?? false)
-      NOTIFICATION_TITLE: title,
-
-    if(body?.isNotEmpty ?? false)
-      NOTIFICATION_BODY: body,
-
-    if(summary?.isNotEmpty ?? false)
-      NOTIFICATION_SUMMARY: summary,
-
-    if(bigPicture?.isNotEmpty ?? false)
-      NOTIFICATION_BIG_PICTURE: bigPicture,
-
-    if(largeIcon?.isNotEmpty ?? false)
-      NOTIFICATION_LARGE_ICON: largeIcon,
-
-    if(buttonLabels?.isNotEmpty ?? false)
-      NOTIFICATION_BUTTON_LABELS: buttonLabels,
-  };
+        if (title?.isNotEmpty ?? false) NOTIFICATION_TITLE: title,
+        if (body?.isNotEmpty ?? false) NOTIFICATION_BODY: body,
+        if (summary?.isNotEmpty ?? false) NOTIFICATION_SUMMARY: summary,
+        if (bigPicture?.isNotEmpty ?? false)
+          NOTIFICATION_BIG_PICTURE: bigPicture,
+        if (largeIcon?.isNotEmpty ?? false) NOTIFICATION_LARGE_ICON: largeIcon,
+        if (buttonLabels?.isNotEmpty ?? false)
+          NOTIFICATION_BUTTON_LABELS: buttonLabels,
+      };
 
   @override
   void validate() {}

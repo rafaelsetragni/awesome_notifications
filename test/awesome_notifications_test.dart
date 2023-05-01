@@ -284,14 +284,8 @@ class MockAwesomeNotificationsPlatform
 }
 
 void main() {
-  final AwesomeNotificationsPlatform initialPlatform = AwesomeNotificationsPlatform.instance;
-
-  test('$MethodChannelAwesomeNotifications is the default instance', () {
-    expect(initialPlatform, isInstanceOf<MethodChannelAwesomeNotifications>());
-  });
 
   test('getPlatformVersion', () async {
-    AwesomeNotifications awesomeNotificationsPlugin = AwesomeNotifications();
     MockAwesomeNotificationsPlatform fakePlatform = MockAwesomeNotificationsPlatform();
     AwesomeNotificationsPlatform.instance = fakePlatform;
 

@@ -286,7 +286,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     if (kIsWeb) {
       // For web release
     } else {
-      if (!AwesomeAssertUtils.isNullOrEmptyOrInvalid(defaultIcon, String)) {
+      if (!AwesomeAssertUtils.isNullOrEmptyOrInvalid(defaultIcon)) {
         // To set a icon on top of notification, is mandatory to user a native resource
         assert(AwesomeBitmapUtils().getMediaSource(defaultIcon!) ==
             MediaSource.Resource);

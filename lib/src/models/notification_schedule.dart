@@ -35,22 +35,22 @@ abstract class NotificationSchedule extends Model {
   @override
   NotificationSchedule? fromMap(Map<String, dynamic> mapData) {
     timeZone = AwesomeAssertUtils.extractValue(
-            NOTIFICATION_SCHEDULE_TIMEZONE, mapData, String) ?? timeZone;
+            NOTIFICATION_SCHEDULE_TIMEZONE, mapData) ?? timeZone;
 
     allowWhileIdle = AwesomeAssertUtils.extractValue(
-            NOTIFICATION_ALLOW_WHILE_IDLE, mapData, bool) ??
+            NOTIFICATION_ALLOW_WHILE_IDLE, mapData) ??
         false;
 
     repeats = AwesomeAssertUtils.extractValue(
-            NOTIFICATION_SCHEDULE_REPEATS, mapData, bool) ??
+            NOTIFICATION_SCHEDULE_REPEATS, mapData) ??
         false;
 
     delayTolerance = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_DELAY_TOLERANCE, mapData, int) ??
+        NOTIFICATION_SCHEDULE_DELAY_TOLERANCE, mapData) ??
         0;
 
     preciseAlarm = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_PRECISE_ALARM, mapData, bool) ??
+        NOTIFICATION_SCHEDULE_PRECISE_ALARM, mapData) ??
         false;
 
     return this;

@@ -87,7 +87,8 @@ const CHANNEL_METHOD_NOTIFICATION_AT_LAUNCH = 'notificationAtLaunch';
 
 const CHANNEL_METHOD_LIST_ALL_SCHEDULES = 'listAllSchedules';
 const CHANNEL_METHOD_IS_NOTIFICATION_ACTIVE = 'isNotificationActive';
-const CHANNEL_METHOD_GET_ALL_ACTIVE_NOTIFICATION_IDS = 'getAllActiveNotificationIds';
+const CHANNEL_METHOD_GET_ALL_ACTIVE_NOTIFICATION_IDS =
+    'getAllActiveNotificationIds';
 
 const CHANNEL_METHOD_GET_BADGE_COUNT = 'getBadgeCount';
 const CHANNEL_METHOD_SET_BADGE_COUNT = 'setBadgeCount';
@@ -283,7 +284,7 @@ const NOTIFICATION_ROUNDED_BIG_PICTURE = 'roundedBigPicture';
 
 class Definitions {
   static Map<String, Object?> initialValues = {
-    NOTIFICATION_ID: 0,
+    NOTIFICATION_ID: -1,
     NOTIFICATION_GROUP_SORT: GroupSort.Desc,
     NOTIFICATION_GROUP_ALERT_BEHAVIOR: GroupAlertBehavior.All,
     NOTIFICATION_IMPORTANCE: NotificationImportance.Default,
@@ -294,8 +295,6 @@ class Definitions {
     NOTIFICATION_DEFAULT_RINGTONE_TYPE: DefaultRingtoneType.Notification,
     NOTIFICATION_DISPLAY_ON_FOREGROUND: true,
     NOTIFICATION_DISPLAY_ON_BACKGROUND: true,
-    NOTIFICATION_CHANNEL_DESCRIPTION: 'Notifications',
-    NOTIFICATION_CHANNEL_NAME: 'Notifications',
     NOTIFICATION_SHOW_WHEN: true,
     NOTIFICATION_CHANNEL_SHOW_BADGE: false,
     NOTIFICATION_ENABLED: true,

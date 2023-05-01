@@ -7,23 +7,20 @@ import 'package:intl/intl.dart';
 import '../definitions.dart';
 import 'string_utils.dart';
 
-const String _dateFormat = "yyyy-MM-dd HH:mm:ss Z";
+const String _dateFormatTimezone = "yyyy-MM-dd HH:mm:ss Z";
+const String _dateFormat = "yyyy-MM-dd HH:mm:ss";
 
 class AwesomeAssertUtils {
   static String? toSimpleEnumString<T extends Enum>(T? e) {
     return e?.name;
   }
 
-  static bool isNullOrEmptyOrInvalid(dynamic value, Type T) {
-    if (value?.runtimeType != T) return true;
-
-    switch (value.runtimeType) {
-      case String:
-      case Map:
-      case List:
-        return value.isEmpty;
-    }
-
+  static bool isNullOrEmptyOrInvalid<T>(dynamic value) {
+    if (value == null) return true;
+    if (value is! T) return true;
+    if (value is String) return value.isEmpty;
+    if (value is Map) return value.isEmpty;
+    if (value is List) return value.isEmpty;
     return false;
   }
 
@@ -38,7 +35,7 @@ class AwesomeAssertUtils {
     return returnList;
   }
 
-  static getValueOrDefault(String reference, dynamic value, Type T) {
+  static T? getValueOrDefault<T>(String reference, dynamic value) {
     switch (value.runtimeType) {
       case MaterialColor:
         value = (value as MaterialColor).shade500;
@@ -53,24 +50,30 @@ class AwesomeAssertUtils {
         break;
     }
 
-    if (value?.runtimeType == T) return value;
-
-    return _getDefaultValue(reference, T);
+    T? defaultValue = _getDefaultValue<T>(reference);
+    if (value == null) return defaultValue;
+    if (value is T) return value;
+    return defaultValue;
   }
 
-  static extractValue(String reference, Map dataMap, Type T) {
-    dynamic defaultValue = _getDefaultValue(reference, T);
+  static extractValue<T>(String reference, Map dataMap) {
+    dynamic defaultValue = _getDefaultValue<T>(reference);
     dynamic value = dataMap[reference];
 
     if (value is String) {
       String valueCasted = value;
-      if (AwesomeStringUtils.isNullOrEmpty(valueCasted,
-          considerWhiteSpaceAsEmpty: true)) return defaultValue;
-
       switch (T) {
         case DateTime:
           try {
-            return DateFormat(_dateFormat).parse(valueCasted, true);
+            if (RegExp(r'\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2} \w+')
+                .hasMatch(valueCasted)) {
+              return DateFormat(_dateFormatTimezone).parse(valueCasted, true);
+            }
+            if (RegExp(r'\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}')
+                .hasMatch(valueCasted)) {
+              return DateFormat(_dateFormat).parse(valueCasted, false);
+            }
+            return null;
           } catch (err) {
             return defaultValue;
           }
@@ -82,7 +85,7 @@ class AwesomeAssertUtils {
 
           // Color hexadecimal representation
           final RegExpMatch? match =
-              RegExp(r'^(0x|#)(\w{2})?(\w{6,6})$').firstMatch(valueCasted);
+              RegExp(r'^(0x|#)(\w{2})?(\w{6})$').firstMatch(valueCasted);
 
           if (match != null) {
             String hex = (match.group(2) ?? 'FF') + match.group(3)!;
@@ -91,7 +94,11 @@ class AwesomeAssertUtils {
           } else if (T == int) {
             int? parsedValue = int.tryParse(valueCasted.replaceFirstMapped(
                 RegExp(r'^(\d+)\.\d+$'), (match) => '${match.group(1)}'));
-            return parsedValue ?? defaultValue;
+            var finalValue = parsedValue ?? defaultValue;
+            if (T is Color) {
+              return Color(finalValue);
+            }
+            return finalValue;
           }
           break;
 
@@ -100,7 +107,7 @@ class AwesomeAssertUtils {
           return parsedValue ?? defaultValue;
 
         case bool:
-          return valueCasted.toLowerCase() == 'true';
+          return valueCasted.toLowerCase() == 'true' || valueCasted == '1';
       }
     }
 
@@ -117,6 +124,8 @@ class AwesomeAssertUtils {
 
       case Color:
         switch (value.runtimeType) {
+          case int:
+            return Color(value);
           case MaterialColor:
             value = (value as MaterialColor).shade500;
             break;
@@ -132,22 +141,24 @@ class AwesomeAssertUtils {
         break;
 
       case bool:
-        return value ?? defaultValue ?? false;
+        if (value == null) return defaultValue;
+        if (value is int) return value == 1;
+        return value;
     }
 
-    if (value.runtimeType.hashCode != T.hashCode) return defaultValue;
+    if (value is T) return value;
 
     return defaultValue;
   }
 
-  static extractMap<T, C>(Map dataMap, String reference) {
-    Map? defaultValue = _getDefaultValue(reference, Map);
+  static extractMap<T, C>(String reference, Map dataMap) {
+    Map? defaultValue = _getDefaultValue<Map>(reference);
 
     dynamic value = dataMap[reference];
     if (value == null || value is! Map) return defaultValue;
 
     try {
-      if(value.isEmpty) return defaultValue;
+      if (value.isEmpty) return defaultValue;
       return Map<T, C>.from(value);
     } catch (e) {
       return defaultValue;
@@ -156,16 +167,21 @@ class AwesomeAssertUtils {
 
   static T? extractEnum<T extends Enum>(
       String reference, Map dataMap, List<T> values) {
-    T? defaultValue = _getDefaultValue(reference, T);
+    T? defaultValue = _getDefaultValue<T>(reference);
     dynamic value = dataMap[reference];
 
     if (value is T) return value;
 
     if (value == null || value is! String) return defaultValue;
 
+    if (AwesomeStringUtils.isNullOrEmpty(value,
+        considerWhiteSpaceAsEmpty: true)) {
+      return defaultValue;
+    }
+
     String castedValue = value;
     castedValue = castedValue.trim();
-    return enumToString<T>(castedValue, values, defaultValue ?? values.first);
+    return enumToString<T>(castedValue, values, defaultValue);
   }
 
   static T? enumToString<T extends Enum>(
@@ -177,9 +193,9 @@ class AwesomeAssertUtils {
     return defaultValue;
   }
 
-  static dynamic _getDefaultValue(String reference, Type T) {
+  static dynamic _getDefaultValue<T>(String reference) {
     dynamic defaultValue = Definitions.initialValues[reference];
-    if (defaultValue?.runtimeType != T) return null;
+    if (defaultValue is! T) return null;
     return defaultValue;
   }
 

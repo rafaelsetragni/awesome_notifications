@@ -45,10 +45,11 @@ class NotificationAndroidCrontab extends NotificationSchedule {
       bool allowWhileIdle = false,
       bool repeats = false,
       bool preciseAlarm = true})
-      : _initialDateTime = initialDateTime,
-        _expirationDateTime = expirationDateTime,
-        _preciseSchedules = preciseSchedules,
-        _crontabExpression = crontabExpression,
+      :
+        _initialDateTime = AwesomeAssertUtils.getValueOrDefault<DateTime>(NOTIFICATION_INITIAL_DATE_TIME, initialDateTime),
+        _expirationDateTime = AwesomeAssertUtils.getValueOrDefault<DateTime>(NOTIFICATION_EXPIRATION_DATE_TIME, expirationDateTime),
+        _preciseSchedules = AwesomeAssertUtils.getValueOrDefault<List<DateTime>>(NOTIFICATION_PRECISE_SCHEDULES, preciseSchedules),
+        _crontabExpression = AwesomeAssertUtils.getValueOrDefault<String>(NOTIFICATION_CRONTAB_EXPRESSION, crontabExpression),
         super(
             timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
@@ -178,12 +179,12 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   NotificationAndroidCrontab? fromMap(Map<String, dynamic> mapData) {
     super.fromMap(mapData);
 
-    _crontabExpression = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CRONTAB_EXPRESSION, mapData, String);
-    _initialDateTime = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_INITIAL_DATE_TIME, mapData, DateTime);
-    _expirationDateTime = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_EXPIRATION_DATE_TIME, mapData, DateTime);
+    _crontabExpression = AwesomeAssertUtils.extractValue<String>(
+        NOTIFICATION_CRONTAB_EXPRESSION, mapData);
+    _initialDateTime = AwesomeAssertUtils.extractValue<DateTime>(
+        NOTIFICATION_INITIAL_DATE_TIME, mapData);
+    _expirationDateTime = AwesomeAssertUtils.extractValue<DateTime>(
+        NOTIFICATION_EXPIRATION_DATE_TIME, mapData);
 
     if (mapData[NOTIFICATION_PRECISE_SCHEDULES] is List) {
       List<String> schedules =

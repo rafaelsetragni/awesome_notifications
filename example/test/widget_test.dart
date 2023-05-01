@@ -10,7 +10,7 @@
 //
 // import 'package:awesome_notifications_example/main_complete.dart';
 //
-// void main() {
+void main() {
 //   testWidgets('Verify Platform version', (WidgetTester tester) async {
 //     // Build our app and trigger a frame.
 //     await tester.pumpWidget(const App());
@@ -24,4 +24,4 @@
 //       findsOneWidget,
 //     );
 //   });
-// }
+}
