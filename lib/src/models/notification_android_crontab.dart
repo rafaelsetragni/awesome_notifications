@@ -45,11 +45,15 @@ class NotificationAndroidCrontab extends NotificationSchedule {
       bool allowWhileIdle = false,
       bool repeats = false,
       bool preciseAlarm = true})
-      :
-        _initialDateTime = AwesomeAssertUtils.getValueOrDefault<DateTime>(NOTIFICATION_INITIAL_DATE_TIME, initialDateTime),
-        _expirationDateTime = AwesomeAssertUtils.getValueOrDefault<DateTime>(NOTIFICATION_EXPIRATION_DATE_TIME, expirationDateTime),
-        _preciseSchedules = AwesomeAssertUtils.getValueOrDefault<List<DateTime>>(NOTIFICATION_PRECISE_SCHEDULES, preciseSchedules),
-        _crontabExpression = AwesomeAssertUtils.getValueOrDefault<String>(NOTIFICATION_CRONTAB_EXPRESSION, crontabExpression),
+      : _initialDateTime = AwesomeAssertUtils.getValueOrDefault<DateTime>(
+            NOTIFICATION_INITIAL_DATE_TIME, initialDateTime),
+        _expirationDateTime = AwesomeAssertUtils.getValueOrDefault<DateTime>(
+            NOTIFICATION_EXPIRATION_DATE_TIME, expirationDateTime),
+        _preciseSchedules =
+            AwesomeAssertUtils.getValueOrDefault<List<DateTime>>(
+                NOTIFICATION_PRECISE_SCHEDULES, preciseSchedules),
+        _crontabExpression = AwesomeAssertUtils.getValueOrDefault<String>(
+            NOTIFICATION_CRONTAB_EXPRESSION, crontabExpression),
         super(
             timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
             allowWhileIdle: allowWhileIdle,
@@ -107,7 +111,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
             allowWhileIdle: allowWhileIdle,
             repeats: false) {
     _crontabExpression =
-        CronHelper().monthly(referenceDateTime: referenceDateTime);
+        CronHelper().weekly(referenceDateTime: referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at day based on a date reference
@@ -120,7 +124,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
             allowWhileIdle: allowWhileIdle,
             repeats: false) {
     _crontabExpression =
-        CronHelper().monthly(referenceDateTime: referenceDateTime);
+        CronHelper().daily(referenceDateTime: referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at hour based on a date reference
@@ -133,7 +137,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
             allowWhileIdle: allowWhileIdle,
             repeats: false) {
     _crontabExpression =
-        CronHelper().monthly(referenceDateTime: referenceDateTime);
+        CronHelper().hourly(referenceDateTime: referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only once at every minute based on a date reference
@@ -159,7 +163,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
             allowWhileIdle: allowWhileIdle,
             repeats: false) {
     _crontabExpression =
-        CronHelper().monthly(referenceDateTime: referenceDateTime);
+        CronHelper().workweekDay(referenceDateTime: referenceDateTime);
   }
 
   /// Generates a Cron expression to be played only on weekend days based on a date reference
@@ -172,7 +176,7 @@ class NotificationAndroidCrontab extends NotificationSchedule {
             allowWhileIdle: allowWhileIdle,
             repeats: false) {
     _crontabExpression =
-        CronHelper().monthly(referenceDateTime: referenceDateTime);
+        CronHelper().weekendDay(referenceDateTime: referenceDateTime);
   }
 
   @override

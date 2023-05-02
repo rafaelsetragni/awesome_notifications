@@ -4,16 +4,17 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('parseStringToDate()', () {
     test('Null string', () {
-      expect(AwesomeDateUtils.parseStringToDate(null), null);
+      expect(AwesomeDateUtils.parseStringToDateUtc(null), null);
     });
 
     test('Empty string', () {
-      expect(AwesomeDateUtils.parseStringToDate(''), null);
+      expect(AwesomeDateUtils.parseStringToDateUtc(''), null);
     });
 
     test('Valid date string', () {
       expect(
-          AwesomeDateUtils.parseStringToDate('2023-01-01 00:00:00')?.toIso8601String(),
+          AwesomeDateUtils.parseStringToDateUtc('2023-01-01 00:00:00')
+              ?.toIso8601String(),
           '2023-01-01T00:00:00.000Z');
     });
   });
@@ -25,7 +26,8 @@ void main() {
 
     test('Valid DateTime', () {
       DateTime dateTime = DateTime.parse('2023-01-01T00:00:00.000Z');
-      expect(AwesomeDateUtils.parseDateToString(dateTime), '2023-01-01 00:00:00');
+      expect(
+          AwesomeDateUtils.parseDateToString(dateTime), '2023-01-01 00:00:00');
     });
   });
 

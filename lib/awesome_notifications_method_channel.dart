@@ -17,7 +17,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  final methodChannel = const MethodChannel('awesome_notifications');
+  var methodChannel = const MethodChannel('awesome_notifications');
 
   ActionHandler? actionHandler;
   ActionHandler? dismissedHandler;
@@ -26,7 +26,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
   @override
   Future<void> cancel(int id) async {
-    _validateId(id);
+    validateId(id);
     await methodChannel.invokeMethod(CHANNEL_METHOD_CANCEL_NOTIFICATION, id);
   }
 
@@ -54,7 +54,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
   @override
   Future<void> cancelSchedule(int id) async {
-    _validateId(id);
+    validateId(id);
     await methodChannel.invokeMethod(CHANNEL_METHOD_CANCEL_SCHEDULE, id);
   }
 
@@ -98,7 +98,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     List<NotificationActionButton>? actionButtons,
     Map<String, NotificationLocalization>? localizations,
   }) async {
-    _validateId(content.id!);
+    validateId(content.id!);
 
     final bool wasCreated = await methodChannel.invokeMethod(
         CHANNEL_METHOD_CREATE_NOTIFICATION,
@@ -161,7 +161,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
   @override
   Future<void> dismiss(int id) async {
-    _validateId(id);
+    validateId(id);
     await methodChannel.invokeMethod(CHANNEL_METHOD_DISMISS_NOTIFICATION, id);
   }
 
@@ -268,7 +268,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    methodChannel.setMethodCallHandler(_handleMethod);
+    methodChannel.setMethodCallHandler(handleMethod);
 
     List<dynamic> serializedChannels = [];
     for (NotificationChannel channel in channels) {
@@ -379,7 +379,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
   @override
   Future<void> resetGlobalBadge() async {
-    await methodChannel.invokeListMethod(CHANNEL_METHOD_RESET_BADGE);
+    await methodChannel.invokeMethod(CHANNEL_METHOD_RESET_BADGE);
   }
 
   @override
@@ -414,25 +414,24 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
     final CallbackHandle? createdCallbackReference =
         onNotificationCreatedMethod != null
-          ? PluginUtilities.getCallbackHandle(onNotificationCreatedMethod)
-          : null;
+            ? PluginUtilities.getCallbackHandle(onNotificationCreatedMethod)
+            : null;
 
     final CallbackHandle? displayedCallbackReference =
-    onNotificationDisplayedMethod != null
-          ? PluginUtilities.getCallbackHandle(onNotificationDisplayedMethod)
-          : null;
+        onNotificationDisplayedMethod != null
+            ? PluginUtilities.getCallbackHandle(onNotificationDisplayedMethod)
+            : null;
 
     final CallbackHandle? actionCallbackReference =
         PluginUtilities.getCallbackHandle(onActionReceivedMethod);
 
     final CallbackHandle? dismissedCallbackReference =
         onDismissActionReceivedMethod != null
-          ? PluginUtilities.getCallbackHandle(onDismissActionReceivedMethod)
-          : null;
+            ? PluginUtilities.getCallbackHandle(onDismissActionReceivedMethod)
+            : null;
 
     bool result =
-        await methodChannel.invokeMethod(
-            CHANNEL_METHOD_SET_EVENT_HANDLES, {
+        await methodChannel.invokeMethod(CHANNEL_METHOD_SET_EVENT_HANDLES, {
       CREATED_HANDLE: createdCallbackReference?.toRawHandle(),
       DISPLAYED_HANDLE: displayedCallbackReference?.toRawHandle(),
       ACTION_HANDLE: actionCallbackReference?.toRawHandle(),
@@ -514,7 +513,8 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   final String _silentBGActionTypeKey =
       AwesomeAssertUtils.toSimpleEnumString(ActionType.SilentBackgroundAction)!;
 
-  Future<dynamic> _handleMethod(MethodCall call) async {
+  @visibleForTesting
+  Future<dynamic> handleMethod(MethodCall call) async {
     Map<String, dynamic> arguments =
         (call.arguments as Map).cast<String, dynamic>();
 
@@ -541,9 +541,9 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
       case EVENT_SILENT_ACTION:
         if (arguments[NOTIFICATION_ACTION_TYPE] == _silentBGActionTypeKey) {
-          compute(receiveSilentAction, arguments);
+          await compute(IsolateController().receiveSilentAction, arguments);
         } else {
-          receiveSilentAction(arguments);
+          await IsolateController().receiveSilentAction(arguments);
         }
         return;
 
@@ -552,7 +552,8 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     }
   }
 
-  void _validateId(int id) {
+  @visibleForTesting
+  void validateId(int id) {
     if (id > 0x7FFFFFFF || id < -0x80000000) {
       throw ArgumentError(
           'The id field must be the limited to 32-bit size integer');

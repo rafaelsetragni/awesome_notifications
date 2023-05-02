@@ -30,8 +30,44 @@ void main() {
       expect(calendar.weekOfYear, 23);
     });
 
-    test('should create a NotificationCalendar object fromDate', () {
+    test(
+        'should throw an exception a NotificationCalendar '
+        'object fromMap warning about weekOfMonth is not implemented yet', () {
+      Map<String, dynamic> dataMap = {
+        NOTIFICATION_SCHEDULE_ERA: 1,
+        NOTIFICATION_SCHEDULE_YEAR: 2023,
+        NOTIFICATION_SCHEDULE_MONTH: 5,
+        NOTIFICATION_SCHEDULE_DAY: 1,
+        NOTIFICATION_SCHEDULE_HOUR: 12,
+        NOTIFICATION_SCHEDULE_MINUTE: 30,
+        NOTIFICATION_SCHEDULE_SECOND: 45,
+        NOTIFICATION_SCHEDULE_WEEKDAY: 1,
+        NOTIFICATION_SCHEDULE_WEEKOFYEAR: 23,
+        NOTIFICATION_SCHEDULE_WEEKOFMONTH: 1
+      };
+
+      expect(
+          () => NotificationCalendar()
+            ..fromMap(dataMap)
+            ..validate(),
+          throwsA(isA<UnimplementedError>()));
+    });
+
+    test('should create a NotificationCalendar object fromDate using local',
+        () {
       DateTime date = DateTime(2023, 5, 1, 12, 30, 45);
+      NotificationCalendar calendar = NotificationCalendar.fromDate(date: date);
+
+      expect(calendar.year, 2023);
+      expect(calendar.month, 5);
+      expect(calendar.day, 1);
+      expect(calendar.hour, 12);
+      expect(calendar.minute, 30);
+      expect(calendar.second, 45);
+    });
+
+    test('should create a NotificationCalendar object fromDate using UTC', () {
+      DateTime date = DateTime.utc(2023, 5, 1, 12, 30, 45);
       NotificationCalendar calendar = NotificationCalendar.fromDate(date: date);
 
       expect(calendar.year, 2023);

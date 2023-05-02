@@ -35,7 +35,8 @@ abstract class NotificationSchedule extends Model {
   @override
   NotificationSchedule? fromMap(Map<String, dynamic> mapData) {
     timeZone = AwesomeAssertUtils.extractValue(
-            NOTIFICATION_SCHEDULE_TIMEZONE, mapData) ?? timeZone;
+            NOTIFICATION_SCHEDULE_TIMEZONE, mapData) ??
+        timeZone;
 
     allowWhileIdle = AwesomeAssertUtils.extractValue(
             NOTIFICATION_ALLOW_WHILE_IDLE, mapData) ??
@@ -46,11 +47,11 @@ abstract class NotificationSchedule extends Model {
         false;
 
     delayTolerance = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_DELAY_TOLERANCE, mapData) ??
+            NOTIFICATION_SCHEDULE_DELAY_TOLERANCE, mapData) ??
         0;
 
     preciseAlarm = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SCHEDULE_PRECISE_ALARM, mapData) ??
+            NOTIFICATION_SCHEDULE_PRECISE_ALARM, mapData) ??
         false;
 
     return this;
@@ -67,10 +68,5 @@ abstract class NotificationSchedule extends Model {
     };
 
     return dataMap;
-  }
-
-  @override
-  String toString() {
-    return toMap().toString().replaceAll(',', ',\n');
   }
 }

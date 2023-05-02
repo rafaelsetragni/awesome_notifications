@@ -102,8 +102,8 @@ class NotificationActionButton extends Model {
         AwesomeAssertUtils.extractValue<bool>(NOTIFICATION_ENABLED, mapData);
     _requireInputText = AwesomeAssertUtils.extractValue<bool>(
         NOTIFICATION_REQUIRE_INPUT_TEXT, mapData);
-    _autoDismissible =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_AUTO_DISMISSIBLE, mapData);
+    _autoDismissible = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_AUTO_DISMISSIBLE, mapData);
     _showInCompactView = AwesomeAssertUtils.extractValue<bool>(
         NOTIFICATION_SHOW_IN_COMPACT_VIEW, mapData);
     _isDangerousOption = AwesomeAssertUtils.extractValue<bool>(

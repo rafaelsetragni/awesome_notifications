@@ -94,30 +94,39 @@ class NotificationModel extends Model {
     if (mapData[NOTIFICATION_BUTTONS] is! List) return null;
     if (mapData[NOTIFICATION_BUTTONS].isEmpty) return null;
 
-    List finalList = [
-      for (dynamic buttonData in mapData[NOTIFICATION_BUTTONS])
-        NotificationActionButton(label: '', key: '')
-            .fromMap(Map<String, dynamic>.from(buttonData))
-          ?..validate()
-    ]..removeWhere((element) => element == null);
+    List<NotificationActionButton> finalList = [];
+    for (dynamic buttonData in mapData[NOTIFICATION_BUTTONS]) {
+      NotificationActionButton? actionButton =
+          NotificationActionButton(label: '', key: '')
+              .fromMap(Map<String, dynamic>.from(buttonData))
+            ?..validate();
+      if (actionButton == null) continue;
+      finalList.add(actionButton);
+    }
 
-    return finalList as List<NotificationActionButton>;
+    return finalList;
   }
 
   Map<String, NotificationLocalization>? _extractLocalizationsFromMap(
       Map<String, dynamic> mapData) {
-    if (mapData[NOTIFICATION_LOCALIZATIONS] is! Map<String, dynamic>)
+    if (mapData[NOTIFICATION_LOCALIZATIONS] is! Map<String, dynamic>) {
       return null;
+    }
     if (mapData[NOTIFICATION_LOCALIZATIONS].isEmpty) return null;
 
-    return (<String, dynamic>{
-      for (MapEntry<String, dynamic> entry
-          in mapData[NOTIFICATION_LOCALIZATIONS].entries)
-        if (entry.value is Map<String, dynamic>)
-          entry.key: NotificationLocalization().fromMap(entry.value)
-            ?..validate()
-    }..removeWhere((key, value) => value == null))
-        as Map<String, NotificationLocalization>;
+    Map<String, NotificationLocalization> finalLocalizations = {};
+
+    for (MapEntry<String, dynamic> entry
+        in mapData[NOTIFICATION_LOCALIZATIONS].entries) {
+      if (entry.value is! Map<String, dynamic>) continue;
+      var localization = NotificationLocalization().fromMap(entry.value);
+      if (localization == null) continue;
+      localization.validate();
+
+      finalLocalizations[entry.key] = localization;
+    }
+
+    return finalLocalizations;
   }
 
   /// Exports all content into a serializable object

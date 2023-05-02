@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -69,9 +70,9 @@ class AwesomeAssertUtils {
                 .hasMatch(valueCasted)) {
               return DateFormat(_dateFormatTimezone).parse(valueCasted, true);
             }
-            if (RegExp(r'\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}')
+            if (RegExp(r'\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}:\d{2}(\.\d{1,3})?')
                 .hasMatch(valueCasted)) {
-              return DateFormat(_dateFormat).parse(valueCasted, false);
+              return AwesomeDateUtils.parseStringToDate(valueCasted);
             }
             return null;
           } catch (err) {
@@ -95,9 +96,6 @@ class AwesomeAssertUtils {
             int? parsedValue = int.tryParse(valueCasted.replaceFirstMapped(
                 RegExp(r'^(\d+)\.\d+$'), (match) => '${match.group(1)}'));
             var finalValue = parsedValue ?? defaultValue;
-            if (T is Color) {
-              return Color(finalValue);
-            }
             return finalValue;
           }
           break;
@@ -107,7 +105,17 @@ class AwesomeAssertUtils {
           return parsedValue ?? defaultValue;
 
         case bool:
-          return valueCasted.toLowerCase() == 'true' || valueCasted == '1';
+          switch (valueCasted.toLowerCase()) {
+            case 'true':
+              return true;
+            case 'false':
+              return false;
+            case '1':
+              return true;
+            case '0':
+              return false;
+          }
+          return null;
       }
     }
 
@@ -201,9 +209,9 @@ class AwesomeAssertUtils {
 
   static List<T>? fromListMap<T extends Model>(
       Object? mapData, Function newModel) {
-    if (mapData == null || mapData is List<Map<String, dynamic>>) return null;
+    if (mapData == null || mapData is! List<Map<String, dynamic>>) return null;
 
-    List<Map<String, dynamic>> listMapData = List.from(mapData as List);
+    List<Map<String, dynamic>> listMapData = List.from(mapData);
     if (listMapData.isEmpty) return null;
 
     List<T> actionButtons = [];
