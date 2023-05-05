@@ -11,6 +11,7 @@
 [![Discord Shield](https://discordapp.com/api/guilds/888523488376279050/widget.png?style=shield)](https://discord.awesome-notifications.carda.me)
 [![pub package](https://img.shields.io/pub/v/awesome_notifications.svg)](https://pub.dev/packages/awesome_notifications)
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=hotfix)
+![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/hotfix/graph/badge.svg)
 
 
 Engage your users with custom local and push notifications on Flutter. Get real-time events and never miss a user interaction with Awesome Notifications.
