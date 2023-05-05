@@ -119,24 +119,25 @@ class NotificationContent extends BaseNotificationContent {
   @override
   NotificationContent? fromMap(Map<String, dynamic> mapData) {
     super.fromMap(mapData);
-    _hideLargeIconOnExpand = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND, mapData, bool);
+    _hideLargeIconOnExpand = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND, mapData);
 
     _progress =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_PROGRESS, mapData, int);
-    _badge = AwesomeAssertUtils.extractValue(NOTIFICATION_BADGE, mapData, int);
+        AwesomeAssertUtils.extractValue<int>(NOTIFICATION_PROGRESS, mapData);
+    _badge = AwesomeAssertUtils.extractValue<int>(NOTIFICATION_BADGE, mapData);
     _ticker =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_TICKER, mapData, String);
+        AwesomeAssertUtils.extractValue<String>(NOTIFICATION_TICKER, mapData);
     _locked =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_LOCKED, mapData, bool);
+        AwesomeAssertUtils.extractValue<bool>(NOTIFICATION_LOCKED, mapData);
 
     _notificationLayout = AwesomeAssertUtils.extractEnum<NotificationLayout>(
         NOTIFICATION_LAYOUT, mapData, NotificationLayout.values);
 
-    _displayOnForeground = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_DISPLAY_ON_FOREGROUND, mapData, bool);
-    _displayOnBackground = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_DISPLAY_ON_BACKGROUND, mapData, bool);
+    _displayOnForeground = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_DISPLAY_ON_FOREGROUND, mapData);
+
+    _displayOnBackground = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_DISPLAY_ON_BACKGROUND, mapData);
 
     try {
       validate();

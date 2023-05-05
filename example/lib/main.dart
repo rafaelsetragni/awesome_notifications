@@ -1,10 +1,19 @@
+import 'dart:async';
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:palette_generator/palette_generator.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   // Always initialize Awesome Notifications
   await NotificationController.initializeLocalNotifications();
+  await NotificationController.initializeIsolateReceivePort();
   runApp(const MyApp());
 }
 
@@ -42,6 +51,17 @@ class NotificationController {
         .getInitialNotificationAction(removeFromActionEvents: false);
   }
 
+  static ReceivePort? receivePort;
+  static Future<void> initializeIsolateReceivePort() async {
+    receivePort = ReceivePort('Notification action port in main isolate')
+      ..listen(
+          (silentData) => onActionReceivedImplementationMethod(silentData));
+
+    // This initialization only happens on main isolate
+    IsolateNameServer.registerPortWithName(
+        receivePort!.sendPort, 'notification_action_port');
+  }
+
   ///  *********************************************
   ///     NOTIFICATION EVENTS LISTENER
   ///  *********************************************
@@ -58,22 +78,40 @@ class NotificationController {
   @pragma('vm:entry-point')
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
-
-    if(
-      receivedAction.actionType == ActionType.SilentAction ||
-      receivedAction.actionType == ActionType.SilentBackgroundAction
-    ){
+    if (receivedAction.actionType == ActionType.SilentAction ||
+        receivedAction.actionType == ActionType.SilentBackgroundAction) {
       // For background actions, you must hold the execution until the end
-      print('Message sent via notification input: "${receivedAction.buttonKeyInput}"');
+      print(
+          'Message sent via notification input: "${receivedAction.buttonKeyInput}"');
       await executeLongTaskInBackground();
+    } else {
+      // this process is only necessary when you need to redirect the user
+      // to a new page or use a valid context, since parallel isolates do not
+      // have valid context, so you need redirect the execution to main isolate
+      if (receivePort == null) {
+        print(
+            'onActionReceivedMethod was called inside a parallel dart isolate.');
+        SendPort? sendPort =
+            IsolateNameServer.lookupPortByName('notification_action_port');
+
+        if (sendPort != null) {
+          print('Redirecting the execution to main isolate process.');
+          sendPort.send(receivedAction);
+          return;
+        }
+      }
+
+      return onActionReceivedImplementationMethod(receivedAction);
     }
-    else {
-      MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil(
-          '/notification-page',
-              (route) =>
-          (route.settings.name != '/notification-page') || route.isFirst,
-          arguments: receivedAction);
-    }
+  }
+
+  static Future<void> onActionReceivedImplementationMethod(
+      ReceivedAction receivedAction) async {
+    MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil(
+        '/notification-page',
+        (route) =>
+            (route.settings.name != '/notification-page') || route.isFirst,
+        arguments: receivedAction);
   }
 
   ///  *********************************************
@@ -178,8 +216,7 @@ class NotificationController {
               key: 'REPLY',
               label: 'Reply Message',
               requireInputText: true,
-              actionType: ActionType.SilentAction
-          ),
+              actionType: ActionType.SilentAction),
           NotificationActionButton(
               key: 'DISMISS',
               label: 'Dismiss',
@@ -193,30 +230,14 @@ class NotificationController {
     if (!isAllowed) isAllowed = await displayNotificationRationale();
     if (!isAllowed) return;
 
-    await AwesomeNotifications().createNotification(
-        content: NotificationContent(
-            id: -1, // -1 is replaced by a random number
-            channelKey: 'alerts',
-            title: "Huston! The eagle has landed!",
-            body:
-                "A small step for a man, but a giant leap to Flutter's community!",
-            bigPicture: 'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
-            largeIcon: 'https://storage.googleapis.com/cms-storage-bucket/0dbfcc7a59cd1cf16282.png',
-            //'asset://assets/images/balloons-in-sky.jpg',
-            notificationLayout: NotificationLayout.BigPicture,
-            payload: {
-              'notificationId': '1234567890'
-            }),
-        actionButtons: [
-          NotificationActionButton(key: 'REDIRECT', label: 'Redirect'),
-          NotificationActionButton(
-              key: 'DISMISS',
-              label: 'Dismiss',
-              actionType: ActionType.DismissAction,
-              isDangerousOption: true)
-        ],
-        schedule: NotificationCalendar.fromDate(
-            date: DateTime.now().add(const Duration(seconds: 10))));
+    await myNotifyScheduleInHours(
+        title: 'test',
+        msg: 'test message',
+        heroThumbUrl:
+            'https://storage.googleapis.com/cms-storage-bucket/d406c736e7c4c57f5f61.png',
+        hoursFromNow: 5,
+        username: 'test user',
+        repeatNotif: false);
   }
 
   static Future<void> resetBadgeCounter() async {
@@ -226,6 +247,52 @@ class NotificationController {
   static Future<void> cancelNotifications() async {
     await AwesomeNotifications().cancelAll();
   }
+}
+
+Future<void> myNotifyScheduleInHours({
+  required int hoursFromNow,
+  required String heroThumbUrl,
+  required String username,
+  required String title,
+  required String msg,
+  bool repeatNotif = false,
+}) async {
+  var nowDate = DateTime.now().add(Duration(hours: hoursFromNow, seconds: 5));
+  await AwesomeNotifications().createNotification(
+    schedule: NotificationCalendar(
+      //weekday: nowDate.day,
+      hour: nowDate.hour,
+      minute: 0,
+      second: nowDate.second,
+      repeats: repeatNotif,
+      //allowWhileIdle: true,
+    ),
+    // schedule: NotificationCalendar.fromDate(
+    //    date: DateTime.now().add(const Duration(seconds: 10))),
+    content: NotificationContent(
+      id: -1,
+      channelKey: 'basic_channel',
+      title: '${Emojis.food_bowl_with_spoon} $title',
+      body: '$username, $msg',
+      bigPicture: heroThumbUrl,
+      notificationLayout: NotificationLayout.BigPicture,
+      //actionType : ActionType.DismissAction,
+      color: Colors.black,
+      backgroundColor: Colors.black,
+      // customSound: 'resource://raw/notif',
+      payload: {'actPag': 'myAct', 'actType': 'food', 'username': username},
+    ),
+    actionButtons: [
+      NotificationActionButton(
+        key: 'NOW',
+        label: 'btnAct1',
+      ),
+      NotificationActionButton(
+        key: 'LATER',
+        label: 'btnAct2',
+      ),
+    ],
+  );
 }
 
 ///  *********************************************
@@ -371,118 +438,217 @@ class _MyHomePageState extends State<MyHomePage> {
 ///  *********************************************
 ///     NOTIFICATION PAGE
 ///  *********************************************
-///
-class NotificationPage extends StatelessWidget {
-  const NotificationPage({Key? key, required this.receivedAction})
-      : super(key: key);
+class NotificationPage extends StatefulWidget {
+  const NotificationPage({
+    Key? key,
+    required this.receivedAction,
+  }) : super(key: key);
 
   final ReceivedAction receivedAction;
 
   @override
+  NotificationPageState createState() =>
+      NotificationPageState();
+}
+
+class NotificationPageState extends State<NotificationPage> {
+
+  bool get hasTitle => widget.receivedAction.title?.isNotEmpty ?? false;
+  bool get hasBody => widget.receivedAction.body?.isNotEmpty ?? false;
+  bool get hasLargeIcon => widget.receivedAction.largeIconImage != null;
+  bool get hasBigPicture => widget.receivedAction.bigPictureImage != null;
+
+  double bigPictureSize = 0.0;
+  double largeIconSize = 0.0;
+  bool isTotallyCollapsed = false;
+  bool bigPictureIsPredominantlyWhite = true;
+
+  ScrollController scrollController = ScrollController();
+
+  Future<bool> isImagePredominantlyWhite(ImageProvider imageProvider) async {
+    final paletteGenerator = await PaletteGenerator.fromImageProvider(imageProvider);
+    final dominantColor = paletteGenerator.dominantColor?.color ?? Colors.transparent;
+    return dominantColor.computeLuminance() > 0.5;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(_scrollListener);
+
+    if (hasBigPicture){
+      isImagePredominantlyWhite(
+        widget.receivedAction.bigPictureImage!
+      ).then((isPredominantlyWhite) => setState((){
+        bigPictureIsPredominantlyWhite = isPredominantlyWhite;
+      }));
+    }
+  }
+
+  void _scrollListener() {
+    bool pastScrollLimit =
+        scrollController.position.pixels >=
+            scrollController.position.maxScrollExtent - 240;
+
+    if (!hasBigPicture) {
+      isTotallyCollapsed = true;
+      return;
+    }
+
+    if (isTotallyCollapsed) {
+      if (!pastScrollLimit){
+        setState(() {
+          isTotallyCollapsed = false;
+        });
+      }
+    } else {
+      if (pastScrollLimit){
+        setState(() {
+          isTotallyCollapsed = true;
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    bool hasLargeIcon = receivedAction.largeIconImage != null;
-    bool hasBigPicture = receivedAction.bigPictureImage != null;
-    double bigPictureSize = MediaQuery.of(context).size.height * .4;
-    double largeIconSize =
-        MediaQuery.of(context).size.height * (hasBigPicture ? .12 : .2);
+    bigPictureSize = MediaQuery.of(context).size.height * .4;
+    largeIconSize = MediaQuery.of(context).size.height * (hasBigPicture ? .16 : .2);
+
+    if (!hasBigPicture){
+      isTotallyCollapsed = true;
+    }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(receivedAction.title ?? receivedAction.body ?? ''),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.zero,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-                height:
-                    hasBigPicture ? bigPictureSize + 40 : largeIconSize + 60,
-                child: hasBigPicture
-                    ? Stack(
-                        children: [
-                          if (hasBigPicture)
-                            FadeInImage(
-                              placeholder: const NetworkImage(
-                                  'https://cdn.syncfusion.com/content/images/common/placeholder.gif'),
-                              //AssetImage('assets/images/placeholder.gif'),
-                              height: bigPictureSize,
-                              width: MediaQuery.of(context).size.width,
-                              image: receivedAction.bigPictureImage!,
-                              fit: BoxFit.cover,
-                            ),
-                          if (hasLargeIcon)
-                            Positioned(
-                              bottom: 15,
-                              left: 20,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(largeIconSize)),
-                                child: FadeInImage(
-                                  placeholder: const NetworkImage(
-                                      'https://cdn.syncfusion.com/content/images/common/placeholder.gif'),
-                                  //AssetImage('assets/images/placeholder.gif'),
-                                  height: largeIconSize,
-                                  width: largeIconSize,
-                                  image: receivedAction.largeIconImage!,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            )
-                        ],
-                      )
-                    : Center(
-                        child: ClipRRect(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(largeIconSize)),
-                          child: FadeInImage(
-                            placeholder: const NetworkImage(
-                                'https://cdn.syncfusion.com/content/images/common/placeholder.gif'),
-                            //AssetImage('assets/images/placeholder.gif'),
-                            height: largeIconSize,
-                            width: largeIconSize,
-                            image: receivedAction.largeIconImage!,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      )),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20.0, left: 20, right: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RichText(
-                      text: TextSpan(children: [
-                    if (receivedAction.title?.isNotEmpty ?? false)
-                      TextSpan(
-                        text: receivedAction.title!,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    if ((receivedAction.title?.isNotEmpty ?? false) &&
-                        (receivedAction.body?.isNotEmpty ?? false))
-                      TextSpan(
-                        text: '\n\n',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    if (receivedAction.body?.isNotEmpty ?? false)
-                      TextSpan(
-                        text: receivedAction.body!,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                  ]))
-                ],
+      body: CustomScrollView(
+        controller: scrollController,
+        physics: const BouncingScrollPhysics(),
+        slivers: <Widget>[
+          SliverAppBar(
+            elevation: 0,
+            centerTitle: true,
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(
+                Icons.arrow_back_ios_rounded,
+                color: isTotallyCollapsed || bigPictureIsPredominantlyWhite
+                    ? Colors.black
+                    : Colors.white,
               ),
             ),
-            Container(
-              color: Colors.black12,
-              padding: const EdgeInsets.all(20),
-              width: MediaQuery.of(context).size.width,
-              child: Text(receivedAction.toString()),
+            systemOverlayStyle: isTotallyCollapsed || bigPictureIsPredominantlyWhite
+                ? SystemUiOverlayStyle.dark
+                : SystemUiOverlayStyle.light,
+            expandedHeight: hasBigPicture
+                ? bigPictureSize + (hasLargeIcon ? 40 : 0)
+                : (hasLargeIcon)
+                    ? largeIconSize + 10
+                    : MediaQuery.of(context).padding.top + 28,
+            backgroundColor: Colors.transparent,
+            stretch: true,
+            flexibleSpace: FlexibleSpaceBar(
+              stretchModes: const [StretchMode.zoomBackground],
+              centerTitle: true,
+              expandedTitleScale: 1,
+              collapseMode: CollapseMode.pin,
+              title: (!hasLargeIcon)
+                ? null
+                : Stack(
+                  children: [
+                    Positioned(
+                      bottom: 0,
+                      left: 16,
+                      right: 16,
+                      child: Row(
+                        mainAxisAlignment: hasBigPicture
+                            ? MainAxisAlignment.start
+                            : MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: largeIconSize,
+                            width: largeIconSize,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.all(Radius.circular(largeIconSize)),
+                              child: FadeInImage(
+                                placeholder: const NetworkImage(
+                                    'https://cdn.syncfusion.com/content/images/common/placeholder.gif'),
+                                image: widget.receivedAction.largeIconImage!,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]
+                ),
+              background: hasBigPicture
+                ? Padding(
+                  padding: EdgeInsets.only(
+                      bottom: hasLargeIcon
+                          ? 60 : 20
+                  ),
+                  child: FadeInImage(
+                    placeholder: const NetworkImage(
+                        'https://cdn.syncfusion.com/content/images/common/placeholder.gif'),
+                    height: bigPictureSize,
+                    width: MediaQuery.of(context).size.width,
+                    image: widget.receivedAction.bigPictureImage!,
+                    fit: BoxFit.cover,
+                  ),
+                )
+                : null,
             ),
-          ],
-        ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0, left: 20, right: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                            children: [
+                              if (hasTitle)
+                                TextSpan(
+                                  text: widget.receivedAction.title!,
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                              if(hasBody)
+                                WidgetSpan(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                      top: hasTitle ? 16.0 : 0.0,
+                                    ),
+                                    child: SizedBox(
+                                        width: MediaQuery.of(context).size.width,
+                                        child: Text(
+                                            widget.receivedAction
+                                                .bodyWithoutHtml ?? '',
+                                            style: Theme.of(context).textTheme.bodyText2
+                                        )
+                                    ),
+                                  ),
+                                ),
+                            ]
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  color: Colors.black12,
+                  padding: const EdgeInsets.all(20),
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(widget.receivedAction.toString()),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

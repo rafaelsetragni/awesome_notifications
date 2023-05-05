@@ -23,6 +23,7 @@ public abstract class NotificationScheduleModel extends AbstractModel {
     public Boolean repeats;
     public Boolean allowWhileIdle;
     public Boolean preciseAlarm;
+    public Integer delayTolerance;
 
     public NotificationScheduleModel() {}
 
@@ -33,6 +34,7 @@ public abstract class NotificationScheduleModel extends AbstractModel {
         repeats        = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_REPEATS, Boolean.class, false);
         allowWhileIdle = getValueOrDefault(arguments, Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, Boolean.class, false);
         preciseAlarm   = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_PRECISE_ALARM, Boolean.class, false);
+        delayTolerance = getValueOrDefault(arguments, Definitions.NOTIFICATION_SCHEDULE_DELAY_TOLERANCE, Integer.class, 0);
 
         return this;
     }
@@ -46,6 +48,7 @@ public abstract class NotificationScheduleModel extends AbstractModel {
         putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_REPEATS, dataMap, repeats);
         putDataOnSerializedMap(Definitions.NOTIFICATION_ALLOW_WHILE_IDLE, dataMap, allowWhileIdle);
         putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_PRECISE_ALARM, dataMap, preciseAlarm);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_SCHEDULE_DELAY_TOLERANCE, dataMap, delayTolerance);
 
         return dataMap;
     }

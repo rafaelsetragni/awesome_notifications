@@ -266,9 +266,11 @@ class NotificationsController {
   @pragma("vm:entry-point")
   static Future<void> onNotificationCreatedMethod(
       ReceivedNotification receivedNotification) async {
+    var message = 'Notification created on ${
+        _toSimpleEnum(receivedNotification.createdLifeCycle!)}';
+    print(message);
     Fluttertoast.showToast(
-        msg:
-            'Notification created on ${_toSimpleEnum(receivedNotification.createdLifeCycle!)}',
+        msg: message,
         toastLength: Toast.LENGTH_SHORT,
         backgroundColor: Colors.green,
         gravity: ToastGravity.BOTTOM);
@@ -278,9 +280,13 @@ class NotificationsController {
   @pragma("vm:entry-point")
   static Future<void> onNotificationDisplayedMethod(
       ReceivedNotification receivedNotification) async {
+    var message1 = 'Notification displayed on ${receivedNotification.displayedLifeCycle?.name}';
+    var message2 = 'Notification displayed at ${receivedNotification.displayedDate}';
+
+    print(message1);
+    print(message2);
     Fluttertoast.showToast(
-        msg:
-            'Notification displayed on ${_toSimpleEnum(receivedNotification.displayedLifeCycle!)}',
+        msg: message1,
         toastLength: Toast.LENGTH_SHORT,
         backgroundColor: Colors.blue,
         gravity: ToastGravity.BOTTOM);
@@ -290,9 +296,10 @@ class NotificationsController {
   @pragma("vm:entry-point")
   static Future<void> onDismissActionReceivedMethod(
       ReceivedAction receivedAction) async {
+    var message = 'Notification dismissed on ${
+        _toSimpleEnum(receivedAction.dismissedLifeCycle!)}';
     Fluttertoast.showToast(
-        msg:
-            'Notification dismissed on ${_toSimpleEnum(receivedAction.dismissedLifeCycle!)}',
+        msg: message,
         toastLength: Toast.LENGTH_SHORT,
         backgroundColor: Colors.orange,
         gravity: ToastGravity.BOTTOM);
@@ -302,6 +309,10 @@ class NotificationsController {
   @pragma("vm:entry-point")
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
+    var message = 'Action ${receivedAction.actionType?.name} received on ${
+        _toSimpleEnum(receivedAction.actionLifeCycle!)}';
+    print(message);
+
     // Always ensure that all plugins was initialized
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -322,7 +333,7 @@ class NotificationsController {
 
     switch (receivedAction.channelKey) {
       case 'call_channel':
-        if (receivedAction.actionLifeCycle != NotificationLifeCycle.AppKilled){
+        if (receivedAction.actionLifeCycle != NotificationLifeCycle.Terminated){
           await receiveCallNotificationAction(receivedAction);
         }
         break;

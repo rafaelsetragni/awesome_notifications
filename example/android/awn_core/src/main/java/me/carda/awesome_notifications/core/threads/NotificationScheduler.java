@@ -19,6 +19,7 @@ import me.carda.awesome_notifications.core.AwesomeNotifications;
 import me.carda.awesome_notifications.core.Definitions;
 import me.carda.awesome_notifications.core.broadcasters.senders.BroadcastSender;
 import me.carda.awesome_notifications.core.completion_handlers.NotificationThreadCompletionHandler;
+import me.carda.awesome_notifications.core.enumerators.NotificationCategory;
 import me.carda.awesome_notifications.core.enumerators.NotificationLifeCycle;
 import me.carda.awesome_notifications.core.enumerators.NotificationSource;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
@@ -216,12 +217,14 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
 
                     ScheduleManager.saveSchedule(wContextReference.get(), notificationModel);
                     if (!rescheduled) {
-                        BroadcastSender.sendBroadcastNotificationCreated(
+                        BroadcastSender
+                            .getInstance()
+                            .sendBroadcastNotificationCreated(
                                 wContextReference.get(),
                                 new NotificationReceived(
                                         notificationModel.content,
                                         originalIntent)
-                        );
+                            );
                         Logger.d(TAG, "Scheduled created");
                     }
 
@@ -320,6 +323,8 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
 //    }
 
     private void scheduleNotificationWithAlarmManager(Context context, NotificationModel notificationModel, Calendar nextValidDate, PendingIntent pendingIntent) {
+        if(notificationModel.schedule == null) return;
+
         AlarmManager alarmManager = ScheduleManager.getAlarmManager(context);
         long timeMillis = nextValidDate.getTimeInMillis();
 
@@ -327,32 +332,57 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
             BooleanUtils.getInstance().getValue(notificationModel.schedule.preciseAlarm) &&
             ScheduleManager.isPreciseAlarmGloballyAllowed(alarmManager)
         ) {
-            AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(timeMillis, pendingIntent);
-            alarmManager.setAlarmClock(info, pendingIntent);
+            if (notificationModel.content.category == NotificationCategory.Alarm) {
+                AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(timeMillis, pendingIntent);
+                alarmManager.setAlarmClock(info, pendingIntent);
+            } else {
+                if (BooleanUtils.getInstance().getValue(notificationModel.schedule.allowWhileIdle)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmManager.setExactAndAllowWhileIdle(
+                                AlarmManager.RTC_WAKEUP,
+                                timeMillis,
+                                pendingIntent);
+                        return;
+                    }
+                }
+                alarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,
+                        timeMillis,
+                        pendingIntent);
+            }
             return;
+        }
+
+        if(notificationModel.schedule.delayTolerance == null) {
+            notificationModel.schedule.delayTolerance = 0;
         }
 
         if (BooleanUtils.getInstance().getValue(notificationModel.schedule.allowWhileIdle)) {
-            AlarmManagerCompat.setExactAndAllowWhileIdle(alarmManager, AlarmManager.RTC_WAKEUP, timeMillis, pendingIntent);
-            return;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        timeMillis,
+                        pendingIntent);
+                return;
+            }
         }
 
-        AlarmManagerCompat.setExact(alarmManager, AlarmManager.RTC_WAKEUP, timeMillis, pendingIntent);
+        alarmManager.setWindow(
+                AlarmManager.RTC,
+                timeMillis,
+                notificationModel.schedule.delayTolerance,
+                pendingIntent);
     }
 
     public static void refreshScheduledNotifications(
             Context context
     ) throws AwesomeNotificationsException {
 
-        List<String> notificationIds = ScheduleManager.listScheduledIds(context);
+        List<Integer> notificationIds = ScheduleManager.listScheduledIds(context);
         if (notificationIds.isEmpty()) return;
 
-        for (String id : notificationIds) {
-
-            if(isScheduleActiveOnAlarmManager(
-                context,
-                Integer.parseInt(id)))
-                continue;
+        for (Integer id : notificationIds) {
+            if(isScheduleActiveOnAlarmManager(context,id)) continue;
 
             NotificationModel notificationModel = ScheduleManager.getScheduleById(context, id);
             if(notificationModel == null){
@@ -372,7 +402,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
         @NonNull Context context, @NonNull Integer id
     ) throws AwesomeNotificationsException {
         _removeFromAlarm(context, id);
-        ScheduleManager.cancelScheduleById(context, id.toString());
+        ScheduleManager.cancelScheduleById(context, id);
         ScheduleManager.commitChanges(context);
     }
 
@@ -387,7 +417,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
     public static void cancelSchedulesByChannelKey(
         @NonNull Context context, @NonNull String channelKey
     ) throws AwesomeNotificationsException {
-        List<String> ids = ScheduleManager.listScheduledIdsFromChannel(context, channelKey);
+        List<Integer> ids = ScheduleManager.listScheduledIdsFromChannel(context, channelKey);
         _removeAllFromAlarm(context, ids);
         ScheduleManager.cancelSchedulesByChannelKey(context, channelKey);
         ScheduleManager.commitChanges(context);
@@ -396,14 +426,14 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
     public static void cancelSchedulesByGroupKey(
         @NonNull Context context, @NonNull String groupKey
     ) throws AwesomeNotificationsException {
-        List<String> ids = ScheduleManager.listScheduledIdsFromGroup(context, groupKey);
+        List<Integer> ids = ScheduleManager.listScheduledIdsFromGroup(context, groupKey);
         _removeAllFromAlarm(context, ids);
         ScheduleManager.cancelSchedulesByGroupKey(context, groupKey);
         ScheduleManager.commitChanges(context);
     }
 
     public static void cancelAllSchedules(@NonNull Context context) throws AwesomeNotificationsException {
-        List<String> ids = ScheduleManager.listScheduledIds(context);
+        List<Integer> ids = ScheduleManager.listScheduledIds(context);
         _removeAllFromAlarm(context, ids);
         ScheduleManager.cancelAllSchedules(context);
         ScheduleManager.commitChanges(context);
@@ -430,7 +460,7 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
     }
 
     private static void _removeAllFromAlarm(
-        @NonNull Context context, @NonNull List<String> ids
+        @NonNull Context context, @NonNull List<Integer> ids
     ){
         AlarmManager alarmManager = ScheduleManager.getAlarmManager(context);
         Intent intent = new Intent(context, AwesomeNotifications.scheduleReceiverClass);
@@ -439,13 +469,13 @@ public class NotificationScheduler extends NotificationThread<Calendar> {
                         PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT :
                         PendingIntent.FLAG_UPDATE_CURRENT;
 
-        for(String id : ids){
+        for(Integer id : ids){
             @SuppressLint("WrongConstant")
             PendingIntent pendingIntent =
                     PendingIntent
                             .getBroadcast(
                                     context,
-                                    Integer.parseInt(id),
+                                    id,
                                     intent,
                                     flags);
 

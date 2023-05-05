@@ -5,6 +5,7 @@
 //import 'dart:html' as html show window;
 import 'dart:typed_data';
 
+import 'package:awesome_notifications/src/models/notification_localization.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'awesome_notifications.dart';
@@ -57,10 +58,12 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   }
 
   @override
-  Future<bool> createNotification(
-      {required NotificationContent content,
-      NotificationSchedule? schedule,
-      List<NotificationActionButton>? actionButtons}) async {
+  Future<bool> createNotification({
+    required NotificationContent content,
+    NotificationSchedule? schedule,
+    List<NotificationActionButton>? actionButtons,
+    Map<String, NotificationLocalization>? localizations,
+  }) async {
     return false;
   }
 
@@ -89,7 +92,7 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
 
   @override
   Future<NotificationLifeCycle> getAppLifeCycle() async {
-    return NotificationLifeCycle.AppKilled;
+    return NotificationLifeCycle.Terminated;
   }
 
   @override
@@ -131,9 +134,12 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
 
   @override
   Future<bool> initialize(
-      String? defaultIcon, List<NotificationChannel> channels,
-      {List<NotificationChannelGroup>? channelGroups,
-      bool debug = false}) async {
+    String? defaultIcon,
+    List<NotificationChannel> channels, {
+    List<NotificationChannelGroup>? channelGroups,
+    bool debug = false,
+    String? languageCode,
+  }) async {
     return false;
   }
 
@@ -205,6 +211,26 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
 
   @override
   Future<void> showNotificationConfigPage({String? channelKey}) async {}
+
+  @override
+  Future<String> getLocalization() async {
+    return '';
+  }
+
+  @override
+  Future<bool> setLocalization({required String? languageCode}) async {
+    return false;
+  }
+
+  @override
+  Future<bool> isNotificationActiveOnStatusBar({required int id}) async {
+    return false;
+  }
+
+  @override
+  Future<List<int>> getAllActiveNotificationIdsOnStatusBar() async {
+    return [];
+  }
 
   @override
   dispose() async {}

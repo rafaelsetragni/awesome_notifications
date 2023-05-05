@@ -444,6 +444,106 @@ class NotificationUtils {
   }
 
   /* *********************************************
+      TRANSLATED NOTIFICATIONS
+  ************************************************ */
+
+
+  static Future<void> showTranslatedNotification(int id, {required languageCode}) async {
+    await AwesomeNotifications().setLocalization(languageCode: languageCode);
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: id,
+            channelKey: 'basic_channel',
+            title: 'This title is written in english',
+            body: 'Now it is really easy to translate a notification content, '
+                'including images and buttons!',
+            summary: 'Awesome Notifications Translations',
+            notificationLayout: NotificationLayout.BigPicture,
+            bigPicture: 'asset://assets/images/awn-rocks-en.jpg',
+            largeIcon: 'asset://assets/images/american.jpg',
+            payload: {'uuid': 'user-profile-uuid'}),
+        actionButtons: [
+          NotificationActionButton(
+              key: 'AGREED1', label: 'I agree', autoDismissible: true),
+          NotificationActionButton(
+              key: 'AGREED2', label: 'I agree too', autoDismissible: true),
+        ],
+        localizations: {
+          'pt-br' : NotificationLocalization(
+              title: 'Este título está escrito em português do Brasil!',
+              body: 'Agora é muito fácil traduzir o conteúdo das notificações, '
+                  'incluindo imagens e botões!',
+              summary: 'Traduções Awesome Notifications',
+              bigPicture: 'asset://assets/images/awn-rocks-pt-br.jpg',
+              largeIcon: 'asset://assets/images/brazilian.jpg',
+              buttonLabels: {
+                'AGREED1': 'Eu concordo!',
+                'AGREED2': 'Eu concordo também!'
+              }
+          ),
+          'zh': NotificationLocalization(
+              title: '这个标题是用中文写的',
+              body: '现在，轻松翻译通知内容，包括图像和按钮！',
+              summary: '',
+              bigPicture: 'asset://assets/images/awn-rocks-zh.jpg',
+              largeIcon: 'asset://assets/images/chinese.jpg',
+              buttonLabels: {
+                'AGREED1': '我同意',
+                'AGREED2': '我也同意'
+              }
+          ),
+          'ko': NotificationLocalization(
+              title: '이 타이틀은 한국어로 작성되었습니다',
+              body: '이제 이미지 및 버튼을 포함한 알림 콘텐츠를 쉽게 번역할 수 있습니다!',
+              summary: '',
+              bigPicture: 'asset://assets/images/awn-rocks-ko.jpg',
+              largeIcon: 'asset://assets/images/korean.jpg',
+              buttonLabels: {
+                'AGREED1': '동의합니다',
+                'AGREED2': '저도 동의합니다'
+              }
+          ),
+          'de': NotificationLocalization(
+              title: 'Dieser Titel ist in Deutsch geschrieben',
+              body: 'Jetzt ist es wirklich einfach, den Inhalt einer Benachrichtigung zu übersetzen, '
+                  'einschließlich Bilder und Schaltflächen!',
+              summary: '',
+              bigPicture: 'asset://assets/images/awn-rocks-de.jpg',
+              largeIcon: 'asset://assets/images/german.jpg',
+              buttonLabels: {
+                'AGREED1': 'Ich stimme zu',
+                'AGREED2': 'Ich stimme auch zu'
+              }
+          ),
+          'pt': NotificationLocalization(
+              title: 'Este título está escrito em português de Portugal!',
+              body: 'Agora é muito fácil traduzir o conteúdo das notificações, '
+                  'incluindo imagens e botões!',
+              summary: 'Traduções Awesome Notifications',
+              bigPicture: 'asset://assets/images/awn-rocks-pt.jpg',
+              largeIcon: 'asset://assets/images/portuguese.jpg',
+              buttonLabels: {
+                'AGREED1': 'Eu concordo!',
+                'AGREED2': 'Eu concordo também!'
+              }
+          ),
+          'es': NotificationLocalization(
+              title: 'Este título está escrito en español!',
+              body: 'Ahora es muy fácil traducir el contenido de las notificaciones, '
+                  'incluyendo imágenes y botones.',
+              summary: 'Traducciones de Awesome Notifications',
+              bigPicture: 'asset://assets/images/awn-rocks-es.jpg',
+              largeIcon: 'asset://assets/images/spanish.jpg',
+              buttonLabels: {
+                'AGREED1': 'Estoy de acuerdo',
+                'AGREED2': 'También estoy de acuerdo'
+              }
+          ),
+        });
+    await AwesomeNotifications().setLocalization(languageCode: null);
+  }
+
+  /* *********************************************
       ACTION BUTTONS NOTIFICATIONS
   ************************************************ */
 
@@ -1545,6 +1645,7 @@ class NotificationUtils {
   static Future<void> listScheduledNotifications(BuildContext context) async {
     List<NotificationModel> activeSchedules =
         await AwesomeNotifications().listScheduledNotifications();
+
     for (NotificationModel schedule in activeSchedules) {
       debugPrint('pending notification: ['
           'id: ${schedule.content!.id}, '
@@ -1568,6 +1669,75 @@ class NotificationUtils {
         );
       },
     );
+  }
+
+
+  static Future<DateTime?> pickScheduleDate(BuildContext context,
+      {required bool isUtc}) async {
+    TimeOfDay? timeOfDay;
+    DateTime now = isUtc ? DateTime.now().toUtc() : DateTime.now();
+    DateTime? newDate = await showDatePicker(
+        context: context,
+        initialDate: now,
+        firstDate: now,
+        lastDate: now.add(const Duration(days: 365)));
+
+    if (newDate != null) {
+      timeOfDay = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(now.add(const Duration(minutes: 1))),
+      );
+
+      if (timeOfDay != null) {
+        return isUtc
+            ? DateTime.utc(newDate.year, newDate.month, newDate.day,
+            timeOfDay.hour, timeOfDay.minute)
+            : DateTime(newDate.year, newDate.month, newDate.day, timeOfDay.hour,
+            timeOfDay.minute);
+      }
+    }
+    return null;
+  }
+
+  static Future<void> getNextValidMonday(BuildContext context) async {
+    DateTime? referenceDate =
+    await pickScheduleDate(context, isUtc: false);
+
+    NotificationSchedule schedule = NotificationCalendar(
+        weekday: DateTime.monday,
+        hour: 0,
+        minute: 0,
+        second: 0,
+        timeZone: AwesomeNotifications.localTimeZoneIdentifier);
+    //NotificationCalendar.fromDate(date: expectedDate);
+
+    DateTime? nextValidDate = await AwesomeNotifications()
+        .getNextDate(schedule, fixedDate: referenceDate);
+
+    late String response;
+    if (nextValidDate == null) {
+      response = 'There is no more valid date for this schedule';
+    } else {
+      response = utils.AwesomeDateUtils.parseDateToString(
+          nextValidDate.toUtc(),
+          format: 'dd/MM/yyyy')!;
+    }
+
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text("Next valid schedule"),
+          content: SizedBox(
+              height: 50, child: Center(child: Text(response))),
+          actions: [
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop(null);
+              },
+            )
+          ],
+        ));
   }
 
   static Future<String> getCurrentTimeZone() {
@@ -1599,6 +1769,7 @@ class NotificationUtils {
   }
 
   static Future<void> repeatMultiple5Crontab() async {
+    var nowDate = DateTime.now();
     String localTimeZone =
         await AwesomeNotifications().getLocalTimeZoneIdentifier();
     await AwesomeNotifications().createNotification(
@@ -1609,15 +1780,18 @@ class NotificationUtils {
             body:
                 'This notification was schedule to repeat at every 5 seconds.'),
         schedule: NotificationAndroidCrontab(
-            initialDateTime: DateTime.now().add(Duration(seconds: 10)).toUtc(),
+            initialDateTime: nowDate.copyWith().add(const Duration(seconds: 10)).toUtc(),
             expirationDateTime:
-                DateTime.now().add(Duration(seconds: 10, minutes: 1)).toUtc(),
+            nowDate.copyWith().add(const Duration(seconds: 10, minutes: 1)).toUtc(),
             crontabExpression: '/5 * * * * ? *',
             timeZone: localTimeZone,
-            repeats: true));
+            repeats: true,
+            preciseAlarm: true
+        ));
   }
 
   static Future<void> repeatPreciseThreeTimes() async {
+    var nowDate = DateTime.now();
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: -1,
@@ -1625,12 +1799,17 @@ class NotificationUtils {
             title: 'Notification scheduled to play precisely 3 times',
             body: 'This notification was schedule to play precisely 3 times.',
             notificationLayout: NotificationLayout.BigPicture,
+            category: NotificationCategory.Alarm,
             bigPicture: 'asset://assets/images/melted-clock.png'),
-        schedule: NotificationAndroidCrontab(preciseSchedules: [
-          DateTime.now().add(Duration(seconds: 10)).toUtc(),
-          DateTime.now().add(Duration(seconds: 25)).toUtc(),
-          DateTime.now().add(Duration(seconds: 45)).toUtc()
-        ], repeats: true));
+        schedule: NotificationAndroidCrontab(
+            preciseSchedules: [
+              nowDate.copyWith().add(const Duration(seconds: 1)).toUtc(),
+              nowDate.copyWith().add(const Duration(seconds: 25)).toUtc(),
+              nowDate.copyWith().add(const Duration(seconds: 45)).toUtc()
+            ],
+            repeats: true,
+            preciseAlarm: true
+        ));
   }
 
   static Future<void> repeatMinuteNotificationOClock() async {
@@ -1641,8 +1820,7 @@ class NotificationUtils {
             id: -1,
             channelKey: 'scheduled',
             title: 'Notification at exactly every single minute',
-            body:
-                'This notification was schedule to repeat at every single minute at clock.',
+            body: 'This notification was schedule to repeat at every single minute at clock.',
             notificationLayout: NotificationLayout.BigPicture,
             bigPicture: 'asset://assets/images/melted-clock.png'),
         schedule: NotificationCalendar(

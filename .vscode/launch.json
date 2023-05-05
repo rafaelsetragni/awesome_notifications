@@ -40,6 +40,11 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
-        }
+        },
+        {
+            "name": "All tests coverage",
+            "request": "launch",
+            "type": "dart"
+        },
     ]
 }

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../main_complete.dart';
 
-enum Themes { Light, Dark }
+enum Themes { light, dark }
 
 class ThemesController {
   static final appThemeData = {
-    Themes.Light: ThemeData(
+    Themes.light: ThemeData(
       brightness: Brightness.light,
 
       primaryColor: App.mainColor,
@@ -35,7 +35,7 @@ class ThemesController {
 
       // Define the default TextTheme. Use this to specify the default
       // text styling for headlines, titles, bodies of text, and more.
-      textTheme: TextTheme(
+      textTheme: const TextTheme(
         headline1:
             TextStyle(fontSize: 64.0, height: 1.5, fontWeight: FontWeight.w500),
         headline2:
@@ -59,9 +59,9 @@ class ThemesController {
 
       buttonTheme: ButtonThemeData(
         buttonColor: Colors.grey.shade200,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(5))),
-        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
         textTheme: ButtonTextTheme.accent,
       ),
     )
@@ -70,14 +70,12 @@ class ThemesController {
   static ThemeData? _currentTheme;
 
   ThemesController(bool isLight) {
-    _currentTheme = appThemeData[isLight ? Themes.Light : Themes.Dark]!;
+    _currentTheme = appThemeData[isLight ? Themes.light : Themes.dark]!;
   }
 
   /// Use this method on UI to get selected theme.
   static ThemeData get currentTheme {
-    if (_currentTheme == null) {
-      _currentTheme = appThemeData[Themes.Light];
-    }
+    _currentTheme ??= appThemeData[Themes.light];
     return _currentTheme!;
   }
 

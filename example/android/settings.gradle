@@ -1,5 +1,5 @@
 include ':app'
-//include ':awn_core'
+include ':awn_core'
 
 def localPropertiesFile = new File(rootProject.projectDir, "local.properties")
 def properties = new Properties()

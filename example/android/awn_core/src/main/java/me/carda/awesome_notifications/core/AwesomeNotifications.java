@@ -4,15 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.media.session.MediaSession;
 import android.support.v4.media.session.MediaSessionCompat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +22,6 @@ import me.carda.awesome_notifications.core.broadcasters.receivers.AwesomeEventsR
 import me.carda.awesome_notifications.core.broadcasters.receivers.DismissedNotificationReceiver;
 import me.carda.awesome_notifications.core.broadcasters.receivers.NotificationActionReceiver;
 import me.carda.awesome_notifications.core.broadcasters.receivers.ScheduledNotificationReceiver;
-import me.carda.awesome_notifications.core.broadcasters.senders.BroadcastSender;
 import me.carda.awesome_notifications.core.builders.NotificationBuilder;
 import me.carda.awesome_notifications.core.completion_handlers.BitmapCompletionHandler;
 import me.carda.awesome_notifications.core.completion_handlers.NotificationThreadCompletionHandler;
@@ -43,15 +44,14 @@ import me.carda.awesome_notifications.core.managers.BadgeManager;
 import me.carda.awesome_notifications.core.managers.CancellationManager;
 import me.carda.awesome_notifications.core.managers.ChannelGroupManager;
 import me.carda.awesome_notifications.core.managers.ChannelManager;
-import me.carda.awesome_notifications.core.managers.CreatedManager;
 import me.carda.awesome_notifications.core.managers.DefaultsManager;
-import me.carda.awesome_notifications.core.managers.DismissedManager;
-import me.carda.awesome_notifications.core.managers.DisplayedManager;
 import me.carda.awesome_notifications.core.managers.LifeCycleManager;
+import me.carda.awesome_notifications.core.managers.LocalizationManager;
+import me.carda.awesome_notifications.core.managers.LostEventsManager;
 import me.carda.awesome_notifications.core.managers.PermissionManager;
 import me.carda.awesome_notifications.core.managers.ScheduleManager;
+import me.carda.awesome_notifications.core.managers.StatusBarManager;
 import me.carda.awesome_notifications.core.models.AbstractModel;
-import me.carda.awesome_notifications.core.models.DefaultsModel;
 import me.carda.awesome_notifications.core.models.NotificationChannelGroupModel;
 import me.carda.awesome_notifications.core.models.NotificationChannelModel;
 import me.carda.awesome_notifications.core.models.NotificationModel;
@@ -90,6 +90,11 @@ public class AwesomeNotifications
             packageName = context.getPackageName();
         return packageName;
     }
+
+    private Long createdCallbackHandle;
+    private Long displayedCallbackHandle;
+    private Long actionCallbackHandle;
+    private Long dismissedCallbackHandle;
 
     // ************************** CONSTRUCTOR ***********************************
 
@@ -204,6 +209,8 @@ public class AwesomeNotifications
         notifyNotificationEvent(eventName, notificationReceived);
     }
 
+    private NotificationLifeCycle lastLifeCycle;
+
     @Override
     public void onNewLifeCycleEvent(NotificationLifeCycle lifeCycle) {
 
@@ -211,7 +218,6 @@ public class AwesomeNotifications
             return;
 
         switch (lifeCycle){
-
             case Foreground:
                 PermissionManager
                         .getInstance()
@@ -219,17 +225,36 @@ public class AwesomeNotifications
                                 PermissionManager.REQUEST_CODE,
                                 null,
                                 null);
+
+                if (lastLifeCycle != NotificationLifeCycle.Terminated) {
+                    break;
+                }
+                try {
+                    LostEventsManager
+                            .getInstance()
+                            .recoverLostNotificationEvents(
+                                    wContext.get(),
+                                    createdCallbackHandle > 0L,
+                                    displayedCallbackHandle > 0L,
+                                    actionCallbackHandle > 0L,
+                                    dismissedCallbackHandle > 0L
+                            );
+                } catch (AwesomeNotificationsException e) {
+                    ExceptionFactory
+                            .getInstance()
+                            .registerNewAwesomeException(
+                                    TAG,
+                                    ExceptionCode.CODE_BACKGROUND_EXECUTION_EXCEPTION,
+                                    "Was not possible to recover lost notification events",
+                                    ExceptionCode.DETAILED_UNEXPECTED_ERROR + ".onNewLifeCycleEvent");
+                }
                 break;
 
             case Background:
+            case Terminated:
                 break;
-
-            case AppKilled:
-
-//                NotificationScheduler
-//                        .refreshScheduledNotifications(
-//                                wContext.get());
         }
+        lastLifeCycle = lifeCycle;
     }
 
     // ********************************************************
@@ -314,23 +339,43 @@ public class AwesomeNotifications
             ).execute();
     }
 
-    public void setActionHandle(Long actionCallbackHandle) throws AwesomeNotificationsException {
-        DefaultsManager.setActionCallbackDispatcher(wContext.get(), actionCallbackHandle);
-        DefaultsManager.commitChanges(wContext.get());
+    public void setEventsHandle(
+            @NonNull Long createdCallbackHandle,
+            @NonNull Long displayedCallbackHandle,
+            @NonNull Long actionCallbackHandle,
+            @NonNull Long dismissedCallbackHandle
+    ) throws AwesomeNotificationsException {
+        Context context = wContext.get();
+        DefaultsManager defaultsManager = DefaultsManager.getInstance(wContext.get());
 
-        if(actionCallbackHandle != 0L)
-        {
-            recoverNotificationCreated(wContext.get());
-            recoverNotificationDisplayed(wContext.get());
-            recoverNotificationsDismissed(wContext.get());
-            recoverNotificationActions(wContext.get());
+        this.createdCallbackHandle = createdCallbackHandle;
+        this.displayedCallbackHandle = displayedCallbackHandle;
+        this.actionCallbackHandle = actionCallbackHandle;
+        this.dismissedCallbackHandle = dismissedCallbackHandle;
+
+        defaultsManager.setCreatedCallbackDispatcher(context, createdCallbackHandle);
+        defaultsManager.setDisplayedCallbackDispatcher(context, displayedCallbackHandle);
+        defaultsManager.setActionCallbackDispatcher(context, actionCallbackHandle);
+        defaultsManager.setDismissedCallbackDispatcher(context, dismissedCallbackHandle);
+        defaultsManager.commitChanges(context);
+
+        if(actionCallbackHandle > 0L) {
+            LostEventsManager
+                .getInstance()
+                .recoverLostNotificationEvents(
+                    context,
+                    createdCallbackHandle > 0L,
+                    displayedCallbackHandle > 0L,
+                    true,
+                    dismissedCallbackHandle > 0L
+                );
         }
     }
 
     public Long getActionHandle() throws AwesomeNotificationsException {
-        DefaultsModel defaults = DefaultsManager.getDefaults(wContext.get());
-        return defaults.silentDataCallback == null ?
-                0L : Long.parseLong(defaults.silentDataCallback);
+        return DefaultsManager
+                .getInstance(wContext.get())
+                .getActionCallbackDispatcher(wContext.get());
     }
 
     public List<NotificationModel> listAllPendingSchedules() throws AwesomeNotificationsException {
@@ -357,12 +402,13 @@ public class AwesomeNotifications
         Context currentContext = wContext.get();
 
         DefaultsManager
-                .saveDefault(
+                .getInstance(currentContext)
+                .setDartCallbackDispatcher(
                         currentContext,
-                        defaultIconPath,
                         dartCallback);
 
         DefaultsManager
+                .getInstance(currentContext)
                 .commitChanges(currentContext);
 
         if (!ListUtils.isNullOrEmpty(channelGroupsData))
@@ -466,89 +512,6 @@ public class AwesomeNotifications
         channelManager.commitChanges(context);
     }
 
-    // *****************************  RECOVER FUNCTIONS  **********************************
-
-    private void recoverNotificationCreated(@NonNull Context context) throws AwesomeNotificationsException {
-        List<NotificationReceived> lostCreated = CreatedManager.listCreated(context);
-
-        if (lostCreated != null)
-            for (NotificationReceived created : lostCreated)
-                try {
-
-                    created.validate(context);
-
-                    CreatedManager.removeCreated(context, created.id);
-                    CreatedManager.commitChanges(context);
-
-                    BroadcastSender.sendBroadcastNotificationCreated(context, created);
-
-                } catch (AwesomeNotificationsException e) {
-                    if (AwesomeNotifications.debug)
-                        Logger.d(TAG, String.format("%s", e.getMessage()));
-                    e.printStackTrace();
-                }
-    }
-
-    private void recoverNotificationDisplayed(@NonNull Context context) throws AwesomeNotificationsException {
-        List<NotificationReceived> lostDisplayed = DisplayedManager.listDisplayed(context);
-
-        if (lostDisplayed != null)
-            for (NotificationReceived displayed : lostDisplayed)
-                try {
-                    displayed.validate(context);
-
-                    DisplayedManager.removeDisplayed(context, displayed.id);
-                    DisplayedManager.commitChanges(context);
-
-                    BroadcastSender.sendBroadcastNotificationDisplayed(context, displayed);
-
-                } catch (AwesomeNotificationsException e) {
-                    if (AwesomeNotifications.debug)
-                        Logger.d(TAG, String.format("%s", e.getMessage()));
-                    e.printStackTrace();
-                }
-    }
-
-    private void recoverNotificationActions(@NonNull Context context) throws AwesomeNotificationsException {
-        List<ActionReceived> lostActions = ActionManager.listActions(context);
-
-        if (lostActions != null)
-            for (ActionReceived received : lostActions)
-                try {
-                    received.validate(context);
-
-                    ActionManager.removeAction(context, received.id);
-                    ActionManager.commitChanges(context);
-
-                    BroadcastSender.sendBroadcastDefaultAction(context, received, false);
-
-                } catch (AwesomeNotificationsException e) {
-                    if (AwesomeNotifications.debug)
-                        Logger.d(TAG, String.format("%s", e.getMessage()));
-                    e.printStackTrace();
-                }
-    }
-
-    private void recoverNotificationsDismissed(@NonNull Context context) throws AwesomeNotificationsException {
-        List<ActionReceived> lostDismissed = DismissedManager.listDismisses(context);
-
-        if (lostDismissed != null)
-            for (ActionReceived received : lostDismissed)
-                try {
-                    received.validate(context);
-
-                    DismissedManager.removeDismissed(context, received.id);
-                    DismissedManager.commitChanges(context);
-
-                    BroadcastSender.sendBroadcastNotificationDismissed(context, received);
-
-                } catch (AwesomeNotificationsException e) {
-                    if (AwesomeNotifications.debug)
-                        Logger.d(TAG, String.format("%s", e.getMessage()));
-                    e.printStackTrace();
-                }
-    }
-
     // *****************************  NOTIFICATION METHODS  **********************************
 
     public void createNotification(@NonNull NotificationModel notificationModel, NotificationThreadCompletionHandler threadCompletionHandler) throws AwesomeNotificationsException {
@@ -584,7 +547,7 @@ public class AwesomeNotifications
     }
 
     public void clearStoredActions() throws AwesomeNotificationsException {
-        ActionManager.clearAllActions(wContext.get());
+        ActionManager.getInstance().removeAllActions(wContext.get());
     }
 
     public boolean captureNotificationActionFromActivity(Activity startActivity) throws Exception {
@@ -618,13 +581,16 @@ public class AwesomeNotifications
     public ActionReceived getInitialNotificationAction(
             @NonNull boolean removeActionEvent
     ) throws AwesomeNotificationsException {
-        ActionReceived initialActionReceived = ActionManager.getInitialActionReceived();
+        ActionReceived initialActionReceived = ActionManager
+                .getInstance()
+                .getInitialActionReceived();
+
         if (!removeActionEvent) return initialActionReceived;
         if(initialActionReceived == null) return null;
 
         Context context = wContext.get();
-        ActionManager.removeAction(context, initialActionReceived.id);
-        ActionManager.commitChanges(context);
+        ActionManager.getInstance().removeAction(context, initialActionReceived.id);
+        ActionManager.getInstance().commitChanges(context);
 
         return initialActionReceived;
     }
@@ -695,7 +661,6 @@ public class AwesomeNotifications
     }
 
     public void setGlobalBadgeCounter(@NonNull Integer count) {
-        // Android resets badges automatically when all notifications are cleared
         BadgeManager.getInstance().setGlobalBadgeCounter(wContext.get(), count);
     }
 
@@ -709,6 +674,21 @@ public class AwesomeNotifications
 
     public int decrementGlobalBadgeCounter() {
         return BadgeManager.getInstance().decrementGlobalBadgeCounter(wContext.get());
+    }
+
+    public boolean setLocalization(String languageCode){
+        return LocalizationManager
+                .getInstance()
+                .setLocalization(
+                    wContext.get(),
+                    languageCode
+                );
+    }
+
+    public String getLocalization(){
+        return LocalizationManager
+                .getInstance()
+                .getLocalization(wContext.get());
     }
 
     public boolean dismissNotification(
@@ -886,5 +866,22 @@ public class AwesomeNotifications
                         channelKey,
                         permissions,
                         permissionCompletionHandler);
+    }
+
+    public boolean isNotificationActiveOnStatusBar(
+            @NotNull int id
+    ) throws AwesomeNotificationsException
+    {
+        return StatusBarManager
+                .getInstance(wContext.get())
+                .isNotificationActiveOnStatusBar(id);
+    }
+
+    public Collection<Integer> getAllActiveNotificationIdsOnStatusBar(
+    ) throws AwesomeNotificationsException
+    {
+        return StatusBarManager
+                .getInstance(wContext.get())
+                .getAllActiveNotificationIdsOnStatusBar();
     }
 }

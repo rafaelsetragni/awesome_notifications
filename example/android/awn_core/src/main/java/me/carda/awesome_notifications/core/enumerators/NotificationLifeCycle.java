@@ -3,7 +3,14 @@ package me.carda.awesome_notifications.core.enumerators;
 public enum NotificationLifeCycle implements SafeEnum {
     Foreground("Foreground"),
     Background("Background"),
-    AppKilled("AppKilled");
+    Terminated("Terminated");
+
+    /**
+     * @deprecated
+     * AppKilled is now deprecated. Please, use Terminated instead
+     */
+    @Deprecated
+    public static final NotificationLifeCycle AppKilled = NotificationLifeCycle.Terminated;
 
     private final String safeName;
     NotificationLifeCycle(final String safeName){
@@ -28,8 +35,11 @@ public enum NotificationLifeCycle implements SafeEnum {
 //            }
 //        }
 
+        if (SafeEnum.charMatches(reference, stringLength, 0, 't')){
+            return Terminated;
+        }
         if (SafeEnum.charMatches(reference, stringLength, 0, 'a')){
-            return AppKilled;
+            return Terminated;
         }
         if (SafeEnum.charMatches(reference, stringLength, 0, 'f')){
             return Foreground;
