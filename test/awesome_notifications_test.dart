@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:awesome_notifications/awesome_notifications_platform_interface.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:test/test.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/awesome_notifications_platform_interface.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 // Mock the AwesomeNotifications class
 class MockAwesomeNotificationsPlatform extends AwesomeNotificationsPlatform

@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 
 import 'awesome_notifications.dart';
 import 'awesome_notifications_platform_interface.dart';
-
 import 'src/isolates/isolate_main.dart';
 import 'src/logs/logger.dart';
 

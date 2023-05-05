@@ -1,7 +1,8 @@
 import 'dart:typed_data';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications/awesome_notifications_empty.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 
 void main() {
   group('AwesomeNotificationsEmpty', () {

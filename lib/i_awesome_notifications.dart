@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:awesome_notifications/src/models/notification_localization.dart';
-
 import 'awesome_notifications.dart';
 
 abstract class IAwesomeNotifications {

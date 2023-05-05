@@ -5,7 +5,6 @@
 //import 'dart:html' as html show window;
 import 'dart:typed_data';
 
-import 'package:awesome_notifications/src/models/notification_localization.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'awesome_notifications.dart';
