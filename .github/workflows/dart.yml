@@ -17,15 +17,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      # Note: This workflow uses the latest stable version of the Dart SDK.
-      # You can specify other versions if desired, see documentation here:
-      # https://github.com/dart-lang/setup-dart/blob/main/README.md
-      # - uses: dart-lang/setup-dart@v1
-      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+      - uses: actions/setup-java@v3
+      - uses: subosito/flutter-action@v2.10.0
+        with:
+          channel: "stable"
 
       - name: Install dependencies
-        run: dart pub get
+        run: flutter pub get
 
       # Uncomment this step to verify the use of 'dart format' on each commit.
       - name: Verify formatting
@@ -33,7 +31,7 @@ jobs:
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
-        run: dart analyze
+        run: flutter analyze
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
@@ -42,4 +40,4 @@ jobs:
         run: dart test
 
       - name: Run tests
-        run: dart test --coverage
+        run: flutter test --coverage
