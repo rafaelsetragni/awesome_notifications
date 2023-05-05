@@ -379,9 +379,13 @@ void main() {
 
       mockMethodChannel.setMockMethodCallHandler(
           CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER, 'Local');
+
       mockMethodChannel.setMockMethodCallHandler(
           CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER, 'UTC');
 
+      mockMethodChannel.setMockMethodCallHandler(
+          CHANNEL_METHOD_SET_LOCALIZATION, true);
+          
       try {
         await awesomeNotifications.initialize(
           'test_icon',

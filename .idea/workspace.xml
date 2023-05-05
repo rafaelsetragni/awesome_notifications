@@ -7,35 +7,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="90f153b2-27cc-4b8f-8201-8a3571b86189" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coverage/lcov.info" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/lcov.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/awesome_notifications_method_channel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications_method_channel.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/awesome_notifications_platform_interface.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/awesome_notifications_platform_interface.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/definitions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/definitions.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/exceptions/isolate_callback_exception.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/exceptions/isolate_callback_exception.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/helpers/cron_helper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/helpers/cron_helper.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/isolates/isolate_main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/isolates/isolate_main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/logs/logger.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/logs/logger.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_android_crontab.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_android_crontab.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_button.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_model.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_schedule.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_schedule.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/date_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/date_utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utils/resource_image_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/resource_image_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/awesome_notifications_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/awesome_notifications_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/models/notification_android_crontab_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/models/notification_android_crontab_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/models/notification_calendar_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/models/notification_calendar_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/models/notification_model_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/models/notification_model_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/utils/assert_utils_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/utils/assert_utils_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/utils/date_utils_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/utils/date_utils_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/utils/resource_image_provider_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/utils/resource_image_provider_test.dart" afterDir="false" />
-    </list>
+    <list default="true" id="90f153b2-27cc-4b8f-8201-8a3571b86189" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -108,7 +80,7 @@
       <recent name="$PROJECT_DIR$/test/src/utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Flutter Test.Execute All Tests">
+  <component name="RunManager" selected="Flutter Test.MethodChannelAwesomeNotifications">
     <configuration name="Android debuger" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="awesome_notifications_android" />
       <option name="DEPLOY" value="true" />
@@ -185,9 +157,9 @@
       <option name="additionalArgs" value="--coverage" />
       <method v="2" />
     </configuration>
-    <configuration name="bigPictureImage method" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
-      <option name="testName" value="bigPictureImage method" />
-      <option name="testFile" value="$PROJECT_DIR$/test/src/models/base_notification_content_test.dart" />
+    <configuration name="MethodChannelAwesomeNotifications" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testName" value="MethodChannelAwesomeNotifications" />
+      <option name="testFile" value="$PROJECT_DIR$/test/awesome_method_channel_test.dart" />
       <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
@@ -197,8 +169,9 @@
       <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="tests in base_notification_content_test.dart" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
-      <option name="testFile" value="$PROJECT_DIR$/test/src/models/base_notification_content_test.dart" />
+    <configuration name="incrementGlobalBadgeCounter" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testName" value="incrementGlobalBadgeCounter" />
+      <option name="testFile" value="$PROJECT_DIR$/test/awesome_method_channel_test.dart" />
       <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
@@ -206,19 +179,19 @@
       <item itemvalue="Android App.Android debuger" />
       <item itemvalue="Flutter.Simple Example" />
       <item itemvalue="Flutter.Complete Example" />
+      <item itemvalue="Flutter Test.MethodChannelAwesomeNotifications" />
+      <item itemvalue="Flutter Test.incrementGlobalBadgeCounter" />
       <item itemvalue="Flutter Test.fromMap" />
       <item itemvalue="Flutter Test.Deprecated Getters and Setters" />
       <item itemvalue="Flutter Test.Execute All Tests" />
-      <item itemvalue="Flutter Test.bigPictureImage method" />
-      <item itemvalue="Flutter Test.tests in base_notification_content_test.dart" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Flutter Test.MethodChannelAwesomeNotifications" />
+        <item itemvalue="Flutter Test.incrementGlobalBadgeCounter" />
         <item itemvalue="Flutter Test.Execute All Tests" />
         <item itemvalue="Flutter Test.fromMap" />
         <item itemvalue="Flutter Test.Deprecated Getters and Setters" />
-        <item itemvalue="Flutter Test.tests in base_notification_content_test.dart" />
-        <item itemvalue="Flutter Test.bigPictureImage method" />
       </list>
     </recent_temporary>
   </component>
@@ -272,6 +245,11 @@
           <line>276</line>
           <option name="timeStamp" value="55" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/test/awesome_method_channel_test.dart</url>
+          <line>409</line>
+          <option name="timeStamp" value="56" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="dart-exception" />
@@ -285,6 +263,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="../../../../Documents/GitHub/plugins/awesome_notifications/coverage/lcov.info" NAME="tests in base_notification_content_test.dart Coverage Results" MODIFIED="1682905528671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="../../../../Documents/GitHub/plugins/awesome_notifications/coverage/lcov.info" NAME="Execute All Tests Coverage Results" MODIFIED="1682957583973" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="D:\GitHub\plugins\awesome_notifications\coverage\lcov.info" NAME="Execute All Tests Coverage Results" MODIFIED="1683249220394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
