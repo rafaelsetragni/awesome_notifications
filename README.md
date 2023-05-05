@@ -6,10 +6,11 @@
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#)
 [![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#)
-[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](#)
+[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source-175x29.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
 [![Discord Shield](https://discordapp.com/api/guilds/888523488376279050/widget.png?style=shield)](https://discord.awesome-notifications.carda.me)
 [![pub package](https://img.shields.io/pub/v/awesome_notifications.svg)](https://pub.dev/packages/awesome_notifications)
+![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=hotfix)
 
 
 Engage your users with custom local and push notifications on Flutter. Get real-time events and never miss a user interaction with Awesome Notifications.
