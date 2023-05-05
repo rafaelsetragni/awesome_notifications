@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:awesome_notifications/src/models/notification_localization.dart';
+
 import 'i_awesome_notifications.dart';
 import 'src/enumerators/notification_life_cycle.dart';
 import 'src/enumerators/notification_permission.dart';
@@ -39,6 +41,7 @@ export 'src/models/notification_schedule.dart';
 export 'src/models/notification_calendar.dart';
 export 'src/models/notification_interval.dart';
 export 'src/models/notification_android_crontab.dart';
+export 'src/models/notification_localization.dart';
 export 'src/models/received_models/push_notification.dart';
 export 'src/models/notification_model.dart';
 export 'src/models/received_models/received_action.dart';
@@ -132,12 +135,17 @@ class AwesomeNotifications implements IAwesomeNotifications {
   }
 
   @override
-  Future<bool> createNotification(
-      {required NotificationContent content,
-      NotificationSchedule? schedule,
-      List<NotificationActionButton>? actionButtons}) {
+  Future<bool> createNotification({
+    required NotificationContent content,
+    NotificationSchedule? schedule,
+    List<NotificationActionButton>? actionButtons,
+    Map<String, NotificationLocalization>? localizations,
+  }) {
     return AwesomeNotificationsPlatform.instance.createNotification(
-        content: content, schedule: schedule, actionButtons: actionButtons);
+        content: content,
+        schedule: schedule,
+        actionButtons: actionButtons,
+        localizations: localizations);
   }
 
   @override
@@ -224,11 +232,15 @@ class AwesomeNotifications implements IAwesomeNotifications {
 
   @override
   Future<bool> initialize(
-      String? defaultIcon, List<NotificationChannel> channels,
-      {List<NotificationChannelGroup>? channelGroups, bool debug = false}) {
+    String? defaultIcon,
+    List<NotificationChannel> channels, {
+    List<NotificationChannelGroup>? channelGroups,
+    bool debug = false,
+    String? languageCode,
+  }) {
     return AwesomeNotificationsPlatform.instance.initialize(
         defaultIcon, channels,
-        channelGroups: channelGroups, debug: debug);
+        channelGroups: channelGroups, languageCode: languageCode, debug: debug);
   }
 
   @override
@@ -276,7 +288,7 @@ class AwesomeNotifications implements IAwesomeNotifications {
   }
 
   @override
-  Future<void> setGlobalBadgeCounter(int? amount) {
+  Future<void> setGlobalBadgeCounter(int amount) {
     return AwesomeNotificationsPlatform.instance.setGlobalBadgeCounter(amount);
   }
 
@@ -324,5 +336,28 @@ class AwesomeNotifications implements IAwesomeNotifications {
   Future<void> showNotificationConfigPage({String? channelKey}) {
     return AwesomeNotificationsPlatform.instance
         .showNotificationConfigPage(channelKey: channelKey);
+  }
+
+  @override
+  Future<String> getLocalization() async {
+    return AwesomeNotificationsPlatform.instance.getLocalization();
+  }
+
+  @override
+  Future<bool> setLocalization({required String? languageCode}) async {
+    return AwesomeNotificationsPlatform.instance
+        .setLocalization(languageCode: languageCode);
+  }
+
+  @override
+  Future<bool> isNotificationActiveOnStatusBar({required int id}) {
+    return AwesomeNotificationsPlatform.instance
+        .isNotificationActiveOnStatusBar(id: id);
+  }
+
+  @override
+  Future<List<int>> getAllActiveNotificationIdsOnStatusBar() {
+    return AwesomeNotificationsPlatform.instance
+        .getAllActiveNotificationIdsOnStatusBar();
   }
 }

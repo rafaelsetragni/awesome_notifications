@@ -43,6 +43,9 @@ public interface Definitions {
 
     String BADGE_COUNT = "badgeCount";
     String ACTION_HANDLE = "actionHandle";
+    String CREATED_HANDLE = "createdHandle";
+    String DISPLAYED_HANDLE = "displayedHandle";
+    String DISMISSED_HANDLE = "dismissedHandle";
     String SILENT_HANDLE = "silentHandle";
     String STORE_INITIAL_ACTION = "storeInitialAction";
     String BACKGROUND_HANDLE = "awesomeDartBGHandle";
@@ -56,6 +59,7 @@ public interface Definitions {
     String NOTIFICATION_MODEL_CONTENT = "content";
     String NOTIFICATION_MODEL_SCHEDULE = "schedule";
     String NOTIFICATION_MODEL_BUTTONS = "actionButtons";
+    String NOTIFICATION_MODEL_LOCALIZATIONS = "localizations";
     String NOTIFICATION_SILENT_ACTION = "silentAction";
     String NOTIFICATION_RECEIVED_ACTION = "receivedAction";
 
@@ -107,6 +111,8 @@ public interface Definitions {
     String CHANNEL_METHOD_RESET_BADGE = "resetBadge";
 
     String CHANNEL_METHOD_GET_APP_LIFE_CYCLE = "getAppLifeCycle";
+    String CHANNEL_METHOD_IS_NOTIFICATION_ACTIVE = "isNotificationActive";
+    String CHANNEL_METHOD_GET_ALL_ACTIVE_NOTIFICATION_IDS = "getAllActiveNotificationIds";
 
     String CHANNEL_METHOD_GET_NEXT_DATE = "getNextDate";
     String CHANNEL_METHOD_DISMISS_NOTIFICATION = "dismissNotification";
@@ -122,7 +128,7 @@ public interface Definitions {
     String CHANNEL_METHOD_CANCEL_ALL_SCHEDULES = "cancelAllSchedules";
     String CHANNEL_METHOD_CANCEL_ALL_NOTIFICATIONS = "cancelAllNotifications";
     String CHANNEL_METHOD_SILENT_CALLBACK = "silentCallbackReference";
-    String CHANNEL_METHOD_SET_ACTION_HANDLE = "setActionHandle";
+    String CHANNEL_METHOD_SET_EVENT_HANDLES = "setEventHandles";
 
     String CHANNEL_METHOD_START_FOREGROUND = "startForeground";
     String CHANNEL_METHOD_STOP_FOREGROUND = "stopForeground";
@@ -152,6 +158,7 @@ public interface Definitions {
     String NOTIFICATION_SCHEDULE_ERA = "era";
     String NOTIFICATION_SCHEDULE_TIMEZONE = "timeZone";
     String NOTIFICATION_SCHEDULE_PRECISE_ALARM = "preciseAlarm";
+    String NOTIFICATION_SCHEDULE_DELAY_TOLERANCE = "delayTolerance";
     String NOTIFICATION_SCHEDULE_YEAR = "year";
     String NOTIFICATION_SCHEDULE_MONTH = "month";
     String NOTIFICATION_SCHEDULE_DAY = "day";
@@ -164,6 +171,7 @@ public interface Definitions {
     String NOTIFICATION_SCHEDULE_WEEKOFYEAR = "weekOfYear";
     String NOTIFICATION_SCHEDULE_INTERVAL = "interval";
     String NOTIFICATION_SCHEDULE_REPEATS = "repeats";
+    String ACTIVE_NOTIFICATION_IDS = "activeNotificationIds";
 
     String NOTIFICATION_CREATED_SOURCE = "createdSource";
     String NOTIFICATION_CREATED_LIFECYCLE = "createdLifeCycle";
@@ -183,6 +191,7 @@ public interface Definitions {
     String NOTIFICATION_TIMESTAMP = "timestamp";
     String NOTIFICATION_SUMMARY = "summary";
     String NOTIFICATION_SHOW_WHEN = "showWhen";
+    String NOTIFICATION_TIMEOUT_AFTER = "timeoutAfter";
     String NOTIFICATION_BUTTON_KEY_PRESSED = "buttonKeyPressed";
     String NOTIFICATION_BUTTON_KEY_INPUT = "buttonKeyInput";
     String NOTIFICATION_JSON = "notificationJson";
@@ -238,6 +247,8 @@ public interface Definitions {
     String NOTIFICATION_CHANNEL_GROUP_NAME = "channelGroupName";
     String NOTIFICATION_CHANNEL_GROUP_KEY = "channelGroupKey";
     String NOTIFICATION_CHANNEL_CRITICAL_ALERTS = "criticalAlerts";
+    String CHANNEL_METHOD_SET_LOCALIZATION = "setLocalization";
+    String CHANNEL_METHOD_GET_LOCALIZATION = "getLocalization";
     String NOTIFICATION_IMPORTANCE = "importance";
     String NOTIFICATION_COLOR = "color";
     String NOTIFICATION_BACKGROUND_COLOR = "backgroundColor";
@@ -253,6 +264,7 @@ public interface Definitions {
     String NOTIFICATION_LED_ON_MS = "ledOnMs";
     String NOTIFICATION_LED_OFF_MS = "ledOffMs";
     String NOTIFICATION_TICKER = "ticker";
+    String NOTIFICATION_BUTTON_LABELS = "buttonLabels";
     String NOTIFICATION_ALLOW_WHILE_IDLE = "allowWhileIdle";
     String NOTIFICATION_BG_HANDLE_CLASS = "bgHandleClass";
 

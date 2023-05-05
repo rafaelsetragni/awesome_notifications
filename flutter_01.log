@@ -1,0 +1,96 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter --no-color pub get
+
+## exception
+
+FileSystemException: FileSystemException: Cannot create link, path = 'D:\GitHub\plugins\awesome_notifications\example\windows\flutter\ephemeral\.plugin_symlinks\awesome_notifications' (OS Error: Função incorreta.
+, errno = 1)
+
+```
+#0      _Link.throwIfError (dart:io/link.dart:254:7)
+#1      _Link.createSync (dart:io/link.dart:182:5)
+#2      ForwardingLink.createSync (package:file/src/forwarding/forwarding_link.dart:20:16)
+#3      ForwardingLink.createSync (package:file/src/forwarding/forwarding_link.dart:20:16)
+#4      _createPlatformPluginSymlinks (package:flutter_tools/src/flutter_plugins.dart:1057:12)
+#5      createPluginSymlinks (package:flutter_tools/src/flutter_plugins.dart:987:5)
+#6      refreshPluginsList (package:flutter_tools/src/flutter_plugins.dart:1089:5)
+<asynchronous suspension>
+#7      FlutterProject.ensureReadyForPlatformSpecificTooling (package:flutter_tools/src/project.dart:357:5)
+<asynchronous suspension>
+#8      PackagesGetCommand.runCommand (package:flutter_tools/src/commands/packages.dart:182:7)
+<asynchronous suspension>
+#9      FlutterCommand.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command.dart:1257:27)
+<asynchronous suspension>
+#10     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:150:19)
+<asynchronous suspension>
+#11     CommandRunner.runCommand (package:args/command_runner.dart:209:13)
+<asynchronous suspension>
+#12     FlutterCommandRunner.runCommand.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:283:9)
+<asynchronous suspension>
+#13     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:150:19)
+<asynchronous suspension>
+#14     FlutterCommandRunner.runCommand (package:flutter_tools/src/runner/flutter_command_runner.dart:229:5)
+<asynchronous suspension>
+#15     run.<anonymous closure>.<anonymous closure> (package:flutter_tools/runner.dart:64:9)
+<asynchronous suspension>
+#16     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:150:19)
+<asynchronous suspension>
+#17     main (package:flutter_tools/executable.dart:91:3)
+<asynchronous suspension>
+```
+
+## flutter doctor
+
+```
+[✓] Flutter (Channel stable, 3.7.12, on Microsoft Windows [versÆo 10.0.19044.2846], locale pt-BR)
+    • Flutter version 3.7.12 on channel stable at D:\flutter
+    • Upstream repository https://github.com/flutter/flutter.git
+    • Framework revision 4d9e56e694 (2 weeks ago), 2023-04-17 21:47:46 -0400
+    • Engine revision 1a65d409c7
+    • Dart version 2.19.6
+    • DevTools version 2.20.1
+
+[✗] Windows Version (Unable to confirm if installed Windows version is 10 or greater)
+
+[✓] Android toolchain - develop for Android devices (Android SDK version 33.0.2)
+    • Android SDK at C:\Users\rafae\AppData\Local\Android\sdk
+    • Platform android-33, build-tools 33.0.2
+    • Java binary at: C:\Program Files\Android\Android Studio\jbr\bin\java
+    • Java version OpenJDK Runtime Environment (build 17.0.6+0-b2043.56-9586694)
+    • All Android licenses accepted.
+
+[✓] Chrome - develop for the web
+    • Chrome at C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
+
+[✓] Visual Studio - develop for Windows (Visual Studio Community 2022 17.5.5)
+    • Visual Studio at C:\Program Files\Microsoft Visual Studio\2022\Community
+    • Visual Studio Community 2022 version 17.5.33627.172
+    • Windows 10 SDK version 10.0.22000.0
+
+[✓] Android Studio (version 2022.2)
+    • Android Studio at C:\Program Files\Android\Android Studio
+    • Flutter plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/9212-flutter
+    • Dart plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/6351-dart
+    • Java version OpenJDK Runtime Environment (build 17.0.6+0-b2043.56-9586694)
+
+[✓] VS Code (version 1.78.0)
+    • VS Code at C:\Users\rafae\AppData\Local\Programs\Microsoft VS Code
+    • Flutter extension version 3.62.0
+
+[✓] Connected device (4 available)
+    • 2201117TG (mobile) • 16d1392f • android-arm64  • Android 12 (API 31)
+    • Windows (desktop)  • windows  • windows-x64    • Microsoft Windows [versÆo 10.0.19044.2846]
+    • Chrome (web)       • chrome   • web-javascript • Google Chrome 113.0.5672.64
+    • Edge (web)         • edge     • web-javascript • Microsoft Edge 112.0.1722.68
+
+[✓] HTTP Host Availability
+    • All required HTTP hosts are available
+
+! Doctor found issues in 1 category.
+```

@@ -91,13 +91,13 @@ public class NotificationIntervalModel extends NotificationScheduleModel {
         {
             Long initialEpoch = initialDate.getTimeInMillis();
             Long currentEpoch = fixedNowDate.getTimeInMillis();
-            Long missingSeconds = Math.abs(initialEpoch - currentEpoch)/1000 % interval;
+            Long missingSeconds = Math.abs(currentEpoch - initialEpoch)/1000 % interval;
 
             finalDate = initialDate.after(fixedNowDate) ?
                     (Calendar) initialDate.clone() :
                     (Calendar) fixedNowDate.clone();
 
-            finalDate.add(Calendar.SECOND, missingSeconds.intValue());
+            finalDate.add(Calendar.SECOND, interval - missingSeconds.intValue());
         }
         else {
             finalDate = (Calendar) initialDate.clone();

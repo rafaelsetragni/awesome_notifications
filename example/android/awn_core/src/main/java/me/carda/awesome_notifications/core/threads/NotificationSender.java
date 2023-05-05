@@ -172,17 +172,21 @@ public class NotificationSender extends NotificationThread<NotificationReceived>
             if(created) {
                 ScheduleManager.cancelScheduleById(
                         wContextReference.get(),
-                        String.valueOf(receivedNotification.id));
+                        receivedNotification.id);
 
-                BroadcastSender.sendBroadcastNotificationCreated(
-                        wContextReference.get(),
-                        receivedNotification);
+                BroadcastSender
+                        .getInstance()
+                        .sendBroadcastNotificationCreated(
+                                wContextReference.get(),
+                                receivedNotification);
             }
 
             if(displayed)
-                BroadcastSender.sendBroadcastNotificationDisplayed(
-                    wContextReference.get(),
-                    receivedNotification);
+                BroadcastSender
+                        .getInstance()
+                        .sendBroadcastNotificationDisplayed(
+                                wContextReference.get(),
+                                receivedNotification);
         }
 
         if(this.endTime == 0L)

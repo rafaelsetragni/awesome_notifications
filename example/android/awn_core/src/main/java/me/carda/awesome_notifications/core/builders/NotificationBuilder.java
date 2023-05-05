@@ -33,8 +33,12 @@ import androidx.core.text.HtmlCompat;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import me.carda.awesome_notifications.core.AwesomeNotifications;
@@ -53,11 +57,13 @@ import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.core.managers.BadgeManager;
 import me.carda.awesome_notifications.core.managers.ChannelManager;
 import me.carda.awesome_notifications.core.managers.DefaultsManager;
+import me.carda.awesome_notifications.core.managers.LocalizationManager;
 import me.carda.awesome_notifications.core.managers.PermissionManager;
 import me.carda.awesome_notifications.core.managers.StatusBarManager;
 import me.carda.awesome_notifications.core.models.NotificationButtonModel;
 import me.carda.awesome_notifications.core.models.NotificationChannelModel;
 import me.carda.awesome_notifications.core.models.NotificationContentModel;
+import me.carda.awesome_notifications.core.models.NotificationLocalizationModel;
 import me.carda.awesome_notifications.core.models.NotificationMessageModel;
 import me.carda.awesome_notifications.core.models.NotificationModel;
 import me.carda.awesome_notifications.core.models.returnedData.ActionReceived;
@@ -68,6 +74,14 @@ import me.carda.awesome_notifications.core.utils.HtmlUtils;
 import me.carda.awesome_notifications.core.utils.IntegerUtils;
 import me.carda.awesome_notifications.core.utils.ListUtils;
 import me.carda.awesome_notifications.core.utils.StringUtils;
+
+
+class DescendingComparator implements Comparator<String> {
+    @Override
+    public int compare(String s1, String s2) {
+        return s2.compareTo(s1);
+    }
+}
 
 public class NotificationBuilder {
 
@@ -575,8 +589,12 @@ public class NotificationBuilder {
 
         setChannelKey(context, channel, builder);
         setNotificationId(notificationModel);
-        setTitle(notificationModel, channel, builder);
+
+        setCurrentTranslation(context, notificationModel);
+
+        setTitle(notificationModel, builder);
         setBody(notificationModel, builder);
+        setSummary(notificationModel, builder);
 
         setGroupKey(notificationModel, channel);
         setSmallIcon(context, notificationModel, channel, builder);
@@ -591,6 +609,7 @@ public class NotificationBuilder {
         setLockedNotification(notificationModel, channel, builder);
         setImportance(channel, builder);
         setCategory(notificationModel, builder);
+        setTimeoutAfter(notificationModel, builder);
 
         setSound(context, notificationModel, channel, builder);
         setVibrationPattern(channel, builder);
@@ -710,6 +729,12 @@ public class NotificationBuilder {
         builder.setOnlyAlertOnce(onlyAlertOnceValue);
     }
 
+    private void setTimeoutAfter(NotificationModel notificationModel, NotificationCompat.Builder builder) {
+        if(notificationModel.content.timeoutAfter == null) return;
+        if(notificationModel.content.timeoutAfter < 1) return;
+        builder.setTimeoutAfter(notificationModel.content.timeoutAfter);
+    }
+
     private void setRemoteHistory(NotificationModel notificationModel, NotificationCompat.Builder builder) {
         if(!stringUtils.isNullOrEmpty(notificationModel.remoteHistory) && notificationModel.content.notificationLayout == NotificationLayout.Default)
             builder.setRemoteInputHistory(new CharSequence[]{notificationModel.remoteHistory});
@@ -751,14 +776,102 @@ public class NotificationBuilder {
         builder.setAutoCancel(BooleanUtils.getInstance().getValueOrDefault(notificationModel.content.autoDismissible, true));
     }
 
+    private void setCurrentTranslation(
+            Context context,
+            NotificationModel notificationModel
+    ){
+        if (notificationModel.localizations == null) return;
+        if (notificationModel.localizations.isEmpty()) return;
+
+        String languageCode =
+                LocalizationManager
+                    .getInstance()
+                    .getLocalization(context);
+
+        String matchedTranslationCode = getMatchedLanguageCode(
+                notificationModel.localizations,
+                languageCode);
+        if (matchedTranslationCode == null) return;
+
+        NotificationLocalizationModel localizationModel = notificationModel
+                .localizations
+                .get(matchedTranslationCode);
+        if (localizationModel == null) return;
+
+        if (!StringUtils.getInstance().isNullOrEmpty(localizationModel.title)) {
+            notificationModel.content.title = localizationModel.title;
+        }
+        if (!StringUtils.getInstance().isNullOrEmpty(localizationModel.body)) {
+            notificationModel.content.body = localizationModel.body;
+        }
+        if (!StringUtils.getInstance().isNullOrEmpty(localizationModel.summary)) {
+            notificationModel.content.summary = localizationModel.summary;
+        }
+        if (!StringUtils.getInstance().isNullOrEmpty(localizationModel.largeIcon)) {
+            notificationModel.content.largeIcon = localizationModel.largeIcon;
+        }
+        if (!StringUtils.getInstance().isNullOrEmpty(localizationModel.bigPicture)) {
+            notificationModel.content.bigPicture = localizationModel.bigPicture;
+        }
+
+        if (localizationModel.buttonLabels == null) return;
+        if (notificationModel.actionButtons == null) return;
+
+        for (NotificationButtonModel buttonModel : notificationModel.actionButtons){
+            if (localizationModel.buttonLabels.containsKey(buttonModel.key)){
+                buttonModel.label = localizationModel.buttonLabels.get(buttonModel.key);
+            }
+        }
+    }
+
+    private String getMatchedLanguageCode(Map<String, NotificationLocalizationModel> localizations, String languageCode) {
+        String lowercaseLanguageCode = languageCode.toLowerCase(Locale.ROOT);
+        if (localizations.containsKey(lowercaseLanguageCode)) return lowercaseLanguageCode;
+
+        lowercaseLanguageCode = lowercaseLanguageCode
+                .replace("-", "_");
+
+        Set<String> sortedSet = new TreeSet<>(new DescendingComparator());
+        sortedSet.addAll(localizations.keySet());
+        String exactWord = null, keyStartedWith = null, codeStartedWith = null;
+        for (String key : sortedSet) {
+            String lowercaseKey = key
+                    .toLowerCase(Locale.ROOT)
+                    .replace("-", "_");
+
+            if (lowercaseKey.equals(lowercaseLanguageCode)) {
+                exactWord = key;
+                continue;
+            }
+            if (lowercaseKey.startsWith(lowercaseLanguageCode + "_")) {
+                keyStartedWith = key;
+                continue;
+            }
+            if (lowercaseLanguageCode.startsWith(lowercaseKey + "_")) {
+                codeStartedWith = key;
+            }
+        }
+
+        if (StringUtils.getInstance().isNullOrEmpty(exactWord)) return exactWord;
+        if (StringUtils.getInstance().isNullOrEmpty(keyStartedWith)) return keyStartedWith;
+        if (StringUtils.getInstance().isNullOrEmpty(codeStartedWith)) return codeStartedWith;
+
+        return null;
+    }
+
+    private void setTitle(NotificationModel notificationModel, NotificationCompat.Builder builder) {
+        if (notificationModel.content.title == null) return;
+        builder.setContentTitle(HtmlUtils.fromHtml(notificationModel.content.title));
+    }
+
     private void setBody(NotificationModel notificationModel, NotificationCompat.Builder builder) {
+        if (notificationModel.content.body == null) return;
         builder.setContentText(HtmlUtils.fromHtml(notificationModel.content.body));
     }
 
-    private void setTitle(NotificationModel notificationModel, NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
-        if (notificationModel.content.title != null) {
-            builder.setContentTitle(HtmlUtils.fromHtml(notificationModel.content.title));
-        }
+    private void setSummary(NotificationModel notificationModel, NotificationCompat.Builder builder) {
+        if (notificationModel.content.summary == null) return;
+        builder.setSubText(HtmlUtils.fromHtml(notificationModel.content.summary));
     }
 
     private void setVibrationPattern(NotificationChannelModel channelModel, NotificationCompat.Builder builder) {
@@ -802,15 +915,18 @@ public class NotificationBuilder {
     }
 
     private void setLargeIcon(Context context, NotificationModel notificationModel, NotificationCompat.Builder builder) {
-        if (notificationModel.content.notificationLayout != NotificationLayout.BigPicture)
-            if (!stringUtils.isNullOrEmpty(notificationModel.content.largeIcon)) {
-                Bitmap largeIcon = bitmapUtils.getBitmapFromSource(
-                        context,
-                        notificationModel.content.largeIcon,
-                        notificationModel.content.roundedLargeIcon);
-                if (largeIcon != null)
-                    builder.setLargeIcon(largeIcon);
-            }
+        if (notificationModel.content.notificationLayout == NotificationLayout.BigPicture) return;
+
+        String largeIconReference = notificationModel.content.largeIcon;
+        if (!stringUtils.isNullOrEmpty(largeIconReference)) {
+            Bitmap largeIcon = bitmapUtils.getBitmapFromSource(
+                    context,
+                    largeIconReference,
+                    notificationModel.content.roundedLargeIcon);
+
+            if (largeIcon != null)
+                builder.setLargeIcon(largeIcon);
+        }
     }
 
     @SuppressLint("WrongConstant")
@@ -830,11 +946,11 @@ public class NotificationBuilder {
             if (
                 Build.VERSION.SDK_INT < Build.VERSION_CODES.N /*Android 7*/ &&
                 buttonProperties.requireInputText
-            ){
-                continue;
-            }
+            ) continue;
+            if (buttonProperties.label == null) continue;
 
             ActionType actionType = buttonProperties.actionType;
+            String buttonLabel = buttonProperties.label;
 
             Intent actionIntent = buildNotificationIntentFromNotificationModel(
                 context,
@@ -889,11 +1005,11 @@ public class NotificationBuilder {
             Spanned htmlLabel =
                 HtmlCompat.fromHtml(
                         buttonProperties.isDangerousOption ?
-                                "<font color=\"16711680\">" + buttonProperties.label + "</font>" :
+                                "<font color=\"16711680\">" + buttonLabel + "</font>" :
                                 (
                                         buttonProperties.color != null ?
-                                                "<font color=\"" + buttonProperties.color.toString() + "\">" + buttonProperties.label + "</font>":
-                                                buttonProperties.label
+                                                "<font color=\"" + buttonProperties.color.toString() + "\">" + buttonLabel + "</font>":
+                                                buttonLabel
                                 ),
                         HtmlCompat.FROM_HTML_MODE_LEGACY
                 );
@@ -903,7 +1019,7 @@ public class NotificationBuilder {
                 RemoteInput remoteInput =
                     new RemoteInput
                         .Builder(buttonProperties.key)
-                        .setLabel(buttonProperties.label)
+                        .setLabel(buttonLabel)
                         .build();
 
                 NotificationCompat.Action replyAction =
@@ -951,7 +1067,9 @@ public class NotificationBuilder {
         } else if (!stringUtils.isNullOrEmpty(channelModel.icon)) {
             builder.setSmallIcon(bitmapUtils.getDrawableResourceId(context, channelModel.icon));
         } else {
-            String defaultIcon = DefaultsManager.getDefaultIcon(context);
+            String defaultIcon = DefaultsManager
+                    .getInstance(context)
+                    .getDefaultIcon(context);
 
             if (stringUtils.isNullOrEmpty(defaultIcon)) {
 
@@ -1017,7 +1135,7 @@ public class NotificationBuilder {
         switch (notificationModel.content.notificationLayout) {
 
             case BigPicture:
-                if (setBigPictureLayout(context, notificationModel.content, builder)) return;
+                if (setBigPictureLayout(context, notificationModel, builder)) return;
                 break;
 
             case BigText:
@@ -1050,30 +1168,33 @@ public class NotificationBuilder {
         }
     }
 
-    private Boolean setBigPictureLayout(Context context, NotificationContentModel contentModel, NotificationCompat.Builder builder) {
+    private Boolean setBigPictureLayout(Context context, NotificationModel notificationModel, NotificationCompat.Builder builder) {
+        NotificationContentModel contentModel = notificationModel.content;
+        String bigPictureReference = contentModel.bigPicture;
+        String largeIconReference = contentModel.largeIcon;
 
         Bitmap bigPicture = null, largeIcon = null;
 
-        if (!stringUtils.isNullOrEmpty(contentModel.bigPicture))
-            bigPicture = bitmapUtils.getBitmapFromSource(context, contentModel.bigPicture, contentModel.roundedBigPicture);
+        if (!stringUtils.isNullOrEmpty(bigPictureReference))
+            bigPicture = bitmapUtils.getBitmapFromSource(context, bigPictureReference, contentModel.roundedBigPicture);
 
         if (contentModel.hideLargeIconOnExpand)
             largeIcon = bigPicture != null ?
-                bigPicture : (!stringUtils.isNullOrEmpty(contentModel.largeIcon) ?
+                bigPicture : (!stringUtils.isNullOrEmpty(largeIconReference) ?
                     bitmapUtils.getBitmapFromSource(
                             context,
-                            contentModel.largeIcon,
+                            largeIconReference,
                             contentModel.roundedLargeIcon || contentModel.roundedBigPicture) : null);
         else {
             boolean areEqual =
-                    !stringUtils.isNullOrEmpty(contentModel.largeIcon) &&
-                            contentModel.largeIcon.equals(contentModel.bigPicture);
+                    !stringUtils.isNullOrEmpty(largeIconReference) &&
+                            largeIconReference.equals(bigPictureReference);
 
             if(areEqual)
                 largeIcon = bigPicture;
-            else if(!stringUtils.isNullOrEmpty(contentModel.largeIcon))
+            else if(!stringUtils.isNullOrEmpty(largeIconReference))
                 largeIcon =
-                        bitmapUtils.getBitmapFromSource(context, contentModel.largeIcon, contentModel.roundedLargeIcon);
+                        bitmapUtils.getBitmapFromSource(context, largeIconReference, contentModel.roundedLargeIcon);
         }
 
         if (largeIcon != null)

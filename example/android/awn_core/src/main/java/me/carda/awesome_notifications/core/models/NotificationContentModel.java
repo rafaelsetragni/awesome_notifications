@@ -2,6 +2,9 @@ package me.carda.awesome_notifications.core.models;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -27,7 +30,6 @@ import me.carda.awesome_notifications.core.utils.ListUtils;
 
 @SuppressWarnings("unchecked")
 public class NotificationContentModel extends AbstractModel {
-
     private static final String TAG = "NotificationContentModel";
 
     public boolean isRefreshNotification = false;
@@ -58,6 +60,7 @@ public class NotificationContentModel extends AbstractModel {
     public Integer backgroundColor;
     public Integer progress;
     public Integer badge;
+    public Integer timeoutAfter;
     public String ticker;
 
     public Boolean roundedLargeIcon;
@@ -79,8 +82,10 @@ public class NotificationContentModel extends AbstractModel {
 
     public NotificationCategory category;
 
-    public boolean registerCreatedEvent(NotificationLifeCycle lifeCycle, NotificationSource createdSource){
-
+    public boolean registerCreatedEvent(
+            @NonNull NotificationLifeCycle lifeCycle,
+            @NonNull NotificationSource createdSource
+    ){
         // Creation register can only happen once
         if(this.createdDate == null){
 
@@ -93,14 +98,14 @@ public class NotificationContentModel extends AbstractModel {
         return false;
     }
 
-    public boolean registerDisplayedEvent(NotificationLifeCycle lifeCycle){
+    public boolean registerDisplayedEvent(@NonNull NotificationLifeCycle lifeCycle){
         this.displayedDate = CalendarUtils.getInstance().getCurrentCalendar();
         this.displayedLifeCycle = lifeCycle;
         return true;
     }
 
     @Override
-    public NotificationContentModel fromMap(Map<String, Object> arguments) {
+    public NotificationContentModel fromMap(@Nullable Map<String, Object> arguments) {
         if(arguments == null || arguments.isEmpty())
             return null;
 
@@ -135,26 +140,34 @@ public class NotificationContentModel extends AbstractModel {
         icon                  = getValueOrDefault(arguments, Definitions.NOTIFICATION_ICON, String.class, null);
         largeIcon             = getValueOrDefault(arguments, Definitions.NOTIFICATION_LARGE_ICON, String.class, null);
         bigPicture            = getValueOrDefault(arguments, Definitions.NOTIFICATION_BIG_PICTURE, String.class, null);
-        payload               = getValueOrDefault(arguments, Definitions.NOTIFICATION_PAYLOAD, Map.class, null);
+        payload               = getValueOrDefaultMap(arguments, Definitions.NOTIFICATION_PAYLOAD, null);
         autoDismissible       = getValueOrDefault(arguments, Definitions.NOTIFICATION_AUTO_DISMISSIBLE, Boolean.class, true);
         progress              = getValueOrDefault(arguments, Definitions.NOTIFICATION_PROGRESS, Integer.class, null);
         badge                 = getValueOrDefault(arguments, Definitions.NOTIFICATION_BADGE, Integer.class, null);
+        timeoutAfter          = getValueOrDefault(arguments, Definitions.NOTIFICATION_TIMEOUT_AFTER, Integer.class, null);
         groupKey              = getValueOrDefault(arguments, Definitions.NOTIFICATION_GROUP_KEY, String.class, null);
         ticker                = getValueOrDefault(arguments, Definitions.NOTIFICATION_TICKER, String.class, null);
         roundedLargeIcon      = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, Boolean.class, false);
         roundedBigPicture     = getValueOrDefault(arguments, Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE, Boolean.class, false);
 
-        messages = mapToMessages(getValueOrDefault(arguments, Definitions.NOTIFICATION_MESSAGES, List.class, null));
+        messages = mapToMessages(getValueOrDefaultList(arguments, Definitions.NOTIFICATION_MESSAGES, null));
 
         return this;
     }
 
     // Retro-compatibility with 0.6.X
-    public void processRetroCompatibility(Map<String, Object> arguments){
-
+    public void processRetroCompatibility(@NonNull Map<String, Object> arguments){
         if (arguments.containsKey("autoCancel")) {
-            Logger.i("AwesomeNotifications", "autoCancel is deprecated. Please use autoDismissible instead.");
+            Logger.i("AwesomeNotifications", "autoCancel is now deprecated. Please use autoDismissible instead.");
             autoDismissible   = getValueOrDefault(arguments, "autoCancel", Boolean.class, true);
+        }
+
+        for (Map.Entry<String, Object> entry : arguments.entrySet()){
+            Object value = entry.getValue();
+            if (value != null && value.equals("AppKilled")){
+                Logger.i("AwesomeNotifications", "AppKilled is now deprecated. Please use Terminated instead.");
+                arguments.put(entry.getKey(), NotificationLifeCycle.Terminated);
+            }
         }
     }
 
@@ -195,6 +208,7 @@ public class NotificationContentModel extends AbstractModel {
         putDataOnSerializedMap(Definitions.NOTIFICATION_BIG_PICTURE, returnedObject, this.bigPicture);
         putDataOnSerializedMap(Definitions.NOTIFICATION_PROGRESS, returnedObject, this.progress);
         putDataOnSerializedMap(Definitions.NOTIFICATION_BADGE, returnedObject, this.badge);
+        putDataOnSerializedMap(Definitions.NOTIFICATION_TIMEOUT_AFTER, returnedObject, this.timeoutAfter);
         putDataOnSerializedMap(Definitions.NOTIFICATION_GROUP_KEY, returnedObject, this.groupKey);
         putDataOnSerializedMap(Definitions.NOTIFICATION_PRIVACY, returnedObject, this.privacy);
         putDataOnSerializedMap(Definitions.NOTIFICATION_PRIVATE_MESSAGE, returnedObject, this.privateMessage);
@@ -206,7 +220,7 @@ public class NotificationContentModel extends AbstractModel {
         return returnedObject;
     }
 
-    public static List<Map> messagesToMap(List<NotificationMessageModel> messages){
+    public static List<Map> messagesToMap(@Nullable List<NotificationMessageModel> messages){
         List<Map> returnedMessages = new ArrayList<>();
         if(!ListUtils.isNullOrEmpty(messages)){
             for (NotificationMessageModel messageModel : messages) {
@@ -216,7 +230,7 @@ public class NotificationContentModel extends AbstractModel {
         return returnedMessages;
     }
 
-    public static List<NotificationMessageModel> mapToMessages(List<Map> messagesData){
+    public static List<NotificationMessageModel> mapToMessages(@Nullable List<Map> messagesData){
         List<NotificationMessageModel> messages = new ArrayList<>();
         if(!ListUtils.isNullOrEmpty(messagesData))
             for(Map<String, Object> messageData : messagesData){
@@ -233,12 +247,12 @@ public class NotificationContentModel extends AbstractModel {
     }
 
     @Override
-    public NotificationContentModel fromJson(String json){
+    public NotificationContentModel fromJson(@Nullable String json){
         return (NotificationContentModel) super.templateFromJson(json);
     }
 
     @Override
-    public void validate(Context context) throws AwesomeNotificationsException {
+    public void validate(@NonNull Context context) throws AwesomeNotificationsException {
         if(id == null)
             throw ExceptionFactory
                     .getInstance()
@@ -247,6 +261,8 @@ public class NotificationContentModel extends AbstractModel {
                             ExceptionCode.CODE_MISSING_ARGUMENTS,
                             "Notification id is required",
                             ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".notificationContent.id");
+
+        if(timeoutAfter != null && timeoutAfter < 1) timeoutAfter = null;
 
         if(ChannelManager
                 .getInstance()
@@ -274,25 +290,24 @@ public class NotificationContentModel extends AbstractModel {
 
     }
 
-    private void validateIcon(Context context) throws AwesomeNotificationsException {
+    private void validateIcon(@NonNull Context context) throws AwesomeNotificationsException {
+        if(stringUtils.isNullOrEmpty(icon)) return;
 
-        if(!stringUtils.isNullOrEmpty(icon)){
-            if(
-                BitmapUtils.getInstance().getMediaSourceType(icon) != MediaSource.Resource ||
-                !BitmapUtils.getInstance().isValidBitmap(context, icon)
-            ){
-                throw ExceptionFactory
-                        .getInstance()
-                        .createNewAwesomeException(
-                                TAG,
-                                ExceptionCode.CODE_INVALID_ARGUMENTS,
-                                "Small icon ('"+icon+"') must be a valid media native resource type.",
-                                ExceptionCode.DETAILED_INVALID_ARGUMENTS+".smallIcon");
-            }
+        if(
+            BitmapUtils.getInstance().getMediaSourceType(icon) != MediaSource.Resource ||
+            !BitmapUtils.getInstance().isValidBitmap(context, icon)
+        ){
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Small icon ('"+icon+"') must be a valid media native resource type.",
+                            ExceptionCode.DETAILED_INVALID_ARGUMENTS+".smallIcon");
         }
     }
 
-    private void validateRequiredImages(Context context) throws AwesomeNotificationsException {
+    private void validateRequiredImages(@NonNull Context context) throws AwesomeNotificationsException {
         if(stringUtils.isNullOrEmpty(largeIcon) && stringUtils.isNullOrEmpty(bigPicture))
             throw ExceptionFactory
                     .getInstance()
@@ -303,7 +318,7 @@ public class NotificationContentModel extends AbstractModel {
                             ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".image.required");
     }
 
-    private void validateBigPicture(Context context) throws AwesomeNotificationsException {  
+    private void validateBigPicture(@NonNull Context context) throws AwesomeNotificationsException {
         if(
             !stringUtils.isNullOrEmpty(bigPicture) && 
             !BitmapUtils.getInstance().isValidBitmap(context, bigPicture)

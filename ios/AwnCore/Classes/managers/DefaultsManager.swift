@@ -7,9 +7,9 @@
 
 import Foundation
 
-class DefaultsManager {
+public class DefaultsManager {
     
-    static let TAG = "DefaultsManager"
+    let TAG = "DefaultsManager"
     let userDefaults:UserDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)!
     
     // ************** SINGLETON PATTERN ***********************
@@ -23,6 +23,10 @@ class DefaultsManager {
         }
     }
     private init(){}
+    
+    public func setDefaultGroupTest() {
+        userDefaults.setValue("pass", forKey: Definitions.TEST_APP_GROUP)
+    }
     
     // ********************************************************
     
@@ -55,14 +59,11 @@ class DefaultsManager {
         get {
             let dateText:String? = userDefaults.object(forKey: Definitions.AWESOME_LAST_DISPLAYED_DATE) as? String
             
-            Logger.d(DefaultsManager.TAG, "Awesome Notifications - UTC timezone : \(RealDateTime.utcTimeZone)")
-            Logger.d(DefaultsManager.TAG, "Awesome Notifications - Local timezone : \(DateUtils.shared.localTimeZone)")
-            
             guard let dateText:String = dateText else {
                 return RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
             }
             
-            Logger.d(DefaultsManager.TAG, "Awesome Notifications - last displayed date : \(dateText)")
+            Logger.d(TAG, "Awesome Notifications - last displayed date : \(dateText)")
             
             guard let lastDate:RealDateTime =
                                     RealDateTime.init(
@@ -80,5 +81,12 @@ class DefaultsManager {
     
     public func registerLastDisplayedDate(){
         self.lastDisplayedDate = RealDateTime.init(fromTimeZone: RealDateTime.utcTimeZone)
+    }
+    
+    public func checkIfAppGroupConnected() {
+        let valueRestored:String? = userDefaults.object(forKey: Definitions.TEST_APP_GROUP) as? String
+        if valueRestored?.isEmpty ?? true {
+            Logger.e(TAG, "App Groups are not successfully connected. Please, use '\(Definitions.USER_DEFAULT_TAG)' group name in your App Groups Capabilities.")
+        }
     }
 }

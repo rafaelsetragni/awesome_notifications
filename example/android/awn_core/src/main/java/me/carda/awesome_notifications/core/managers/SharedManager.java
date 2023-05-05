@@ -3,15 +3,16 @@ package me.carda.awesome_notifications.core.managers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import me.carda.awesome_notifications.core.AwesomeNotifications;
 import me.carda.awesome_notifications.core.Definitions;
-import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
-import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
-import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.core.models.AbstractModel;
 import me.carda.awesome_notifications.core.utils.StringUtils;
 
@@ -38,12 +39,12 @@ public class SharedManager<T extends AbstractModel> {
             this.hashedReference = reference;
             // TODO change register exception to throw exception
             ExceptionFactory
-                .getInstance()
-                .registerNewAwesomeException(
-                        TAG,
-                        ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
-                        "SharedManager could not be correctly initialized: "+ e.getMessage(),
-                        ExceptionCode.DETAILED_INITIALIZATION_FAILED+"."+reference);
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_SHARED_PREFERENCES_NOT_AVAILABLE,
+                            "SharedManager could not be correctly initialized: "+ e.getMessage(),
+                            ExceptionCode.DETAILED_INITIALIZATION_FAILED+"."+reference);
         }
     }
 

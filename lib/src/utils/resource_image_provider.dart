@@ -22,9 +22,12 @@ class ResourceImage extends ImageProvider<ResourceImage> {
   /// Creates an object that decodes a [Uint8List] buffer as an image.
   ///
   /// The arguments must not be null.
-  const ResourceImage(this.drawablePath, {this.scale = 1.0});
+  const ResourceImage(this.drawablePath,
+      {this.scale = 1.0, AwesomeNotifications? awesomeNotifications})
+      : _awesomeNotifications = awesomeNotifications;
 
   final String drawablePath;
+  final AwesomeNotifications? _awesomeNotifications;
 
   /// The scale to place in the [ImageInfo] object of the image.
   final double scale;
@@ -39,19 +42,20 @@ class ResourceImage extends ImageProvider<ResourceImage> {
   ImageStreamCompleter loadBuffer(
       ResourceImage key, DecoderBufferCallback decode) {
     return MultiFrameImageStreamCompleter(
-      codec: _loadAsync(key, decode),
+      codec: loadAsync(key, decode),
       scale: key.scale,
     );
   }
 
-  Future<ui.Codec> _loadAsync(
+  @visibleForTesting
+  Future<ui.Codec> loadAsync(
       ResourceImage key, DecoderBufferCallback decode) async {
     assert(key == this);
-    Uint8List? bytes =
-        await AwesomeNotifications().getDrawableData(drawablePath);
+    Uint8List? bytes = await (_awesomeNotifications ?? AwesomeNotifications())
+        .getDrawableData(drawablePath);
 
-    if (bytes?.lengthInBytes == 0) {
-      throw Exception('image is invalid');
+    if ((bytes?.lengthInBytes ?? 0) == 0) {
+      throw const AwesomeNotificationsException(message: 'image is invalid');
     }
 
     final ImmutableBuffer buffer = await ImmutableBuffer.fromUint8List(bytes!);

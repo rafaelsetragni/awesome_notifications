@@ -9,6 +9,7 @@ import 'package:awesome_notifications/src/models/model.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
 import 'package:awesome_notifications/src/utils/string_utils.dart';
+import 'package:flutter/foundation.dart';
 
 /// Notification button to display inside a notification.
 /// Since Android 7, icons are displayed only for Media Layout Notifications
@@ -87,41 +88,42 @@ class NotificationActionButton extends Model {
         _color = color,
         _actionType = actionType {
     // Adapting input type to 0.7.0 pattern
-    _adaptInputFieldToRequireText();
+    adaptInputFieldToRequireText();
   }
 
   @override
   NotificationActionButton? fromMap(Map<String, dynamic> mapData) {
-    _processRetroCompatibility(mapData);
-    _key = AwesomeAssertUtils.extractValue(NOTIFICATION_KEY, mapData, String);
-    _icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, mapData, String);
-    _label = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_BUTTON_LABEL, mapData, String);
+    processRetroCompatibility(mapData);
+    _key = AwesomeAssertUtils.extractValue<String>(NOTIFICATION_KEY, mapData);
+    _icon = AwesomeAssertUtils.extractValue<String>(NOTIFICATION_ICON, mapData);
+    _label = AwesomeAssertUtils.extractValue<String>(
+        NOTIFICATION_BUTTON_LABEL, mapData);
     _enabled =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_ENABLED, mapData, bool);
-    _requireInputText = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_REQUIRE_INPUT_TEXT, mapData, bool);
-    _autoDismissible = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_AUTO_DISMISSIBLE, mapData, bool);
-    _showInCompactView = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_SHOW_IN_COMPACT_VIEW, mapData, bool);
-    _isDangerousOption = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_IS_DANGEROUS_OPTION, mapData, bool);
+        AwesomeAssertUtils.extractValue<bool>(NOTIFICATION_ENABLED, mapData);
+    _requireInputText = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_REQUIRE_INPUT_TEXT, mapData);
+    _autoDismissible = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_AUTO_DISMISSIBLE, mapData);
+    _showInCompactView = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_SHOW_IN_COMPACT_VIEW, mapData);
+    _isDangerousOption = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_IS_DANGEROUS_OPTION, mapData);
     _actionType = AwesomeAssertUtils.extractEnum<ActionType>(
         NOTIFICATION_ACTION_TYPE, mapData, ActionType.values);
 
     _color =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_COLOR, mapData, Color);
+        AwesomeAssertUtils.extractValue<Color>(NOTIFICATION_COLOR, mapData);
 
     return this;
   }
 
-  void _processRetroCompatibility(Map<String, dynamic> dataMap) {
+  @visibleForTesting
+  void processRetroCompatibility(Map<String, dynamic> dataMap) {
     if (dataMap.containsKey("autoCancel")) {
       developer
           .log("autoCancel is deprecated. Please use autoDismissible instead.");
-      _autoDismissible =
-          AwesomeAssertUtils.extractValue("autoCancel", dataMap, bool);
+      dataMap[NOTIFICATION_AUTO_DISMISSIBLE] =
+          AwesomeAssertUtils.extractValue<bool>('autoCancel', dataMap);
     }
 
     if (dataMap.containsKey("buttonType")) {
@@ -130,10 +132,11 @@ class NotificationActionButton extends Model {
           "buttonType", dataMap, ActionType.values);
     }
 
-    _adaptInputFieldToRequireText();
+    adaptInputFieldToRequireText();
   }
 
-  void _adaptInputFieldToRequireText() {
+  @visibleForTesting
+  void adaptInputFieldToRequireText() {
     // ignore: deprecated_member_use_from_same_package
     if (_actionType == ActionType.InputField) {
       developer.log(
@@ -145,7 +148,7 @@ class NotificationActionButton extends Model {
 
   @override
   Map<String, dynamic> toMap() {
-    _adaptInputFieldToRequireText();
+    adaptInputFieldToRequireText();
 
     return {
       NOTIFICATION_KEY: _key,
@@ -163,20 +166,12 @@ class NotificationActionButton extends Model {
 
   @override
   void validate() {
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_key, String)) {
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_key)) {
       throw const AwesomeNotificationsException(message: 'key id is requried');
     }
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_label, String)) {
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_label)) {
       throw const AwesomeNotificationsException(
           message: 'label id is requried');
-    }
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_autoDismissible, bool)) {
-      throw const AwesomeNotificationsException(
-          message: 'autoDismissible id is requried');
-    }
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_showInCompactView, bool)) {
-      throw const AwesomeNotificationsException(
-          message: 'showInCompactView id is requried');
     }
 
     // For action buttons, it's only allowed resource media types

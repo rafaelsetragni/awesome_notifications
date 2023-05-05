@@ -2,130 +2,165 @@ package me.carda.awesome_notifications.core.managers;
 
 import android.app.AlarmManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
-import me.carda.awesome_notifications.core.AwesomeNotifications;
 import me.carda.awesome_notifications.core.Definitions;
+import me.carda.awesome_notifications.core.databases.SQLiteSchedulesDB;
+import me.carda.awesome_notifications.core.databases.SqLiteCypher;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.models.NotificationModel;
 import me.carda.awesome_notifications.core.utils.StringUtils;
 
 public class ScheduleManager {
 
-    private static final SharedManager<NotificationModel> shared
-            = new SharedManager<>(
-                    StringUtils.getInstance(),
-                    "ScheduleManager",
-                    NotificationModel.class,
-                    "NotificationModel");
+    private static SQLiteSchedulesDB _getPrimitiveDB(Context context){
+        SQLiteSchedulesDB schedulesDB = SQLiteSchedulesDB.getInstance(context);
 
-    public static List<NotificationModel> listSchedules(Context context) throws AwesomeNotificationsException {
-        return shared.getAllObjects(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS);
+        try {
+            List<NotificationModel> oldSchedules = shared.getAllObjects(
+                    context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS);
+            if (!oldSchedules.isEmpty()) {
+                migrateSharedScheduleDatabase(context, schedulesDB, oldSchedules);
+                shared.removeAll(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS);
+            }
+        } catch (AwesomeNotificationsException e) {
+            throw new RuntimeException(e);
+        }
+
+        return schedulesDB;
     }
 
-    public static NotificationModel getScheduleById(Context context, String Id) throws AwesomeNotificationsException {
-        return shared.get(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS, Id);
-    }
-
-    public static List<String> listScheduledIds(Context context) {
-        return _getHelper(context, Definitions.SCHEDULER_HELPER_ALL, "");
-    }
-
-    public static List<String> listScheduledIdsFromChannel(Context context, String channelKey) {
-        return _getHelper(context, Definitions.SCHEDULER_HELPER_CHANNEL, channelKey);
-    }
-
-    public static List<String> listScheduledIdsFromGroup(Context context, String groupKey) {
-        return _getHelper(context, Definitions.SCHEDULER_HELPER_GROUP, groupKey);
-    }
-
-    public static Boolean removeSchedule(Context context, NotificationModel notificationModel) throws AwesomeNotificationsException {
-        String targetId = notificationModel.content.id.toString();
-
-        boolean successHelper =
-                _removeHelperId(
-                        context,
-                        targetId,
-                        notificationModel.content.channelKey,
-                        notificationModel.content.groupKey);
-
-        boolean successShared =
-                _removeNotificationFromShared(
-                        context,
-                        targetId);
-
-        return successHelper && successShared;
-    }
-
-    public static Boolean saveSchedule(Context context, NotificationModel notificationModel) throws AwesomeNotificationsException {
-        String targetId = notificationModel.content.id.toString();
-
-        boolean successHelper =
-                _setHelperId(
-                        context,
-                        targetId,
-                        notificationModel.content.channelKey,
-                        notificationModel.content.groupKey);
-
-        boolean successShared =
-                _setNotificationOnShared(
-                        context,
-                        targetId,
-                        notificationModel);
-
-        return successHelper && successShared;
-    }
-
-    public static void cancelScheduleById(Context context, String id) throws AwesomeNotificationsException {
-        NotificationModel schedule = getScheduleById(context, id);
-        if(schedule != null)
-            removeSchedule(context, schedule);
-        else {
-            _removeNotificationFromShared(
+    private static void migrateSharedScheduleDatabase(
+        Context context,
+        SQLiteSchedulesDB db,
+        List<NotificationModel> schedules
+    ){
+        for (NotificationModel schedule : schedules) {
+            db.saveSchedule(
                 context,
-                id);
+                schedule.content.id,
+                schedule.content.channelKey,
+                schedule.content.groupKey,
+                schedule.toJson()
+            );
         }
     }
 
-    public static void cancelSchedulesByChannelKey(Context context, String channelKey) throws AwesomeNotificationsException {
-        List<String> allIds = _getHelper(context, Definitions.SCHEDULER_HELPER_ALL, "");
-        List<String> channelIds = _getHelper(context, Definitions.SCHEDULER_HELPER_CHANNEL, channelKey);
+    private static final RepositoryManager<NotificationModel> shared
+            = new RepositoryManager<>(
+            StringUtils.getInstance(),
+            "ScheduleManager",
+            NotificationModel.class,
+            "NotificationModel");
 
-        for (String targetId : channelIds) {
-            allIds.remove(targetId);
-            _removeNotificationFromShared(
+    public static List<NotificationModel> listSchedules(
+            Context context
+    ) throws AwesomeNotificationsException {
+        List<NotificationModel> schedules = new ArrayList<>();
+        Map<Integer, String> schedulesRaw;
+        try (SQLiteSchedulesDB schedulesDB = _getPrimitiveDB(context)) {
+            schedulesRaw = schedulesDB.getAllSchedules(context);
+            for (String json : schedulesRaw.values()) {
+                schedules.add(new NotificationModel().fromJson(json));
+            }
+            return schedules;
+        }
+    }
+
+    public static NotificationModel getScheduleById(
+            Context context, Integer Id
+    ) throws AwesomeNotificationsException {
+        Map<Integer, String> schedulesRaw;
+        try (SQLiteSchedulesDB schedulesDB = _getPrimitiveDB(context)) {
+            schedulesRaw = schedulesDB.getScheduleById(context, Id);
+            for (String json : schedulesRaw.values()) {
+                return new NotificationModel().fromJson(json);
+            }
+        }
+        return null;
+    }
+
+    public static List<Integer> listScheduledIds(Context context) {
+        Map<Integer, String> schedulesRaw;
+        try (SQLiteSchedulesDB schedulesDB = _getPrimitiveDB(context)) {
+            schedulesRaw = schedulesDB.getAllSchedules(context);
+        }
+        return new ArrayList<>(schedulesRaw.keySet());
+    }
+
+    public static List<Integer> listScheduledIdsFromChannel(Context context, String channelKey) {
+        Map<Integer, String> schedulesRaw;
+        try (SQLiteSchedulesDB schedulesDB = _getPrimitiveDB(context)) {
+            schedulesRaw = schedulesDB.getSchedulesByChannelKey(context, channelKey);
+        }
+        return new ArrayList<>(schedulesRaw.keySet());
+    }
+
+    public static List<Integer> listScheduledIdsFromGroup(Context context, String groupKey) {
+        Map<Integer, String> schedulesRaw;
+        try (SQLiteSchedulesDB schedulesDB = _getPrimitiveDB(context)) {
+            schedulesRaw = schedulesDB.getSchedulesByGroupKey(context, groupKey);
+            return new ArrayList<>(schedulesRaw.keySet());
+        }
+    }
+
+    public static Boolean removeSchedule(
+        Context context, NotificationModel notificationModel
+    ) throws AwesomeNotificationsException {
+        try (SQLiteSchedulesDB schedulesDB = _getPrimitiveDB(context)) {
+            schedulesDB.removeScheduleById(context, notificationModel.content.id);
+        }
+        return true;
+    }
+
+    public static Boolean saveSchedule(
+        Context context, NotificationModel notificationModel
+    ) throws AwesomeNotificationsException {
+        try (SQLiteSchedulesDB schedulesDB = _getPrimitiveDB(context)) {
+            schedulesDB.saveSchedule(
                     context,
-                    targetId);
+                    notificationModel.content.id,
+                    notificationModel.content.channelKey,
+                    notificationModel.content.groupKey,
+                    notificationModel.toJson()
+            );
         }
-
-        _updateHelper(context, Definitions.SCHEDULER_HELPER_ALL, "", allIds);
-        _removeHelper(context, Definitions.SCHEDULER_HELPER_CHANNEL, channelKey);
+        return true;
     }
 
-    public static void cancelSchedulesByGroupKey(Context context, String groupKey) throws AwesomeNotificationsException {
-        List<String> allIds = _getHelper(context, Definitions.SCHEDULER_HELPER_ALL, "");
-        List<String> groupIds = _getHelper(context, Definitions.SCHEDULER_HELPER_GROUP, groupKey);
-
-        for (String targetId : groupIds) {
-            allIds.remove(targetId);
-            _removeNotificationFromShared(
-                    context,
-                    targetId);
+    public static void cancelScheduleById(
+            Context context, Integer id
+    ) throws AwesomeNotificationsException {
+        try (SQLiteSchedulesDB schedulesDB = _getPrimitiveDB(context)) {
+            schedulesDB.removeScheduleById(context, id);
         }
-
-        _updateHelper(context, Definitions.SCHEDULER_HELPER_ALL, "", allIds);
-        _removeHelper(context, Definitions.SCHEDULER_HELPER_GROUP, groupKey);
     }
 
-    public static void cancelAllSchedules(Context context) throws AwesomeNotificationsException {
-        shared.removeAll(context);
-        _removeAllHelpers(context, Definitions.SCHEDULER_HELPER_ALL);
-        _removeAllHelpers(context, Definitions.SCHEDULER_HELPER_CHANNEL);
-        _removeAllHelpers(context, Definitions.SCHEDULER_HELPER_GROUP);
+    public static void cancelSchedulesByChannelKey(
+            Context context, String channelKey
+    ) throws AwesomeNotificationsException {
+        try (SQLiteSchedulesDB schedulesDB = _getPrimitiveDB(context)) {
+            schedulesDB.removeSchedulesByChannelKey(context, channelKey);
+        }
+    }
+
+    public static void cancelSchedulesByGroupKey(
+            Context context, String groupKey
+    ) throws AwesomeNotificationsException {
+        try (SQLiteSchedulesDB schedulesDB = _getPrimitiveDB(context)) {
+            schedulesDB.removeSchedulesByGroupKey(context, groupKey);
+        }
+    }
+
+    public static void cancelAllSchedules(
+            Context context
+    ) throws AwesomeNotificationsException {
+        try (SQLiteSchedulesDB schedulesDB = _getPrimitiveDB(context)) {
+            schedulesDB.removeAllSchedules(context);
+        }
     }
 
     public static AlarmManager getAlarmManager(Context context) {
@@ -144,102 +179,8 @@ public class ScheduleManager {
     }
 
     public static void commitChanges(Context context) throws AwesomeNotificationsException {
-        shared.commit(context);
-    }
-
-    private static boolean _setNotificationOnShared(Context context, String id, NotificationModel notificationModel) throws AwesomeNotificationsException {
-        return shared.set(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS, id, notificationModel);
-    }
-
-    private static boolean _removeNotificationFromShared(Context context, String targetId) throws AwesomeNotificationsException {
-        return shared.remove(context, Definitions.SHARED_SCHEDULED_NOTIFICATIONS, targetId);
-    }
-
-    private static boolean _setHelperId(Context context, String targetId, String channelKey, String groupKey){
-        StringUtils stringUtils = StringUtils.getInstance();
-
-        List<String> ids = _getHelper(context, Definitions.SCHEDULER_HELPER_ALL, "");
-        ids.add(targetId);
-        _updateHelper(context, Definitions.SCHEDULER_HELPER_ALL, "", ids);
-
-        if(!stringUtils.isNullOrEmpty(channelKey)){
-            List<String> channelIds = _getHelper(context, Definitions.SCHEDULER_HELPER_CHANNEL, channelKey);
-            channelIds.add(targetId);
-            _updateHelper(context, Definitions.SCHEDULER_HELPER_CHANNEL, channelKey, channelIds);
+        try (SQLiteSchedulesDB schedulesDB = _getPrimitiveDB(context)) {
+            schedulesDB.commit(context);
         }
-
-        if(!stringUtils.isNullOrEmpty(groupKey)){
-            List<String> groupIds = _getHelper(context, Definitions.SCHEDULER_HELPER_GROUP, groupKey);
-            groupIds.add(targetId);
-            _updateHelper(context, Definitions.SCHEDULER_HELPER_GROUP, groupKey, groupIds);
-        }
-
-        return true;
-    }
-
-    private static boolean _removeHelperId(Context context, String targetId, String channelKey, String groupKey){
-        StringUtils stringUtils = StringUtils.getInstance();
-
-        List<String> ids = _getHelper(context, Definitions.SCHEDULER_HELPER_ALL, "");
-        ids.remove(targetId);
-        _updateHelper(context, Definitions.SCHEDULER_HELPER_ALL, "", ids);
-
-        if(!stringUtils.isNullOrEmpty(channelKey)){
-            List<String> channelIds = _getHelper(context, Definitions.SCHEDULER_HELPER_CHANNEL, channelKey);
-            channelIds.remove(targetId);
-            _updateHelper(context, Definitions.SCHEDULER_HELPER_CHANNEL, channelKey, channelIds);
-        }
-
-        if(!stringUtils.isNullOrEmpty(groupKey)){
-            List<String> groupIds = _getHelper(context, Definitions.SCHEDULER_HELPER_GROUP, groupKey);
-            groupIds.remove(targetId);
-            _updateHelper(context, Definitions.SCHEDULER_HELPER_GROUP, groupKey, groupIds);
-        }
-
-        return true;
-    }
-
-    private static List<String> _getHelper(Context context, String type, String referenceKey){
-
-        SharedPreferences preferences = context.getSharedPreferences(
-                AwesomeNotifications.getPackageName(context) + Definitions.SCHEDULER_HELPER_SHARED + type,
-                Context.MODE_PRIVATE);
-
-        ArrayList<String> ids = new ArrayList<String>();
-        ids.addAll(preferences.getStringSet(referenceKey, new HashSet<String>()));
-
-        return ids;
-    }
-
-    private static void _updateHelper(Context context, String type, String referenceKey, List<String> ids){
-
-        SharedPreferences preferences = context.getSharedPreferences(
-                AwesomeNotifications.getPackageName(context) + Definitions.SCHEDULER_HELPER_SHARED + type,
-                Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putStringSet(referenceKey, new HashSet<String>(ids));
-        editor.apply();
-    }
-
-    private static void _removeHelper(Context context, String type, String referenceKey){
-
-        SharedPreferences preferences = context.getSharedPreferences(
-                AwesomeNotifications.getPackageName(context) + Definitions.SCHEDULER_HELPER_SHARED + type,
-                Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.remove(referenceKey);
-        editor.apply();
-    }
-
-    private static void _removeAllHelpers(Context context, String type){
-        SharedPreferences preferences = context.getSharedPreferences(
-                AwesomeNotifications.getPackageName(context) + Definitions.SCHEDULER_HELPER_SHARED + type,
-                Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.clear();
-        editor.apply();
     }
 }

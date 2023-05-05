@@ -1,30 +1,34 @@
 package me.carda.awesome_notifications.core.managers;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import me.carda.awesome_notifications.core.AwesomeNotifications;
 import me.carda.awesome_notifications.core.Definitions;
+import me.carda.awesome_notifications.core.databases.SQLitePrimitivesDB;
 import me.carda.awesome_notifications.core.enumerators.NotificationLayout;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
@@ -32,7 +36,7 @@ import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.core.models.NotificationModel;
 import me.carda.awesome_notifications.core.utils.StringUtils;
 
-public class StatusBarManager {
+public class StatusBarManager extends NotificationListenerService {
 
     private static final String TAG = "CancellationManager";
 
@@ -43,6 +47,16 @@ public class StatusBarManager {
     public final Map<String, List<String>> activeNotificationsChannel;
 
     // ************** SINGLETON PATTERN ***********************
+
+    public StatusBarManager(){
+        this.stringUtils = StringUtils.getInstance();
+        preferences = this.getSharedPreferences(
+                AwesomeNotifications.getPackageName(this) + "." + stringUtils.digestString(TAG),
+                Context.MODE_PRIVATE);
+
+        activeNotificationsGroup = loadNotificationIdFromPreferences("group");
+        activeNotificationsChannel = loadNotificationIdFromPreferences("channel");
+    }
 
     private static StatusBarManager instance;
 
@@ -519,5 +533,84 @@ public class StatusBarManager {
             }
         }
         return notifications;
+    }
+
+    @Override
+    public void onNotificationPosted(StatusBarNotification sbn) {
+        SQLitePrimitivesDB sqLitePrimitives = SQLitePrimitivesDB.getInstance(this);
+        int id = sbn.getNotification()
+                        .extras
+                        .getInt(Definitions.NOTIFICATION_ID);
+
+        sqLitePrimitives.setInt(
+                this,
+                Definitions.ACTIVE_NOTIFICATION_IDS,
+                Integer.toString(id),
+                id);
+    }
+
+    @Override
+    public void onNotificationRemoved(StatusBarNotification sbn) {
+        SQLitePrimitivesDB sqLitePrimitives = SQLitePrimitivesDB.getInstance(this);
+        int id = sbn.getNotification()
+                .extras
+                .getInt(Definitions.NOTIFICATION_ID);
+
+        sqLitePrimitives.removeInt(
+                this,
+                Definitions.ACTIVE_NOTIFICATION_IDS,
+                Integer.toString(id));
+    }
+
+    public Collection<Integer> getAllActiveNotificationIdsOnStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            List<Integer> activeIds = _getAllActiveIdsWithoutServices();
+            if (activeIds != null) return activeIds;
+        }
+
+        SQLitePrimitivesDB sqLitePrimitives = SQLitePrimitivesDB.getInstance(this);
+        return sqLitePrimitives.getAllIntValues(
+                this,
+                Definitions.ACTIVE_NOTIFICATION_IDS
+        ).values();
+    }
+
+    public boolean isNotificationActiveOnStatusBar(int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return getIsNotificationActiveWithoutServices(id);
+        }
+
+        SQLitePrimitivesDB sqLitePrimitives = SQLitePrimitivesDB.getInstance(this);
+        return sqLitePrimitives.getInt(
+                this,
+                Definitions.ACTIVE_NOTIFICATION_IDS,
+                Integer.toString(id),
+                -1
+        ) >= 0;
+    }
+
+    @Nullable
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private List<Integer> _getAllActiveIdsWithoutServices() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
+        List<Integer> activeIds = new ArrayList<>();
+        for (StatusBarNotification notification : activeNotifications) {
+            activeIds.add(notification.getId());
+        }
+        return activeIds;
+    }
+
+    @NotNull
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean getIsNotificationActiveWithoutServices(int id) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
+        for (StatusBarNotification notification : activeNotifications) {
+            if (notification.getId() == id) {
+                return true;
+            }
+        }
+        return false;
     }
 }

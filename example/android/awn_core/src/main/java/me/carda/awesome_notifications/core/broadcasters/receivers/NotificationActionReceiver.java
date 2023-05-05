@@ -96,48 +96,61 @@ public abstract class NotificationActionReceiver extends AwesomeBroadcastReceive
             switch (actionReceived.actionType){
 
                 case Default:
-                    BroadcastSender.sendBroadcastDefaultAction(
-                            context,
-                            actionReceived,
-                            onInitialization);
+                    BroadcastSender
+                            .getInstance()
+                            .sendBroadcastDefaultAction(
+                                    context,
+                                    actionReceived,
+                                    onInitialization);
                     break;
 
                 case KeepOnTop:
-                    if (appLifeCycle != NotificationLifeCycle.AppKilled)
-                        BroadcastSender.sendBroadcastBackgroundAction(
-                                context,
-                                actionReceived);
+                    if (appLifeCycle != NotificationLifeCycle.Terminated)
+                        BroadcastSender
+                                .getInstance()
+                                .sendBroadcastBackgroundAction(
+                                        context,
+                                        actionReceived);
                     else
-                        BroadcastSender.enqueueSilentAction(
-                                context,
-                                intent.getAction(),
-                                actionReceived,
-                                intent);
+                        BroadcastSender
+                                .getInstance()
+                                .enqueueSilentAction(
+                                        context,
+                                        intent.getAction(),
+                                        actionReceived,
+                                        intent);
                     break;
 
                 case SilentAction:
-                    if (appLifeCycle != NotificationLifeCycle.AppKilled)
-                        BroadcastSender.sendBroadcastSilentAction(
-                                context,
-                                actionReceived);
+                    if (appLifeCycle != NotificationLifeCycle.Terminated)
+                        BroadcastSender
+                                .getInstance()
+                                .sendBroadcastSilentAction(
+                                        context,
+                                        actionReceived);
                     else
-                        BroadcastSender.enqueueSilentAction(
-                                context,
-                                intent.getAction(),
-                                actionReceived,
-                                intent);
+                        BroadcastSender
+                                .getInstance()
+                                .enqueueSilentAction(
+                                        context,
+                                        intent.getAction(),
+                                        actionReceived,
+                                        intent);
                     break;
 
                 case SilentBackgroundAction:
-                    BroadcastSender.enqueueSilentBackgroundAction(
-                            context,
-                            intent.getAction(),
-                            actionReceived,
-                            intent);
+                    BroadcastSender
+                            .getInstance()
+                            .enqueueSilentBackgroundAction(
+                                    context,
+                                    intent.getAction(),
+                                    actionReceived,
+                                    intent);
                     break;
 
                 case DismissAction:
                     BroadcastSender
+                            .getInstance()
                             .sendBroadcastNotificationDismissed(
                                     context,
                                     actionReceived);

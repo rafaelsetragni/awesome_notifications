@@ -58,13 +58,13 @@ public class NotificationIntervalModel : NotificationScheduleModel {
     
     public func validate() throws {
         
-        if(IntUtils.isNullOrEmpty(interval) || interval! <= 5){
+        if(IntUtils.isNullOrEmpty(interval) || interval! < 5){
             throw ExceptionFactory
                 .shared
                 .createNewAwesomeException(
                     className: NotificationIntervalModel.TAG,
                     code: ExceptionCode.CODE_INVALID_ARGUMENTS,
-                    message: "Interval is required and must be greater than 5",
+                    message: "Interval is required and must be equal or greater than 5",
                     detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".notificationInterval.interval")
         }
 
