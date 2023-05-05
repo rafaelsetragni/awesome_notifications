@@ -314,8 +314,8 @@ void main() {
 
       expect(initialAction, isNotNull);
       expect(initialAction, isA<ReceivedAction>());
-      expect(initialAction!.id, 1);
-      expect(initialAction!.buttonKeyPressed, 'test_button_key');
+      expect(initialAction?.id, 1);
+      expect(initialAction?.buttonKeyPressed, 'test_button_key');
     });
 
     test('getGlobalBadgeCounter', () async {
@@ -385,7 +385,7 @@ void main() {
 
       mockMethodChannel.setMockMethodCallHandler(
           CHANNEL_METHOD_SET_LOCALIZATION, true);
-          
+
       try {
         await awesomeNotifications.initialize(
           'test_icon',
