@@ -6,8 +6,7 @@ void main() {
     late CronHelper cronHelper;
 
     setUp(() {
-      DateTime fixedNow = DateTime(2023, 05, 01, 12, 30, 15);
-      cronHelper = CronHelper.private(fixedNow: fixedNow);
+      cronHelper = CronHelper.private();
     });
 
     test('atDate', () {

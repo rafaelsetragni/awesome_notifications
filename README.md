@@ -1308,7 +1308,7 @@ Note that in this example, the showProgressNotification function creates a loop 
 
 # 😃 Emojis (Emoticons)
 
-You can use Emojis in your local notifications by concatenating the Emoji class with your text. For push notifications, you can use the Unicode text of the Emoji, which can be found on [http://www.unicode.org/emoji/charts/full-emoji-list.html](http://www.unicode.org/emoji/charts/full-emoji-list.html), and use the format \u{1f6f8}.
+You can use Emojis in your local notifications by concatenating the Emoji class with your text. For push notifications, you can use the Unicode text of the Emoji, which can be found on [http://www.unicode.org/emoji/charts/full-emoji-list.html](https://www.unicode.org/emoji/charts/full-emoji-list.html), and use the format \u{1f6f8}.
 
 Please note that not all Emojis work on all platforms. You should test the specific Emoji you want to use before using it in production.
 
