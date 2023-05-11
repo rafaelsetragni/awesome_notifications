@@ -1,9 +1,7 @@
-import 'package:awesome_notifications/awesome_notifications_method_channel.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  MethodChannelAwesomeNotifications platform = MethodChannelAwesomeNotifications();
   const MethodChannel channel = MethodChannel('awesome_notifications');
 
   TestWidgetsFlutterBinding.ensureInitialized();

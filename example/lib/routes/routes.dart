@@ -7,7 +7,6 @@ import 'package:awesome_notifications_example/pages/media_details_page.dart';
 import 'package:awesome_notifications_example/pages/notification_details_page.dart';
 import 'package:awesome_notifications_example/pages/home_page.dart';
 
-import '../main.dart';
 import '../notifications/notifications_controller.dart';
 
 const String PAGE_HOME = '/';

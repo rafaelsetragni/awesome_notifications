@@ -9,19 +9,34 @@
   <component name="ChangeListManager">
     <list default="true" id="90f153b2-27cc-4b8f-8201-8a3571b86189" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/version" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/version" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/enumerators/notification_life_cycle.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/enumerators/notification_life_cycle.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/helpers/cron_helper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/helpers/cron_helper.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/lcov.info" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/lcov.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main_complete.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main_complete.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/notifications/notifications_controller.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/pages/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/home_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/pages/media_details_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/pages/media_details_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/routes/routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/routes/routes.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/themes/themes_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/themes/themes_controller.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/helpers/cron_helper_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/helpers/cron_helper_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/awesome_notifications_method_channel_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/awesome_notifications_method_channel_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/models/notification_android_crontab_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/models/notification_android_crontab_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageOptionsProvider">
+    <option name="myAddOrReplace" value="0" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -74,7 +89,7 @@
     &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/GitHub/plugins/awesome_notifications_fcm&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;dart.settings&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
 }</component>
@@ -91,7 +106,7 @@
       <recent name="$PROJECT_DIR$/test/src/utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Flutter.Complete Example">
+  <component name="RunManager" selected="Flutter Test.Execute All Tests">
     <configuration name="Android debuger" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="awesome_notifications_android" />
       <option name="DEPLOY" value="true" />
@@ -156,9 +171,9 @@
       <option name="filePath" value="$PROJECT_DIR$/example/lib/main.dart" />
       <method v="2" />
     </configuration>
-    <configuration name="Deprecated Getters and Setters" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
-      <option name="testName" value="Deprecated Getters and Setters" />
-      <option name="testFile" value="$PROJECT_DIR$/test/src/models/base_notification_content_test.dart" />
+    <configuration name="Constructors and toMap" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testName" value="Constructors and toMap" />
+      <option name="testFile" value="$PROJECT_DIR$/test/src/models/notification_android_crontab_test.dart" />
       <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
@@ -190,19 +205,19 @@
       <item itemvalue="Android App.Android debuger" />
       <item itemvalue="Flutter.Simple Example" />
       <item itemvalue="Flutter.Complete Example" />
+      <item itemvalue="Flutter Test.Constructors and toMap" />
       <item itemvalue="Flutter Test.MethodChannelAwesomeNotifications" />
       <item itemvalue="Flutter Test.incrementGlobalBadgeCounter" />
       <item itemvalue="Flutter Test.fromMap" />
-      <item itemvalue="Flutter Test.Deprecated Getters and Setters" />
       <item itemvalue="Flutter Test.Execute All Tests" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Flutter Test.Execute All Tests" />
+        <item itemvalue="Flutter Test.Constructors and toMap" />
         <item itemvalue="Flutter Test.MethodChannelAwesomeNotifications" />
         <item itemvalue="Flutter Test.incrementGlobalBadgeCounter" />
-        <item itemvalue="Flutter Test.Execute All Tests" />
         <item itemvalue="Flutter Test.fromMap" />
-        <item itemvalue="Flutter Test.Deprecated Getters and Setters" />
       </list>
     </recent_temporary>
   </component>
@@ -274,6 +289,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="../../../../Documents/GitHub/plugins/awesome_notifications/coverage/lcov.info" NAME="tests in base_notification_content_test.dart Coverage Results" MODIFIED="1682905528671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="D:\GitHub\plugins\awesome_notifications\coverage\lcov.info" NAME="Execute All Tests Coverage Results" MODIFIED="1683249220394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="D:/GitHub/plugins/awesome_notifications/coverage/lcov.info" NAME="Execute All Tests Coverage Results" MODIFIED="1683249220394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

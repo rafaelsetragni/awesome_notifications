@@ -11,7 +11,9 @@ class ThemesController {
 
       primaryColor: App.mainColor,
       // ignore: deprecated_member_use
-      accentColor: Colors.blueGrey,
+      colorScheme: const ColorScheme.light().copyWith(
+        secondary: Colors.blueGrey,
+      ),
       canvasColor: Colors.white,
       focusColor: Colors.blueAccent,
       disabledColor: Colors.grey,
@@ -19,17 +21,12 @@ class ThemesController {
       backgroundColor: Colors.blueGrey.shade400,
 
       appBarTheme: AppBarTheme(
-          // ignore: deprecated_member_use
-          brightness: Brightness.dark,
           color: Colors.white,
           elevation: 0,
           iconTheme: IconThemeData(
             color: App.mainColor,
-          ),
-          // ignore: deprecated_member_use
-          textTheme: TextTheme(
-            headline6: TextStyle(color: App.mainColor, fontSize: 18),
-          )),
+          )
+      ),
 
       fontFamily: 'Robot',
 
