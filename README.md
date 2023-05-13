@@ -109,8 +109,8 @@ We are constantly working to improve Awesome Notifications and provide support f
 
 Help us improve and maintain our work with donations of any amount via Stripe or BuyMeACoffee. Your donation will mainly be used to purchase new devices and equipment, which we will use to test and ensure that our plugins work correctly on all platforms and their respective versions.
 
-<p dir="auto"><a href="https://donate.stripe.com/3cs14Yf79dQcbU4001" rel="nofollow"><em><img src="https://github.com/rafaelsetragni/awesome_notifications/raw/68c963206885290f8a44eee4bfc7e7b223610e4a/example/assets/readme/stripe.png?raw=true" alt="Donate With Stripe" style="max-width: 100%; border-radius:16px;"></em></a>
-<a href="https://www.buymeacoffee.com/rafaelsetragni" rel="nofollow"><em><img src="https://github.com/rafaelsetragni/awesome_notifications/raw/95ee986af0aa59ccf9a80959bbf3dd60b5a4f048/example/assets/readme/buy-me-a-coffee.jpeg?raw=true" alt="Donate With Buy Me A Coffee" style="max-width: 100%; border-radius:16px;"></em></a></p>
+[*![Donate With Stripe](https://github.com/rafaelsetragni/awesome_notifications/blob/68c963206885290f8a44eee4bfc7e7b223610e4a/example/assets/readme/stripe.png?raw=true)*](https://donate.stripe.com/3cs14Yf79dQcbU4001)
+[*![Donate With Buy Me A Coffee](https://github.com/rafaelsetragni/awesome_notifications/blob/95ee986af0aa59ccf9a80959bbf3dd60b5a4f048/example/assets/readme/buy-me-a-coffee.jpeg?raw=true)*](https://www.buymeacoffee.com/rafaelsetragni)
     
 <br>
 <br>
