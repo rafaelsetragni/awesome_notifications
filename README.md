@@ -15,6 +15,27 @@
 
 Engage your users with custom local and push notifications on Flutter. Get real-time events and never miss a user interaction with Awesome Notifications.
 
+<br>
+<br>
+
+---
+
+# 🔺 Disclaimer 🔺
+
+This version is currently in its ***pre-release*** stage. That means it's under active development, and the features, functionality, and implementation details are subject to change.
+
+While we're doing our best to ensure a smooth experience, you might encounter bugs or issues that we haven't yet identified. We highly encourage users to provide feedback, report bugs, or make feature suggestions to help us improve.
+
+If you're interested in contributing to this project's development and want to have an impact on its future, we'd love for you to join our beta testing program at:
+[https://discord.com/channels/888523488376279050/933445281243082772](https://discord.com/channels/888523488376279050/933445281243082772)
+
+By joining the beta testing program, you can help us make this project the best it can be. We appreciate your interest and support, and we look forward to seeing you on Discord!
+
+---
+
+<br>
+<br>
+
 ### **Key Features:**
 
 * **Create custom notifications:** Use Awesome Notifications to easily create and customize local and push notifications for your Flutter app.
@@ -128,6 +149,7 @@ Stay up to date with new updates and get community support by subscribing to our
 # 📙 Table of Contents
 
 - [Awesome Notifications for Flutter](#awesome-notifications-for-flutter)
+- [🔺 Disclaimer 🔺](#-disclaimer-)
     - [**Key Features:**](#key-features)
   - [Notification Types Available](#notification-types-available)
 - [🛑 ATTENTION - PLUGIN UNDER DEVELOPMENT](#-attention---plugin-under-development)
