@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
@@ -96,10 +98,9 @@ void main() {
               scale: 2.0, awesomeNotifications: awesomeNotifications);
           return resourceImage.loadAsync(
               resourceImage,
-              (buffer,
-                      {int? cacheWidth,
-                      int? cacheHeight,
-                      bool allowUpscaling = true}) =>
+              (buffer, {
+                TargetImageSizeCallback? getTargetSize,
+              }) =>
                   Future.value(MockCodec()));
         },
         throwsA(isA<AwesomeNotificationsException>()),

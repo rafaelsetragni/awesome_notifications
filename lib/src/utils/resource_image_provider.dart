@@ -12,7 +12,7 @@ import '../../awesome_notifications.dart';
 /// The provided [bytes] buffer should not be changed after it is provided
 /// to a [ResourceImage]. To provide an [ImageStream] that represents an image
 /// that changes over time, consider creating a new subclass of [ImageProvider]
-/// whose [loadBuffer] method returns a subclass of [ImageStreamCompleter] that can
+/// whose [loadImage] method returns a subclass of [ImageStreamCompleter] that can
 /// handle providing multiple images.
 ///
 /// See also:
@@ -38,9 +38,8 @@ class ResourceImage extends ImageProvider<ResourceImage> {
   }
 
   @override
-  @protected
-  ImageStreamCompleter loadBuffer(
-      ResourceImage key, DecoderBufferCallback decode) {
+  ImageStreamCompleter loadImage(
+      ResourceImage key, ImageDecoderCallback decode) {
     return MultiFrameImageStreamCompleter(
       codec: loadAsync(key, decode),
       scale: key.scale,
@@ -49,7 +48,7 @@ class ResourceImage extends ImageProvider<ResourceImage> {
 
   @visibleForTesting
   Future<ui.Codec> loadAsync(
-      ResourceImage key, DecoderBufferCallback decode) async {
+      ResourceImage key, ImageDecoderCallback decode) async {
     assert(key == this);
     Uint8List? bytes = await (_awesomeNotifications ?? AwesomeNotifications())
         .getDrawableData(drawablePath);
