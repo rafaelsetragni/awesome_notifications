@@ -127,7 +127,7 @@ public class SwiftAwesomeNotificationsPlugin:
 				
 				case Definitions.CHANNEL_METHOD_INITIALIZE:
                     try channelMethodInitialize(call: call, result: result)
-					return
+                    return
                 
                 case Definitions.CHANNEL_METHOD_SET_EVENTS_HANDLES:
                     try channelMethodSetEventsHandle(call: call, result: result)
@@ -323,8 +323,8 @@ public class SwiftAwesomeNotificationsPlugin:
                 .init(bytes: data))
     }
     
-    private func channelMethodSetChannel(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
-		guard let channelData:[String:Any?] = call.arguments as? [String:Any?]
+    private func channelMethodSetChannel(call: FlutterMethodCall, result: @escaping FlutterResult) throws {                
+		guard let channel = NotificationChannelModel(fromMap: call.arguments as? [String:Any?])
         else {
             throw ExceptionFactory
                     .shared
@@ -333,12 +333,6 @@ public class SwiftAwesomeNotificationsPlugin:
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Channel data is invalid",
                         detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.data")
-        }
-                
-		guard let channel = NotificationChannelModel(fromMap: channelData)
-        else {
-            result(false)
-            return
         }
 		
         let updated = awesomeNotifications?
