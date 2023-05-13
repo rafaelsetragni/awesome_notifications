@@ -10,7 +10,20 @@
     <list default="true" id="90f153b2-27cc-4b8f-8201-8a3571b86189" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/utils/resource_image_provider_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/utils/resource_image_provider_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis_options.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/analysis_options.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/awesome_method_channel_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/awesome_method_channel_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/awesome_notifications_method_channel_test.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/definitions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/definitions.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/enumerators/media_source_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/enumerators/media_source_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/enumerators/notification_life_cycle_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/enumerators/notification_life_cycle_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/extensions/navigator_extension_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/extensions/navigator_extension_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/models/base_notification_content_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/models/base_notification_content_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/models/model_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/models/model_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/models/notificaton_button_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/models/notificaton_button_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/models/received_models/push_notificaton_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/models/received_models/push_notificaton_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -245,19 +258,9 @@
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/test/src/models/base_notification_content_test.dart</url>
-          <line>1029</line>
-          <option name="timeStamp" value="50" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/src/models/base_notification_content.dart</url>
           <line>276</line>
           <option name="timeStamp" value="55" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/test/awesome_method_channel_test.dart</url>
-          <line>412</line>
-          <option name="timeStamp" value="56" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -273,5 +276,6 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="../../../../Documents/GitHub/plugins/awesome_notifications/coverage/lcov.info" NAME="tests in base_notification_content_test.dart Coverage Results" MODIFIED="1682905528671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="D:/GitHub/plugins/awesome_notifications/coverage/lcov.info" NAME="Execute All Tests Coverage Results" MODIFIED="1683249220394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="../../../../Documents/GitHub/plugins/awesome_notifications/coverage/lcov.info" NAME="Execute All Tests Coverage Results" MODIFIED="1684004914566" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

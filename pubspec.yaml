@@ -4,7 +4,7 @@ version: 0.7.5-dev.2
 repository: https://github.com/rafaelsetragni/awesome_notifications
 
 environment:
-  sdk: '>=2.19.0 <3.0.0'
+  sdk: '>=2.19.0 <4.0.0'
   flutter: ">=2.5.0"
 
 dependencies:

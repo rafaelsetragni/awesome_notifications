@@ -14,7 +14,7 @@ import 'src/isolates/isolate_main_test.dart';
 class MockMethodChannel extends MethodChannel {
   MockMethodChannel(String name) : super(name);
 
-  Map<String, dynamic> _responses = {};
+  final Map<String, dynamic> _responses = {};
 
   // Use this method to set up the response for the method call
   void setMockMethodCallHandler(String methodName, dynamic response) {
@@ -23,7 +23,7 @@ class MockMethodChannel extends MethodChannel {
 
   @override
   Future<T?> invokeMethod<T>(String method, [dynamic arguments]) async {
-    var response;
+    T? response;
     if (_responses[method] is Function) {
       dynamic handler = _responses[method];
       if (handler is T Function(T)) {
@@ -340,7 +340,7 @@ void main() {
 
     test('getNextDate', () async {
       DateTime fixedDate = DateTime(2023, 5, 3);
-      DateTime expectedNextDate = fixedDate.add(Duration(days: 1));
+      DateTime expectedNextDate = fixedDate.add(const Duration(days: 1));
 
       mockMethodChannel.setMockMethodCallHandler(CHANNEL_METHOD_GET_NEXT_DATE,
           AwesomeDateUtils.parseDateToString(expectedNextDate));

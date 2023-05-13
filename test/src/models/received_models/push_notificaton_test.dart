@@ -26,6 +26,7 @@ void main() {
         ),
       ];
 
+      // ignore: deprecated_member_use_from_same_package
       PushNotification pushNotification = PushNotification(
         content: content,
         schedule: schedule,

@@ -12,8 +12,8 @@ void main() {
         navigatorKey: navigatorKey,
         initialRoute: '/',
         routes: {
-          '/': (context) => Text('Home'),
-          '/second': (context) => Text('Second'),
+          '/': (context) => const Text('Home'),
+          '/second': (context) => const Text('Second'),
         },
       ));
 
@@ -32,8 +32,8 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => Text('Home'),
-          '/second': (context) => Text('Second'),
+          '/': (context) => const Text('Home'),
+          '/second': (context) => const Text('Second'),
         },
       ));
 
@@ -52,8 +52,8 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => Text('Home'),
-          '/second': (context) => Text('Second'),
+          '/': (context) => const Text('Home'),
+          '/second': (context) => const Text('Second'),
         },
       ));
 

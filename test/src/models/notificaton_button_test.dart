@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 
+// ignore_for_file: deprecated_member_use_from_same_package
+
 void main() {
   group('NotificationActionButton', () {
     test('toMap and fromMap should work properly', () {

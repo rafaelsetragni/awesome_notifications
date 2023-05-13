@@ -5,3 +5,4 @@ include: package:flutter_lints/flutter.yaml
 linter:
   rules:
     constant_identifier_names: false
+    deprecated_member_use_from_same_package: false

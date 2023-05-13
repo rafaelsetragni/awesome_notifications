@@ -15,7 +15,7 @@ void main() {
     });
 
     test('MediaSourcePrefix index is set correctly', () {
-      expect(MediaSourcePrefix(1).value, 1);
+      expect(const MediaSourcePrefix(1).value, 1);
     });
   });
 }
