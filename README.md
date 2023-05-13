@@ -1,6 +1,10 @@
 
 # Awesome Notifications for Flutter
 
+<style>
+em > img { border-radius:16px; }
+</style>
+
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications.jpg)
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#)
@@ -109,8 +113,8 @@ We are constantly working to improve Awesome Notifications and provide support f
 
 Help us improve and maintain our work with donations of any amount via Stripe or BuyMeACoffee. Your donation will mainly be used to purchase new devices and equipment, which we will use to test and ensure that our plugins work correctly on all platforms and their respective versions.
 
-[![Donate With Stripe](https://github.com/rafaelsetragni/awesome_notifications/blob/68c963206885290f8a44eee4bfc7e7b223610e4a/example/assets/readme/stripe.png?raw=true)](https://donate.stripe.com/3cs14Yf79dQcbU4001)
-[![Donate With Buy Me A Coffee](https://github.com/rafaelsetragni/awesome_notifications/blob/95ee986af0aa59ccf9a80959bbf3dd60b5a4f048/example/assets/readme/buy-me-a-coffee.jpeg?raw=true)](https://www.buymeacoffee.com/rafaelsetragni)
+[*![Donate With Stripe](https://github.com/rafaelsetragni/awesome_notifications/blob/68c963206885290f8a44eee4bfc7e7b223610e4a/example/assets/readme/stripe.png?raw=true)*](https://donate.stripe.com/3cs14Yf79dQcbU4001)
+[*![Donate With Buy Me A Coffee](https://github.com/rafaelsetragni/awesome_notifications/blob/95ee986af0aa59ccf9a80959bbf3dd60b5a4f048/example/assets/readme/buy-me-a-coffee.jpeg?raw=true)*](https://www.buymeacoffee.com/rafaelsetragni)
     
 <br>
 <br>
@@ -119,7 +123,7 @@ Help us improve and maintain our work with donations of any amount via Stripe or
 
 Stay up to date with new updates and get community support by subscribing to our Discord chat server:
 
-[![Discord Banner 3](https://discordapp.com/api/guilds/888523488376279050/widget.png?style=banner3)](https://discord.awesome-notifications.carda.me)
+[*![Discord Banner 3](https://discordapp.com/api/guilds/888523488376279050/widget.png?style=banner3)*](https://discord.awesome-notifications.carda.me)
 
 <br>
 <br>
@@ -300,11 +304,12 @@ To use Awesome Notifications and build your app correctly, you need to ensure to
 In *Runner* Target:
 * Build libraries for distribution => NO
 * Only safe API extensions => NO
-* iOS Deployment Target => 11 or greater
+* iOS Deployment Target => 13 or greater
 
 In *all other* Targets:
 * Build libraries for distribution => NO
 * Only safe API extensions => YES
+* iOS Deployment Target => 13 or greater
 
 <br>
 <br>
@@ -1775,3 +1780,4 @@ If the icon of the notification is not set or not valid, the notification will a
 
 ### Foreground Services behaviour on platforms other than Android
 On any platform other then Android, all foreground service methods are no-ops (they do nothing when called), so you don't need to do a platform check before calling them.
+
