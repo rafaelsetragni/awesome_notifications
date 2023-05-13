@@ -5,5 +5,7 @@ enum NotificationLifeCycle {
   Terminated;
 
   @Deprecated('AppKilled is deprecated, use Terminated instead')
-  static get AppKilled => NotificationLifeCycle.Terminated;
+  // ignore: non_constant_identifier_names
+  static NotificationLifeCycle get AppKilled =>
+      NotificationLifeCycle.Terminated;
 }

@@ -26,6 +26,7 @@ void main() {
       // Test daily constructor
       NotificationAndroidCrontab crontabDaily =
           NotificationAndroidCrontab.daily(referenceDateTime: referenceDate);
+      expect(crontabDaily.crontabExpression, '0 30 14 * * ? *');
       // Check if crontabDaily has a crontabExpression
 
       // Test other constructors similarly...

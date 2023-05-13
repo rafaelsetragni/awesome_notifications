@@ -1,3 +1,8 @@
+## [0.7.5-dev.2]
+### Fixed
+* Replaces local references from development repositories to online versions
+* Updates and improves documentation due new pub.dev requirements
+
 ## [0.7.5-dev.1]
 ### Added
 * Added translation feature to notifications based on app configurations or custom configurations

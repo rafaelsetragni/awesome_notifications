@@ -2,19 +2,39 @@
 # Awesome Notifications for Flutter
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications.jpg)
-<div>
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#)
 [![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#)
-[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source-175x29.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
+[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.awesome-notifications.carda.me)
 
-[![Discord Shield](https://discordapp.com/api/guilds/888523488376279050/widget.png?style=shield)](https://discord.awesome-notifications.carda.me)
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](#)
 [![pub package](https://img.shields.io/pub/v/awesome_notifications.svg)](https://pub.dev/packages/awesome_notifications)
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=hotfix)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/hotfix/graph/badge.svg)
 
 
 Engage your users with custom local and push notifications on Flutter. Get real-time events and never miss a user interaction with Awesome Notifications.
+
+<br>
+<br>
+
+---
+
+# 🔺 Disclaimer 🔺
+
+This version is currently in its ***pre-release*** stage. That means it's under active development, and the features, functionality, and implementation details are subject to change.
+
+While we're doing our best to ensure a smooth experience, you might encounter bugs or issues that we haven't yet identified. We highly encourage users to provide feedback, report bugs, or make feature suggestions to help us improve.
+
+If you're interested in contributing to this project's development and want to have an impact on its future, we'd love for you to join our beta testing program at:
+[https://discord.com/channels/888523488376279050/933445281243082772](https://discord.com/channels/888523488376279050/933445281243082772)
+
+By joining the beta testing program, you can help us make this project the best it can be. We appreciate your interest and support, and we look forward to seeing you on Discord!
+
+---
+
+<br>
+<br>
 
 ### **Key Features:**
 
@@ -29,12 +49,14 @@ Engage your users with custom local and push notifications on Flutter. Get real-
 <br>
 
 ***Android** notification examples:*
+
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-android-examples.jpg)
 
 
 <br>
 
 ***iOS** notification examples:*
+
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-ios-examples.jpg)
 
 
@@ -104,15 +126,12 @@ We are constantly working to improve Awesome Notifications and provide support f
 <br>
 <br>
 
-# 💰 Donate via PayPal or BuyMeACoffee
+# 💰 Donate via Stripe or BuyMeACoffee
 
-Help us improve and maintain our work with donations of any amount via PayPal or BuyMeACoffee. Your donation will mainly be used to purchase new devices and equipment, which we will use to test and ensure that our plugins work correctly on all platforms and their respective versions.
+Help us improve and maintain our work with donations of any amount via Stripe or BuyMeACoffee. Your donation will mainly be used to purchase new devices and equipment, which we will use to test and ensure that our plugins work correctly on all platforms and their respective versions.
 
-<a href="https://www.paypal.com/donate/?business=9BKB6ZCQLLMZY&no_recurring=0&item_name=Help+us+to+improve+and+maintain+Awesome+Notifications+with+donations+of+any+amount.&currency_code=USD">
-  <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" width="250px"/>
-</a>
-    
-<a href="https://www.buymeacoffee.com/rafaelsetragni" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+[*![Donate With Stripe](https://github.com/rafaelsetragni/awesome_notifications/blob/68c963206885290f8a44eee4bfc7e7b223610e4a/example/assets/readme/stripe.png?raw=true)*](https://donate.stripe.com/3cs14Yf79dQcbU4001)
+[*![Donate With Buy Me A Coffee](https://github.com/rafaelsetragni/awesome_notifications/blob/95ee986af0aa59ccf9a80959bbf3dd60b5a4f048/example/assets/readme/buy-me-a-coffee.jpeg?raw=true)*](https://www.buymeacoffee.com/rafaelsetragni)
     
 <br>
 <br>
@@ -130,13 +149,14 @@ Stay up to date with new updates and get community support by subscribing to our
 # 📙 Table of Contents
 
 - [Awesome Notifications for Flutter](#awesome-notifications-for-flutter)
+- [🔺 Disclaimer 🔺](#-disclaimer-)
     - [**Key Features:**](#key-features)
   - [Notification Types Available](#notification-types-available)
 - [🛑 ATTENTION - PLUGIN UNDER DEVELOPMENT](#-attention---plugin-under-development)
 - [🛑 ATTENTION  Users from flutter\_local\_notifications plugin](#-attention--users-from-flutter_local_notifications-plugin)
 - [🛑 ATTENTION  Users from firebase\_messaging plugin](#-attention--users-from-firebase_messaging-plugin)
 - [✅ Next steps](#-next-steps)
-- [💰 Donate via PayPal or BuyMeACoffee](#-donate-via-paypal-or-buymeacoffee)
+- [💰 Donate via Stripe or BuyMeACoffee](#-donate-via-stripe-or-buymeacoffee)
 - [💬 Discord Chat Server](#-discord-chat-server)
 - [📙 Table of Contents](#-table-of-contents)
 - [🔶 Main Philosophy](#-main-philosophy)
@@ -174,19 +194,20 @@ Stay up to date with new updates and get community support by subscribing to our
 - [🖥 Full Screen Notifications (only for Android)](#-full-screen-notifications-only-for-android)
 - [🏗 Notification Structures](#-notification-structures)
   - [NotificationContent ("content" in Push data) - (required)](#notificationcontent-content-in-push-data---required)
+  - [📝 Notification Content's Important Notes:](#-notification-contents-important-notes)
   - [NotificationActionButton ("actionButtons" in Push data) - (optional)](#notificationactionbutton-actionbuttons-in-push-data---optional)
   - [Schedules](#schedules)
     - [NotificationInterval ("schedule" in Push data) - (optional)](#notificationinterval-schedule-in-push-data---optional)
     - [NotificationCalendar ("schedule" in Push data) - (optional)](#notificationcalendar-schedule-in-push-data---optional)
     - [NotificationAndroidCrontab (Only for Android)("schedule" in Push data) - (optional)](#notificationandroidcrontab-only-for-androidschedule-in-push-data---optional)
 - [Common Known Issues](#common-known-issues)
-- [](#)
-- [](#-1)
-- [](#-2)
-- [](#-3)
-- [](#-4)
-- [](#-5)
-- [](#-6)
+  - [***Issue***: Targeting S+ (version 31 and above) requires that an explicit value for android:exported be defined when intent filters are present](#issue-targeting-s-version-31-and-above-requires-that-an-explicit-value-for-androidexported-be-defined-when-intent-filters-are-present)
+  - [***Issue***: Notification is not showing up or is showing up inconsistently.](#issue-notification-is-not-showing-up-or-is-showing-up-inconsistently)
+  - [***Issue:*** My schedules are only displayed immediately after I open my app](#issue-my-schedules-are-only-displayed-immediately-after-i-open-my-app)
+  - [***Issue***: DecoderBufferCallback not found / Uint8List not found](#issue-decoderbuffercallback-not-found--uint8list-not-found)
+  - [***Issue***: Using bridging headers with module interfaces is unsupported](#issue-using-bridging-headers-with-module-interfaces-is-unsupported)
+  - [***Issue***: Invalid notification content](#issue-invalid-notification-content)
+  - [***Issue***: Undefined symbol: OBJC\_CLASS$\_FlutterStandardTypedData / OBJC\_CLASS$\_FlutterError / OBJC\_CLASS$\_FlutterMethodChannel](#issue-undefined-symbol-objc_class_flutterstandardtypeddata--objc_class_fluttererror--objc_class_fluttermethodchannel)
 - [Android Foreground Services (Optional)](#android-foreground-services-optional)
     - [IMPORTANT](#important)
     - [Foreground Services behaviour on platforms other than Android](#foreground-services-behaviour-on-platforms-other-than-android)
@@ -301,11 +322,12 @@ To use Awesome Notifications and build your app correctly, you need to ensure to
 In *Runner* Target:
 * Build libraries for distribution => NO
 * Only safe API extensions => NO
-* iOS Deployment Target => 11 or greater
+* iOS Deployment Target => 13 or greater
 
 In *all other* Targets:
 * Build libraries for distribution => NO
 * Only safe API extensions => YES
+* iOS Deployment Target => 13 or greater
 
 <br>
 <br>
@@ -1308,7 +1330,7 @@ Note that in this example, the showProgressNotification function creates a loop 
 
 # 😃 Emojis (Emoticons)
 
-You can use Emojis in your local notifications by concatenating the Emoji class with your text. For push notifications, you can use the Unicode text of the Emoji, which can be found on [http://www.unicode.org/emoji/charts/full-emoji-list.html](http://www.unicode.org/emoji/charts/full-emoji-list.html), and use the format \u{1f6f8}.
+You can use Emojis in your local notifications by concatenating the Emoji class with your text. For push notifications, you can use the Unicode text of the Emoji, which can be found on [http://www.unicode.org/emoji/charts/full-emoji-list.html](https://www.unicode.org/emoji/charts/full-emoji-list.html), and use the format \u{1f6f8}.
 
 Please note that not all Emojis work on all platforms. You should test the specific Emoji you want to use before using it in production.
 
@@ -1615,7 +1637,8 @@ NotificationContent (
 
 # Common Known Issues
 
-***Issue***: Targeting S+ (version 31 and above) requires that an explicit value for android:exported be defined when intent filters are present
+
+## ***Issue***: Targeting S+ (version 31 and above) requires that an explicit value for android:exported be defined when intent filters are present
 
 ***Fix***: You need to add the attribute android:exported="true" to any <activity>, <activity-alias>, <service>, or <receiver> components that have <intent-filter> declared inside in the app’s AndroidManifest.xml file. This is necessary to comply with Android 12's new security requirements. However, manually adding this attribute to your plugin's local files can be risky as they can be modified or even erased by some flutter commands, such as "Pub clear cache".
 
@@ -1645,9 +1668,9 @@ To learn more about this issue and how to fix it, please visit [Android 12 - Saf
 
 <br>
 
-#
+---
 
-***Issue***: Notification is not showing up or is showing up inconsistently.
+## ***Issue***: Notification is not showing up or is showing up inconsistently.
 
 ***Fix***: This can happen due to various reasons such as channel not being registered properly, notification not being triggered at the right time due device battery optimization settings, and other ones.
 
@@ -1661,9 +1684,9 @@ To know more about it, please visit [Customize which resources to keep](https://
 
 <br>
 
-#
+---
 
-***Issue:*** My schedules are only displayed immediately after I open my app
+## ***Issue:*** My schedules are only displayed immediately after I open my app
 
 ***Fix:*** Your app or device is under battery saving mode restrictions. This may be different on some platforms, for example Xiaomi already sets this feature for every new app installed. You should educate your users about the need to disable battery saving modes and allow you to run background tasks.
 
@@ -1675,9 +1698,9 @@ To know more about it, please visit [flutter_background_fetch documentation](htt
 
 <br>
 
-#
+---
 
-***Issue***: DecoderBufferCallback not found / Uint8List not found
+## ***Issue***: DecoderBufferCallback not found / Uint8List not found
 
 ***Fix***: You need to update your Flutter version running `flutter upgrade`.
 
@@ -1685,9 +1708,9 @@ These methods were added/deprecated since version 2.12. If you are already on th
 
 <br>
 
-#
+---
 
-***Issue***: Using bridging headers with module interfaces is unsupported
+## ***Issue***: Using bridging headers with module interfaces is unsupported
 
 ***Fix***: You need to set `build settings` options below in your Runner target:
 * Build libraries for distribution => NO
@@ -1700,9 +1723,9 @@ These methods were added/deprecated since version 2.12. If you are already on th
 
 <br>
 
-#
+---
 
-***Issue***: Invalid notification content
+## ***Issue***: Invalid notification content
 
 ***Fix***: The notification sent via FCM services *MUST* respect the types of the respective Notification elements. Otherwise, your notification will be discarded as invalid one.
 Also, all the payload elements *MUST* be a String, as the same way as you do in Local Notifications using dart code.
@@ -1711,13 +1734,11 @@ To see more information about each type, please go to https://github.com/rafaels
 
 <br>
 
-#
+---
 
-***Issue***: Undefined symbol: OBJC_CLASS$_FlutterStandardTypedData / OBJC_CLASS$_FlutterError / OBJC_CLASS$_FlutterMethodChannel
+## ***Issue***: Undefined symbol: OBJC_CLASS$_FlutterStandardTypedData / OBJC_CLASS$_FlutterError / OBJC_CLASS$_FlutterMethodChannel
 
 ***Fix***: This error happens when the flutter dependecies are not copied to another target extensions. Please, remove the old target extensions and update your awesome_notification plugin to the last version available, modifying your pod file according and running `pod install` after it.
-
-#
 
 <br>
 <br>
@@ -1777,3 +1798,4 @@ If the icon of the notification is not set or not valid, the notification will a
 
 ### Foreground Services behaviour on platforms other than Android
 On any platform other then Android, all foreground service methods are no-ops (they do nothing when called), so you don't need to do a platform check before calling them.
+

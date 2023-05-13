@@ -337,10 +337,10 @@ class NotificationUtils {
       id: id,
       channelKey: 'basic_channel',
       category: NotificationCategory.Social,
-      title: 'Emojis are awesome too! ' +
-          Emojis.smile_face_with_tongue +
-          Emojis.smile_smiling_face +
-          Emojis.smile_smiling_face_with_heart_eyes,
+      title: 'Emojis are awesome too! '
+          '${Emojis.smile_face_with_tongue}'
+          '${Emojis.smile_smiling_face}'
+          '${Emojis.smile_smiling_face_with_heart_eyes}',
       body:
           'Simple body with a bunch of Emojis! ${Emojis.transport_police_car} ${Emojis.animals_dog} ${Emojis.flag_UnitedStates} ${Emojis.person_baby}',
       largeIcon: 'https://tecnoblog.net/wp-content/uploads/2019/09/emoji.jpg',
@@ -356,6 +356,7 @@ class NotificationUtils {
             id: id,
             channelKey: 'basic_channel',
             title: 'Simple notification',
+            summary: 'Simple subtitle',
             body: 'Only a simple notification',
             payload: {'uuid': 'uuid-test'}));
   }

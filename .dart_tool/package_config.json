@@ -3,403 +3,403 @@
   "packages": [
     {
       "name": "_fe_analyzer_shared",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/_fe_analyzer_shared-59.0.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-59.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "analyzer",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/analyzer-5.11.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/analyzer-5.11.1",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
       "name": "args",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/args-2.4.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/args-2.4.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "async",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/async-2.10.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/async-2.11.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "boolean_selector",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/boolean_selector-2.1.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/boolean_selector-2.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "build",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/build-2.3.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/build-2.3.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "built_collection",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/built_collection-5.1.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/built_collection-5.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "built_value",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/built_value-8.4.4",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/built_value-8.4.4",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "characters",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/characters-1.2.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/characters-1.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "clock",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/clock-1.1.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/clock-1.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "code_builder",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/code_builder-4.4.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/code_builder-4.4.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "collection",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/collection-1.17.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/collection-1.17.1",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "convert",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/convert-3.1.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/convert-3.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "coverage",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/coverage-1.6.3",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/coverage-1.6.3",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "crypto",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/crypto-3.0.2",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/crypto-3.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
     {
       "name": "dart_style",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/dart_style-2.3.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/dart_style-2.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
       "name": "fake_async",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/fake_async-1.3.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/fake_async-1.3.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "file",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/file-6.1.4",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/file-6.1.4",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "fixnum",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/fixnum-1.1.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/fixnum-1.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
       "name": "flutter",
-      "rootUri": "file:///D:/flutter/packages/flutter",
+      "rootUri": "file:///Users/rafaelsetragni/Development/flutter/packages/flutter",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.0"
     },
     {
       "name": "flutter_lints",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-2.0.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/flutter_lints-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///D:/flutter/packages/flutter_test",
+      "rootUri": "file:///Users/rafaelsetragni/Development/flutter/packages/flutter_test",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.0"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///D:/flutter/packages/flutter_web_plugins",
+      "rootUri": "file:///Users/rafaelsetragni/Development/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.0"
     },
     {
       "name": "frontend_server_client",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/frontend_server_client-3.2.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/frontend_server_client-3.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "glob",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/glob-2.1.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/glob-2.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
     {
       "name": "http_multi_server",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/http_multi_server-3.2.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/http_multi_server-3.2.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "http_parser",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.0.2",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/http_parser-4.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "intl",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.18.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/intl-0.18.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "io",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/io-1.0.4",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/io-1.0.4",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "js",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/js-0.6.5",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/js-0.6.7",
       "packageUri": "lib/",
-      "languageVersion": "2.16"
+      "languageVersion": "2.19"
     },
     {
       "name": "lints",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/lints-2.0.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/lints-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "logging",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/logging-1.1.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/logging-1.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "matcher",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/matcher-0.12.13",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/matcher-0.12.15",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "material_color_utilities",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/material_color_utilities-0.2.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/material_color_utilities-0.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.13"
     },
     {
       "name": "meta",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/meta-1.8.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/meta-1.9.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "mime",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/mime-1.0.4",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/mime-1.0.4",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "mockito",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/mockito-5.4.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/mockito-5.4.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "mocktail",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/mocktail-0.3.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/mocktail-0.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "node_preamble",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/node_preamble-2.0.2",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/node_preamble-2.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "package_config",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/package_config-2.1.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/package_config-2.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "path",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.8.2",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/path-1.8.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "plugin_platform_interface",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.3",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.4",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.17"
     },
     {
       "name": "pool",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/pool-1.5.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/pool-1.5.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "pub_semver",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/pub_semver-2.1.3",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/pub_semver-2.1.3",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "shelf",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/shelf-1.4.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/shelf-1.4.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "shelf_packages_handler",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_packages_handler-3.0.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/shelf_packages_handler-3.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
     {
       "name": "shelf_static",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_static-1.1.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/shelf_static-1.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
     {
       "name": "shelf_web_socket",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/shelf_web_socket-1.0.3",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/shelf_web_socket-1.0.3",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///D:/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///Users/rafaelsetragni/Development/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.0"
     },
     {
       "name": "source_gen",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/source_gen-1.2.7",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/source_gen-1.2.7",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "source_map_stack_trace",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/source_map_stack_trace-2.1.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/source_map_stack_trace-2.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "source_maps",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/source_maps-0.10.12",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/source_maps-0.10.12",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "source_span",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/source_span-1.9.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/source_span-1.9.1",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
     {
       "name": "stack_trace",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/stack_trace-1.11.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/stack_trace-1.11.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "stream_channel",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/stream_channel-2.1.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/stream_channel-2.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
     {
       "name": "string_scanner",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/string_scanner-1.2.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/string_scanner-1.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "term_glyph",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/term_glyph-1.2.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/term_glyph-1.2.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "test",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/test-1.22.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/test-1.24.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "test_api",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/test_api-0.4.16",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/test_api-0.5.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "test_core",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/test_core-0.4.20",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/test_core-0.5.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "typed_data",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/typed_data-1.3.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/typed_data-1.3.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "vector_math",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/vector_math-2.1.4",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/vector_math-2.1.4",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-9.4.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/vm_service-9.4.0",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
     {
       "name": "watcher",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/watcher-1.0.2",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/watcher-1.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
     {
       "name": "web_socket_channel",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/web_socket_channel-2.4.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/web_socket_channel-2.4.0",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
     {
       "name": "webkit_inspection_protocol",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/webkit_inspection_protocol-1.2.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/webkit_inspection_protocol-1.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "yaml",
-      "rootUri": "file:///C:/Users/rafae/AppData/Local/Pub/Cache/hosted/pub.dev/yaml-3.1.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/yaml-3.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -407,10 +407,10 @@
       "name": "awesome_notifications",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-05-05T11:25:57.967546Z",
+  "generated": "2023-05-12T23:08:44.939336Z",
   "generator": "pub",
-  "generatorVersion": "2.19.6"
+  "generatorVersion": "3.0.0"
 }
