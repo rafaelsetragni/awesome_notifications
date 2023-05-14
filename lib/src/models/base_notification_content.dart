@@ -224,8 +224,8 @@ class BaseNotificationContent extends Model {
         NOTIFICATION_CHANNEL_KEY, mapData);
     _groupKey = AwesomeAssertUtils.extractValue<String>(
         NOTIFICATION_GROUP_KEY, mapData);
-    _actionType = AwesomeAssertUtils.extractValue<ActionType>(
-        NOTIFICATION_ACTION_TYPE, mapData);
+    _actionType = AwesomeAssertUtils.extractEnum<ActionType>(
+        NOTIFICATION_ACTION_TYPE, mapData, ActionType.values);
     _title =
         AwesomeAssertUtils.extractValue<String>(NOTIFICATION_TITLE, mapData);
     _body = AwesomeAssertUtils.extractValue<String>(NOTIFICATION_BODY, mapData);

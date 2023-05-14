@@ -1,5 +1,12 @@
 include ':app'
-include ':awn_core'
+
+def useAwnLocalReferences = false
+if (useAwnLocalReferences) {
+    include ':awn_core'
+    def localAndroidCoreFolder = new File(rootDir, "../../../AndroidAwnCore/core")
+    assert localAndroidCoreFolder.exists()
+    project(":awn_core").projectDir=localAndroidCoreFolder
+}
 
 def localPropertiesFile = new File(rootProject.projectDir, "local.properties")
 def properties = new Properties()

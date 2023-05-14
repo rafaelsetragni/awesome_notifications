@@ -1,3 +1,9 @@
+## [0.7.5-dev.2+1]
+### Improved
+* Android core dependencies moved to new repository 
+* Added new native module switcher to avoid the folder copy at example/android folder.
+* Added new test cases for actionType property
+
 ## [0.7.5-dev.2]
 ### Fixed
 * Replaces local references from development repositories to online versions

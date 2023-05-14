@@ -641,6 +641,38 @@ void main() {
             reason: '$failureReason: non-string value');
       });
 
+      test('actionType field fromMap', () {
+        String failureReason =
+            'The actionType field was not correctly imported from a map';
+        String? defaultValue =
+            Definitions.initialValues[NOTIFICATION_CHANNEL_KEY] as String?;
+
+        expect(
+            BaseNotificationContent().fromMap(
+                {NOTIFICATION_ACTION_TYPE: 'SilentAction'})?.actionType,
+            ActionType.SilentAction,
+            reason: '$failureReason: normal string value');
+
+        expect(
+            BaseNotificationContent().fromMap({
+              NOTIFICATION_ACTION_TYPE: 'SilentBackgroundAction'
+            })?.actionType,
+            ActionType.SilentBackgroundAction,
+            reason: '$failureReason: normal string value');
+
+        expect(
+            BaseNotificationContent().fromMap(
+                {NOTIFICATION_ACTION_TYPE: 'DisabledAction'})?.actionType,
+            ActionType.DisabledAction,
+            reason: '$failureReason: normal string value');
+
+        expect(
+            BaseNotificationContent().fromMap(
+                {NOTIFICATION_ACTION_TYPE: 'DismissAction'})?.actionType,
+            ActionType.DismissAction,
+            reason: '$failureReason: normal string value');
+      });
+
       test('groupKey field fromMap', () {
         String failureReason =
             'The groupKey field was not correctly imported from a map';
