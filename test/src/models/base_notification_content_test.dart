@@ -644,9 +644,6 @@ void main() {
       test('actionType field fromMap', () {
         String failureReason =
             'The actionType field was not correctly imported from a map';
-        String? defaultValue =
-            Definitions.initialValues[NOTIFICATION_CHANNEL_KEY] as String?;
-
         expect(
             BaseNotificationContent().fromMap(
                 {NOTIFICATION_ACTION_TYPE: 'SilentAction'})?.actionType,
