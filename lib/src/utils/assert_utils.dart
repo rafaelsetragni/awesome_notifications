@@ -149,9 +149,7 @@ class AwesomeAssertUtils {
         Duration? duration;
         if (value is String) duration = Duration(seconds: int.parse(value));
         if (value is int) duration = Duration(seconds: value);
-        return (duration?.inSeconds ?? -1) < 0
-            ? defaultValue
-            : duration;
+        return (duration?.inSeconds ?? -1) < 0 ? defaultValue : duration;
 
       case bool:
         if (value == null) return defaultValue;

@@ -1,5 +1,5 @@
-import 'dart:ui';
 import 'dart:developer' as developer;
+import 'dart:ui';
 
 import 'package:awesome_notifications/src/definitions.dart';
 import 'package:awesome_notifications/src/enumerators/action_type.dart';
