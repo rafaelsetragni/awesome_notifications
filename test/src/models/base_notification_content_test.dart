@@ -426,12 +426,13 @@ void main() {
             BaseNotificationContent(timeoutAfter: const Duration(seconds: 1))
                 .toMap()[NOTIFICATION_TIMEOUT_AFTER],
             1,
-            reason: '$failureReason: zero value');
+            reason: '$failureReason: minimal positive value');
         expect(
             BaseNotificationContent(timeoutAfter: const Duration(seconds: 0))
                 .toMap()[NOTIFICATION_TIMEOUT_AFTER],
-            null,
-            reason: '$failureReason: zero or negative value');
+            0,
+            reason: '$failureReason: zero value returning valid duration');
+
         expect(
             BaseNotificationContent(timeoutAfter: const Duration(seconds: -1))
                 .toMap()[NOTIFICATION_TIMEOUT_AFTER],
@@ -1158,8 +1159,8 @@ void main() {
         expect(
             BaseNotificationContent()
                 .fromMap({NOTIFICATION_TIMEOUT_AFTER: 0})?.timeoutAfter,
-            null,
-            reason: '$failureReason: valid value in string form');
+            Duration.zero,
+            reason: '$failureReason: zero value returning valid duration');
 
         expect(
             BaseNotificationContent()
