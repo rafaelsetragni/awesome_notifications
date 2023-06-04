@@ -418,27 +418,27 @@ void main() {
             Definitions.initialValues[NOTIFICATION_TIMEOUT_AFTER] as int?;
 
         expect(
-            BaseNotificationContent(timeoutAfter: 1000)
+            BaseNotificationContent(timeoutAfter: const Duration(seconds: 1000))
                 .toMap()[NOTIFICATION_TIMEOUT_AFTER],
             1000,
             reason: '$failureReason: positive value');
         expect(
-            BaseNotificationContent(timeoutAfter: 1)
+            BaseNotificationContent(timeoutAfter: const Duration(seconds: 1))
                 .toMap()[NOTIFICATION_TIMEOUT_AFTER],
             1,
             reason: '$failureReason: zero value');
         expect(
-            BaseNotificationContent(timeoutAfter: 0)
+            BaseNotificationContent(timeoutAfter: const Duration(seconds: 0))
                 .toMap()[NOTIFICATION_TIMEOUT_AFTER],
             null,
             reason: '$failureReason: zero or negative value');
         expect(
-            BaseNotificationContent(timeoutAfter: -1)
+            BaseNotificationContent(timeoutAfter: const Duration(seconds: -1))
                 .toMap()[NOTIFICATION_TIMEOUT_AFTER],
             null,
             reason: '$failureReason: zero or negative value');
         expect(
-            BaseNotificationContent(timeoutAfter: -1000)
+            BaseNotificationContent(timeoutAfter: const Duration(seconds: -1000))
                 .toMap()[NOTIFICATION_TIMEOUT_AFTER],
             null,
             reason: '$failureReason: zero or negative value');
@@ -1146,13 +1146,13 @@ void main() {
         expect(
             BaseNotificationContent()
                 .fromMap({NOTIFICATION_TIMEOUT_AFTER: 1000})?.timeoutAfter,
-            1000,
+            const Duration(seconds: 1000),
             reason: '$failureReason: positive value');
 
         expect(
             BaseNotificationContent()
                 .fromMap({NOTIFICATION_TIMEOUT_AFTER: '1000'})?.timeoutAfter,
-            1000,
+            const Duration(seconds: 1000),
             reason: '$failureReason: valid value in string form');
 
         expect(
