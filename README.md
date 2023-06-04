@@ -1524,6 +1524,8 @@ NotificationContent (
     largeIcon: String?, 
     bigPicture: String?, 
     autoDismissible: bool?, 
+    chronometer: Duration?, 
+    timeoutAfter: Duration?, 
     color: Color?, 
     backgroundColor: Color?, 
     payload: Map<String, String>?, 
@@ -1545,7 +1547,10 @@ NotificationContent (
 | summary               | NO       | A summary to be displayed when the notification content is protected by privacy                          | String                | Unlimited                 | -             |
 | category              | NO       | The notification category that best describes the nature of the notification (Android only)              | NotificationCategory  | -                         | -             |
 | badge                 | NO       | The value to display as the app's badge                                                                  | int                   | 0 - 999,999               | -             |
+| chronometer           | NO       | A duration to set the showWhen attribute of Android notifications to the amount of seconds to start      | Duration              | Positive integers         | -             |
+| timeoutAfter          | NO       | A duration to determine an expiration time limit for the notification to stay in the system tray         | Duration              | Positive integers         | -             |
 | showWhen              | NO       | Whether to show the time elapsed since the notification was posted                                       | bool                  | True or false             | true          |
+| chronometer           | NO       | Display how many seconds has                                        | bool                  | True or false             | true          |
 | displayOnForeground   | NO       | Whether to display the notification while the app is in the foreground (preserves streams)               | bool                  | True or false             | true          |
 | displayOnBackground   | NO       | Whether to display the notification while the app is in the background (preserves streams, Android only) | bool                  | True or false             | true          |
 | icon                  | NO       | The name of the small icon to display with the notification (Android only)                               | String                | A resource image          | -             |
