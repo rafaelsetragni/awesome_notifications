@@ -248,6 +248,7 @@ const NOTIFICATION_IMPORTANCE = 'importance';
 const NOTIFICATION_COLOR = 'color';
 const NOTIFICATION_DEFAULT_COLOR = 'defaultColor';
 const NOTIFICATION_BACKGROUND_COLOR = 'backgroundColor';
+const NOTIFICATION_CHRONOMETER = 'chronometer';
 const NOTIFICATION_TIMEOUT_AFTER = 'timeoutAfter';
 const NOTIFICATION_LARGE_ICON = 'largeIcon';
 const NOTIFICATION_BIG_PICTURE = 'bigPicture';
