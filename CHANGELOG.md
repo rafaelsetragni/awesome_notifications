@@ -1,3 +1,16 @@
+## [0.7.5-dev.3]
+### Added
+* Chronometer indicator for Android notifications
+### Fixed
+* Default app small icon fixed on Android
+* New field timeoutAfter exposed on NotificationContentModel constructor
+* Notification events changed to fire also for negative address
+* Filters to separate meta data from payload on iOS pushes changed to ignore local notifications
+* Order of recreation notification events changed on iOS to preserve expired lost events
+### Improved
+* iOS minimal deployment target decreased to 11
+* TimeoutAfter modified to use Duration, instead of integer values to represent seconds
+
 ## [0.7.5-dev.2+1]
 ### Improved
 * Android core dependencies moved to new repository 

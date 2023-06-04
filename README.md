@@ -185,6 +185,7 @@ Stay up to date with new updates and get community support by subscribing to our
   - [📝 Schedule Notification's Important Notes:](#-schedule-notifications-important-notes)
   - [Deprecated Schedule Class for Cron Rules (Versions Prior to 0.0.6)](#deprecated-schedule-class-for-cron-rules-versions-prior-to-006)
 - [🌎 Translation of Notification Content](#-translation-of-notification-content)
+- [⏱ Chronometer and Timeout (Expiration)](#-chronometer-and-timeout-expiration)
 - [⌛️ Progress Bar Notifications (Only for Android)](#️-progress-bar-notifications-only-for-android)
 - [😃 Emojis (Emoticons)](#-emojis-emoticons)
 - [🎨 Notification Layout Types](#-notification-layout-types)
@@ -322,12 +323,12 @@ To use Awesome Notifications and build your app correctly, you need to ensure to
 In *Runner* Target:
 * Build libraries for distribution => NO
 * Only safe API extensions => NO
-* iOS Deployment Target => 13 or greater
+* iOS Deployment Target => 11 or greater
 
 In *all other* Targets:
 * Build libraries for distribution => NO
 * Only safe API extensions => YES
-* iOS Deployment Target => 13 or greater
+* iOS Deployment Target => 11 or greater
 
 <br>
 <br>
@@ -1247,6 +1248,32 @@ await AwesomeNotifications().createNotification(
     ),
   }
 );
+```
+
+<br>
+<br>
+
+# ⏱ Chronometer and Timeout (Expiration)
+
+With Awesome Notifications, you can now set a chronometer and a timeout (expiration time) for your notifications.
+
+The `chronometer` field is a `Duration` type that sets the `showWhen` attribute of Android notifications to the amount of seconds to start. The `timeoutAfter` field, also a `Duration` type, determines an expiration time limit for the notification to stay in the system tray. After this period, the notification will automatically dismiss itself.
+
+Both fields are optional and when used with JSON data, should be positive integers representing the amount of seconds.
+
+Here is how you can set the `chronometer` and `timeoutAfter` in your notifications:
+
+```dart
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: id,
+          channelKey: 'basic_channel',
+          title: 'Notification with Chronometer and Timeout',
+          body: 'This notification will start with a chronometer and dismiss after 20 seconds',
+          chronometer: Duration.zero, // Chronometer starts to count at 0 seconds
+          timeoutAfter: Duration(seconds: 20) // Notification dismisses after 20 seconds
+      )
+  );
 ```
 
 <br>
