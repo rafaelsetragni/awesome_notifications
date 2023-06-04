@@ -185,6 +185,7 @@ Stay up to date with new updates and get community support by subscribing to our
   - [📝 Schedule Notification's Important Notes:](#-schedule-notifications-important-notes)
   - [Deprecated Schedule Class for Cron Rules (Versions Prior to 0.0.6)](#deprecated-schedule-class-for-cron-rules-versions-prior-to-006)
 - [🌎 Translation of Notification Content](#-translation-of-notification-content)
+- [⏱ Chronometer and Timeout (Expiration)](#-chronometer-and-timeout-expiration)
 - [⌛️ Progress Bar Notifications (Only for Android)](#️-progress-bar-notifications-only-for-android)
 - [😃 Emojis (Emoticons)](#-emojis-emoticons)
 - [🎨 Notification Layout Types](#-notification-layout-types)
@@ -322,12 +323,12 @@ To use Awesome Notifications and build your app correctly, you need to ensure to
 In *Runner* Target:
 * Build libraries for distribution => NO
 * Only safe API extensions => NO
-* iOS Deployment Target => 13 or greater
+* iOS Deployment Target => 11 or greater
 
 In *all other* Targets:
 * Build libraries for distribution => NO
 * Only safe API extensions => YES
-* iOS Deployment Target => 13 or greater
+* iOS Deployment Target => 11 or greater
 
 <br>
 <br>
@@ -1252,6 +1253,32 @@ await AwesomeNotifications().createNotification(
 <br>
 <br>
 
+# ⏱ Chronometer and Timeout (Expiration)
+
+With Awesome Notifications, you can now set a chronometer and a timeout (expiration time) for your notifications.
+
+The `chronometer` field is a `Duration` type that sets the `showWhen` attribute of Android notifications to the amount of seconds to start. The `timeoutAfter` field, also a `Duration` type, determines an expiration time limit for the notification to stay in the system tray. After this period, the notification will automatically dismiss itself.
+
+Both fields are optional and when used with JSON data, should be positive integers representing the amount of seconds.
+
+Here is how you can set the `chronometer` and `timeoutAfter` in your notifications:
+
+```dart
+  await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: id,
+          channelKey: 'basic_channel',
+          title: 'Notification with Chronometer and Timeout',
+          body: 'This notification will start with a chronometer and dismiss after 20 seconds',
+          chronometer: Duration.zero, // Chronometer starts to count at 0 seconds
+          timeoutAfter: Duration(seconds: 20) // Notification dismisses after 20 seconds
+      )
+  );
+```
+
+<br>
+<br>
+
 # ⌛️ Progress Bar Notifications (Only for Android)
 
 On Android, you can display a progress bar notification to show the progress of an ongoing task. To create a progress bar notification, you need to set the notification layout to ProgressBar and specify the progress value (between 0 and 100) or set it to indeterminate.
@@ -1497,6 +1524,8 @@ NotificationContent (
     largeIcon: String?, 
     bigPicture: String?, 
     autoDismissible: bool?, 
+    chronometer: Duration?, 
+    timeoutAfter: Duration?, 
     color: Color?, 
     backgroundColor: Color?, 
     payload: Map<String, String>?, 
@@ -1518,7 +1547,10 @@ NotificationContent (
 | summary               | NO       | A summary to be displayed when the notification content is protected by privacy                          | String                | Unlimited                 | -             |
 | category              | NO       | The notification category that best describes the nature of the notification (Android only)              | NotificationCategory  | -                         | -             |
 | badge                 | NO       | The value to display as the app's badge                                                                  | int                   | 0 - 999,999               | -             |
+| chronometer           | NO       | A duration to set the showWhen attribute of Android notifications to the amount of seconds to start      | Duration              | Positive integers         | -             |
+| timeoutAfter          | NO       | A duration to determine an expiration time limit for the notification to stay in the system tray         | Duration              | Positive integers         | -             |
 | showWhen              | NO       | Whether to show the time elapsed since the notification was posted                                       | bool                  | True or false             | true          |
+| chronometer           | NO       | Display how many seconds has                                        | bool                  | True or false             | true          |
 | displayOnForeground   | NO       | Whether to display the notification while the app is in the foreground (preserves streams)               | bool                  | True or false             | true          |
 | displayOnBackground   | NO       | Whether to display the notification while the app is in the background (preserves streams, Android only) | bool                  | True or false             | true          |
 | icon                  | NO       | The name of the small icon to display with the notification (Android only)                               | String                | A resource image          | -             |

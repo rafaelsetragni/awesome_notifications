@@ -15,7 +15,7 @@ Future<String> saveAssetOnDisk(ImageProvider image, String fileName) async {
   File newFile = File(filePath);
 
   if (!await newFile.exists()) {
-    BitmapHelper bitmapHelper = await BitmapHelper.fromProvider(image);
+    BitmapHelper bitmapHelper = await BitmapHelper.fromImageProvider(image);
     await newFile.writeAsBytes(bitmapHelper.content);
   }
 

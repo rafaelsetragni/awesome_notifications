@@ -134,7 +134,7 @@ class NotificationController {
                   children: [
                     Expanded(
                       child: Image.asset(
-                        'assets/animated-bell.gif',
+                        'assets/images/animated-bell.gif',
                         height: MediaQuery.of(context).size.height * 0.3,
                         fit: BoxFit.fitWidth,
                       ),
@@ -447,12 +447,10 @@ class NotificationPage extends StatefulWidget {
   final ReceivedAction receivedAction;
 
   @override
-  NotificationPageState createState() =>
-      NotificationPageState();
+  NotificationPageState createState() => NotificationPageState();
 }
 
 class NotificationPageState extends State<NotificationPage> {
-
   bool get hasTitle => widget.receivedAction.title?.isNotEmpty ?? false;
   bool get hasBody => widget.receivedAction.body?.isNotEmpty ?? false;
   bool get hasLargeIcon => widget.receivedAction.largeIconImage != null;
@@ -466,8 +464,10 @@ class NotificationPageState extends State<NotificationPage> {
   ScrollController scrollController = ScrollController();
 
   Future<bool> isImagePredominantlyWhite(ImageProvider imageProvider) async {
-    final paletteGenerator = await PaletteGenerator.fromImageProvider(imageProvider);
-    final dominantColor = paletteGenerator.dominantColor?.color ?? Colors.transparent;
+    final paletteGenerator =
+        await PaletteGenerator.fromImageProvider(imageProvider);
+    final dominantColor =
+        paletteGenerator.dominantColor?.color ?? Colors.transparent;
     return dominantColor.computeLuminance() > 0.5;
   }
 
@@ -476,19 +476,17 @@ class NotificationPageState extends State<NotificationPage> {
     super.initState();
     scrollController.addListener(_scrollListener);
 
-    if (hasBigPicture){
-      isImagePredominantlyWhite(
-        widget.receivedAction.bigPictureImage!
-      ).then((isPredominantlyWhite) => setState((){
-        bigPictureIsPredominantlyWhite = isPredominantlyWhite;
-      }));
+    if (hasBigPicture) {
+      isImagePredominantlyWhite(widget.receivedAction.bigPictureImage!)
+          .then((isPredominantlyWhite) => setState(() {
+                bigPictureIsPredominantlyWhite = isPredominantlyWhite;
+              }));
     }
   }
 
   void _scrollListener() {
-    bool pastScrollLimit =
-        scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 240;
+    bool pastScrollLimit = scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 240;
 
     if (!hasBigPicture) {
       isTotallyCollapsed = true;
@@ -496,13 +494,13 @@ class NotificationPageState extends State<NotificationPage> {
     }
 
     if (isTotallyCollapsed) {
-      if (!pastScrollLimit){
+      if (!pastScrollLimit) {
         setState(() {
           isTotallyCollapsed = false;
         });
       }
     } else {
-      if (pastScrollLimit){
+      if (pastScrollLimit) {
         setState(() {
           isTotallyCollapsed = true;
         });
@@ -513,9 +511,10 @@ class NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     bigPictureSize = MediaQuery.of(context).size.height * .4;
-    largeIconSize = MediaQuery.of(context).size.height * (hasBigPicture ? .16 : .2);
+    largeIconSize =
+        MediaQuery.of(context).size.height * (hasBigPicture ? .16 : .2);
 
-    if (!hasBigPicture){
+    if (!hasBigPicture) {
       isTotallyCollapsed = true;
     }
 
@@ -536,9 +535,10 @@ class NotificationPageState extends State<NotificationPage> {
                     : Colors.white,
               ),
             ),
-            systemOverlayStyle: isTotallyCollapsed || bigPictureIsPredominantlyWhite
-                ? SystemUiOverlayStyle.dark
-                : SystemUiOverlayStyle.light,
+            systemOverlayStyle:
+                isTotallyCollapsed || bigPictureIsPredominantlyWhite
+                    ? SystemUiOverlayStyle.dark
+                    : SystemUiOverlayStyle.light,
             expandedHeight: hasBigPicture
                 ? bigPictureSize + (hasLargeIcon ? 40 : 0)
                 : (hasLargeIcon)
@@ -552,89 +552,84 @@ class NotificationPageState extends State<NotificationPage> {
               expandedTitleScale: 1,
               collapseMode: CollapseMode.pin,
               title: (!hasLargeIcon)
-                ? null
-                : Stack(
-                  children: [
-                    Positioned(
-                      bottom: 0,
-                      left: 16,
-                      right: 16,
-                      child: Row(
-                        mainAxisAlignment: hasBigPicture
-                            ? MainAxisAlignment.start
-                            : MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: largeIconSize,
-                            width: largeIconSize,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.all(Radius.circular(largeIconSize)),
-                              child: FadeInImage(
-                                placeholder: const NetworkImage(
-                                    'https://cdn.syncfusion.com/content/images/common/placeholder.gif'),
-                                image: widget.receivedAction.largeIconImage!,
-                                fit: BoxFit.cover,
+                  ? null
+                  : Stack(children: [
+                      Positioned(
+                        bottom: 0,
+                        left: 16,
+                        right: 16,
+                        child: Row(
+                          mainAxisAlignment: hasBigPicture
+                              ? MainAxisAlignment.start
+                              : MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: largeIconSize,
+                              width: largeIconSize,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(largeIconSize)),
+                                child: FadeInImage(
+                                  placeholder: const NetworkImage(
+                                      'https://cdn.syncfusion.com/content/images/common/placeholder.gif'),
+                                  image: widget.receivedAction.largeIconImage!,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ]
-                ),
+                    ]),
               background: hasBigPicture
-                ? Padding(
-                  padding: EdgeInsets.only(
-                      bottom: hasLargeIcon
-                          ? 60 : 20
-                  ),
-                  child: FadeInImage(
-                    placeholder: const NetworkImage(
-                        'https://cdn.syncfusion.com/content/images/common/placeholder.gif'),
-                    height: bigPictureSize,
-                    width: MediaQuery.of(context).size.width,
-                    image: widget.receivedAction.bigPictureImage!,
-                    fit: BoxFit.cover,
-                  ),
-                )
-                : null,
+                  ? Padding(
+                      padding: EdgeInsets.only(bottom: hasLargeIcon ? 60 : 20),
+                      child: FadeInImage(
+                        placeholder: const NetworkImage(
+                            'https://cdn.syncfusion.com/content/images/common/placeholder.gif'),
+                        height: bigPictureSize,
+                        width: MediaQuery.of(context).size.width,
+                        image: widget.receivedAction.bigPictureImage!,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : null,
             ),
           ),
           SliverList(
             delegate: SliverChildListDelegate(
               [
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0, left: 20, right: 20),
+                  padding:
+                      const EdgeInsets.only(bottom: 20.0, left: 20, right: 20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RichText(
-                        text: TextSpan(
-                            children: [
-                              if (hasTitle)
-                                TextSpan(
-                                  text: widget.receivedAction.title!,
-                                  style: Theme.of(context).textTheme.titleLarge,
+                        text: TextSpan(children: [
+                          if (hasTitle)
+                            TextSpan(
+                              text: widget.receivedAction.title!,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                          if (hasBody)
+                            WidgetSpan(
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  top: hasTitle ? 16.0 : 0.0,
                                 ),
-                              if(hasBody)
-                                WidgetSpan(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      top: hasTitle ? 16.0 : 0.0,
-                                    ),
-                                    child: SizedBox(
-                                        width: MediaQuery.of(context).size.width,
-                                        child: Text(
-                                            widget.receivedAction
-                                                .bodyWithoutHtml ?? '',
-                                            style: Theme.of(context).textTheme.bodyText2
-                                        )
-                                    ),
-                                  ),
-                                ),
-                            ]
-                        ),
+                                child: SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Text(
+                                        widget.receivedAction.bodyWithoutHtml ??
+                                            '',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2)),
+                              ),
+                            ),
+                        ]),
                       ),
                     ],
                   ),

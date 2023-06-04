@@ -73,6 +73,7 @@ class AwesomeAssertUtils {
           } catch (err) {
             return defaultValue;
           }
+
         case String:
           return valueCasted;
 
@@ -143,10 +144,20 @@ class AwesomeAssertUtils {
         }
         break;
 
+      case Duration:
+        if (value == null) return defaultValue;
+        Duration? duration;
+        if (value is String) duration = Duration(seconds: int.parse(value));
+        if (value is int) duration = Duration(seconds: value);
+        return (duration?.inSeconds ?? -1) < 0
+            ? defaultValue
+            : duration;
+
       case bool:
         if (value == null) return defaultValue;
         if (value is int) return value == 1;
-        return value;
+        if (value is bool) return value;
+        return defaultValue;
     }
 
     if (value is T) return value;

@@ -32,7 +32,8 @@ class BaseNotificationContent extends Model {
   bool? _criticalAlert;
   Color? _color;
   Color? _backgroundColor;
-  int? _timeoutAfter;
+  Duration? _timeoutAfter;
+  Duration? _chronometer;
   NotificationPrivacy? _privacy;
   NotificationCategory? _category;
 
@@ -48,31 +49,82 @@ class BaseNotificationContent extends Model {
   bool? _roundedLargeIcon;
   bool? _roundedBigPicture;
 
+  /// Returns the id of the notification.
   int? get id => _id;
+
+  /// Returns the channel key of the notification.
   String? get channelKey => _channelKey;
+
+  /// Returns the group key of the notification.
   String? get groupKey => _groupKey;
+
+  /// Returns the title of the notification.
   String? get title => _title;
+
+  /// Returns the body text of the notification.
   String? get body => _body;
+
+  /// Returns the summary of the notification.
   String? get summary => _summary;
+
+  /// Returns whether the notification should show a timestamp.
   bool? get showWhen => _showWhen;
+
+  /// Returns the custom payload of the notification.
   Map<String, String?>? get payload => _payload;
+
+  /// Returns the icon of the notification.
   String? get icon => _icon;
+
+  /// Returns the large icon of the notification.
   String? get largeIcon => _largeIcon;
+
+  /// Returns the big picture of the notification.
   String? get bigPicture => _bigPicture;
+
+  /// Returns the custom sound of the notification.
   String? get customSound => _customSound;
+
+  /// Returns whether the notification is auto-dismissible.
   bool? get autoDismissible => _autoDismissible;
+
+  /// Returns whether the notification should wake up the screen.
   bool? get wakeUpScreen => _wakeUpScreen;
+
+  /// Returns whether the notification should use a full screen intent.
   bool? get fullScreenIntent => _fullScreenIntent;
+
+  /// Returns whether the notification is a critical alert.
   bool? get criticalAlert => _criticalAlert;
+
+  /// Returns the color of the notification.
   Color? get color => _color;
-  int? get timeoutAfter => _timeoutAfter;
+
+  /// Returns the duration after which the notification should be timed out.
+  Duration? get timeoutAfter => _timeoutAfter;
+
+  /// Returns the chronometer duration for the notification.
+  Duration? get chronometer => _chronometer;
+
+  /// Returns the background color of the notification.
   Color? get backgroundColor => _backgroundColor;
+
+  /// Returns the privacy setting of the notification.
   NotificationPrivacy? get privacy => _privacy;
+
+  /// Returns the category of the notification.
   NotificationCategory? get category => _category;
+
+  /// Returns the action type of the notification.
   ActionType? get actionType => _actionType;
+
+  /// Returns whether the large icon should be rounded.
   bool? get roundedLargeIcon => _roundedLargeIcon;
+
+  /// Returns whether the big picture should be rounded.
   bool? get roundedBigPicture => _roundedBigPicture;
 
+  /// Returns the date and time when the notification was displayed.
   DateTime? get displayedDate {
     return _displayedDate;
   }
@@ -162,7 +214,8 @@ class BaseNotificationContent extends Model {
       bool autoDismissible = true,
       Color? color,
       Color? backgroundColor,
-      int? timeoutAfter,
+      Duration? chronometer,
+      Duration? timeoutAfter,
       Map<String, String?>? payload,
       String? customSound,
       bool roundedLargeIcon = false,
@@ -201,9 +254,12 @@ class BaseNotificationContent extends Model {
             NOTIFICATION_COLOR, color),
         _backgroundColor = AwesomeAssertUtils.getValueOrDefault<Color>(
             NOTIFICATION_BACKGROUND_COLOR, backgroundColor),
-        _timeoutAfter = AwesomeAssertUtils.getValueOrDefault<int>(
+        _chronometer = AwesomeAssertUtils.getValueOrDefault<Duration>(
+            NOTIFICATION_CHRONOMETER,
+            (chronometer?.inSeconds ?? -1)  < 0 ? null : chronometer),
+        _timeoutAfter = AwesomeAssertUtils.getValueOrDefault<Duration>(
             NOTIFICATION_TIMEOUT_AFTER,
-            (timeoutAfter ?? 0) < 1 ? null : timeoutAfter),
+            (timeoutAfter?.inSeconds ?? -1)  < 0 ? null : timeoutAfter),
         _payload = AwesomeAssertUtils.getValueOrDefault<Map<String, String?>>(
             NOTIFICATION_PAYLOAD, payload),
         _customSound = AwesomeAssertUtils.getValueOrDefault<String>(
@@ -250,7 +306,9 @@ class BaseNotificationContent extends Model {
         AwesomeAssertUtils.extractValue<Color>(NOTIFICATION_COLOR, mapData);
     _backgroundColor = AwesomeAssertUtils.extractValue<Color>(
         NOTIFICATION_BACKGROUND_COLOR, mapData);
-    _timeoutAfter = AwesomeAssertUtils.extractValue<int>(
+    _chronometer = AwesomeAssertUtils.extractValue<Duration>(
+        NOTIFICATION_CHRONOMETER, mapData);
+    _timeoutAfter = AwesomeAssertUtils.extractValue<Duration>(
         NOTIFICATION_TIMEOUT_AFTER, mapData);
     _payload = AwesomeAssertUtils.extractMap<String, String?>(
         NOTIFICATION_PAYLOAD, mapData);
@@ -262,8 +320,6 @@ class BaseNotificationContent extends Model {
         NOTIFICATION_ROUNDED_BIG_PICTURE, mapData);
     _autoDismissible = AwesomeAssertUtils.extractValue<bool>(
         NOTIFICATION_AUTO_DISMISSIBLE, mapData);
-
-    _timeoutAfter = (_timeoutAfter ?? 0) < 1 ? null : _timeoutAfter;
 
     return this;
   }
@@ -310,14 +366,15 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_WAKE_UP_SCREEN: _wakeUpScreen,
       NOTIFICATION_FULL_SCREEN_INTENT: _fullScreenIntent,
       NOTIFICATION_CRITICAL_ALERT: _criticalAlert,
-      NOTIFICATION_TIMEOUT_AFTER: _timeoutAfter,
       NOTIFICATION_ROUNDED_LARGE_ICON: _roundedLargeIcon,
       NOTIFICATION_ROUNDED_BIG_PICTURE: _roundedBigPicture,
       NOTIFICATION_CREATED_SOURCE: createdSource?.name,
       NOTIFICATION_CREATED_LIFECYCLE: createdLifeCycle?.name,
       NOTIFICATION_DISPLAYED_LIFECYCLE: displayedLifeCycle?.name,
       NOTIFICATION_CREATED_DATE: createdDate,
-      NOTIFICATION_DISPLAYED_DATE: displayedDate
+      NOTIFICATION_DISPLAYED_DATE: displayedDate,
+      NOTIFICATION_CHRONOMETER: _chronometer?.inSeconds,
+      NOTIFICATION_TIMEOUT_AFTER: _timeoutAfter?.inSeconds,
     };
   }
 

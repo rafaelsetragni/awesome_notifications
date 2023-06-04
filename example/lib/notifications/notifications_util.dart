@@ -80,8 +80,8 @@ class NotificationUtils {
       await showDialog(
           context: context,
           builder: (context) => AlertDialog(
-                backgroundColor: Color(0xfffbfbfb),
-                title: Text('Get Notified!',
+                backgroundColor: const Color(0xfffbfbfb),
+                title: const Text('Get Notified!',
                     maxLines: 2,
                     textAlign: TextAlign.center,
                     style:
@@ -94,7 +94,7 @@ class NotificationUtils {
                       height: MediaQuery.of(context).size.height * 0.3,
                       fit: BoxFit.fitWidth,
                     ),
-                    Text(
+                    const Text(
                       'Allow Awesome Notifications to send you beautiful notifications!',
                       maxLines: 4,
                       textAlign: TextAlign.center,
@@ -106,7 +106,7 @@ class NotificationUtils {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text(
+                      child: const Text(
                         'Later',
                         style: TextStyle(color: Colors.grey, fontSize: 18),
                       )),
@@ -116,7 +116,7 @@ class NotificationUtils {
                           .requestPermissionToSendNotifications();
                       Navigator.pop(context);
                     },
-                    child: Text(
+                    child: const Text(
                       'Allow',
                       style: TextStyle(
                           color: Colors.deepPurple,
@@ -180,8 +180,8 @@ class NotificationUtils {
       await showDialog(
           context: context,
           builder: (context) => AlertDialog(
-                backgroundColor: Color(0xfffbfbfb),
-                title: Text(
+                backgroundColor: const Color(0xfffbfbfb),
+                title: const Text(
                   'Awesome Notificaitons needs your permission',
                   textAlign: TextAlign.center,
                   maxLines: 2,
@@ -204,7 +204,7 @@ class NotificationUtils {
                       maxLines: 2,
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Text(
                       lockedPermissions
                           .join(', ')
@@ -212,7 +212,7 @@ class NotificationUtils {
                       maxLines: 2,
                       textAlign: TextAlign.center,
                       style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                          const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -221,7 +221,7 @@ class NotificationUtils {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text(
+                      child: const Text(
                         'Deny',
                         style: TextStyle(color: Colors.red, fontSize: 18),
                       )),
@@ -241,7 +241,7 @@ class NotificationUtils {
 
                       Navigator.pop(context);
                     },
-                    child: Text(
+                    child: const Text(
                       'Allow',
                       style: TextStyle(
                           color: Colors.deepPurple,
@@ -442,6 +442,32 @@ class NotificationUtils {
 
   static Future<void> resetBadgeIndicator() async {
     await AwesomeNotifications().resetGlobalBadge();
+  }
+
+  /* *********************************************
+      TIMEOUT NOTIFICATIONS
+  ************************************************ */
+
+  static Future<void> showNotificationWithTimeout(int id) async {
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: id,
+            channelKey: 'basic_channel',
+            title: 'This notification will expire',
+            body: 'This notification will expire in 10 seconds',
+            summary: 'Timeout After',
+            notificationLayout: NotificationLayout.BigPicture,
+            bigPicture: 'asset://assets/images/melted-clock.png',
+            timeoutAfter: const Duration(seconds: 10),
+            chronometer: Duration.zero, // starts from 0 seconds
+            payload: {'uuid': 'user-profile-uuid'}),
+            actionButtons: [
+              NotificationActionButton(
+                  key: 'AGREED1', label: 'I agree', autoDismissible: true),
+              NotificationActionButton(
+                  key: 'AGREED2', label: 'I agree too', autoDismissible: true),
+            ]
+        );
   }
 
   /* *********************************************
@@ -1661,7 +1687,7 @@ class NotificationUtils {
           content: Text('${activeSchedules.length} schedules founded'),
           actions: [
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

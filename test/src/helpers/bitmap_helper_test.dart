@@ -84,7 +84,7 @@ void main() {
     test('Create BitmapHelper from ImageProvider', () async {
       const ImageProvider provider = AssetImage(
           'test/assets/images/test_image.png'); // Replace with an actual image file in your assets folder
-      final BitmapHelper bitmap = await BitmapHelper.fromProvider(provider);
+      final BitmapHelper bitmap = await BitmapHelper.fromImageProvider(provider);
 
       expect(bitmap.width, width); // Replace with actual image width
       expect(bitmap.height, height); // Replace with actual image height

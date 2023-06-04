@@ -467,6 +467,19 @@ class _HomePageState extends State<HomePage> {
 
             /* ******************************************************************** */
 
+            TextDivisor(title: 'Timeout Notification (Android)'),
+            const TextNote(
+                'To set a timeout for notification, making it auto dismiss as it get expired, set the "timeoutAfter" property with an duration interval.\n\n'
+                    "Attention: to use this property from json payloads, use an integer positive value to represent seconds."),
+            SimpleButton('Create notification with 10 seconds timeout',
+                onPressed: () => NotificationUtils.showNotificationWithTimeout(2)),
+            SimpleButton('Cancel notification',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () => NotificationUtils.cancelNotification(2)),
+
+            /* ******************************************************************** */
+
             TextDivisor(
                 title:
                 'Translations 🈳🈂️'),
