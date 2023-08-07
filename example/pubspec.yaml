@@ -39,7 +39,7 @@ dependencies:
   numberpicker: ^2.1.2
   giff_dialog: ^1.0.1
   vibration: ^1.7.7
-  device_info: ^2.0.3
+  device_info_plus: ^9.0.2
   url_launcher: ^6.1.11
   intl: ^0.18.1
   palette_generator: ^0.3.3+2
