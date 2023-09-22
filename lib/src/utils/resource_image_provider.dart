@@ -12,7 +12,7 @@ import '../../awesome_notifications.dart';
 /// The provided [bytes] buffer should not be changed after it is provided
 /// to a [ResourceImage]. To provide an [ImageStream] that represents an image
 /// that changes over time, consider creating a new subclass of [ImageProvider]
-/// whose [loadBuffer] method returns a subclass of [ImageStreamCompleter] that can
+/// whose [loadImage] method returns a subclass of [ImageStreamCompleter] that can
 /// handle providing multiple images.
 ///
 /// See also:
@@ -22,9 +22,12 @@ class ResourceImage extends ImageProvider<ResourceImage> {
   /// Creates an object that decodes a [Uint8List] buffer as an image.
   ///
   /// The arguments must not be null.
-  const ResourceImage(this.drawablePath, {this.scale = 1.0});
+  const ResourceImage(this.drawablePath,
+      {this.scale = 1.0, AwesomeNotifications? awesomeNotifications})
+      : _awesomeNotifications = awesomeNotifications;
 
   final String drawablePath;
+  final AwesomeNotifications? _awesomeNotifications;
 
   /// The scale to place in the [ImageInfo] object of the image.
   final double scale;
@@ -35,23 +38,23 @@ class ResourceImage extends ImageProvider<ResourceImage> {
   }
 
   @override
-  @protected
-  ImageStreamCompleter loadBuffer(
-      ResourceImage key, DecoderBufferCallback decode) {
+  ImageStreamCompleter loadImage(
+      ResourceImage key, ImageDecoderCallback decode) {
     return MultiFrameImageStreamCompleter(
-      codec: _loadAsync(key, decode),
+      codec: loadAsync(key, decode),
       scale: key.scale,
     );
   }
 
-  Future<ui.Codec> _loadAsync(
-      ResourceImage key, DecoderBufferCallback decode) async {
+  @visibleForTesting
+  Future<ui.Codec> loadAsync(
+      ResourceImage key, ImageDecoderCallback decode) async {
     assert(key == this);
-    Uint8List? bytes =
-        await AwesomeNotifications().getDrawableData(drawablePath);
+    Uint8List? bytes = await (_awesomeNotifications ?? AwesomeNotifications())
+        .getDrawableData(drawablePath);
 
-    if (bytes?.lengthInBytes == 0) {
-      throw Exception('image is invalid');
+    if ((bytes?.lengthInBytes ?? 0) == 0) {
+      throw const AwesomeNotificationsException(message: 'image is invalid');
     }
 
     final ImmutableBuffer buffer = await ImmutableBuffer.fromUint8List(bytes!);

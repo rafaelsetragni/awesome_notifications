@@ -624,7 +624,7 @@ public class PermissionManager {
         guard let settingsUrl = URL(string: url) else {
             return false
         }
-
+        
         if UIApplication.shared.canOpenURL(settingsUrl) {
             DispatchQueue.main.async {
                 UIApplication.shared.open(settingsUrl)
@@ -634,7 +634,6 @@ public class PermissionManager {
         
         return false
     }
-
     public func handlePermissionResult() {
         fireActivityCompletionHandle()
     }

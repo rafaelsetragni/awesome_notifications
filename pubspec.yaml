@@ -1,10 +1,10 @@
 name: awesome_notifications
-description: A complete solution to create Local and Push Notifications (Firebase Messaging), customizing buttons, images, sounds, emoticons and applying many different layouts for Flutter apps.
-version: 0.7.4
+description: A complete solution to create Local and Push Notifications, customizing buttons, images, sounds, emoticons and applying many different layouts for Flutter apps.
+version: 0.7.5-dev.3
 repository: https://github.com/rafaelsetragni/awesome_notifications
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: '>=2.19.0 <4.0.0'
   flutter: ">=2.5.0"
 
 dependencies:
@@ -13,13 +13,16 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
-  plugin_platform_interface: ^2.0.2
-  intl: ^0.17.0
+  plugin_platform_interface: ^2.1.4
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^2.0.1
+
+  mockito: ^5.4.1
+  mocktail: ^0.3.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -53,11 +56,9 @@ flutter:
         pluginClass: AwesomeNotificationsWeb
         fileName: awesome_notifications_web.dart
 
-  # To add assets to your plugin package, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
-  #
+  assets:
+    - test/assets/images/test_image.png
+    
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages
   #

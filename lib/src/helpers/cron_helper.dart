@@ -11,29 +11,18 @@ import 'package:intl/intl.dart';
 /// OBS: Do not use <day-of-month> and <day-of-week> simultaneously. Chose one of
 /// then, marking the other one with ? tag to be ignored
 class CronHelper {
-  DateTime? _fixedNow;
-
   /// FACTORY METHODS *********************************************
 
   factory CronHelper() => instance;
 
   @visibleForTesting
-  CronHelper.private({DateTime? fixedNow}) : _fixedNow = fixedNow;
+  CronHelper.private();
 
   static final CronHelper instance = CronHelper.private();
 
   /// FACTORY METHODS *********************************************
 
   String dateFormat = 'dd-MM-yyyy hh:mm';
-
-  DateTime _getNow() {
-    return _fixedNow ?? DateTime.now();
-  }
-
-  /// Get the current UTC date
-  String get utc {
-    return DateFormat(dateFormat).format(_getNow().toUtc());
-  }
 
   /// Generates a Cron expression to be played at only exact time
   String atDate({required DateTime referenceDateTime}) {
