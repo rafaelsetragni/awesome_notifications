@@ -63,13 +63,13 @@
     },
     {
       "name": "code_builder",
-      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/code_builder-4.4.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/code_builder-4.6.0",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.19"
     },
     {
       "name": "collection",
-      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/collection-1.17.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/collection-1.17.2",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -123,9 +123,9 @@
     },
     {
       "name": "flutter_lints",
-      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/flutter_lints-2.0.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/flutter_lints-2.0.3",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.19"
     },
     {
       "name": "flutter_test",
@@ -195,15 +195,15 @@
     },
     {
       "name": "matcher",
-      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/matcher-0.12.15",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/matcher-0.12.16",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "material_color_utilities",
-      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/material_color_utilities-0.2.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/material_color_utilities-0.5.0",
       "packageUri": "lib/",
-      "languageVersion": "2.13"
+      "languageVersion": "2.17"
     },
     {
       "name": "meta",
@@ -219,13 +219,13 @@
     },
     {
       "name": "mockito",
-      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/mockito-5.4.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/mockito-5.4.2",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
       "name": "mocktail",
-      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/mocktail-0.3.0",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/mocktail-1.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -249,9 +249,9 @@
     },
     {
       "name": "plugin_platform_interface",
-      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.4",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.6",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.19"
     },
     {
       "name": "pool",
@@ -315,9 +315,9 @@
     },
     {
       "name": "source_span",
-      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/source_span-1.9.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/source_span-1.10.0",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "2.18"
     },
     {
       "name": "stack_trace",
@@ -345,19 +345,19 @@
     },
     {
       "name": "test",
-      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/test-1.24.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/test-1.24.3",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/test_api-0.5.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/test_api-0.6.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "test_core",
-      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/test_core-0.5.1",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/test_core-0.5.3",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -386,6 +386,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "web",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/web-0.1.4-beta",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
       "name": "web_socket_channel",
       "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/web_socket_channel-2.4.0",
       "packageUri": "lib/",
@@ -410,7 +416,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-06-04T22:58:41.355235Z",
+  "generated": "2023-09-22T19:44:12.166308Z",
   "generator": "pub",
-  "generatorVersion": "3.0.2"
+  "generatorVersion": "3.1.1"
 }

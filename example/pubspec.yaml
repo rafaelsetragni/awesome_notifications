@@ -28,21 +28,21 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.5
-  universal_io: ^2.2.0
+  cupertino_icons: ^1.0.6
+  universal_io: ^2.2.2
 
-  font_awesome_flutter: ^10.4.0
-  fluttertoast: ^8.2.1
-  http: ^0.13.6
-  path_provider: ^2.0.15
-  shared_preferences: ^2.1.1
+  font_awesome_flutter: ^10.5.0
+  fluttertoast: ^8.2.2
+  http: ^1.1.0
+  path_provider: ^2.1.1
+  shared_preferences: ^2.2.1
   numberpicker: ^2.1.2
   giff_dialog: ^1.0.1
-  vibration: ^1.7.7
-  device_info_plus: ^9.0.2
-  url_launcher: ^6.1.11
+  vibration: ^1.8.1
+  device_info_plus: ^9.0.3
+  url_launcher: ^6.1.14
   intl: ^0.18.1
-  palette_generator: ^0.3.3+2
+  palette_generator: ^0.3.3+3
 
 dev_dependencies:
   flutter_test:
@@ -53,7 +53,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.1
+  flutter_lints: ^2.0.3
 
   flutter_launcher_icons: ^0.13.1
 

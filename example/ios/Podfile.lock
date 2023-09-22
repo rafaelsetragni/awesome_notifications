@@ -1,14 +1,14 @@
 PODS:
-  - awesome_notifications (0.7.5-dev.3):
+  - awesome_notifications (0.7.5):
     - Flutter
-    - IosAwnCore
-  - device_info (0.0.1):
+    - IosAwnCore (= 0.7.5)
+  - device_info_plus (0.0.1):
     - Flutter
   - Flutter (1.0.0)
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - IosAwnCore (0.7.5-dev.3)
+  - IosAwnCore (0.7.5)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -23,10 +23,9 @@ PODS:
 
 DEPENDENCIES:
   - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
-  - device_info (from `.symlinks/plugins/device_info/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
-  - IosAwnCore (from `../../../IosAwnCore/`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -34,19 +33,18 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - IosAwnCore
     - Toast
 
 EXTERNAL SOURCES:
   awesome_notifications:
     :path: ".symlinks/plugins/awesome_notifications/ios"
-  device_info:
-    :path: ".symlinks/plugins/device_info/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
-  IosAwnCore:
-    :path: "../../../IosAwnCore/"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   shared_preferences_foundation:
@@ -57,17 +55,17 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/vibration/ios"
 
 SPEC CHECKSUMS:
-  awesome_notifications: 88627def583fd44b0df54df59d092ab42ceb116f
-  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
+  awesome_notifications: 866bda0a8fcf8f83cb0fe76762f730c6b77083db
+  device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  fluttertoast: eb263d302cc92e04176c053d2385237e9f43fad0
-  IosAwnCore: edf31913fd18960ebcde7c05912dc860ca2b63b2
-  path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
+  fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
+  IosAwnCore: 29cb6224ff81d33529b0055556897b63471de801
+  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
 
-PODFILE CHECKSUM: 8437af030e62c123e108fe904c2cc97fa22c7653
+PODFILE CHECKSUM: 75def7c0fdb0efe5a8b7599c2e7d9302906d572f
 
 COCOAPODS: 1.12.1
