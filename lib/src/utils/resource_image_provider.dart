@@ -58,7 +58,10 @@ class ResourceImage extends ImageProvider<ResourceImage> {
     }
 
     final ImmutableBuffer buffer = await ImmutableBuffer.fromUint8List(bytes!);
-    return decode(buffer);
+    final ImageDescriptor descriptor = await ImageDescriptor.encoded(buffer);
+
+    buffer.dispose();
+    return descriptor.instantiateCodec();
   }
 
   @override
