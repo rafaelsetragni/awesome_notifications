@@ -9,29 +9,11 @@
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](#)
 [![pub package](https://img.shields.io/pub/v/awesome_notifications.svg)](https://pub.dev/packages/awesome_notifications)
-![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=hotfix)
-![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/hotfix/graph/badge.svg)
+![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
+![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/master/graph/badge.svg)
 
 
 Engage your users with custom local and push notifications on Flutter. Get real-time events and never miss a user interaction with Awesome Notifications.
-
-<br>
-<br>
-
----
-
-# 🔺 Disclaimer 🔺
-
-This version is currently in its ***pre-release*** stage. That means it's under active development, and the features, functionality, and implementation details are subject to change.
-
-While we're doing our best to ensure a smooth experience, you might encounter bugs or issues that we haven't yet identified. We highly encourage users to provide feedback, report bugs, or make feature suggestions to help us improve.
-
-If you're interested in contributing to this project's development and want to have an impact on its future, we'd love for you to join our beta testing program at:
-[https://discord.com/channels/888523488376279050/933445281243082772](https://discord.com/channels/888523488376279050/933445281243082772)
-
-By joining the beta testing program, you can help us make this project the best it can be. We appreciate your interest and support, and we look forward to seeing you on Discord!
-
----
 
 <br>
 <br>
@@ -117,6 +99,10 @@ So, you MUST not use `firebase_messaging` with `awesome_notifications`. Use `awe
 
 - Include `Web support`
 - Include `Desktop support`
+- Include `Live Activities notifications`
+- Include `Time Sensitive notifications`
+- Include `Communication notifications`
+- Include full `Media Player notifications`
 - Include support for other push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
 - Replicate all Android layouts for iOS (almost accomplished)
 - Custom layouts for notifications
@@ -149,7 +135,6 @@ Stay up to date with new updates and get community support by subscribing to our
 # 📙 Table of Contents
 
 - [Awesome Notifications for Flutter](#awesome-notifications-for-flutter)
-- [🔺 Disclaimer 🔺](#-disclaimer-)
     - [**Key Features:**](#key-features)
   - [Notification Types Available](#notification-types-available)
 - [🛑 ATTENTION - PLUGIN UNDER DEVELOPMENT](#-attention---plugin-under-development)
