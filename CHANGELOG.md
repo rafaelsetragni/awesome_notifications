@@ -1,3 +1,13 @@
+## [0.7.5]
+### Added
+* Support to iOS 17
+* Compatibility to AGP 8 
+* Automated tests for dart code in master with +90% of coverage
+### Fixed
+* New image provider for native resource media
+### Improved
+* Project dependencies upgraded to the last version available
+
 ## [0.7.5-dev.3]
 ### Added
 * Chronometer indicator for Android notifications
@@ -15,7 +25,7 @@
 ### Improved
 * Android core dependencies moved to new repository 
 * Added new native module switcher to avoid the folder copy at example/android folder.
-* Added new test cases for actionType property
+* Added new test cases for actionType property 
 
 ## [0.7.5-dev.2]
 ### Fixed
