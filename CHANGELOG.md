@@ -7,6 +7,7 @@
 * New image provider for native resource media
 ### Improved
 * Project dependencies upgraded to the last version available
+* Documentation updated
 
 ## [0.7.5-dev.3]
 ### Added

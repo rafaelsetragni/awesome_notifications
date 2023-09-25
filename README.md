@@ -754,15 +754,18 @@ The notification category is a group of predefined categories that best describe
 
 # 👮‍♀️ Requesting Permissions
 
-Permissions give transparency to the user of what you intend to do with your app while it's in use. To show any notification on a device, you must obtain the user's consent, and keep in mind that this consent can be revoked at any time, on any platform. On Android, the basic permissions are always granted to any newly installed app, but for iOS, even the basic permission must be requested from the user.
+Permissions give transparency to the user about what you intend to do with your app while it's in use. To show any notification on a device, you must obtain the user's consent. Keep in mind that this consent can be revoked at any time, on any platform. On Android 12 and below, the basic permissions are always granted to any newly installed app. But for iOS and Android 13 and beyond, even the basic permission must be requested from the user.
+
+> **Disclaimer:**
+> On Android, revoke certain permissions, including notification permissions, may cause the system to automatically restart the app to ensure the new permission setting is respected. Handle this scenario in your code by saving any necessary state before requesting or changing permissions, and restoring that state when the app is restarted. Inform your users about this behavior to avoid confusion and ensure a smoother user experience.
 
 Permissions can be defined in three types:
 
-- **Normal permissions:** These are permissions that are not considered dangerous and do not require explicit user consent to be enabled.
-- **Execution permissions:** These are permissions that are considered more sensitive to the user, and you must obtain their explicit consent to use.
-- **Special/Dangerous permissions:** These are permissions that can harm the user experience or their privacy, and you must obtain their explicit consent. Depending on the platform, you may need permission from the manufacturer to use them.
+- **Normal permissions:** These permissions are not considered dangerous and do not require explicit user consent to be enabled.
+- **Execution permissions:** These permissions are considered more sensitive to the user, and you must obtain their explicit consent to use them.
+- **Special/Dangerous permissions:** These permissions can harm the user experience or their privacy, and you must obtain their explicit consent. Depending on the platform, you may need permission from the manufacturer to use them.
 
-As a good practice, always check if the permissions you desire are granted before creating any new notification, regardless of the platform. To check if a permission requires explicit user consent, call the method shouldShowRationaleToRequest. The list of permissions that require a rationale to the user can be different between platforms and OS versions. If your app does not require a permission to execute what you need, consider not requesting it and respecting the user's will.
+As a good practice, always check if the permissions you desire are granted before creating any new notification, regardless of the platform. To check if a permission requires explicit user consent, call the method `shouldShowRationaleToRequest`. The list of permissions that require a rationale to the user can differ between platforms and OS versions. If your app does not require a permission to execute what you need, consider not requesting it, respecting the user's will.
 
 <br>
     
