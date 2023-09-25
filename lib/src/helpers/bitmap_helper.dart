@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 
 const int bitmapPixelLength = 4;
@@ -40,7 +41,7 @@ class BitmapHelper {
     );
   }
 
-  static Future<BitmapHelper> fromProvider(ImageProvider provider) async {
+  static Future<BitmapHelper> fromImageProvider(ImageProvider provider) async {
     final Completer completer = Completer<ImageInfo>();
     final ImageStream stream = provider.resolve(const ImageConfiguration());
     final listener =
@@ -51,10 +52,11 @@ class BitmapHelper {
     });
     stream.addListener(listener);
     final imageInfo = await completer.future;
+    stream.removeListener(listener);
+
     final ui.Image image = imageInfo.image;
     final ByteData? byteData = await image.toByteData();
     final Uint8List listInt = byteData!.buffer.asUint8List();
-
     return BitmapHelper.fromHeadless(image.width, image.height, listInt);
   }
 

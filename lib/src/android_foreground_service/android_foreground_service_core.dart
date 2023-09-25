@@ -3,9 +3,9 @@ import 'dart:io' show Platform;
 import 'package:flutter/services.dart';
 
 import '../definitions.dart';
-import '../enumerators/foreground_start_mode.dart';
-import '../enumerators/foreground_service_type.dart';
 import '../enumerators/android_foreground_service_constants.dart';
+import '../enumerators/foreground_service_type.dart';
+import '../enumerators/foreground_start_mode.dart';
 import '../models/notification_button.dart';
 import '../models/notification_content.dart';
 import '../models/notification_model.dart';

@@ -7,8 +7,7 @@
 
 import Foundation
 
-public class BadgeManager {
-    
+public class BadgeManager : AwesomeLifeCycleEventListener {
     let TAG:String = "BadgeManager"
     
     // ************** SINGLETON PATTERN ***********************
@@ -21,7 +20,14 @@ public class BadgeManager {
             return BadgeManager.instance!
         }
     }
-    private init(){}
+    
+    private init(){
+        _ = LifeCycleManager.shared.subscribe(listener: self)
+    }
+    
+    public func onNewLifeCycleEvent(lifeCycle: NotificationLifeCycle) {
+        syncBadgeAmount()
+    }
     
     // ********************************************************
     
@@ -49,10 +55,17 @@ public class BadgeManager {
             else{
                 _badgeAmount = NSNumber(value: newValue)
             }
-            
-            let userDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)
-            userDefaults!.set(newValue, forKey: Definitions.BADGE_COUNT)
+            setGlobalBadgeCounterInStorage(newValue: newValue)
         }
+    }
+    
+    public func syncBadgeAmount(){
+        setGlobalBadgeCounterInStorage(newValue: globalBadgeCounter)
+    }
+    
+    public func setGlobalBadgeCounterInStorage(newValue:Int) {
+        let userDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)
+        userDefaults!.set(newValue, forKey: Definitions.BADGE_COUNT)
     }
 
     public func resetGlobalBadgeCounter() {

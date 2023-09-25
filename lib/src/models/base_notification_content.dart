@@ -1,4 +1,5 @@
 import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 
 import '../definitions.dart';
@@ -32,6 +33,8 @@ class BaseNotificationContent extends Model {
   bool? _criticalAlert;
   Color? _color;
   Color? _backgroundColor;
+  Duration? _timeoutAfter;
+  Duration? _chronometer;
   NotificationPrivacy? _privacy;
   NotificationCategory? _category;
 
@@ -47,34 +50,99 @@ class BaseNotificationContent extends Model {
   bool? _roundedLargeIcon;
   bool? _roundedBigPicture;
 
+  /// Returns the id of the notification.
   int? get id => _id;
+
+  /// Returns the channel key of the notification.
   String? get channelKey => _channelKey;
+
+  /// Returns the group key of the notification.
   String? get groupKey => _groupKey;
+
+  /// Returns the title of the notification.
   String? get title => _title;
+
+  /// Returns the body text of the notification.
   String? get body => _body;
+
+  /// Returns the summary of the notification.
   String? get summary => _summary;
+
+  /// Returns whether the notification should show a timestamp.
   bool? get showWhen => _showWhen;
+
+  /// Returns the custom payload of the notification.
   Map<String, String?>? get payload => _payload;
+
+  /// Returns the icon of the notification.
   String? get icon => _icon;
+
+  /// Returns the large icon of the notification.
   String? get largeIcon => _largeIcon;
+
+  /// Returns the big picture of the notification.
   String? get bigPicture => _bigPicture;
+
+  /// Returns the custom sound of the notification.
   String? get customSound => _customSound;
+
+  /// Returns whether the notification is auto-dismissible.
   bool? get autoDismissible => _autoDismissible;
+
+  /// Returns whether the notification should wake up the screen.
   bool? get wakeUpScreen => _wakeUpScreen;
+
+  /// Returns whether the notification should use a full screen intent.
   bool? get fullScreenIntent => _fullScreenIntent;
+
+  /// Returns whether the notification is a critical alert.
   bool? get criticalAlert => _criticalAlert;
+
+  /// Returns the color of the notification.
   Color? get color => _color;
+
+  /// Returns the duration after which the notification should be timed out.
+  Duration? get timeoutAfter => _timeoutAfter;
+
+  /// Returns the chronometer duration for the notification.
+  Duration? get chronometer => _chronometer;
+
+  /// Returns the background color of the notification.
   Color? get backgroundColor => _backgroundColor;
+
+  /// Returns the privacy setting of the notification.
   NotificationPrivacy? get privacy => _privacy;
+
+  /// Returns the category of the notification.
   NotificationCategory? get category => _category;
+
+  /// Returns the action type of the notification.
   ActionType? get actionType => _actionType;
+
+  /// Returns whether the large icon should be rounded.
   bool? get roundedLargeIcon => _roundedLargeIcon;
+
+  /// Returns whether the big picture should be rounded.
   bool? get roundedBigPicture => _roundedBigPicture;
 
+  /// Returns the date and time when the notification was displayed.
   DateTime? get displayedDate {
     return _displayedDate;
   }
 
+  @visibleForTesting
+  @protected
+  set privacy(newValue) {
+    _privacy = newValue;
+  }
+
+  @visibleForTesting
+  @protected
+  set actionType(newValue) {
+    _actionType = newValue;
+  }
+
+  @visibleForTesting
   @protected
   set displayedDate(newValue) {
     _displayedDate = newValue;
@@ -84,6 +152,7 @@ class BaseNotificationContent extends Model {
     return _createdDate;
   }
 
+  @visibleForTesting
   @protected
   set createdDate(newValue) {
     _createdDate = newValue;
@@ -93,6 +162,7 @@ class BaseNotificationContent extends Model {
     return _createdSource;
   }
 
+  @visibleForTesting
   @protected
   set createdSource(newValue) {
     _createdSource = newValue;
@@ -102,6 +172,7 @@ class BaseNotificationContent extends Model {
     return _createdLifeCycle;
   }
 
+  @visibleForTesting
   @protected
   set createdLifeCycle(newValue) {
     _createdLifeCycle = newValue;
@@ -111,6 +182,7 @@ class BaseNotificationContent extends Model {
     return _displayedLifeCycle;
   }
 
+  @visibleForTesting
   @protected
   set displayedLifeCycle(newValue) {
     _displayedLifeCycle = newValue;
@@ -143,98 +215,132 @@ class BaseNotificationContent extends Model {
       bool autoDismissible = true,
       Color? color,
       Color? backgroundColor,
+      Duration? chronometer,
+      Duration? timeoutAfter,
       Map<String, String?>? payload,
       String? customSound,
       bool roundedLargeIcon = false,
       bool roundedBigPicture = false,
       bool autoCancel = true})
-      : _id = id,
-        _channelKey = channelKey,
-        _groupKey = groupKey,
-        _actionType = actionType,
-        _title = title,
-        _body = body,
-        _summary = summary,
-        _showWhen = showWhen,
-        _icon = icon,
-        _largeIcon = largeIcon,
-        _bigPicture = bigPicture,
-        _wakeUpScreen = wakeUpScreen,
-        _fullScreenIntent = fullScreenIntent,
-        _criticalAlert = criticalAlert,
-        _category = category,
-        _color = color,
-        _backgroundColor = backgroundColor,
-        _payload = payload,
-        _customSound = customSound,
-        _roundedLargeIcon = roundedLargeIcon,
-        _roundedBigPicture = roundedBigPicture,
-        _autoDismissible = autoDismissible && autoCancel;
+      : _id = AwesomeAssertUtils.getValueOrDefault<int>(NOTIFICATION_ID, id),
+        _channelKey = AwesomeAssertUtils.getValueOrDefault<String>(
+            NOTIFICATION_CHANNEL_KEY, channelKey),
+        _groupKey = AwesomeAssertUtils.getValueOrDefault<String>(
+            NOTIFICATION_GROUP_KEY, groupKey),
+        _actionType = AwesomeAssertUtils.getValueOrDefault<ActionType>(
+            NOTIFICATION_ACTION_TYPE, actionType),
+        _title = AwesomeAssertUtils.getValueOrDefault<String>(
+            NOTIFICATION_TITLE, title),
+        _body = AwesomeAssertUtils.getValueOrDefault<String>(
+            NOTIFICATION_BODY, body),
+        _summary = AwesomeAssertUtils.getValueOrDefault<String>(
+            NOTIFICATION_SUMMARY, summary),
+        _showWhen = AwesomeAssertUtils.getValueOrDefault<bool>(
+            NOTIFICATION_SHOW_WHEN, showWhen),
+        _icon = AwesomeAssertUtils.getValueOrDefault<String>(
+            NOTIFICATION_ICON, icon),
+        _largeIcon = AwesomeAssertUtils.getValueOrDefault<String>(
+            NOTIFICATION_LARGE_ICON, largeIcon),
+        _bigPicture = AwesomeAssertUtils.getValueOrDefault<String>(
+            NOTIFICATION_BIG_PICTURE, bigPicture),
+        _wakeUpScreen = AwesomeAssertUtils.getValueOrDefault<bool>(
+            NOTIFICATION_WAKE_UP_SCREEN, wakeUpScreen),
+        _fullScreenIntent = AwesomeAssertUtils.getValueOrDefault<bool>(
+            NOTIFICATION_FULL_SCREEN_INTENT, fullScreenIntent),
+        _criticalAlert = AwesomeAssertUtils.getValueOrDefault<bool>(
+            NOTIFICATION_CRITICAL_ALERT, criticalAlert),
+        _category = AwesomeAssertUtils.getValueOrDefault<NotificationCategory>(
+            NOTIFICATION_CATEGORY, category),
+        _color = AwesomeAssertUtils.getValueOrDefault<Color>(
+            NOTIFICATION_COLOR, color),
+        _backgroundColor = AwesomeAssertUtils.getValueOrDefault<Color>(
+            NOTIFICATION_BACKGROUND_COLOR, backgroundColor),
+        _chronometer = AwesomeAssertUtils.getValueOrDefault<Duration>(
+            NOTIFICATION_CHRONOMETER,
+            (chronometer?.inSeconds ?? -1) < 0 ? null : chronometer),
+        _timeoutAfter = AwesomeAssertUtils.getValueOrDefault<Duration>(
+            NOTIFICATION_TIMEOUT_AFTER,
+            (timeoutAfter?.inSeconds ?? -1) < 0 ? null : timeoutAfter),
+        _payload = AwesomeAssertUtils.getValueOrDefault<Map<String, String?>>(
+            NOTIFICATION_PAYLOAD, payload),
+        _customSound = AwesomeAssertUtils.getValueOrDefault<String>(
+            NOTIFICATION_CUSTOM_SOUND, customSound),
+        _roundedLargeIcon = AwesomeAssertUtils.getValueOrDefault<bool>(
+            NOTIFICATION_ROUNDED_LARGE_ICON, roundedLargeIcon),
+        _roundedBigPicture = AwesomeAssertUtils.getValueOrDefault<bool>(
+            NOTIFICATION_ROUNDED_BIG_PICTURE, roundedBigPicture),
+        _autoDismissible = AwesomeAssertUtils.getValueOrDefault<bool>(
+            NOTIFICATION_AUTO_DISMISSIBLE, autoDismissible && autoCancel);
 
   @override
   BaseNotificationContent? fromMap(Map<String, dynamic> mapData) {
-    _processRetroCompatibility(mapData);
+    mapData = processRetroCompatibility(mapData);
 
-    _id = AwesomeAssertUtils.extractValue(NOTIFICATION_ID, mapData, int);
-    _channelKey = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CHANNEL_KEY, mapData, String);
-    _groupKey = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_GROUP_KEY, mapData, String);
-
-    _title =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_TITLE, mapData, String);
-    _body = AwesomeAssertUtils.extractValue(NOTIFICATION_BODY, mapData, String);
-    _summary =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SUMMARY, mapData, String);
-    _showWhen =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_SHOW_WHEN, mapData, bool);
-    _icon = AwesomeAssertUtils.extractValue(NOTIFICATION_ICON, mapData, String);
-    _largeIcon = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_LARGE_ICON, mapData, String);
-    _bigPicture = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_BIG_PICTURE, mapData, String);
-    _customSound = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CUSTOM_SOUND, mapData, String);
-
-    _wakeUpScreen = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_WAKE_UP_SCREEN, mapData, bool);
-    _fullScreenIntent = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_FULL_SCREEN_INTENT, mapData, bool);
-    _criticalAlert = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_CRITICAL_ALERT, mapData, bool);
-    _autoDismissible = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_AUTO_DISMISSIBLE, mapData, bool);
-
-    _roundedLargeIcon = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_ROUNDED_LARGE_ICON, mapData, bool);
-    _roundedBigPicture = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_ROUNDED_BIG_PICTURE, mapData, bool);
-
+    _id = AwesomeAssertUtils.extractValue<int>(NOTIFICATION_ID, mapData);
+    _channelKey = AwesomeAssertUtils.extractValue<String>(
+        NOTIFICATION_CHANNEL_KEY, mapData);
+    _groupKey = AwesomeAssertUtils.extractValue<String>(
+        NOTIFICATION_GROUP_KEY, mapData);
     _actionType = AwesomeAssertUtils.extractEnum<ActionType>(
         NOTIFICATION_ACTION_TYPE, mapData, ActionType.values);
-    _privacy = AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
-        NOTIFICATION_PRIVACY, mapData, NotificationPrivacy.values);
+    _title =
+        AwesomeAssertUtils.extractValue<String>(NOTIFICATION_TITLE, mapData);
+    _body = AwesomeAssertUtils.extractValue<String>(NOTIFICATION_BODY, mapData);
+    _summary =
+        AwesomeAssertUtils.extractValue<String>(NOTIFICATION_SUMMARY, mapData);
+    _showWhen =
+        AwesomeAssertUtils.extractValue<bool>(NOTIFICATION_SHOW_WHEN, mapData);
+    _icon = AwesomeAssertUtils.extractValue<String>(NOTIFICATION_ICON, mapData);
+    _largeIcon = AwesomeAssertUtils.extractValue<String>(
+        NOTIFICATION_LARGE_ICON, mapData);
+    _bigPicture = AwesomeAssertUtils.extractValue<String>(
+        NOTIFICATION_BIG_PICTURE, mapData);
+    _wakeUpScreen = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_WAKE_UP_SCREEN, mapData);
+    _fullScreenIntent = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_FULL_SCREEN_INTENT, mapData);
+    _criticalAlert = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_CRITICAL_ALERT, mapData);
     _category = AwesomeAssertUtils.extractEnum<NotificationCategory>(
         NOTIFICATION_CATEGORY, mapData, NotificationCategory.values);
-
     _color =
-        AwesomeAssertUtils.extractValue(NOTIFICATION_COLOR, mapData, Color);
-    _backgroundColor = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_BACKGROUND_COLOR, mapData, Color);
-
+        AwesomeAssertUtils.extractValue<Color>(NOTIFICATION_COLOR, mapData);
+    _backgroundColor = AwesomeAssertUtils.extractValue<Color>(
+        NOTIFICATION_BACKGROUND_COLOR, mapData);
+    _chronometer = AwesomeAssertUtils.extractValue<Duration>(
+        NOTIFICATION_CHRONOMETER, mapData);
+    _timeoutAfter = AwesomeAssertUtils.extractValue<Duration>(
+        NOTIFICATION_TIMEOUT_AFTER, mapData);
     _payload = AwesomeAssertUtils.extractMap<String, String?>(
-        mapData, NOTIFICATION_PAYLOAD);
+        NOTIFICATION_PAYLOAD, mapData);
+    _customSound = AwesomeAssertUtils.extractValue<String>(
+        NOTIFICATION_CUSTOM_SOUND, mapData);
+    _roundedLargeIcon = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_ROUNDED_LARGE_ICON, mapData);
+    _roundedBigPicture = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_ROUNDED_BIG_PICTURE, mapData);
+    _autoDismissible = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_AUTO_DISMISSIBLE, mapData);
 
     return this;
   }
 
-  void _processRetroCompatibility(Map<String, dynamic> dataMap) {
-    if (dataMap.containsKey("autoCancel")) {
-      developer
-          .log("autoCancel is deprecated. Please use autoDismissible instead.");
-      _autoDismissible =
-          AwesomeAssertUtils.extractValue("autoCancel", dataMap, bool);
+  @visibleForTesting
+  Map<String, dynamic> processRetroCompatibility(Map<String, dynamic> dataMap) {
+    if (dataMap.containsKey('autoCancel')) {
+      developer.log(
+          'autoCancel is now deprecated. Please use autoDismissible instead.');
+      dataMap[NOTIFICATION_AUTO_DISMISSIBLE] =
+          AwesomeAssertUtils.extractValue<bool>('autoCancel', dataMap);
     }
+    for (MapEntry<String, dynamic> entry in dataMap.entries) {
+      if (entry.value == 'AppKilled') {
+        developer
+            .log('AppKilled is now deprecated. Please use Terminated instead.');
+        dataMap[entry.key] = NotificationLifeCycle.Terminated.name;
+      }
+    }
+    return dataMap;
   }
 
   @override
@@ -267,7 +373,9 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_CREATED_LIFECYCLE: createdLifeCycle?.name,
       NOTIFICATION_DISPLAYED_LIFECYCLE: displayedLifeCycle?.name,
       NOTIFICATION_CREATED_DATE: createdDate,
-      NOTIFICATION_DISPLAYED_DATE: displayedDate
+      NOTIFICATION_DISPLAYED_DATE: displayedDate,
+      NOTIFICATION_CHRONOMETER: _chronometer?.inSeconds,
+      NOTIFICATION_TIMEOUT_AFTER: _timeoutAfter?.inSeconds,
     };
   }
 
@@ -297,11 +405,11 @@ class BaseNotificationContent extends Model {
 
   @override
   void validate() {
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_id, int)) {
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_id)) {
       throw const AwesomeNotificationsException(
           message: 'Property id is required');
     }
-    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_channelKey, String)) {
+    if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_channelKey)) {
       throw const AwesomeNotificationsException(
           message: 'Channel Key is required');
     }

@@ -30,16 +30,16 @@ class ReceivedAction extends ReceivedNotification {
         dataMap,
         NotificationLifeCycle.values);
 
-    actionDate = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_ACTION_DATE, dataMap, DateTime);
-    dismissedDate = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_DISMISSED_DATE, dataMap, DateTime);
+    actionDate = AwesomeAssertUtils.extractValue<DateTime>(
+        NOTIFICATION_ACTION_DATE, dataMap);
+    dismissedDate = AwesomeAssertUtils.extractValue<DateTime>(
+        NOTIFICATION_DISMISSED_DATE, dataMap);
 
-    buttonKeyPressed = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_BUTTON_KEY_PRESSED, dataMap, String);
+    buttonKeyPressed = AwesomeAssertUtils.extractValue<String>(
+        NOTIFICATION_BUTTON_KEY_PRESSED, dataMap);
 
-    buttonKeyInput = AwesomeAssertUtils.extractValue(
-        NOTIFICATION_BUTTON_KEY_INPUT, dataMap, String);
+    buttonKeyInput = AwesomeAssertUtils.extractValue<String>(
+        NOTIFICATION_BUTTON_KEY_INPUT, dataMap);
 
     return this;
   }

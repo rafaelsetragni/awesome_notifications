@@ -1,8 +1,8 @@
 import 'package:awesome_notifications/i_awesome_notifications.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'awesome_notifications_web.dart';
 import 'awesome_notifications_method_channel.dart';
+import 'awesome_notifications_web.dart';
 
 abstract class AwesomeNotificationsPlatform extends PlatformInterface
     implements IAwesomeNotifications {

@@ -25,21 +25,33 @@
             "name": "Complete Example",
             "cwd": "example",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "program": "lib/main_complete.dart",
         },
         {
             "name": "Complete Example (profile mode)",
             "cwd": "example",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+            "program": "lib/main_complete.dart",
+          }
         },
         {
             "name": "Complete Example (release mode)",
             "cwd": "example",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
-        }
+            "flutterMode": "release",
+            "program": "lib/main_complete.dart",
+        },
+        {
+            "name": "All tests coverage",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--coverage",
+            ],
+        },
     ]
 }
