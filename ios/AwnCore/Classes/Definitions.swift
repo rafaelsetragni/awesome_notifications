@@ -1,9 +1,11 @@
 public enum Definitions {
-    public static let  USER_DEFAULT_TAG = "group.AwesomeNotifications." + Bundle.main.getBundleName()
+    public static let  USER_DEFAULT_TAG = "group.awn." + Bundle.main.getBundleName().md5.prefix(8)
+    public static let  TEST_APP_GROUP = "AAA"
     
     public static let  NOTIFICATION_MODEL_CONTENT = "content"
     public static let  NOTIFICATION_MODEL_SCHEDULE = "schedule"
     public static let  NOTIFICATION_MODEL_BUTTONS = "actionButtons"
+    public static let  NOTIFICATION_MODEL_LOCALIZATIONS = "localizations"
     
     public static let  MEDIA_VALID_NETWORK = "^https?:\\/\\/"//(www)?(\\.?[a-zA-Z0-9@:%.\\-_\\+~#=]{2,256}\\/?)+(\\?\\S+)$
     public static let  MEDIA_VALID_FILE = "^file:\\/\\/"
@@ -65,6 +67,7 @@ public enum Definitions {
     public static let  CHANNEL_METHOD_INITIALIZE = "initialize"
     public static let  CHANNEL_METHOD_REGISTER_PLUGIN_BY_NAME = "registerPluginByName"
     public static let  CHANNEL_METHOD_PUSH_NEXT = "pushNext"
+    public static let  CHANNEL_METHOD_GET_INITIAL_ACTION = "getInitialAction"
     public static let  CHANNEL_METHOD_GET_DRAWABLE_DATA = "getDrawableData"
     public static let  CHANNEL_METHOD_GET_PLATFORM_VERSION = "getPlatformVersion"
     public static let  CHANNEL_METHOD_CREATE_NOTIFICATION = "createNewNotification"
@@ -84,6 +87,9 @@ public enum Definitions {
     public static let  CHANNEL_METHOD_DECREMENT_BADGE_COUNT = "decBadgeCount"
     public static let  CHANNEL_METHOD_GET_NEXT_DATE = "getNextDate"
     public static let  CHANNEL_METHOD_RESET_BADGE = "resetBadge"
+    
+    public static let  CHANNEL_METHOD_SET_LOCALIZATION = "setLocalization"
+    public static let  CHANNEL_METHOD_GET_LOCALIZATION = "getLocalization"
     
     public static let  CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE = "showNotificationPage"
     public static let  CHANNEL_METHOD_SHOW_ALARM_PAGE = "showAlarmPage"
@@ -147,6 +153,9 @@ public enum Definitions {
     public static let  NOTIFICATION_DISPLAYED_DATE = "displayedDate"
     public static let  NOTIFICATION_ACTION_DATE = "actionDate"
     public static let  NOTIFICATION_DISMISSED_DATE = "dismissedDate"
+    
+    public static let  NOTIFICATION_MODEL_ANDROID = "Android"
+    public static let  NOTIFICATION_MODEL_IOS = "iOS"
 
     public static let  NOTIFICATION_ID = "id"
     public static let  NOTIFICATION_LAYOUT = "notificationLayout"
@@ -158,7 +167,9 @@ public enum Definitions {
     public static let  NOTIFICATION_BUTTON_KEY_PRESSED = "buttonKeyPressed"
     public static let  NOTIFICATION_BUTTON_KEY_INPUT = "buttonKeyInput"
     public static let  NOTIFICATION_JSON = "notificationJson"
+    public static let  NOTIFICATION_TIMEOUT_AFTER = "timeoutAfter"
     
+    public static let  NOTIFICATION_BUTTON_LABELS = "buttonLabels"
     public static let  NOTIFICATION_ACTION_BUTTONS = "actionButtons"
     public static let  NOTIFICATION_BUTTON_KEY = "key"
     public static let  NOTIFICATION_BUTTON_ICON = "icon"
@@ -209,6 +220,7 @@ public enum Definitions {
     public static let  NOTIFICATION_BIG_PICTURE = "bigPicture"
     public static let  NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND = "hideLargeIconOnExpand"
     public static let  NOTIFICATION_PROGRESS = "progress"
+    public static let  NOTIFICATION_BADGE = "badge"
     public static let  NOTIFICATION_ENABLE_LIGHTS = "enableLights"
     public static let  NOTIFICATION_LED_COLOR = "ledColor"
     public static let  NOTIFICATION_LED_ON_MS = "ledOnMs"
@@ -249,7 +261,7 @@ public enum Definitions {
         Definitions.NOTIFICATION_PLAY_SOUND: true,
         Definitions.NOTIFICATION_AUTO_DISMISSIBLE: true,
         Definitions.NOTIFICATION_LOCKED: false,
-        Definitions.NOTIFICATION_TICKER: "ticker",
+        Definitions.NOTIFICATION_TICKER: "",
         Definitions.NOTIFICATION_ALLOW_WHILE_IDLE: false,
         Definitions.NOTIFICATION_ONLY_ALERT_ONCE: false,
         Definitions.NOTIFICATION_IS_DANGEROUS_OPTION: false,

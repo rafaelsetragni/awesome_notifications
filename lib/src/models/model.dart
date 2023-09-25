@@ -10,10 +10,7 @@ abstract class Model {
   Model? fromMap(Map<String, dynamic> mapData);
 
   @override
-  String toString() {
-    Map mapData = toMap();
-    return AwesomeMapUtils.printPrettyMap(mapData);
-  }
+  String toString() => AwesomeMapUtils.printPrettyMap(toMap());
 
   /// Validates
   void validate();

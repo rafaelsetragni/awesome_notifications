@@ -40,12 +40,13 @@ public class DartAwesomeNotificationsExtension: AwesomeNotificationsExtension {
         
         AwesomeNotifications.initialize()
         
+        FlutterAudioUtils.extendCapabilities(
+            usingFlutterRegistrar: DartAwesomeNotificationsExtension.registrar)
+        
+        FlutterBitmapUtils.extendCapabilities(
+            usingFlutterRegistrar: DartAwesomeNotificationsExtension.registrar)
+        
         if DartAwesomeNotificationsExtension.registrar != nil {
-            FlutterAudioUtils.extendCapabilities(
-                usingFlutterRegistrar: DartAwesomeNotificationsExtension.registrar!)
-            
-            FlutterBitmapUtils.extendCapabilities(
-                usingFlutterRegistrar: DartAwesomeNotificationsExtension.registrar!)
             
             DartBackgroundExecutor.extendCapabilities(
                 usingFlutterRegistrar: DartAwesomeNotificationsExtension.registrar!)

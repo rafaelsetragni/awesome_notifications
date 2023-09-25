@@ -36,6 +36,7 @@ public class NotificationContentModel : AbstractModel {
     public var color: Int64?
     public var backgroundColor: Int64?
     public var progress: Int?
+    public var badge: Int?
     public var ticker: String?
 
     public var roundedLargeIcon: Bool?
@@ -139,6 +140,7 @@ public class NotificationContentModel : AbstractModel {
         self.color                 = MapUtils<Int64>.getValueOrDefault(reference: Definitions.NOTIFICATION_COLOR, arguments: arguments)
         self.backgroundColor       = MapUtils<Int64>.getValueOrDefault(reference: Definitions.NOTIFICATION_BACKGROUND_COLOR, arguments: arguments)
         self.progress              = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_PROGRESS, arguments: arguments)
+        self.badge                 = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_BADGE, arguments: arguments)
         self.ticker                = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_TICKER, arguments: arguments)
         
         self.roundedLargeIcon   = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_ROUNDED_LARGE_ICON, arguments: arguments)
@@ -158,6 +160,13 @@ public class NotificationContentModel : AbstractModel {
         self.displayedDate      = MapUtils<RealDateTime>.getRealDateOrDefault(reference: Definitions.NOTIFICATION_DISPLAYED_DATE, arguments: arguments, defaultTimeZone: RealDateTime.utcTimeZone)
         
         self.payload  = MapUtils<[String:String?]>.getValueOrDefault(reference: Definitions.NOTIFICATION_PAYLOAD, arguments: arguments)
+        
+        if StringUtils.shared.isNullOrEmpty(self.bigPicture, considerWhiteSpaceAsEmpty: true) {
+            self.largeIcon = nil
+        }
+        if StringUtils.shared.isNullOrEmpty(self.bigPicture, considerWhiteSpaceAsEmpty: true) {
+            self.bigPicture = nil
+        }
         
         return self
     }
@@ -189,6 +198,7 @@ public class NotificationContentModel : AbstractModel {
         if(self.color != nil){ mapData[Definitions.NOTIFICATION_COLOR] = self.color }
         if(self.backgroundColor != nil){ mapData[Definitions.NOTIFICATION_BACKGROUND_COLOR] = self.backgroundColor }
         if(self.progress != nil){ mapData[Definitions.NOTIFICATION_PROGRESS] = self.progress }
+        if(self.badge != nil){ mapData[Definitions.NOTIFICATION_BADGE] = self.badge }
         if(self.ticker != nil){ mapData[Definitions.NOTIFICATION_TICKER] = self.ticker }
         if(self.privacy != nil){ mapData[Definitions.NOTIFICATION_PRIVACY] = self.privacy?.rawValue }
         if(self.privateMessage != nil){ mapData[Definitions.NOTIFICATION_PRIVATE_MESSAGE] = self.privateMessage }
