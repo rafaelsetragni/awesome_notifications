@@ -45,7 +45,7 @@ class BitmapHelper {
     final Completer completer = Completer<ImageInfo>();
     final ImageStream stream = provider.resolve(const ImageConfiguration());
     final listener =
-    ImageStreamListener((ImageInfo info, bool synchronousCall) {
+        ImageStreamListener((ImageInfo info, bool synchronousCall) {
       if (!completer.isCompleted) {
         completer.complete(info);
       }
