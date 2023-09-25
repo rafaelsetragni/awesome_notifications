@@ -103,6 +103,7 @@ So, you MUST not use `firebase_messaging` with `awesome_notifications`. Use `awe
 - Include `Time Sensitive notifications`
 - Include `Communication notifications`
 - Include full `Media Player notifications`
+- Implement test cases for native libraries to achieve +90% test coverage in each one
 - Include support for other push notification services (Wonderpush, One Signal, IBM, AWS, Azure, etc)
 - Replicate all Android layouts for iOS (almost accomplished)
 - Custom layouts for notifications
