@@ -38,7 +38,7 @@ dependencies:
   shared_preferences: ^2.2.1
   numberpicker: ^2.1.2
   giff_dialog: ^1.0.1
-  vibration: ^1.8.1
+  vibration: ^1.8.2
   device_info_plus: ^9.0.3
   url_launcher: ^6.1.14
   intl: ^0.18.1
