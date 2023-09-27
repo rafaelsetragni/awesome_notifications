@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.2'
+        classpath 'com.android.tools.build:gradle:7.3.0'
     }
 }
 
@@ -27,7 +27,7 @@ android {
     if (project.android.hasProperty('namespace')) {
         namespace 'me.carda.awesome_notifications'
     }
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -36,13 +36,14 @@ android {
 
     defaultConfig {
         minSdkVersion 21
+        targetSdk 34
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 }
 
 dependencies {
 //    implementation project(':awn_core')
-    implementation 'me.carda:AndroidAwnCore:0.7.5'
+    implementation 'me.carda:AndroidAwnCore:0.7.6'
 
     implementation 'com.google.guava:guava:31.1-android'
 
