@@ -1,3 +1,10 @@
+## [0.7.6]
+### Added
+* Integration with awesome_notifications_core to automatically manage versions
+* Support for Android 14
+### Improved
+* Documentation updated
+
 ## [0.7.5]
 ### Added
 * Full support for Flutter 3.13
