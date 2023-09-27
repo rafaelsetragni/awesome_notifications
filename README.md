@@ -250,14 +250,22 @@ Bellow are the obligatory configurations that your app must meet to use awesome_
 
 ### 🤖 Configuring Android:
 
-1 - Is required the minimum android SDK to 21 (Android 5.0 Lollipop) and Java compiled SDK Version to 33 (Android 13). You can change the `minSdkVersion` to 21 and the `compileSdkVersion` and `targetSdkVersion` to 33, inside the file `build.gradle`, located inside "android/app/" folder.
+1 - Is required the minimum android SDK to 21 (Android 5.0 Lollipop), Grade 7.3.0 or greater and Java compiled SDK Version to 34 (Android 14). You can change the `minSdkVersion` to 21 and the `compileSdkVersion` and `targetSdkVersion` to 34, inside the file `build.gradle`, located inside "android/app/" folder.
 ```Gradle
+buildscript {
+    ...
+    
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.2.2'
+    }
+}
+
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 34
         ...
     }
     ...
@@ -1097,16 +1105,15 @@ await AwesomeNotifications().createNotification(
 
 ## ⏰ Schedule Precision
 
-It's important to keep in mind that schedules can be ignored or delayed, especially for repeating schedules, due to system algorithms designed to save battery life and prevent abuse of resources. While this behavior is recommended to protect the app and the manufacturer's image, it's important to consider this fact in your business logic.
+It's important to keep in mind that schedules can be ignored or delayed, especially for repeating schedules, due to system algorithms designed to save battery life and prevent abuse of resources. While this behavior is recommended to protect the app and the manufacturer's image, it's crucial to consider this fact in your business logic.
 
-However, for cases where precise schedule execution is a MUST requirement, there are some features you can use to ensure the execution at the correct time:
+However, for cases where precise schedule execution is a must, there are some features you can use to ensure the notification is sent at the correct time:
 
-- Set the notification's category to a critical category, such as Alarm, Reminder, or Call.
-- Set the `preciseAlarm` property to true. This feature allows the system to schedule notifications to be sent at an exact time, even if the device is in low-power mode. For Android versions greater than or equal to 12, you need to explicitly request user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications` or take the user to the permission page calling `showAlarmPage`.
-- Set criticalAlerts channel property and notification content property to true. This feature allows you to show notifications and play sounds even when the device is on silent or Do Not Disturb mode. Due to its sensitivity, this feature requires special authorization from Apple on iOS and explicit user consent on Android versions greater than or equal to 11. On iOS, you must submit a request authorization to Apple to enable it, as described in [this post](https://medium.com/@shashidharyamsani/implementing-ios-critical-alerts-7d82b4bb5026).
+- Set the notification's category to a critical one, such as Alarm, Reminder, or Call.
+- Set the `preciseAlarm` property to true. This feature allows the system to schedule notifications to be sent at an exact time, even if the device is in low-power mode. For Android versions greater than or equal to 12, you need to explicitly request user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications` or take the user to the permission page by calling `showAlarmPage`.
+- Set the `criticalAlerts` channel property and notification content property to true. This feature allows you to show notifications and play sounds even when the device is on silent or Do Not Disturb mode. Due to its sensitivity, this feature requires special authorization from Apple on iOS and explicit user consent on Android versions greater than or equal to 11. On iOS, you must submit a request for authorization to Apple to enable it, as described in [this post](https://medium.com/@shashidharyamsani/implementing-ios-critical-alerts-7d82b4bb5026).
 
-
-To enable precise alarms, you need to add the `SCHEDULE_EXACT_ALARM` permission to your app's `AndroidManifest.xml` file, which is located in the ***Android/app/src/main/*** folder:
+To enable precise alarms, you need to add the `SCHEDULE_EXACT_ALARM` permission to your app's `AndroidManifest.xml` file, located in the ***Android/app/src/main/*** folder:
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -1117,6 +1124,8 @@ To enable precise alarms, you need to add the `SCHEDULE_EXACT_ALARM` permission 
    </application>
 </manifest>
 ```
+
+For Android 14 or greater, the SCHEDULE_EXACT_ALARM permission is denied by default, and you must request it from the users using `requestPermissionToSendNotifications`.
 
 To enable critical alerts, you need to add the `ACCESS_NOTIFICATION_POLICY` permission to your app's `AndroidManifest.xml` file:
 
