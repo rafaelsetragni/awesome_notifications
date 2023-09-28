@@ -1,3 +1,7 @@
+## [0.7.7]
+### Improved
+* Enhanced versioning of iOS core libraries to better support DevOps, ensuring greater flexibility for future updates.
+
 ## [0.7.6]
 ### Added
 * Integration with awesome_notifications_core to automatically manage versions
