@@ -984,7 +984,7 @@ You can use the following attributes to configure your notification channels:
 | `ledColor`            | No       | The color of the LED to display when the notification is received.                           | Color                  | No        | `Colors.white`|
 | `ledOnMs`             | No       | The duration in milliseconds that the LED should remain on when displaying the notification. | Integer                | No        | None          |
 | `ledOffMs`            | No       | The duration in milliseconds that the LED should remain off when displaying the notification.| Integer                | No        | None          |
-| `groupKey`            | No       | The string key used to group notifications together.                                         | String                 | No        | None          |
+| `channelGroupKey`     | No       | The string key used to group notifications together.                                         | String                 | No        | None          |
 | `groupSort`           | No       | The order in which notifications within a group should be sorted.                            | GroupSort              | No        | `Desc`        |
 | `groupAlertBehavior`  | No       | The alert behavior to use for notifications within a group.                                  | GroupAlertBehavior     | No        | `All`         |
 | `defaultPrivacy`      | No       | The level of privacy to apply to the notification when the device is locked.                 | NotificationPrivacy    | No        | `Private`     |
