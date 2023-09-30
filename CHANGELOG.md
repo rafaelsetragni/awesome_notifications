@@ -1,12 +1,25 @@
+## [0.7.7]
+### Improved
+* Enhanced versioning of iOS core libraries to better support DevOps, ensuring greater flexibility for future updates.
+
+## [0.7.6]
+### Added
+* Integration with awesome_notifications_core to automatically manage versions
+* Support for Android 14
+### Improved
+* Documentation updated
+
 ## [0.7.5]
 ### Added
-* Support to iOS 17
-* Compatibility to AGP 8 
-* Automated tests for dart code in master with +90% of coverage
+* Full support for Flutter 3.13
+* Support for iOS 17
+* Compatibility with AGP 8 
+* Automated tests for Dart code in master, with over 90% coverage
 ### Fixed
 * New image provider for native resource media
 ### Improved
-* Project dependencies upgraded to the last version available
+* Project dependencies upgraded to the latest version available
+* Documentation updated
 
 ## [0.7.5-dev.3]
 ### Added

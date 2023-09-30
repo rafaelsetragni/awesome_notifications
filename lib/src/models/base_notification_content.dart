@@ -257,10 +257,10 @@ class BaseNotificationContent extends Model {
             NOTIFICATION_BACKGROUND_COLOR, backgroundColor),
         _chronometer = AwesomeAssertUtils.getValueOrDefault<Duration>(
             NOTIFICATION_CHRONOMETER,
-            (chronometer?.inSeconds ?? -1)  < 0 ? null : chronometer),
+            (chronometer?.inSeconds ?? -1) < 0 ? null : chronometer),
         _timeoutAfter = AwesomeAssertUtils.getValueOrDefault<Duration>(
             NOTIFICATION_TIMEOUT_AFTER,
-            (timeoutAfter?.inSeconds ?? -1)  < 0 ? null : timeoutAfter),
+            (timeoutAfter?.inSeconds ?? -1) < 0 ? null : timeoutAfter),
         _payload = AwesomeAssertUtils.getValueOrDefault<Map<String, String?>>(
             NOTIFICATION_PAYLOAD, payload),
         _customSound = AwesomeAssertUtils.getValueOrDefault<String>(
