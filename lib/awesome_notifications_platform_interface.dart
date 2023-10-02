@@ -6,6 +6,7 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'awesome_notifications_empty.dart';
 import 'awesome_notifications_method_channel.dart';
+import 'awesome_notifications_linux.dart';
 
 abstract class AwesomeNotificationsPlatform extends PlatformInterface
     implements IAwesomeNotifications {
@@ -28,6 +29,9 @@ abstract class AwesomeNotificationsPlatform extends PlatformInterface
         case "android":
         case "ios":
           _instance = MethodChannelAwesomeNotifications();
+          break;
+        case "linux":
+          _instance = AwesomeNotificationsLinux();
           break;
         default:
           _instance = AwesomeNotificationsEmpty();
