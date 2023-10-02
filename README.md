@@ -244,7 +244,23 @@ We have made some changes to Awesome Notifications in version 0.7.X that may req
 
 ## Initial Configurations
 
-Bellow are the obligatory configurations that your app must meet to use awesome_notifications:
+To use the `awesome_notifications`, follow these steps:
+
+1. Add the `awesome_notifications` plugin to your project's `pubspec.yaml` file:
+
+```yaml
+dependencies:
+awesome_notifications_core: ^0.8.0 # <~ always ensure to use the latest version
+awesome_notifications: any # <~ this version is managed by awesome_notifications_core package
+```
+
+After adding the dependency, run the following command to get the package:
+
+```bash
+flutter pub get
+```
+
+Now you need to modify some files in native libraries to meet to use awesome_notifications properly. Let's start with the Android configurations:
 
 <br>
 
@@ -256,7 +272,7 @@ buildscript {
     ...
     
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath 'com.android.tools.build:gradle:7.3.0'
     }
 }
 
@@ -969,29 +985,30 @@ You can use the following attributes to configure your notification channels:
 
 ## Notification Channel Attributes
 
-| Attribute             | Required | Description                                                                                  | Type                   | Updatable | Default Value |
-| ----------------------| -------- | -------------------------------------------------------------------------------------------- | ---------------------- | --------- | ------------- |
-| `channelKey`          | Yes      | A string key that identifies a channel where notifications are sent.                         | String                 | No        | basic_channel |
-| `channelName`         | Yes      | The name of the channel, which is visible to users on Android.                               | String                 | Yes       | None          |
-| `channelDescription`  | Yes      | A brief description of the channel, which is visible to users on Android.                    | String                 | Yes       | None          |
-| `channelShowBadge`    | No       | Whether the notification should automatically increment the app icon badge counter.          | Boolean                | Yes       | `false`       |
-| `importance`          | No       | The importance level of the notification.                                                    | NotificationImportance | No        | `Normal`      |
-| `playSound`           | No       | Whether the notification should play a sound.                                                | Boolean                | No        | `true`        |
-| `soundSource`         | No       | The path of a custom sound file to be played with the notification.                          | String                 | No        | None          |
-| `defaultRingtoneType` | No       | The type of default sound to be played with the notification (only for Android).             | DefaultRingtoneType    | Yes       | `Notification`|
-| `enableVibration`     | No       | Whether the device should vibrate when the notification is received.                         | Boolean                | No        | `true`        |
-| `enableLights`        | No       | Whether the device should display a blinking LED when the notification is received.          | Boolean                | No        | `true` |
-| `ledColor`            | No       | The color of the LED to display when the notification is received.                           | Color                  | No        | `Colors.white`|
-| `ledOnMs`             | No       | The duration in milliseconds that the LED should remain on when displaying the notification. | Integer                | No        | None          |
-| `ledOffMs`            | No       | The duration in milliseconds that the LED should remain off when displaying the notification.| Integer                | No        | None          |
-| `groupKey`            | No       | The string key used to group notifications together.                                         | String                 | No        | None          |
-| `groupSort`           | No       | The order in which notifications within a group should be sorted.                            | GroupSort              | No        | `Desc`        |
-| `groupAlertBehavior`  | No       | The alert behavior to use for notifications within a group.                                  | GroupAlertBehavior     | No        | `All`         |
-| `defaultPrivacy`      | No       | The level of privacy to apply to the notification when the device is locked.                 | NotificationPrivacy    | No        | `Private`     |
-| `icon`                | No       | The name of the notification icon to display in the status bar.                              | String                 | No        | None          |
-| `defaultColor`        | No       | The color to use for the notification on Android.                                            | Color                  | No        | `Color.black` |
-| `locked`              | No       | Whether the notification should be prevented from being dismissed by the user.               | Boolean                | No        | `false`       |
-| `onlyAlertOnce`       | No       | Whether the notification should only alert the user once.                                    | Boolean                | No        | `false`       |
+| Attribute             | Required | Description                                                                                   | Type                    | Updatable | Default Value  |
+|-----------------------| -------- |-----------------------------------------------------------------------------------------------|-------------------------|-----------|----------------|
+| `channelKey`          | Yes      | A string key that identifies a channel where notifications are sent.                          | String                  | No        | basic_channel  |
+| `channelName`         | Yes      | The name of the channel, which is visible to users on Android.                                | String                  | Yes       | None           |
+| `channelDescription`  | Yes      | A brief description of the channel, which is visible to users on Android.                     | String                  | Yes       | None           |
+| `channelShowBadge`    | No       | Whether the notification should automatically increment the app icon badge counter.           | Boolean                 | Yes       | `false`        |
+| `channelGroupKey`     | No       | A string key to group all channels in same topic at android's configuration page              | String                  | No        | None           |
+| `importance`          | No       | The importance level of the notification.                                                     | NotificationImportance  | No        | `Normal`       |
+| `playSound`           | No       | Whether the notification should play a sound.                                                 | Boolean                 | No        | `true`         |
+| `soundSource`         | No       | The path of a custom sound file to be played with the notification.                           | String                  | No        | None           |
+| `defaultRingtoneType` | No       | The type of default sound to be played with the notification (only for Android).              | DefaultRingtoneType     | Yes       | `Notification` |
+| `enableVibration`     | No       | Whether the device should vibrate when the notification is received.                          | Boolean                 | No        | `true`         |
+| `enableLights`        | No       | Whether the device should display a blinking LED when the notification is received.           | Boolean                 | No        | `true`         |
+| `ledColor`            | No       | The color of the LED to display when the notification is received.                            | Color                   | No        | `Colors.white` |
+| `ledOnMs`             | No       | The duration in milliseconds that the LED should remain on when displaying the notification.  | Integer                 | No        | None           |
+| `ledOffMs`            | No       | The duration in milliseconds that the LED should remain off when displaying the notification. | Integer                 | No        | None           |
+| `groupKey`            | No       | The string key used to group notifications together in Android status bar.                    | String                  | No        | None           |
+| `groupSort`           | No       | The order in which notifications within a group should be sorted.                             | GroupSort               | No        | `Desc`         |
+| `groupAlertBehavior`  | No       | The alert behavior to use for notifications within a group.                                   | GroupAlertBehavior      | No        | `All`          |
+| `defaultPrivacy`      | No       | The level of privacy to apply to the notification when the device is locked.                  | NotificationPrivacy     | No        | `Private`      |
+| `icon`                | No       | The name of the notification icon to display in the status bar.                               | String                  | No        | None           |
+| `defaultColor`        | No       | The color to use for the notification on Android.                                             | Color                   | No        | `Color.black`  |
+| `locked`              | No       | Whether the notification should be prevented from being dismissed by the user.                | Boolean                 | No        | `false`        |
+| `onlyAlertOnce`       | No       | Whether the notification should only alert the user once.                                     | Boolean                 | No        | `false`        |
 
 
 <br>
