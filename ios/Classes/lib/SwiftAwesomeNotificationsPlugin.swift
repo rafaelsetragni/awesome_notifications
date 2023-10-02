@@ -57,8 +57,8 @@ public class SwiftAwesomeNotificationsPlugin:
             registrar.addMethodCallDelegate(self, channel: self.flutterChannel!)
             registrar.addApplicationDelegate(self)
             
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications plugin attached to iOS \(floor(NSFoundationVersionNumber))")
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications - App Group : \(Definitions.USER_DEFAULT_TAG)")
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications plugin attached to iOS \(floor(NSFoundationVersionNumber))")
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications - App Group : \(Definitions.USER_DEFAULT_TAG)")
             
             if !Definitions.USER_DEFAULT_TAG.starts(with: "group.") {
                 throw ExceptionFactory
@@ -71,7 +71,7 @@ public class SwiftAwesomeNotificationsPlugin:
             }
         }
         catch {
-            Logger.e(SwiftAwesomeNotificationsPlugin.TAG, error.localizedDescription)
+            Logger.shared.e(SwiftAwesomeNotificationsPlugin.TAG, error.localizedDescription)
         }
     }
     
@@ -85,7 +85,7 @@ public class SwiftAwesomeNotificationsPlugin:
         awesomeNotifications = nil
         
         if AwesomeNotifications.debug {
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications plugin detached from iOS \(floor(NSFoundationVersionNumber))")
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications plugin detached from iOS \(floor(NSFoundationVersionNumber))")
         }
     }
     
@@ -339,7 +339,7 @@ public class SwiftAwesomeNotificationsPlugin:
                             .setChannel(channel: channel) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.e(SwiftAwesomeNotificationsPlugin.TAG, "Channel \(updated ? "" : "wasn't ")updated")
+            Logger.shared.e(SwiftAwesomeNotificationsPlugin.TAG, "Channel \(updated ? "" : "wasn't ")updated")
         }
 		
 		result(updated)
@@ -362,13 +362,13 @@ public class SwiftAwesomeNotificationsPlugin:
             .removeChannel(channelKey: channelKey) ?? false {
             
             if AwesomeNotifications.debug {
-                Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "Channel removed")
+                Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "Channel removed")
             }
             result(true)
         }
         else {
             if AwesomeNotifications.debug {
-                Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "Channel '\(channelKey)' not found")
+                Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "Channel '\(channelKey)' not found")
             }
             result(false)
         }
@@ -459,7 +459,7 @@ public class SwiftAwesomeNotificationsPlugin:
                 .dismissNotification(byId: notificationId!) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, dismissed ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, dismissed ?
                   "Notification \(notificationId!) dismissed":
                   "Notification \(notificationId!) was not found")
         }
@@ -484,7 +484,7 @@ public class SwiftAwesomeNotificationsPlugin:
                 .cancelSchedule(byId: notificationId!) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, cancelled ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, cancelled ?
                   "Schedule \(notificationId!) cancelled":
                   "Schedule \(notificationId!) was not found")
         }
@@ -509,7 +509,7 @@ public class SwiftAwesomeNotificationsPlugin:
                 .cancelNotification(byId: notificationId!) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, cancelled ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, cancelled ?
                   "Notification \(notificationId!) cancelled":
                   "Notification \(notificationId!) was not found")
         }
@@ -533,7 +533,7 @@ public class SwiftAwesomeNotificationsPlugin:
                 .dismissNotifications(byChannelKey: channelKey) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
                   "Notifications from channel \(channelKey) dismissed":
                   "Notifications from channel \(channelKey) not found")
         }
@@ -557,7 +557,7 @@ public class SwiftAwesomeNotificationsPlugin:
                 .cancelSchedules(byChannelKey: channelKey) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
                   "Scheduled notifications from channel \(channelKey) canceled":
                   "Scheduled notifications from channel \(channelKey) not found")
         }
@@ -581,7 +581,7 @@ public class SwiftAwesomeNotificationsPlugin:
                 .cancelNotifications(byChannelKey: channelKey) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
                   "Notifications and schedules from channel \(channelKey) canceled":
                   "Notifications and schedules from channel \(channelKey) not found")
         }
@@ -605,7 +605,7 @@ public class SwiftAwesomeNotificationsPlugin:
                 .dismissNotifications(byGroupKey: groupKey) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
                   "Notifications from group \(groupKey) dismissed":
                   "Notifications from group \(groupKey) not found")
         }
@@ -629,7 +629,7 @@ public class SwiftAwesomeNotificationsPlugin:
                 .cancelSchedules(byGroupKey: groupKey) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
                   "Scheduled notifications from group \(groupKey) cancelled":
                   "Scheduled notifications from group \(groupKey) not found")
         }
@@ -653,7 +653,7 @@ public class SwiftAwesomeNotificationsPlugin:
                 .cancelNotifications(byGroupKey: groupKey) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
                   "Notifications and schedules from group \(groupKey) cancelled":
                   "Notifications and schedules from group \(groupKey) not found")
         }
@@ -667,7 +667,7 @@ public class SwiftAwesomeNotificationsPlugin:
                 .dismissAllNotifications() ?? false
         
         if AwesomeNotifications.debug {
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "All notifications was dismissed")
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "All notifications was dismissed")
         }
         
         result(success)
@@ -679,7 +679,7 @@ public class SwiftAwesomeNotificationsPlugin:
                 .cancelAllSchedules() ?? false
         
         if AwesomeNotifications.debug {
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "All schedules was cancelled")
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "All schedules was cancelled")
         }
         
         result(success)
@@ -691,7 +691,7 @@ public class SwiftAwesomeNotificationsPlugin:
                 .cancelAllNotifications() ?? false
         
         if AwesomeNotifications.debug {
-            Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "All notifications was cancelled")
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "All notifications was cancelled")
         }
         
         result(success)
@@ -1023,7 +1023,7 @@ public class SwiftAwesomeNotificationsPlugin:
                     backgroundHandle: dartBgHandle,
                     debug: debug)
 		
-		Logger.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications service initialized")
+		Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications service initialized")
 		result(awesomeNotifications != nil)
     }
     
@@ -1045,7 +1045,7 @@ public class SwiftAwesomeNotificationsPlugin:
         
         let success = actionHandle != 0
         if !success {
-            Logger.e(SwiftAwesomeNotificationsPlugin.TAG, "Attention: there is no valid static method to receive notification action data in background")
+            Logger.shared.e(SwiftAwesomeNotificationsPlugin.TAG, "Attention: there is no valid static method to receive notification action data in background")
         }
         
         result(success)
