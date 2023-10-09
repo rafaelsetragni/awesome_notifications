@@ -95,23 +95,23 @@ public class DartBackgroundExecutor: BackgroundExecutor {
     ) {
         
         guard let dartCallbackInfo = FlutterCallbackCache.lookupCallbackInformation(dartCallbackHandle) else {
-            Logger.e(TAG, "There is no valid callback info to handle dart channels.")
+            print("There is no valid callback info to handle dart channels.")
             closeBackgroundIsolate()
             return
         }
-        
+
         guard FlutterCallbackCache.lookupCallbackInformation(silentCallbackHandle) != nil else {
-            Logger.e(TAG, "There is no valid callback info to handle silent data.")
+            print("There is no valid callback info to handle silent data.")
             closeBackgroundIsolate()
             return
         }
-        
+
         if(self.backgroundEngine != nil){
-            Logger.d(TAG, "Background isolate already started.")
+            print( "Background isolate already started.")
             closeBackgroundIsolate()
             return
         }
-        
+
         // Flutter engine still doesn't support running in background thread
         if Thread.isMainThread {
             createNewFlutterEngine(dartCallbackInfo: dartCallbackInfo)
@@ -122,63 +122,63 @@ public class DartBackgroundExecutor: BackgroundExecutor {
             })
         }
     }
-    
+
     func createNewFlutterEngine(
         dartCallbackInfo:FlutterCallbackInformation
     ){
         do {
-            
+
             self.backgroundEngine = FlutterEngine(
                 name: "AwesomeNotificationsBgEngine",
                 project: nil,
                 allowHeadlessExecution: true
             )
-            
+
             if self.backgroundEngine == nil {
-                Logger.e(self.TAG, "Flutter background engine is not available.")
+                        print("Flutter background engine is not available.")
                 self.closeBackgroundIsolate()
             }
             else {
                 self.backgroundEngine!.run(
                     withEntrypoint: dartCallbackInfo.callbackName,
                     libraryURI: dartCallbackInfo.callbackLibraryPath)
-                
+
                 SwiftAwesomeNotificationsPlugin
                     .flutterRegistrantCallback?(self.backgroundEngine!)
-                
+
                 DartAwesomeNotificationsExtension.setRegistrar(flutterEngine: backgroundEngine)
                 DartAwesomeNotificationsExtension.initialize()
                 try AwesomeNotifications.loadExtensions()
-                
+
                 self.initializeReverseMethodChannel(
                     backgroundEngine: self.backgroundEngine!)
             }
-            
+
         } catch {
-            Logger.e(TAG, error.localizedDescription)
+            print(error.localizedDescription)
         }
     }
-    
+
     func initializeReverseMethodChannel(backgroundEngine: FlutterEngine){
-        
+
         self.backgroundChannel = FlutterMethodChannel(
             name: Definitions.DART_REVERSE_CHANNEL,
             binaryMessenger: backgroundEngine.binaryMessenger
         )
-        
+
         self.backgroundChannel!.setMethodCallHandler(onMethodCall)
     }
-    
+
     func closeBackgroundIsolate() {
         _isRunning = false
-        
+
         self.backgroundEngine?.destroyContext()
         self.backgroundEngine = nil
-        
+
         self.backgroundChannel = nil
-        Logger.i(TAG, "FlutterEngine instance terminated.")
+        print( "FlutterEngine instance terminated.")
     }
-    
+
     func dischargeNextSilentExecution(){
         if let silentDataRequest:SilentActionRequest = silentDataQueue.first {
             silentDataQueue.remove(at: 0)
@@ -188,19 +188,19 @@ public class DartBackgroundExecutor: BackgroundExecutor {
 
     func finishDartBackgroundExecution(){
         if (silentDataQueue.count == 0) {
-            Logger.i(TAG, "All silent actions fetched.")
+            print( "All silent actions fetched.")
             self.closeBackgroundIsolate()
         }
         else {
-            Logger.i(TAG, "Remaining " + String(silentDataQueue.count) + " silents to finish")
+            print( "Remaining " + String(silentDataQueue.count) + " silents to finish")
             self.dischargeNextSilentExecution()
         }
     }
-    
+
     func executeDartCallbackInBackgroundIsolate(_ silentDataRequest:SilentActionRequest){
-        
+
         if self.backgroundEngine == nil {
-            Logger.i(TAG, "A background message could not be handle since" +
+            print( "A background message could not be handle since" +
                     "dart callback handler has not been registered")
         }
         
