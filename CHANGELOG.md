@@ -1,3 +1,9 @@
+## [0.8.3]
+### Improved
+* Support for Flutter 3.16.0 and the new methods exclusive for Main targets on iOS
+* Dependencies updated
+* Documentation updated
+
 ## [0.8.2]
 ### Improved
 * iOS awesome_notifications library updated to version 0.8.1
