@@ -244,7 +244,23 @@ We have made some changes to Awesome Notifications in version 0.7.X that may req
 
 ## Initial Configurations
 
-Bellow are the obligatory configurations that your app must meet to use awesome_notifications:
+To use the `awesome_notifications`, follow these steps:
+
+1. Add the `awesome_notifications` plugin to your project's `pubspec.yaml` file:
+
+```yaml
+dependencies:
+awesome_notifications_core: ^0.8.0 # <~ always ensure to use the latest version
+awesome_notifications: any # <~ this version is managed by awesome_notifications_core package
+```
+
+After adding the dependency, run the following command to get the package:
+
+```bash
+flutter pub get
+```
+
+Now you need to modify some files in native libraries to meet to use awesome_notifications properly. Let's start with the Android configurations:
 
 <br>
 
@@ -256,7 +272,7 @@ buildscript {
     ...
     
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath 'com.android.tools.build:gradle:7.3.0'
     }
 }
 

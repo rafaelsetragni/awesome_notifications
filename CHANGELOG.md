@@ -1,3 +1,11 @@
+## [0.8.2]
+### Improved
+* iOS awesome_notifications library updated to version 0.8.1
+
+## [0.8.1]
+### Fixed
+* Swift libraries updated to utilize a shared reference from the new Logger class.
+
 ## [0.8.0]
 ### Fixed
 * Updated library versions to 0.8.0 to ensure that project lock files are updated.
