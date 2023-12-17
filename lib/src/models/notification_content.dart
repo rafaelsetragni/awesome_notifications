@@ -11,8 +11,9 @@ import 'base_notification_content.dart';
 /// If notification has no [body] or [title], it will only be created, but not displayed to the user (background notification).
 class NotificationContent extends BaseNotificationContent {
   bool? _hideLargeIconOnExpand;
-  int? _progress, _badge;
+  int? _progress, _badge, _duration, _playState;
   String? _ticker;
+  double? _playbackSpeed;
 
   NotificationLayout? _notificationLayout;
 
@@ -53,6 +54,18 @@ class NotificationContent extends BaseNotificationContent {
     return _locked;
   }
 
+  int? get duration {
+    return _duration;
+  }
+
+  int? get playState {
+    return _playState;
+  }
+
+  double? get playbackSpeed {
+    return _playbackSpeed;
+  }
+
   NotificationContent(
       {required int id,
       required String channelKey,
@@ -85,7 +98,10 @@ class NotificationContent extends BaseNotificationContent {
       int? badge,
       String? ticker,
       bool displayOnForeground = true,
-      bool displayOnBackground = true})
+      bool displayOnBackground = true,
+      int? duration,
+      int? playState,
+      double? playbackSpeed})
       : _hideLargeIconOnExpand = hideLargeIconOnExpand,
         _progress = progress,
         _ticker = ticker,
@@ -94,6 +110,9 @@ class NotificationContent extends BaseNotificationContent {
         _displayOnForeground = displayOnForeground,
         _displayOnBackground = displayOnBackground,
         _locked = locked,
+        _duration = duration,
+        _playState = playState,
+        _playbackSpeed = playbackSpeed,
         super(
             id: id,
             channelKey: channelKey,
@@ -133,6 +152,12 @@ class NotificationContent extends BaseNotificationContent {
         AwesomeAssertUtils.extractValue<String>(NOTIFICATION_TICKER, mapData);
     _locked =
         AwesomeAssertUtils.extractValue<bool>(NOTIFICATION_LOCKED, mapData);
+    _duration =
+        AwesomeAssertUtils.extractValue<int>(NOTIFICATION_DURATION, mapData);
+    _playState =
+        AwesomeAssertUtils.extractValue<int>(NOTIFICATION_PLAY_STATE, mapData);
+    _playbackSpeed =
+        AwesomeAssertUtils.extractValue<double>(NOTIFICATION_PLAYBACK_SPEED, mapData);
 
     _notificationLayout = AwesomeAssertUtils.extractEnum<NotificationLayout>(
         NOTIFICATION_LAYOUT, mapData, NotificationLayout.values);
@@ -166,6 +191,9 @@ class NotificationContent extends BaseNotificationContent {
         NOTIFICATION_LAYOUT: _notificationLayout?.name,
         NOTIFICATION_DISPLAY_ON_FOREGROUND: _displayOnForeground,
         NOTIFICATION_DISPLAY_ON_BACKGROUND: _displayOnBackground,
+        NOTIFICATION_DURATION: _duration,
+        NOTIFICATION_PLAY_STATE: _playState,
+        NOTIFICATION_PLAYBACK_SPEED: _playbackSpeed,
       });
     return dataMap;
   }
