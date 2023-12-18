@@ -28,8 +28,11 @@ void main() {
     });
 
     test('fromMap method should return null for invalid values', () {
+      expect(NotificationPlayState.fromMap(null), isNull);
+      expect(NotificationPlayState.fromMap(''), isNull);
       expect(NotificationPlayState.fromMap('invalid_value'), isNull);
-      expect(NotificationPlayState.fromMap(100), isNull); // Assuming 100 is not a valid index
+      expect(NotificationPlayState.fromMap(12), isNull); // Assuming 100 is not a valid index
+      expect(NotificationPlayState.fromMap(-2), isNull); // Assuming 100 is not a valid index
     });
   });
 }

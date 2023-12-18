@@ -63,7 +63,7 @@ enum NotificationPlayState {
       );
     }
     if (value is int){
-      return value >= NotificationPlayState.values.length || value < -1
+      return value >= NotificationPlayState.values.length-1 || value < -1
           ? null
           : NotificationPlayState.values[value + 1];
     }
