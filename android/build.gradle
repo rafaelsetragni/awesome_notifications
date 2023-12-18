@@ -45,7 +45,7 @@ dependencies {
 //    implementation project(':awn_core')
     implementation 'me.carda:AndroidAwnCore:[0.8.0, 0.9.0)'
 
-    implementation 'com.google.guava:guava:31.1-android'
+    implementation 'com.google.guava:guava:32.1.3-android'
 
     // Required for instrumented tests
     testImplementation 'junit:junit:4.13.2'

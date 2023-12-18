@@ -8,7 +8,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="90f153b2-27cc-4b8f-8201-8a3571b86189" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/lib/src/enumerators/notification_play_state.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/src/enumerators/notification_play_state_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/definitions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/definitions.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/models/notification_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/models/notification_content.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utils/assert_utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/models/notification_content_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/models/notification_content_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +107,7 @@
       <recent name="$PROJECT_DIR$/test/src/utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Flutter.Complete Example">
+  <component name="RunManager" selected="Flutter Test.tests in test">
     <configuration name="Android debuger" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="awesome_notifications_android" />
       <option name="DEPLOY" value="true" />
@@ -170,27 +181,25 @@
       <option name="filePath" value="$PROJECT_DIR$/example/lib/main.dart" />
       <method v="2" />
     </configuration>
-    <configuration name="BitmapHelper tests" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
-      <option name="testName" value="BitmapHelper tests" />
-      <option name="testFile" value="$PROJECT_DIR$/test/src/helpers/bitmap_helper_test.dart" />
+    <configuration name="Valid data is properly deserialized" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testName" value="Valid data is properly deserialized" />
+      <option name="testFile" value="$PROJECT_DIR$/test/src/models/notification_content_test.dart" />
       <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Create BitmapHelper from ImageProvider" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
-      <option name="testName" value="Create BitmapHelper from ImageProvider" />
-      <option name="testFile" value="$PROJECT_DIR$/test/src/helpers/bitmap_helper_test.dart" />
+    <configuration name="Valid data with string play state" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testName" value="Valid data with string play state" />
+      <option name="testFile" value="$PROJECT_DIR$/test/src/models/notification_content_test.dart" />
       <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Execute All Tests" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true">
+    <configuration name="tests in notification_play_state_test.dart" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testFile" value="$PROJECT_DIR$/test/src/enumerators/notification_play_state_test.dart" />
+      <option name="useRegexp" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tests in test" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
       <option name="testDir" value="$PROJECT_DIR$/test" />
-      <option name="useRegexp" value="false" />
-      <option name="additionalArgs" value="--coverage" />
-      <method v="2" />
-    </configuration>
-    <configuration name="timeoutAfter field fromMap" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
-      <option name="testName" value="timeoutAfter field fromMap" />
-      <option name="testFile" value="$PROJECT_DIR$/test/src/models/base_notification_content_test.dart" />
       <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
@@ -204,19 +213,19 @@
       <item itemvalue="Android App.Android debuger" />
       <item itemvalue="Flutter.Simple Example" />
       <item itemvalue="Flutter.Complete Example" />
-      <item itemvalue="Flutter Test.BitmapHelper tests" />
-      <item itemvalue="Flutter Test.Create BitmapHelper from ImageProvider" />
+      <item itemvalue="Flutter Test.Valid data is properly deserialized" />
+      <item itemvalue="Flutter Test.Valid data with string play state" />
+      <item itemvalue="Flutter Test.tests in notification_play_state_test.dart" />
+      <item itemvalue="Flutter Test.tests in test" />
       <item itemvalue="Flutter Test.timeoutAfter field" />
-      <item itemvalue="Flutter Test.timeoutAfter field fromMap" />
-      <item itemvalue="Flutter Test.Execute All Tests" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Flutter Test.tests in test" />
+        <item itemvalue="Flutter Test.Valid data with string play state" />
+        <item itemvalue="Flutter Test.Valid data is properly deserialized" />
+        <item itemvalue="Flutter Test.tests in notification_play_state_test.dart" />
         <item itemvalue="Flutter Test.timeoutAfter field" />
-        <item itemvalue="Flutter Test.timeoutAfter field fromMap" />
-        <item itemvalue="Flutter Test.Execute All Tests" />
-        <item itemvalue="Flutter Test.Create BitmapHelper from ImageProvider" />
-        <item itemvalue="Flutter Test.BitmapHelper tests" />
       </list>
     </recent_temporary>
   </component>

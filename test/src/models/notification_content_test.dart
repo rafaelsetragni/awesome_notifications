@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/src/enumerators/notification_play_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -73,6 +74,46 @@ void main() {
         ).fromMap(invalidMapData);
 
         expect(notificationContent, isNull);
+      });
+    });
+
+    group('fromMap media player Tests', () {
+      test('Valid data with integer play state', () {
+        final Map<String, dynamic> mapData = {
+          'id': 1,
+          'channelKey': 'test_channel',
+          'duration': 50,
+          'playState': 5,
+          'playbackSpeed': 2,
+        };
+
+        final notificationContent = NotificationContent(
+          id: 1,
+          channelKey: 'test_channel',
+        ).fromMap(mapData);
+
+        expect(notificationContent?.duration, const Duration(seconds: 50));
+        expect(notificationContent?.playState, NotificationPlayState.rewinding);
+        expect(notificationContent?.playbackSpeed, 2);
+      });
+
+      test('Valid data with string play state', () {
+        final Map<String, dynamic> mapData = {
+          'id': 1,
+          'channelKey': 'test_channel',
+          'duration': 50,
+          'playState': 'rewinding',
+          'playbackSpeed': 2,
+        };
+
+        final notificationContent = NotificationContent(
+          id: 1,
+          channelKey: 'test_channel',
+        ).fromMap(mapData);
+
+        expect(notificationContent?.duration, const Duration(seconds: 50));
+        expect(notificationContent?.playState, NotificationPlayState.rewinding);
+        expect(notificationContent?.playbackSpeed, 2);
       });
     });
 

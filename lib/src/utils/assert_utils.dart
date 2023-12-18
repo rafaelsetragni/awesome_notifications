@@ -122,7 +122,7 @@ class AwesomeAssertUtils {
         return defaultValue;
 
       case double:
-        if (value is int) return value;
+        if (value is int) return value.toDouble();
         if (value is double) return value;
         return defaultValue;
 
@@ -183,6 +183,10 @@ class AwesomeAssertUtils {
     dynamic value = dataMap[reference];
 
     if (value is T) return value;
+
+    if (value == null) return defaultValue;
+
+    if (value is int) return defaultValue;
 
     if (value == null || value is! String) return defaultValue;
 
