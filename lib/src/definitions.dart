@@ -282,6 +282,9 @@ const NOTIFICATION_TICKER = 'ticker';
 const NOTIFICATION_ALLOW_WHILE_IDLE = 'allowWhileIdle';
 const NOTIFICATION_ROUNDED_LARGE_ICON = 'roundedLargeIcon';
 const NOTIFICATION_ROUNDED_BIG_PICTURE = 'roundedBigPicture';
+const NOTIFICATION_DURATION = 'duration';
+const NOTIFICATION_PLAY_STATE = 'playState';
+const NOTIFICATION_PLAYBACK_SPEED = 'playbackSpeed';
 
 class Definitions {
   static Map<String, Object?> initialValues = {

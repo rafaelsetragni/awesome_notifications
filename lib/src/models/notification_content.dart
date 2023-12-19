@@ -4,6 +4,7 @@ import '../definitions.dart';
 import '../enumerators/action_type.dart';
 import '../enumerators/notification_category.dart';
 import '../enumerators/notification_layout.dart';
+import '../enumerators/notification_play_state.dart';
 import '../utils/assert_utils.dart';
 import 'base_notification_content.dart';
 
@@ -12,7 +13,10 @@ import 'base_notification_content.dart';
 class NotificationContent extends BaseNotificationContent {
   bool? _hideLargeIconOnExpand;
   int? _progress, _badge;
+  Duration? _duration;
+  NotificationPlayState? _playState;
   String? _ticker;
+  double? _playbackSpeed;
 
   NotificationLayout? _notificationLayout;
 
@@ -53,39 +57,54 @@ class NotificationContent extends BaseNotificationContent {
     return _locked;
   }
 
+  Duration? get duration {
+    return _duration;
+  }
+
+  NotificationPlayState? get playState {
+    return _playState;
+  }
+
+  double? get playbackSpeed {
+    return _playbackSpeed;
+  }
+
   NotificationContent(
-      {required int id,
-      required String channelKey,
-      String? title,
-      String? body,
-      String? groupKey,
-      String? summary,
-      String? icon,
-      String? largeIcon,
-      String? bigPicture,
-      String? customSound,
-      bool showWhen = true,
-      bool wakeUpScreen = false,
-      bool fullScreenIntent = false,
-      bool criticalAlert = false,
-      bool roundedLargeIcon = false,
-      bool roundedBigPicture = false,
-      bool autoDismissible = true,
-      Color? color,
-      Duration? timeoutAfter,
-      Duration? chronometer,
-      Color? backgroundColor,
-      ActionType actionType = ActionType.Default,
+      {required int super.id,
+      required String super.channelKey,
+      super.title,
+      super.body,
+      super.groupKey,
+      super.summary,
+      super.icon,
+      super.largeIcon,
+      super.bigPicture,
+      super.customSound,
+      super.showWhen,
+      super.wakeUpScreen,
+      super.fullScreenIntent,
+      super.criticalAlert,
+      super.roundedLargeIcon,
+      super.roundedBigPicture,
+      super.autoDismissible,
+      super.color,
+      super.timeoutAfter,
+      super.chronometer,
+      super.backgroundColor,
+      super.actionType,
       NotificationLayout notificationLayout = NotificationLayout.Default,
-      Map<String, String?>? payload,
-      NotificationCategory? category,
+      super.payload,
+      super.category,
       bool hideLargeIconOnExpand = false,
       bool locked = false,
       int? progress,
       int? badge,
       String? ticker,
       bool displayOnForeground = true,
-      bool displayOnBackground = true})
+      bool displayOnBackground = true,
+      Duration? duration,
+      NotificationPlayState? playState,
+      double? playbackSpeed})
       : _hideLargeIconOnExpand = hideLargeIconOnExpand,
         _progress = progress,
         _ticker = ticker,
@@ -94,31 +113,9 @@ class NotificationContent extends BaseNotificationContent {
         _displayOnForeground = displayOnForeground,
         _displayOnBackground = displayOnBackground,
         _locked = locked,
-        super(
-            id: id,
-            channelKey: channelKey,
-            groupKey: groupKey,
-            title: title,
-            body: body,
-            summary: summary,
-            wakeUpScreen: wakeUpScreen,
-            fullScreenIntent: fullScreenIntent,
-            category: category,
-            criticalAlert: criticalAlert,
-            showWhen: showWhen,
-            payload: payload,
-            icon: icon,
-            timeoutAfter: timeoutAfter,
-            chronometer: chronometer,
-            largeIcon: largeIcon,
-            bigPicture: bigPicture,
-            customSound: customSound,
-            autoDismissible: autoDismissible,
-            color: color,
-            actionType: actionType,
-            backgroundColor: backgroundColor,
-            roundedBigPicture: roundedBigPicture,
-            roundedLargeIcon: roundedLargeIcon);
+        _duration = duration,
+        _playState = playState,
+        _playbackSpeed = playbackSpeed;
 
   @override
   NotificationContent? fromMap(Map<String, dynamic> mapData) {
@@ -133,6 +130,13 @@ class NotificationContent extends BaseNotificationContent {
         AwesomeAssertUtils.extractValue<String>(NOTIFICATION_TICKER, mapData);
     _locked =
         AwesomeAssertUtils.extractValue<bool>(NOTIFICATION_LOCKED, mapData);
+    _duration =
+        AwesomeAssertUtils.extractValue<Duration>(NOTIFICATION_DURATION, mapData);
+    _playState =
+        NotificationPlayState.fromMap(mapData[NOTIFICATION_PLAY_STATE]);
+
+    _playbackSpeed =
+        AwesomeAssertUtils.extractValue<double>(NOTIFICATION_PLAYBACK_SPEED, mapData);
 
     _notificationLayout = AwesomeAssertUtils.extractEnum<NotificationLayout>(
         NOTIFICATION_LAYOUT, mapData, NotificationLayout.values);
@@ -166,6 +170,9 @@ class NotificationContent extends BaseNotificationContent {
         NOTIFICATION_LAYOUT: _notificationLayout?.name,
         NOTIFICATION_DISPLAY_ON_FOREGROUND: _displayOnForeground,
         NOTIFICATION_DISPLAY_ON_BACKGROUND: _displayOnBackground,
+        NOTIFICATION_DURATION: _duration?.inSeconds,
+        NOTIFICATION_PLAY_STATE: _playState?.toMap(),
+        NOTIFICATION_PLAYBACK_SPEED: _playbackSpeed,
       });
     return dataMap;
   }

@@ -1,3 +1,24 @@
+## [0.8.3]
+### Added
+* New media player features (Playback state, speed and duration) for media player notifications 
+### Improved
+* Support for Flutter 3.16.0 and the new methods exclusive for Main targets on iOS
+* Dependencies updated
+* Unit tests updated
+* Documentation updated
+
+## [0.8.2]
+### Improved
+* iOS awesome_notifications library updated to version 0.8.1
+
+## [0.8.1]
+### Fixed
+* Swift libraries updated to utilize a shared reference from the new Logger class.
+
+## [0.8.0]
+### Fixed
+* Updated library versions to 0.8.0 to ensure that project lock files are updated.
+
 ## [0.7.7]
 ### Improved
 * Enhanced versioning of iOS core libraries to better support DevOps, ensuring greater flexibility for future updates.

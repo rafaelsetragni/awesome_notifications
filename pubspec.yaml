@@ -1,6 +1,6 @@
 name: awesome_notifications
 description: A complete solution to create Local and Push Notifications, customizing buttons, images, sounds, emoticons and applying many different layouts for Flutter apps.
-version: 0.7.7
+version: 0.8.3
 repository: https://github.com/rafaelsetragni/awesome_notifications
 
 environment:
@@ -13,16 +13,16 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
-  plugin_platform_interface: ^2.1.6
-  intl: ^0.18.1
+  plugin_platform_interface: ^2.1.7
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.3
+  flutter_lints: ^3.0.1
 
-  mockito: ^5.4.2
-  mocktail: ^1.0.0
+  mockito: ^5.4.3
+  mocktail: ^1.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
