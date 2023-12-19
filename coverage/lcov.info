@@ -272,12 +272,6 @@ DA:49,2
 LF:12
 LH:12
 end_of_record
-SF:lib/src/enumerators/media_source.dart
-DA:22,2
-DA:26,1
-LF:2
-LH:2
-end_of_record
 SF:lib/src/enumerators/notification_play_state.dart
 DA:52,3
 DA:53,4
@@ -288,7 +282,7 @@ DA:60,2
 DA:61,6
 DA:62,1
 DA:65,2
-DA:66,8
+DA:66,10
 DA:68,4
 LF:11
 LH:11
@@ -840,8 +834,14 @@ DA:291,18
 LF:2
 LH:2
 end_of_record
+SF:lib/src/enumerators/media_source.dart
+DA:22,2
+DA:26,1
+LF:2
+LH:2
+end_of_record
 SF:lib/src/exceptions/awesome_exception.dart
-DA:3,381
+DA:3,391
 DA:5,1
 DA:7,2
 LF:3
