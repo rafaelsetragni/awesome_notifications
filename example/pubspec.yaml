@@ -31,17 +31,17 @@ dependencies:
   cupertino_icons: ^1.0.6
   universal_io: ^2.2.2
 
-  font_awesome_flutter: ^10.5.0
-  fluttertoast: ^8.2.2
-  http: ^1.1.0
+  font_awesome_flutter: ^10.6.0
+  fluttertoast: ^8.2.4
+  http: ^1.1.2
   path_provider: ^2.1.1
-  shared_preferences: ^2.2.1
+  shared_preferences: ^2.2.2
   numberpicker: ^2.1.2
   giff_dialog: ^1.0.1
-  vibration: ^1.8.2
-  device_info_plus: ^9.0.3
-  url_launcher: ^6.1.14
-  intl: ^0.18.1
+  vibration: ^1.8.4
+  device_info_plus: ^9.1.1
+  url_launcher: ^6.2.2
+  intl: ^0.19.0
   palette_generator: ^0.3.3+3
 
 dev_dependencies:
@@ -53,7 +53,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.3
+  flutter_lints: ^3.0.1
 
   flutter_launcher_icons: ^0.13.1
 
