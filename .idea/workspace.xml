@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
@@ -10,14 +15,17 @@
     <list default="true" id="90f153b2-27cc-4b8f-8201-8a3571b86189" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/awesome_notifications.podspec" beforeDir="false" afterPath="$PROJECT_DIR$/ios/awesome_notifications.podspec" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/lcov.info" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/lcov.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/src/enumerators/notification_play_state_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/enumerators/notification_play_state_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
   </component>
   <component name="CoverageOptionsProvider">
     <option name="myAddOrReplace" value="0" />
@@ -73,13 +81,15 @@
     &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;SHOW_ALL_PROCESSES&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;com.intellij.openapi.externalSystem.service.settings.ExternalSystemGroupConfigurable&quot;: &quot;ALL&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;features/flutter-3-16-support&quot;,
     &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/rafaelsetragni/Documents/GitHub/plugins/awesome_notifications/example/build/app/outputs/bundle/release&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/rafaelsetragni/GitHub/plugins/awesome_notifications&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;AndroidSdkUpdater&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
 }</component>
@@ -107,6 +117,7 @@
       <option name="ALL_USERS" value="false" />
       <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
       <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="default_activity" />
       <option name="CLEAR_LOGCAT" value="false" />
@@ -169,33 +180,31 @@
       <option name="filePath" value="$PROJECT_DIR$/example/lib/main.dart" />
       <method v="2" />
     </configuration>
-    <configuration name="BitmapHelper tests" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
-      <option name="testName" value="BitmapHelper tests" />
-      <option name="testFile" value="$PROJECT_DIR$/test/src/helpers/bitmap_helper_test.dart" />
+    <configuration name="Valid data is properly deserialized" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testName" value="Valid data is properly deserialized" />
+      <option name="testFile" value="$PROJECT_DIR$/test/src/models/notification_content_test.dart" />
       <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Create BitmapHelper from ImageProvider" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
-      <option name="testName" value="Create BitmapHelper from ImageProvider" />
-      <option name="testFile" value="$PROJECT_DIR$/test/src/helpers/bitmap_helper_test.dart" />
+    <configuration name="Valid data with string play state" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testName" value="Valid data with string play state" />
+      <option name="testFile" value="$PROJECT_DIR$/test/src/models/notification_content_test.dart" />
       <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Execute All Tests" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true">
+    <configuration name="fromMap method should return null for invalid values" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testName" value="fromMap method should return null for invalid values" />
+      <option name="testFile" value="$PROJECT_DIR$/test/src/enumerators/notification_play_state_test.dart" />
+      <option name="useRegexp" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tests in notification_play_state_test.dart" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testFile" value="$PROJECT_DIR$/test/src/enumerators/notification_play_state_test.dart" />
+      <option name="useRegexp" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tests in test" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
       <option name="testDir" value="$PROJECT_DIR$/test" />
-      <option name="useRegexp" value="false" />
-      <option name="additionalArgs" value="--coverage" />
-      <method v="2" />
-    </configuration>
-    <configuration name="timeoutAfter field fromMap" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
-      <option name="testName" value="timeoutAfter field fromMap" />
-      <option name="testFile" value="$PROJECT_DIR$/test/src/models/base_notification_content_test.dart" />
-      <option name="useRegexp" value="false" />
-      <method v="2" />
-    </configuration>
-    <configuration name="timeoutAfter field" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
-      <option name="testName" value="timeoutAfter field" />
-      <option name="testFile" value="$PROJECT_DIR$/test/src/models/base_notification_content_test.dart" />
       <option name="useRegexp" value="false" />
       <method v="2" />
     </configuration>
@@ -203,19 +212,19 @@
       <item itemvalue="Android App.Android debuger" />
       <item itemvalue="Flutter.Simple Example" />
       <item itemvalue="Flutter.Complete Example" />
-      <item itemvalue="Flutter Test.BitmapHelper tests" />
-      <item itemvalue="Flutter Test.Create BitmapHelper from ImageProvider" />
-      <item itemvalue="Flutter Test.timeoutAfter field" />
-      <item itemvalue="Flutter Test.timeoutAfter field fromMap" />
-      <item itemvalue="Flutter Test.Execute All Tests" />
+      <item itemvalue="Flutter Test.Valid data is properly deserialized" />
+      <item itemvalue="Flutter Test.Valid data with string play state" />
+      <item itemvalue="Flutter Test.fromMap method should return null for invalid values" />
+      <item itemvalue="Flutter Test.tests in notification_play_state_test.dart" />
+      <item itemvalue="Flutter Test.tests in test" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Flutter Test.Execute All Tests" />
-        <item itemvalue="Flutter Test.timeoutAfter field" />
-        <item itemvalue="Flutter Test.timeoutAfter field fromMap" />
-        <item itemvalue="Flutter Test.BitmapHelper tests" />
-        <item itemvalue="Flutter Test.Create BitmapHelper from ImageProvider" />
+        <item itemvalue="Flutter Test.tests in test" />
+        <item itemvalue="Flutter Test.fromMap method should return null for invalid values" />
+        <item itemvalue="Flutter Test.Valid data with string play state" />
+        <item itemvalue="Flutter Test.Valid data is properly deserialized" />
+        <item itemvalue="Flutter Test.tests in notification_play_state_test.dart" />
       </list>
     </recent_temporary>
   </component>
@@ -281,7 +290,9 @@
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="../../../../Documents/GitHub/plugins/awesome_notifications/coverage/lcov.info" NAME="tests in base_notification_content_test.dart Coverage Results" MODIFIED="1682905528671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="../../../../GitHub/plugins/awesome_notifications/coverage/lcov.info" NAME="tests in test Coverage Results" MODIFIED="1702869638147" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="../../../../GitHub/plugins/awesome_notifications/coverage/lcov.info" NAME="tests in test Coverage Results" MODIFIED="1702937422596" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="D:/GitHub/plugins/awesome_notifications/coverage/lcov.info" NAME="Execute All Tests Coverage Results" MODIFIED="1683249220394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="../../../../Documents/GitHub/plugins/awesome_notifications/coverage/lcov.info" NAME="tests in base_notification_content_test.dart Coverage Results" MODIFIED="1682905528671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

@@ -1160,9 +1160,9 @@ In summary, if you need to ensure precise execution of scheduled notifications, 
 
 Additionally, you can ask your users to whitelist your app from any battery optimization feature that the device may have. This can be done by adding your app to the "unmonitored apps" or "battery optimization exceptions" list, depending on the device.
 
-You can also try to use the [flutter_background_fetch](https://pub.dev/packages/flutter_background_fetch) package to help schedule background tasks. This package allows you to schedule tasks that will run even when the app is not open, and it has some built-in features to help handle battery optimization.
+You can also try to use the [flutter_background_service](https://pub.dev/packages/flutter_background_service) package to help schedule background tasks. This package allows you to schedule tasks that will run even when the app is not open, and it has some built-in features to help handle battery optimization.
 
-To know more about it, please visit [flutter_background_fetch documentation](https://pub.dev/packages/flutter_background_fetch) and [Optimizing for Doze and App Standby](https://developer.android.com/training/monitoring-device-state/doze-standby) for Android devices.
+To know more about it, please visit [flutter_background_service_fetch documentation](https://pub.dev/packages/flutter_background_service) and [Optimizing for Doze and App Standby](https://developer.android.com/training/monitoring-device-state/doze-standby) for Android devices.
 
 
 <br>
@@ -1553,34 +1553,37 @@ NotificationContent (
 )
 ```
 
-| Attribute             | Required | Description                                                                                              | Type                  | Value Limits              | Default value |
-| --------------------- | -------- | -------------------------------------------------------------------------------------------------------- | --------------------- | ------------------------- | ------------- |
-| id                    | YES      | A unique identifier for the notification                                                                 | int                   | 1 - 2,147,483,647         | -             |
-| channelKey            | YES      | The identifier of the notification channel where the notification will be displayed                      | String                | Channel must be enabled   | basic_channel |
-| title                 | NO       | The title of the notification                                                                            | String                | Unlimited                 | -             |
-| body                  | NO       | The body text of the notification                                                                        | String                | Unlimited                 | -             |
-| summary               | NO       | A summary to be displayed when the notification content is protected by privacy                          | String                | Unlimited                 | -             |
-| category              | NO       | The notification category that best describes the nature of the notification (Android only)              | NotificationCategory  | -                         | -             |
-| badge                 | NO       | The value to display as the app's badge                                                                  | int                   | 0 - 999,999               | -             |
-| chronometer           | NO       | A duration to set the showWhen attribute of Android notifications to the amount of seconds to start      | Duration              | Positive integers         | -             |
-| timeoutAfter          | NO       | A duration to determine an expiration time limit for the notification to stay in the system tray         | Duration              | Positive integers         | -             |
-| showWhen              | NO       | Whether to show the time elapsed since the notification was posted                                       | bool                  | True or false             | true          |
-| chronometer           | NO       | Display how many seconds has                                        | bool                  | True or false             | true          |
-| displayOnForeground   | NO       | Whether to display the notification while the app is in the foreground (preserves streams)               | bool                  | True or false             | true          |
-| displayOnBackground   | NO       | Whether to display the notification while the app is in the background (preserves streams, Android only) | bool                  | True or false             | true          |
-| icon                  | NO       | The name of the small icon to display with the notification (Android only)                               | String                | A resource image          | -             |
-| largeIcon             | NO       | The name of the large icon to display with the notification                                              | String                | Unlimited                 | -             |
-| bigPicture            | NO       | The name of the image to display when the notification is expanded (Android only)                        | String                | Unlimited                 | -             |
-| autoDismissible       | NO       | Whether to automatically dismiss the notification when the user taps it (Android only)                   | bool                  | True or false             | true          |
-| color                 | NO       | The text color for the notification                                                                      | Color                 | 0x000000 to 0xFFFFFF      | Colors.black  |
-| backgroundColor       | NO       | The background color for the notification                                                                | Color                 | 0x000000 to 0xFFFFFF      | Colors.white  |
-| payload               | NO       | A hidden payload for the notification                                                                    | Map<String, String>   | Only string values        | -             |
-| notificationLayout    | NO       | The layout type for the notification                                                                     | NotificationLayout    | -                         | Default       |
-| hideLargeIconOnExpand | NO       | Whether to hide the large icon when the notification is expanded (Android only)                          | bool                  | True or false             | false         |
-| locked                | NO       | Whether to prevent the user from dismissing the notification (Android only)                              | bool                  | True or false             | false         |
-| progress              | NO       | The current value for the notification's progress bar (Android only)                                     | int                   | 0 - 100                   | -             |
-| ticker                | NO       | The text to display in the ticker when the notification arrives                                          | String                | Unlimited                 | -             |
-| actionType (Only for Android) | NO | Specifies the type of action that should be taken when the user taps on the body of the notification.  | Enumerator            | NotificationActionType    | NotificationActionType.Default |
+| Attribute                     | Required | Description                                                                                              | Type                      | Value Limits            | Default value |
+|-------------------------------| -------- |----------------------------------------------------------------------------------------------------------|---------------------------|-------------------------| ------------- |
+| id                            | YES      | A unique identifier for the notification                                                                 | int                       | 1 - 2,147,483,647       | -             |
+| channelKey                    | YES      | The identifier of the notification channel where the notification will be displayed                      | String                    | Channel must be enabled | basic_channel |
+| title                         | NO       | The title of the notification                                                                            | String                    | Unlimited               | -             |
+| body                          | NO       | The body text of the notification                                                                        | String                    | Unlimited               | -             |
+| summary                       | NO       | A summary to be displayed when the notification content is protected by privacy                          | String                    | Unlimited               | -             |
+| category                      | NO       | The notification category that best describes the nature of the notification (Android only)              | NotificationCategory      | -                       | -             |
+| badge                         | NO       | The value to display as the app's badge                                                                  | int                       | 0 - 999,999             | -             |
+| chronometer                   | NO       | A duration to set the showWhen attribute of Android notifications to the amount of seconds to start      | Duration                  | Positive integers       | -             |
+| timeoutAfter                  | NO       | A duration to determine an expiration time limit for the notification to stay in the system tray         | Duration                  | Positive integers       | -             |
+| showWhen                      | NO       | Whether to show the time elapsed since the notification was posted                                       | bool                      | True or false           | true          |
+| chronometer                   | NO       | Display how many seconds has                                                                             | bool                      | True or false           | true          |
+| displayOnForeground           | NO       | Whether to display the notification while the app is in the foreground (preserves streams)               | bool                      | True or false           | true          |
+| displayOnBackground           | NO       | Whether to display the notification while the app is in the background (preserves streams, Android only) | bool                      | True or false           | true          |
+| icon                          | NO       | The name of the small icon to display with the notification (Android only)                               | String                    | A resource image        | -             |
+| largeIcon                     | NO       | The name of the large icon to display with the notification                                              | String                    | Unlimited               | -             |
+| bigPicture                    | NO       | The name of the image to display when the notification is expanded (Android only)                        | String                    | Unlimited               | -             |
+| autoDismissible               | NO       | Whether to automatically dismiss the notification when the user taps it (Android only)                   | bool                      | True or false           | true          |
+| color                         | NO       | The text color for the notification                                                                      | Color                     | 0x000000 to 0xFFFFFF    | Colors.black  |
+| backgroundColor               | NO       | The background color for the notification                                                                | Color                     | 0x000000 to 0xFFFFFF    | Colors.white  |
+| payload                       | NO       | A hidden payload for the notification                                                                    | Map<String, String>       | Only string values      | -             |
+| notificationLayout            | NO       | The layout type for the notification                                                                     | NotificationLayout        | -                       | Default       |
+| hideLargeIconOnExpand         | NO       | Whether to hide the large icon when the notification is expanded (Android only)                          | bool                      | True or false           | false         |
+| locked                        | NO       | Whether to prevent the user from dismissing the notification (Android only)                              | bool                      | True or false           | false         |
+| progress                      | NO       | The current value for the notification's progress bar (Android only)                                     | int                       | 0 - 100                 | -             |
+| ticker                        | NO       | The text to display in the ticker when the notification arrives                                          | String                    | Unlimited               | -             |
+| duration                      | NO       | The media duration on media player notifications                                                         | Duration                  | Unlimited               | -             |
+| playState                     | NO       | The current playback state on media player notifications                                                 | NotificationPlaybackState | -                       | -             |
+| playbackSpeed                 | NO       | The current playback speed on media player notifications                                                 | double                    | Unlimited               | -             |
+| actionType (Only for Android) | NO | Specifies the type of action that should be taken when the user taps on the body of the notification.    | Enumerator                | NotificationActionType  | NotificationActionType.Default |
 
 <br>
 
