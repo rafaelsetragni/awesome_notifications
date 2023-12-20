@@ -1,12 +1,11 @@
 name: awesome_notifications_example
-description: Demonstrates how to use the awesome_notifications plugin.
-
+description: "Demonstrates how to use the awesome_notifications plugin."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: '>=2.19.0 <4.0.0'
+  sdk: '>=3.2.3 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -15,9 +14,6 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  flutter:
-    sdk: flutter
-
   awesome_notifications:
     # When depending on this package from a real application you should use:
     #   awesome_notifications: ^x.y.z
@@ -25,37 +21,25 @@ dependencies:
     # The example app is bundled with the plugin so we use a path dependency on
     # the parent directory to use the current plugin's version.
     path: ../
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.6
-  universal_io: ^2.2.2
-
-  font_awesome_flutter: ^10.6.0
+  device_info_plus: ^9.1.1
+  flutter:
+    sdk: flutter
   fluttertoast: ^8.2.4
+  font_awesome_flutter: ^10.6.0
+  giff_dialog: ^1.0.1
   http: ^1.1.2
+  intl: ^0.19.0
+  numberpicker: ^2.1.2
+  palette_generator: ^0.3.3+3
   path_provider: ^2.1.1
   shared_preferences: ^2.2.2
-  numberpicker: ^2.1.2
-  giff_dialog: ^1.0.1
-  vibration: ^1.8.4
-  device_info_plus: ^9.1.1
+  universal_io: ^2.2.2
   url_launcher: ^6.2.2
-  intl: ^0.19.0
-  palette_generator: ^0.3.3+3
+  vibration: ^1.8.4
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
-  flutter_lints: ^3.0.1
-
   flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^3.0.0
 
 flutter_icons:
   ios: true
@@ -76,6 +60,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/awesome-notifications-logo-color.png
     - assets/images/awesome-notifications-logo-black.png
@@ -110,3 +95,29 @@ flutter:
     - assets/images/awn-rocks-zh.jpg
     - assets/images/awn-rocks-es.jpg
     - assets/images/awn-rocks-de.jpg
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
