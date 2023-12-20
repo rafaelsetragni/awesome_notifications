@@ -10,8 +10,9 @@ import me.carda.awesome_notifications.core.logs.Logger;
 public class AwesomeNotificationsFlutterExtension extends AwesomeNotificationsExtension {
     private static final String TAG = "AwesomeNotificationsFlutterExtension";
 
-    public static void initialize(){
-        if(AwesomeNotifications.awesomeExtensions != null) return;
+    public static void initialize() {
+        if (AwesomeNotifications.awesomeExtensions != null)
+            return;
 
         AwesomeNotifications.actionReceiverClass = DartNotificationActionReceiver.class;
         AwesomeNotifications.dismissReceiverClass = DartDismissedNotificationReceiver.class;
