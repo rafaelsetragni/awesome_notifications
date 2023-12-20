@@ -128,14 +128,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
-  flare_flutter:
-    dependency: transitive
-    description:
-      name: flare_flutter
-      sha256: "99d63c60f00fac81249ce6410ee015d7b125c63d8278a30da81edf3317a1f6a0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -178,14 +170,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.6.0"
-  giff_dialog:
-    dependency: "direct main"
-    description:
-      name: giff_dialog
-      sha256: "0fb2189a1d8902ce4e3858a7917f1e53d887fad791a9153f0711736d31e00af1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   http:
     dependency: "direct main"
     description:
@@ -219,7 +203,7 @@ packages:
     source: hosted
     version: "1.1.0"
   intl:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: intl
       sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
