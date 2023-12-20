@@ -1,7 +1,9 @@
 class AwesomeStringUtils {
   static final RegExp _emptyRegex = RegExp(r'^\s*$');
-  static bool isNullOrEmpty(String? value,
-      {bool considerWhiteSpaceAsEmpty = false}) {
+  static bool isNullOrEmpty(
+    String? value, {
+    bool considerWhiteSpaceAsEmpty = false,
+  }) {
     if (considerWhiteSpaceAsEmpty) {
       return value == null || _emptyRegex.hasMatch(value);
     }

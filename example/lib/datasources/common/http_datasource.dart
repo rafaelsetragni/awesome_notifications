@@ -1,7 +1,7 @@
 import 'package:http/http.dart' show Client, Response;
 import 'package:flutter/cupertino.dart';
-import 'package:awesome_notifications_example/utils/common_functions.dart' if (dart.library.html)
-'package:awesome_notifications_example/utils/common_web_functions.dart';
+import 'package:awesome_notifications_example/utils/common_functions.dart'
+    if (dart.library.html) 'package:awesome_notifications_example/utils/common_web_functions.dart';
 import 'package:universal_io/io.dart';
 import 'datasource.dart';
 

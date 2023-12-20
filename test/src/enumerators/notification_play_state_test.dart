@@ -14,14 +14,26 @@ void main() {
       expect(NotificationPlayState.fromMap(-1), NotificationPlayState.unknown);
       expect(NotificationPlayState.fromMap(0), NotificationPlayState.none);
       expect(NotificationPlayState.fromMap(1), NotificationPlayState.stopped);
-      expect(NotificationPlayState.fromMap(11), NotificationPlayState.skippingToQueueItem);
+      expect(
+        NotificationPlayState.fromMap(11),
+        NotificationPlayState.skippingToQueueItem,
+      );
     });
 
     test('fromMap method should reconstruct enum from string values', () {
-      expect(NotificationPlayState.fromMap('unknown'), NotificationPlayState.unknown);
+      expect(
+        NotificationPlayState.fromMap('unknown'),
+        NotificationPlayState.unknown,
+      );
       expect(NotificationPlayState.fromMap('none'), NotificationPlayState.none);
-      expect(NotificationPlayState.fromMap('stopped'), NotificationPlayState.stopped);
-      expect(NotificationPlayState.fromMap('skippingToQueueItem'), NotificationPlayState.skippingToQueueItem);
+      expect(
+        NotificationPlayState.fromMap('stopped'),
+        NotificationPlayState.stopped,
+      );
+      expect(
+        NotificationPlayState.fromMap('skippingToQueueItem'),
+        NotificationPlayState.skippingToQueueItem,
+      );
     });
 
     test('fromMap method should return null for invalid values', () {

@@ -3,7 +3,8 @@ import '../../android_foreground_service.dart';
 /// Static helper class that contains all relevant
 /// Android foreground service related constants.
 @Deprecated(
-    "Please, use ForegroundServiceType and ForegroundStartMode instead.")
+  "Please, use ForegroundServiceType and ForegroundStartMode instead.",
+)
 class AndroidForegroundServiceConstants {
   /// The constructor is hidden since this class should not be instantiated.
   const AndroidForegroundServiceConstants._();

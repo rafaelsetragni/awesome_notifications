@@ -54,13 +54,18 @@ String printDuration(Duration? duration) {
   return "$twoDigitMinutes:$twoDigitSeconds";
 }
 
-void loadSingletonPage(NavigatorState? navigatorState,
-    {required String targetPage, required ReceivedAction receivedAction}) {
+void loadSingletonPage(
+  NavigatorState? navigatorState, {
+  required String targetPage,
+  required ReceivedAction receivedAction,
+}) {
   // Avoid to open the notification details page over another details page already opened
   // Navigate into pages, avoiding to open the notification details page over another details page already opened
-  navigatorState?.pushNamedAndRemoveUntil(targetPage,
-      (route) => (route.settings.name != targetPage) || route.isFirst,
-      arguments: receivedAction);
+  navigatorState?.pushNamedAndRemoveUntil(
+    targetPage,
+    (route) => (route.settings.name != targetPage) || route.isFirst,
+    arguments: receivedAction,
+  );
 }
 
 Future<String> downloadAndSaveImageOnDisk(String url, String fileName) async {
@@ -84,58 +89,58 @@ String fileSize(dynamic size, [int round = 2]) {
    * of digits after comma/point (default is 2)
    */
   int divider = 1024;
-  int _size;
+  int size0;
   try {
-    _size = int.parse(size.toString());
+    size0 = int.parse(size.toString());
   } catch (e) {
     throw ArgumentError("Can not parse the size parameter: $e");
   }
 
-  if (_size < divider) {
-    return "$_size B";
+  if (size0 < divider) {
+    return "$size0 B";
   }
 
-  if (_size < divider * divider && _size % divider == 0) {
-    return "${(_size / divider).toStringAsFixed(0)} KB";
+  if (size0 < divider * divider && size0 % divider == 0) {
+    return "${(size0 / divider).toStringAsFixed(0)} KB";
   }
 
-  if (_size < divider * divider) {
-    return "${(_size / divider).toStringAsFixed(round)} KB";
+  if (size0 < divider * divider) {
+    return "${(size0 / divider).toStringAsFixed(round)} KB";
   }
 
-  if (_size < divider * divider * divider && _size % divider == 0) {
-    return "${(_size / (divider * divider)).toStringAsFixed(0)} MB";
+  if (size0 < divider * divider * divider && size0 % divider == 0) {
+    return "${(size0 / (divider * divider)).toStringAsFixed(0)} MB";
   }
 
-  if (_size < divider * divider * divider) {
-    return "${(_size / divider / divider).toStringAsFixed(round)} MB";
+  if (size0 < divider * divider * divider) {
+    return "${(size0 / divider / divider).toStringAsFixed(round)} MB";
   }
 
-  if (_size < divider * divider * divider * divider && _size % divider == 0) {
-    return "${(_size / (divider * divider * divider)).toStringAsFixed(0)} GB";
+  if (size0 < divider * divider * divider * divider && size0 % divider == 0) {
+    return "${(size0 / (divider * divider * divider)).toStringAsFixed(0)} GB";
   }
 
-  if (_size < divider * divider * divider * divider) {
-    return "${(_size / divider / divider / divider).toStringAsFixed(round)} GB";
+  if (size0 < divider * divider * divider * divider) {
+    return "${(size0 / divider / divider / divider).toStringAsFixed(round)} GB";
   }
 
-  if (_size < divider * divider * divider * divider * divider &&
-      _size % divider == 0) {
-    num r = _size / divider / divider / divider / divider;
+  if (size0 < divider * divider * divider * divider * divider &&
+      size0 % divider == 0) {
+    num r = size0 / divider / divider / divider / divider;
     return "${r.toStringAsFixed(0)} TB";
   }
 
-  if (_size < divider * divider * divider * divider * divider) {
-    num r = _size / divider / divider / divider / divider;
+  if (size0 < divider * divider * divider * divider * divider) {
+    num r = size0 / divider / divider / divider / divider;
     return "${r.toStringAsFixed(round)} TB";
   }
 
-  if (_size < divider * divider * divider * divider * divider * divider &&
-      _size % divider == 0) {
-    num r = _size / divider / divider / divider / divider / divider;
+  if (size0 < divider * divider * divider * divider * divider * divider &&
+      size0 % divider == 0) {
+    num r = size0 / divider / divider / divider / divider / divider;
     return "${r.toStringAsFixed(0)} PB";
   } else {
-    num r = _size / divider / divider / divider / divider / divider;
+    num r = size0 / divider / divider / divider / divider / divider;
     return "${r.toStringAsFixed(round)} PB";
   }
 }

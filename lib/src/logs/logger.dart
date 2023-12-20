@@ -10,12 +10,14 @@ abstract class Logger {
 
   static void d(String className, String msg) {
     debugPrint(
-        '[Awesome Notifications - DEBUG]: $msg ($className:${_getLastLine()})');
+      '[Awesome Notifications - DEBUG]: $msg ($className:${_getLastLine()})',
+    );
   }
 
   static void e(String className, String msg) {
     print(
-        '\x1B[31m[Awesome Notifications - ERROR]: $msg ($className:${_getLastLine()})\x1B[0m');
+      '\x1B[31m[Awesome Notifications - ERROR]: $msg ($className:${_getLastLine()})\x1B[0m',
+    );
   }
 
   static void i(String className, String msg) {
@@ -24,6 +26,7 @@ abstract class Logger {
 
   static void w(String className, String msg) {
     print(
-        '\x1B[33m[Awesome Notifications - WARNING]: $msg ($className:${_getLastLine()})\x1B[0m');
+      '\x1B[33m[Awesome Notifications - WARNING]: $msg ($className:${_getLastLine()})\x1B[0m',
+    );
   }
 }

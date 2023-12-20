@@ -9,23 +9,23 @@ class CheckButton extends StatelessWidget {
     this.label,
     this.isSelected, {
     this.onPressed,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
+          SizedBox(
             width: mediaQueryData.size.width - 110 /* 30 - 60 - 20 */,
-            child: Text(label, style: TextStyle(fontSize: 16)),
+            child: Text(label, style: const TextStyle(fontSize: 16)),
           ),
-          Container(
+          SizedBox(
             width: 60,
             child: Switch(
               value: isSelected,

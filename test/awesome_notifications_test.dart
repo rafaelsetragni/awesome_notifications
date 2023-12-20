@@ -48,9 +48,9 @@ void main() {
           .thenAnswer((_) => Future.value());
       await AwesomeNotifications()
           .cancelNotificationsByChannelKey('channel_key');
-      verify(() =>
-              mockNotifications.cancelNotificationsByChannelKey('channel_key'))
-          .called(1);
+      verify(
+        () => mockNotifications.cancelNotificationsByChannelKey('channel_key'),
+      ).called(1);
     });
 
     test('cancelNotificationsByGroupKey method is called once', () async {
@@ -93,7 +93,11 @@ void main() {
 
     test('createNotification method is called once', () async {
       NotificationContent content = NotificationContent(
-          id: 1, channelKey: 'channel_key', title: 'title', body: 'body');
+        id: 1,
+        channelKey: 'channel_key',
+        title: 'title',
+        body: 'body',
+      );
       when(() => mockNotifications.createNotification(content: content))
           .thenAnswer((_) async => true);
 
@@ -107,7 +111,7 @@ void main() {
         'id': 1,
         'channelKey': 'channel_key',
         'title': 'title',
-        'body': 'body'
+        'body': 'body',
       };
       when(() => mockNotifications.createNotificationFromJsonData(jsonData))
           .thenAnswer((_) async => true);
@@ -143,18 +147,18 @@ void main() {
           .thenAnswer((_) => Future.value());
       await AwesomeNotifications()
           .dismissNotificationsByChannelKey('channel_key');
-      verify(() =>
-              mockNotifications.dismissNotificationsByChannelKey('channel_key'))
-          .called(1);
+      verify(
+        () => mockNotifications.dismissNotificationsByChannelKey('channel_key'),
+      ).called(1);
     });
 
     test('dismissNotificationsByGroupKey method is called once', () async {
       when(() => mockNotifications.dismissNotificationsByGroupKey(any()))
           .thenAnswer((_) => Future.value());
       await AwesomeNotifications().dismissNotificationsByGroupKey('group_key');
-      verify(() =>
-              mockNotifications.dismissNotificationsByGroupKey('group_key'))
-          .called(1);
+      verify(
+        () => mockNotifications.dismissNotificationsByGroupKey('group_key'),
+      ).called(1);
     });
 
     test('dispose method is called once', () async {
@@ -294,14 +298,20 @@ void main() {
     test('setListeners method is called once', () async {
       actionMethod(_) async {}
 
-      when(() => mockNotifications.setListeners(
-          onActionReceivedMethod: actionMethod)).thenAnswer((_) async => true);
+      when(
+        () => mockNotifications.setListeners(
+          onActionReceivedMethod: actionMethod,
+        ),
+      ).thenAnswer((_) async => true);
 
       await AwesomeNotifications()
           .setListeners(onActionReceivedMethod: actionMethod);
 
-      verify(() => mockNotifications.setListeners(
-          onActionReceivedMethod: actionMethod)).called(1);
+      verify(
+        () => mockNotifications.setListeners(
+          onActionReceivedMethod: actionMethod,
+        ),
+      ).called(1);
     });
 
     test('shouldShowRationaleToRequest method is called once', () async {
@@ -372,10 +382,14 @@ void main() {
 
     test('vibration standards', () async {
       expect(lowVibrationPattern, Int64List.fromList([0, 200, 200, 200]));
-      expect(mediumVibrationPattern,
-          Int64List.fromList([0, 500, 200, 200, 200, 200]));
-      expect(highVibrationPattern,
-          Int64List.fromList([0, 1000, 200, 200, 200, 200, 200, 200]));
+      expect(
+        mediumVibrationPattern,
+        Int64List.fromList([0, 500, 200, 200, 200, 200]),
+      );
+      expect(
+        highVibrationPattern,
+        Int64List.fromList([0, 1000, 200, 200, 200, 200, 200, 200]),
+      );
     });
   });
 }

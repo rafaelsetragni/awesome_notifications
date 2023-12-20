@@ -26,20 +26,22 @@ void main() {
       };
 
       expect(
-          () => NotificationChannelGroup(
-                  channelGroupKey: '', channelGroupName: '')
-              .fromMap(data)
-              ?.validate(),
-          throwsA(isA<AwesomeNotificationsException>()));
+        () => NotificationChannelGroup(
+          channelGroupKey: '',
+          channelGroupName: '',
+        ).fromMap(data)?.validate(),
+        throwsA(isA<AwesomeNotificationsException>()),
+      );
 
       data[NOTIFICATION_CHANNEL_GROUP_KEY] = '';
 
       expect(
-          () => NotificationChannelGroup(
-                  channelGroupKey: '', channelGroupName: '')
-              .fromMap(data)
-              ?.validate(),
-          throwsA(isA<AwesomeNotificationsException>()));
+        () => NotificationChannelGroup(
+          channelGroupKey: '',
+          channelGroupName: '',
+        ).fromMap(data)?.validate(),
+        throwsA(isA<AwesomeNotificationsException>()),
+      );
     });
 
     test(
@@ -51,20 +53,22 @@ void main() {
       };
 
       expect(
-          () => NotificationChannelGroup(
-                  channelGroupKey: '', channelGroupName: '')
-              .fromMap(data)
-              ?.validate(),
-          throwsA(isA<AwesomeNotificationsException>()));
+        () => NotificationChannelGroup(
+          channelGroupKey: '',
+          channelGroupName: '',
+        ).fromMap(data)?.validate(),
+        throwsA(isA<AwesomeNotificationsException>()),
+      );
 
       data[NOTIFICATION_CHANNEL_GROUP_NAME] = '';
 
       expect(
-          () => NotificationChannelGroup(
-                  channelGroupKey: '', channelGroupName: '')
-              .fromMap(data)
-              ?.validate(),
-          throwsA(isA<AwesomeNotificationsException>()));
+        () => NotificationChannelGroup(
+          channelGroupKey: '',
+          channelGroupName: '',
+        ).fromMap(data)?.validate(),
+        throwsA(isA<AwesomeNotificationsException>()),
+      );
     });
 
     test('should convert a NotificationChannelGroup object to a map', () {

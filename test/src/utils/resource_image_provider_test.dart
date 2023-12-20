@@ -53,8 +53,11 @@ void main() {
         return byteData.buffer.asUint8List();
       });
 
-      ResourceImage resourceImage = ResourceImage('drawable_path',
-          scale: 2.0, awesomeNotifications: awesomeNotifications);
+      ResourceImage resourceImage = ResourceImage(
+        'drawable_path',
+        scale: 2.0,
+        awesomeNotifications: awesomeNotifications,
+      );
 
       // Create a widget to test the ResourceImage
       await tester.pumpWidget(
@@ -94,14 +97,19 @@ void main() {
 
       expect(
         () {
-          ResourceImage resourceImage = ResourceImage('drawable_path',
-              scale: 2.0, awesomeNotifications: awesomeNotifications);
+          ResourceImage resourceImage = ResourceImage(
+            'drawable_path',
+            scale: 2.0,
+            awesomeNotifications: awesomeNotifications,
+          );
           return resourceImage.loadAsync(
-              resourceImage,
-              (buffer, {
-                TargetImageSizeCallback? getTargetSize,
-              }) =>
-                  Future.value(MockCodec()));
+            resourceImage,
+            (
+              buffer, {
+              TargetImageSizeCallback? getTargetSize,
+            }) =>
+                Future.value(MockCodec()),
+          );
         },
         throwsA(isA<AwesomeNotificationsException>()),
       );

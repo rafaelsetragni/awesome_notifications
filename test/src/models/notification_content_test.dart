@@ -23,7 +23,9 @@ void main() {
         expect(notificationContent.autoDismissible, true);
         expect(notificationContent.actionType, ActionType.Default);
         expect(
-            notificationContent.notificationLayout, NotificationLayout.Default);
+          notificationContent.notificationLayout,
+          NotificationLayout.Default,
+        );
         expect(notificationContent.displayOnForeground, true);
         expect(notificationContent.displayOnBackground, true);
       });
@@ -58,7 +60,9 @@ void main() {
         expect(notificationContent.ticker, 'ticker_text');
         expect(notificationContent.locked, true);
         expect(
-            notificationContent.notificationLayout, NotificationLayout.BigText);
+          notificationContent.notificationLayout,
+          NotificationLayout.BigText,
+        );
         expect(notificationContent.displayOnForeground, false);
         expect(notificationContent.displayOnBackground, false);
       });
@@ -168,17 +172,25 @@ void main() {
         expect(stringRepresentation.contains('id: 1'), true);
         expect(stringRepresentation.contains('channelKey: test_channel'), true);
         expect(
-            stringRepresentation.contains('hideLargeIconOnExpand: true'), true);
+          stringRepresentation.contains('hideLargeIconOnExpand: true'),
+          true,
+        );
         expect(stringRepresentation.contains('progress: 50'), true);
         expect(stringRepresentation.contains('badge: 2'), true);
         expect(stringRepresentation.contains('ticker: ticker_text'), true);
         expect(stringRepresentation.contains('locked: true'), true);
         expect(
-            stringRepresentation.contains('notificationLayout: BigText'), true);
+          stringRepresentation.contains('notificationLayout: BigText'),
+          true,
+        );
         expect(
-            stringRepresentation.contains('displayOnForeground: false'), true);
+          stringRepresentation.contains('displayOnForeground: false'),
+          true,
+        );
         expect(
-            stringRepresentation.contains('displayOnBackground: false'), true);
+          stringRepresentation.contains('displayOnBackground: false'),
+          true,
+        );
       });
     });
   });

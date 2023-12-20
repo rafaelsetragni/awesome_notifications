@@ -89,8 +89,12 @@ class AwesomeAssertUtils {
             final int colorValue = int.parse(hex, radix: 16);
             return (T == Color) ? Color(colorValue) : colorValue;
           } else if (T == int) {
-            int? parsedValue = int.tryParse(valueCasted.replaceFirstMapped(
-                RegExp(r'^(\d+)\.\d+$'), (match) => '${match.group(1)}'));
+            int? parsedValue = int.tryParse(
+              valueCasted.replaceFirstMapped(
+                RegExp(r'^(\d+)\.\d+$'),
+                (match) => '${match.group(1)}',
+              ),
+            );
             var finalValue = parsedValue ?? defaultValue;
             return finalValue;
           }
@@ -178,7 +182,10 @@ class AwesomeAssertUtils {
   }
 
   static T? extractEnum<T extends Enum>(
-      String reference, Map dataMap, List<T> values) {
+    String reference,
+    Map dataMap,
+    List<T> values,
+  ) {
     T? defaultValue = _getDefaultValue<T>(reference);
     dynamic value = dataMap[reference];
 
@@ -190,8 +197,10 @@ class AwesomeAssertUtils {
 
     if (value == null || value is! String) return defaultValue;
 
-    if (AwesomeStringUtils.isNullOrEmpty(value,
-        considerWhiteSpaceAsEmpty: true)) {
+    if (AwesomeStringUtils.isNullOrEmpty(
+      value,
+      considerWhiteSpaceAsEmpty: true,
+    )) {
       return defaultValue;
     }
 
@@ -201,7 +210,10 @@ class AwesomeAssertUtils {
   }
 
   static T? enumToString<T extends Enum>(
-      String enumValue, List<T> values, T? defaultValue) {
+    String enumValue,
+    List<T> values,
+    T? defaultValue,
+  ) {
     for (final enumerator in values) {
       if (AwesomeAssertUtils.toSimpleEnumString(enumerator)!.toLowerCase() ==
           enumValue.toLowerCase()) return enumerator;
@@ -216,7 +228,9 @@ class AwesomeAssertUtils {
   }
 
   static List<T>? fromListMap<T extends Model>(
-      Object? mapData, Function newModel) {
+    Object? mapData,
+    Function newModel,
+  ) {
     if (mapData == null || mapData is! List<Map<String, dynamic>>) return null;
 
     List<Map<String, dynamic>> listMapData = List.from(mapData);

@@ -16,21 +16,29 @@ void main() {
 
     test('should throw an exception if interval is negative', () {
       expect(
-          () => NotificationInterval(interval: -1).validate(),
-          throwsA(isA<AwesomeNotificationsException>().having(
-              (error) => error.message,
-              'message',
-              'interval must be greater or equal to zero.')));
+        () => NotificationInterval(interval: -1).validate(),
+        throwsA(
+          isA<AwesomeNotificationsException>().having(
+            (error) => error.message,
+            'message',
+            'interval must be greater or equal to zero.',
+          ),
+        ),
+      );
     });
 
     test('should throw an exception if interval is less than 60 and repeating',
         () {
       expect(
-          () => NotificationInterval(interval: 59, repeats: true).validate(),
-          throwsA(isA<AwesomeNotificationsException>().having(
-              (error) => error.message,
-              'message',
-              'time interval must be greater or equal to 60 if repeating')));
+        () => NotificationInterval(interval: 59, repeats: true).validate(),
+        throwsA(
+          isA<AwesomeNotificationsException>().having(
+            (error) => error.message,
+            'message',
+            'time interval must be greater or equal to 60 if repeating',
+          ),
+        ),
+      );
     });
   });
   group('NotificationInterval - toMap and fromMap', () {

@@ -134,7 +134,9 @@ class NotificationContent extends BaseNotificationContent {
   NotificationContent? fromMap(Map<String, dynamic> mapData) {
     super.fromMap(mapData);
     _hideLargeIconOnExpand = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND, mapData);
+      NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND,
+      mapData,
+    );
 
     _progress =
         AwesomeAssertUtils.extractValue<int>(NOTIFICATION_PROGRESS, mapData);
@@ -152,13 +154,20 @@ class NotificationContent extends BaseNotificationContent {
         NOTIFICATION_PLAYBACK_SPEED, mapData);
 
     _notificationLayout = AwesomeAssertUtils.extractEnum<NotificationLayout>(
-        NOTIFICATION_LAYOUT, mapData, NotificationLayout.values);
+      NOTIFICATION_LAYOUT,
+      mapData,
+      NotificationLayout.values,
+    );
 
     _displayOnForeground = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_DISPLAY_ON_FOREGROUND, mapData);
+      NOTIFICATION_DISPLAY_ON_FOREGROUND,
+      mapData,
+    );
 
     _displayOnBackground = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_DISPLAY_ON_BACKGROUND, mapData);
+      NOTIFICATION_DISPLAY_ON_BACKGROUND,
+      mapData,
+    );
 
     try {
       validate();

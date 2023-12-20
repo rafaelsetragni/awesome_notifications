@@ -27,7 +27,9 @@ class NotificationInterval extends NotificationSchedule {
     super.fromMap(mapData);
 
     interval = AwesomeAssertUtils.extractValue<int>(
-        NOTIFICATION_SCHEDULE_INTERVAL, mapData);
+      NOTIFICATION_SCHEDULE_INTERVAL,
+      mapData,
+    );
 
     try {
       validate();
@@ -58,12 +60,14 @@ class NotificationInterval extends NotificationSchedule {
   void validate() {
     if ((interval ?? -1) < 0) {
       throw const AwesomeNotificationsException(
-          message: 'interval must be greater or equal to zero.');
+        message: 'interval must be greater or equal to zero.',
+      );
     }
 
     if (repeats && (interval ?? 0) < 60) {
       throw const AwesomeNotificationsException(
-          message: 'time interval must be greater or equal to 60 if repeating');
+        message: 'time interval must be greater or equal to 60 if repeating',
+      );
     }
   }
 }

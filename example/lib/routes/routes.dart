@@ -17,7 +17,7 @@ const String PAGE_PHONE_CALL = '/phone-call';
 
 Map<String, WidgetBuilder> materialRoutes = {
   PAGE_HOME: (context) => const HomePage(),
-  PAGE_MEDIA_DETAILS: (context) => MediaDetailsPage(),
+  PAGE_MEDIA_DETAILS: (context) => const MediaDetailsPage(),
   PAGE_NOTIFICATION_DETAILS: (context) => NotificationDetailsPage(
         ModalRoute.of(context)!.settings.arguments as ReceivedNotification,
       ),
@@ -28,5 +28,5 @@ Map<String, WidgetBuilder> materialRoutes = {
             : ModalRoute.of(context)!.settings.arguments as ReceivedAction;
 
     return PhoneCallPage(receivedAction: receivedAction!);
-  }
+  },
 };

@@ -10,7 +10,10 @@ void main() {
     });
 
     test('Network media path', () {
-      expect(audioUtils.getFromMediaPath('https://example.com/audio.mp3'), null);
+      expect(
+        audioUtils.getFromMediaPath('https://example.com/audio.mp3'),
+        null,
+      );
     });
 
     test('File media path', () {

@@ -11,9 +11,10 @@ void main() {
 
       // Test main constructor
       NotificationAndroidCrontab crontab = NotificationAndroidCrontab(
-          initialDateTime: initialDate,
-          expirationDateTime: expirationDate,
-          crontabExpression: crontabExpression);
+        initialDateTime: initialDate,
+        expirationDateTime: expirationDate,
+        crontabExpression: crontabExpression,
+      );
       expect(crontab.initialDateTime, initialDate);
       expect(crontab.expirationDateTime, expirationDate);
       expect(crontab.crontabExpression, crontabExpression);
@@ -33,10 +34,14 @@ void main() {
 
       // Test toMap
       Map<String, dynamic> crontabMap = crontab.toMap();
-      expect(crontabMap[NOTIFICATION_INITIAL_DATE_TIME],
-          AwesomeDateUtils.parseDateToString(initialDate));
-      expect(crontabMap[NOTIFICATION_EXPIRATION_DATE_TIME],
-          AwesomeDateUtils.parseDateToString(expirationDate));
+      expect(
+        crontabMap[NOTIFICATION_INITIAL_DATE_TIME],
+        AwesomeDateUtils.parseDateToString(initialDate),
+      );
+      expect(
+        crontabMap[NOTIFICATION_EXPIRATION_DATE_TIME],
+        AwesomeDateUtils.parseDateToString(expirationDate),
+      );
       expect(crontabMap[NOTIFICATION_CRONTAB_EXPRESSION], crontabExpression);
     });
 
@@ -81,7 +86,7 @@ void main() {
             AwesomeDateUtils.parseDateToString(initialDate),
         NOTIFICATION_EXPIRATION_DATE_TIME:
             AwesomeDateUtils.parseDateToString(expirationDate),
-        NOTIFICATION_CRONTAB_EXPRESSION: crontabExpression
+        NOTIFICATION_CRONTAB_EXPRESSION: crontabExpression,
       };
 
       NotificationAndroidCrontab crontab = NotificationAndroidCrontab()

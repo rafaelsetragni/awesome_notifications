@@ -10,8 +10,7 @@ void main() {
       "nested": {"y": 5, "x": 4},
     };
 
-    String expectedOutput =
-'''{
+    String expectedOutput = '''{
   "a": 1,
   "b": 2,
   "c": 3,
@@ -38,15 +37,15 @@ void main() {
       "c": null,
     };
 
-    String expectedOutputWithNullValues =
-'''{
+    String expectedOutputWithNullValues = '''{
   "a": null,
   "b": 2,
   "c": null
 }''';
 
     expect(
-        AwesomeMapUtils.printPrettyMap(mapWithNullValues),
-        expectedOutputWithNullValues);
+      AwesomeMapUtils.printPrettyMap(mapWithNullValues),
+      expectedOutputWithNullValues,
+    );
   });
 }

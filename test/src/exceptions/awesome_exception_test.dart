@@ -7,8 +7,10 @@ void main() {
       const errorMessage = 'Test error message';
       const exception = AwesomeNotificationsException(message: errorMessage);
       expect(exception.message, errorMessage);
-      expect(exception.toString(),
-          'AwesomeNotificationsException{msg: $errorMessage}');
+      expect(
+        exception.toString(),
+        'AwesomeNotificationsException{msg: $errorMessage}',
+      );
     });
   });
 }

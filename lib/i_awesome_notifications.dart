@@ -59,11 +59,12 @@ abstract class IAwesomeNotifications {
   ///
   /// This method returns a [Future] that resolves to `true` if the listeners were
   /// successfully set, or `false` if an error occurred.
-  Future<bool> setListeners(
-      {required ActionHandler onActionReceivedMethod,
-      NotificationHandler? onNotificationCreatedMethod,
-      NotificationHandler? onNotificationDisplayedMethod,
-      ActionHandler? onDismissActionReceivedMethod});
+  Future<bool> setListeners({
+    required ActionHandler onActionReceivedMethod,
+    NotificationHandler? onNotificationCreatedMethod,
+    NotificationHandler? onNotificationDisplayedMethod,
+    ActionHandler? onDismissActionReceivedMethod,
+  });
 
   /// NATIVE MEDIA METHODS *********************************************
 
@@ -292,15 +293,16 @@ abstract class IAwesomeNotifications {
   ///
   /// In case the user is redirected to the app's notification settings to grant the
   /// permission, the future will wait until the user returns to app in foreground.
-  Future<bool> requestPermissionToSendNotifications(
-      {String? channelKey,
-      List<NotificationPermission> permissions = const [
-        NotificationPermission.Alert,
-        NotificationPermission.Sound,
-        NotificationPermission.Badge,
-        NotificationPermission.Vibration,
-        NotificationPermission.Light,
-      ]});
+  Future<bool> requestPermissionToSendNotifications({
+    String? channelKey,
+    List<NotificationPermission> permissions = const [
+      NotificationPermission.Alert,
+      NotificationPermission.Sound,
+      NotificationPermission.Badge,
+      NotificationPermission.Vibration,
+      NotificationPermission.Light,
+    ],
+  });
 
   /// Checks which notification permissions have been granted to the app.
   ///
@@ -330,7 +332,7 @@ abstract class IAwesomeNotifications {
       NotificationPermission.Alert,
       NotificationPermission.Sound,
       NotificationPermission.Vibration,
-      NotificationPermission.Light
+      NotificationPermission.Light,
     ],
   });
 
@@ -366,7 +368,7 @@ abstract class IAwesomeNotifications {
       NotificationPermission.Alert,
       NotificationPermission.Sound,
       NotificationPermission.Vibration,
-      NotificationPermission.Light
+      NotificationPermission.Light,
     ],
   });
 

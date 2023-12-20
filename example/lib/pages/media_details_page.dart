@@ -11,10 +11,10 @@ import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/media_player_central.dart';
 
 class MediaDetailsPage extends StatefulWidget {
-  MediaDetailsPage();
+  const MediaDetailsPage({super.key});
 
   @override
-  _MediaDetailsPageState createState() => _MediaDetailsPageState();
+  State<MediaDetailsPage> createState() => _MediaDetailsPageState();
 }
 
 class _MediaDetailsPageState extends State<MediaDetailsPage> {
@@ -35,44 +35,50 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
 
   @override
   void initState() {
-    if(!MediaPlayerCentral.hasAnyMedia){
+    if (!MediaPlayerCentral.hasAnyMedia) {
       MediaPlayerCentral.addAll([
         MediaModel(
-            diskImagePath: 'asset://assets/images/rock-disc.jpg',
-            colorCaptureSize: Size(788, 800),
-            bandName: 'Bright Sharp',
-            trackName: 'Champagne Supernova',
-            trackSize: Duration(minutes: 4, seconds: 21)),
+          diskImagePath: 'asset://assets/images/rock-disc.jpg',
+          colorCaptureSize: const Size(788, 800),
+          bandName: 'Bright Sharp',
+          trackName: 'Champagne Supernova',
+          trackSize: const Duration(minutes: 4, seconds: 21),
+        ),
         MediaModel(
-            diskImagePath: 'asset://assets/images/classic-disc.jpg',
-            colorCaptureSize: Size(500, 500),
-            bandName: 'Best of Mozart',
-            trackName: 'Allegro',
-            trackSize: Duration(minutes: 7, seconds: 41)),
+          diskImagePath: 'asset://assets/images/classic-disc.jpg',
+          colorCaptureSize: const Size(500, 500),
+          bandName: 'Best of Mozart',
+          trackName: 'Allegro',
+          trackSize: const Duration(minutes: 7, seconds: 41),
+        ),
         MediaModel(
-            diskImagePath: 'asset://assets/images/remix-disc.jpg',
-            colorCaptureSize: Size(500, 500),
-            bandName: 'Dj Allucard',
-            trackName: '21st Century',
-            trackSize: Duration(minutes: 4, seconds: 59)),
+          diskImagePath: 'asset://assets/images/remix-disc.jpg',
+          colorCaptureSize: const Size(500, 500),
+          bandName: 'Dj Allucard',
+          trackName: '21st Century',
+          trackSize: const Duration(minutes: 4, seconds: 59),
+        ),
         MediaModel(
-            diskImagePath: 'asset://assets/images/dj-disc.jpg',
-            colorCaptureSize: Size(500, 500),
-            bandName: 'Dj Brainiak',
-            trackName: 'Speed of light',
-            trackSize: Duration(minutes: 4, seconds: 59)),
+          diskImagePath: 'asset://assets/images/dj-disc.jpg',
+          colorCaptureSize: const Size(500, 500),
+          bandName: 'Dj Brainiak',
+          trackName: 'Speed of light',
+          trackSize: const Duration(minutes: 4, seconds: 59),
+        ),
         MediaModel(
-            diskImagePath: 'asset://assets/images/80s-disc.jpg',
-            colorCaptureSize: Size(500, 500),
-            bandName: 'Back to the 80\'s',
-            trackName: 'Disco revenge',
-            trackSize: Duration(minutes: 4, seconds: 59)),
+          diskImagePath: 'asset://assets/images/80s-disc.jpg',
+          colorCaptureSize: const Size(500, 500),
+          bandName: 'Back to the 80\'s',
+          trackName: 'Disco revenge',
+          trackSize: const Duration(minutes: 4, seconds: 59),
+        ),
         MediaModel(
-            diskImagePath: 'asset://assets/images/old-disc.jpg',
-            colorCaptureSize: Size(500, 500),
-            bandName: 'PeacefulMind',
-            trackName: 'Never look at back',
-            trackSize: Duration(minutes: 4, seconds: 59)),
+          diskImagePath: 'asset://assets/images/old-disc.jpg',
+          colorCaptureSize: const Size(500, 500),
+          bandName: 'PeacefulMind',
+          trackName: 'Never look at back',
+          trackSize: const Duration(minutes: 4, seconds: 59),
+        ),
       ]);
     }
 
@@ -170,12 +176,13 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
     late PaletteGenerator paletteGenerator;
     if (media != null) {
       paletteGenerator = await PaletteGenerator.fromImageProvider(
-          media.diskImage,
-          maximumColorCount: 5,
-          size: media.colorCaptureSize);
+        media.diskImage,
+        maximumColorCount: 5,
+        size: media.colorCaptureSize,
+      );
     }
 
-    if (media != null && paletteGenerator.paletteColors.length >= 1) {
+    if (media != null && paletteGenerator.paletteColors.isNotEmpty) {
       mainColor = paletteGenerator.dominantColor!.color;
       contrastColor = getContrastColor(mainColor!)
           .withOpacity(0.85); //paletteGenerator.paletteColors.last.color;//
@@ -184,7 +191,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
       contrastColor = null;
     }
 
-    if (this.mounted) setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override
@@ -199,7 +206,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
     isLighten =
         // ignore: deprecated_member_use
         isLighten ?? themeData.brightness == Brightness.light;
-    mainColor = mainColor ?? themeData.backgroundColor;
+    mainColor = mainColor ?? themeData.colorScheme.background;
     contrastColor = contrastColor ?? (isLighten! ? Colors.black : Colors.white);
 
     double maxSize = max(mediaQueryData.size.width, mediaQueryData.size.height);
@@ -208,106 +215,127 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
     double imageWidth = mediaQueryData.size.width * 0.8;
 
     return Theme(
-        data: Theme.of(context).copyWith(
-            primaryColor: mainColor,
-            // ignore: deprecated_member_use
-            secondaryHeaderColor: contrastColor,
-            scaffoldBackgroundColor: mainColor,
-            disabledColor: contrastColor?.withOpacity(0.25),
-            textTheme: Theme.of(context)
-                .textTheme
-                .copyWith(
-                  headline2:
-                      TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  headline3:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-                  headline6:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-                )
-                .apply(
-                  bodyColor: contrastColor,
-                  decorationColor: contrastColor,
-                  displayColor: contrastColor,
-                ),
-            colorScheme: contrastColor != null
-                ? ColorScheme.light(primary: contrastColor!)
-                : null,
-            buttonTheme: ButtonThemeData(
-                textTheme: ButtonTextTheme.accent,
-                disabledColor: contrastColor?.withOpacity(0.25),
-                buttonColor: contrastColor),
-            iconTheme: IconThemeData(color: contrastColor),
-            sliderTheme: SliderThemeData(
-                trackHeight: 4.0,
-                activeTrackColor: contrastColor,
-                inactiveTrackColor: contrastColor?.withOpacity(0.25),
-                disabledInactiveTrackColor: contrastColor?.withOpacity(0.25),
-                disabledThumbColor: contrastColor?.withOpacity(0.25),
-                thumbColor: contrastColor,
-                thumbShape: RoundSliderThumbShape(enabledThumbRadius: 15)),
-            canvasColor: mainColor),
-        child: Builder(builder: (BuildContext context) {
-          return Scaffold(
-              body: Stack(
-            children: <Widget>[
-              ListView(
-                padding: EdgeInsets.zero,
-                children: <Widget>[
-                  Container(
-                    constraints: BoxConstraints(
-                      minHeight: mediaQueryData.size.height,
-                      minWidth: mediaQueryData.size.width,
-                    ),
-                    child: Stack(
-                      children: <Widget>[
-                        _buildBackgroundMedia(mediaQueryData),
-                        _buildMediaPlayerContent(mediaQueryData, themeData,
-                            imageHeight, imageWidth, maxSize, context),
-                      ],
-                    ),
-                  ),
-                ],
+      data: Theme.of(context).copyWith(
+        primaryColor: mainColor,
+        // ignore: deprecated_member_use
+        secondaryHeaderColor: contrastColor,
+        scaffoldBackgroundColor: mainColor,
+        disabledColor: contrastColor?.withOpacity(0.25),
+        textTheme: Theme.of(context)
+            .textTheme
+            .copyWith(
+              displayMedium: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
               ),
-              Positioned(
-                top: mediaQueryData.padding.top + 10,
-                left: 10,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: mainColor,
-                    borderRadius: BorderRadius.only(
+              displaySmall: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+              ),
+              titleLarge: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+              ),
+            )
+            .apply(
+              bodyColor: contrastColor,
+              decorationColor: contrastColor,
+              displayColor: contrastColor,
+            ),
+        colorScheme: contrastColor != null
+            ? ColorScheme.light(primary: contrastColor!)
+            : null,
+        buttonTheme: ButtonThemeData(
+          textTheme: ButtonTextTheme.accent,
+          disabledColor: contrastColor?.withOpacity(0.25),
+          buttonColor: contrastColor,
+        ),
+        iconTheme: IconThemeData(color: contrastColor),
+        sliderTheme: SliderThemeData(
+          trackHeight: 4.0,
+          activeTrackColor: contrastColor,
+          inactiveTrackColor: contrastColor?.withOpacity(0.25),
+          disabledInactiveTrackColor: contrastColor?.withOpacity(0.25),
+          disabledThumbColor: contrastColor?.withOpacity(0.25),
+          thumbColor: contrastColor,
+          thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 15),
+        ),
+        canvasColor: mainColor,
+      ),
+      child: Builder(
+        builder: (BuildContext context) {
+          return Scaffold(
+            body: Stack(
+              children: <Widget>[
+                ListView(
+                  padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    Container(
+                      constraints: BoxConstraints(
+                        minHeight: mediaQueryData.size.height,
+                        minWidth: mediaQueryData.size.width,
+                      ),
+                      child: Stack(
+                        children: <Widget>[
+                          _buildBackgroundMedia(mediaQueryData),
+                          _buildMediaPlayerContent(
+                            mediaQueryData,
+                            themeData,
+                            imageHeight,
+                            imageWidth,
+                            maxSize,
+                            context,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  top: mediaQueryData.padding.top + 10,
+                  left: 10,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: mainColor,
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(10),
                         topRight: Radius.circular(10),
                         bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
+                        bottomRight: Radius.circular(10),
                       ),
-                    ],
-                  ),
-                  width: 50,
-                  height: 40,
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () => Navigator.pop(context),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    width: 50,
+                    height: 40,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back_ios),
+                      onPressed: () => Navigator.pop(context),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ));
-        }));
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Padding _buildMediaPlayerContent(
-      MediaQueryData mediaQueryData,
-      ThemeData themeData,
-      double imageHeight,
-      double imageWidth,
-      double maxSize,
-      BuildContext context) {
+    MediaQueryData mediaQueryData,
+    ThemeData themeData,
+    double imageHeight,
+    double imageWidth,
+    double maxSize,
+    BuildContext context,
+  ) {
     return Padding(
       padding: EdgeInsets.only(top: mediaQueryData.padding.top + 20),
       child: Column(
@@ -317,33 +345,49 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
           Stack(
             children: <Widget>[
               Opacity(
-                  opacity: closeCaptionActivated ? 0.08 : 1.0,
-                  child: mediaArt(
-                      imageHeight, imageWidth, mediaQueryData, maxSize)),
+                opacity: closeCaptionActivated ? 0.08 : 1.0,
+                child: mediaArt(
+                  imageHeight,
+                  imageWidth,
+                  mediaQueryData,
+                  maxSize,
+                ),
+              ),
               closeCaptionActivated
-                  ? mediaCloseCaption(themeData, imageHeight, imageWidth,
-                      mediaQueryData, maxSize)
-                  : SizedBox.shrink()
+                  ? mediaCloseCaption(
+                      themeData,
+                      imageHeight,
+                      imageWidth,
+                      mediaQueryData,
+                      maxSize,
+                    )
+                  : const SizedBox.shrink(),
             ],
           ),
           mediaInfo(maxSize, mediaQueryData, context),
           mediaTrackBar(maxSize, mediaQueryData),
-          mediaPlayerControllers(maxSize)
+          mediaPlayerControllers(maxSize),
         ],
       ),
     );
   }
 
-  Widget mediaCloseCaption(ThemeData themeData, double imageHeight,
-      double imageWidth, MediaQueryData mediaQueryData, double maxSize) {
+  Widget mediaCloseCaption(
+    ThemeData themeData,
+    double imageHeight,
+    double imageWidth,
+    MediaQueryData mediaQueryData,
+    double maxSize,
+  ) {
     TextStyle? textStyle =
-        themeData.textTheme.headline6?.copyWith(color: contrastColor);
+        themeData.textTheme.titleLarge?.copyWith(color: contrastColor);
     String subtitle = MediaPlayerCentral.getCloseCaption(durationPlayed!);
 
-    return Container(
-        width: mediaQueryData.size.width * 0.8,
-        height: imageHeight,
-        child: Center(child: Text(subtitle, style: textStyle)));
+    return SizedBox(
+      width: mediaQueryData.size.width * 0.8,
+      height: imageHeight,
+      child: Center(child: Text(subtitle, style: textStyle)),
+    );
   }
 
   Widget mediaPlayerControllers(double maxSize) {
@@ -351,18 +395,18 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
       child: Container(
         height: maxSize * 0.15,
         width: maxSize * 0.8,
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             IconButton(
-              icon: Icon(Icons.list),
+              icon: const Icon(Icons.list),
               iconSize: maxSize * 0.05,
               onPressed: null,
             ),
             IconButton(
-              icon: Icon(Icons.skip_previous),
+              icon: const Icon(Icons.skip_previous),
               iconSize: maxSize * 0.05,
               onPressed: (durationPlayed == null ||
                           durationPlayed! <
@@ -375,7 +419,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                     },
             ),
             Container(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               margin: EdgeInsets.zero,
               decoration: BoxDecoration(
                 color: contrastColor?.withOpacity(0.2),
@@ -383,7 +427,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
               ),
               child: MediaPlayerCentral.isPlaying
                   ? IconButton(
-                      icon: Icon(Icons.pause_circle_filled),
+                      icon: const Icon(Icons.pause_circle_filled),
                       padding: EdgeInsets.zero,
                       iconSize: maxSize * 0.08,
                       onPressed: !MediaPlayerCentral.hasAnyMedia
@@ -391,7 +435,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                           : () => MediaPlayerCentral.playPause(),
                     )
                   : IconButton(
-                      icon: Icon(Icons.play_circle_filled),
+                      icon: const Icon(Icons.play_circle_filled),
                       padding: EdgeInsets.zero,
                       iconSize: maxSize * 0.08,
                       onPressed: !MediaPlayerCentral.hasAnyMedia
@@ -400,7 +444,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                     ),
             ),
             IconButton(
-              icon: Icon(Icons.skip_next),
+              icon: const Icon(Icons.skip_next),
               iconSize: maxSize * 0.05,
               onPressed: !MediaPlayerCentral.hasNextMedia
                   ? null
@@ -410,10 +454,10 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                     },
             ),
             IconButton(
-              icon: Icon(CupertinoIcons.shuffle_medium),
+              icon: const Icon(CupertinoIcons.shuffle_medium),
               iconSize: maxSize * 0.05,
               onPressed: null,
-            )
+            ),
           ],
         ),
       ),
@@ -428,37 +472,42 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
       height: maxSize * 0.15,
       width: mediaQueryData.size.width,
       padding: EdgeInsets.only(
-          left: mediaQueryData.size.width * 0.05,
-          right: mediaQueryData.size.width * 0.05),
+        left: mediaQueryData.size.width * 0.05,
+        right: mediaQueryData.size.width * 0.05,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-              margin: EdgeInsets.zero,
-              height: maxSize * 0.05,
-              width: maxSize,
-              child: Slider(
-                  min: 0.0,
-                  max: maxValue,
-                  value: min(
-                      maxValue, durationPlayed?.inSeconds.toDouble() ?? 0.0),
-                  onChangeStart: (value) {
-                    isDraggin = true;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      durationPlayed = Duration(seconds: value.toInt());
-                    });
-                  },
-                  onChangeEnd: (value) {
-                    isDraggin = false;
-                    setState(() {
-                      MediaPlayerCentral.goTo(durationPlayed!);
-                    });
-                  })),
-          SizedBox(height: 5),
+            margin: EdgeInsets.zero,
+            height: maxSize * 0.05,
+            width: maxSize,
+            child: Slider(
+              min: 0.0,
+              max: maxValue,
+              value: min(
+                maxValue,
+                durationPlayed?.inSeconds.toDouble() ?? 0.0,
+              ),
+              onChangeStart: (value) {
+                isDraggin = true;
+              },
+              onChanged: (value) {
+                setState(() {
+                  durationPlayed = Duration(seconds: value.toInt());
+                });
+              },
+              onChangeEnd: (value) {
+                isDraggin = false;
+                setState(() {
+                  MediaPlayerCentral.goTo(durationPlayed!);
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 5),
           Container(
             padding: EdgeInsets.zero,
             width: maxSize,
@@ -470,17 +519,21 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                 hasCloseCaption
                     ? IconButton(
                         padding: EdgeInsets.zero,
-                        icon: Icon(Icons.closed_caption,
-                            size: 48,
-                            color: closeCaptionActivated
-                                ? contrastColor
-                                : contrastColor?.withOpacity(0.5)),
+                        icon: Icon(
+                          Icons.closed_caption,
+                          size: 48,
+                          color: closeCaptionActivated
+                              ? contrastColor
+                              : contrastColor?.withOpacity(0.5),
+                        ),
                         onPressed: () =>
                             closeCaptionActivated = !closeCaptionActivated,
                       )
-                    : SizedBox(height: 47),
-                Text(printDuration(mediaLength),
-                    style: TextStyle(color: contrastColor)),
+                    : const SizedBox(height: 47),
+                Text(
+                  printDuration(mediaLength),
+                  style: TextStyle(color: contrastColor),
+                ),
               ],
             ),
           ),
@@ -490,8 +543,11 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
   }
 
   Widget mediaInfo(
-      double maxSize, MediaQueryData mediaQueryData, BuildContext context) {
-    return Container(
+    double maxSize,
+    MediaQueryData mediaQueryData,
+    BuildContext context,
+  ) {
+    return SizedBox(
       height: maxSize * 0.2 - mediaQueryData.padding.top,
       width: mediaQueryData.size.width,
       child: Column(
@@ -499,58 +555,65 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
         children: <Widget>[
           Text(
             band ?? 'No track',
-            style: Theme.of(context).textTheme.headline2,
+            style: Theme.of(context).textTheme.displayMedium,
             textAlign: TextAlign.center,
           ),
           SizedBox(height: maxSize * 0.01),
           Text(
             music ?? '',
-            style: Theme.of(context).textTheme.headline3,
+            style: Theme.of(context).textTheme.displaySmall,
             textAlign: TextAlign.center,
-          )
+          ),
         ],
       ),
     );
   }
 
-  Widget mediaArt(double imageHeight, double imageWidth,
-      MediaQueryData mediaQueryData, double maxSize) {
+  Widget mediaArt(
+    double imageHeight,
+    double imageWidth,
+    MediaQueryData mediaQueryData,
+    double maxSize,
+  ) {
     return Center(
-      child: Container(
-          height: imageHeight,
-          width: imageWidth,
-          child: ShaderMask(
-              shaderCallback: (rect) {
-                return LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                      Colors.black,
-                      Colors.black,
-                      Colors.transparent
-                    ],
-                        stops: [
-                      0.0,
-                      0.75,
-                      0.98
-                    ])
-                    .createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-              },
-              blendMode: BlendMode.dstIn,
-              child: diskImage == null
-                  ? Container(
-                      width: mediaQueryData.size.width,
-                      height: (maxSize - mediaQueryData.padding.top) * 0.45,
-                      color: contrastColor?.withOpacity(0.65))
-                  : Image(
-                      //ProgressiveImage
-                      //placeholder: AssetImage('assets/images/placeholder.gif'),
-                      //thumbnail: AssetImage('assets/images/placeholder.gif'),
-                      image: diskImage!,
-                      width: mediaQueryData.size.width,
-                      height: (maxSize - mediaQueryData.padding.top) * 0.45,
-                      fit: BoxFit.cover,
-                    ))),
+      child: SizedBox(
+        height: imageHeight,
+        width: imageWidth,
+        child: ShaderMask(
+          shaderCallback: (rect) {
+            return const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black,
+                Colors.black,
+                Colors.transparent,
+              ],
+              stops: [
+                0.0,
+                0.75,
+                0.98,
+              ],
+            ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+          },
+          blendMode: BlendMode.dstIn,
+          child: diskImage == null
+              ? Container(
+                  width: mediaQueryData.size.width,
+                  height: (maxSize - mediaQueryData.padding.top) * 0.45,
+                  color: contrastColor?.withOpacity(0.65),
+                )
+              : Image(
+                  //ProgressiveImage
+                  //placeholder: AssetImage('assets/images/placeholder.gif'),
+                  //thumbnail: AssetImage('assets/images/placeholder.gif'),
+                  image: diskImage!,
+                  width: mediaQueryData.size.width,
+                  height: (maxSize - mediaQueryData.padding.top) * 0.45,
+                  fit: BoxFit.cover,
+                ),
+        ),
+      ),
     );
   }
 

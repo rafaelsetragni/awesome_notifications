@@ -12,15 +12,15 @@ class ServiceControlPanel extends StatelessWidget {
     this.title,
     this.statusControl,
     this.themeData, {
-    Key? key,
+    super.key,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
 
-    return Container(
+    return SizedBox(
       width: mediaQueryData.size.width * 0.4,
       child: Column(
         children: <Widget>[
@@ -29,25 +29,27 @@ class ServiceControlPanel extends StatelessWidget {
             child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                  style: TextStyle(color: Colors.black87),
-                  text: '$title status:\n',
-                  children: [
-                    TextSpan(
-                        style: TextStyle(
-                            color: statusControl
-                                ? Colors.green
-                                : Colors.redAccent),
-                        text: (statusControl ? 'Available' : 'Unavailable') +
-                            '\n'),
-                    WidgetSpan(child: LedLight(statusControl))
-                  ]),
+                style: const TextStyle(color: Colors.black87),
+                text: '$title status:\n',
+                children: [
+                  TextSpan(
+                    style: TextStyle(
+                      color: statusControl ? Colors.green : Colors.redAccent,
+                    ),
+                    text: '${statusControl ? 'Available' : 'Unavailable'}\n',
+                  ),
+                  WidgetSpan(child: LedLight(statusControl)),
+                ],
+              ),
             ),
           ),
-          SimpleButton('Go to $title\nTest Page',
-              width: mediaQueryData.size.width * 0.4,
-              labelColor:
-                  statusControl ? themeData.hintColor : themeData.disabledColor,
-              onPressed: statusControl ? onPressed : null),
+          SimpleButton(
+            'Go to $title\nTest Page',
+            width: mediaQueryData.size.width * 0.4,
+            labelColor:
+                statusControl ? themeData.hintColor : themeData.disabledColor,
+            onPressed: statusControl ? onPressed : null,
+          ),
         ],
       ),
     );

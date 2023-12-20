@@ -60,9 +60,13 @@ void main() {
 
       expect(notificationModel?.localizations, isNotNull);
       expect(
-          notificationModel?.localizations?['en_US']?.title, 'English Title');
-      expect(notificationModel?.localizations?['es_ES']?.title,
-          'Título en Español');
+        notificationModel?.localizations?['en_US']?.title,
+        'English Title',
+      );
+      expect(
+        notificationModel?.localizations?['es_ES']?.title,
+        'Título en Español',
+      );
 
       Map<String, dynamic> newDataMap = notificationModel?.toMap() ?? {};
       expect(newDataMap['content']['title'], 'Test Title');
@@ -74,7 +78,9 @@ void main() {
 
       expect(newDataMap['localizations']['en_US']['title'], 'English Title');
       expect(
-          newDataMap['localizations']['es_ES']['title'], 'Título en Español');
+        newDataMap['localizations']['es_ES']['title'],
+        'Título en Español',
+      );
     });
 
     test('using notification callendar', () {
@@ -134,9 +140,13 @@ void main() {
 
       expect(notificationModel?.localizations, isNotNull);
       expect(
-          notificationModel?.localizations?['en_US']?.title, 'English Title');
-      expect(notificationModel?.localizations?['es_ES']?.title,
-          'Título en Español');
+        notificationModel?.localizations?['en_US']?.title,
+        'English Title',
+      );
+      expect(
+        notificationModel?.localizations?['es_ES']?.title,
+        'Título en Español',
+      );
 
       Map<String, dynamic> newDataMap = notificationModel?.toMap() ?? {};
       expect(newDataMap['content']['title'], 'Test Title');
@@ -148,7 +158,9 @@ void main() {
 
       expect(newDataMap['localizations']['en_US']['title'], 'English Title');
       expect(
-          newDataMap['localizations']['es_ES']['title'], 'Título en Español');
+        newDataMap['localizations']['es_ES']['title'],
+        'Título en Español',
+      );
     });
 
     test('using notification crontab', () {
@@ -209,9 +221,13 @@ void main() {
 
       expect(notificationModel?.localizations, isNotNull);
       expect(
-          notificationModel?.localizations?['en_US']?.title, 'English Title');
-      expect(notificationModel?.localizations?['es_ES']?.title,
-          'Título en Español');
+        notificationModel?.localizations?['en_US']?.title,
+        'English Title',
+      );
+      expect(
+        notificationModel?.localizations?['es_ES']?.title,
+        'Título en Español',
+      );
 
       Map<String, dynamic> newDataMap = notificationModel?.toMap() ?? {};
       expect(newDataMap['content']['title'], 'Test Title');
@@ -223,7 +239,9 @@ void main() {
 
       expect(newDataMap['localizations']['en_US']['title'], 'English Title');
       expect(
-          newDataMap['localizations']['es_ES']['title'], 'Título en Español');
+        newDataMap['localizations']['es_ES']['title'],
+        'Título en Español',
+      );
     });
   });
 

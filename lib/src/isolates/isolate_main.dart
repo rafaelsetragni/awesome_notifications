@@ -51,8 +51,10 @@ class IsolateController {
   /// This method handle the silent callback as a flutter plugin
   Future<void> channelMethodIsolateShutdown(MethodCall call) async {
     try {} catch (error, stacktrace) {
-      Logger.e("channelMethodIsolateShutdown",
-          "An error occurred in your background messaging handler: $error");
+      Logger.e(
+        "channelMethodIsolateShutdown",
+        "An error occurred in your background messaging handler: $error",
+      );
       Logger.e("receiveSilentAction", stacktrace.toString());
     }
   }
@@ -61,15 +63,19 @@ class IsolateController {
   Future<void> channelMethodSilentCallbackHandle(MethodCall call) async {
     try {
       bool success = await receiveSilentAction(
-          (call.arguments as Map).cast<String, dynamic>());
+        (call.arguments as Map).cast<String, dynamic>(),
+      );
 
       if (!success) {
         throw const AwesomeNotificationsException(
-            message: 'Silent data could not be recovered');
+          message: 'Silent data could not be recovered',
+        );
       }
     } on Exception catch (error, stacktrace) {
-      Logger.e("channelMethodSilentCallbackHandle",
-          "An error occurred in your background messaging handler: $error");
+      Logger.e(
+        "channelMethodSilentCallbackHandle",
+        "An error occurred in your background messaging handler: $error",
+      );
       Logger.e("receiveSilentAction", stacktrace.toString());
     }
   }
@@ -87,7 +93,8 @@ class IsolateController {
 
     if (onActionDataHandle == null) {
       throw IsolateCallbackException(
-          'Could not find a valid action callback. Certifies that your action method is global and static.');
+        'Could not find a valid action callback. Certifies that your action method is global and static.',
+      );
     }
 
     Map<String, dynamic> actionMap = Map<String, dynamic>.from(arguments);
@@ -96,8 +103,10 @@ class IsolateController {
     try {
       await onActionDataHandle(receivedAction);
     } catch (error, stacktrace) {
-      Logger.e("receiveSilentAction",
-          "Got an unknown Silent Action callback error: $error");
+      Logger.e(
+        "receiveSilentAction",
+        "Got an unknown Silent Action callback error: $error",
+      );
       Logger.e("receiveSilentAction", stacktrace.toString());
       return false;
     }

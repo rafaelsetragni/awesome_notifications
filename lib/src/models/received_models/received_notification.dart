@@ -14,21 +14,32 @@ class ReceivedNotification extends BaseNotificationContent {
     super.fromMap(mapData);
 
     createdDate = AwesomeAssertUtils.extractValue<DateTime>(
-        NOTIFICATION_CREATED_DATE, mapData);
+      NOTIFICATION_CREATED_DATE,
+      mapData,
+    );
 
     displayedDate = AwesomeAssertUtils.extractValue<DateTime>(
-        NOTIFICATION_DISPLAYED_DATE, mapData);
+      NOTIFICATION_DISPLAYED_DATE,
+      mapData,
+    );
 
     createdSource = AwesomeAssertUtils.extractEnum<NotificationSource>(
-        NOTIFICATION_CREATED_SOURCE, mapData, NotificationSource.values);
+      NOTIFICATION_CREATED_SOURCE,
+      mapData,
+      NotificationSource.values,
+    );
 
     createdLifeCycle = AwesomeAssertUtils.extractEnum<NotificationLifeCycle>(
-        NOTIFICATION_CREATED_LIFECYCLE, mapData, NotificationLifeCycle.values);
+      NOTIFICATION_CREATED_LIFECYCLE,
+      mapData,
+      NotificationLifeCycle.values,
+    );
 
     displayedLifeCycle = AwesomeAssertUtils.extractEnum<NotificationLifeCycle>(
-        NOTIFICATION_DISPLAYED_LIFECYCLE,
-        mapData,
-        NotificationLifeCycle.values);
+      NOTIFICATION_DISPLAYED_LIFECYCLE,
+      mapData,
+      NotificationLifeCycle.values,
+    );
 
     return this;
   }

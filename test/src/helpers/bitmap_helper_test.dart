@@ -11,7 +11,8 @@ void main() {
 
     test('Creating BitmapHelper using different constructors', () {
       final Uint8List content = Uint8List.fromList(
-          List.filled(width * height * bitmapPixelLength, 0));
+        List.filled(width * height * bitmapPixelLength, 0),
+      );
 
       // Test BitmapHelper.fromHeadless
       final BitmapHelper bitmapHeadless =
@@ -38,7 +39,8 @@ void main() {
 
     test('Cloning BitmapHelper', () {
       final Uint8List content = Uint8List.fromList(
-          List.filled(width * height * bitmapPixelLength, 0));
+        List.filled(width * height * bitmapPixelLength, 0),
+      );
       final BitmapHelper original =
           BitmapHelper.fromHeadless(width, height, content);
       final BitmapHelper clone = original.cloneHeadless();
@@ -50,7 +52,8 @@ void main() {
 
     test('Build image from BitmapHelper', () async {
       final Uint8List content = Uint8List.fromList(
-          List.filled(width * height * bitmapPixelLength, 0));
+        List.filled(width * height * bitmapPixelLength, 0),
+      );
       final BitmapHelper bitmap =
           BitmapHelper.fromHeadless(width, height, content);
 
@@ -61,7 +64,8 @@ void main() {
 
     test('Build headed content from BitmapHelper', () {
       final Uint8List content = Uint8List.fromList(
-          List.filled(width * height * bitmapPixelLength, 0));
+        List.filled(width * height * bitmapPixelLength, 0),
+      );
       final BitmapHelper bitmap =
           BitmapHelper.fromHeadless(width, height, content);
 
@@ -83,8 +87,10 @@ void main() {
 
     test('Create BitmapHelper from ImageProvider', () async {
       const ImageProvider provider = AssetImage(
-          'test/assets/images/test_image.png'); // Replace with an actual image file in your assets folder
-      final BitmapHelper bitmap = await BitmapHelper.fromImageProvider(provider);
+        'test/assets/images/test_image.png',
+      ); // Replace with an actual image file in your assets folder
+      final BitmapHelper bitmap =
+          await BitmapHelper.fromImageProvider(provider);
 
       expect(bitmap.width, width); // Replace with actual image width
       expect(bitmap.height, height); // Replace with actual image height

@@ -12,27 +12,35 @@ void main() {
     });
 
     test('Plain text without HTML tags', () {
-      expect(AwesomeHtmlUtils.removeAllHtmlTags("Hello, World!"), "Hello, World!");
+      expect(
+        AwesomeHtmlUtils.removeAllHtmlTags("Hello, World!"),
+        "Hello, World!",
+      );
     });
 
     test('Text with single HTML tag', () {
       expect(
-          AwesomeHtmlUtils.removeAllHtmlTags("<p>Hello, World!</p>"),
-          "Hello, World!");
+        AwesomeHtmlUtils.removeAllHtmlTags("<p>Hello, World!</p>"),
+        "Hello, World!",
+      );
     });
 
     test('Text with nested HTML tags', () {
       expect(
-          AwesomeHtmlUtils.removeAllHtmlTags(
-              "<div><p><strong>Hello, World!</strong></p></div>"),
-          "Hello, World!");
+        AwesomeHtmlUtils.removeAllHtmlTags(
+          "<div><p><strong>Hello, World!</strong></p></div>",
+        ),
+        "Hello, World!",
+      );
     });
 
     test('Text with multiple HTML tags', () {
       expect(
-          AwesomeHtmlUtils.removeAllHtmlTags(
-              "<h1>Title</h1><p>Paragraph <em>with</em> emphasis.</p>"),
-          "TitleParagraph with emphasis.");
+        AwesomeHtmlUtils.removeAllHtmlTags(
+          "<h1>Title</h1><p>Paragraph <em>with</em> emphasis.</p>",
+        ),
+        "TitleParagraph with emphasis.",
+      );
     });
   });
 }

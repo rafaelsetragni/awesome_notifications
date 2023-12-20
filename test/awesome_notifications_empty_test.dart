@@ -52,7 +52,7 @@ void main() {
         NotificationPermission.Alert,
         NotificationPermission.Sound,
         NotificationPermission.Vibration,
-        NotificationPermission.Light
+        NotificationPermission.Light,
       ]);
     });
 

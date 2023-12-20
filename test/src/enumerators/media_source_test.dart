@@ -10,8 +10,10 @@ void main() {
       expect(MediaSourcePrefix.Network, 'https://');
       expect(MediaSourcePrefix.Unknown, '');
 
-      expect(MediaSourcePrefix.values,
-          containsAll(['resource://', 'asset://', 'file://', 'https://', '']));
+      expect(
+        MediaSourcePrefix.values,
+        containsAll(['resource://', 'asset://', 'file://', 'https://', '']),
+      );
     });
 
     test('MediaSourcePrefix index is set correctly', () {

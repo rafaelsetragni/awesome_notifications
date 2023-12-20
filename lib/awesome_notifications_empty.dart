@@ -32,15 +32,16 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
   Future<void> cancelSchedulesByGroupKey(String groupKey) async {}
 
   @override
-  Future<List<NotificationPermission>> checkPermissionList(
-      {String? channelKey,
-      List<NotificationPermission> permissions = const [
-        NotificationPermission.Badge,
-        NotificationPermission.Alert,
-        NotificationPermission.Sound,
-        NotificationPermission.Vibration,
-        NotificationPermission.Light
-      ]}) async {
+  Future<List<NotificationPermission>> checkPermissionList({
+    String? channelKey,
+    List<NotificationPermission> permissions = const [
+      NotificationPermission.Badge,
+      NotificationPermission.Alert,
+      NotificationPermission.Sound,
+      NotificationPermission.Vibration,
+      NotificationPermission.Light,
+    ],
+  }) async {
     return permissions;
   }
 
@@ -56,7 +57,8 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
 
   @override
   Future<bool> createNotificationFromJsonData(
-      Map<String, dynamic> mapData) async {
+    Map<String, dynamic> mapData,
+  ) async {
     return false;
   }
 
@@ -88,8 +90,9 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
   }
 
   @override
-  Future<ReceivedAction?> getInitialNotificationAction(
-      {bool removeFromActionEvents = false}) async {
+  Future<ReceivedAction?> getInitialNotificationAction({
+    bool removeFromActionEvents = false,
+  }) async {
     return null;
   }
 
@@ -104,8 +107,10 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
   }
 
   @override
-  Future<DateTime?> getNextDate(NotificationSchedule schedule,
-      {DateTime? fixedDate}) async {
+  Future<DateTime?> getNextDate(
+    NotificationSchedule schedule, {
+    DateTime? fixedDate,
+  }) async {
     return null;
   }
 
@@ -146,15 +151,16 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
   }
 
   @override
-  Future<bool> requestPermissionToSendNotifications(
-      {String? channelKey,
-      List<NotificationPermission> permissions = const [
-        NotificationPermission.Alert,
-        NotificationPermission.Sound,
-        NotificationPermission.Badge,
-        NotificationPermission.Vibration,
-        NotificationPermission.Light
-      ]}) async {
+  Future<bool> requestPermissionToSendNotifications({
+    String? channelKey,
+    List<NotificationPermission> permissions = const [
+      NotificationPermission.Alert,
+      NotificationPermission.Sound,
+      NotificationPermission.Badge,
+      NotificationPermission.Vibration,
+      NotificationPermission.Light,
+    ],
+  }) async {
     return false;
   }
 
@@ -162,31 +168,35 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
   Future<void> resetGlobalBadge() async {}
 
   @override
-  Future<void> setChannel(NotificationChannel notificationChannel,
-      {bool forceUpdate = false}) async {}
+  Future<void> setChannel(
+    NotificationChannel notificationChannel, {
+    bool forceUpdate = false,
+  }) async {}
 
   @override
   Future<void> setGlobalBadgeCounter(int? amount) async {}
 
   @override
-  Future<bool> setListeners(
-      {required ActionHandler onActionReceivedMethod,
-      NotificationHandler? onNotificationCreatedMethod,
-      NotificationHandler? onNotificationDisplayedMethod,
-      ActionHandler? onDismissActionReceivedMethod}) async {
+  Future<bool> setListeners({
+    required ActionHandler onActionReceivedMethod,
+    NotificationHandler? onNotificationCreatedMethod,
+    NotificationHandler? onNotificationDisplayedMethod,
+    ActionHandler? onDismissActionReceivedMethod,
+  }) async {
     return true;
   }
 
   @override
-  Future<List<NotificationPermission>> shouldShowRationaleToRequest(
-      {String? channelKey,
-      List<NotificationPermission> permissions = const [
-        NotificationPermission.Badge,
-        NotificationPermission.Alert,
-        NotificationPermission.Sound,
-        NotificationPermission.Vibration,
-        NotificationPermission.Light
-      ]}) async {
+  Future<List<NotificationPermission>> shouldShowRationaleToRequest({
+    String? channelKey,
+    List<NotificationPermission> permissions = const [
+      NotificationPermission.Badge,
+      NotificationPermission.Alert,
+      NotificationPermission.Sound,
+      NotificationPermission.Vibration,
+      NotificationPermission.Light,
+    ],
+  }) async {
     return [];
   }
 

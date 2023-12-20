@@ -74,7 +74,8 @@ class NotificationModel extends Model {
     if (mapData[NOTIFICATION_SCHEDULE].isEmpty) return null;
 
     Map<String, dynamic> scheduleData = Map<String, dynamic>.from(
-        Map<String, dynamic>.from(mapData[NOTIFICATION_SCHEDULE]));
+      Map<String, dynamic>.from(mapData[NOTIFICATION_SCHEDULE]),
+    );
 
     if (scheduleData.containsKey(NOTIFICATION_SCHEDULE_INTERVAL)) {
       return NotificationInterval(interval: 0).fromMap(scheduleData)
@@ -90,7 +91,8 @@ class NotificationModel extends Model {
   }
 
   List<NotificationActionButton>? _extractButtonsFromMap(
-      Map<String, dynamic> mapData) {
+    Map<String, dynamic> mapData,
+  ) {
     if (mapData[NOTIFICATION_BUTTONS] is! List) return null;
     if (mapData[NOTIFICATION_BUTTONS].isEmpty) return null;
 
@@ -108,7 +110,8 @@ class NotificationModel extends Model {
   }
 
   Map<String, NotificationLocalization>? _extractLocalizationsFromMap(
-      Map<String, dynamic> mapData) {
+    Map<String, dynamic> mapData,
+  ) {
     if (mapData[NOTIFICATION_LOCALIZATIONS] is! Map<String, dynamic>) {
       return null;
     }
@@ -137,13 +140,13 @@ class NotificationModel extends Model {
         if (_actionButtons?.isNotEmpty ?? false)
           NOTIFICATION_BUTTONS: [
             for (NotificationActionButton button in _actionButtons!)
-              button.toMap()
+              button.toMap(),
           ],
         if (_localizations?.isNotEmpty ?? false)
           NOTIFICATION_LOCALIZATIONS: {
             for (MapEntry<String, NotificationLocalization> localization
                 in _localizations!.entries)
-              localization.key: localization.value.toMap()
+              localization.key: localization.value.toMap(),
           },
       };
 
@@ -153,7 +156,8 @@ class NotificationModel extends Model {
   void validate() {
     if (_content == null) {
       throw const AwesomeNotificationsException(
-          message: 'content is required.');
+        message: 'content is required.',
+      );
     }
   }
 }

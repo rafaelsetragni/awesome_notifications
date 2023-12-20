@@ -142,60 +142,106 @@ class NotificationChannel extends Model {
       this.criticalAlerts})
       : super() {
     channelKey = AwesomeAssertUtils.getValueOrDefault<String>(
-        NOTIFICATION_CHANNEL_KEY, channelKey);
+      NOTIFICATION_CHANNEL_KEY,
+      channelKey,
+    );
     channelName = AwesomeAssertUtils.getValueOrDefault<String>(
-        NOTIFICATION_CHANNEL_NAME, channelName);
+      NOTIFICATION_CHANNEL_NAME,
+      channelName,
+    );
     channelDescription = AwesomeAssertUtils.getValueOrDefault<String>(
-        NOTIFICATION_CHANNEL_DESCRIPTION, channelDescription);
+      NOTIFICATION_CHANNEL_DESCRIPTION,
+      channelDescription,
+    );
     channelShowBadge = AwesomeAssertUtils.getValueOrDefault<bool>(
-        NOTIFICATION_CHANNEL_SHOW_BADGE, channelShowBadge);
+      NOTIFICATION_CHANNEL_SHOW_BADGE,
+      channelShowBadge,
+    );
 
     channelGroupKey = AwesomeAssertUtils.getValueOrDefault<String>(
-        NOTIFICATION_CHANNEL_GROUP_KEY, channelGroupKey);
+      NOTIFICATION_CHANNEL_GROUP_KEY,
+      channelGroupKey,
+    );
 
     importance = AwesomeAssertUtils.getValueOrDefault<NotificationImportance>(
-        NOTIFICATION_IMPORTANCE, importance);
+      NOTIFICATION_IMPORTANCE,
+      importance,
+    );
     playSound = AwesomeAssertUtils.getValueOrDefault<bool>(
-        NOTIFICATION_PLAY_SOUND, playSound);
+      NOTIFICATION_PLAY_SOUND,
+      playSound,
+    );
     criticalAlerts = AwesomeAssertUtils.getValueOrDefault<bool>(
-        NOTIFICATION_CHANNEL_CRITICAL_ALERTS, criticalAlerts);
+      NOTIFICATION_CHANNEL_CRITICAL_ALERTS,
+      criticalAlerts,
+    );
     soundSource = AwesomeAssertUtils.getValueOrDefault<String>(
-        NOTIFICATION_SOUND_SOURCE, soundSource);
+      NOTIFICATION_SOUND_SOURCE,
+      soundSource,
+    );
     enableVibration = AwesomeAssertUtils.getValueOrDefault<bool>(
-        NOTIFICATION_ENABLE_VIBRATION, enableVibration);
+      NOTIFICATION_ENABLE_VIBRATION,
+      enableVibration,
+    );
     vibrationPattern = AwesomeAssertUtils.getValueOrDefault<Int64List>(
-        NOTIFICATION_VIBRATION_PATTERN, vibrationPattern);
+      NOTIFICATION_VIBRATION_PATTERN,
+      vibrationPattern,
+    );
     enableLights = AwesomeAssertUtils.getValueOrDefault<bool>(
-        NOTIFICATION_ENABLE_LIGHTS, enableLights);
+      NOTIFICATION_ENABLE_LIGHTS,
+      enableLights,
+    );
     ledColor = AwesomeAssertUtils.getValueOrDefault<Color>(
-        NOTIFICATION_LED_COLOR, ledColor);
+      NOTIFICATION_LED_COLOR,
+      ledColor,
+    );
     ledOnMs = AwesomeAssertUtils.getValueOrDefault<int>(
-        NOTIFICATION_LED_ON_MS, ledOnMs);
+      NOTIFICATION_LED_ON_MS,
+      ledOnMs,
+    );
     ledOffMs = AwesomeAssertUtils.getValueOrDefault<int>(
-        NOTIFICATION_LED_OFF_MS, ledOffMs);
+      NOTIFICATION_LED_OFF_MS,
+      ledOffMs,
+    );
     groupKey = AwesomeAssertUtils.getValueOrDefault<String>(
-        NOTIFICATION_GROUP_KEY, groupKey);
+      NOTIFICATION_GROUP_KEY,
+      groupKey,
+    );
     groupSort = AwesomeAssertUtils.getValueOrDefault<GroupSort>(
-        NOTIFICATION_GROUP_SORT, groupSort);
+      NOTIFICATION_GROUP_SORT,
+      groupSort,
+    );
     groupAlertBehavior =
         AwesomeAssertUtils.getValueOrDefault<GroupAlertBehavior>(
-            NOTIFICATION_GROUP_ALERT_BEHAVIOR, groupAlertBehavior);
+      NOTIFICATION_GROUP_ALERT_BEHAVIOR,
+      groupAlertBehavior,
+    );
     icon = AwesomeAssertUtils.getValueOrDefault(NOTIFICATION_ICON, icon);
     defaultColor = AwesomeAssertUtils.getValueOrDefault<Color>(
-        NOTIFICATION_DEFAULT_COLOR, defaultColor);
+      NOTIFICATION_DEFAULT_COLOR,
+      defaultColor,
+    );
     locked =
         AwesomeAssertUtils.getValueOrDefault<bool>(NOTIFICATION_LOCKED, locked);
     onlyAlertOnce = AwesomeAssertUtils.getValueOrDefault<bool>(
-        NOTIFICATION_ONLY_ALERT_ONCE, onlyAlertOnce);
+      NOTIFICATION_ONLY_ALERT_ONCE,
+      onlyAlertOnce,
+    );
     defaultPrivacy = AwesomeAssertUtils.getValueOrDefault<NotificationPrivacy>(
-        NOTIFICATION_DEFAULT_PRIVACY, defaultPrivacy);
+      NOTIFICATION_DEFAULT_PRIVACY,
+      defaultPrivacy,
+    );
     defaultRingtoneType =
         AwesomeAssertUtils.getValueOrDefault<DefaultRingtoneType>(
-            NOTIFICATION_DEFAULT_RINGTONE_TYPE, defaultRingtoneType);
+      NOTIFICATION_DEFAULT_RINGTONE_TYPE,
+      defaultRingtoneType,
+    );
 
     // For small icons, it's only allowed resource media types
-    assert(AwesomeStringUtils.isNullOrEmpty(icon) ||
-        AwesomeBitmapUtils().getMediaSource(icon!) == MediaSource.Resource);
+    assert(
+      AwesomeStringUtils.isNullOrEmpty(icon) ||
+          AwesomeBitmapUtils().getMediaSource(icon!) == MediaSource.Resource,
+    );
   }
 
   /// Converts the [NotificationChannel] instance to a map.
@@ -225,7 +271,7 @@ class NotificationChannel extends Model {
       NOTIFICATION_DEFAULT_RINGTONE_TYPE: defaultRingtoneType?.name,
       NOTIFICATION_LOCKED: locked,
       NOTIFICATION_CHANNEL_CRITICAL_ALERTS: criticalAlerts,
-      NOTIFICATION_ONLY_ALERT_ONCE: onlyAlertOnce
+      NOTIFICATION_ONLY_ALERT_ONCE: onlyAlertOnce,
     };
   }
 
@@ -233,53 +279,90 @@ class NotificationChannel extends Model {
   @override
   NotificationChannel fromMap(Map<String, dynamic> mapData) {
     channelKey = AwesomeAssertUtils.extractValue<String>(
-        NOTIFICATION_CHANNEL_KEY, mapData);
+      NOTIFICATION_CHANNEL_KEY,
+      mapData,
+    );
     channelName = AwesomeAssertUtils.extractValue<String>(
-        NOTIFICATION_CHANNEL_NAME, mapData);
+      NOTIFICATION_CHANNEL_NAME,
+      mapData,
+    );
     channelDescription = AwesomeAssertUtils.extractValue<String>(
-        NOTIFICATION_CHANNEL_DESCRIPTION, mapData);
+      NOTIFICATION_CHANNEL_DESCRIPTION,
+      mapData,
+    );
     channelShowBadge = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_CHANNEL_SHOW_BADGE, mapData);
+      NOTIFICATION_CHANNEL_SHOW_BADGE,
+      mapData,
+    );
 
     channelGroupKey = AwesomeAssertUtils.extractValue<String>(
-        NOTIFICATION_CHANNEL_GROUP_KEY, mapData);
+      NOTIFICATION_CHANNEL_GROUP_KEY,
+      mapData,
+    );
 
     playSound =
         AwesomeAssertUtils.extractValue<bool>(NOTIFICATION_PLAY_SOUND, mapData);
     soundSource = AwesomeAssertUtils.extractValue<String>(
-        NOTIFICATION_SOUND_SOURCE, mapData);
+      NOTIFICATION_SOUND_SOURCE,
+      mapData,
+    );
 
     enableVibration = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_ENABLE_VIBRATION, mapData);
+      NOTIFICATION_ENABLE_VIBRATION,
+      mapData,
+    );
     vibrationPattern = AwesomeAssertUtils.extractValue<Int64List>(
-        NOTIFICATION_VIBRATION_PATTERN, mapData);
+      NOTIFICATION_VIBRATION_PATTERN,
+      mapData,
+    );
     enableLights = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_ENABLE_LIGHTS, mapData);
+      NOTIFICATION_ENABLE_LIGHTS,
+      mapData,
+    );
 
     importance = AwesomeAssertUtils.extractEnum<NotificationImportance>(
-        NOTIFICATION_IMPORTANCE, mapData, NotificationImportance.values);
+      NOTIFICATION_IMPORTANCE,
+      mapData,
+      NotificationImportance.values,
+    );
     defaultPrivacy = AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
-        NOTIFICATION_DEFAULT_PRIVACY, mapData, NotificationPrivacy.values);
+      NOTIFICATION_DEFAULT_PRIVACY,
+      mapData,
+      NotificationPrivacy.values,
+    );
     defaultRingtoneType = AwesomeAssertUtils.extractEnum<DefaultRingtoneType>(
-        NOTIFICATION_DEFAULT_RINGTONE_TYPE,
-        mapData,
-        DefaultRingtoneType.values);
+      NOTIFICATION_DEFAULT_RINGTONE_TYPE,
+      mapData,
+      DefaultRingtoneType.values,
+    );
 
     groupKey = AwesomeAssertUtils.extractValue<String>(
-        NOTIFICATION_GROUP_KEY, mapData);
+      NOTIFICATION_GROUP_KEY,
+      mapData,
+    );
     groupSort = AwesomeAssertUtils.extractEnum<GroupSort>(
-        NOTIFICATION_GROUP_SORT, mapData, GroupSort.values);
+      NOTIFICATION_GROUP_SORT,
+      mapData,
+      GroupSort.values,
+    );
     groupAlertBehavior = AwesomeAssertUtils.extractEnum<GroupAlertBehavior>(
-        NOTIFICATION_GROUP_ALERT_BEHAVIOR, mapData, GroupAlertBehavior.values);
+      NOTIFICATION_GROUP_ALERT_BEHAVIOR,
+      mapData,
+      GroupAlertBehavior.values,
+    );
 
     icon = AwesomeAssertUtils.extractValue<String>(NOTIFICATION_ICON, mapData);
     locked =
         AwesomeAssertUtils.extractValue<bool>(NOTIFICATION_LOCKED, mapData);
     onlyAlertOnce = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_ONLY_ALERT_ONCE, mapData);
+      NOTIFICATION_ONLY_ALERT_ONCE,
+      mapData,
+    );
 
     defaultColor = AwesomeAssertUtils.extractValue<Color>(
-        NOTIFICATION_DEFAULT_COLOR, mapData);
+      NOTIFICATION_DEFAULT_COLOR,
+      mapData,
+    );
     ledColor =
         AwesomeAssertUtils.extractValue<Color>(NOTIFICATION_LED_COLOR, mapData);
 
@@ -289,7 +372,9 @@ class NotificationChannel extends Model {
         AwesomeAssertUtils.extractValue<int>(NOTIFICATION_LED_OFF_MS, mapData);
 
     criticalAlerts = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_CHANNEL_CRITICAL_ALERTS, mapData);
+      NOTIFICATION_CHANNEL_CRITICAL_ALERTS,
+      mapData,
+    );
 
     return this;
   }
@@ -301,15 +386,18 @@ class NotificationChannel extends Model {
   void validate() {
     if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(channelKey)) {
       throw const AwesomeNotificationsException(
-          message: 'Property channelKey is required');
+        message: 'Property channelKey is required',
+      );
     }
     if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(channelName)) {
       throw const AwesomeNotificationsException(
-          message: 'Property channelName is required');
+        message: 'Property channelName is required',
+      );
     }
     if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(channelDescription)) {
       throw const AwesomeNotificationsException(
-          message: 'Property channelDescription is required');
+        message: 'Property channelDescription is required',
+      );
     }
   }
 }

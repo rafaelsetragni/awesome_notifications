@@ -13,9 +13,10 @@ void main() {
 
     test('Valid date string', () {
       expect(
-          AwesomeDateUtils.parseStringToDateUtc('2023-01-01 00:00:00')
-              ?.toIso8601String(),
-          '2023-01-01T00:00:00.000Z');
+        AwesomeDateUtils.parseStringToDateUtc('2023-01-01 00:00:00')
+            ?.toIso8601String(),
+        '2023-01-01T00:00:00.000Z',
+      );
     });
   });
 
@@ -27,7 +28,9 @@ void main() {
     test('Valid DateTime', () {
       DateTime dateTime = DateTime.parse('2023-01-01T00:00:00.000Z');
       expect(
-          AwesomeDateUtils.parseDateToString(dateTime), '2023-01-01 00:00:00');
+        AwesomeDateUtils.parseDateToString(dateTime),
+        '2023-01-01 00:00:00',
+      );
     });
   });
 

@@ -53,8 +53,10 @@ void main() {
       expect(data[NOTIFICATION_SUMMARY], 'Summary');
       expect(data[NOTIFICATION_LARGE_ICON], 'LargeIcon');
       expect(data[NOTIFICATION_BIG_PICTURE], 'BigPicture');
-      expect(data[NOTIFICATION_BUTTON_LABELS],
-          {'key1': 'Label1', 'key2': 'Label2'});
+      expect(
+        data[NOTIFICATION_BUTTON_LABELS],
+        {'key1': 'Label1', 'key2': 'Label2'},
+      );
     });
 
     test(

@@ -8,14 +8,16 @@ void main() {
       final GlobalKey<NavigatorState> navigatorKey =
           GlobalKey<NavigatorState>();
 
-      await tester.pumpWidget(MaterialApp(
-        navigatorKey: navigatorKey,
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const Text('Home'),
-          '/second': (context) => const Text('Second'),
-        },
-      ));
+      await tester.pumpWidget(
+        MaterialApp(
+          navigatorKey: navigatorKey,
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const Text('Home'),
+            '/second': (context) => const Text('Second'),
+          },
+        ),
+      );
 
       // Should push the route if it's not the current route
       navigatorKey.currentState!.pushNamedIfNotCurrent('/second');
@@ -29,39 +31,47 @@ void main() {
     });
 
     testWidgets('getCurrentPage', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const Text('Home'),
-          '/second': (context) => const Text('Second'),
-        },
-      ));
+      await tester.pumpWidget(
+        MaterialApp(
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const Text('Home'),
+            '/second': (context) => const Text('Second'),
+          },
+        ),
+      );
 
       await tester.tap(find.text('Home'));
       await tester.pumpAndSettle();
 
       expect(
-          Navigator.of(tester.element(find.text('Home')))
-              .getCurrentPage('/')
-              .settings
-              .name,
-          '/');
+        Navigator.of(tester.element(find.text('Home')))
+            .getCurrentPage('/')
+            .settings
+            .name,
+        '/',
+      );
     });
 
     testWidgets('isCurrent', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const Text('Home'),
-          '/second': (context) => const Text('Second'),
-        },
-      ));
+      await tester.pumpWidget(
+        MaterialApp(
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const Text('Home'),
+            '/second': (context) => const Text('Second'),
+          },
+        ),
+      );
 
       expect(
-          Navigator.of(tester.element(find.text('Home'))).isCurrent('/'), true);
+        Navigator.of(tester.element(find.text('Home'))).isCurrent('/'),
+        true,
+      );
       expect(
-          Navigator.of(tester.element(find.text('Home'))).isCurrent('/second'),
-          false);
+        Navigator.of(tester.element(find.text('Home'))).isCurrent('/second'),
+        false,
+      );
     });
   });
 }

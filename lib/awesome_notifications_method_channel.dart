@@ -42,13 +42,17 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<void> cancelNotificationsByChannelKey(String channelKey) async {
     await methodChannel.invokeMethod(
-        CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_CHANNEL_KEY, channelKey);
+      CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_CHANNEL_KEY,
+      channelKey,
+    );
   }
 
   @override
   Future<void> cancelNotificationsByGroupKey(String groupKey) async {
     await methodChannel.invokeMethod(
-        CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_GROUP_KEY, groupKey);
+      CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_GROUP_KEY,
+      groupKey,
+    );
   }
 
   @override
@@ -60,31 +64,36 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<void> cancelSchedulesByChannelKey(String channelKey) async {
     await methodChannel.invokeMethod(
-        CHANNEL_METHOD_CANCEL_SCHEDULES_BY_CHANNEL_KEY, channelKey);
+      CHANNEL_METHOD_CANCEL_SCHEDULES_BY_CHANNEL_KEY,
+      channelKey,
+    );
   }
 
   @override
   Future<void> cancelSchedulesByGroupKey(String groupKey) async {
     await methodChannel.invokeMethod(
-        CHANNEL_METHOD_CANCEL_SCHEDULES_BY_GROUP_KEY, groupKey);
+      CHANNEL_METHOD_CANCEL_SCHEDULES_BY_GROUP_KEY,
+      groupKey,
+    );
   }
 
   @override
-  Future<List<NotificationPermission>> checkPermissionList(
-      {String? channelKey,
-      List<NotificationPermission> permissions = const [
-        NotificationPermission.Badge,
-        NotificationPermission.Alert,
-        NotificationPermission.Sound,
-        NotificationPermission.Vibration,
-        NotificationPermission.Light
-      ]}) async {
+  Future<List<NotificationPermission>> checkPermissionList({
+    String? channelKey,
+    List<NotificationPermission> permissions = const [
+      NotificationPermission.Badge,
+      NotificationPermission.Alert,
+      NotificationPermission.Sound,
+      NotificationPermission.Vibration,
+      NotificationPermission.Light,
+    ],
+  }) async {
     List<Object?> permissionList = _listPermissionToListString(permissions);
 
-    permissionList = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_CHECK_PERMISSIONS, {
+    permissionList =
+        await methodChannel.invokeMethod(CHANNEL_METHOD_CHECK_PERMISSIONS, {
       NOTIFICATION_CHANNEL_KEY: channelKey,
-      NOTIFICATION_PERMISSIONS: permissionList
+      NOTIFICATION_PERMISSIONS: permissionList,
     });
 
     return _listStringToListPermission(permissionList);
@@ -100,20 +109,22 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     validateId(content.id!);
 
     final bool wasCreated = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_CREATE_NOTIFICATION,
-        NotificationModel(
-                content: content,
-                schedule: schedule,
-                actionButtons: actionButtons,
-                localizations: localizations)
-            .toMap());
+      CHANNEL_METHOD_CREATE_NOTIFICATION,
+      NotificationModel(
+        content: content,
+        schedule: schedule,
+        actionButtons: actionButtons,
+        localizations: localizations,
+      ).toMap(),
+    );
 
     return wasCreated;
   }
 
   @override
   Future<bool> createNotificationFromJsonData(
-      Map<String, dynamic> mapData) async {
+    Map<String, dynamic> mapData,
+  ) async {
     try {
       if (mapData[NOTIFICATION_CONTENT] is String) {
         mapData[NOTIFICATION_CONTENT] =
@@ -143,9 +154,10 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
       }
 
       return createNotification(
-          content: notificationModel.content!,
-          schedule: notificationModel.schedule,
-          actionButtons: notificationModel.actionButtons);
+        content: notificationModel.content!,
+        schedule: notificationModel.schedule,
+        actionButtons: notificationModel.actionButtons,
+      );
     } catch (e) {
       return false;
     }
@@ -172,13 +184,17 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<void> dismissNotificationsByChannelKey(String channelKey) async {
     await methodChannel.invokeMethod(
-        CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_CHANNEL_KEY, channelKey);
+      CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_CHANNEL_KEY,
+      channelKey,
+    );
   }
 
   @override
   Future<void> dismissNotificationsByGroupKey(String groupKey) async {
     await methodChannel.invokeMethod(
-        CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_GROUP_KEY, groupKey);
+      CHANNEL_METHOD_DISMISS_NOTIFICATIONS_BY_GROUP_KEY,
+      groupKey,
+    );
   }
 
   @override
@@ -192,7 +208,9 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<Uint8List?> getDrawableData(String drawablePath) async {
     var result2 = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_GET_DRAWABLE_DATA, drawablePath);
+      CHANNEL_METHOD_GET_DRAWABLE_DATA,
+      drawablePath,
+    );
 
     if (result2 == null) return null;
 
@@ -200,10 +218,13 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }
 
   @override
-  Future<ReceivedAction?> getInitialNotificationAction(
-      {bool removeFromActionEvents = false}) async {
+  Future<ReceivedAction?> getInitialNotificationAction({
+    bool removeFromActionEvents = false,
+  }) async {
     dynamic returnedData = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_GET_INITIAL_ACTION, removeFromActionEvents);
+      CHANNEL_METHOD_GET_INITIAL_ACTION,
+      removeFromActionEvents,
+    );
     if (returnedData == null) return null;
 
     Map<String, dynamic>? actionData = Map<String, dynamic>.from(returnedData);
@@ -226,17 +247,21 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }
 
   @override
-  Future<DateTime?> getNextDate(NotificationSchedule schedule,
-      {DateTime? fixedDate}) async {
+  Future<DateTime?> getNextDate(
+    NotificationSchedule schedule, {
+    DateTime? fixedDate,
+  }) async {
     fixedDate ??= DateTime.now().toUtc();
     Map parameters = {
       NOTIFICATION_INITIAL_FIXED_DATE:
           AwesomeDateUtils.parseDateToString(fixedDate),
-      NOTIFICATION_SCHEDULE: schedule.toMap()
+      NOTIFICATION_SCHEDULE: schedule.toMap(),
     };
 
     final String? nextDate = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_GET_NEXT_DATE, parameters);
+      CHANNEL_METHOD_GET_NEXT_DATE,
+      parameters,
+    );
 
     if (nextDate == null) return null;
 
@@ -287,8 +312,10 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     } else {
       if (!AwesomeAssertUtils.isNullOrEmptyOrInvalid(defaultIcon)) {
         // To set a icon on top of notification, is mandatory to user a native resource
-        assert(AwesomeBitmapUtils().getMediaSource(defaultIcon!) ==
-            MediaSource.Resource);
+        assert(
+          AwesomeBitmapUtils().getMediaSource(defaultIcon!) ==
+              MediaSource.Resource,
+        );
         defaultIconPath = defaultIcon;
       }
     }
@@ -301,7 +328,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
       INITIALIZE_DEFAULT_ICON: defaultIconPath,
       INITIALIZE_CHANNELS: serializedChannels,
       INITIALIZE_CHANNELS_GROUPS: serializedChannelGroups,
-      BACKGROUND_HANDLE: dartCallbackReference!.toRawHandle()
+      BACKGROUND_HANDLE: dartCallbackReference!.toRawHandle(),
     });
 
     if (languageCode != null) {
@@ -346,20 +373,23 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<bool> removeChannel(String channelKey) async {
     final bool wasRemoved = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL, channelKey);
+      CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL,
+      channelKey,
+    );
     return wasRemoved;
   }
 
   @override
-  Future<bool> requestPermissionToSendNotifications(
-      {String? channelKey,
-      List<NotificationPermission> permissions = const [
-        NotificationPermission.Alert,
-        NotificationPermission.Sound,
-        NotificationPermission.Badge,
-        NotificationPermission.Vibration,
-        NotificationPermission.Light
-      ]}) async {
+  Future<bool> requestPermissionToSendNotifications({
+    String? channelKey,
+    List<NotificationPermission> permissions = const [
+      NotificationPermission.Alert,
+      NotificationPermission.Sound,
+      NotificationPermission.Badge,
+      NotificationPermission.Vibration,
+      NotificationPermission.Light,
+    ],
+  }) async {
     final List<String> permissionList = [];
     for (final permission in permissions) {
       String? permissionValue =
@@ -367,10 +397,10 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
       if (permissionValue != null) permissionList.add(permissionValue);
     }
 
-    final List<Object?>? missingPermissions = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_REQUEST_NOTIFICATIONS, {
+    final List<Object?>? missingPermissions =
+        await methodChannel.invokeMethod(CHANNEL_METHOD_REQUEST_NOTIFICATIONS, {
       NOTIFICATION_CHANNEL_KEY: channelKey,
-      NOTIFICATION_PERMISSIONS: permissionList
+      NOTIFICATION_PERMISSIONS: permissionList,
     });
 
     return missingPermissions?.isEmpty ?? false;
@@ -382,13 +412,17 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }
 
   @override
-  Future<void> setChannel(NotificationChannel notificationChannel,
-      {bool forceUpdate = false}) async {
+  Future<void> setChannel(
+    NotificationChannel notificationChannel, {
+    bool forceUpdate = false,
+  }) async {
     Map<String, dynamic> parameters = notificationChannel.toMap();
     parameters.addAll({CHANNEL_FORCE_UPDATE: forceUpdate});
 
     await methodChannel.invokeMethod(
-        CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL, parameters);
+      CHANNEL_METHOD_SET_NOTIFICATION_CHANNEL,
+      parameters,
+    );
   }
 
   @override
@@ -397,11 +431,12 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }
 
   @override
-  Future<bool> setListeners(
-      {required ActionHandler onActionReceivedMethod,
-      NotificationHandler? onNotificationCreatedMethod,
-      NotificationHandler? onNotificationDisplayedMethod,
-      ActionHandler? onDismissActionReceivedMethod}) async {
+  Future<bool> setListeners({
+    required ActionHandler onActionReceivedMethod,
+    NotificationHandler? onNotificationCreatedMethod,
+    NotificationHandler? onNotificationDisplayedMethod,
+    ActionHandler? onDismissActionReceivedMethod,
+  }) async {
     if (actionHandler != null && actionHandler != onActionReceivedMethod) {
       Logger.w(tag, 'Static listener for notifications actions was redefined.');
     }
@@ -434,12 +469,14 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
       CREATED_HANDLE: createdCallbackReference?.toRawHandle(),
       DISPLAYED_HANDLE: displayedCallbackReference?.toRawHandle(),
       ACTION_HANDLE: actionCallbackReference?.toRawHandle(),
-      DISMISSED_HANDLE: dismissedCallbackReference?.toRawHandle()
+      DISMISSED_HANDLE: dismissedCallbackReference?.toRawHandle(),
     });
 
     if (!result) {
-      Logger.e(tag,
-          'onActionNotificationMethod is not a valid global or static method.');
+      Logger.e(
+        tag,
+        'onActionNotificationMethod is not a valid global or static method.',
+      );
       return false;
     }
 
@@ -447,21 +484,22 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }
 
   @override
-  Future<List<NotificationPermission>> shouldShowRationaleToRequest(
-      {String? channelKey,
-      List<NotificationPermission> permissions = const [
-        NotificationPermission.Badge,
-        NotificationPermission.Alert,
-        NotificationPermission.Sound,
-        NotificationPermission.Vibration,
-        NotificationPermission.Light
-      ]}) async {
+  Future<List<NotificationPermission>> shouldShowRationaleToRequest({
+    String? channelKey,
+    List<NotificationPermission> permissions = const [
+      NotificationPermission.Badge,
+      NotificationPermission.Alert,
+      NotificationPermission.Sound,
+      NotificationPermission.Vibration,
+      NotificationPermission.Light,
+    ],
+  }) async {
     List<Object?> permissionList = _listPermissionToListString(permissions);
 
-    permissionList = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_SHOULD_SHOW_RATIONALE, {
+    permissionList =
+        await methodChannel.invokeMethod(CHANNEL_METHOD_SHOULD_SHOW_RATIONALE, {
       NOTIFICATION_CHANNEL_KEY: channelKey,
-      NOTIFICATION_PERMISSIONS: permissionList
+      NOTIFICATION_PERMISSIONS: permissionList,
     });
 
     return _listStringToListPermission(permissionList);
@@ -480,7 +518,9 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<void> showNotificationConfigPage({String? channelKey}) async {
     await methodChannel.invokeMethod(
-        CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE, channelKey);
+      CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE,
+      channelKey,
+    );
   }
 
   @override
@@ -491,14 +531,18 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<bool> setLocalization({required String? languageCode}) async {
     var success = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_SET_LOCALIZATION, languageCode);
+      CHANNEL_METHOD_SET_LOCALIZATION,
+      languageCode,
+    );
     return success;
   }
 
   @override
   Future<bool> isNotificationActiveOnStatusBar({required int id}) async {
     var success = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_IS_NOTIFICATION_ACTIVE, id);
+      CHANNEL_METHOD_IS_NOTIFICATION_ACTIVE,
+      id,
+    );
     return success;
   }
 
@@ -555,12 +599,14 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   void validateId(int id) {
     if (id > 0x7FFFFFFF || id < -0x80000000) {
       throw ArgumentError(
-          'The id field must be the limited to 32-bit size integer');
+        'The id field must be the limited to 32-bit size integer',
+      );
     }
   }
 
   List<Object?> _listPermissionToListString(
-      List<NotificationPermission> permissions) {
+    List<NotificationPermission> permissions,
+  ) {
     List<Object?> permissionList = [];
     for (final permission in permissions) {
       String? permissionValue =
@@ -571,12 +617,16 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }
 
   List<NotificationPermission> _listStringToListPermission(
-      List<Object?> permissionList) {
+    List<Object?> permissionList,
+  ) {
     List<NotificationPermission> lockedPermissions = [];
     for (final permission in permissionList) {
       NotificationPermission? permissionValue =
           AwesomeAssertUtils.enumToString<NotificationPermission>(
-              permission.toString(), NotificationPermission.values, null);
+        permission.toString(),
+        NotificationPermission.values,
+        null,
+      );
       if (permissionValue != null) lockedPermissions.add(permissionValue);
     }
     return lockedPermissions;

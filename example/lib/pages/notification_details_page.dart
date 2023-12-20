@@ -15,7 +15,7 @@ class NotificationDetailsPage extends StatefulWidget {
   const NotificationDetailsPage(this.receivedNotification, {super.key});
 
   @override
-  _NotificationDetailsPageState createState() =>
+  State<NotificationDetailsPage> createState() =>
       _NotificationDetailsPageState();
 }
 
@@ -26,8 +26,9 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
   void initState() {
     super.initState();
     displayedDate = AwesomeDateUtils.parseDateToString(
-        widget.receivedNotification.displayedDate!,
-        format: 'dd/MM/yyyy HH:mm');
+      widget.receivedNotification.displayedDate!,
+      format: 'dd/MM/yyyy HH:mm',
+    );
   }
 
   @override
@@ -71,12 +72,33 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                     width: mediaQueryData.size.width,
                                     decoration: const BoxDecoration(
                                         gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.black12,
+                                            Colors.transparent,
+                                          ],
+                                          stops: [
+                                            0.0,
+                                            1.0,
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : SizedBox(
+                                      height: maxSize * 0.4 +
+                                          mediaQueryData.padding.top,
+                                      width: mediaQueryData.size.width,
+                                      child: ShaderMask(
+                                        shaderCallback: (rect) {
+                                          return const LinearGradient(
                                             begin: Alignment.topCenter,
                                             end: Alignment.bottomCenter,
                                             colors: [
-                                          Colors.black12,
-                                          Colors.transparent
-                                        ],
+                                              Colors.black,
+                                              Colors.black,
+                                              Colors.transparent,
+                                            ],
                                             stops: [
                                           0.0,
                                           1.0
@@ -133,6 +155,9 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                   radius: maxSize * 0.08,
                                   backgroundColor: const Color(0xffFDCF09),
                                   child: CircleAvatar(
+                                    radius: maxSize * 0.08,
+                                    backgroundColor: const Color(0xffFDCF09),
+                                    child: CircleAvatar(
                                       radius: maxSize * 0.075,
                                       backgroundColor: Colors.white,
                                       child: ClipOval(
@@ -145,33 +170,28 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                                           height: maxSize * 0.08 * 2,
                                           fit: BoxFit.cover,
                                         ),
-                                      ) //widget.receivedNotification.largeIcon.image,
-                                      ),
-                                )),
-                        Container(
-                          width: mediaQueryData.size.width,
-                          padding: EdgeInsets.only(
+                                      ), //widget.receivedNotification.largeIcon.image,
+                                    ),
+                                  ),
+                                ),
+                          Container(
+                            width: mediaQueryData.size.width,
+                            padding: EdgeInsets.only(
                               left: 20.0,
                               right: 20.0,
                               bottom: 10,
                               top: bigPicture == null
                                   ? (largeIcon == null ? 130 : 240)
-                                  : maxSize * 0.48),
-                          child: RichText(
-                              text: TextSpan(children: [
-                            TextSpan(
-                                text: widget.receivedNotification
-                                        .titleWithoutHtml ??
-                                    ((widget.receivedNotification.body
-                                                ?.isEmpty ??
-                                            true)
-                                        ? ''
-                                        : widget.receivedNotification
-                                            .bodyWithoutHtml),
-                                style:
-                                    TextStyle(
-                                        fontSize: (widget.receivedNotification
-                                                    .title?.isEmpty ??
+                                  : maxSize * 0.48,
+                            ),
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: widget.receivedNotification
+                                            .titleWithoutHtml ??
+                                        ((widget.receivedNotification.body
+                                                    ?.isEmpty ??
                                                 true)
                                             ? 22
                                             : 32,
@@ -227,11 +247,13 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                             Text(
                               widget.results,
                               style: themeData.textTheme.bodyMedium
-                                  ?.copyWith(color: themeData.colorScheme.onSurface),
+                                  .copyWith(color: themeData.colorScheme.onSurface),
                             ),
                           ],
-                        )),
-                  ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               )
             ],
@@ -275,13 +297,7 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
                     bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3), // changes position of shadow
+                    bottomRight: Radius.circular(10),
                   ),
                 ],
               ),
@@ -291,9 +307,9 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
                 onPressed: () => Navigator.pop(context),
               ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
-    ));
+    )
   }
 }

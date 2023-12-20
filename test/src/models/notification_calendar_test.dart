@@ -43,14 +43,15 @@ void main() {
         NOTIFICATION_SCHEDULE_SECOND: 45,
         NOTIFICATION_SCHEDULE_WEEKDAY: 1,
         NOTIFICATION_SCHEDULE_WEEKOFYEAR: 23,
-        NOTIFICATION_SCHEDULE_WEEKOFMONTH: 1
+        NOTIFICATION_SCHEDULE_WEEKOFMONTH: 1,
       };
 
       expect(
-          () => NotificationCalendar()
-            ..fromMap(dataMap)
-            ..validate(),
-          throwsA(isA<UnimplementedError>()));
+        () => NotificationCalendar()
+          ..fromMap(dataMap)
+          ..validate(),
+        throwsA(isA<UnimplementedError>()),
+      );
     });
 
     test('should create a NotificationCalendar object fromDate using local',
@@ -80,27 +81,41 @@ void main() {
 
     test('should throw an exception if no time condition is provided', () {
       expect(
-          () => NotificationCalendar().validate(),
-          throwsA(isA<AwesomeNotificationsException>().having(
-              (error) => error.message,
-              'message',
-              'At least one shedule time condition is required.')));
+        () => NotificationCalendar().validate(),
+        throwsA(
+          isA<AwesomeNotificationsException>().having(
+            (error) => error.message,
+            'message',
+            'At least one shedule time condition is required.',
+          ),
+        ),
+      );
     });
 
     test('should throw an exception if weekOfMonth is used', () {
       expect(
-          () => NotificationCalendar(weekOfMonth: 2),
-          throwsA(isA<UnimplementedError>().having((error) => error.message,
-              'message', 'weekOfMonth is not fully implemented yet')));
+        () => NotificationCalendar(weekOfMonth: 2),
+        throwsA(
+          isA<UnimplementedError>().having(
+            (error) => error.message,
+            'message',
+            'weekOfMonth is not fully implemented yet',
+          ),
+        ),
+      );
     });
 
     test('should throw an exception if a time condition is negative', () {
       expect(
-          () => NotificationCalendar(day: -1).validate(),
-          throwsA(isA<AwesomeNotificationsException>().having(
-              (error) => error.message,
-              'message',
-              'A shedule time condition must be greater or equal to zero.')));
+        () => NotificationCalendar(day: -1).validate(),
+        throwsA(
+          isA<AwesomeNotificationsException>().having(
+            (error) => error.message,
+            'message',
+            'A shedule time condition must be greater or equal to zero.',
+          ),
+        ),
+      );
     });
   });
 }

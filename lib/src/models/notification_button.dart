@@ -128,17 +128,27 @@ class NotificationActionButton extends Model {
     _key = AwesomeAssertUtils.extractValue<String>(NOTIFICATION_KEY, mapData);
     _icon = AwesomeAssertUtils.extractValue<String>(NOTIFICATION_ICON, mapData);
     _label = AwesomeAssertUtils.extractValue<String>(
-        NOTIFICATION_BUTTON_LABEL, mapData);
+      NOTIFICATION_BUTTON_LABEL,
+      mapData,
+    );
     _enabled =
         AwesomeAssertUtils.extractValue<bool>(NOTIFICATION_ENABLED, mapData);
     _requireInputText = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_REQUIRE_INPUT_TEXT, mapData);
+      NOTIFICATION_REQUIRE_INPUT_TEXT,
+      mapData,
+    );
     _autoDismissible = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_AUTO_DISMISSIBLE, mapData);
+      NOTIFICATION_AUTO_DISMISSIBLE,
+      mapData,
+    );
     _showInCompactView = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_SHOW_IN_COMPACT_VIEW, mapData);
+      NOTIFICATION_SHOW_IN_COMPACT_VIEW,
+      mapData,
+    );
     _isDangerousOption = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_IS_DANGEROUS_OPTION, mapData);
+      NOTIFICATION_IS_DANGEROUS_OPTION,
+      mapData,
+    );
     _actionType = AwesomeAssertUtils.extractEnum<ActionType>(
         NOTIFICATION_ACTION_TYPE, mapData, ActionType.values);
     _isAuthenticationRequired = AwesomeAssertUtils.extractValue<bool>(
@@ -163,7 +173,10 @@ class NotificationActionButton extends Model {
     if (dataMap.containsKey("buttonType")) {
       developer.log("buttonType is deprecated. Please use actionType instead.");
       _actionType = AwesomeAssertUtils.extractEnum<ActionType>(
-          "buttonType", dataMap, ActionType.values);
+        "buttonType",
+        dataMap,
+        ActionType.values,
+      );
     }
 
     adaptInputFieldToRequireText();
@@ -175,7 +188,8 @@ class NotificationActionButton extends Model {
     // ignore: deprecated_member_use_from_same_package
     if (_actionType == ActionType.InputField) {
       developer.log(
-          "InputField is deprecated. Please use requireInputText instead.");
+        "InputField is deprecated. Please use requireInputText instead.",
+      );
       _requireInputText = true;
       _actionType = ActionType.SilentAction;
     }
@@ -218,8 +232,9 @@ class NotificationActionButton extends Model {
     if (!AwesomeStringUtils.isNullOrEmpty(_icon) &&
         AwesomeBitmapUtils().getMediaSource(_icon!) != MediaSource.Resource) {
       throw const AwesomeNotificationsException(
-          message:
-              'icons for action buttons must be a native resource media type');
+        message:
+            'icons for action buttons must be a native resource media type',
+      );
     }
   }
 }

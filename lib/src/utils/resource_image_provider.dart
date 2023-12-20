@@ -22,9 +22,11 @@ class ResourceImage extends ImageProvider<ResourceImage> {
   /// Creates an object that decodes a [Uint8List] buffer as an image.
   ///
   /// The arguments must not be null.
-  const ResourceImage(this.drawablePath,
-      {this.scale = 1.0, AwesomeNotifications? awesomeNotifications})
-      : _awesomeNotifications = awesomeNotifications;
+  const ResourceImage(
+    this.drawablePath, {
+    this.scale = 1.0,
+    AwesomeNotifications? awesomeNotifications,
+  }) : _awesomeNotifications = awesomeNotifications;
 
   final String drawablePath;
   final AwesomeNotifications? _awesomeNotifications;
@@ -39,7 +41,9 @@ class ResourceImage extends ImageProvider<ResourceImage> {
 
   @override
   ImageStreamCompleter loadImage(
-      ResourceImage key, ImageDecoderCallback decode) {
+    ResourceImage key,
+    ImageDecoderCallback decode,
+  ) {
     return MultiFrameImageStreamCompleter(
       codec: loadAsync(key, decode),
       scale: key.scale,
@@ -48,7 +52,9 @@ class ResourceImage extends ImageProvider<ResourceImage> {
 
   @visibleForTesting
   Future<ui.Codec> loadAsync(
-      ResourceImage key, ImageDecoderCallback decode) async {
+    ResourceImage key,
+    ImageDecoderCallback decode,
+  ) async {
     assert(key == this);
     Uint8List? bytes = await (_awesomeNotifications ?? AwesomeNotifications())
         .getDrawableData(drawablePath);

@@ -36,23 +36,35 @@ class ReceivedAction extends ReceivedNotification {
     super.fromMap(dataMap);
 
     actionLifeCycle = AwesomeAssertUtils.extractEnum<NotificationLifeCycle>(
-        NOTIFICATION_ACTION_LIFECYCLE, dataMap, NotificationLifeCycle.values);
+      NOTIFICATION_ACTION_LIFECYCLE,
+      dataMap,
+      NotificationLifeCycle.values,
+    );
 
     dismissedLifeCycle = AwesomeAssertUtils.extractEnum<NotificationLifeCycle>(
-        NOTIFICATION_DISMISSED_LIFE_CYCLE,
-        dataMap,
-        NotificationLifeCycle.values);
+      NOTIFICATION_DISMISSED_LIFE_CYCLE,
+      dataMap,
+      NotificationLifeCycle.values,
+    );
 
     actionDate = AwesomeAssertUtils.extractValue<DateTime>(
-        NOTIFICATION_ACTION_DATE, dataMap);
+      NOTIFICATION_ACTION_DATE,
+      dataMap,
+    );
     dismissedDate = AwesomeAssertUtils.extractValue<DateTime>(
-        NOTIFICATION_DISMISSED_DATE, dataMap);
+      NOTIFICATION_DISMISSED_DATE,
+      dataMap,
+    );
 
     buttonKeyPressed = AwesomeAssertUtils.extractValue<String>(
-        NOTIFICATION_BUTTON_KEY_PRESSED, dataMap);
+      NOTIFICATION_BUTTON_KEY_PRESSED,
+      dataMap,
+    );
 
     buttonKeyInput = AwesomeAssertUtils.extractValue<String>(
-        NOTIFICATION_BUTTON_KEY_INPUT, dataMap);
+      NOTIFICATION_BUTTON_KEY_INPUT,
+      dataMap,
+    );
 
     isAuthenticationRequired = AwesomeAssertUtils.extractValue<bool>(
         NOTIFICATION_AUTHENTICATION_REQUIRED, dataMap);

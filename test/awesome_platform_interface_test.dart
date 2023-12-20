@@ -20,8 +20,10 @@ void main() {
       AwesomeNotificationsPlatform.resetInstance();
 
       // Test if the instance is set correctly
-      expect(AwesomeNotificationsPlatform.instance,
-          isA<MethodChannelAwesomeNotifications>());
+      expect(
+        AwesomeNotificationsPlatform.instance,
+        isA<MethodChannelAwesomeNotifications>(),
+      );
     });
 
     test('sets instance for Android', () {
@@ -29,8 +31,10 @@ void main() {
       AwesomeNotificationsPlatform.resetInstance();
 
       // Test if the instance is set correctly
-      expect(AwesomeNotificationsPlatform.instance,
-          isA<MethodChannelAwesomeNotifications>());
+      expect(
+        AwesomeNotificationsPlatform.instance,
+        isA<MethodChannelAwesomeNotifications>(),
+      );
     });
 
     test('sets instance for other platforms', () {
@@ -38,36 +42,46 @@ void main() {
       AwesomeNotificationsPlatform.resetInstance();
 
       // Test if the instance is set correctly
-      expect(AwesomeNotificationsPlatform.instance,
-          isA<AwesomeNotificationsEmpty>());
+      expect(
+        AwesomeNotificationsPlatform.instance,
+        isA<AwesomeNotificationsEmpty>(),
+      );
 
       AwesomeNotificationsPlatform.operatingSystem = "linux";
       AwesomeNotificationsPlatform.resetInstance();
 
       // Test if the instance is set correctly
-      expect(AwesomeNotificationsPlatform.instance,
-          isA<AwesomeNotificationsEmpty>());
+      expect(
+        AwesomeNotificationsPlatform.instance,
+        isA<AwesomeNotificationsEmpty>(),
+      );
 
       AwesomeNotificationsPlatform.operatingSystem = "macos";
       AwesomeNotificationsPlatform.resetInstance();
 
       // Test if the instance is set correctly
-      expect(AwesomeNotificationsPlatform.instance,
-          isA<AwesomeNotificationsEmpty>());
+      expect(
+        AwesomeNotificationsPlatform.instance,
+        isA<AwesomeNotificationsEmpty>(),
+      );
 
       AwesomeNotificationsPlatform.operatingSystem = "windows";
       AwesomeNotificationsPlatform.resetInstance();
 
       // Test if the instance is set correctly
-      expect(AwesomeNotificationsPlatform.instance,
-          isA<AwesomeNotificationsEmpty>());
+      expect(
+        AwesomeNotificationsPlatform.instance,
+        isA<AwesomeNotificationsEmpty>(),
+      );
 
       AwesomeNotificationsPlatform.operatingSystem = "fuchsia";
       AwesomeNotificationsPlatform.resetInstance();
 
       // Test if the instance is set correctly
-      expect(AwesomeNotificationsPlatform.instance,
-          isA<AwesomeNotificationsEmpty>());
+      expect(
+        AwesomeNotificationsPlatform.instance,
+        isA<AwesomeNotificationsEmpty>(),
+      );
     });
   });
 }

@@ -12,13 +12,15 @@ void main() {
         'actionDate': '2023-05-01 12:34:56',
         'dismissedDate': '2023-05-01 12:35:56',
         'buttonKeyPressed': 'testButton',
-        'buttonKeyInput': 'testInput'
+        'buttonKeyInput': 'testInput',
       };
 
       ReceivedAction receivedAction = ReceivedAction().fromMap(dataMap);
       expect(receivedAction.actionLifeCycle, NotificationLifeCycle.Foreground);
       expect(
-          receivedAction.dismissedLifeCycle, NotificationLifeCycle.Terminated);
+        receivedAction.dismissedLifeCycle,
+        NotificationLifeCycle.Terminated,
+      );
       expect(receivedAction.actionDate, DateTime(2023, 5, 1, 12, 34, 56));
       expect(receivedAction.dismissedDate, DateTime(2023, 5, 1, 12, 35, 56));
       expect(receivedAction.buttonKeyPressed, 'testButton');
@@ -26,9 +28,13 @@ void main() {
 
       Map<String, dynamic> newDataMap = receivedAction.toMap();
       expect(
-          newDataMap['actionLifeCycle'], NotificationLifeCycle.Foreground.name);
-      expect(newDataMap['dismissedLifeCycle'],
-          NotificationLifeCycle.Terminated.name);
+        newDataMap['actionLifeCycle'],
+        NotificationLifeCycle.Foreground.name,
+      );
+      expect(
+        newDataMap['dismissedLifeCycle'],
+        NotificationLifeCycle.Terminated.name,
+      );
       expect(newDataMap['actionDate'], '2023-05-01 12:34:56');
       expect(newDataMap['dismissedDate'], '2023-05-01 12:35:56');
       expect(newDataMap['buttonKeyPressed'], 'testButton');

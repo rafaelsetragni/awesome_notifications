@@ -16,15 +16,34 @@ void main() {
     });
 
     test('White space string with considerWhiteSpaceAsEmpty = false', () {
-      expect(AwesomeStringUtils.isNullOrEmpty(" ", considerWhiteSpaceAsEmpty: false), false);
+      expect(
+        AwesomeStringUtils.isNullOrEmpty(
+          " ",
+          considerWhiteSpaceAsEmpty: false,
+        ),
+        false,
+      );
     });
 
     test('White space string with considerWhiteSpaceAsEmpty = true', () {
-      expect(AwesomeStringUtils.isNullOrEmpty(" ", considerWhiteSpaceAsEmpty: true), true);
+      expect(
+        AwesomeStringUtils.isNullOrEmpty(
+          " ",
+          considerWhiteSpaceAsEmpty: true,
+        ),
+        true,
+      );
     });
 
-    test('White space and newline string with considerWhiteSpaceAsEmpty = true', () {
-      expect(AwesomeStringUtils.isNullOrEmpty(" \n", considerWhiteSpaceAsEmpty: true), true);
+    test('White space and newline string with considerWhiteSpaceAsEmpty = true',
+        () {
+      expect(
+        AwesomeStringUtils.isNullOrEmpty(
+          " \n",
+          considerWhiteSpaceAsEmpty: true,
+        ),
+        true,
+      );
     });
   });
 }

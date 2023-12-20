@@ -29,51 +29,64 @@ void main() {
 
     test('Network media path', () {
       expect(
-          mediaUtils.getMediaSource('http://example.com/image.jpg'),
-          MediaSource.Network);
+        mediaUtils.getMediaSource('http://example.com/image.jpg'),
+        MediaSource.Network,
+      );
       expect(
-          mediaUtils.getMediaSource('https://example.com/image.jpg'),
-          MediaSource.Network);
+        mediaUtils.getMediaSource('https://example.com/image.jpg'),
+        MediaSource.Network,
+      );
     });
 
     test('File media path', () {
       expect(
-          mediaUtils.getMediaSource('file://path/to/image.jpg'),
-          MediaSource.File);
+        mediaUtils.getMediaSource('file://path/to/image.jpg'),
+        MediaSource.File,
+      );
     });
 
     test('Asset media path', () {
       expect(
-          mediaUtils.getMediaSource('asset://path/to/image.jpg'),
-          MediaSource.Asset);
+        mediaUtils.getMediaSource('asset://path/to/image.jpg'),
+        MediaSource.Asset,
+      );
     });
 
     test('Resource media path', () {
       expect(
-          mediaUtils.getMediaSource('resource://path/to/image.jpg'),
-          MediaSource.Resource);
+        mediaUtils.getMediaSource('resource://path/to/image.jpg'),
+        MediaSource.Resource,
+      );
     });
   });
 
   group('cleanMediaPath()', () {
     test('File media path', () {
-      expect(mediaUtils.cleanMediaPath('file://path/to/image.jpg'),
-          '/path/to/image.jpg');
+      expect(
+        mediaUtils.cleanMediaPath('file://path/to/image.jpg'),
+        '/path/to/image.jpg',
+      );
     });
 
     test('Asset media path', () {
-      expect(mediaUtils.cleanMediaPath('asset://path/to/image.jpg'),
-          'path/to/image.jpg');
+      expect(
+        mediaUtils.cleanMediaPath('asset://path/to/image.jpg'),
+        'path/to/image.jpg',
+      );
     });
 
     test('Resource media path', () {
-      expect(mediaUtils.cleanMediaPath('resource://path/to/image.jpg'),
-          'path/to/image.jpg');
+      expect(
+        mediaUtils.cleanMediaPath('resource://path/to/image.jpg'),
+        'path/to/image.jpg',
+      );
     });
 
     test('Non-prefixed media path', () {
-      expect(mediaUtils.cleanMediaPath('/path/to/image.jpg'),
-          '/path/to/image.jpg');
+      expect(
+        mediaUtils.cleanMediaPath('/path/to/image.jpg'),
+        '/path/to/image.jpg',
+      );
     });
   });
 
@@ -82,19 +95,20 @@ void main() {
   // which internally calls these methods.
   group('getFromMediaPath()', () {
     test('Unknown media path', () {
-      expect(mediaUtils.getFromMediaPath('unknown://path/to/image.jpg'),
-          null);
-      expect(mediaUtils.getFromMediaPath('resources://path/to/image.jpg'),
-          null);
-      expect(mediaUtils.getFromMediaPath('assets://path/to/image.jpg'),
-          null);
-      expect(mediaUtils.getFromMediaPath('files://path/to/image.jpg'),
-          null);
+      expect(mediaUtils.getFromMediaPath('unknown://path/to/image.jpg'), null);
+      expect(
+        mediaUtils.getFromMediaPath('resources://path/to/image.jpg'),
+        null,
+      );
+      expect(mediaUtils.getFromMediaPath('assets://path/to/image.jpg'), null);
+      expect(mediaUtils.getFromMediaPath('files://path/to/image.jpg'), null);
     });
 
     test('Network media path', () {
-      expect(mediaUtils.getFromMediaPath('https://example.com/image.jpg'),
-          null);
+      expect(
+        mediaUtils.getFromMediaPath('https://example.com/image.jpg'),
+        null,
+      );
     });
 
     test('File media path', () {
@@ -107,8 +121,7 @@ void main() {
     });
 
     test('Resource media path', () {
-      expect(mediaUtils.getFromMediaPath('resource://path/to/image.jpg'),
-          null);
+      expect(mediaUtils.getFromMediaPath('resource://path/to/image.jpg'), null);
     });
   });
 }

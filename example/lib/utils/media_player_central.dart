@@ -11,35 +11,34 @@ enum MediaLifeCycle {
 }
 
 class MediaPlayerCentral {
-
   static final PlaybackTimer _timer = PlaybackTimer(
-      onDone: (Duration duration){
-        if(hasNextMedia) {
-          nextMedia();
-        } else {
-          stop();
-        }
-      },
-      onData: (Duration duration){
-        _mediaProgress.add(_timer.now);
+    onDone: (Duration duration) {
+      if (hasNextMedia) {
+        nextMedia();
+      } else {
+        stop();
       }
+    },
+    onData: (Duration duration) {
+      _mediaProgress.add(_timer.now);
+    },
   );
 
-  static String getCloseCaption(Duration duration){
-    if( currentMedia?.closeCaption.isEmpty ?? true ) return '';
+  static String getCloseCaption(Duration duration) {
+    if (currentMedia?.closeCaption.isEmpty ?? true) return '';
 
-    for(CloseCaptionElement cc in currentMedia!.closeCaption){
-      if(cc.start <= duration && cc.end >= duration) return cc.subtitle;
+    for (CloseCaptionElement cc in currentMedia!.closeCaption) {
+      if (cc.start <= duration && cc.end >= duration) return cc.subtitle;
     }
 
     return '';
   }
 
-  static Duration replayTolerance = Duration(seconds: 4);
+  static Duration replayTolerance = const Duration(seconds: 4);
 
   static int _index = 0;
   static MediaLifeCycle _lifeCycle = MediaLifeCycle.Stopped;
-  static List<MediaModel> _playlist = [];
+  static final List<MediaModel> _playlist = [];
 
   // ignore: close_sinks
   static StreamController<MediaModel> _mediaBroadcaster =
@@ -69,7 +68,7 @@ class MediaPlayerCentral {
   static MediaLifeCycle get mediaLifeCycle => _lifeCycle;
 
   static MediaModel? get currentMedia {
-    return _playlist.length == 0 ? null : _playlist[_index];
+    return _playlist.isEmpty ? null : _playlist[_index];
   }
 
   static bool get isEmpty => _playlist.isEmpty;
@@ -78,25 +77,25 @@ class MediaPlayerCentral {
   static bool get hasPreviousMedia => hasAnyMedia && index > 0;
 
   static Stream get mediaStream {
-    if (_mediaBroadcaster.isClosed)
+    if (_mediaBroadcaster.isClosed) {
       _mediaBroadcaster = StreamController<MediaModel>.broadcast();
+    }
     return _mediaBroadcaster.stream;
   }
+
   static Stream get progressStream {
-    if (_mediaProgress.isClosed)
+    if (_mediaProgress.isClosed) {
       _mediaProgress = StreamController<Duration>.broadcast();
+    }
     return _mediaProgress.stream;
   }
+
   static StreamSink get mediaSink => _mediaBroadcaster.sink;
   static StreamSink get progressSink => _mediaProgress.sink;
 
-  static void _broadcastChanges(){
-    _mediaBroadcaster.sink.add(
-        currentMedia!
-    );
-    _mediaProgress.sink.add(
-        _timer.now
-    );
+  static void _broadcastChanges() {
+    _mediaBroadcaster.sink.add(currentMedia!);
+    _mediaProgress.sink.add(_timer.now);
   }
 
   static void add(MediaModel newMedia) {
@@ -107,7 +106,7 @@ class MediaPlayerCentral {
   }
 
   static void addAll(List<MediaModel> newMedias) {
-    _playlist..addAll(newMedias);
+    _playlist.addAll(newMedias);
   }
 
   static void remove(MediaModel oldMedia) {

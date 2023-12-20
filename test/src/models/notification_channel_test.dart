@@ -25,8 +25,10 @@ void main() {
       };
 
       NotificationChannel channel = NotificationChannel(
-              channelKey: '', channelName: '', channelDescription: '')
-          .fromMap(data);
+        channelKey: '',
+        channelName: '',
+        channelDescription: '',
+      ).fromMap(data);
 
       expect(channel.channelKey, 'channelKey');
       expect(channel.channelName, 'channelName');
@@ -56,61 +58,74 @@ void main() {
       };
 
       expect(
-          () => NotificationChannel(
-                  channelKey: '', channelName: '', channelDescription: '')
-              .fromMap(data)
-              .validate(),
-          throwsA(isA<AwesomeNotificationsException>()));
+        () => NotificationChannel(
+          channelKey: '',
+          channelName: '',
+          channelDescription: '',
+        ).fromMap(data).validate(),
+        throwsA(isA<AwesomeNotificationsException>()),
+      );
 
       data[NOTIFICATION_CHANNEL_KEY] = '';
       expect(
-          () => NotificationChannel(
-                  channelKey: '', channelName: '', channelDescription: '')
-              .fromMap(data)
-              .validate(),
-          throwsA(isA<AwesomeNotificationsException>()));
+        () => NotificationChannel(
+          channelKey: '',
+          channelName: '',
+          channelDescription: '',
+        ).fromMap(data).validate(),
+        throwsA(isA<AwesomeNotificationsException>()),
+      );
 
       data[NOTIFICATION_CHANNEL_KEY] = 'channelKey';
       data[NOTIFICATION_CHANNEL_NAME] = null;
       expect(
-          () => NotificationChannel(
-                  channelKey: '', channelName: '', channelDescription: '')
-              .fromMap(data)
-              .validate(),
-          throwsA(isA<AwesomeNotificationsException>()));
+        () => NotificationChannel(
+          channelKey: '',
+          channelName: '',
+          channelDescription: '',
+        ).fromMap(data).validate(),
+        throwsA(isA<AwesomeNotificationsException>()),
+      );
 
       data[NOTIFICATION_CHANNEL_NAME] = '';
       expect(
-          () => NotificationChannel(
-                  channelKey: '', channelName: '', channelDescription: '')
-              .fromMap(data)
-              .validate(),
-          throwsA(isA<AwesomeNotificationsException>()));
+        () => NotificationChannel(
+          channelKey: '',
+          channelName: '',
+          channelDescription: '',
+        ).fromMap(data).validate(),
+        throwsA(isA<AwesomeNotificationsException>()),
+      );
 
       data[NOTIFICATION_CHANNEL_NAME] = 'channelName';
       data[NOTIFICATION_CHANNEL_DESCRIPTION] = null;
       expect(
-          () => NotificationChannel(
-                  channelKey: '', channelName: '', channelDescription: '')
-              .fromMap(data)
-              .validate(),
-          throwsA(isA<AwesomeNotificationsException>()));
+        () => NotificationChannel(
+          channelKey: '',
+          channelName: '',
+          channelDescription: '',
+        ).fromMap(data).validate(),
+        throwsA(isA<AwesomeNotificationsException>()),
+      );
 
       data[NOTIFICATION_CHANNEL_DESCRIPTION] = '';
       expect(
-          () => NotificationChannel(
-                  channelKey: '', channelName: '', channelDescription: '')
-              .fromMap(data)
-              .validate(),
-          throwsA(isA<AwesomeNotificationsException>()));
+        () => NotificationChannel(
+          channelKey: '',
+          channelName: '',
+          channelDescription: '',
+        ).fromMap(data).validate(),
+        throwsA(isA<AwesomeNotificationsException>()),
+      );
     });
 
     test('should convert a NotificationChannel object to a map', () {
       NotificationChannel channel = NotificationChannel(
-          channelKey: 'channelKey',
-          channelName: 'channelName',
-          channelDescription: 'channelDescription',
-          channelShowBadge: true);
+        channelKey: 'channelKey',
+        channelName: 'channelName',
+        channelDescription: 'channelDescription',
+        channelShowBadge: true,
+      );
 
       Map<String, dynamic> data = channel.toMap();
 

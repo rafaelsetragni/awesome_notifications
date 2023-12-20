@@ -33,7 +33,7 @@ class App extends StatefulWidget {
       GlobalKey<NavigatorState>();
 
   @override
-  _AppState createState() => _AppState();
+  State<App> createState() => _AppState();
 }
 
 class _AppState extends State<App> {
@@ -47,10 +47,9 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    String initialRoute =
-        NotificationsController.initialCallAction == null
-            ? PAGE_HOME
-            : PAGE_PHONE_CALL;
+    String initialRoute = NotificationsController.initialCallAction == null
+        ? PAGE_HOME
+        : PAGE_PHONE_CALL;
     debugPrint('initialRoute: $initialRoute');
 
     return MaterialApp(

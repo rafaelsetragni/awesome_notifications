@@ -67,15 +67,19 @@ class NotificationLocalization extends Model {
     summary =
         AwesomeAssertUtils.extractValue<String>(NOTIFICATION_SUMMARY, mapData);
     largeIcon = AwesomeAssertUtils.extractValue<String>(
-        NOTIFICATION_LARGE_ICON, mapData);
+      NOTIFICATION_LARGE_ICON,
+      mapData,
+    );
     bigPicture = AwesomeAssertUtils.extractValue<String>(
-        NOTIFICATION_BIG_PICTURE, mapData);
+      NOTIFICATION_BIG_PICTURE,
+      mapData,
+    );
 
     buttonLabels = mapData[NOTIFICATION_BUTTON_LABELS] is Map
         ? {
             for (MapEntry entry
                 in (mapData[NOTIFICATION_BUTTON_LABELS] as Map).entries)
-              entry.key.toString(): entry.value.toString()
+              entry.key.toString(): entry.value.toString(),
           }
         : null;
     return this;

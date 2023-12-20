@@ -73,29 +73,39 @@ void main() {
 
   test('getValueOrDefault() tests', () {
     // Test for MaterialColor
-    expect(AwesomeAssertUtils.getValueOrDefault<Color>('key', Colors.red),
-        Colors.red.shade500);
+    expect(
+      AwesomeAssertUtils.getValueOrDefault<Color>('key', Colors.red),
+      Colors.red.shade500,
+    );
 
     // Test for MaterialAccentColor
     expect(
-        AwesomeAssertUtils.getValueOrDefault<Color>('key', Colors.pinkAccent),
-        Color(Colors.pinkAccent.value));
+      AwesomeAssertUtils.getValueOrDefault<Color>('key', Colors.pinkAccent),
+      Color(Colors.pinkAccent.value),
+    );
 
     // Test for CupertinoDynamicColor
     expect(
-        AwesomeAssertUtils.getValueOrDefault<Color>(
-            'key', CupertinoColors.systemBlue),
-        Color(CupertinoColors.systemBlue.value));
+      AwesomeAssertUtils.getValueOrDefault<Color>(
+        'key',
+        CupertinoColors.systemBlue,
+      ),
+      Color(CupertinoColors.systemBlue.value),
+    );
 
     // Test for invalid value
     expect(AwesomeAssertUtils.getValueOrDefault<Color>('key', 123), null);
   });
 
   test('extractValueTest', () async {
-    expect("title",
-        AwesomeAssertUtils.extractValue<String>("test", {"test": "title"}));
-    expect(" title",
-        AwesomeAssertUtils.extractValue<String>("test", {"test": " title"}));
+    expect(
+      "title",
+      AwesomeAssertUtils.extractValue<String>("test", {"test": "title"}),
+    );
+    expect(
+      " title",
+      AwesomeAssertUtils.extractValue<String>("test", {"test": " title"}),
+    );
     expect("", AwesomeAssertUtils.extractValue<String>("test", {"test": ""}));
     expect(" ", AwesomeAssertUtils.extractValue<String>("test", {"test": " "}));
 
@@ -114,46 +124,75 @@ void main() {
         AwesomeAssertUtils.extractValue<List<String>>("test", {"test": ["1","1","1"]}));
 
     expect(
-        AwesomeAssertUtils.extractValue<Uint8List>(
-            "test", {"test": Uint8List.fromList([])}),
-        Uint8List.fromList([]));
+      AwesomeAssertUtils.extractValue<Uint8List>(
+        "test",
+        {"test": Uint8List.fromList([])},
+      ),
+      Uint8List.fromList([]),
+    );
 
     expect(10, AwesomeAssertUtils.extractValue<int>("test", {"test": "10"}));
     expect(10, AwesomeAssertUtils.extractValue<int>("test", {"test": 10}));
     expect(10, AwesomeAssertUtils.extractValue<int>("test", {"test": "10.0"}));
-    expect(10.0,
-        AwesomeAssertUtils.extractValue<double>("test", {"test": "10.0"}));
+    expect(
+      10.0,
+      AwesomeAssertUtils.extractValue<double>("test", {"test": "10.0"}),
+    );
     expect(0, AwesomeAssertUtils.extractValue<int>("test", {"test": "0"}));
     expect(0.0, AwesomeAssertUtils.extractValue<double>("test", {"test": "0"}));
     expect(0, AwesomeAssertUtils.extractValue<int>("test", {"test": "0.0"}));
     expect(0, AwesomeAssertUtils.extractValue<int>("test", {"test": 0}));
 
-    expect(0xFFFF0000,
-        AwesomeAssertUtils.extractValue<int>("test", {"test": "#FF0000"}));
-    expect(0xFFFF0000,
-        AwesomeAssertUtils.extractValue<int>("test", {"test": "#ff0000"}));
-    expect(0xFFFF0000,
-        AwesomeAssertUtils.extractValue<int>("test", {"test": "#FFFF0000"}));
-    expect(0x00FF0000,
-        AwesomeAssertUtils.extractValue<int>("test", {"test": "#00FF0000"}));
-    expect(0xFFFF0000,
-        AwesomeAssertUtils.extractValue<int>("test", {"test": "0xFF0000"}));
-    expect(0xFFFF0000,
-        AwesomeAssertUtils.extractValue<int>("test", {"test": "0xFFff0000"}));
-
-    expect(Colors.black,
-        AwesomeAssertUtils.extractValue<Color>("test", {"test": "#000000"}));
-    expect(Colors.black,
-        AwesomeAssertUtils.extractValue<Color>("test", {"test": "#FF000000"}));
-    expect(Colors.transparent,
-        AwesomeAssertUtils.extractValue<Color>("test", {"test": "#00000000"}));
+    expect(
+      0xFFFF0000,
+      AwesomeAssertUtils.extractValue<int>("test", {"test": "#FF0000"}),
+    );
+    expect(
+      0xFFFF0000,
+      AwesomeAssertUtils.extractValue<int>("test", {"test": "#ff0000"}),
+    );
+    expect(
+      0xFFFF0000,
+      AwesomeAssertUtils.extractValue<int>("test", {"test": "#FFFF0000"}),
+    );
+    expect(
+      0x00FF0000,
+      AwesomeAssertUtils.extractValue<int>("test", {"test": "#00FF0000"}),
+    );
+    expect(
+      0xFFFF0000,
+      AwesomeAssertUtils.extractValue<int>("test", {"test": "0xFF0000"}),
+    );
+    expect(
+      0xFFFF0000,
+      AwesomeAssertUtils.extractValue<int>("test", {"test": "0xFFff0000"}),
+    );
 
     expect(
-        null, AwesomeAssertUtils.extractValue<Color>("test", {"test": null}));
-    expect(null,
-        AwesomeAssertUtils.extractValue<Color>("test", {"test": "#0004"}));
+      Colors.black,
+      AwesomeAssertUtils.extractValue<Color>("test", {"test": "#000000"}),
+    );
     expect(
-        null, AwesomeAssertUtils.extractValue<Color>("test", {"test": "#04"}));
+      Colors.black,
+      AwesomeAssertUtils.extractValue<Color>("test", {"test": "#FF000000"}),
+    );
+    expect(
+      Colors.transparent,
+      AwesomeAssertUtils.extractValue<Color>("test", {"test": "#00000000"}),
+    );
+
+    expect(
+      null,
+      AwesomeAssertUtils.extractValue<Color>("test", {"test": null}),
+    );
+    expect(
+      null,
+      AwesomeAssertUtils.extractValue<Color>("test", {"test": "#0004"}),
+    );
+    expect(
+      null,
+      AwesomeAssertUtils.extractValue<Color>("test", {"test": "#04"}),
+    );
     expect(null, AwesomeAssertUtils.extractValue<Color>("test", {"test": " "}));
 
     expect(null, AwesomeAssertUtils.extractValue<int>("test", {"test": null}));
@@ -162,40 +201,66 @@ void main() {
 
     expect(null, AwesomeAssertUtils.extractValue<String>("test", {"test": 0}));
     expect(
-        null, AwesomeAssertUtils.extractValue<String>("test", {"test": null}));
+      null,
+      AwesomeAssertUtils.extractValue<String>("test", {"test": null}),
+    );
 
     expect(true, AwesomeAssertUtils.extractValue<bool>("test", {"test": true}));
     expect(
-        true, AwesomeAssertUtils.extractValue<bool>("test", {"test": "true"}));
-    expect(false,
-        AwesomeAssertUtils.extractValue<bool>("test", {"test": "false"}));
+      true,
+      AwesomeAssertUtils.extractValue<bool>("test", {"test": "true"}),
+    );
+    expect(
+      false,
+      AwesomeAssertUtils.extractValue<bool>("test", {"test": "false"}),
+    );
   });
 
   test('extractEnumTest', () async {
     expect(
-        NotificationPrivacy.Private,
-        AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
-            "test", {"test": "Private"}, NotificationPrivacy.values));
+      NotificationPrivacy.Private,
+      AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
+        "test",
+        {"test": "Private"},
+        NotificationPrivacy.values,
+      ),
+    );
 
     expect(
-        NotificationPrivacy.Public,
-        AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
-            "test", {"test": "Public"}, NotificationPrivacy.values));
+      NotificationPrivacy.Public,
+      AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
+        "test",
+        {"test": "Public"},
+        NotificationPrivacy.values,
+      ),
+    );
 
     expect(
-        null,
-        AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
-            "test", {"test": ""}, NotificationPrivacy.values));
+      null,
+      AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
+        "test",
+        {"test": ""},
+        NotificationPrivacy.values,
+      ),
+    );
 
     expect(
-        null,
-        AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
-            "test", {"test": " "}, NotificationPrivacy.values));
+      null,
+      AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
+        "test",
+        {"test": " "},
+        NotificationPrivacy.values,
+      ),
+    );
 
     expect(
-        null,
-        AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
-            "test", {"test": null}, NotificationPrivacy.values));
+      null,
+      AwesomeAssertUtils.extractEnum<NotificationPrivacy>(
+        "test",
+        {"test": null},
+        NotificationPrivacy.values,
+      ),
+    );
   });
 
   group('AwesomeAssertUtils tests', () {
@@ -216,7 +281,7 @@ void main() {
     test('toListMap returns the correct list of maps', () {
       final input = [
         TestModel(id: 1, name: 'test1'),
-        TestModel(id: 2, name: 'test2')
+        TestModel(id: 2, name: 'test2'),
       ];
 
       final result = AwesomeAssertUtils.toListMap<TestModel>(input);
@@ -225,7 +290,7 @@ void main() {
         result,
         [
           {'id': 1, 'name': 'test1'},
-          {'id': 2, 'name': 'test2'}
+          {'id': 2, 'name': 'test2'},
         ],
       );
     });
