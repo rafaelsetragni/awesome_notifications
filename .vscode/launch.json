@@ -1,57 +1,54 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Simple Example",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "Simple Example (profile mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "Simple Example (release mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        },
-        {
-            "name": "Complete Example",
-            "cwd": "example",
-            "request": "launch",
-            "type": "dart",
-            "program": "lib/main_complete.dart",
-        },
-        {
-            "name": "Complete Example (profile mode)",
-            "cwd": "example",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile",
-            "program": "lib/main_complete.dart",
-          }
-        },
-        {
-            "name": "Complete Example (release mode)",
-            "cwd": "example",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release",
-            "program": "lib/main_complete.dart",
-        },
-        {
-            "name": "All tests coverage",
-            "request": "launch",
-            "type": "dart",
-            "toolArgs": [
-                "--coverage",
-            ],
-        },
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Simple Example",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "Simple Example (profile mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "Simple Example (release mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    },
+    {
+      "name": "Complete Example",
+      "cwd": "example",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_complete.dart"
+    },
+    {
+      "name": "Complete Example (profile mode)",
+      "cwd": "example",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "program": "lib/main_complete.dart"
+    },
+    {
+      "name": "Complete Example (release mode)",
+      "cwd": "example",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "program": "lib/main_complete.dart"
+    },
+    {
+      "name": "All tests coverage",
+      "request": "launch",
+      "type": "dart",
+      "toolArgs": ["--coverage"]
+    }
+  ]
 }

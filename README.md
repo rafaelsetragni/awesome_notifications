@@ -12,7 +12,6 @@
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/master/graph/badge.svg)
 
-
 Engage your users with custom local and push notifications on Flutter. Get real-time events and never miss a user interaction with Awesome Notifications.
 
 <br>
@@ -20,27 +19,25 @@ Engage your users with custom local and push notifications on Flutter. Get real-
 
 ### **Key Features:**
 
-* **Create custom notifications:** Use Awesome Notifications to easily create and customize local and push notifications for your Flutter app.
-* **Engage your users:** Keep your users engaged with your app by sending notifications with images, sounds, emoticons, buttons, and many different layouts.
-* **Real-time events:** Receive real-time events on the Flutter level code for notifications that are created, displayed, dismissed, or tapped by the user.
-* **Highly customizable:** With a range of customizable options, including translations, you can tailor notifications to fit your specific needs.
-* **Scheduled notifications:** Schedule notifications repeatedly or at specific times with second precision to keep your users up-to-date.
-* **Trusted performance:** Receive notifications with confidence and trust in any application lifecycle.
-* **Easy to use:** With an easy-to-use interface, you can start creating custom notifications in minutes.
-<br>
-<br>
+- **Create custom notifications:** Use Awesome Notifications to easily create and customize local and push notifications for your Flutter app.
+- **Engage your users:** Keep your users engaged with your app by sending notifications with images, sounds, emoticons, buttons, and many different layouts.
+- **Real-time events:** Receive real-time events on the Flutter level code for notifications that are created, displayed, dismissed, or tapped by the user.
+- **Highly customizable:** With a range of customizable options, including translations, you can tailor notifications to fit your specific needs.
+- **Scheduled notifications:** Schedule notifications repeatedly or at specific times with second precision to keep your users up-to-date.
+- **Trusted performance:** Receive notifications with confidence and trust in any application lifecycle.
+- **Easy to use:** With an easy-to-use interface, you can start creating custom notifications in minutes.
+  <br>
+  <br>
 
-***Android** notification examples:*
+_**Android** notification examples:_
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-android-examples.jpg)
 
-
 <br>
 
-***iOS** notification examples:*
+_**iOS** notification examples:_
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-ios-examples.jpg)
-
 
 <br>
 
@@ -64,10 +61,10 @@ All notification types can be created locally or via remote push services, with 
 <br>
 
 # 🛑 ATTENTION - PLUGIN UNDER DEVELOPMENT
-    
+
 ![image](https://user-images.githubusercontent.com/40064496/155188371-48e22104-8bb8-4f38-ba1a-1795eeb7b81b.png)
 
-*Working Progress Percentages of Awesome Notifications Plugin*
+_Working Progress Percentages of Awesome Notifications Plugin_
 
 OBS: Please note that these progress percentages are estimates and are subject to change. We are continually working to improve the Awesome Notifications plugin and add support for new platforms.
 
@@ -248,9 +245,9 @@ We are constantly working to improve Awesome Notifications and provide support f
 - [👊 Notification Action Types](#-notification-action-types)
 - [🟦 Notification's Category](#-notifications-category)
 - [👮‍♀️ Requesting Permissions](#️-requesting-permissions)
-    - [Notification's Permissions:](#notifications-permissions)
-    - [Notification's Permission Level](#notifications-permission-level)
-    - [Full example on how to request permissions](#full-example-on-how-to-request-permissions)
+  - [Notification's Permissions:](#notifications-permissions)
+  - [Notification's Permission Level](#notifications-permission-level)
+  - [Full example on how to request permissions](#full-example-on-how-to-request-permissions)
 - [📡 Notification channels](#-notification-channels)
   - [Notification Channel Attributes](#notification-channel-attributes)
   - [📝 Notification Channel's Important Notes:](#-notification-channels-important-notes)
@@ -276,17 +273,16 @@ We are constantly working to improve Awesome Notifications and provide support f
     - [NotificationCalendar ("schedule" in Push data) - (optional)](#notificationcalendar-schedule-in-push-data---optional)
     - [NotificationAndroidCrontab (Only for Android)("schedule" in Push data) - (optional)](#notificationandroidcrontab-only-for-androidschedule-in-push-data---optional)
 - [Common Known Issues](#common-known-issues)
-  - [***Issue***: Targeting S+ (version 31 and above) requires that an explicit value for android:exported be defined when intent filters are present](#issue-targeting-s-version-31-and-above-requires-that-an-explicit-value-for-androidexported-be-defined-when-intent-filters-are-present)
-  - [***Issue***: Notification is not showing up or is showing up inconsistently.](#issue-notification-is-not-showing-up-or-is-showing-up-inconsistently)
-  - [***Issue:*** My schedules are only displayed immediately after I open my app](#issue-my-schedules-are-only-displayed-immediately-after-i-open-my-app)
-  - [***Issue***: DecoderBufferCallback not found / Uint8List not found](#issue-decoderbuffercallback-not-found--uint8list-not-found)
-  - [***Issue***: Using bridging headers with module interfaces is unsupported](#issue-using-bridging-headers-with-module-interfaces-is-unsupported)
-  - [***Issue***: Invalid notification content](#issue-invalid-notification-content)
-  - [***Issue***: Undefined symbol: OBJC\_CLASS$\_FlutterStandardTypedData / OBJC\_CLASS$\_FlutterError / OBJC\_CLASS$\_FlutterMethodChannel](#issue-undefined-symbol-objc_class_flutterstandardtypeddata--objc_class_fluttererror--objc_class_fluttermethodchannel)
+  - [**_Issue_**: Targeting S+ (version 31 and above) requires that an explicit value for android:exported be defined when intent filters are present](#issue-targeting-s-version-31-and-above-requires-that-an-explicit-value-for-androidexported-be-defined-when-intent-filters-are-present)
+  - [**_Issue_**: Notification is not showing up or is showing up inconsistently.](#issue-notification-is-not-showing-up-or-is-showing-up-inconsistently)
+  - [**_Issue:_** My schedules are only displayed immediately after I open my app](#issue-my-schedules-are-only-displayed-immediately-after-i-open-my-app)
+  - [**_Issue_**: DecoderBufferCallback not found / Uint8List not found](#issue-decoderbuffercallback-not-found--uint8list-not-found)
+  - [**_Issue_**: Using bridging headers with module interfaces is unsupported](#issue-using-bridging-headers-with-module-interfaces-is-unsupported)
+  - [**_Issue_**: Invalid notification content](#issue-invalid-notification-content)
+  - [**_Issue_**: Undefined symbol: OBJC_CLASS$\_FlutterStandardTypedData / OBJC\_CLASS$\_FlutterError / OBJC_CLASS$\_FlutterMethodChannel](#issue-undefined-symbol-objc_class_flutterstandardtypeddata--objc_class_fluttererror--objc_class_fluttermethodchannel)
 - [Android Foreground Services (Optional)](#android-foreground-services-optional)
-    - [IMPORTANT](#important)
-    - [Foreground Services behaviour on platforms other than Android](#foreground-services-behaviour-on-platforms-other-than-android)
-
+  - [IMPORTANT](#important)
+  - [Foreground Services behaviour on platforms other than Android](#foreground-services-behaviour-on-platforms-other-than-android)
 
 <br>
 <br>
@@ -305,6 +301,7 @@ Key aspects of our philosophy include:
 By adhering to these principles, Awesome Notifications is committed to delivering a seamless and consistent notification experience across various devices, thereby enhancing user engagement with your application.
 
 
+- **_Deprecated support for firebase_messaging plugin:_** The support for firebase_messaging plugin is now deprecated. You need to use the [Awesome's FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm) to achieve all Firebase Cloud Messaging features without violating the platform rules. This is the only way to fully integrate with Awesome Notifications, running all in native level.
 
 <br>
 <br>
@@ -338,10 +335,11 @@ Now you need to modify some files in native libraries to meet to use awesome_not
 ### 🤖 Configuring Android for Awesome Notifications:
 
 1 - Is required the minimum android SDK to 21 (Android 5.0 Lollipop), Grade 7.3.0 or greater and Java compiled SDK Version to 34 (Android 14). You can change the `minSdkVersion` to 21 and the `compileSdkVersion` and `targetSdkVersion` to 34, inside the file `build.gradle`, located inside "android/app/" folder.
-```Gradle
+
+```gradle
 buildscript {
     ...
-    
+
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.0'
     }
@@ -372,7 +370,7 @@ android {
 </manifest>
 ```
 
-3 -  If you're using any `<activity>`, `<activity-alias>`, `<service>`, or `<receiver>` components with `<intent-filter>` declared inside, add the attribute `android:exported="true"` to make them accessible from outside the app's context.:
+3 - If you're using any `<activity>`, `<activity-alias>`, `<service>`, or `<receiver>` components with `<intent-filter>` declared inside, add the attribute `android:exported="true"` to make them accessible from outside the app's context.:
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -441,7 +439,7 @@ Also, the modifications are clearly marked with `################ Awesome Notifi
 
 <br>
 
-1. Add *awesome_notifications* as a dependency in your `pubspec.yaml` file.
+1. Add _awesome_notifications_ as a dependency in your `pubspec.yaml` file.
 
 ```yaml
 awesome_notifications: any # Any attribute updates automatically your source to the last version
@@ -479,8 +477,8 @@ AwesomeNotifications().initialize(
 ```
 
 4. Inside the MaterialApp widget, create your named routes and set your global navigator key. Also, inside initState, initialize your static listeners methods to capture notification's actions.
-OBS 1: With the navigator key, you can redirect pages and get context even inside static classes.
-OBS 2: Only after setListeners being called, the notification events starts to be delivered.
+   OBS 1: With the navigator key, you can redirect pages and get context even inside static classes.
+   OBS 2: Only after setListeners being called, the notification events starts to be delivered.
 
 ```dart
 class MyApp extends StatefulWidget {
@@ -551,7 +549,8 @@ class _MyAppState extends State<MyApp> {
 ```
 
 OBS: Note that the example below is not a valid static or global method. You can retrieve the current context from the NavigatorKey instance, declared on MaterialApp widget, at any time.
-```Dart
+
+```dart
     AwesomeNotifications().setListeners(
         onActionReceivedMethod: (ReceivedAction receivedAction){
             NotificationController.onActionReceivedMethod(context, receivedAction);
@@ -569,7 +568,7 @@ OBS: Note that the example below is not a valid static or global method. You can
 ```
 
 5. Create in any place or class, the static methods to capture the respective notification events.
-OBS: You need to use `@pragma("vm:entry-point")` in each static method to identify to the Flutter engine that the dart address will be called from native and should be preserved.
+   OBS: You need to use `@pragma("vm:entry-point")` in each static method to identify to the Flutter engine that the dart address will be called from native and should be preserved.
 
 ```dart
 class NotificationController {
@@ -631,6 +630,7 @@ AwesomeNotifications().createNotification(
   )
 );
 ```
+
 <br>
 
 This will create a new notification with ID `10`, using the previously defined notification channel `basic_channel` and the default action type that brings the app to foreground. The notification will have a title of "Hello World!" and a body of "This is my first notification!".
@@ -668,7 +668,8 @@ First, create a `ReceivePort` inside your initialization process (which only occ
 Here is an example:
 
 In the initialization of your `notification_controller.dart`:
-```Dart
+
+```dart
     // Create a receive port
     ReceivePort port = ReceivePort();
 
@@ -684,13 +685,14 @@ In the initialization of your `notification_controller.dart`:
         final receivedAction = ReceivedAction().fromMap(serializedData);
         _handleActionReceived(receivedAction);
     });
-    
+
     // Set the initialization flag
     _initialized = true;
 ```
 
 In your `onActionReceivedMethod` method:
-```Dart
+
+```dart
   static Future<void> onActionReceivedMethod(ReceivedAction received) async {
     print('New action received: ${received.toMap()}');
 
@@ -704,7 +706,7 @@ In your `onActionReceivedMethod` method:
         return;
       }
     }
-    
+
     print('Action running on background isolate');
     await _handleActionReceived(received);
   }
@@ -723,8 +725,8 @@ In your `onActionReceivedMethod` method:
 
 <br>
 
-4. On Android, if you press the back button until leaves the app and then reopen it using the "Recent apps list" *`THE LAST APP INITIALIZATION WILL BE REPEATED`*. 
-So, in the case where the app was started up by a notification, in this exclusive case the notification action will be repeated. If this is not desirable behavior for your app, you will need to handle this case specifically in your app's logic.
+4. On Android, if you press the back button until leaves the app and then reopen it using the "Recent apps list" _`THE LAST APP INITIALIZATION WILL BE REPEATED`_.
+   So, in the case where the app was started up by a notification, in this exclusive case the notification action will be repeated. If this is not desirable behavior for your app, you will need to handle this case specifically in your app's logic.
 
 <br>
 <br>
@@ -736,7 +738,7 @@ So, in the case where the app was started up by a notification, in this exclusiv
 On iOS, to use any plugin inside background actions, you will need to manually register each plugin you want. Otherwise, you will face the `MissingPluginException` exception.
 To avoid this, you need to add the following lines to the `AppDelegate.swift` file in your iOS project folder:
 
-```Swift
+```swift
 import Flutter
 import awesome_notifications
 import shared_preferences_ios
@@ -749,9 +751,9 @@ override func application(
       GeneratedPluginRegistrant.register(with: self)
 
       // This function registers the desired plugins to be used within a notification background action
-      SwiftAwesomeNotificationsPlugin.setPluginRegistrantCallback { registry in          
+      SwiftAwesomeNotificationsPlugin.setPluginRegistrantCallback { registry in
           SwiftAwesomeNotificationsPlugin.register(
-            with: registry.registrar(forPlugin: "io.flutter.plugins.awesomenotifications.AwesomeNotificationsPlugin")!)          
+            with: registry.registrar(forPlugin: "io.flutter.plugins.awesomenotifications.AwesomeNotificationsPlugin")!)
           FLTSharedPreferencesPlugin.register(
             with: registry.registrar(forPlugin: "io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin")!)
       }
@@ -778,7 +780,6 @@ To run and debug the Simple Example App, follow the steps bellow:
 3. Paste the content inside the `main.dart` file
 4. Debug the application with a real device or emulator
 
-
 To run and debug the Complete Example App, follow the steps bellow:
 
 1. Install GitHub software in your local machine. I strongly recommend to use [GitHub Desktop](https://desktop.github.com/).
@@ -786,7 +787,7 @@ To run and debug the Complete Example App, follow the steps bellow:
 3. Clone the project to your local machine
 4. Open the project with Android Studio or any other IDE
 5. Sync the project dependencies running `flutter pub get`
-6. On iOS, run `pod install` inside the folder *example/ios/* to sync the native dependencies
+6. On iOS, run `pod install` inside the folder _example/ios/_ to sync the native dependencies
 7. Debug the application with a real device or emulator
 
 <br>
@@ -806,18 +807,17 @@ Notifications are received by local code or Push service using native code, so t
 The notification events are only delivered after `setListeners` method being called, and they are not always delivered at same time as they happen.
 The awesome notifications event methods available to track your notifications are:
 
-* **onNotificationCreatedMethod (optional)**: Fires when a notification is created  
-* **onNotificationDisplayedMethod (optional)**: Fires when a notification is displayed on system status bar  
-* **onActionReceivedMethod (required)**: Fires when a notification is tapped by the user  
-* **onDismissedActionReceivedMethod (optional)**: Fires when a notification is dismissed by the user (sometimes the OS denies the deliver)
+- **onNotificationCreatedMethod (optional)**: Fires when a notification is created
+- **onNotificationDisplayedMethod (optional)**: Fires when a notification is displayed on system status bar
+- **onActionReceivedMethod (required)**: Fires when a notification is tapped by the user
+- **onDismissedActionReceivedMethod (optional)**: Fires when a notification is dismissed by the user (sometimes the OS denies the deliver)
 
 ... and these are the delivery conditions:
 
-| Platform    | App in Foreground | App in Background | App Terminated (Force Quit) |
-| ----------- | ----------------- | ----------------- | ----------------------- |
-| **Android** | Fires all events immediately after occurs | Fires all events immediately after occurs | Store events to be fired when app is on Foreground or Background |
-| **iOS**     | Fires all events immediately after occurs | Store events to be fired when app is on Foreground | Store events to be fired when app is on Foreground |
-
+| Platform    | App in Foreground                         | App in Background                                  | App Terminated (Force Quit)                                      |
+| ----------- | ----------------------------------------- | -------------------------------------------------- | ---------------------------------------------------------------- |
+| **Android** | Fires all events immediately after occurs | Fires all events immediately after occurs          | Store events to be fired when app is on Foreground or Background |
+| **iOS**     | Fires all events immediately after occurs | Store events to be fired when app is on Foreground | Store events to be fired when app is on Foreground               |
 
 Exception: **onActionReceivedMethod** fires all events immediately after occurs in any application life cycle, for all Platforms.
 
@@ -828,13 +828,13 @@ Exception: **onActionReceivedMethod** fires all events immediately after occurs 
 
 There are several types of notification actions that you can use in Awesome Notifications:
 
-* **Default:** This is the default action type. It forces the app to go to the foreground when the user taps the notification.
-* **SilentAction:** This type of action does not force the app to go to the foreground, but it runs on the main thread and can accept visual elements. It can be interrupted if the main app is terminated.
-* **SilentBackgroundAction:** This type of action does not force the app to the foreground and runs in the background. It does not accept any visual element and the execution is done on an exclusive Dart isolate.
-* **KeepOnTop:** This type of action fires the respective action without closing the notification status bar and does not bring the app to the foreground.
-* **DisabledAction:** When the user taps this type of action, the notification simply closes itself on the tray without firing any action event.
-* **DismissAction:** This type of action behaves the same way as a user dismissing action, but it dismisses the respective notification and fires the onDismissActionReceivedMethod. It ignores the autoDismissible property.
-* **InputField:** (Deprecated) When the user taps this type of action, it opens a dialog box that allows them to send a text response. Now you can use the requireInputText property instead.
+- **Default:** This is the default action type. It forces the app to go to the foreground when the user taps the notification.
+- **SilentAction:** This type of action does not force the app to go to the foreground, but it runs on the main thread and can accept visual elements. It can be interrupted if the main app is terminated.
+- **SilentBackgroundAction:** This type of action does not force the app to the foreground and runs in the background. It does not accept any visual element and the execution is done on an exclusive Dart isolate.
+- **KeepOnTop:** This type of action fires the respective action without closing the notification status bar and does not bring the app to the foreground.
+- **DisabledAction:** When the user taps this type of action, the notification simply closes itself on the tray without firing any action event.
+- **DismissAction:** This type of action behaves the same way as a user dismissing action, but it dismisses the respective notification and fires the onDismissActionReceivedMethod. It ignores the autoDismissible property.
+- **InputField:** (Deprecated) When the user taps this type of action, it opens a dialog box that allows them to send a text response. Now you can use the requireInputText property instead.
 
 Remember that for silent types, it is necessary to use the await keyword to prevent the isolates from shutting down before all the work is done. Consider using these different types of actions to customize the behavior of your notifications to suit your needs.
 
@@ -843,33 +843,32 @@ Remember that for silent types, it is necessary to use the await keyword to prev
 
 # 🟦 Notification's Category
 
-The notification category is a group of predefined categories that best describe the nature of the notification and may be used by some systems to rank, delay or filter the notifications. 
+The notification category is a group of predefined categories that best describe the nature of the notification and may be used by some systems to rank, delay or filter the notifications.
 
-***It's highly recommended to always correctly categorize your notifications***.
+**_It's highly recommended to always correctly categorize your notifications_**.
 
- * **Alarm:** Alarm or timer.
- * **Call:** incoming call (voice or video) or similar synchronous communication request
- * **Email:** asynchronous bulk message (email).
- * **Error:** error in background operation or authentication status.
- * **Event:** calendar event.
- * **LocalSharing:** temporarily sharing location.
- * **Message:** incoming direct message (SMS, instant message, etc.).
- * **MissedCall:** incoming call (voice or video) or similar synchronous communication request
- * **Navigation:** map turn-by-turn navigation.
- * **Progress:** progress of a long-running background operation.
- * **Promo:** promotion or advertisement.
- * **Recommendation:** a specific, timely recommendation for a single thing. For example, a news app might want to recommend a news story it believes the user will want to read next.
- * **Reminder:** user-scheduled reminder.
- * **Service:** indication of running background service.
- * **Social:** social network or sharing update.
- * **Status:** ongoing information about device or contextual status.
- * **StopWatch:** running stopwatch.
- * **Transport:** media transport control for playback.
- * **Workout:** tracking a user's workout.
+- **Alarm:** Alarm or timer.
+- **Call:** incoming call (voice or video) or similar synchronous communication request
+- **Email:** asynchronous bulk message (email).
+- **Error:** error in background operation or authentication status.
+- **Event:** calendar event.
+- **LocalSharing:** temporarily sharing location.
+- **Message:** incoming direct message (SMS, instant message, etc.).
+- **MissedCall:** incoming call (voice or video) or similar synchronous communication request
+- **Navigation:** map turn-by-turn navigation.
+- **Progress:** progress of a long-running background operation.
+- **Promo:** promotion or advertisement.
+- **Recommendation:** a specific, timely recommendation for a single thing. For example, a news app might want to recommend a news story it believes the user will want to read next.
+- **Reminder:** user-scheduled reminder.
+- **Service:** indication of running background service.
+- **Social:** social network or sharing update.
+- **Status:** ongoing information about device or contextual status.
+- **StopWatch:** running stopwatch.
+- **Transport:** media transport control for playback.
+- **Workout:** tracking a user's workout.
 
 <br>
 <br>
-
 
 # 👮‍♀️ Requesting Permissions
 
@@ -912,7 +911,6 @@ As a good practice, always check if the permissions you desire are granted befor
 
 - Car: The ability to display notifications while the device is in car mode.
 
-    
 OBS: If none permission is requested through `requestPermissionToSendNotifications` method, the standard permissions requested are Alert, Badge, Sound, Vibrate and Light.
 
 <br>
@@ -922,7 +920,6 @@ OBS: If none permission is requested through `requestPermissionToSendNotificatio
 A permission can be segregated in 3 different levels:
 
 ![image](https://user-images.githubusercontent.com/40064496/143137760-32b99fad-5827-4d0e-9d4f-c39c82ca6bfd.png)
-
 
 - Device level: The permissions set at the global device configuration are applicable at any app installed on device, such as disable/enable all notifications, battery save mode / low power mode and silent / do not disturb mode.
 - Application level: The permissions set at the global app configurations are applicable to any notification in any channel.
@@ -934,7 +931,7 @@ A permission can be segregated in 3 different levels:
 
 Below is a complete example of how to check if the desired permission is enabled and how to request it by showing a dialog with a rationale if necessary (this example is taken from our sample app):
 
-```Dart
+```dart
   static Future<List<NotificationPermission>> requestUserPermissions(
       BuildContext context,{
       // if you only intends to request the permissions until app level, set the channelKey value to null
@@ -1072,39 +1069,38 @@ You can also organize your notification channels visually in your Android app by
 
 The main methods to manipulate notification channels are:
 
-* `AwesomeNotifications().setChannel`: Creates or updates a notification channel.
-* `AwesomeNotifications().removeChannel`: Removes a notification channel, closing all current notifications on that channel.
-You can use the following attributes to configure your notification channels:
+- `AwesomeNotifications().setChannel`: Creates or updates a notification channel.
+- `AwesomeNotifications().removeChannel`: Removes a notification channel, closing all current notifications on that channel.
+  You can use the following attributes to configure your notification channels:
 
 <br>
 
 ## Notification Channel Attributes
 
-| Attribute             | Required | Description                                                                                   | Type                    | Updatable | Default Value  |
-|-----------------------| -------- |-----------------------------------------------------------------------------------------------|-------------------------|-----------|----------------|
-| `channelKey`          | Yes      | A string key that identifies a channel where notifications are sent.                          | String                  | No        | basic_channel  |
-| `channelName`         | Yes      | The name of the channel, which is visible to users on Android.                                | String                  | Yes       | None           |
-| `channelDescription`  | Yes      | A brief description of the channel, which is visible to users on Android.                     | String                  | Yes       | None           |
-| `channelShowBadge`    | No       | Whether the notification should automatically increment the app icon badge counter.           | Boolean                 | Yes       | `false`        |
-| `channelGroupKey`     | No       | A string key to group all channels in same topic at android's configuration page              | String                  | No        | None           |
-| `importance`          | No       | The importance level of the notification.                                                     | NotificationImportance  | No        | `Normal`       |
-| `playSound`           | No       | Whether the notification should play a sound.                                                 | Boolean                 | No        | `true`         |
-| `soundSource`         | No       | The path of a custom sound file to be played with the notification.                           | String                  | No        | None           |
-| `defaultRingtoneType` | No       | The type of default sound to be played with the notification (only for Android).              | DefaultRingtoneType     | Yes       | `Notification` |
-| `enableVibration`     | No       | Whether the device should vibrate when the notification is received.                          | Boolean                 | No        | `true`         |
-| `enableLights`        | No       | Whether the device should display a blinking LED when the notification is received.           | Boolean                 | No        | `true`         |
-| `ledColor`            | No       | The color of the LED to display when the notification is received.                            | Color                   | No        | `Colors.white` |
-| `ledOnMs`             | No       | The duration in milliseconds that the LED should remain on when displaying the notification.  | Integer                 | No        | None           |
-| `ledOffMs`            | No       | The duration in milliseconds that the LED should remain off when displaying the notification. | Integer                 | No        | None           |
-| `groupKey`            | No       | The string key used to group notifications together in Android status bar.                    | String                  | No        | None           |
-| `groupSort`           | No       | The order in which notifications within a group should be sorted.                             | GroupSort               | No        | `Desc`         |
-| `groupAlertBehavior`  | No       | The alert behavior to use for notifications within a group.                                   | GroupAlertBehavior      | No        | `All`          |
-| `defaultPrivacy`      | No       | The level of privacy to apply to the notification when the device is locked.                  | NotificationPrivacy     | No        | `Private`      |
-| `icon`                | No       | The name of the notification icon to display in the status bar.                               | String                  | No        | None           |
-| `defaultColor`        | No       | The color to use for the notification on Android.                                             | Color                   | No        | `Color.black`  |
-| `locked`              | No       | Whether the notification should be prevented from being dismissed by the user.                | Boolean                 | No        | `false`        |
-| `onlyAlertOnce`       | No       | Whether the notification should only alert the user once.                                     | Boolean                 | No        | `false`        |
-
+| Attribute             | Required | Description                                                                                   | Type                   | Updatable | Default Value  |
+| --------------------- | -------- | --------------------------------------------------------------------------------------------- | ---------------------- | --------- | -------------- |
+| `channelKey`          | Yes      | A string key that identifies a channel where notifications are sent.                          | String                 | No        | basic_channel  |
+| `channelName`         | Yes      | The name of the channel, which is visible to users on Android.                                | String                 | Yes       | None           |
+| `channelDescription`  | Yes      | A brief description of the channel, which is visible to users on Android.                     | String                 | Yes       | None           |
+| `channelShowBadge`    | No       | Whether the notification should automatically increment the app icon badge counter.           | Boolean                | Yes       | `false`        |
+| `channelGroupKey`     | No       | A string key to group all channels in same topic at android's configuration page              | String                 | No        | None           |
+| `importance`          | No       | The importance level of the notification.                                                     | NotificationImportance | No        | `Normal`       |
+| `playSound`           | No       | Whether the notification should play a sound.                                                 | Boolean                | No        | `true`         |
+| `soundSource`         | No       | The path of a custom sound file to be played with the notification.                           | String                 | No        | None           |
+| `defaultRingtoneType` | No       | The type of default sound to be played with the notification (only for Android).              | DefaultRingtoneType    | Yes       | `Notification` |
+| `enableVibration`     | No       | Whether the device should vibrate when the notification is received.                          | Boolean                | No        | `true`         |
+| `enableLights`        | No       | Whether the device should display a blinking LED when the notification is received.           | Boolean                | No        | `true`         |
+| `ledColor`            | No       | The color of the LED to display when the notification is received.                            | Color                  | No        | `Colors.white` |
+| `ledOnMs`             | No       | The duration in milliseconds that the LED should remain on when displaying the notification.  | Integer                | No        | None           |
+| `ledOffMs`            | No       | The duration in milliseconds that the LED should remain off when displaying the notification. | Integer                | No        | None           |
+| `groupKey`            | No       | The string key used to group notifications together in Android status bar.                    | String                 | No        | None           |
+| `groupSort`           | No       | The order in which notifications within a group should be sorted.                             | GroupSort              | No        | `Desc`         |
+| `groupAlertBehavior`  | No       | The alert behavior to use for notifications within a group.                                   | GroupAlertBehavior     | No        | `All`          |
+| `defaultPrivacy`      | No       | The level of privacy to apply to the notification when the device is locked.                  | NotificationPrivacy    | No        | `Private`      |
+| `icon`                | No       | The name of the notification icon to display in the status bar.                               | String                 | No        | None           |
+| `defaultColor`        | No       | The color to use for the notification on Android.                                             | Color                  | No        | `Color.black`  |
+| `locked`              | No       | Whether the notification should be prevented from being dismissed by the user.                | Boolean                | No        | `false`        |
+| `onlyAlertOnce`       | No       | Whether the notification should only alert the user once.                                     | Boolean                | No        | `false`        |
 
 <br>
 
@@ -1115,7 +1111,6 @@ You can use the following attributes to configure your notification channels:
 2 - In exceptional cases where modification is necessary, you can set the `forceUpdate` property to true in the `setChannel` method to delete the original channel and recreate it with a different native channel key. However, this method should only be used when absolutely necessary as it deviates from the standard defined by the Android team..
 
 3 - Keep in mind that using `forceUpdate` will also close all active notifications on the channel.
-
 
 <br>
 <br>
@@ -1139,13 +1134,13 @@ All of these classes can be configured with the following properties:
 
 Please note the following about time zones:
 
-* Dates with UTC time zones are triggered at the same time in all parts of the planet and are not affected by daylight rules.
-* Dates with local time zones, defined such as "GMT-07:00", are not affected by daylight rules.
-* Dates with local time zones, defined such as "Europe/Lisbon", are affected by daylight rules, especially when scheduled based on a calendar filter.
+- Dates with UTC time zones are triggered at the same time in all parts of the planet and are not affected by daylight rules.
+- Dates with local time zones, defined such as "GMT-07:00", are not affected by daylight rules.
+- Dates with local time zones, defined such as "Europe/Lisbon", are affected by daylight rules, especially when scheduled based on a calendar filter.
 
 Here are some practical examples of how to create a scheduled notification:
 
-```Dart
+```dart
   String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
   String utcTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
 
@@ -1161,7 +1156,7 @@ Here are some practical examples of how to create a scheduled notification:
       schedule: NotificationInterval(interval: 60, timeZone: localTimeZone, repeats: true));
 ```
 
-```Dart
+```dart
 await AwesomeNotifications().createNotification(
   content: NotificationContent(
       id: id,
@@ -1179,7 +1174,7 @@ await AwesomeNotifications().createNotification(
   );
 ```
 
-```Dart
+```dart
   await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
@@ -1191,7 +1186,7 @@ await AwesomeNotifications().createNotification(
       schedule: NotificationCalendar(second: 0, timeZone: localTimeZone, repeats: true));
 ```
 
-```Dart
+```dart
  await AwesomeNotifications().createNotification(
   content: NotificationContent(
     id: id,
@@ -1214,7 +1209,6 @@ await AwesomeNotifications().createNotification(
 
 <br>
 
-
 ## ⏰ Schedule Precision
 
 It's important to keep in mind that schedules can be ignored or delayed, especially for repeating schedules, due to system algorithms designed to save battery life and prevent abuse of resources. While this behavior is recommended to protect the app and the manufacturer's image, it's crucial to consider this fact in your business logic.
@@ -1225,7 +1219,7 @@ However, for cases where precise schedule execution is a must, there are some fe
 - Set the `preciseAlarm` property to true. This feature allows the system to schedule notifications to be sent at an exact time, even if the device is in low-power mode. For Android versions greater than or equal to 12, you need to explicitly request user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications` or take the user to the permission page by calling `showAlarmPage`.
 - Set the `criticalAlerts` channel property and notification content property to true. This feature allows you to show notifications and play sounds even when the device is on silent or Do Not Disturb mode. Due to its sensitivity, this feature requires special authorization from Apple on iOS and explicit user consent on Android versions greater than or equal to 11. On iOS, you must submit a request for authorization to Apple to enable it, as described in [this post](https://medium.com/@shashidharyamsani/implementing-ios-critical-alerts-7d82b4bb5026).
 
-To enable precise alarms, you need to add the `SCHEDULE_EXACT_ALARM` permission to your app's `AndroidManifest.xml` file, located in the ***Android/app/src/main/*** folder:
+To enable precise alarms, you need to add the `SCHEDULE_EXACT_ALARM` permission to your app's `AndroidManifest.xml` file, located in the **_Android/app/src/main/_** folder:
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -1259,7 +1253,6 @@ You can also try to use the [flutter_background_service](https://pub.dev/package
 
 To know more about it, please visit [flutter_background_service_fetch documentation](https://pub.dev/packages/flutter_background_service) and [Optimizing for Doze and App Standby](https://developer.android.com/training/monitoring-device-state/doze-standby) for Android devices.
 
-
 <br>
 
 ## 📝 Schedule Notification's Important Notes:
@@ -1283,26 +1276,25 @@ A support ticket was opened for Apple in order to resolve this issue, but they d
 
 <br>
 
-
 # 🌎 Translation of Notification Content
 
 The new NotificationLocalization class allows you to create a set of localized strings for a notification, including the title, body, summary, large icon, big picture, and button labels. This feature makes it easy to provide localized content for your users, which is essential for global applications.
 
 To set the desired localization for notifications, use the setLocalization method. This method takes a required languageCode parameter, which is an optional, case-insensitive string that represents the language code for the desired localization. For example, you can set the language code to "en" for English, "pt-br" for Brazilian Portuguese, "es" for Spanish, and so on. If the localization was never set or redefined, the default localization will be loaded from the device system.
 
-```Dart
+```dart
 await AwesomeNotifications().setLocalization(languageCode: 'pt-br');
 ```
 
 To get the current localization code used by the plugin for notification content, use the getLocalization method. This method returns a string representing the current localization code, which is a two-letter language code or a language code combined with a region code. If no localization has been set, this method will return the system's default language code.
 
-```Dart
+```dart
 String currentLanguageCode = await AwesomeNotifications().getLocalization();
 ```
 
 Here's an example of how to use the localizations parameter to translate notification content into several languages:
 
-```Dart
+```dart
 await AwesomeNotifications().createNotification(
   content: NotificationContent(
       id: id,
@@ -1397,7 +1389,7 @@ To update the progress of your notification, you can create a new notification w
 
 Here is an example of how to create a progress bar notification and update its progress:
 
-```Dart
+```dart
 int currentStep = 0;
 Timer? udpateNotificationAfter1Second;
 Future<void> showProgressNotification(int id) async {
@@ -1460,7 +1452,7 @@ void _updateCurrentProgressBar({
 }
 ```
 
-Note that in this example, the showProgressNotification function creates a loop to simulate progress by delaying a fixed amount of time between each simulated step. The _updateCurrentProgressBar function is called at a frequency of one call per second and updates the progress value of the notification. The locked parameter is set to true to prevent the user from dismissing the notification while the progress bar is active.
+Note that in this example, the showProgressNotification function creates a loop to simulate progress by delaying a fixed amount of time between each simulated step. The \_updateCurrentProgressBar function is called at a frequency of one call per second and updates the progress value of the notification. The locked parameter is set to true to prevent the user from dismissing the notification while the progress bar is active.
 
 <br>
 <br>
@@ -1492,14 +1484,14 @@ You can find more than 3000 Emojis available in the Emoji class, which includes 
 
 The appearance of a notification can be customized using different layouts. Each layout type can be specified by including a respective source prefix before the path. The available layout types are:
 
-* `Default`: The default notification layout. This layout will be used if no other layout is specified or if there is an error while loading the specified layout.
-* `BigPicture`: This layout displays a large picture along with a small image attached to the notification.
-* `BigText`: This layout can display more than two lines of text.
-* `Inbox`: This layout can be used to list messages or items separated by lines.
-* `ProgressBar`: This layout displays a progress bar, such as a download progress bar.
-* `Messaging`: This layout displays each notification as a chat conversation with one person.
-* `Messaging Group`: This layout displays each notification as a chat conversation with more than one person (groups).
-* `MediaPlayer`: This layout displays a media controller with action buttons, allowing the user to send commands without bringing the application to the foreground.
+- `Default`: The default notification layout. This layout will be used if no other layout is specified or if there is an error while loading the specified layout.
+- `BigPicture`: This layout displays a large picture along with a small image attached to the notification.
+- `BigText`: This layout can display more than two lines of text.
+- `Inbox`: This layout can be used to list messages or items separated by lines.
+- `ProgressBar`: This layout displays a progress bar, such as a download progress bar.
+- `Messaging`: This layout displays each notification as a chat conversation with one person.
+- `Messaging Group`: This layout displays each notification as a chat conversation with more than one person (groups).
+- `MediaPlayer`: This layout displays a media controller with action buttons, allowing the user to send commands without bringing the application to the foreground.
 
 <br>
 <br>
@@ -1510,20 +1502,19 @@ To display images in notifications, you need to include the respective source pr
 
 Images can be defined using the following prefix types:
 
-* `Asset`: images accessed through the Flutter asset method. Example: asset://path/to/image-asset.png
-* `Network`: images accessed through an internet connection. Example: http(s)://url.com/to/image-asset.png
-* `File`: images accessed through files stored on the device. Example: file://path/to/image-asset.png
-* `Resource`: images accessed through drawable native resources. On Android, these files are stored inside [project]/android/app/src/main/drawable folder. Example: resource://drawable/res_image-asset.png
+- `Asset`: images accessed through the Flutter asset method. Example: asset://path/to/image-asset.png
+- `Network`: images accessed through an internet connection. Example: http(s)://url.com/to/image-asset.png
+- `File`: images accessed through files stored on the device. Example: file://path/to/image-asset.png
+- `Resource`: images accessed through drawable native resources. On Android, these files are stored inside [project]/android/app/src/main/drawable folder. Example: resource://drawable/res_image-asset.png
 
 Note that icons and sounds can only be resource media types.
 
-Unfortunately, to protect your native resources on Android against minification, please include the prefix `res_` in your resource file names. The use of the tag `shrinkResources` to false inside build.gradle or the command flutter build apk `--no-shrink` ***is not recommended***.
+Unfortunately, to protect your native resources on Android against minification, please include the prefix `res_` in your resource file names. The use of the tag `shrinkResources` to false inside build.gradle or the command flutter build apk `--no-shrink` **_is not recommended_**.
 
 For more information, please visit [Shrink, obfuscate, and optimize your app](https://developer.android.com/studio/build/shrink-code)
 
 <br>
 <br>
-
 
 # ⬆️ Notification Importance
 
@@ -1531,12 +1522,12 @@ Defines the notification's importance level as a hierarchy, with Max being the m
 
 The possible importance levels are as follows:
 
-* `Max`: Makes a sound and appears as a heads-up notification.
-* `Higher`: Shows everywhere, makes noise and peeks. May use full-screen intents.
-* `Default`: Shows everywhere, makes noise, but does not visually intrude.
-* `Low`: Shows in the shade, and potentially in the status bar (see shouldHideSilentStatusBarIcons()), but is not audibly intrusive.
-* `Min`: Only shows in the shade, below the fold.
-* `None`: Disables the respective channel.
+- `Max`: Makes a sound and appears as a heads-up notification.
+- `Higher`: Shows everywhere, makes noise and peeks. May use full-screen intents.
+- `Default`: Shows everywhere, makes noise, but does not visually intrude.
+- `Low`: Shows in the shade, and potentially in the status bar (see shouldHideSilentStatusBarIcons()), but is not audibly intrusive.
+- `Min`: Only shows in the shade, below the fold.
+- `None`: Disables the respective channel.
 
 Note that higher importance levels should only be used when necessary, such as for critical or time-sensitive notifications. Abusing higher importance levels can be intrusive to the user and negatively impact their experience.
 
@@ -1614,36 +1605,36 @@ For Android versions 11 and above, you must request the user's consent to enable
     
 # 🏗 Notification Structures
 
-
 ## NotificationContent ("content" in Push data) - (required)
+
 <br>
 
-```Dart
+```dart
 NotificationContent (
-    id: int, 
-    channelKey: String, 
-    title: String?, 
-    body: String?, 
-    summary: String?, 
-    category: NotificationCategory?, 
-    badge: int?, 
-    showWhen: bool?, 
-    displayOnForeground: bool?, 
-    displayOnBackground: bool?, 
-    icon: String?, 
-    largeIcon: String?, 
-    bigPicture: String?, 
-    autoDismissible: bool?, 
-    chronometer: Duration?, 
-    timeoutAfter: Duration?, 
-    color: Color?, 
-    backgroundColor: Color?, 
-    payload: Map<String, String>?, 
-    notificationLayout: NotificationLayout?, 
-    hideLargeIconOnExpand: bool?, 
-    locked: bool?, 
-    progress: int?, 
-    ticker: String?, 
+    id: int,
+    channelKey: String,
+    title: String?,
+    body: String?,
+    summary: String?,
+    category: NotificationCategory?,
+    badge: int?,
+    showWhen: bool?,
+    displayOnForeground: bool?,
+    displayOnBackground: bool?,
+    icon: String?,
+    largeIcon: String?,
+    bigPicture: String?,
+    autoDismissible: bool?,
+    chronometer: Duration?,
+    timeoutAfter: Duration?,
+    color: Color?,
+    backgroundColor: Color?,
+    payload: Map<String, String>?,
+    notificationLayout: NotificationLayout?,
+    hideLargeIconOnExpand: bool?,
+    locked: bool?,
+    progress: int?,
+    ticker: String?,
     actionType: ActionType?
 )
 ```
@@ -1690,14 +1681,15 @@ NotificationContent (
 
 1. Custom vibrations are only available for Android devices.
 2. ProgressBar and Inbox layouts are only available for Android devices.
-    
+
 <br>
 <br>
 
 ## NotificationActionButton ("actionButtons" in Push data) - (optional)
+
 <br>
 
-* At least one *required attribute is necessary
+- At least one \*required attribute is necessary
 
 | Attribute                 | Required | Description                                                                             |   Type                | Value Limits                 | Default value           |
 | ------------------------- | -------- | --------------------------------------------------------------------------------------- | --------------------- |------------------------------| ----------------------- |
@@ -1720,77 +1712,75 @@ NotificationContent (
 <br>
 
 ### NotificationInterval ("schedule" in Push data) - (optional)
+
 <br>
 
-| Attribute      | Required | Description                                                                                                                  | Type          | Value Limits / Format       | Default value   |
-|----------------| -------- |----------------------------------------------------------------------------------------------------------------------------- | ------------- | --------------------------- | --------------- |
-| interval       |    YES   | The time interval between each notification (minimum of 60 seconds for repeating notifications)                              | Int (seconds) | Positive integers           |                 |
-| allowWhileIdle |     NO   | Displays the notification even when the device is in a low-power idle mode                                                   | bool          | true or false               | false           |
-| repeats        |     NO   | Determines whether the notification should be played once or repeatedly                                                      | bool          | true or false               | false           |
-| preciseAlarm   |     NO   | Requires the notification to be displayed at the precise scheduled time, even when the device is in a low-power idle mode. Requires explicit permission on Android 12 and beyond. | bool          | true or false                             | false           |
-| delayTolerance |     NO   | Sets the acceptable delay tolerance for inexact notifications                                                                | int (seconds) | 600000 or greater           | 600000          |
-| timeZone       |     NO   | Specifies the time zone identifier (ISO 8601) for the notification                                                           | String        | "America/Sao_Paulo", "GMT-08:00", or "UTC" | "UTC"           |
-| preciseAlarm   |     NO   | Requires the notification to be displayed at the precise scheduled time, even when the device is in a low-power idle mode. This attribute requires explicit permission on Android 12 and beyond. | bool          | true or false               | false           |
+| Attribute      | Required | Description                                                                                                                                                                                      | Type          | Value Limits / Format                      | Default value |
+| -------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------- | ------------------------------------------ | ------------- |
+| interval       | YES      | The time interval between each notification (minimum of 60 seconds for repeating notifications)                                                                                                  | Int (seconds) | Positive integers                          |               |
+| allowWhileIdle | NO       | Displays the notification even when the device is in a low-power idle mode                                                                                                                       | bool          | true or false                              | false         |
+| repeats        | NO       | Determines whether the notification should be played once or repeatedly                                                                                                                          | bool          | true or false                              | false         |
+| preciseAlarm   | NO       | Requires the notification to be displayed at the precise scheduled time, even when the device is in a low-power idle mode. Requires explicit permission on Android 12 and beyond.                | bool          | true or false                              | false         |
+| delayTolerance | NO       | Sets the acceptable delay tolerance for inexact notifications                                                                                                                                    | int (seconds) | 600000 or greater                          | 600000        |
+| timeZone       | NO       | Specifies the time zone identifier (ISO 8601) for the notification                                                                                                                               | String        | "America/Sao_Paulo", "GMT-08:00", or "UTC" | "UTC"         |
+| preciseAlarm   | NO       | Requires the notification to be displayed at the precise scheduled time, even when the device is in a low-power idle mode. This attribute requires explicit permission on Android 12 and beyond. | bool          | true or false                              | false         |
 
 <br>
 
 ### NotificationCalendar ("schedule" in Push data) - (optional)
+
 <br>
 
-* Is necessary at least one *required attribute
-* If the calendar time condition is not defined, then any value is considered valid in the filtering process for the respective time component
+- Is necessary at least one \*required attribute
+- If the calendar time condition is not defined, then any value is considered valid in the filtering process for the respective time component
 
-| Attribute       | Required | Description                                                           | Type     | Value Limits / Format | Default value |
-| --------------- | -------- | --------------------------------------------------------------------- | -------- | --------------------- | ------------- |
-| era             | *YES     | The era of the calendar. Example: 1 for AD, 0 for BC                  | Integer  | 0 - 99999             |               |
-| year            | *YES     | The year in the calendar.                                             | Integer  | 0 - 99999             |               |
-| month           | *YES     | The month in the calendar.                                            | Integer  | 1 - 12                |               |
-| day             | *YES     | The day of the month in the calendar.                                 | Integer  | 1 - 31                |               |
-| hour            | *YES     | The hour of the day in the calendar.                                  | Integer  | 0 - 23                |               |
-| minute          | *YES     | The minute of the hour in the calendar.                               | Integer  | 0 - 59                |               |
-| second          | *YES     | The second of the minute in the calendar.                             | Integer  | 0 - 59                |               |
-| weekday         | *YES     | The day of the week in the calendar.                                  | Integer  | 1 - 7                 |               |
-| weekOfMonth     | *YES     | The week of the month in the calendar.                                | Integer  | 1 - 6                 |               |
-| weekOfYear      | *YES     | The week of the year in the calendar.                                 | Integer  | 1 - 53                |               |
-| allowWhileIdle  | NO       | Displays the notification, even when the device is low battery.       | bool     | true or false         | false         |
-| delayTolerance  | NO       | Set the delay tolerance for inexact schedules.                        | bool     | 600000 or greater     | 600000        |
-| preciseAlarm    | NO       | Require schedules to be precise, even when the device is low battery. | bool     | true or false         | false         |
-| repeats         | NO       | Defines if the notification should play only once or keeps repeating. | bool     | true or false         | false         |
-| timeZone        | NO       | Time zone identifier (ISO 8601).                                      | String   | "America/Sao_Paulo", "GMT-08:00" or "UTC" | "UTC"        |
-
+| Attribute      | Required | Description                                                           | Type    | Value Limits / Format                     | Default value |
+| -------------- | -------- | --------------------------------------------------------------------- | ------- | ----------------------------------------- | ------------- |
+| era            | \*YES    | The era of the calendar. Example: 1 for AD, 0 for BC                  | Integer | 0 - 99999                                 |               |
+| year           | \*YES    | The year in the calendar.                                             | Integer | 0 - 99999                                 |               |
+| month          | \*YES    | The month in the calendar.                                            | Integer | 1 - 12                                    |               |
+| day            | \*YES    | The day of the month in the calendar.                                 | Integer | 1 - 31                                    |               |
+| hour           | \*YES    | The hour of the day in the calendar.                                  | Integer | 0 - 23                                    |               |
+| minute         | \*YES    | The minute of the hour in the calendar.                               | Integer | 0 - 59                                    |               |
+| second         | \*YES    | The second of the minute in the calendar.                             | Integer | 0 - 59                                    |               |
+| weekday        | \*YES    | The day of the week in the calendar.                                  | Integer | 1 - 7                                     |               |
+| weekOfMonth    | \*YES    | The week of the month in the calendar.                                | Integer | 1 - 6                                     |               |
+| weekOfYear     | \*YES    | The week of the year in the calendar.                                 | Integer | 1 - 53                                    |               |
+| allowWhileIdle | NO       | Displays the notification, even when the device is low battery.       | bool    | true or false                             | false         |
+| delayTolerance | NO       | Set the delay tolerance for inexact schedules.                        | bool    | 600000 or greater                         | 600000        |
+| preciseAlarm   | NO       | Require schedules to be precise, even when the device is low battery. | bool    | true or false                             | false         |
+| repeats        | NO       | Defines if the notification should play only once or keeps repeating. | bool    | true or false                             | false         |
+| timeZone       | NO       | Time zone identifier (ISO 8601).                                      | String  | "America/Sao_Paulo", "GMT-08:00" or "UTC" | "UTC"         |
 
 <br>
 
 ### NotificationAndroidCrontab (Only for Android)("schedule" in Push data) - (optional)
-<br>
-
-* At least one *required attribute is necessary for scheduling the notification using a Cron expression.
-* The Cron expression must respect the format described in [this article](https://www.baeldung.com/cron-expressions), including seconds precision.
-
-| Attribute          | Required | Description                                                                                                                          | Type   | Value Limits / Format                    | Default value |
-| ------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------ | ---------------------------------------- | ------------- |
-| initialDateTime    | NO       | The initial limit date of valid dates, which does not fire any notifications                                                         | String | YYYY-MM-DD hh:mm:ss                      |               |
-| expirationDateTime | NO       | The final limit date of valid dates, which does not fire any notifications                                                           | String | YYYY-MM-DD hh:mm:ss                      |               |
-| crontabExpression  | *YES     | The crontab rule to generate new valid dates, with seconds precision                                                                 | String | crontab expression format                |               |
-| preciseSchedules   | *YES     | A list of precise valid dates to fire. Each item in the list should be a string in the format "YYYY-MM-DD hh:mm:ss", with seconds.   | Array  | array of strings in the specified format |               |
-| allowWhileIdle     | NO       | Displays the notification, even when the device is low on battery                                                                    | bool   | true or false                            | false         |
-| delayTolerance     | NO       | Sets the delay tolerance for inexact schedules                                                                                       | bool   | 600000 or greater                        | 600000        |
-| preciseAlarm       | NO       | Requires schedules to be precise, even when the device is low on battery. Requires explicit permission in Android 12 and beyond.     | bool   | true or false                            | false         |
-| repeats            | NO       | Defines if the notification should play only once or keep repeating                                                                  | bool   | true or false                            | false         |
-| timeZone           | NO       | The time zone identifier in the ISO 8601 format                                                                                      | String | "America/Sao_Paulo", "GMT-08:00", "UTC"  | "UTC"         |
-
-
 
 <br>
+
+- At least one \*required attribute is necessary for scheduling the notification using a Cron expression.
+- The Cron expression must respect the format described in [this article](https://www.baeldung.com/cron-expressions), including seconds precision.
+
+| Attribute          | Required | Description                                                                                                                        | Type   | Value Limits / Format                    | Default value |
+| ------------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------ | ---------------------------------------- | ------------- |
+| initialDateTime    | NO       | The initial limit date of valid dates, which does not fire any notifications                                                       | String | YYYY-MM-DD hh:mm:ss                      |               |
+| expirationDateTime | NO       | The final limit date of valid dates, which does not fire any notifications                                                         | String | YYYY-MM-DD hh:mm:ss                      |               |
+| crontabExpression  | \*YES    | The crontab rule to generate new valid dates, with seconds precision                                                               | String | crontab expression format                |               |
+| preciseSchedules   | \*YES    | A list of precise valid dates to fire. Each item in the list should be a string in the format "YYYY-MM-DD hh:mm:ss", with seconds. | Array  | array of strings in the specified format |               |
+| allowWhileIdle     | NO       | Displays the notification, even when the device is low on battery                                                                  | bool   | true or false                            | false         |
+| delayTolerance     | NO       | Sets the delay tolerance for inexact schedules                                                                                     | bool   | 600000 or greater                        | 600000        |
+| preciseAlarm       | NO       | Requires schedules to be precise, even when the device is low on battery. Requires explicit permission in Android 12 and beyond.   | bool   | true or false                            | false         |
+| repeats            | NO       | Defines if the notification should play only once or keep repeating                                                                | bool   | true or false                            | false         |
+| timeZone           | NO       | The time zone identifier in the ISO 8601 format                                                                                    | String | "America/Sao_Paulo", "GMT-08:00", "UTC"  | "UTC"         |
+
 <br>
-    
+<br>
 
 # Common Known Issues
 
+## **_Issue_**: Targeting S+ (version 31 and above) requires that an explicit value for android:exported be defined when intent filters are present
 
-## ***Issue***: Targeting S+ (version 31 and above) requires that an explicit value for android:exported be defined when intent filters are present
-
-***Fix***: You need to add the attribute android:exported="true" to any <activity>, <activity-alias>, <service>, or <receiver> components that have <intent-filter> declared inside in the app’s AndroidManifest.xml file. This is necessary to comply with Android 12's new security requirements. However, manually adding this attribute to your plugin's local files can be risky as they can be modified or even erased by some flutter commands, such as "Pub clear cache".
+**_Fix_**: You need to add the attribute android:exported="true" to any <activity>, <activity-alias>, <service>, or <receiver> components that have <intent-filter> declared inside in the app’s AndroidManifest.xml file. This is necessary to comply with Android 12's new security requirements. However, manually adding this attribute to your plugin's local files can be risky as they can be modified or even erased by some flutter commands, such as "Pub clear cache".
 
 To fix this issue, it's recommended to request the changes to be made in the plugin repository instead and upgrade it in your pubspec.yaml to the latest version. This ensures that the necessary changes are made without compromising the integrity of the local files.
 
@@ -1813,16 +1803,16 @@ For example, you can add the following line of code to your AndroidManifest.xml 
     </application>
 </manifest>
 ```
-    
+
 To learn more about this issue and how to fix it, please visit [Android 12 - Safer component exporting](https://developer.android.com/about/versions/12/behavior-changes-12?hl=pt-br#exported)
 
 <br>
 
 ---
 
-## ***Issue***: Notification is not showing up or is showing up inconsistently.
+## **_Issue_**: Notification is not showing up or is showing up inconsistently.
 
-***Fix***: This can happen due to various reasons such as channel not being registered properly, notification not being triggered at the right time due device battery optimization settings, and other ones.
+**_Fix_**: This can happen due to various reasons such as channel not being registered properly, notification not being triggered at the right time due device battery optimization settings, and other ones.
 
 - First, make sure that you have registered your notification channels properly and that your app is targeting at least API level 26 (Android 8.0) or higher.
 - Check if the notification is triggered at the right time. You may need to verify that the correct date and time have been set in the notification.
@@ -1836,9 +1826,9 @@ To know more about it, please visit [Customize which resources to keep](https://
 
 ---
 
-## ***Issue:*** My schedules are only displayed immediately after I open my app
+## **_Issue:_** My schedules are only displayed immediately after I open my app
 
-***Fix:*** Your app or device is under battery saving mode restrictions. This may be different on some platforms, for example Xiaomi already sets this feature for every new app installed. You should educate your users about the need to disable battery saving modes and allow you to run background tasks.
+**_Fix:_** Your app or device is under battery saving mode restrictions. This may be different on some platforms, for example Xiaomi already sets this feature for every new app installed. You should educate your users about the need to disable battery saving modes and allow you to run background tasks.
 
 Additionally, you can ask your users to whitelist your app from any battery optimization feature that the device may have. This can be done by adding your app to the "unmonitored apps" or "battery optimization exceptions" list, depending on the device.
 
@@ -1850,9 +1840,9 @@ To know more about it, please visit [flutter_background_fetch documentation](htt
 
 ---
 
-## ***Issue***: DecoderBufferCallback not found / Uint8List not found
+## **_Issue_**: DecoderBufferCallback not found / Uint8List not found
 
-***Fix***: You need to update your Flutter version running `flutter upgrade`.
+**_Fix_**: You need to update your Flutter version running `flutter upgrade`.
 
 These methods were added/deprecated since version 2.12. If you are already on the latest Flutter version and still encountering the issue, make sure to also update your awesome_notifications package to the latest version.
 
@@ -1860,25 +1850,26 @@ These methods were added/deprecated since version 2.12. If you are already on th
 
 ---
 
-## ***Issue***: Using bridging headers with module interfaces is unsupported
+## **_Issue_**: Using bridging headers with module interfaces is unsupported
 
-***Fix***: You need to set `build settings` options below in your Runner target:
-* Build libraries for distribution => NO
-* Only safe API extensions => NO
+**_Fix_**: You need to set `build settings` options below in your Runner target:
+
+- Build libraries for distribution => NO
+- Only safe API extensions => NO
 
 .. and in your Notification Extension target:
-* Build libraries for distribution => NO
-* Only safe API extensions => YES
 
+- Build libraries for distribution => NO
+- Only safe API extensions => YES
 
 <br>
 
 ---
 
-## ***Issue***: Invalid notification content
+## **_Issue_**: Invalid notification content
 
-***Fix***: The notification sent via FCM services *MUST* respect the types of the respective Notification elements. Otherwise, your notification will be discarded as invalid one.
-Also, all the payload elements *MUST* be a String, as the same way as you do in Local Notifications using dart code.
+**_Fix_**: The notification sent via FCM services _MUST_ respect the types of the respective Notification elements. Otherwise, your notification will be discarded as invalid one.
+Also, all the payload elements _MUST_ be a String, as the same way as you do in Local Notifications using dart code.
 
 To see more information about each type, please go to https://github.com/rafaelsetragni/awesome_notifications#notification-types-values-and-defaults
 
@@ -1886,9 +1877,9 @@ To see more information about each type, please go to https://github.com/rafaels
 
 ---
 
-## ***Issue***: Undefined symbol: OBJC_CLASS$_FlutterStandardTypedData / OBJC_CLASS$_FlutterError / OBJC_CLASS$_FlutterMethodChannel
+## **_Issue_**: Undefined symbol: OBJC_CLASS$_FlutterStandardTypedData / OBJC_CLASS$\_FlutterError / OBJC_CLASS$\_FlutterMethodChannel
 
-***Fix***: This error happens when the flutter dependecies are not copied to another target extensions. Please, remove the old target extensions and update your awesome_notification plugin to the last version available, modifying your pod file according and running `pod install` after it.
+**_Fix_**: This error happens when the flutter dependecies are not copied to another target extensions. Please, remove the old target extensions and update your awesome_notification plugin to the last version available, modifying your pod file according and running `pod install` after it.
 
 <br>
 <br>
@@ -1898,19 +1889,23 @@ To see more information about each type, please go to https://github.com/rafaels
 This feature is necessary to use all features available to some notification's category, as call notifications, alarms, full screen intent, and to display background task progress to the user.
 
 Since it is optional it was moved to a second library you can import as follows:
+
 ```dart
 import 'package:awesome_notifications/android_foreground_service.dart';
 ```
 
 The [foreground service permission](https://developer.android.com/reference/android/Manifest.permission#FOREGROUND_SERVICE) is NOT automatically added by this plugin, and you only need to add it if you want to use Android foreground services.
 In your `AndroidManifest.xml` inside the `<manifest>` tag add:
+
 ```xml
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 ```
+
 Next, you have to add the `<service>` tag to your `AndroidManifest.xml`. Inside your `<application>` tag add
+
 ```xml
  <service android:name="me.carda.awesome_notifications.core.services.ForegroundService"
-          android:enabled="true"            
+          android:enabled="true"
           android:exported="false"
           android:stopWithTask="true"
           android:foregroundServiceType=AllServiceTypesThatYouChosen
@@ -1919,33 +1914,34 @@ Next, you have to add the `<service>` tag to your `AndroidManifest.xml`. Inside 
 
 And finally, to create the notification as foreground service, use the method startForeground and set the notification category to Service:
 
-```Dart
-    AndroidForegroundService.startAndroidForegroundService(
-      foregroundStartMode: ForegroundStartMode.stick,
-      foregroundServiceType: ForegroundServiceType.phoneCall,
-      content: NotificationContent(
-          id: 2341234,
-          body: 'Service is running!',
-          title: 'Android Foreground Service',
-          channelKey: 'basic_channel',
-          bigPicture: 'asset://assets/images/android-bg-worker.jpg',
-          notificationLayout: NotificationLayout.BigPicture,
-          category: NotificationCategory.Service
-      ),
-      actionButtons: [
-        NotificationActionButton(
-            key: 'SHOW_SERVICE_DETAILS',
-            label: 'Show details'
-        )
-      ]
-    );
+```dart
+AndroidForegroundService.startAndroidForegroundService(
+  foregroundStartMode: ForegroundStartMode.stick,
+  foregroundServiceType: ForegroundServiceType.phoneCall,
+  content: NotificationContent(
+      id: 2341234,
+      body: 'Service is running!',
+      title: 'Android Foreground Service',
+      channelKey: 'basic_channel',
+      bigPicture: 'asset://assets/images/android-bg-worker.jpg',
+      notificationLayout: NotificationLayout.BigPicture,
+      category: NotificationCategory.Service
+  ),
+  actionButtons: [
+    NotificationActionButton(
+        key: 'SHOW_SERVICE_DETAILS',
+        label: 'Show details'
+    )
+  ]
+);
 ```
 
-While the `android:name` must exactly match this value, you can configure the other parameters as you like, although it is recommended to copy the values for `android:enabled`, `android:exported` and `android:stopWithTask`. Suitable values for `foregroundServiceType` can be found [here](https://developer.android.com/reference/android/app/Service#startForeground(int,%20android.app.Notification,%20int)).
+While the `android:name` must exactly match this value, you can configure the other parameters as you like, although it is recommended to copy the values for `android:enabled`, `android:exported` and `android:stopWithTask`. Suitable values for `foregroundServiceType` can be found [here](<https://developer.android.com/reference/android/app/Service#startForeground(int,%20android.app.Notification,%20int)>).
 
 ### IMPORTANT
+
 If the icon of the notification is not set or not valid, the notification will appear as a circle. Make sure to always specify an valid transparent icon. If you need help with this, take a look at [the examples](https://github.com/rafaelsetragni/awesome_notifications/tree/master/example).
 
 ### Foreground Services behaviour on platforms other than Android
-On any platform other then Android, all foreground service methods are no-ops (they do nothing when called), so you don't need to do a platform check before calling them.
 
+On any platform other then Android, all foreground service methods are no-ops (they do nothing when called), so you don't need to do a platform check before calling them.
