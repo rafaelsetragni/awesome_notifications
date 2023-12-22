@@ -1,3 +1,7 @@
+## [0.8.4]
+### Fixes
+* Event handles modified to support negative values during the lost events recovering process.
+
 ## [0.8.3]
 ### Added
 * New media player features (Playback state, speed and duration) for media player notifications 
