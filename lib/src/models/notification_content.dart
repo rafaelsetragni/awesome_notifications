@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-
 import '../definitions.dart';
-import '../enumerators/action_type.dart';
-import '../enumerators/notification_category.dart';
 import '../enumerators/notification_layout.dart';
 import '../enumerators/notification_play_state.dart';
 import '../utils/assert_utils.dart';
