@@ -1,6 +1,6 @@
 ## [0.8.4]
 ### Fixes
-* Event handles modified to support negative values during the lost events recovering process.
+* Event handles modified to support negative values during the lost events recovering process on Android.
 
 ## [0.8.3]
 ### Added

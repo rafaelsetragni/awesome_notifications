@@ -7,6 +7,20 @@ protocol AttachablePlugin {
     func attachPlugin(with registrar: FlutterPluginRegistrar)
 }
 
+public class SwiftAwesomeNotificationsPlugin: BaseAwesomeNotificationsPlugin {
+    public override func attachPlugin(with registrar: FlutterPluginRegistrar) {
+        registrar.addMethodCallDelegate(self, channel: self.flutterChannel!)
+    }
+}
+
+@available(iOSApplicationExtension, unavailable)
+public class ExtensionAwesomeNotificationsPlugin: BaseAwesomeNotificationsPlugin {
+    public override func attachPlugin(with registrar: FlutterPluginRegistrar) {
+        registrar.addMethodCallDelegate(self, channel: self.flutterChannel!)
+        registrar.addApplicationDelegate(self)
+    }
+}
+
 public class BaseAwesomeNotificationsPlugin:
                 NSObject,
                 FlutterPlugin,
@@ -1056,19 +1070,5 @@ public class BaseAwesomeNotificationsPlugin:
         }
         
         result(success)
-    }
-}
-
-public class SwiftAwesomeNotificationsPlugin: BaseAwesomeNotificationsPlugin {
-    public override func attachPlugin(with registrar: FlutterPluginRegistrar) {
-        registrar.addMethodCallDelegate(self, channel: self.flutterChannel!)
-    }
-}
-
-@available(iOSApplicationExtension, unavailable)
-public class ExtensionAwesomeNotificationsPlugin: BaseAwesomeNotificationsPlugin {
-    public override func attachPlugin(with registrar: FlutterPluginRegistrar) {
-        registrar.addMethodCallDelegate(self, channel: self.flutterChannel!)
-        registrar.addApplicationDelegate(self)
     }
 }
