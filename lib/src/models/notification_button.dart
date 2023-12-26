@@ -11,9 +11,9 @@ import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
 import 'package:awesome_notifications/src/utils/string_utils.dart';
 import 'package:flutter/foundation.dart';
 
-/// Notification button to display inside a notification.
-/// Since Android 7, icons are displayed only for Media Layout Notifications
-/// [icon] must be a native resource media type
+/// Represents a button to be displayed inside a notification.
+/// Note: Since Android 7, icons are only displayed for Media Layout Notifications.
+/// The [icon] must be a native resource media type.
 class NotificationActionButton extends Model {
   String? _key;
   String? _label;
@@ -26,46 +26,68 @@ class NotificationActionButton extends Model {
   Color? _color;
   ActionType? _actionType;
 
+  /// Returns the unique key identifier of the action button.
   String? get key {
     return _key;
   }
 
+  /// Returns the label text of the action button.
   String? get label {
     return _label;
   }
 
+  /// Returns the icon resource of the action button.
   String? get icon {
     return _icon;
   }
 
+  /// Indicates whether the action button is enabled.
   bool? get enabled {
     return _enabled;
   }
 
+  /// Indicates whether the action button requires input text.
   bool get requireInputText {
     return _requireInputText;
   }
 
+  /// Determines if the notification should be dismissed automatically when the action button is pressed.
   bool? get autoDismissible {
     return _autoDismissible;
   }
 
+  /// Indicates if the action button should be shown in the compact view of the notification.
   bool? get showInCompactView {
     return _showInCompactView;
   }
 
+  /// Indicates if the action button represents a dangerous option or choice.
   bool? get isDangerousOption {
     return _isDangerousOption;
   }
 
+  /// Returns the color of the action button.
   Color? get color {
     return _color;
   }
 
+  /// Returns the type of action associated with the action button.
   ActionType? get actionType {
     return _actionType;
   }
 
+  /// Constructs a [NotificationActionButton].
+  ///
+  /// [key]: Unique key identifier for the action button.
+  /// [label]: Text label for the action button.
+  /// [icon]: Icon resource for the action button.
+  /// [enabled]: Indicates if the button is enabled.
+  /// [requireInputText]: Requires input text when the button is pressed.
+  /// [autoDismissible]: Automatically dismisses the notification when the button is pressed.
+  /// [showInCompactView]: Shows the button in the compact view of the notification.
+  /// [isDangerousOption]: Marks the button as representing a dangerous choice.
+  /// [color]: Color of the button.
+  /// [actionType]: Type of action associated with the button.
   NotificationActionButton(
       {required String key,
       required String label,
@@ -91,6 +113,7 @@ class NotificationActionButton extends Model {
     adaptInputFieldToRequireText();
   }
 
+  /// Creates a [NotificationActionButton] instance from a map of data.
   @override
   NotificationActionButton? fromMap(Map<String, dynamic> mapData) {
     processRetroCompatibility(mapData);
@@ -117,6 +140,7 @@ class NotificationActionButton extends Model {
     return this;
   }
 
+  /// Processes retrocompatibility for older versions of the action button.
   @visibleForTesting
   void processRetroCompatibility(Map<String, dynamic> dataMap) {
     if (dataMap.containsKey("autoCancel")) {
@@ -135,6 +159,7 @@ class NotificationActionButton extends Model {
     adaptInputFieldToRequireText();
   }
 
+  /// Adapts the input field type to require text based on the action type.
   @visibleForTesting
   void adaptInputFieldToRequireText() {
     // ignore: deprecated_member_use_from_same_package
@@ -146,6 +171,7 @@ class NotificationActionButton extends Model {
     }
   }
 
+  /// Converts the [NotificationActionButton] instance to a map.
   @override
   Map<String, dynamic> toMap() {
     adaptInputFieldToRequireText();
@@ -164,14 +190,17 @@ class NotificationActionButton extends Model {
     };
   }
 
+  /// Validates the properties of the action button.
+  ///
+  /// Throws an [AwesomeNotificationsException] if the key or label is missing or if the icon is not a native resource media type.
   @override
   void validate() {
     if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_key)) {
-      throw const AwesomeNotificationsException(message: 'key id is requried');
+      throw const AwesomeNotificationsException(message: 'key id is required');
     }
     if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_label)) {
       throw const AwesomeNotificationsException(
-          message: 'label id is requried');
+          message: 'label id is required');
     }
 
     // For action buttons, it's only allowed resource media types
