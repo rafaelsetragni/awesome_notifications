@@ -3,36 +3,13 @@ import Flutter
 import UserNotifications
 import IosAwnCore
 
-protocol AttachablePlugin {
-    func attachPlugin(with registrar: FlutterPluginRegistrar)
-}
-
-public class SwiftAwesomeNotificationsPlugin: BaseAwesomeNotificationsPlugin {
-    public override func attachPlugin(with registrar: FlutterPluginRegistrar) {
-        registrar.addMethodCallDelegate(self, channel: self.flutterChannel!)
-    }
-}
-
-@available(iOSApplicationExtension, unavailable)
-public class ExtensionAwesomeNotificationsPlugin: BaseAwesomeNotificationsPlugin {
-    public override func attachPlugin(with registrar: FlutterPluginRegistrar) {
-        registrar.addMethodCallDelegate(self, channel: self.flutterChannel!)
-        registrar.addApplicationDelegate(self)
-    }
-}
-
-public class BaseAwesomeNotificationsPlugin:
+public class SwiftAwesomeNotificationsPlugin:
                 NSObject,
                 FlutterPlugin,
-                AttachablePlugin,
                 AwesomeEventListener,
                 UNUserNotificationCenterDelegate
 {
     static let TAG = "AwesomeNotificationsPlugin"
-    
-    func attachPlugin(with registrar: FlutterPluginRegistrar) {
-        fatalError("Must Override")
-    }
     
     static var flutterRegistrantCallback: FlutterPluginRegistrantCallback?
     var awesomeNotifications:AwesomeNotifications?
@@ -47,7 +24,7 @@ public class BaseAwesomeNotificationsPlugin:
             name: Definitions.CHANNEL_FLUTTER_PLUGIN,
             binaryMessenger: registrar.messenger())
         
-        BaseAwesomeNotificationsPlugin()
+        SwiftAwesomeNotificationsPlugin()
             .AttachAwesomeNotificationsPlugin(
                 usingRegistrar: registrar,
                 throughFlutterChannel: flutterChannel)
@@ -76,23 +53,25 @@ public class BaseAwesomeNotificationsPlugin:
             awesomeNotifications = AwesomeNotifications()
             
             registrar.addMethodCallDelegate(self, channel: self.flutterChannel!)
-            registrar.addApplicationDelegate(self)
+            if !SwiftUtils.isRunningOnExtension() {
+                registrar.addApplicationDelegate(self)
+            }
             
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, "Awesome Notifications plugin attached to iOS \(floor(NSFoundationVersionNumber))")
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, "Awesome Notifications - App Group : \(Definitions.USER_DEFAULT_TAG)")
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications plugin attached to iOS \(floor(NSFoundationVersionNumber))")
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications - App Group : \(Definitions.USER_DEFAULT_TAG)")
             
             if !Definitions.USER_DEFAULT_TAG.starts(with: "group.") {
                 throw ExceptionFactory
                         .shared
                         .createNewAwesomeException(
-                            className: BaseAwesomeNotificationsPlugin.TAG,
+                            className: SwiftAwesomeNotificationsPlugin.TAG,
                             code: ExceptionCode.CODE_INITIALIZATION_EXCEPTION,
                             message: "Your App Group name \"\(Definitions.USER_DEFAULT_TAG)\" is invalid. It must starts with \"group.\"",
                             detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".customAppGroup")
             }
         }
         catch {
-            Logger.shared.e(BaseAwesomeNotificationsPlugin.TAG, error.localizedDescription)
+            Logger.shared.e(SwiftAwesomeNotificationsPlugin.TAG, error.localizedDescription)
         }
     }
     
@@ -106,7 +85,7 @@ public class BaseAwesomeNotificationsPlugin:
         awesomeNotifications = nil
         
         if AwesomeNotifications.debug {
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, "Awesome Notifications plugin detached from iOS \(floor(NSFoundationVersionNumber))")
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications plugin detached from iOS \(floor(NSFoundationVersionNumber))")
         }
     }
     
@@ -128,7 +107,7 @@ public class BaseAwesomeNotificationsPlugin:
                 = ExceptionFactory
                         .shared
                         .createNewAwesomeException(
-                            className: BaseAwesomeNotificationsPlugin.TAG,
+                            className: SwiftAwesomeNotificationsPlugin.TAG,
                             code: ExceptionCode.CODE_INITIALIZATION_EXCEPTION,
                             message: "Awesome notifications is currently not available",
                             detailedCode: ExceptionCode.DETAILED_INITIALIZATION_FAILED+".awesomeNotifications.core")
@@ -294,7 +273,7 @@ public class BaseAwesomeNotificationsPlugin:
                     throw ExceptionFactory
                         .shared
                         .createNewAwesomeException(
-                            className: BaseAwesomeNotificationsPlugin.TAG,
+                            className: SwiftAwesomeNotificationsPlugin.TAG,
                             code: ExceptionCode.CODE_MISSING_METHOD,
                             message: "method \(call.method) not found",
                             detailedCode: ExceptionCode.DETAILED_MISSING_METHOD+"."+call.method)
@@ -313,7 +292,7 @@ public class BaseAwesomeNotificationsPlugin:
                 ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_UNKNOWN_EXCEPTION,
                         detailedCode: ExceptionCode.DETAILED_UNEXPECTED_ERROR,
                         originalException: error)
@@ -350,7 +329,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Channel data is invalid",
                         detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.data")
@@ -360,7 +339,7 @@ public class BaseAwesomeNotificationsPlugin:
                             .setChannel(channel: channel) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.shared.e(BaseAwesomeNotificationsPlugin.TAG, "Channel \(updated ? "" : "wasn't ")updated")
+            Logger.shared.e(SwiftAwesomeNotificationsPlugin.TAG, "Channel \(updated ? "" : "wasn't ")updated")
         }
 		
 		result(updated)
@@ -373,7 +352,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Empty channel key",
                         detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.key")
@@ -383,13 +362,13 @@ public class BaseAwesomeNotificationsPlugin:
             .removeChannel(channelKey: channelKey) ?? false {
             
             if AwesomeNotifications.debug {
-                Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, "Channel removed")
+                Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "Channel removed")
             }
             result(true)
         }
         else {
             if AwesomeNotifications.debug {
-                Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, "Channel '\(channelKey)' not found")
+                Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "Channel '\(channelKey)' not found")
             }
             result(false)
         }
@@ -418,7 +397,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Invalid Badge value",
                         detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".badge.value")
@@ -469,7 +448,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                 .shared
                 .createNewAwesomeException(
-                    className: BaseAwesomeNotificationsPlugin.TAG,
+                    className: SwiftAwesomeNotificationsPlugin.TAG,
                     code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                     message: "Invalid id value",
                     detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.id")
@@ -480,7 +459,7 @@ public class BaseAwesomeNotificationsPlugin:
                 .dismissNotification(byId: notificationId!) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, dismissed ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, dismissed ?
                   "Notification \(notificationId!) dismissed":
                   "Notification \(notificationId!) was not found")
         }
@@ -494,7 +473,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Invalid id value",
                         detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.id")
@@ -505,7 +484,7 @@ public class BaseAwesomeNotificationsPlugin:
                 .cancelSchedule(byId: notificationId!) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, cancelled ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, cancelled ?
                   "Schedule \(notificationId!) cancelled":
                   "Schedule \(notificationId!) was not found")
         }
@@ -519,7 +498,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Invalid id value",
                         detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.id")
@@ -530,7 +509,7 @@ public class BaseAwesomeNotificationsPlugin:
                 .cancelNotification(byId: notificationId!) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, cancelled ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, cancelled ?
                   "Notification \(notificationId!) cancelled":
                   "Notification \(notificationId!) was not found")
         }
@@ -543,7 +522,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Invalid channel key value",
                         detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.channelKey")
@@ -554,7 +533,7 @@ public class BaseAwesomeNotificationsPlugin:
                 .dismissNotifications(byChannelKey: channelKey) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, success ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
                   "Notifications from channel \(channelKey) dismissed":
                   "Notifications from channel \(channelKey) not found")
         }
@@ -567,7 +546,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Invalid channel key value",
                         detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.channelKey")
@@ -578,7 +557,7 @@ public class BaseAwesomeNotificationsPlugin:
                 .cancelSchedules(byChannelKey: channelKey) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, success ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
                   "Scheduled notifications from channel \(channelKey) canceled":
                   "Scheduled notifications from channel \(channelKey) not found")
         }
@@ -591,7 +570,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Invalid channel key value",
                         detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.channelKey")
@@ -602,7 +581,7 @@ public class BaseAwesomeNotificationsPlugin:
                 .cancelNotifications(byChannelKey: channelKey) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, success ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
                   "Notifications and schedules from channel \(channelKey) canceled":
                   "Notifications and schedules from channel \(channelKey) not found")
         }
@@ -615,7 +594,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Invalid group key value",
                         detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.groupKey")
@@ -626,7 +605,7 @@ public class BaseAwesomeNotificationsPlugin:
                 .dismissNotifications(byGroupKey: groupKey) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, success ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
                   "Notifications from group \(groupKey) dismissed":
                   "Notifications from group \(groupKey) not found")
         }
@@ -639,7 +618,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Invalid group key value",
                         detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.groupKey")
@@ -650,7 +629,7 @@ public class BaseAwesomeNotificationsPlugin:
                 .cancelSchedules(byGroupKey: groupKey) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, success ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
                   "Scheduled notifications from group \(groupKey) cancelled":
                   "Scheduled notifications from group \(groupKey) not found")
         }
@@ -663,7 +642,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Invalid group key value",
                         detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".dismiss.groupKey")
@@ -674,7 +653,7 @@ public class BaseAwesomeNotificationsPlugin:
                 .cancelNotifications(byGroupKey: groupKey) ?? false
         
         if AwesomeNotifications.debug {
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, success ?
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, success ?
                   "Notifications and schedules from group \(groupKey) cancelled":
                   "Notifications and schedules from group \(groupKey) not found")
         }
@@ -688,7 +667,7 @@ public class BaseAwesomeNotificationsPlugin:
                 .dismissAllNotifications() ?? false
         
         if AwesomeNotifications.debug {
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, "All notifications was dismissed")
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "All notifications was dismissed")
         }
         
         result(success)
@@ -700,7 +679,7 @@ public class BaseAwesomeNotificationsPlugin:
                 .cancelAllSchedules() ?? false
         
         if AwesomeNotifications.debug {
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, "All schedules was cancelled")
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "All schedules was cancelled")
         }
         
         result(success)
@@ -712,7 +691,7 @@ public class BaseAwesomeNotificationsPlugin:
                 .cancelAllNotifications() ?? false
         
         if AwesomeNotifications.debug {
-            Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, "All notifications was cancelled")
+            Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "All notifications was cancelled")
         }
         
         result(success)
@@ -819,7 +798,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_MISSING_ARGUMENTS,
                         message: "Arguments are missing",
                         detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS)
@@ -830,7 +809,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Permission list is required",
                         detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList")
@@ -840,7 +819,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Permission list is required",
                         detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList")
@@ -861,7 +840,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_MISSING_ARGUMENTS,
                         message: "Arguments are missing",
                         detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS)
@@ -872,7 +851,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Permission list is required",
                         detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList")
@@ -882,7 +861,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Permission list is required",
                         detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList")
@@ -903,7 +882,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_MISSING_ARGUMENTS,
                         message: "Arguments are missing",
                         detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS)
@@ -914,7 +893,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Permission list is required",
                         detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList")
@@ -924,7 +903,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Permission list is required",
                         detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList")
@@ -946,7 +925,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                         message: "Notification content is invalid",
                         detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".notificationModel.data")
@@ -970,7 +949,7 @@ public class BaseAwesomeNotificationsPlugin:
                             let awesomeException = ExceptionFactory
                                 .shared
                                 .createNewAwesomeException(
-                                    className: BaseAwesomeNotificationsPlugin.TAG,
+                                    className: SwiftAwesomeNotificationsPlugin.TAG,
                                     code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                                     message: "Notification content is invalid",
                                     detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".notificationModel.data")
@@ -998,7 +977,7 @@ public class BaseAwesomeNotificationsPlugin:
             throw ExceptionFactory
                     .shared
                     .createNewAwesomeException(
-                        className: BaseAwesomeNotificationsPlugin.TAG,
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
                         code: ExceptionCode.CODE_MISSING_ARGUMENTS,
                         message: "Arguments are missing",
                         detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS)
@@ -1017,7 +996,7 @@ public class BaseAwesomeNotificationsPlugin:
                 throw ExceptionFactory
                         .shared
                         .createNewAwesomeException(
-                            className: BaseAwesomeNotificationsPlugin.TAG,
+                            className: SwiftAwesomeNotificationsPlugin.TAG,
                             code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                             message: "Notification channel `\(channelsData)` is invalid",
                             detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.invalid.\(channelsData)")
@@ -1028,7 +1007,7 @@ public class BaseAwesomeNotificationsPlugin:
                 throw ExceptionFactory
                         .shared
                         .createNewAwesomeException(
-                            className: BaseAwesomeNotificationsPlugin.TAG,
+                            className: SwiftAwesomeNotificationsPlugin.TAG,
                             code: ExceptionCode.CODE_INVALID_ARGUMENTS,
                             message: "Notification channel `\(channelsData)` is invalid",
                             detailedCode: ExceptionCode.DETAILED_INVALID_ARGUMENTS+".channel.invalid.\(channelsData)")
@@ -1044,7 +1023,7 @@ public class BaseAwesomeNotificationsPlugin:
                     backgroundHandle: dartBgHandle,
                     debug: debug)
 		
-		Logger.shared.d(BaseAwesomeNotificationsPlugin.TAG, "Awesome Notifications service initialized")
+		Logger.shared.d(SwiftAwesomeNotificationsPlugin.TAG, "Awesome Notifications service initialized")
 		result(awesomeNotifications != nil)
     }
     
@@ -1066,7 +1045,7 @@ public class BaseAwesomeNotificationsPlugin:
         
         let success = actionHandle != 0
         if !success {
-            Logger.shared.e(BaseAwesomeNotificationsPlugin.TAG, "Attention: there is no valid static method to receive notification action data in background")
+            Logger.shared.e(SwiftAwesomeNotificationsPlugin.TAG, "Attention: there is no valid static method to receive notification action data in background")
         }
         
         result(success)

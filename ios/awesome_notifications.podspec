@@ -20,6 +20,7 @@ A complete solution to create Local Notifications and Push Notifications, throug
     'DEFINES_MODULE' => 'NO',
     'ENABLE_BITCODE' => 'NO',
     'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'NO',
+    'APPLICATION_EXTENSION_API_ONLY' => 'NO',
     'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64'
   }
   s.swift_version = '5.3'

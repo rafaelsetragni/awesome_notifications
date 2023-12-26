@@ -45,4 +45,10 @@ post_install do |installer|
     end
     flutter_additional_ios_build_settings(target)
   end
+
+  ################  Awesome Notifications pod modification  ###################
+  awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
+  require awesome_pod_file
+  update_awesome_pod_build_settings(installer, flutter_root)
+  ################  Awesome Notifications pod modification  ###################
 end
