@@ -1,5 +1,5 @@
 
-# Awesome Notifications for Flutter
+# Awesome Notifications for Flutter - Year 2
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications.jpg)
 
@@ -74,24 +74,22 @@ OBS: Please note that these progress percentages are estimates and are subject t
 <br>
 <br>
 
-# 🛑 ATTENTION <br> Users from flutter_local_notifications plugin
-awesome_notifications plugin is incompatible with `flutter_local_notifications`, as both plugins will compete each other to accquire global notification resources to send notifications and to receive notification actions.
+# 💰 Donate via Stripe or BuyMeACoffee
 
-So, you MUST not use `flutter_local_notifications` with `awesome_notifications`. Awesome Notifications contains all features available in flutter_local_notifications plugin and more, so you can replace totally flutter_local_notifications in your project.
+Help us improve and maintain our work with donations of any amount via Stripe or BuyMeACoffee. Your donation will mainly be used to purchase new devices and equipment, which we will use to test and ensure that our plugins work correctly on all platforms and their respective versions.
 
+[*![Donate With Stripe](https://github.com/rafaelsetragni/awesome_notifications/blob/68c963206885290f8a44eee4bfc7e7b223610e4a/example/assets/readme/stripe.png?raw=true)*](https://donate.stripe.com/3cs14Yf79dQcbU4001)
+[*![Donate With Buy Me A Coffee](https://github.com/rafaelsetragni/awesome_notifications/blob/95ee986af0aa59ccf9a80959bbf3dd60b5a4f048/example/assets/readme/buy-me-a-coffee.jpeg?raw=true)*](https://www.buymeacoffee.com/rafaelsetragni)
     
 <br>
 <br>
 
-# 🛑 ATTENTION <br> Users from firebase_messaging plugin
-The support for `firebase_messaging` plugin is now deprecated, but all other firebase plugins are still being supported. This is because firebase_messaging plugin and awesome_notifications plugin will compete with each other to acquire global notification resources.
+# 💬 Discord Chat Server 
 
-To use FCM services with Awesome Notifications, you need to use the Awesome Notifications FCM add-on plugin.
+Stay up to date with new updates and get community support by subscribing to our Discord chat server:
 
-Only by using `awesome_notifications_fcm` will you be capable of achieving all Firebase Cloud Messaging features + all Awesome Notifications features. To continue using `firebase_messaging`, you will need to implement workarounds with silent push notifications, which is not recommended for displaying visual notifications and will result in several background penalties for your application.
+[![Discord Banner 3](https://discordapp.com/api/guilds/888523488376279050/widget.png?style=banner3)](https://discord.awesome-notifications.carda.me)
 
-So, you MUST not use `firebase_messaging` with `awesome_notifications`. Use `awesome_notifications` with `awesome_notifications_fcm` instead.
-    
 <br>
 <br>
     
@@ -112,22 +110,110 @@ We are constantly working to improve Awesome Notifications and provide support f
 
 <br>
 <br>
-
-# 💰 Donate via Stripe or BuyMeACoffee
-
-Help us improve and maintain our work with donations of any amount via Stripe or BuyMeACoffee. Your donation will mainly be used to purchase new devices and equipment, which we will use to test and ensure that our plugins work correctly on all platforms and their respective versions.
-
-[*![Donate With Stripe](https://github.com/rafaelsetragni/awesome_notifications/blob/68c963206885290f8a44eee4bfc7e7b223610e4a/example/assets/readme/stripe.png?raw=true)*](https://donate.stripe.com/3cs14Yf79dQcbU4001)
-[*![Donate With Buy Me A Coffee](https://github.com/rafaelsetragni/awesome_notifications/blob/95ee986af0aa59ccf9a80959bbf3dd60b5a4f048/example/assets/readme/buy-me-a-coffee.jpeg?raw=true)*](https://www.buymeacoffee.com/rafaelsetragni)
-    
-<br>
 <br>
 
-# 💬 Discord Chat Server 
+## 🛑 ATTENTION: Third-Party Plugin Restrictions
 
-Stay up to date with new updates and get community support by subscribing to our Discord chat server:
+**Incompatibility Notice:** The `awesome_notifications` plugin is incompatible with `flutter_local_notifications` or any other notification plugin. These plugins may conflict with each other when trying to acquire global notification resources.
 
-[![Discord Banner 3](https://discordapp.com/api/guilds/888523488376279050/widget.png?style=banner3)](https://discord.awesome-notifications.carda.me)
+**Important:** Do not use `awesome_notifications` in conjunction with other notification plugins. If you have any questions or need further clarification, please visit our [Discord Community](https://discord.awesome-notifications.carda.me) for support and information.
+
+<br>
+
+## 🚚 Migration Guides from Older Versions
+### Breaking Changes
+
+### From Version 0.8.X to 0.9.X:
+
+- **Awesome Notifications Podfile Modification:** 
+  Modifications to the `Podfile` file are now required for local notifications on iOS. This update ensures that your pod packages are configured correctly for both main and extended targets on iOS.
+
+  **Before:**
+  ```rb
+    post_install do |installer|
+      installer.pods_project.targets.each do |target|
+        flutter_additional_ios_build_settings(target)
+      end
+    end
+  ```
+
+  **Now:**
+  ```rb
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      flutter_additional_ios_build_settings(target)
+    end
+
+    ################  Awesome Notifications pod modification  ###################
+    awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
+    require awesome_pod_file
+    update_awesome_pod_build_settings(installer, flutter_root)
+    ################  Awesome Notifications pod modification  ###################
+  end
+
+  ################  Awesome Notifications pod modification  ###################
+  awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
+  require awesome_pod_file
+  update_awesome_main_target_settings('Runner', File.dirname(File.realpath(__FILE__)), flutter_root)
+  ################  Awesome Notifications pod modification  ###################
+  ```
+
+- **Send port and Receive port with data restriction:** The methods `sendPort.send()` and `receivePort!.listen()` now only accept serialized data, not objects. Convert your data to a map format and reconstruct it later from this format.
+
+  **Before:**
+  ```Dart
+    /// At your initialization
+    receivePort!.listen((receivedAction) {
+      onActionReceivedMethodImpl(receivedAction);
+    });
+
+    // (...)
+
+    // Later in your action handler
+    SendPort? sendPort = IsolateNameServer
+        .lookupPortByName('notification_action_port');
+
+    if (sendPort != null) {
+      sendPort.send(receivedAction);
+    }
+  ```
+
+  **Now:**
+  ```Dart
+    /// At your initialization
+    receivePort!.listen((serializedData) {
+      final receivedAction = ReceivedAction().fromMap(serializedData);
+      onActionReceivedMethodImpl(receivedAction);
+    });
+
+    // (...)
+
+    // Later in your action handler
+    SendPort? sendPort = IsolateNameServer
+        .lookupPortByName('notification_action_port');
+
+    if (sendPort != null) {
+      dynamic serializedData = receivedAction.toMap();
+      sendPort.send(serializedData);
+    }
+  ```
+
+<br>
+
+### from version 0.6.X to 0.7.X:
+
+  - **Action Events Update:** Now it's possible to receive action events without bringing the app to the foreground. Please refer to the action type's topic for more information on how to implement this.
+
+  - **Streams replaced by global static methods:** All streams (createdStream, displayedStream, actionStream, and dismissedStream) have been replaced by global static methods. Replace your old stream methods with static and global ones, using static Future<void> and async/await. Utilize `@pragma("vm:entry-point")` for dart addressing. For context and navigation within static methods, use Flutter's navigatorKey or a third-party library like GetX. Refer to our "How to Show Local Notifications" topic for more details.
+
+  - **Delayed notification events:** All notification events are now delivered only after the first setListeners being called. Please make sure to update your code accordingly.
+
+  - **Renamed ButtonType class:** The `ButtonType` class has been renamed to `ActionType`. Please update your code to use the new class name.
+
+  - **Deprecated InputField action type:** The action type `InputField` is now deprecated. You just need to set the property `requireInputText` to true to achieve the same result, but it now works combined with all other action types.
+
+  - **Deprecated support for firebase_messaging plugin:** The support for `firebase_messaging` plugin is now deprecated. You need to use the [Awesome's FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm) to achieve all Firebase Cloud Messaging features without violating the platform rules. This is the only way to fully integrate with Awesome Notifications, running all in native level.
+
 
 <br>
 <br>
@@ -135,22 +221,24 @@ Stay up to date with new updates and get community support by subscribing to our
 
 # 📙 Table of Contents
 
-- [Awesome Notifications for Flutter](#awesome-notifications-for-flutter)
+- [Awesome Notifications for Flutter - Year 2](#awesome-notifications-for-flutter---year-2)
     - [**Key Features:**](#key-features)
   - [Notification Types Available](#notification-types-available)
 - [🛑 ATTENTION - PLUGIN UNDER DEVELOPMENT](#-attention---plugin-under-development)
-- [🛑 ATTENTION  Users from flutter\_local\_notifications plugin](#-attention--users-from-flutter_local_notifications-plugin)
-- [🛑 ATTENTION  Users from firebase\_messaging plugin](#-attention--users-from-firebase_messaging-plugin)
-- [✅ Next steps](#-next-steps)
 - [💰 Donate via Stripe or BuyMeACoffee](#-donate-via-stripe-or-buymeacoffee)
 - [💬 Discord Chat Server](#-discord-chat-server)
+- [✅ Next steps](#-next-steps)
+  - [🛑 ATTENTION: Third-Party Plugin Restrictions](#-attention-third-party-plugin-restrictions)
+  - [🚚 Migration Guides from Older Versions](#-migration-guides-from-older-versions)
+    - [Breaking Changes](#breaking-changes)
+    - [From Version 0.8.X to 0.9.X:](#from-version-08x-to-09x)
+    - [from version 0.6.X to 0.7.X:](#from-version-06x-to-07x)
 - [📙 Table of Contents](#-table-of-contents)
-- [🔶 Main Philosophy](#-main-philosophy)
-- [🚚 Migrating from version 0.6.X to 0.7.XBreaking changes](#-migrating-from-version-06x-to-07xbreaking-changes)
+- [🔶 Main Philosophy of Awesome Notifications](#-main-philosophy-of-awesome-notifications)
 - [🛠 Getting Started](#-getting-started)
   - [Initial Configurations](#initial-configurations)
-    - [🤖 Configuring Android:](#-configuring-android)
-    - [🍎 Configuring iOS:](#-configuring-ios)
+    - [🤖 Configuring Android for Awesome Notifications:](#-configuring-android-for-awesome-notifications)
+    - [🍎 Configuring iOS for Awesome Notifications:](#-configuring-ios-for-awesome-notifications)
 - [📨 How to show Local Notifications](#-how-to-show-local-notifications)
   - [📝 Getting started - Important notes](#-getting-started---important-notes)
 - [🍎⁺ Extra iOS Setup for Background Actions](#-extra-ios-setup-for-background-actions)
@@ -203,36 +291,19 @@ Stay up to date with new updates and get community support by subscribing to our
 <br>
 <br>
 
-# 🔶 Main Philosophy
+# 🔶 Main Philosophy of Awesome Notifications
 
-At Awesome Notifications, we believe that notifications should be transparent to developers with all available features, simplifying the many different hardware and software resources available on different devices. This way, developers can focus on `what to do` instead of `how to do`. To achieve this, we adopt the philosophy of showing notifications with all available features requested, but ignoring any features that are not available on the device.
+At Awesome Notifications, we prioritize making notification implementation both straightforward and feature-rich. This approach allows developers to concentrate on content creation rather than the technical challenges posed by the diverse capabilities of different devices. Our philosophy is to make full use of all available notification features on a device while seamlessly omitting those that are not supported.
 
-For example, if a device has LED colored lights, we will use them for notifications. If it doesn't have LED lights, we will ignore that feature but still show the notification with all the other available features. We follow the same philosophy for Notification Channels: if there is no channel segregation of notifications, we use the channel configuration as default. If the device has channels, we use them as expected.
+Key aspects of our philosophy include:
 
-All notifications sent while the app was killed are registered and delivered as soon as possible to the Application after the plugin initialization and the event listeners being set, respecting the delivery order. This way, your application will receive all notification events at the Flutter level code.
+- **Consistent Delivery:** We ensure that all notifications sent while the app is inactive are recorded and delivered promptly after the app restarts and listener setups are complete.
+- **Device-Specific Adaptation:** We automatically ignore device-specific features (e.g., LED lights) when they are not available, adapting notifications to each device's capabilities.
+- **Notification Channels:** We strive to emulate Android's channel configuration behavior in iOS devices, providing a familiar and intuitive experience across platforms.
+- **App Badge Management:** We strive to emulate iOS's approach to app badge manipulation as closely as possible on all other platforms.
 
-For the app badge number manipulation, we consider as expected behavior how iOS handles it. For all other platforms, we try to mimic its behavior as much close as possible.
+By adhering to these principles, Awesome Notifications is committed to delivering a seamless and consistent notification experience across various devices, thereby enhancing user engagement with your application.
 
-By following our main philosophy, we ensure that Awesome Notifications delivers notifications that work consistently across different devices and provide the best user experience possible for your users.
-    
-<br>
-<br>
-
-#  🚚 Migrating from version 0.6.X to 0.7.X<br>Breaking changes
-
-We have made some changes to Awesome Notifications in version 0.7.X that may require you to update your code. Here are the main breaking changes:
-
-- ***Action events:*** Now it's possible to receive action events without bringing the app to the foreground. Please refer to the action type's topic for more information on how to implement this.
-
-- ***Streams replaced by global static methods:*** All streams (createdStream, displayedStream, actionStream, and dismissedStream) have been replaced by global static methods. You must replace your old stream methods with static and global methods. These must be static Future<void> and use async/await. Make sure to use @pragma("vm:entry-point") to preserve dart addressing. To use context and redirect the user to another page inside static methods, please use Flutter navigatorKey or another third-party library, such as GetX. Check our How to show Local Notifications topic to know more.
-
-- ***Delayed notification events:*** All notification events are now delivered only after the first setListeners being called. Please make sure to update your code accordingly.
-
-- ***Renamed ButtonType class:*** The ButtonType class has been renamed to ActionType. Please update your code to use the new class name.
-
-- ***Deprecated InputField action type:*** The action type InputField is now deprecated. You just need to set the property requireInputText to true to achieve the same result, but it now works combined with all other action types.
-
-- ***Deprecated support for firebase_messaging plugin:*** The support for firebase_messaging plugin is now deprecated. You need to use the [Awesome's FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm) to achieve all Firebase Cloud Messaging features without violating the platform rules. This is the only way to fully integrate with Awesome Notifications, running all in native level.
 
 
 <br>
@@ -264,7 +335,7 @@ Now you need to modify some files in native libraries to meet to use awesome_not
 
 <br>
 
-### 🤖 Configuring Android:
+### 🤖 Configuring Android for Awesome Notifications:
 
 1 - Is required the minimum android SDK to 21 (Android 5.0 Lollipop), Grade 7.3.0 or greater and Java compiled SDK Version to 34 (Android 14). You can change the `minSdkVersion` to 21 and the `compileSdkVersion` and `targetSdkVersion` to 34, inside the file `build.gradle`, located inside "android/app/" folder.
 ```Gradle
@@ -322,23 +393,41 @@ android {
 <br>
 <br>
 
-### 🍎 Configuring iOS:
+### 🍎 Configuring iOS for Awesome Notifications:
 
-To use Awesome Notifications and build your app correctly, you need to ensure to set some `build settings` options for your app targets. In your project view, click on *Runner -> Target Runner -> Build settings*...  
+To ensure Awesome Notifications works seamlessly with your iOS app, you need to modify your `Podfile` file within the iOS folder. This involves adding the "Awesome Notifications pod modification" block at the end of the `post_install` section.
 
-![image](https://user-images.githubusercontent.com/40064496/194729267-6fbfc78c-8cba-422b-8af7-d7099f359adb.png)
+**Original `Podfile` Configuration:**
+```rb
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+  end
+end
+```
 
-... and set the following options:
+**Modified `Podfile` with Awesome Notifications Configuration:**
+```rb
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+  end
 
-In *Runner* Target:
-* Build libraries for distribution => NO
-* Only safe API extensions => NO
-* iOS Deployment Target => 11 or greater
+  ################  Awesome Notifications pod modification  ###################
+  awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
+  require awesome_pod_file
+  update_awesome_pod_build_settings(installer, flutter_root)
+  ################  Awesome Notifications pod modification  ###################
+end
 
-In *all other* Targets:
-* Build libraries for distribution => NO
-* Only safe API extensions => YES
-* iOS Deployment Target => 11 or greater
+################  Awesome Notifications pod modification  ###################
+awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
+require awesome_pod_file
+update_awesome_main_target_settings('Runner', File.dirname(File.realpath(__FILE__)), flutter_root)
+################  Awesome Notifications pod modification  ###################
+```
+
+These modifications are crucial for integrating the Awesome Notifications plugin effectively into your iOS app. They ensure that your project is properly configured for optimal functionality and compatibility on iOS devices.
 
 <br>
 <br>
@@ -585,9 +674,10 @@ In the initialization of your `notification_controller.dart`:
     );
 
     // Listen for messages on the receive port
-    port.listen((var received) async {
+    port.listen((var serializedData) async {
         print('Action running on main isolate');
-        _handleActionReceived(received);
+        final receivedAction = ReceivedAction().fromMap(serializedData);
+        _handleActionReceived(receivedAction);
     });
     
     // Set the initialization flag
@@ -605,7 +695,7 @@ In your `onActionReceivedMethod` method:
       SendPort? uiSendPort = IsolateNameServer.lookupPortByName('notification_actions');
       if (uiSendPort != null) {
         print('Background action running on parallel isolate without valid context. Redirecting execution');
-        uiSendPort.send(received);
+        uiSendPort.send(received.toMap());
         return;
       }
     }
