@@ -130,13 +130,6 @@ We are constantly working to improve Awesome Notifications and provide support f
 
   **Before:**
   ```rb
-  target 'Runner' do
-    use_frameworks!
-    use_modular_headers!
-    
-    flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-  end
-
   post_install do |installer|
     installer.pods_project.targets.each do |target|
       flutter_additional_ios_build_settings(target)
@@ -146,19 +139,6 @@ We are constantly working to improve Awesome Notifications and provide support f
 
   **Now:**
   ```rb
-  target 'Runner' do
-    use_frameworks!
-    use_modular_headers!
-    
-    flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-
-    ################  Awesome Notifications pod modification  ###################
-    awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
-    require awesome_pod_file
-    update_awesome_main_target_settings target
-    ################  Awesome Notifications pod modification  ###################
-  end
-
   post_install do |installer|
     installer.pods_project.targets.each do |target|
       flutter_additional_ios_build_settings(target)
@@ -167,9 +147,15 @@ We are constantly working to improve Awesome Notifications and provide support f
     ################  Awesome Notifications pod modification  ###################
     awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
     require awesome_pod_file
-    update_awesome_pod_build_settings installer
+    update_awesome_pod_build_settings(installer)
     ################  Awesome Notifications pod modification  ###################
   end
+  
+  ################  Awesome Notifications pod modification  ###################
+  awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
+  require awesome_pod_file
+  update_awesome_main_target_settings('Runner', File.dirname(File.realpath(__FILE__)), flutter_root)
+  ################  Awesome Notifications pod modification  ###################
   ```
 
 - **Send port and Receive port with data restriction:** The methods `sendPort.send()` and `receivePort!.listen()` now only accept serialized data, not objects. Convert your data to a map format and reconstruct it later from this format.
@@ -409,54 +395,44 @@ android {
 
 ### 🍎 Configuring iOS for Awesome Notifications:
 
-To ensure Awesome Notifications is correctly configured with your iOS app, you need to modify your `Podfile` file within the iOS folder. 
-This involves adding the "Awesome Notifications pod modification" block at the end of the `Runner` and `post_install` section.
+To ensure that Awesome Notifications is correctly configured with your iOS app, you need to modify your `Podfile` within the iOS folder. This involves adding specific blocks for "Awesome Notifications pod modifications" at the end of the `post_install` section and immediately following it.
 
 **Original `Podfile` Configuration:**
 ```rb
-target 'Runner' do
-  use_frameworks!
-  use_modular_headers!
-  
-  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-end
-
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    flutter_additional_ios_build_settings(target)
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      flutter_additional_ios_build_settings(target)
+    end
   end
-end
 ```
 
 **Modified `Podfile` with Awesome Notifications Configurations:**
 ```rb
-target 'Runner' do
-  use_frameworks!
-  use_modular_headers!
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      flutter_additional_ios_build_settings target
+    end
   
-  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-
-  ################  Awesome Notifications pod modification  ###################
-  awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
-  require awesome_pod_file
-  update_awesome_main_target_settings target
-  ################  Awesome Notifications pod modification  ###################
-end
-
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    flutter_additional_ios_build_settings target
+    ################  Awesome Notifications pod modification 1 ###################
+    awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
+    require awesome_pod_file
+    update_awesome_pod_build_settings(installer)
+    ################  Awesome Notifications pod modification 1 ###################
   end
-
-  ################  Awesome Notifications pod modification  ###################
+  
+  ################  Awesome Notifications pod modification 2 ###################
   awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
   require awesome_pod_file
-  update_awesome_pod_build_settings installer
-  ################  Awesome Notifications pod modification  ###################
-end
+  update_awesome_main_target_settings('Runner', File.dirname(File.realpath(__FILE__)), flutter_root)
+  ################  Awesome Notifications pod modification 2 ###################
 ```
 
-The modifications are clearly marked with `################ Awesome Notifications pod modification ################` comments for easy identification. This ensures that the relevant blocks for Awesome Notifications are quickly and accurately located within the Podfile.
+**Key Points:**
+- The *first modification block* updates the pod settings (`update_awesome_pod_build_settings`).
+- The *second modification block* updates the settings of the main project target 'Runner' (`update_awesome_main_target_settings`).
+- The 2 blocks are not equal. The first one calls `update_awesome_pod_build_settings` and the second one calls `update_awesome_main_target_settings`
+
+Also, the modifications are clearly marked with `################ Awesome Notifications pod modification ################` comments for easy identification. These additions ensure that Awesome Notifications are properly integrated and configured within your iOS project's Podfile.
 
 <br>
 <br>
