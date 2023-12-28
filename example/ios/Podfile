@@ -30,10 +30,16 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
-
+  
   #pod 'IosAwnCore', '0.7.5-dev.3'
   #pod 'IosAwnCore', :path => '../../../IosAwnCore/'
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  ################  Awesome Notifications pod modification  ###################
+  awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
+  require awesome_pod_file
+  update_awesome_main_target_settings target
+  ################  Awesome Notifications pod modification  ###################
 end
 
 post_install do |installer|
@@ -43,13 +49,13 @@ post_install do |installer|
           config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
         end
     end
-    flutter_additional_ios_build_settings(target)
+    flutter_additional_ios_build_settings target
   end
 
   ################  Awesome Notifications pod modification  ###################
   awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
   require awesome_pod_file
-  update_awesome_pod_build_settings(installer, flutter_root)
+  update_awesome_pod_build_settings(installer)
   ################  Awesome Notifications pod modification  ###################
 end
 

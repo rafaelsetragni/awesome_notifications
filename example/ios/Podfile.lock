@@ -1,7 +1,7 @@
 PODS:
-  - awesome_notifications (0.8.1):
+  - awesome_notifications (0.9.0):
     - Flutter
-    - IosAwnCore (~> 0.8.0)
+    - IosAwnCore
   - device_info_plus (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -26,6 +26,7 @@ DEPENDENCIES:
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - IosAwnCore (from `../../../IosAwnCore/`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -33,7 +34,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - IosAwnCore
     - Toast
 
 EXTERNAL SOURCES:
@@ -45,6 +45,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  IosAwnCore:
+    :path: "../../../IosAwnCore/"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   shared_preferences_foundation:
@@ -55,7 +57,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/vibration/ios"
 
 SPEC CHECKSUMS:
-  awesome_notifications: 89e116cc603dea6ed481d762e5a4682c2ea579b4
+  awesome_notifications: f50a4777fc9249ea15821893b1b1bc6f4efb8f81
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
@@ -66,6 +68,6 @@ SPEC CHECKSUMS:
   url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
   vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
 
-PODFILE CHECKSUM: 90cdae8cbba57bc9e89ced004dea97bfb8cf8af6
+PODFILE CHECKSUM: 5a613a7253b37b1ca4081cabbb39ffa56e57da92
 
 COCOAPODS: 1.14.3
