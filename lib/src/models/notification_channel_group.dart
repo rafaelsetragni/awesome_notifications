@@ -3,24 +3,32 @@ import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
 import 'package:awesome_notifications/src/models/model.dart';
 import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
+/// Represents a group of notification channels to be displayed at Android Notification Settings Page.
 class NotificationChannelGroup extends Model {
   String? _channelGroupKey;
   String? _channelGroupName;
 
+  /// Gets the unique key identifier of the channel group.
   String? get channelGroupKey {
     return _channelGroupKey;
   }
 
+  /// Gets the name of the channel group.
   String? get channelGroupName {
     return _channelGroupName;
   }
 
+  /// Constructs a [NotificationChannelGroup].
+  ///
+  /// [channelGroupKey]: Unique key identifier for the channel group.
+  /// [channelGroupName]: Name of the channel group.
   NotificationChannelGroup(
       {required String channelGroupKey, required String channelGroupName}) {
     _channelGroupKey = channelGroupKey;
     _channelGroupName = channelGroupName;
   }
 
+  /// Creates a [NotificationChannelGroup] instance from a map of data.
   @override
   NotificationChannelGroup? fromMap(Map<String, dynamic> mapData) {
     _channelGroupKey = AwesomeAssertUtils.extractValue(
@@ -31,6 +39,7 @@ class NotificationChannelGroup extends Model {
     return this;
   }
 
+  /// Converts the [NotificationChannelGroup] instance to a map.
   @override
   Map<String, dynamic> toMap() {
     return {
@@ -39,6 +48,9 @@ class NotificationChannelGroup extends Model {
     };
   }
 
+  /// Validates the properties of the channel group.
+  ///
+  /// Throws an [AwesomeNotificationsException] if either the channelGroupKey or channelGroupName is missing.
   @override
   void validate() {
     if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_channelGroupKey)) {

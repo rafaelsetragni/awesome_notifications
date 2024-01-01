@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'awesome_notifications'
-  s.version          = '0.8.1'
+  s.version          = '0.9.0'
   s.summary          = 'A complete solution to create Local and Push Notifications, through Firebase or another services, using Flutter.'
   s.description      = <<-DESC
 A complete solution to create Local Notifications and Push Notifications, through Firebase or another services, using Flutter.
@@ -20,6 +20,7 @@ A complete solution to create Local Notifications and Push Notifications, throug
     'DEFINES_MODULE' => 'NO',
     'ENABLE_BITCODE' => 'NO',
     'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'NO',
+    'APPLICATION_EXTENSION_API_ONLY' => 'NO',
     'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64'
   }
   s.swift_version = '5.3'
