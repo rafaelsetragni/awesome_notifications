@@ -7,17 +7,27 @@ import '../../utils/date_utils.dart';
 
 /// All received details of a user action over a Notification
 class ReceivedAction extends ReceivedNotification {
+  /// The lifecycle state when the notification action was taken.
   NotificationLifeCycle? actionLifeCycle;
+
+  /// The lifecycle state when the notification was dismissed by the user.
   NotificationLifeCycle? dismissedLifeCycle;
 
+  /// The key of the button pressed by the user in the notification.
   String buttonKeyPressed = '';
+
+  /// The text input received from the user if the notification had an input field.
   String buttonKeyInput = '';
+
+  /// The date and time when the user action was taken.
   DateTime? actionDate;
+
+  /// The date and time when the notification was dismissed by the user.
   DateTime? dismissedDate;
 
   ReceivedAction();
 
-  /// Imports data from a serializable object
+  /// Imports data from a serializable object.
   @override
   ReceivedAction fromMap(Map<String, dynamic> dataMap) {
     super.fromMap(dataMap);

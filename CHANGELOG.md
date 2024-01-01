@@ -1,3 +1,11 @@
+## [0.9.0] - 12/26/2023
+### Improvements
+- **Extended Support:** We're excited to announce the commencement of our "Year 2 Support Season." This includes ongoing maintenance, regular updates, and dedicated support.
+- **Flutter 3.16.0 Compatibility:** The plugin is now fully compatible with Flutter 3.16.0.
+### Bug Fixes
+- **Enhanced Event Handling on Android:** We've modified event handlers on Android to support negative values. This enhancement ensures more robust and reliable event management.
+- **Resolved Silent Callback Issue:** Fixed a previously encountered issue where silent callbacks were missing for silent background actions.
+
 ## [0.8.3]
 ### Added
 * New media player features (Playback state, speed and duration) for media player notifications 

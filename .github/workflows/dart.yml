@@ -7,9 +7,9 @@ name: Dart
 
 on:
   push:
-    branches: [ "master", "hotfix", "development" ]
+    branches: [ "master", "hotfix", "development", "release" ]
   pull_request:
-    branches: [ "master", "hotfix", "development" ]
+    branches: [ "master", "hotfix", "development", "release" ]
 
 jobs:
   build:
