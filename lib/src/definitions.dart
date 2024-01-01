@@ -195,6 +195,10 @@ const NOTIFICATION_CHANNEL_GROUP_NAME = 'channelGroupName';
 
 const NOTIFICATION_TITLE = 'title';
 const NOTIFICATION_BODY = 'body';
+const NOTIFICATION_TITLE_KEY = 'titleLocKey';
+const NOTIFICATION_BODY_KEY = 'bodyLocKey';
+const NOTIFICATION_TITLE_ARGS = 'titleLocArgs';
+const NOTIFICATION_BODY_ARGS = 'bodyLocArgs';
 const NOTIFICATION_SUMMARY = 'summary';
 const NOTIFICATION_SHOW_WHEN = 'showWhen';
 const NOTIFICATION_EXPANDABLE_BODY = 'expandableBody';
