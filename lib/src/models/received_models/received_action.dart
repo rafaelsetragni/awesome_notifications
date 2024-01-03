@@ -25,6 +25,9 @@ class ReceivedAction extends ReceivedNotification {
   /// The date and time when the notification was dismissed by the user.
   DateTime? dismissedDate;
 
+  /// Returns if authentication was required to open the notification.
+  bool isAuthenticationRequired = false;
+
   ReceivedAction();
 
   /// Imports data from a serializable object.
@@ -51,6 +54,9 @@ class ReceivedAction extends ReceivedNotification {
     buttonKeyInput = AwesomeAssertUtils.extractValue<String>(
         NOTIFICATION_BUTTON_KEY_INPUT, dataMap);
 
+    isAuthenticationRequired = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_AUTHENTICATION_REQUIRED, dataMap);
+
     return this;
   }
 
@@ -67,7 +73,8 @@ class ReceivedAction extends ReceivedNotification {
         NOTIFICATION_ACTION_LIFECYCLE: actionLifeCycle?.name,
         NOTIFICATION_DISMISSED_LIFE_CYCLE: dismissedLifeCycle?.name,
         NOTIFICATION_BUTTON_KEY_PRESSED: buttonKeyPressed,
-        NOTIFICATION_BUTTON_KEY_INPUT: buttonKeyInput
+        NOTIFICATION_BUTTON_KEY_INPUT: buttonKeyInput,
+        NOTIFICATION_AUTHENTICATION_REQUIRED: isAuthenticationRequired,
       });
   }
 }

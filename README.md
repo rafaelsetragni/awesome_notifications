@@ -1654,6 +1654,10 @@ NotificationContent (
 | channelKey                    | YES      | The identifier of the notification channel where the notification will be displayed                      | String                    | Channel must be enabled | basic_channel |
 | title                         | NO       | The title of the notification                                                                            | String                    | Unlimited               | -             |
 | body                          | NO       | The body text of the notification                                                                        | String                    | Unlimited               | -             |
+| titleLocKey                   | NO       | Key to a localized title string with placeholders, to be replaced by `titleLocArgs`                      | String                    | Unlimited               | -             |
+| bodyLocKey                    | NO       | Key to a localized body string with placeholders, to be replaced by `bodyLocArgs`                        | String                    | Unlimited               | -             |
+| titleLocArgs                  | NO       | Arguments to replace placeholders in the localized title string, referenced by `titleLocKey`             | List<String>              | Unlimited               | -             |
+| bodyLocArgs                   | NO       | Arguments to replace placeholders in the localized body string, referenced by `bodyLocKey`               | List<String>              | Unlimited               | -             |
 | summary                       | NO       | A summary to be displayed when the notification content is protected by privacy                          | String                    | Unlimited               | -             |
 | category                      | NO       | The notification category that best describes the nature of the notification (Android only)              | NotificationCategory      | -                       | -             |
 | badge                         | NO       | The value to display as the app's badge                                                                  | int                       | 0 - 999,999             | -             |
@@ -1695,17 +1699,18 @@ NotificationContent (
 
 * At least one *required attribute is necessary
 
-| Attribute          | Required | Description                                                                             |   Type                | Value Limits                 | Default value           |
-| ------------------ | -------- | --------------------------------------------------------------------------------------- | --------------------- |------------------------------| ----------------------- |
-| key 		           | YES      | A text key that identifies what action the user took when they tapped the notification  | String                | unlimited                    |                         |
-| label 		         | *YES     | The text to be displayed on the action button                                           | String                | unlimited                    |                         |
-| icon 		           | *YES     | The icon to be displayed inside the button (only available for few layouts)             | String                | Must be a resource image     |                         |
-| color 		         | NO       | The label text color (only for Android)                                                 | Color                 | 0x000000 to 0xFFFFFF         |                         |
-| enabled 	         | NO       | On Android, deactivates the button. On iOS, the button disappears                       | bool                  | true or false                | true                    |
-| autoDismissible    | NO       | Whether the notification should be auto-cancelled when the user taps the button         | bool                  | true or false                | true                    |
-| showInCompactView  | NO       | For MediaPlayer notifications on Android, sets the button as visible in compact view    | bool                  | true or false                | true                    |
-| isDangerousOption  | NO       | Whether the button is marked as a dangerous option, displaying the text in red          | bool                  | true or false                | false                   |
-| actionType 	       | NO       | The notification action response type                                                   | Enumerator            | ActionType (Default)         |                         |
+| Attribute                 | Required | Description                                                                             |   Type                | Value Limits                 | Default value           |
+| ------------------------- | -------- | --------------------------------------------------------------------------------------- | --------------------- |------------------------------| ----------------------- |
+| key 		                  | YES      | A text key that identifies what action the user took when they tapped the notification  | String                | unlimited                    |                         |
+| label 		                | *YES     | The text to be displayed on the action button                                           | String                | unlimited                    |                         |
+| icon 		                  | *YES     | The icon to be displayed inside the button (only available for few layouts)             | String                | Must be a resource image     |                         |
+| color 		                | NO       | The label text color (only for Android)                                                 | Color                 | 0x000000 to 0xFFFFFF         |                         |
+| enabled 	                | NO       | On Android, deactivates the button. On iOS, the button disappears                       | bool                  | true or false                | true                    |
+| autoDismissible           | NO       | Whether the notification should be auto-cancelled when the user taps the button         | bool                  | true or false                | true                    |
+| showInCompactView         | NO       | For MediaPlayer notifications on Android, sets the button as visible in compact view    | bool                  | true or false                | true                    |
+| isDangerousOption         | NO       | Whether the button is marked as a dangerous option, displaying the text in red          | bool                  | true or false                | false                   |
+| isAuthenticationRequired  | NO       | The action performed by this button requires user authentication to proceed             | bool                  | true or false                | false                   |
+| actionType 	              | NO       | The notification action response type                                                   | Enumerator            | ActionType (Default)         |                         |
 
 <br>
 <br>

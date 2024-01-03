@@ -1,10 +1,21 @@
-## [0.9.0] - 12/26/2023
+## [0.9.0] - 01/02/2024
+### Breaking Changes
+- **Pod modifications:** Now it's necessary to also add Awesome Notifications pod modification inside `PodFile` at iOS folder.
+- **Receive port and send port:** The methods `sendPort.send()` and `receivePort!.listen()` now only accept serialized data, not objects. Convert your data to a map format and reconstruct it later from this format.
+- **License Key (Year 2):** Starting the year 2 support of awesome suite. In case your license was generated for Year 1 and you're still under the 1-year purchase support you just need to reply to the license email requesting the free update.
+
+### Added
+- **Translation keys and Args:** Implemented support for dynamic localization in notifications. Translation keys (`titleLocKey`, `bodyLocKey`) and their respective arguments (`titleLocArgs`, `bodyLocArgs`) can now be used to localize notification content dynamically based on the user's language preference.
+- **Authentication required action:** New action property that requires user authentication to proceed.
+
 ### Improvements
 - **Extended Support:** We're excited to announce the commencement of our "Year 2 Support Season." This includes ongoing maintenance, regular updates, and dedicated support.
-- **Flutter 3.16.0 Compatibility:** The plugin is now fully compatible with Flutter 3.16.0.
+- **Flutter 3.16.5 Compatibility:** The plugin is now fully compatible with Flutter 3.16.5.
+
 ### Bug Fixes
 - **Enhanced Event Handling on Android:** We've modified event handlers on Android to support negative values. This enhancement ensures more robust and reliable event management.
 - **Resolved Silent Callback Issue:** Fixed a previously encountered issue where silent callbacks were missing for silent background actions.
+
 
 ## [0.8.3]
 ### Added

@@ -23,6 +23,7 @@ class NotificationActionButton extends Model {
   bool? _autoDismissible;
   bool? _showInCompactView;
   bool? _isDangerousOption;
+  bool? _isAuthenticationRequired;
   Color? _color;
   ActionType? _actionType;
 
@@ -53,17 +54,22 @@ class NotificationActionButton extends Model {
 
   /// Determines if the notification should be dismissed automatically when the action button is pressed.
   bool? get autoDismissible {
-    return _autoDismissible;
+    return _autoDismissible ?? true;
   }
 
   /// Indicates if the action button should be shown in the compact view of the notification.
   bool? get showInCompactView {
-    return _showInCompactView;
+    return _showInCompactView ?? false;
   }
 
   /// Indicates if the action button represents a dangerous option or choice.
   bool? get isDangerousOption {
-    return _isDangerousOption;
+    return _isDangerousOption ?? false;
+  }
+
+  /// Returns if authentication is required to open the notification.
+  bool get isAuthenticationRequired {
+    return _isAuthenticationRequired ?? false;
   }
 
   /// Returns the color of the action button.
@@ -97,6 +103,7 @@ class NotificationActionButton extends Model {
       bool autoDismissible = true,
       bool showInCompactView = false,
       bool isDangerousOption = false,
+      bool isAuthenticationRequired = false,
       Color? color,
       ActionType actionType = ActionType.Default})
       : _key = key,
@@ -107,6 +114,7 @@ class NotificationActionButton extends Model {
         _autoDismissible = autoDismissible,
         _showInCompactView = showInCompactView,
         _isDangerousOption = isDangerousOption,
+        _isAuthenticationRequired = isAuthenticationRequired,
         _color = color,
         _actionType = actionType {
     // Adapting input type to 0.7.0 pattern
@@ -133,6 +141,8 @@ class NotificationActionButton extends Model {
         NOTIFICATION_IS_DANGEROUS_OPTION, mapData);
     _actionType = AwesomeAssertUtils.extractEnum<ActionType>(
         NOTIFICATION_ACTION_TYPE, mapData, ActionType.values);
+    _isAuthenticationRequired = AwesomeAssertUtils.extractValue<bool>(
+        NOTIFICATION_AUTHENTICATION_REQUIRED, mapData);
 
     _color =
         AwesomeAssertUtils.extractValue<Color>(NOTIFICATION_COLOR, mapData);
@@ -140,7 +150,7 @@ class NotificationActionButton extends Model {
     return this;
   }
 
-  /// Processes retrocompatibility for older versions of the action button.
+  /// Processes retro compatibility for older versions of the action button.
   @visibleForTesting
   void processRetroCompatibility(Map<String, dynamic> dataMap) {
     if (dataMap.containsKey("autoCancel")) {
@@ -186,7 +196,8 @@ class NotificationActionButton extends Model {
       NOTIFICATION_SHOW_IN_COMPACT_VIEW: _showInCompactView,
       NOTIFICATION_IS_DANGEROUS_OPTION: _isDangerousOption,
       NOTIFICATION_ACTION_TYPE: _actionType?.name,
-      NOTIFICATION_COLOR: _color?.value
+      NOTIFICATION_COLOR: _color?.value,
+      NOTIFICATION_AUTHENTICATION_REQUIRED: _isAuthenticationRequired
     };
   }
 
