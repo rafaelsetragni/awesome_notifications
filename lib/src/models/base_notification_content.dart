@@ -38,6 +38,9 @@ class BaseNotificationContent extends Model {
   NotificationPrivacy? _privacy;
   NotificationCategory? _category;
 
+  String? _titleLocKey, _bodyLocKey;
+  List<String>? _titleLocArgs, _bodyLocArgs;
+
   DateTime? _displayedDate;
   DateTime? _createdDate;
 
@@ -64,6 +67,18 @@ class BaseNotificationContent extends Model {
 
   /// Returns the body text of the notification.
   String? get body => _body;
+
+  /// Returns the title key used to translate the notification.
+  String? get titleLockKey => _titleLocKey;
+
+  /// Returns the body key used to translate the notification.
+  String? get bodyLockKey => _bodyLocKey;
+
+  /// Returns the args used to translate the notification title.
+  List<String>? get titleLockArgs => _titleLocArgs;
+
+  /// Returns the args used to translate the notification body.
+  List<String>? get bodyLockArgs => _bodyLocArgs;
 
   /// Returns the summary of the notification.
   String? get summary => _summary;
@@ -203,6 +218,10 @@ class BaseNotificationContent extends Model {
       ActionType actionType = ActionType.Default,
       String? title,
       String? body,
+      String? titleLocKey,
+      String? bodyLocKey,
+      List<String>? titleLocArgs,
+      List<String>? bodyLocArgs,
       String? summary,
       bool showWhen = true,
       String? icon,
@@ -233,6 +252,14 @@ class BaseNotificationContent extends Model {
             NOTIFICATION_TITLE, title),
         _body = AwesomeAssertUtils.getValueOrDefault<String>(
             NOTIFICATION_BODY, body),
+        _titleLocKey = AwesomeAssertUtils.getValueOrDefault<String>(
+            NOTIFICATION_TITLE_KEY, titleLocKey),
+        _bodyLocKey = AwesomeAssertUtils.getValueOrDefault<String>(
+            NOTIFICATION_BODY_KEY, bodyLocKey),
+        _titleLocArgs = AwesomeAssertUtils.getValueOrDefault<List<String>>(
+            NOTIFICATION_TITLE_ARGS, titleLocArgs),
+        _bodyLocArgs = AwesomeAssertUtils.getValueOrDefault<List<String>>(
+            NOTIFICATION_BODY_ARGS, bodyLocArgs),
         _summary = AwesomeAssertUtils.getValueOrDefault<String>(
             NOTIFICATION_SUMMARY, summary),
         _showWhen = AwesomeAssertUtils.getValueOrDefault<bool>(
@@ -286,6 +313,17 @@ class BaseNotificationContent extends Model {
     _title =
         AwesomeAssertUtils.extractValue<String>(NOTIFICATION_TITLE, mapData);
     _body = AwesomeAssertUtils.extractValue<String>(NOTIFICATION_BODY, mapData);
+
+    _titleLocKey = AwesomeAssertUtils.extractValue<String>(
+        NOTIFICATION_TITLE_KEY, mapData);
+    _bodyLocKey =
+        AwesomeAssertUtils.extractValue<String>(NOTIFICATION_BODY_KEY, mapData);
+
+    _titleLocArgs = AwesomeAssertUtils.extractValue<List<String>>(
+        NOTIFICATION_TITLE_ARGS, mapData);
+    _bodyLocArgs = AwesomeAssertUtils.extractValue<List<String>>(
+        NOTIFICATION_BODY_ARGS, mapData);
+
     _summary =
         AwesomeAssertUtils.extractValue<String>(NOTIFICATION_SUMMARY, mapData);
     _showWhen =
@@ -351,6 +389,10 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_GROUP_KEY: _groupKey,
       NOTIFICATION_TITLE: _title,
       NOTIFICATION_BODY: _body,
+      NOTIFICATION_TITLE_KEY: _titleLocKey,
+      NOTIFICATION_BODY_KEY: _bodyLocKey,
+      NOTIFICATION_TITLE_ARGS: _titleLocArgs,
+      NOTIFICATION_BODY_ARGS: _bodyLocArgs,
       NOTIFICATION_SUMMARY: _summary,
       NOTIFICATION_SHOW_WHEN: _showWhen,
       NOTIFICATION_ICON: _icon,

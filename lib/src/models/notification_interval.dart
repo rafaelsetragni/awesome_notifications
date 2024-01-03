@@ -1,27 +1,27 @@
 import '../../awesome_notifications.dart';
 
+/// Represents a notification scheduling configuration based on time intervals.
 class NotificationInterval extends NotificationSchedule {
-  /// Field number for get and set indicating the amount of seconds between each repetition (greater than 0).
+  /// The amount of seconds between each notification repetition. Must be greater than 0 or 60 if repeating.
   int? interval;
 
-  /// Notification Schedule based on calendar components. At least one date parameter is required.
-  /// [interval] Time interval between each notification (minimum of 60 sec case repeating)
-  /// [allowWhileIdle] Displays the notification, even when the device is low battery
-  /// [repeats] Defines if the notification should play only once or keeps repeating
-  /// [preciseAlarm] Requires maximum precision to schedule notifications at exact time, but may use more battery. Requires the explicit user consent for Android 12 and beyond.
-  /// [timeZone] time zone identifier as reference of this schedule date. (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+  /// Constructs a [NotificationInterval] object with various scheduling options.
+  ///
+  /// [interval] specifies the time interval between each notification (minimum of 60 seconds if repeating).
+  /// [timeZone] specifies the time zone identifier as a reference for the schedule date.
+  /// [allowWhileIdle] allows the notification to be displayed even when the device is in low battery mode.
+  /// [repeats] determines whether the notification should play only once or keep repeating.
+  /// [preciseAlarm] enables maximum precision for scheduling notifications at exact times, which may consume more battery. Requires explicit user consent on Android 12 and beyond.
   NotificationInterval(
       {required this.interval,
       String? timeZone,
-      bool allowWhileIdle = false,
-      bool repeats = false,
-      bool preciseAlarm = true})
+      super.allowWhileIdle,
+      super.repeats,
+      super.preciseAlarm = true})
       : super(
-            timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
-            allowWhileIdle: allowWhileIdle,
-            repeats: repeats,
-            preciseAlarm: preciseAlarm);
+            timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier);
 
+  /// Creates a [NotificationInterval] instance from a map of data.
   @override
   NotificationInterval? fromMap(Map<String, dynamic> mapData) {
     super.fromMap(mapData);
@@ -38,17 +38,22 @@ class NotificationInterval extends NotificationSchedule {
     return this;
   }
 
+  /// Converts the [NotificationInterval] instance to a map.
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
     return map..addAll({NOTIFICATION_SCHEDULE_INTERVAL: interval});
   }
 
+  /// Returns a string representation of the [NotificationInterval] instance.
   @override
   String toString() {
     return toMap().toString().replaceAll(',', ',\n');
   }
 
+  /// Validates the notification interval settings.
+  ///
+  /// Throws an [AwesomeNotificationsException] if the interval is negative or less than 60 seconds when repeating.
   @override
   void validate() {
     if ((interval ?? -1) < 0) {

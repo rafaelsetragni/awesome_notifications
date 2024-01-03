@@ -15,45 +15,106 @@ import '../utils/bitmap_utils.dart';
 import '../utils/string_utils.dart';
 import 'model.dart';
 
-/// A representation of default settings that applies to all notifications with same channel key
-/// [soundSource] needs to be a native resource media type
+/// Represents default settings applied to all notifications sharing the same channel key.
+/// Note: The [soundSource] needs to be a native resource media type.
 class NotificationChannel extends Model {
+  /// Unique identifier for the notification channel.
   String? channelKey;
+
+  /// Name of the notification channel.
   String? channelName;
+
+  /// Description of the notification channel.
   String? channelDescription;
+
+  /// Indicates whether to show a badge for notifications in this channel.
   bool? channelShowBadge;
 
+  /// Key for the channel group this channel belongs to.
   String? channelGroupKey;
 
+  /// The importance level for notifications in this channel.
   NotificationImportance? importance;
 
+  /// Indicates whether to play a sound for notifications in this channel.
   bool? playSound;
+
+  /// The sound resource to play for notifications in this channel.
   String? soundSource;
+
+  /// Default ringtone type for notifications in this channel.
   DefaultRingtoneType? defaultRingtoneType;
 
+  /// Indicates whether to enable vibration for notifications in this channel.
   bool? enableVibration;
+
+  /// Vibration pattern for notifications in this channel.
   Int64List? vibrationPattern;
 
+  /// Indicates whether to enable LED lights for notifications in this channel.
   bool? enableLights;
+
+  /// The color of the LED light for notifications in this channel.
   Color? ledColor;
+
+  /// Duration in milliseconds for which the LED light is on.
   int? ledOnMs;
+
+  /// Duration in milliseconds for which the LED light is off.
   int? ledOffMs;
 
+  /// Key for grouping notifications in this channel.
   String? groupKey;
+
+  /// Sort order for grouped notifications.
   GroupSort? groupSort;
+
+  /// Alert behavior for grouped notifications.
   GroupAlertBehavior? groupAlertBehavior;
 
+  /// Default privacy level for notifications in this channel.
   NotificationPrivacy? defaultPrivacy;
 
+  /// Icon for notifications in this channel.
   String? icon;
+
+  /// Default color for notifications in this channel.
   Color? defaultColor;
 
+  /// Indicates whether this channel is locked (cannot be modified or deleted by the user).
   bool? locked;
-  bool? onlyAlertOnce;
-  bool? stayOnScreen = true;
 
+  /// Indicates whether to alert only once for notifications in this channel.
+  bool? onlyAlertOnce;
+
+  /// Indicates whether notifications in this channel are critical alerts.
   bool? criticalAlerts;
 
+  /// Constructs a [NotificationChannel].
+  ///
+  /// [channelKey]: Unique identifier for the channel.
+  /// [channelName]: Name of the channel.
+  /// [channelDescription]: Description of the channel.
+  /// [channelShowBadge]: Indicates whether to show a badge for notifications in this channel.
+  /// [importance]: The importance level for notifications in this channel.
+  /// [playSound]: Indicates whether to play a sound for notifications in this channel.
+  /// [soundSource]: The sound resource to play for notifications in this channel.
+  /// [defaultRingtoneType]: Default ringtone type for notifications in this channel.
+  /// [enableVibration]: Indicates whether to enable vibration for notifications in this channel.
+  /// [vibrationPattern]: Vibration pattern for notifications in this channel.
+  /// [enableLights]: Indicates whether to enable LED lights for notifications in this channel.
+  /// [ledColor]: The color of the LED light for notifications in this channel.
+  /// [ledOnMs]: Duration in milliseconds for which the LED light is on.
+  /// [ledOffMs]: Duration in milliseconds for which the LED light is off.
+  /// [groupKey]: Key for grouping notifications in this channel.
+  /// [groupSort]: Sort order for grouped notifications.
+  /// [groupAlertBehavior]: Alert behavior for grouped notifications.
+  /// [defaultPrivacy]: Default privacy level for notifications in this channel.
+  /// [icon]: Icon for notifications in this channel.
+  /// [defaultColor]: Default color for notifications in this channel.
+  /// [locked]: Indicates whether this channel is locked (cannot be modified or deleted by the user).
+  /// [onlyAlertOnce]: Indicates whether to alert only once for notifications in this channel.
+  /// [criticalAlerts]: Indicates whether notifications in this channel are critical alerts.
   NotificationChannel(
       {required this.channelKey,
       required this.channelName,
@@ -137,6 +198,7 @@ class NotificationChannel extends Model {
         AwesomeBitmapUtils().getMediaSource(icon!) == MediaSource.Resource);
   }
 
+  /// Converts the [NotificationChannel] instance to a map.
   @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -167,6 +229,7 @@ class NotificationChannel extends Model {
     };
   }
 
+  /// Creates a [NotificationChannel] instance from a map of data.
   @override
   NotificationChannel fromMap(Map<String, dynamic> mapData) {
     channelKey = AwesomeAssertUtils.extractValue<String>(
@@ -231,6 +294,9 @@ class NotificationChannel extends Model {
     return this;
   }
 
+  /// Validates the properties of the notification channel.
+  ///
+  /// Throws an [AwesomeNotificationsException] if the channelKey, channelName, or channelDescription is missing.
   @override
   void validate() {
     if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(channelKey)) {

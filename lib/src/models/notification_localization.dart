@@ -98,6 +98,7 @@ class NotificationLocalization extends Model {
           NOTIFICATION_BUTTON_LABELS: buttonLabels,
       };
 
+  /// Validates the notification localization settings.
   @override
   void validate() {}
 }

@@ -289,7 +289,7 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
             final Map<String, Object> actionData = actionReceived.toMap();
             actionData.put(
                     Definitions.ACTION_HANDLE,
-                    silentCallbackHandle);
+                    actionCallbackHandle);
 
             // Handle the message event in Dart.
             backgroundChannel.invokeMethod(
