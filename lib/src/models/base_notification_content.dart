@@ -314,15 +314,15 @@ class BaseNotificationContent extends Model {
         AwesomeAssertUtils.extractValue<String>(NOTIFICATION_TITLE, mapData);
     _body = AwesomeAssertUtils.extractValue<String>(NOTIFICATION_BODY, mapData);
 
-    _titleLocKey =
-        AwesomeAssertUtils.extractValue<String>(NOTIFICATION_TITLE_KEY, mapData);
+    _titleLocKey = AwesomeAssertUtils.extractValue<String>(
+        NOTIFICATION_TITLE_KEY, mapData);
     _bodyLocKey =
         AwesomeAssertUtils.extractValue<String>(NOTIFICATION_BODY_KEY, mapData);
 
-    _titleLocArgs =
-        AwesomeAssertUtils.extractValue<List<String>>(NOTIFICATION_TITLE_ARGS, mapData);
-    _bodyLocArgs =
-        AwesomeAssertUtils.extractValue<List<String>>(NOTIFICATION_BODY_ARGS, mapData);
+    _titleLocArgs = AwesomeAssertUtils.extractValue<List<String>>(
+        NOTIFICATION_TITLE_ARGS, mapData);
+    _bodyLocArgs = AwesomeAssertUtils.extractValue<List<String>>(
+        NOTIFICATION_BODY_ARGS, mapData);
 
     _summary =
         AwesomeAssertUtils.extractValue<String>(NOTIFICATION_SUMMARY, mapData);

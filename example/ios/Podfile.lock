@@ -1,14 +1,14 @@
 PODS:
   - awesome_notifications (0.9.0):
     - Flutter
-    - IosAwnCore
+    - IosAwnCore (~> 0.9.1)
   - device_info_plus (0.0.1):
     - Flutter
   - Flutter (1.0.0)
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - IosAwnCore (0.8.0)
+  - IosAwnCore (0.9.1)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -26,7 +26,6 @@ DEPENDENCIES:
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
-  - IosAwnCore (from `../../../IosAwnCore/`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -34,6 +33,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - IosAwnCore
     - Toast
 
 EXTERNAL SOURCES:
@@ -45,8 +45,6 @@ EXTERNAL SOURCES:
     :path: Flutter
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
-  IosAwnCore:
-    :path: "../../../IosAwnCore/"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   shared_preferences_foundation:
@@ -57,17 +55,17 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/vibration/ios"
 
 SPEC CHECKSUMS:
-  awesome_notifications: f50a4777fc9249ea15821893b1b1bc6f4efb8f81
+  awesome_notifications: 399076ea2bdf119beef9126f1ca6914215390997
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
-  IosAwnCore: ed1b2b6d84962a758354dbacd9ce525c72ce28a9
+  IosAwnCore: 4691f457bd8dc9a3a0a941cee6439a894a0b81aa
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
   vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
 
-PODFILE CHECKSUM: 4f0059f4d23c08eb2b9eb56f897d02b1d08d6060
+PODFILE CHECKSUM: 944b80afeedf5dfd664cc55811ffa75665dbd799
 
 COCOAPODS: 1.14.3
