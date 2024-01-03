@@ -195,11 +195,16 @@ const NOTIFICATION_CHANNEL_GROUP_NAME = 'channelGroupName';
 
 const NOTIFICATION_TITLE = 'title';
 const NOTIFICATION_BODY = 'body';
+const NOTIFICATION_TITLE_KEY = 'titleLocKey';
+const NOTIFICATION_BODY_KEY = 'bodyLocKey';
+const NOTIFICATION_TITLE_ARGS = 'titleLocArgs';
+const NOTIFICATION_BODY_ARGS = 'bodyLocArgs';
 const NOTIFICATION_SUMMARY = 'summary';
 const NOTIFICATION_SHOW_WHEN = 'showWhen';
 const NOTIFICATION_EXPANDABLE_BODY = 'expandableBody';
 const NOTIFICATION_JSON = 'notificationJson';
 const NOTIFICATION_PERMISSIONS = 'permissions';
+const NOTIFICATION_AUTHENTICATION_REQUIRED = 'isAuthenticationRequired';
 
 const NOTIFICATION_ACTION_BUTTONS = 'actionButtons';
 const NOTIFICATION_BUTTON_KEY = 'key';
@@ -326,5 +331,6 @@ class Definitions {
     NOTIFICATION_CHANNEL_CRITICAL_ALERTS: false,
     NOTIFICATION_ROUNDED_LARGE_ICON: false,
     NOTIFICATION_ROUNDED_BIG_PICTURE: false,
+    NOTIFICATION_AUTHENTICATION_REQUIRED: false,
   };
 }

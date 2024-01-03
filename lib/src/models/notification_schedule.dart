@@ -3,12 +3,16 @@ import 'package:awesome_notifications/src/utils/assert_utils.dart';
 
 import '../definitions.dart';
 
-/// Notification schedule configuration
-/// [timeZone]: time zone reference to this schedule
-/// [crontabExpression]: Crontab expression as repetition rule (with seconds precision), as described in https://www.baeldung.com/cron-expressions
-/// [allowWhileIdle]: Determines if notification will send, even when the device is in critical situation, such as low battery.
-
+/// Abstract base class for notification schedule configuration.
+/// Defines the common properties and methods for scheduling notifications.
 abstract class NotificationSchedule extends Model {
+  /// Constructs a [NotificationSchedule] with various scheduling options.
+  ///
+  /// [timeZone]: Specifies the time zone reference for the schedule.
+  /// [allowWhileIdle]: Determines if the notification should be sent even in critical device situations like low battery.
+  /// [repeats]: Specifies whether the notification should repeat.
+  /// [preciseAlarm]: Requires precise scheduling, which may consume more battery. Needs explicit permission on Android 12+.
+  /// [delayTolerance]: Specifies the delay tolerance in milliseconds for scheduling notifications.
   NotificationSchedule(
       {required this.timeZone,
       this.allowWhileIdle = false,
@@ -16,22 +20,23 @@ abstract class NotificationSchedule extends Model {
       this.preciseAlarm = false,
       this.delayTolerance = 600000});
 
-  /// Full time zone identifier to schedule a notification, in english (ex: America/Sao_Paulo, America/New_York, Europe/Helsinki or GMT-07:00)
+  /// Full time zone identifier for scheduling the notification. Example: 'America/Sao_Paulo', 'America/New_York', 'Europe/Helsinki'.
   String timeZone;
 
-  /// Displays the notification, even when the device is low battery
+  /// Allows the notification to be displayed even when the device is in low battery mode.
   bool allowWhileIdle;
 
-  /// Require schedules to be precise, even when the device is low battery. Requires explicit permission in Android 12 and beyond.
+  /// Requires precise timing for the notification schedule, especially important on devices with strict power-saving features.
   bool preciseAlarm;
 
-  /// Delay tolerance in milliseconds to schedule notifications being displayed. The minimum tolerance for inexact schedules is 600.000 (10 minutes).
+  /// Delay tolerance in milliseconds for scheduling the notification. Minimum tolerance is typically 600,000 ms (10 minutes).
   int delayTolerance;
 
-  /// Specify false to deliver the notification one time. Specify true to reschedule the notification request each time the notification is delivered.
+  /// Indicates whether the notification should be delivered once (false) or rescheduled each time it's delivered (true).
   bool repeats;
 
-  /// Returns null if  invalid mapData is provided
+  /// Creates a [NotificationSchedule] instance from a map of data.
+  /// Returns null if invalid [mapData] is provided.
   @override
   NotificationSchedule? fromMap(Map<String, dynamic> mapData) {
     timeZone = AwesomeAssertUtils.extractValue(
@@ -57,6 +62,7 @@ abstract class NotificationSchedule extends Model {
     return this;
   }
 
+  /// Converts the [NotificationSchedule] instance to a map.
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> dataMap = {

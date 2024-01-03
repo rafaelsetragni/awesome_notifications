@@ -1,39 +1,40 @@
 import '../../awesome_notifications.dart';
 
+/// Represents a notification scheduling configuration based on calendar components.
 class NotificationCalendar extends NotificationSchedule {
-  /// Field number for get and set indicating the era, e.g., AD or BC in the Julian calendar
+  /// The era for scheduling, e.g., AD or BC in the Julian calendar.
   int? era;
 
-  /// Field number for get and set indicating the year.
+  /// The year for scheduling the notification.
   int? year;
 
-  /// Field number for get and set indicating the month of the year (1-12).
+  /// The month of the year (1-12) for scheduling the notification.
   int? month;
 
-  /// Field number for get and set indicating the day of the month (1-31).
+  /// The day of the month (1-31) for scheduling the notification.
   int? day;
 
-  /// Field number for get and set indicating the hour of the day (0-23).
+  /// The hour of the day (0-23) for scheduling the notification.
   int? hour;
 
-  /// Field number for get and set indicating the minute within the hour (0-59).
+  /// The minute within the hour (0-59) for scheduling the notification.
   int? minute;
 
-  /// Field number for get and set indicating the second within the minute (0-59).
+  /// The second within the minute (0-59) for scheduling the notification.
   int? second;
 
-  /// Field number for get and set indicating the millisecond within the second.
+  /// Millisecond precision is deprecated due to device limitations. This field will be ignored.
   @Deprecated(
       'Millisecond precision was deprecated, due devices do not provide or ignore such precision. The value will be ignored')
   int? millisecond;
 
-  /// Field number for get and set indicating the day of the week (1 = Monday).
+  /// The day of the week (1 = Monday) for scheduling the notification.
   int? weekday;
 
-  /// Field number for get and set indicating the count of weeks of the month.
+  /// The count of weeks of the month for scheduling. Not fully implemented yet.
   int? weekOfMonth;
 
-  /// Field number for get and set indicating the weeks of the year.
+  /// The week of the year for scheduling the notification.
   int? weekOfYear;
 
   /// Notification Schedule based on calendar components. At least one date parameter is required.
@@ -65,32 +66,27 @@ class NotificationCalendar extends NotificationSchedule {
     this.weekOfMonth,
     this.weekOfYear,
     String? timeZone,
-    bool allowWhileIdle = false,
-    bool preciseAlarm = true,
-    bool repeats = false,
+    super.allowWhileIdle,
+    super.preciseAlarm = true,
+    super.repeats,
   }) : super(
-            timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
-            allowWhileIdle: allowWhileIdle,
-            repeats: repeats,
-            preciseAlarm: preciseAlarm) {
+            timeZone:
+                timeZone ?? AwesomeNotifications.localTimeZoneIdentifier) {
     if (weekOfMonth != null) {
       throw UnimplementedError("weekOfMonth is not fully implemented yet");
     }
   }
 
-  /// Initialize a notification schedule calendar based on a date object
+  /// Initializes a [NotificationCalendar] from a [DateTime] object.
   NotificationCalendar.fromDate(
       {required DateTime date,
-      bool allowWhileIdle = false,
-      bool repeats = false,
-      bool preciseAlarm = false})
+      super.allowWhileIdle,
+      super.repeats,
+      super.preciseAlarm})
       : super(
             timeZone: date.isUtc
                 ? AwesomeNotifications.utcTimeZoneIdentifier
-                : AwesomeNotifications.localTimeZoneIdentifier,
-            allowWhileIdle: allowWhileIdle,
-            repeats: repeats,
-            preciseAlarm: preciseAlarm) {
+                : AwesomeNotifications.localTimeZoneIdentifier) {
     year = date.year;
     month = date.month;
     day = date.day;
@@ -99,6 +95,7 @@ class NotificationCalendar extends NotificationSchedule {
     second = date.second;
   }
 
+  /// Creates a [NotificationCalendar] instance from a map of data.
   @override
   NotificationCalendar? fromMap(Map<String, dynamic> mapData) {
     era = AwesomeAssertUtils.extractValue<int>(
@@ -133,6 +130,7 @@ class NotificationCalendar extends NotificationSchedule {
     return this;
   }
 
+  /// Converts the [NotificationCalendar] instance to a map.
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> dataMap = super.toMap()
@@ -152,11 +150,16 @@ class NotificationCalendar extends NotificationSchedule {
     return dataMap;
   }
 
+  /// Returns a string representation of the [NotificationCalendar] instance.
   @override
   String toString() {
     return toMap().toString().replaceAll(',', ',\n');
   }
 
+  /// Validates the calendar schedule settings.
+  ///
+  /// Throws an [AwesomeNotificationsException] if no schedule time condition is provided or if any condition is negative.
+  /// Throws an [UnimplementedError] if [weekOfMonth] is not null as it's not fully implemented.
   @override
   void validate() {
     if (era == null &&

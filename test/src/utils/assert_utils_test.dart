@@ -99,6 +99,20 @@ void main() {
     expect("", AwesomeAssertUtils.extractValue<String>("test", {"test": ""}));
     expect(" ", AwesomeAssertUtils.extractValue<String>("test", {"test": " "}));
 
+
+    expect(null,
+        AwesomeAssertUtils.extractValue<List<String>>("test", {"test": []}));
+    expect([""],
+        AwesomeAssertUtils.extractValue<List<String>>("test", {"test": [""]}));
+    expect(["1"],
+        AwesomeAssertUtils.extractValue<List<String>>("test", {"test": ["1"]}));
+    expect(["1","2"],
+        AwesomeAssertUtils.extractValue<List<String>>("test", {"test": ["1","2"]}));
+    expect(["1","2","3"],
+        AwesomeAssertUtils.extractValue<List<String>>("test", {"test": ["1","2","3"]}));
+    expect(["1","1","1"],
+        AwesomeAssertUtils.extractValue<List<String>>("test", {"test": ["1","1","1"]}));
+
     expect(
         AwesomeAssertUtils.extractValue<Uint8List>(
             "test", {"test": Uint8List.fromList([])}),

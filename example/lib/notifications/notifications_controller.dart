@@ -268,7 +268,10 @@ class NotificationsController {
   static ReceivePort? receivePort;
   static Future<void> initializeIsolateReceivePort() async {
     receivePort = ReceivePort('Notification action port in main isolate');
-    receivePort!.listen((silentData) => onActionReceivedMethodImpl(silentData));
+    receivePort!.listen((serializedData) {
+      final receivedAction = ReceivedAction().fromMap(serializedData);
+      onActionReceivedMethodImpl(receivedAction);
+    });
 
     // This initialization only happens on main isolate
     IsolateNameServer.registerPortWithName(
@@ -325,20 +328,20 @@ class NotificationsController {
   @pragma("vm:entry-point")
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
-    if (receivePort == null) {
+    if (receivePort != null) {
+      await onActionReceivedMethodImpl(receivedAction);
+    } else {
       print(
-          'onActionReceivedMethod was called inside a parallel dart isolate.');
-      SendPort? sendPort =
-      IsolateNameServer.lookupPortByName('notification_action_port');
+          'onActionReceivedMethod was called inside a parallel dart isolate, where receivePort was never initialized.');
+      SendPort? sendPort = IsolateNameServer
+          .lookupPortByName('notification_action_port');
 
       if (sendPort != null) {
-        print('Redirecting the execution to main isolate process...');
-        sendPort.send(receivedAction);
-        return;
+        print('Redirecting the execution to main isolate process in listening...');
+        dynamic serializedData = receivedAction.toMap();
+        sendPort.send(serializedData);
       }
     }
-
-    await onActionReceivedMethodImpl(receivedAction);
   }
 
 
