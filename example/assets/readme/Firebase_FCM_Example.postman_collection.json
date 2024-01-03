@@ -1,55 +1,674 @@
 {
 	"info": {
-		"_postman_id": "c501f74f-d05b-4344-8f51-c64f4d69d8a9",
-		"name": "AwesomeNotifications Example",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_postman_id": "88f76358-35b6-4e06-8f17-42867cbd2644",
+		"name": "Firebase FMC Example (legacy)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11386914",
+		"_collection_link": "https://yodassolution.postman.co/workspace/My-Workspace~34876b36-dfef-49e0-8d7a-07e43972e312/collection/11386914-88f76358-35b6-4e06-8f17-42867cbd2644?action=share&source=collection_link&creator=11386914"
 	},
 	"item": [
 		{
-			"name": "Firebase Cloud Message Example - Awesome Notifications (Flutter)",
-			"request": {
-				"auth": {
-					"type": "apikey",
-					"apikey": [
-						{
-							"key": "value",
-							"value": "key={{server_key}}",
-							"type": "string"
+			"name": "Structured data",
+			"item": [
+				{
+					"name": "Push Notification iOS",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "key={{server_key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
 						},
-						{
-							"key": "key",
-							"value": "Authorization",
-							"type": "string"
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\" : \"{{fcm_token_ios}}\",\r\n    \"mutable_content\": true,\r\n    \"priority\": \"high\",\r\n    \"notification\": {\r\n        \"badge\": 50,\r\n        \"title\": \"Huston! The eagle has landed!\",\r\n        \"body\": \"A small step for a man, but a giant leap to Flutter's community!\"\r\n    },\r\n    \"data\" : {\r\n        \"content\": {\r\n            \"id\": 1,\r\n            \"badge\": 50,\r\n            \"channelKey\": \"alerts\",\r\n            \"notificationLayout\": \"BigPicture\",\r\n            \"largeIcon\": \"https://br.web.img3.acsta.net/pictures/19/06/18/17/09/0834720.jpg\",\r\n            \"bigPicture\": \"https://www.dw.com/image/49519617_303.jpg\",\r\n            \"showWhen\": true,\r\n            \"displayOnForeground\": true,\r\n            \"autoDismissible\": true,\r\n            \"privacy\": \"Private\",\r\n            \"payload\": {\r\n                \"secret\": \"Awesome Notifications Rocks!\"\r\n            }\r\n        },\r\n        \"actionButtons\": [\r\n            {\r\n                \"key\": \"REDIRECT\",\r\n                \"label\": \"Redirect\",\r\n                \"autoDismissible\": true\r\n            },\r\n            {\r\n                \"key\": \"DISMISS\",\r\n                \"label\": \"Dismiss\",\r\n                \"actionType\": \"DismissAction\",\r\n                \"isDangerousOption\": true,\r\n                \"autoDismissible\": true\r\n            }\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fcm.googleapis.com/fcm/send",
+							"protocol": "https",
+							"host": [
+								"fcm",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"fcm",
+								"send"
+							]
+						},
+						"description": "Firebase Message example, using Flutter Awesome Notifications"
+					},
+					"response": []
+				},
+				{
+					"name": "Push Notification Android",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "key={{server_key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\" : \"{{fcm_token_android}}\",\r\n    \"mutable_content\": true,\r\n    \"priority\": \"high\",\r\n    \"notification\": {\r\n        \"badge\": 50,\r\n        \"title\": \"Huston! The eagle has landed!\",\r\n        \"body\": \"A small step for a man, but a giant leap to Flutter's community!\"\r\n    },\r\n    \"data\" : {\r\n        \"content\": {\r\n            \"id\": 1,\r\n            \"badge\": 50,\r\n            \"channelKey\": \"alerts\",\r\n            \"displayOnForeground\": true,\r\n            \"notificationLayout\": \"BigPicture\",\r\n            \"largeIcon\": \"https://br.web.img3.acsta.net/pictures/19/06/18/17/09/0834720.jpg\",\r\n            \"bigPicture\": \"https://www.dw.com/image/49519617_303.jpg\",\r\n            \"showWhen\": true,\r\n            \"autoDismissible\": true,\r\n            \"privacy\": \"Private\",\r\n            \"payload\": {\r\n                \"secret\": \"Awesome Notifications Rocks!\"\r\n            }\r\n        },\r\n        \"actionButtons\": [\r\n            {\r\n                \"key\": \"REDIRECT\",\r\n                \"label\": \"Redirect\",\r\n                \"autoDismissible\": true\r\n            },\r\n            {\r\n                \"key\": \"DISMISS\",\r\n                \"label\": \"Dismiss\",\r\n                \"actionType\": \"DismissAction\",\r\n                \"isDangerousOption\": true,\r\n                \"autoDismissible\": true\r\n            }\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fcm.googleapis.com/fcm/send",
+							"protocol": "https",
+							"host": [
+								"fcm",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"fcm",
+								"send"
+							]
+						},
+						"description": "Firebase Message example, using Flutter Awesome Notifications"
+					},
+					"response": []
+				},
+				{
+					"name": "Localization/Tanslation",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "key={{server_key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\": \"{{fcm_test_topic}}\",\r\n    \"mutable_content\": true,\r\n    \"priority\": \"high\",\r\n    \"notification\": {\r\n        \"title\": \"This title is written in english\",\r\n        \"body\": \"Now it is really easy to translate a notification content, including images and buttons!\",\r\n        \"summary\": \"Awesome Notifications Translations\",\r\n        \"notificationLayout\": \"BigPicture\",\r\n        \"bigPicture\": \"asset://assets/images/awn-rocks-en.jpg\",\r\n        \"largeIcon\": \"asset://assets/images/american.jpg\",\r\n        \"badge\": 11\r\n    },\r\n    \"data\": {\r\n        \"content\": {\r\n            \"id\": \"{{id}}\",\r\n            \"badge\": 11,\r\n            \"channelKey\": \"alerts\",\r\n            \"displayOnForeground\": true,\r\n            \"notificationLayout\": \"BigPicture\",\r\n            \"largeIcon\": \"asset://assets/images/american.jpg\",\r\n            \"bigPicture\": \"asset://assets/images/awn-rocks-en.jpg\",\r\n            \"showWhen\": null,\r\n            \"autoDismissible\": null,\r\n            \"privacy\": null,\r\n            \"payload\": {\r\n                \"uuid\": \"user-profile-uuid\"\r\n            }\r\n        },\r\n        \"actionButtons\": [\r\n            {\r\n                \"key\": \"AGREED1\",\r\n                \"label\": \"I agree\",\r\n                \"autoDismissible\": true,\r\n                \"actionType\": null,\r\n                \"isDangerousOption\": null\r\n            },\r\n            {\r\n                \"key\": \"AGREED2\",\r\n                \"label\": \"I agree too\",\r\n                \"autoDismissible\": true,\r\n                \"actionType\": \"DismissAction\",\r\n                \"isDangerousOption\": true\r\n            }\r\n        ],\r\n        \"localizations\": {\r\n            \"pt-br\": {\r\n                \"title\": \"Este título está escrito em português do Brasil!\",\r\n                \"body\": \"Agora é muito fácil traduzir o conteúdo das notificações, incluindo imagens e botões!\",\r\n                \"summary\": \"Traduções Awesome Notifications\",\r\n                \"bigPicture\": \"asset://assets/images/awn-rocks-pt-br.jpg\",\r\n                \"largeIcon\": \"asset://assets/images/brazilian.jpg\",\r\n                \"buttonLabels\": {\r\n                    \"AGREED1\": \"Eu concordo!\",\r\n                    \"AGREED2\": \"Eu concordo também!\"\r\n                }\r\n            },\r\n            \"zh\": {\r\n                \"title\": \"这个标题是用中文写的\",\r\n                \"body\": \"现在，轻松翻译通知内容，包括图像和按钮！\",\r\n                \"summary\": \"Awesome Notifications 翻译\",\r\n                \"bigPicture\": \"asset://assets/images/awn-rocks-zh.jpg\",\r\n                \"largeIcon\": \"asset://assets/images/chinese.jpg\",\r\n                \"buttonLabels\": {\r\n                    \"AGREED1\": \"我同意\",\r\n                    \"AGREED2\": \"我也同意\"\r\n                }\r\n            },\r\n            \"ko\": {\r\n                \"title\": \"이 타이틀은 한국어로 작성되었습니다\",\r\n                \"body\": \"이제 이미지 및 버튼을 포함한 알림 콘텐츠를 쉽게 번역할 수 있습니다!\",\r\n                \"summary\": \"어썸 알림 번역\",\r\n                \"bigPicture\": \"asset://assets/images/awn-rocks-ko.jpg\",\r\n                \"largeIcon\": \"asset://assets/images/korean.jpg\",\r\n                \"buttonLabels\": {\r\n                    \"AGREED1\": \"동의합니다\",\r\n                    \"AGREED2\": \"저도 동의합니다\"\r\n                }\r\n            },\r\n            \"de\": {\r\n                \"title\": \"Dieser Titel ist in Deutsch geschrieben\",\r\n                \"body\": \"Jetzt ist es wirklich einfach, den Inhalt einer Benachrichtigung zu übersetzen, einschließlich Bilder und Schaltflächen!\",\r\n                \"summary\": \"Awesome Notifications Übersetzungen\",\r\n                \"bigPicture\": \"asset://assets/images/awn-rocks-de.jpg\",\r\n                \"largeIcon\": \"asset://assets/images/german.jpg\",\r\n                \"buttonLabels\": {\r\n                    \"AGREED1\": \"Ich stimme zu\",\r\n                    \"AGREED2\": \"Ich stimme auch zu\"\r\n                }\r\n            },\r\n            \"pt\": {\r\n                \"title\": \"Este título está escrito em português de Portugal!\",\r\n                \"body\": \"Agora é muito fácil traduzir o conteúdo das notificações, incluindo imagens e botões!\",\r\n                \"summary\": \"Traduções Awesome Notifications\",\r\n                \"bigPicture\": \"asset://assets/images/awn-rocks-pt.jpg\",\r\n                \"largeIcon\": \"asset://assets/images/portuguese.jpg\",\r\n                \"buttonLabels\": {\r\n                    \"AGREED1\": \"Eu concordo!\",\r\n                    \"AGREED2\": \"Eu concordo também!\"\r\n                }\r\n            },\r\n            \"es\": {\r\n                \"title\": \"Este título está escrito en español!\",\r\n                \"body\": \"Ahora es muy fácil traducir el contenido de las notificaciones, incluyendo imágenes y botones.\",\r\n                \"summary\": \"Traducciones de Awesome Notifications\",\r\n                \"bigPicture\": \"asset://assets/images/awn-rocks-es.jpg\",\r\n                \"largeIcon\": \"asset://assets/images/spanish.jpg\",\r\n                \"buttonLabels\": {\r\n                    \"AGREED1\": \"Estoy de acuerdo\",\r\n                    \"AGREED2\": \"También estoy de acuerdo\"\r\n                }\r\n            }\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fcm.googleapis.com/fcm/send",
+							"protocol": "https",
+							"host": [
+								"fcm",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"fcm",
+								"send"
+							]
+						},
+						"description": "Firebase Message example, using Flutter Awesome Notifications"
+					},
+					"response": []
+				},
+				{
+					"name": "Localization/Tanslation Key",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "key={{server_key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\": \"{{fcm_token_android}}\",\r\n    \"mutable_content\": true,\r\n    \"priority\": \"high\",\r\n    \"notification\": {\r\n        \"title\": \"Original title in english\",\r\n        \"body\" : \"Original body in english\",\r\n        \"summary\": \"Awesome Notifications Translations\",\r\n        \"notificationLayout\": \"BigPicture\",\r\n        \"bigPicture\": \"asset://assets/images/awn-rocks-en.jpg\",\r\n        \"largeIcon\": \"asset://assets/images/american.jpg\",\r\n        \"badge\": 11\r\n    },\r\n    \"data\": {\r\n        \"content\": {\r\n            \"id\": \"{{id}}\",\r\n            \"badge\": 11,\r\n            \"channelKey\": \"alerts\",\r\n            \"titleLocKey\": \"not_loc_key\",\r\n            \"bodyLocKey\": \"not_loc_key\",\r\n            \"titleLocArgs\": [\"title\"],\r\n            \"bodyLocArgs\": \"body\",\r\n            \"displayOnForeground\": true,\r\n            \"notificationLayout\": \"BigPicture\",\r\n            \"largeIcon\": \"asset://assets/images/american.jpg\",\r\n            \"bigPicture\": \"asset://assets/images/awn-rocks-en.jpg\",\r\n            \"showWhen\": null,\r\n            \"autoDismissible\": null,\r\n            \"privacy\": null,\r\n            \"payload\": {\r\n                \"uuid\": \"user-profile-uuid\"\r\n            }\r\n        },\r\n        \"actionButtons\": [\r\n            {\r\n                \"key\": \"AGREED1\",\r\n                \"label\": \"I agree\",\r\n                \"autoDismissible\": true,\r\n                \"actionType\": null,\r\n                \"isDangerousOption\": null\r\n            },\r\n            {\r\n                \"key\": \"AGREED2\",\r\n                \"label\": \"I agree too\",\r\n                \"autoDismissible\": true,\r\n                \"actionType\": \"DismissAction\",\r\n                \"isDangerousOption\": true\r\n            }\r\n        ],\r\n        \"localizations\": {\r\n            \"pt-br\": {\r\n                \"bigPicture\": \"asset://assets/images/awn-rocks-pt-br.jpg\",\r\n                \"largeIcon\": \"asset://assets/images/brazilian.jpg\",\r\n                \"buttonLabels\": {\r\n                    \"AGREED1\": \"Eu concordo!\",\r\n                    \"AGREED2\": \"Eu concordo também!\"\r\n                }\r\n            },\r\n            \"zh\": {\r\n                \"bigPicture\": \"asset://assets/images/awn-rocks-zh.jpg\",\r\n                \"largeIcon\": \"asset://assets/images/chinese.jpg\",\r\n                \"buttonLabels\": {\r\n                    \"AGREED1\": \"我同意\",\r\n                    \"AGREED2\": \"我也同意\"\r\n                }\r\n            },\r\n            \"ko\": {\r\n                \"bigPicture\": \"asset://assets/images/awn-rocks-ko.jpg\",\r\n                \"largeIcon\": \"asset://assets/images/korean.jpg\",\r\n                \"buttonLabels\": {\r\n                    \"AGREED1\": \"동의합니다\",\r\n                    \"AGREED2\": \"저도 동의합니다\"\r\n                }\r\n            },\r\n            \"de\": {\r\n                \"title\": \"Dieser Titel ist in Deutsch geschrieben\",\r\n                \"body\": \"Jetzt ist es wirklich einfach, den Inhalt einer Benachrichtigung zu übersetzen, einschließlich Bilder und Schaltflächen!\",\r\n                \"summary\": \"Awesome Notifications Übersetzungen\",\r\n                \"bigPicture\": \"asset://assets/images/awn-rocks-de.jpg\",\r\n                \"largeIcon\": \"asset://assets/images/german.jpg\",\r\n                \"buttonLabels\": {\r\n                    \"AGREED1\": \"Ich stimme zu\",\r\n                    \"AGREED2\": \"Ich stimme auch zu\"\r\n                }\r\n            },\r\n            \"pt\": {\r\n                \"bigPicture\": \"asset://assets/images/awn-rocks-pt.jpg\",\r\n                \"largeIcon\": \"asset://assets/images/portuguese.jpg\",\r\n                \"buttonLabels\": {\r\n                    \"AGREED1\": \"Eu concordo!\",\r\n                    \"AGREED2\": \"Eu concordo também!\"\r\n                }\r\n            },\r\n            \"es\": {\r\n                \"bigPicture\": \"asset://assets/images/awn-rocks-es.jpg\",\r\n                \"largeIcon\": \"asset://assets/images/spanish.jpg\",\r\n                \"buttonLabels\": {\r\n                    \"AGREED1\": \"Estoy de acuerdo\",\r\n                    \"AGREED2\": \"También estoy de acuerdo\"\r\n                }\r\n            }\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fcm.googleapis.com/fcm/send",
+							"protocol": "https",
+							"host": [
+								"fcm",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"fcm",
+								"send"
+							]
+						},
+						"description": "Firebase Message example, using Flutter Awesome Notifications"
+					},
+					"response": []
+				},
+				{
+					"name": "Push Notification Progress bar",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "key={{server_key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\" : \"{{fcm_test_topic}}\",\r\n    \"mutable_content\": true,\r\n    \"priority\": \"high\",\r\n    \"notification\": {\r\n        \"badge\": 50,\r\n        \"title\": \"Huston! The eagle has landed!\",\r\n        \"body\": \"A small step for a man, but a giant leap to Flutter's community!\"\r\n    },\r\n    \"data\" : {\r\n        \"content\": {\r\n            \"id\": 1,\r\n            \"badge\": 50,\r\n            \"channelKey\": \"alerts\",\r\n            \"notificationLayout\": \"ProgressBar\",\r\n            \"progress\": 85,\r\n            \"privacy\": \"Private\",\r\n            \"payload\": {\r\n                \"secret\": \"Awesome Notifications Rocks!\"\r\n            }\r\n        },\r\n        \"actionButtons\": [\r\n            {\r\n                \"key\": \"REDIRECT\",\r\n                \"label\": \"Redirect\",\r\n                \"autoDismissible\": true\r\n            },\r\n            {\r\n                \"key\": \"DISMISS\",\r\n                \"label\": \"Dismiss\",\r\n                \"actionType\": \"DismissAction\",\r\n                \"isDangerousOption\": true,\r\n                \"autoDismissible\": true\r\n            }\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fcm.googleapis.com/fcm/send",
+							"protocol": "https",
+							"host": [
+								"fcm",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"fcm",
+								"send"
+							]
+						},
+						"description": "Firebase Message example, using Flutter Awesome Notifications"
+					},
+					"response": []
+				},
+				{
+					"name": "Original Firebase push notification",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "value",
+									"value": "key={{server_key}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\" : \"{{fcm_token_ios}}\",\r\n    \"mutable_content\" : true,\r\n    \"notification\" : {\r\n        \"title\": \"This notification mimics Firebase console\",\r\n        \"body\" : \"Here is a beautiful image to you!\",\r\n        \"image\": \"https://img.buzzfeed.com/buzzfeed-static/static/2017-04/24/14/asset/buzzfeed-prod-fastlane-01/sub-buzz-10398-1493058094-5.jpg?resize=990:912?output-quality=auto&output-format=auto&downsize=640:*\"\r\n    },\r\n    \"data\" : {\r\n        \"variable_1\" : \"abcd\",\r\n        \"secret\": \"secret_key\",\r\n        \"key_1\" : \"Value for key_1\",\r\n        \"key_2\" : \"Value for key_2\"\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "https://fcm.googleapis.com/fcm/send",
+							"protocol": "https",
+							"host": [
+								"fcm",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"fcm",
+								"send"
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"to\" : \"{{fcm_token}}\",\r\n    \"mutable_content\" : true,\n    \"content_available\" : true,\n   \"priority\" : \"high\",\n   \"data\" : {\r\n        \"content\": {\r\n            \"id\": 100,\r\n            \"channelKey\": \"big_picture\",\r\n            \"title\": \"Huston!\\nThe eagle has landed!\",\r\n            \"body\": \"A small step for a man, but a giant leap to Flutter's community!\",\r\n            \"notificationLayout\": \"BigPicture\",\r\n            \"largeIcon\": \"https://media.fstatic.com/kdNpUx4VBicwDuRBnhBrNmVsaKU=/full-fit-in/290x478/media/artists/avatar/2013/08/neil-i-armstrong_a39978.jpeg\",\r\n            \"bigPicture\": \"https://www.dw.com/image/49519617_303.jpg\",\r\n            \"showWhen\": true,\r\n            \"autoDismissible\": true,\r\n            \"privacy\": \"Private\"\r\n        },\r\n        \"actionButtons\": [\r\n            {\r\n                \"key\": \"REPLY\",\r\n                \"label\": \"Reply\",\r\n                \"autoDismissible\": true,\r\n                \"buttonType\":  \"InputField\"\r\n            },\r\n            {\r\n                \"key\": \"ARCHIVE\",\r\n                \"label\": \"Archive\",\r\n                \"autoDismissible\": true\r\n            }\r\n        ]\r\n    }\r\n}"
-				},
-				"url": {
-					"raw": "https://fcm.googleapis.com/fcm/send",
-					"protocol": "https",
-					"host": [
-						"fcm",
-						"googleapis",
-						"com"
-					],
-					"path": [
-						"fcm",
-						"send"
-					]
+				{
+					"name": "Switchable Push Notification",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "key={{server_key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\" : \"{{fcm_token_ios}}\",\r\n    \"priority\": \"high\",\r\n    \"mutable_content\": true,\r\n    \"notification\": {\r\n        \"badge\": 15,\r\n        \"title\": \"Huston! The eagle has landed!\",\r\n        \"body\": \"A small step for a man, but a giant leap to Flutter's community!\"\r\n    },\r\n    \"data\" : {\r\n        \"content\": {\r\n            \"id\": 1,\r\n            \"badge\": 15,\r\n            \"channelKey\": \"alerts\",\r\n            \"displayOnForeground\": true,\r\n            \"notificationLayout\": \"BigPicture\",\r\n            \"largeIcon\": \"https://br.web.img3.acsta.net/pictures/19/06/18/17/09/0834720.jpg\",\r\n            \"bigPicture\": \"https://www.dw.com/image/49519617_303.jpg\",\r\n            \"showWhen\": true,\r\n            \"autoDismissible\": true,\r\n            \"privacy\": \"Private\",\r\n            \"payload\": {\r\n                \"secret\": \"Awesome Notifications Rocks!\"\r\n            }\r\n        },\r\n        \"actionButtons\": [\r\n            {\r\n                \"key\": \"REDIRECT\",\r\n                \"label\": \"label1\",\r\n                \"autoDismissible\": true\r\n            },\r\n            {\r\n                \"key\": \"DISMISS\",\r\n                \"label\": \"label2\",\r\n                \"actionType\": \"DismissAction\",\r\n                \"isDangerousOption\": true,\r\n                \"autoDismissible\": true\r\n            }\r\n        ],\r\n        \"Android\": {\r\n            \"content\": {\r\n                \"title\": \"Android! The eagle has landed!\",\r\n                \"payload\": {\r\n                    \"android\": \"android custom content!\"\r\n                }\r\n            },\r\n            \"actionButtons\": [\r\n                {\r\n                    \"key\": \"REDIRECT\",\r\n                    \"label\": \"Redirect\",\r\n                    \"autoDismissible\": true\r\n                },\r\n                {\r\n                    \"key\": \"DISMISS\",\r\n                    \"label\": \"Dismiss\",\r\n                    \"actionType\": \"DismissAction\",\r\n                    \"isDangerousOption\": true,\r\n                    \"autoDismissible\": true\r\n                }\r\n            ]\r\n        },\r\n        \"iOS\": {\r\n            \"content\": {\r\n                \"title\": \"Jobs! The eagle has landed!\",\r\n                \"payload\": {\r\n                    \"ios\": \"ios custom content!\"\r\n                }\r\n            },\r\n            \"actionButtons\": [\r\n                {\r\n                    \"key\": \"REDIRECT\",\r\n                    \"label\": \"Redirect message\",\r\n                    \"autoDismissible\": true\r\n                },\r\n                {\r\n                    \"key\": \"DISMISS\",\r\n                    \"label\": \"Dismiss message\",\r\n                    \"actionType\": \"DismissAction\",\r\n                    \"isDangerousOption\": true,\r\n                    \"autoDismissible\": true\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fcm.googleapis.com/fcm/send",
+							"protocol": "https",
+							"host": [
+								"fcm",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"fcm",
+								"send"
+							]
+						},
+						"description": "Firebase Message example, using Flutter Awesome Notifications"
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "Silent push",
+			"item": [
+				{
+					"name": "Push Silent Data iOS",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var moment = require('moment');",
+									"",
+									"const microsecondsSinceEpoch = moment().valueOf();",
+									"console.log(microsecondsSinceEpoch);",
+									"pm.environment.set('fromMicrosecondsSinceEpoch', microsecondsSinceEpoch);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "key={{server_key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\" : \"{{fcm_token_ios}}\",\r\n    \"content_available\": true,\r\n    \"priority\": \"high\",\r\n    \"data\" : {\r\n        \"data1\": \"fb787aa2-6387-4f65-a5a2-125f96ab4c14\",\r\n        \"data2\": \"call_voz\",\r\n        \"data3\": \"3c3079b7-ab5e-48a5-8c61-b64ebb4910a9\",\r\n        \"data4\": \"5469846578\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fcm.googleapis.com/fcm/send",
+							"protocol": "https",
+							"host": [
+								"fcm",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"fcm",
+								"send"
+							]
+						},
+						"description": "Firebase Message example, using Flutter Awesome Notifications"
+					},
+					"response": []
+				},
+				{
+					"name": "Push Silent Data Android",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var moment = require('moment');",
+									"",
+									"const microsecondsSinceEpoch = moment().valueOf();",
+									"console.log(microsecondsSinceEpoch);",
+									"pm.environment.set('fromMicrosecondsSinceEpoch', microsecondsSinceEpoch);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "key={{server_key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\" : \"{{fcm_token_android}}\",\r\n    \"content_available\": true,\r\n    \"priority\": \"high\",\r\n    \"data\" : {\r\n        \"data1\": \"fb787aa2-6387-4f65-a5a2-125f96ab4c14\",\r\n        \"data2\": \"call_voice\",\r\n        \"data3\": \"3c3079b7-ab5e-48a5-8c61-b64ebb4910a9\",\r\n        \"data4\": \"5469846578\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fcm.googleapis.com/fcm/send",
+							"protocol": "https",
+							"host": [
+								"fcm",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"fcm",
+								"send"
+							]
+						},
+						"description": "Firebase Message example, using Flutter Awesome Notifications"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Remote dismiss",
+			"item": [
+				{
+					"name": "Push Notifications + dismiss",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "key={{server_key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\" : \"{{fcm_token_android}}\",\r\n    \"mutable_content\": true,\r\n    \"priority\": \"high\",\r\n    \"notification\": {\r\n        \"badge\": 50,\r\n        \"title\": \"Huston! The eagle has landed!\",\r\n        \"body\": \"A small step for a man, but a giant leap to Flutter's community!\"\r\n    },\r\n    \"data\" : {\r\n        \"dismiss\": \"1,2,42\",\r\n        \"dismissByChannel\": \"channel1,channel_voice\",\r\n        \"dismissByGroup\": \"group1,group2\",\r\n        \"dismissAll\": \"true\",\r\n        \"cancelSchedule\": \"1,2,42\",\r\n        \"cancelScheduleByChannel\": \"channel1,channel_voice\",\r\n        \"cancelScheduleByGroup\": \"group1,group2\",\r\n        \"cancelAllSchedules\": \"true\",\r\n        \"cancelNotification\": \"1,2,42\",\r\n        \"cancelNotificationByChannel\": \"channel1,channel_voice\",\r\n        \"cancelNotificationByGroup\": \"group1,group2\",\r\n        \"cancelAllNotifications\": true,\r\n        \"content\": {\r\n            \"id\": 1,\r\n            \"badge\": 50,\r\n            \"channelKey\": \"alerts\",\r\n            \"notificationLayout\": \"BigPicture\",\r\n            \"largeIcon\": \"https://br.web.img3.acsta.net/pictures/19/06/18/17/09/0834720.jpg\",\r\n            \"bigPicture\": \"https://www.dw.com/image/49519617_303.jpg\",\r\n            \"showWhen\": true,\r\n            \"displayOnForeground\": true,\r\n            \"autoDismissible\": true,\r\n            \"privacy\": \"Private\",\r\n            \"payload\": {\r\n                \"secret\": \"Awesome Notifications Rocks!\"\r\n            }\r\n        },\r\n        \"actionButtons\": [\r\n            {\r\n                \"key\": \"REDIRECT\",\r\n                \"label\": \"Redirect\",\r\n                \"autoDismissible\": true\r\n            },\r\n            {\r\n                \"key\": \"DISMISS\",\r\n                \"label\": \"Dismiss\",\r\n                \"actionType\": \"DismissAction\",\r\n                \"isDangerousOption\": true,\r\n                \"autoDismissible\": true\r\n            }\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fcm.googleapis.com/fcm/send",
+							"protocol": "https",
+							"host": [
+								"fcm",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"fcm",
+								"send"
+							]
+						},
+						"description": "Firebase Message example, using Flutter Awesome Notifications"
+					},
+					"response": []
+				},
+				{
+					"name": "Silent Remote dismiss",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "key={{server_key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"to\" : \"{{fcm_token_android}}\",\r\n    \"content_available\": true,\r\n    \"priority\": \"high\",\r\n    \"data\": {\r\n        \"dismiss\": \"1,2,42\",\r\n        \"dismissByChannel\": \"channel1,channel_voice\",\r\n        \"dismissByGroup\": \"group1,group2\",\r\n        \"dismissAll\": \"true\",\r\n        \"cancelSchedule\": \"1,2,42\",\r\n        \"cancelScheduleByChannel\": \"channel1,channel_voice\",\r\n        \"cancelScheduleByGroup\": \"group1,group2\",\r\n        \"cancelAllSchedules\": \"true\",\r\n        \"cancelNotification\": \"1,2,42\",\r\n        \"cancelNotificationByChannel\": \"channel1,channel_voice\",\r\n        \"cancelNotificationByGroup\": \"group1,group2\",\r\n        \"cancelAllNotifications\": true,\r\n        \"dontCallFlutter\": \"true\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fcm.googleapis.com/fcm/send",
+							"protocol": "https",
+							"host": [
+								"fcm",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"fcm",
+								"send"
+							]
+						},
+						"description": "Firebase Message example, using Flutter Awesome Notifications"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "server_key",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "fcm_token_ipad",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "fcm_token_ios",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "fcm_token_android",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "fcm_test_topic",
+			"value": "/topics/test_topic",
+			"type": "string"
+		},
+		{
+			"key": "fcm_test_negative_topic",
+			"value": "/topics/test_negative_topic",
+			"type": "string"
 		}
 	]
 }
