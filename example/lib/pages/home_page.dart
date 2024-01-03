@@ -629,6 +629,10 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () =>
                     NotificationUtils.showBigPictureNotificationActionButtons(
                         3)),
+            SimpleButton('Show Notification\nwith Authentication Required Action',
+                onPressed: () =>
+                    NotificationUtils.showNotificationWithAuthenticatedActionButtons(
+                        3)),
             SimpleButton(
                 'Show Big picture notification\nwith Reply and Action button',
                 onPressed: () => NotificationUtils

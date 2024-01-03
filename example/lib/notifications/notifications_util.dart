@@ -1394,6 +1394,37 @@ class NotificationUtils {
         ]);
   }
 
+  static Future<void> showNotificationWithAuthenticatedActionButtons(int id) async {
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: id,
+            channelKey: "big_picture",
+            title: 'Big <b>BIG</b> picture title',
+            summary: 'Summary <i>text</i>',
+            body:
+            '$lorenIpsumText<br><br>$lorenIpsumText<br><br>$lorenIpsumText',
+            largeIcon:
+            'https://image.freepik.com/vetores-gratis/modelo-de-logotipo-de-restaurante-retro_23-2148451519.jpg',
+            bigPicture: 'https://media-cdn.tripadvisor.com/media/photo-s/15/dd/20/61/al-punto.jpg',
+            notificationLayout: NotificationLayout.BigPicture,
+            color: Colors.indigoAccent,
+            payload: {'uuid': 'uuid-test'}),
+        actionButtons: [
+          NotificationActionButton(
+              key: 'READ',
+              label: 'Mark as read',
+              autoDismissible: true,
+              isAuthenticationRequired: true,
+          ),
+          NotificationActionButton(
+              key: 'REMEMBER',
+              label: 'Remember-me later',
+              autoDismissible: false,
+              isAuthenticationRequired: true,
+          )
+        ]);
+  }
+
   static Future<void> showBigPictureNotificationActionButtonsAndReply(
       int id) async {
     await AwesomeNotifications().createNotification(

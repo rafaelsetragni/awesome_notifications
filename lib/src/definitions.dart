@@ -204,6 +204,7 @@ const NOTIFICATION_SHOW_WHEN = 'showWhen';
 const NOTIFICATION_EXPANDABLE_BODY = 'expandableBody';
 const NOTIFICATION_JSON = 'notificationJson';
 const NOTIFICATION_PERMISSIONS = 'permissions';
+const NOTIFICATION_AUTHENTICATION_REQUIRED = 'isAuthenticationRequired';
 
 const NOTIFICATION_ACTION_BUTTONS = 'actionButtons';
 const NOTIFICATION_BUTTON_KEY = 'key';
@@ -330,5 +331,6 @@ class Definitions {
     NOTIFICATION_CHANNEL_CRITICAL_ALERTS: false,
     NOTIFICATION_ROUNDED_LARGE_ICON: false,
     NOTIFICATION_ROUNDED_BIG_PICTURE: false,
+    NOTIFICATION_AUTHENTICATION_REQUIRED: false,
   };
 }
