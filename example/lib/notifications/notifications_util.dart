@@ -475,8 +475,7 @@ class NotificationUtils {
   ************************************************ */
 
 
-  static Future<void> showTranslatedNotification(int id, {required languageCode}) async {
-    await AwesomeNotifications().setLocalization(languageCode: languageCode);
+  static Future<void> showNotificationWithLocalizationsBlock(int id) async {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: id,
@@ -567,7 +566,85 @@ class NotificationUtils {
               }
           ),
         });
-    await AwesomeNotifications().setLocalization(languageCode: null);
+  }
+
+
+  static Future<void> showNotificationWithLocalizationsKeyBlock(int id) async {
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: id,
+            channelKey: 'basic_channel',
+            title: 'Original title in English',
+            body: 'Original body in English',
+            titleLocKey: 'not_loc_key',
+            bodyLocKey: 'not_loc_key',
+            titleLocArgs: ['title'],
+            bodyLocArgs: ['body'],
+            summary: 'Awesome Notifications Translations',
+            notificationLayout: NotificationLayout.BigPicture,
+            bigPicture: 'asset://assets/images/awn-rocks-en.jpg',
+            largeIcon: 'asset://assets/images/american.jpg',
+            payload: {'uuid': 'user-profile-uuid'}),
+        actionButtons: [
+          NotificationActionButton(
+              key: 'AGREED1', label: 'I agree', autoDismissible: true),
+          NotificationActionButton(
+              key: 'AGREED2', label: 'I agree too', autoDismissible: true),
+        ],
+        localizations: {
+          'pt-br' : NotificationLocalization(
+              bigPicture: 'asset://assets/images/awn-rocks-pt-br.jpg',
+              largeIcon: 'asset://assets/images/brazilian.jpg',
+              buttonLabels: {
+                'AGREED1': 'Eu concordo!',
+                'AGREED2': 'Eu concordo também!'
+              }
+          ),
+          'zh': NotificationLocalization(
+              bigPicture: 'asset://assets/images/awn-rocks-zh.jpg',
+              largeIcon: 'asset://assets/images/chinese.jpg',
+              buttonLabels: {
+                'AGREED1': '我同意',
+                'AGREED2': '我也同意'
+              }
+          ),
+          'ko': NotificationLocalization(
+              bigPicture: 'asset://assets/images/awn-rocks-ko.jpg',
+              largeIcon: 'asset://assets/images/korean.jpg',
+              buttonLabels: {
+                'AGREED1': '동의합니다',
+                'AGREED2': '저도 동의합니다'
+              }
+          ),
+          'de': NotificationLocalization(
+              bigPicture: 'asset://assets/images/awn-rocks-de.jpg',
+              largeIcon: 'asset://assets/images/german.jpg',
+              buttonLabels: {
+                'AGREED1': 'Ich stimme zu',
+                'AGREED2': 'Ich stimme auch zu'
+              }
+          ),
+          'pt': NotificationLocalization(
+              bigPicture: 'asset://assets/images/awn-rocks-pt.jpg',
+              largeIcon: 'asset://assets/images/portuguese.jpg',
+              buttonLabels: {
+                'AGREED1': 'Eu concordo!',
+                'AGREED2': 'Eu concordo também!'
+              }
+          ),
+          'es': NotificationLocalization(
+              bigPicture: 'asset://assets/images/awn-rocks-es.jpg',
+              largeIcon: 'asset://assets/images/spanish.jpg',
+              buttonLabels: {
+                'AGREED1': 'Estoy de acuerdo',
+                'AGREED2': 'También estoy de acuerdo'
+              }
+          ),
+        });
+  }
+
+  static Future<void> setLocalizationForNotification({required languageCode}) async {
+    await AwesomeNotifications().setLocalization(languageCode: languageCode);
   }
 
   /* *********************************************

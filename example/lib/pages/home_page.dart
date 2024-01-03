@@ -480,60 +480,65 @@ class _HomePageState extends State<HomePage> {
 
             /* ******************************************************************** */
 
-            TextDivisor(
-                title:
-                'Translations 🈳🈂️'),
+            TextDivisor( title: 'Localizations 🈳🈂️'),
             const TextNote(
-                'Notification translations allow developers to show notification '
-                    'content in different languages based on the user\'s language preference. '
-                    'The NotificationModel provides a localizations field, which is a '
-                    'Map<String, NotificationLocalization> that contains a list of '
-                    'NotificationLocalization instances for each available language, '
-                    'indexed by their respective language code (e.g., "en", "pt-br"). '
-                    'If the current language, set by the setLocalization methods or '
-                    'the current language in system settings, matches with a defined '
-                    'translation in the notification, all contents defined in the translation '
-                    'will replace the original content. Otherwise, the original '
-                    'content will be preserved.'
+                'Notification localizations allow developers to show notification '
+                    'content in multiple languages. The NotificationModel has a '
+                    'localizations field, which is a Map<String, NotificationLocalization>, '
+                    'containing NotificationLocalization instances for each language (e.g., "en", "pt-br"). '
+                    'Matching the user\'s language preference with these localizations '
+                    'updates the notification content. If no match is found, original content is used. '
+                    'Additionally, localization keys and arguments (locKeys and locArgs) can be used '
+                    'to refer to localized strings from local translation files, enabling dynamic content '
+                    'localization based on user preferences.'
             ),
-            SimpleButton('Show notification using system default',
-                onPressed: () => NotificationUtils.showTranslatedNotification(
-                    1, languageCode: null
+            SimpleButton('Show notification using localization section',
+                onPressed: () => NotificationUtils
+                    .showNotificationWithLocalizationsBlock(1)
+            ),
+            SimpleButton('Show notification using localization Keys',
+                onPressed: () => NotificationUtils
+                    .showNotificationWithLocalizationsKeyBlock(1)
+            ),
+            const SizedBox(height: 48),
+            SimpleButton('Set language to system default',
+                onPressed: () => NotificationUtils.setLocalizationForNotification(
+                    languageCode: null
                 )
             ),
-            SimpleButton('Show notification in english 🇺🇸',
-                onPressed: () => NotificationUtils.showTranslatedNotification(
-                    1, languageCode: "en"
+            SimpleButton('Set language to english 🇺🇸',
+                onPressed: () => NotificationUtils.setLocalizationForNotification(
+                    languageCode: "en"
                 )
             ),
-            SimpleButton('Show notification in brazilian portuguese 🇧🇷',
-                onPressed: () => NotificationUtils.showTranslatedNotification(
-                    1, languageCode: "pt-br"
+            SimpleButton('Set language to brazilian portuguese 🇧🇷',
+                onPressed: () => NotificationUtils.setLocalizationForNotification(
+                    languageCode: "pt-br"
                 )
             ),
-            SimpleButton('Show notification in portuguese 🇵🇹',
-                onPressed: () => NotificationUtils.showTranslatedNotification(
-                    1, languageCode: "pt"
+            SimpleButton('Set language to portuguese 🇵🇹',
+                onPressed: () => NotificationUtils.setLocalizationForNotification(
+                    languageCode: "pt"
                 )
             ),
-            SimpleButton('Show notification in chinese 🇨🇳',
-                onPressed: () => NotificationUtils.showTranslatedNotification(
-                    1, languageCode: "zh"
+            SimpleButton('Set language to chinese 🇨🇳',
+                onPressed: () => NotificationUtils.setLocalizationForNotification(
+                    languageCode: "zh"
                 )
             ),
-            SimpleButton('Show notification in Korean 🇰🇷',
-                onPressed: () => NotificationUtils.showTranslatedNotification(
-                    1, languageCode: "ko"
+            SimpleButton('Set language to Korean 🇰🇷',
+                onPressed: () => NotificationUtils.setLocalizationForNotification(
+                    languageCode: "ko"
                 )
             ),
-            SimpleButton('Show notification in Spanish 🇪🇸',
-                onPressed: () => NotificationUtils.showTranslatedNotification(
-                    1, languageCode: "es"
+            SimpleButton('Set language to Spanish 🇪🇸',
+                onPressed: () => NotificationUtils.setLocalizationForNotification(
+                    languageCode: "es"
                 )
             ),
-            SimpleButton('Show notification in Germany 🇩🇪',
-                onPressed: () => NotificationUtils.showTranslatedNotification(
-                    1, languageCode: "de"
+            SimpleButton('Set language to Germany 🇩🇪',
+                onPressed: () => NotificationUtils.setLocalizationForNotification(
+                    languageCode: "de"
                 )
             ),
 
