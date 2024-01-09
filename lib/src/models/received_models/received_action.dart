@@ -67,7 +67,9 @@ class ReceivedAction extends ReceivedNotification {
     );
 
     isAuthenticationRequired = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_AUTHENTICATION_REQUIRED, dataMap);
+      NOTIFICATION_AUTHENTICATION_REQUIRED,
+      dataMap,
+    );
 
     return this;
   }

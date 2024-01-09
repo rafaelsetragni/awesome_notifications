@@ -213,37 +213,37 @@ class BaseNotificationContent extends Model {
   )
   bool? get autoDismissable => _autoDismissible;
 
-  BaseNotificationContent(
-      {int? id,
-      String? channelKey,
-      String? groupKey,
-      ActionType actionType = ActionType.Default,
-      String? title,
-      String? body,
-      String? titleLocKey,
-      String? bodyLocKey,
-      List<String>? titleLocArgs,
-      List<String>? bodyLocArgs,
-      String? summary,
-      bool showWhen = true,
-      String? icon,
-      String? largeIcon,
-      String? bigPicture,
-      bool wakeUpScreen = false,
-      bool fullScreenIntent = false,
-      bool criticalAlert = false,
-      NotificationCategory? category,
-      bool autoDismissible = true,
-      Color? color,
-      Color? backgroundColor,
-      Duration? chronometer,
-      Duration? timeoutAfter,
-      Map<String, String?>? payload,
-      String? customSound,
-      bool roundedLargeIcon = false,
-      bool roundedBigPicture = false,
-      bool autoCancel = true})
-      : _id = AwesomeAssertUtils.getValueOrDefault<int>(NOTIFICATION_ID, id),
+  BaseNotificationContent({
+    int? id,
+    String? channelKey,
+    String? groupKey,
+    ActionType actionType = ActionType.Default,
+    String? title,
+    String? body,
+    String? titleLocKey,
+    String? bodyLocKey,
+    List<String>? titleLocArgs,
+    List<String>? bodyLocArgs,
+    String? summary,
+    bool showWhen = true,
+    String? icon,
+    String? largeIcon,
+    String? bigPicture,
+    bool wakeUpScreen = false,
+    bool fullScreenIntent = false,
+    bool criticalAlert = false,
+    NotificationCategory? category,
+    bool autoDismissible = true,
+    Color? color,
+    Color? backgroundColor,
+    Duration? chronometer,
+    Duration? timeoutAfter,
+    Map<String, String?>? payload,
+    String? customSound,
+    bool roundedLargeIcon = false,
+    bool roundedBigPicture = false,
+    bool autoCancel = true,
+  })  : _id = AwesomeAssertUtils.getValueOrDefault<int>(NOTIFICATION_ID, id),
         _channelKey = AwesomeAssertUtils.getValueOrDefault<String>(
           NOTIFICATION_CHANNEL_KEY,
           channelKey,
@@ -261,15 +261,25 @@ class BaseNotificationContent extends Model {
           title,
         ),
         _body = AwesomeAssertUtils.getValueOrDefault<String>(
-            NOTIFICATION_BODY, body),
+          NOTIFICATION_BODY,
+          body,
+        ),
         _titleLocKey = AwesomeAssertUtils.getValueOrDefault<String>(
-            NOTIFICATION_TITLE_KEY, titleLocKey),
+          NOTIFICATION_TITLE_KEY,
+          titleLocKey,
+        ),
         _bodyLocKey = AwesomeAssertUtils.getValueOrDefault<String>(
-            NOTIFICATION_BODY_KEY, bodyLocKey),
+          NOTIFICATION_BODY_KEY,
+          bodyLocKey,
+        ),
         _titleLocArgs = AwesomeAssertUtils.getValueOrDefault<List<String>>(
-            NOTIFICATION_TITLE_ARGS, titleLocArgs),
+          NOTIFICATION_TITLE_ARGS,
+          titleLocArgs,
+        ),
         _bodyLocArgs = AwesomeAssertUtils.getValueOrDefault<List<String>>(
-            NOTIFICATION_BODY_ARGS, bodyLocArgs),
+          NOTIFICATION_BODY_ARGS,
+          bodyLocArgs,
+        ),
         _summary = AwesomeAssertUtils.getValueOrDefault<String>(
           NOTIFICATION_SUMMARY,
           summary,
@@ -366,14 +376,20 @@ class BaseNotificationContent extends Model {
     _body = AwesomeAssertUtils.extractValue<String>(NOTIFICATION_BODY, mapData);
 
     _titleLocKey = AwesomeAssertUtils.extractValue<String>(
-        NOTIFICATION_TITLE_KEY, mapData);
+      NOTIFICATION_TITLE_KEY,
+      mapData,
+    );
     _bodyLocKey =
         AwesomeAssertUtils.extractValue<String>(NOTIFICATION_BODY_KEY, mapData);
 
     _titleLocArgs = AwesomeAssertUtils.extractValue<List<String>>(
-        NOTIFICATION_TITLE_ARGS, mapData);
+      NOTIFICATION_TITLE_ARGS,
+      mapData,
+    );
     _bodyLocArgs = AwesomeAssertUtils.extractValue<List<String>>(
-        NOTIFICATION_BODY_ARGS, mapData);
+      NOTIFICATION_BODY_ARGS,
+      mapData,
+    );
 
     _summary =
         AwesomeAssertUtils.extractValue<String>(NOTIFICATION_SUMMARY, mapData);

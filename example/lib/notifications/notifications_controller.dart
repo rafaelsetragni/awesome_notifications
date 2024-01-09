@@ -373,18 +373,21 @@ class NotificationsController {
   /// Use this method to detect when the user taps on a notification or action button
   @pragma("vm:entry-point")
   static Future<void> onActionReceivedMethod(
-      ReceivedAction receivedAction) async {
+    ReceivedAction receivedAction,
+  ) async {
     if (receivePort != null) {
       await onActionReceivedMethodImpl(receivedAction);
     } else {
       print(
-          'onActionReceivedMethod was called inside a parallel dart isolate, where receivePort was never initialized.');
+        'onActionReceivedMethod was called inside a parallel dart isolate, where receivePort was never initialized.',
+      );
       SendPort? sendPort =
           IsolateNameServer.lookupPortByName('notification_action_port');
 
       if (sendPort != null) {
         print(
-            'Redirecting the execution to main isolate process in listening...');
+          'Redirecting the execution to main isolate process in listening...',
+        );
         dynamic serializedData = receivedAction.toMap();
         sendPort.send(serializedData);
       }

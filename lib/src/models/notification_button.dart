@@ -94,19 +94,19 @@ class NotificationActionButton extends Model {
   /// [isDangerousOption]: Marks the button as representing a dangerous choice.
   /// [color]: Color of the button.
   /// [actionType]: Type of action associated with the button.
-  NotificationActionButton(
-      {required String key,
-      required String label,
-      String? icon,
-      bool enabled = true,
-      bool requireInputText = false,
-      bool autoDismissible = true,
-      bool showInCompactView = false,
-      bool isDangerousOption = false,
-      bool isAuthenticationRequired = false,
-      Color? color,
-      ActionType actionType = ActionType.Default})
-      : _key = key,
+  NotificationActionButton({
+    required String key,
+    required String label,
+    String? icon,
+    bool enabled = true,
+    bool requireInputText = false,
+    bool autoDismissible = true,
+    bool showInCompactView = false,
+    bool isDangerousOption = false,
+    bool isAuthenticationRequired = false,
+    Color? color,
+    ActionType actionType = ActionType.Default,
+  })  : _key = key,
         _label = label,
         _icon = icon,
         _enabled = enabled,
@@ -150,9 +150,14 @@ class NotificationActionButton extends Model {
       mapData,
     );
     _actionType = AwesomeAssertUtils.extractEnum<ActionType>(
-        NOTIFICATION_ACTION_TYPE, mapData, ActionType.values);
+      NOTIFICATION_ACTION_TYPE,
+      mapData,
+      ActionType.values,
+    );
     _isAuthenticationRequired = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_AUTHENTICATION_REQUIRED, mapData);
+      NOTIFICATION_AUTHENTICATION_REQUIRED,
+      mapData,
+    );
 
     _color =
         AwesomeAssertUtils.extractValue<Color>(NOTIFICATION_COLOR, mapData);
@@ -211,7 +216,7 @@ class NotificationActionButton extends Model {
       NOTIFICATION_IS_DANGEROUS_OPTION: _isDangerousOption,
       NOTIFICATION_ACTION_TYPE: _actionType?.name,
       NOTIFICATION_COLOR: _color?.value,
-      NOTIFICATION_AUTHENTICATION_REQUIRED: _isAuthenticationRequired
+      NOTIFICATION_AUTHENTICATION_REQUIRED: _isAuthenticationRequired,
     };
   }
 
@@ -225,7 +230,8 @@ class NotificationActionButton extends Model {
     }
     if (AwesomeAssertUtils.isNullOrEmptyOrInvalid(_label)) {
       throw const AwesomeNotificationsException(
-          message: 'label id is required');
+        message: 'label id is required',
+      );
     }
 
     // For action buttons, it's only allowed resource media types

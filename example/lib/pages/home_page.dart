@@ -554,79 +554,93 @@ class _HomePageState extends State<HomePage> {
 
           /* ******************************************************************** */
 
-            const TextDivisor(title: 'Timeout Notification (Android)'),
-            const TextNote(
-                'To set a timeout for notification, making it auto dismiss as it get expired, set the "timeoutAfter" property with an duration interval.\n\n'
-                    "Attention: to use this property from json payloads, use an integer positive value to represent seconds."),
-            SimpleButton('Create notification with 10 seconds timeout',
-                onPressed: () => NotificationUtils.showNotificationWithTimeout(2)),
-            SimpleButton('Cancel notification',
-                backgroundColor: Colors.red,
-                labelColor: Colors.white,
-                onPressed: () => NotificationUtils.cancelNotification(2)),
+          const TextDivisor(title: 'Timeout Notification (Android)'),
+          const TextNote(
+              'To set a timeout for notification, making it auto dismiss as it get expired, set the "timeoutAfter" property with an duration interval.\n\n'
+              "Attention: to use this property from json payloads, use an integer positive value to represent seconds."),
+          SimpleButton(
+            'Create notification with 10 seconds timeout',
+            onPressed: () => NotificationUtils.showNotificationWithTimeout(2),
+          ),
+          SimpleButton(
+            'Cancel notification',
+            backgroundColor: Colors.red,
+            labelColor: Colors.white,
+            onPressed: () => NotificationUtils.cancelNotification(2),
+          ),
 
-            /* ******************************************************************** */
+          /* ******************************************************************** */
 
-            const TextDivisor( title: 'Localizations 🈳🈂️'),
-            const TextNote(
-                'Notification localizations allow developers to show notification '
-                    'content in multiple languages. The NotificationModel has a '
-                    'localizations field, which is a Map<String, NotificationLocalization>, '
-                    'containing NotificationLocalization instances for each language (e.g., "en", "pt-br"). '
-                    'Matching the user\'s language preference with these localizations '
-                    'updates the notification content. If no match is found, original content is used. '
-                    'Additionally, localization keys and arguments (locKeys and locArgs) can be used '
-                    'to refer to localized strings from local translation files, enabling dynamic content '
-                    'localization based on user preferences.'
+          const TextDivisor(title: 'Localizations 🈳🈂️'),
+          const TextNote(
+              'Notification localizations allow developers to show notification '
+              'content in multiple languages. The NotificationModel has a '
+              'localizations field, which is a Map<String, NotificationLocalization>, '
+              'containing NotificationLocalization instances for each language (e.g., "en", "pt-br"). '
+              'Matching the user\'s language preference with these localizations '
+              'updates the notification content. If no match is found, original content is used. '
+              'Additionally, localization keys and arguments (locKeys and locArgs) can be used '
+              'to refer to localized strings from local translation files, enabling dynamic content '
+              'localization based on user preferences.'),
+          SimpleButton(
+            'Show notification using localization section',
+            onPressed: () =>
+                NotificationUtils.showNotificationWithLocalizationsBlock(1),
+          ),
+          SimpleButton(
+            'Show notification using localization Keys',
+            onPressed: () =>
+                NotificationUtils.showNotificationWithLocalizationsKeyBlock(
+              1,
             ),
-            SimpleButton('Show notification using localization section',
-                onPressed: () => NotificationUtils
-                    .showNotificationWithLocalizationsBlock(1)
+          ),
+          const SizedBox(height: 48),
+          SimpleButton(
+            'Set language to system default',
+            onPressed: () => NotificationUtils.setLocalizationForNotification(
+              languageCode: null,
             ),
-            SimpleButton('Show notification using localization Keys',
-                onPressed: () => NotificationUtils
-                    .showNotificationWithLocalizationsKeyBlock(1)
+          ),
+          SimpleButton(
+            'Set language to english 🇺🇸',
+            onPressed: () => NotificationUtils.setLocalizationForNotification(
+              languageCode: "en",
             ),
-            const SizedBox(height: 48),
-            SimpleButton('Set language to system default',
-                onPressed: () => NotificationUtils.setLocalizationForNotification(
-                    languageCode: null
-                )
+          ),
+          SimpleButton(
+            'Set language to brazilian portuguese 🇧🇷',
+            onPressed: () => NotificationUtils.setLocalizationForNotification(
+              languageCode: "pt-br",
             ),
-            SimpleButton('Set language to english 🇺🇸',
-                onPressed: () => NotificationUtils.setLocalizationForNotification(
-                    languageCode: "en"
-                )
+          ),
+          SimpleButton(
+            'Set language to portuguese 🇵🇹',
+            onPressed: () => NotificationUtils.setLocalizationForNotification(
+              languageCode: "pt",
             ),
-            SimpleButton('Set language to brazilian portuguese 🇧🇷',
-                onPressed: () => NotificationUtils.setLocalizationForNotification(
-                    languageCode: "pt-br"
-                )
+          ),
+          SimpleButton(
+            'Set language to chinese 🇨🇳',
+            onPressed: () => NotificationUtils.setLocalizationForNotification(
+              languageCode: "zh",
             ),
-            SimpleButton('Set language to portuguese 🇵🇹',
-                onPressed: () => NotificationUtils.setLocalizationForNotification(
-                    languageCode: "pt"
-                )
+          ),
+          SimpleButton(
+            'Set language to Korean 🇰🇷',
+            onPressed: () => NotificationUtils.setLocalizationForNotification(
+              languageCode: "ko",
             ),
-            SimpleButton('Set language to chinese 🇨🇳',
-                onPressed: () => NotificationUtils.setLocalizationForNotification(
-                    languageCode: "zh"
-                )
+          ),
+          SimpleButton(
+            'Set language to Spanish 🇪🇸',
+            onPressed: () => NotificationUtils.setLocalizationForNotification(
+              languageCode: "es",
             ),
-            SimpleButton('Set language to Korean 🇰🇷',
-                onPressed: () => NotificationUtils.setLocalizationForNotification(
-                    languageCode: "ko"
-                )
-            ),
-            SimpleButton('Set language to Spanish 🇪🇸',
-                onPressed: () => NotificationUtils.setLocalizationForNotification(
-                    languageCode: "es"
-                )
-            ),
-            SimpleButton('Set language to Germany 🇩🇪',
-                onPressed: () => NotificationUtils.setLocalizationForNotification(
-                    languageCode: "de"
-                )
+          ),
+          SimpleButton(
+            'Set language to Germany 🇩🇪',
+            onPressed: () => NotificationUtils.setLocalizationForNotification(
+              languageCode: "de",
             ),
           ),
 
@@ -722,51 +736,66 @@ class _HomePageState extends State<HomePage> {
 
           /* ******************************************************************** */
 
-            const TextDivisor(title: 'Action Buttons'),
-            const TextNote('Action buttons can be used in four types:'
-                '\n\n'
-                '* Default: after user taps, the notification bar is closed and an action event is fired.'
-                '\n\n'
-                '* InputField: after user taps, a input text field is displayed to capture input by the user.'
-                '\n\n'
-                '* DisabledAction: after user taps, the notification bar is closed, but the respective action event is not fired.'
-                '\n\n'
-                '* KeepOnTop: after user taps, the notification bar is not closed, but an action event is fired.'),
-            const TextNote(
-                'Since Android Nougat, icons are only displayed on media layout. The icon media needs to be a native resource type.'),
-            SimpleButton(
-                'Show notification with\nsimple Action buttons (one disabled)',
-                onPressed: () =>
-                    NotificationUtils.showNotificationWithActionButtons(3)),
-            SimpleButton('Show notification with\nIcons and Action buttons',
-                onPressed: () =>
-                    NotificationUtils.showNotificationWithIconsAndActionButtons(
-                        3)),
-            SimpleButton('Show notification with\nReply and Action button',
-                onPressed: () =>
-                    NotificationUtils.showNotificationWithActionButtonsAndReply(
-                        3)),
-            SimpleButton('Show Big picture notification\nwith Action Buttons',
-                onPressed: () =>
-                    NotificationUtils.showBigPictureNotificationActionButtons(
-                        3)),
-            SimpleButton('Show Notification\nwith Authentication Required Action',
-                onPressed: () =>
-                    NotificationUtils.showNotificationWithAuthenticatedActionButtons(
-                        3)),
-            SimpleButton(
-                'Show Big picture notification\nwith Reply and Action button',
-                onPressed: () => NotificationUtils
-                    .showBigPictureNotificationActionButtonsAndReply(3)),
-            SimpleButton(
-                'Show Big text notification\nwith Reply and Action button',
-                onPressed: () =>
-                    NotificationUtils.showBigTextNotificationWithActionAndReply(
-                        3)),
-            SimpleButton('Cancel notification',
-                backgroundColor: Colors.red,
-                labelColor: Colors.white,
-                onPressed: () => NotificationUtils.cancelNotification(3)),
+          const TextDivisor(title: 'Action Buttons'),
+          const TextNote('Action buttons can be used in four types:'
+              '\n\n'
+              '* Default: after user taps, the notification bar is closed and an action event is fired.'
+              '\n\n'
+              '* InputField: after user taps, a input text field is displayed to capture input by the user.'
+              '\n\n'
+              '* DisabledAction: after user taps, the notification bar is closed, but the respective action event is not fired.'
+              '\n\n'
+              '* KeepOnTop: after user taps, the notification bar is not closed, but an action event is fired.'),
+          const TextNote(
+            'Since Android Nougat, icons are only displayed on media layout. The icon media needs to be a native resource type.',
+          ),
+          SimpleButton(
+            'Show notification with\nsimple Action buttons (one disabled)',
+            onPressed: () =>
+                NotificationUtils.showNotificationWithActionButtons(3),
+          ),
+          SimpleButton(
+            'Show notification with\nIcons and Action buttons',
+            onPressed: () =>
+                NotificationUtils.showNotificationWithIconsAndActionButtons(
+              3,
+            ),
+          ),
+          SimpleButton(
+            'Show notification with\nReply and Action button',
+            onPressed: () =>
+                NotificationUtils.showNotificationWithActionButtonsAndReply(
+              3,
+            ),
+          ),
+          SimpleButton(
+            'Show Big picture notification\nwith Action Buttons',
+            onPressed: () =>
+                NotificationUtils.showBigPictureNotificationActionButtons(3),
+          ),
+          SimpleButton(
+            'Show Notification\nwith Authentication Required Action',
+            onPressed: () => NotificationUtils
+                .showNotificationWithAuthenticatedActionButtons(3),
+          ),
+          SimpleButton(
+            'Show Big picture notification\nwith Reply and Action button',
+            onPressed: () => NotificationUtils
+                .showBigPictureNotificationActionButtonsAndReply(3),
+          ),
+          SimpleButton(
+            'Show Big text notification\nwith Reply and Action button',
+            onPressed: () =>
+                NotificationUtils.showBigTextNotificationWithActionAndReply(
+              3,
+            ),
+          ),
+          SimpleButton(
+            'Cancel notification',
+            backgroundColor: Colors.red,
+            labelColor: Colors.white,
+            onPressed: () => NotificationUtils.cancelNotification(3),
+          ),
 
           /* ******************************************************************** */
 
@@ -1337,7 +1366,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-    )
+    );
   }
 }
 

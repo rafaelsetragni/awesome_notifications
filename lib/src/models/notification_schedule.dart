@@ -13,12 +13,13 @@ abstract class NotificationSchedule extends Model {
   /// [repeats]: Specifies whether the notification should repeat.
   /// [preciseAlarm]: Requires precise scheduling, which may consume more battery. Needs explicit permission on Android 12+.
   /// [delayTolerance]: Specifies the delay tolerance in milliseconds for scheduling notifications.
-  NotificationSchedule(
-      {required this.timeZone,
-      this.allowWhileIdle = false,
-      this.repeats = false,
-      this.preciseAlarm = false,
-      this.delayTolerance = 600000});
+  NotificationSchedule({
+    required this.timeZone,
+    this.allowWhileIdle = false,
+    this.repeats = false,
+    this.preciseAlarm = false,
+    this.delayTolerance = 600000,
+  });
 
   /// Full time zone identifier for scheduling the notification. Example: 'America/Sao_Paulo', 'America/New_York', 'Europe/Helsinki'.
   String timeZone;

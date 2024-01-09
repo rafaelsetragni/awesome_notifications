@@ -12,14 +12,15 @@ class NotificationInterval extends NotificationSchedule {
   /// [allowWhileIdle] allows the notification to be displayed even when the device is in low battery mode.
   /// [repeats] determines whether the notification should play only once or keep repeating.
   /// [preciseAlarm] enables maximum precision for scheduling notifications at exact times, which may consume more battery. Requires explicit user consent on Android 12 and beyond.
-  NotificationInterval(
-      {required this.interval,
-      String? timeZone,
-      super.allowWhileIdle,
-      super.repeats,
-      super.preciseAlarm = true})
-      : super(
-            timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier);
+  NotificationInterval({
+    required this.interval,
+    String? timeZone,
+    super.allowWhileIdle,
+    super.repeats,
+    super.preciseAlarm = true,
+  }) : super(
+          timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
+        );
 
   /// Creates a [NotificationInterval] instance from a map of data.
   @override

@@ -77,47 +77,47 @@ class NotificationContent extends BaseNotificationContent {
   }
 
   /// Constructs a [NotificationContent] object with various customization options.
-  NotificationContent(
-      {required int super.id,
-      required String super.channelKey,
-      super.title,
-      super.body,
-      super.titleLocKey,
-      super.bodyLocKey,
-      super.titleLocArgs,
-      super.bodyLocArgs,
-      super.groupKey,
-      super.summary,
-      super.icon,
-      super.largeIcon,
-      super.bigPicture,
-      super.customSound,
-      super.showWhen,
-      super.wakeUpScreen,
-      super.fullScreenIntent,
-      super.criticalAlert,
-      super.roundedLargeIcon,
-      super.roundedBigPicture,
-      super.autoDismissible,
-      super.color,
-      super.timeoutAfter,
-      super.chronometer,
-      super.backgroundColor,
-      super.actionType,
-      NotificationLayout notificationLayout = NotificationLayout.Default,
-      super.payload,
-      super.category,
-      bool hideLargeIconOnExpand = false,
-      bool locked = false,
-      int? progress,
-      int? badge,
-      String? ticker,
-      bool displayOnForeground = true,
-      bool displayOnBackground = true,
-      Duration? duration,
-      NotificationPlayState? playState,
-      double? playbackSpeed})
-      : _hideLargeIconOnExpand = hideLargeIconOnExpand,
+  NotificationContent({
+    required int super.id,
+    required String super.channelKey,
+    super.title,
+    super.body,
+    super.titleLocKey,
+    super.bodyLocKey,
+    super.titleLocArgs,
+    super.bodyLocArgs,
+    super.groupKey,
+    super.summary,
+    super.icon,
+    super.largeIcon,
+    super.bigPicture,
+    super.customSound,
+    super.showWhen,
+    super.wakeUpScreen,
+    super.fullScreenIntent,
+    super.criticalAlert,
+    super.roundedLargeIcon,
+    super.roundedBigPicture,
+    super.autoDismissible,
+    super.color,
+    super.timeoutAfter,
+    super.chronometer,
+    super.backgroundColor,
+    super.actionType,
+    NotificationLayout notificationLayout = NotificationLayout.Default,
+    super.payload,
+    super.category,
+    bool hideLargeIconOnExpand = false,
+    bool locked = false,
+    int? progress,
+    int? badge,
+    String? ticker,
+    bool displayOnForeground = true,
+    bool displayOnBackground = true,
+    Duration? duration,
+    NotificationPlayState? playState,
+    double? playbackSpeed,
+  })  : _hideLargeIconOnExpand = hideLargeIconOnExpand,
         _progress = progress,
         _ticker = ticker,
         _badge = badge,
@@ -146,12 +146,16 @@ class NotificationContent extends BaseNotificationContent {
     _locked =
         AwesomeAssertUtils.extractValue<bool>(NOTIFICATION_LOCKED, mapData);
     _duration = AwesomeAssertUtils.extractValue<Duration>(
-        NOTIFICATION_DURATION, mapData);
+      NOTIFICATION_DURATION,
+      mapData,
+    );
     _playState =
         NotificationPlayState.fromMap(mapData[NOTIFICATION_PLAY_STATE]);
 
     _playbackSpeed = AwesomeAssertUtils.extractValue<double>(
-        NOTIFICATION_PLAYBACK_SPEED, mapData);
+      NOTIFICATION_PLAYBACK_SPEED,
+      mapData,
+    );
 
     _notificationLayout = AwesomeAssertUtils.extractEnum<NotificationLayout>(
       NOTIFICATION_LAYOUT,

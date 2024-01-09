@@ -40,17 +40,19 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   /// [allowWhileIdle]: Allows the notification to display even when the device is in low battery mode.
   /// [repeats]: Determines if the notification will be repeated.
   /// [preciseAlarm]: Requires maximum precision for scheduling notifications, which may use more battery.
-  NotificationAndroidCrontab(
-      {DateTime? initialDateTime,
-      DateTime? expirationDateTime,
-      List<DateTime>? preciseSchedules,
-      String? crontabExpression,
-      String? timeZone,
-      super.allowWhileIdle,
-      super.repeats,
-      super.preciseAlarm = true})
-      : _initialDateTime = AwesomeAssertUtils.getValueOrDefault<DateTime>(
-            NOTIFICATION_INITIAL_DATE_TIME, initialDateTime),
+  NotificationAndroidCrontab({
+    DateTime? initialDateTime,
+    DateTime? expirationDateTime,
+    List<DateTime>? preciseSchedules,
+    String? crontabExpression,
+    String? timeZone,
+    super.allowWhileIdle,
+    super.repeats,
+    super.preciseAlarm = true,
+  })  : _initialDateTime = AwesomeAssertUtils.getValueOrDefault<DateTime>(
+          NOTIFICATION_INITIAL_DATE_TIME,
+          initialDateTime,
+        ),
         _expirationDateTime = AwesomeAssertUtils.getValueOrDefault<DateTime>(
           NOTIFICATION_EXPIRATION_DATE_TIME,
           expirationDateTime,
@@ -65,16 +67,20 @@ class NotificationAndroidCrontab extends NotificationSchedule {
           crontabExpression,
         ),
         super(
-            timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier);
+          timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
+        );
 
   /// Initializes a notification schedule based on a single date reference.
-  NotificationAndroidCrontab.fromDate(
-      {required DateTime date, int initialSecond = 0, super.allowWhileIdle})
-      : super(
-            timeZone: date.isUtc
-                ? AwesomeNotifications.utcTimeZoneIdentifier
-                : AwesomeNotifications.localTimeZoneIdentifier,
-            repeats: false) {
+  NotificationAndroidCrontab.fromDate({
+    required DateTime date,
+    int initialSecond = 0,
+    super.allowWhileIdle,
+  }) : super(
+          timeZone: date.isUtc
+              ? AwesomeNotifications.utcTimeZoneIdentifier
+              : AwesomeNotifications.localTimeZoneIdentifier,
+          repeats: false,
+        ) {
     _initialDateTime = date;
     _crontabExpression = CronHelper().atDate(referenceDateTime: date);
   }
@@ -82,13 +88,15 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   /// Initializes a notification crontab schedule to be triggered yearly at a specific date and time.
   /// [referenceDateTime]: The date and time at which the notification should be scheduled each year.
   /// [allowWhileIdle]: Allows the notification to display even when the device is in low battery mode.
-  NotificationAndroidCrontab.yearly(
-      {required DateTime referenceDateTime, super.allowWhileIdle})
-      : super(
-            timeZone: referenceDateTime.isUtc
-                ? AwesomeNotifications.utcTimeZoneIdentifier
-                : AwesomeNotifications.localTimeZoneIdentifier,
-            repeats: false) {
+  NotificationAndroidCrontab.yearly({
+    required DateTime referenceDateTime,
+    super.allowWhileIdle,
+  }) : super(
+          timeZone: referenceDateTime.isUtc
+              ? AwesomeNotifications.utcTimeZoneIdentifier
+              : AwesomeNotifications.localTimeZoneIdentifier,
+          repeats: false,
+        ) {
     _crontabExpression =
         CronHelper().yearly(referenceDateTime: referenceDateTime);
   }
@@ -96,13 +104,15 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   /// Initializes a notification crontab schedule to be triggered monthly at a specific date and time.
   /// [referenceDateTime]: The date and time at which the notification should be scheduled each month.
   /// [allowWhileIdle]: Allows the notification to display even when the device is in low battery mode.
-  NotificationAndroidCrontab.monthly(
-      {required DateTime referenceDateTime, super.allowWhileIdle})
-      : super(
-            timeZone: referenceDateTime.isUtc
-                ? AwesomeNotifications.utcTimeZoneIdentifier
-                : AwesomeNotifications.localTimeZoneIdentifier,
-            repeats: false) {
+  NotificationAndroidCrontab.monthly({
+    required DateTime referenceDateTime,
+    super.allowWhileIdle,
+  }) : super(
+          timeZone: referenceDateTime.isUtc
+              ? AwesomeNotifications.utcTimeZoneIdentifier
+              : AwesomeNotifications.localTimeZoneIdentifier,
+          repeats: false,
+        ) {
     _crontabExpression =
         CronHelper().monthly(referenceDateTime: referenceDateTime);
   }
@@ -110,13 +120,15 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   /// Initializes a notification crontab schedule to be triggered weekly at a specific date and time.
   /// [referenceDateTime]: The date and time at which the notification should be scheduled each week.
   /// [allowWhileIdle]: Allows the notification to display even when the device is in low battery mode.
-  NotificationAndroidCrontab.weekly(
-      {required DateTime referenceDateTime, super.allowWhileIdle})
-      : super(
-            timeZone: referenceDateTime.isUtc
-                ? AwesomeNotifications.utcTimeZoneIdentifier
-                : AwesomeNotifications.localTimeZoneIdentifier,
-            repeats: false) {
+  NotificationAndroidCrontab.weekly({
+    required DateTime referenceDateTime,
+    super.allowWhileIdle,
+  }) : super(
+          timeZone: referenceDateTime.isUtc
+              ? AwesomeNotifications.utcTimeZoneIdentifier
+              : AwesomeNotifications.localTimeZoneIdentifier,
+          repeats: false,
+        ) {
     _crontabExpression =
         CronHelper().weekly(referenceDateTime: referenceDateTime);
   }
@@ -124,13 +136,15 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   /// Initializes a notification crontab schedule to be triggered daily at a specific time.
   /// [referenceDateTime]: The time at which the notification should be scheduled each day.
   /// [allowWhileIdle]: Allows the notification to display even when the device is in low battery mode.
-  NotificationAndroidCrontab.daily(
-      {required DateTime referenceDateTime, super.allowWhileIdle})
-      : super(
-            timeZone: referenceDateTime.isUtc
-                ? AwesomeNotifications.utcTimeZoneIdentifier
-                : AwesomeNotifications.localTimeZoneIdentifier,
-            repeats: false) {
+  NotificationAndroidCrontab.daily({
+    required DateTime referenceDateTime,
+    super.allowWhileIdle,
+  }) : super(
+          timeZone: referenceDateTime.isUtc
+              ? AwesomeNotifications.utcTimeZoneIdentifier
+              : AwesomeNotifications.localTimeZoneIdentifier,
+          repeats: false,
+        ) {
     _crontabExpression =
         CronHelper().daily(referenceDateTime: referenceDateTime);
   }
@@ -138,13 +152,15 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   /// Initializes a notification crontab schedule to be triggered hourly at a specific minute and second.
   /// [referenceDateTime]: The minute and second at which the notification should be scheduled each hour.
   /// [allowWhileIdle]: Allows the notification to display even when the device is in low battery mode.
-  NotificationAndroidCrontab.hourly(
-      {required DateTime referenceDateTime, super.allowWhileIdle})
-      : super(
-            timeZone: referenceDateTime.isUtc
-                ? AwesomeNotifications.utcTimeZoneIdentifier
-                : AwesomeNotifications.localTimeZoneIdentifier,
-            repeats: false) {
+  NotificationAndroidCrontab.hourly({
+    required DateTime referenceDateTime,
+    super.allowWhileIdle,
+  }) : super(
+          timeZone: referenceDateTime.isUtc
+              ? AwesomeNotifications.utcTimeZoneIdentifier
+              : AwesomeNotifications.localTimeZoneIdentifier,
+          repeats: false,
+        ) {
     _crontabExpression =
         CronHelper().hourly(referenceDateTime: referenceDateTime);
   }
@@ -152,13 +168,15 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   /// Initializes a notification crontab schedule to be triggered every minute at a specific second.
   /// [referenceDateTime]: The second at which the notification should be scheduled each minute.
   /// [allowWhileIdle]: Allows the notification to display even when the device is in low battery mode.
-  NotificationAndroidCrontab.minutely(
-      {required DateTime referenceDateTime, super.allowWhileIdle})
-      : super(
-            timeZone: referenceDateTime.isUtc
-                ? AwesomeNotifications.utcTimeZoneIdentifier
-                : AwesomeNotifications.localTimeZoneIdentifier,
-            repeats: false) {
+  NotificationAndroidCrontab.minutely({
+    required DateTime referenceDateTime,
+    super.allowWhileIdle,
+  }) : super(
+          timeZone: referenceDateTime.isUtc
+              ? AwesomeNotifications.utcTimeZoneIdentifier
+              : AwesomeNotifications.localTimeZoneIdentifier,
+          repeats: false,
+        ) {
     _crontabExpression =
         CronHelper().minutely(initialSecond: referenceDateTime.second);
   }
@@ -166,13 +184,15 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   /// Initializes a notification crontab schedule to be triggered on workweek days (Monday to Friday) at a specific time.
   /// [referenceDateTime]: The time at which the notification should be scheduled on workweek days.
   /// [allowWhileIdle]: Allows the notification to display even when the device is in low battery mode.
-  NotificationAndroidCrontab.workweekDay(
-      {required DateTime referenceDateTime, super.allowWhileIdle})
-      : super(
-            timeZone: referenceDateTime.isUtc
-                ? AwesomeNotifications.utcTimeZoneIdentifier
-                : AwesomeNotifications.localTimeZoneIdentifier,
-            repeats: false) {
+  NotificationAndroidCrontab.workweekDay({
+    required DateTime referenceDateTime,
+    super.allowWhileIdle,
+  }) : super(
+          timeZone: referenceDateTime.isUtc
+              ? AwesomeNotifications.utcTimeZoneIdentifier
+              : AwesomeNotifications.localTimeZoneIdentifier,
+          repeats: false,
+        ) {
     _crontabExpression =
         CronHelper().workweekDay(referenceDateTime: referenceDateTime);
   }
@@ -180,13 +200,15 @@ class NotificationAndroidCrontab extends NotificationSchedule {
   /// Initializes a notification crontab schedule to be triggered on weekend days (Saturday and Sunday) at a specific time.
   /// [referenceDateTime]: The time at which the notification should be scheduled on weekend days.
   /// [allowWhileIdle]: Allows the notification to display even when the device is in low battery mode.
-  NotificationAndroidCrontab.weekendDay(
-      {required DateTime referenceDateTime, super.allowWhileIdle})
-      : super(
-            timeZone: referenceDateTime.isUtc
-                ? AwesomeNotifications.utcTimeZoneIdentifier
-                : AwesomeNotifications.localTimeZoneIdentifier,
-            repeats: false) {
+  NotificationAndroidCrontab.weekendDay({
+    required DateTime referenceDateTime,
+    super.allowWhileIdle,
+  }) : super(
+          timeZone: referenceDateTime.isUtc
+              ? AwesomeNotifications.utcTimeZoneIdentifier
+              : AwesomeNotifications.localTimeZoneIdentifier,
+          repeats: false,
+        ) {
     _crontabExpression =
         CronHelper().weekendDay(referenceDateTime: referenceDateTime);
   }

@@ -1,4 +1,3 @@
-
 # Awesome Notifications for Flutter - Year 2
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications.jpg)
@@ -75,13 +74,13 @@ OBS: Please note that these progress percentages are estimates and are subject t
 
 Help us improve and maintain our work with donations of any amount via Stripe or BuyMeACoffee. Your donation will mainly be used to purchase new devices and equipment, which we will use to test and ensure that our plugins work correctly on all platforms and their respective versions.
 
-[*![Donate With Stripe](https://github.com/rafaelsetragni/awesome_notifications/blob/68c963206885290f8a44eee4bfc7e7b223610e4a/example/assets/readme/stripe.png?raw=true)*](https://donate.stripe.com/3cs14Yf79dQcbU4001)
-[*![Donate With Buy Me A Coffee](https://github.com/rafaelsetragni/awesome_notifications/blob/95ee986af0aa59ccf9a80959bbf3dd60b5a4f048/example/assets/readme/buy-me-a-coffee.jpeg?raw=true)*](https://www.buymeacoffee.com/rafaelsetragni)
-    
+[_![Donate With Stripe](https://github.com/rafaelsetragni/awesome_notifications/blob/68c963206885290f8a44eee4bfc7e7b223610e4a/example/assets/readme/stripe.png?raw=true)_](https://donate.stripe.com/3cs14Yf79dQcbU4001)
+[_![Donate With Buy Me A Coffee](https://github.com/rafaelsetragni/awesome_notifications/blob/95ee986af0aa59ccf9a80959bbf3dd60b5a4f048/example/assets/readme/buy-me-a-coffee.jpeg?raw=true)_](https://www.buymeacoffee.com/rafaelsetragni)
+
 <br>
 <br>
 
-# 💬 Discord Chat Server 
+# 💬 Discord Chat Server
 
 Stay up to date with new updates and get community support by subscribing to our Discord chat server:
 
@@ -118,14 +117,16 @@ We are constantly working to improve Awesome Notifications and provide support f
 <br>
 
 ## 🚚 Migration Guides from Older Versions
+
 ### Breaking Changes
 
 ### From Version 0.8.X to 0.9.X:
 
-- **Awesome Notifications Podfile Modification:** 
+- **Awesome Notifications Podfile Modification:**
   Modifications to the `Podfile` file are now required for local notifications on iOS. This update ensures that your pod packages are configured correctly for both main and extended targets on iOS.
 
   **Before:**
+
   ```rb
   post_install do |installer|
     installer.pods_project.targets.each do |target|
@@ -135,6 +136,7 @@ We are constantly working to improve Awesome Notifications and provide support f
   ```
 
   **Now:**
+
   ```rb
   post_install do |installer|
     installer.pods_project.targets.each do |target|
@@ -147,7 +149,7 @@ We are constantly working to improve Awesome Notifications and provide support f
     update_awesome_pod_build_settings(installer)
     ################  Awesome Notifications pod modification  ###################
   end
-  
+
   ################  Awesome Notifications pod modification  ###################
   awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
   require awesome_pod_file
@@ -158,6 +160,7 @@ We are constantly working to improve Awesome Notifications and provide support f
 - **Send port and Receive port with data restriction:** The methods `sendPort.send()` and `receivePort!.listen()` now only accept serialized data, not objects. Convert your data to a map format and reconstruct it later from this format.
 
   **Before:**
+
   ```Dart
     /// At your initialization
     receivePort!.listen((receivedAction) {
@@ -176,6 +179,7 @@ We are constantly working to improve Awesome Notifications and provide support f
   ```
 
   **Now:**
+
   ```Dart
     /// At your initialization
     receivePort!.listen((serializedData) {
@@ -199,18 +203,17 @@ We are constantly working to improve Awesome Notifications and provide support f
 
 ### from version 0.6.X to 0.7.X:
 
-  - **Action Events Update:** Now it's possible to receive action events without bringing the app to the foreground. Please refer to the action type's topic for more information on how to implement this.
+- **Action Events Update:** Now it's possible to receive action events without bringing the app to the foreground. Please refer to the action type's topic for more information on how to implement this.
 
-  - **Streams replaced by global static methods:** All streams (createdStream, displayedStream, actionStream, and dismissedStream) have been replaced by global static methods. Replace your old stream methods with static and global ones, using static Future<void> and async/await. Utilize `@pragma("vm:entry-point")` for dart addressing. For context and navigation within static methods, use Flutter's navigatorKey or a third-party library like GetX. Refer to our "How to Show Local Notifications" topic for more details.
+- **Streams replaced by global static methods:** All streams (createdStream, displayedStream, actionStream, and dismissedStream) have been replaced by global static methods. Replace your old stream methods with static and global ones, using static Future<void> and async/await. Utilize `@pragma("vm:entry-point")` for dart addressing. For context and navigation within static methods, use Flutter's navigatorKey or a third-party library like GetX. Refer to our "How to Show Local Notifications" topic for more details.
 
-  - **Delayed notification events:** All notification events are now delivered only after the first setListeners being called. Please make sure to update your code accordingly.
+- **Delayed notification events:** All notification events are now delivered only after the first setListeners being called. Please make sure to update your code accordingly.
 
-  - **Renamed ButtonType class:** The `ButtonType` class has been renamed to `ActionType`. Please update your code to use the new class name.
+- **Renamed ButtonType class:** The `ButtonType` class has been renamed to `ActionType`. Please update your code to use the new class name.
 
-  - **Deprecated InputField action type:** The action type `InputField` is now deprecated. You just need to set the property `requireInputText` to true to achieve the same result, but it now works combined with all other action types.
+- **Deprecated InputField action type:** The action type `InputField` is now deprecated. You just need to set the property `requireInputText` to true to achieve the same result, but it now works combined with all other action types.
 
-  - **Deprecated support for firebase_messaging plugin:** The support for `firebase_messaging` plugin is now deprecated. You need to use the [Awesome's FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm) to achieve all Firebase Cloud Messaging features without violating the platform rules. This is the only way to fully integrate with Awesome Notifications, running all in native level.
-
+- **Deprecated support for firebase_messaging plugin:** The support for `firebase_messaging` plugin is now deprecated. You need to use the [Awesome's FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm) to achieve all Firebase Cloud Messaging features without violating the platform rules. This is the only way to fully integrate with Awesome Notifications, running all in native level.
 
 <br>
 <br>
@@ -219,7 +222,7 @@ We are constantly working to improve Awesome Notifications and provide support f
 # 📙 Table of Contents
 
 - [Awesome Notifications for Flutter - Year 2](#awesome-notifications-for-flutter---year-2)
-    - [**Key Features:**](#key-features)
+  - [**Key Features:**](#key-features)
   - [Notification Types Available](#notification-types-available)
 - [🛑 ATTENTION - PLUGIN UNDER DEVELOPMENT](#-attention---plugin-under-development)
 - [💰 Donate via Stripe or BuyMeACoffee](#-donate-via-stripe-or-buymeacoffee)
@@ -299,7 +302,6 @@ Key aspects of our philosophy include:
 - **App Badge Management:** We strive to emulate iOS's approach to app badge manipulation as closely as possible on all other platforms.
 
 By adhering to these principles, Awesome Notifications is committed to delivering a seamless and consistent notification experience across various devices, thereby enhancing user engagement with your application.
-
 
 - **_Deprecated support for firebase_messaging plugin:_** The support for firebase_messaging plugin is now deprecated. You need to use the [Awesome's FCM add-on plugin](https://pub.dev/packages/awesome_notifications_fcm) to achieve all Firebase Cloud Messaging features without violating the platform rules. This is the only way to fully integrate with Awesome Notifications, running all in native level.
 
@@ -396,6 +398,7 @@ android {
 To ensure that Awesome Notifications is correctly configured with your iOS app, you need to modify your `Podfile` within the iOS folder. This involves adding specific blocks for "Awesome Notifications pod modifications" at the end of the `post_install` section and immediately following it.
 
 **Original `Podfile` Configuration:**
+
 ```rb
   post_install do |installer|
     installer.pods_project.targets.each do |target|
@@ -405,19 +408,20 @@ To ensure that Awesome Notifications is correctly configured with your iOS app, 
 ```
 
 **Modified `Podfile` with Awesome Notifications Configurations:**
+
 ```rb
   post_install do |installer|
     installer.pods_project.targets.each do |target|
       flutter_additional_ios_build_settings target
     end
-  
+
     ################  Awesome Notifications pod modification 1 ###################
     awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
     require awesome_pod_file
     update_awesome_pod_build_settings(installer)
     ################  Awesome Notifications pod modification 1 ###################
   end
-  
+
   ################  Awesome Notifications pod modification 2 ###################
   awesome_pod_file = File.expand_path(File.join('plugins', 'awesome_notifications', 'ios', 'Scripts', 'AwesomePodFile'), '.symlinks')
   require awesome_pod_file
@@ -426,8 +430,9 @@ To ensure that Awesome Notifications is correctly configured with your iOS app, 
 ```
 
 **Key Points:**
-- The *first modification block* updates the pod settings (`update_awesome_pod_build_settings`).
-- The *second modification block* updates the settings of the main project target 'Runner' (`update_awesome_main_target_settings`).
+
+- The _first modification block_ updates the pod settings (`update_awesome_pod_build_settings`).
+- The _second modification block_ updates the settings of the main project target 'Runner' (`update_awesome_main_target_settings`).
 - The 2 blocks are not equal. The first one calls `update_awesome_pod_build_settings` and the second one calls `update_awesome_main_target_settings`
 
 Also, the modifications are clearly marked with `################ Awesome Notifications pod modification ################` comments for easy identification. These additions ensure that Awesome Notifications are properly integrated and configured within your iOS project's Podfile.
@@ -1639,41 +1644,41 @@ NotificationContent (
 )
 ```
 
-| Attribute                     | Required | Description                                                                                              | Type                      | Value Limits            | Default value |
-|-------------------------------| -------- |----------------------------------------------------------------------------------------------------------|---------------------------|-------------------------| ------------- |
-| id                            | YES      | A unique identifier for the notification                                                                 | int                       | 1 - 2,147,483,647       | -             |
-| channelKey                    | YES      | The identifier of the notification channel where the notification will be displayed                      | String                    | Channel must be enabled | basic_channel |
-| title                         | NO       | The title of the notification                                                                            | String                    | Unlimited               | -             |
-| body                          | NO       | The body text of the notification                                                                        | String                    | Unlimited               | -             |
-| titleLocKey                   | NO       | Key to a localized title string with placeholders, to be replaced by `titleLocArgs`                      | String                    | Unlimited               | -             |
-| bodyLocKey                    | NO       | Key to a localized body string with placeholders, to be replaced by `bodyLocArgs`                        | String                    | Unlimited               | -             |
-| titleLocArgs                  | NO       | Arguments to replace placeholders in the localized title string, referenced by `titleLocKey`             | List<String>              | Unlimited               | -             |
-| bodyLocArgs                   | NO       | Arguments to replace placeholders in the localized body string, referenced by `bodyLocKey`               | List<String>              | Unlimited               | -             |
-| summary                       | NO       | A summary to be displayed when the notification content is protected by privacy                          | String                    | Unlimited               | -             |
-| category                      | NO       | The notification category that best describes the nature of the notification (Android only)              | NotificationCategory      | -                       | -             |
-| badge                         | NO       | The value to display as the app's badge                                                                  | int                       | 0 - 999,999             | -             |
-| chronometer                   | NO       | A duration to set the showWhen attribute of Android notifications to the amount of seconds to start      | Duration                  | Positive integers       | -             |
-| timeoutAfter                  | NO       | A duration to determine an expiration time limit for the notification to stay in the system tray         | Duration                  | Positive integers       | -             |
-| showWhen                      | NO       | Whether to show the time elapsed since the notification was posted                                       | bool                      | True or false           | true          |
-| chronometer                   | NO       | Display how many seconds has                                                                             | bool                      | True or false           | true          |
-| displayOnForeground           | NO       | Whether to display the notification while the app is in the foreground (preserves streams)               | bool                      | True or false           | true          |
-| displayOnBackground           | NO       | Whether to display the notification while the app is in the background (preserves streams, Android only) | bool                      | True or false           | true          |
-| icon                          | NO       | The name of the small icon to display with the notification (Android only)                               | String                    | A resource image        | -             |
-| largeIcon                     | NO       | The name of the large icon to display with the notification                                              | String                    | Unlimited               | -             |
-| bigPicture                    | NO       | The name of the image to display when the notification is expanded (Android only)                        | String                    | Unlimited               | -             |
-| autoDismissible               | NO       | Whether to automatically dismiss the notification when the user taps it (Android only)                   | bool                      | True or false           | true          |
-| color                         | NO       | The text color for the notification                                                                      | Color                     | 0x000000 to 0xFFFFFF    | Colors.black  |
-| backgroundColor               | NO       | The background color for the notification                                                                | Color                     | 0x000000 to 0xFFFFFF    | Colors.white  |
-| payload                       | NO       | A hidden payload for the notification                                                                    | Map<String, String>       | Only string values      | -             |
-| notificationLayout            | NO       | The layout type for the notification                                                                     | NotificationLayout        | -                       | Default       |
-| hideLargeIconOnExpand         | NO       | Whether to hide the large icon when the notification is expanded (Android only)                          | bool                      | True or false           | false         |
-| locked                        | NO       | Whether to prevent the user from dismissing the notification (Android only)                              | bool                      | True or false           | false         |
-| progress                      | NO       | The current value for the notification's progress bar (Android only)                                     | int                       | 0 - 100                 | -             |
-| ticker                        | NO       | The text to display in the ticker when the notification arrives                                          | String                    | Unlimited               | -             |
-| duration                      | NO       | The media duration on media player notifications                                                         | Duration                  | Unlimited               | -             |
-| playState                     | NO       | The current playback state on media player notifications                                                 | NotificationPlaybackState | -                       | -             |
-| playbackSpeed                 | NO       | The current playback speed on media player notifications                                                 | double                    | Unlimited               | -             |
-| actionType (Only for Android) | NO | Specifies the type of action that should be taken when the user taps on the body of the notification.    | Enumerator                | NotificationActionType  | NotificationActionType.Default |
+| Attribute                     | Required | Description                                                                                              | Type                      | Value Limits            | Default value                  |
+| ----------------------------- | -------- | -------------------------------------------------------------------------------------------------------- | ------------------------- | ----------------------- | ------------------------------ |
+| id                            | YES      | A unique identifier for the notification                                                                 | int                       | 1 - 2,147,483,647       | -                              |
+| channelKey                    | YES      | The identifier of the notification channel where the notification will be displayed                      | String                    | Channel must be enabled | basic_channel                  |
+| title                         | NO       | The title of the notification                                                                            | String                    | Unlimited               | -                              |
+| body                          | NO       | The body text of the notification                                                                        | String                    | Unlimited               | -                              |
+| titleLocKey                   | NO       | Key to a localized title string with placeholders, to be replaced by `titleLocArgs`                      | String                    | Unlimited               | -                              |
+| bodyLocKey                    | NO       | Key to a localized body string with placeholders, to be replaced by `bodyLocArgs`                        | String                    | Unlimited               | -                              |
+| titleLocArgs                  | NO       | Arguments to replace placeholders in the localized title string, referenced by `titleLocKey`             | List<String>              | Unlimited               | -                              |
+| bodyLocArgs                   | NO       | Arguments to replace placeholders in the localized body string, referenced by `bodyLocKey`               | List<String>              | Unlimited               | -                              |
+| summary                       | NO       | A summary to be displayed when the notification content is protected by privacy                          | String                    | Unlimited               | -                              |
+| category                      | NO       | The notification category that best describes the nature of the notification (Android only)              | NotificationCategory      | -                       | -                              |
+| badge                         | NO       | The value to display as the app's badge                                                                  | int                       | 0 - 999,999             | -                              |
+| chronometer                   | NO       | A duration to set the showWhen attribute of Android notifications to the amount of seconds to start      | Duration                  | Positive integers       | -                              |
+| timeoutAfter                  | NO       | A duration to determine an expiration time limit for the notification to stay in the system tray         | Duration                  | Positive integers       | -                              |
+| showWhen                      | NO       | Whether to show the time elapsed since the notification was posted                                       | bool                      | True or false           | true                           |
+| chronometer                   | NO       | Display how many seconds has                                                                             | bool                      | True or false           | true                           |
+| displayOnForeground           | NO       | Whether to display the notification while the app is in the foreground (preserves streams)               | bool                      | True or false           | true                           |
+| displayOnBackground           | NO       | Whether to display the notification while the app is in the background (preserves streams, Android only) | bool                      | True or false           | true                           |
+| icon                          | NO       | The name of the small icon to display with the notification (Android only)                               | String                    | A resource image        | -                              |
+| largeIcon                     | NO       | The name of the large icon to display with the notification                                              | String                    | Unlimited               | -                              |
+| bigPicture                    | NO       | The name of the image to display when the notification is expanded (Android only)                        | String                    | Unlimited               | -                              |
+| autoDismissible               | NO       | Whether to automatically dismiss the notification when the user taps it (Android only)                   | bool                      | True or false           | true                           |
+| color                         | NO       | The text color for the notification                                                                      | Color                     | 0x000000 to 0xFFFFFF    | Colors.black                   |
+| backgroundColor               | NO       | The background color for the notification                                                                | Color                     | 0x000000 to 0xFFFFFF    | Colors.white                   |
+| payload                       | NO       | A hidden payload for the notification                                                                    | Map<String, String>       | Only string values      | -                              |
+| notificationLayout            | NO       | The layout type for the notification                                                                     | NotificationLayout        | -                       | Default                        |
+| hideLargeIconOnExpand         | NO       | Whether to hide the large icon when the notification is expanded (Android only)                          | bool                      | True or false           | false                          |
+| locked                        | NO       | Whether to prevent the user from dismissing the notification (Android only)                              | bool                      | True or false           | false                          |
+| progress                      | NO       | The current value for the notification's progress bar (Android only)                                     | int                       | 0 - 100                 | -                              |
+| ticker                        | NO       | The text to display in the ticker when the notification arrives                                          | String                    | Unlimited               | -                              |
+| duration                      | NO       | The media duration on media player notifications                                                         | Duration                  | Unlimited               | -                              |
+| playState                     | NO       | The current playback state on media player notifications                                                 | NotificationPlaybackState | -                       | -                              |
+| playbackSpeed                 | NO       | The current playback speed on media player notifications                                                 | double                    | Unlimited               | -                              |
+| actionType (Only for Android) | NO       | Specifies the type of action that should be taken when the user taps on the body of the notification.    | Enumerator                | NotificationActionType  | NotificationActionType.Default |
 
 <br>
 
@@ -1691,18 +1696,18 @@ NotificationContent (
 
 - At least one \*required attribute is necessary
 
-| Attribute                 | Required | Description                                                                             |   Type                | Value Limits                 | Default value           |
-| ------------------------- | -------- | --------------------------------------------------------------------------------------- | --------------------- |------------------------------| ----------------------- |
-| key 		                  | YES      | A text key that identifies what action the user took when they tapped the notification  | String                | unlimited                    |                         |
-| label 		                | *YES     | The text to be displayed on the action button                                           | String                | unlimited                    |                         |
-| icon 		                  | *YES     | The icon to be displayed inside the button (only available for few layouts)             | String                | Must be a resource image     |                         |
-| color 		                | NO       | The label text color (only for Android)                                                 | Color                 | 0x000000 to 0xFFFFFF         |                         |
-| enabled 	                | NO       | On Android, deactivates the button. On iOS, the button disappears                       | bool                  | true or false                | true                    |
-| autoDismissible           | NO       | Whether the notification should be auto-cancelled when the user taps the button         | bool                  | true or false                | true                    |
-| showInCompactView         | NO       | For MediaPlayer notifications on Android, sets the button as visible in compact view    | bool                  | true or false                | true                    |
-| isDangerousOption         | NO       | Whether the button is marked as a dangerous option, displaying the text in red          | bool                  | true or false                | false                   |
-| isAuthenticationRequired  | NO       | The action performed by this button requires user authentication to proceed             | bool                  | true or false                | false                   |
-| actionType 	              | NO       | The notification action response type                                                   | Enumerator            | ActionType (Default)         |                         |
+| Attribute                | Required | Description                                                                            | Type       | Value Limits             | Default value |
+| ------------------------ | -------- | -------------------------------------------------------------------------------------- | ---------- | ------------------------ | ------------- |
+| key                      | YES      | A text key that identifies what action the user took when they tapped the notification | String     | unlimited                |               |
+| label                    | \*YES    | The text to be displayed on the action button                                          | String     | unlimited                |               |
+| icon                     | \*YES    | The icon to be displayed inside the button (only available for few layouts)            | String     | Must be a resource image |               |
+| color                    | NO       | The label text color (only for Android)                                                | Color      | 0x000000 to 0xFFFFFF     |               |
+| enabled                  | NO       | On Android, deactivates the button. On iOS, the button disappears                      | bool       | true or false            | true          |
+| autoDismissible          | NO       | Whether the notification should be auto-cancelled when the user taps the button        | bool       | true or false            | true          |
+| showInCompactView        | NO       | For MediaPlayer notifications on Android, sets the button as visible in compact view   | bool       | true or false            | true          |
+| isDangerousOption        | NO       | Whether the button is marked as a dangerous option, displaying the text in red         | bool       | true or false            | false         |
+| isAuthenticationRequired | NO       | The action performed by this button requires user authentication to proceed            | bool       | true or false            | false         |
+| actionType               | NO       | The notification action response type                                                  | Enumerator | ActionType (Default)     |               |
 
 <br>
 <br>

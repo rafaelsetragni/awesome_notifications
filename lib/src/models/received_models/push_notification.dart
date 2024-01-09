@@ -5,8 +5,9 @@ import '../notification_model.dart';
     'all push features will be moved to the companion plugin. '
     'Use NotificationModel class instead.')
 class PushNotification extends NotificationModel {
-  PushNotification(
-      {required NotificationContent super.content,
-      super.schedule,
-      super.actionButtons});
+  PushNotification({
+    required NotificationContent super.content,
+    super.schedule,
+    super.actionButtons,
+  });
 }

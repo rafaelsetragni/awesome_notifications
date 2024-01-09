@@ -22,8 +22,10 @@ class NotificationChannelGroup extends Model {
   ///
   /// [channelGroupKey]: Unique key identifier for the channel group.
   /// [channelGroupName]: Name of the channel group.
-  NotificationChannelGroup(
-      {required String channelGroupKey, required String channelGroupName}) {
+  NotificationChannelGroup({
+    required String channelGroupKey,
+    required String channelGroupName,
+  }) {
     _channelGroupKey = channelGroupKey;
     _channelGroupName = channelGroupName;
   }

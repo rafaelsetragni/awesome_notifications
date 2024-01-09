@@ -71,23 +71,24 @@ class NotificationCalendar extends NotificationSchedule {
     super.preciseAlarm = true,
     super.repeats,
   }) : super(
-            timeZone:
-                timeZone ?? AwesomeNotifications.localTimeZoneIdentifier) {
+          timeZone: timeZone ?? AwesomeNotifications.localTimeZoneIdentifier,
+        ) {
     if (weekOfMonth != null) {
       throw UnimplementedError("weekOfMonth is not fully implemented yet");
     }
   }
 
   /// Initializes a [NotificationCalendar] from a [DateTime] object.
-  NotificationCalendar.fromDate(
-      {required DateTime date,
-      super.allowWhileIdle,
-      super.repeats,
-      super.preciseAlarm})
-      : super(
-            timeZone: date.isUtc
-                ? AwesomeNotifications.utcTimeZoneIdentifier
-                : AwesomeNotifications.localTimeZoneIdentifier) {
+  NotificationCalendar.fromDate({
+    required DateTime date,
+    super.allowWhileIdle,
+    super.repeats,
+    super.preciseAlarm,
+  }) : super(
+          timeZone: date.isUtc
+              ? AwesomeNotifications.utcTimeZoneIdentifier
+              : AwesomeNotifications.localTimeZoneIdentifier,
+        ) {
     year = date.year;
     month = date.month;
     day = date.day;
