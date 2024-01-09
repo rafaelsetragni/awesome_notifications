@@ -55,7 +55,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/vibration/ios"
 
 SPEC CHECKSUMS:
-  awesome_notifications: 399076ea2bdf119beef9126f1ca6914215390997
+  awesome_notifications: c5dc67fb49ee39f4a29652d7be6b36edec4383d0
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
