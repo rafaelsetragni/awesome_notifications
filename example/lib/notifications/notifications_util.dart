@@ -1545,7 +1545,12 @@ class NotificationUtils {
       MEDIA CONTROLLER NOTIFICATIONS
   ************************************************ */
 
-  static void updateNotificationMediaPlayer(int id, MediaModel? mediaNow) {
+  static void updateNotificationMediaPlayer(
+      int id,
+      MediaModel? mediaNow,
+      Duration currentTrackPosition,
+      NotificationPlayState playState,
+  ) {
     if (mediaNow == null) {
       cancelNotification(id);
       return;
@@ -1558,17 +1563,22 @@ class NotificationUtils {
             category: NotificationCategory.Transport,
             title: mediaNow.bandName,
             body: mediaNow.trackName,
+            duration: mediaNow.trackSize,
+            progress: currentTrackPosition.inMilliseconds / mediaNow.trackSize.inMilliseconds * 100,
+            playbackSpeed: 1,
+            playState: playState,
             summary: MediaPlayerCentral.isPlaying ? 'Now playing' : '',
             notificationLayout: NotificationLayout.MediaPlayer,
             largeIcon: mediaNow.diskImagePath,
             color: Colors.purple.shade700,
             autoDismissible: false,
-            showWhen: false),
+            showWhen: false
+        ),
         actionButtons: [
           NotificationActionButton(
               key: 'MEDIA_PREV',
-              icon: 'resource://drawable/res_ic_prev' +
-                  (MediaPlayerCentral.hasPreviousMedia ? '' : '_disabled'),
+              icon: 'resource://drawable/res_ic_prev${
+                  MediaPlayerCentral.hasPreviousMedia ? '' : '_disabled'}',
               label: 'Previous',
               autoDismissible: false,
               showInCompactView: false,
@@ -1584,8 +1594,8 @@ class NotificationUtils {
                   actionType: ActionType.KeepOnTop)
               : NotificationActionButton(
                   key: 'MEDIA_PLAY',
-                  icon: 'resource://drawable/res_ic_play' +
-                      (MediaPlayerCentral.hasAnyMedia ? '' : '_disabled'),
+                  icon: 'resource://drawable/res_ic_play${
+                      MediaPlayerCentral.hasAnyMedia ? '' : '_disabled'}',
                   label: 'Play',
                   autoDismissible: false,
                   showInCompactView: true,
@@ -1593,8 +1603,8 @@ class NotificationUtils {
                   actionType: ActionType.KeepOnTop),
           NotificationActionButton(
               key: 'MEDIA_NEXT',
-              icon: 'resource://drawable/res_ic_next' +
-                  (MediaPlayerCentral.hasNextMedia ? '' : '_disabled'),
+              icon: 'resource://drawable/res_ic_next${
+                  MediaPlayerCentral.hasNextMedia ? '' : '_disabled'}',
               label: 'Previous',
               showInCompactView: true,
               enabled: MediaPlayerCentral.hasNextMedia,
@@ -2038,7 +2048,7 @@ class NotificationUtils {
               },
               locked: false));
     } else {
-      int progress = min((simulatedStep / maxStep * 100).round(), 100);
+      double progress = min(simulatedStep / maxStep * 100, 100);
       AwesomeNotifications().createNotification(
           content: NotificationContent(
               id: id,
