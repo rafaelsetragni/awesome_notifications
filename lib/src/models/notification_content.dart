@@ -8,11 +8,11 @@ import 'base_notification_content.dart';
 /// If notification has no [body] or [title], it will only be created, but not displayed to the user (background notification).
 class NotificationContent extends BaseNotificationContent {
   bool? _hideLargeIconOnExpand;
-  int? _progress, _badge;
+  int? _badge;
   Duration? _duration;
   NotificationPlayState? _playState;
   String? _ticker;
-  double? _playbackSpeed;
+  double? _progress, _playbackSpeed;
 
   NotificationLayout? _notificationLayout;
 
@@ -27,7 +27,7 @@ class NotificationContent extends BaseNotificationContent {
   }
 
   /// Returns the progress value of the notification, if set.
-  int? get progress {
+  double? get progress {
     return _progress;
   }
 
@@ -109,7 +109,7 @@ class NotificationContent extends BaseNotificationContent {
       super.category,
       bool hideLargeIconOnExpand = false,
       bool locked = false,
-      int? progress,
+      double? progress,
       int? badge,
       String? ticker,
       bool displayOnForeground = true,
@@ -137,7 +137,7 @@ class NotificationContent extends BaseNotificationContent {
         NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND, mapData);
 
     _progress =
-        AwesomeAssertUtils.extractValue<int>(NOTIFICATION_PROGRESS, mapData);
+        AwesomeAssertUtils.extractValue<double>(NOTIFICATION_PROGRESS, mapData);
     _badge = AwesomeAssertUtils.extractValue<int>(NOTIFICATION_BADGE, mapData);
     _ticker =
         AwesomeAssertUtils.extractValue<String>(NOTIFICATION_TICKER, mapData);
