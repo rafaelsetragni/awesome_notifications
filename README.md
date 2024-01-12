@@ -158,6 +158,7 @@ We are constantly working to improve Awesome Notifications and provide support f
   ################  Awesome Notifications pod modification  ###################
   ```
 
+- **progress property changed to double:** The property `progress` from `NotificationContent` was changed to double type to increase precision.
 - **Send port and Receive port with data restriction:** The methods `sendPort.send()` and `receivePort!.listen()` now only accept serialized data, not objects. Convert your data to a map format and reconstruct it later from this format.
 
   **Before:**
@@ -1642,7 +1643,7 @@ NotificationContent (
     notificationLayout: NotificationLayout?, 
     hideLargeIconOnExpand: bool?, 
     locked: bool?, 
-    progress: int?, 
+    progress: double?, 
     ticker: String?, 
     actionType: ActionType?
 )
@@ -1677,11 +1678,11 @@ NotificationContent (
 | notificationLayout            | NO       | The layout type for the notification                                                                     | NotificationLayout        | -                       | Default       |
 | hideLargeIconOnExpand         | NO       | Whether to hide the large icon when the notification is expanded (Android only)                          | bool                      | True or false           | false         |
 | locked                        | NO       | Whether to prevent the user from dismissing the notification (Android only)                              | bool                      | True or false           | false         |
-| progress                      | NO       | The current value for the notification's progress bar (Android only)                                     | int                       | 0 - 100                 | -             |
+| progress                      | NO       | The current value for the notification's progress bar (Android only)                                     | double                    | 0.0 - 100.0             | -             |
 | ticker                        | NO       | The text to display in the ticker when the notification arrives                                          | String                    | Unlimited               | -             |
 | duration                      | NO       | The media duration on media player notifications                                                         | Duration                  | Unlimited               | -             |
 | playState                     | NO       | The current playback state on media player notifications                                                 | NotificationPlaybackState | -                       | -             |
-| playbackSpeed                 | NO       | The current playback speed on media player notifications                                                 | double                    | Unlimited               | -             |
+| playbackSpeed                 | NO       | The current playback speed on media player notifications. The rate is a multiple of normal playback and should be 0 when paused and negative when rewinding. Normal playback rate is 1.0. | double                    | Unlimited               | -             |
 | actionType (Only for Android) | NO | Specifies the type of action that should be taken when the user taps on the body of the notification.    | Enumerator                | NotificationActionType  | NotificationActionType.Default |
 
 <br>
@@ -1699,17 +1700,17 @@ NotificationContent (
 
 * At least one *required attribute is necessary
 
-| Attribute                 | Required | Description                                                                             |   Type                | Value Limits                 | Default value           |
-| ------------------------- | -------- | --------------------------------------------------------------------------------------- | --------------------- |------------------------------| ----------------------- |
+| Attribute                  | Required | Description                                                                             |   Type                | Value Limits                 | Default value           |
+|----------------------------| -------- | --------------------------------------------------------------------------------------- | --------------------- |------------------------------| ----------------------- |
 | key 		                  | YES      | A text key that identifies what action the user took when they tapped the notification  | String                | unlimited                    |                         |
-| label 		                | *YES     | The text to be displayed on the action button                                           | String                | unlimited                    |                         |
-| icon 		                  | *YES     | The icon to be displayed inside the button (only available for few layouts)             | String                | Must be a resource image     |                         |
-| color 		                | NO       | The label text color (only for Android)                                                 | Color                 | 0x000000 to 0xFFFFFF         |                         |
-| enabled 	                | NO       | On Android, deactivates the button. On iOS, the button disappears                       | bool                  | true or false                | true                    |
-| autoDismissible           | NO       | Whether the notification should be auto-cancelled when the user taps the button         | bool                  | true or false                | true                    |
-| showInCompactView         | NO       | For MediaPlayer notifications on Android, sets the button as visible in compact view    | bool                  | true or false                | true                    |
-| isDangerousOption         | NO       | Whether the button is marked as a dangerous option, displaying the text in red          | bool                  | true or false                | false                   |
-| isAuthenticationRequired  | NO       | The action performed by this button requires user authentication to proceed             | bool                  | true or false                | false                   |
+| label 		              | *YES     | The text to be displayed on the action button                                           | String                | unlimited                    |                         |
+| icon 		              | *YES     | The icon to be displayed inside the button (only available for few layouts)             | String                | Must be a resource image     |                         |
+| color 		              | NO       | The label text color (only for Android)                                                 | Color                 | 0x000000 to 0xFFFFFF         |                         |
+| enabled 	                  | NO       | On Android, deactivates the button. On iOS, the button disappears                       | bool                  | true or false                | true                    |
+| autoDismissible            | NO       | Whether the notification should be auto-cancelled when the user taps the button         | bool                  | true or false                | true                    |
+| showInCompactView          | NO       | For MediaPlayer notifications on Android, sets the button as visible in compact view    | bool                  | true or false                | true                    |
+| isDangerousOption          | NO       | Whether the button is marked as a dangerous option, displaying the text in red          | bool                  | true or false                | false                   |
+| isAuthenticationRequired   | NO       | The action performed by this button requires user authentication to proceed             | bool                  | true or false                | false                   |
 | actionType 	              | NO       | The notification action response type                                                   | Enumerator            | ActionType (Default)         |                         |
 
 <br>

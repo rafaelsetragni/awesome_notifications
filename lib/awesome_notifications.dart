@@ -30,6 +30,7 @@ export 'src/enumerators/notification_life_cycle.dart';
 export 'src/enumerators/notification_permission.dart';
 export 'src/enumerators/notification_privacy.dart';
 export 'src/enumerators/notification_source.dart';
+export 'src/enumerators/notification_play_state.dart';
 export 'src/enumerators/time_and_date.dart';
 export 'src/exceptions/awesome_exception.dart';
 export 'src/exceptions/isolate_callback_exception.dart';
