@@ -1,3 +1,20 @@
+## [0.9.2] - 2024-17-01
+### Added
+- **Cancel schedule for iOS:** The feature `cancelSchedule` was added to iOS platform.
+- **Example app updated:** The example app was updated to reflect the last changes.
+
+## [0.9.1] - 2024-11-01
+### Breaking Changes
+- **Progress Property Now Double:** The `progress` property in `NotificationContent` has been changed from `int` to `double`. This modification enhances the precision of progress values in notifications.
+
+### Improvements
+- **Enhanced Documentation:** Updated the README documentation to include details on the new media player properties and the updated `progress` property type.
+- **Refined Test Cases:** Revised test cases to cover the new `double` type for `progress` and related numerical conversions, ensuring robustness and accuracy.
+
+### Bug Fixes
+- **Default Values for MediaPlayer Properties:** Introduced default values for new media player properties like `duration`, `playState`, and `playSpeed`. This change aims to eliminate null exceptions and improve reliability.
+
+
 ## [0.9.0] - 01/02/2024
 ### Breaking Changes
 - **Pod modifications:** Now it's necessary to also add Awesome Notifications pod modification inside `PodFile` at iOS folder.

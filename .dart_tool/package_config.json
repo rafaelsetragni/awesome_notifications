@@ -201,7 +201,7 @@
     },
     {
       "name": "plugin_platform_interface",
-      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.7",
+      "rootUri": "file:///Users/rafaelsetragni/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -296,7 +296,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2024-01-03T16:47:25.412066Z",
+  "generated": "2024-01-17T11:13:42.180172Z",
   "generator": "pub",
   "generatorVersion": "3.2.3"
 }

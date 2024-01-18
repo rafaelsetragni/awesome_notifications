@@ -1043,6 +1043,11 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () =>
                     NotificationUtils.dismissNotificationsByGroupKey(
                         'grouped')),
+            SimpleButton('Cancel schedule by id',
+                backgroundColor: Colors.red,
+                labelColor: Colors.white,
+                onPressed: () =>
+                    NotificationUtils.cancelSchedule(1)),
             SimpleButton('Cancel all schedules by channel key',
                 backgroundColor: Colors.red,
                 labelColor: Colors.white,

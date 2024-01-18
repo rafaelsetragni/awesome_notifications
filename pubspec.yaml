@@ -1,6 +1,6 @@
 name: awesome_notifications
 description: A complete solution to create Local and Push Notifications, customizing buttons, images, sounds, emoticons and applying many different layouts for Flutter apps.
-version: 0.9.0
+version: 0.9.2
 repository: https://github.com/rafaelsetragni/awesome_notifications
 
 environment:
@@ -13,7 +13,7 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
-  plugin_platform_interface: ^2.1.7
+  plugin_platform_interface: ^2.1.8
   intl: ^0.19.0
 
 dev_dependencies:
