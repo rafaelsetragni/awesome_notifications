@@ -5,9 +5,9 @@ import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/playback_timer.dart';
 
 enum MediaLifeCycle {
-  Stopped,
-  Paused,
-  Playing,
+  stopped,
+  paused,
+  playing,
 }
 
 class MediaPlayerCentral {
@@ -35,11 +35,11 @@ class MediaPlayerCentral {
     return '';
   }
 
-  static Duration replayTolerance = Duration(seconds: 4);
+  static Duration replayTolerance = const Duration(seconds: 4);
 
   static int _index = 0;
-  static MediaLifeCycle _lifeCycle = MediaLifeCycle.Stopped;
-  static List<MediaModel> _playlist = [];
+  static MediaLifeCycle _lifeCycle = MediaLifeCycle.stopped;
+  static final List<MediaModel> _playlist = [];
 
   // ignore: close_sinks
   static StreamController<MediaModel> _mediaBroadcaster =
@@ -63,13 +63,13 @@ class MediaPlayerCentral {
   static Duration get currentDuration => _timer.now;
 
   static bool get isPlaying {
-    return _lifeCycle == MediaLifeCycle.Playing;
+    return _lifeCycle == MediaLifeCycle.playing;
   }
 
   static MediaLifeCycle get mediaLifeCycle => _lifeCycle;
 
   static MediaModel? get currentMedia {
-    return _playlist.length == 0 ? null : _playlist[_index];
+    return _playlist.isEmpty ? null : _playlist[_index];
   }
 
   static bool get isEmpty => _playlist.isEmpty;
@@ -78,13 +78,15 @@ class MediaPlayerCentral {
   static bool get hasPreviousMedia => hasAnyMedia && index > 0;
 
   static Stream get mediaStream {
-    if (_mediaBroadcaster.isClosed)
+    if (_mediaBroadcaster.isClosed) {
       _mediaBroadcaster = StreamController<MediaModel>.broadcast();
+    }
     return _mediaBroadcaster.stream;
   }
   static Stream get progressStream {
-    if (_mediaProgress.isClosed)
+    if (_mediaProgress.isClosed) {
       _mediaProgress = StreamController<Duration>.broadcast();
+    }
     return _mediaProgress.stream;
   }
   static StreamSink get mediaSink => _mediaBroadcaster.sink;
@@ -107,7 +109,7 @@ class MediaPlayerCentral {
   }
 
   static void addAll(List<MediaModel> newMedias) {
-    _playlist..addAll(newMedias);
+    _playlist.addAll(newMedias);
   }
 
   static void remove(MediaModel oldMedia) {
@@ -127,15 +129,15 @@ class MediaPlayerCentral {
 
   static void playPause() {
     switch (_lifeCycle) {
-      case MediaLifeCycle.Stopped:
-      case MediaLifeCycle.Paused:
-        _lifeCycle = MediaLifeCycle.Playing;
+      case MediaLifeCycle.stopped:
+      case MediaLifeCycle.paused:
+        _lifeCycle = MediaLifeCycle.playing;
         _timer.playPause(currentMedia!.trackSize);
         _broadcastChanges();
         break;
 
-      case MediaLifeCycle.Playing:
-        _lifeCycle = MediaLifeCycle.Paused;
+      case MediaLifeCycle.playing:
+        _lifeCycle = MediaLifeCycle.paused;
         _timer.playPause(currentMedia!.trackSize);
         _broadcastChanges();
         break;
@@ -143,14 +145,14 @@ class MediaPlayerCentral {
   }
 
   static void stop() {
-    _lifeCycle = MediaLifeCycle.Stopped;
+    _lifeCycle = MediaLifeCycle.stopped;
     _timer.stop();
     _broadcastChanges();
   }
 
   static void goTo(Duration moment) {
     _timer.goTo(moment);
-    _lifeCycle = _timer.isPlaying ? MediaLifeCycle.Playing : _lifeCycle;
+    _lifeCycle = _timer.isPlaying ? MediaLifeCycle.playing : _lifeCycle;
     _broadcastChanges();
   }
 
@@ -160,20 +162,20 @@ class MediaPlayerCentral {
     }
 
     switch (_lifeCycle) {
-      case MediaLifeCycle.Stopped:
+      case MediaLifeCycle.stopped:
         _timer.stop();
-        _lifeCycle = MediaLifeCycle.Stopped;
+        _lifeCycle = MediaLifeCycle.stopped;
         break;
 
-      case MediaLifeCycle.Paused:
+      case MediaLifeCycle.paused:
         _timer.stop();
-        _lifeCycle = MediaLifeCycle.Paused;
+        _lifeCycle = MediaLifeCycle.paused;
         break;
 
-      case MediaLifeCycle.Playing:
+      case MediaLifeCycle.playing:
         _timer.stop();
         _timer.playPause(currentMedia!.trackSize);
-        _lifeCycle = MediaLifeCycle.Playing;
+        _lifeCycle = MediaLifeCycle.playing;
         break;
     }
     _broadcastChanges();
@@ -187,26 +189,23 @@ class MediaPlayerCentral {
     }
 
     switch (_lifeCycle) {
-      case MediaLifeCycle.Playing:
+      case MediaLifeCycle.playing:
         _timer.stop();
         _timer.playPause(currentMedia!.trackSize);
-        _lifeCycle = MediaLifeCycle.Playing;
+        _lifeCycle = MediaLifeCycle.playing;
         break;
 
-      case MediaLifeCycle.Paused:
+      case MediaLifeCycle.paused:
         _timer.stop();
-        _lifeCycle = MediaLifeCycle.Paused;
+        _lifeCycle = MediaLifeCycle.paused;
         break;
 
-      case MediaLifeCycle.Stopped:
+      case MediaLifeCycle.stopped:
         break;
     }
 
     _broadcastChanges();
   }
 
-  dispose() {
-    _mediaBroadcaster.sink.close();
-    _mediaProgress.sink.close();
-  }
+  dispose() {}
 }

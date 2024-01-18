@@ -35,7 +35,7 @@ void main() {
           'id': 1,
           'channelKey': 'test_channel',
           'hideLargeIconOnExpand': true,
-          'progress': 50,
+          'progress': "50",
           'badge': 2,
           'ticker': 'ticker_text',
           'locked': true,
@@ -53,7 +53,7 @@ void main() {
         expect(notificationContent!.id, 1);
         expect(notificationContent.channelKey, 'test_channel');
         expect(notificationContent.hideLargeIconOnExpand, true);
-        expect(notificationContent.progress, 50);
+        expect(notificationContent.progress, 50.0);
         expect(notificationContent.badge, 2);
         expect(notificationContent.ticker, 'ticker_text');
         expect(notificationContent.locked, true);

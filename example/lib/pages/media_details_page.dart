@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart';
 import 'package:awesome_notifications_example/notifications/notifications_util.dart';
 
@@ -11,16 +12,16 @@ import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/media_player_central.dart';
 
 class MediaDetailsPage extends StatefulWidget {
-  MediaDetailsPage();
+  const MediaDetailsPage({super.key});
 
   @override
-  _MediaDetailsPageState createState() => _MediaDetailsPageState();
+  MediaDetailsPageState createState() => MediaDetailsPageState();
 }
 
-class _MediaDetailsPageState extends State<MediaDetailsPage> {
+class MediaDetailsPageState extends State<MediaDetailsPage> {
   ImageProvider? diskImage;
 
-  bool isDraggin = false;
+  bool isDragging = false;
   bool closeCaptionActivated = false;
   bool hasCloseCaption = false;
 
@@ -39,40 +40,40 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
       MediaPlayerCentral.addAll([
         MediaModel(
             diskImagePath: 'asset://assets/images/rock-disc.jpg',
-            colorCaptureSize: Size(788, 800),
+            colorCaptureSize: const Size(788, 800),
             bandName: 'Bright Sharp',
             trackName: 'Champagne Supernova',
-            trackSize: Duration(minutes: 4, seconds: 21)),
+            trackSize: const Duration(minutes: 4, seconds: 21)),
         MediaModel(
             diskImagePath: 'asset://assets/images/classic-disc.jpg',
-            colorCaptureSize: Size(500, 500),
+            colorCaptureSize: const Size(500, 500),
             bandName: 'Best of Mozart',
             trackName: 'Allegro',
-            trackSize: Duration(minutes: 7, seconds: 41)),
+            trackSize: const Duration(minutes: 7, seconds: 41)),
         MediaModel(
             diskImagePath: 'asset://assets/images/remix-disc.jpg',
-            colorCaptureSize: Size(500, 500),
+            colorCaptureSize: const Size(500, 500),
             bandName: 'Dj Allucard',
             trackName: '21st Century',
-            trackSize: Duration(minutes: 4, seconds: 59)),
+            trackSize: const Duration(minutes: 4, seconds: 59)),
         MediaModel(
             diskImagePath: 'asset://assets/images/dj-disc.jpg',
-            colorCaptureSize: Size(500, 500),
+            colorCaptureSize: const Size(500, 500),
             bandName: 'Dj Brainiak',
             trackName: 'Speed of light',
-            trackSize: Duration(minutes: 4, seconds: 59)),
+            trackSize: const Duration(minutes: 4, seconds: 59)),
         MediaModel(
             diskImagePath: 'asset://assets/images/80s-disc.jpg',
-            colorCaptureSize: Size(500, 500),
+            colorCaptureSize: const Size(500, 500),
             bandName: 'Back to the 80\'s',
             trackName: 'Disco revenge',
-            trackSize: Duration(minutes: 4, seconds: 59)),
+            trackSize: const Duration(minutes: 4, seconds: 59)),
         MediaModel(
             diskImagePath: 'asset://assets/images/old-disc.jpg',
-            colorCaptureSize: Size(500, 500),
+            colorCaptureSize: const Size(500, 500),
             bandName: 'PeacefulMind',
             trackName: 'Never look at back',
-            trackSize: Duration(minutes: 4, seconds: 59)),
+            trackSize: const Duration(minutes: 4, seconds: 59)),
       ]);
     }
 
@@ -82,16 +83,26 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
     // this is not part of notification system, but just a media player simulator instead
     MediaPlayerCentral.mediaStream.listen((media) {
       switch (MediaPlayerCentral.mediaLifeCycle) {
-        case MediaLifeCycle.Stopped:
+        case MediaLifeCycle.stopped:
           NotificationUtils.cancelNotification(100);
           break;
 
-        case MediaLifeCycle.Paused:
-          NotificationUtils.updateNotificationMediaPlayer(100, media);
+        case MediaLifeCycle.paused:
+          NotificationUtils.updateNotificationMediaPlayer(
+              100,
+              media,
+              durationPlayed ?? Duration.zero,
+              NotificationPlayState.paused
+          );
           break;
 
-        case MediaLifeCycle.Playing:
-          NotificationUtils.updateNotificationMediaPlayer(100, media);
+        case MediaLifeCycle.playing:
+          NotificationUtils.updateNotificationMediaPlayer(
+              100,
+              media,
+              durationPlayed ?? Duration.zero,
+              NotificationPlayState.playing
+          );
           break;
       }
     });
@@ -103,7 +114,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
     MediaPlayerCentral.progressStream.listen((moment) {
       if (mounted) {
         setState(() {
-          if (!isDraggin) {
+          if (!isDragging) {
             durationPlayed = moment;
           }
         });
@@ -175,7 +186,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
           size: media.colorCaptureSize);
     }
 
-    if (media != null && paletteGenerator.paletteColors.length >= 1) {
+    if (media != null && paletteGenerator.paletteColors.isNotEmpty) {
       mainColor = paletteGenerator.dominantColor!.color;
       contrastColor = getContrastColor(mainColor!)
           .withOpacity(0.85); //paletteGenerator.paletteColors.last.color;//
@@ -184,7 +195,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
       contrastColor = null;
     }
 
-    if (this.mounted) setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override
@@ -199,7 +210,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
     isLighten =
         // ignore: deprecated_member_use
         isLighten ?? themeData.brightness == Brightness.light;
-    mainColor = mainColor ?? themeData.backgroundColor;
+    mainColor = mainColor ?? themeData.colorScheme.background;
     contrastColor = contrastColor ?? (isLighten! ? Colors.black : Colors.white);
 
     double maxSize = max(mediaQueryData.size.width, mediaQueryData.size.height);
@@ -217,12 +228,12 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
             textTheme: Theme.of(context)
                 .textTheme
                 .copyWith(
-                  headline2:
-                      TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  headline3:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-                  headline6:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                  displayMedium:
+                      const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  displaySmall:
+                      const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                  titleLarge:
+                      const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                 )
                 .apply(
                   bodyColor: contrastColor,
@@ -244,7 +255,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                 disabledInactiveTrackColor: contrastColor?.withOpacity(0.25),
                 disabledThumbColor: contrastColor?.withOpacity(0.25),
                 thumbColor: contrastColor,
-                thumbShape: RoundSliderThumbShape(enabledThumbRadius: 15)),
+                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 15)),
             canvasColor: mainColor),
         child: Builder(builder: (BuildContext context) {
           return Scaffold(
@@ -274,12 +285,12 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: mainColor,
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(10),
                         topRight: Radius.circular(10),
                         bottomLeft: Radius.circular(10),
                         bottomRight: Radius.circular(10)),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.black26,
                         spreadRadius: 5,
@@ -291,7 +302,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                   width: 50,
                   height: 40,
                   child: IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
+                    icon: const Icon(Icons.arrow_back_ios),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
@@ -323,7 +334,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
               closeCaptionActivated
                   ? mediaCloseCaption(themeData, imageHeight, imageWidth,
                       mediaQueryData, maxSize)
-                  : SizedBox.shrink()
+                  : const SizedBox.shrink()
             ],
           ),
           mediaInfo(maxSize, mediaQueryData, context),
@@ -337,10 +348,10 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
   Widget mediaCloseCaption(ThemeData themeData, double imageHeight,
       double imageWidth, MediaQueryData mediaQueryData, double maxSize) {
     TextStyle? textStyle =
-        themeData.textTheme.headline6?.copyWith(color: contrastColor);
+        themeData.textTheme.titleLarge?.copyWith(color: contrastColor);
     String subtitle = MediaPlayerCentral.getCloseCaption(durationPlayed!);
 
-    return Container(
+    return SizedBox(
         width: mediaQueryData.size.width * 0.8,
         height: imageHeight,
         child: Center(child: Text(subtitle, style: textStyle)));
@@ -351,18 +362,18 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
       child: Container(
         height: maxSize * 0.15,
         width: maxSize * 0.8,
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             IconButton(
-              icon: Icon(Icons.list),
+              icon: const Icon(Icons.list),
               iconSize: maxSize * 0.05,
               onPressed: null,
             ),
             IconButton(
-              icon: Icon(Icons.skip_previous),
+              icon: const Icon(Icons.skip_previous),
               iconSize: maxSize * 0.05,
               onPressed: (durationPlayed == null ||
                           durationPlayed! <
@@ -375,7 +386,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                     },
             ),
             Container(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               margin: EdgeInsets.zero,
               decoration: BoxDecoration(
                 color: contrastColor?.withOpacity(0.2),
@@ -383,7 +394,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
               ),
               child: MediaPlayerCentral.isPlaying
                   ? IconButton(
-                      icon: Icon(Icons.pause_circle_filled),
+                      icon: const Icon(Icons.pause_circle_filled),
                       padding: EdgeInsets.zero,
                       iconSize: maxSize * 0.08,
                       onPressed: !MediaPlayerCentral.hasAnyMedia
@@ -391,7 +402,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                           : () => MediaPlayerCentral.playPause(),
                     )
                   : IconButton(
-                      icon: Icon(Icons.play_circle_filled),
+                      icon: const Icon(Icons.play_circle_filled),
                       padding: EdgeInsets.zero,
                       iconSize: maxSize * 0.08,
                       onPressed: !MediaPlayerCentral.hasAnyMedia
@@ -400,7 +411,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                     ),
             ),
             IconButton(
-              icon: Icon(Icons.skip_next),
+              icon: const Icon(Icons.skip_next),
               iconSize: maxSize * 0.05,
               onPressed: !MediaPlayerCentral.hasNextMedia
                   ? null
@@ -410,7 +421,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                     },
             ),
             IconButton(
-              icon: Icon(CupertinoIcons.shuffle_medium),
+              icon: const Icon(CupertinoIcons.shuffle_medium),
               iconSize: maxSize * 0.05,
               onPressed: null,
             )
@@ -445,7 +456,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                   value: min(
                       maxValue, durationPlayed?.inSeconds.toDouble() ?? 0.0),
                   onChangeStart: (value) {
-                    isDraggin = true;
+                    isDragging = true;
                   },
                   onChanged: (value) {
                     setState(() {
@@ -453,12 +464,12 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                     });
                   },
                   onChangeEnd: (value) {
-                    isDraggin = false;
+                    isDragging = false;
                     setState(() {
                       MediaPlayerCentral.goTo(durationPlayed!);
                     });
                   })),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Container(
             padding: EdgeInsets.zero,
             width: maxSize,
@@ -478,7 +489,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                         onPressed: () =>
                             closeCaptionActivated = !closeCaptionActivated,
                       )
-                    : SizedBox(height: 47),
+                    : const SizedBox(height: 47),
                 Text(printDuration(mediaLength),
                     style: TextStyle(color: contrastColor)),
               ],
@@ -491,7 +502,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
 
   Widget mediaInfo(
       double maxSize, MediaQueryData mediaQueryData, BuildContext context) {
-    return Container(
+    return SizedBox(
       height: maxSize * 0.2 - mediaQueryData.padding.top,
       width: mediaQueryData.size.width,
       child: Column(
@@ -499,13 +510,13 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
         children: <Widget>[
           Text(
             band ?? 'No track',
-            style: Theme.of(context).textTheme.headline2,
+            style: Theme.of(context).textTheme.displayMedium,
             textAlign: TextAlign.center,
           ),
           SizedBox(height: maxSize * 0.01),
           Text(
             music ?? '',
-            style: Theme.of(context).textTheme.headline3,
+            style: Theme.of(context).textTheme.displaySmall,
             textAlign: TextAlign.center,
           )
         ],
@@ -516,12 +527,12 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
   Widget mediaArt(double imageHeight, double imageWidth,
       MediaQueryData mediaQueryData, double maxSize) {
     return Center(
-      child: Container(
+      child: SizedBox(
           height: imageHeight,
           width: imageWidth,
           child: ShaderMask(
               shaderCallback: (rect) {
-                return LinearGradient(
+                return const LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
