@@ -1,3 +1,8 @@
+## [0.9.2] - 2024-17-01
+### Added
+- **Cancel schedule for iOS:** The feature `cancelSchedule` was added to iOS platform.
+- **Example app updated:** The example app was updated to reflect the last changes.
+
 ## [0.9.1] - 2024-11-01
 ### Breaking Changes
 - **Progress Property Now Double:** The `progress` property in `NotificationContent` has been changed from `int` to `double`. This modification enhances the precision of progress values in notifications.
