@@ -1,3 +1,21 @@
+## [0.9.3] - 2024-15-03
+### Added
+- **Double Check in Lost Events Manager:** Implemented a double-check for `createdDate` and `displayedDate` fields to enhance the stability of the Awesome Notifications framework.
+- **Image Support for iOS Notifications:** Expanded image support to all notification layouts on the iOS platform, enabling a richer user experience.
+- **Upgrade to Flutter 3.19 Standards:** Migrated Android configuration and dependency management to comply with Flutter 3.19 standards.
+- **Project and Android Core Dependencies Updated:** Upgraded all project dependencies, including Android core dependencies to version 0.9.3, to their latest versions.
+
+### Improved
+- **Notification Builder Flexibility:** Adjusted notification builder to eliminate the need for setting a summary in the Messaging layout, addressing the exception "User must be valid and have a name."
+- **SimpleButton Widget Update:** Updated the `SimpleButton` widget in the example app to use non-deprecated properties, ensuring compatibility with the latest Flutter versions.
+
+### Breaking Changes
+- **Progress Property Type Change:** The `progress` property in `NotificationContent` has been altered from `int` to `double` for improved precision in notification progress indication.
+
+### Dependency Updates
+- **iOS Core Version Bumped to 0.9.3:** Updated the iOS core version to 0.9.3 to align with the latest enhancements and fixes.
+- **Android Core Dependencies Updated to 0.9.3:** The Android core dependencies have been updated to reflect the latest improvements, security patches, and new features.
+
 ## [0.9.2] - 2024-17-01
 ### Added
 - **Cancel schedule for iOS:** The feature `cancelSchedule` was added to iOS platform.
