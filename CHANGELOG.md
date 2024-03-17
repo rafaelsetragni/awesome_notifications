@@ -1,3 +1,13 @@
+## [0.9.3+1] - 2024-15-03
+### Transition Support from Github to Discord Community
+- **GitHub Issues Closure**: Effective immediately, GitHub issues will no longer be open for new support requests. Existing issues will remain accessible as an archive and resource.
+- **Discord Community Support**: All support for Awesome Notifications has transitioned to our Discord community. This move aims to provide a more dynamic, interactive, and efficient support experience.
+- **Reasons for Change**:
+  - *Community Rules Respect*: Numerous issues posted on GitHub have not adhered to our community guidelines, impacting heavily on support efficiency and effectiveness.
+  - *Efficiency and Effectiveness*: Managing support through GitHub has become exceedingly time-consuming, particularly when posts omit critical information or disregard guidelines.
+  - *Quality of Support*: Our Discord community allows for real-time engagement, resource sharing, and a closer-knit user and developer interaction, which wasn't true for GitHub.
+- **Next Steps for Users**: We encourage all users to join our Discord community [https://discord.awesome-notifications.carda.me/](https://discord.awesome-notifications.carda.me/) for ongoing support, updates, and to connect with fellow users and the development team.
+
 ## [0.9.3] - 2024-15-03
 ### Added
 - **Double Check in Lost Events Manager:** Implemented a double-check for `createdDate` and `displayedDate` fields to enhance the stability of the Awesome Notifications framework.
