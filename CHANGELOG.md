@@ -1,4 +1,4 @@
-## [0.9.3+1] - 2024-07-06
+## [0.9.3+2] - 2024-07-06
 ### Removes references to Flutter v1 android embedding classes.
 
 ## [0.9.3+1] - 2024-15-03
