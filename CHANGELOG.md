@@ -1,3 +1,6 @@
+## [0.9.3+1] - 2024-07-06
+### Removes references to Flutter v1 android embedding classes.
+
 ## [0.9.3+1] - 2024-15-03
 ### Transition Support from Github to Discord Community
 - **GitHub Issues Closure**: Effective immediately, GitHub issues will no longer be open for new support requests. Existing issues will remain accessible as an archive and resource.
