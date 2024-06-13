@@ -9,7 +9,7 @@ import android.os.Build;
 
 import java.io.InputStream;
 
-import io.flutter.view.FlutterMain;
+import io.flutter.FlutterInjector;
 import me.carda.awesome_notifications.core.utils.BitmapUtils;
 
 public class FlutterBitmapUtils extends BitmapUtils {
@@ -43,7 +43,9 @@ public class FlutterBitmapUtils extends BitmapUtils {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 inputStream = context.getAssets().open("flutter_assets/" + bitmapPath);
             } else {
-                String assetLookupKey = FlutterMain.getLookupKeyForAsset(bitmapPath);
+                String assetLookupKey = FlutterInjector.instance()
+                        .flutterLoader()
+                        .getLookupKeyForAsset(bitmapPath);
                 AssetManager assetManager = context.getAssets();
                 AssetFileDescriptor assetFileDescriptor = assetManager.openFd(assetLookupKey);
                 inputStream = assetFileDescriptor.createInputStream();

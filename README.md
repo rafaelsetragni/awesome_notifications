@@ -1561,7 +1561,6 @@ Here's an example of how to add these properties to your `AndroidManifest.xml` f
    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
    <application
-        android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="Awesome Notifications for Flutter">
         <activity
