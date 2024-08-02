@@ -740,7 +740,7 @@ To avoid this, you need to add the following lines to the `AppDelegate.swift` fi
 ```Swift
 import Flutter
 import awesome_notifications
-import shared_preferences_ios
+import shared_preferences_foundation
 //import all_other_plugins_that_i_need
 
 override func application(
@@ -750,10 +750,10 @@ override func application(
       GeneratedPluginRegistrant.register(with: self)
 
       // This function registers the desired plugins to be used within a notification background action
-      SwiftAwesomeNotificationsPlugin.setPluginRegistrantCallback { registry in          
+      SwiftAwesomeNotificationsPlugin.setPluginRegistrantCallback { registry in
           SwiftAwesomeNotificationsPlugin.register(
-            with: registry.registrar(forPlugin: "io.flutter.plugins.awesomenotifications.AwesomeNotificationsPlugin")!)          
-          FLTSharedPreferencesPlugin.register(
+            with: registry.registrar(forPlugin: "io.flutter.plugins.awesomenotifications.AwesomeNotificationsPlugin")!)
+          SharedPreferencesPlugin.register(
             with: registry.registrar(forPlugin: "io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin")!)
       }
 
