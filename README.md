@@ -626,7 +626,7 @@ AwesomeNotifications().createNotification(
   content: NotificationContent(
       id: 10,
       channelKey: 'basic_channel',
-      actionType: ActionType.Default
+      actionType: ActionType.Default,
       title: 'Hello World!',
       body: 'This is my first notification!',
   )
