@@ -5,18 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="148ab794-38a5-4a37-8880-b24443dd25cc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coverage/lcov.info" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/lcov.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/awesome_method_channel_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/awesome_method_channel_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/awesome_notifications_empty_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/awesome_notifications_empty_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/awesome_notifications_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/awesome_notifications_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/models/notification_interval_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/models/notification_interval_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/models/notification_model_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/models/notification_model_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/models/notification_schedule_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/models/notification_schedule_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/models/received_models/push_notificaton_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/models/received_models/push_notificaton_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +45,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Flutter Test.tests in test.executor": "Coverage",
+    "Flutter.Complete App.executor": "Debug",
     "Flutter.main.dart.executor": "Debug",
     "Flutter.main_complete.dart.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -68,16 +61,26 @@
     "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>
-  <component name="RunManager" selected="Flutter Test.tests in test">
-    <configuration name="main_complete.dart" type="FlutterRunConfigurationType" factoryName="Flutter" nameIsGenerated="true">
+  <component name="RunManager" selected="Flutter.Complete App">
+    <configuration name="Complete App" type="FlutterRunConfigurationType" factoryName="Flutter">
       <option name="filePath" value="$PROJECT_DIR$/example/lib/main_complete.dart" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Simple App" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/example/lib/main.dart" />
       <method v="2" />
     </configuration>
     <configuration name="tests in test" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
       <option name="testDir" value="$PROJECT_DIR$/test" />
       <option name="useRegexp" value="false" />
+      <option name="additionalArgs" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Flutter.Simple App" />
+      <item itemvalue="Flutter.Complete App" />
+      <item itemvalue="Flutter Test.tests in test" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Flutter Test.tests in test" />
@@ -94,5 +97,29 @@
       <updated>1728921929474</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/example/lib/utils/common_functions.dart</url>
+          <line>69</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/example/lib/main_complete.dart</url>
+          <line>44</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/example/lib/main_complete.dart</url>
+          <line>21</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="../../../../GitHub/plugins/awesome_notifications/coverage/lcov.info" NAME="tests in test Coverage Results" MODIFIED="1728996432361" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="FlutterCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
