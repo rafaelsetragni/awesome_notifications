@@ -200,7 +200,8 @@ void main() {
     });
 
     test('getNextDate method is called once', () async {
-      NotificationSchedule schedule = NotificationInterval(interval: 60);
+      NotificationSchedule schedule =
+          NotificationInterval(interval: Duration(minutes: 1));
       when(() => mockNotifications.getNextDate(schedule))
           .thenAnswer((_) async => DateTime.now());
       await AwesomeNotifications().getNextDate(schedule);
