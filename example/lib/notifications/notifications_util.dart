@@ -5,19 +5,17 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:awesome_notifications/android_foreground_service.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-
 // TO AVOID CONFLICT WITH MATERIAL DATE UTILS CLASS
 import 'package:awesome_notifications/awesome_notifications.dart'
     hide AwesomeDateUtils;
 import 'package:awesome_notifications/awesome_notifications.dart' as utils
     show AwesomeDateUtils;
-
 import 'package:awesome_notifications_example/models/media_model.dart';
 import 'package:awesome_notifications_example/utils/common_functions.dart'
     if (dart.library.html) 'package:awesome_notifications_example/utils/common_web_functions.dart';
 import 'package:awesome_notifications_example/utils/media_player_central.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -211,8 +209,8 @@ class NotificationUtils {
                           .replaceAll('NotificationPermission.', ''),
                       maxLines: 2,
                       textAlign: TextAlign.center,
-                      style:
-                          const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -401,7 +399,7 @@ class NotificationUtils {
             body: 'This notification does activate badge indicator',
             payload: {'content 1': 'value'}),
         schedule: NotificationInterval(
-            interval: 5,
+            interval: Duration(seconds: 5),
             timeZone:
                 await AwesomeNotifications().getLocalTimeZoneIdentifier()));
   }
@@ -416,7 +414,7 @@ class NotificationUtils {
             title: 'Badge test notification',
             body: 'This notification does not activate badge indicator'),
         schedule: NotificationInterval(
-            interval: 5,
+            interval: Duration(seconds: 5),
             timeZone:
                 await AwesomeNotifications().getLocalTimeZoneIdentifier()));
   }
@@ -449,8 +447,8 @@ class NotificationUtils {
   ************************************************ */
 
   static Future<void> showNotificationWithTimeout(int id) async {
-    await AwesomeNotifications().createNotification(
-        content: NotificationContent(
+    await AwesomeNotifications()
+        .createNotification(content: NotificationContent(
             id: id,
             channelKey: 'basic_channel',
             title: 'This notification will expire',
@@ -460,20 +458,17 @@ class NotificationUtils {
             bigPicture: 'asset://assets/images/melted-clock.png',
             timeoutAfter: const Duration(seconds: 10),
             chronometer: Duration.zero, // starts from 0 seconds
-            payload: {'uuid': 'user-profile-uuid'}),
-            actionButtons: [
-              NotificationActionButton(
-                  key: 'AGREED1', label: 'I agree', autoDismissible: true),
-              NotificationActionButton(
-                  key: 'AGREED2', label: 'I agree too', autoDismissible: true),
-            ]
-        );
+            payload: {'uuid': 'user-profile-uuid'}), actionButtons: [
+      NotificationActionButton(
+          key: 'AGREED1', label: 'I agree', autoDismissible: true),
+      NotificationActionButton(
+          key: 'AGREED2', label: 'I agree too', autoDismissible: true),
+    ]);
   }
 
   /* *********************************************
       TRANSLATED NOTIFICATIONS
   ************************************************ */
-
 
   static Future<void> showNotificationWithLocalizationsBlock(int id) async {
     await AwesomeNotifications().createNotification(
@@ -495,7 +490,7 @@ class NotificationUtils {
               key: 'AGREED2', label: 'I agree too', autoDismissible: true),
         ],
         localizations: {
-          'pt-br' : NotificationLocalization(
+          'pt-br': NotificationLocalization(
               title: 'Este título está escrito em português do Brasil!',
               body: 'Agora é muito fácil traduzir o conteúdo das notificações, '
                   'incluindo imagens e botões!',
@@ -505,33 +500,25 @@ class NotificationUtils {
               buttonLabels: {
                 'AGREED1': 'Eu concordo!',
                 'AGREED2': 'Eu concordo também!'
-              }
-          ),
+              }),
           'zh': NotificationLocalization(
               title: '这个标题是用中文写的',
               body: '现在，轻松翻译通知内容，包括图像和按钮！',
               summary: '',
               bigPicture: 'asset://assets/images/awn-rocks-zh.jpg',
               largeIcon: 'asset://assets/images/chinese.jpg',
-              buttonLabels: {
-                'AGREED1': '我同意',
-                'AGREED2': '我也同意'
-              }
-          ),
+              buttonLabels: {'AGREED1': '我同意', 'AGREED2': '我也同意'}),
           'ko': NotificationLocalization(
               title: '이 타이틀은 한국어로 작성되었습니다',
               body: '이제 이미지 및 버튼을 포함한 알림 콘텐츠를 쉽게 번역할 수 있습니다!',
               summary: '',
               bigPicture: 'asset://assets/images/awn-rocks-ko.jpg',
               largeIcon: 'asset://assets/images/korean.jpg',
-              buttonLabels: {
-                'AGREED1': '동의합니다',
-                'AGREED2': '저도 동의합니다'
-              }
-          ),
+              buttonLabels: {'AGREED1': '동의합니다', 'AGREED2': '저도 동의합니다'}),
           'de': NotificationLocalization(
               title: 'Dieser Titel ist in Deutsch geschrieben',
-              body: 'Jetzt ist es wirklich einfach, den Inhalt einer Benachrichtigung zu übersetzen, '
+              body:
+                  'Jetzt ist es wirklich einfach, den Inhalt einer Benachrichtigung zu übersetzen, '
                   'einschließlich Bilder und Schaltflächen!',
               summary: '',
               bigPicture: 'asset://assets/images/awn-rocks-de.jpg',
@@ -539,8 +526,7 @@ class NotificationUtils {
               buttonLabels: {
                 'AGREED1': 'Ich stimme zu',
                 'AGREED2': 'Ich stimme auch zu'
-              }
-          ),
+              }),
           'pt': NotificationLocalization(
               title: 'Este título está escrito em português de Portugal!',
               body: 'Agora é muito fácil traduzir o conteúdo das notificações, '
@@ -551,11 +537,11 @@ class NotificationUtils {
               buttonLabels: {
                 'AGREED1': 'Eu concordo!',
                 'AGREED2': 'Eu concordo também!'
-              }
-          ),
+              }),
           'es': NotificationLocalization(
               title: 'Este título está escrito en español!',
-              body: 'Ahora es muy fácil traducir el contenido de las notificaciones, '
+              body:
+                  'Ahora es muy fácil traducir el contenido de las notificaciones, '
                   'incluyendo imágenes y botones.',
               summary: 'Traducciones de Awesome Notifications',
               bigPicture: 'asset://assets/images/awn-rocks-es.jpg',
@@ -563,11 +549,9 @@ class NotificationUtils {
               buttonLabels: {
                 'AGREED1': 'Estoy de acuerdo',
                 'AGREED2': 'También estoy de acuerdo'
-              }
-          ),
+              }),
         });
   }
-
 
   static Future<void> showNotificationWithLocalizationsKeyBlock(int id) async {
     await AwesomeNotifications().createNotification(
@@ -592,58 +576,47 @@ class NotificationUtils {
               key: 'AGREED2', label: 'I agree too', autoDismissible: true),
         ],
         localizations: {
-          'pt-br' : NotificationLocalization(
+          'pt-br': NotificationLocalization(
               bigPicture: 'asset://assets/images/awn-rocks-pt-br.jpg',
               largeIcon: 'asset://assets/images/brazilian.jpg',
               buttonLabels: {
                 'AGREED1': 'Eu concordo!',
                 'AGREED2': 'Eu concordo também!'
-              }
-          ),
+              }),
           'zh': NotificationLocalization(
               bigPicture: 'asset://assets/images/awn-rocks-zh.jpg',
               largeIcon: 'asset://assets/images/chinese.jpg',
-              buttonLabels: {
-                'AGREED1': '我同意',
-                'AGREED2': '我也同意'
-              }
-          ),
+              buttonLabels: {'AGREED1': '我同意', 'AGREED2': '我也同意'}),
           'ko': NotificationLocalization(
               bigPicture: 'asset://assets/images/awn-rocks-ko.jpg',
               largeIcon: 'asset://assets/images/korean.jpg',
-              buttonLabels: {
-                'AGREED1': '동의합니다',
-                'AGREED2': '저도 동의합니다'
-              }
-          ),
+              buttonLabels: {'AGREED1': '동의합니다', 'AGREED2': '저도 동의합니다'}),
           'de': NotificationLocalization(
               bigPicture: 'asset://assets/images/awn-rocks-de.jpg',
               largeIcon: 'asset://assets/images/german.jpg',
               buttonLabels: {
                 'AGREED1': 'Ich stimme zu',
                 'AGREED2': 'Ich stimme auch zu'
-              }
-          ),
+              }),
           'pt': NotificationLocalization(
               bigPicture: 'asset://assets/images/awn-rocks-pt.jpg',
               largeIcon: 'asset://assets/images/portuguese.jpg',
               buttonLabels: {
                 'AGREED1': 'Eu concordo!',
                 'AGREED2': 'Eu concordo também!'
-              }
-          ),
+              }),
           'es': NotificationLocalization(
               bigPicture: 'asset://assets/images/awn-rocks-es.jpg',
               largeIcon: 'asset://assets/images/spanish.jpg',
               buttonLabels: {
                 'AGREED1': 'Estoy de acuerdo',
                 'AGREED2': 'También estoy de acuerdo'
-              }
-          ),
+              }),
         });
   }
 
-  static Future<void> setLocalizationForNotification({required languageCode}) async {
+  static Future<void> setLocalizationForNotification(
+      {required languageCode}) async {
     await AwesomeNotifications().setLocalization(languageCode: languageCode);
   }
 
@@ -789,7 +762,7 @@ class NotificationUtils {
               isDangerousOption: true,
               autoDismissible: true),
         ],
-        schedule: NotificationInterval(interval: timeToWait));
+        schedule: NotificationInterval(interval: Duration(seconds: 5)));
   }
 
   static Future<void> showAlarmNotification(
@@ -922,7 +895,7 @@ class NotificationUtils {
             body: 'scheduled body',
             payload: {'uuid': 'uuid-test'}),
         schedule: NotificationInterval(
-            interval: 5,
+            interval: Duration(seconds: 5),
             timeZone:
                 await AwesomeNotifications().getLocalTimeZoneIdentifier()));
   }
@@ -987,7 +960,7 @@ class NotificationUtils {
   ************************************************ */
 
   static Future<void> redNotification(int id, bool delayLEDTests) async {
-    AwesomeNotifications().setChannel(NotificationChannel(
+    await AwesomeNotifications().setChannel(NotificationChannel(
         channelKey: "colorful_notification",
         channelName: "Colorful notifications",
         channelDescription: "A red colorful notification",
@@ -1019,16 +992,16 @@ class NotificationUtils {
         ],
         schedule: delayLEDTests
             ? NotificationInterval(
-                interval: 5,
+                interval: Duration(seconds: 5),
                 timeZone:
                     await AwesomeNotifications().getLocalTimeZoneIdentifier())
             : null);
   }
 
   static Future<void> blueNotification(int id, bool delayLEDTests) async {
-    AwesomeNotifications().setChannel(NotificationChannel(
-        channelKey: "colorful_notification",
-        channelName: "Colorful notifications",
+    await AwesomeNotifications().setChannel(NotificationChannel(
+        channelKey: "colorful_notification_blue",
+        channelName: "Blue Colorful notifications",
         channelDescription: "A red colorful notification",
         vibrationPattern: lowVibrationPattern,
         defaultColor: Colors.blueAccent,
@@ -1039,7 +1012,7 @@ class NotificationUtils {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: id,
-            channelKey: "colorful_notification",
+            channelKey: "colorful_notification_blue",
             title:
                 '<font color="${Colors.blueAccent.value}">Blue Notification</font>',
             body: "<font color='${Colors.blueAccent.value}'>A colorful notification</font>",
@@ -1057,14 +1030,14 @@ class NotificationUtils {
         ],
         schedule: delayLEDTests
             ? NotificationInterval(
-                interval: 5,
+                interval: Duration(seconds: 5),
                 timeZone:
                     await AwesomeNotifications().getLocalTimeZoneIdentifier())
             : null);
   }
 
   static Future<void> yellowNotification(int id, bool delayLEDTests) async {
-    AwesomeNotifications().setChannel(NotificationChannel(
+    await AwesomeNotifications().setChannel(NotificationChannel(
         channelKey: "colorful_notification",
         channelName: "Colorful notifications",
         channelDescription: "A red colorful notification",
@@ -1094,14 +1067,14 @@ class NotificationUtils {
         ],
         schedule: delayLEDTests
             ? NotificationInterval(
-                interval: 5,
+                interval: Duration(seconds: 5),
                 timeZone:
                     await AwesomeNotifications().getLocalTimeZoneIdentifier())
             : null);
   }
 
   static Future<void> purpleNotification(int id, bool delayLEDTests) async {
-    AwesomeNotifications().setChannel(NotificationChannel(
+    await AwesomeNotifications().setChannel(NotificationChannel(
         channelKey: "colorful_notification",
         channelName: "Colorful notifications",
         channelDescription: "A purple colorful notification",
@@ -1133,14 +1106,14 @@ class NotificationUtils {
         ],
         schedule: delayLEDTests
             ? NotificationInterval(
-                interval: 5,
+                interval: Duration(seconds: 5),
                 timeZone:
                     await AwesomeNotifications().getLocalTimeZoneIdentifier())
             : null);
   }
 
   static Future<void> greenNotification(int id, bool delayLEDTests) async {
-    AwesomeNotifications().setChannel(NotificationChannel(
+    await AwesomeNotifications().setChannel(NotificationChannel(
         channelKey: "colorful_notification",
         channelName: "Colorful notifications",
         channelDescription: "A green colorful notification",
@@ -1157,6 +1130,8 @@ class NotificationUtils {
             title:
                 '<font color="${Colors.lightGreen.value}">Green Notification</font>',
             body: "<font color='${Colors.lightGreen.value}'>A colorful notification</font>",
+            color: Colors.purple,
+            backgroundColor: Colors.red,
             payload: {
               'uuid': 'uuid-green'
             }),
@@ -1172,7 +1147,7 @@ class NotificationUtils {
         ],
         schedule: delayLEDTests
             ? NotificationInterval(
-                interval: 5,
+                interval: Duration(seconds: 5),
                 timeZone:
                     await AwesomeNotifications().getLocalTimeZoneIdentifier())
             : null);
@@ -1235,7 +1210,8 @@ class NotificationUtils {
           color: Colors.blueGrey,
           category: NotificationCategory.Reminder,
         ),
-        schedule: NotificationInterval(interval: seconds, preciseAlarm: true));
+        schedule: NotificationInterval(
+            interval: Duration(seconds: seconds), preciseAlarm: true));
   }
 
   /* *********************************************
@@ -1257,7 +1233,8 @@ class NotificationUtils {
           payload: {'uuid': 'uuid-test'},
           autoDismissible: false,
         ),
-        schedule: NotificationInterval(interval: 5, preciseAlarm: true));
+        schedule: NotificationInterval(
+            interval: Duration(seconds: 5), preciseAlarm: true));
   }
 
   /* *********************************************
@@ -1394,7 +1371,8 @@ class NotificationUtils {
         ]);
   }
 
-  static Future<void> showNotificationWithAuthenticatedActionButtons(int id) async {
+  static Future<void> showNotificationWithAuthenticatedActionButtons(
+      int id) async {
     await AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: id,
@@ -1402,25 +1380,25 @@ class NotificationUtils {
             title: 'Big <b>BIG</b> picture title',
             summary: 'Summary <i>text</i>',
             body:
-            '$lorenIpsumText<br><br>$lorenIpsumText<br><br>$lorenIpsumText',
+                '$lorenIpsumText<br><br>$lorenIpsumText<br><br>$lorenIpsumText',
             largeIcon:
-            'https://image.freepik.com/vetores-gratis/modelo-de-logotipo-de-restaurante-retro_23-2148451519.jpg',
+                'https://image.freepik.com/vetores-gratis/modelo-de-logotipo-de-restaurante-retro_23-2148451519.jpg',
             bigPicture: 'https://media-cdn.tripadvisor.com/media/photo-s/15/dd/20/61/al-punto.jpg',
             notificationLayout: NotificationLayout.BigPicture,
             color: Colors.indigoAccent,
             payload: {'uuid': 'uuid-test'}),
         actionButtons: [
           NotificationActionButton(
-              key: 'READ',
-              label: 'Mark as read',
-              autoDismissible: true,
-              isAuthenticationRequired: true,
+            key: 'READ',
+            label: 'Mark as read',
+            autoDismissible: true,
+            isAuthenticationRequired: true,
           ),
           NotificationActionButton(
-              key: 'REMEMBER',
-              label: 'Remember-me later',
-              autoDismissible: false,
-              isAuthenticationRequired: true,
+            key: 'REMEMBER',
+            label: 'Remember-me later',
+            autoDismissible: false,
+            isAuthenticationRequired: true,
           )
         ]);
   }
@@ -1546,10 +1524,10 @@ class NotificationUtils {
   ************************************************ */
 
   static void updateNotificationMediaPlayer(
-      int id,
-      MediaModel? mediaNow,
-      Duration currentTrackPosition,
-      NotificationPlayState playState,
+    int id,
+    MediaModel? mediaNow,
+    Duration currentTrackPosition,
+    NotificationPlayState playState,
   ) {
     if (mediaNow == null) {
       cancelNotification(id);
@@ -1564,7 +1542,9 @@ class NotificationUtils {
             title: mediaNow.bandName,
             body: mediaNow.trackName,
             duration: mediaNow.trackSize,
-            progress: currentTrackPosition.inMilliseconds / mediaNow.trackSize.inMilliseconds * 100,
+            progress: currentTrackPosition.inMilliseconds /
+                mediaNow.trackSize.inMilliseconds *
+                100,
             playbackSpeed: 1,
             playState: playState,
             summary: MediaPlayerCentral.isPlaying ? 'Now playing' : '',
@@ -1572,13 +1552,12 @@ class NotificationUtils {
             largeIcon: mediaNow.diskImagePath,
             color: Colors.purple.shade700,
             autoDismissible: false,
-            showWhen: false
-        ),
+            showWhen: false),
         actionButtons: [
           NotificationActionButton(
               key: 'MEDIA_PREV',
-              icon: 'resource://drawable/res_ic_prev${
-                  MediaPlayerCentral.hasPreviousMedia ? '' : '_disabled'}',
+              icon:
+                  'resource://drawable/res_ic_prev${MediaPlayerCentral.hasPreviousMedia ? '' : '_disabled'}',
               label: 'Previous',
               autoDismissible: false,
               showInCompactView: false,
@@ -1594,8 +1573,8 @@ class NotificationUtils {
                   actionType: ActionType.KeepOnTop)
               : NotificationActionButton(
                   key: 'MEDIA_PLAY',
-                  icon: 'resource://drawable/res_ic_play${
-                      MediaPlayerCentral.hasAnyMedia ? '' : '_disabled'}',
+                  icon:
+                      'resource://drawable/res_ic_play${MediaPlayerCentral.hasAnyMedia ? '' : '_disabled'}',
                   label: 'Play',
                   autoDismissible: false,
                   showInCompactView: true,
@@ -1603,8 +1582,8 @@ class NotificationUtils {
                   actionType: ActionType.KeepOnTop),
           NotificationActionButton(
               key: 'MEDIA_NEXT',
-              icon: 'resource://drawable/res_ic_next${
-                  MediaPlayerCentral.hasNextMedia ? '' : '_disabled'}',
+              icon:
+                  'resource://drawable/res_ic_next${MediaPlayerCentral.hasNextMedia ? '' : '_disabled'}',
               label: 'Previous',
               showInCompactView: true,
               enabled: MediaPlayerCentral.hasNextMedia,
@@ -1816,7 +1795,6 @@ class NotificationUtils {
     );
   }
 
-
   static Future<DateTime?> pickScheduleDate(BuildContext context,
       {required bool isUtc}) async {
     TimeOfDay? timeOfDay;
@@ -1830,23 +1808,23 @@ class NotificationUtils {
     if (newDate != null) {
       timeOfDay = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay.fromDateTime(now.add(const Duration(minutes: 1))),
+        initialTime:
+            TimeOfDay.fromDateTime(now.add(const Duration(minutes: 1))),
       );
 
       if (timeOfDay != null) {
         return isUtc
             ? DateTime.utc(newDate.year, newDate.month, newDate.day,
-            timeOfDay.hour, timeOfDay.minute)
+                timeOfDay.hour, timeOfDay.minute)
             : DateTime(newDate.year, newDate.month, newDate.day, timeOfDay.hour,
-            timeOfDay.minute);
+                timeOfDay.minute);
       }
     }
     return null;
   }
 
   static Future<void> getNextValidMonday(BuildContext context) async {
-    DateTime? referenceDate =
-    await pickScheduleDate(context, isUtc: false);
+    DateTime? referenceDate = await pickScheduleDate(context, isUtc: false);
 
     NotificationSchedule schedule = NotificationCalendar(
         weekday: DateTime.monday,
@@ -1863,26 +1841,25 @@ class NotificationUtils {
     if (nextValidDate == null) {
       response = 'There is no more valid date for this schedule';
     } else {
-      response = utils.AwesomeDateUtils.parseDateToString(
-          nextValidDate.toUtc(),
+      response = utils.AwesomeDateUtils.parseDateToString(nextValidDate.toUtc(),
           format: 'dd/MM/yyyy')!;
     }
 
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text("Next valid schedule"),
-          content: SizedBox(
-              height: 50, child: Center(child: Text(response))),
-          actions: [
-            TextButton(
-              child: const Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop(null);
-              },
-            )
-          ],
-        ));
+              title: const Text("Next valid schedule"),
+              content:
+                  SizedBox(height: 50, child: Center(child: Text(response))),
+              actions: [
+                TextButton(
+                  child: const Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context).pop(null);
+                  },
+                )
+              ],
+            ));
   }
 
   static Future<String> getCurrentTimeZone() {
@@ -1907,7 +1884,7 @@ class NotificationUtils {
             bigPicture: 'asset://assets/images/melted-clock.png',
             category: NotificationCategory.Reminder),
         schedule: NotificationInterval(
-            interval: 60,
+            interval: Duration(minutes: 1),
             timeZone: localTimeZone,
             repeats: true,
             preciseAlarm: true));
@@ -1925,14 +1902,16 @@ class NotificationUtils {
             body:
                 'This notification was schedule to repeat at every 5 seconds.'),
         schedule: NotificationAndroidCrontab(
-            initialDateTime: nowDate.copyWith().add(const Duration(seconds: 10)).toUtc(),
-            expirationDateTime:
-            nowDate.copyWith().add(const Duration(seconds: 10, minutes: 1)).toUtc(),
+            initialDateTime:
+                nowDate.copyWith().add(const Duration(seconds: 10)).toUtc(),
+            expirationDateTime: nowDate
+                .copyWith()
+                .add(const Duration(seconds: 10, minutes: 1))
+                .toUtc(),
             crontabExpression: '/5 * * * * ? *',
             timeZone: localTimeZone,
             repeats: true,
-            preciseAlarm: true
-        ));
+            preciseAlarm: true));
   }
 
   static Future<void> repeatPreciseThreeTimes() async {
@@ -1946,15 +1925,11 @@ class NotificationUtils {
             notificationLayout: NotificationLayout.BigPicture,
             category: NotificationCategory.Alarm,
             bigPicture: 'asset://assets/images/melted-clock.png'),
-        schedule: NotificationAndroidCrontab(
-            preciseSchedules: [
-              nowDate.copyWith().add(const Duration(seconds: 1)).toUtc(),
-              nowDate.copyWith().add(const Duration(seconds: 25)).toUtc(),
-              nowDate.copyWith().add(const Duration(seconds: 45)).toUtc()
-            ],
-            repeats: true,
-            preciseAlarm: true
-        ));
+        schedule: NotificationAndroidCrontab(preciseSchedules: [
+          nowDate.copyWith().add(const Duration(seconds: 1)).toUtc(),
+          nowDate.copyWith().add(const Duration(seconds: 25)).toUtc(),
+          nowDate.copyWith().add(const Duration(seconds: 45)).toUtc()
+        ], repeats: true, preciseAlarm: true));
   }
 
   static Future<void> repeatMinuteNotificationOClock() async {
@@ -1965,7 +1940,8 @@ class NotificationUtils {
             id: -1,
             channelKey: 'scheduled',
             title: 'Notification at exactly every single minute',
-            body: 'This notification was schedule to repeat at every single minute at clock.',
+            body:
+                'This notification was schedule to repeat at every single minute at clock.',
             notificationLayout: NotificationLayout.BigPicture,
             bigPicture: 'asset://assets/images/melted-clock.png'),
         schedule: NotificationCalendar(

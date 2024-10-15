@@ -120,7 +120,7 @@ void main() {
 
     test('getNextDate method', () async {
       DateTime? result = await notifications.getNextDate(
-        NotificationInterval(interval: 10),
+        NotificationInterval(interval: Duration(seconds: 10)),
       );
       expect(result, null);
     });

@@ -31,7 +31,9 @@ class NotificationCalendar extends NotificationSchedule {
   /// The day of the week (1 = Monday) for scheduling the notification.
   int? weekday;
 
-  /// The count of weeks of the month for scheduling. Not fully implemented yet.
+  /// The count of weeks of the month for scheduling. This parameter is now deprecated and will be no longer supported.
+  @Deprecated(
+      'The weekOfMonth parameter is deprecated and scheduled for removal in a future release due to unimplemented dependencies expected in versions beyond 1.0.0. It may be reconsidered for inclusion in later versions.')
   int? weekOfMonth;
 
   /// The week of the year for scheduling the notification.

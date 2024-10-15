@@ -5,7 +5,8 @@ void main() {
   group('toString', () {
     test('toString prints the respective inherited notification model', () {
       NotificationSchedule schedule1 = NotificationCalendar(second: 0);
-      NotificationSchedule schedule2 = NotificationInterval(interval: 60);
+      NotificationSchedule schedule2 =
+          NotificationInterval(interval: Duration(minutes: 1));
       NotificationSchedule schedule3 =
           NotificationAndroidCrontab(crontabExpression: '0 30 14 * * *');
 

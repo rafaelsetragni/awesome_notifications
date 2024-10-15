@@ -1,14 +1,38 @@
-## [0.9.3+1] - 2024-15-03
+## [0.10.0] - 2024-10-14
+### Added
+- **Support to AGP 8:** Added new proguard rules to allow SQLite database, used to capture notification events and schedules, to work with AGP 8.
+- **Example app updated to support Flutter 3.19:** The flutter example was updated to fully support Flutter 3.24 with new Gradle Java Standards.
+- **Firebase dependencies updated:** All Firebase dependencies was updated to support Firebase core 3.0.0.
+- **Intervals changed to Duration type:** The inteval value was changed from int (sec) to Duration, allowing a better understanding of time reading the code.
+- **Documentation Updated:** Documentation updated to also include AndroidManifest instructions to recreate schedules when the device is restarted.
+### Fixed
+- **MediaPlayer Album Art Resolution Fix:** Addressed an issue where album art was displaying at reduced resolution on Android 14 devices. Album artwork now renders clearly and crisply, improving the visual quality of the media player.
+### Removals
+- **Gson Library Removal:** Removed the Gson library due to compatibility issues with Android's latest releases and the R8 minification process. Transitioned to a more robust serialization framework that better supports obfuscation and modern Android versions.
+### Breaking changes
+- **Minimal supported Android version increased to 23:** The minimal android supported is now 23 (Android 6), since some encryption and security features rely on this minimal version.
+- **Minimum iOS Deployment Target Increased to 12:** The minimum iOS deployment target has been increased to iOS 12 to leverage newer API capabilities and enhance app security and performance.
+- **Necessity to Manually Add Permissions in AndroidManifest.xml:** Projects will now need to manually declare the following permissions in their AndroidManifest.xml in case needed:
+  - `android.permission.VIBRATE`
+  - `android.permission.SCHEDULE_EXACT_ALARM`
+  - `android.permission.USE_FULL_SCREEN_INTENT`
+  - `android.permission.WAKE_LOCK`
+  - `android.permission.FOREGROUND_SERVICE`
+  - `android.permission.RECEIVE_BOOT_COMPLETED`
+### Deprecated
+- **weekOfMonth** parameter is deprecated and scheduled for removal in a future release due to unimplemented dependencies expected in versions beyond 1.0.0. It may be reconsidered for inclusion in later versions.
+
+## [0.9.3+1] - 2024-03-15
 ### Transition Support from Github to Discord Community
 - **GitHub Issues Closure**: Effective immediately, GitHub issues will no longer be open for new support requests. Existing issues will remain accessible as an archive and resource.
 - **Discord Community Support**: All support for Awesome Notifications has transitioned to our Discord community. This move aims to provide a more dynamic, interactive, and efficient support experience.
 - **Reasons for Change**:
-  - *Community Rules Respect*: Numerous issues posted on GitHub have not adhered to our community guidelines, impacting heavily on support efficiency and effectiveness.
-  - *Efficiency and Effectiveness*: Managing support through GitHub has become exceedingly time-consuming, particularly when posts omit critical information or disregard guidelines.
-  - *Quality of Support*: Our Discord community allows for real-time engagement, resource sharing, and a closer-knit user and developer interaction, which wasn't true for GitHub.
+    - *Community Rules Respect*: Numerous issues posted on GitHub have not adhered to our community guidelines, impacting heavily on support efficiency and effectiveness.
+    - *Efficiency and Effectiveness*: Managing support through GitHub has become exceedingly time-consuming, particularly when posts omit critical information or disregard guidelines.
+    - *Quality of Support*: Our Discord community allows for real-time engagement, resource sharing, and a closer-knit user and developer interaction, which wasn't true for GitHub.
 - **Next Steps for Users**: We encourage all users to join our Discord community [https://discord.awesome-notifications.carda.me/](https://discord.awesome-notifications.carda.me/) for ongoing support, updates, and to connect with fellow users and the development team.
 
-## [0.9.3] - 2024-15-03
+## [0.9.3] - 2024-03-15
 ### Added
 - **Double Check in Lost Events Manager:** Implemented a double-check for `createdDate` and `displayedDate` fields to enhance the stability of the Awesome Notifications framework.
 - **Image Support for iOS Notifications:** Expanded image support to all notification layouts on the iOS platform, enabling a richer user experience.
@@ -26,12 +50,12 @@
 - **iOS Core Version Bumped to 0.9.3:** Updated the iOS core version to 0.9.3 to align with the latest enhancements and fixes.
 - **Android Core Dependencies Updated to 0.9.3:** The Android core dependencies have been updated to reflect the latest improvements, security patches, and new features.
 
-## [0.9.2] - 2024-17-01
+## [0.9.2] - 2024-01-17
 ### Added
 - **Cancel schedule for iOS:** The feature `cancelSchedule` was added to iOS platform.
 - **Example app updated:** The example app was updated to reflect the last changes.
 
-## [0.9.1] - 2024-11-01
+## [0.9.1] - 2024-01-11
 ### Breaking Changes
 - **Progress Property Now Double:** The `progress` property in `NotificationContent` has been changed from `int` to `double`. This modification enhances the precision of progress values in notifications.
 
@@ -43,7 +67,7 @@
 - **Default Values for MediaPlayer Properties:** Introduced default values for new media player properties like `duration`, `playState`, and `playSpeed`. This change aims to eliminate null exceptions and improve reliability.
 
 
-## [0.9.0] - 01/02/2024
+## [0.9.0] - 2024-01-02
 ### Breaking Changes
 - **Pod modifications:** Now it's necessary to also add Awesome Notifications pod modification inside `PodFile` at iOS folder.
 - **Receive port and send port:** The methods `sendPort.send()` and `receivePort!.listen()` now only accept serialized data, not objects. Convert your data to a map format and reconstruct it later from this format.

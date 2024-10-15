@@ -626,7 +626,7 @@ class NotificationPageState extends State<NotificationPage> {
                                             '',
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyText2)),
+                                            .bodyMedium)),
                               ),
                             ),
                         ]),

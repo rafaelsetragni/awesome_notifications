@@ -123,6 +123,18 @@ We are constantly working to improve Awesome Notifications and provide support f
 ## 🚚 Migration Guides from Older Versions
 ### Breaking Changes
 
+### From Version 0.9.X to 0.10.X:
+
+- **Increased Minimum iOS Deployment Target:** The minimum iOS deployment target has been increased to iOS 12. This change aligns with the use of newer iOS APIs and enhances both security and performance.
+- **Increased Minimum Android SDK to 23:** Raised the minimum supported Android version to SDK 23 (Android 6.0 Marshmallow) to utilize advanced security and encryption features, enhancing the app's overall security posture.
+- **Necessity to Manually Add Permissions in AndroidManifest (Android):** Projects will now need to manually declare the following permissions in their AndroidManifest.xml:
+  - `android.permission.VIBRATE`: To enable vibration when a new notification arrives.
+  - `android.permission.SCHEDULE_EXACT_ALARM`: To execute precise notification alarms.
+  - `android.permission.USE_FULL_SCREEN_INTENT`: To call the application in full screen instead of only displaying the notification.
+  - `android.permission.WAKE_LOCK`: To wake up the screen on a new notification if the device is sleeping.
+  - `android.permission.FOREGROUND_SERVICE`: To use foreground services to automatically close notifications when the app is terminated.
+  - `android.permission.RECEIVE_BOOT_COMPLETED`: To reschedule notifications if the app was rebooted.
+
 ### From Version 0.8.X to 0.9.X:
 
 - **Awesome Notifications Podfile Modification:** 
@@ -232,6 +244,7 @@ We are constantly working to improve Awesome Notifications and provide support f
   - [🛑 ATTENTION: Third-Party Plugin Restrictions](#-attention-third-party-plugin-restrictions)
   - [🚚 Migration Guides from Older Versions](#-migration-guides-from-older-versions)
     - [Breaking Changes](#breaking-changes)
+    - [From Version 0.9.X to 0.10.X:](#from-version-09x-to-010x)
     - [From Version 0.8.X to 0.9.X:](#from-version-08x-to-09x)
     - [from version 0.6.X to 0.7.X:](#from-version-06x-to-07x)
 - [📙 Table of Contents](#-table-of-contents)
@@ -322,8 +335,19 @@ To use the `awesome_notifications`, follow these steps:
 
 ```yaml
 dependencies:
-awesome_notifications_core: ^0.9.0 # <~ always ensure to use the latest version
-awesome_notifications: any # <~ this version is managed by awesome_notifications_core package
+  # Awesome plugins for local notifications
+  awesome_notifications_core: ^0.10.0 # use the latest core version available
+  awesome_notifications: ^0.10.0 # This version is managed by core plugin
+
+  # Awesome plugins for remote push notifications
+  awesome_notifications_fcm: ^0.10.0 # This version is managed by core plugin
+  # Attention:
+  # The firebase_messaging plugin is not necessary. awesome_notifications_fcm is a replacement for it
+  # firebase_messaging: ^X.X.X 
+  
+  # Firebase plugins, in case you intent to use Push Notifications with awesome packages
+  firebase_core: ^X.X.X # use the latest available
+  firebase_crashlytics: ^X.X.X # use the latest available
 ```
 
 After adding the dependency, run the following command to get the package:
@@ -338,13 +362,13 @@ Now you need to modify some files in native libraries to meet to use awesome_not
 
 ### 🤖 Configuring Android for Awesome Notifications:
 
-1 - Is required the minimum android SDK to 21 (Android 5.0 Lollipop), Grade 7.3.0 or greater and Java compiled SDK Version to 34 (Android 14). You can change the `minSdkVersion` to 21 and the `compileSdkVersion` and `targetSdkVersion` to 34, inside the file `build.gradle`, located inside "android/app/" folder.
+1 - Is required the minimum android SDK to 23 (Android 6.0 Lollipop), Grade 8.1.1 or greater and Java compiled SDK Version to 34 (Android 14). You can change the `minSdkVersion` to 23 and the `compileSdkVersion` and `targetSdkVersion` to 34, inside the file `build.gradle`, located inside "android/app/" folder.
 ```Gradle
 buildscript {
     ...
     
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath 'com.android.tools.build:gradle:8.1.1'
     }
 }
 
@@ -352,7 +376,7 @@ android {
     compileSdkVersion 34
 
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 34
         ...
     }
@@ -1213,6 +1237,26 @@ await AwesomeNotifications().createNotification(
   schedule: NotificationCalendar.fromDate(date: scheduleTime));
 ```
 
+Also, to allow the schedules to be recreated when the device is restarted, you need to add these permissions and these listeners on your AndroidManifest file: 
+```xml
+<manifest>
+
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+  <application>
+    
+    <receiver android:name="me.carda.awesome_notifications.core.broadcasters.receivers.ScheduledNotificationReceiver" android:exported="true" />
+    <receiver android:name="me.carda.awesome_notifications.core.broadcasters.receivers.RefreshSchedulesReceiver" android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+        <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+      </intent-filter>
+    </receiver>
+    
+  </application>
+</manifest>
+```
+
 <br>
 
 
@@ -1561,7 +1605,6 @@ Here's an example of how to add these properties to your `AndroidManifest.xml` f
    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
    <application
-        android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="Awesome Notifications for Flutter">
         <activity
@@ -1725,7 +1768,7 @@ NotificationContent (
 
 | Attribute      | Required | Description                                                                                                                  | Type          | Value Limits / Format       | Default value   |
 |----------------| -------- |----------------------------------------------------------------------------------------------------------------------------- | ------------- | --------------------------- | --------------- |
-| interval       |    YES   | The time interval between each notification (minimum of 60 seconds for repeating notifications)                              | Int (seconds) | Positive integers           |                 |
+| interval       |    YES   | The time interval between each notification (minimum of 60 seconds for repeating notifications)                              | Duration      | Zero or Positive values           |                 |
 | allowWhileIdle |     NO   | Displays the notification even when the device is in a low-power idle mode                                                   | bool          | true or false               | false           |
 | repeats        |     NO   | Determines whether the notification should be played once or repeatedly                                                      | bool          | true or false               | false           |
 | preciseAlarm   |     NO   | Requires the notification to be displayed at the precise scheduled time, even when the device is in a low-power idle mode. Requires explicit permission on Android 12 and beyond. | bool          | true or false                             | false           |

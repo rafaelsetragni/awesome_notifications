@@ -12,7 +12,7 @@ import 'package:mocktail/mocktail.dart';
 import 'src/isolates/isolate_main_test.dart';
 
 class MockMethodChannel extends MethodChannel {
-  MockMethodChannel(String name) : super(name);
+  MockMethodChannel(super.name);
 
   final Map<String, dynamic> _responses = {};
 
@@ -345,8 +345,9 @@ void main() {
       mockMethodChannel.setMockMethodCallHandler(CHANNEL_METHOD_GET_NEXT_DATE,
           AwesomeDateUtils.parseDateToString(expectedNextDate));
 
-      DateTime? nextDate = await awesomeNotifications
-          .getNextDate(NotificationInterval(interval: 1), fixedDate: fixedDate);
+      DateTime? nextDate = await awesomeNotifications.getNextDate(
+          NotificationInterval(interval: Duration(seconds: 1)),
+          fixedDate: fixedDate);
 
       expect(nextDate, isNotNull);
       expect(nextDate, expectedNextDate);
