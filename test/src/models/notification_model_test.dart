@@ -11,7 +11,8 @@ void main() {
         body: 'Test Body',
       );
 
-      NotificationSchedule schedule = NotificationInterval(interval: 60);
+      NotificationSchedule schedule =
+          NotificationInterval(interval: Duration(minutes: 1));
 
       List<NotificationActionButton> actionButtons = [
         NotificationActionButton(

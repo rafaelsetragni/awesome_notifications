@@ -11,47 +11,43 @@ class ThemesController {
 
       primaryColor: App.mainColor,
       // ignore: deprecated_member_use
-      colorScheme: const ColorScheme.light().copyWith(
-        secondary: Colors.blueGrey,
-      ),
+      colorScheme: const ColorScheme.light().copyWith(),
       canvasColor: Colors.white,
       focusColor: Colors.blueAccent,
       disabledColor: Colors.grey,
-
-      backgroundColor: Colors.blueGrey.shade400,
 
       appBarTheme: AppBarTheme(
           color: Colors.white,
           elevation: 0,
           iconTheme: IconThemeData(
             color: App.mainColor,
-          )
-      ),
+          )),
 
       fontFamily: 'Robot',
 
       // Define the default TextTheme. Use this to specify the default
       // text styling for headlines, titles, bodies of text, and more.
       textTheme: const TextTheme(
-        headline1:
+        displayLarge:
             TextStyle(fontSize: 64.0, height: 1.5, fontWeight: FontWeight.w500),
-        headline2:
+        displayMedium:
             TextStyle(fontSize: 52.0, height: 1.5, fontWeight: FontWeight.w500),
-        headline3:
+        displaySmall:
             TextStyle(fontSize: 48.0, height: 1.5, fontWeight: FontWeight.w500),
-        headline4:
+        headlineMedium:
             TextStyle(fontSize: 32.0, height: 1.5, fontWeight: FontWeight.w500),
-        headline5:
+        headlineSmall:
             TextStyle(fontSize: 28.0, height: 1.5, fontWeight: FontWeight.w500),
-        headline6:
+        titleLarge:
             TextStyle(fontSize: 22.0, height: 1.5, fontWeight: FontWeight.w500),
-        subtitle1:
+        titleMedium:
             TextStyle(fontSize: 18.0, height: 1.5, color: Colors.black54),
-        subtitle2:
+        titleSmall:
             TextStyle(fontSize: 12.0, height: 1.5, color: Colors.black54),
-        button: TextStyle(fontSize: 16.0, height: 1.5, color: Colors.black54),
-        bodyText1: TextStyle(fontSize: 16.0, height: 1.5),
-        bodyText2: TextStyle(fontSize: 16.0, height: 1.5),
+        labelLarge:
+            TextStyle(fontSize: 16.0, height: 1.5, color: Colors.black54),
+        bodyLarge: TextStyle(fontSize: 16.0, height: 1.5),
+        bodyMedium: TextStyle(fontSize: 16.0, height: 1.5),
       ),
 
       buttonTheme: ButtonThemeData(

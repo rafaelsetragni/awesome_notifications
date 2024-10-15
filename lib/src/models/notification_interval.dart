@@ -3,7 +3,7 @@ import '../../awesome_notifications.dart';
 /// Represents a notification scheduling configuration based on time intervals.
 class NotificationInterval extends NotificationSchedule {
   /// The amount of seconds between each notification repetition. Must be greater than 0 or 60 if repeating.
-  int? interval;
+  Duration? interval;
 
   /// Constructs a [NotificationInterval] object with various scheduling options.
   ///
@@ -26,7 +26,7 @@ class NotificationInterval extends NotificationSchedule {
   NotificationInterval? fromMap(Map<String, dynamic> mapData) {
     super.fromMap(mapData);
 
-    interval = AwesomeAssertUtils.extractValue<int>(
+    interval = AwesomeAssertUtils.extractValue<Duration>(
         NOTIFICATION_SCHEDULE_INTERVAL, mapData);
 
     try {
@@ -42,7 +42,7 @@ class NotificationInterval extends NotificationSchedule {
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
-    return map..addAll({NOTIFICATION_SCHEDULE_INTERVAL: interval});
+    return map..addAll({NOTIFICATION_SCHEDULE_INTERVAL: interval?.inSeconds});
   }
 
   /// Returns a string representation of the [NotificationInterval] instance.
@@ -56,14 +56,15 @@ class NotificationInterval extends NotificationSchedule {
   /// Throws an [AwesomeNotificationsException] if the interval is negative or less than 60 seconds when repeating.
   @override
   void validate() {
-    if ((interval ?? -1) < 0) {
+    if (interval?.isNegative ?? true) {
       throw const AwesomeNotificationsException(
           message: 'interval must be greater or equal to zero.');
     }
 
-    if (repeats && (interval ?? 0) < 60) {
+    if (repeats && (interval?.inSeconds ?? 0) < 60) {
       throw const AwesomeNotificationsException(
-          message: 'time interval must be greater or equal to 60 if repeating');
+          message:
+              'time interval must be greater or equal to 60 seconds if repeating');
     }
   }
 }
