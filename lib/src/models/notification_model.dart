@@ -77,7 +77,7 @@ class NotificationModel extends Model {
         Map<String, dynamic>.from(mapData[NOTIFICATION_SCHEDULE]));
 
     if (scheduleData.containsKey(NOTIFICATION_SCHEDULE_INTERVAL)) {
-      return NotificationInterval(interval: 0).fromMap(scheduleData)
+      return NotificationInterval(interval: Duration.zero).fromMap(scheduleData)
         ?..validate();
     }
 
