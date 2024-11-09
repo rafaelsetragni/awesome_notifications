@@ -8,67 +8,87 @@
 import Foundation
 
 public class SharedManager {
-    
-    let _userDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG)
-    
-    let tag:String
-    var objectList:[String:Any?]    
-    
-    public init(tag:String){
+    private let userDefaults: UserDefaults
+    private let tag: String
+    private var objectList: [String: Any?]
+
+    private let queue = DispatchQueue(label: "awn.sharedManager.queue")
+
+    public init(tag: String) {
         self.tag = tag
-        objectList = [:]
+        self.userDefaults = UserDefaults(suiteName: Definitions.USER_DEFAULT_TAG) ?? .standard
+        self.objectList = self.userDefaults.dictionary(forKey: tag) ?? [:]
     }
-    
-    private let TAG:String = "SharedManager"
-    
-    private func refreshObjects(){
-        objectList = _userDefaults!.dictionary(forKey: tag) ?? [:]
+
+    private func refreshObjects() {
+        queue.sync {
+            objectList = userDefaults.dictionary(forKey: tag) ?? [:]
+        }
     }
-    
-    private func updateObjects(){
-        _userDefaults!.removeObject(forKey: tag)
-        _userDefaults!.setValue(objectList, forKey: tag)
-        refreshObjects()
+
+    private func updateObjects() {
+        queue.sync {
+            userDefaults.removeObject(forKey: tag)
+            userDefaults.setValue(objectList, forKey: tag)
+            userDefaults.synchronize()
+            refreshObjects()
+        }
     }
-    
-    public func get(referenceKey:String ) -> [String:Any?]? {
-        refreshObjects()
-        return objectList[referenceKey] as? [String:Any?]
+
+    public func get(referenceKey: String) -> [String: Any?]? {
+        queue.sync {
+            refreshObjects()
+            return objectList[referenceKey] as? [String: Any?]
+        }
     }
-    
-    public func set(_ data:[String:Any?]?, referenceKey:String) {
-        refreshObjects()
-        if(StringUtils.shared.isNullOrEmpty(referenceKey) || data == nil){ return }
-        objectList[referenceKey] = data!
-        updateObjects()
+
+    public func set(_ data: [String: Any?]?, referenceKey: String) {
+        guard !StringUtils.shared.isNullOrEmpty(referenceKey),
+              let data = data else { return }
+
+        queue.sync {
+            refreshObjects()
+            objectList[referenceKey] = data
+            updateObjects()
+        }
     }
-    
-    public func remove(referenceKey:String) -> Bool {
-        refreshObjects()
-        if(StringUtils.shared.isNullOrEmpty(referenceKey)){ return false }
-        
-        objectList.removeValue(forKey: referenceKey)
-        updateObjects()
-        return true
+
+    public func remove(referenceKey: String) -> Bool {
+        guard !StringUtils.shared.isNullOrEmpty(referenceKey) else { return false }
+
+        queue.sync {
+            refreshObjects()
+            objectList.removeValue(forKey: referenceKey)
+            updateObjects()
+            return true
+        }
     }
-    
+
     public func removeAll() {
-        refreshObjects()
-        objectList.removeAll()
-        updateObjects()
+        queue.sync {
+            refreshObjects()
+            objectList.removeAll()
+            updateObjects()
+        }
     }
-    
-    public func getAllObjects() -> [[String:Any?]] {
-        refreshObjects()
-        var returnedList:[[String:Any?]] = []
-        
-        for (_, data) in objectList {
-            if let dictionary:[String:Any?] = data as? [String:Any?] {
-                returnedList.append( dictionary )
+
+    public func getAllObjectsStarting(with keyFragment: String) -> [[String: Any?]] {
+        queue.sync {
+            refreshObjects()
+            return objectList.compactMap { key, data in
+                guard key.starts(with: keyFragment),
+                      let dictionary = data as? [String: Any?] else { return nil }
+                return dictionary
             }
         }
-        
-        return returnedList
     }
-    
+
+    public func getAllObjects() -> [[String: Any?]] {
+        queue.sync {
+            refreshObjects()
+            return objectList.compactMap { _, data in
+                data as? [String: Any?]
+            }
+        }
+    }
 }
