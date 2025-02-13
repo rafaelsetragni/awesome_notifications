@@ -13,10 +13,10 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import io.flutter.FlutterInjector;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.dart.DartExecutor;
 import io.flutter.embedding.engine.dart.DartExecutor.DartCallback;
+import io.flutter.embedding.engine.loader.FlutterLoader;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -71,22 +71,6 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
         return true;
     }
 
-    private static io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback
-            pluginRegistrantCallback;
-
-    /**
-     * Sets the {@code io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback} used to
-     * register plugins with the newly spawned isolate.
-     *
-     * <p>Note: this is only necessary for applications using the V1 engine embedding API as plugins
-     * are automatically registered via reflection in the V2 engine embedding API. If not set,
-     * background message callbacks will not be able to utilize functionality from other plugins.
-     */
-    public static void setPluginRegistrant(
-            io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback callback) {
-        pluginRegistrantCallback = callback;
-    }
-
     private static void addSilentIntent(Intent intent){
         silentDataQueue.add(intent);
     }
@@ -131,57 +115,54 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
 //            e.printStackTrace();
 //        }
 
+        FlutterLoader loader = new FlutterLoader();
         final Handler handler = new Handler(Looper.getMainLooper());
         Runnable dartBgRunnable =
-                new Runnable() {
-                    @Override
-                    public void run() {
+                () -> {
+                    Logger.i(TAG, "Initializing Flutter global instance.");
 
-                        Logger.i(TAG, "Initializing Flutter global instance.");
-
-                        FlutterInjector.instance().flutterLoader().startInitialization(applicationContext.getApplicationContext());
-                        FlutterInjector.instance().flutterLoader().ensureInitializationCompleteAsync(
-                                applicationContext.getApplicationContext(),
-                                null,
-                                handler,
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        String appBundlePath = FlutterInjector.instance().flutterLoader().findAppBundlePath();
-                                        AssetManager assets = applicationContext.getApplicationContext().getAssets();
-
-                                        Logger.i(TAG, "Creating background FlutterEngine instance.");
-                                        backgroundFlutterEngine =
-                                                new FlutterEngine(applicationContext.getApplicationContext());
-
-                                        // We need to create an instance of `FlutterEngine` before looking up the
-                                        // callback. If we don't, the callback cache won't be initialized and the
-                                        // lookup will fail.
-                                        FlutterCallbackInformation flutterCallback =
-                                                FlutterCallbackInformation.lookupCallbackInformation(callbackHandle);
-
-                                        if (flutterCallback == null){
-                                            ExceptionFactory
-                                                    .getInstance()
-                                                    .registerNewAwesomeException(
-                                                            TAG,
-                                                            ExceptionCode.CODE_MISSING_ARGUMENTS,
-                                                            "The flutter background reference for dart background action is invalid",
-                                                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".FlutterCallbackInformation");
-                                        }
-                                        else {
-                                            DartExecutor executor = backgroundFlutterEngine.getDartExecutor();
-                                            initializeReverseMethodChannel(executor);
-
-                                            Logger.i(TAG, "Executing background FlutterEngine instance.");
-                                            DartCallback dartCallback =
-                                                    new DartCallback(assets, appBundlePath, flutterCallback);
-                                            executor.executeDartCallback(dartCallback);
-                                        }
+                    loader.startInitialization(applicationContext.getApplicationContext());
+                    loader.ensureInitializationCompleteAsync(
+                            applicationContext.getApplicationContext(),
+                            null,
+                            handler,
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    String appBundlePath = loader.findAppBundlePath();
+                                    AssetManager assets = applicationContext.getApplicationContext().getAssets();
+                                    
+                                    Logger.i(TAG, "Creating background FlutterEngine instance.");
+                                    backgroundFlutterEngine =
+                                            new FlutterEngine(applicationContext.getApplicationContext());
+                                    
+                                    // We need to create an instance of `FlutterEngine` before looking up the
+                                    // callback. If we don't, the callback cache won't be initialized and the
+                                    // lookup will fail.
+                                    FlutterCallbackInformation flutterCallback =
+                                            FlutterCallbackInformation.lookupCallbackInformation(callbackHandle);
+                                    
+                                    if (flutterCallback == null){
+                                        ExceptionFactory
+                                                .getInstance()
+                                                .registerNewAwesomeException(
+                                                        TAG,
+                                                        ExceptionCode.CODE_MISSING_ARGUMENTS,
+                                                        "The flutter background reference for dart background action is invalid",
+                                                        ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".FlutterCallbackInformation");
                                     }
-                                });
-                    }
-                };
+                                    else {
+                                        DartExecutor executor = backgroundFlutterEngine.getDartExecutor();
+                                        initializeReverseMethodChannel(executor);
+                                        
+                                        Logger.i(TAG, "Executing background FlutterEngine instance.");
+                                        DartCallback dartCallback =
+                                                new DartCallback(assets, appBundlePath, flutterCallback);
+                                        executor.executeDartCallback(dartCallback);
+                                    }
+                                }
+                            });
+        };
 
         handler.post(dartBgRunnable);
     }
