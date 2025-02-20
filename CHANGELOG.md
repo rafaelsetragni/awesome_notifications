@@ -1,3 +1,7 @@
+## [0.10.1] - 2025-02-19
+### Fixed
+- **Updated Android native library to fully support Flutter 3.27:** Removed deprecated Flutter V1 libraries on Android, ensuring compatibility with Flutter 3.27.
+
 ## [0.10.0] - 2024-10-14
 ### Added
 - **Support to AGP 8:** Added new proguard rules to allow SQLite database, used to capture notification events and schedules, to work with AGP 8.
