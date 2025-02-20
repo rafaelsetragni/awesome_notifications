@@ -73,8 +73,8 @@ Int64List highVibrationPattern =
 
 class AwesomeNotifications implements IAwesomeNotifications {
   static int get maxID => 2147483647;
-  static String localTimeZoneIdentifier = 'UTC';
-  static String utcTimeZoneIdentifier = DateTime.now().timeZoneName;
+  static String localTimeZoneIdentifier = DateTime.now().timeZoneName;
+  static String utcTimeZoneIdentifier = 'UTC';
 
   @override
   Future<void> cancel(int id) {
