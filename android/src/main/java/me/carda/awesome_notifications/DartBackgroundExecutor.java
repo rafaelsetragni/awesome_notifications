@@ -71,6 +71,15 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
         return true;
     }
 
+    /*
+    private static io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback
+            pluginRegistrantCallback;
+
+    public static void setPluginRegistrant(
+            io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback callback) {
+        pluginRegistrantCallback = callback;
+    }
+    */
 
     private static void addSilentIntent(Intent intent){
         silentDataQueue.add(intent);
@@ -88,13 +97,13 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
             }
         } catch (Exception e) {
             AwesomeNotificationsException awesomeException =
-                ExceptionFactory
-                    .getInstance()
-                    .createNewAwesomeException(
-                            TAG,
-                            ExceptionCode.CODE_UNKNOWN_EXCEPTION,
-                            "An unexpected exception was found in a silent background execution",
-                            ExceptionCode.DETAILED_UNEXPECTED_ERROR);
+                    ExceptionFactory
+                            .getInstance()
+                            .createNewAwesomeException(
+                                    TAG,
+                                    ExceptionCode.CODE_UNKNOWN_EXCEPTION,
+                                    "An unexpected exception was found in a silent background execution",
+                                    ExceptionCode.DETAILED_UNEXPECTED_ERROR);
             result.error(
                     awesomeException.getCode(),
                     awesomeException.getMessage(),
@@ -123,7 +132,6 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
                     public void run() {
 
                         Logger.i(TAG, "Initializing Flutter global instance.");
-                        backgroundFlutterEngine = new FlutterEngine(applicationContext.getApplicationContext());
 
                         FlutterInjector.instance().flutterLoader().startInitialization(applicationContext.getApplicationContext());
                         FlutterInjector.instance().flutterLoader().ensureInitializationCompleteAsync(
@@ -236,22 +244,22 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
     }
 
     private final Result dartChannelResultHandle =
-        new Result() {
-            @Override
-            public void success(Object result) {
-                finishDartBackgroundExecution();
-            }
+            new Result() {
+                @Override
+                public void success(Object result) {
+                    finishDartBackgroundExecution();
+                }
 
-            @Override
-            public void error(String errorCode, String errorMessage, Object errorDetails) {
-                finishDartBackgroundExecution();
-            }
+                @Override
+                public void error(String errorCode, String errorMessage, Object errorDetails) {
+                    finishDartBackgroundExecution();
+                }
 
-            @Override
-            public void notImplemented() {
-                finishDartBackgroundExecution();
-            }
-        };
+                @Override
+                public void notImplemented() {
+                    finishDartBackgroundExecution();
+                }
+            };
 
     public void executeDartCallbackInBackgroundIsolate(Intent intent) throws AwesomeNotificationsException {
 
@@ -279,9 +287,9 @@ public class DartBackgroundExecutor extends BackgroundExecutor implements Method
 
             // Handle the message event in Dart.
             backgroundChannel.invokeMethod(
-                Definitions.CHANNEL_METHOD_SILENT_CALLBACK,
-                actionData,
-                dartChannelResultHandle);
+                    Definitions.CHANNEL_METHOD_SILENT_CALLBACK,
+                    actionData,
+                    dartChannelResultHandle);
 
         } else {
             Logger.e(TAG, "Silent data model not found inside Intent content.");
