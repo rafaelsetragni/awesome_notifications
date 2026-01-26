@@ -90,13 +90,16 @@ public class SwiftAwesomeNotificationsPlugin:
     }
     
     public func onNewAwesomeEvent(eventType: String, content: [String : Any?]) {
-        if Definitions.EVENT_SILENT_ACTION == eventType {
-            var updatedContent = [:].merging(content, uniquingKeysWith: { (current, _) in current })
-            updatedContent[Definitions.ACTION_HANDLE] = awesomeNotifications?.getActionHandle()
-            flutterChannel?.invokeMethod(eventType, arguments: updatedContent)
-        }
-        else {
-            flutterChannel?.invokeMethod(eventType, arguments: content)
+        // Fix: Ensure Flutter method channel calls are made on the main thread
+        DispatchQueue.main.async { [weak self] in
+            if Definitions.EVENT_SILENT_ACTION == eventType {
+                var updatedContent = [:].merging(content, uniquingKeysWith: { (current, _) in current })
+                updatedContent[Definitions.ACTION_HANDLE] = self?.awesomeNotifications?.getActionHandle()
+                self?.flutterChannel?.invokeMethod(eventType, arguments: updatedContent)
+            }
+            else {
+                self?.flutterChannel?.invokeMethod(eventType, arguments: content)
+            }
         }
     }
     

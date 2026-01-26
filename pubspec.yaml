@@ -22,7 +22,7 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
 
-  mockito: ^5.4.5
+  mockito: ^5.4.4
   mocktail: ^1.0.4
 
 # For information on the generic Dart part of this file, see the
