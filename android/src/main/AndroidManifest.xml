@@ -6,13 +6,13 @@
     <application>
 
         <receiver android:name=".DartNotificationActionReceiver"
-            android:exported="true"/>
+            android:exported="false"/>
 
         <receiver android:name=".DartDismissedNotificationReceiver"
-            android:exported="true"/>
+            android:exported="false"/>
 
         <receiver android:name=".DartScheduledNotificationReceiver"
-            android:exported="true"/>
+            android:exported="false"/>
 
         <receiver
             android:name=".DartRefreshSchedulesReceiver"
