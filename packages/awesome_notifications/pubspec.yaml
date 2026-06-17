@@ -1,0 +1,90 @@
+name: awesome_notifications
+description: A complete solution to create Local and Push Notifications, customizing buttons, images, sounds, emoticons and applying many different layouts for Flutter apps.
+version: 0.12.0
+repository: https://github.com/rafaelsetragni/awesome_notifications
+homepage: https://discord.awesome-notifications.carda.me/
+
+# Resolved as part of the awesome_notifications monorepo (Dart pub workspace / Melos).
+resolution: workspace
+
+environment:
+  sdk: '>=3.6.0 <4.0.0'
+  flutter: ">=2.5.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+
+  plugin_platform_interface: ^2.1.8
+  intl: ^0.20.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+  mockito: ^5.4.5
+  mocktail: ^1.0.4
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+  # This section identifies this Flutter project as a plugin project.
+  # The 'pluginClass' specifies the class (in Java, Kotlin, Swift, Objective-C, etc.)
+  # which should be registered in the plugin registry. This is required for
+  # using method channels.
+  # The Android 'package' specifies package in which the registered class is.
+  # This is required for using method channels on Android.
+  # The 'ffiPlugin' specifies that native code should be built and bundled.
+  # This is required for using `dart:ffi`.
+  # All these are used by the tooling to maintain consistency when
+  # adding or updating assets for this project.
+  plugin:
+    platforms:
+      android:
+        package: me.carda.awesome_notifications
+        pluginClass: AwesomeNotificationsPlugin
+      ios:
+        pluginClass: SwiftAwesomeNotificationsPlugin
+      linux:
+        pluginClass: AwesomeNotificationsPlugin
+      macos:
+        pluginClass: AwesomeNotificationsPlugin
+      windows:
+        pluginClass: AwesomeNotificationsPluginCApi
+      web:
+        pluginClass: AwesomeNotificationsWeb
+        fileName: awesome_notifications_web.dart
+
+  assets:
+    - test/assets/images/test_image.png
+    
+  # For details regarding assets in packages, see
+  # https://flutter.dev/assets-and-images/#from-packages
+  #
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware
+
+  # To add custom fonts to your plugin package, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts in packages, see
+  # https://flutter.dev/custom-fonts/#from-packages

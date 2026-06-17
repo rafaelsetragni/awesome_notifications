@@ -1,10 +1,19 @@
-build/
-example/ios/Runner/GoogleService-Info.plist
+# Monorepo root — per-package ignores live inside each package.
 
-example/android/app/.cxx/
-
+# Dart / Flutter
 .dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+pubspec.lock
 
+# Melos
+.melos_tool/
+
+# IDE / OS
 .idea/
-
+*.iml
+.vscode/*
+!.vscode/launch.json
 .DS_Store
+*.log

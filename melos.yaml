@@ -1,0 +1,18 @@
+name: awesome_notifications
+
+# Packages are discovered from the pub workspace (root pubspec `workspace:` field).
+
+scripts:
+  analyze:
+    description: Statically analyze every package in the workspace.
+    exec: dart analyze .
+
+  format:
+    description: Format Dart code across the workspace.
+    exec: dart format .
+
+  test:
+    description: Run unit tests in packages that have a test/ folder.
+    exec: flutter test
+    packageFilters:
+      dirExists: test
