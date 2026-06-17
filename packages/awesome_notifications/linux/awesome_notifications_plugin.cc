@@ -6,6 +6,8 @@
 
 #include <cstring>
 
+#include "awesome_notifications_plugin_private.h"
+
 #define AWESOME_NOTIFICATIONS_PLUGIN(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST((obj), awesome_notifications_plugin_get_type(), \
                               AwesomeNotificationsPlugin))
@@ -25,16 +27,20 @@ static void awesome_notifications_plugin_handle_method_call(
   const gchar* method = fl_method_call_get_name(method_call);
 
   if (strcmp(method, "getPlatformVersion") == 0) {
-    struct utsname uname_data = {};
-    uname(&uname_data);
-    g_autofree gchar *version = g_strdup_printf("Linux %s", uname_data.version);
-    g_autoptr(FlValue) result = fl_value_new_string(version);
-    response = FL_METHOD_RESPONSE(fl_method_success_response_new(result));
+    response = get_platform_version();
   } else {
     response = FL_METHOD_RESPONSE(fl_method_not_implemented_response_new());
   }
 
   fl_method_call_respond(method_call, response, nullptr);
+}
+
+FlMethodResponse* get_platform_version() {
+  struct utsname uname_data = {};
+  uname(&uname_data);
+  g_autofree gchar *version = g_strdup_printf("Linux %s", uname_data.version);
+  g_autoptr(FlValue) result = fl_value_new_string(version);
+  return FL_METHOD_RESPONSE(fl_method_success_response_new(result));
 }
 
 static void awesome_notifications_plugin_dispose(GObject* object) {

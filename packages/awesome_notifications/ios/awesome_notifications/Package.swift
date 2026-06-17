@@ -6,24 +6,26 @@ import PackageDescription
 let package = Package(
     name: "awesome_notifications",
     platforms: [
-        .iOS("15.0")
+        .iOS("13.0")
     ],
     products: [
         .library(name: "awesome-notifications", targets: ["awesome_notifications"])
     ],
-    dependencies: [
-        .package(name: "FlutterFramework", path: "../FlutterFramework"),
-        // IosAwnCore is a standalone (non-Flutter) Swift package referenced by its released
-        // tag — Flutter symlinks plugins into ephemeral/Packages/.packages, which breaks
-        // relative paths to non-plugin packages, so it must be a URL+tag (not a local path).
-        .package(url: "https://github.com/rafaelsetragni/IosAwnCore.git", from: "0.12.0"),
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "awesome_notifications",
-            dependencies: [
-                .product(name: "FlutterFramework", package: "FlutterFramework"),
-                .product(name: "IosAwnCore", package: "IosAwnCore"),
+            dependencies: [],
+            resources: [
+                // If your plugin requires a privacy manifest, for example if it uses any required
+                // reason APIs, update the PrivacyInfo.xcprivacy file to describe your plugin's
+                // privacy impact, and then uncomment these lines. For more information, see
+                // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
+                // .process("PrivacyInfo.xcprivacy"),
+
+                // If you have other resources that need to be bundled with your plugin, refer to
+                // the following instructions to add them:
+                // https://developer.apple.com/documentation/xcode/bundling-resources-with-a-swift-package
             ]
         )
     ]

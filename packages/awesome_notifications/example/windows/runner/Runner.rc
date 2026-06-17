@@ -93,7 +93,7 @@ BEGIN
             VALUE "FileDescription", "awesome_notifications_example" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "awesome_notifications_example" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022 me.carda. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 me.carda. All rights reserved." "\0"
             VALUE "OriginalFilename", "awesome_notifications_example.exe" "\0"
             VALUE "ProductName", "awesome_notifications_example" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"

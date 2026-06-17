@@ -1,18 +1,16 @@
-import UIKit
 import Flutter
-import awesome_notifications
+import UIKit
 
 @main
-@objc class AppDelegate: FlutterAppDelegate {
+@objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-      GeneratedPluginRegistrant.register(with: self)
-      SwiftAwesomeNotificationsPlugin.setPluginRegistrantCallback { registry in          
-          SwiftAwesomeNotificationsPlugin.register(
-            with: registry.registrar(forPlugin: "io.flutter.plugins.awesomenotifications.AwesomeNotificationsPlugin")!)
-      }
-      return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
+    GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
   }
 }

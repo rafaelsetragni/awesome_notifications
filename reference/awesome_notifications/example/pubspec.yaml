@@ -1,0 +1,112 @@
+name: awesome_notifications_example
+description: Demonstrates how to use the awesome_notifications plugin.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+environment:
+  sdk: '>=2.19.0 <4.0.0'
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  awesome_notifications:
+    # When depending on this package from a real application you should use:
+    #   awesome_notifications: ^x.y.z
+    # See https://dart.dev/tools/pub/dependencies#version-constraints
+    # The example app is bundled with the plugin so we use a path dependency on
+    # the parent directory to use the current plugin's version.
+    path: ../
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.8
+  universal_io: ^2.2.2
+
+  font_awesome_flutter: ^10.8.0
+  fluttertoast: ^8.2.12
+  http: ^1.3.0
+  path_provider: ^2.1.5
+  shared_preferences: ^2.5.2
+  numberpicker: ^2.1.2
+  giff_dialog: ^1.0.1
+  vibration: ^3.1.3
+  device_info_plus: ^11.3.0
+  url_launcher: ^6.3.1
+  intl: ^0.20.2
+  palette_generator: ^0.3.3+6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^5.0.0
+
+  flutter_launcher_icons: ^0.14.3
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/launcher/icon.png"
+  image_path_android: "assets/launcher/icon.png"
+  adaptive_icon_background: "assets/launcher/background.png"
+  adaptive_icon_foreground: "assets/launcher/foreground.png"
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  assets:
+    - assets/images/awesome-notifications-logo-color.png
+    - assets/images/awesome-notifications-logo-black.png
+    - assets/images/awesome-notifications-logo-white.png
+    - assets/images/girl-phonecall.jpg
+    - assets/images/animated-bell.gif
+    - assets/images/animated-clock.gif
+    - assets/images/animated-warning.gif
+    - assets/images/placeholder.gif
+    - assets/images/happy-dogs.jpg
+    - assets/images/balloons-in-sky.jpg
+    - assets/images/android-bg-worker.jpg
+    - assets/images/fireman-hero.jpg
+    - assets/images/delivery.jpeg
+    - assets/images/melted-clock.png
+    - assets/images/rock-disc.jpg
+    - assets/images/classic-disc.jpg
+    - assets/images/dj-disc.jpg
+    - assets/images/80s-disc.jpg
+    - assets/images/remix-disc.jpg
+    - assets/images/american.jpg
+    - assets/images/chinese.jpg
+    - assets/images/portuguese.jpg
+    - assets/images/brazilian.jpg
+    - assets/images/german.jpg
+    - assets/images/korean.jpg
+    - assets/images/spanish.jpg
+    - assets/images/awn-rocks-en.jpg
+    - assets/images/awn-rocks-pt-br.jpg
+    - assets/images/awn-rocks-pt.jpg
+    - assets/images/awn-rocks-ko.jpg
+    - assets/images/awn-rocks-zh.jpg
+    - assets/images/awn-rocks-es.jpg
+    - assets/images/awn-rocks-de.jpg
