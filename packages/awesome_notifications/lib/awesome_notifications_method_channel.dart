@@ -16,4 +16,30 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     );
     return version;
   }
+
+  @override
+  Future<bool> requestPermission() async {
+    final granted = await methodChannel.invokeMethod<bool>('requestPermission');
+    return granted ?? false;
+  }
+
+  @override
+  Future<void> showNotification({
+    required int id,
+    String? title,
+    String? body,
+  }) async {
+    await methodChannel.invokeMethod<void>('showNotification', <String, dynamic>{
+      'id': id,
+      'title': title,
+      'body': body,
+    });
+  }
+
+  @override
+  Future<void> dismiss(int id) async {
+    await methodChannel.invokeMethod<void>('dismiss', <String, dynamic>{
+      'id': id,
+    });
+  }
 }

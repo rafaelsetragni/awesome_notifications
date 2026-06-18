@@ -26,4 +26,19 @@ abstract class AwesomeNotificationsPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+
+  /// Request the user's permission to display notifications.
+  Future<bool> requestPermission() {
+    throw UnimplementedError('requestPermission() has not been implemented.');
+  }
+
+  /// Show a minimal local notification immediately.
+  Future<void> showNotification({required int id, String? title, String? body}) {
+    throw UnimplementedError('showNotification() has not been implemented.');
+  }
+
+  /// Dismiss a delivered notification by id.
+  Future<void> dismiss(int id) {
+    throw UnimplementedError('dismiss() has not been implemented.');
+  }
 }
