@@ -17,3 +17,7 @@ pubspec.lock
 !.vscode/launch.json
 .DS_Store
 *.log
+
+# Swift Package Manager
+.build/
+.swiftpm/
