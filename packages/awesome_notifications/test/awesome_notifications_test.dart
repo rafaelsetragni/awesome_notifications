@@ -1,28 +1,54 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:awesome_notifications/awesome_notifications_platform_interface.dart';
-import 'package:awesome_notifications/awesome_notifications_method_channel.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-
-class MockAwesomeNotificationsPlatform
-    with MockPlatformInterfaceMixin
-    implements AwesomeNotificationsPlatform {
-  @override
-  Future<String?> getPlatformVersion() => Future.value('42');
-}
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final AwesomeNotificationsPlatform initialPlatform = AwesomeNotificationsPlatform.instance;
+  TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('$MethodChannelAwesomeNotifications is the default instance', () {
-    expect(initialPlatform, isInstanceOf<MethodChannelAwesomeNotifications>());
+  group('NotificationContent', () {
+    test('serializes core fields through toMap/fromMap', () {
+      final original = NotificationContent(
+        id: 42,
+        channelKey: 'basic_channel',
+        title: 'Title',
+        body: 'Body',
+      );
+
+      final restored = NotificationContent(id: 0, channelKey: '')
+          .fromMap(original.toMap());
+
+      expect(restored, isNotNull);
+      expect(restored!.id, 42);
+      expect(restored.channelKey, 'basic_channel');
+      expect(restored.title, 'Title');
+      expect(restored.body, 'Body');
+    });
   });
 
-  test('getPlatformVersion', () async {
-    AwesomeNotifications awesomeNotificationsPlugin = AwesomeNotifications();
-    MockAwesomeNotificationsPlatform fakePlatform = MockAwesomeNotificationsPlatform();
-    AwesomeNotificationsPlatform.instance = fakePlatform;
+  group('NotificationModel', () {
+    test('requires content to be valid', () {
+      expect(
+        () => NotificationModel().validate(),
+        throwsA(isA<AwesomeNotificationsException>()),
+      );
+    });
 
-    expect(await awesomeNotificationsPlugin.getPlatformVersion(), '42');
+    test('round-trips content and action buttons', () {
+      final model = NotificationModel(
+        content: NotificationContent(
+          id: 1,
+          channelKey: 'basic_channel',
+          title: 'Hello',
+        ),
+        actionButtons: [
+          NotificationActionButton(key: 'ACCEPT', label: 'Accept'),
+        ],
+      );
+
+      final restored = NotificationModel().fromMap(model.toMap());
+
+      expect(restored, isNotNull);
+      expect(restored!.content?.id, 1);
+      expect(restored.actionButtons?.single.key, 'ACCEPT');
+    });
   });
 }

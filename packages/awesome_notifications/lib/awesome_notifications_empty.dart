@@ -1,24 +1,12 @@
-// In order to *not* need this ignore, consider extracting the "web" version
-// of your plugin as a separate package, instead of inlining it in the same
-// package as the core of your plugin.
-// ignore: avoid_web_libraries_in_flutter
-//import 'dart:html' as html show window;
 import 'dart:typed_data';
 
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:awesome_notifications/i_awesome_notifications.dart';
 
 import 'awesome_notifications.dart';
-import 'awesome_notifications_web_interface.dart';
+import 'awesome_notifications_platform_interface.dart';
 
-/// A web implementation of the AwesomeNotificationsPlatform of the AwesomeNotifications plugin.
-class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
-  /// Constructs a AwesomeNotificationsWeb
-  AwesomeNotificationsWeb();
-
-  static void registerWith(Registrar registrar) {
-    AwesomeNotificationsPlatform.instance = AwesomeNotificationsWeb();
-  }
-
+class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
+    implements IAwesomeNotifications {
   @override
   Future<void> cancel(int id) async {}
 
@@ -53,7 +41,7 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
         NotificationPermission.Vibration,
         NotificationPermission.Light
       ]}) async {
-    return [];
+    return permissions;
   }
 
   @override
@@ -139,7 +127,7 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
     bool debug = false,
     String? languageCode,
   }) async {
-    return false;
+    return true;
   }
 
   @override
@@ -186,7 +174,7 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
       NotificationHandler? onNotificationCreatedMethod,
       NotificationHandler? onNotificationDisplayedMethod,
       ActionHandler? onDismissActionReceivedMethod}) async {
-    return false;
+    return true;
   }
 
   @override
@@ -232,5 +220,5 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   }
 
   @override
-  dispose() async {}
+  dispose() {}
 }

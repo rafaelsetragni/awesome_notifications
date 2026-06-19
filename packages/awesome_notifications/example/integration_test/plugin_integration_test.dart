@@ -14,11 +14,24 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('getPlatformVersion test', (WidgetTester tester) async {
-    final AwesomeNotifications plugin = AwesomeNotifications();
-    final String? version = await plugin.getPlatformVersion();
-    // The version string depends on the host platform running the test, so
-    // just assert that some non-empty string is returned.
-    expect(version?.isNotEmpty, true);
+  testWidgets('initialize and query notification permission',
+      (WidgetTester tester) async {
+    final plugin = AwesomeNotifications();
+
+    await plugin.initialize(
+      null,
+      [
+        NotificationChannel(
+          channelKey: 'basic_channel',
+          channelName: 'Basic notifications',
+          channelDescription: 'Notification channel for integration tests',
+        ),
+      ],
+    );
+
+    // The host platform answers whether notifications are allowed; we only
+    // assert the round-trip through the method channel returns a bool.
+    final allowed = await plugin.isNotificationAllowed();
+    expect(allowed, isA<bool>());
   });
 }

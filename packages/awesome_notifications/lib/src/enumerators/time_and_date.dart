@@ -1,0 +1,20 @@
+const String JAN = 'JAN';
+const String FEB = 'FEB';
+const String MAR = 'MAR';
+const String APR = 'APR';
+const String MAY = 'MAY';
+const String JUN = 'JUN';
+const String JUL = 'JUL';
+const String AUG = 'AUG';
+const String SEP = 'SEP';
+const String OCT = 'OCT';
+const String NOV = 'NOV';
+const String DEC = 'DEC';
+
+const String SUN = 'SUN';
+const String MON = 'MON';
+const String TUE = 'TUE';
+const String WED = 'WED';
+const String THU = 'THU';
+const String FRI = 'FRI';
+const String SAT = 'SAT';
