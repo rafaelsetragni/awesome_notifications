@@ -5,7 +5,7 @@ import 'awesome_notifications.dart';
 abstract class IAwesomeNotifications {
   /// DISPOSE METHODS *********************************************
 
-  dispose();
+  void dispose();
 
   /// Initializes the plugin by creating a default icon and setting up the initial
   /// notification channels. This method only needs to be called once in the

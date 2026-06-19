@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:awesome_notifications/i_awesome_notifications.dart';
 
 import 'awesome_notifications.dart';
-import 'awesome_notifications_platform_interface.dart';
+import 'awesome_notifications_platform.dart';
 
 class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
     implements IAwesomeNotifications {
@@ -220,5 +220,5 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
   }
 
   @override
-  dispose() {}
+  void dispose() {}
 }

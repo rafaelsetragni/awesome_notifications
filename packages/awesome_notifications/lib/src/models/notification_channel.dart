@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 
 import '../definitions.dart';
 import '../enumerators/default_ringtone_type.dart';
-import '../enumerators/group_alert_behaviour.dart';
+import '../enumerators/group_alert_behavior.dart';
 import '../enumerators/group_sort.dart';
 import '../enumerators/media_source.dart';
 import '../enumerators/notification_importance.dart';
 import '../enumerators/notification_privacy.dart';
-import '../exceptions/awesome_exception.dart';
-import '../utils/assert_utils.dart';
-import '../utils/bitmap_utils.dart';
-import '../utils/string_utils.dart';
+import '../exceptions/awesome_notifications_exception.dart';
+import '../utils/awesome_assert_utils.dart';
+import '../utils/awesome_bitmap_utils.dart';
+import '../utils/awesome_string_utils.dart';
 import 'model.dart';
 
 /// Represents default settings applied to all notifications sharing the same channel key.

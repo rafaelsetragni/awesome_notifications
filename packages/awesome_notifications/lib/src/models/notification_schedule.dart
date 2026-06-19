@@ -1,5 +1,5 @@
 import 'package:awesome_notifications/src/models/model.dart';
-import 'package:awesome_notifications/src/utils/assert_utils.dart';
+import 'package:awesome_notifications/src/utils/awesome_assert_utils.dart';
 
 import '../definitions.dart';
 

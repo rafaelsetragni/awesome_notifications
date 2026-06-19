@@ -2,12 +2,12 @@ import 'dart:typed_data';
 
 import 'package:awesome_notifications/src/models/notification_localization.dart';
 
-import 'awesome_notifications_platform_interface.dart'
-    if (dart.library.html) 'awesome_notifications_web_interface.dart';
+import 'awesome_notifications_platform.dart'
+    if (dart.library.html) 'awesome_notifications_platform_web.dart';
 import 'i_awesome_notifications.dart';
 import 'src/enumerators/notification_life_cycle.dart';
 import 'src/enumerators/notification_permission.dart';
-import 'src/models/notification_button.dart';
+import 'src/models/notification_action_button.dart';
 import 'src/models/notification_channel.dart';
 import 'src/models/notification_channel_group.dart';
 import 'src/models/notification_content.dart';
@@ -20,7 +20,7 @@ export 'src/definitions.dart';
 export 'src/enumerators/action_type.dart';
 export 'src/enumerators/default_ringtone_type.dart';
 export 'src/enumerators/emojis.dart';
-export 'src/enumerators/group_alert_behaviour.dart';
+export 'src/enumerators/group_alert_behavior.dart';
 export 'src/enumerators/group_sort.dart';
 export 'src/enumerators/media_source.dart';
 export 'src/enumerators/notification_category.dart';
@@ -32,11 +32,11 @@ export 'src/enumerators/notification_privacy.dart';
 export 'src/enumerators/notification_source.dart';
 export 'src/enumerators/notification_play_state.dart';
 export 'src/enumerators/time_and_date.dart';
-export 'src/exceptions/awesome_exception.dart';
+export 'src/exceptions/awesome_notifications_exception.dart';
 export 'src/exceptions/isolate_callback_exception.dart';
 export 'src/extensions/extension_navigator_state.dart';
 export 'src/helpers/bitmap_helper.dart';
-export 'src/models/notification_button.dart';
+export 'src/models/notification_action_button.dart';
 export 'src/models/notification_channel.dart';
 export 'src/models/notification_channel_group.dart';
 export 'src/models/notification_content.dart';
@@ -45,12 +45,12 @@ export 'src/models/notification_model.dart';
 export 'src/models/notification_schedule.dart';
 export 'src/models/received_models/received_action.dart';
 export 'src/models/received_models/received_notification.dart';
-export 'src/utils/assert_utils.dart';
-export 'src/utils/bitmap_utils.dart';
-export 'src/utils/date_utils.dart';
-export 'src/utils/map_utils.dart';
-export 'src/utils/resource_image_provider.dart';
-export 'src/utils/string_utils.dart';
+export 'src/utils/awesome_assert_utils.dart';
+export 'src/utils/awesome_bitmap_utils.dart';
+export 'src/utils/awesome_date_utils.dart';
+export 'src/utils/awesome_map_utils.dart';
+export 'src/utils/resource_image.dart';
+export 'src/utils/awesome_string_utils.dart';
 
 /// Method structure to listen to an incoming action with dart
 typedef ActionHandler = Future<void> Function(ReceivedAction receivedAction);
@@ -177,7 +177,7 @@ class AwesomeNotifications implements IAwesomeNotifications {
   }
 
   @override
-  dispose() {
+  void dispose() {
     return AwesomeNotificationsPlatform.instance.dispose();
   }
 

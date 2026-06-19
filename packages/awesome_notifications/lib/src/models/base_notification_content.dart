@@ -8,10 +8,10 @@ import '../enumerators/notification_category.dart';
 import '../enumerators/notification_life_cycle.dart';
 import '../enumerators/notification_privacy.dart';
 import '../enumerators/notification_source.dart';
-import '../exceptions/awesome_exception.dart';
-import '../utils/assert_utils.dart';
-import '../utils/bitmap_utils.dart';
-import '../utils/html_utils.dart';
+import '../exceptions/awesome_notifications_exception.dart';
+import '../utils/awesome_assert_utils.dart';
+import '../utils/awesome_bitmap_utils.dart';
+import '../utils/awesome_html_utils.dart';
 import 'model.dart';
 
 class BaseNotificationContent extends Model {
@@ -147,19 +147,19 @@ class BaseNotificationContent extends Model {
 
   @visibleForTesting
   @protected
-  set privacy(newValue) {
+  set privacy(NotificationPrivacy? newValue) {
     _privacy = newValue;
   }
 
   @visibleForTesting
   @protected
-  set actionType(newValue) {
+  set actionType(ActionType? newValue) {
     _actionType = newValue;
   }
 
   @visibleForTesting
   @protected
-  set displayedDate(newValue) {
+  set displayedDate(DateTime? newValue) {
     _displayedDate = newValue;
   }
 
@@ -169,7 +169,7 @@ class BaseNotificationContent extends Model {
 
   @visibleForTesting
   @protected
-  set createdDate(newValue) {
+  set createdDate(DateTime? newValue) {
     _createdDate = newValue;
   }
 
@@ -179,7 +179,7 @@ class BaseNotificationContent extends Model {
 
   @visibleForTesting
   @protected
-  set createdSource(newValue) {
+  set createdSource(NotificationSource? newValue) {
     _createdSource = newValue;
   }
 
@@ -189,7 +189,7 @@ class BaseNotificationContent extends Model {
 
   @visibleForTesting
   @protected
-  set createdLifeCycle(newValue) {
+  set createdLifeCycle(NotificationLifeCycle? newValue) {
     _createdLifeCycle = newValue;
   }
 
@@ -199,7 +199,7 @@ class BaseNotificationContent extends Model {
 
   @visibleForTesting
   @protected
-  set displayedLifeCycle(newValue) {
+  set displayedLifeCycle(NotificationLifeCycle? newValue) {
     _displayedLifeCycle = newValue;
   }
 

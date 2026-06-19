@@ -8,7 +8,7 @@ import 'dart:typed_data';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'awesome_notifications.dart';
-import 'awesome_notifications_web_interface.dart';
+import 'awesome_notifications_platform_web.dart';
 
 /// A web implementation of the AwesomeNotificationsPlatform of the AwesomeNotifications plugin.
 class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
@@ -232,5 +232,5 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   }
 
   @override
-  dispose() async {}
+  Future<void> dispose() async {}
 }

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
 import 'package:flutter/material.dart';
 
@@ -39,19 +37,18 @@ abstract class AwesomeMediaUtils {
   }
 
   @protected
-  getFromMediaAsset(String mediaPath);
+  ImageProvider? getFromMediaAsset(String mediaPath);
 
   @protected
-  getFromMediaFile(String mediaPath) =>
-      FileImage(File(cleanMediaPath(mediaPath)));
+  ImageProvider? getFromMediaFile(String mediaPath) => null;
 
   @protected
-  getFromMediaNetwork(String mediaPath);
+  ImageProvider? getFromMediaNetwork(String mediaPath);
 
   @protected
-  getFromMediaResource(String mediaPath);
+  ImageProvider? getFromMediaResource(String mediaPath);
 
-  getFromMediaPath(String mediaPath) {
+  ImageProvider? getFromMediaPath(String mediaPath) {
     switch (getMediaSource(mediaPath)) {
       case MediaSource.Asset:
         return getFromMediaAsset(mediaPath);

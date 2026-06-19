@@ -1,5 +1,5 @@
-import 'package:awesome_notifications/src/utils/media_abstract_utils.dart'
-    if (dart.library.html) 'package:awesome_notifications/src/utils/media_abstract_utils_web.dart';
+import 'package:awesome_notifications/src/utils/awesome_media_utils.dart'
+    if (dart.library.html) 'package:awesome_notifications/src/utils/awesome_media_utils_web.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeAudioUtils extends AwesomeMediaUtils {
@@ -15,28 +15,28 @@ class AwesomeAudioUtils extends AwesomeMediaUtils {
   /// FACTORY METHODS *********************************************
 
   @override
-  getFromMediaAsset(String mediaPath) {
+  ImageProvider? getFromMediaAsset(String mediaPath) {
     return null;
 
     /// TODO MISSING IMPLEMENTATION
   }
 
   @override
-  getFromMediaFile(String mediaPath) {
+  ImageProvider? getFromMediaFile(String mediaPath) {
     return null;
 
     /// TODO MISSING IMPLEMENTATION
   }
 
   @override
-  getFromMediaNetwork(String mediaPath) {
+  ImageProvider? getFromMediaNetwork(String mediaPath) {
     return null;
 
     /// TODO MISSING IMPLEMENTATION
   }
 
   @override
-  getFromMediaResource(String mediaPath) {
+  ImageProvider? getFromMediaResource(String mediaPath) {
     return null;
 
     /// TODO MISSING IMPLEMENTATION

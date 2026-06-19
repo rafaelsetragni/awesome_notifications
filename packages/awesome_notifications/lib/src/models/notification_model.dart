@@ -1,7 +1,7 @@
 import 'package:awesome_notifications/src/definitions.dart';
-import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
+import 'package:awesome_notifications/src/exceptions/awesome_notifications_exception.dart';
 import 'package:awesome_notifications/src/models/model.dart';
-import 'package:awesome_notifications/src/models/notification_button.dart';
+import 'package:awesome_notifications/src/models/notification_action_button.dart';
 import 'package:awesome_notifications/src/models/notification_content.dart';
 import 'package:awesome_notifications/src/models/notification_localization.dart';
 import 'package:awesome_notifications/src/models/notification_schedule.dart';

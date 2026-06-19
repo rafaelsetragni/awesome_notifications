@@ -1,7 +1,7 @@
 import '../definitions.dart';
 import '../enumerators/notification_layout.dart';
 import '../enumerators/notification_play_state.dart';
-import '../utils/assert_utils.dart';
+import '../utils/awesome_assert_utils.dart';
 import 'base_notification_content.dart';
 
 /// Represents the content of a notification with customizable options.

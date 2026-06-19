@@ -3,8 +3,8 @@ import 'package:awesome_notifications/src/models/base_notification_content.dart'
 import '../../definitions.dart';
 import '../../enumerators/notification_life_cycle.dart';
 import '../../enumerators/notification_source.dart';
-import '../../utils/assert_utils.dart';
-import '../../utils/date_utils.dart';
+import '../../utils/awesome_assert_utils.dart';
+import '../../utils/awesome_date_utils.dart';
 
 /// All received details of a notification created or displayed on the system
 /// The data field

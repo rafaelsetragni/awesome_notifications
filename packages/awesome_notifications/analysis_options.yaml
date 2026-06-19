@@ -1,4 +1,11 @@
 include: package:flutter_lints/flutter.yaml
 
+linter:
+  rules:
+    # Every method/function must declare an explicit return type and typed
+    # parameters (project convention).
+    always_declare_return_types: true
+    type_annotate_public_apis: true
+
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

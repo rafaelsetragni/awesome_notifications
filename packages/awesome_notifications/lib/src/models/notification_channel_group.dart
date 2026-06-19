@@ -1,7 +1,7 @@
 import 'package:awesome_notifications/src/definitions.dart';
-import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
+import 'package:awesome_notifications/src/exceptions/awesome_notifications_exception.dart';
 import 'package:awesome_notifications/src/models/model.dart';
-import 'package:awesome_notifications/src/utils/assert_utils.dart';
+import 'package:awesome_notifications/src/utils/awesome_assert_utils.dart';
 
 /// Represents a group of notification channels to be displayed at Android Notification Settings Page.
 class NotificationChannelGroup extends Model {

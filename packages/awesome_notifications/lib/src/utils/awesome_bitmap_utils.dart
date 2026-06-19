@@ -1,6 +1,6 @@
-import 'package:awesome_notifications/src/utils/media_abstract_utils.dart'
-    if (dart.library.html) 'package:awesome_notifications/src/utils/media_abstract_utils_web.dart';
-import 'package:awesome_notifications/src/utils/resource_image_provider.dart';
+import 'package:awesome_notifications/src/utils/awesome_media_utils.dart'
+    if (dart.library.html) 'package:awesome_notifications/src/utils/awesome_media_utils_web.dart';
+import 'package:awesome_notifications/src/utils/resource_image.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeBitmapUtils extends AwesomeMediaUtils {

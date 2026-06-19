@@ -6,8 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'awesome_notifications.dart';
-import 'awesome_notifications_platform_interface.dart';
-import 'src/isolates/isolate_main.dart';
+import 'awesome_notifications_platform.dart';
+import 'src/isolates/isolate_controller.dart';
 import 'src/logs/logger.dart';
 
 /// An implementation of [AwesomeNotificationsPlatform] that uses method channels.
@@ -16,7 +16,7 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  var methodChannel = const MethodChannel('awesome_notifications');
+  final MethodChannel methodChannel = const MethodChannel('awesome_notifications');
 
   ActionHandler? actionHandler;
   ActionHandler? dismissedHandler;
@@ -583,5 +583,5 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }
 
   @override
-  dispose() {}
+  void dispose() {}
 }

@@ -4,11 +4,11 @@ import 'dart:ui';
 import 'package:awesome_notifications/src/definitions.dart';
 import 'package:awesome_notifications/src/enumerators/action_type.dart';
 import 'package:awesome_notifications/src/enumerators/media_source.dart';
-import 'package:awesome_notifications/src/exceptions/awesome_exception.dart';
+import 'package:awesome_notifications/src/exceptions/awesome_notifications_exception.dart';
 import 'package:awesome_notifications/src/models/model.dart';
-import 'package:awesome_notifications/src/utils/assert_utils.dart';
-import 'package:awesome_notifications/src/utils/bitmap_utils.dart';
-import 'package:awesome_notifications/src/utils/string_utils.dart';
+import 'package:awesome_notifications/src/utils/awesome_assert_utils.dart';
+import 'package:awesome_notifications/src/utils/awesome_bitmap_utils.dart';
+import 'package:awesome_notifications/src/utils/awesome_string_utils.dart';
 import 'package:flutter/foundation.dart';
 
 /// Represents a button to be displayed inside a notification.

@@ -1,4 +1,4 @@
-import 'package:awesome_notifications/src/utils/map_utils.dart';
+import 'package:awesome_notifications/src/utils/awesome_map_utils.dart';
 
 abstract class Model {
   Model();

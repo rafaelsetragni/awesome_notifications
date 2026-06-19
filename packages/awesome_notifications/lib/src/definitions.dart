@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 import 'package:awesome_notifications/src/enumerators/action_type.dart';
 import 'package:awesome_notifications/src/enumerators/default_ringtone_type.dart';
-import 'package:awesome_notifications/src/enumerators/group_alert_behaviour.dart';
+import 'package:awesome_notifications/src/enumerators/group_alert_behavior.dart';
 import 'package:awesome_notifications/src/enumerators/group_sort.dart';
 import 'package:awesome_notifications/src/enumerators/notification_importance.dart';
 import 'package:awesome_notifications/src/enumerators/notification_privacy.dart';

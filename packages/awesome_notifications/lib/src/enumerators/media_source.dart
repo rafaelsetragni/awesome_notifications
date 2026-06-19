@@ -19,7 +19,7 @@ class MediaSourcePrefix {
   static const Network = 'https://';
   static const Unknown = '';
 
-  static get values => [Resource, Asset, File, Network, Unknown];
+  static List<String> get values => [Resource, Asset, File, Network, Unknown];
 
   final int value;
 

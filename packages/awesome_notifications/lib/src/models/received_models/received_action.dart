@@ -2,8 +2,8 @@ import 'package:awesome_notifications/src/models/received_models/received_notifi
 
 import '../../definitions.dart';
 import '../../enumerators/notification_life_cycle.dart';
-import '../../utils/assert_utils.dart';
-import '../../utils/date_utils.dart';
+import '../../utils/awesome_assert_utils.dart';
+import '../../utils/awesome_date_utils.dart';
 
 /// All received details of a user action over a Notification
 class ReceivedAction extends ReceivedNotification {
