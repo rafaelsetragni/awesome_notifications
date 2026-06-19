@@ -42,7 +42,14 @@ android {
 
     sourceSets {
         getByName("main") {
-            java.srcDirs("src/main/kotlin")
+            // The Flutter-free engine lives once at the repo root under
+            // native/android/AndroidAwnCore and is compiled into the plugin from
+            // here (single source of truth). Later it can be split into its own
+            // Maven Central module without moving the sources.
+            java.srcDirs(
+                "src/main/kotlin",
+                "../../../native/android/AndroidAwnCore/src/main/kotlin"
+            )
         }
         getByName("test") {
             java.srcDirs("src/test/kotlin")
@@ -71,6 +78,8 @@ android {
 }
 
 dependencies {
+    implementation("androidx.core:core-ktx:1.13.1")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.mockito:mockito-core:5.0.0")
 }
