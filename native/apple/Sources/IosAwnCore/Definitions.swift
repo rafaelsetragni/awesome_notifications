@@ -33,6 +33,14 @@ public enum Definitions {
     public static let NOTIFICATION_DISPLAYED_LIFECYCLE = "displayedLifeCycle"
     public static let NOTIFICATION_ACTION_TYPE = "actionType"
     public static let NOTIFICATION_ACTION_LIFECYCLE = "actionLifeCycle"
+    public static let NOTIFICATION_CREATED_DATE = "createdDate"
+    public static let NOTIFICATION_DISPLAYED_DATE = "displayedDate"
+    public static let NOTIFICATION_ACTION_DATE = "actionDate"
+    public static let NOTIFICATION_DISMISSED_DATE = "dismissedDate"
+
+    // The full serialized NotificationModel, injected into the delivered
+    // notification (userInfo) so it can be recovered on display/tap/dismiss.
+    public static let NOTIFICATION_JSON = "notificationJson"
 
     // Event method names sent back to Dart.
     public static let EVENT_NOTIFICATION_CREATED = "notificationCreated"

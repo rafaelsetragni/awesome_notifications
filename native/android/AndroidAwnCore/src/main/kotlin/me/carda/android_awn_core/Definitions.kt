@@ -36,6 +36,10 @@ object Definitions {
     const val NOTIFICATION_DISPLAYED_LIFECYCLE = "displayedLifeCycle"
     const val NOTIFICATION_ACTION_TYPE = "actionType"
     const val NOTIFICATION_ACTION_LIFECYCLE = "actionLifeCycle"
+    const val NOTIFICATION_CREATED_DATE = "createdDate"
+    const val NOTIFICATION_DISPLAYED_DATE = "displayedDate"
+    const val NOTIFICATION_ACTION_DATE = "actionDate"
+    const val NOTIFICATION_DISMISSED_DATE = "dismissedDate"
 
     // Event method names sent back to Dart.
     const val EVENT_NOTIFICATION_CREATED = "notificationCreated"

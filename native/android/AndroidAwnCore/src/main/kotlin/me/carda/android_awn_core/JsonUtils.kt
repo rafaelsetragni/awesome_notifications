@@ -4,10 +4,16 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 /**
- * Minimal Map <-> JSON conversion used to carry a notification's content map
- * through PendingIntent extras (tap / dismiss) without a serialization library.
+ * Instance-based JSON helpers (singleton via getInstance, instance methods — no
+ * static utilities): Map <-> JSON string. Used to carry a notification's full
+ * model through PendingIntent extras (tap / dismiss). Mirrors the original
+ * AndroidAwnCore `JsonUtils`.
  */
-object JsonUtils {
+class JsonUtils private constructor() {
+    companion object {
+        private var instance: JsonUtils? = null
+        fun getInstance(): JsonUtils = instance ?: JsonUtils().also { instance = it }
+    }
 
     fun toJson(map: Map<String, Any?>): String = JSONObject(wrapMap(map)).toString()
 

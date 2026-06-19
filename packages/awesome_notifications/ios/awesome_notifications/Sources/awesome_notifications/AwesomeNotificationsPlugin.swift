@@ -79,13 +79,13 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin, AwesomeEventLi
       }
 
     case "dismissNotification":
-      if let id = AwesomeNotifications.readInt(call.arguments) {
+      if let id = MapUtils.shared.getInt(call.arguments) {
         core.dismiss(id: id)
       }
       result(true)
 
     case "cancelNotification":
-      if let id = AwesomeNotifications.readInt(call.arguments) {
+      if let id = MapUtils.shared.getInt(call.arguments) {
         core.cancel(id: id)
       }
       result(true)

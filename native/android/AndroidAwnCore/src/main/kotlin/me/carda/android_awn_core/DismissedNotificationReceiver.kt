@@ -6,16 +6,20 @@ import android.content.Intent
 
 /**
  * Receives the notification's deleteIntent (fired when the user swipes the
- * notification away) and emits a "notificationDismissed" event.
+ * notification away), recovers the model from the injected payload and emits a
+ * "notificationDismissed" event.
  */
 class DismissedNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Definitions.DISMISSED_NOTIFICATION) return
-        val json = intent.getStringExtra(Definitions.NOTIFICATION_JSON) ?: return
-        val content = JsonUtils.fromJson(json)
+
+        val builder = NotificationBuilder.getNewBuilder()
+        val model = builder.notificationModel(intent) ?: return
+        val content = builder.contentMap(model)
+
         AwesomeEventsReceiver.notifyAwesomeEvent(
             Definitions.EVENT_NOTIFICATION_DISMISSED,
-            content + mapOf(Definitions.NOTIFICATION_ACTION_LIFECYCLE to "Foreground")
+            builder.registerDismissedEvent(content, "Foreground")
         )
     }
 }

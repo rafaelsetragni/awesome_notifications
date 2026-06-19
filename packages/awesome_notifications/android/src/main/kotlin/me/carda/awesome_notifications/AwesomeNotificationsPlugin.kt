@@ -21,7 +21,8 @@ import me.carda.android_awn_core.AwesomeEventListener
 import me.carda.android_awn_core.AwesomeEventsReceiver
 import me.carda.android_awn_core.AwesomeNotifications
 import me.carda.android_awn_core.Definitions
-import me.carda.android_awn_core.JsonUtils
+import me.carda.android_awn_core.MapUtils
+import me.carda.android_awn_core.NotificationBuilder
 
 /**
  * Thin Flutter bridge: translates method-channel calls into the Flutter-free
@@ -104,12 +105,12 @@ class AwesomeNotificationsPlugin :
             }
 
             "dismissNotification" -> {
-                AwesomeNotifications.readInt(call.arguments)?.let { core.dismiss(it) }
+                MapUtils.getInstance().getInt(call.arguments)?.let { core.dismiss(it) }
                 result.success(true)
             }
 
             "cancelNotification" -> {
-                AwesomeNotifications.readInt(call.arguments)?.let { core.cancel(it) }
+                MapUtils.getInstance().getInt(call.arguments)?.let { core.cancel(it) }
                 result.success(true)
             }
 
@@ -183,14 +184,12 @@ class AwesomeNotificationsPlugin :
     /** Emits a defaultAction when the app is (re)opened by tapping a notification. */
     private fun handleNotificationIntent(intent: Intent) {
         if (intent.action != Definitions.SELECT_NOTIFICATION) return
-        val json = intent.getStringExtra(Definitions.NOTIFICATION_JSON) ?: return
-        val content = JsonUtils.fromJson(json)
+        val builder = NotificationBuilder.getNewBuilder()
+        val model = builder.notificationModel(intent) ?: return
+        val content = builder.contentMap(model)
         AwesomeEventsReceiver.notifyAwesomeEvent(
             Definitions.EVENT_DEFAULT_ACTION,
-            content + mapOf(
-                Definitions.NOTIFICATION_ACTION_TYPE to "Default",
-                Definitions.NOTIFICATION_ACTION_LIFECYCLE to "Foreground"
-            )
+            builder.registerActionEvent(content, "Foreground")
         )
         // Consume so it is not re-emitted on the next attach / config change.
         intent.removeExtra(Definitions.NOTIFICATION_JSON)
