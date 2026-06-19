@@ -14,6 +14,13 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin {
     )
     let instance = AwesomeNotificationsPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
+
+    // Forward core lifecycle events (created/displayed/tap/dismiss) to Dart.
+    AwesomeNotifications.shared.onEvent = { eventName, data in
+      DispatchQueue.main.async {
+        channel.invokeMethod(eventName, arguments: data)
+      }
+    }
   }
 
   private var core: AwesomeNotifications { AwesomeNotifications.shared }
@@ -37,7 +44,13 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin {
       core.isNotificationAllowed { result($0) }
 
     case "requestNotifications":
-      core.requestPermission { result($0) }
+      // Dart expects back the list of permissions still MISSING after the
+      // request (empty list = everything granted).
+      let args = call.arguments as? [String: Any]
+      let requested = (args?[Definitions.permissions] as? [String]) ?? []
+      core.requestPermission { granted in
+        result(granted ? [] : requested)
+      }
 
     case "setNotificationChannel":
       if let args = call.arguments as? [String: Any] {

@@ -3,4 +3,12 @@
 
   <!-- Required to post notifications on Android 13 (API 33) and above. -->
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+  <application>
+    <!-- Receives the notification deleteIntent (swipe-away) to emit the
+         "notificationDismissed" event. -->
+    <receiver
+      android:name="me.carda.android_awn_core.DismissedNotificationReceiver"
+      android:exported="false" />
+  </application>
 </manifest>

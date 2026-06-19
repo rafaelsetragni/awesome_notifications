@@ -2,7 +2,9 @@ package me.carda.android_awn_core
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -60,16 +62,60 @@ class AwesomeNotifications(private val context: Context) {
         val builder = NotificationCompat.Builder(context, channelKey)
             .setSmallIcon(context.applicationInfo.icon)
             .setAutoCancel(true)
+            .setContentIntent(buildContentIntent(id, content))
+            .setDeleteIntent(buildDeleteIntent(id, content))
         (content[Definitions.TITLE] as? String)?.let { builder.setContentTitle(it) }
         (content[Definitions.BODY] as? String)?.let { builder.setContentText(it) }
 
         return try {
             NotificationManagerCompat.from(context).notify(id, builder.build())
+            AwesomeEventSink.emit(
+                Definitions.EVENT_NOTIFICATION_CREATED,
+                received(content, Definitions.CREATED_LIFECYCLE)
+            )
+            AwesomeEventSink.emit(
+                Definitions.EVENT_NOTIFICATION_DISPLAYED,
+                received(content, Definitions.DISPLAYED_LIFECYCLE)
+            )
             true
         } catch (_: SecurityException) {
             // POST_NOTIFICATIONS not granted (Android 13+).
             false
         }
+    }
+
+    /** Content map enriched with the event-specific lifecycle/source fields. */
+    private fun received(content: Map<String, Any?>, lifeCycleKey: String): Map<String, Any?> =
+        content + mapOf(
+            lifeCycleKey to "Foreground",
+            Definitions.CREATED_SOURCE to "Local"
+        )
+
+    /** Tap intent: launches the app; the bridge reports it as a defaultAction. */
+    private fun buildContentIntent(id: Int, content: Map<String, Any?>): PendingIntent {
+        val launch = context.packageManager
+            .getLaunchIntentForPackage(context.packageName) ?: Intent()
+        launch.action = Definitions.ACTION_SELECT_NOTIFICATION
+        launch.putExtra(Definitions.NOTIFICATION_JSON, MapJson.toJson(content))
+        launch.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        return PendingIntent.getActivity(context, id, launch, pendingIntentFlags())
+    }
+
+    /** Dismiss intent: fired on swipe-away; DismissedNotificationReceiver emits. */
+    private fun buildDeleteIntent(id: Int, content: Map<String, Any?>): PendingIntent {
+        val intent = Intent(context, DismissedNotificationReceiver::class.java).apply {
+            action = Definitions.ACTION_DISMISSED_NOTIFICATION
+            putExtra(Definitions.NOTIFICATION_JSON, MapJson.toJson(content))
+        }
+        return PendingIntent.getBroadcast(context, id, intent, pendingIntentFlags())
+    }
+
+    private fun pendingIntentFlags(): Int {
+        var flags = PendingIntent.FLAG_UPDATE_CURRENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags = flags or PendingIntent.FLAG_IMMUTABLE
+        }
+        return flags
     }
 
     // MARK: - Dismiss / cancel
