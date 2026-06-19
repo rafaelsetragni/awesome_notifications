@@ -16,12 +16,12 @@ let package = Package(
     ],
     products: [
         // One product per capability (Core first; Fcm and others come later as decorators).
-        .library(name: "AwesomeNotificationsCore", targets: ["AwesomeNotificationsCore"])
+        .library(name: "IosAwnCore", targets: ["IosAwnCore"])
     ],
     targets: [
         .target(
-            name: "AwesomeNotificationsCore",
-            path: "native/apple/Sources/AwesomeNotificationsCore"
+            name: "IosAwnCore",
+            path: "native/apple/Sources/IosAwnCore"
         )
     ]
 )

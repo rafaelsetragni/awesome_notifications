@@ -10,9 +10,9 @@ import UserNotifications
 /// This is the minimal slice — request permission, show a basic notification, dismiss.
 /// Richer content (images, action buttons, grouping, badge…) is ported in next, from
 /// the previous IosAwnCore implementation kept under `reference/`.
-public final class AwesomeNotificationsCore {
+public final class AwesomeNotifications {
 
-    public static let shared = AwesomeNotificationsCore()
+    public static let shared = AwesomeNotifications()
     private init() {}
 
     private var center: UNUserNotificationCenter { .current() }
