@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
-/// Main page with the test options + a live event log. Mirrors the original
-/// example's home page (simplified to the core's current capabilities).
+import '../common_widgets/simple_button.dart';
+import '../common_widgets/text_divisor.dart';
+
+/// Main page with the test options + a live event log, following the original
+/// example's style (ListView of TextDivisor sections + full-width SimpleButtons).
 class HomePage extends StatefulWidget {
   final String channelKey;
   final Stream<String> events;
@@ -81,67 +84,46 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(title: const Text('Awesome Notifications core')),
-      body: Column(
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Text('Notifications allowed: $_allowed'),
-                const SizedBox(height: 8),
-                if (!_allowed)
-                  FilledButton.tonal(
-                    onPressed: _requestPermission,
-                    child: const Text('Request permission'),
-                  ),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  alignment: WrapAlignment.center,
-                  children: [
-                    FilledButton(
-                      onPressed: _basic,
-                      child: const Text('Basic'),
-                    ),
-                    FilledButton(
-                      onPressed: _withImageAndPayload,
-                      child: const Text('Image + payload'),
-                    ),
-                    FilledButton(
-                      onPressed: _payloadOnly,
-                      child: const Text('Payload only'),
-                    ),
-                    OutlinedButton(
-                      onPressed: () =>
-                          AwesomeNotifications().dismissAllNotifications(),
-                      child: const Text('Dismiss all'),
-                    ),
-                    OutlinedButton(
-                      onPressed: () => AwesomeNotifications().cancelAll(),
-                      child: const Text('Cancel all'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          TextDivisor(title: 'Global Permission to send Notifications'),
+          Text(
+            'Notifications are ${_allowed ? 'allowed' : 'not allowed'}.',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyMedium,
           ),
-          const Divider(),
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Text('Events:'),
-            ),
+          SimpleButton(
+            'Request permission to send notifications',
+            enabled: !_allowed,
+            backgroundColor: Colors.deepPurple,
+            labelColor: Colors.white,
+            onPressed: _requestPermission,
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _log.length,
-              itemBuilder: (context, i) =>
-                  ListTile(dense: true, title: Text(_log[i])),
+          TextDivisor(title: 'Basic Notifications'),
+          SimpleButton('Show the most basic notification', onPressed: _basic),
+          SimpleButton('Show notification with image and payload',
+              onPressed: _withImageAndPayload),
+          SimpleButton('Show notification with payload',
+              onPressed: _payloadOnly),
+          SimpleButton('Dismiss all notifications',
+              onPressed: () =>
+                  AwesomeNotifications().dismissAllNotifications()),
+          SimpleButton('Cancel all notifications',
+              onPressed: () => AwesomeNotifications().cancelAll()),
+          TextDivisor(title: 'Events'),
+          if (_log.isEmpty)
+            Text('No events yet.',
+                textAlign: TextAlign.center, style: theme.textTheme.bodySmall),
+          for (final line in _log)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Text(line, style: theme.textTheme.bodyMedium),
             ),
-          ),
+          const SizedBox(height: 20),
         ],
       ),
     );
