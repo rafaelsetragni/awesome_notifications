@@ -3,10 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
-const String _channelKey = 'basic_channel';
+import 'pages/home_page.dart';
+import 'pages/notification_details_page.dart';
+
+const String channelKey = 'basic_channel';
+
+/// Used by the action listener to open the details page from anywhere.
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 /// Broadcast of human-readable event lines, fed by the static listeners below.
-final StreamController<String> _events = StreamController<String>.broadcast();
+final StreamController<String> events = StreamController<String>.broadcast();
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +20,7 @@ void main() {
     null,
     [
       NotificationChannel(
-        channelKey: _channelKey,
+        channelKey: channelKey,
         channelName: 'Basic notifications',
         channelDescription: 'Notification channel for basic tests',
         importance: NotificationImportance.High,
@@ -29,23 +35,27 @@ void main() {
 // with @pragma('vm:entry-point') so they can also be invoked from background.
 
 @pragma('vm:entry-point')
-Future<void> _onCreated(ReceivedNotification received) async {
-  _events.add('created • #${received.id} ${received.title ?? ''}');
+Future<void> onCreated(ReceivedNotification received) async {
+  events.add('created • #${received.id} ${received.title ?? ''}');
 }
 
 @pragma('vm:entry-point')
-Future<void> _onDisplayed(ReceivedNotification received) async {
-  _events.add('displayed • #${received.id} ${received.title ?? ''}');
+Future<void> onDisplayed(ReceivedNotification received) async {
+  events.add('displayed • #${received.id} ${received.title ?? ''}');
 }
 
 @pragma('vm:entry-point')
-Future<void> _onAction(ReceivedAction action) async {
-  _events.add('action • #${action.id} (${action.actionType})');
+Future<void> onDismiss(ReceivedAction action) async {
+  events.add('dismissed • #${action.id}');
 }
 
 @pragma('vm:entry-point')
-Future<void> _onDismiss(ReceivedAction action) async {
-  _events.add('dismissed • #${action.id}');
+Future<void> onAction(ReceivedAction action) async {
+  events.add('pressed • #${action.id} (${action.actionType})');
+  // "Open" the notification fullscreen.
+  navigatorKey.currentState?.push(
+    MaterialPageRoute(builder: (_) => NotificationDetailsPage(action)),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -56,98 +66,24 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool _allowed = false;
-  final List<String> _log = [];
-  StreamSubscription<String>? _sub;
-
   @override
   void initState() {
     super.initState();
-
     AwesomeNotifications().setListeners(
-      onActionReceivedMethod: _onAction,
-      onNotificationCreatedMethod: _onCreated,
-      onNotificationDisplayedMethod: _onDisplayed,
-      onDismissActionReceivedMethod: _onDismiss,
-    );
-
-    _sub = _events.stream.listen((line) {
-      if (mounted) setState(() => _log.insert(0, line));
-    });
-
-    AwesomeNotifications().isNotificationAllowed().then((allowed) {
-      if (mounted) setState(() => _allowed = allowed);
-    });
-  }
-
-  @override
-  void dispose() {
-    _sub?.cancel();
-    super.dispose();
-  }
-
-  Future<void> _requestPermission() async {
-    final allowed =
-        await AwesomeNotifications().requestPermissionToSendNotifications();
-    if (mounted) setState(() => _allowed = allowed);
-  }
-
-  Future<void> _createNotification() async {
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: 1,
-        channelKey: _channelKey,
-        title: 'Hello from the monorepo core',
-        body: 'Tap or swipe me to see the action / dismiss events.',
-      ),
+      onActionReceivedMethod: onAction,
+      onNotificationCreatedMethod: onCreated,
+      onNotificationDisplayedMethod: onDisplayed,
+      onDismissActionReceivedMethod: onDismiss,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Awesome Notifications core')),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Text('Notifications allowed: $_allowed'),
-                  const SizedBox(height: 12),
-                  if (!_allowed)
-                    ElevatedButton(
-                      onPressed: _requestPermission,
-                      child: const Text('Request permission'),
-                    ),
-                  ElevatedButton(
-                    onPressed: _createNotification,
-                    child: const Text('Create notification'),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text('Events:'),
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _log.length,
-                itemBuilder: (context, i) => ListTile(
-                  dense: true,
-                  title: Text(_log[i]),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      title: 'Awesome Notifications',
+      navigatorKey: navigatorKey,
+      theme: ThemeData(useMaterial3: true),
+      home: HomePage(channelKey: channelKey, events: events.stream),
     );
   }
 }
