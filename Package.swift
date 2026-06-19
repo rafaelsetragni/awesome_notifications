@@ -22,6 +22,11 @@ let package = Package(
         .target(
             name: "IosAwnCore",
             path: "native/apple/Sources/IosAwnCore"
+        ),
+        .testTarget(
+            name: "IosAwnCoreTests",
+            dependencies: ["IosAwnCore"],
+            path: "native/apple/Tests/IosAwnCoreTests"
         )
     ]
 )
