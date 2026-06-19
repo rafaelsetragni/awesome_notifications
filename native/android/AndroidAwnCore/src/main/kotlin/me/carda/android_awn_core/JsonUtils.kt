@@ -7,7 +7,7 @@ import org.json.JSONObject
  * Minimal Map <-> JSON conversion used to carry a notification's content map
  * through PendingIntent extras (tap / dismiss) without a serialization library.
  */
-object MapJson {
+object JsonUtils {
 
     fun toJson(map: Map<String, Any?>): String = JSONObject(wrapMap(map)).toString()
 

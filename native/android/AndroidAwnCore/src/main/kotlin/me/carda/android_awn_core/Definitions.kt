@@ -1,30 +1,29 @@
 package me.carda.android_awn_core
 
 /**
- * Map keys shared with the Dart side (mirrors `lib/src/definitions.dart`).
- *
- * These are the serialization keys used by `NotificationModel.toMap()` and the
- * channel/content models. Keep them in sync with the Dart constants.
+ * Map keys and constants shared with the Dart side. The names mirror the
+ * original AndroidAwnCore `Definitions` (which in turn mirror `definitions.dart`),
+ * to keep the migration consistent.
  */
 object Definitions {
     // Notification model sections
-    const val CONTENT = "content"
-    const val ACTION_BUTTONS = "actionButtons"
+    const val NOTIFICATION_CONTENT = "content"
+    const val NOTIFICATION_BUTTONS = "actionButtons"
 
     // Content fields
-    const val ID = "id"
-    const val TITLE = "title"
-    const val BODY = "body"
-    const val PAYLOAD = "payload"
+    const val NOTIFICATION_ID = "id"
+    const val NOTIFICATION_TITLE = "title"
+    const val NOTIFICATION_BODY = "body"
+    const val NOTIFICATION_PAYLOAD = "payload"
 
     // Permissions
-    const val PERMISSIONS = "permissions"
+    const val NOTIFICATION_PERMISSIONS = "permissions"
 
     // Channel fields
-    const val CHANNEL_KEY = "channelKey"
-    const val CHANNEL_NAME = "channelName"
-    const val CHANNEL_DESCRIPTION = "channelDescription"
-    const val IMPORTANCE = "importance"
+    const val NOTIFICATION_CHANNEL_KEY = "channelKey"
+    const val NOTIFICATION_CHANNEL_NAME = "channelName"
+    const val NOTIFICATION_CHANNEL_DESCRIPTION = "channelDescription"
+    const val NOTIFICATION_IMPORTANCE = "importance"
 
     // Initialize payload
     const val INITIALIZE_CHANNELS = "initializeChannels"
@@ -32,13 +31,13 @@ object Definitions {
     const val INITIALIZE_DEBUG_MODE = "debug"
 
     // Lifecycle / action metadata (native -> Dart)
-    const val CREATED_SOURCE = "createdSource"
-    const val CREATED_LIFECYCLE = "createdLifeCycle"
-    const val DISPLAYED_LIFECYCLE = "displayedLifeCycle"
-    const val ACTION_TYPE = "actionType"
-    const val ACTION_LIFECYCLE = "actionLifeCycle"
+    const val NOTIFICATION_CREATED_SOURCE = "createdSource"
+    const val NOTIFICATION_CREATED_LIFECYCLE = "createdLifeCycle"
+    const val NOTIFICATION_DISPLAYED_LIFECYCLE = "displayedLifeCycle"
+    const val NOTIFICATION_ACTION_TYPE = "actionType"
+    const val NOTIFICATION_ACTION_LIFECYCLE = "actionLifeCycle"
 
-    // Event method names sent back to Dart (mirror the Dart EVENT_* constants).
+    // Event method names sent back to Dart.
     const val EVENT_NOTIFICATION_CREATED = "notificationCreated"
     const val EVENT_NOTIFICATION_DISPLAYED = "notificationDisplayed"
     const val EVENT_NOTIFICATION_DISMISSED = "notificationDismissed"
@@ -46,9 +45,7 @@ object Definitions {
 
     // Intent actions + extra used to carry the notification through the
     // tap (contentIntent) and dismiss (deleteIntent) PendingIntents.
-    const val ACTION_SELECT_NOTIFICATION =
-        "me.carda.awesome_notifications.SELECT_NOTIFICATION"
-    const val ACTION_DISMISSED_NOTIFICATION =
-        "me.carda.awesome_notifications.DISMISSED_NOTIFICATION"
+    const val SELECT_NOTIFICATION = "SELECT_NOTIFICATION"
+    const val DISMISSED_NOTIFICATION = "DISMISSED_NOTIFICATION"
     const val NOTIFICATION_JSON = "notificationJson"
 }

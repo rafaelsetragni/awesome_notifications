@@ -5,7 +5,9 @@ import IosAwnCore
 /// Thin Flutter bridge: translates method-channel calls into the Flutter-free
 /// IosAwnCore engine. All notification logic lives in the core so it can be
 /// shared with a Notification Service Extension later.
-public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin {
+public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin, AwesomeEventListener {
+
+  private var channel: FlutterMethodChannel?
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(
@@ -13,24 +15,30 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin {
       binaryMessenger: registrar.messenger()
     )
     let instance = AwesomeNotificationsPlugin()
+    instance.channel = channel
     registrar.addMethodCallDelegate(instance, channel: channel)
 
-    // Forward core lifecycle events (created/displayed/tap/dismiss) to Dart.
-    AwesomeNotifications.shared.onEvent = { eventName, data in
-      DispatchQueue.main.async {
-        channel.invokeMethod(eventName, arguments: data)
-      }
-    }
+    // Subscribe to core lifecycle events (created/displayed/tap/dismiss) and
+    // forward them to Dart.
+    AwesomeEventsReceiver.shared.subscribe(listener: instance)
   }
 
   private var core: AwesomeNotifications { AwesomeNotifications.shared }
+
+  // MARK: - AwesomeEventListener
+
+  public func onNewAwesomeEvent(eventType: String, content: [String: Any]) {
+    DispatchQueue.main.async { [weak self] in
+      self?.channel?.invokeMethod(eventType, arguments: content)
+    }
+  }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
 
     case "initialize":
       let args = call.arguments as? [String: Any]
-      let channels = (args?[Definitions.initializeChannels] as? [[String: Any]]) ?? []
+      let channels = (args?[Definitions.INITIALIZE_CHANNELS] as? [[String: Any]]) ?? []
       core.initialize(channels: channels)
       result(true)
 
@@ -40,6 +48,11 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin {
     case "getUtcTimeZoneIdentifier":
       result("UTC")
 
+    case "setEventHandles":
+      // Background isolate handles; foreground events are delivered live through
+      // this channel, so we just acknowledge.
+      result(true)
+
     case "isNotificationAllowed":
       core.isNotificationAllowed { result($0) }
 
@@ -47,7 +60,7 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin {
       // Dart expects back the list of permissions still MISSING after the
       // request (empty list = everything granted).
       let args = call.arguments as? [String: Any]
-      let requested = (args?[Definitions.permissions] as? [String]) ?? []
+      let requested = (args?[Definitions.NOTIFICATION_PERMISSIONS] as? [String]) ?? []
       core.requestPermission { granted in
         result(granted ? [] : requested)
       }

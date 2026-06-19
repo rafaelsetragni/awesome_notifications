@@ -10,12 +10,12 @@ import android.content.Intent
  */
 class DismissedNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action != Definitions.ACTION_DISMISSED_NOTIFICATION) return
+        if (intent.action != Definitions.DISMISSED_NOTIFICATION) return
         val json = intent.getStringExtra(Definitions.NOTIFICATION_JSON) ?: return
-        val content = MapJson.fromJson(json)
-        AwesomeEventSink.emit(
+        val content = JsonUtils.fromJson(json)
+        AwesomeEventsReceiver.notifyAwesomeEvent(
             Definitions.EVENT_NOTIFICATION_DISMISSED,
-            content + mapOf(Definitions.ACTION_LIFECYCLE to "Foreground")
+            content + mapOf(Definitions.NOTIFICATION_ACTION_LIFECYCLE to "Foreground")
         )
     }
 }

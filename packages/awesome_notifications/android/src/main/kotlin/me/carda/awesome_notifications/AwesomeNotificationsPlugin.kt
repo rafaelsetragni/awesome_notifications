@@ -17,10 +17,11 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 import java.util.TimeZone
-import me.carda.android_awn_core.AwesomeEventSink
+import me.carda.android_awn_core.AwesomeEventListener
+import me.carda.android_awn_core.AwesomeEventsReceiver
 import me.carda.android_awn_core.AwesomeNotifications
 import me.carda.android_awn_core.Definitions
-import me.carda.android_awn_core.MapJson
+import me.carda.android_awn_core.JsonUtils
 
 /**
  * Thin Flutter bridge: translates method-channel calls into the Flutter-free
@@ -32,7 +33,8 @@ class AwesomeNotificationsPlugin :
     MethodCallHandler,
     ActivityAware,
     PluginRegistry.RequestPermissionsResultListener,
-    PluginRegistry.NewIntentListener {
+    PluginRegistry.NewIntentListener,
+    AwesomeEventListener {
 
     private lateinit var channel: MethodChannel
     private lateinit var core: AwesomeNotifications
@@ -50,11 +52,15 @@ class AwesomeNotificationsPlugin :
         channel.setMethodCallHandler(this)
         core = AwesomeNotifications(binding.applicationContext)
 
-        // Forward core lifecycle events (created/displayed/tap/dismiss) to Dart,
-        // always on the main thread.
-        AwesomeEventSink.emitter = { eventName, data ->
-            mainHandler.post { channel.invokeMethod(eventName, data) }
-        }
+        // Subscribe to core lifecycle events (created/displayed/tap/dismiss).
+        AwesomeEventsReceiver.subscribe(this)
+    }
+
+    // MARK: - AwesomeEventListener
+
+    override fun onNewAwesomeEvent(eventType: String, content: Map<String, Any?>) {
+        // Always deliver on the main thread.
+        mainHandler.post { channel.invokeMethod(eventType, content) }
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -72,12 +78,18 @@ class AwesomeNotificationsPlugin :
             "getLocalTimeZoneIdentifier" -> result.success(TimeZone.getDefault().id)
             "getUtcTimeZoneIdentifier" -> result.success("UTC")
 
+            "setEventHandles" -> {
+                // Background isolate handles; foreground events are delivered
+                // live through this channel, so we just acknowledge.
+                result.success(true)
+            }
+
             "isNotificationAllowed" -> result.success(core.isNotificationAllowed())
 
             "requestNotifications" -> {
                 val args = call.arguments as? Map<String, Any?>
                 val requested =
-                    (args?.get(Definitions.PERMISSIONS) as? List<String>) ?: emptyList()
+                    (args?.get(Definitions.NOTIFICATION_PERMISSIONS) as? List<String>) ?: emptyList()
                 requestNotifications(requested, result)
             }
 
@@ -158,7 +170,7 @@ class AwesomeNotificationsPlugin :
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
-        AwesomeEventSink.emitter = null
+        AwesomeEventsReceiver.unsubscribe(this)
     }
 
     // MARK: - Notification tap (defaultAction)
@@ -170,14 +182,14 @@ class AwesomeNotificationsPlugin :
 
     /** Emits a defaultAction when the app is (re)opened by tapping a notification. */
     private fun handleNotificationIntent(intent: Intent) {
-        if (intent.action != Definitions.ACTION_SELECT_NOTIFICATION) return
+        if (intent.action != Definitions.SELECT_NOTIFICATION) return
         val json = intent.getStringExtra(Definitions.NOTIFICATION_JSON) ?: return
-        val content = MapJson.fromJson(json)
-        AwesomeEventSink.emit(
+        val content = JsonUtils.fromJson(json)
+        AwesomeEventsReceiver.notifyAwesomeEvent(
             Definitions.EVENT_DEFAULT_ACTION,
             content + mapOf(
-                Definitions.ACTION_TYPE to "Default",
-                Definitions.ACTION_LIFECYCLE to "Foreground"
+                Definitions.NOTIFICATION_ACTION_TYPE to "Default",
+                Definitions.NOTIFICATION_ACTION_LIFECYCLE to "Foreground"
             )
         )
         // Consume so it is not re-emitted on the next attach / config change.

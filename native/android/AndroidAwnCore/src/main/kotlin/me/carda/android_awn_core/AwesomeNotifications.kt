@@ -31,14 +31,14 @@ class AwesomeNotifications(private val context: Context) {
     }
 
     fun setChannel(channelData: Map<String, Any?>) {
-        val key = channelData[Definitions.CHANNEL_KEY] as? String ?: return
+        val key = channelData[Definitions.NOTIFICATION_CHANNEL_KEY] as? String ?: return
         channels[key] = channelData
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = channelData[Definitions.CHANNEL_NAME] as? String ?: key
-            val importance = readImportance(channelData[Definitions.IMPORTANCE])
+            val name = channelData[Definitions.NOTIFICATION_CHANNEL_NAME] as? String ?: key
+            val importance = readImportance(channelData[Definitions.NOTIFICATION_IMPORTANCE])
             val channel = NotificationChannel(key, name, importance)
-            (channelData[Definitions.CHANNEL_DESCRIPTION] as? String)?.let {
+            (channelData[Definitions.NOTIFICATION_CHANNEL_DESCRIPTION] as? String)?.let {
                 channel.description = it
             }
             notificationManager().createNotificationChannel(channel)
@@ -55,27 +55,27 @@ class AwesomeNotifications(private val context: Context) {
     /** Builds and posts a notification from a serialized `NotificationModel`. */
     fun createNotification(notification: Map<String, Any?>): Boolean {
         @Suppress("UNCHECKED_CAST")
-        val content = notification[Definitions.CONTENT] as? Map<String, Any?> ?: return false
-        val id = readInt(content[Definitions.ID]) ?: return false
-        val channelKey = content[Definitions.CHANNEL_KEY] as? String ?: return false
+        val content = notification[Definitions.NOTIFICATION_CONTENT] as? Map<String, Any?> ?: return false
+        val id = readInt(content[Definitions.NOTIFICATION_ID]) ?: return false
+        val channelKey = content[Definitions.NOTIFICATION_CHANNEL_KEY] as? String ?: return false
 
         val builder = NotificationCompat.Builder(context, channelKey)
             .setSmallIcon(context.applicationInfo.icon)
             .setAutoCancel(true)
             .setContentIntent(buildContentIntent(id, content))
             .setDeleteIntent(buildDeleteIntent(id, content))
-        (content[Definitions.TITLE] as? String)?.let { builder.setContentTitle(it) }
-        (content[Definitions.BODY] as? String)?.let { builder.setContentText(it) }
+        (content[Definitions.NOTIFICATION_TITLE] as? String)?.let { builder.setContentTitle(it) }
+        (content[Definitions.NOTIFICATION_BODY] as? String)?.let { builder.setContentText(it) }
 
         return try {
             NotificationManagerCompat.from(context).notify(id, builder.build())
-            AwesomeEventSink.emit(
+            AwesomeEventsReceiver.notifyAwesomeEvent(
                 Definitions.EVENT_NOTIFICATION_CREATED,
-                received(content, Definitions.CREATED_LIFECYCLE)
+                received(content, Definitions.NOTIFICATION_CREATED_LIFECYCLE)
             )
-            AwesomeEventSink.emit(
+            AwesomeEventsReceiver.notifyAwesomeEvent(
                 Definitions.EVENT_NOTIFICATION_DISPLAYED,
-                received(content, Definitions.DISPLAYED_LIFECYCLE)
+                received(content, Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE)
             )
             true
         } catch (_: SecurityException) {
@@ -88,15 +88,15 @@ class AwesomeNotifications(private val context: Context) {
     private fun received(content: Map<String, Any?>, lifeCycleKey: String): Map<String, Any?> =
         content + mapOf(
             lifeCycleKey to "Foreground",
-            Definitions.CREATED_SOURCE to "Local"
+            Definitions.NOTIFICATION_CREATED_SOURCE to "Local"
         )
 
     /** Tap intent: launches the app; the bridge reports it as a defaultAction. */
     private fun buildContentIntent(id: Int, content: Map<String, Any?>): PendingIntent {
         val launch = context.packageManager
             .getLaunchIntentForPackage(context.packageName) ?: Intent()
-        launch.action = Definitions.ACTION_SELECT_NOTIFICATION
-        launch.putExtra(Definitions.NOTIFICATION_JSON, MapJson.toJson(content))
+        launch.action = Definitions.SELECT_NOTIFICATION
+        launch.putExtra(Definitions.NOTIFICATION_JSON, JsonUtils.toJson(content))
         launch.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         return PendingIntent.getActivity(context, id, launch, pendingIntentFlags())
     }
@@ -104,8 +104,8 @@ class AwesomeNotifications(private val context: Context) {
     /** Dismiss intent: fired on swipe-away; DismissedNotificationReceiver emits. */
     private fun buildDeleteIntent(id: Int, content: Map<String, Any?>): PendingIntent {
         val intent = Intent(context, DismissedNotificationReceiver::class.java).apply {
-            action = Definitions.ACTION_DISMISSED_NOTIFICATION
-            putExtra(Definitions.NOTIFICATION_JSON, MapJson.toJson(content))
+            action = Definitions.DISMISSED_NOTIFICATION
+            putExtra(Definitions.NOTIFICATION_JSON, JsonUtils.toJson(content))
         }
         return PendingIntent.getBroadcast(context, id, intent, pendingIntentFlags())
     }

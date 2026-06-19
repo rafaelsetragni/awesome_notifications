@@ -21,12 +21,6 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
     /// (sound, importance, …) so later features can honor it per channelKey.
     private var channels: [String: [String: Any]] = [:]
 
-    /// Event sink the Flutter bridge subscribes to. The core stays Flutter-free;
-    /// the bridge forwards (eventName, payload) to the method channel. Emitted
-    /// events: notificationCreated / notificationDisplayed / defaultAction /
-    /// notificationDismissed.
-    public var onEvent: ((_ eventName: String, _ data: [String: Any]) -> Void)?
-
     // MARK: - Initialization
 
     public func initialize(channels: [[String: Any]]) {
@@ -44,7 +38,7 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
     }
 
     private func registerChannel(_ channel: [String: Any]) {
-        guard let key = channel[Definitions.channelKey] as? String else { return }
+        guard let key = channel[Definitions.NOTIFICATION_CHANNEL_KEY] as? String else { return }
         channels[key] = channel
     }
 
@@ -52,7 +46,7 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
     /// when the user swipes a notification away (otherwise dismiss is silent).
     private func registerDefaultCategory() {
         let category = UNNotificationCategory(
-            identifier: Definitions.defaultCategoryIdentifier,
+            identifier: Definitions.DEFAULT_CATEGORY_IDENTIFIER,
             actions: [],
             intentIdentifiers: [],
             options: [.customDismissAction]
@@ -87,18 +81,18 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
         completion: @escaping (Bool) -> Void
     ) {
         guard
-            let content = notification[Definitions.content] as? [String: Any],
-            let id = AwesomeNotifications.readInt(content[Definitions.id])
+            let content = notification[Definitions.NOTIFICATION_CONTENT] as? [String: Any],
+            let id = AwesomeNotifications.readInt(content[Definitions.NOTIFICATION_ID])
         else {
             completion(false)
             return
         }
 
         let unContent = UNMutableNotificationContent()
-        if let title = content[Definitions.title] as? String { unContent.title = title }
-        if let body = content[Definitions.body] as? String { unContent.body = body }
+        if let title = content[Definitions.NOTIFICATION_TITLE] as? String { unContent.title = title }
+        if let body = content[Definitions.NOTIFICATION_BODY] as? String { unContent.body = body }
         unContent.sound = .default
-        unContent.categoryIdentifier = Definitions.defaultCategoryIdentifier
+        unContent.categoryIdentifier = Definitions.DEFAULT_CATEGORY_IDENTIFIER
         // Stash the original content so the received/action maps can be rebuilt
         // when the notification is displayed, tapped or dismissed.
         unContent.userInfo = content.filter { !($0.value is NSNull) }
@@ -112,10 +106,10 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
             let created = error == nil
             if created {
                 self?.emit(
-                    Definitions.eventNotificationCreated,
+                    Definitions.EVENT_NOTIFICATION_CREATED,
                     self?.payload(content, [
-                        Definitions.createdSource: "Local",
-                        Definitions.createdLifeCycle: "Foreground"
+                        Definitions.NOTIFICATION_CREATED_SOURCE: "Local",
+                        Definitions.NOTIFICATION_CREATED_LIFECYCLE: "Foreground"
                     ]) ?? content
                 )
             }
@@ -133,8 +127,8 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
     ) {
         if let content = notification.request.content.userInfo as? [String: Any] {
             emit(
-                Definitions.eventNotificationDisplayed,
-                payload(content, [Definitions.displayedLifeCycle: "Foreground"])
+                Definitions.EVENT_NOTIFICATION_DISPLAYED,
+                payload(content, [Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE: "Foreground"])
             )
         }
         if #available(iOS 14.0, macOS 11.0, *) {
@@ -154,16 +148,16 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
 
         if response.actionIdentifier == UNNotificationDismissActionIdentifier {
             emit(
-                Definitions.eventNotificationDismissed,
-                payload(content, [Definitions.actionLifeCycle: "Foreground"])
+                Definitions.EVENT_NOTIFICATION_DISMISSED,
+                payload(content, [Definitions.NOTIFICATION_ACTION_LIFECYCLE: "Foreground"])
             )
         } else {
             // UNNotificationDefaultActionIdentifier (tap) or a button key.
             emit(
-                Definitions.eventDefaultAction,
+                Definitions.EVENT_DEFAULT_ACTION,
                 payload(content, [
-                    Definitions.actionType: "Default",
-                    Definitions.actionLifeCycle: "Foreground"
+                    Definitions.NOTIFICATION_ACTION_TYPE: "Default",
+                    Definitions.NOTIFICATION_ACTION_LIFECYCLE: "Foreground"
                 ])
             )
         }
@@ -194,7 +188,7 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
     // MARK: - Helpers
 
     private func emit(_ eventName: String, _ data: [String: Any]) {
-        onEvent?(eventName, data)
+        AwesomeEventsReceiver.shared.notifyAwesomeEvent(eventType: eventName, content: data)
     }
 
     /// Merges event-specific fields onto a copy of the stashed content map.
