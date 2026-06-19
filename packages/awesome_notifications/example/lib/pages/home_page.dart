@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
+import '../common_widgets/led_light.dart';
 import '../common_widgets/simple_button.dart';
 import '../common_widgets/text_divisor.dart';
 
@@ -91,10 +92,16 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
           TextDivisor(title: 'Global Permission to send Notifications'),
-          Text(
-            'Notifications are ${_allowed ? 'allowed' : 'not allowed'}.',
-            textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              LedLight(_allowed),
+              const SizedBox(width: 10),
+              Text(
+                'Notifications are ${_allowed ? 'allowed' : 'not allowed'}.',
+                style: theme.textTheme.bodyMedium,
+              ),
+            ],
           ),
           SimpleButton(
             'Request permission to send notifications',
