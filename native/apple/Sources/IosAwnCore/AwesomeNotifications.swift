@@ -180,9 +180,63 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
         center.removeAllDeliveredNotifications()
     }
 
+    // dismiss* removes the visible notification (keeps the schedule); cancel* also
+    // removes the pending request (which will be the schedule once that exists).
+
+    public func dismissByChannelKey(_ channelKey: String) {
+        removeDelivered(matchingKey: Definitions.NOTIFICATION_CHANNEL_KEY, value: channelKey)
+    }
+
+    public func dismissByGroupKey(_ groupKey: String) {
+        removeDelivered(matchingKey: Definitions.NOTIFICATION_GROUP_KEY, value: groupKey)
+    }
+
+    public func cancelByChannelKey(_ channelKey: String) {
+        removeDelivered(matchingKey: Definitions.NOTIFICATION_CHANNEL_KEY, value: channelKey)
+        removePending(matchingKey: Definitions.NOTIFICATION_CHANNEL_KEY, value: channelKey)
+    }
+
+    public func cancelByGroupKey(_ groupKey: String) {
+        removeDelivered(matchingKey: Definitions.NOTIFICATION_GROUP_KEY, value: groupKey)
+        removePending(matchingKey: Definitions.NOTIFICATION_GROUP_KEY, value: groupKey)
+    }
+
     // MARK: - Helpers
 
     private func emit(_ eventName: String, _ data: [String: Any]) {
         AwesomeEventsReceiver.shared.notifyAwesomeEvent(eventType: eventName, content: data)
+    }
+
+    /// Reads a stored content string (channelKey/groupKey) from a notification's
+    /// injected payload.
+    private func contentString(_ userInfo: [AnyHashable: Any], _ key: String) -> String? {
+        guard let model = builder.notificationModel(fromUserInfo: userInfo) else {
+            return nil
+        }
+        return builder.contentMap(fromModel: model)[key] as? String
+    }
+
+    private func removeDelivered(matchingKey key: String, value: String) {
+        center.getDeliveredNotifications { [weak self] delivered in
+            guard let self = self else { return }
+            let ids = delivered
+                .filter { self.contentString($0.request.content.userInfo, key) == value }
+                .map { $0.request.identifier }
+            if !ids.isEmpty {
+                self.center.removeDeliveredNotifications(withIdentifiers: ids)
+            }
+        }
+    }
+
+    private func removePending(matchingKey key: String, value: String) {
+        center.getPendingNotificationRequests { [weak self] pending in
+            guard let self = self else { return }
+            let ids = pending
+                .filter { self.contentString($0.content.userInfo, key) == value }
+                .map { $0.identifier }
+            if !ids.isEmpty {
+                self.center.removePendingNotificationRequests(withIdentifiers: ids)
+            }
+        }
     }
 }

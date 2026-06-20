@@ -22,6 +22,7 @@ object Definitions {
 
     // Channel fields
     const val NOTIFICATION_CHANNEL_KEY = "channelKey"
+    const val NOTIFICATION_GROUP_KEY = "groupKey"
     const val NOTIFICATION_CHANNEL_NAME = "channelName"
     const val NOTIFICATION_CHANNEL_DESCRIPTION = "channelDescription"
     const val NOTIFICATION_IMPORTANCE = "importance"

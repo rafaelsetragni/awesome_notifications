@@ -4,6 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationManagerCompat
 
 /**
@@ -80,10 +81,35 @@ class AwesomeNotifications(private val context: Context) {
 
     fun cancelAll() = dismissAll()
 
+    // dismiss* removes the visible notification (keeps the schedule); cancel*
+    // would also remove the schedule once that exists — for now they coincide.
+
+    fun dismissByChannelKey(channelKey: String) =
+        cancelMatching { channelIdOf(it) == channelKey }
+
+    fun dismissByGroupKey(groupKey: String) =
+        cancelMatching { it.notification.group == groupKey }
+
+    fun cancelByChannelKey(channelKey: String) = dismissByChannelKey(channelKey)
+
+    fun cancelByGroupKey(groupKey: String) = dismissByGroupKey(groupKey)
+
     // MARK: - Helpers
 
     private fun notificationManager(): NotificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+    /** Cancels the app's active notifications matching [predicate]. */
+    private fun cancelMatching(predicate: (StatusBarNotification) -> Boolean) {
+        val manager = notificationManager()
+        manager.activeNotifications
+            .filter(predicate)
+            .forEach { manager.cancel(it.id) }
+    }
+
+    private fun channelIdOf(sbn: StatusBarNotification): String? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) sbn.notification.channelId
+        else null
 
     /** Maps the Dart `NotificationImportance` name to an Android importance. */
     private fun readImportance(value: Any?): Int =

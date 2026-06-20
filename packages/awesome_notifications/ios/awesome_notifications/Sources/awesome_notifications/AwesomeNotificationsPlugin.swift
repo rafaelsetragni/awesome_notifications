@@ -90,6 +90,22 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin, AwesomeEventLi
       }
       result(true)
 
+    case "dismissNotificationsByChannelKey":
+      if let key = call.arguments as? String { core.dismissByChannelKey(key) }
+      result(true)
+
+    case "cancelNotificationsByChannelKey":
+      if let key = call.arguments as? String { core.cancelByChannelKey(key) }
+      result(true)
+
+    case "dismissNotificationsByGroupKey":
+      if let key = call.arguments as? String { core.dismissByGroupKey(key) }
+      result(true)
+
+    case "cancelNotificationsByGroupKey":
+      if let key = call.arguments as? String { core.cancelByGroupKey(key) }
+      result(true)
+
     case "dismissAllNotifications":
       core.dismissAllNotifications()
       result(true)

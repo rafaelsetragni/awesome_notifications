@@ -20,6 +20,7 @@ public enum Definitions {
 
     // Channel fields
     public static let NOTIFICATION_CHANNEL_KEY = "channelKey"
+    public static let NOTIFICATION_GROUP_KEY = "groupKey"
     public static let NOTIFICATION_CHANNEL_NAME = "channelName"
     public static let NOTIFICATION_IMPORTANCE = "importance"
 

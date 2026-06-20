@@ -114,6 +114,23 @@ class AwesomeNotificationsPlugin :
                 result.success(true)
             }
 
+            "dismissNotificationsByChannelKey" -> {
+                (call.arguments as? String)?.let { core.dismissByChannelKey(it) }
+                result.success(true)
+            }
+            "cancelNotificationsByChannelKey" -> {
+                (call.arguments as? String)?.let { core.cancelByChannelKey(it) }
+                result.success(true)
+            }
+            "dismissNotificationsByGroupKey" -> {
+                (call.arguments as? String)?.let { core.dismissByGroupKey(it) }
+                result.success(true)
+            }
+            "cancelNotificationsByGroupKey" -> {
+                (call.arguments as? String)?.let { core.cancelByGroupKey(it) }
+                result.success(true)
+            }
+
             "dismissAllNotifications" -> { core.dismissAll(); result.success(true) }
             "cancelAllNotifications" -> { core.cancelAll(); result.success(true) }
 
