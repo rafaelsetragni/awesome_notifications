@@ -5,53 +5,31 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Simple Example",
-            "cwd": "example",
+            "name": "Example",
+            "cwd": "packages/awesome_notifications/example",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart"
         },
         {
-            "name": "Simple Example (profile mode)",
-            "cwd": "example",
+            "name": "Example (profile mode)",
+            "cwd": "packages/awesome_notifications/example",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
             "program": "lib/main.dart"
         },
         {
-            "name": "Simple Example (release mode)",
-            "cwd": "example",
+            "name": "Example (release mode)",
+            "cwd": "packages/awesome_notifications/example",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release",
             "program": "lib/main.dart"
-        },
-        {
-            "name": "Complete Example",
-            "cwd": "example",
-            "request": "launch",
-            "type": "dart",
-            "program": "lib/main_complete.dart"
-        },
-        {
-            "name": "Complete Example (profile mode)",
-            "cwd": "example",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile",
-            "program": "lib/main_complete.dart"
-        },
-        {
-            "name": "Complete Example (release mode)",
-            "cwd": "example",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release",
-            "program": "lib/main_complete.dart"
         },
         {
             "name": "All tests coverage",
+            "cwd": "packages/awesome_notifications",
             "request": "launch",
             "type": "dart",
             "toolArgs": [
