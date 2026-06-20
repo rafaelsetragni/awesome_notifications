@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
@@ -7,13 +5,13 @@ import '../common_widgets/led_light.dart';
 import '../common_widgets/simple_button.dart';
 import '../common_widgets/text_divisor.dart';
 
-/// Main page with the test options + a live event log, following the original
-/// example's style (ListView of TextDivisor sections + full-width SimpleButtons).
+/// Main page with the test options, following the original example's style
+/// (ListView of TextDivisor sections + full-width SimpleButtons). Notification
+/// events are surfaced as snackbars (see main.dart).
 class HomePage extends StatefulWidget {
   final String channelKey;
-  final Stream<String> events;
 
-  const HomePage({super.key, required this.channelKey, required this.events});
+  const HomePage({super.key, required this.channelKey});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -24,24 +22,13 @@ class _HomePageState extends State<HomePage> {
   static const String _largeIcon = 'https://picsum.photos/id/64/200/200';
 
   bool _allowed = false;
-  final List<String> _log = [];
-  StreamSubscription<String>? _sub;
 
   @override
   void initState() {
     super.initState();
-    _sub = widget.events.listen((line) {
-      if (mounted) setState(() => _log.insert(0, line));
-    });
     AwesomeNotifications().isNotificationAllowed().then((allowed) {
       if (mounted) setState(() => _allowed = allowed);
     });
-  }
-
-  @override
-  void dispose() {
-    _sub?.cancel();
-    super.dispose();
   }
 
   Future<void> _requestPermission() async {
@@ -125,15 +112,6 @@ class _HomePageState extends State<HomePage> {
                   AwesomeNotifications().dismissAllNotifications()),
           SimpleButton('Cancel all notifications',
               onPressed: () => AwesomeNotifications().cancelAll()),
-          TextDivisor(title: 'Events'),
-          if (_log.isEmpty)
-            Text('No events yet.',
-                textAlign: TextAlign.center, style: theme.textTheme.bodySmall),
-          for (final line in _log)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Text(line, style: theme.textTheme.bodyMedium),
-            ),
           const SizedBox(height: 20),
         ],
       ),

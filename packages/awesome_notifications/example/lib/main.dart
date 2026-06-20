@@ -11,6 +11,10 @@ const String channelKey = 'basic_channel';
 /// Used by the action listener to open the details page from anywhere.
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+/// Used to show event snackbars from anywhere (any current route).
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 /// Broadcast of human-readable event lines, fed by the static listeners below.
 final StreamController<String> events = StreamController<String>.broadcast();
 
@@ -66,6 +70,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  StreamSubscription<String>? _eventsSub;
+
   @override
   void initState() {
     super.initState();
@@ -75,6 +81,25 @@ class _MyAppState extends State<MyApp> {
       onNotificationDisplayedMethod: onDisplayed,
       onDismissActionReceivedMethod: onDismiss,
     );
+
+    // Surface every notification event as a snackbar.
+    _eventsSub = events.stream.listen((line) {
+      scaffoldMessengerKey.currentState
+        ?..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(line),
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(milliseconds: 2000),
+          ),
+        );
+    });
+  }
+
+  @override
+  void dispose() {
+    _eventsSub?.cancel();
+    super.dispose();
   }
 
   @override
@@ -82,8 +107,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Awesome Notifications',
       navigatorKey: navigatorKey,
+      scaffoldMessengerKey: scaffoldMessengerKey,
       theme: ThemeData(useMaterial3: true),
-      home: HomePage(channelKey: channelKey, events: events.stream),
+      home: HomePage(channelKey: channelKey),
     );
   }
 }
