@@ -20,6 +20,15 @@ class AwesomeNotifications(private val context: Context) {
     private val builder = NotificationBuilder.getNewBuilder()
     private val channels = mutableMapOf<String, Map<String, Any?>>()
 
+    companion object {
+        /**
+         * Registered by the scheduling decorator so `cancel*` also cancels the
+         * pending scheduled creation (AlarmManager). Null in the bare core, where
+         * cancel then coincides with dismiss.
+         */
+        var scheduleCanceller: ScheduleCanceller? = null
+    }
+
     // MARK: - Initialization
 
     fun initialize(channelList: List<Map<String, Any?>>) {
@@ -73,16 +82,13 @@ class AwesomeNotifications(private val context: Context) {
 
     // MARK: - Dismiss / cancel
 
+    // dismiss* only removes the visible notification from the status bar (keeps
+    // any pending scheduled creation). cancel* also cancels the schedule, via the
+    // scheduleCanceller registered by the scheduling decorator.
+
     fun dismiss(id: Int) = NotificationManagerCompat.from(context).cancel(id)
 
-    fun cancel(id: Int) = dismiss(id)
-
     fun dismissAll() = NotificationManagerCompat.from(context).cancelAll()
-
-    fun cancelAll() = dismissAll()
-
-    // dismiss* removes the visible notification (keeps the schedule); cancel*
-    // would also remove the schedule once that exists — for now they coincide.
 
     fun dismissByChannelKey(channelKey: String) =
         cancelMatching { channelIdOf(it) == channelKey }
@@ -90,9 +96,25 @@ class AwesomeNotifications(private val context: Context) {
     fun dismissByGroupKey(groupKey: String) =
         cancelMatching { it.notification.group == groupKey }
 
-    fun cancelByChannelKey(channelKey: String) = dismissByChannelKey(channelKey)
+    fun cancel(id: Int) {
+        scheduleCanceller?.cancelSchedule(context, id)
+        dismiss(id)
+    }
 
-    fun cancelByGroupKey(groupKey: String) = dismissByGroupKey(groupKey)
+    fun cancelAll() {
+        scheduleCanceller?.cancelAllSchedules(context)
+        dismissAll()
+    }
+
+    fun cancelByChannelKey(channelKey: String) {
+        scheduleCanceller?.cancelSchedulesByChannelKey(context, channelKey)
+        dismissByChannelKey(channelKey)
+    }
+
+    fun cancelByGroupKey(groupKey: String) {
+        scheduleCanceller?.cancelSchedulesByGroupKey(context, groupKey)
+        dismissByGroupKey(groupKey)
+    }
 
     // MARK: - Helpers
 
