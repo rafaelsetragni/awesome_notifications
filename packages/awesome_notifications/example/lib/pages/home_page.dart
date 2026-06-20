@@ -92,13 +92,14 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
           TextDivisor(title: 'Global Permission to send Notifications'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               LedLight(_allowed),
-              const SizedBox(width: 10),
+              const SizedBox(height: 6),
               Text(
                 'Notifications are ${_allowed ? 'allowed' : 'not allowed'}.',
+                textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium,
               ),
             ],

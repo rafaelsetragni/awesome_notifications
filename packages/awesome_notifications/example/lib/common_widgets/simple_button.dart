@@ -36,8 +36,9 @@ class SimpleButton extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
-              color: (labelColor ?? Colors.black87)
-                  .withAlpha(enabled ? 255 : 60),
+              color: enabled
+                  ? (labelColor ?? Colors.black87)
+                  : Colors.grey.shade500,
             ),
           ),
         ),
