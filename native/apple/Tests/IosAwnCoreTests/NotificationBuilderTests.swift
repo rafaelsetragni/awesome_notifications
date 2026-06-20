@@ -99,6 +99,29 @@ final class NotificationBuilderTests: XCTestCase {
         assertIsTimestamp(result[Definitions.NOTIFICATION_DISMISSED_DATE])
     }
 
+    // MARK: - dismiss concepts
+
+    func testReadId() {
+        XCTAssertEqual(builder.readId([Definitions.NOTIFICATION_ID: 9]), 9)
+        XCTAssertNil(builder.readId([:]))
+    }
+
+    func testIsDismissActionTrueForDismissActionType() {
+        XCTAssertTrue(
+            builder.isDismissAction(
+                [Definitions.NOTIFICATION_ACTION_TYPE: "DismissAction"]))
+        XCTAssertTrue(
+            builder.isDismissAction(
+                [Definitions.NOTIFICATION_ACTION_TYPE: "ActionType.DismissAction"]))
+    }
+
+    func testIsDismissActionFalseOtherwise() {
+        XCTAssertFalse(
+            builder.isDismissAction(
+                [Definitions.NOTIFICATION_ACTION_TYPE: "Default"]))
+        XCTAssertFalse(builder.isDismissAction([:]))
+    }
+
     func testRegistrationPreservesOriginalContent() {
         let result = builder.registerCreatedEvent(["id": 99], lifeCycle: "Foreground")
         XCTAssertEqual(mapUtils.getInt(result["id"]), 99)

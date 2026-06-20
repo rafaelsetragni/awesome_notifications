@@ -136,7 +136,14 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
             fromUserInfo: response.notification.request.content.userInfo
         ) {
             let content = builder.contentMap(fromModel: model)
-            if response.actionIdentifier == UNNotificationDismissActionIdentifier {
+            let userDismissed =
+                response.actionIdentifier == UNNotificationDismissActionIdentifier
+            if userDismissed || builder.isDismissAction(content) {
+                // User swipe, or a DismissAction whose tap dismisses + fires the
+                // dismiss event (ignoring autoDismissible).
+                if !userDismissed, let id = builder.readId(content) {
+                    dismiss(id: id)
+                }
                 emit(
                     Definitions.EVENT_NOTIFICATION_DISMISSED,
                     builder.registerDismissedEvent(content, lifeCycle: "Foreground")

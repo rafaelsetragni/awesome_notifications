@@ -70,6 +70,31 @@ class _HomePageState extends State<HomePage> {
         ),
       );
 
+  // Auto-dismiss concept: stays in the tray after a tap (Android).
+  Future<void> _keepOnTap() => AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 4,
+          channelKey: widget.channelKey,
+          title: 'Stays after tap',
+          body: 'autoDismissible: false — tapping keeps it on the tray (Android).',
+          autoDismissible: false,
+          payload: {'origin': 'keep-on-tap'},
+        ),
+      );
+
+  // DismissAction concept: a tap dismisses it and fires onDismissActionReceived.
+  Future<void> _dismissOnTap() => AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 5,
+          channelKey: widget.channelKey,
+          title: 'Dismiss on tap',
+          body: 'actionType DismissAction — tapping dismisses it and fires '
+              'onDismissActionReceived.',
+          actionType: ActionType.DismissAction,
+          payload: {'origin': 'dismiss-action'},
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -112,6 +137,11 @@ class _HomePageState extends State<HomePage> {
                   AwesomeNotifications().dismissAllNotifications()),
           SimpleButton('Cancel all notifications',
               onPressed: () => AwesomeNotifications().cancelAll()),
+          TextDivisor(title: 'Dismiss concepts'),
+          SimpleButton('Keep on tray after tap (autoDismissible: false)',
+              onPressed: _keepOnTap),
+          SimpleButton('Dismiss on tap (DismissAction)',
+              onPressed: _dismissOnTap),
           const SizedBox(height: 20),
         ],
       ),

@@ -100,6 +100,21 @@ public final class NotificationBuilder {
         return map
     }
 
+    // MARK: - Dismiss concepts
+
+    func readId(_ content: [String: Any]) -> Int? {
+        return mapUtils.getInt(content[Definitions.NOTIFICATION_ID])
+    }
+
+    /// A `DismissAction` notification/button behaves like a user dismissal: it
+    /// dismisses the notification and fires the dismiss event (ignoring
+    /// autoDismissible).
+    func isDismissAction(_ content: [String: Any]) -> Bool {
+        let actionType =
+            mapUtils.getString(content[Definitions.NOTIFICATION_ACTION_TYPE]) ?? ""
+        return actionType.hasSuffix("DismissAction")
+    }
+
     private func now() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"

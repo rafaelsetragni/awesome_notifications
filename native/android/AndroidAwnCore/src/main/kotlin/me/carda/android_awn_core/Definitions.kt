@@ -15,6 +15,7 @@ object Definitions {
     const val NOTIFICATION_TITLE = "title"
     const val NOTIFICATION_BODY = "body"
     const val NOTIFICATION_PAYLOAD = "payload"
+    const val NOTIFICATION_AUTO_DISMISSIBLE = "autoDismissible"
 
     // Permissions
     const val NOTIFICATION_PERMISSIONS = "permissions"

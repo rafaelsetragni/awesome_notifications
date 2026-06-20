@@ -13,6 +13,7 @@ public enum Definitions {
     public static let NOTIFICATION_TITLE = "title"
     public static let NOTIFICATION_BODY = "body"
     public static let NOTIFICATION_PAYLOAD = "payload"
+    public static let NOTIFICATION_AUTO_DISMISSIBLE = "autoDismissible"
 
     // Permissions
     public static let NOTIFICATION_PERMISSIONS = "permissions"

@@ -44,7 +44,7 @@ class NotificationBuilder private constructor(
 
         val builder = NotificationCompat.Builder(context, channelKey)
             .setSmallIcon(context.applicationInfo.icon)
-            .setAutoCancel(true)
+            .setAutoCancel(shouldAutoDismiss(content))
             .setContentIntent(contentIntent(context, id, model))
             .setDeleteIntent(deleteIntent(context, id, model))
 
@@ -125,6 +125,29 @@ class NotificationBuilder private constructor(
             Definitions.NOTIFICATION_DISMISSED_DATE to now(),
             Definitions.NOTIFICATION_ACTION_LIFECYCLE to lifeCycle
         )
+
+    // MARK: - Dismiss concepts
+
+    fun readId(content: Map<String, Any?>): Int? =
+        mapUtils.getInt(content[Definitions.NOTIFICATION_ID])
+
+    /** A `DismissAction` tap dismisses + fires the dismiss event. */
+    fun isDismissAction(content: Map<String, Any?>): Boolean =
+        (mapUtils.getString(content[Definitions.NOTIFICATION_ACTION_TYPE]) ?: "")
+            .endsWith("DismissAction")
+
+    /**
+     * Whether tapping the notification auto-dismisses it (Android `setAutoCancel`).
+     * DismissAction always dismisses; KeepOnTop never; otherwise honor the
+     * `autoDismissible` flag (default true).
+     */
+    fun shouldAutoDismiss(content: Map<String, Any?>): Boolean {
+        val actionType =
+            mapUtils.getString(content[Definitions.NOTIFICATION_ACTION_TYPE]) ?: ""
+        if (actionType.endsWith("DismissAction")) return true
+        if (actionType.endsWith("KeepOnTop")) return false
+        return mapUtils.getBool(content[Definitions.NOTIFICATION_AUTO_DISMISSIBLE]) ?: true
+    }
 
     private fun now(): String {
         val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)

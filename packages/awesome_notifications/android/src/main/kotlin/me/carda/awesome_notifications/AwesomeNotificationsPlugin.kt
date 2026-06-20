@@ -187,10 +187,20 @@ class AwesomeNotificationsPlugin :
         val builder = NotificationBuilder.getNewBuilder()
         val model = builder.notificationModel(intent) ?: return
         val content = builder.contentMap(model)
-        AwesomeEventsReceiver.notifyAwesomeEvent(
-            Definitions.EVENT_DEFAULT_ACTION,
-            builder.registerActionEvent(content, "Foreground")
-        )
+
+        if (builder.isDismissAction(content)) {
+            // A DismissAction tap dismisses + fires the dismiss event.
+            builder.readId(content)?.let { core.dismiss(it) }
+            AwesomeEventsReceiver.notifyAwesomeEvent(
+                Definitions.EVENT_NOTIFICATION_DISMISSED,
+                builder.registerDismissedEvent(content, "Foreground")
+            )
+        } else {
+            AwesomeEventsReceiver.notifyAwesomeEvent(
+                Definitions.EVENT_DEFAULT_ACTION,
+                builder.registerActionEvent(content, "Foreground")
+            )
+        }
         // Consume so it is not re-emitted on the next attach / config change.
         intent.removeExtra(Definitions.NOTIFICATION_JSON)
         intent.action = null
