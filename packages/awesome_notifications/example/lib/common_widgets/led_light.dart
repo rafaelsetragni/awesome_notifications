@@ -10,7 +10,7 @@ class LedLight extends StatelessWidget {
     final Color lightColor = isOn ? Colors.green : Colors.redAccent;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 15.0, bottom: 10.0),
+      padding: const EdgeInsets.only(top: 25.0, bottom: 25.0),
       child: Container(
         width: 15.0,
         height: 15.0,
