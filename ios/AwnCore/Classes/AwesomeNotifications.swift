@@ -986,6 +986,19 @@ public class AwesomeNotifications:
                 filteringByChannelKey: channelKey,
                 whenGotResults: completion)
     }
+
+    public func getPermissionStatuses(
+        _ permissions:[String],
+        filteringByChannelKey channelKey:String?,
+        whenGotResults completion: @escaping ([String:String]) -> ()
+    ){
+        PermissionManager
+            .shared
+            .getPermissionStatuses(
+                permissions,
+                filteringByChannelKey: channelKey,
+                whenGotResults: completion)
+    }
     
     public func requestUserPermissions(
         _ permissions:[String],

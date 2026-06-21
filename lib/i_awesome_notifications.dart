@@ -334,6 +334,24 @@ abstract class IAwesomeNotifications {
     ],
   });
 
+  /// Returns the explicit status of each requested [NotificationPermission].
+  ///
+  /// On iOS, [NotificationPermission.CriticalAlert] can report
+  /// [NotificationPermissionStatus.notSupported] when the Apple entitlement is
+  /// missing, or [NotificationPermissionStatus.notDetermined] when base
+  /// notifications are granted but Critical Alerts were never requested.
+  Future<Map<NotificationPermission, NotificationPermissionStatus>>
+      getPermissionStatusList({
+    String? channelKey,
+    List<NotificationPermission> permissions = const [
+      NotificationPermission.Badge,
+      NotificationPermission.Alert,
+      NotificationPermission.Sound,
+      NotificationPermission.Vibration,
+      NotificationPermission.Light,
+    ],
+  });
+
   /// Checks whether the app should show a rationale to the user before requesting
   /// notification permissions.
   ///

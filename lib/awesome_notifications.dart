@@ -7,6 +7,7 @@ import 'awesome_notifications_platform_interface.dart'
 import 'i_awesome_notifications.dart';
 import 'src/enumerators/notification_life_cycle.dart';
 import 'src/enumerators/notification_permission.dart';
+import 'src/enumerators/notification_permission_status.dart';
 import 'src/models/notification_button.dart';
 import 'src/models/notification_channel.dart';
 import 'src/models/notification_channel_group.dart';
@@ -28,6 +29,7 @@ export 'src/enumerators/notification_importance.dart';
 export 'src/enumerators/notification_layout.dart';
 export 'src/enumerators/notification_life_cycle.dart';
 export 'src/enumerators/notification_permission.dart';
+export 'src/enumerators/notification_permission_status.dart';
 export 'src/enumerators/notification_privacy.dart';
 export 'src/enumerators/notification_source.dart';
 export 'src/enumerators/notification_play_state.dart';
@@ -132,6 +134,22 @@ class AwesomeNotifications implements IAwesomeNotifications {
       ]}) {
     return AwesomeNotificationsPlatform.instance
         .checkPermissionList(channelKey: channelKey, permissions: permissions);
+  }
+
+  @override
+  Future<Map<NotificationPermission, NotificationPermissionStatus>>
+      getPermissionStatusList({
+    String? channelKey,
+    List<NotificationPermission> permissions = const [
+      NotificationPermission.Badge,
+      NotificationPermission.Alert,
+      NotificationPermission.Sound,
+      NotificationPermission.Vibration,
+      NotificationPermission.Light,
+    ],
+  }) {
+    return AwesomeNotificationsPlatform.instance.getPermissionStatusList(
+        channelKey: channelKey, permissions: permissions);
   }
 
   @override

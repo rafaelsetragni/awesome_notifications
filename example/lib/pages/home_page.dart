@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   bool globalNotificationsAllowed = false;
   bool schedulesFullControl = false;
   bool isCriticalAlertsEnabled = false;
+  bool isCriticalAlertsNotSupported = false;
   bool isPreciseAlarmEnabled = false;
   bool isOverrideDnDEnabled = false;
 
@@ -138,14 +139,21 @@ class _HomePageState extends State<HomePage> {
 
   void refreshDangerousChannelPermissions() {
     AwesomeNotifications()
-        .checkPermissionList(permissions: dangerousPermissions)
-        .then((List<NotificationPermission> permissionsAllowed) => setState(() {
+        .getPermissionStatusList(permissions: dangerousPermissions)
+        .then((Map<NotificationPermission, NotificationPermissionStatus>
+            permissionStatuses) => setState(() {
               for (NotificationPermission permission in dangerousPermissions) {
+                final NotificationPermissionStatus status =
+                    permissionStatuses[permission] ??
+                        NotificationPermissionStatus.denied;
                 dangerousPermissionsStatus[permission] =
-                    permissionsAllowed.contains(permission);
+                    status == NotificationPermissionStatus.granted;
               }
               isCriticalAlertsEnabled = dangerousPermissionsStatus[
                   NotificationPermission.CriticalAlert]!;
+              isCriticalAlertsNotSupported =
+                  permissionStatuses[NotificationPermission.CriticalAlert] ==
+                      NotificationPermissionStatus.notSupported;
               isPreciseAlarmEnabled = dangerousPermissionsStatus[
                   NotificationPermission.PreciseAlarms]!;
               isOverrideDnDEnabled = dangerousPermissionsStatus[
@@ -322,12 +330,18 @@ class _HomePageState extends State<HomePage> {
                               refreshPermissionsIcons();
                             }))),
             SimpleButton('Request Critical Alerts mode',
-                enabled: !isCriticalAlertsEnabled,
+                enabled: !isCriticalAlertsEnabled && !isCriticalAlertsNotSupported,
                 onPressed: () =>
                     NotificationUtils.requestCriticalAlertsPermission(context)
                         .then((isAllowed) => setState(() {
                               refreshPermissionsIcons();
                             }))),
+            if (isCriticalAlertsNotSupported)
+              const TextNote(
+                  'Critical Alerts are not supported on this device or project. '
+                  'Add the Apple critical-alerts entitlement to enable them on iOS.'),
+            SimpleButton('Show critical alert notification (iOS/Android)',
+                onPressed: () => NotificationUtils.showCriticalAlertNotification(9001)),
             SimpleButton('Request to Override Do not Disturb mode (Android)',
                 enabled: !isOverrideDnDEnabled,
                 onPressed: () =>

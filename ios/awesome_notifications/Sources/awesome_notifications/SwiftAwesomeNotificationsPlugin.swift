@@ -163,6 +163,10 @@ public class SwiftAwesomeNotificationsPlugin:
                     try channelMethodCheckPermissions(call: call, result: result)
                     return
 
+                case Definitions.CHANNEL_METHOD_GET_PERMISSION_STATUSES:
+                    try channelMethodGetPermissionStatuses(call: call, result: result)
+                    return
+
 				case Definitions.CHANNEL_METHOD_REQUEST_NOTIFICATIONS:
                     try channelMethodRequestNotification(call: call, result: result)
 					return
@@ -837,6 +841,48 @@ public class SwiftAwesomeNotificationsPlugin:
                 filteringByChannelKey: channelKey,
                 whenGotResults: { (permissionsAllowed) in
                     result(permissionsAllowed)
+                })
+    }
+
+    private func channelMethodGetPermissionStatuses(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        guard let platformParameters:[String:Any?] = call.arguments as? [String:Any?]
+        else {
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
+                        code: ExceptionCode.CODE_MISSING_ARGUMENTS,
+                        message: "Arguments are missing",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS)
+        }
+
+        let channelKey:String? = platformParameters[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
+        guard let permissions:[String] = platformParameters[Definitions.NOTIFICATION_PERMISSIONS] as? [String] else {
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Permission list is required",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList")
+        }
+
+        if(permissions.isEmpty){
+            throw ExceptionFactory
+                    .shared
+                    .createNewAwesomeException(
+                        className: SwiftAwesomeNotificationsPlugin.TAG,
+                        code: ExceptionCode.CODE_INVALID_ARGUMENTS,
+                        message: "Permission list is required",
+                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList")
+        }
+
+        awesomeNotifications?
+            .getPermissionStatuses(
+                permissions,
+                filteringByChannelKey: channelKey,
+                whenGotResults: { (permissionStatuses) in
+                    result(permissionStatuses)
                 })
     }
     

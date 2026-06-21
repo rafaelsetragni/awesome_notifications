@@ -114,7 +114,7 @@ public class NotificationChannelModel : AbstractModel {
         if(locked != nil) {mapData[Definitions.NOTIFICATION_LOCKED] = self.locked}
         if(onlyAlertOnce != nil) {mapData[Definitions.NOTIFICATION_ONLY_ALERT_ONCE] = self.onlyAlertOnce}
         
-        if(criticalAlerts != nil) {mapData[Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS] = self.locked}
+        if(criticalAlerts != nil) {mapData[Definitions.NOTIFICATION_CHANNEL_CRITICAL_ALERTS] = self.criticalAlerts}
 
         if(defaultPrivacy != nil) {mapData[Definitions.NOTIFICATION_DEFAULT_PRIVACY] = self.defaultPrivacy?.rawValue}
         

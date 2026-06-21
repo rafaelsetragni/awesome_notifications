@@ -164,6 +164,127 @@ void main() {
       expect(result, permissions);
     });
 
+    group('getPermissionStatusList', () {
+      test('maps native status map to typed Dart map', () async {
+        mockMethodChannel.setMockMethodCallHandler(
+            CHANNEL_METHOD_GET_PERMISSION_STATUSES, {
+          'Alert': 'granted',
+          'CriticalAlert': 'notSupported',
+          'Sound': 'denied',
+        });
+
+        final Map<NotificationPermission, NotificationPermissionStatus> result =
+            await awesomeNotifications.getPermissionStatusList(
+          channelKey: 'test_channel',
+          permissions: [
+            NotificationPermission.Alert,
+            NotificationPermission.CriticalAlert,
+            NotificationPermission.Sound,
+          ],
+        );
+
+        expect(result[NotificationPermission.Alert],
+            NotificationPermissionStatus.granted);
+        expect(result[NotificationPermission.CriticalAlert],
+            NotificationPermissionStatus.notSupported);
+        expect(result[NotificationPermission.Sound],
+            NotificationPermissionStatus.denied);
+        expect(result.length, 3);
+      });
+
+      test('sends channelKey and permission names to native channel', () async {
+        mockMethodChannel.setMockMethodCallHandler(
+            CHANNEL_METHOD_GET_PERMISSION_STATUSES,
+            (Map<String, dynamic> arguments) {
+          expect(arguments[NOTIFICATION_CHANNEL_KEY], 'test_channel');
+          expect(
+            arguments[NOTIFICATION_PERMISSIONS],
+            ['Alert', 'CriticalAlert'],
+          );
+          return {'Alert': 'granted', 'CriticalAlert': 'notSupported'};
+        });
+
+        await awesomeNotifications.getPermissionStatusList(
+          channelKey: 'test_channel',
+          permissions: [
+            NotificationPermission.Alert,
+            NotificationPermission.CriticalAlert,
+          ],
+        );
+      });
+
+      test('uses default permissions when none are specified', () async {
+        mockMethodChannel.setMockMethodCallHandler(
+            CHANNEL_METHOD_GET_PERMISSION_STATUSES,
+            (Map<String, dynamic> arguments) {
+          expect(
+            arguments[NOTIFICATION_PERMISSIONS],
+            [
+              'Badge',
+              'Alert',
+              'Sound',
+              'Vibration',
+              'Light',
+            ],
+          );
+          return {
+            'Badge': 'granted',
+            'Alert': 'granted',
+            'Sound': 'granted',
+            'Vibration': 'granted',
+            'Light': 'granted',
+          };
+        });
+
+        final Map<NotificationPermission, NotificationPermissionStatus> result =
+            await awesomeNotifications.getPermissionStatusList();
+
+        expect(result.length, 5);
+        for (final status in result.values) {
+          expect(status, NotificationPermissionStatus.granted);
+        }
+      });
+
+      test('returns empty map when native response is empty', () async {
+        mockMethodChannel.setMockMethodCallHandler(
+            CHANNEL_METHOD_GET_PERMISSION_STATUSES, {});
+
+        final Map<NotificationPermission, NotificationPermissionStatus> result =
+            await awesomeNotifications.getPermissionStatusList(
+          permissions: [NotificationPermission.Alert],
+        );
+
+        expect(result, isEmpty);
+      });
+
+      test('returns empty map when native response is null', () async {
+        mockMethodChannel.setMockMethodCallHandler(
+            CHANNEL_METHOD_GET_PERMISSION_STATUSES, null);
+
+        final Map<NotificationPermission, NotificationPermissionStatus> result =
+            await awesomeNotifications.getPermissionStatusList(
+          permissions: [NotificationPermission.Alert],
+        );
+
+        expect(result, isEmpty);
+      });
+
+      test('filters out unknown permission and status keys', () async {
+        mockMethodChannel.setMockMethodCallHandler(
+            CHANNEL_METHOD_GET_PERMISSION_STATUSES, {
+          'UnknownPerm': 'granted',
+          'Alert': 'invalidStatus',
+        });
+
+        final Map<NotificationPermission, NotificationPermissionStatus> result =
+            await awesomeNotifications.getPermissionStatusList(
+          permissions: [NotificationPermission.Alert],
+        );
+
+        expect(result, isEmpty);
+      });
+    });
+
     test('createNotificationFromJsonData with valid data', () async {
       mockMethodChannel.setMockMethodCallHandler(
           CHANNEL_METHOD_CREATE_NOTIFICATION, true);
