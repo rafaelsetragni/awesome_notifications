@@ -4,8 +4,11 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationManagerCompat
+import java.util.concurrent.Executors
 
 /**
  * Flutter-free notification engine for Android.
@@ -19,6 +22,10 @@ class AwesomeNotifications(private val context: Context) {
 
     private val builder = NotificationBuilder.getNewBuilder()
     private val channels = mutableMapOf<String, Map<String, Any?>>()
+
+    // Notifications are built off the main thread (image loading does I/O).
+    private val executor = Executors.newSingleThreadExecutor()
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     companion object {
         /**
@@ -57,26 +64,40 @@ class AwesomeNotifications(private val context: Context) {
 
     // MARK: - Create / display
 
-    /** Builds and posts a notification from a serialized `NotificationModel`. */
-    fun createNotification(notification: Map<String, Any?>): Boolean {
-        val androidNotification = builder.build(context, notification) ?: return false
-        val id = builder.notificationId(notification) ?: return false
+    /**
+     * Builds and posts a notification from a serialized `NotificationModel`. Runs
+     * on a background thread (image loading does I/O) and reports the result on
+     * the main thread.
+     */
+    fun createNotification(rawNotification: Map<String, Any?>, callback: (Boolean) -> Unit) {
+        executor.execute {
+            val created = try {
+                // Let registered decorators (e.g. localization) transform the model
+                // once; the build, events and stored payload all use the result.
+                val notification = NotificationContentManager.apply(rawNotification)
+                val androidNotification = builder.build(context, notification)
+                val id = builder.notificationId(notification)
 
-        return try {
-            NotificationManagerCompat.from(context).notify(id, androidNotification)
-            val content = builder.contentMap(notification)
-            AwesomeEventsReceiver.notifyAwesomeEvent(
-                Definitions.EVENT_NOTIFICATION_CREATED,
-                builder.registerCreatedEvent(content, "Foreground")
-            )
-            AwesomeEventsReceiver.notifyAwesomeEvent(
-                Definitions.EVENT_NOTIFICATION_DISPLAYED,
-                builder.registerDisplayedEvent(content, "Foreground")
-            )
-            true
-        } catch (_: SecurityException) {
-            // POST_NOTIFICATIONS not granted (Android 13+).
-            false
+                if (androidNotification != null && id != null) {
+                    NotificationManagerCompat.from(context).notify(id, androidNotification)
+                    val content = builder.contentMap(notification)
+                    AwesomeEventsReceiver.notifyAwesomeEvent(
+                        Definitions.EVENT_NOTIFICATION_CREATED,
+                        builder.registerCreatedEvent(content, "Foreground")
+                    )
+                    AwesomeEventsReceiver.notifyAwesomeEvent(
+                        Definitions.EVENT_NOTIFICATION_DISPLAYED,
+                        builder.registerDisplayedEvent(content, "Foreground")
+                    )
+                    true
+                } else {
+                    false
+                }
+            } catch (_: SecurityException) {
+                // POST_NOTIFICATIONS not granted (Android 13+).
+                false
+            }
+            mainHandler.post { callback(created) }
         }
     }
 

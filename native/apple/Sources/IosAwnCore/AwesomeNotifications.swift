@@ -51,8 +51,15 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
             intentIdentifiers: [],
             options: [.customDismissAction]
         )
+        registerCategory(category)
+    }
+
+    /// Adds a category to the notification center, keeping the existing ones.
+    private func registerCategory(_ category: UNNotificationCategory) {
         center.getNotificationCategories { existing in
-            self.center.setNotificationCategories(existing.union([category]))
+            // Replace any same-identifier category, then add the new one.
+            let kept = existing.filter { $0.identifier != category.identifier }
+            self.center.setNotificationCategories(Set(kept).union([category]))
         }
     }
 
@@ -77,29 +84,43 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
     /// Builds and delivers a notification from a serialized `NotificationModel`
     /// (the same map produced by the Dart `NotificationModel.toMap()`).
     public func createNotification(
-        _ notification: [String: Any],
+        _ rawNotification: [String: Any],
         completion: @escaping (Bool) -> Void
     ) {
-        guard let built = builder.createNotificationContent(fromModel: notification) else {
-            completion(false)
-            return
-        }
+        // Build off the main thread (image loading does I/O).
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
 
-        let request = UNNotificationRequest(
-            identifier: String(built.id),
-            content: built.content,
-            trigger: nil // deliver immediately
-        )
-        center.add(request) { [weak self] error in
-            let created = error == nil
-            if created, let self = self {
-                let content = self.builder.contentMap(fromModel: notification)
-                self.emit(
-                    Definitions.EVENT_NOTIFICATION_CREATED,
-                    self.builder.registerCreatedEvent(content, lifeCycle: "Foreground")
-                )
+            // Let registered decorators (e.g. localization) transform the model
+            // once; the build, events and stored payload all use the result.
+            let notification = NotificationContentManager.shared.apply(to: rawNotification)
+            guard let built = self.builder.createNotificationContent(fromModel: notification) else {
+                DispatchQueue.main.async { completion(false) }
+                return
             }
-            DispatchQueue.main.async { completion(created) }
+
+            // Register the per-notification action-button category (if any) so
+            // iOS shows the buttons and reports which one was pressed.
+            if let category = self.builder.actionCategory(forModel: notification) {
+                self.registerCategory(category)
+            }
+
+            let request = UNNotificationRequest(
+                identifier: String(built.id),
+                content: built.content,
+                trigger: nil // deliver immediately
+            )
+            self.center.add(request) { error in
+                let created = error == nil
+                if created {
+                    let content = self.builder.contentMap(fromModel: notification)
+                    self.emit(
+                        Definitions.EVENT_NOTIFICATION_CREATED,
+                        self.builder.registerCreatedEvent(content, lifeCycle: "Foreground")
+                    )
+                }
+                DispatchQueue.main.async { completion(created) }
+            }
         }
     }
 
@@ -135,13 +156,30 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
         if let model = builder.notificationModel(
             fromUserInfo: response.notification.request.content.userInfo
         ) {
-            let content = builder.contentMap(fromModel: model)
-            let userDismissed =
-                response.actionIdentifier == UNNotificationDismissActionIdentifier
-            if userDismissed || builder.isDismissAction(content) {
-                // User swipe, or a DismissAction whose tap dismisses + fires the
-                // dismiss event (ignoring autoDismissible).
-                if !userDismissed, let id = builder.readId(content) {
+            var content = builder.contentMap(fromModel: model)
+            let actionId = response.actionIdentifier
+            let systemDismiss = actionId == UNNotificationDismissActionIdentifier
+            let defaultTap = actionId == UNNotificationDefaultActionIdentifier
+            // Anything else is one of our button keys.
+            let buttonKey = (systemDismiss || defaultTap) ? "" : actionId
+            let pressedButton = builder.findButton(inModel: model, key: buttonKey)
+
+            // Carry the pressed button key + any typed text back to Dart.
+            if !buttonKey.isEmpty {
+                content[Definitions.NOTIFICATION_BUTTON_KEY_PRESSED] = buttonKey
+                if let textResponse = response as? UNTextInputNotificationResponse {
+                    content[Definitions.NOTIFICATION_BUTTON_KEY_INPUT] = textResponse.userText
+                }
+            }
+
+            // A swipe, a DismissAction notification, or a DismissAction button all
+            // count as a dismissal.
+            let isDismiss = systemDismiss
+                || (buttonKey.isEmpty && builder.isDismissAction(content))
+                || builder.buttonActionType(pressedButton).hasSuffix("DismissAction")
+
+            if isDismiss {
+                if !systemDismiss, let id = builder.readId(content) {
                     dismiss(id: id)
                 }
                 emit(
@@ -149,10 +187,20 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
                     builder.registerDismissedEvent(content, lifeCycle: "Foreground")
                 )
             } else {
-                // UNNotificationDefaultActionIdentifier (tap) or a button key.
+                // Default tap, or a non-dismiss button. Auto-dismiss the button's
+                // notification when requested (a plain tap is auto-dismissed by iOS).
+                if !buttonKey.isEmpty,
+                   builder.shouldButtonAutoDismiss(pressedButton),
+                   let id = builder.readId(content) {
+                    dismiss(id: id)
+                }
                 emit(
                     Definitions.EVENT_DEFAULT_ACTION,
-                    builder.registerActionEvent(content, lifeCycle: "Foreground")
+                    builder.registerActionEvent(
+                        content,
+                        lifeCycle: "Foreground",
+                        actionType: builder.buttonActionType(pressedButton)
+                    )
                 )
             }
         }

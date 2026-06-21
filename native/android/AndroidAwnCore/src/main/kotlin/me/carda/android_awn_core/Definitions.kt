@@ -16,6 +16,18 @@ object Definitions {
     const val NOTIFICATION_BODY = "body"
     const val NOTIFICATION_PAYLOAD = "payload"
     const val NOTIFICATION_AUTO_DISMISSIBLE = "autoDismissible"
+    const val NOTIFICATION_LAYOUT = "notificationLayout"
+    const val NOTIFICATION_LARGE_ICON = "largeIcon"
+    const val NOTIFICATION_BIG_PICTURE = "bigPicture"
+
+    // Action button fields
+    const val NOTIFICATION_BUTTON_KEY = "key"
+    const val NOTIFICATION_BUTTON_LABEL = "label"
+    const val NOTIFICATION_BUTTON_ICON = "icon"
+    const val NOTIFICATION_BUTTON_ENABLED = "enabled"
+    const val NOTIFICATION_REQUIRE_INPUT_TEXT = "requireInputText"
+    const val NOTIFICATION_BUTTON_KEY_PRESSED = "buttonKeyPressed"
+    const val NOTIFICATION_BUTTON_KEY_INPUT = "buttonKeyInput"
 
     // Permissions
     const val NOTIFICATION_PERMISSIONS = "permissions"
@@ -50,8 +62,9 @@ object Definitions {
     const val EVENT_DEFAULT_ACTION = "defaultAction"
 
     // Intent actions + extra used to carry the notification through the
-    // tap (contentIntent) and dismiss (deleteIntent) PendingIntents.
+    // tap (contentIntent), dismiss (deleteIntent) and action-button PendingIntents.
     const val SELECT_NOTIFICATION = "SELECT_NOTIFICATION"
     const val DISMISSED_NOTIFICATION = "DISMISSED_NOTIFICATION"
+    const val NOTIFICATION_BUTTON_ACTION_PREFIX = "ACTION_NOTIFICATION"
     const val NOTIFICATION_JSON = "notificationJson"
 }

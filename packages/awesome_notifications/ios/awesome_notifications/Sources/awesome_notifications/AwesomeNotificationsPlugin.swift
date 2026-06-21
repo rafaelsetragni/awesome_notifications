@@ -118,7 +118,16 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin, AwesomeEventLi
       result("iOS " + UIDevice.current.systemVersion)
 
     default:
-      result(FlutterMethodNotImplemented)
+      // Let registered decorators (e.g. localization) answer their own methods.
+      let handled = AwesomeMethodHandlerRegistry.shared.handle(
+        method: call.method,
+        arguments: call.arguments
+      ) { value in
+        result(value)
+      }
+      if !handled {
+        result(FlutterMethodNotImplemented)
+      }
     }
   }
 }

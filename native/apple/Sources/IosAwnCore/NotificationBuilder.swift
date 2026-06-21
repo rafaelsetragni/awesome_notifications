@@ -37,10 +37,113 @@ public final class NotificationBuilder {
         let body = mapUtils.getString(content[Definitions.NOTIFICATION_BODY])
         if !stringUtils.isNullOrEmpty(body) { unContent.body = body! }
         unContent.sound = .default
-        unContent.categoryIdentifier = Definitions.DEFAULT_CATEGORY_IDENTIFIER
+        unContent.categoryIdentifier = categoryIdentifier(forModel: model)
 
+        applyImages(content, to: unContent)
         setUserInfoContent(model: model, content: unContent)
         return (id, unContent)
+    }
+
+    // MARK: - Action buttons
+
+    /// The serialized action buttons of a model (the `actionButtons` list).
+    public func actionButtons(fromModel model: [String: Any]) -> [[String: Any]] {
+        return (model[Definitions.NOTIFICATION_BUTTONS] as? [[String: Any]]) ?? []
+    }
+
+    /// The category identifier a notification should use: `DEFAULT` when it has
+    /// no buttons, otherwise a deterministic id derived from the button keys so
+    /// the same set of buttons reuses the same registered category.
+    public func categoryIdentifier(forModel model: [String: Any]) -> String {
+        let keys = actionButtons(fromModel: model)
+            .compactMap { mapUtils.getString($0[Definitions.NOTIFICATION_BUTTON_KEY]) }
+            .filter { !$0.isEmpty }
+        return keys.isEmpty ? Definitions.DEFAULT_CATEGORY_IDENTIFIER : keys.joined(separator: ",")
+    }
+
+    /// Builds the `UNNotificationCategory` (with its actions) for a model's
+    /// buttons, or nil when there are none. The caller registers it.
+    public func actionCategory(forModel model: [String: Any]) -> UNNotificationCategory? {
+        let buttons = actionButtons(fromModel: model)
+        var actions: [UNNotificationAction] = []
+        for button in buttons {
+            guard let key = mapUtils.getString(button[Definitions.NOTIFICATION_BUTTON_KEY]),
+                  !key.isEmpty else { continue }
+            let label = mapUtils.getString(button[Definitions.NOTIFICATION_BUTTON_LABEL]) ?? key
+            let actionType =
+                mapUtils.getString(button[Definitions.NOTIFICATION_ACTION_TYPE]) ?? "Default"
+
+            var options: UNNotificationActionOptions = []
+            if actionType.hasSuffix("Default") { options.insert(.foreground) }
+            if mapUtils.getBool(button[Definitions.NOTIFICATION_IS_DANGEROUS_OPTION]) == true {
+                options.insert(.destructive)
+            }
+            if mapUtils.getBool(button[Definitions.NOTIFICATION_AUTHENTICATION_REQUIRED]) == true {
+                options.insert(.authenticationRequired)
+            }
+
+            if mapUtils.getBool(button[Definitions.NOTIFICATION_REQUIRE_INPUT_TEXT]) == true {
+                actions.append(UNTextInputNotificationAction(
+                    identifier: key, title: label, options: options))
+            } else {
+                actions.append(UNNotificationAction(
+                    identifier: key, title: label, options: options))
+            }
+        }
+        if actions.isEmpty { return nil }
+        return UNNotificationCategory(
+            identifier: categoryIdentifier(forModel: model),
+            actions: actions,
+            intentIdentifiers: [],
+            options: [.customDismissAction]
+        )
+    }
+
+    /// Finds a button map by its key (nil for the content tap / unknown key).
+    public func findButton(inModel model: [String: Any], key: String) -> [String: Any]? {
+        if key.isEmpty { return nil }
+        return actionButtons(fromModel: model).first {
+            (mapUtils.getString($0[Definitions.NOTIFICATION_BUTTON_KEY]) ?? "") == key
+        }
+    }
+
+    /// Attaches the notification image. iOS shows a single attachment, so prefer
+    /// the big picture and fall back to the large icon.
+    private func applyImages(_ content: [String: Any], to unContent: UNMutableNotificationContent) {
+        let bigPicture = mapUtils.getString(content[Definitions.NOTIFICATION_BIG_PICTURE])
+        let largeIcon = mapUtils.getString(content[Definitions.NOTIFICATION_LARGE_ICON])
+        let source = !(bigPicture?.isEmpty ?? true) ? bigPicture : largeIcon
+        if let attachment = bitmapAttachment(from: source) {
+            unContent.attachments = [attachment]
+        }
+    }
+
+    private func bitmapAttachment(from source: String?) -> UNNotificationAttachment? {
+        #if canImport(UIKit)
+        guard let source = source, !source.isEmpty,
+              let image = BitmapUtils.shared.getBitmapFromSource(source),
+              let data = image.pngData()
+        else { return nil }
+
+        // Each call writes into its own unique temp subfolder (like the original
+        // core's `globallyUniqueString` subfolder), so concurrent builds never
+        // share a path. The attachment identifier is unique too.
+        let uniqueName = UUID().uuidString
+        let directory = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent(uniqueName, isDirectory: true)
+        do {
+            try FileManager.default.createDirectory(
+                at: directory, withIntermediateDirectories: true)
+            let fileURL = directory.appendingPathComponent(uniqueName + ".png")
+            try data.write(to: fileURL)
+            return try UNNotificationAttachment(
+                identifier: uniqueName + ".png", url: fileURL, options: nil)
+        } catch {
+            return nil
+        }
+        #else
+        return nil
+        #endif
     }
 
     /// Stores the full serialized model into userInfo for later recovery.
@@ -85,11 +188,15 @@ public final class NotificationBuilder {
         return map
     }
 
-    public func registerActionEvent(_ content: [String: Any], lifeCycle: String) -> [String: Any] {
+    public func registerActionEvent(
+        _ content: [String: Any],
+        lifeCycle: String,
+        actionType: String = "Default"
+    ) -> [String: Any] {
         var map = content
         map[Definitions.NOTIFICATION_ACTION_DATE] = now()
         map[Definitions.NOTIFICATION_ACTION_LIFECYCLE] = lifeCycle
-        map[Definitions.NOTIFICATION_ACTION_TYPE] = "Default"
+        map[Definitions.NOTIFICATION_ACTION_TYPE] = actionType
         return map
     }
 
@@ -113,6 +220,24 @@ public final class NotificationBuilder {
         let actionType =
             mapUtils.getString(content[Definitions.NOTIFICATION_ACTION_TYPE]) ?? ""
         return actionType.hasSuffix("DismissAction")
+    }
+
+    /// The actionType of a pressed button (or "Default" when the content itself
+    /// was tapped / the button is unknown).
+    func buttonActionType(_ button: [String: Any]?) -> String {
+        return mapUtils.getString(button?[Definitions.NOTIFICATION_ACTION_TYPE] ?? "")
+            ?? "Default"
+    }
+
+    /// Whether a pressed button should auto-dismiss its notification.
+    /// `DismissAction` always dismisses; `KeepOnTop` never; otherwise honor the
+    /// button's `autoDismissible` flag (default true).
+    func shouldButtonAutoDismiss(_ button: [String: Any]?) -> Bool {
+        let actionType = buttonActionType(button)
+        if actionType.hasSuffix("DismissAction") { return true }
+        if actionType.hasSuffix("KeepOnTop") { return false }
+        return mapUtils.getBool(button?[Definitions.NOTIFICATION_AUTO_DISMISSIBLE] ?? "")
+            ?? true
     }
 
     private func now() -> String {

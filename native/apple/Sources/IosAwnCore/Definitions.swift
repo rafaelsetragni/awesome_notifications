@@ -14,6 +14,19 @@ public enum Definitions {
     public static let NOTIFICATION_BODY = "body"
     public static let NOTIFICATION_PAYLOAD = "payload"
     public static let NOTIFICATION_AUTO_DISMISSIBLE = "autoDismissible"
+    public static let NOTIFICATION_LAYOUT = "notificationLayout"
+    public static let NOTIFICATION_LARGE_ICON = "largeIcon"
+    public static let NOTIFICATION_BIG_PICTURE = "bigPicture"
+
+    // Action button fields
+    public static let NOTIFICATION_BUTTON_KEY = "key"
+    public static let NOTIFICATION_BUTTON_LABEL = "label"
+    public static let NOTIFICATION_BUTTON_ENABLED = "enabled"
+    public static let NOTIFICATION_REQUIRE_INPUT_TEXT = "requireInputText"
+    public static let NOTIFICATION_IS_DANGEROUS_OPTION = "isDangerousOption"
+    public static let NOTIFICATION_AUTHENTICATION_REQUIRED = "isAuthenticationRequired"
+    public static let NOTIFICATION_BUTTON_KEY_PRESSED = "buttonKeyPressed"
+    public static let NOTIFICATION_BUTTON_KEY_INPUT = "buttonKeyInput"
 
     // Permissions
     public static let NOTIFICATION_PERMISSIONS = "permissions"

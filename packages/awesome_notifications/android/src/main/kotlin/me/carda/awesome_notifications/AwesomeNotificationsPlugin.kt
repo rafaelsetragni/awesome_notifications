@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import androidx.core.app.RemoteInput
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -19,6 +20,7 @@ import io.flutter.plugin.common.PluginRegistry
 import java.util.TimeZone
 import me.carda.android_awn_core.AwesomeEventListener
 import me.carda.android_awn_core.AwesomeEventsReceiver
+import me.carda.android_awn_core.AwesomeMethodHandlerRegistry
 import me.carda.android_awn_core.AwesomeNotifications
 import me.carda.android_awn_core.Definitions
 import me.carda.android_awn_core.MapUtils
@@ -101,7 +103,12 @@ class AwesomeNotificationsPlugin :
 
             "createNewNotification" -> {
                 val data = call.arguments as? Map<String, Any?>
-                result.success(if (data != null) core.createNotification(data) else false)
+                if (data == null) {
+                    result.success(false)
+                } else {
+                    // Async: builds off the main thread; the result comes back on it.
+                    core.createNotification(data) { created -> result.success(created) }
+                }
             }
 
             "dismissNotification" -> {
@@ -136,7 +143,13 @@ class AwesomeNotificationsPlugin :
 
             "getPlatformVersion" -> result.success("Android ${Build.VERSION.RELEASE}")
 
-            else -> result.notImplemented()
+            else -> {
+                // Let registered decorators (e.g. localization) answer their methods.
+                val handled = AwesomeMethodHandlerRegistry.handle(
+                    call.method, call.arguments
+                ) { value -> result.success(value) }
+                if (!handled) result.notImplemented()
+            }
         }
     }
 
@@ -198,28 +211,61 @@ class AwesomeNotificationsPlugin :
         return false
     }
 
-    /** Emits a defaultAction when the app is (re)opened by tapping a notification. */
+    /**
+     * Emits an action event when the app is (re)opened by tapping a notification
+     * or one of its foreground (`Default`) action buttons. Non-foreground buttons
+     * never reach here — they broadcast to NotificationButtonReceiver instead.
+     */
     private fun handleNotificationIntent(intent: Intent) {
-        if (intent.action != Definitions.SELECT_NOTIFICATION) return
+        val action = intent.action ?: return
+        val isTap = action == Definitions.SELECT_NOTIFICATION
+        val isButton = action.startsWith(Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX)
+        if (!isTap && !isButton) return
+
         val builder = NotificationBuilder.getNewBuilder()
         val model = builder.notificationModel(intent) ?: return
-        val content = builder.contentMap(model)
+        var content = builder.contentMap(model)
 
-        if (builder.isDismissAction(content)) {
-            // A DismissAction tap dismisses + fires the dismiss event.
-            builder.readId(content)?.let { core.dismiss(it) }
+        val buttonKey =
+            if (isButton) intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_KEY_PRESSED) ?: ""
+            else ""
+        val button = builder.findButton(model, buttonKey)
+
+        if (isButton) {
+            // Carry the pressed key + any typed reply back to Dart.
+            content = content + (Definitions.NOTIFICATION_BUTTON_KEY_PRESSED to buttonKey)
+            RemoteInput.getResultsFromIntent(intent)
+                ?.getCharSequence(Definitions.NOTIFICATION_BUTTON_KEY_INPUT)
+                ?.let {
+                    content = content + (Definitions.NOTIFICATION_BUTTON_KEY_INPUT to it.toString())
+                }
+            if (builder.shouldButtonAutoDismiss(button)) {
+                builder.readId(content)?.let { core.dismiss(it) }
+            }
+        }
+
+        val isDismiss =
+            if (isButton) builder.buttonActionType(button).endsWith("DismissAction")
+            else builder.isDismissAction(content)
+
+        if (isDismiss) {
+            // A notification-level DismissAction tap also removes the notification
+            // (button dismissals were already handled by the auto-dismiss above).
+            if (!isButton) builder.readId(content)?.let { core.dismiss(it) }
             AwesomeEventsReceiver.notifyAwesomeEvent(
                 Definitions.EVENT_NOTIFICATION_DISMISSED,
                 builder.registerDismissedEvent(content, "Foreground")
             )
         } else {
+            val actionType = if (isButton) builder.buttonActionType(button) else "Default"
             AwesomeEventsReceiver.notifyAwesomeEvent(
                 Definitions.EVENT_DEFAULT_ACTION,
-                builder.registerActionEvent(content, "Foreground")
+                builder.registerActionEvent(content, "Foreground", actionType)
             )
         }
         // Consume so it is not re-emitted on the next attach / config change.
         intent.removeExtra(Definitions.NOTIFICATION_JSON)
+        intent.removeExtra(Definitions.NOTIFICATION_BUTTON_KEY_PRESSED)
         intent.action = null
     }
 
