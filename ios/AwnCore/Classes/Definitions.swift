@@ -97,6 +97,7 @@ public enum Definitions {
     public static let  CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED = "isNotificationAllowed"
     public static let  CHANNEL_METHOD_REQUEST_NOTIFICATIONS = "requestNotifications"
     public static let  CHANNEL_METHOD_CHECK_PERMISSIONS = "checkPermissions"
+    public static let  CHANNEL_METHOD_GET_PERMISSION_STATUSES = "getPermissionStatuses"
     public static let  CHANNEL_METHOD_SHOULD_SHOW_RATIONALE = "shouldShowRationale"
 
     public static let  CHANNEL_METHOD_DISMISS_NOTIFICATION = "dismissNotification"
@@ -190,6 +191,7 @@ public enum Definitions {
     public static let  NOTIFICATION_ENABLED = "enabled"
     public static let  NOTIFICATION_AUTO_DISMISSIBLE = "autoDismissible"
     public static let  NOTIFICATION_LOCKED = "locked"
+    public static let  NOTIFICATION_CRITICAL_ALERT = "criticalAlert"
     public static let  NOTIFICATION_DISPLAY_ON_FOREGROUND = "displayOnForeground"
     public static let  NOTIFICATION_DISPLAY_ON_BACKGROUND = "displayOnBackground"
     public static let  NOTIFICATION_ICON = "icon"

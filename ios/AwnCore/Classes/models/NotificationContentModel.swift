@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 public class NotificationContentModel : AbstractModel {
     
@@ -19,10 +20,15 @@ public class NotificationContentModel : AbstractModel {
     public var summary: String?
     public var showWhen: Bool?
     
-    public var actionButtons:[NotificationButtonModel]?
+    public var titleLocKey:String?
+    public var bodyLocKey:String?
+    public var titleLocArgs:[String]?
+    public var bodyLocArgs:[String]?
+    
     public var payload:[String:String?]?
     
     public var wakeUpScreen: Bool?
+    public var criticalAlert: Bool?
     public var playSound: Bool?
     public var customSound: String?
     public var locked: Bool?
@@ -58,28 +64,28 @@ public class NotificationContentModel : AbstractModel {
     public init(){}
     
     func registerCreateEvent(
-        inLifeCycle lifeCycle: NotificationLifeCycle,
+        withDisplayedDate createdDate: RealDateTime = RealDateTime.init(
+            fromTimeZone: TimeZone(identifier: "UTC")
+        ),
+        withLifeCycle lifeCycle: NotificationLifeCycle,
         fromSource createdSource: NotificationSource
     ) -> Bool {
-        if(self.createdDate == nil){
-            self.createdSource = createdSource
-            self.createdLifeCycle = lifeCycle
-            self.createdDate =
-                    RealDateTime.init(
-                        fromTimeZone: RealDateTime.utcTimeZone)
-            
-            return true
-        }
-        return false
+        if self.createdDate != nil { return false }
+        self.createdSource = createdSource
+        self.createdLifeCycle = lifeCycle
+        self.createdDate = createdDate
+        return true
     }
     
     public func registerDisplayedEvent(
-        inLifeCycle lifeCycle: NotificationLifeCycle
+        withDisplayedDate displayedDate: RealDateTime = RealDateTime.init(
+            fromTimeZone: TimeZone(identifier: "UTC")
+        ),
+        withLifeCycle lifeCycle: NotificationLifeCycle
     ){
+        if self.displayedDate != nil { return }
         self.displayedLifeCycle = lifeCycle
-        self.displayedDate =
-                RealDateTime.init(
-                    fromTimeZone: TimeZone(identifier: "UTC"))
+        self.displayedDate = displayedDate
     }
     
     public func registerLastDisplayedEvent(
@@ -94,7 +100,7 @@ public class NotificationContentModel : AbstractModel {
             
             if schedule == nil {
                 registerDisplayedEvent(
-                    inLifeCycle: lifeCycle
+                    withLifeCycle: lifeCycle
                 )
             }
             else {
@@ -109,8 +115,10 @@ public class NotificationContentModel : AbstractModel {
         }
     }
     
-    public func fromMap(arguments: [String : Any?]?) -> AbstractModel? {
-                
+    public convenience init?(fromMap arguments: [String : Any?]?){
+        if arguments?.isEmpty ?? true { return nil }
+        
+        self.init()
         self.id = MapUtils<Int>.getValueOrDefault(reference: Definitions.NOTIFICATION_ID, arguments: arguments)
         if((id ?? -1) < 0) {
             id = IntUtils.generateNextRandomId();
@@ -125,10 +133,16 @@ public class NotificationContentModel : AbstractModel {
         self.summary        = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_SUMMARY, arguments: arguments)
         self.showWhen       = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_SHOW_WHEN, arguments: arguments)
         
+        self.titleLocKey    = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_TITLE_KEY, arguments: arguments)
+        self.bodyLocKey     = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_BODY_KEY, arguments: arguments)
+        self.titleLocArgs   = MapUtils<[String]>.getValueOrDefault(reference: Definitions.NOTIFICATION_TITLE_ARGS, arguments: arguments)
+        self.bodyLocArgs    = MapUtils<[String]>.getValueOrDefault(reference: Definitions.NOTIFICATION_BODY_ARGS, arguments: arguments)
+        
         self.playSound             = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_PLAY_SOUND, arguments: arguments)
         self.customSound           = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_CUSTOM_SOUND, arguments: arguments)
         
         self.wakeUpScreen          = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_WAKE_UP_SCREEN, arguments: arguments)
+        self.criticalAlert         = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_CRITICAL_ALERT, arguments: arguments)
         self.locked                = MapUtils<Bool>.getValueOrDefault(reference: Definitions.NOTIFICATION_LOCKED, arguments: arguments)
         self.icon                  = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_ICON, arguments: arguments)
         self.largeIcon             = MapUtils<String>.getValueOrDefault(reference: Definitions.NOTIFICATION_LARGE_ICON, arguments: arguments)
@@ -167,8 +181,6 @@ public class NotificationContentModel : AbstractModel {
         if StringUtils.shared.isNullOrEmpty(self.bigPicture, considerWhiteSpaceAsEmpty: true) {
             self.bigPicture = nil
         }
-        
-        return self
     }
     
     public func toMap() -> [String : Any?] {
@@ -179,8 +191,16 @@ public class NotificationContentModel : AbstractModel {
         if(self.groupKey != nil) {mapData[Definitions.NOTIFICATION_GROUP_KEY] = self.groupKey}
         if(self.title != nil){ mapData[Definitions.NOTIFICATION_TITLE] = self.title }
         if(self.body != nil){ mapData[Definitions.NOTIFICATION_BODY] = self.body }
+        
+        
+        if(self.titleLocKey != nil){ mapData[Definitions.NOTIFICATION_TITLE_KEY] = self.titleLocKey }
+        if(self.bodyLocKey != nil){ mapData[Definitions.NOTIFICATION_BODY_KEY] = self.bodyLocKey }
+        if(self.titleLocArgs != nil){ mapData[Definitions.NOTIFICATION_TITLE_ARGS] = self.titleLocArgs }
+        if(self.bodyLocArgs != nil){ mapData[Definitions.NOTIFICATION_BODY_ARGS] = self.bodyLocArgs }
+        
         if(self.summary != nil){ mapData[Definitions.NOTIFICATION_SUMMARY] = self.summary }
         if(self.wakeUpScreen != nil){ mapData[Definitions.NOTIFICATION_WAKE_UP_SCREEN] = self.wakeUpScreen }
+        if(self.criticalAlert != nil){ mapData[Definitions.NOTIFICATION_CRITICAL_ALERT] = self.criticalAlert }
         if(self.showWhen != nil){ mapData[Definitions.NOTIFICATION_SHOW_WHEN] = self.showWhen }
         if(self.playSound != nil){ mapData[Definitions.NOTIFICATION_PLAY_SOUND] = self.playSound }
         if(self.customSound != nil){ mapData[Definitions.NOTIFICATION_CUSTOM_SOUND] = self.customSound }
@@ -215,13 +235,13 @@ public class NotificationContentModel : AbstractModel {
     
     func _processRetroCompatibility(fromArguments arguments: [String : Any?]?){
         if arguments?["autoCancel"] != nil {
-            Logger.w(NotificationButtonModel.TAG, "autoCancel is deprecated. Please use autoDismissible instead.")
+            Logger.shared.w(NotificationButtonModel.TAG, "autoCancel is deprecated. Please use autoDismissible instead.")
             autoDismissible = MapUtils<Bool>.getValueOrDefault(reference: "autoCancel", arguments: arguments)
         }
     }
     
     public func validate() throws {
-
+        
         if(IntUtils.isNullOrEmpty(id)){
             throw ExceptionFactory
                     .shared
@@ -267,15 +287,6 @@ public class NotificationContentModel : AbstractModel {
     }
     
     private func validateRequiredImages() throws {
-        if bigPicture == nil && largeIcon == nil {
-            throw ExceptionFactory
-                    .shared
-                    .createNewAwesomeException(
-                        className: NotificationContentModel.TAG,
-                        code: ExceptionCode.CODE_MISSING_ARGUMENTS,
-                        message: "bigPicture or largeIcon is required",
-                        detailedCode: ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".image.required")
-        }
     }
     
     private func validateIcon(_ icon:String?) throws {
