@@ -5,26 +5,33 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Example",
-            "cwd": "packages/awesome_notifications/example",
+            "name": "Complete Example",
+            "cwd": "examples/complete_example",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart"
         },
         {
-            "name": "Example (profile mode)",
-            "cwd": "packages/awesome_notifications/example",
+            "name": "Complete Example (profile mode)",
+            "cwd": "examples/complete_example",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
             "program": "lib/main.dart"
         },
         {
-            "name": "Example (release mode)",
-            "cwd": "packages/awesome_notifications/example",
+            "name": "Complete Example (release mode)",
+            "cwd": "examples/complete_example",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release",
+            "program": "lib/main.dart"
+        },
+        {
+            "name": "Example (Base)",
+            "cwd": "packages/awesome_notifications/example",
+            "request": "launch",
+            "type": "dart",
             "program": "lib/main.dart"
         },
         {
