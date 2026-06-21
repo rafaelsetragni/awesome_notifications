@@ -9,6 +9,7 @@ environment:
 # Packages that share a single, consistent dependency resolution (Dart 3.6+).
 workspace:
   - packages/awesome_notifications
+  - packages/awesome_notifications_localizations
 
 dev_dependencies:
   melos: ^7.0.0
