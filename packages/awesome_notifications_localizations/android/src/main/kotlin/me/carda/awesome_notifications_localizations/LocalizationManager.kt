@@ -27,6 +27,9 @@ class LocalizationManager private constructor() {
         appContext = context.applicationContext
     }
 
+    /** The application context, needed to resolve localized string resources. */
+    fun context(): Context? = appContext
+
     fun setLocalization(languageCode: String?): Boolean {
         val context = appContext ?: return false
         val code = (languageCode ?: systemLanguage(context)).lowercase()
