@@ -97,26 +97,163 @@ class _HomePageState extends State<HomePage> {
         ),
       );
 
-  // Localizations decorator: translated at build time based on the set language.
+  // Localizations decorator: the same notification declared in every language;
+  // translated at build time (text, images and button labels) to the language
+  // set with setLocalization.
   Future<void> _localized() => AwesomeNotifications().createNotification(
         content: NotificationContent(
           id: 6,
           channelKey: widget.channelKey,
-          title: 'Hello',
-          body: 'This is the default (en) text.',
+          title: 'This title is written in english',
+          body: 'Now it is really easy to translate a notification content, '
+              'including images and buttons!',
+          summary: 'Awesome Notifications Translations',
+          notificationLayout: NotificationLayout.BigPicture,
+          bigPicture: 'asset://assets/images/awn-rocks-en.jpg',
+          largeIcon: 'asset://assets/images/american.jpg',
           payload: {'origin': 'localized'},
         ),
+        actionButtons: [
+          NotificationActionButton(key: 'AGREED1', label: 'I agree'),
+          NotificationActionButton(key: 'AGREED2', label: 'I agree too'),
+        ],
         localizations: {
+          'pt-br': NotificationLocalization(
+            title: 'Este título está escrito em português do Brasil!',
+            body: 'Agora é muito fácil traduzir o conteúdo das notificações, '
+                'incluindo imagens e botões!',
+            summary: 'Traduções Awesome Notifications',
+            bigPicture: 'asset://assets/images/awn-rocks-pt-br.jpg',
+            largeIcon: 'asset://assets/images/brazilian.jpg',
+            buttonLabels: {
+              'AGREED1': 'Eu concordo!',
+              'AGREED2': 'Eu concordo também!'
+            },
+          ),
           'pt': NotificationLocalization(
-            title: 'Olá',
-            body: 'Este é o texto em português.',
+            title: 'Este título está escrito em português de Portugal!',
+            body: 'Agora é muito fácil traduzir o conteúdo das notificações, '
+                'incluindo imagens e botões!',
+            summary: 'Traduções Awesome Notifications',
+            bigPicture: 'asset://assets/images/awn-rocks-pt.jpg',
+            largeIcon: 'asset://assets/images/portuguese.jpg',
+            buttonLabels: {
+              'AGREED1': 'Eu concordo!',
+              'AGREED2': 'Eu concordo também!'
+            },
           ),
           'es': NotificationLocalization(
-            title: 'Hola',
-            body: 'Este es el texto en español.',
+            title: 'Este título está escrito en español!',
+            body: 'Ahora es muy fácil traducir el contenido de las '
+                'notificaciones, incluyendo imágenes y botones.',
+            summary: 'Traducciones de Awesome Notifications',
+            bigPicture: 'asset://assets/images/awn-rocks-es.jpg',
+            largeIcon: 'asset://assets/images/spanish.jpg',
+            buttonLabels: {
+              'AGREED1': 'Estoy de acuerdo',
+              'AGREED2': 'También estoy de acuerdo'
+            },
+          ),
+          'zh': NotificationLocalization(
+            title: '这个标题是用中文写的',
+            body: '现在，轻松翻译通知内容，包括图像和按钮！',
+            bigPicture: 'asset://assets/images/awn-rocks-zh.jpg',
+            largeIcon: 'asset://assets/images/chinese.jpg',
+            buttonLabels: {'AGREED1': '我同意', 'AGREED2': '我也同意'},
+          ),
+          'ko': NotificationLocalization(
+            title: '이 타이틀은 한국어로 작성되었습니다',
+            body: '이제 이미지 및 버튼을 포함한 알림 콘텐츠를 쉽게 번역할 수 있습니다!',
+            bigPicture: 'asset://assets/images/awn-rocks-ko.jpg',
+            largeIcon: 'asset://assets/images/korean.jpg',
+            buttonLabels: {'AGREED1': '동의합니다', 'AGREED2': '저도 동의합니다'},
+          ),
+          'de': NotificationLocalization(
+            title: 'Dieser Titel ist in Deutsch geschrieben',
+            body: 'Jetzt ist es wirklich einfach, den Inhalt einer '
+                'Benachrichtigung zu übersetzen, einschließlich Bilder und '
+                'Schaltflächen!',
+            bigPicture: 'asset://assets/images/awn-rocks-de.jpg',
+            largeIcon: 'asset://assets/images/german.jpg',
+            buttonLabels: {
+              'AGREED1': 'Ich stimme zu',
+              'AGREED2': 'Ich stimme auch zu'
+            },
           ),
         },
       );
+
+  // Title/body come from app string resources (titleLocKey/bodyLocKey) resolved
+  // for the current language; images and button labels come from the block.
+  Future<void> _localizedKeys() => AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 6,
+          channelKey: widget.channelKey,
+          title: 'Original title in English',
+          body: 'Original body in English',
+          titleLocKey: 'not_loc_key',
+          bodyLocKey: 'not_loc_key',
+          titleLocArgs: ['title'],
+          bodyLocArgs: ['body'],
+          summary: 'Awesome Notifications Translations',
+          notificationLayout: NotificationLayout.BigPicture,
+          bigPicture: 'asset://assets/images/awn-rocks-en.jpg',
+          largeIcon: 'asset://assets/images/american.jpg',
+          payload: {'origin': 'localized-keys'},
+        ),
+        actionButtons: [
+          NotificationActionButton(key: 'AGREED1', label: 'I agree'),
+          NotificationActionButton(key: 'AGREED2', label: 'I agree too'),
+        ],
+        localizations: {
+          'pt-br': NotificationLocalization(
+            bigPicture: 'asset://assets/images/awn-rocks-pt-br.jpg',
+            largeIcon: 'asset://assets/images/brazilian.jpg',
+            buttonLabels: {
+              'AGREED1': 'Eu concordo!',
+              'AGREED2': 'Eu concordo também!'
+            },
+          ),
+          'pt': NotificationLocalization(
+            bigPicture: 'asset://assets/images/awn-rocks-pt.jpg',
+            largeIcon: 'asset://assets/images/portuguese.jpg',
+            buttonLabels: {
+              'AGREED1': 'Eu concordo!',
+              'AGREED2': 'Eu concordo também!'
+            },
+          ),
+          'es': NotificationLocalization(
+            bigPicture: 'asset://assets/images/awn-rocks-es.jpg',
+            largeIcon: 'asset://assets/images/spanish.jpg',
+            buttonLabels: {
+              'AGREED1': 'Estoy de acuerdo',
+              'AGREED2': 'También estoy de acuerdo'
+            },
+          ),
+          'zh': NotificationLocalization(
+            bigPicture: 'asset://assets/images/awn-rocks-zh.jpg',
+            largeIcon: 'asset://assets/images/chinese.jpg',
+            buttonLabels: {'AGREED1': '我同意', 'AGREED2': '我也同意'},
+          ),
+          'ko': NotificationLocalization(
+            bigPicture: 'asset://assets/images/awn-rocks-ko.jpg',
+            largeIcon: 'asset://assets/images/korean.jpg',
+            buttonLabels: {'AGREED1': '동의합니다', 'AGREED2': '저도 동의합니다'},
+          ),
+          'de': NotificationLocalization(
+            bigPicture: 'asset://assets/images/awn-rocks-de.jpg',
+            largeIcon: 'asset://assets/images/german.jpg',
+            buttonLabels: {
+              'AGREED1': 'Ich stimme zu',
+              'AGREED2': 'Ich stimme auch zu'
+            },
+          ),
+        },
+      );
+
+  // Sets the decorator's target language (null = system default).
+  Future<void> _setLanguage(String? code) =>
+      AwesomeNotifications().setLocalization(languageCode: code);
 
   @override
   Widget build(BuildContext context) {
@@ -178,16 +315,26 @@ class _HomePageState extends State<HomePage> {
           SimpleButton('Dismiss on tap (DismissAction)',
               onPressed: _dismissOnTap),
           TextDivisor(title: 'Localizations (decorator)'),
-          SimpleButton('Set language: Portuguese (pt)',
-              onPressed: () =>
-                  AwesomeNotifications().setLocalization(languageCode: 'pt')),
-          SimpleButton('Set language: Spanish (es)',
-              onPressed: () =>
-                  AwesomeNotifications().setLocalization(languageCode: 'es')),
-          SimpleButton('Set language: English (en)',
-              onPressed: () =>
-                  AwesomeNotifications().setLocalization(languageCode: 'en')),
           SimpleButton('Show localized notification', onPressed: _localized),
+          SimpleButton('Show notification using localization Keys',
+              onPressed: _localizedKeys),
+          const SizedBox(height: 16),
+          SimpleButton('Set language: system default',
+              onPressed: () => _setLanguage(null)),
+          SimpleButton('Set language: English 🇺🇸',
+              onPressed: () => _setLanguage('en')),
+          SimpleButton('Set language: Brazilian Portuguese 🇧🇷',
+              onPressed: () => _setLanguage('pt-br')),
+          SimpleButton('Set language: Portuguese 🇵🇹',
+              onPressed: () => _setLanguage('pt')),
+          SimpleButton('Set language: Spanish 🇪🇸',
+              onPressed: () => _setLanguage('es')),
+          SimpleButton('Set language: Chinese 🇨🇳',
+              onPressed: () => _setLanguage('zh')),
+          SimpleButton('Set language: Korean 🇰🇷',
+              onPressed: () => _setLanguage('ko')),
+          SimpleButton('Set language: German 🇩🇪',
+              onPressed: () => _setLanguage('de')),
           const SizedBox(height: 20),
         ],
       ),
