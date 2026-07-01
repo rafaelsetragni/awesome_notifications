@@ -95,18 +95,24 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     required NotificationContent content,
     NotificationSchedule? schedule,
     List<NotificationActionButton>? actionButtons,
-    Map<String, NotificationLocalization>? localizations,
+    List<NotificationExtension>? extensions,
   }) async {
     validateId(content.id!);
 
-    final bool wasCreated = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_CREATE_NOTIFICATION,
-        NotificationModel(
-                content: content,
-                schedule: schedule,
-                actionButtons: actionButtons,
-                localizations: localizations)
-            .toMap());
+    final Map<String, dynamic> data = NotificationModel(
+      content: content,
+      schedule: schedule,
+      actionButtons: actionButtons,
+    ).toMap();
+
+    // Merge whatever add-on extensions contribute (e.g. localizations). The core
+    // doesn't know what these are — it just forwards the extra map entries.
+    for (final extension in extensions ?? const <NotificationExtension>[]) {
+      data.addAll(extension.toMap());
+    }
+
+    final bool wasCreated =
+        await methodChannel.invokeMethod(CHANNEL_METHOD_CREATE_NOTIFICATION, data);
 
     return wasCreated;
   }
@@ -115,37 +121,42 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   Future<bool> createNotificationFromJsonData(
       Map<String, dynamic> mapData) async {
     try {
-      if (mapData[NOTIFICATION_CONTENT] is String) {
-        mapData[NOTIFICATION_CONTENT] =
-            json.decode(mapData[NOTIFICATION_CONTENT]);
-      }
-
-      if (mapData[NOTIFICATION_SCHEDULE] is String) {
-        mapData[NOTIFICATION_SCHEDULE] =
-            json.decode(mapData[NOTIFICATION_SCHEDULE]);
-      }
-
-      if (mapData[NOTIFICATION_BUTTONS] is String) {
-        mapData[NOTIFICATION_BUTTONS] =
-            json.decode(mapData[NOTIFICATION_BUTTONS]);
-      }
-
-      if (mapData[NOTIFICATION_LOCALIZATIONS] is String) {
-        mapData[NOTIFICATION_LOCALIZATIONS] =
-            json.decode(mapData[NOTIFICATION_LOCALIZATIONS]);
+      // FCM data arrives as a flat Map<String, String>, so work on a typed copy.
+      // Normalize every top-level string that parses as a JSON object/array —
+      // this covers content/schedule/actionButtons, the `localizations` block and
+      // any future add-on key, without the core needing to know them by name.
+      final Map<String, dynamic> normalized = Map<String, dynamic>.from(mapData);
+      for (final String key in normalized.keys.toList()) {
+        final dynamic value = normalized[key];
+        if (value is String) {
+          try {
+            final dynamic decoded = json.decode(value);
+            if (decoded is Map || decoded is List) normalized[key] = decoded;
+          } catch (_) {
+            // Not JSON — keep the original string value.
+          }
+        }
       }
 
       // Invalid Notification
       NotificationModel? notificationModel =
-          NotificationModel().fromMap(mapData);
+          NotificationModel().fromMap(normalized);
       if (notificationModel == null) {
         throw Exception('Notification map data is invalid');
       }
 
-      return createNotification(
-          content: notificationModel.content!,
-          schedule: notificationModel.schedule,
-          actionButtons: notificationModel.actionButtons);
+      // Forward the normalized known sections AND preserve any extra top-level
+      // keys from the payload (e.g. `localizations` from a push, or other add-on
+      // data) so the native side still receives the original JSON shape.
+      final Map<String, dynamic> data = notificationModel.toMap();
+      for (final MapEntry<String, dynamic> entry in normalized.entries) {
+        data.putIfAbsent(entry.key, () => entry.value);
+      }
+
+      final bool wasCreated =
+          await methodChannel.invokeMethod(CHANNEL_METHOD_CREATE_NOTIFICATION, data);
+
+      return wasCreated;
     } catch (e) {
       return false;
     }
@@ -263,7 +274,6 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     List<NotificationChannel> channels, {
     List<NotificationChannelGroup>? channelGroups,
     bool debug = false,
-    String? languageCode,
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -303,10 +313,6 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
       INITIALIZE_CHANNELS_GROUPS: serializedChannelGroups,
       BACKGROUND_HANDLE: dartCallbackReference!.toRawHandle()
     });
-
-    if (languageCode != null) {
-      await setLocalization(languageCode: languageCode);
-    }
 
     AwesomeNotifications.localTimeZoneIdentifier = await methodChannel
         .invokeMethod(CHANNEL_METHOD_GET_LOCAL_TIMEZONE_IDENTIFIER);
@@ -481,18 +487,6 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   Future<void> showNotificationConfigPage({String? channelKey}) async {
     await methodChannel.invokeMethod(
         CHANNEL_METHOD_SHOW_NOTIFICATION_PAGE, channelKey);
-  }
-
-  @override
-  Future<String> getLocalization() async {
-    return await methodChannel.invokeMethod(CHANNEL_METHOD_GET_LOCALIZATION);
-  }
-
-  @override
-  Future<bool> setLocalization({required String? languageCode}) async {
-    var success = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_SET_LOCALIZATION, languageCode);
-    return success;
   }
 
   @override

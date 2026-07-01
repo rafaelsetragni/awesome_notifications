@@ -3,14 +3,13 @@ import 'package:awesome_notifications/src/exceptions/awesome_notifications_excep
 import 'package:awesome_notifications/src/models/model.dart';
 import 'package:awesome_notifications/src/models/notification_action_button.dart';
 import 'package:awesome_notifications/src/models/notification_content.dart';
-import 'package:awesome_notifications/src/models/notification_localization.dart';
 import 'package:awesome_notifications/src/models/notification_schedule.dart';
 
 /// A model class representing a single notification instance.
 ///
 /// The [NotificationModel] class encapsulates all the information needed to
 /// display a single notification, including the notification's content,
-/// schedule, action buttons, and localizations.
+/// schedule, and action buttons.
 ///
 /// Scheduling is provided by an opt-in decorator package: the core keeps the
 /// abstract [NotificationSchedule] slot (so serialization stays polymorphic and
@@ -29,7 +28,6 @@ class NotificationModel extends Model {
   NotificationContent? _content;
   NotificationSchedule? _schedule;
   List<NotificationActionButton>? _actionButtons;
-  Map<String, NotificationLocalization>? _localizations;
 
   /// The content of the notification.
   NotificationContent? get content => _content;
@@ -40,20 +38,15 @@ class NotificationModel extends Model {
   /// The action buttons for the notification.
   List<NotificationActionButton>? get actionButtons => _actionButtons;
 
-  /// The localizations for the notification.
-  Map<String, NotificationLocalization>? get localizations => _localizations;
-
   /// Creates a new instance of the [NotificationModel] class with the given
-  /// content, schedule, action buttons, and localizations.
+  /// content, schedule, and action buttons.
   NotificationModel({
     NotificationContent? content,
     NotificationSchedule? schedule,
     List<NotificationActionButton>? actionButtons,
-    Map<String, NotificationLocalization>? localizations,
   })  : _content = content,
         _schedule = schedule,
-        _actionButtons = actionButtons,
-        _localizations = localizations;
+        _actionButtons = actionButtons;
 
   /// Imports data from a serializable object
   @override
@@ -62,7 +55,6 @@ class NotificationModel extends Model {
       _content = _extractContentFromMap(mapData);
       _schedule = _extractScheduleFromMap(mapData);
       _actionButtons = _extractButtonsFromMap(mapData);
-      _localizations = _extractLocalizationsFromMap(mapData);
     } catch (e) {
       return null;
     }
@@ -109,28 +101,6 @@ class NotificationModel extends Model {
     return finalList;
   }
 
-  Map<String, NotificationLocalization>? _extractLocalizationsFromMap(
-      Map<String, dynamic> mapData) {
-    if (mapData[NOTIFICATION_LOCALIZATIONS] is! Map<String, dynamic>) {
-      return null;
-    }
-    if (mapData[NOTIFICATION_LOCALIZATIONS].isEmpty) return null;
-
-    Map<String, NotificationLocalization> finalLocalizations = {};
-
-    for (MapEntry<String, dynamic> entry
-        in mapData[NOTIFICATION_LOCALIZATIONS].entries) {
-      if (entry.value is! Map<String, dynamic>) continue;
-      var localization = NotificationLocalization().fromMap(entry.value);
-      if (localization == null) continue;
-      localization.validate();
-
-      finalLocalizations[entry.key] = localization;
-    }
-
-    return finalLocalizations;
-  }
-
   /// Exports all content into a serializable object
   @override
   Map<String, dynamic> toMap() => {
@@ -141,12 +111,6 @@ class NotificationModel extends Model {
             for (NotificationActionButton button in _actionButtons!)
               button.toMap()
           ],
-        if (_localizations?.isNotEmpty ?? false)
-          NOTIFICATION_LOCALIZATIONS: {
-            for (MapEntry<String, NotificationLocalization> localization
-                in _localizations!.entries)
-              localization.key: localization.value.toMap()
-          },
       };
 
   @override

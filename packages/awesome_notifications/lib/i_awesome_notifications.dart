@@ -26,11 +26,6 @@ abstract class IAwesomeNotifications {
   /// The optional [debug] parameter enables verbose logging in Awesome
   /// Notifications.
   ///
-  /// The optional [languageCode] parameter is a `String` that represents the
-  /// localization code for translating notification content. If specified, this
-  /// code will be used to translate notification titles, bodies, and other
-  /// contents into the appropriate language.
-  ///
   /// This method returns a [Future] that resolves to `true` if the initialization
   /// was successful, or `false` if an error occurred.
   Future<bool> initialize(
@@ -38,7 +33,6 @@ abstract class IAwesomeNotifications {
     List<NotificationChannel> channels, {
     List<NotificationChannelGroup>? channelGroups,
     bool debug = false,
-    String? languageCode,
   });
 
   /// Defines the global or static methods that will receive notification events.
@@ -98,10 +92,6 @@ abstract class IAwesomeNotifications {
   /// [NotificationActionButton] objects that represent the action buttons to be
   /// displayed on the notification.
   ///
-  /// The optional [localizations] parameter is a [Map] of
-  /// [NotificationLocalization] objects that represent the localized content of
-  /// the notification, such as the title and body text in different languages.
-  ///
   /// This method returns a [Future] that resolves to `true` if the notification
   /// was successfully created, or `false` if an error occurred.
   ///
@@ -113,18 +103,14 @@ abstract class IAwesomeNotifications {
   /// provided, they will be displayed on the notification to allow the user to
   /// take specific actions in response to the notification.
   ///
-  /// The [localizations] parameter can be used to provide localized versions of
-  /// the notification content, such as the title and body text in different
-  /// languages. To provide localized content, create a [NotificationLocalization]
-  /// object for each language, and include them in a [Map] that maps the language
-  /// codes as keys (e.g. "en", "pt-br", "es", etc.) to their corresponding localizations.
-  /// When the notification is displayed, the appropriate localization will be selected
-  /// based on the user's language preferences or the default system language.
+  /// The optional [extensions] let opt-in add-on packages attach extra data to
+  /// the notification (for example, per-language translations via the
+  /// `awesome_notifications_localizations` package's `NotificationLocalizations`).
   Future<bool> createNotification({
     required NotificationContent content,
     NotificationSchedule? schedule,
     List<NotificationActionButton>? actionButtons,
-    Map<String, NotificationLocalization>? localizations,
+    List<NotificationExtension>? extensions,
   });
 
   /// Creates a new notification based on a map that is similar to the map
@@ -513,30 +499,6 @@ abstract class IAwesomeNotifications {
     NotificationSchedule schedule, {
     DateTime? fixedDate,
   });
-
-  /// The [setLocalization] method is used to set the desired localization for
-  /// notifications. It takes a required [languageCode] parameter, which is an
-  /// optional, case-insensitive [String] that represents the language code for
-  /// the desired localization (e.g. "en" for English, "pt-br" for Brazilian
-  /// Portuguese, "es" for Spanish, etc.). If the [languageCode] parameter is
-  /// `null` or not provided, the default localization will be loaded from the
-  /// device system.
-  ///
-  /// This method returns a [Future] that resolves to [true] if the localization
-  /// was successfully set, or [false] if the localization could not be set for
-  /// any reason (e.g. the specified language is not supported).
-  ///
-  /// The translation value for the title or  is defined on the parameter
-  Future<bool> setLocalization({required String? languageCode});
-
-  /// Gets the current localization code used by the plugin for notification content.
-  ///
-  /// This method returns a [Future] that resolves to a [String] representing
-  /// the current localization code. The localization code is a two-letter language
-  /// code (e.g. "en" for English, "pt" for Portuguese) or a language code combined
-  /// with a region code (e.g. "pt-br" for Brazilian Portuguese). If no localization
-  /// has been set, this method will return the system's default language code.
-  Future<String> getLocalization();
 
   /// Returns the identifier for the UTC time zone.
   ///

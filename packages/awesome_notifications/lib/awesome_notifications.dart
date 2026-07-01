@@ -1,13 +1,12 @@
 import 'dart:typed_data';
 
-import 'package:awesome_notifications/src/models/notification_localization.dart';
-
 import 'awesome_notifications_platform.dart'
     if (dart.library.html) 'awesome_notifications_platform_web.dart';
 import 'i_awesome_notifications.dart';
 import 'src/enumerators/notification_life_cycle.dart';
 import 'src/enumerators/notification_permission.dart';
 import 'src/models/notification_action_button.dart';
+import 'src/models/notification_extension.dart';
 import 'src/models/notification_channel.dart';
 import 'src/models/notification_channel_group.dart';
 import 'src/models/notification_content.dart';
@@ -39,7 +38,7 @@ export 'src/models/notification_action_button.dart';
 export 'src/models/notification_channel.dart';
 export 'src/models/notification_channel_group.dart';
 export 'src/models/notification_content.dart';
-export 'src/models/notification_localization.dart';
+export 'src/models/notification_extension.dart';
 export 'src/models/notification_model.dart';
 export 'src/models/notification_schedule.dart';
 export 'src/models/received_models/received_action.dart';
@@ -133,13 +132,13 @@ class AwesomeNotifications implements IAwesomeNotifications {
     required NotificationContent content,
     NotificationSchedule? schedule,
     List<NotificationActionButton>? actionButtons,
-    Map<String, NotificationLocalization>? localizations,
+    List<NotificationExtension>? extensions,
   }) {
     return AwesomeNotificationsPlatform.instance.createNotification(
         content: content,
         schedule: schedule,
         actionButtons: actionButtons,
-        localizations: localizations);
+        extensions: extensions);
   }
 
   @override
@@ -231,11 +230,10 @@ class AwesomeNotifications implements IAwesomeNotifications {
     List<NotificationChannel> channels, {
     List<NotificationChannelGroup>? channelGroups,
     bool debug = false,
-    String? languageCode,
   }) {
     return AwesomeNotificationsPlatform.instance.initialize(
         defaultIcon, channels,
-        channelGroups: channelGroups, languageCode: languageCode, debug: debug);
+        channelGroups: channelGroups, debug: debug);
   }
 
   @override
@@ -331,17 +329,6 @@ class AwesomeNotifications implements IAwesomeNotifications {
   Future<void> showNotificationConfigPage({String? channelKey}) {
     return AwesomeNotificationsPlatform.instance
         .showNotificationConfigPage(channelKey: channelKey);
-  }
-
-  @override
-  Future<String> getLocalization() async {
-    return AwesomeNotificationsPlatform.instance.getLocalization();
-  }
-
-  @override
-  Future<bool> setLocalization({required String? languageCode}) async {
-    return AwesomeNotificationsPlatform.instance
-        .setLocalization(languageCode: languageCode);
   }
 
   @override

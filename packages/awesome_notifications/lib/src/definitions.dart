@@ -26,7 +26,6 @@ const INITIALIZE_CHANNELS_GROUPS = "initializeChannelGroups";
 const NOTIFICATION_CONTENT = "content";
 const NOTIFICATION_SCHEDULE = "schedule";
 const NOTIFICATION_BUTTONS = "actionButtons";
-const NOTIFICATION_LOCALIZATIONS = "localizations";
 
 const FOREGROUND_NOTIFICATION_MODEL = "notificationModel";
 const FOREGROUND_START_MODE = "startMode";
@@ -71,9 +70,6 @@ const CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL = 'removeNotificationChannel';
 const CHANNEL_METHOD_IS_FCM_AVAILABLE = 'isFirebaseAvailable';
 const CHANNEL_METHOD_GET_FCM_TOKEN = 'getFirebaseToken';
 const CHANNEL_METHOD_NEW_FCM_TOKEN = 'newTokenReceived';
-
-const CHANNEL_METHOD_SET_LOCALIZATION = 'setLocalization';
-const CHANNEL_METHOD_GET_LOCALIZATION = 'getLocalization';
 
 const CHANNEL_METHOD_CREATE_NOTIFICATION = 'createNewNotification';
 
