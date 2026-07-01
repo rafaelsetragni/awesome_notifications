@@ -1285,7 +1285,7 @@ However, for cases where precise schedule execution is a must, there are some fe
 
 - Set the notification's category to a critical one, such as Alarm, Reminder, or Call.
 - Set the `preciseAlarm` property to true. This feature allows the system to schedule notifications to be sent at an exact time, even if the device is in low-power mode. For Android versions greater than or equal to 12, you need to explicitly request user consent to enable this feature. You can request the permission with `requestPermissionToSendNotifications` or take the user to the permission page by calling `showAlarmPage`.
-- Set the `criticalAlerts` channel property and notification content property to true. This feature allows you to show notifications and play sounds even when the device is on silent or Do Not Disturb mode. Due to its sensitivity, this feature requires special authorization from Apple on iOS and explicit user consent on Android versions greater than or equal to 11. On iOS, you must submit a request for authorization to Apple to enable it, as described in [this post](https://medium.com/@shashidharyamsani/implementing-ios-critical-alerts-7d82b4bb5026).
+- Set the `criticalAlerts` channel property to true (it is a channel-only capability — there is no per-notification content flag). This feature allows you to show notifications and play sounds even when the device is on silent or Do Not Disturb mode. Due to its sensitivity, this feature requires special authorization from Apple on iOS and explicit user consent on Android versions greater than or equal to 11. On iOS, you must submit a request for authorization to Apple to enable it, as described in [this post](https://medium.com/@shashidharyamsani/implementing-ios-critical-alerts-7d82b4bb5026).
 
 To enable precise alarms, you need to add the `SCHEDULE_EXACT_ALARM` permission to your app's `AndroidManifest.xml` file, located in the ***Android/app/src/main/*** folder:
 
@@ -1318,7 +1318,7 @@ To enable critical alerts, you need to add the `ACCESS_NOTIFICATION_POLICY` perm
 Critical alerts on iOS are **opt-in** and require Apple's explicit approval. Apps without the entitlement continue to work normally; critical flags are ignored and notifications are delivered with standard interruption levels.
 
 1. Request the `com.apple.developer.usernotifications.critical-alerts` entitlement from Apple and add it to your **Runner** target. If you use FCM with a Notification Service Extension, add the same entitlement to the **extension** target as well.
-2. Register a channel with `criticalAlerts: true` and/or set `criticalAlert: true` on `NotificationContent`.
+2. Register a channel with `criticalAlerts: true` and post your notifications to it. Critical alerts are a channel-only capability (identical on iOS and Android); there is no per-notification `criticalAlert` flag.
 3. Request `NotificationPermission.CriticalAlert` explicitly via `requestPermissionToSendNotifications`.
 4. For FCM, include `mutable_content: true` and the Awesome notification payload with the correct `channelKey`.
 
