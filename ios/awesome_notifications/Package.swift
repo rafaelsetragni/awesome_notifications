@@ -16,7 +16,7 @@ let package = Package(
         // IosAwnCore is a standalone (non-Flutter) Swift package referenced by its released
         // tag — Flutter symlinks plugins into ephemeral/Packages/.packages, which breaks
         // relative paths to non-plugin packages, so it must be a URL+tag (not a local path).
-        .package(url: "https://github.com/rafaelsetragni/IosAwnCore.git", from: "0.12.0"),
+        .package(url: "https://github.com/rafaelsetragni/IosAwnCore.git", from: "0.12.1"),
     ],
     targets: [
         .target(
