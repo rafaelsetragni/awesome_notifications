@@ -1,13 +1,5 @@
-// Example for the awesome_notifications_localizations decorator.
-//
-// Same skeleton as the base awesome_notifications example — the difference is
-// the test buttons: here they exercise the localization feature. Just by
-// depending on this package, notifications are translated at build time on the
-// native side, according to the language set with setLocalization.
-//
-// NOTE: the native translation is currently Android-only — on iOS the decorator
-// is a no-op placeholder, so the default (untranslated) content is shown there.
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications_localizations/awesome_notifications_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 
@@ -140,7 +132,7 @@ class NotificationController {
   /// Sets the language the decorator translates notifications into.
   static Future<bool> setLanguage(String? languageCode) async {
     try {
-      await AwesomeNotifications().setLocalization(languageCode: languageCode);
+      await AwesomeNotificationsLocalizations().setLocalization(languageCode: languageCode);
       _showEventSnackBar('Language: ${languageCode ?? 'system default'}',
           mainColor);
       return true;
@@ -172,7 +164,8 @@ class NotificationController {
         NotificationActionButton(key: 'AGREED1', label: 'I agree'),
         NotificationActionButton(key: 'AGREED2', label: 'I agree too'),
       ],
-      localizations: {
+      extensions: [
+        NotificationLocalizations({
         'pt-br': NotificationLocalization(
           title: 'Este título está escrito em português do Brasil!',
           body: 'Agora é muito fácil traduzir o conteúdo das notificações, '
@@ -225,7 +218,8 @@ class NotificationController {
           largeIcon: 'asset://assets/images/german.jpg',
           buttonLabels: {'AGREED1': 'Ich stimme zu', 'AGREED2': 'Ich stimme auch zu'},
         ),
-      },
+        }),
+      ],
     );
   }
 
@@ -253,7 +247,8 @@ class NotificationController {
         NotificationActionButton(key: 'AGREED1', label: 'I agree'),
         NotificationActionButton(key: 'AGREED2', label: 'I agree too'),
       ],
-      localizations: {
+      extensions: [
+        NotificationLocalizations({
         'pt-br': NotificationLocalization(
           bigPicture: 'asset://assets/images/awn-rocks-pt-br.jpg',
           largeIcon: 'asset://assets/images/brazilian.jpg',
@@ -287,7 +282,8 @@ class NotificationController {
           largeIcon: 'asset://assets/images/german.jpg',
           buttonLabels: {'AGREED1': 'Ich stimme zu', 'AGREED2': 'Ich stimme auch zu'},
         ),
-      },
+        }),
+      ],
     );
   }
 
@@ -387,7 +383,7 @@ class _HomePageState extends State<HomePage> {
     AwesomeNotifications().isNotificationAllowed().then(
       (allowed) => setState(() => _allowed = allowed),
     );
-    AwesomeNotifications().getLocalization().then(
+    AwesomeNotificationsLocalizations().getLocalization().then(
       (code) => setState(() => _language = code),
     );
   }
@@ -399,7 +395,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _setLanguage(String? code) async {
     if (await NotificationController.setLanguage(code)) {
-      final current = await AwesomeNotifications().getLocalization();
+      final current = await AwesomeNotificationsLocalizations().getLocalization();
       setState(() => _language = current);
     }
   }

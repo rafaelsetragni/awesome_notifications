@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications_localizations/awesome_notifications_localizations.dart';
 
 import '../common_widgets/led_light.dart';
 import '../common_widgets/simple_button.dart';
@@ -100,7 +101,8 @@ class _HomePageState extends State<HomePage> {
   // Localizations decorator: the same notification declared in every language;
   // translated at build time (text, images and button labels) to the language
   // set with setLocalization.
-  Future<void> _localized() => AwesomeNotifications().createNotification(
+  Future<void> _localized() =>
+      AwesomeNotifications().createNotification(
         content: NotificationContent(
           id: 6,
           channelKey: widget.channelKey,
@@ -117,7 +119,8 @@ class _HomePageState extends State<HomePage> {
           NotificationActionButton(key: 'AGREED1', label: 'I agree'),
           NotificationActionButton(key: 'AGREED2', label: 'I agree too'),
         ],
-        localizations: {
+        extensions: [
+          NotificationLocalizations({
           'pt-br': NotificationLocalization(
             title: 'Este título está escrito em português do Brasil!',
             body: 'Agora é muito fácil traduzir o conteúdo das notificações, '
@@ -180,12 +183,14 @@ class _HomePageState extends State<HomePage> {
               'AGREED2': 'Ich stimme auch zu'
             },
           ),
-        },
+          }),
+        ],
       );
 
   // Title/body come from app string resources (titleLocKey/bodyLocKey) resolved
   // for the current language; images and button labels come from the block.
-  Future<void> _localizedKeys() => AwesomeNotifications().createNotification(
+  Future<void> _localizedKeys() =>
+      AwesomeNotifications().createNotification(
         content: NotificationContent(
           id: 6,
           channelKey: widget.channelKey,
@@ -205,7 +210,8 @@ class _HomePageState extends State<HomePage> {
           NotificationActionButton(key: 'AGREED1', label: 'I agree'),
           NotificationActionButton(key: 'AGREED2', label: 'I agree too'),
         ],
-        localizations: {
+        extensions: [
+          NotificationLocalizations({
           'pt-br': NotificationLocalization(
             bigPicture: 'asset://assets/images/awn-rocks-pt-br.jpg',
             largeIcon: 'asset://assets/images/brazilian.jpg',
@@ -248,12 +254,13 @@ class _HomePageState extends State<HomePage> {
               'AGREED2': 'Ich stimme auch zu'
             },
           ),
-        },
+          }),
+        ],
       );
 
   // Sets the decorator's target language (null = system default).
   Future<void> _setLanguage(String? code) =>
-      AwesomeNotifications().setLocalization(languageCode: code);
+      AwesomeNotificationsLocalizations().setLocalization(languageCode: code);
 
   @override
   Widget build(BuildContext context) {

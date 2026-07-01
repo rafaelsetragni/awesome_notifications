@@ -35,6 +35,13 @@
             "program": "lib/main.dart"
         },
         {
+            "name": "Example (Localizations)",
+            "cwd": "packages/awesome_notifications_localizations/example",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart"
+        },
+        {
             "name": "All tests coverage",
             "cwd": "packages/awesome_notifications",
             "request": "launch",
