@@ -331,9 +331,7 @@ class NotificationUtils {
               id: id,
               channelKey: 'scheduled',
               title: 'Critical Alert',
-              body: 'This notification uses the critical alert channel and content flag',
-              criticalAlert: true,
-              playSound: true,
+              body: 'This notification is critical because its channel is a critical alert channel',
               wakeUpScreen: true));
 
       debugPrint(success ? 'Critical notification created successfully' : '');

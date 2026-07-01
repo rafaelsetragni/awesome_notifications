@@ -1,3 +1,15 @@
+## [0.12.1] - 2026-07-01
+### Changed
+- **Critical alerts are now a channel-only capability, with the same rule on iOS and Android.** A notification is delivered as a critical alert only when its channel is registered as critical (`NotificationChannel(criticalAlerts: true)`). This mirrors Android, where Do-Not-Disturb bypass is inherently a channel property with no per-notification override, giving one predictable cross-platform behavior.
+### Fixed
+- **iOS: the critical-alert availability check no longer blocks the notification build.** The entitlement/permission is resolved asynchronously and read from cache during the build, so the result is always correct — including inside notification service extensions — without stalling delivery.
+- **Android: critical alerts no longer override the device's global Do-Not-Disturb settings.** The global `setInterruptionFilter`/`setNotificationPolicy` override was removed; critical delivery relies solely on the per-channel `setBypassDnd`, which is app-scoped and respects the user's system-wide choices.
+- **iOS: `getInitialNotificationAction()` no longer hangs — or drops the launch action — under the UIScene lifecycle.** The notification-center delegate is now claimed at plugin registration and the launch state is settled on activation, so an app launched by tapping a notification captures its initial action under both the classic and UIScene lifecycles.
+### Breaking changes
+- **`NotificationContent.criticalAlert` was removed.** Critical alerts are configured on the channel instead: register a `NotificationChannel(criticalAlerts: true)` and post notifications to it. A `criticalAlert` key still present in a content payload is ignored.
+### Dependencies
+- **Requires IosAwnCore and AndroidAwnCore 0.12.1.**
+
 ## [0.12.0] - 2026-06-16
 ### Added
 - **Swift Package Manager support (iOS & macOS):** The plugin now ships a `Package.swift` and can be installed through Swift Package Manager, while keeping CocoaPods support during the transition. This prepares the plugin for Flutter's migration away from CocoaPods, ahead of Firebase ending CocoaPods publishing in October 2026.

@@ -42,7 +42,7 @@ android {
 
 dependencies {
 //    implementation project(':awn_core')
-    implementation 'me.carda:AndroidAwnCore:0.12.0'
+    implementation 'me.carda:AndroidAwnCore:0.12.1'
 
     implementation 'com.google.guava:guava:33.5.0-android'
 

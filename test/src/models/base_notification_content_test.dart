@@ -328,27 +328,6 @@ void main() {
             reason: '$failureReason: default value');
       });
 
-      test('criticalAlert field', () {
-        String failureReason =
-            'The criticalAlert field was not correctly exported as a map';
-        bool? defaultValue =
-            Definitions.initialValues[NOTIFICATION_CRITICAL_ALERT] as bool?;
-
-        expect(
-            BaseNotificationContent(criticalAlert: true)
-                .toMap()[NOTIFICATION_CRITICAL_ALERT],
-            true,
-            reason: '$failureReason: true value');
-        expect(
-            BaseNotificationContent(criticalAlert: false)
-                .toMap()[NOTIFICATION_CRITICAL_ALERT],
-            false,
-            reason: '$failureReason: false value');
-        expect(BaseNotificationContent().toMap()[NOTIFICATION_CRITICAL_ALERT],
-            defaultValue,
-            reason: '$failureReason: default value');
-      });
-
       test('category field', () {
         String failureReason =
             'The category field was not correctly exported as a map';
@@ -988,59 +967,6 @@ void main() {
         expect(
             BaseNotificationContent().fromMap(
                 {NOTIFICATION_FULL_SCREEN_INTENT: null})?.fullScreenIntent,
-            defaultValue,
-            reason: '$failureReason: null value');
-      });
-
-      test('criticalAlert field fromMap', () {
-        String failureReason =
-            'The criticalAlert field was not correctly imported from a map';
-        bool? defaultValue =
-            Definitions.initialValues[NOTIFICATION_CRITICAL_ALERT] as bool?;
-
-        expect(
-            BaseNotificationContent()
-                .fromMap({NOTIFICATION_CRITICAL_ALERT: true})?.criticalAlert,
-            true,
-            reason: '$failureReason: true value');
-        expect(
-            BaseNotificationContent()
-                .fromMap({NOTIFICATION_CRITICAL_ALERT: false})?.criticalAlert,
-            false,
-            reason: '$failureReason: false value');
-        expect(
-            BaseNotificationContent()
-                .fromMap({NOTIFICATION_CRITICAL_ALERT: 'true'})?.criticalAlert,
-            true,
-            reason: '$failureReason: non-boolean value (string)');
-        expect(
-            BaseNotificationContent()
-                .fromMap({NOTIFICATION_CRITICAL_ALERT: 'false'})?.criticalAlert,
-            false,
-            reason: '$failureReason: non-boolean value (string)');
-        expect(
-            BaseNotificationContent()
-                .fromMap({NOTIFICATION_CRITICAL_ALERT: '1'})?.criticalAlert,
-            true,
-            reason: '$failureReason: non-boolean value (string)');
-        expect(
-            BaseNotificationContent()
-                .fromMap({NOTIFICATION_CRITICAL_ALERT: '0'})?.criticalAlert,
-            false,
-            reason: '$failureReason: non-boolean value (string)');
-        expect(
-            BaseNotificationContent()
-                .fromMap({NOTIFICATION_CRITICAL_ALERT: 1})?.criticalAlert,
-            true,
-            reason: '$failureReason: non-boolean value (int)');
-        expect(
-            BaseNotificationContent()
-                .fromMap({NOTIFICATION_CRITICAL_ALERT: 0})?.criticalAlert,
-            false,
-            reason: '$failureReason: non-boolean value (int)');
-        expect(
-            BaseNotificationContent()
-                .fromMap({NOTIFICATION_CRITICAL_ALERT: null})?.criticalAlert,
             defaultValue,
             reason: '$failureReason: null value');
       });

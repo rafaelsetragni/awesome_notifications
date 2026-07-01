@@ -30,7 +30,6 @@ class BaseNotificationContent extends Model {
   bool? _autoDismissible;
   bool? _wakeUpScreen;
   bool? _fullScreenIntent;
-  bool? _criticalAlert;
   Color? _color;
   Color? _backgroundColor;
   Duration? _timeoutAfter;
@@ -109,9 +108,6 @@ class BaseNotificationContent extends Model {
 
   /// Returns whether the notification should use a full screen intent.
   bool? get fullScreenIntent => _fullScreenIntent;
-
-  /// Returns whether the notification is a critical alert.
-  bool? get criticalAlert => _criticalAlert;
 
   /// Returns the color of the notification.
   Color? get color => _color;
@@ -229,7 +225,6 @@ class BaseNotificationContent extends Model {
       String? bigPicture,
       bool wakeUpScreen = false,
       bool fullScreenIntent = false,
-      bool criticalAlert = false,
       NotificationCategory? category,
       bool autoDismissible = true,
       Color? color,
@@ -274,8 +269,6 @@ class BaseNotificationContent extends Model {
             NOTIFICATION_WAKE_UP_SCREEN, wakeUpScreen),
         _fullScreenIntent = AwesomeAssertUtils.getValueOrDefault<bool>(
             NOTIFICATION_FULL_SCREEN_INTENT, fullScreenIntent),
-        _criticalAlert = AwesomeAssertUtils.getValueOrDefault<bool>(
-            NOTIFICATION_CRITICAL_ALERT, criticalAlert),
         _category = AwesomeAssertUtils.getValueOrDefault<NotificationCategory>(
             NOTIFICATION_CATEGORY, category),
         _color = AwesomeAssertUtils.getValueOrDefault<Color>(
@@ -337,8 +330,6 @@ class BaseNotificationContent extends Model {
         NOTIFICATION_WAKE_UP_SCREEN, mapData);
     _fullScreenIntent = AwesomeAssertUtils.extractValue<bool>(
         NOTIFICATION_FULL_SCREEN_INTENT, mapData);
-    _criticalAlert = AwesomeAssertUtils.extractValue<bool>(
-        NOTIFICATION_CRITICAL_ALERT, mapData);
     _category = AwesomeAssertUtils.extractEnum<NotificationCategory>(
         NOTIFICATION_CATEGORY, mapData, NotificationCategory.values);
     _color =
@@ -408,7 +399,6 @@ class BaseNotificationContent extends Model {
       NOTIFICATION_BACKGROUND_COLOR: _backgroundColor?.value,
       NOTIFICATION_WAKE_UP_SCREEN: _wakeUpScreen,
       NOTIFICATION_FULL_SCREEN_INTENT: _fullScreenIntent,
-      NOTIFICATION_CRITICAL_ALERT: _criticalAlert,
       NOTIFICATION_ROUNDED_LARGE_ICON: _roundedLargeIcon,
       NOTIFICATION_ROUNDED_BIG_PICTURE: _roundedBigPicture,
       NOTIFICATION_CREATED_SOURCE: createdSource?.name,

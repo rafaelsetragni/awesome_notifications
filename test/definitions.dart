@@ -55,7 +55,6 @@ void main() {
           Definitions.initialValues[NOTIFICATION_IS_DANGEROUS_OPTION], false);
       expect(Definitions.initialValues[NOTIFICATION_WAKE_UP_SCREEN], false);
       expect(Definitions.initialValues[NOTIFICATION_FULL_SCREEN_INTENT], false);
-      expect(Definitions.initialValues[NOTIFICATION_CRITICAL_ALERT], false);
       expect(Definitions.initialValues[NOTIFICATION_CHANNEL_CRITICAL_ALERTS],
           false);
       expect(Definitions.initialValues[NOTIFICATION_ROUNDED_LARGE_ICON], false);

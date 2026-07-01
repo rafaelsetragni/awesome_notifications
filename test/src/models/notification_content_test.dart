@@ -17,7 +17,6 @@ void main() {
         expect(notificationContent.showWhen, true);
         expect(notificationContent.wakeUpScreen, false);
         expect(notificationContent.fullScreenIntent, false);
-        expect(notificationContent.criticalAlert, false);
         expect(notificationContent.roundedLargeIcon, false);
         expect(notificationContent.roundedBigPicture, false);
         expect(notificationContent.autoDismissible, true);
