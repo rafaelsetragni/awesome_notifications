@@ -91,6 +91,13 @@ void main() {
       verify(() => mockNotifications.checkPermissionList()).called(1);
     });
 
+    test('getPermissionStatusList method is called once', () async {
+      when(() => mockNotifications.getPermissionStatusList())
+          .thenAnswer((_) async => {});
+      await AwesomeNotifications().getPermissionStatusList();
+      verify(() => mockNotifications.getPermissionStatusList()).called(1);
+    });
+
     test('createNotification method is called once', () async {
       NotificationContent content = NotificationContent(
           id: 1, channelKey: 'channel_key', title: 'title', body: 'body');

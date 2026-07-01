@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import me.carda.awesome_notifications.core.completion_handlers.NotificationThrea
 import me.carda.awesome_notifications.core.completion_handlers.PermissionCompletionHandler;
 import me.carda.awesome_notifications.core.enumerators.ForegroundServiceType;
 import me.carda.awesome_notifications.core.enumerators.ForegroundStartMode;
+import me.carda.awesome_notifications.core.enumerators.NotificationPermission;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
 import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
 import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
@@ -283,6 +285,10 @@ public class AwesomeNotificationsPlugin
 
                 case Definitions.CHANNEL_METHOD_CHECK_PERMISSIONS:
                     channelMethodCheckPermissions(call, result);
+                    return;
+
+                case "getPermissionStatuses":
+                    channelMethodGetPermissionStatuses(call, result);
                     return;
 
                 case Definitions.CHANNEL_METHOD_SHOULD_SHOW_RATIONALE:
@@ -1171,6 +1177,69 @@ public class AwesomeNotificationsPlugin
                                 permissions);
 
         result.success(permissions);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void channelMethodGetPermissionStatuses(
+            @NonNull final MethodCall call,
+            @NonNull final Result result
+    ) throws AwesomeNotificationsException {
+
+        Map<String, Object> arguments = MapUtils.extractArgument(call.arguments(), Map.class).orNull();
+        if(arguments == null)
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_MISSING_ARGUMENTS,
+                            "Arguments are missing",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS);
+
+        String channelKey = (String) arguments.get(Definitions.NOTIFICATION_CHANNEL_KEY);
+
+        List<String> permissions = (List<String>) arguments.get(Definitions.NOTIFICATION_PERMISSIONS);
+        if(ListUtils.isNullOrEmpty(permissions))
+            throw ExceptionFactory
+                    .getInstance()
+                    .createNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_INVALID_ARGUMENTS,
+                            "Permission list is required",
+                            ExceptionCode.DETAILED_REQUIRED_ARGUMENTS+".permissionList");
+
+        List<String> allowedPermissions = awesomeNotifications.arePermissionsAllowed(
+                channelKey,
+                new ArrayList<>(permissions));
+
+        List<String> rationalePermissions = awesomeNotifications.shouldShowRationale(
+                channelKey,
+                new ArrayList<>(permissions));
+
+        HashMap<String, String> statuses = new HashMap<>();
+
+        for (String permission : permissions) {
+            NotificationPermission permissionEnum = NotificationPermission.getSafeEnum(permission);
+
+            if (permissionEnum == NotificationPermission.Provisional ||
+                permissionEnum == NotificationPermission.Car) {
+                statuses.put(permission, "notSupported");
+                continue;
+            }
+
+            if (allowedPermissions.contains(permission)) {
+                statuses.put(permission, "granted");
+                continue;
+            }
+
+            if (rationalePermissions.contains(permission)) {
+                statuses.put(permission, "notDetermined");
+                continue;
+            }
+
+            statuses.put(permission, "denied");
+        }
+
+        result.success(statuses);
     }
 
     @SuppressWarnings("unchecked")

@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import UserNotifications
+
 
 typealias ActivityCompletionHandler = () -> ()
 
@@ -82,6 +84,7 @@ public class PermissionManager {
         
         let current = UNUserNotificationCenter.current()
         current.getNotificationSettings(completionHandler: { (settings) in
+            CriticalAlertUtils.updateCache(from: settings)
             
             if settings.authorizationStatus == .notDetermined {
                 // The user hasnt decided yet if he authorizes or not
@@ -97,7 +100,22 @@ public class PermissionManager {
                 // Notification permission was already granted
                 permissionCompletion(true)
                 return
+
+            } else if #available(iOS 12.0, *) {
+                if settings.authorizationStatus == .provisional {
+                    permissionCompletion(true)
+                    return
+                }
             }
+
+            if #available(iOS 14.0, *) {
+                if settings.authorizationStatus == .ephemeral {
+                    permissionCompletion(true)
+                    return
+                }
+            }
+
+            permissionCompletion(false)
         })
         
         //return UIApplication.shared.isRegisteredForRemoteNotifications
@@ -118,6 +136,7 @@ public class PermissionManager {
             }
             
             UNUserNotificationCenter.current().getNotificationSettings(completionHandler: { iOSpermissions in
+                CriticalAlertUtils.updateCache(from: iOSpermissions)
                 
                 for permission in permissions {
                     if let permissionEnum:NotificationPermission = NotificationPermission.fromString(permission) {
@@ -149,7 +168,8 @@ public class PermissionManager {
                             case .OverrideDnD: fallthrough
                             case .CriticalAlert:
                                 if #available(iOS 12.0, *) {
-                                    if(iOSpermissions.criticalAlertSetting == .disabled){
+                                    if iOSpermissions.criticalAlertSetting != .enabled &&
+                                        iOSpermissions.criticalAlertSetting != .notSupported {
                                         shouldShowRationaleList.append(NotificationPermission.CriticalAlert.rawValue)
                                     }
                                 }
@@ -190,6 +210,7 @@ public class PermissionManager {
             }
             
             UNUserNotificationCenter.current().getNotificationSettings(completionHandler: { iOSpermissions in
+                CriticalAlertUtils.updateCache(from: iOSpermissions)
                 
                 // (Settings != .Disabled == .Enabled & .NotSupported /*Emulator limitations*/)
                 for permission in permissions {
@@ -276,6 +297,7 @@ public class PermissionManager {
     public func isSpecifiedPermissionGloballyAllowed(_ permission:String, channel:String?, completion: @escaping (Bool) -> ()){
 
         UNUserNotificationCenter.current().getNotificationSettings(completionHandler: { iOSpermissions in
+            CriticalAlertUtils.updateCache(from: iOSpermissions)
             
             // (Settings != .Disabled == .Enabled & .NotSupported /*Emulator limitations*/)
             switch NotificationPermission.fromString(permission) {
@@ -365,6 +387,211 @@ public class PermissionManager {
         return false
     }
 
+    public func getPermissionStatuses(
+        _ permissions:[String],
+        filteringByChannelKey channelKey:String?,
+        whenGotResults completion: @escaping ([String:String]) -> ()
+    ) {
+        if SwiftUtils.isRunningOnExtension() {
+            var statuses:[String:String] = [:]
+            for permission in permissions {
+                statuses[permission] = NotificationPermissionStatus.granted.rawValue
+            }
+            completion(statuses)
+            return
+        }
+
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            CriticalAlertUtils.updateCache(from: settings)
+
+            var statuses:[String:String] = [:]
+            for permission in permissions {
+                statuses[permission] = self.resolvePermissionStatus(
+                    permission: permission,
+                    settings: settings,
+                    channelKey: channelKey)
+            }
+            completion(statuses)
+        }
+    }
+
+    private func resolvePermissionStatus(
+        permission:String,
+        settings:UNNotificationSettings,
+        channelKey:String?
+    ) -> String {
+        guard let permissionEnum = NotificationPermission.fromString(permission) else {
+            return NotificationPermissionStatus.notSupported.rawValue
+        }
+
+        switch permissionEnum {
+            case .CriticalAlert, .OverrideDnD:
+                return resolveCriticalAlertPermissionStatus(settings: settings)
+
+            case .Alert:
+                return resolveNotificationSettingStatus(
+                    settings: settings,
+                    setting: settings.alertSetting)
+
+            case .Sound:
+                return resolveNotificationSettingStatus(
+                    settings: settings,
+                    setting: settings.soundSetting)
+
+            case .Badge:
+                return resolveNotificationSettingStatus(
+                    settings: settings,
+                    setting: settings.badgeSetting)
+
+            case .Car:
+                return resolveNotificationSettingStatus(
+                    settings: settings,
+                    setting: settings.carPlaySetting)
+
+            case .Provisional:
+                if #available(iOS 12.0, *) {
+                    if settings.authorizationStatus == .provisional {
+                        return NotificationPermissionStatus.granted.rawValue
+                    }
+                    if settings.authorizationStatus == .notDetermined {
+                        return NotificationPermissionStatus.notDetermined.rawValue
+                    }
+                    if settings.authorizationStatus == .denied {
+                        return NotificationPermissionStatus.denied.rawValue
+                    }
+                    return NotificationPermissionStatus.notDetermined.rawValue
+                }
+                return NotificationPermissionStatus.notSupported.rawValue
+
+            default:
+                if channelKey == nil ||
+                    isSpecifiedChannelPermissionAllowed(
+                        channelKey: channelKey!,
+                        permissionEnum: permissionEnum) {
+                    return NotificationPermissionStatus.granted.rawValue
+                }
+                return NotificationPermissionStatus.denied.rawValue
+        }
+    }
+
+    private func resolveNotificationSettingStatus(
+        settings:UNNotificationSettings,
+        setting:UNNotificationSetting
+    ) -> String {
+        if settings.authorizationStatus == .notDetermined {
+            return NotificationPermissionStatus.notDetermined.rawValue
+        }
+        if settings.authorizationStatus == .denied {
+            return NotificationPermissionStatus.denied.rawValue
+        }
+        switch setting {
+            case .enabled:
+                return NotificationPermissionStatus.granted.rawValue
+            case .notSupported:
+                return NotificationPermissionStatus.notSupported.rawValue
+            default:
+                return NotificationPermissionStatus.denied.rawValue
+        }
+    }
+
+    @available(iOS 12.0, *)
+    private func resolveCriticalAlertPermissionStatus(
+        settings:UNNotificationSettings
+    ) -> String {
+        switch settings.criticalAlertSetting {
+            case .enabled:
+                return NotificationPermissionStatus.granted.rawValue
+            case .notSupported:
+                if self.isBaseNotificationAuthorizationGranted(settings) {
+                    return NotificationPermissionStatus.notDetermined.rawValue
+                }
+                return NotificationPermissionStatus.notSupported.rawValue
+            default:
+                break
+        }
+
+        if settings.authorizationStatus == .notDetermined {
+            return NotificationPermissionStatus.notDetermined.rawValue
+        }
+        if settings.authorizationStatus == .denied {
+            return NotificationPermissionStatus.denied.rawValue
+        }
+        return NotificationPermissionStatus.notDetermined.rawValue
+    }
+
+    private func isBaseNotificationAuthorizationGranted(_ settings: UNNotificationSettings) -> Bool {
+        if #available(iOS 12.0, *) {
+            return settings.authorizationStatus == .authorized ||
+                settings.authorizationStatus == .provisional
+        }
+        return settings.authorizationStatus == .authorized
+    }
+
+    @available(iOS 12.0, *)
+    private func isCriticalAlertEntitlementMissing(_ settings: UNNotificationSettings) -> Bool {
+        return settings.criticalAlertSetting == .notSupported &&
+            !isBaseNotificationAuthorizationGranted(settings)
+    }
+
+    @available(iOS 12.0, *)
+    private func shouldRequestCriticalAlertAuthorization(_ settings: UNNotificationSettings) -> Bool {
+        if settings.criticalAlertSetting == .disabled {
+            return true
+        }
+        if settings.criticalAlertSetting == .notSupported &&
+            isBaseNotificationAuthorizationGranted(settings) {
+            return true
+        }
+        return false
+    }
+
+    private func iosCriticalAlertAuthorizationPermissions() -> [String] {
+        return [
+            NotificationPermission.Alert.rawValue,
+            NotificationPermission.Sound.rawValue,
+            NotificationPermission.Badge.rawValue,
+            NotificationPermission.CriticalAlert.rawValue
+        ]
+    }
+
+    private func requestCriticalAlertPermissionIfNeeded(
+        permissionsNeeded:[String],
+        permissionsRequested:[String],
+        settings:UNNotificationSettings,
+        channelKey:String?,
+        permissionCompletion: @escaping ([String]) -> ()
+    ) -> Bool {
+        guard #available(iOS 12.0, *) else { return false }
+
+        let needsCriticalAlertPermission =
+            permissionsRequested.contains(NotificationPermission.CriticalAlert.rawValue) ||
+            permissionsRequested.contains(NotificationPermission.OverrideDnD.rawValue)
+
+        guard needsCriticalAlertPermission else { return false }
+        guard isBaseNotificationAuthorizationGranted(settings) else { return false }
+        guard settings.criticalAlertSetting != .enabled else { return false }
+
+        if self.isCriticalAlertEntitlementMissing(settings) {
+            Logger.e(self.TAG,
+                "Critical Alerts are not available for this project. " +
+                "You must require Apple special permissions to use it. " +
+                "For more informations, please read our official documentation.")
+            permissionCompletion(permissionsNeeded)
+            return true
+        }
+
+        if self.shouldRequestCriticalAlertAuthorization(settings) {
+            self.showRequestDialog(
+                channelKey: nil,
+                permissionsNeeded: permissionsNeeded,
+                permissionsToRequest: self.iosCriticalAlertAuthorizationPermissions(),
+                permissionCompletion: permissionCompletion)
+            return true
+        }
+
+        return false
+    }
+
     public func requestUserPermissions(
         _ permissions:[String],
         filteringByChannelKey channelKey:String?,
@@ -392,6 +619,7 @@ public class PermissionManager {
                 
                 else {
                     UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+                        CriticalAlertUtils.updateCache(from: settings)
                         
                         var isAllowed:Bool = false
                         if #available(iOS 12.0, *) {
@@ -406,7 +634,7 @@ public class PermissionManager {
                         if #available(iOS 12.0, *) {
                             if permissionsRequested.contains(NotificationPermission.CriticalAlert.rawValue) ||
                                 permissionsRequested.contains(NotificationPermission.OverrideDnD.rawValue){
-                                if(settings.criticalAlertSetting == .notSupported){
+                                if self.isCriticalAlertEntitlementMissing(settings) {
                                     Logger.e(self.TAG,
                                         "Critical Alerts are not available for this project. " +
                                         "You must require Apple special permissions to use it. " +
@@ -416,7 +644,7 @@ public class PermissionManager {
                                         return
                                     }
                                     permissionsRequested = permissionsRequested.filter {
-                                        ![NotificationPermission.CriticalAlert.rawValue, NotificationPermission.CriticalAlert.rawValue].contains($0)
+                                        ![NotificationPermission.CriticalAlert.rawValue, NotificationPermission.OverrideDnD.rawValue].contains($0)
                                     }
                                 }
                             }
@@ -424,6 +652,15 @@ public class PermissionManager {
                         
                         if permissionsRequested.isEmpty {
                             permissionCompletion(permissions)
+                            return
+                        }
+
+                        if self.requestCriticalAlertPermissionIfNeeded(
+                            permissionsNeeded: permissionsNeeded,
+                            permissionsRequested: permissionsRequested,
+                            settings: settings,
+                            channelKey: channelKey,
+                            permissionCompletion: permissionCompletion) {
                             return
                         }
 
@@ -440,7 +677,7 @@ public class PermissionManager {
                             
                             if listToShowRationale.count == 1 {
                                 
-                                guard let permissionEnum = NotificationPermission.fromString(permissionsNeeded.first!) else {
+                                guard let permissionEnum = NotificationPermission.fromString(listToShowRationale.first!) else {
                                     self.refreshReturnedPermissions(
                                         permissionsNeeded,
                                         filteringByChannelKey: channelKey,
@@ -453,11 +690,11 @@ public class PermissionManager {
                                     case .OverrideDnD: fallthrough
                                     case .CriticalAlert:
                                         if #available(iOS 12.0, *) {
-                                            if(settings.criticalAlertSetting == .disabled){
+                                            if self.shouldRequestCriticalAlertAuthorization(settings) {
                                                 self.showRequestDialog(
-                                                    channelKey: channelKey,
+                                                    channelKey: nil,
                                                     permissionsNeeded: permissionsNeeded,
-                                                    permissionsToRequest: listToShowRationale,
+                                                    permissionsToRequest: self.iosCriticalAlertAuthorizationPermissions(),
                                                     permissionCompletion: permissionCompletion)
                                                 return
                                             }
@@ -498,6 +735,7 @@ public class PermissionManager {
         
         let iOSpermissions:UNAuthorizationOptions = getIosPermissionsCode(permissionsToRequest)
         UNUserNotificationCenter.current().requestAuthorization(options: iOSpermissions) { (granted, error) in
+            CriticalAlertUtils.clearCache()
 
             if granted {
                 Logger.d("PermissionManager", "Permissions enabled successfully")
@@ -621,18 +859,25 @@ public class PermissionManager {
 
     public func startTestedActivity(_ url:String) -> Bool {
 
-        guard let settingsUrl = URL(string: url) else {
+        guard
+            let settingsUrl = URL(string: url),
+            let application = SwiftUtils.sharedApplication()
+        else {
             return false
         }
-        
-        if UIApplication.shared.canOpenURL(settingsUrl) {
-            DispatchQueue.main.async {
-                UIApplication.shared.open(settingsUrl)
-            }
-            return true
+
+        // `open(_:)` is unavailable in app extensions, so it is dispatched through the
+        // Objective-C runtime to keep this file compiling under `-application-extension`.
+        // This is an app-only action and is never reached from an app extension.
+        let openSelector = NSSelectorFromString("openURL:")
+        guard application.responds(to: openSelector) else {
+            return false
         }
-        
-        return false
+
+        DispatchQueue.main.async {
+            application.perform(openSelector, with: settingsUrl)
+        }
+        return true
     }
     public func handlePermissionResult() {
         fireActivityCompletionHandle()

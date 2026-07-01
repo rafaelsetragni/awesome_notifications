@@ -91,6 +91,29 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }
 
   @override
+  Future<Map<NotificationPermission, NotificationPermissionStatus>>
+      getPermissionStatusList({
+    String? channelKey,
+    List<NotificationPermission> permissions = const [
+      NotificationPermission.Badge,
+      NotificationPermission.Alert,
+      NotificationPermission.Sound,
+      NotificationPermission.Vibration,
+      NotificationPermission.Light,
+    ],
+  }) async {
+    final List<Object?> permissionList = _listPermissionToListString(permissions);
+
+    final Map<dynamic, dynamic>? statusMap =
+        await methodChannel.invokeMethod(CHANNEL_METHOD_GET_PERMISSION_STATUSES, {
+      NOTIFICATION_CHANNEL_KEY: channelKey,
+      NOTIFICATION_PERMISSIONS: permissionList,
+    });
+
+    return _mapToPermissionStatusList(statusMap ?? {});
+  }
+
+  @override
   Future<bool> createNotification({
     required NotificationContent content,
     NotificationSchedule? schedule,
@@ -580,6 +603,28 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
       if (permissionValue != null) lockedPermissions.add(permissionValue);
     }
     return lockedPermissions;
+  }
+
+  Map<NotificationPermission, NotificationPermissionStatus>
+      _mapToPermissionStatusList(Map<dynamic, dynamic> statusMap) {
+    final Map<NotificationPermission, NotificationPermissionStatus> result = {};
+
+    statusMap.forEach((permissionKey, statusValue) {
+      final NotificationPermission? permission =
+          AwesomeAssertUtils.enumToString<NotificationPermission>(
+              permissionKey.toString(), NotificationPermission.values, null);
+      final NotificationPermissionStatus? status =
+          AwesomeAssertUtils.enumToString<NotificationPermissionStatus>(
+              statusValue.toString(),
+              NotificationPermissionStatus.values,
+              null);
+
+      if (permission != null && status != null) {
+        result[permission] = status;
+      }
+    });
+
+    return result;
   }
 
   @override

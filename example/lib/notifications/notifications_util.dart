@@ -324,6 +324,24 @@ class NotificationUtils {
     }
   }
 
+  static Future<void> showCriticalAlertNotification(int id) async {
+    try {
+      bool success = await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+              id: id,
+              channelKey: 'scheduled',
+              title: 'Critical Alert',
+              body: 'This notification uses the critical alert channel and content flag',
+              criticalAlert: true,
+              playSound: true,
+              wakeUpScreen: true));
+
+      debugPrint(success ? 'Critical notification created successfully' : '');
+    } on PlatformException catch (exception) {
+      debugPrint('$exception');
+    }
+  }
+
   static Future<void> showNotificationFromJson(
       Map<String, Object> jsonData) async {
     await AwesomeNotifications().createNotificationFromJsonData(jsonData);

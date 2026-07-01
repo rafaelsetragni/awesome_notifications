@@ -1313,6 +1313,17 @@ To enable critical alerts, you need to add the `ACCESS_NOTIFICATION_POLICY` perm
 </manifest>
 ```
 
+#### iOS Critical Alerts (optional)
+
+Critical alerts on iOS are **opt-in** and require Apple's explicit approval. Apps without the entitlement continue to work normally; critical flags are ignored and notifications are delivered with standard interruption levels.
+
+1. Request the `com.apple.developer.usernotifications.critical-alerts` entitlement from Apple and add it to your **Runner** target. If you use FCM with a Notification Service Extension, add the same entitlement to the **extension** target as well.
+2. Register a channel with `criticalAlerts: true` and/or set `criticalAlert: true` on `NotificationContent`.
+3. Request `NotificationPermission.CriticalAlert` explicitly via `requestPermissionToSendNotifications`.
+4. For FCM, include `mutable_content: true` and the Awesome notification payload with the correct `channelKey`.
+
+Apps without Apple's entitlement can still declare `criticalAlerts` on channels; the plugin degrades gracefully to standard notification delivery.
+
 In summary, if you need to ensure precise execution of scheduled notifications, make sure to use the appropriate categories and properties for your notifications, and enable the necessary permissions in your app's manifest file.
 
 Additionally, you can ask your users to whitelist your app from any battery optimization feature that the device may have. This can be done by adding your app to the "unmonitored apps" or "battery optimization exceptions" list, depending on the device.
@@ -1331,7 +1342,7 @@ To know more about it, please visit [flutter_background_service_fetch documentat
 3. If you're running your app in debug mode, all schedules may be erased by the Android OS when you close the app. This ensures consistent behavior when testing in debug mode. To test schedule notifications on Android when the app is not running, make sure to open the app without debugging.
 4. If your app doesn't require precise scheduling of notifications, avoid requesting exact notifications to conserve battery life.
 5. Categorize your notifications correctly to avoid scheduling delays.
-6. Note that critical alerts are still under development and should not be used in production mode.
+6. On iOS, critical alerts require Apple's entitlement and user permission. Without them, notifications fall back to standard delivery without errors.
 
 <br>
 

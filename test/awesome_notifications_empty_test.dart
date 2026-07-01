@@ -56,6 +56,18 @@ void main() {
       ]);
     });
 
+    test('getPermissionStatusList method', () async {
+      final Map<NotificationPermission, NotificationPermissionStatus> result =
+          await notifications.getPermissionStatusList();
+      expect(result, {
+        NotificationPermission.Badge: NotificationPermissionStatus.granted,
+        NotificationPermission.Alert: NotificationPermissionStatus.granted,
+        NotificationPermission.Sound: NotificationPermissionStatus.granted,
+        NotificationPermission.Vibration: NotificationPermissionStatus.granted,
+        NotificationPermission.Light: NotificationPermissionStatus.granted,
+      });
+    });
+
     test('createNotification method', () async {
       bool result = await notifications.createNotification(
         content: NotificationContent(id: 1, channelKey: 'test'),
