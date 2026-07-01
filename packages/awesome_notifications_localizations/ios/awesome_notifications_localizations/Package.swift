@@ -11,21 +11,23 @@ let package = Package(
     products: [
         .library(name: "awesome-notifications-localizations", targets: ["awesome_notifications_localizations"])
     ],
-    dependencies: [],
+    dependencies: [
+        // Depend on the base plugin package and use its vended IosAwnCore product,
+        // so this decorator registers its transformer/handler into the very same
+        // IosAwnCore singletons the base plugin's engine reads from.
+        //
+        // Flutter lays every plugin out as a sibling under
+        // ios/Flutter/ephemeral/Packages/.packages/<name>, and resolves a plugin's
+        // relative dependency paths from THAT symlink location — so the sibling
+        // path `../awesome_notifications` reaches the base plugin correctly
+        // (whereas a path that climbs out of `.packages` would not).
+        .package(name: "awesome_notifications", path: "../awesome_notifications")
+    ],
     targets: [
         .target(
             name: "awesome_notifications_localizations",
-            dependencies: [],
-            resources: [
-                // If your plugin requires a privacy manifest, for example if it uses any required
-                // reason APIs, update the PrivacyInfo.xcprivacy file to describe your plugin's
-                // privacy impact, and then uncomment these lines. For more information, see
-                // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
-                // .process("PrivacyInfo.xcprivacy"),
-
-                // If you have other resources that need to be bundled with your plugin, refer to
-                // the following instructions to add them:
-                // https://developer.apple.com/documentation/xcode/bundling-resources-with-a-swift-package
+            dependencies: [
+                .product(name: "IosAwnCore", package: "awesome_notifications")
             ]
         )
     ]
