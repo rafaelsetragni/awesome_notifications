@@ -3,6 +3,7 @@ package me.carda.awesome_notifications_localizations
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
+import me.carda.android_awn_core.JsonUtils
 import me.carda.android_awn_core.NotificationContentTransformer
 import java.util.Locale
 
@@ -33,7 +34,7 @@ class LocalizationTransformer(
 
         // 2. localizations block (overrides the loc-key result).
         var translatedButtons: List<Map<String, Any?>>? = null
-        val localizations = model[LOCALIZATIONS] as? Map<String, Any?>
+        val localizations = localizationsMap(model)
         if (!localizations.isNullOrEmpty()) {
             val matched = matchLanguage(localizations.keys, languageCode)
             val localization = matched?.let { localizations[it] as? Map<String, Any?> }
@@ -96,6 +97,21 @@ class LocalizationTransformer(
         val config = Configuration(context.resources.configuration)
         config.setLocale(locale)
         return context.createConfigurationContext(config).resources
+    }
+
+    /** The `localizations` block, accepting either a Map or — for push/JSON
+     *  payloads where it arrives JSON-encoded — a JSON string. */
+    @Suppress("UNCHECKED_CAST")
+    private fun localizationsMap(model: Map<String, Any?>): Map<String, Any?>? {
+        return when (val raw = model[LOCALIZATIONS]) {
+            is Map<*, *> -> raw as Map<String, Any?>
+            is String -> try {
+                JsonUtils.getInstance().fromJson(raw)
+            } catch (e: Exception) {
+                null
+            }
+            else -> null
+        }
     }
 
     /** Overrides each action button's label from the localization's `buttonLabels`

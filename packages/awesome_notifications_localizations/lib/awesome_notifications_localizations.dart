@@ -1,15 +1,39 @@
-/// Localizations (translation) decorator for awesome_notifications.
+/// Multi-language support for awesome_notifications.
 ///
-/// This package adds no Dart API: the public localization surface
-/// (`setLocalization`, `getLocalization`, `NotificationContent.localizations`,
-/// `NotificationLocalization`) already lives in the core. Adding this package as
-/// a dependency registers a native content transformer + method handler into the
-/// core, so notifications are translated at build time without the core knowing
-/// about localization — validating the builder decorator seam.
+/// Attach per-language translations to a notification with
+/// [NotificationLocalizations] (passed to the core's `createNotification` via
+/// `extensions`), and choose the language with
+/// [AwesomeNotificationsLocalizations.setLocalization].
 library;
 
-/// Marker for the localizations decorator. The native plugin auto-registers on
-/// engine attach; this type only documents the package's presence.
+import 'package:flutter/services.dart';
+
+export 'src/notification_localization.dart';
+export 'src/notification_localizations.dart';
+
+/// Controls the language notifications are translated into.
+///
+/// Notifications themselves are created with the core
+/// `AwesomeNotifications().createNotification(..., extensions: [
+/// NotificationLocalizations({...})])`.
 class AwesomeNotificationsLocalizations {
-  const AwesomeNotificationsLocalizations._();
+  static const MethodChannel _channel = MethodChannel('awesome_notifications');
+
+  static final AwesomeNotificationsLocalizations _instance =
+      AwesomeNotificationsLocalizations._();
+  factory AwesomeNotificationsLocalizations() => _instance;
+  AwesomeNotificationsLocalizations._();
+
+  /// Sets the language notifications are translated into (null = system default).
+  Future<bool> setLocalization({required String? languageCode}) async {
+    final result =
+        await _channel.invokeMethod<bool>('setLocalization', languageCode);
+    return result ?? false;
+  }
+
+  /// The current language code used for translation.
+  Future<String> getLocalization() async {
+    final result = await _channel.invokeMethod<String>('getLocalization');
+    return result ?? '';
+  }
 }
