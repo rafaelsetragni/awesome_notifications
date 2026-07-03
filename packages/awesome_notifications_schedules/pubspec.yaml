@@ -14,6 +14,9 @@ dependencies:
     sdk: flutter
   web: ^1.0.0
   plugin_platform_interface: ^2.0.2
+  # Local path during dev; a real release would pin a published version.
+  awesome_notifications:
+    path: ../awesome_notifications
 
 dev_dependencies:
   flutter_test:
