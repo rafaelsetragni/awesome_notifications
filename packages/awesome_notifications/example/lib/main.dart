@@ -79,6 +79,23 @@ class NotificationController {
     );
   }
 
+  /// If the app was launched by tapping a notification (killed state), the tap
+  /// is not delivered to [onActionReceivedMethod] (no listener existed yet):
+  /// it is retrieved here instead, and opens the details page.
+  static Future<void> handleInitialAction() async {
+    final ReceivedAction? action = await AwesomeNotifications()
+        .getInitialNotificationAction(removeFromActionEvents: true);
+    debugPrint('getInitialNotificationAction -> '
+        '${action == null ? 'null (no launch action)' : 'id=${action.id} '
+            'channelKey=${action.channelKey} '
+            'buttonKeyPressed=${action.buttonKeyPressed}'}');
+    if (action == null) return;
+    navigatorKey.currentState?.pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => NotificationPage(action: action)),
+      (route) => route.isFirst,
+    );
+  }
+
   // Listeners must be static / top-level and annotated with vm:entry-point.
 
   @pragma('vm:entry-point')
@@ -388,6 +405,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     NotificationController.startListeningNotificationEvents();
+    // Handle a notification tap that launched the app from a killed state.
+    NotificationController.handleInitialAction();
     AwesomeNotifications().isNotificationAllowed().then(
       (allowed) => setState(() => _allowed = allowed),
     );
