@@ -45,6 +45,9 @@ class AwesomeNotificationsPlugin :
     private val mainHandler = Handler(Looper.getMainLooper())
 
     private var activity: Activity? = null
+    /// The action that launched the app from a killed state (via the Activity's
+    /// initial intent), if any — returned by getInitialAction.
+    private var initialAction: Map<String, Any?>? = null
     private var pendingPermissionResult: Result? = null
     private var pendingRequestedPermissions: List<String> = emptyList()
 
@@ -85,6 +88,14 @@ class AwesomeNotificationsPlugin :
                 // Background isolate handles; foreground events are delivered
                 // live through this channel, so we just acknowledge.
                 result.success(true)
+            }
+
+            "getInitialAction" -> {
+                // Returns the action that launched the app (killed state), or null.
+                val removeFromEvents = call.arguments as? Boolean ?: false
+                val action = initialAction
+                if (removeFromEvents) initialAction = null
+                result.success(action)
             }
 
             "isNotificationAllowed" -> result.success(core.isNotificationAllowed())
@@ -216,7 +227,7 @@ class AwesomeNotificationsPlugin :
      * or one of its foreground (`Default`) action buttons. Non-foreground buttons
      * never reach here — they broadcast to NotificationButtonReceiver instead.
      */
-    private fun handleNotificationIntent(intent: Intent) {
+    private fun handleNotificationIntent(intent: Intent, isLaunch: Boolean = false) {
         val action = intent.action ?: return
         val isTap = action == Definitions.SELECT_NOTIFICATION
         val isButton = action.startsWith(Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX)
@@ -258,9 +269,14 @@ class AwesomeNotificationsPlugin :
             )
         } else {
             val actionType = if (isButton) builder.buttonActionType(button) else "Default"
+            // A cold start from a notification tap is the initial action: capture it
+            // (killed-state lifecycle) so getInitialAction() can return it.
+            val lifeCycle = if (isLaunch) "AppKilled" else "Foreground"
+            val actionEvent = builder.registerActionEvent(content, lifeCycle, actionType)
+            if (isLaunch) initialAction = actionEvent
             AwesomeEventsReceiver.notifyAwesomeEvent(
                 Definitions.EVENT_DEFAULT_ACTION,
-                builder.registerActionEvent(content, "Foreground", actionType)
+                actionEvent
             )
         }
         // Consume so it is not re-emitted on the next attach / config change.
@@ -276,7 +292,7 @@ class AwesomeNotificationsPlugin :
         binding.addRequestPermissionsResultListener(this)
         binding.addOnNewIntentListener(this)
         // Cold start: the app may have been launched by tapping a notification.
-        activity?.intent?.let { handleNotificationIntent(it) }
+        activity?.intent?.let { handleNotificationIntent(it, isLaunch = true) }
     }
 
     override fun onDetachedFromActivityForConfigChanges() {

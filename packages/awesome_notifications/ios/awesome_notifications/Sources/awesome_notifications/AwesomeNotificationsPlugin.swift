@@ -21,6 +21,25 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin, AwesomeEventLi
     // Subscribe to core lifecycle events (created/displayed/tap/dismiss) and
     // forward them to Dart.
     AwesomeEventsReceiver.shared.subscribe(listener: instance)
+
+    // Claim the notification-center delegate now — Apple requires it before the
+    // app finishes launching, so a notification that launched a killed app is
+    // captured. This is what makes getInitialAction reliable, including under
+    // the UIScene lifecycle. Then settle the launch state once the app becomes
+    // active (deferred one run loop so a launch response is processed first).
+    AwesomeNotifications.shared.attachToNotificationCenter()
+    NotificationCenter.default.addObserver(
+      instance,
+      selector: #selector(appDidBecomeActive),
+      name: UIApplication.didBecomeActiveNotification,
+      object: nil
+    )
+  }
+
+  @objc private func appDidBecomeActive() {
+    DispatchQueue.main.async {
+      AwesomeNotifications.shared.finishLaunching()
+    }
   }
 
   private var core: AwesomeNotifications { AwesomeNotifications.shared }
@@ -52,6 +71,11 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin, AwesomeEventLi
       // Background isolate handles; foreground events are delivered live through
       // this channel, so we just acknowledge.
       result(true)
+
+    case "getInitialAction":
+      // Returns the action that launched the app (killed state), or nil.
+      let removeFromEvents = call.arguments as? Bool ?? false
+      core.getInitialAction(removeFromEvents: removeFromEvents) { result($0) }
 
     case "isNotificationAllowed":
       core.isNotificationAllowed { result($0) }
