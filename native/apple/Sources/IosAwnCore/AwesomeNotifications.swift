@@ -157,10 +157,12 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
                 self.registerCategory(category)
             }
 
+            // A scheduling decorator (if registered) supplies a trigger from the
+            // notification's `schedule`; otherwise nil delivers it immediately.
             let request = UNNotificationRequest(
                 identifier: String(built.id),
                 content: built.content,
-                trigger: nil // deliver immediately
+                trigger: NotificationScheduleManager.shared.trigger(for: notification)
             )
             self.center.add(request) { error in
                 let created = error == nil
