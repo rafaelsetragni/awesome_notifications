@@ -21,6 +21,14 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
     /// (sound, importance, …) so later features can honor it per channelKey.
     private var channels: [String: [String: Any]] = [:]
 
+    // Initial-action (launch) state. Until the launch phase settles, an action
+    // arriving through `didReceive` is the one that launched the app.
+    private var didFinishLaunch = false
+    private var initialAction: [String: Any]?
+    private var removeInitialActionFromEvents = false
+    /// A `getInitialAction` request that arrived before the launch settled.
+    private var pendingInitialActionCompletion: (([String: Any]?) -> Void)?
+
     // MARK: - Initialization
 
     public func initialize(channels: [[String: Any]]) {
@@ -77,6 +85,50 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
                 || settings.authorizationStatus == .provisional
             DispatchQueue.main.async { completion(allowed) }
         }
+    }
+
+    // MARK: - Launch / initial action
+
+    /// Claims the notification-center delegate as early as the plugin registers.
+    /// Apple requires the delegate to be assigned *before the app finishes
+    /// launching*; otherwise a notification that launched a killed app is dropped
+    /// by the system instead of being delivered via `didReceive` — which is
+    /// exactly the getInitialAction path. Under UIScene the plugin registers
+    /// during scene connection, so this must not be deferred to `initialize`.
+    public func attachToNotificationCenter() {
+        center.delegate = self
+    }
+
+    /// Marks the launch phase complete and resolves any pending
+    /// `getInitialAction`. Idempotent — called both from the platform's "app
+    /// became active" signal (via the plugin bridge, which owns UIKit) and from
+    /// `didReceive` once the launch action is captured, whichever happens first.
+    public func finishLaunching() {
+        if didFinishLaunch { return }
+        didFinishLaunch = true
+        if let completion = pendingInitialActionCompletion {
+            let action = initialAction
+            if removeInitialActionFromEvents { initialAction = nil }
+            completion(action)
+            pendingInitialActionCompletion = nil
+        }
+    }
+
+    /// Returns the action that launched the app, or nil. Reliable under both the
+    /// classic and UIScene lifecycles: if the launch hasn't settled yet, the
+    /// request is parked and answered by `finishLaunching()`.
+    public func getInitialAction(
+        removeFromEvents: Bool,
+        completion: @escaping ([String: Any]?) -> Void
+    ) {
+        if didFinishLaunch {
+            let action = initialAction
+            if removeFromEvents { initialAction = nil }
+            completion(action)
+            return
+        }
+        removeInitialActionFromEvents = removeFromEvents
+        pendingInitialActionCompletion = completion
     }
 
     // MARK: - Create / display
@@ -194,14 +246,20 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
                    let id = builder.readId(content) {
                     dismiss(id: id)
                 }
-                emit(
-                    Definitions.EVENT_DEFAULT_ACTION,
-                    builder.registerActionEvent(
-                        content,
-                        lifeCycle: "Foreground",
-                        actionType: builder.buttonActionType(pressedButton)
-                    )
+                // If the launch phase hasn't settled yet, this notification is the
+                // one that launched the app from a killed state: capture it as the
+                // initial action and settle any pending getInitialAction with it.
+                let launchAction = !didFinishLaunch
+                let actionMap = builder.registerActionEvent(
+                    content,
+                    lifeCycle: launchAction ? "AppKilled" : "Foreground",
+                    actionType: builder.buttonActionType(pressedButton)
                 )
+                if launchAction {
+                    initialAction = actionMap
+                    finishLaunching()
+                }
+                emit(Definitions.EVENT_DEFAULT_ACTION, actionMap)
             }
         }
         completionHandler()
