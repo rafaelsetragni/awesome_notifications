@@ -71,6 +71,11 @@ android {
 }
 
 dependencies {
+    // Depends on the core plugin module (which compiles AndroidAwnCore in), giving
+    // the decorator access to the core's scheduling seams (ScheduleProvider,
+    // ScheduleCanceller) and builder without duplicating the engine.
+    implementation(project(":awesome_notifications"))
+
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.mockito:mockito-core:5.0.0")
 }

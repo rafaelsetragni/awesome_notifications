@@ -1,38 +1,26 @@
 package me.carda.awesome_notifications_schedules
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
+import me.carda.android_awn_core.AwesomeNotifications
 
-/** AwesomeNotificationsSchedulesPlugin */
-class AwesomeNotificationsSchedulesPlugin :
-    FlutterPlugin,
-    MethodCallHandler {
-    // The MethodChannel that will the communication between Flutter and native Android
-    //
-    // This local reference serves to register the plugin with the Flutter Engine and unregister it
-    // when the Flutter Engine is detached from the Activity
-    private lateinit var channel: MethodChannel
+/**
+ * Scheduling decorator plugin (Android). Owns no method channel: on attach it
+ * plugs a [NotificationScheduler] into the core's scheduling seams
+ * ([AwesomeNotifications.scheduleProvider] to register the AlarmManager delivery,
+ * and [AwesomeNotifications.scheduleCanceller] so `cancel*` also cancels the
+ * pending schedule). The core stays unaware of scheduling.
+ */
+class AwesomeNotificationsSchedulesPlugin : FlutterPlugin {
 
-    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "awesome_notifications_schedules")
-        channel.setMethodCallHandler(this)
-    }
+    private val scheduler = NotificationScheduler()
 
-    override fun onMethodCall(
-        call: MethodCall,
-        result: Result
-    ) {
-        if (call.method == "getPlatformVersion") {
-            result.success("Android ${android.os.Build.VERSION.RELEASE}")
-        } else {
-            result.notImplemented()
-        }
+    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        AwesomeNotifications.scheduleProvider = scheduler
+        AwesomeNotifications.scheduleCanceller = scheduler
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        channel.setMethodCallHandler(null)
+        AwesomeNotifications.scheduleProvider = null
+        AwesomeNotifications.scheduleCanceller = null
     }
 }

@@ -34,6 +34,13 @@ class AwesomeNotifications(private val context: Context) {
          * cancel then coincides with dismiss.
          */
         var scheduleCanceller: ScheduleCanceller? = null
+
+        /**
+         * Registered by the scheduling decorator so a notification carrying a
+         * `schedule` is registered with AlarmManager for later delivery instead
+         * of being posted immediately. Null in the bare core.
+         */
+        var scheduleProvider: ScheduleProvider? = null
     }
 
     // MARK: - Initialization
@@ -75,23 +82,31 @@ class AwesomeNotifications(private val context: Context) {
                 // Let registered decorators (e.g. localization) transform the model
                 // once; the build, events and stored payload all use the result.
                 val notification = NotificationContentManager.apply(rawNotification)
-                val androidNotification = builder.build(context, notification)
-                val id = builder.notificationId(notification)
 
-                if (androidNotification != null && id != null) {
-                    NotificationManagerCompat.from(context).notify(id, androidNotification)
-                    val content = builder.contentMap(notification)
-                    AwesomeEventsReceiver.notifyAwesomeEvent(
-                        Definitions.EVENT_NOTIFICATION_CREATED,
-                        builder.registerCreatedEvent(content, "Foreground")
-                    )
-                    AwesomeEventsReceiver.notifyAwesomeEvent(
-                        Definitions.EVENT_NOTIFICATION_DISPLAYED,
-                        builder.registerDisplayedEvent(content, "Foreground")
-                    )
+                // A scheduling decorator registers a notification that carries a
+                // `schedule` with AlarmManager for later delivery; when it does,
+                // the core does not post it now.
+                if (scheduleProvider?.schedule(context, notification) == true) {
                     true
                 } else {
-                    false
+                    val androidNotification = builder.build(context, notification)
+                    val id = builder.notificationId(notification)
+
+                    if (androidNotification != null && id != null) {
+                        NotificationManagerCompat.from(context).notify(id, androidNotification)
+                        val content = builder.contentMap(notification)
+                        AwesomeEventsReceiver.notifyAwesomeEvent(
+                            Definitions.EVENT_NOTIFICATION_CREATED,
+                            builder.registerCreatedEvent(content, "Foreground")
+                        )
+                        AwesomeEventsReceiver.notifyAwesomeEvent(
+                            Definitions.EVENT_NOTIFICATION_DISPLAYED,
+                            builder.registerDisplayedEvent(content, "Foreground")
+                        )
+                        true
+                    } else {
+                        false
+                    }
                 }
             } catch (_: SecurityException) {
                 // POST_NOTIFICATIONS not granted (Android 13+).

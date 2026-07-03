@@ -1,3 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="me.carda.awesome_notifications_schedules">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- Fired by AlarmManager at a scheduled notification's delivery time. -->
+        <receiver
+            android:name=".ScheduledNotificationReceiver"
+            android:exported="false" />
+    </application>
 </manifest>
