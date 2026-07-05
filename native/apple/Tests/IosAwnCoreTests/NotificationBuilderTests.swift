@@ -74,27 +74,27 @@ final class NotificationBuilderTests: XCTestCase {
     // MARK: - event registration
 
     func testRegisterCreatedEventStampsFields() {
-        let result = builder.registerCreatedEvent(["id": 1], lifeCycle: "Foreground")
+        let result = builder.registerCreatedEvent(["id": 1], lifeCycle: .foreground)
         XCTAssertEqual(result[Definitions.NOTIFICATION_CREATED_LIFECYCLE] as? String, "Foreground")
         XCTAssertEqual(result[Definitions.NOTIFICATION_CREATED_SOURCE] as? String, "Local")
         assertIsTimestamp(result[Definitions.NOTIFICATION_CREATED_DATE])
     }
 
     func testRegisterDisplayedEventStampsFields() {
-        let result = builder.registerDisplayedEvent(["id": 1], lifeCycle: "Foreground")
+        let result = builder.registerDisplayedEvent(["id": 1], lifeCycle: .foreground)
         XCTAssertEqual(result[Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE] as? String, "Foreground")
         assertIsTimestamp(result[Definitions.NOTIFICATION_DISPLAYED_DATE])
     }
 
     func testRegisterActionEventStampsFields() {
-        let result = builder.registerActionEvent(["id": 1], lifeCycle: "Foreground")
+        let result = builder.registerActionEvent(["id": 1], lifeCycle: .foreground)
         XCTAssertEqual(result[Definitions.NOTIFICATION_ACTION_TYPE] as? String, "Default")
         XCTAssertEqual(result[Definitions.NOTIFICATION_ACTION_LIFECYCLE] as? String, "Foreground")
         assertIsTimestamp(result[Definitions.NOTIFICATION_ACTION_DATE])
     }
 
     func testRegisterDismissedEventStampsFields() {
-        let result = builder.registerDismissedEvent(["id": 1], lifeCycle: "Foreground")
+        let result = builder.registerDismissedEvent(["id": 1], lifeCycle: .foreground)
         XCTAssertEqual(result[Definitions.NOTIFICATION_ACTION_LIFECYCLE] as? String, "Foreground")
         assertIsTimestamp(result[Definitions.NOTIFICATION_DISMISSED_DATE])
     }
@@ -123,7 +123,7 @@ final class NotificationBuilderTests: XCTestCase {
     }
 
     func testRegistrationPreservesOriginalContent() {
-        let result = builder.registerCreatedEvent(["id": 99], lifeCycle: "Foreground")
+        let result = builder.registerCreatedEvent(["id": 99], lifeCycle: .foreground)
         XCTAssertEqual(mapUtils.getInt(result["id"]), 99)
     }
 
