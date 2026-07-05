@@ -42,13 +42,52 @@
             "program": "lib/main.dart"
         },
         {
-            "name": "All tests coverage",
+            "name": "Example (Schedules)",
+            "cwd": "packages/awesome_notifications_schedules/example",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart"
+        },
+        {
+            "name": "Tests + coverage (Core)",
             "cwd": "packages/awesome_notifications",
             "request": "launch",
             "type": "dart",
+            "program": "test/",
             "toolArgs": [
                 "--coverage"
             ]
+        },
+        {
+            "name": "Tests + coverage (Schedules)",
+            "cwd": "packages/awesome_notifications_schedules",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/",
+            "toolArgs": [
+                "--coverage"
+            ]
+        },
+        {
+            "name": "Tests + coverage (Localizations)",
+            "cwd": "packages/awesome_notifications_localizations",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/",
+            "toolArgs": [
+                "--coverage"
+            ]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Tests + coverage (All packages)",
+            "configurations": [
+                "Tests + coverage (Core)",
+                "Tests + coverage (Schedules)",
+                "Tests + coverage (Localizations)"
+            ],
+            "stopAll": true
         }
     ]
 }

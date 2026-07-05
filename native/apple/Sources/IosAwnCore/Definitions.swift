@@ -65,4 +65,7 @@ public enum Definitions {
 
     // iOS category whose `.customDismissAction` lets us capture dismiss events.
     public static let DEFAULT_CATEGORY_IDENTIFIER = "DEFAULT"
+
+    // The reference time zone all lifecycle dates are serialized in.
+    public static let UTC_TIMEZONE = "UTC"
 }

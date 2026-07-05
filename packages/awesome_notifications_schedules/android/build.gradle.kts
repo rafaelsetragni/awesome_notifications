@@ -56,15 +56,10 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
+            isReturnDefaultValues = true
             all {
-                it.useJUnitPlatform()
-
                 it.outputs.upToDateWhen { false }
-
-                it.testLogging {
-                    events("passed", "skipped", "failed", "standardOut", "standardError")
-                    showStandardStreams = true
-                }
+                it.testLogging { events("passed", "skipped", "failed") }
             }
         }
     }
@@ -72,10 +67,13 @@ android {
 
 dependencies {
     // Depends on the core plugin module (which compiles AndroidAwnCore in), giving
-    // the decorator access to the core's scheduling seams (ScheduleProvider,
-    // ScheduleCanceller) and builder without duplicating the engine.
+    // the decorator access to the core's builder decorator chain, cancel-interceptor
+    // registry and event bus without duplicating the engine.
     implementation(project(":awesome_notifications"))
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:5.0.0")
+    testImplementation("org.json:json:20240303")
+    testImplementation("org.robolectric:robolectric:4.14.1")
+    testImplementation("androidx.test:core-ktx:1.6.1")
 }

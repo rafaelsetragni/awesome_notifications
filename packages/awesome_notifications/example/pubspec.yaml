@@ -34,6 +34,9 @@ dependencies:
   # Bundled example: path dependency on the plugin in the parent directory.
   awesome_notifications:
     path: ../
+  # Scheduling decorator (adds NotificationInterval/NotificationCalendar delivery).
+  awesome_notifications_schedules:
+    path: ../../awesome_notifications_schedules
 
 dev_dependencies:
   flutter_test:

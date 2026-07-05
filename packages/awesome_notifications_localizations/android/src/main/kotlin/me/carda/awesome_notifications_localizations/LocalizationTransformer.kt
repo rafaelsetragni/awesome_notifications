@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import me.carda.android_awn_core.JsonUtils
-import me.carda.android_awn_core.NotificationContentTransformer
 import java.util.Locale
 
 /**
@@ -17,14 +16,15 @@ import java.util.Locale
  *     labels from the matching entry of the model's `localizations` map (this
  *     takes precedence over the loc-key result).
  *
- * The core builder runs this without knowing it exists — the decorator seam.
+ * Driven by [LocalizationBuilder], the decorator's hook into the core builder
+ * chain; the core stays unaware it exists.
  */
 class LocalizationTransformer(
     private val manager: LocalizationManager
-) : NotificationContentTransformer {
+) {
 
     @Suppress("UNCHECKED_CAST")
-    override fun transform(model: Map<String, Any?>): Map<String, Any?> {
+    fun transform(model: Map<String, Any?>): Map<String, Any?> {
         val content = (model[CONTENT] as? Map<String, Any?>)?.toMutableMap()
             ?: return model
         val languageCode = manager.getLocalization()

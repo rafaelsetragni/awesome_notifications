@@ -9,8 +9,6 @@ import java.util.Calendar
 import java.util.TimeZone
 import me.carda.android_awn_core.JsonUtils
 import me.carda.android_awn_core.NotificationBuilder
-import me.carda.android_awn_core.ScheduleCanceller
-import me.carda.android_awn_core.ScheduleProvider
 
 /**
  * Schedules notifications for later delivery via AlarmManager and cancels them.
@@ -18,22 +16,24 @@ import me.carda.android_awn_core.ScheduleProvider
  * A notification carrying a `schedule` map is registered as a one-shot alarm
  * whose PendingIntent (to [ScheduledNotificationReceiver]) carries the serialized
  * model; the receiver rebuilds and posts it, re-scheduling if the schedule
- * repeats.
+ * repeats. Driven by [ScheduleBuilder] (delivery) and [ScheduleCancelInterceptor]
+ * (cancellation) — the decorator's hooks into the core.
  *
  * Note: without a persistent store, `cancel*ByChannelKey/ByGroupKey/all` and
  * reboot re-scheduling are not yet supported (follow-up); cancel-by-id works.
  */
-class NotificationScheduler : ScheduleProvider, ScheduleCanceller {
+class NotificationScheduler {
 
-    override fun schedule(context: Context, model: Map<String, Any?>): Boolean {
+    /** Registers [model] for later delivery; returns false if it can't be scheduled. */
+    fun schedule(context: Context, model: Map<String, Any?>): Boolean {
         @Suppress("UNCHECKED_CAST")
-        val schedule = model["schedule"] as? Map<String, Any?> ?: return false
+        val schedule = model[ScheduleKeys.SCHEDULE] as? Map<String, Any?> ?: return false
         val id = NotificationBuilder.getNewBuilder().notificationId(model) ?: return false
         val fireAt = nextFireTime(schedule) ?: return false
 
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pending = firePendingIntent(context, id, model)
-        val allowWhileIdle = schedule["allowWhileIdle"] as? Boolean ?: false
+        val allowWhileIdle = schedule[ScheduleKeys.ALLOW_WHILE_IDLE] as? Boolean ?: false
 
         if (allowWhileIdle && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, fireAt, pending)
@@ -43,15 +43,10 @@ class NotificationScheduler : ScheduleProvider, ScheduleCanceller {
         return true
     }
 
-    override fun cancelSchedule(context: Context, id: Int) {
+    fun cancelSchedule(context: Context, id: Int) {
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         am.cancel(cancelPendingIntent(context, id))
     }
-
-    // Without persistence these can only be honored per-id; left as no-ops for now.
-    override fun cancelSchedulesByChannelKey(context: Context, channelKey: String) {}
-    override fun cancelSchedulesByGroupKey(context: Context, groupKey: String) {}
-    override fun cancelAllSchedules(context: Context) {}
 
     companion object {
         const val ACTION = "me.carda.awesome_notifications_schedules.FIRE"
@@ -82,37 +77,36 @@ class NotificationScheduler : ScheduleProvider, ScheduleCanceller {
         /** Next fire time (epoch ms) for an interval or calendar schedule, or null. */
         fun nextFireTime(schedule: Map<String, Any?>): Long? {
             val now = System.currentTimeMillis()
-            (schedule["interval"] as? Number)?.let { return now + it.toLong() * 1000L }
+            (schedule[ScheduleKeys.INTERVAL] as? Number)?.let { return now + it.toLong() * 1000L }
             return nextCalendarTime(schedule, now)
         }
 
         private fun nextCalendarTime(schedule: Map<String, Any?>, now: Long): Long? {
-            val components = listOf("year", "month", "day", "hour", "minute", "second", "weekday")
-            if (components.none { schedule[it] != null }) return null
+            if (ScheduleKeys.CALENDAR_COMPONENTS.none { schedule[it] != null }) return null
 
-            val tz = (schedule["timeZone"] as? String)?.let { TimeZone.getTimeZone(it) }
+            val tz = (schedule[ScheduleKeys.TIME_ZONE] as? String)?.let { TimeZone.getTimeZone(it) }
                 ?: TimeZone.getDefault()
             val cal = Calendar.getInstance(tz).apply {
                 timeInMillis = now
                 set(Calendar.MILLISECOND, 0)
             }
-            (schedule["year"] as? Number)?.let { cal.set(Calendar.YEAR, it.toInt()) }
-            (schedule["month"] as? Number)?.let { cal.set(Calendar.MONTH, it.toInt() - 1) }
-            (schedule["day"] as? Number)?.let { cal.set(Calendar.DAY_OF_MONTH, it.toInt()) }
-            (schedule["hour"] as? Number)?.let { cal.set(Calendar.HOUR_OF_DAY, it.toInt()) }
-            (schedule["minute"] as? Number)?.let { cal.set(Calendar.MINUTE, it.toInt()) }
-            (schedule["second"] as? Number)?.let { cal.set(Calendar.SECOND, it.toInt()) }
+            (schedule[ScheduleKeys.YEAR] as? Number)?.let { cal.set(Calendar.YEAR, it.toInt()) }
+            (schedule[ScheduleKeys.MONTH] as? Number)?.let { cal.set(Calendar.MONTH, it.toInt() - 1) }
+            (schedule[ScheduleKeys.DAY] as? Number)?.let { cal.set(Calendar.DAY_OF_MONTH, it.toInt()) }
+            (schedule[ScheduleKeys.HOUR] as? Number)?.let { cal.set(Calendar.HOUR_OF_DAY, it.toInt()) }
+            (schedule[ScheduleKeys.MINUTE] as? Number)?.let { cal.set(Calendar.MINUTE, it.toInt()) }
+            (schedule[ScheduleKeys.SECOND] as? Number)?.let { cal.set(Calendar.SECOND, it.toInt()) }
             // Dart weekday: 1=Monday..7=Sunday; Calendar: 1=Sunday..7=Saturday.
-            (schedule["weekday"] as? Number)?.let { cal.set(Calendar.DAY_OF_WEEK, (it.toInt() % 7) + 1) }
+            (schedule[ScheduleKeys.WEEKDAY] as? Number)?.let { cal.set(Calendar.DAY_OF_WEEK, (it.toInt() % 7) + 1) }
 
             // If the computed time is already past, advance to the next occurrence
             // based on the coarsest unspecified period.
             if (cal.timeInMillis <= now) {
                 when {
-                    schedule["weekday"] != null -> cal.add(Calendar.WEEK_OF_YEAR, 1)
-                    schedule["day"] == null && schedule["hour"] != null -> cal.add(Calendar.DAY_OF_MONTH, 1)
-                    schedule["day"] != null && schedule["month"] == null -> cal.add(Calendar.MONTH, 1)
-                    schedule["month"] != null && schedule["year"] == null -> cal.add(Calendar.YEAR, 1)
+                    schedule[ScheduleKeys.WEEKDAY] != null -> cal.add(Calendar.WEEK_OF_YEAR, 1)
+                    schedule[ScheduleKeys.DAY] == null && schedule[ScheduleKeys.HOUR] != null -> cal.add(Calendar.DAY_OF_MONTH, 1)
+                    schedule[ScheduleKeys.DAY] != null && schedule[ScheduleKeys.MONTH] == null -> cal.add(Calendar.MONTH, 1)
+                    schedule[ScheduleKeys.MONTH] != null && schedule[ScheduleKeys.YEAR] == null -> cal.add(Calendar.YEAR, 1)
                     else -> return null // fully-specified past date: no next occurrence
                 }
             }

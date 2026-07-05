@@ -65,7 +65,7 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin, AwesomeEventLi
       result(TimeZone.current.identifier)
 
     case "getUtcTimeZoneIdentifier":
-      result("UTC")
+      result(Definitions.UTC_TIMEZONE)
 
     case "setEventHandles":
       // Background isolate handles; foreground events are delivered live through

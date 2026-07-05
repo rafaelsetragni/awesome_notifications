@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationManagerCompat
+import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 /**
@@ -17,31 +18,21 @@ import java.util.concurrent.Executors
  * plugin (app side) and background/headless entry points later. Delegates
  * building/payload-injection/event-stamping to `NotificationBuilder` and
  * broadcasts lifecycle events through `AwesomeEventsReceiver`.
+ *
+ * The [executor] runs the build off the main thread (image loading does I/O); it
+ * is injectable so tests can drive `createNotification` synchronously.
  */
-class AwesomeNotifications(private val context: Context) {
+class AwesomeNotifications(
+    private val context: Context,
+    private val executor: Executor = Executors.newSingleThreadExecutor()
+) {
 
+    // For event stamping / content extraction. The build itself goes through the
+    // decorator chain composed by NotificationBuilderRegistry (see createNotification).
     private val builder = NotificationBuilder.getNewBuilder()
     private val channels = mutableMapOf<String, Map<String, Any?>>()
 
-    // Notifications are built off the main thread (image loading does I/O).
-    private val executor = Executors.newSingleThreadExecutor()
     private val mainHandler = Handler(Looper.getMainLooper())
-
-    companion object {
-        /**
-         * Registered by the scheduling decorator so `cancel*` also cancels the
-         * pending scheduled creation (AlarmManager). Null in the bare core, where
-         * cancel then coincides with dismiss.
-         */
-        var scheduleCanceller: ScheduleCanceller? = null
-
-        /**
-         * Registered by the scheduling decorator so a notification carrying a
-         * `schedule` is registered with AlarmManager for later delivery instead
-         * of being posted immediately. Null in the bare core.
-         */
-        var scheduleProvider: ScheduleProvider? = null
-    }
 
     // MARK: - Initialization
 
@@ -55,7 +46,9 @@ class AwesomeNotifications(private val context: Context) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = channelData[Definitions.NOTIFICATION_CHANNEL_NAME] as? String ?: key
-            val importance = readImportance(channelData[Definitions.NOTIFICATION_IMPORTANCE])
+            val importance = NotificationImportance
+                .from(channelData[Definitions.NOTIFICATION_IMPORTANCE] as? String)
+                .toAndroidImportance()
             val channel = NotificationChannel(key, name, importance)
             (channelData[Definitions.NOTIFICATION_CHANNEL_DESCRIPTION] as? String)?.let {
                 channel.description = it
@@ -79,34 +72,28 @@ class AwesomeNotifications(private val context: Context) {
     fun createNotification(rawNotification: Map<String, Any?>, callback: (Boolean) -> Unit) {
         executor.execute {
             val created = try {
-                // Let registered decorators (e.g. localization) transform the model
-                // once; the build, events and stored payload all use the result.
-                val notification = NotificationContentManager.apply(rawNotification)
-
-                // A scheduling decorator registers a notification that carries a
-                // `schedule` with AlarmManager for later delivery; when it does,
-                // the core does not post it now.
-                if (scheduleProvider?.schedule(context, notification) == true) {
-                    true
-                } else {
-                    val androidNotification = builder.build(context, notification)
-                    val id = builder.notificationId(notification)
-
-                    if (androidNotification != null && id != null) {
-                        NotificationManagerCompat.from(context).notify(id, androidNotification)
-                        val content = builder.contentMap(notification)
+                // Run the builder decorator chain (localization transforms the
+                // model, scheduling may take over delivery, …). In the bare core
+                // this is just the base builder, which posts immediately.
+                when (val outcome =
+                    NotificationBuilderRegistry.makeBuilder().build(context, rawNotification)) {
+                    is BuildOutcome.Post -> {
+                        NotificationManagerCompat.from(context)
+                            .notify(outcome.id, outcome.notification)
+                        val content = builder.contentMap(outcome.model)
                         AwesomeEventsReceiver.notifyAwesomeEvent(
                             Definitions.EVENT_NOTIFICATION_CREATED,
-                            builder.registerCreatedEvent(content, "Foreground")
+                            builder.registerCreatedEvent(content, NotificationLifeCycle.Foreground)
                         )
                         AwesomeEventsReceiver.notifyAwesomeEvent(
                             Definitions.EVENT_NOTIFICATION_DISPLAYED,
-                            builder.registerDisplayedEvent(content, "Foreground")
+                            builder.registerDisplayedEvent(content, NotificationLifeCycle.Foreground)
                         )
                         true
-                    } else {
-                        false
                     }
+                    // A decorator took over delivery (e.g. scheduled it for later).
+                    BuildOutcome.Handled -> true
+                    BuildOutcome.Invalid -> false
                 }
             } catch (_: SecurityException) {
                 // POST_NOTIFICATIONS not granted (Android 13+).
@@ -119,8 +106,8 @@ class AwesomeNotifications(private val context: Context) {
     // MARK: - Dismiss / cancel
 
     // dismiss* only removes the visible notification from the status bar (keeps
-    // any pending scheduled creation). cancel* also cancels the schedule, via the
-    // scheduleCanceller registered by the scheduling decorator.
+    // any pending scheduled creation). cancel* also notifies the registered
+    // CancelInterceptors, so a decorator (e.g. scheduling) can drop its own state.
 
     fun dismiss(id: Int) = NotificationManagerCompat.from(context).cancel(id)
 
@@ -133,22 +120,22 @@ class AwesomeNotifications(private val context: Context) {
         cancelMatching { it.notification.group == groupKey }
 
     fun cancel(id: Int) {
-        scheduleCanceller?.cancelSchedule(context, id)
+        CancelInterceptorRegistry.onCancel(context, id)
         dismiss(id)
     }
 
     fun cancelAll() {
-        scheduleCanceller?.cancelAllSchedules(context)
+        CancelInterceptorRegistry.onCancelAll(context)
         dismissAll()
     }
 
     fun cancelByChannelKey(channelKey: String) {
-        scheduleCanceller?.cancelSchedulesByChannelKey(context, channelKey)
+        CancelInterceptorRegistry.onCancelByChannelKey(context, channelKey)
         dismissByChannelKey(channelKey)
     }
 
     fun cancelByGroupKey(groupKey: String) {
-        scheduleCanceller?.cancelSchedulesByGroupKey(context, groupKey)
+        CancelInterceptorRegistry.onCancelByGroupKey(context, groupKey)
         dismissByGroupKey(groupKey)
     }
 
@@ -168,14 +155,4 @@ class AwesomeNotifications(private val context: Context) {
     private fun channelIdOf(sbn: StatusBarNotification): String? =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) sbn.notification.channelId
         else null
-
-    /** Maps the Dart `NotificationImportance` name to an Android importance. */
-    private fun readImportance(value: Any?): Int =
-        when ((value as? String)?.substringAfterLast('.')?.lowercase()) {
-            "none" -> NotificationManager.IMPORTANCE_NONE
-            "min" -> NotificationManager.IMPORTANCE_MIN
-            "low" -> NotificationManager.IMPORTANCE_LOW
-            "high", "max" -> NotificationManager.IMPORTANCE_HIGH
-            else -> NotificationManager.IMPORTANCE_DEFAULT
-        }
 }

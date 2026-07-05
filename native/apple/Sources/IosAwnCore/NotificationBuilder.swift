@@ -7,16 +7,147 @@ import UserNotifications
 ///
 /// Created via a factory (an instance with injected helpers — not static utility
 /// methods), mirroring the original IosAwnCore `NotificationBuilder`.
-public final class NotificationBuilder {
+/// The deliverable produced by the builder chain: the built content plus an
+/// optional delivery trigger contributed by a scheduling decorator.
+public struct BuiltNotification {
+    public let id: Int
+    public let content: UNMutableNotificationContent
+    public let trigger: UNNotificationTrigger?
+    /// The (possibly decorator-transformed) model, so the caller stamps events
+    /// from the same content that was built.
+    public let model: [String: Any]
+    public init(
+        id: Int,
+        content: UNMutableNotificationContent,
+        trigger: UNNotificationTrigger? = nil,
+        model: [String: Any]
+    ) {
+        self.id = id
+        self.content = content
+        self.trigger = trigger
+        self.model = model
+    }
+}
+
+open class NotificationBuilder {
 
     public static func newInstance() -> NotificationBuilder {
         return NotificationBuilder()
     }
-    private init() {}
+
+    /// The wrapped inner builder — the next in the decorator chain; nil for the
+    /// base builder.
+    private let inner: NotificationBuilder?
+    public init(inner: NotificationBuilder? = nil) {
+        self.inner = inner
+    }
 
     private let stringUtils = StringUtils.shared
     private let mapUtils = MapUtils.shared
     private let jsonUtils = JsonUtils.shared
+
+    // MARK: - Decorator chain
+
+    /// Produces the deliverable for a model. The base builds the content (no
+    /// trigger); a decorator overrides this, does its work, and calls [next] to
+    /// delegate to the wrapped builder. The registry composes the chain in
+    /// priority order so the build order is predictable.
+    open func build(model: [String: Any]) -> BuiltNotification? {
+        // Stamp the created lifecycle into the content BEFORE building, so it is
+        // stored in the delivered notification's userInfo and round-trips to the
+        // displayed/action events (otherwise a tapped notification reports a null
+        // createdDate). Mirrors the original core's registerCreateEvent.
+        let stampedModel = stampCreatedLifecycle(into: model)
+        guard let (id, content) = createNotificationContent(fromModel: stampedModel) else {
+            return nil
+        }
+        return BuiltNotification(id: id, content: content, trigger: nil, model: stampedModel)
+    }
+
+    /// Delegates to the wrapped inner builder (called by decorators).
+    public func next(_ model: [String: Any]) -> BuiltNotification? {
+        return inner?.build(model: model)
+    }
+
+    // MARK: - Lifecycle stamping (persisted into the stored content)
+
+    /// Returns a copy of [model] with the created lifecycle (date/source/lifeCycle)
+    /// merged into its `content` sub-map, unless already present. Persisting it in
+    /// the content is what lets a later displayed/action event carry the
+    /// createdDate — the original core stamped it the same way.
+    public func stampCreatedLifecycle(
+        into model: [String: Any],
+        lifeCycle: NotificationLifeCycle = .foreground,
+        source: NotificationSource = .local
+    ) -> [String: Any] {
+        var result = model
+        var content = contentMap(fromModel: model)
+        if content[Definitions.NOTIFICATION_CREATED_DATE] == nil {
+            content[Definitions.NOTIFICATION_CREATED_DATE] = now()
+            content[Definitions.NOTIFICATION_CREATED_LIFECYCLE] = lifeCycle.rawValue
+            content[Definitions.NOTIFICATION_CREATED_SOURCE] = source.rawValue
+        }
+        result[Definitions.NOTIFICATION_CONTENT] = content
+        return result
+    }
+
+    /// Returns a copy of [model] with the displayed lifecycle merged into its
+    /// `content` sub-map. For an immediate notification the caller passes the
+    /// created date/lifecycle; for a scheduled one, the (predicted) fire date and
+    /// the `AppKilled` lifecycle (it may be shown while the app is not foreground).
+    public func stampDisplayedLifecycle(
+        into model: [String: Any],
+        displayedDate: String,
+        lifeCycle: NotificationLifeCycle
+    ) -> [String: Any] {
+        var result = model
+        var content = contentMap(fromModel: model)
+        content[Definitions.NOTIFICATION_DISPLAYED_DATE] = displayedDate
+        content[Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE] = lifeCycle.rawValue
+        result[Definitions.NOTIFICATION_CONTENT] = content
+        return result
+    }
+
+    /// Bakes the (predicted) displayed lifecycle into a built notification's stored
+    /// userInfo, returning the updated deliverable. Immediate → displayed == created
+    /// (foreground); scheduled → the trigger's next fire date, lifecycle terminated
+    /// (it may be shown while the app is not running).
+    public func stampDisplayed(on built: BuiltNotification) -> BuiltNotification {
+        let displayedDate: String
+        let lifeCycle: NotificationLifeCycle
+        if let fireDate = nextTriggerDate(built.trigger) {
+            displayedDate = fireDate
+            lifeCycle = .terminated
+        } else {
+            let content = contentMap(fromModel: built.model)
+            displayedDate =
+                (content[Definitions.NOTIFICATION_CREATED_DATE] as? String) ?? now()
+            lifeCycle = .foreground
+        }
+        let updatedModel = stampDisplayedLifecycle(
+            into: built.model, displayedDate: displayedDate, lifeCycle: lifeCycle)
+        // Rewrite the stored payload so the delivered notification carries it.
+        if let json = jsonUtils.toJson(updatedModel) {
+            built.content.userInfo[Definitions.NOTIFICATION_JSON] = json
+        }
+        return BuiltNotification(
+            id: built.id, content: built.content,
+            trigger: built.trigger, model: updatedModel)
+    }
+
+    /// The next fire date of a delivery trigger (interval or calendar), formatted
+    /// like the other lifecycle dates, or nil for an immediate (nil) trigger.
+    private func nextTriggerDate(_ trigger: UNNotificationTrigger?) -> String? {
+        if let calendar = trigger as? UNCalendarNotificationTrigger,
+           let date = calendar.nextTriggerDate() {
+            return format(date)
+        }
+        if let interval = trigger as? UNTimeIntervalNotificationTrigger,
+           let date = interval.nextTriggerDate() {
+            return format(date)
+        }
+        return nil
+    }
 
     // MARK: - Build
 
@@ -71,10 +202,10 @@ public final class NotificationBuilder {
                   !key.isEmpty else { continue }
             let label = mapUtils.getString(button[Definitions.NOTIFICATION_BUTTON_LABEL]) ?? key
             let actionType =
-                mapUtils.getString(button[Definitions.NOTIFICATION_ACTION_TYPE]) ?? "Default"
+                ActionType.from(mapUtils.getString(button[Definitions.NOTIFICATION_ACTION_TYPE]))
 
             var options: UNNotificationActionOptions = []
-            if actionType.hasSuffix("Default") { options.insert(.foreground) }
+            if actionType == .default { options.insert(.foreground) }
             if mapUtils.getBool(button[Definitions.NOTIFICATION_IS_DANGEROUS_OPTION]) == true {
                 options.insert(.destructive)
             }
@@ -173,37 +304,51 @@ public final class NotificationBuilder {
 
     // MARK: - Event registration (stamps date + lifecycle on the content)
 
-    public func registerCreatedEvent(_ content: [String: Any], lifeCycle: String) -> [String: Any] {
+    public func registerCreatedEvent(
+        _ content: [String: Any],
+        lifeCycle: NotificationLifeCycle
+    ) -> [String: Any] {
         var map = content
-        map[Definitions.NOTIFICATION_CREATED_DATE] = now()
-        map[Definitions.NOTIFICATION_CREATED_LIFECYCLE] = lifeCycle
-        map[Definitions.NOTIFICATION_CREATED_SOURCE] = "Local"
+        // Preserve values already stamped into the content (e.g. a scheduling
+        // decorator sets the source to Schedule); only fill what's missing.
+        map[Definitions.NOTIFICATION_CREATED_DATE] =
+            content[Definitions.NOTIFICATION_CREATED_DATE] ?? now()
+        map[Definitions.NOTIFICATION_CREATED_LIFECYCLE] =
+            content[Definitions.NOTIFICATION_CREATED_LIFECYCLE] ?? lifeCycle.rawValue
+        map[Definitions.NOTIFICATION_CREATED_SOURCE] =
+            content[Definitions.NOTIFICATION_CREATED_SOURCE] ?? NotificationSource.local.rawValue
         return map
     }
 
-    public func registerDisplayedEvent(_ content: [String: Any], lifeCycle: String) -> [String: Any] {
+    public func registerDisplayedEvent(
+        _ content: [String: Any],
+        lifeCycle: NotificationLifeCycle
+    ) -> [String: Any] {
         var map = content
         map[Definitions.NOTIFICATION_DISPLAYED_DATE] = now()
-        map[Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE] = lifeCycle
+        map[Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE] = lifeCycle.rawValue
         return map
     }
 
     public func registerActionEvent(
         _ content: [String: Any],
-        lifeCycle: String,
-        actionType: String = "Default"
+        lifeCycle: NotificationLifeCycle,
+        actionType: ActionType = .default
     ) -> [String: Any] {
         var map = content
         map[Definitions.NOTIFICATION_ACTION_DATE] = now()
-        map[Definitions.NOTIFICATION_ACTION_LIFECYCLE] = lifeCycle
-        map[Definitions.NOTIFICATION_ACTION_TYPE] = actionType
+        map[Definitions.NOTIFICATION_ACTION_LIFECYCLE] = lifeCycle.rawValue
+        map[Definitions.NOTIFICATION_ACTION_TYPE] = actionType.rawValue
         return map
     }
 
-    public func registerDismissedEvent(_ content: [String: Any], lifeCycle: String) -> [String: Any] {
+    public func registerDismissedEvent(
+        _ content: [String: Any],
+        lifeCycle: NotificationLifeCycle
+    ) -> [String: Any] {
         var map = content
         map[Definitions.NOTIFICATION_DISMISSED_DATE] = now()
-        map[Definitions.NOTIFICATION_ACTION_LIFECYCLE] = lifeCycle
+        map[Definitions.NOTIFICATION_ACTION_LIFECYCLE] = lifeCycle.rawValue
         return map
     }
 
@@ -217,33 +362,39 @@ public final class NotificationBuilder {
     /// dismisses the notification and fires the dismiss event (ignoring
     /// autoDismissible).
     func isDismissAction(_ content: [String: Any]) -> Bool {
-        let actionType =
-            mapUtils.getString(content[Definitions.NOTIFICATION_ACTION_TYPE]) ?? ""
-        return actionType.hasSuffix("DismissAction")
+        return ActionType.from(
+            mapUtils.getString(content[Definitions.NOTIFICATION_ACTION_TYPE])) == .dismissAction
     }
 
-    /// The actionType of a pressed button (or "Default" when the content itself
-    /// was tapped / the button is unknown).
-    func buttonActionType(_ button: [String: Any]?) -> String {
-        return mapUtils.getString(button?[Definitions.NOTIFICATION_ACTION_TYPE] ?? "")
-            ?? "Default"
+    /// The actionType of a pressed button (`.default` when the content itself was
+    /// tapped / the button is unknown).
+    func buttonActionType(_ button: [String: Any]?) -> ActionType {
+        return ActionType.from(mapUtils.getString(button?[Definitions.NOTIFICATION_ACTION_TYPE]))
     }
 
     /// Whether a pressed button should auto-dismiss its notification.
     /// `DismissAction` always dismisses; `KeepOnTop` never; otherwise honor the
     /// button's `autoDismissible` flag (default true).
     func shouldButtonAutoDismiss(_ button: [String: Any]?) -> Bool {
-        let actionType = buttonActionType(button)
-        if actionType.hasSuffix("DismissAction") { return true }
-        if actionType.hasSuffix("KeepOnTop") { return false }
-        return mapUtils.getBool(button?[Definitions.NOTIFICATION_AUTO_DISMISSIBLE] ?? "")
-            ?? true
+        switch buttonActionType(button) {
+        case .dismissAction: return true
+        case .keepOnTop: return false
+        default:
+            return mapUtils.getBool(button?[Definitions.NOTIFICATION_AUTO_DISMISSIBLE] ?? "")
+                ?? true
+        }
     }
 
     private func now() -> String {
+        return format(Date())
+    }
+
+    /// Formats a date the way all lifecycle dates are serialized (UTC), so Dart's
+    /// `AwesomeDateUtils` parses it back consistently.
+    private func format(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        formatter.timeZone = TimeZone(identifier: "UTC")
-        return formatter.string(from: Date())
+        formatter.timeZone = TimeZone(identifier: Definitions.UTC_TIMEZONE)
+        return formatter.string(from: date)
     }
 }

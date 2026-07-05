@@ -1,11 +1,18 @@
-import 'package:awesome_notifications/src/models/model.dart';
-import 'package:awesome_notifications/src/utils/awesome_assert_utils.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
-import '../definitions.dart';
-
-/// Abstract base class for notification schedule configuration.
-/// Defines the common properties and methods for scheduling notifications.
-abstract class NotificationSchedule extends Model {
+/// Abstract base class for a notification schedule configuration.
+///
+/// A schedule is a [NotificationExtension]: it is attached to a notification
+/// through the core's
+/// `createNotification(extensions: [NotificationCalendar(...) | NotificationInterval(...)])`.
+/// As an extension it contributes a top-level `schedule` block to the serialized
+/// notification map ([toMap]); the native scheduling decorator reads that block
+/// and registers the delayed delivery. The core stays unaware of scheduling.
+///
+/// Concrete subclasses ([NotificationInterval], [NotificationCalendar]) extend
+/// the flat serialization via [toScheduleMap].
+abstract class NotificationSchedule extends Model
+    implements NotificationExtension {
   /// Constructs a [NotificationSchedule] with various scheduling options.
   ///
   /// [timeZone]: Specifies the time zone reference for the schedule.
@@ -35,8 +42,8 @@ abstract class NotificationSchedule extends Model {
   /// Indicates whether the notification should be delivered once (false) or rescheduled each time it's delivered (true).
   bool repeats;
 
-  /// Creates a [NotificationSchedule] instance from a map of data.
-  /// Returns null if invalid [mapData] is provided.
+  /// Creates a [NotificationSchedule] instance from a map of the flat `schedule`
+  /// block. Returns null if invalid [mapData] is provided.
   @override
   NotificationSchedule? fromMap(Map<String, dynamic> mapData) {
     timeZone = AwesomeAssertUtils.extractValue(
@@ -62,17 +69,22 @@ abstract class NotificationSchedule extends Model {
     return this;
   }
 
-  /// Converts the [NotificationSchedule] instance to a map.
-  @override
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> dataMap = {
+  /// The flat `schedule` block (timeZone, repeats, …). Subclasses extend this
+  /// with their own scheduling fields.
+  Map<String, dynamic> toScheduleMap() {
+    return {
       NOTIFICATION_SCHEDULE_TIMEZONE: timeZone,
       NOTIFICATION_ALLOW_WHILE_IDLE: allowWhileIdle,
       NOTIFICATION_SCHEDULE_REPEATS: repeats,
       NOTIFICATION_SCHEDULE_PRECISE_ALARM: preciseAlarm,
       NOTIFICATION_SCHEDULE_DELAY_TOLERANCE: delayTolerance
     };
+  }
 
-    return dataMap;
+  /// [NotificationExtension] contract: contributes the `schedule` block to the
+  /// notification map, as a sibling of `content` / `actionButtons`.
+  @override
+  Map<String, dynamic> toMap() {
+    return {NOTIFICATION_SCHEDULE: toScheduleMap()};
   }
 }

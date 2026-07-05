@@ -56,20 +56,27 @@ public final class BitmapUtils {
 
     private func mediaSource(_ path: String) -> MediaSource {
         let lower = path.lowercased()
-        if lower.hasPrefix("http://") || lower.hasPrefix("https://") { return .network }
-        if lower.hasPrefix("file://") { return .file }
-        if lower.hasPrefix("resource://") { return .resource }
-        if lower.hasPrefix("asset://") { return .asset }
+        if lower.hasPrefix(MediaSourcePrefix.networkHttp)
+            || lower.hasPrefix(MediaSourcePrefix.networkHttps) { return .network }
+        if lower.hasPrefix(MediaSourcePrefix.file) { return .file }
+        if lower.hasPrefix(MediaSourcePrefix.resource) { return .resource }
+        if lower.hasPrefix(MediaSourcePrefix.asset) { return .asset }
         return .unknown
     }
 
     /// Strips the scheme prefix (network URLs are kept whole).
     private func clean(_ path: String) -> String {
         let lower = path.lowercased()
-        if lower.hasPrefix("http") { return path }
-        if lower.hasPrefix("asset://") { return String(path.dropFirst("asset://".count)) }
-        if lower.hasPrefix("file://") { return String(path.dropFirst("file://".count)) }
-        if lower.hasPrefix("resource://") { return String(path.dropFirst("resource://".count)) }
+        if lower.hasPrefix(MediaSourcePrefix.http) { return path }
+        if lower.hasPrefix(MediaSourcePrefix.asset) {
+            return String(path.dropFirst(MediaSourcePrefix.asset.count))
+        }
+        if lower.hasPrefix(MediaSourcePrefix.file) {
+            return String(path.dropFirst(MediaSourcePrefix.file.count))
+        }
+        if lower.hasPrefix(MediaSourcePrefix.resource) {
+            return String(path.dropFirst(MediaSourcePrefix.resource.count))
+        }
         return path
     }
 }

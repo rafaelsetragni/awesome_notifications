@@ -1,5 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 
+import 'notification_schedule.dart';
+
 /// Represents a notification scheduling configuration based on time intervals.
 class NotificationInterval extends NotificationSchedule {
   /// The amount of time between each notification repetition. Must be greater
@@ -39,17 +41,17 @@ class NotificationInterval extends NotificationSchedule {
     return this;
   }
 
-  /// Converts the [NotificationInterval] instance to a map.
+  /// Converts the interval schedule to its flat `schedule` block.
   @override
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = super.toMap();
+  Map<String, dynamic> toScheduleMap() {
+    Map<String, dynamic> map = super.toScheduleMap();
     return map..addAll({NOTIFICATION_SCHEDULE_INTERVAL: interval?.inSeconds});
   }
 
   /// Returns a string representation of the [NotificationInterval] instance.
   @override
   String toString() {
-    return toMap().toString().replaceAll(',', ',\n');
+    return toScheduleMap().toString().replaceAll(',', ',\n');
   }
 
   /// Validates the notification interval settings.

@@ -8,7 +8,7 @@ import IosAwnCore
 /// and the action button labels.
 ///
 /// The core builder runs this without knowing it exists — the decorator seam.
-final class LocalizationTransformer: NotificationContentTransformer {
+final class LocalizationTransformer {
 
     func transform(_ model: [String: Any]) -> [String: Any] {
         guard let localizations = localizationsMap(model), !localizations.isEmpty else {

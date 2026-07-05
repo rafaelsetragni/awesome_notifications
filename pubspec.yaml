@@ -9,7 +9,36 @@ environment:
 # Packages that share a single, consistent dependency resolution (Dart 3.6+).
 workspace:
   - packages/awesome_notifications
+  - packages/awesome_notifications_schedules
   - packages/awesome_notifications_localizations
 
 dev_dependencies:
   melos: ^7.0.0
+
+# Melos configuration (this Melos version reads it from the workspace pubspec).
+melos:
+  scripts:
+    analyze:
+      description: Statically analyze every package in the workspace.
+      exec: dart analyze .
+
+    format:
+      description: Format Dart code across the workspace.
+      exec: dart format .
+
+    test:
+      description: Run unit tests in packages that have a test/ folder.
+      exec: flutter test
+      packageFilters:
+        dirExists: test
+
+    coverage:
+      description: >-
+        Run tests with coverage in every package that has a test/ folder and
+        print each package's line coverage (lcov -> <pkg>/coverage/lcov.info).
+        Add --no-select to run all packages without the interactive prompt.
+      # The logic lives in tool/coverage.sh so Melos doesn't interpolate the
+      # awk's $2 (it treats $-tokens as its own variables).
+      exec: sh "$MELOS_ROOT_PATH/tool/coverage.sh"
+      packageFilters:
+        dirExists: test

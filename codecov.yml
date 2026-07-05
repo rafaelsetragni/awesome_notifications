@@ -1,0 +1,43 @@
+# Per-package coverage for the monorepo. Each package uploads its lcov under a
+# flag (see .github/workflows/dart.yml); the flags carry forward so a PR that
+# only touches one package doesn't drop the others' numbers. Package README
+# badges point at their own flag, e.g.
+#   https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/master/graph/badge.svg?flag=awesome_notifications_schedules
+coverage:
+  status:
+    project:
+      default:
+        informational: true
+    patch:
+      default:
+        informational: true
+
+flag_management:
+  default_rules:
+    carryforward: true
+
+flags:
+  awesome_notifications:
+    paths:
+      - packages/awesome_notifications/lib
+  awesome_notifications_schedules:
+    paths:
+      - packages/awesome_notifications_schedules/lib
+  awesome_notifications_localizations:
+    paths:
+      - packages/awesome_notifications_localizations/lib
+
+component_management:
+  individual_components:
+    - component_id: core
+      name: awesome_notifications
+      paths:
+        - packages/awesome_notifications/lib/**
+    - component_id: schedules
+      name: awesome_notifications_schedules
+      paths:
+        - packages/awesome_notifications_schedules/lib/**
+    - component_id: localizations
+      name: awesome_notifications_localizations
+      paths:
+        - packages/awesome_notifications_localizations/lib/**

@@ -19,27 +19,95 @@ import java.util.TimeZone
  *
  * Created via a factory (an instance with injected helpers — not static utility
  * methods), mirroring the original AndroidAwnCore `NotificationBuilder`.
+ *
+ * This is also the base of the builder **decorator chain**: an add-on subclasses
+ * it, overrides [build], does its work and calls [next] to delegate to the
+ * wrapped inner builder. The [NotificationBuilderRegistry] composes the chain in
+ * priority order so the build order is predictable.
  */
-class NotificationBuilder private constructor(
-    private val stringUtils: StringUtils,
-    private val mapUtils: MapUtils,
-    private val jsonUtils: JsonUtils,
-    private val bitmapUtils: BitmapUtils
+open class NotificationBuilder protected constructor(
+    private val inner: NotificationBuilder? = null,
+    private val stringUtils: StringUtils = StringUtils.getInstance(),
+    private val mapUtils: MapUtils = MapUtils.getInstance(),
+    private val jsonUtils: JsonUtils = JsonUtils.getInstance(),
+    private val bitmapUtils: BitmapUtils = BitmapUtils.getInstance()
 ) {
     companion object {
-        fun getNewBuilder(): NotificationBuilder =
-            NotificationBuilder(
-                StringUtils.getInstance(),
-                MapUtils.getInstance(),
-                JsonUtils.getInstance(),
-                BitmapUtils.getInstance()
-            )
+        fun getNewBuilder(): NotificationBuilder = NotificationBuilder()
     }
+
+    // MARK: - Decorator chain
+
+    /**
+     * Produces the [BuildOutcome] for a model. The base builds the content and
+     * asks the caller to post it now; a decorator overrides this, does its work
+     * (transform the model, or take over delivery), and calls [next] to delegate
+     * to the wrapped builder.
+     */
+    open fun build(context: Context, model: Map<String, Any?>): BuildOutcome {
+        // Immediate delivery: stamp created + displayed (now) into the content so
+        // both round-trip to the action event via the tap PendingIntent (a tapped
+        // notification would otherwise report null created/displayed dates).
+        // Scheduling decorators intercept before this and stamp their own dates.
+        val stamped = stampDisplayedLifecycle(
+            stampCreatedLifecycle(model),
+            displayedDate = nowUtc(),
+            lifeCycle = NotificationLifeCycle.Foreground)
+        val notification = createNotificationContent(context, stamped)
+            ?: return BuildOutcome.Invalid
+        val id = notificationId(stamped) ?: return BuildOutcome.Invalid
+        return BuildOutcome.Post(id, notification, stamped)
+    }
+
+    /** Delegates to the wrapped inner builder (called by decorators). */
+    fun next(context: Context, model: Map<String, Any?>): BuildOutcome =
+        inner?.build(context, model) ?: BuildOutcome.Invalid
+
+    // MARK: - Lifecycle stamping (persisted into the stored content)
+
+    /**
+     * Returns a copy of [model] with the created lifecycle (date/source/lifeCycle)
+     * merged into its `content` sub-map, unless already present. Persisting it in
+     * the content is what lets a later displayed/action event carry the
+     * createdDate — the tap/dismiss PendingIntents serialize this content.
+     */
+    fun stampCreatedLifecycle(
+        model: Map<String, Any?>,
+        lifeCycle: NotificationLifeCycle = NotificationLifeCycle.Foreground,
+        source: NotificationSource = NotificationSource.Local
+    ): Map<String, Any?> {
+        val content = contentMap(model).toMutableMap()
+        if (content[Definitions.NOTIFICATION_CREATED_DATE] == null) {
+            content[Definitions.NOTIFICATION_CREATED_DATE] = now()
+            content[Definitions.NOTIFICATION_CREATED_LIFECYCLE] = lifeCycle.name
+            content[Definitions.NOTIFICATION_CREATED_SOURCE] = source.name
+        }
+        return model.toMutableMap().apply { this[Definitions.NOTIFICATION_CONTENT] = content }
+    }
+
+    /**
+     * Returns a copy of [model] with the displayed lifecycle merged into its
+     * `content` sub-map. Immediate delivery passes the current time; a scheduled
+     * receiver passes the actual fire time when it posts.
+     */
+    fun stampDisplayedLifecycle(
+        model: Map<String, Any?>,
+        displayedDate: String,
+        lifeCycle: NotificationLifeCycle
+    ): Map<String, Any?> {
+        val content = contentMap(model).toMutableMap()
+        content[Definitions.NOTIFICATION_DISPLAYED_DATE] = displayedDate
+        content[Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE] = lifeCycle.name
+        return model.toMutableMap().apply { this[Definitions.NOTIFICATION_CONTENT] = content }
+    }
+
+    /** Current UTC timestamp, formatted like every other lifecycle date. */
+    fun nowUtc(): String = now()
 
     // MARK: - Build
 
     /** Builds an Android notification from a serialized model, or null if invalid. */
-    fun build(context: Context, model: Map<String, Any?>): Notification? {
+    fun createNotificationContent(context: Context, model: Map<String, Any?>): Notification? {
         val content = contentMap(model)
         val id = mapUtils.getInt(content[Definitions.NOTIFICATION_ID]) ?: return null
         val channelKey =
@@ -84,10 +152,10 @@ class NotificationBuilder private constructor(
 
             val label = mapUtils.getString(button[Definitions.NOTIFICATION_BUTTON_LABEL]) ?: key
             val actionType =
-                mapUtils.getString(button[Definitions.NOTIFICATION_ACTION_TYPE]) ?: "Default"
+                ActionType.from(mapUtils.getString(button[Definitions.NOTIFICATION_ACTION_TYPE]))
             val requireInput =
                 mapUtils.getBool(button[Definitions.NOTIFICATION_REQUIRE_INPUT_TEXT]) ?: false
-            val isForeground = actionType.endsWith("Default")
+            val isForeground = actionType == ActionType.Default
 
             val pending = buttonPendingIntent(
                 context, id, index, key, model, isForeground, requireInput
@@ -109,8 +177,8 @@ class NotificationBuilder private constructor(
     /** Resolves a button icon from a `resource://type/name` path (0 = no icon). */
     private fun buttonIcon(context: Context, button: Map<String, Any?>): Int {
         val icon = mapUtils.getString(button[Definitions.NOTIFICATION_BUTTON_ICON]) ?: return 0
-        if (!icon.startsWith("resource://")) return 0
-        val parts = icon.substring("resource://".length).split("/")
+        if (!icon.startsWith(MediaSourcePrefix.RESOURCE)) return 0
+        val parts = icon.substring(MediaSourcePrefix.RESOURCE.length).split("/")
         if (parts.size < 2) return 0
         return context.resources.getIdentifier(parts[1], parts[0], context.packageName)
     }
@@ -157,8 +225,8 @@ class NotificationBuilder private constructor(
         }
     }
 
-    fun buttonActionType(button: Map<String, Any?>?): String =
-        mapUtils.getString(button?.get(Definitions.NOTIFICATION_ACTION_TYPE)) ?: "Default"
+    fun buttonActionType(button: Map<String, Any?>?): ActionType =
+        ActionType.from(mapUtils.getString(button?.get(Definitions.NOTIFICATION_ACTION_TYPE)))
 
     /**
      * Whether a pressed button auto-dismisses its notification. `DismissAction`
@@ -166,10 +234,12 @@ class NotificationBuilder private constructor(
      * `autoDismissible` flag (default true).
      */
     fun shouldButtonAutoDismiss(button: Map<String, Any?>?): Boolean {
-        val actionType = buttonActionType(button)
-        if (actionType.endsWith("DismissAction")) return true
-        if (actionType.endsWith("KeepOnTop")) return false
-        return mapUtils.getBool(button?.get(Definitions.NOTIFICATION_AUTO_DISMISSIBLE)) ?: true
+        return when (buttonActionType(button)) {
+            ActionType.DismissAction -> true
+            ActionType.KeepOnTop -> false
+            else ->
+                mapUtils.getBool(button?.get(Definitions.NOTIFICATION_AUTO_DISMISSIBLE)) ?: true
+        }
     }
 
     /**
@@ -182,10 +252,12 @@ class NotificationBuilder private constructor(
         content: Map<String, Any?>,
         builder: NotificationCompat.Builder
     ) {
-        val layout = mapUtils.getString(content[Definitions.NOTIFICATION_LAYOUT]) ?: ""
+        val layout =
+            NotificationLayout.from(mapUtils.getString(content[Definitions.NOTIFICATION_LAYOUT]))
         val bigPicturePath = mapUtils.getString(content[Definitions.NOTIFICATION_BIG_PICTURE])
         val largeIconPath = mapUtils.getString(content[Definitions.NOTIFICATION_LARGE_ICON])
-        val isBigPicture = layout.endsWith("BigPicture") && !bigPicturePath.isNullOrEmpty()
+        val isBigPicture =
+            layout == NotificationLayout.BigPicture && !bigPicturePath.isNullOrEmpty()
 
         if (isBigPicture) {
             val bigPicture = bitmapUtils.getBitmapFromSource(context, bigPicturePath)
@@ -261,34 +333,48 @@ class NotificationBuilder private constructor(
 
     // MARK: - Event registration (stamps date + lifecycle on the content)
 
-    fun registerCreatedEvent(content: Map<String, Any?>, lifeCycle: String): Map<String, Any?> =
+    fun registerCreatedEvent(
+        content: Map<String, Any?>,
+        lifeCycle: NotificationLifeCycle
+    ): Map<String, Any?> =
+        // Preserve values already stamped into the content (e.g. a scheduling
+        // decorator sets the source to Schedule); only fill what's missing.
         content + mapOf(
-            Definitions.NOTIFICATION_CREATED_DATE to now(),
-            Definitions.NOTIFICATION_CREATED_LIFECYCLE to lifeCycle,
-            Definitions.NOTIFICATION_CREATED_SOURCE to "Local"
+            Definitions.NOTIFICATION_CREATED_DATE to
+                (content[Definitions.NOTIFICATION_CREATED_DATE] ?: now()),
+            Definitions.NOTIFICATION_CREATED_LIFECYCLE to
+                (content[Definitions.NOTIFICATION_CREATED_LIFECYCLE] ?: lifeCycle.name),
+            Definitions.NOTIFICATION_CREATED_SOURCE to
+                (content[Definitions.NOTIFICATION_CREATED_SOURCE] ?: NotificationSource.Local.name)
         )
 
-    fun registerDisplayedEvent(content: Map<String, Any?>, lifeCycle: String): Map<String, Any?> =
+    fun registerDisplayedEvent(
+        content: Map<String, Any?>,
+        lifeCycle: NotificationLifeCycle
+    ): Map<String, Any?> =
         content + mapOf(
             Definitions.NOTIFICATION_DISPLAYED_DATE to now(),
-            Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE to lifeCycle
+            Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE to lifeCycle.name
         )
 
     fun registerActionEvent(
         content: Map<String, Any?>,
-        lifeCycle: String,
-        actionType: String = "Default"
+        lifeCycle: NotificationLifeCycle,
+        actionType: ActionType = ActionType.Default
     ): Map<String, Any?> =
         content + mapOf(
             Definitions.NOTIFICATION_ACTION_DATE to now(),
-            Definitions.NOTIFICATION_ACTION_LIFECYCLE to lifeCycle,
-            Definitions.NOTIFICATION_ACTION_TYPE to actionType
+            Definitions.NOTIFICATION_ACTION_LIFECYCLE to lifeCycle.name,
+            Definitions.NOTIFICATION_ACTION_TYPE to actionType.name
         )
 
-    fun registerDismissedEvent(content: Map<String, Any?>, lifeCycle: String): Map<String, Any?> =
+    fun registerDismissedEvent(
+        content: Map<String, Any?>,
+        lifeCycle: NotificationLifeCycle
+    ): Map<String, Any?> =
         content + mapOf(
             Definitions.NOTIFICATION_DISMISSED_DATE to now(),
-            Definitions.NOTIFICATION_ACTION_LIFECYCLE to lifeCycle
+            Definitions.NOTIFICATION_ACTION_LIFECYCLE to lifeCycle.name
         )
 
     // MARK: - Dismiss concepts
@@ -298,8 +384,8 @@ class NotificationBuilder private constructor(
 
     /** A `DismissAction` tap dismisses + fires the dismiss event. */
     fun isDismissAction(content: Map<String, Any?>): Boolean =
-        (mapUtils.getString(content[Definitions.NOTIFICATION_ACTION_TYPE]) ?: "")
-            .endsWith("DismissAction")
+        ActionType.from(mapUtils.getString(content[Definitions.NOTIFICATION_ACTION_TYPE])) ==
+            ActionType.DismissAction
 
     /**
      * Whether tapping the notification auto-dismisses it (Android `setAutoCancel`).
@@ -307,16 +393,18 @@ class NotificationBuilder private constructor(
      * `autoDismissible` flag (default true).
      */
     fun shouldAutoDismiss(content: Map<String, Any?>): Boolean {
-        val actionType =
-            mapUtils.getString(content[Definitions.NOTIFICATION_ACTION_TYPE]) ?: ""
-        if (actionType.endsWith("DismissAction")) return true
-        if (actionType.endsWith("KeepOnTop")) return false
-        return mapUtils.getBool(content[Definitions.NOTIFICATION_AUTO_DISMISSIBLE]) ?: true
+        return when (
+            ActionType.from(mapUtils.getString(content[Definitions.NOTIFICATION_ACTION_TYPE]))
+        ) {
+            ActionType.DismissAction -> true
+            ActionType.KeepOnTop -> false
+            else -> mapUtils.getBool(content[Definitions.NOTIFICATION_AUTO_DISMISSIBLE]) ?: true
+        }
     }
 
     private fun now(): String {
         val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
-        formatter.timeZone = TimeZone.getTimeZone("UTC")
+        formatter.timeZone = TimeZone.getTimeZone(Definitions.UTC_TIMEZONE)
         return formatter.format(Date())
     }
 }

@@ -1,5 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 
+import 'notification_schedule.dart';
+
 /// Represents a notification scheduling configuration based on calendar components.
 class NotificationCalendar extends NotificationSchedule {
   /// The era for scheduling, e.g., AD or BC in the Julian calendar.
@@ -130,10 +132,10 @@ class NotificationCalendar extends NotificationSchedule {
     return this;
   }
 
-  /// Converts the [NotificationCalendar] instance to a map.
+  /// Converts the calendar schedule to its flat `schedule` block.
   @override
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> dataMap = super.toMap()
+  Map<String, dynamic> toScheduleMap() {
+    Map<String, dynamic> dataMap = super.toScheduleMap()
       ..addAll({
         NOTIFICATION_SCHEDULE_ERA: era,
         NOTIFICATION_SCHEDULE_YEAR: year,
@@ -153,7 +155,7 @@ class NotificationCalendar extends NotificationSchedule {
   /// Returns a string representation of the [NotificationCalendar] instance.
   @override
   String toString() {
-    return toMap().toString().replaceAll(',', ',\n');
+    return toScheduleMap().toString().replaceAll(',', ',\n');
   }
 
   /// Validates the calendar schedule settings.

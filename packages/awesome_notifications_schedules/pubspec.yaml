@@ -1,19 +1,16 @@
 name: awesome_notifications_schedules
-description: "A new Flutter plugin project."
+description: "Notification scheduling (interval/calendar) decorator for awesome_notifications."
 version: 0.0.1
 homepage:
+resolution: workspace
 
 environment:
-  sdk: ^3.11.5
+  sdk: '>=3.6.0 <4.0.0'
   flutter: '>=3.3.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_web_plugins:
-    sdk: flutter
-  web: ^1.0.0
-  plugin_platform_interface: ^2.0.2
   # Local path during dev; a real release would pin a published version.
   awesome_notifications:
     path: ../awesome_notifications
@@ -51,9 +48,6 @@ flutter:
         pluginClass: AwesomeNotificationsSchedulesPlugin
       windows:
         pluginClass: AwesomeNotificationsSchedulesPluginCApi
-      web:
-        pluginClass: AwesomeNotificationsSchedulesWeb
-        fileName: awesome_notifications_schedules_web.dart
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

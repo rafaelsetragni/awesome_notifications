@@ -143,34 +143,41 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
 
-            // Let registered decorators (e.g. localization) transform the model
-            // once; the build, events and stored payload all use the result.
-            let notification = NotificationContentManager.shared.apply(to: rawNotification)
-            guard let built = self.builder.createNotificationContent(fromModel: notification) else {
+            // Build through the decorator chain (localization, scheduling, …),
+            // composed in priority order by the registry. Each decorator may
+            // transform the model and/or contribute a delivery trigger.
+            let builder = NotificationBuilderRegistry.shared.makeBuilder()
+            guard let chained = builder.build(model: rawNotification) else {
                 DispatchQueue.main.async { completion(false) }
                 return
             }
 
+            // Bake the (predicted) displayed lifecycle into the stored payload now
+            // that the trigger is known, so the createdDate + displayedDate both
+            // round-trip to the displayed/action events (a tapped notification
+            // otherwise reports them as null).
+            let built = builder.stampDisplayed(on: chained)
+
             // Register the per-notification action-button category (if any) so
             // iOS shows the buttons and reports which one was pressed.
-            if let category = self.builder.actionCategory(forModel: notification) {
+            if let category = builder.actionCategory(forModel: built.model) {
                 self.registerCategory(category)
             }
 
-            // A scheduling decorator (if registered) supplies a trigger from the
-            // notification's `schedule`; otherwise nil delivers it immediately.
+            // A scheduling decorator contributes a trigger from the notification's
+            // `schedule`; otherwise nil delivers it immediately.
             let request = UNNotificationRequest(
                 identifier: String(built.id),
                 content: built.content,
-                trigger: NotificationScheduleManager.shared.trigger(for: notification)
+                trigger: built.trigger
             )
             self.center.add(request) { error in
                 let created = error == nil
                 if created {
-                    let content = self.builder.contentMap(fromModel: notification)
+                    let content = builder.contentMap(fromModel: built.model)
                     self.emit(
                         Definitions.EVENT_NOTIFICATION_CREATED,
-                        self.builder.registerCreatedEvent(content, lifeCycle: "Foreground")
+                        builder.registerCreatedEvent(content, lifeCycle: .foreground)
                     )
                 }
                 DispatchQueue.main.async { completion(created) }
@@ -192,7 +199,7 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
             let content = builder.contentMap(fromModel: model)
             emit(
                 Definitions.EVENT_NOTIFICATION_DISPLAYED,
-                builder.registerDisplayedEvent(content, lifeCycle: "Foreground")
+                builder.registerDisplayedEvent(content, lifeCycle: .foreground)
             )
         }
         if #available(iOS 14.0, macOS 11.0, *) {
@@ -230,7 +237,7 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
             // count as a dismissal.
             let isDismiss = systemDismiss
                 || (buttonKey.isEmpty && builder.isDismissAction(content))
-                || builder.buttonActionType(pressedButton).hasSuffix("DismissAction")
+                || builder.buttonActionType(pressedButton) == .dismissAction
 
             if isDismiss {
                 if !systemDismiss, let id = builder.readId(content) {
@@ -238,7 +245,7 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
                 }
                 emit(
                     Definitions.EVENT_NOTIFICATION_DISMISSED,
-                    builder.registerDismissedEvent(content, lifeCycle: "Foreground")
+                    builder.registerDismissedEvent(content, lifeCycle: .foreground)
                 )
             } else {
                 // Default tap, or a non-dismiss button. Auto-dismiss the button's
@@ -254,7 +261,7 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
                 let launchAction = !didFinishLaunch
                 let actionMap = builder.registerActionEvent(
                     content,
-                    lifeCycle: launchAction ? "AppKilled" : "Foreground",
+                    lifeCycle: launchAction ? .terminated : .foreground,
                     actionType: builder.buttonActionType(pressedButton)
                 )
                 if launchAction {

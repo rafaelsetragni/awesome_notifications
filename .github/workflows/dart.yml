@@ -16,41 +16,52 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: flutter-action
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-      - name: Print Flutter configurations
-        run: |
-          echo CACHE-PATH=${{ steps.flutter-action.outputs.CACHE-PATH }}
-          echo CACHE-KEY=${{ steps.flutter-action.outputs.CACHE-KEY }}
-          echo CHANNEL=${{ steps.flutter-action.outputs.CHANNEL }}
-          echo VERSION=${{ steps.flutter-action.outputs.VERSION }}
-          echo ARCHITECTURE=${{ steps.flutter-action.outputs.ARCHITECTURE }}
 
-      - name: Clean cache configurations
-        run: flutter clean
+      - name: Install Melos
+        run: dart pub global activate melos
 
-      - name: Install dependencies
-        run: flutter pub get
+      - name: Bootstrap workspace
+        run: melos bootstrap
 
-      # Disabled due inconsistencies between local and remote execution.
-      # - name: Verify formatting
-      #   run: dart format --output=none --set-exit-if-changed .
+      - name: Analyze all packages
+        run: melos exec -- flutter analyze --no-fatal-infos
 
-      - name: Analyze project source
-        run: flutter analyze --no-fatal-infos
-
-      - name: Run tests
-        run: flutter test
-
-      - name: Run tests coverage
+      # Each package is tested with coverage and its lcov is uploaded to Codecov
+      # under its own flag, so every package reports its own statistic.
+      - name: Test — awesome_notifications
         run: flutter test --coverage
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        working-directory: packages/awesome_notifications
+      - name: Upload coverage — awesome_notifications
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
-          directory: coverage
+          flags: awesome_notifications
+          files: packages/awesome_notifications/coverage/lcov.info
+
+      - name: Test — awesome_notifications_schedules
+        run: flutter test --coverage
+        working-directory: packages/awesome_notifications_schedules
+      - name: Upload coverage — awesome_notifications_schedules
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+          flags: awesome_notifications_schedules
+          files: packages/awesome_notifications_schedules/coverage/lcov.info
+
+      - name: Test — awesome_notifications_localizations
+        run: flutter test --coverage
+        working-directory: packages/awesome_notifications_localizations
+      - name: Upload coverage — awesome_notifications_localizations
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+          flags: awesome_notifications_localizations
+          files: packages/awesome_notifications_localizations/coverage/lcov.info
