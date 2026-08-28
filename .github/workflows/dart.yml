@@ -65,3 +65,14 @@ jobs:
           fail_ci_if_error: false
           flags: awesome_notifications_localizations
           files: packages/awesome_notifications_localizations/coverage/lcov.info
+
+      - name: Test — awesome_notifications_fcm
+        run: flutter test --coverage
+        working-directory: packages/awesome_notifications_fcm
+      - name: Upload coverage — awesome_notifications_fcm
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+          flags: awesome_notifications_fcm
+          files: packages/awesome_notifications_fcm/coverage/lcov.info

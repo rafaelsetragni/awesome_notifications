@@ -49,6 +49,13 @@
             "program": "lib/main.dart"
         },
         {
+            "name": "Example (FCM)",
+            "cwd": "packages/awesome_notifications_fcm/example",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart"
+        },
+        {
             "name": "Tests + coverage (Core)",
             "cwd": "packages/awesome_notifications",
             "request": "launch",
@@ -77,6 +84,16 @@
             "toolArgs": [
                 "--coverage"
             ]
+        },
+        {
+            "name": "Tests + coverage (FCM)",
+            "cwd": "packages/awesome_notifications_fcm",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/",
+            "toolArgs": [
+                "--coverage"
+            ]
         }
     ],
     "compounds": [
@@ -85,7 +102,8 @@
             "configurations": [
                 "Tests + coverage (Core)",
                 "Tests + coverage (Schedules)",
-                "Tests + coverage (Localizations)"
+                "Tests + coverage (Localizations)",
+                "Tests + coverage (FCM)"
             ],
             "stopAll": true
         }

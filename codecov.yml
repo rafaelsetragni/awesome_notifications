@@ -26,6 +26,9 @@ flags:
   awesome_notifications_localizations:
     paths:
       - packages/awesome_notifications_localizations/lib
+  awesome_notifications_fcm:
+    paths:
+      - packages/awesome_notifications_fcm/lib
 
 component_management:
   individual_components:
@@ -41,3 +44,7 @@ component_management:
       name: awesome_notifications_localizations
       paths:
         - packages/awesome_notifications_localizations/lib/**
+    - component_id: fcm
+      name: awesome_notifications_fcm
+      paths:
+        - packages/awesome_notifications_fcm/lib/**

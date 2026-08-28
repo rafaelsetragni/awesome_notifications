@@ -13,9 +13,10 @@ opt-in **capability add-ons** that *decorate* the core — you depend only on wh
 | [`awesome_notifications`](packages/awesome_notifications) | **Core**: create / display / dismiss notifications, channels, images, action buttons, grouping, badge. |
 | [`awesome_notifications_schedules`](packages/awesome_notifications_schedules) | **Decorator**: schedule notifications by time interval or calendar date, once or repeating. |
 | [`awesome_notifications_localizations`](packages/awesome_notifications_localizations) | **Decorator**: show notifications in the user's language (per-language content + button labels). |
+| [`awesome_notifications_fcm`](packages/awesome_notifications_fcm) | **Decorator**: Firebase Cloud Messaging — display pushes through the core, silent background data, FCM/APNs tokens, topics. |
 
 More capability add-ons (decorators of the core) are migrated in incrementally:
-`_fcm` (push) · `_permissions` · `_foreground` · `_calls` · `_live_activities` ·
+`_permissions` · `_foreground` · `_calls` · `_live_activities` ·
 `_media` · `_progress` · `_chat`.
 
 ## Working in the monorepo

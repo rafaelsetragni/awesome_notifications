@@ -1,0 +1,40 @@
+name: awesome_notifications_fcm
+description: "Firebase Cloud Messaging (push) decorator for awesome_notifications: FCM/APNs tokens, silent background data and rich push, displayed through the core engine."
+version: 1.0.0-dev.0
+homepage: https://discord.awesome-notifications.carda.me/
+repository: https://github.com/rafaelsetragni/awesome_notifications
+
+# Resolved as part of the awesome_notifications monorepo (Dart pub workspace / Melos).
+resolution: workspace
+
+environment:
+  sdk: '>=3.6.0 <4.0.0'
+  flutter: '>=3.3.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # The core engine that actually builds and displays every notification. The FCM
+  # decorator is a preprocessor: it turns a Firebase message into a core payload
+  # and hands it to the core's create/display pipeline — it never displays itself.
+  # Local path during dev; a real release would pin a published version.
+  awesome_notifications:
+    path: ../awesome_notifications
+  # Firebase must be initialized by the host app; we depend on it so the native
+  # side can query FirebaseApp availability and the app shares one Firebase.
+  firebase_core: ^4.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+# The following section is specific to Flutter packages.
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: me.carda.awesome_notifications_fcm
+        pluginClass: AwesomeNotificationsFcmPlugin
+      ios:
+        pluginClass: AwesomeNotificationsFcmPlugin
