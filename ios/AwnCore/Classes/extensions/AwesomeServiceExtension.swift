@@ -53,6 +53,7 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
                     notificationModel!.content!.title = title
                     notificationModel!.content!.body = body
                     notificationModel!.content!.playSound = true
+                    notificationModel!.content!.payload = Self.extractPayload(from: content.userInfo)
                     
                     if !StringUtils.shared.isNullOrEmpty(image) {
                         notificationModel!.content!.notificationLayout = NotificationLayout.BigPicture
@@ -132,6 +133,36 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
             }
             contentHandler(content)
         }
+    }
+    
+    /// Carries the original FCM `data` into the notification payload.
+    ///
+    /// Without this, custom keys sent by the server are dropped for plain FCM
+    /// messages, and `ReceivedNotification.payload` reaches the Dart handlers
+    /// as `null` on iOS, while Android delivers them.
+    ///
+    /// Reserved keys used by the notification transport itself are skipped, so
+    /// only the sender's own data is exposed.
+    private static func extractPayload(from userInfo: [AnyHashable: Any]) -> [String: String?] {
+        let reservedKeys: Set<String> = [
+            "aps",
+            "fcm_options",
+            "gcm.message_id",
+            "google.c.a.e",
+            "google.c.fid",
+            "google.c.sender.id"
+        ]
+
+        var payload: [String: String?] = [:]
+        for (key, value) in userInfo {
+            guard let key = key as? String, !reservedKeys.contains(key) else { continue }
+            if let value = value as? String {
+                payload[key] = value
+            } else {
+                payload[key] = String(describing: value)
+            }
+        }
+        return payload
     }
     
     public override func serviceExtensionTimeWillExpire() {
