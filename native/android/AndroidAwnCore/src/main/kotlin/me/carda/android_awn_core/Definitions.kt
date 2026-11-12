@@ -67,4 +67,7 @@ object Definitions {
     const val DISMISSED_NOTIFICATION = "DISMISSED_NOTIFICATION"
     const val NOTIFICATION_BUTTON_ACTION_PREFIX = "ACTION_NOTIFICATION"
     const val NOTIFICATION_JSON = "notificationJson"
+
+    // The reference time zone all lifecycle dates are serialized in.
+    const val UTC_TIMEZONE = "UTC"
 }

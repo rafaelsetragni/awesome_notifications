@@ -38,15 +38,15 @@ class NotificationButtonReceiver : BroadcastReceiver() {
             builder.readId(content)?.let { NotificationManagerCompat.from(context).cancel(it) }
         }
 
-        if (builder.buttonActionType(button).endsWith("DismissAction")) {
+        if (builder.buttonActionType(button) == ActionType.DismissAction) {
             AwesomeEventsReceiver.notifyAwesomeEvent(
                 Definitions.EVENT_NOTIFICATION_DISMISSED,
-                builder.registerDismissedEvent(content, "Background")
+                builder.registerDismissedEvent(content, NotificationLifeCycle.Background)
             )
         } else {
             AwesomeEventsReceiver.notifyAwesomeEvent(
                 Definitions.EVENT_DEFAULT_ACTION,
-                builder.registerActionEvent(content, "Background", builder.buttonActionType(button))
+                builder.registerActionEvent(content, NotificationLifeCycle.Background, builder.buttonActionType(button))
             )
         }
     }

@@ -39,10 +39,11 @@ class BitmapUtils private constructor() {
     private fun mediaSource(path: String): MediaSource {
         val lower = path.lowercase()
         return when {
-            lower.startsWith("http://") || lower.startsWith("https://") -> MediaSource.NETWORK
-            lower.startsWith("file://") -> MediaSource.FILE
-            lower.startsWith("resource://") -> MediaSource.RESOURCE
-            lower.startsWith("asset://") -> MediaSource.ASSET
+            lower.startsWith(MediaSourcePrefix.NETWORK_HTTP) ||
+                lower.startsWith(MediaSourcePrefix.NETWORK_HTTPS) -> MediaSource.NETWORK
+            lower.startsWith(MediaSourcePrefix.FILE) -> MediaSource.FILE
+            lower.startsWith(MediaSourcePrefix.RESOURCE) -> MediaSource.RESOURCE
+            lower.startsWith(MediaSourcePrefix.ASSET) -> MediaSource.ASSET
             else -> MediaSource.UNKNOWN
         }
     }
@@ -51,10 +52,13 @@ class BitmapUtils private constructor() {
     private fun clean(path: String): String {
         val lower = path.lowercase()
         return when {
-            lower.startsWith("http") -> path
-            lower.startsWith("asset://") -> path.substring("asset://".length)
-            lower.startsWith("file://") -> path.substring("file://".length)
-            lower.startsWith("resource://") -> path.substring("resource://".length)
+            lower.startsWith(MediaSourcePrefix.HTTP) -> path
+            lower.startsWith(MediaSourcePrefix.ASSET) ->
+                path.substring(MediaSourcePrefix.ASSET.length)
+            lower.startsWith(MediaSourcePrefix.FILE) ->
+                path.substring(MediaSourcePrefix.FILE.length)
+            lower.startsWith(MediaSourcePrefix.RESOURCE) ->
+                path.substring(MediaSourcePrefix.RESOURCE.length)
             else -> path
         }
     }

@@ -18,6 +18,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 import java.util.TimeZone
+import me.carda.android_awn_core.ActionType
 import me.carda.android_awn_core.AwesomeEventListener
 import me.carda.android_awn_core.AwesomeEventsReceiver
 import me.carda.android_awn_core.AwesomeMethodHandlerRegistry
@@ -25,6 +26,7 @@ import me.carda.android_awn_core.AwesomeNotifications
 import me.carda.android_awn_core.Definitions
 import me.carda.android_awn_core.MapUtils
 import me.carda.android_awn_core.NotificationBuilder
+import me.carda.android_awn_core.NotificationLifeCycle
 
 /**
  * Thin Flutter bridge: translates method-channel calls into the Flutter-free
@@ -82,7 +84,7 @@ class AwesomeNotificationsPlugin :
             }
 
             "getLocalTimeZoneIdentifier" -> result.success(TimeZone.getDefault().id)
-            "getUtcTimeZoneIdentifier" -> result.success("UTC")
+            "getUtcTimeZoneIdentifier" -> result.success(Definitions.UTC_TIMEZONE)
 
             "setEventHandles" -> {
                 // Background isolate handles; foreground events are delivered
@@ -256,7 +258,7 @@ class AwesomeNotificationsPlugin :
         }
 
         val isDismiss =
-            if (isButton) builder.buttonActionType(button).endsWith("DismissAction")
+            if (isButton) builder.buttonActionType(button) == ActionType.DismissAction
             else builder.isDismissAction(content)
 
         if (isDismiss) {
@@ -265,13 +267,14 @@ class AwesomeNotificationsPlugin :
             if (!isButton) builder.readId(content)?.let { core.dismiss(it) }
             AwesomeEventsReceiver.notifyAwesomeEvent(
                 Definitions.EVENT_NOTIFICATION_DISMISSED,
-                builder.registerDismissedEvent(content, "Foreground")
+                builder.registerDismissedEvent(content, NotificationLifeCycle.Foreground)
             )
         } else {
-            val actionType = if (isButton) builder.buttonActionType(button) else "Default"
+            val actionType = if (isButton) builder.buttonActionType(button) else ActionType.Default
             // A cold start from a notification tap is the initial action: capture it
-            // (killed-state lifecycle) so getInitialAction() can return it.
-            val lifeCycle = if (isLaunch) "AppKilled" else "Foreground"
+            // (terminated lifecycle) so getInitialAction() can return it.
+            val lifeCycle =
+                if (isLaunch) NotificationLifeCycle.Terminated else NotificationLifeCycle.Foreground
             val actionEvent = builder.registerActionEvent(content, lifeCycle, actionType)
             if (isLaunch) initialAction = actionEvent
             AwesomeEventsReceiver.notifyAwesomeEvent(

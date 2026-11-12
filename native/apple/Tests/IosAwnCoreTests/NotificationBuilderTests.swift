@@ -1,5 +1,8 @@
 import XCTest
 @testable import IosAwnCore
+#if canImport(UIKit)
+import UIKit
+#endif
 
 final class NotificationBuilderTests: XCTestCase {
 
@@ -74,27 +77,27 @@ final class NotificationBuilderTests: XCTestCase {
     // MARK: - event registration
 
     func testRegisterCreatedEventStampsFields() {
-        let result = builder.registerCreatedEvent(["id": 1], lifeCycle: "Foreground")
+        let result = builder.registerCreatedEvent(["id": 1], lifeCycle: .foreground)
         XCTAssertEqual(result[Definitions.NOTIFICATION_CREATED_LIFECYCLE] as? String, "Foreground")
         XCTAssertEqual(result[Definitions.NOTIFICATION_CREATED_SOURCE] as? String, "Local")
         assertIsTimestamp(result[Definitions.NOTIFICATION_CREATED_DATE])
     }
 
     func testRegisterDisplayedEventStampsFields() {
-        let result = builder.registerDisplayedEvent(["id": 1], lifeCycle: "Foreground")
+        let result = builder.registerDisplayedEvent(["id": 1], lifeCycle: .foreground)
         XCTAssertEqual(result[Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE] as? String, "Foreground")
         assertIsTimestamp(result[Definitions.NOTIFICATION_DISPLAYED_DATE])
     }
 
     func testRegisterActionEventStampsFields() {
-        let result = builder.registerActionEvent(["id": 1], lifeCycle: "Foreground")
+        let result = builder.registerActionEvent(["id": 1], lifeCycle: .foreground)
         XCTAssertEqual(result[Definitions.NOTIFICATION_ACTION_TYPE] as? String, "Default")
         XCTAssertEqual(result[Definitions.NOTIFICATION_ACTION_LIFECYCLE] as? String, "Foreground")
         assertIsTimestamp(result[Definitions.NOTIFICATION_ACTION_DATE])
     }
 
     func testRegisterDismissedEventStampsFields() {
-        let result = builder.registerDismissedEvent(["id": 1], lifeCycle: "Foreground")
+        let result = builder.registerDismissedEvent(["id": 1], lifeCycle: .foreground)
         XCTAssertEqual(result[Definitions.NOTIFICATION_ACTION_LIFECYCLE] as? String, "Foreground")
         assertIsTimestamp(result[Definitions.NOTIFICATION_DISMISSED_DATE])
     }
@@ -123,7 +126,7 @@ final class NotificationBuilderTests: XCTestCase {
     }
 
     func testRegistrationPreservesOriginalContent() {
-        let result = builder.registerCreatedEvent(["id": 99], lifeCycle: "Foreground")
+        let result = builder.registerCreatedEvent(["id": 99], lifeCycle: .foreground)
         XCTAssertEqual(mapUtils.getInt(result["id"]), 99)
     }
 
@@ -138,4 +141,46 @@ final class NotificationBuilderTests: XCTestCase {
             "‘\(string)’ is not a valid timestamp"
         )
     }
+
+    // MARK: - images
+
+    #if canImport(UIKit)
+    /// Writes a 1x1 PNG to a temp file and returns its `file://` reference.
+    private func tempImageReference() throws -> String {
+        let image = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1)).image { ctx in
+            UIColor.red.setFill()
+            ctx.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
+        }
+        let url = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent(UUID().uuidString + ".png")
+        try XCTUnwrap(image.pngData()).write(to: url)
+        return "file://" + url.path
+    }
+
+    func testFirstAttachmentFallsBackWhenBigPictureCannotLoad() throws {
+        let largeIcon = try tempImageReference()
+        let attachment = builder.firstAttachment(from: ["file:///no/such/image.png", largeIcon])
+        XCTAssertNotNil(attachment, "a dead big picture must fall back to the large icon")
+    }
+
+    func testFirstAttachmentPrefersBigPicture() throws {
+        let bigPicture = try tempImageReference()
+        XCTAssertNotNil(builder.firstAttachment(from: [bigPicture, nil]))
+    }
+
+    func testFirstAttachmentNilWhenNoSourceLoads() {
+        XCTAssertNil(builder.firstAttachment(from: [nil, "", "file:///no/such/image.png"]))
+    }
+
+    func testCreateNotificationContentAttachesLargeIconWhenBigPictureIsDead() throws {
+        var model = sampleModel()
+        var content = model[Definitions.NOTIFICATION_CONTENT] as! [String: Any]
+        content[Definitions.NOTIFICATION_BIG_PICTURE] = "file:///no/such/image.png"
+        content[Definitions.NOTIFICATION_LARGE_ICON] = try tempImageReference()
+        model[Definitions.NOTIFICATION_CONTENT] = content
+
+        let built = try XCTUnwrap(builder.createNotificationContent(fromModel: model))
+        XCTAssertEqual(built.content.attachments.count, 1)
+    }
+    #endif
 }

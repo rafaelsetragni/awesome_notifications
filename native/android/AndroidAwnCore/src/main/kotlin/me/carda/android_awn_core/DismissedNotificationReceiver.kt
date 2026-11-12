@@ -19,7 +19,7 @@ class DismissedNotificationReceiver : BroadcastReceiver() {
 
         AwesomeEventsReceiver.notifyAwesomeEvent(
             Definitions.EVENT_NOTIFICATION_DISMISSED,
-            builder.registerDismissedEvent(content, "Foreground")
+            builder.registerDismissedEvent(content, NotificationLifeCycle.Foreground)
         )
     }
 }

@@ -10,8 +10,6 @@ import 'src/models/notification_extension.dart';
 import 'src/models/notification_channel.dart';
 import 'src/models/notification_channel_group.dart';
 import 'src/models/notification_content.dart';
-import 'src/models/notification_model.dart';
-import 'src/models/notification_schedule.dart';
 import 'src/models/received_models/received_action.dart';
 import 'src/models/received_models/received_notification.dart';
 
@@ -37,10 +35,10 @@ export 'src/helpers/bitmap_helper.dart';
 export 'src/models/notification_action_button.dart';
 export 'src/models/notification_channel.dart';
 export 'src/models/notification_channel_group.dart';
+export 'src/models/model.dart';
 export 'src/models/notification_content.dart';
 export 'src/models/notification_extension.dart';
 export 'src/models/notification_model.dart';
-export 'src/models/notification_schedule.dart';
 export 'src/models/received_models/received_action.dart';
 export 'src/models/received_models/received_notification.dart';
 export 'src/utils/awesome_assert_utils.dart';
@@ -80,11 +78,6 @@ class AwesomeNotifications implements IAwesomeNotifications {
   }
 
   @override
-  Future<void> cancelAllSchedules() {
-    return AwesomeNotificationsPlatform.instance.cancelAllSchedules();
-  }
-
-  @override
   Future<void> cancelNotificationsByChannelKey(String channelKey) {
     return AwesomeNotificationsPlatform.instance
         .cancelNotificationsByChannelKey(channelKey);
@@ -94,23 +87,6 @@ class AwesomeNotifications implements IAwesomeNotifications {
   Future<void> cancelNotificationsByGroupKey(String groupKey) {
     return AwesomeNotificationsPlatform.instance
         .cancelNotificationsByGroupKey(groupKey);
-  }
-
-  @override
-  Future<void> cancelSchedule(int id) {
-    return AwesomeNotificationsPlatform.instance.cancelSchedule(id);
-  }
-
-  @override
-  Future<void> cancelSchedulesByChannelKey(String channelKey) {
-    return AwesomeNotificationsPlatform.instance
-        .cancelSchedulesByChannelKey(channelKey);
-  }
-
-  @override
-  Future<void> cancelSchedulesByGroupKey(String groupKey) {
-    return AwesomeNotificationsPlatform.instance
-        .cancelSchedulesByGroupKey(groupKey);
   }
 
   @override
@@ -130,13 +106,11 @@ class AwesomeNotifications implements IAwesomeNotifications {
   @override
   Future<bool> createNotification({
     required NotificationContent content,
-    NotificationSchedule? schedule,
     List<NotificationActionButton>? actionButtons,
     List<NotificationExtension>? extensions,
   }) {
     return AwesomeNotificationsPlatform.instance.createNotification(
         content: content,
-        schedule: schedule,
         actionButtons: actionButtons,
         extensions: extensions);
   }
@@ -208,13 +182,6 @@ class AwesomeNotifications implements IAwesomeNotifications {
   }
 
   @override
-  Future<DateTime?> getNextDate(NotificationSchedule schedule,
-      {DateTime? fixedDate}) {
-    return AwesomeNotificationsPlatform.instance
-        .getNextDate(schedule, fixedDate: fixedDate);
-  }
-
-  @override
   Future<String> getUtcTimeZoneIdentifier() {
     return AwesomeNotificationsPlatform.instance.getUtcTimeZoneIdentifier();
   }
@@ -239,11 +206,6 @@ class AwesomeNotifications implements IAwesomeNotifications {
   @override
   Future<bool> isNotificationAllowed() {
     return AwesomeNotificationsPlatform.instance.isNotificationAllowed();
-  }
-
-  @override
-  Future<List<NotificationModel>> listScheduledNotifications() {
-    return AwesomeNotificationsPlatform.instance.listScheduledNotifications();
   }
 
   @override

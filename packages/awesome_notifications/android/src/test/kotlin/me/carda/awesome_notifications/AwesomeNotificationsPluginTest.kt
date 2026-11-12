@@ -2,8 +2,8 @@ package me.carda.awesome_notifications
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import org.junit.Test
 import org.mockito.Mockito
-import kotlin.test.Test
 
 /*
  * This demonstrates a simple unit test of the Kotlin portion of this plugin's implementation.
@@ -13,7 +13,7 @@ import kotlin.test.Test
  * you can run them directly from IDEs that support JUnit such as Android Studio.
  */
 
-internal class AwesomeNotificationsPluginTest {
+class AwesomeNotificationsPluginTest {
     @Test
     fun onMethodCall_getPlatformVersion_returnsExpectedValue() {
         val plugin = AwesomeNotificationsPlugin()

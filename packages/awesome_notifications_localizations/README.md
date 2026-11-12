@@ -2,6 +2,10 @@
 
 Multi-language support for [awesome_notifications](https://pub.dev/packages/awesome_notifications).
 
+[![pub package](https://img.shields.io/pub/v/awesome_notifications_localizations.svg)](https://pub.dev/packages/awesome_notifications_localizations)
+![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
+![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/master/graph/badge.svg?flag=awesome_notifications_localizations)
+
 Show your notifications in the user's language: translate the title, body,
 summary, large icon, big picture and action button labels — all from a single
 `createNotification` call.

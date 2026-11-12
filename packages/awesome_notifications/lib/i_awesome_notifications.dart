@@ -85,9 +85,6 @@ abstract class IAwesomeNotifications {
   /// the content of the notification, including the title, body, icon, and other
   /// details.
   ///
-  /// The optional [schedule] parameter is a [NotificationSchedule] object that
-  /// specifies when the notification should be delivered.
-  ///
   /// The optional [actionButtons] parameter is a list of
   /// [NotificationActionButton] objects that represent the action buttons to be
   /// displayed on the notification.
@@ -99,16 +96,17 @@ abstract class IAwesomeNotifications {
   /// displayed (i.e. it will be a "background" notification).
   ///
   /// This method is typically used to create a new notification with the
-  /// specified content and delivery schedule. If an action button or buttons are
-  /// provided, they will be displayed on the notification to allow the user to
-  /// take specific actions in response to the notification.
+  /// specified content. If an action button or buttons are provided, they will be
+  /// displayed on the notification to allow the user to take specific actions in
+  /// response to the notification.
   ///
   /// The optional [extensions] let opt-in add-on packages attach extra data to
-  /// the notification (for example, per-language translations via the
-  /// `awesome_notifications_localizations` package's `NotificationLocalizations`).
+  /// the notification — for example scheduling via the
+  /// `awesome_notifications_schedules` package (`NotificationCalendar` /
+  /// `NotificationInterval`), or per-language translations via the
+  /// `awesome_notifications_localizations` package (`NotificationLocalizations`).
   Future<bool> createNotification({
     required NotificationContent content,
-    NotificationSchedule? schedule,
     List<NotificationActionButton>? actionButtons,
     List<NotificationExtension>? extensions,
   });
@@ -356,17 +354,6 @@ abstract class IAwesomeNotifications {
     ],
   });
 
-  /// Lists all active scheduled notifications.
-  ///
-  /// This method returns a [Future] that resolves to a list of
-  /// [NotificationModel] objects representing all active scheduled
-  /// notifications. If there are no active scheduled notifications, the list
-  /// will be empty.
-  ///
-  /// This method can be used to get a list of all scheduled notifications in
-  /// order to display them to the user or to cancel them programmatically.
-  Future<List<NotificationModel>> listScheduledNotifications();
-
   /// Sets a new notification channel or updates an existing channel.
   ///
   /// The [notificationChannel] parameter is a [NotificationChannel] object that
@@ -481,25 +468,6 @@ abstract class IAwesomeNotifications {
   /// been reset.
   Future<void> resetGlobalBadge();
 
-  /// Gets the next valid date for a notification schedule. The [schedule]
-  /// parameter is a valid [NotificationSchedule] model that specifies the
-  /// notification schedule. The optional [fixedDate] parameter is a [DateTime]
-  /// value that represents the reference date to simulate a schedule in a
-  /// different time. If this parameter is omitted, the reference date will be
-  /// set to the current date and time.
-  ///
-  /// This method returns a [Future] that resolves to a [DateTime] value that
-  /// represents the next valid date for the notification schedule. If the
-  /// notification schedule has expired or is invalid, the method will return
-  /// `null`. If the notification schedule is a one-time event, the method will
-  /// return the event's date and time. If the notification schedule is a
-  /// repeating event, the method will return the next valid date and time for
-  /// the event.
-  Future<DateTime?> getNextDate(
-    NotificationSchedule schedule, {
-    DateTime? fixedDate,
-  });
-
   /// Returns the identifier for the UTC time zone.
   ///
   /// The identifier for the UTC time zone is a string in the format "Etc/GMT[+/-]hh:mm",
@@ -564,21 +532,6 @@ abstract class IAwesomeNotifications {
   /// This method returns a [Future] that resolves to `void`.
   Future<void> dismiss(int id);
 
-  /// Cancels a single scheduled notification, without dismissing the active notification.
-  ///
-  /// The [id] parameter is an [int] that represents the unique identifier of
-  /// the scheduled notification to cancel. This method cancels only the
-  /// schedule associated with the notification, leaving the notification
-  /// itself intact.
-  ///
-  /// If the notification has not been shown yet but is scheduled to be shown in
-  /// the future, the schedule will be removed and the notification will not be
-  /// shown. If the notification is already shown, this method has no effect on
-  /// the currently active notification.
-  ///
-  /// This method returns a [Future] that resolves to `void`.
-  Future<void> cancelSchedule(int id);
-
   /// Dismisses all active notifications with the specified [channelKey], without
   /// cancelling their respective schedules.
   ///
@@ -592,19 +545,6 @@ abstract class IAwesomeNotifications {
   /// This method returns a [Future] that resolves when all active notifications
   /// with the specified channel key have been dismissed.
   Future<void> dismissNotificationsByChannelKey(String channelKey);
-
-  /// Cancels all active schedules with the specified [channelKey], without
-  /// dismissing the respective notifications.
-  ///
-  /// The [channelKey] parameter is a [String] that represents the unique key of
-  /// the channel that the schedules belong to.
-  ///
-  /// This method can be used to cancel all active schedules that belong to
-  /// a specific channel, without dismissing the respective notifications.
-  ///
-  /// This method returns a [Future] that resolves when all active schedules
-  /// with the specified channel key have been cancelled.
-  Future<void> cancelSchedulesByChannelKey(String channelKey);
 
   /// Cancels all active notifications and schedules with the specified [channelKey].
   ///
@@ -632,19 +572,6 @@ abstract class IAwesomeNotifications {
   /// with the specified group key have been dismissed.
   Future<void> dismissNotificationsByGroupKey(String groupKey);
 
-  /// Cancels all active schedules with the specified [groupKey], without dismissing
-  /// the respective notifications.
-  ///
-  /// The [groupKey] parameter is a [String] that represents the unique key of
-  /// the group that the schedules belong to.
-  ///
-  /// This method can be used to cancel all active schedules that belong to
-  /// a specific group, without dismissing the respective notifications.
-  ///
-  /// This method returns a [Future] that resolves when all active schedules
-  /// with the specified group key have been cancelled.
-  Future<void> cancelSchedulesByGroupKey(String groupKey);
-
   /// Cancels all active notifications and schedules with the specified [groupKey].
   ///
   /// The [groupKey] parameter is a [String] that represents the unique key of
@@ -663,12 +590,6 @@ abstract class IAwesomeNotifications {
   /// This method returns a [Future] that resolves when all active notifications
   /// with the specified group key have been dismissed.
   Future<void> dismissAllNotifications();
-
-  /// Cancels all active schedules, without dismissing the respective notifications.
-  ///
-  /// This method returns a [Future] that resolves when all active schedules
-  /// with the specified group key have been cancelled.
-  Future<void> cancelAllSchedules();
 
   /// Cancels all active notifications and schedules.
   ///

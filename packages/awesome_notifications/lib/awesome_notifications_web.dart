@@ -26,22 +26,10 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   Future<void> cancelAll() async {}
 
   @override
-  Future<void> cancelAllSchedules() async {}
-
-  @override
   Future<void> cancelNotificationsByChannelKey(String channelKey) async {}
 
   @override
   Future<void> cancelNotificationsByGroupKey(String groupKey) async {}
-
-  @override
-  Future<void> cancelSchedule(int id) async {}
-
-  @override
-  Future<void> cancelSchedulesByChannelKey(String channelKey) async {}
-
-  @override
-  Future<void> cancelSchedulesByGroupKey(String groupKey) async {}
 
   @override
   Future<List<NotificationPermission>> checkPermissionList(
@@ -59,7 +47,6 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   @override
   Future<bool> createNotification({
     required NotificationContent content,
-    NotificationSchedule? schedule,
     List<NotificationActionButton>? actionButtons,
     List<NotificationExtension>? extensions,
   }) async {
@@ -116,12 +103,6 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   }
 
   @override
-  Future<DateTime?> getNextDate(NotificationSchedule schedule,
-      {DateTime? fixedDate}) async {
-    return null;
-  }
-
-  @override
   Future<String> getUtcTimeZoneIdentifier() async {
     return AwesomeNotifications.utcTimeZoneIdentifier;
   }
@@ -144,11 +125,6 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
   @override
   Future<bool> isNotificationAllowed() async {
     return false;
-  }
-
-  @override
-  Future<List<NotificationModel>> listScheduledNotifications() async {
-    return [];
   }
 
   @override

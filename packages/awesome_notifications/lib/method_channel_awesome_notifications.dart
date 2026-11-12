@@ -35,11 +35,6 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }
 
   @override
-  Future<void> cancelAllSchedules() async {
-    await methodChannel.invokeMethod(CHANNEL_METHOD_CANCEL_ALL_SCHEDULES);
-  }
-
-  @override
   Future<void> cancelNotificationsByChannelKey(String channelKey) async {
     await methodChannel.invokeMethod(
         CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_CHANNEL_KEY, channelKey);
@@ -49,24 +44,6 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   Future<void> cancelNotificationsByGroupKey(String groupKey) async {
     await methodChannel.invokeMethod(
         CHANNEL_METHOD_CANCEL_NOTIFICATIONS_BY_GROUP_KEY, groupKey);
-  }
-
-  @override
-  Future<void> cancelSchedule(int id) async {
-    validateId(id);
-    await methodChannel.invokeMethod(CHANNEL_METHOD_CANCEL_SCHEDULE, id);
-  }
-
-  @override
-  Future<void> cancelSchedulesByChannelKey(String channelKey) async {
-    await methodChannel.invokeMethod(
-        CHANNEL_METHOD_CANCEL_SCHEDULES_BY_CHANNEL_KEY, channelKey);
-  }
-
-  @override
-  Future<void> cancelSchedulesByGroupKey(String groupKey) async {
-    await methodChannel.invokeMethod(
-        CHANNEL_METHOD_CANCEL_SCHEDULES_BY_GROUP_KEY, groupKey);
   }
 
   @override
@@ -93,7 +70,6 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   @override
   Future<bool> createNotification({
     required NotificationContent content,
-    NotificationSchedule? schedule,
     List<NotificationActionButton>? actionButtons,
     List<NotificationExtension>? extensions,
   }) async {
@@ -101,12 +77,12 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
     final Map<String, dynamic> data = NotificationModel(
       content: content,
-      schedule: schedule,
       actionButtons: actionButtons,
     ).toMap();
 
-    // Merge whatever add-on extensions contribute (e.g. localizations). The core
-    // doesn't know what these are — it just forwards the extra map entries.
+    // Merge whatever add-on extensions contribute (e.g. scheduling,
+    // localizations). The core doesn't know what these are — it just forwards
+    // the extra map entries as siblings of content/actionButtons.
     for (final extension in extensions ?? const <NotificationExtension>[]) {
       data.addAll(extension.toMap());
     }
@@ -237,24 +213,6 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }
 
   @override
-  Future<DateTime?> getNextDate(NotificationSchedule schedule,
-      {DateTime? fixedDate}) async {
-    fixedDate ??= DateTime.now().toUtc();
-    Map parameters = {
-      NOTIFICATION_INITIAL_FIXED_DATE:
-          AwesomeDateUtils.parseDateToString(fixedDate),
-      NOTIFICATION_SCHEDULE: schedule.toMap()
-    };
-
-    final String? nextDate = await methodChannel.invokeMethod(
-        CHANNEL_METHOD_GET_NEXT_DATE, parameters);
-
-    if (nextDate == null) return null;
-
-    return AwesomeDateUtils.parseStringToDate(nextDate)!;
-  }
-
-  @override
   Future<String> getUtcTimeZoneIdentifier() async {
     final String utcIdentifier = await methodChannel
         .invokeMethod(CHANNEL_METHOD_GET_UTC_TIMEZONE_IDENTIFIER);
@@ -328,25 +286,6 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
     final bool isAllowed = await methodChannel
         .invokeMethod(CHANNEL_METHOD_IS_NOTIFICATION_ALLOWED);
     return isAllowed;
-  }
-
-  @override
-  Future<List<NotificationModel>> listScheduledNotifications() async {
-    List<NotificationModel> scheduledNotifications = [];
-    List<Object>? returned =
-        await methodChannel.invokeListMethod(CHANNEL_METHOD_LIST_ALL_SCHEDULES);
-    if (returned != null) {
-      for (Object object in returned) {
-        if (object is Map) {
-          NotificationModel? notificationModel =
-              NotificationModel().fromMap(Map<String, dynamic>.from(object));
-          if (notificationModel == null) continue;
-
-          scheduledNotifications.add(notificationModel);
-        }
-      }
-    }
-    return scheduledNotifications;
   }
 
   @override
@@ -498,8 +437,10 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
   @override
   Future<List<int>> getAllActiveNotificationIdsOnStatusBar() async {
-    return await methodChannel
-            .invokeMethod(CHANNEL_METHOD_GET_ALL_ACTIVE_NOTIFICATION_IDS) ??
+    // The platform channel returns a List<Object?>; invokeListMethod casts each
+    // element to int (a plain `as List<int>` would throw at runtime).
+    return await methodChannel.invokeListMethod<int>(
+            CHANNEL_METHOD_GET_ALL_ACTIVE_NOTIFICATION_IDS) ??
         [];
   }
 
