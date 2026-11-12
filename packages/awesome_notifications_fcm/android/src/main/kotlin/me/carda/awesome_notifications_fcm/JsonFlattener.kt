@@ -12,21 +12,33 @@ package me.carda.awesome_notifications_fcm
  *
  *   { content: { id: "1", title: "Hi" }, actionButtons: [ { key: "OK" } ] }
  *
- * A numeric path segment turns the parent into a list. Values are left as their
- * original strings (the core models coerce types on `fromMap`).
+ * A numeric path segment turns the parent into a list. Since every value arrives
+ * as a string, `"true"` / `"false"` become booleans (the core reads flags with
+ * `getBool`, which does not parse strings) and `"null"` drops the key; anything
+ * else stays a string (the core parses numeric strings itself).
  */
 object JsonFlattener {
 
+    @Suppress("UNCHECKED_CAST")
     fun decode(flat: Map<String, String>): MutableMap<String, Any?> {
         val root = mutableMapOf<String, Any?>()
         for ((key, value) in flat) {
-            insert(root, key.split('.'), value)
+            val coerced = coerce(value) ?: continue
+            insert(root, key.split('.'), coerced)
         }
         return normalize(root) as MutableMap<String, Any?>
     }
 
+    /** Typed value of a flattened string, or null to drop the key. */
+    fun coerce(value: String): Any? = when (value) {
+        "true" -> true
+        "false" -> false
+        "null" -> null
+        else -> value
+    }
+
     @Suppress("UNCHECKED_CAST")
-    private fun insert(node: MutableMap<String, Any?>, path: List<String>, value: String) {
+    private fun insert(node: MutableMap<String, Any?>, path: List<String>, value: Any) {
         val head = path.first()
         if (path.size == 1) {
             node[head] = value

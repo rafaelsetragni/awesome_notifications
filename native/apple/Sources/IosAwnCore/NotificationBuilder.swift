@@ -239,14 +239,24 @@ open class NotificationBuilder {
     }
 
     /// Attaches the notification image. iOS shows a single attachment, so prefer
-    /// the big picture and fall back to the large icon.
+    /// the big picture and fall back to the large icon — also when the big
+    /// picture is set but cannot be loaded (dead URL, missing asset, …).
     private func applyImages(_ content: [String: Any], to unContent: UNMutableNotificationContent) {
-        let bigPicture = mapUtils.getString(content[Definitions.NOTIFICATION_BIG_PICTURE])
-        let largeIcon = mapUtils.getString(content[Definitions.NOTIFICATION_LARGE_ICON])
-        let source = !(bigPicture?.isEmpty ?? true) ? bigPicture : largeIcon
-        if let attachment = bitmapAttachment(from: source) {
+        let sources = [
+            mapUtils.getString(content[Definitions.NOTIFICATION_BIG_PICTURE]),
+            mapUtils.getString(content[Definitions.NOTIFICATION_LARGE_ICON])
+        ]
+        if let attachment = firstAttachment(from: sources) {
             unContent.attachments = [attachment]
         }
+    }
+
+    /// The attachment of the first source that actually loads, in order.
+    func firstAttachment(from sources: [String?]) -> UNNotificationAttachment? {
+        for source in sources {
+            if let attachment = bitmapAttachment(from: source) { return attachment }
+        }
+        return nil
     }
 
     private func bitmapAttachment(from source: String?) -> UNNotificationAttachment? {

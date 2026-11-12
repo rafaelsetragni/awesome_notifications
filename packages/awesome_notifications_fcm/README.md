@@ -107,8 +107,39 @@ are optional.
 }
 ```
 
+The sections can also be sent dot‑flattened (`"content.title": "Hello"`,
+`"actionButtons.0.key": "OPEN"`); `"true"` / `"false"` become booleans and
+`"null"` drops the key. Platform‑specific overrides go under `Android` / `iOS`
+with the same shape (`{"content": {…}, "actionButtons": […]}`).
+
 A data message **without** displayable content is delivered to
 `onFcmSilentDataHandle` instead.
+
+> **Keep it data‑only.** Don't add an FCM `notification` block (or an APNs
+> `alert`): with the app in background or terminated, the Firebase SDK on
+> Android and the OS on iOS display it themselves, without images, buttons or
+> layouts, and the plugin never sees it. On iOS, send the message as a
+> background push so the plugin can build it:
+>
+> ```json
+> "apns": {
+>   "headers": { "apns-push-type": "background", "apns-priority": "5" },
+>   "payload": { "aps": { "content-available": 1 } }
+> }
+> ```
+>
+> iOS throttles background pushes and does not deliver them to an app the user
+> force‑quit; rich pushes that survive that need the Notification Service
+> Extension (planned, see Scope below).
+
+### Trying it with Postman
+
+[`example/postman/awesome_notifications_fcm.postman_collection.json`](example/postman/awesome_notifications_fcm.postman_collection.json)
+has ready pushes (flattened and stringified payloads, localizations, platform
+overrides and silent data) for the example app. Set `project_id`,
+`bearer_token` (an OAuth2 access token with the `firebase.messaging` scope) and
+`fcm_token` (printed by the example app). Its images are pinned to a commit of
+this repository, so they don't expire.
 
 ## How it works
 

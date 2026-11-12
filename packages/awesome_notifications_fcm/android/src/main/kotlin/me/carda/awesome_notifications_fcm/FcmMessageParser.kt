@@ -88,9 +88,14 @@ class FcmMessageParser {
         if (!content.containsKey(Definitions.NOTIFICATION_CHANNEL_KEY)) {
             firstOsChannelKey(context)?.let { content[Definitions.NOTIFICATION_CHANNEL_KEY] = it }
         }
-        if (data.isNotEmpty()) content[Definitions.NOTIFICATION_PAYLOAD] = HashMap(data)
+        val payload = data.filterKeys { !isReservedKey(it) }
+        if (payload.isNotEmpty()) content[Definitions.NOTIFICATION_PAYLOAD] = HashMap(payload)
         return mutableMapOf(FcmDefinitions.MODEL_CONTENT to content)
     }
+
+    /** The awesome sections — whole (structured) or dot-flattened. */
+    private fun isReservedKey(key: String): Boolean =
+        key.substringBefore('.') in RESERVED_SECTIONS
 
     private fun structuredContent(
         notificationId: Int,
@@ -156,6 +161,15 @@ class FcmMessageParser {
     }
 
     companion object {
+        private val RESERVED_SECTIONS = setOf(
+            FcmDefinitions.MODEL_CONTENT,
+            FcmDefinitions.MODEL_SCHEDULE,
+            FcmDefinitions.MODEL_BUTTONS,
+            FcmDefinitions.MODEL_LOCALIZATIONS,
+            FcmDefinitions.MODEL_ANDROID,
+            FcmDefinitions.MODEL_IOS
+        )
+
         /** Recursive map merge; values from [override] win, nested maps are merged. */
         @Suppress("UNCHECKED_CAST")
         fun deepMerge(

@@ -109,4 +109,32 @@ class FcmMessageParserTest {
         val content = model[Definitions.NOTIFICATION_CONTENT] as Map<String, Any?>
         assertEquals("Flat", content[Definitions.NOTIFICATION_TITLE])
     }
+
+    @Test
+    @Suppress("UNCHECKED_CAST")
+    fun `flattened payload keeps images, booleans and a clean payload`() {
+        val model = parser.buildAwesomeMap(
+            context, 5,
+            mapOf(
+                "orderId" to "9",
+                "content.channelKey" to "push",
+                "content.title" to "Hi",
+                "content.bigPicture" to "https://example.com/big.jpg",
+                "content.largeIcon" to "https://example.com/icon.png",
+                "content.displayOnForeground" to "true",
+                "content.privacy" to "null",
+                "content.payload.secret" to "s3cr3t",
+                "actionButtons.0.key" to "OK"
+            ),
+            null, NotificationLifeCycle.Foreground
+        )
+        val content = model["content"] as Map<String, Any?>
+        assertEquals("https://example.com/big.jpg", content[Definitions.NOTIFICATION_BIG_PICTURE])
+        assertEquals("https://example.com/icon.png", content[Definitions.NOTIFICATION_LARGE_ICON])
+        assertEquals(true, content["displayOnForeground"])
+        assertFalse(content.containsKey("privacy"))
+        val payload = content[Definitions.NOTIFICATION_PAYLOAD] as Map<String, Any?>
+        assertEquals(mapOf("orderId" to "9", "secret" to "s3cr3t"), payload)
+        assertEquals(1, (model["actionButtons"] as List<*>).size)
+    }
 }

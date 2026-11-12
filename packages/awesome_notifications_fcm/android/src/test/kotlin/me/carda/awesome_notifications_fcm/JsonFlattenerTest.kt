@@ -1,6 +1,7 @@
 package me.carda.awesome_notifications_fcm
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -49,5 +50,34 @@ class JsonFlattenerTest {
             mapOf("x.0" to "a", "x.2" to "b")
         )
         assertTrue(decoded["x"] is Map<*, *>)
+    }
+
+    @Test
+    fun `turns boolean strings into booleans`() {
+        val decoded = JsonFlattener.decode(
+            mapOf("content.displayOnForeground" to "true", "content.locked" to "false")
+        )
+        @Suppress("UNCHECKED_CAST")
+        val content = decoded["content"] as Map<String, Any?>
+        assertEquals(true, content["displayOnForeground"])
+        assertEquals(false, content["locked"])
+    }
+
+    @Test
+    fun `drops null strings`() {
+        val decoded = JsonFlattener.decode(
+            mapOf("content.title" to "Hi", "content.privacy" to "null")
+        )
+        @Suppress("UNCHECKED_CAST")
+        val content = decoded["content"] as Map<String, Any?>
+        assertFalse(content.containsKey("privacy"))
+        assertEquals("Hi", content["title"])
+    }
+
+    @Test
+    fun `keeps numeric strings as strings`() {
+        val decoded = JsonFlattener.decode(mapOf("content.id" to "42"))
+        @Suppress("UNCHECKED_CAST")
+        assertEquals("42", (decoded["content"] as Map<String, Any?>)["id"])
     }
 }

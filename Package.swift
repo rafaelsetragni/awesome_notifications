@@ -54,6 +54,17 @@ let package = Package(
             name: "LocalizationsLogicTests",
             dependencies: ["LocalizationsLogic"],
             path: "native/apple/Tests/LocalizationsLogicTests"
+        ),
+        .target(
+            name: "FcmLogic",
+            dependencies: ["IosAwnCore"],
+            path: "packages/awesome_notifications_fcm/ios/awesome_notifications_fcm/Sources/awesome_notifications_fcm",
+            exclude: ["AwesomeNotificationsFcmPlugin.swift", "DartFcmBackgroundExecutor.swift"]
+        ),
+        .testTarget(
+            name: "FcmLogicTests",
+            dependencies: ["FcmLogic"],
+            path: "native/apple/Tests/FcmLogicTests"
         )
     ]
 )
