@@ -16,6 +16,8 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
 
     private var center: UNUserNotificationCenter { .current() }
     private let builder = NotificationBuilder.newInstance()
+    /// Real displayed lifecycle of notifications shown with the app open.
+    private let displayedTracker = DisplayedLifecycleTracker()
 
     /// iOS/macOS have no notification channels; we still keep the channel config
     /// (sound, importance, …) so later features can honor it per channelKey.
@@ -171,6 +173,8 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
 
             // A scheduling decorator contributes a trigger from the notification's
             // `schedule`; otherwise nil delivers it immediately.
+            // A new notification reusing an id starts with no display record.
+            self.displayedTracker.forget(id: built.id)
             let request = UNNotificationRequest(
                 identifier: String(built.id),
                 content: built.content,
@@ -202,10 +206,12 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
             fromUserInfo: notification.request.content.userInfo
         ) {
             let content = builder.contentMap(fromModel: model)
-            emit(
-                Definitions.EVENT_NOTIFICATION_DISPLAYED,
-                builder.registerDisplayedEvent(content, lifeCycle: .foreground)
-            )
+            let displayed = builder.registerDisplayedEvent(content, lifeCycle: .foreground)
+            if let id = builder.readId(content),
+               let date = displayed[Definitions.NOTIFICATION_DISPLAYED_DATE] as? String {
+                displayedTracker.recordForegroundDisplay(id: id, date: date)
+            }
+            emit(Definitions.EVENT_NOTIFICATION_DISPLAYED, displayed)
         }
         if #available(iOS 14.0, macOS 11.0, *) {
             completionHandler([.banner, .list, .sound, .badge])
@@ -222,7 +228,10 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
         if let model = builder.notificationModel(
             fromUserInfo: response.notification.request.content.userInfo
         ) {
-            var content = builder.contentMap(fromModel: model)
+            // The stored content carries the displayed lifecycle predicted at
+            // creation; correct it if the notification was shown in foreground.
+            let stored = builder.contentMap(fromModel: model)
+            var content = displayedTracker.resolve(stored, id: builder.readId(stored))
             let actionId = response.actionIdentifier
             let systemDismiss = actionId == UNNotificationDismissActionIdentifier
             let defaultTap = actionId == UNNotificationDefaultActionIdentifier
@@ -282,20 +291,24 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
     // MARK: - Dismiss / cancel
 
     public func dismiss(id: Int) {
+        displayedTracker.forget(id: id)
         center.removeDeliveredNotifications(withIdentifiers: [String(id)])
     }
 
     public func cancel(id: Int) {
+        displayedTracker.forget(id: id)
         let identifiers = [String(id)]
         center.removePendingNotificationRequests(withIdentifiers: identifiers)
         center.removeDeliveredNotifications(withIdentifiers: identifiers)
     }
 
     public func dismissAllNotifications() {
+        displayedTracker.forgetAll()
         center.removeAllDeliveredNotifications()
     }
 
     public func cancelAll() {
+        displayedTracker.forgetAll()
         center.removeAllPendingNotificationRequests()
         center.removeAllDeliveredNotifications()
     }
