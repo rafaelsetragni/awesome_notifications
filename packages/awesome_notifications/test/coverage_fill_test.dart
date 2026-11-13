@@ -289,6 +289,11 @@ void main() {
       expect(AwesomeNotificationsPlatform.instance,
           isA<MethodChannelAwesomeNotifications>());
 
+      AwesomeNotificationsPlatform.operatingSystem = 'windows';
+      AwesomeNotificationsPlatform.resetInstance();
+      expect(AwesomeNotificationsPlatform.instance,
+          isA<MethodChannelAwesomeNotifications>());
+
       AwesomeNotificationsPlatform.operatingSystem = 'linux';
       AwesomeNotificationsPlatform.resetInstance();
       expect(AwesomeNotificationsPlatform.instance,

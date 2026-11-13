@@ -13,12 +13,23 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
+    defaults:
+      run:
+        # bash -e: stop at the first failing command (PowerShell would not).
+        shell: bash
 
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+
+      # The portable desktop core (shared with Linux), under MSVC /W4 /WX.
+      - name: Desktop core unit tests
+        run: |
+          cmake -S packages/awesome_notifications/desktop/awn_core/tests -B build/awn_core_tests
+          cmake --build build/awn_core_tests --config Debug
+          ctest --test-dir build/awn_core_tests -C Debug --output-on-failure
 
       # The core example also depends on the schedules decorator, so this
       # builds both plugins' Windows code.

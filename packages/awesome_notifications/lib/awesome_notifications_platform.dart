@@ -25,11 +25,12 @@ abstract class AwesomeNotificationsPlatform extends PlatformInterface
   static AwesomeNotificationsPlatform get instance {
     if (_instance == null) {
       switch (operatingSystem) {
-        // Platforms with a native engine; the rest (linux/windows until
-        // their engines land) get the no-op implementation.
+        // Platforms with a native engine; the rest (linux until its engine
+        // lands) get the no-op implementation.
         case "android":
         case "ios":
         case "macos":
+        case "windows":
           _instance = MethodChannelAwesomeNotifications();
           break;
         default:
