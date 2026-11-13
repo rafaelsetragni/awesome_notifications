@@ -17,7 +17,8 @@ Service Extension.
   s.author           = { 'Rafael Setragni' => 'rafaelsetra@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files     = 'Sources/IosAwnCore/**/*.swift'
-  s.platform         = :ios, '13.0'
+  s.ios.deployment_target = '13.0'
+  s.osx.deployment_target = '10.15'
   s.swift_version    = '5.9'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 end

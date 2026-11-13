@@ -1,30 +1,23 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint awesome_notifications.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
   s.name             = 'awesome_notifications'
-  s.version          = '0.0.1'
-  s.summary          = 'A new Flutter plugin project.'
+  s.version          = '1.0.0'
+  s.summary          = 'Local and push notifications plugin (macOS bridge).'
   s.description      = <<-DESC
-A new Flutter plugin project.
+Flutter bridge for Awesome Notifications on macOS. Translates method-channel calls
+into the Flutter-free IosAwnCore engine (shared with iOS).
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/rafaelsetragni/awesome_notifications'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
-
+  s.author           = { 'Rafael Setragni' => 'rafaelsetra@gmail.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'awesome_notifications/Sources/awesome_notifications/**/*'
-
-  # If your plugin requires a privacy manifest, for example if it collects user
-  # data, update the PrivacyInfo.xcprivacy file to describe your plugin's
-  # privacy impact, and then uncomment this line. For more information,
-  # see https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
-  # s.resource_bundles = {'awesome_notifications_privacy' => ['awesome_notifications/Sources/awesome_notifications/PrivacyInfo.xcprivacy']}
-
+  s.source_files = 'awesome_notifications/Sources/awesome_notifications/**/*.swift'
   s.dependency 'FlutterMacOS'
+  s.dependency 'IosAwnCore'
+  s.platform = :osx, '10.15'
 
-  s.platform = :osx, '10.11'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.swift_version = '5.0'
 end

@@ -273,13 +273,18 @@ void main() {
       AwesomeNotificationsPlatform.resetInstance();
     });
 
-    test('resolves the method-channel impl on mobile and empty elsewhere', () {
+    test('resolves the method-channel impl on native platforms and empty elsewhere', () {
       AwesomeNotificationsPlatform.operatingSystem = 'android';
       AwesomeNotificationsPlatform.resetInstance();
       expect(AwesomeNotificationsPlatform.instance,
           isA<MethodChannelAwesomeNotifications>());
 
       AwesomeNotificationsPlatform.operatingSystem = 'ios';
+      AwesomeNotificationsPlatform.resetInstance();
+      expect(AwesomeNotificationsPlatform.instance,
+          isA<MethodChannelAwesomeNotifications>());
+
+      AwesomeNotificationsPlatform.operatingSystem = 'macos';
       AwesomeNotificationsPlatform.resetInstance();
       expect(AwesomeNotificationsPlatform.instance,
           isA<MethodChannelAwesomeNotifications>());

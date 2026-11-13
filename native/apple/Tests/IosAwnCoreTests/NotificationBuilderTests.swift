@@ -2,6 +2,8 @@ import XCTest
 @testable import IosAwnCore
 #if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
 #endif
 
 final class NotificationBuilderTests: XCTestCase {
@@ -144,16 +146,24 @@ final class NotificationBuilderTests: XCTestCase {
 
     // MARK: - images
 
-    #if canImport(UIKit)
+    #if canImport(UIKit) || canImport(AppKit)
     /// Writes a 1x1 PNG to a temp file and returns its `file://` reference.
     private func tempImageReference() throws -> String {
+        #if canImport(UIKit)
         let image = UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1)).image { ctx in
             UIColor.red.setFill()
             ctx.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
         }
+        #else
+        let image = NSImage(size: NSSize(width: 1, height: 1), flipped: false) { rect in
+            NSColor.red.setFill()
+            rect.fill()
+            return true
+        }
+        #endif
         let url = URL(fileURLWithPath: NSTemporaryDirectory())
             .appendingPathComponent(UUID().uuidString + ".png")
-        try XCTUnwrap(image.pngData()).write(to: url)
+        try XCTUnwrap(BitmapUtils.shared.pngData(image)).write(to: url)
         return "file://" + url.path
     }
 

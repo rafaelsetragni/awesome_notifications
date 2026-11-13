@@ -9,23 +9,31 @@ let package = Package(
         .macOS("10.15")
     ],
     products: [
-        .library(name: "awesome-notifications", targets: ["awesome_notifications"])
+        .library(name: "awesome-notifications", targets: ["awesome_notifications"]),
+        // The shared Apple engine, vended so decorators can display through it.
+        .library(name: "IosAwnCore", targets: ["IosAwnCore"])
     ],
-    dependencies: [],
+    dependencies: [
+        // Flutter's SPM integration vends the engine as a local package.
+        .package(name: "FlutterFramework", path: "../FlutterFramework")
+    ],
     targets: [
+        // Sources/IosAwnCore is a symlink to the repo-root native/apple engine
+        // (single source shared with iOS). A cross-package `.package(path:)`
+        // would break under Flutter's symlinked plugin layout; symlinked target
+        // sources resolve from their real location.
+        .target(
+            name: "IosAwnCore",
+            path: "Sources/IosAwnCore"
+        ),
         .target(
             name: "awesome_notifications",
-            dependencies: [],
+            dependencies: [
+                "IosAwnCore",
+                .product(name: "FlutterFramework", package: "FlutterFramework")
+            ],
             resources: [
-                // If your plugin requires a privacy manifest, for example if it collects user
-                // data, update the PrivacyInfo.xcprivacy file to describe your plugin's
-                // privacy impact, and then uncomment these lines. For more information, see
-                // https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
-                // .process("PrivacyInfo.xcprivacy"),
-
-                // If you have other resources that need to be bundled with your plugin, refer to
-                // the following instructions to add them:
-                // https://developer.apple.com/documentation/xcode/bundling-resources-with-a-swift-package
+                .process("PrivacyInfo.xcprivacy")
             ]
         )
     ]

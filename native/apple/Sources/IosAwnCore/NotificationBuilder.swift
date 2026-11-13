@@ -260,10 +260,10 @@ open class NotificationBuilder {
     }
 
     private func bitmapAttachment(from source: String?) -> UNNotificationAttachment? {
-        #if canImport(UIKit)
+        #if canImport(UIKit) || canImport(AppKit)
         guard let source = source, !source.isEmpty,
               let image = BitmapUtils.shared.getBitmapFromSource(source),
-              let data = image.pngData()
+              let data = BitmapUtils.shared.pngData(image)
         else { return nil }
 
         // Each call writes into its own unique temp subfolder (like the original

@@ -42,8 +42,6 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin, AwesomeEventLi
     }
   }
 
-  private var core: AwesomeNotifications { AwesomeNotifications.shared }
-
   // MARK: - AwesomeEventListener
 
   public func onNewAwesomeEvent(eventType: String, content: [String: Any]) {
@@ -52,106 +50,22 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin, AwesomeEventLi
     }
   }
 
+  // MARK: - Method channel
+
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    switch call.method {
-
-    case "initialize":
-      let args = call.arguments as? [String: Any]
-      let channels = (args?[Definitions.INITIALIZE_CHANNELS] as? [[String: Any]]) ?? []
-      core.initialize(channels: channels)
-      result(true)
-
-    case "getLocalTimeZoneIdentifier":
-      result(TimeZone.current.identifier)
-
-    case "getUtcTimeZoneIdentifier":
-      result(Definitions.UTC_TIMEZONE)
-
-    case "setEventHandles":
-      // Background isolate handles; foreground events are delivered live through
-      // this channel, so we just acknowledge.
-      result(true)
-
-    case "getInitialAction":
-      // Returns the action that launched the app (killed state), or nil.
-      let removeFromEvents = call.arguments as? Bool ?? false
-      core.getInitialAction(removeFromEvents: removeFromEvents) { result($0) }
-
-    case "isNotificationAllowed":
-      core.isNotificationAllowed { result($0) }
-
-    case "requestNotifications":
-      // Dart expects back the list of permissions still MISSING after the
-      // request (empty list = everything granted).
-      let args = call.arguments as? [String: Any]
-      let requested = (args?[Definitions.NOTIFICATION_PERMISSIONS] as? [String]) ?? []
-      core.requestPermission { granted in
-        result(granted ? [] : requested)
-      }
-
-    case "setNotificationChannel":
-      if let args = call.arguments as? [String: Any] {
-        core.setChannel(args)
-      }
-      result(true)
-
-    case "createNewNotification":
-      if let args = call.arguments as? [String: Any] {
-        core.createNotification(args) { result($0) }
-      } else {
-        result(false)
-      }
-
-    case "dismissNotification":
-      if let id = MapUtils.shared.getInt(call.arguments) {
-        core.dismiss(id: id)
-      }
-      result(true)
-
-    case "cancelNotification":
-      if let id = MapUtils.shared.getInt(call.arguments) {
-        core.cancel(id: id)
-      }
-      result(true)
-
-    case "dismissNotificationsByChannelKey":
-      if let key = call.arguments as? String { core.dismissByChannelKey(key) }
-      result(true)
-
-    case "cancelNotificationsByChannelKey":
-      if let key = call.arguments as? String { core.cancelByChannelKey(key) }
-      result(true)
-
-    case "dismissNotificationsByGroupKey":
-      if let key = call.arguments as? String { core.dismissByGroupKey(key) }
-      result(true)
-
-    case "cancelNotificationsByGroupKey":
-      if let key = call.arguments as? String { core.cancelByGroupKey(key) }
-      result(true)
-
-    case "dismissAllNotifications":
-      core.dismissAllNotifications()
-      result(true)
-
-    case "cancelAllNotifications":
-      core.cancelAll()
-      result(true)
-
-    case "getPlatformVersion":
+    if call.method == "getPlatformVersion" {
       result("iOS " + UIDevice.current.systemVersion)
-
-    default:
-      // Let registered decorators (e.g. localization) answer their own methods.
-      let handled = AwesomeMethodHandlerRegistry.shared.handle(
-        method: call.method,
-        arguments: call.arguments
-      ) { value in
-        result(value)
-      }
-      if !handled {
-        result(FlutterMethodNotImplemented)
-      }
+      return
+    }
+    // The shared (iOS + macOS) router drives the core and the decorators.
+    let handled = AwesomeMethodRouter.shared.handle(
+      method: call.method,
+      arguments: call.arguments
+    ) { value in
+      result(value)
+    }
+    if !handled {
+      result(FlutterMethodNotImplemented)
     }
   }
 }

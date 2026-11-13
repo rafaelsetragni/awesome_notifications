@@ -21,6 +21,9 @@ migration:
     - platform: ios
       create_revision: 00b0c91f06209d9e4a41f71b7a512d6eb3b9c694
       base_revision: 00b0c91f06209d9e4a41f71b7a512d6eb3b9c694
+    - platform: macos
+      create_revision: e8113bf45620cbeb8aff64947ee4c93e16adb4cf
+      base_revision: e8113bf45620cbeb8aff64947ee4c93e16adb4cf
 
   # User provided section
 

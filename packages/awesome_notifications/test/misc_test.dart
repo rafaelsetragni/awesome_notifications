@@ -2,6 +2,8 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/awesome_notifications_empty.dart';
+import 'package:awesome_notifications/awesome_notifications_platform.dart';
 import 'package:awesome_notifications/src/logs/logger.dart';
 import 'package:awesome_notifications/src/utils/awesome_html_utils.dart';
 import 'package:awesome_notifications/src/utils/image_file_loader.dart';
@@ -159,8 +161,11 @@ void main() {
     });
 
     test('loadAsync throws when the drawable bytes are empty', () async {
-      // On the test host the platform is the no-op Empty impl, whose
-      // getDrawableData returns null → the "image is invalid" guard fires.
+      // With the no-op Empty impl, getDrawableData returns null → the "image
+      // is invalid" guard fires. Set it explicitly: the default depends on the
+      // host OS (macOS now resolves to the method channel).
+      AwesomeNotificationsPlatform.instance = AwesomeNotificationsEmpty();
+      addTearDown(AwesomeNotificationsPlatform.resetInstance);
       const image = ResourceImage('drawable/missing');
       Future<ui.Codec> decode(ui.ImmutableBuffer buffer,
               {ui.TargetImageSizeCallback? getTargetSize}) async =>

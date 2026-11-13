@@ -1,12 +1,18 @@
 import Foundation
 #if canImport(UIKit)
 import UIKit
+/// The platform image type: UIImage on iOS, NSImage on macOS.
+public typealias PlatformImage = UIImage
+#elseif canImport(AppKit)
+import AppKit
+/// The platform image type: UIImage on iOS, NSImage on macOS.
+public typealias PlatformImage = NSImage
 #endif
 
 /// Loads an image from a media reference, supporting the four media sources by
 /// scheme prefix: `https://` (network), `asset://` (Flutter asset),
 /// `file://` (local file) and `resource://name` (bundled resource). Mirrors the
-/// original IosAwnCore BitmapUtils.
+/// original IosAwnCore BitmapUtils, on iOS (UIKit) and macOS (AppKit).
 ///
 /// NOTE: network/file decoding does I/O; call off the main thread.
 public final class BitmapUtils {
@@ -15,8 +21,8 @@ public final class BitmapUtils {
 
     private enum MediaSource { case network, file, asset, resource, unknown }
 
-    #if canImport(UIKit)
-    public func getBitmapFromSource(_ path: String?) -> UIImage? {
+    #if canImport(UIKit) || canImport(AppKit)
+    public func getBitmapFromSource(_ path: String?) -> PlatformImage? {
         guard let path = path, !path.isEmpty else { return nil }
         switch mediaSource(path) {
         case .network: return imageFromUrl(clean(path))
@@ -27,30 +33,46 @@ public final class BitmapUtils {
         }
     }
 
-    private func imageFromUrl(_ url: String) -> UIImage? {
-        guard let url = URL(string: url),
-              let data = try? Data(contentsOf: url) else { return nil }
-        return UIImage(data: data)
+    /// PNG bytes of an image (what a notification attachment is written as).
+    public func pngData(_ image: PlatformImage) -> Data? {
+        #if canImport(UIKit)
+        return image.pngData()
+        #else
+        guard let tiff = image.tiffRepresentation,
+              let bitmap = NSBitmapImageRep(data: tiff) else { return nil }
+        return bitmap.representation(using: .png, properties: [:])
+        #endif
     }
 
-    private func imageFromFile(_ path: String) -> UIImage? {
+    private func imageFromUrl(_ url: String) -> PlatformImage? {
+        guard let url = URL(string: url),
+              let data = try? Data(contentsOf: url) else { return nil }
+        return PlatformImage(data: data)
+    }
+
+    private func imageFromFile(_ path: String) -> PlatformImage? {
         guard FileManager.default.fileExists(atPath: path),
               let data = try? Data(contentsOf: URL(fileURLWithPath: path))
         else { return nil }
-        return UIImage(data: data)
+        return PlatformImage(data: data)
     }
 
-    private func imageFromAsset(_ assetPath: String) -> UIImage? {
-        // Flutter bundles its assets under App.framework/flutter_assets.
-        let realPath = Bundle.main.bundlePath
-            + "/Frameworks/App.framework/flutter_assets/" + assetPath
-        return imageFromFile(realPath)
+    private func imageFromAsset(_ assetPath: String) -> PlatformImage? {
+        // Flutter bundles its assets under App.framework/flutter_assets
+        // (inside Contents/…/Resources on macOS).
+        #if canImport(UIKit)
+        let root = Bundle.main.bundlePath + "/Frameworks/App.framework/flutter_assets/"
+        #else
+        let root = Bundle.main.bundlePath
+            + "/Contents/Frameworks/App.framework/Resources/flutter_assets/"
+        #endif
+        return imageFromFile(root + assetPath)
     }
 
-    private func imageFromResource(_ reference: String) -> UIImage? {
+    private func imageFromResource(_ reference: String) -> PlatformImage? {
         // resource://[type/]name → use the last path component as the asset name.
         let name = reference.components(separatedBy: "/").last ?? reference
-        return UIImage(named: name)
+        return PlatformImage(named: name)
     }
     #endif
 

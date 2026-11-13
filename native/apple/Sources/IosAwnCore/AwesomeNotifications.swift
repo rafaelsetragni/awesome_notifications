@@ -74,7 +74,12 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
     // MARK: - Permissions
 
     public func requestPermission(_ completion: @escaping (Bool) -> Void) {
-        center.requestAuthorization(options: [.alert, .badge, .sound]) { granted, _ in
+        center.requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+            if let error = error {
+                // e.g. UNErrorDomain 1 "Notifications are not allowed for this
+                // application" — an unsigned/ad-hoc macOS build can't ask.
+                NSLog("[AwesomeNotifications] requestAuthorization failed: %@", "\(error)")
+            }
             DispatchQueue.main.async { completion(granted) }
         }
     }
