@@ -129,7 +129,8 @@ void main() {
     test('getNextDate serializes the schedule and parses the reply', () async {
       final next = await schedules.getNextDate(
           NotificationCalendar(hour: 9, minute: 0, second: 0));
-      expect(next, isA<DateTime>());
+      // The native reply is UTC, like every other date of the plugin.
+      expect(next, DateTime.utc(2026, 7, 5, 9));
       final args = Map<String, dynamic>.from(calls.single.arguments as Map);
       expect(args[NOTIFICATION_SCHEDULE], isA<Map>());
     });

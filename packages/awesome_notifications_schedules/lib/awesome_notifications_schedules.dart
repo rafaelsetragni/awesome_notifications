@@ -99,6 +99,7 @@ class AwesomeNotificationsSchedules {
     final String? nextDate =
         await _channel.invokeMethod(CHANNEL_METHOD_GET_NEXT_DATE, parameters);
     if (nextDate == null) return null;
-    return AwesomeDateUtils.parseStringToDate(nextDate);
+    // Native returns UTC, like every other date of the plugin.
+    return AwesomeDateUtils.parseStringToDateUtc(nextDate);
   }
 }

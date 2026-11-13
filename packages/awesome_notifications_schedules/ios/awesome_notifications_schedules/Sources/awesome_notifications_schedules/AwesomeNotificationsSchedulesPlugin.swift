@@ -12,5 +12,7 @@ public class AwesomeNotificationsSchedulesPlugin: NSObject, FlutterPlugin {
         NotificationBuilderRegistry.shared.register(priority: 10) { inner in
             ScheduleBuilder(inner: inner)
         }
+        // cancelSchedule*, listAllSchedules and getNextDate.
+        AwesomeMethodHandlerRegistry.shared.register(handler: ScheduleMethodHandler())
     }
 }

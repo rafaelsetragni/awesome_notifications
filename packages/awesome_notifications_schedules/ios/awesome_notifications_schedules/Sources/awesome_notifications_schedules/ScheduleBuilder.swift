@@ -26,21 +26,31 @@ final class ScheduleBuilder: NotificationBuilder {
         guard let schedule = model[ScheduleKeys.schedule] as? [String: Any] else { return nil }
         let repeats = (schedule[ScheduleKeys.repeats] as? Bool) ?? false
 
-        if let interval = schedule[ScheduleKeys.interval] as? Int {
-            guard interval > 0, !(repeats && interval < 60) else { return nil }
+        if let interval = validInterval(schedule) {
             return UNTimeIntervalNotificationTrigger(
                 timeInterval: Double(interval), repeats: repeats)
         }
+        guard schedule[ScheduleKeys.interval] == nil,
+              var components = calendarComponents(schedule) else { return nil }
+        components.timeZone = timeZone(schedule)
+        return UNCalendarNotificationTrigger(dateMatching: components, repeats: repeats)
+    }
 
+    /// The interval in seconds of an interval schedule, or nil when it isn't one
+    /// or isn't deliverable (repeating intervals must be at least 60s on iOS).
+    static func validInterval(_ schedule: [String: Any]) -> Int? {
+        guard let interval = schedule[ScheduleKeys.interval] as? Int else { return nil }
+        let repeats = (schedule[ScheduleKeys.repeats] as? Bool) ?? false
+        guard interval > 0, !(repeats && interval < 60) else { return nil }
+        return interval
+    }
+
+    /// The date components of a calendar schedule (without time zone), or nil
+    /// when it has none.
+    static func calendarComponents(_ schedule: [String: Any]) -> DateComponents? {
         guard ScheduleKeys.calendarComponents.contains(where: { schedule[$0] != nil })
         else { return nil }
         var c = DateComponents()
-        if let tzId = schedule[ScheduleKeys.timeZone] as? String,
-           let tz = TimeZone(identifier: tzId) {
-            c.timeZone = tz
-        } else {
-            c.timeZone = TimeZone.current
-        }
         c.era = schedule[ScheduleKeys.era] as? Int
         c.year = schedule[ScheduleKeys.year] as? Int
         c.month = schedule[ScheduleKeys.month] as? Int
@@ -51,6 +61,14 @@ final class ScheduleBuilder: NotificationBuilder {
         c.weekday = schedule[ScheduleKeys.weekday] as? Int
         c.weekOfMonth = schedule[ScheduleKeys.weekOfMonth] as? Int
         c.weekOfYear = schedule[ScheduleKeys.weekOfYear] as? Int
-        return UNCalendarNotificationTrigger(dateMatching: c, repeats: repeats)
+        return c
+    }
+
+    /// The schedule's time zone, defaulting to the device's.
+    static func timeZone(_ schedule: [String: Any]) -> TimeZone {
+        if let id = schedule[ScheduleKeys.timeZone] as? String, let tz = TimeZone(identifier: id) {
+            return tz
+        }
+        return TimeZone.current
     }
 }

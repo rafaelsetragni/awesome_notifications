@@ -23,8 +23,9 @@ A new Flutter plugin project.
   # s.resource_bundles = {'awesome_notifications_schedules_privacy' => ['awesome_notifications_schedules/Sources/awesome_notifications_schedules/PrivacyInfo.xcprivacy']}
 
   s.dependency 'FlutterMacOS'
+  s.dependency 'IosAwnCore'
 
-  s.platform = :osx, '10.11'
+  s.platform = :osx, '10.15'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.swift_version = '5.0'
 end
