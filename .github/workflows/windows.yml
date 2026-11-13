@@ -31,10 +31,28 @@ jobs:
           cmake --build build/awn_core_tests --config Debug
           ctest --test-dir build/awn_core_tests -C Debug --output-on-failure
 
+      - name: Desktop scheduling unit tests
+        run: |
+          cmake -S packages/awesome_notifications_schedules/desktop/awn_schedules/tests -B build/awn_schedules_tests
+          cmake --build build/awn_schedules_tests --config Debug
+          ctest --test-dir build/awn_schedules_tests -C Debug --output-on-failure
+
+      - name: Desktop localization unit tests
+        run: |
+          cmake -S packages/awesome_notifications_localizations/desktop/awn_localizations/tests -B build/awn_localizations_tests
+          cmake --build build/awn_localizations_tests --config Debug
+          ctest --test-dir build/awn_localizations_tests -C Debug --output-on-failure
+
       # The core example also depends on the schedules decorator, so this
       # builds both plugins' Windows code.
       - name: Build core example (Windows)
         working-directory: packages/awesome_notifications/example
+        run: |
+          flutter pub get
+          flutter build windows --debug
+
+      - name: Build localizations example (Windows)
+        working-directory: packages/awesome_notifications_localizations/example
         run: |
           flutter pub get
           flutter build windows --debug

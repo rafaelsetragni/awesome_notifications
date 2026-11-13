@@ -37,6 +37,8 @@ class FakePresenter : public NotificationPresenter {
   int64_t utcOffset(const std::string& zone, TimePoint) override {
     return zone == "America/Sao_Paulo" ? -3 * 3600 : 0;
   }
+  std::string systemLanguage() override { return "pt-br"; }
+  std::filesystem::path dataDirectory() override { return {}; }
 
  private:
   static void erase(std::vector<int64_t>& from, const std::vector<int64_t>& ids) {

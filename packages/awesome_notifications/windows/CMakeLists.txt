@@ -52,6 +52,9 @@ add_library(${PLUGIN_NAME} SHARED
 # application-level CMakeLists.txt. This can be removed for plugins that want
 # full control over build settings.
 apply_standard_settings(${PLUGIN_NAME})
+# C++/WinRT needs the standard C++20 coroutines (in C++17 mode it falls back to
+# the removed <experimental/coroutine>). Only this target; decorators stay C++17.
+target_compile_features(${PLUGIN_NAME} PRIVATE cxx_std_20)
 
 # Symbols are hidden by default to reduce the chance of accidental conflicts
 # between plugins. This should not be removed; any symbols that should be

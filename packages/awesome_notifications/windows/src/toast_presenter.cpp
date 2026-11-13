@@ -3,6 +3,7 @@
 #include <shellapi.h>
 
 #include <algorithm>
+#include <cctype>
 #include <thread>
 
 #include <winrt/Windows.Data.Xml.Dom.h>
@@ -330,6 +331,14 @@ std::string ToastPresenter::localTimeZone() {
 
 int64_t ToastPresenter::utcOffset(const std::string& zone, awn::TimePoint utc) {
   return IcuTimeZone::Offset(zone, utc).value_or(0);
+}
+
+std::string ToastPresenter::systemLanguage() {
+  wchar_t name[LOCALE_NAME_MAX_LENGTH] = {};
+  if (::GetUserDefaultLocaleName(name, LOCALE_NAME_MAX_LENGTH) == 0) return "en";
+  std::string tag = WideToUtf8(name);
+  for (auto& c : tag) c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+  return tag;
 }
 
 }  // namespace awesome_notifications

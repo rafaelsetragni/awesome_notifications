@@ -54,6 +54,8 @@ class ToastPresenter : public awn::NotificationPresenter,
   void requestPermission(std::function<void(bool)> done) override;
   std::string localTimeZone() override;
   int64_t utcOffset(const std::string& zone, awn::TimePoint utc) override;
+  std::string systemLanguage() override;
+  std::filesystem::path dataDirectory() override { return identity_.dataDirectory; }
 
  private:
   bool Show(const awn::BuiltNotification& built, const awn::ToastImages& images, bool silent);

@@ -49,6 +49,8 @@ flutter:
       # shared across plugins via Swift Package Manager (see the plugin class).
       ios:
         pluginClass: AwesomeNotificationsLocalizationsPlugin
+      windows:
+        pluginClass: AwesomeNotificationsLocalizationsPluginCApi
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

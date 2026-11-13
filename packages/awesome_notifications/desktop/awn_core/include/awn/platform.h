@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <functional>
 #include <map>
 #include <optional>
@@ -48,6 +49,11 @@ class AWN_API NotificationPresenter {
   /// Offset from UTC, in seconds, of the IANA time zone `zone` at `utc`
   /// (DST included); used to match calendar schedules in their own zone.
   virtual int64_t utcOffset(const std::string& zone, TimePoint utc) = 0;
+
+  /// The device language as a lowercase BCP 47 tag (e.g. "pt-br").
+  virtual std::string systemLanguage() = 0;
+  /// Per-app folder where decorators may persist their settings.
+  virtual std::filesystem::path dataDirectory() = 0;
 };
 
 /// A notification (or one of its buttons) activated by the user.
