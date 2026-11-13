@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:awesome_notifications_fcm/awesome_notifications_fcm.dart';
 import 'package:awesome_notifications_fcm/src/fcm_definitions.dart';
 import 'package:awesome_notifications_fcm/src/isolates/silent_push_isolate_main.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -18,9 +19,20 @@ import 'package:flutter/widgets.dart';
 ///  * receiving the FCM (and native APNs) registration token,
 ///  * handling silent (data-only) messages in the background/terminated app,
 ///  * subscribing to topics and managing the token.
+///
+/// Push is only available where Firebase Cloud Messaging is (Android and iOS).
+/// Elsewhere (Windows, Linux, macOS, web) every method answers "unavailable"
+/// (`false` / an empty token) instead of throwing, so the same app code runs on
+/// every platform; check [isPlatformSupported] to adapt the UI.
 class AwesomeNotificationsFcm {
   static bool _isInitialized = false;
   static bool get isInitialized => _isInitialized;
+
+  /// Whether push through Firebase Cloud Messaging exists on this platform.
+  static bool get isPlatformSupported =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS);
 
   PushTokenHandler? _tokenFcmHandler;
   PushTokenHandler? _tokenNativeHandler;
@@ -50,6 +62,14 @@ class AwesomeNotificationsFcm {
     bool debug = false,
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
+
+    if (!isPlatformSupported) {
+      debugPrint('Awesome Notifications FCM: push is not available on '
+          '${kIsWeb ? 'web' : defaultTargetPlatform.name}; the FCM API answers '
+          '"unavailable" there.');
+      _isInitialized = false;
+      return false;
+    }
 
     _tokenFcmHandler = onFcmTokenHandle;
     _tokenNativeHandler = onNativeTokenHandle;
@@ -122,26 +142,33 @@ class AwesomeNotificationsFcm {
 
   /// Whether Firebase is fully available (configured) on the device.
   Future<bool> get isFirebaseAvailable async =>
-      await _channel.invokeMethod<bool>(CHANNEL_METHOD_IS_FCM_AVAILABLE) ??
-      false;
+      isPlatformSupported &&
+      (await _channel.invokeMethod<bool>(CHANNEL_METHOD_IS_FCM_AVAILABLE) ??
+          false);
 
   /// Requests the current Firebase Cloud Messaging registration token.
-  Future<String> requestFirebaseAppToken() async =>
-      await _channel.invokeMethod<String>(CHANNEL_METHOD_GET_FCM_TOKEN) ?? '';
+  Future<String> requestFirebaseAppToken() async {
+    if (!isPlatformSupported) return '';
+    return await _channel.invokeMethod<String>(CHANNEL_METHOD_GET_FCM_TOKEN) ??
+        '';
+  }
 
   /// Subscribes the device to an FCM [topic].
   Future<bool> subscribeToTopic(String topic) async =>
-      await _channel.invokeMethod<bool>(
-          CHANNEL_METHOD_SUBSCRIBE_TOPIC, {NOTIFICATION_TOPIC: topic}) ??
-      false;
+      isPlatformSupported &&
+      (await _channel.invokeMethod<bool>(
+              CHANNEL_METHOD_SUBSCRIBE_TOPIC, {NOTIFICATION_TOPIC: topic}) ??
+          false);
 
   /// Unsubscribes the device from an FCM [topic].
   Future<bool> unsubscribeToTopic(String topic) async =>
-      await _channel.invokeMethod<bool>(
-          CHANNEL_METHOD_UNSUBSCRIBE_TOPIC, {NOTIFICATION_TOPIC: topic}) ??
-      false;
+      isPlatformSupported &&
+      (await _channel.invokeMethod<bool>(
+              CHANNEL_METHOD_UNSUBSCRIBE_TOPIC, {NOTIFICATION_TOPIC: topic}) ??
+          false);
 
   /// Deletes the current registration token, forcing a new one to be issued.
   Future<bool> deleteToken() async =>
-      await _channel.invokeMethod<bool>(CHANNEL_METHOD_DELETE_TOKEN) ?? false;
+      isPlatformSupported &&
+      (await _channel.invokeMethod<bool>(CHANNEL_METHOD_DELETE_TOKEN) ?? false);
 }

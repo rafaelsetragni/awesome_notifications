@@ -92,6 +92,12 @@ await fcm.unsubscribeToTopic('news');
 await fcm.deleteToken();
 ```
 
+Push needs Firebase Cloud Messaging, which exists on Android and iOS. On the
+other platforms (Windows, Linux, macOS, web) the same calls are safe: they
+answer "unavailable" (`false` / an empty token) instead of throwing, so one code
+base runs everywhere. Use `AwesomeNotificationsFcm.isPlatformSupported` to adapt
+the UI.
+
 ### Sending a notification from your server
 
 Send an FCM **data** message whose keys hold the awesome payload. The `content`

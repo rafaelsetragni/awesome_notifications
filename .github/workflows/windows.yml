@@ -43,16 +43,27 @@ jobs:
           cmake --build build/awn_localizations_tests --config Debug
           ctest --test-dir build/awn_localizations_tests -C Debug --output-on-failure
 
+      # Each example is built through a short drive letter mapped to the repo (subst): MSVC is limited
+      # to 260-character paths, and the runner's checkout path plus the long
+      # plugin names (.plugin_symlinks, build/plugins/<name>/<name>.dir) exceed it.
       # The core example also depends on the schedules decorator, so this
       # builds both plugins' Windows code.
       - name: Build core example (Windows)
-        working-directory: packages/awesome_notifications/example
+        shell: pwsh
         run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          subst X: "$PWD"
+          Set-Location X:\packages\awesome_notifications\example
           flutter pub get
           flutter build windows --debug
 
       - name: Build localizations example (Windows)
-        working-directory: packages/awesome_notifications_localizations/example
+        shell: pwsh
         run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          subst Y: "$PWD"
+          Set-Location Y:\packages\awesome_notifications_localizations\example
           flutter pub get
           flutter build windows --debug

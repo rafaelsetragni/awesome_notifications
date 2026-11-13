@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:awesome_notifications_fcm/awesome_notifications_fcm.dart';
 import 'package:awesome_notifications_fcm/src/fcm_definitions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -82,6 +83,43 @@ void main() {
         onFcmSilentDataHandle: (_) async {},
       );
       expect(ok, isFalse);
+    });
+  });
+
+  group('platforms without FCM (Windows, Linux, macOS)', () {
+    for (final platform in [
+      TargetPlatform.windows,
+      TargetPlatform.linux,
+      TargetPlatform.macOS,
+    ]) {
+      test('${platform.name}: answers "unavailable" without the channel',
+          () async {
+        debugDefaultTargetPlatformOverride = platform;
+        addTearDown(() => debugDefaultTargetPlatformOverride = null);
+
+        expect(AwesomeNotificationsFcm.isPlatformSupported, isFalse);
+        expect(
+            await fcm.initialize(
+              onFcmTokenHandle: coreTokenHandler,
+              onFcmSilentDataHandle: coreSilentHandler,
+            ),
+            isFalse);
+        expect(AwesomeNotificationsFcm.isInitialized, isFalse);
+        expect(await fcm.isFirebaseAvailable, isFalse);
+        expect(await fcm.requestFirebaseAppToken(), '');
+        expect(await fcm.subscribeToTopic('t'), isFalse);
+        expect(await fcm.unsubscribeToTopic('t'), isFalse);
+        expect(await fcm.deleteToken(), isFalse);
+        expect(log, isEmpty);
+      });
+    }
+
+    test('android and iOS are supported', () {
+      for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {
+        debugDefaultTargetPlatformOverride = platform;
+        expect(AwesomeNotificationsFcm.isPlatformSupported, isTrue);
+      }
+      debugDefaultTargetPlatformOverride = null;
     });
   });
 
