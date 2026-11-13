@@ -45,6 +45,9 @@ class AWN_API NotificationPresenter {
 
   /// IANA identifier of the local time zone (e.g. "America/Sao_Paulo").
   virtual std::string localTimeZone() = 0;
+  /// Offset from UTC, in seconds, of the IANA time zone `zone` at `utc`
+  /// (DST included); used to match calendar schedules in their own zone.
+  virtual int64_t utcOffset(const std::string& zone, TimePoint utc) = 0;
 };
 
 /// A notification (or one of its buttons) activated by the user.

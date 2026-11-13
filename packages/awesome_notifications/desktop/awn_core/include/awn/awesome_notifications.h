@@ -77,6 +77,10 @@ class AWN_API AwesomeNotifications {
   void cancelAll();
 
   // Schedule management (for the scheduling decorator)
+  /// Re-runs the builder chain on a stored model and re-presents it without
+  /// emitting events (tops up the pre-armed occurrences of a repeating schedule).
+  bool rearm(const ValueMap& model);
+  /// Models of the scheduled notifications (one per id).
   std::vector<ValueMap> pendingModels();
   void cancelSchedules(const std::vector<int64_t>& ids);
   void cancelAllSchedules();

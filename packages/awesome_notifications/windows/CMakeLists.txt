@@ -24,6 +24,8 @@ list(APPEND PLUGIN_SOURCES
   "awesome_notifications_plugin.h"
   "src/app_identity.cpp"
   "src/app_identity.h"
+  "src/icu_time_zone.cpp"
+  "src/icu_time_zone.h"
   "src/image_resolver.cpp"
   "src/image_resolver.h"
   "src/toast_activator.cpp"

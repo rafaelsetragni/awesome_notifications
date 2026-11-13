@@ -270,9 +270,20 @@ void AwesomeNotifications::cancelAll() {
 
 // MARK: - Schedules
 
+bool AwesomeNotifications::rearm(const ValueMap& model) {
+  auto chained = NotificationBuilderRegistry::shared().makeBuilder()->build(model);
+  if (!chained || !chained->fireDate) return false;
+  BuiltNotification built = NotificationBuilder::stampDisplayed(*chained);
+  store_->put(built.id, built.model);
+  presenter_->present(built, [](bool) {});
+  return true;
+}
+
 std::vector<ValueMap> AwesomeNotifications::pendingModels() {
   std::vector<ValueMap> models;
+  std::set<int64_t> seen;
   for (auto id : presenter_->pendingIds()) {
+    if (!seen.insert(id).second) continue;  // one entry per pre-armed occurrence
     if (auto model = store_->get(id)) models.push_back(*model);
   }
   return models;
@@ -290,14 +301,15 @@ void AwesomeNotifications::cancelSchedules(const std::vector<int64_t>& ids) {
 
 void AwesomeNotifications::cancelAllSchedules() {
   auto pending = presenter_->pendingIds();
-  cancelSchedules(pending);
+  std::set<int64_t> unique(pending.begin(), pending.end());
+  cancelSchedules(std::vector<int64_t>(unique.begin(), unique.end()));
 }
 
 std::vector<int64_t> AwesomeNotifications::pendingIdsWhereContent(const std::string& key,
                                                                    const std::string& value) {
   auto pending = presenter_->pendingIds();
   std::vector<int64_t> result;
-  for (auto id : store_->idsWhereContent(key, value)) {
+  for (auto id : store_->idsWhereContent(key, value)) {  // store ids are unique
     if (contains(pending, id)) result.push_back(id);
   }
   return result;

@@ -34,6 +34,9 @@ class FakePresenter : public NotificationPresenter {
   bool isAllowed() override { return allowed; }
   void requestPermission(std::function<void(bool)> done) override { done(allowed); }
   std::string localTimeZone() override { return "America/Sao_Paulo"; }
+  int64_t utcOffset(const std::string& zone, TimePoint) override {
+    return zone == "America/Sao_Paulo" ? -3 * 3600 : 0;
+  }
 
  private:
   static void erase(std::vector<int64_t>& from, const std::vector<int64_t>& ids) {

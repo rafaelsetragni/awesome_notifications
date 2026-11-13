@@ -6,6 +6,8 @@
 #include <map>
 #include <memory>
 #include <mutex>
+#include <optional>
+#include <vector>
 
 #include <winrt/Windows.UI.Notifications.h>
 
@@ -51,12 +53,15 @@ class ToastPresenter : public awn::NotificationPresenter,
   bool isAllowed() override;
   void requestPermission(std::function<void(bool)> done) override;
   std::string localTimeZone() override;
+  int64_t utcOffset(const std::string& zone, awn::TimePoint utc) override;
 
  private:
   bool Show(const awn::BuiltNotification& built, const awn::ToastImages& images, bool silent);
   void Track(int64_t id, const winrt::Windows::UI::Notifications::ToastNotification& toast);
   void ArmDisplayedTimer(int64_t id, awn::TimePoint fireDate);
   void CancelDisplayedTimer(int64_t id);
+  /// The earliest delivery still scheduled for `id` after `after`.
+  std::optional<awn::TimePoint> NextScheduledDate(int64_t id, awn::TimePoint after);
   winrt::Windows::UI::Notifications::ToastNotifier Notifier();
   winrt::Windows::UI::Notifications::ToastNotificationHistory History();
 

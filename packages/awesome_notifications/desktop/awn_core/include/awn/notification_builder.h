@@ -3,6 +3,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <vector>
 
 #include "awn/date_utils.h"
 #include "awn/definitions.h"
@@ -19,6 +20,9 @@ struct BuiltNotification {
   ValueMap model;
   /// When to deliver; nullopt delivers immediately.
   std::optional<TimePoint> fireDate;
+  /// Later occurrences of a repeating schedule, pre-armed with the same id
+  /// (desktop systems only schedule one-shot notifications).
+  std::vector<TimePoint> repeatDates;
   /// Decorator-owned delivery data (e.g. the repeat rule a scheduling decorator
   /// needs to re-arm a repeating schedule). Opaque to the core.
   Value trigger;

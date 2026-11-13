@@ -47,11 +47,20 @@ std::string DateUtils::formatUtc(TimePoint time) {
 }
 
 std::optional<TimePoint> DateUtils::parseUtc(const std::string& text) {
-  int y, mo, d, h, mi, s;
-  char tail;
-  if (std::sscanf(text.c_str(), "%4d-%2d-%2d %2d:%2d:%2d%c", &y, &mo, &d, &h, &mi, &s,
-                  &tail) != 6)
-    return std::nullopt;
+  // Exactly "yyyy-MM-dd HH:mm:ss".
+  static constexpr char kPattern[] = "dddd-dd-dd dd:dd:dd";
+  if (text.size() != sizeof(kPattern) - 1) return std::nullopt;
+  for (size_t i = 0; i < text.size(); ++i) {
+    bool digit = text[i] >= '0' && text[i] <= '9';
+    if (kPattern[i] == 'd' ? !digit : text[i] != kPattern[i]) return std::nullopt;
+  }
+  auto number = [&text](size_t from, size_t count) {
+    int value = 0;
+    for (size_t i = from; i < from + count; ++i) value = value * 10 + (text[i] - '0');
+    return value;
+  };
+  int y = number(0, 4), mo = number(5, 2), d = number(8, 2);
+  int h = number(11, 2), mi = number(14, 2), s = number(17, 2);
   if (mo < 1 || mo > 12 || d < 1 || d > 31 || h < 0 || h > 23 || mi < 0 || mi > 59 ||
       s < 0 || s > 60)
     return std::nullopt;

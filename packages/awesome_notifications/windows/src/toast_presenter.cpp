@@ -11,6 +11,7 @@
 
 #include "awn/definitions.h"
 #include "awn/notification_builder.h"
+#include "icu_time_zone.h"
 #include "win_utils.h"
 
 namespace awesome_notifications {
@@ -36,30 +37,6 @@ std::optional<int64_t> IdFromTag(const winrt::hstring& tag) {
 }
 
 winrt::hstring TagOf(int64_t id) { return winrt::to_hstring(id); }
-
-/// IANA id of the local time zone through the ICU that ships with Windows 10
-/// (icu.dll since 1903, icuin.dll before). Loaded dynamically so the plugin
-/// still loads where it is missing.
-std::string IcuDefaultTimeZone() {
-  using GetDefaultTimeZone = int32_t(__cdecl*)(wchar_t*, int32_t, int*);
-  for (const wchar_t* dll : {L"icu.dll", L"icuin.dll"}) {
-    HMODULE module = ::LoadLibraryExW(dll, nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
-    if (!module) continue;
-    auto fn = reinterpret_cast<GetDefaultTimeZone>(
-        reinterpret_cast<void*>(::GetProcAddress(module, "ucal_getDefaultTimeZone")));
-    std::string result;
-    if (fn) {
-      wchar_t buffer[128] = {};
-      int status = 0;
-      int32_t length = fn(buffer, 128, &status);
-      if (status <= 0 && length > 0 && length < 128)
-        result = WideToUtf8(std::wstring(buffer, static_cast<size_t>(length)));
-    }
-    ::FreeLibrary(module);
-    if (!result.empty()) return result;
-  }
-  return awn::defs::UTC_TIMEZONE;
-}
 
 }  // namespace
 
@@ -121,10 +98,18 @@ bool ToastPresenter::Show(const awn::BuiltNotification& built, const awn::ToastI
 
     auto now = awn::DateUtils::now();
     if (built.fireDate && *built.fireDate > now) {
-      ScheduledToastNotification scheduled(document, winrt::clock::from_sys(*built.fireDate));
-      scheduled.Tag(TagOf(built.id));
-      scheduled.Group(kGroup);
-      Notifier().AddToSchedule(scheduled);
+      // Every occurrence (a repeating schedule is pre-armed) shares the id tag,
+      // so they replace each other on screen and cancel together.
+      std::vector<awn::TimePoint> dates{*built.fireDate};
+      dates.insert(dates.end(), built.repeatDates.begin(), built.repeatDates.end());
+      auto notifier = Notifier();
+      for (const auto& date : dates) {
+        if (date <= now) continue;
+        ScheduledToastNotification scheduled(document, winrt::clock::from_sys(date));
+        scheduled.Tag(TagOf(built.id));
+        scheduled.Group(kGroup);
+        notifier.AddToSchedule(scheduled);
+      }
       ArmDisplayedTimer(built.id, *built.fireDate);
       return true;
     }
@@ -194,11 +179,14 @@ void ToastPresenter::ArmDisplayedTimer(int64_t id, awn::TimePoint fireDate) {
   auto delay = std::chrono::duration_cast<std::chrono::milliseconds>(fireDate -
                                                                      awn::DateUtils::now());
   std::weak_ptr<ToastPresenter> weak = weak_from_this();
-  UINT_PTR handle = dispatcher_->PostDelayed(delay, [weak, id]() {
+  UINT_PTR handle = dispatcher_->PostDelayed(delay, [weak, id, fireDate]() {
     auto self = weak.lock();
     if (!self) return;
     self->displayedTimers_.erase(id);
     if (self->callbacks_.onDisplayed) self->callbacks_.onDisplayed(id);
+    // Chain to the next pre-armed occurrence of a repeating schedule.
+    if (auto following = self->NextScheduledDate(id, fireDate))
+      self->ArmDisplayedTimer(id, *following);
   });
   displayedTimers_[id] = handle;
 }
@@ -210,16 +198,27 @@ void ToastPresenter::CancelDisplayedTimer(int64_t id) {
   displayedTimers_.erase(it);
 }
 
-void ToastPresenter::ArmPendingTimers() {
+std::optional<awn::TimePoint> ToastPresenter::NextScheduledDate(int64_t id,
+                                                                awn::TimePoint after) {
+  std::optional<awn::TimePoint> earliest;
   try {
     for (const auto& scheduled : Notifier().GetScheduledToastNotifications()) {
-      auto id = IdFromTag(scheduled.Tag());
-      if (!id) continue;
+      if (IdFromTag(scheduled.Tag()) != id) continue;
       auto fire = std::chrono::time_point_cast<std::chrono::seconds>(
           winrt::clock::to_sys(scheduled.DeliveryTime()));
-      ArmDisplayedTimer(*id, fire);
+      if (fire > after && (!earliest || fire < *earliest)) earliest = fire;
     }
   } catch (const winrt::hresult_error&) {
+  }
+  return earliest;
+}
+
+void ToastPresenter::ArmPendingTimers() {
+  std::vector<int64_t> ids = pendingIds();
+  std::sort(ids.begin(), ids.end());
+  ids.erase(std::unique(ids.begin(), ids.end()), ids.end());
+  for (auto id : ids) {
+    if (auto fire = NextScheduledDate(id, awn::DateUtils::now())) ArmDisplayedTimer(id, *fire);
   }
 }
 
@@ -325,8 +324,12 @@ void ToastPresenter::requestPermission(std::function<void(bool)> done) {
 }
 
 std::string ToastPresenter::localTimeZone() {
-  static const std::string zone = IcuDefaultTimeZone();
+  static const std::string zone = IcuTimeZone::DefaultZone().value_or(awn::defs::UTC_TIMEZONE);
   return zone;
+}
+
+int64_t ToastPresenter::utcOffset(const std::string& zone, awn::TimePoint utc) {
+  return IcuTimeZone::Offset(zone, utc).value_or(0);
 }
 
 }  // namespace awesome_notifications
