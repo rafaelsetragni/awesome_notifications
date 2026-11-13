@@ -5,8 +5,8 @@
 // permission, create a notification (with a big picture + large icon), dismiss
 // it, and open a details page when the user taps it.
 //
-// For a full-featured demo (dismiss vs cancel, dismiss concepts, the
-// localizations decorator, …) see `examples/complete_example` in the repository.
+// Each add-on package (schedules, localizations, FCM, …) ships its own example
+// showing how it combines with this core.
 import 'dart:io';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -224,14 +224,16 @@ class NotificationController {
   ///  *********************************************
   ///     CREATE — IMAGE SOURCES
   ///  *********************************************
-  // Same media/links used by the original complete example. We demonstrate the
-  // assetless image sources here (network + file); `asset://` and
-  // `resource://` are also supported but require bundled media (see the
-  // complete_example in the repository).
-  static const String _networkImage =
-      'https://media.wired.com/photos/598e35994ab8482c0d6946e0/master/w_2560%2Cc_limit/phonepicutres-TA.jpg';
+  // We demonstrate the assetless image sources here (network + file);
+  // `asset://` and `resource://` are also supported but require bundled media.
+  // The network images are pinned to a commit of the plugin repository, so
+  // they never expire.
+  static const String _imagesRoot =
+      'https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/'
+      '2f5a5346f36cfea0b8d221062b32a54ae309339f/example/assets/images';
+  static const String _networkImage = '$_imagesRoot/awn-rocks-en.jpg';
   static const String _largeIcon =
-      'https://image.freepik.com/vetores-gratis/modelo-de-logotipo-de-restaurante-retro_23-2148451519.jpg';
+      '$_imagesRoot/awesome-notifications-logo-color.png';
 
   // Network image (https://).
   static Future<void> createImageFromNetwork() {
