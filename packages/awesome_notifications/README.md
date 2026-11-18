@@ -63,6 +63,21 @@ All notification types can be created locally or via remote push services, with 
 
 <br>
 
+# 📱 Platform support (1.0)
+
+| Package | Android | iOS | macOS | Windows | Linux | Web |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|
+| `awesome_notifications` (this core) | ✅ | ✅ | ✅ | 🧪 | ⏳ | ⏳ |
+| [`awesome_notifications_schedules`](https://pub.dev/packages/awesome_notifications_schedules) | ✅ | ✅ | ✅ | 🧪 | ⏳ | ❌ |
+| [`awesome_notifications_localizations`](https://pub.dev/packages/awesome_notifications_localizations) | ✅ | ✅ | ✅ | 🧪 | ⏳ | ⏳ |
+| [`awesome_notifications_fcm`](https://pub.dev/packages/awesome_notifications_fcm) | ✅ | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
+
+✅ supported · 🧪 preview (implemented, still being validated against the 0.12 behavior) · ⏳ planned · ❌ not possible on this platform
+
+The same call has the same effect on every platform, as far as the platform allows. Where Android and iOS behave differently, macOS follows iOS, and Windows and Linux follow Android. Where a package or platform is not available yet, its calls answer "unavailable" instead of throwing, so one code base runs everywhere. Each package's README details its own gaps.
+
+<br>
+
 # 🛑 ATTENTION - PLUGIN UNDER DEVELOPMENT
     
 ![image](https://user-images.githubusercontent.com/40064496/155188371-48e22104-8bb8-4f38-ba1a-1795eeb7b81b.png)

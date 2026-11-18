@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications/method_channel_awesome_notifications.dart';
 import 'package:awesome_notifications_localizations/awesome_notifications_localizations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -237,6 +238,29 @@ void main() {
       expect(content['bodyLocKey'], 'news');
       expect(content['bodyLocArgs'], ['Ana', '3']);
       expect(sent.containsKey('localizations'), isFalse);
+    });
+
+    group('where translation is not available yet (Linux)', () {
+      setUp(() => debugDefaultTargetPlatformOverride = TargetPlatform.linux);
+      tearDown(() => debugDefaultTargetPlatformOverride = null);
+
+      test('answers "unavailable" without reaching native', () async {
+        const channel = MethodChannel('awesome_notifications');
+        final messenger =
+            TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+        final calls = <MethodCall>[];
+        messenger.setMockMethodCallHandler(channel, (call) async {
+          calls.add(call);
+          return null;
+        });
+        addTearDown(() => messenger.setMockMethodCallHandler(channel, null));
+        final localizations = AwesomeNotificationsLocalizations();
+
+        expect(AwesomeNotificationsLocalizations.isPlatformSupported, isFalse);
+        expect(await localizations.setLocalization(languageCode: 'pt-br'), isFalse);
+        expect(await localizations.getLocalization(), '');
+        expect(calls, isEmpty);
+      });
     });
   });
 }

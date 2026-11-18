@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications_schedules/awesome_notifications_schedules.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -187,6 +188,43 @@ void main() {
 
     test('cancelSchedule rejects ids beyond 32 bits', () {
       expect(() => schedules.cancelSchedule(0x80000000), throwsArgumentError);
+    });
+
+    test('android, iOS, macOS and Windows support scheduling', () {
+      for (final platform in [
+        TargetPlatform.android,
+        TargetPlatform.iOS,
+        TargetPlatform.macOS,
+        TargetPlatform.windows,
+      ]) {
+        debugDefaultTargetPlatformOverride = platform;
+        expect(AwesomeNotificationsSchedules.isPlatformSupported, isTrue,
+            reason: platform.name);
+      }
+      debugDefaultTargetPlatformOverride = null;
+    });
+
+    group('where scheduling does not exist (Linux for now)', () {
+      setUp(() => debugDefaultTargetPlatformOverride = TargetPlatform.linux);
+      tearDown(() => debugDefaultTargetPlatformOverride = null);
+
+      test('is reported as unsupported', () {
+        expect(AwesomeNotificationsSchedules.isPlatformSupported, isFalse);
+      });
+
+      test('answers "nothing scheduled" without reaching native', () async {
+        await schedules.cancelSchedule(5);
+        await schedules.cancelSchedulesByChannelKey('ch');
+        await schedules.cancelSchedulesByGroupKey('g');
+        await schedules.cancelAllSchedules();
+        expect(await schedules.listScheduledNotifications(), isEmpty);
+        expect(await schedules.getNextDate(NotificationCalendar(hour: 9)), isNull);
+        expect(calls, isEmpty);
+      });
+
+      test('still validates the id, as on every platform', () {
+        expect(() => schedules.cancelSchedule(0x80000000), throwsArgumentError);
+      });
     });
   });
 }

@@ -92,11 +92,37 @@ await fcm.unsubscribeToTopic('news');
 await fcm.deleteToken();
 ```
 
-Push needs Firebase Cloud Messaging, which exists on Android and iOS. On the
-other platforms (Windows, Linux, macOS, web) the same calls are safe: they
-answer "unavailable" (`false` / an empty token) instead of throwing, so one code
-base runs everywhere. Use `AwesomeNotificationsFcm.isPlatformSupported` to adapt
-the UI.
+Push works on Android, iOS and macOS. On the other platforms the same calls
+are safe: they answer "unavailable" (`false`, an empty token) instead of
+throwing, so one code base runs everywhere. Use
+`AwesomeNotificationsFcm.isPlatformSupported` to adapt the UI.
+
+## Platform support
+
+| Feature | Android | iOS | macOS | Windows | Linux | Web |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|
+| FCM and native token | ✅ | ✅ (APNs) | ✅ (APNs) | ⏳ (WNS) | ⏳ (UnifiedPush) | ⏳ |
+| Displayed push (images, buttons, events) | ✅ | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
+| Silent data, app running | ✅ | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
+| Silent data, app in background or terminated | ✅ | ✅ | ❌ | ⏳ | ⏳ | ❌ |
+| Topics | ✅ | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
+
+✅ supported · 🧪 preview (implemented, still being validated against the 0.12 behavior) · ⏳ planned · ❌ not possible on this platform
+
+- **macOS:**
+  - macOS never launches a terminated app for a push, and there is no
+    background Dart isolate there. So silent data only reaches a running app.
+    Displayed pushes are shown in every state.
+  - Enable the *Push Notifications* capability and keep
+    `com.apple.security.network.client` in the entitlements. Add
+    `macos/Runner/GoogleService-Info.plist`.
+  - If the user once denied notifications, macOS never asks again: the
+    permission request answers false right away until the user enables it in
+    *System Settings → Notifications*.
+- **Web (planned):** browsers require every push to show a notification, so
+  silent data in the background is not possible there.
+- **Windows and Linux (planned):** push will come through each platform's own
+  service (WNS, UnifiedPush) behind this same API.
 
 ### Sending a notification from your server
 
@@ -154,6 +180,7 @@ this repository, so they don't expire.
 | Dart | Thin channel facade + the background‑isolate entry point for silent data. |
 | Android | A `FirebaseMessagingService` parses each push and posts it through the Flutter‑free core engine (no Flutter engine required — works while terminated). |
 | iOS | The plugin forwards APNs/FCM pushes to the shared `IosAwnCore` engine; silent data runs in a headless engine. |
+| macOS | Same engine and parser as iOS. The plugin hooks the app delegate's APNs callbacks (FlutterMacOS does not forward them), and silent data goes to the running engine. |
 
 > **Scope:** iOS Notification Service Extension (rich media on the lock screen)
 > and remote‑control keys (server‑triggered dismiss/cancel) are planned in a

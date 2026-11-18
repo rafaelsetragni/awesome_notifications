@@ -60,3 +60,25 @@ await schedules.cancelAllSchedules();
 ```
 
 See the `example/` app for a runnable, single‑file demo.
+
+## Platform support
+
+| Feature | Android | iOS | macOS | Windows | Linux | Web |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|
+| Interval and calendar schedules | ✅ | ✅ | ✅ | 🧪 | ⏳ | ❌ |
+| List / cancel / `getNextDate` | ✅ | ✅ | ✅ | 🧪 | ⏳ | ❌ |
+| Re-armed after a reboot or an app update | ✅ | ✅ (system) | ✅ (system) | 🧪 | ⏳ | ❌ |
+
+✅ supported · 🧪 preview (implemented, still being validated against the 0.12 behavior) · ⏳ planned · ❌ not possible on this platform
+
+- **Web:** browsers have no API to schedule a local notification (the
+  Notification Triggers proposal was abandoned), and a page's timers stop when
+  the tab closes. So this package does not declare web support. To notify a web
+  user later, send a push from your server at the right time.
+- **Where scheduling is not available** (web, and Linux for now),
+  `AwesomeNotificationsSchedules.isPlatformSupported` is `false`. The
+  management calls answer "nothing scheduled" (no-op, an empty list, `null`)
+  instead of throwing. A `createNotification` carrying a schedule answers
+  `false`, so the notification is never shown immediately by mistake.
+- Where Android and iOS behave differently, macOS follows iOS and Windows
+  follows Android.

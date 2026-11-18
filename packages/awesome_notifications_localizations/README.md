@@ -190,11 +190,13 @@ field it provides.
 
 ## 📱 Platform support
 
-| Feature                                            | Android | iOS | macOS | Windows |
-| -------------------------------------------------- | :-----: | :-: | :---: | :-----: |
-| Translated title / body / summary / images         |   ✅    | ✅  |  ✅   |   ✅    |
-| Translated action button labels                    |   ✅    | ✅  |  ✅   |   ✅    |
-| `titleLocKey` / `bodyLocKey` from string resources |   ✅    | ✅  |  ✅   |   ✅    |
+| Feature                                            | Android | iOS | macOS | Windows | Linux | Web |
+| -------------------------------------------------- | :-----: | :-: | :---: | :-----: | :---: | :-: |
+| Translated title / body / summary / images         |   ✅    | ✅  |  ✅   |   🧪    |  ⏳   | ⏳  |
+| Translated action button labels                    |   ✅    | ✅  |  ✅   |   🧪    |  ⏳   | ⏳  |
+| `titleLocKey` / `bodyLocKey` from string resources |   ✅    | ✅  |  ✅   |   🧪    |  ⏳   | ⏳  |
+
+✅ supported · 🧪 preview (implemented, still being validated against the 0.12 behavior) · ⏳ planned · ❌ not possible on this platform
 
 On macOS, add the strings to `macos/Runner/<language>.lproj/Localizable.strings`
 just like on iOS. On Windows, the strings come from the JSON assets described

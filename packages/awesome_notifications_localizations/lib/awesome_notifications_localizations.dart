@@ -6,6 +6,7 @@
 /// [AwesomeNotificationsLocalizations.setLocalization].
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 export 'src/notification_localization.dart';
@@ -24,8 +25,19 @@ class AwesomeNotificationsLocalizations {
   factory AwesomeNotificationsLocalizations() => _instance;
   AwesomeNotificationsLocalizations._();
 
+  /// Whether translation exists on this platform (Android, iOS, macOS and
+  /// Windows; Linux and web are in progress). Elsewhere [setLocalization]
+  /// answers false and [getLocalization] an empty code, instead of throwing.
+  static bool get isPlatformSupported =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS ||
+          defaultTargetPlatform == TargetPlatform.macOS ||
+          defaultTargetPlatform == TargetPlatform.windows);
+
   /// Sets the language notifications are translated into (null = system default).
   Future<bool> setLocalization({required String? languageCode}) async {
+    if (!isPlatformSupported) return false;
     final result =
         await _channel.invokeMethod<bool>('setLocalization', languageCode);
     return result ?? false;
@@ -33,6 +45,7 @@ class AwesomeNotificationsLocalizations {
 
   /// The current language code used for translation.
   Future<String> getLocalization() async {
+    if (!isPlatformSupported) return '';
     final result = await _channel.invokeMethod<String>('getLocalization');
     return result ?? '';
   }
