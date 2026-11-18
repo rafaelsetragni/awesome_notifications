@@ -1,0 +1,14 @@
+name: awn_compat_suite
+description: Black-box compatibility suite run unchanged against awesome_notifications 0.12 and the 1.0 monorepo.
+publish_to: none
+version: 0.0.1
+
+environment:
+  sdk: '>=3.6.0 <4.0.0'
+  flutter: '>=3.27.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter

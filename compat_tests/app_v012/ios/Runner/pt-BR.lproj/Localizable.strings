@@ -1,0 +1,3 @@
+"compat_greeting" = "Olá, %@!";
+"compat_news" = "%@ tem %@ novidades";
+"compat_plain" = "Texto simples";

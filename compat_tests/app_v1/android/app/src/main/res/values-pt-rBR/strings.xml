@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="compat_greeting" formatted="false">Olá, %@!</string>
+    <string name="compat_news" formatted="false">%@ tem %@ novidades</string>
+    <string name="compat_plain">Texto simples</string>
+</resources>

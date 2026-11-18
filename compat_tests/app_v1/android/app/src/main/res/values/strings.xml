@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Strings used by the black-box compat suite (titleLocKey / bodyLocKey). -->
+<resources>
+    <string name="compat_greeting" formatted="false">Hi, %@!</string>
+    <string name="compat_news" formatted="false">%@ has %@ news</string>
+    <string name="compat_plain">Plain text</string>
+</resources>

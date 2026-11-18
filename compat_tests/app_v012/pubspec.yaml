@@ -1,0 +1,20 @@
+name: awn_compat_v012
+description: Runs the black-box compat suite against the published awesome_notifications 0.12 (reference behavior).
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.6.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  awesome_notifications: 0.12.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  awn_compat_suite:
+    path: ../suite

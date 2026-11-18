@@ -1,0 +1,4 @@
+/* Strings used by the black-box compat suite (titleLocKey / bodyLocKey). */
+"compat_greeting" = "Hi, %@!";
+"compat_news" = "%@ has %@ news";
+"compat_plain" = "Plain text";
