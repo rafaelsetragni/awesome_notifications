@@ -51,8 +51,10 @@ open class NotificationBuilder {
     /// Produces the deliverable for a model. The base builds the content (no
     /// trigger); a decorator overrides this, does its work, and calls [next] to
     /// delegate to the wrapped builder. The registry composes the chain in
-    /// priority order so the build order is predictable.
-    open func build(model: [String: Any]) -> BuiltNotification? {
+    /// priority order so the build order is predictable. A decorator rejects the
+    /// notification by returning nil (created = false) or by throwing an
+    /// `AwesomeNotificationsException` (the call fails with that error).
+    open func build(model: [String: Any]) throws -> BuiltNotification? {
         // Stamp the created lifecycle into the content BEFORE building, so it is
         // stored in the delivered notification's userInfo and round-trips to the
         // displayed/action events (otherwise a tapped notification reports a null
@@ -65,8 +67,8 @@ open class NotificationBuilder {
     }
 
     /// Delegates to the wrapped inner builder (called by decorators).
-    public func next(_ model: [String: Any]) -> BuiltNotification? {
-        return inner?.build(model: model)
+    public func next(_ model: [String: Any]) throws -> BuiltNotification? {
+        return try inner?.build(model: model)
     }
 
     // MARK: - Lifecycle stamping (persisted into the stored content)

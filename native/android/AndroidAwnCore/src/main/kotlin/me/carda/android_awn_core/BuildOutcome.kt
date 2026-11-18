@@ -21,6 +21,22 @@ sealed class BuildOutcome {
     /** A decorator took over delivery (e.g. scheduled it); do not post now. */
     object Handled : BuildOutcome()
 
+    /**
+     * A decorator took over delivery and answers the create call itself with
+     * [created] (e.g. scheduling keeps the value its previous version answered).
+     */
+    data class Answered(val created: Boolean) : BuildOutcome()
+
+    /**
+     * A decorator rejected the model: the create call fails with this error
+     * (reaches Dart as a `PlatformException(code, message, details)`).
+     */
+    data class Failed(
+        val code: String,
+        val message: String,
+        val details: String?
+    ) : BuildOutcome()
+
     /** The model was invalid; nothing to post. */
     object Invalid : BuildOutcome()
 }

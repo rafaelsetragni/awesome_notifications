@@ -32,14 +32,14 @@ final class NotificationBuilderRegistryTests: XCTestCase {
         XCTAssertEqual(order, [10, 50, 100])
     }
 
-    func testRegisteredDecoratorParticipatesInBuild() {
+    func testRegisteredDecoratorParticipatesInBuild() throws {
         var decoratorRan = false
         NotificationBuilderRegistry.shared.register(priority: 10) { inner in
             RecordingBuilder(inner: inner) { decoratorRan = true }
         }
         let builder = NotificationBuilderRegistry.shared.makeBuilder()
 
-        _ = builder.build(model: [
+        _ = try builder.build(model: [
             Definitions.NOTIFICATION_CONTENT: [Definitions.NOTIFICATION_ID: 1]
         ])
 
@@ -54,8 +54,8 @@ private final class RecordingBuilder: NotificationBuilder {
         self.onBuild = onBuild
         super.init(inner: inner)
     }
-    override func build(model: [String: Any]) -> BuiltNotification? {
+    override func build(model: [String: Any]) throws -> BuiltNotification? {
         onBuild()
-        return next(model)
+        return try next(model)
     }
 }

@@ -62,7 +62,12 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin, AwesomeEventLi
       method: call.method,
       arguments: call.arguments
     ) { value in
-      result(value)
+      if let exception = value as? AwesomeNotificationsException {
+        result(FlutterError(
+          code: exception.code, message: exception.message, details: exception.detailedCode))
+      } else {
+        result(value)
+      }
     }
     if !handled {
       result(FlutterMethodNotImplemented)

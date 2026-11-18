@@ -146,6 +146,19 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
         _ rawNotification: [String: Any],
         completion: @escaping (Bool) -> Void
     ) {
+        createNotification(rawNotification, completion: completion) { _ in
+            completion(false)
+        }
+    }
+
+    /// Same as `createNotification(_:completion:)`, but a decorator's rejection
+    /// (an `AwesomeNotificationsException` thrown while building) is reported to
+    /// [failure] instead of as `false`.
+    public func createNotification(
+        _ rawNotification: [String: Any],
+        completion: @escaping (Bool) -> Void,
+        failure: @escaping (AwesomeNotificationsException) -> Void
+    ) {
         // Build off the main thread (image loading does I/O).
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
@@ -154,7 +167,17 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
             // composed in priority order by the registry. Each decorator may
             // transform the model and/or contribute a delivery trigger.
             let builder = NotificationBuilderRegistry.shared.makeBuilder()
-            guard let chained = builder.build(model: rawNotification) else {
+            let chained: BuiltNotification?
+            do {
+                chained = try builder.build(model: rawNotification)
+            } catch let exception as AwesomeNotificationsException {
+                DispatchQueue.main.async { failure(exception) }
+                return
+            } catch {
+                DispatchQueue.main.async { completion(false) }
+                return
+            }
+            guard let chained = chained else {
                 DispatchQueue.main.async { completion(false) }
                 return
             }

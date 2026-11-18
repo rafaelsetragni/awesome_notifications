@@ -79,3 +79,38 @@ class CancelInterceptorRegistryTest {
         }
     }
 }
+
+/** Decorator method handlers: success and (optional) error replies. */
+class AwesomeMethodHandlerRegistryTest {
+
+    private val handler = object : AwesomeMethodHandler {
+        override fun handle(method: String, arguments: Any?, result: (Any?) -> Unit): Boolean =
+            if (method == "ok") { result("done"); true } else false
+
+        override fun handle(
+            method: String,
+            arguments: Any?,
+            result: (Any?) -> Unit,
+            error: (code: String, message: String?, details: Any?) -> Unit
+        ): Boolean =
+            if (method == "fail") { error("CODE", "msg", "details"); true }
+            else handle(method, arguments, result)
+    }
+
+    @Before fun register() = AwesomeMethodHandlerRegistry.register(handler)
+    @After fun unregister() = AwesomeMethodHandlerRegistry.unregister(handler)
+
+    @Test fun answersWithoutAnErrorCallback() {
+        var reply: Any? = null
+        assertEquals(true, AwesomeMethodHandlerRegistry.handle("ok", null, { reply = it }))
+        assertEquals("done", reply)
+        assertEquals(false, AwesomeMethodHandlerRegistry.handle("unknown", null, {}))
+    }
+
+    @Test fun forwardsErrorsWhenAnErrorCallbackIsGiven() {
+        var code: String? = null
+        val handled = AwesomeMethodHandlerRegistry.handle("fail", null, {}) { c, _, _ -> code = c }
+        assertEquals(true, handled)
+        assertEquals("CODE", code)
+    }
+}

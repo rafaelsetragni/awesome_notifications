@@ -120,7 +120,11 @@ class AwesomeNotificationsPlugin :
                     result.success(false)
                 } else {
                     // Async: builds off the main thread; the result comes back on it.
-                    core.createNotification(data) { created -> result.success(created) }
+                    // A decorator may reject the model (e.g. an invalid schedule).
+                    core.createNotification(
+                        data,
+                        onError = { code, message, details -> result.error(code, message, details) }
+                    ) { created -> result.success(created) }
                 }
             }
 
@@ -159,8 +163,11 @@ class AwesomeNotificationsPlugin :
             else -> {
                 // Let registered decorators (e.g. localization) answer their methods.
                 val handled = AwesomeMethodHandlerRegistry.handle(
-                    call.method, call.arguments
-                ) { value -> result.success(value) }
+                    call.method,
+                    call.arguments,
+                    { value -> result.success(value) },
+                    { code, message, details -> result.error(code, message, details) }
+                )
                 if (!handled) result.notImplemented()
             }
         }

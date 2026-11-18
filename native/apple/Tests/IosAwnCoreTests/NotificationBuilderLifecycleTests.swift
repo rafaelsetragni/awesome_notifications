@@ -37,8 +37,8 @@ final class NotificationBuilderLifecycleTests: XCTestCase {
         XCTAssertEqual(content[Definitions.NOTIFICATION_CREATED_DATE] as? String, "2020-01-01 00:00:00")
     }
 
-    func testBuildStampsCreatedIntoStoredModel() {
-        let out = builder.build(model: model([
+    func testBuildStampsCreatedIntoStoredModel() throws {
+        let out = try builder.build(model: model([
             Definitions.NOTIFICATION_ID: 7,
             Definitions.NOTIFICATION_CHANNEL_KEY: "basic",
             Definitions.NOTIFICATION_TITLE: "Title"

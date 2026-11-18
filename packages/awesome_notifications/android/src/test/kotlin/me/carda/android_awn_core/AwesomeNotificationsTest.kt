@@ -188,4 +188,45 @@ class AwesomeNotificationsTest {
         assertEquals(true, created)
         assertEquals(0, notificationManager().activeNotifications.size)
     }
+
+    private fun createWith(outcome: BuildOutcome, withOnError: Boolean): Pair<Boolean?, String?> {
+        core.setChannel(
+            mapOf(
+                Definitions.NOTIFICATION_CHANNEL_KEY to "ch",
+                Definitions.NOTIFICATION_CHANNEL_NAME to "Ch"
+            )
+        )
+        NotificationBuilderRegistry.clearForTest()
+        NotificationBuilderRegistry.register(10) { inner ->
+            object : NotificationBuilder(inner) {
+                override fun build(context: Context, model: Map<String, Any?>) = outcome
+            }
+        }
+        var created: Boolean? = null
+        var error: String? = null
+        val model = content(
+            Definitions.NOTIFICATION_ID to 9,
+            Definitions.NOTIFICATION_CHANNEL_KEY to "ch"
+        )
+        if (withOnError) {
+            syncCore.createNotification(model, onError = { code, _, _ -> error = code }) { created = it }
+        } else {
+            syncCore.createNotification(model) { created = it }
+        }
+        shadowOf(Looper.getMainLooper()).idle()
+        return created to error
+    }
+
+    @Test fun createAnsweredByDecoratorReportsItsValue() {
+        assertEquals(false to null, createWith(BuildOutcome.Answered(false), withOnError = true))
+        assertEquals(true to null, createWith(BuildOutcome.Answered(true), withOnError = true))
+        assertEquals(0, notificationManager().activeNotifications.size)
+    }
+
+    @Test fun createFailedByDecoratorReportsTheError() {
+        val failed = BuildOutcome.Failed("INVALID_ARGUMENTS", "bad", "arguments.invalid")
+        assertEquals(null to "INVALID_ARGUMENTS", createWith(failed, withOnError = true))
+        // Without an error callback the create just answers false.
+        assertEquals(false to null, createWith(failed, withOnError = false))
+    }
 }

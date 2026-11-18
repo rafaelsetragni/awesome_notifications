@@ -11,6 +11,18 @@ interface AwesomeMethodHandler {
      * return true. Return false to let other handlers / the core try.
      */
     fun handle(method: String, arguments: Any?, result: (Any?) -> Unit): Boolean
+
+    /**
+     * Same as [handle], but the handler may also fail the call with [error]
+     * (reaches Dart as a `PlatformException(code, message, details)`). Defaults
+     * to [handle] for handlers that never fail.
+     */
+    fun handle(
+        method: String,
+        arguments: Any?,
+        result: (Any?) -> Unit,
+        error: (code: String, message: String?, details: Any?) -> Unit
+    ): Boolean = handle(method, arguments, result)
 }
 
 /** Registry of method handlers; decorators register here. */
@@ -26,9 +38,17 @@ object AwesomeMethodHandlerRegistry {
     }
 
     /** Returns true if some handler answered the method. */
-    fun handle(method: String, arguments: Any?, result: (Any?) -> Unit): Boolean {
+    fun handle(
+        method: String,
+        arguments: Any?,
+        result: (Any?) -> Unit,
+        error: ((code: String, message: String?, details: Any?) -> Unit)? = null
+    ): Boolean {
         for (handler in ArrayList(handlers)) {
-            if (handler.handle(method, arguments, result)) return true
+            val handled =
+                if (error == null) handler.handle(method, arguments, result)
+                else handler.handle(method, arguments, result, error)
+            if (handled) return true
         }
         return false
     }

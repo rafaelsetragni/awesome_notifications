@@ -67,10 +67,17 @@ class AwesomeNotifications(
     /**
      * Builds and posts a notification from a serialized `NotificationModel`. Runs
      * on a background thread (image loading does I/O) and reports the result on
-     * the main thread.
+     * the main thread. When a decorator rejects the model ([BuildOutcome.Failed])
+     * [onError] is called instead of [callback] (or [callback] with false when no
+     * [onError] is given).
      */
-    fun createNotification(rawNotification: Map<String, Any?>, callback: (Boolean) -> Unit) {
+    fun createNotification(
+        rawNotification: Map<String, Any?>,
+        onError: ((code: String, message: String, details: String?) -> Unit)? = null,
+        callback: (Boolean) -> Unit
+    ) {
         executor.execute {
+            var failure: BuildOutcome.Failed? = null
             val created = try {
                 // Run the builder decorator chain (localization transforms the
                 // model, scheduling may take over delivery, …). In the bare core
@@ -93,13 +100,23 @@ class AwesomeNotifications(
                     }
                     // A decorator took over delivery (e.g. scheduled it for later).
                     BuildOutcome.Handled -> true
+                    // ...and answers the create call itself.
+                    is BuildOutcome.Answered -> outcome.created
+                    is BuildOutcome.Failed -> {
+                        failure = outcome
+                        false
+                    }
                     BuildOutcome.Invalid -> false
                 }
             } catch (_: SecurityException) {
                 // POST_NOTIFICATIONS not granted (Android 13+).
                 false
             }
-            mainHandler.post { callback(created) }
+            val error = failure
+            mainHandler.post {
+                if (error != null && onError != null) onError(error.code, error.message, error.details)
+                else callback(created)
+            }
         }
     }
 

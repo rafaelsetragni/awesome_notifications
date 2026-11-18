@@ -1,6 +1,8 @@
 import Foundation
 
 /// Routes the `awesome_notifications` method-channel protocol to the engine.
+/// A call fails by answering an `AwesomeNotificationsException`, which the
+/// bridges turn into a `FlutterError`.
 ///
 /// Flutter-free and shared by the iOS and macOS plugin bridges, which only adapt
 /// `result` to `FlutterResult`, answer platform-specific methods (e.g.
@@ -62,7 +64,8 @@ public final class AwesomeMethodRouter {
 
         case "createNewNotification":
             if let args = arguments as? [String: Any] {
-                core.createNotification(args) { result($0) }
+                core.createNotification(
+                    args, completion: { result($0) }, failure: { result($0) })
             } else {
                 result(false)
             }
