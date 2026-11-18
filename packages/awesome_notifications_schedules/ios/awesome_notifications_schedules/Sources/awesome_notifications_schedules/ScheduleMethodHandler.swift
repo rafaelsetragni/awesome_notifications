@@ -9,6 +9,7 @@ import IosAwnCore
 /// On Apple a schedule IS a pending `UNNotificationRequest`: cancelling a
 /// schedule removes the pending request and leaves any delivered notification
 /// with the same id on screen (that is what distinguishes it from `cancel*`).
+/// Arguments, answers and errors follow the 0.12 Apple plugin.
 final class ScheduleMethodHandler: AwesomeMethodHandler {
 
     enum Method {
@@ -27,18 +28,32 @@ final class ScheduleMethodHandler: AwesomeMethodHandler {
     func handle(method: String, arguments: Any?, result: @escaping (Any?) -> Void) -> Bool {
         switch method {
         case Method.cancelSchedule:
-            if let id = MapUtils.shared.getInt(arguments) {
-                center.removePendingNotificationRequests(withIdentifiers: [String(id)])
+            guard let id = arguments as? Int, id >= 0 else {
+                result(ScheduleModels.invalidArguments("Invalid id value", ".dismiss.id"))
+                break
             }
+            center.removePendingNotificationRequests(withIdentifiers: [String(id)])
             result(true)
 
         case Method.cancelSchedulesByChannelKey:
-            removePending(matching: Definitions.NOTIFICATION_CHANNEL_KEY, value: arguments as? String)
-            result(true)
+            guard let channelKey = arguments as? String else {
+                result(ScheduleModels.invalidArguments(
+                    "Invalid channel key value", ".dismiss.channelKey"))
+                break
+            }
+            removePending(matching: Definitions.NOTIFICATION_CHANNEL_KEY, value: channelKey) {
+                result(true)
+            }
 
         case Method.cancelSchedulesByGroupKey:
-            removePending(matching: Definitions.NOTIFICATION_GROUP_KEY, value: arguments as? String)
-            result(true)
+            guard let groupKey = arguments as? String else {
+                result(ScheduleModels.invalidArguments(
+                    "Invalid group key value", ".dismiss.groupKey"))
+                break
+            }
+            removePending(matching: Definitions.NOTIFICATION_GROUP_KEY, value: groupKey) {
+                result(true)
+            }
 
         case Method.cancelAllSchedules:
             center.removeAllPendingNotificationRequests()
@@ -53,10 +68,7 @@ final class ScheduleMethodHandler: AwesomeMethodHandler {
             }
 
         case Method.getNextDate:
-            let args = arguments as? [String: Any] ?? [:]
-            let schedule = args[ScheduleKeys.schedule] as? [String: Any] ?? [:]
-            let fixed = (args[Self.fixedDateKey] as? String).flatMap(ScheduleDates.parse) ?? Date()
-            result(ScheduleDates.nextDate(of: schedule, after: fixed).map(ScheduleDates.format))
+            result(ScheduleMethodHandler.nextDate(arguments as? [String: Any] ?? [:]))
 
         default:
             return false
@@ -64,8 +76,31 @@ final class ScheduleMethodHandler: AwesomeMethodHandler {
         return true
     }
 
-    private func removePending(matching key: String, value: String?) {
-        guard let value = value else { return }
+    /// 0.12's `channelMethodGetNextDate` + `AwesomeNotifications.getNextValidDate`:
+    /// the fixed date's wall clock is read in the `timeZone` argument (UTC —
+    /// "GMT" — when absent), the schedule is computed in its own time zone (the
+    /// device's when invalid or absent) and the answer is that zone's wall clock
+    /// plus its identifier, e.g. "2026-07-05 05:31:30 America/Sao_Paulo".
+    static func nextDate(_ arguments: [String: Any]) -> String? {
+        guard let fixedDate = arguments[fixedDateKey] as? String,
+              let scheduleData = arguments[ScheduleKeys.schedule] as? [String: Any],
+              let schedule = ScheduleModels.from(scheduleMap: scheduleData)
+        else { return nil }
+
+        let timeZoneName = arguments[ScheduleKeys.timeZone] as? String
+            ?? ScheduleDateTime.utcTimeZone.identifier
+        let fixedDateTime = ScheduleDateTime(fromDateText: fixedDate, inTimeZone: timeZoneName)
+            ?? ScheduleDateTime()
+        schedule.createdDate = fixedDateTime
+        return schedule.getNextValidDate(referenceDate: fixedDateTime)?.description
+    }
+
+    /// Removes the pending requests whose content has [key] == [value], then
+    /// calls [completion] (after the removal was requested, so a listing made
+    /// next no longer sees them).
+    private func removePending(
+        matching key: String, value: String, completion: @escaping () -> Void
+    ) {
         center.getPendingNotificationRequests { [builder, center] requests in
             let ids = requests.filter {
                 let model = builder.notificationModel(fromUserInfo: $0.content.userInfo) ?? [:]
@@ -73,35 +108,7 @@ final class ScheduleMethodHandler: AwesomeMethodHandler {
                 return (content[key] as? String) == value
             }.map(\.identifier)
             if !ids.isEmpty { center.removePendingNotificationRequests(withIdentifiers: ids) }
+            DispatchQueue.main.async { completion() }
         }
     }
-}
-
-/// Next-fire-date math for `getNextDate`, using the same interpretation of the
-/// schedule as `ScheduleBuilder`'s triggers. Dates travel as UTC
-/// `yyyy-MM-dd HH:mm:ss`, like every other date of the plugin.
-enum ScheduleDates {
-
-    static func nextDate(of schedule: [String: Any], after fixed: Date) -> Date? {
-        if let interval = ScheduleBuilder.validInterval(schedule) {
-            return fixed.addingTimeInterval(Double(interval))
-        }
-        guard schedule[ScheduleKeys.interval] == nil,
-              let components = ScheduleBuilder.calendarComponents(schedule) else { return nil }
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = ScheduleBuilder.timeZone(schedule)
-        return calendar.nextDate(after: fixed, matching: components, matchingPolicy: .nextTime)
-    }
-
-    static func parse(_ string: String) -> Date? { formatter.date(from: string) }
-
-    static func format(_ date: Date) -> String { formatter.string(from: date) }
-
-    private static let formatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        formatter.timeZone = TimeZone(identifier: "UTC")
-        return formatter
-    }()
 }

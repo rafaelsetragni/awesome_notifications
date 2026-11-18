@@ -20,10 +20,11 @@ enum ScheduleKeys {
     static let weekday = "weekday"
     static let weekOfMonth = "weekOfMonth"
     static let weekOfYear = "weekOfYear"
-
-    /// The calendar-component keys; if any is present the schedule is a calendar
-    /// (date-matching) trigger rather than a time interval.
-    static let calendarComponents = [
-        era, year, month, day, hour, minute, second, weekday, weekOfMonth, weekOfYear
-    ]
+    /// The reference date 0.12 stored in (and listed with) every schedule.
+    static let createdDate = "createdDate"
+    /// Android-only (crontab) schedule keys, rejected on Apple like 0.12 did.
+    static let crontabExpression = "crontabExpression"
+    static let preciseSchedules = "preciseSchedules"
+    static let initialDateTime = "initialDateTime"
+    static let expirationDateTime = "expirationDateTime"
 }

@@ -101,8 +101,21 @@ void main() {
           case CHANNEL_METHOD_LIST_ALL_SCHEDULES:
             return <Object>[
               {
-                NOTIFICATION_CONTENT: {NOTIFICATION_ID: 1, NOTIFICATION_CHANNEL_KEY: 'ch'}
-              }
+                NOTIFICATION_CONTENT: {NOTIFICATION_ID: 1, NOTIFICATION_CHANNEL_KEY: 'ch'},
+                NOTIFICATION_SCHEDULE: {
+                  NOTIFICATION_SCHEDULE_HOUR: 9,
+                  NOTIFICATION_SCHEDULE_WEEKDAY: 1,
+                  NOTIFICATION_SCHEDULE_TIMEZONE: 'UTC',
+                  NOTIFICATION_SCHEDULE_REPEATS: true,
+                },
+              },
+              {
+                NOTIFICATION_CONTENT: {NOTIFICATION_ID: 2, NOTIFICATION_CHANNEL_KEY: 'ch'},
+                NOTIFICATION_SCHEDULE: {
+                  NOTIFICATION_SCHEDULE_INTERVAL: 3600,
+                  NOTIFICATION_SCHEDULE_TIMEZONE: 'UTC',
+                },
+              },
             ];
           default:
             return null;
@@ -129,16 +142,51 @@ void main() {
     test('getNextDate serializes the schedule and parses the reply', () async {
       final next = await schedules.getNextDate(
           NotificationCalendar(hour: 9, minute: 0, second: 0));
-      // The native reply is UTC, like every other date of the plugin.
-      expect(next, DateTime.utc(2026, 7, 5, 9));
+      // Like 0.12: the reply's wall clock, read as a local DateTime.
+      expect(next, DateTime(2026, 7, 5, 9));
+      expect(next!.isUtc, isFalse);
       final args = Map<String, dynamic>.from(calls.single.arguments as Map);
       expect(args[NOTIFICATION_SCHEDULE], isA<Map>());
     });
 
     test('listScheduledNotifications decodes the returned models', () async {
       final list = await schedules.listScheduledNotifications();
-      expect(list, hasLength(1));
+      expect(list, hasLength(2));
       expect(list.first.content?.id, 1);
+    });
+
+    test('listed models keep their schedule, like 0.12', () async {
+      final list = await schedules.listScheduledNotifications();
+
+      final calendar = list.first.schedule as NotificationCalendar;
+      expect([calendar.hour, calendar.weekday, calendar.timeZone, calendar.repeats],
+          [9, 1, 'UTC', true]);
+      final map = list.first.toMap();
+      expect((map[NOTIFICATION_SCHEDULE] as Map)[NOTIFICATION_SCHEDULE_HOUR], 9);
+      expect((map[NOTIFICATION_CONTENT] as Map)[NOTIFICATION_ID], 1);
+
+      final interval = list.last.schedule as NotificationInterval;
+      expect(interval.interval, const Duration(hours: 1));
+    });
+
+    test('a model without schedule is listed without it', () async {
+      final model = ScheduledNotificationModel().fromMap({
+        NOTIFICATION_CONTENT: {NOTIFICATION_ID: 3, NOTIFICATION_CHANNEL_KEY: 'ch'}
+      });
+      expect(model?.schedule, isNull);
+      expect(model?.toMap().containsKey(NOTIFICATION_SCHEDULE), isFalse);
+    });
+
+    test('getNextDate answers null when native has no next date', () async {
+      messenger.setMockMethodCallHandler(channel, (call) async => null);
+      expect(
+          await schedules.getNextDate(NotificationCalendar(hour: 9),
+              fixedDate: DateTime.utc(2026, 7, 5, 8, 30)),
+          isNull);
+    });
+
+    test('cancelSchedule rejects ids beyond 32 bits', () {
+      expect(() => schedules.cancelSchedule(0x80000000), throwsArgumentError);
     });
   });
 }

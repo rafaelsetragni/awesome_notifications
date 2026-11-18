@@ -22,10 +22,12 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/services.dart';
 
 import 'src/notification_schedule.dart';
+import 'src/scheduled_notification_model.dart';
 
 export 'src/notification_calendar.dart';
 export 'src/notification_interval.dart';
 export 'src/notification_schedule.dart';
+export 'src/scheduled_notification_model.dart';
 
 /// Entry point of the scheduling decorator's schedule-management API.
 ///
@@ -45,6 +47,7 @@ class AwesomeNotificationsSchedules {
 
   /// Cancels a single scheduled notification without dismissing the active one.
   Future<void> cancelSchedule(int id) async {
+    _validateId(id);
     await _channel.invokeMethod(CHANNEL_METHOD_CANCEL_SCHEDULE, id);
   }
 
@@ -67,16 +70,16 @@ class AwesomeNotificationsSchedules {
     await _channel.invokeMethod(CHANNEL_METHOD_CANCEL_ALL_SCHEDULES);
   }
 
-  /// Lists all active scheduled notifications.
-  Future<List<NotificationModel>> listScheduledNotifications() async {
+  /// Lists all active scheduled notifications, each with its schedule.
+  Future<List<ScheduledNotificationModel>> listScheduledNotifications() async {
     final List<Object>? returned =
         await _channel.invokeListMethod(CHANNEL_METHOD_LIST_ALL_SCHEDULES);
-    final List<NotificationModel> scheduled = [];
+    final List<ScheduledNotificationModel> scheduled = [];
     if (returned != null) {
       for (final Object object in returned) {
         if (object is Map) {
-          final NotificationModel? model =
-              NotificationModel().fromMap(Map<String, dynamic>.from(object));
+          final ScheduledNotificationModel? model = ScheduledNotificationModel()
+              .fromMap(Map<String, dynamic>.from(object));
           if (model != null) scheduled.add(model);
         }
       }
@@ -99,7 +102,16 @@ class AwesomeNotificationsSchedules {
     final String? nextDate =
         await _channel.invokeMethod(CHANNEL_METHOD_GET_NEXT_DATE, parameters);
     if (nextDate == null) return null;
-    // Native returns UTC, like every other date of the plugin.
-    return AwesomeDateUtils.parseStringToDateUtc(nextDate);
+    // Like 0.12: the reply is the wall clock of the resulting date, read as a
+    // local DateTime.
+    return AwesomeDateUtils.parseStringToDate(nextDate)!;
+  }
+
+  // Same check as the core's createNotification / 0.12's cancelSchedule.
+  void _validateId(int id) {
+    if (id > 0x7FFFFFFF || id < -0x80000000) {
+      throw ArgumentError(
+          'The id field must be the limited to 32-bit size integer');
+    }
   }
 }
