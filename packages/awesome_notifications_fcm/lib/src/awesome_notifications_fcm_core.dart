@@ -20,8 +20,8 @@ import 'package:flutter/widgets.dart';
 ///  * handling silent (data-only) messages in the background/terminated app,
 ///  * subscribing to topics and managing the token.
 ///
-/// Push is only available where Firebase Cloud Messaging is (Android and iOS).
-/// Elsewhere (Windows, Linux, macOS, web) every method answers "unavailable"
+/// Push is available where Firebase Cloud Messaging is (Android, iOS, macOS).
+/// Elsewhere (for now Windows, Linux and web) every method answers "unavailable"
 /// (`false` / an empty token) instead of throwing, so the same app code runs on
 /// every platform; check [isPlatformSupported] to adapt the UI.
 class AwesomeNotificationsFcm {
@@ -32,7 +32,8 @@ class AwesomeNotificationsFcm {
   static bool get isPlatformSupported =>
       !kIsWeb &&
       (defaultTargetPlatform == TargetPlatform.android ||
-          defaultTargetPlatform == TargetPlatform.iOS);
+          defaultTargetPlatform == TargetPlatform.iOS ||
+          defaultTargetPlatform == TargetPlatform.macOS);
 
   PushTokenHandler? _tokenFcmHandler;
   PushTokenHandler? _tokenNativeHandler;

@@ -86,11 +86,10 @@ void main() {
     });
   });
 
-  group('platforms without FCM (Windows, Linux, macOS)', () {
+  group('platforms without push yet (Windows, Linux)', () {
     for (final platform in [
       TargetPlatform.windows,
       TargetPlatform.linux,
-      TargetPlatform.macOS,
     ]) {
       test('${platform.name}: answers "unavailable" without the channel',
           () async {
@@ -114,8 +113,12 @@ void main() {
       });
     }
 
-    test('android and iOS are supported', () {
-      for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {
+    test('android, iOS and macOS are supported', () {
+      for (final platform in [
+        TargetPlatform.android,
+        TargetPlatform.iOS,
+        TargetPlatform.macOS,
+      ]) {
         debugDefaultTargetPlatformOverride = platform;
         expect(AwesomeNotificationsFcm.isPlatformSupported, isTrue);
       }

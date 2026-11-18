@@ -38,3 +38,5 @@ flutter:
         pluginClass: AwesomeNotificationsFcmPlugin
       ios:
         pluginClass: AwesomeNotificationsFcmPlugin
+      macos:
+        pluginClass: AwesomeNotificationsFcmPlugin
