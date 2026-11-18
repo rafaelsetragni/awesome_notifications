@@ -34,12 +34,33 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin, AwesomeEventLi
       name: UIApplication.didBecomeActiveNotification,
       object: nil
     )
+
+    // Keep the core's lifecycle as the original LifeCycleManager: foreground once
+    // active; background after it went foreground and left, terminated (killed)
+    // while it never did (launched in background).
+    if UIApplication.shared.applicationState == .background {
+      AppLifeCycle.current = .terminated
+    }
+    NotificationCenter.default.addObserver(
+      instance,
+      selector: #selector(appDidEnterBackground),
+      name: UIApplication.didEnterBackgroundNotification,
+      object: nil
+    )
   }
 
+  private var hasGoneForeground = false
+
   @objc private func appDidBecomeActive() {
+    hasGoneForeground = true
+    AppLifeCycle.current = .foreground
     DispatchQueue.main.async {
       AwesomeNotifications.shared.finishLaunching()
     }
+  }
+
+  @objc private func appDidEnterBackground() {
+    AppLifeCycle.current = hasGoneForeground ? .background : .terminated
   }
 
   // MARK: - AwesomeEventListener

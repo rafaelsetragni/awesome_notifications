@@ -59,7 +59,7 @@ open class NotificationBuilder {
         // stored in the delivered notification's userInfo and round-trips to the
         // displayed/action events (otherwise a tapped notification reports a null
         // createdDate). Mirrors the original core's registerCreateEvent.
-        let stampedModel = stampCreatedLifecycle(into: model)
+        let stampedModel = stampCreatedLifecycle(into: model, lifeCycle: AppLifeCycle.current)
         guard let (id, content) = createNotificationContent(fromModel: stampedModel) else {
             return nil
         }
@@ -112,7 +112,7 @@ open class NotificationBuilder {
 
     /// Bakes the (predicted) displayed lifecycle into a built notification's stored
     /// userInfo, returning the updated deliverable. Immediate → displayed == created
-    /// (foreground); scheduled → the trigger's next fire date, lifecycle terminated
+    /// (date and lifecycle, as the original core); scheduled → the trigger's next fire date, lifecycle terminated
     /// (it may be shown while the app is not running).
     public func stampDisplayed(on built: BuiltNotification) -> BuiltNotification {
         let displayedDate: String
@@ -124,7 +124,9 @@ open class NotificationBuilder {
             let content = contentMap(fromModel: built.model)
             displayedDate =
                 (content[Definitions.NOTIFICATION_CREATED_DATE] as? String) ?? now()
-            lifeCycle = .foreground
+            lifeCycle = NotificationLifeCycle(
+                rawValue: content[Definitions.NOTIFICATION_CREATED_LIFECYCLE] as? String ?? ""
+            ) ?? .foreground
         }
         let updatedModel = stampDisplayedLifecycle(
             into: built.model, displayedDate: displayedDate, lifeCycle: lifeCycle)

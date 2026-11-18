@@ -68,6 +68,35 @@ final class NotificationBuilderLifecycleTests: XCTestCase {
         XCTAssertEqual(content[Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE] as? String, "Foreground")
     }
 
+    func testStampDisplayedImmediateKeepsTheCreatedLifecycle() {
+        // A push received with the app in background: displayed == created.
+        let built = BuiltNotification(
+            id: 1,
+            content: UNMutableNotificationContent(),
+            trigger: nil,
+            model: model([
+                Definitions.NOTIFICATION_ID: 1,
+                Definitions.NOTIFICATION_CREATED_DATE: "2020-01-01 00:00:00",
+                Definitions.NOTIFICATION_CREATED_LIFECYCLE: "Background"
+            ]))
+        let out = builder.stampDisplayed(on: built)
+        let content = builder.contentMap(fromModel: out.model)
+        XCTAssertEqual(content[Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE] as? String, "Background")
+    }
+
+    func testBuildStampsTheCurrentAppLifecycle() throws {
+        let previous = AppLifeCycle.current
+        defer { AppLifeCycle.current = previous }
+        AppLifeCycle.current = .background
+        let built = try builder.build(model: model([
+            Definitions.NOTIFICATION_ID: 1,
+            Definitions.NOTIFICATION_CHANNEL_KEY: "basic",
+            Definitions.NOTIFICATION_TITLE: "t"
+        ]))
+        let content = builder.contentMap(fromModel: try XCTUnwrap(built).model)
+        XCTAssertEqual(content[Definitions.NOTIFICATION_CREATED_LIFECYCLE] as? String, "Background")
+    }
+
     func testStampDisplayedScheduledUsesTriggerAndTerminated() {
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 60, repeats: false)
         let built = BuiltNotification(

@@ -14,7 +14,7 @@ final class DisplayedLifecycleTrackerTests: XCTestCase {
 
     func testForegroundDisplayOverridesThePrediction() {
         let tracker = DisplayedLifecycleTracker()
-        tracker.recordForegroundDisplay(id: 7, date: "2026-01-01 10:00:05")
+        tracker.recordDisplay(id: 7, date: "2026-01-01 10:00:05", lifeCycle: .foreground)
 
         let resolved = tracker.resolve(predicted, id: 7)
         XCTAssertEqual(
@@ -22,6 +22,14 @@ final class DisplayedLifecycleTrackerTests: XCTestCase {
             NotificationLifeCycle.foreground.rawValue)
         XCTAssertEqual(
             resolved[Definitions.NOTIFICATION_DISPLAYED_DATE] as? String, "2026-01-01 10:00:05")
+    }
+
+    func testBackgroundDisplayIsReportedAsBackground() {
+        let tracker = DisplayedLifecycleTracker()
+        tracker.recordDisplay(id: 7, date: "2026-01-01 10:00:05", lifeCycle: .background)
+        XCTAssertEqual(
+            tracker.resolve(predicted, id: 7)[Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE] as? String,
+            NotificationLifeCycle.background.rawValue)
     }
 
     func testWithoutARecordThePredictionStands() {
@@ -33,7 +41,7 @@ final class DisplayedLifecycleTrackerTests: XCTestCase {
 
     func testRecordIsConsumedAndScopedToItsId() {
         let tracker = DisplayedLifecycleTracker()
-        tracker.recordForegroundDisplay(id: 7, date: "d")
+        tracker.recordDisplay(id: 7, date: "d", lifeCycle: .foreground)
 
         XCTAssertEqual(
             tracker.resolve(predicted, id: 8)[Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE] as? String,
@@ -46,8 +54,8 @@ final class DisplayedLifecycleTrackerTests: XCTestCase {
 
     func testForgetDropsRecords() {
         let tracker = DisplayedLifecycleTracker()
-        tracker.recordForegroundDisplay(id: 7, date: "d")
-        tracker.recordForegroundDisplay(id: 8, date: "d")
+        tracker.recordDisplay(id: 7, date: "d", lifeCycle: .foreground)
+        tracker.recordDisplay(id: 8, date: "d", lifeCycle: .foreground)
         tracker.forget(id: 7)
         XCTAssertEqual(
             tracker.resolve(predicted, id: 7)[Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE] as? String,
@@ -60,7 +68,7 @@ final class DisplayedLifecycleTrackerTests: XCTestCase {
 
     func testNilIdLeavesContentUntouched() {
         let tracker = DisplayedLifecycleTracker()
-        tracker.recordForegroundDisplay(id: 7, date: "d")
+        tracker.recordDisplay(id: 7, date: "d", lifeCycle: .foreground)
         XCTAssertEqual(
             tracker.resolve(predicted, id: nil)[Definitions.NOTIFICATION_DISPLAYED_LIFECYCLE] as? String,
             NotificationLifeCycle.terminated.rawValue)

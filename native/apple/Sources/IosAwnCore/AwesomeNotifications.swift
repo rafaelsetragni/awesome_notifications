@@ -209,7 +209,7 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
                     let content = builder.contentMap(fromModel: built.model)
                     self.emit(
                         Definitions.EVENT_NOTIFICATION_CREATED,
-                        builder.registerCreatedEvent(content, lifeCycle: .foreground)
+                        builder.registerCreatedEvent(content, lifeCycle: AppLifeCycle.current)
                     )
                 }
                 DispatchQueue.main.async { completion(created) }
@@ -229,10 +229,12 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
             fromUserInfo: notification.request.content.userInfo
         ) {
             let content = builder.contentMap(fromModel: model)
-            let displayed = builder.registerDisplayedEvent(content, lifeCycle: .foreground)
+            // As the original core: displayed in the app's current lifecycle.
+            let lifeCycle = AppLifeCycle.current
+            let displayed = builder.registerDisplayedEvent(content, lifeCycle: lifeCycle)
             if let id = builder.readId(content),
                let date = displayed[Definitions.NOTIFICATION_DISPLAYED_DATE] as? String {
-                displayedTracker.recordForegroundDisplay(id: id, date: date)
+                displayedTracker.recordDisplay(id: id, date: date, lifeCycle: lifeCycle)
             }
             emit(Definitions.EVENT_NOTIFICATION_DISPLAYED, displayed)
         }

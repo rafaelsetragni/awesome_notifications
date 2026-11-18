@@ -31,11 +31,46 @@ public class AwesomeNotificationsPlugin: NSObject, FlutterPlugin, AwesomeEventLi
       name: NSApplication.didBecomeActiveNotification,
       object: nil
     )
+
+    // Keep the core's lifecycle in step with the app's visibility.
+    let visibilityChanges: [Notification.Name] = [
+      NSApplication.didBecomeActiveNotification,
+      NSApplication.didResignActiveNotification,
+      NSApplication.didHideNotification,
+      NSApplication.didUnhideNotification,
+      NSWindow.didMiniaturizeNotification,
+      NSWindow.didDeminiaturizeNotification,
+      NSWindow.didChangeOcclusionStateNotification,
+      NSWindow.willCloseNotification,
+    ]
+    for name in visibilityChanges {
+      NotificationCenter.default.addObserver(
+        instance,
+        selector: #selector(visibilityDidChange),
+        name: name,
+        object: nil
+      )
+    }
   }
 
   @objc private func appDidBecomeActive() {
     DispatchQueue.main.async {
       AwesomeNotifications.shared.finishLaunching()
+    }
+  }
+
+  /// macOS counterpart of iOS's foreground: the user can see the app — it is
+  /// not hidden and has a window on screen (not minimized, not fully covered).
+  /// Otherwise it runs in the background, like an iOS app sent home.
+  @objc private func visibilityDidChange() {
+    // Re-read once the change settled (a closing window is still listed now).
+    DispatchQueue.main.async {
+      let app = NSApplication.shared
+      let isVisible = !app.isHidden && app.windows.contains { window in
+        window.isVisible && !window.isMiniaturized
+          && window.occlusionState.contains(.visible)
+      }
+      AppLifeCycle.current = isVisible ? .foreground : .background
     }
   }
 
