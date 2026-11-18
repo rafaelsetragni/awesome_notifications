@@ -3,9 +3,9 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 /// A set of localized strings for a notification — title, body, summary, large
 /// icon, big picture and action button labels — for one language.
 ///
-/// Provided through [AwesomeNotificationsLocalizations.createNotification]'s
-/// `localizations` map (keyed by language code, e.g. "en", "pt-br"). The native
-/// decorator picks the entry matching the current language at build time and
+/// Provided through a [NotificationLocalizations] extension (keyed by language
+/// code, e.g. "en", "pt-br"). The native decorator picks the entry matching the
+/// current language at build time — with the same rule on every platform — and
 /// overwrites the corresponding content. Fields left null keep the original.
 class NotificationLocalization {
   String? title;

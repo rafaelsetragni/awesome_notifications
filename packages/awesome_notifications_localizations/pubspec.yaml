@@ -45,9 +45,9 @@ flutter:
       android:
         package: me.carda.awesome_notifications_localizations
         pluginClass: AwesomeNotificationsLocalizationsPlugin
-      # iOS is a no-op placeholder until the IosAwnCore decorator seams are
-      # shared across plugins via Swift Package Manager (see the plugin class).
       ios:
+        pluginClass: AwesomeNotificationsLocalizationsPlugin
+      macos:
         pluginClass: AwesomeNotificationsLocalizationsPlugin
       windows:
         pluginClass: AwesomeNotificationsLocalizationsPluginCApi

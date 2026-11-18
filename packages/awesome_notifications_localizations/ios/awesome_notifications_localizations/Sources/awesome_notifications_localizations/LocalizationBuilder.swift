@@ -14,7 +14,7 @@ final class LocalizationBuilder: NotificationBuilder {
 
     private let transformer = LocalizationTransformer()
 
-    override func build(model: [String: Any]) -> BuiltNotification? {
-        return next(transformer.transform(model))
+    override func build(model: [String: Any]) throws -> BuiltNotification? {
+        return try next(transformer.transform(model))
     }
 }

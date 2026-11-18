@@ -127,9 +127,9 @@ await AwesomeNotifications().createNotification(
 
 <br>
 
-## 🔑 Localization keys (Android)
+## 🔑 Localization keys
 
-Instead of inlining the translated text, you can point to your app's Android
+Instead of inlining the translated text, you can point to your app's own
 string resources with `titleLocKey` / `bodyLocKey` (and arguments with
 `titleLocArgs` / `bodyLocArgs`). The strings of the current language are used.
 
@@ -159,6 +159,30 @@ Add the strings to your Android resource folders, e.g.
 </resources>
 ```
 
+On iOS, add the same keys to `ios/Runner/pt-BR.lproj/Localizable.strings` (add
+the language to the Runner project in Xcode so the file is bundled). The
+`<language>-<REGION>.lproj` folder is tried first, then `<language>.lproj`:
+
+```
+"notification_title" = "Este %@ está em Português do Brasil";
+```
+
+On Windows, add one JSON file per language to the folder
+`awesome_notifications/strings/` of your app and declare it as an asset in
+`pubspec.yaml`. They work like Android's `values*` folders: `pt-BR.json`
+first, then `pt.json`, then `default.json`. The texts use the same
+placeholders (`%@` / `%s`):
+
+```yaml
+flutter:
+  assets:
+    - awesome_notifications/strings/
+```
+
+```json
+{ "notification_title": "Este %@ está em Português do Brasil" }
+```
+
 When both are present, the `localizations` map wins over the loc-key text for any
 field it provides.
 
@@ -166,11 +190,18 @@ field it provides.
 
 ## 📱 Platform support
 
-| Feature                                            | Android | iOS |
-| -------------------------------------------------- | :-----: | :-: |
-| Translated title / body / summary / images         |   ✅    | ✅  |
-| Translated action button labels                    |   ✅    | ✅  |
-| `titleLocKey` / `bodyLocKey` from string resources |   ✅    | —  |
+| Feature                                            | Android | iOS | macOS | Windows |
+| -------------------------------------------------- | :-----: | :-: | :---: | :-----: |
+| Translated title / body / summary / images         |   ✅    | ✅  |  ✅   |   ✅    |
+| Translated action button labels                    |   ✅    | ✅  |  ✅   |   ✅    |
+| `titleLocKey` / `bodyLocKey` from string resources |   ✅    | ✅  |  ✅   |   ✅    |
+
+On macOS, add the strings to `macos/Runner/<language>.lproj/Localizable.strings`
+just like on iOS. On Windows, the strings come from the JSON assets described
+in [Localization keys](#-localization-keys).
+
+Where Android and iOS behave differently (a missing key, several
+arguments), macOS follows iOS and Windows follows Android.
 
 <br>
 

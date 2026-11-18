@@ -1,0 +1,1 @@
+../../../../ios/awesome_notifications_localizations/Sources/awesome_notifications_localizations/LocalizationMethodHandler.swift
