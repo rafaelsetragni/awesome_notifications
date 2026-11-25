@@ -41,7 +41,10 @@ object NotificationActions {
         if (input != null) content = content + (Definitions.NOTIFICATION_BUTTON_KEY_INPUT to input)
 
         if (builder.shouldButtonAutoDismiss(control)) {
-            builder.readId(content)?.let { NotificationManagerCompat.from(context).cancel(it) }
+            builder.readId(content)?.let {
+                CancelInterceptorRegistry.onDismiss(context, it)
+                NotificationManagerCompat.from(context).cancel(it)
+            }
         }
 
         // 0.12 routing: a disabled control does nothing; a silent-background

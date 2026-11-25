@@ -72,7 +72,8 @@ class MediaBuilderTest {
         layout: String? = "MediaPlayer",
         media: Map<String, Any?>? = media(),
         content: Map<String, Any?> = emptyMap(),
-        buttons: List<Map<String, Any?>>? = null
+        buttons: List<Map<String, Any?>>? = null,
+        extra: Map<String, Any?> = emptyMap()
     ): Outcome {
         val c = mutableMapOf<String, Any?>(
             Definitions.NOTIFICATION_ID to id,
@@ -83,6 +84,7 @@ class MediaBuilderTest {
         val model = mutableMapOf<String, Any?>(Definitions.NOTIFICATION_CONTENT to c)
         if (media != null) model[MediaKeys.MEDIA] = media
         if (buttons != null) model[Definitions.NOTIFICATION_BUTTONS] = buttons
+        model.putAll(extra)
         var outcome = Outcome(null, null, null)
         core.createNotification(model, onError = { code, _, details -> outcome = Outcome(null, code, details) }) {
             outcome = Outcome(it, null, null)
@@ -137,6 +139,44 @@ class MediaBuilderTest {
         assertEquals("INVALID_ARGUMENTS", outcome.code)
         assertEquals("arguments.invalid.notificationMedia", outcome.detail)
         assertEquals("INVALID_ARGUMENTS", create(media = media().apply { remove("title") }).code)
+    }
+
+    private val firebase = mapOf(Definitions.NOTIFICATION_CREATED_SOURCE to "Firebase")
+    private val schedule = mapOf("schedule" to mapOf("interval" to 60))
+
+    @Test fun aPushIsRejected() {
+        val outcome = create(content = firebase)
+        assertEquals("INVALID_ARGUMENTS", outcome.code)
+        assertEquals("arguments.invalid.notificationMedia.push", outcome.detail)
+        // Case-insensitive; any media model, even one that breaks the later rules.
+        assertEquals(
+            "arguments.invalid.notificationMedia.push",
+            create(content = mapOf(Definitions.NOTIFICATION_CREATED_SOURCE to "firebase")).detail
+        )
+        assertEquals("arguments.invalid.notificationMedia.push", create(media = null, content = firebase).detail)
+        assertEquals("arguments.invalid.notificationMedia.push", create(layout = null, content = firebase).detail)
+        assertEquals(
+            "arguments.invalid.notificationMedia.push",
+            create(content = firebase, extra = schedule).detail
+        )
+        assertTrue(manager().activeNotifications.isEmpty())
+        assertNull(MediaSessions.entry("player"))
+    }
+
+    @Test fun aScheduleIsRejected() {
+        val outcome = create(extra = schedule)
+        assertEquals("INVALID_ARGUMENTS", outcome.code)
+        assertEquals("arguments.invalid.notificationMedia.schedule", outcome.detail)
+        assertEquals("arguments.invalid.notificationMedia.schedule", create(media = null, extra = schedule).detail)
+        assertEquals("arguments.invalid.notificationMedia.schedule", create(layout = null, extra = schedule).detail)
+        assertTrue(manager().activeNotifications.isEmpty())
+        // A null schedule entry is no schedule.
+        assertEquals(true, create(extra = mapOf("schedule" to null)).created)
+    }
+
+    @Test fun otherPushesAndSchedulesAreUntouched() {
+        assertEquals(true, create(layout = null, media = null, content = firebase).created)
+        assertEquals(true, create(2, layout = null, media = null, extra = schedule).created)
     }
 
     @Test fun otherNotificationsAreUntouched() {
@@ -378,13 +418,69 @@ class MediaBuilderTest {
         assertTrue(manager().activeNotifications.isEmpty())
     }
 
-    @Test fun anIdleSessionGoesWithItsNotification() {
-        create(media = media(state = "stopped"))
-        core.cancel(1)
+    // MARK: - Events and removal
+
+    @Test fun createdAndDisplayedFire() {
+        create()
+        shadowOf(Looper.getMainLooper()).idle()
+        val types = events.map { it.first }
+        assertTrue(Definitions.EVENT_NOTIFICATION_CREATED in types)
+        assertTrue(Definitions.EVENT_NOTIFICATION_DISPLAYED in types)
+        val displayed = events.last { it.first == Definitions.EVENT_NOTIFICATION_DISPLAYED }.second
+        assertEquals(1, displayed[Definitions.NOTIFICATION_ID])
+        @Suppress("UNCHECKED_CAST")
+        assertEquals("player", (displayed[Definitions.NOTIFICATION_PAYLOAD] as Map<String, Any?>)["mediaSessionId"])
+    }
+
+    /** Asserts that [remove] ends the playing session of notification 1 as `mediaStop` does. */
+    private fun assertEnds(buttons: List<Map<String, Any?>>? = null, remove: () -> Unit) {
+        MediaSessions.clearForTest()
+        manager().cancelAll()
+        create(content = mapOf(Definitions.NOTIFICATION_GROUP_KEY to "album"), buttons = buttons)
+        create(2, media = media(sessionId = "other"))
+        val session = session()
+        remove()
+        shadowOf(Looper.getMainLooper()).idle()
         assertNull(MediaSessions.entry("player"))
-        create(media = media(sessionId = "playing"))
-        core.cancel(1)
-        assertNotNull(MediaSessions.entry("playing"))
+        assertFalse(session.isActive)
+        assertTrue(manager().activeNotifications.none { it.id == 1 })
+    }
+
+    @Test fun cancellingOrDismissingEndsThePlayingSession() {
+        assertEnds { core.cancel(1) }
+        assertNotNull(MediaSessions.entry("other"))
+        assertEnds { core.dismiss(1) }
+        assertNotNull(MediaSessions.entry("other"))
+        assertEnds { core.cancelByGroupKey("album") }
+        assertEnds { core.dismissByGroupKey("album") }
+        assertEnds { core.cancelAll() }
+        assertNull(MediaSessions.entry("other"))
+        assertEnds { core.dismissAll() }
+        assertEnds { core.cancelByChannelKey("media") }
+        assertNull(MediaSessions.entry("other"))
+        assertEnds { core.dismissByChannelKey("media") }
+    }
+
+    @Test fun anotherIdKeepsTheSession() {
+        create()
+        core.cancel(7)
+        core.dismissByGroupKey("none")
+        assertTrue(session().isActive)
+    }
+
+    @Test fun aSwipeEndsTheSession() {
+        assertEnds {
+            val intent = shadowOf(notification().deleteIntent).savedIntent
+            me.carda.android_awn_core.DismissedNotificationReceiver().onReceive(context, Intent(intent))
+        }
+        assertTrue(events.any { it.first == Definitions.EVENT_NOTIFICATION_DISMISSED })
+    }
+
+    @Test fun aDismissingButtonEndsTheSession() {
+        val close = mapOf("key" to "close", "label" to "Close", "actionType" to "SilentAction")
+        assertEnds(listOf(close)) {
+            MediaSessions.entry("player")!!.callback.onCustomAction("close", null)
+        }
     }
 
     @Test fun capabilities() {

@@ -12,8 +12,9 @@ import me.carda.android_awn_core.NotificationBuilder
  * playback state) instead of the core's 0.12 rendering.
  *
  * `build` validates and marks the model (the core then skips its built-in
- * layout); `decorate` updates the session and styles the Android builder, both
- * for an immediate notification and at a schedule's fire time.
+ * layout); `decorate` updates the session and styles the Android builder.
+ * A media model from a push or with a schedule is rejected: the app reports the
+ * player's state while it plays, so only an immediate local notification fits.
  */
 internal class MediaBuilder(inner: NotificationBuilder) : NotificationBuilder(inner) {
 
@@ -22,11 +23,19 @@ internal class MediaBuilder(inner: NotificationBuilder) : NotificationBuilder(in
         val isMediaLayout = content[Definitions.NOTIFICATION_LAYOUT] == MediaKeys.LAYOUT_MEDIA_PLAYER
         val block = model[MediaKeys.MEDIA]
 
-        if (block == null) {
-            return if (isMediaLayout) invalid(
-                "The MediaPlayer layout requires a NotificationMedia", ".notificationMedia"
-            ) else next(context, model)
-        }
+        if (block == null && !isMediaLayout) return next(context, model)
+
+        // The session lives in the app's process, so the app must show it itself.
+        val source = content[Definitions.NOTIFICATION_CREATED_SOURCE] as? String
+        if (source.equals(MediaKeys.SOURCE_FIREBASE, ignoreCase = true)) return invalid(
+            "A media notification cannot come from a push", ".notificationMedia.push"
+        )
+        if (model[MediaKeys.SCHEDULE] != null) return invalid(
+            "A media notification cannot be scheduled", ".notificationMedia.schedule"
+        )
+        if (block == null) return invalid(
+            "The MediaPlayer layout requires a NotificationMedia", ".notificationMedia"
+        )
         if (!isMediaLayout) return invalid(
             "A NotificationMedia requires the MediaPlayer layout", ".notificationMedia.layout"
         )

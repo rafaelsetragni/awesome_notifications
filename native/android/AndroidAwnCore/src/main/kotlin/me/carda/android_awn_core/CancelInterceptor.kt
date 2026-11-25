@@ -10,6 +10,11 @@ import android.content.Context
  * [CancelInterceptor] via [CancelInterceptorRegistry]; the core invokes it
  * alongside its own dismissal. The core itself stays feature-agnostic.
  *
+ * The `onDismiss*` methods tell when notifications leave the status bar:
+ * dismiss* and cancel* (cancel dismisses too), the user swiping one away, or an
+ * action dismissing its notification. A decorator that keeps state per shown
+ * notification (e.g. a media session) drops it there.
+ *
  * All methods default to no-ops so an interceptor overrides only what it needs.
  */
 interface CancelInterceptor {
@@ -17,6 +22,11 @@ interface CancelInterceptor {
     fun onCancelAll(context: Context) {}
     fun onCancelByChannelKey(context: Context, channelKey: String) {}
     fun onCancelByGroupKey(context: Context, groupKey: String) {}
+
+    fun onDismiss(context: Context, id: Int) {}
+    fun onDismissAll(context: Context) {}
+    fun onDismissByChannelKey(context: Context, channelKey: String) {}
+    fun onDismissByGroupKey(context: Context, groupKey: String) {}
 }
 
 /** Registry of cancel interceptors; decorators register here (statically). */
@@ -42,4 +52,16 @@ object CancelInterceptorRegistry {
 
     fun onCancelByGroupKey(context: Context, groupKey: String) =
         interceptors.forEach { it.onCancelByGroupKey(context, groupKey) }
+
+    fun onDismiss(context: Context, id: Int) =
+        interceptors.forEach { it.onDismiss(context, id) }
+
+    fun onDismissAll(context: Context) =
+        interceptors.forEach { it.onDismissAll(context) }
+
+    fun onDismissByChannelKey(context: Context, channelKey: String) =
+        interceptors.forEach { it.onDismissByChannelKey(context, channelKey) }
+
+    fun onDismissByGroupKey(context: Context, groupKey: String) =
+        interceptors.forEach { it.onDismissByGroupKey(context, groupKey) }
 }

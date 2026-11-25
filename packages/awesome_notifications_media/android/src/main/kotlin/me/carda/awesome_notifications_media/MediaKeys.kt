@@ -32,6 +32,12 @@ internal object MediaKeys {
 
     const val LAYOUT_MEDIA_PLAYER = "MediaPlayer"
 
+    /** The model's schedule entry (awesome_notifications_schedules). */
+    const val SCHEDULE = "schedule"
+
+    /** Content `createdSource` of a push (awesome_notifications_fcm). */
+    const val SOURCE_FIREBASE = "Firebase"
+
     // 0.12 exception codes
     const val CODE_INVALID_ARGUMENTS = "INVALID_ARGUMENTS"
     const val DETAILED_INVALID_ARGUMENTS = "arguments.invalid"

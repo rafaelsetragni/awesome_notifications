@@ -25,8 +25,9 @@ import me.carda.android_awn_core.NotificationActions
 
 /**
  * One [MediaSessionCompat] per `sessionId`: made on first use, updated on every
- * notification of the session, released by `mediaStop` (or once it is stopped
- * and its notification is gone). Turns the user's commands into the core's
+ * notification of the session, released by `mediaStop`, when its notification
+ * is dismissed / cancelled / swiped away, or once it is idle and its
+ * notification is gone. Turns the user's commands into the core's
  * action event and / or the commands stream.
  */
 internal object MediaSessions {
@@ -330,15 +331,23 @@ internal object MediaSessions {
         gone.forEach { release(it) }
     }
 
-    /** The app cancelled notifications: idle sessions shown there are released. */
+    /**
+     * A media notification left the status bar (dismiss* / cancel*, a swipe, an
+     * action dismissing it): its session ends as `mediaStop` does, whatever its state.
+     */
     val cancelInterceptor = object : CancelInterceptor {
-        override fun onCancel(context: Context, id: Int) =
-            releaseWhere { it.media.isIdle && it.notificationId == id }
-        override fun onCancelAll(context: Context) = releaseWhere { it.media.isIdle }
-        override fun onCancelByChannelKey(context: Context, channelKey: String) =
-            releaseWhere { it.media.isIdle && it.channelKey == channelKey }
-        override fun onCancelByGroupKey(context: Context, groupKey: String) =
-            releaseWhere { it.media.isIdle && it.groupKey == groupKey }
+        override fun onDismiss(context: Context, id: Int) =
+            stopWhere(context) { it.notificationId == id }
+        override fun onDismissAll(context: Context) = stopWhere(context) { true }
+        override fun onDismissByChannelKey(context: Context, channelKey: String) =
+            stopWhere(context) { it.channelKey == channelKey }
+        override fun onDismissByGroupKey(context: Context, groupKey: String) =
+            stopWhere(context) { it.groupKey == groupKey }
+    }
+
+    private fun stopWhere(context: Context, predicate: (Entry) -> Boolean) {
+        val ids = synchronized(entries) { entries.filterValues(predicate).keys.toList() }
+        ids.forEach { stop(context, it) }
     }
 
     /** Test-only: releases every session. */

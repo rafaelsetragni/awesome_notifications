@@ -127,15 +127,25 @@ class AwesomeNotifications(
     // any pending scheduled creation). cancel* also notifies the registered
     // CancelInterceptors, so a decorator (e.g. scheduling) can drop its own state.
 
-    fun dismiss(id: Int) = NotificationManagerCompat.from(context).cancel(id)
+    fun dismiss(id: Int) {
+        CancelInterceptorRegistry.onDismiss(context, id)
+        NotificationManagerCompat.from(context).cancel(id)
+    }
 
-    fun dismissAll() = NotificationManagerCompat.from(context).cancelAll()
+    fun dismissAll() {
+        CancelInterceptorRegistry.onDismissAll(context)
+        NotificationManagerCompat.from(context).cancelAll()
+    }
 
-    fun dismissByChannelKey(channelKey: String) =
+    fun dismissByChannelKey(channelKey: String) {
+        CancelInterceptorRegistry.onDismissByChannelKey(context, channelKey)
         cancelMatching { channelIdOf(it) == channelKey }
+    }
 
-    fun dismissByGroupKey(groupKey: String) =
+    fun dismissByGroupKey(groupKey: String) {
+        CancelInterceptorRegistry.onDismissByGroupKey(context, groupKey)
         cancelMatching { it.notification.group == groupKey }
+    }
 
     fun cancel(id: Int) {
         CancelInterceptorRegistry.onCancel(context, id)

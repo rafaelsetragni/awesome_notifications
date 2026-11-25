@@ -16,6 +16,7 @@ class DismissedNotificationReceiver : BroadcastReceiver() {
         val builder = NotificationBuilder.getNewBuilder()
         val model = builder.notificationModel(intent) ?: return
         val content = builder.contentMap(model)
+        builder.readId(content)?.let { CancelInterceptorRegistry.onDismiss(context, it) }
 
         AwesomeEventsReceiver.notifyAwesomeEvent(
             Definitions.EVENT_NOTIFICATION_DISMISSED,

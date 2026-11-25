@@ -112,6 +112,60 @@ class AwesomeNotificationsTest {
         }
     }
 
+    @Test fun dismissAndCancelInvokeTheDismissHooks() {
+        val calls = mutableListOf<String>()
+        val interceptor = object : CancelInterceptor {
+            override fun onDismiss(context: Context, id: Int) { calls.add("dismiss:$id") }
+            override fun onDismissAll(context: Context) { calls.add("all") }
+            override fun onDismissByChannelKey(context: Context, channelKey: String) {
+                calls.add("channel:$channelKey")
+            }
+            override fun onDismissByGroupKey(context: Context, groupKey: String) {
+                calls.add("group:$groupKey")
+            }
+        }
+        CancelInterceptorRegistry.register(interceptor)
+        try {
+            core.dismiss(1)
+            core.cancel(2)
+            core.dismissAll()
+            core.cancelAll()
+            core.dismissByChannelKey("c")
+            core.cancelByChannelKey("c")
+            core.dismissByGroupKey("g")
+            core.cancelByGroupKey("g")
+            assertEquals(
+                listOf("dismiss:1", "dismiss:2", "all", "all", "channel:c", "channel:c", "group:g", "group:g"),
+                calls
+            )
+        } finally {
+            CancelInterceptorRegistry.unregister(interceptor)
+        }
+    }
+
+    @Test fun aSwipeInvokesTheDismissHook() {
+        val dismissed = mutableListOf<Int>()
+        val interceptor = object : CancelInterceptor {
+            override fun onDismiss(context: Context, id: Int) { dismissed.add(id) }
+        }
+        CancelInterceptorRegistry.register(interceptor)
+        try {
+            val intent = android.content.Intent(context, DismissedNotificationReceiver::class.java).apply {
+                action = Definitions.DISMISSED_NOTIFICATION
+                putExtra(
+                    Definitions.NOTIFICATION_JSON,
+                    JsonUtils.getInstance().toJson(
+                        mapOf(Definitions.NOTIFICATION_CONTENT to mapOf(Definitions.NOTIFICATION_ID to 9))
+                    )
+                )
+            }
+            DismissedNotificationReceiver().onReceive(context, intent)
+            assertEquals(listOf(9), dismissed)
+        } finally {
+            CancelInterceptorRegistry.unregister(interceptor)
+        }
+    }
+
     @Test fun isNotificationAllowedReturnsBoolean() {
         // Robolectric enables notifications by default.
         assertTrue(core.isNotificationAllowed())
