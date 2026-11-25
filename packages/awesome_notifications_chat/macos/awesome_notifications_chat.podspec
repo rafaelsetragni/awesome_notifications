@@ -23,8 +23,9 @@ A new Flutter plugin project.
   # s.resource_bundles = {'awesome_notifications_chat_privacy' => ['awesome_notifications_chat/Sources/awesome_notifications_chat/PrivacyInfo.xcprivacy']}
 
   s.dependency 'FlutterMacOS'
+  s.dependency 'IosAwnCore'
 
-  s.platform = :osx, '10.11'
+  s.platform = :osx, '12.0'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.swift_version = '5.0'
 end

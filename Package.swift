@@ -61,6 +61,17 @@ let package = Package(
             path: "packages/awesome_notifications_fcm/ios/awesome_notifications_fcm/Sources/awesome_notifications_fcm",
             exclude: ["AwesomeNotificationsFcmPlugin.swift", "DartFcmBackgroundExecutor.swift"]
         ),
+        .target(
+            name: "ChatLogic",
+            dependencies: ["IosAwnCore"],
+            path: "packages/awesome_notifications_chat/ios/awesome_notifications_chat/Sources/awesome_notifications_chat",
+            exclude: ["AwesomeNotificationsChatPlugin.swift", "PrivacyInfo.xcprivacy"]
+        ),
+        .testTarget(
+            name: "ChatLogicTests",
+            dependencies: ["ChatLogic"],
+            path: "native/apple/Tests/ChatLogicTests"
+        ),
         .testTarget(
             name: "FcmLogicTests",
             dependencies: ["FcmLogic"],

@@ -1,19 +1,19 @@
-import Cocoa
 import FlutterMacOS
+import AppKit
+import IosAwnCore
 
+/// Chat decorator plugin (macOS). Owns no method channel: it installs the
+/// `ChatBuilder` in the core's decorator chain (between localization, which
+/// translates first, and scheduling, which freezes the model last) and answers
+/// the AwesomeNotificationsChat methods through the shared handler registry.
 public class AwesomeNotificationsChatPlugin: NSObject, FlutterPlugin {
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "awesome_notifications_chat", binaryMessenger: registrar.messenger)
-    let instance = AwesomeNotificationsChatPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
-  }
 
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    switch call.method {
-    case "getPlatformVersion":
-      result("macOS " + ProcessInfo.processInfo.operatingSystemVersionString)
-    default:
-      result(FlutterMethodNotImplemented)
+    private static let methodHandler = ChatMethodHandler()
+
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        NotificationBuilderRegistry.shared.register(priority: ChatBuilder.priority) { inner in
+            ChatBuilder(inner: inner)
+        }
+        AwesomeMethodHandlerRegistry.shared.register(handler: methodHandler)
     }
-  }
 }

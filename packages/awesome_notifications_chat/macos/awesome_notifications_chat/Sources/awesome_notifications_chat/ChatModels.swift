@@ -1,0 +1,1 @@
+../../../../ios/awesome_notifications_chat/Sources/awesome_notifications_chat/ChatModels.swift
