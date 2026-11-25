@@ -3,7 +3,6 @@ package me.carda.android_awn_core
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
 
 /**
@@ -20,34 +19,12 @@ class NotificationButtonReceiver : BroadcastReceiver() {
         val action = intent.action ?: return
         if (!action.startsWith(Definitions.NOTIFICATION_BUTTON_ACTION_PREFIX)) return
 
-        val builder = NotificationBuilder.getNewBuilder()
-        val model = builder.notificationModel(intent) ?: return
-        var content = builder.contentMap(model)
-
+        val model = NotificationBuilder.getNewBuilder().notificationModel(intent) ?: return
         val buttonKey = intent.getStringExtra(Definitions.NOTIFICATION_BUTTON_KEY_PRESSED) ?: ""
-        val button = builder.findButton(model, buttonKey)
-
-        // Carry the pressed key + any typed reply back to Dart.
-        content = content + (Definitions.NOTIFICATION_BUTTON_KEY_PRESSED to buttonKey)
-        RemoteInput.getResultsFromIntent(intent)
+        // Any typed reply travels as the button's input.
+        val input = RemoteInput.getResultsFromIntent(intent)
             ?.getCharSequence(Definitions.NOTIFICATION_BUTTON_KEY_INPUT)
-            ?.let { content = content + (Definitions.NOTIFICATION_BUTTON_KEY_INPUT to it.toString()) }
-
-        // Auto-dismiss the visible notification when the button requests it.
-        if (builder.shouldButtonAutoDismiss(button)) {
-            builder.readId(content)?.let { NotificationManagerCompat.from(context).cancel(it) }
-        }
-
-        if (builder.buttonActionType(button) == ActionType.DismissAction) {
-            AwesomeEventsReceiver.notifyAwesomeEvent(
-                Definitions.EVENT_NOTIFICATION_DISMISSED,
-                builder.registerDismissedEvent(content, NotificationLifeCycle.Background)
-            )
-        } else {
-            AwesomeEventsReceiver.notifyAwesomeEvent(
-                Definitions.EVENT_DEFAULT_ACTION,
-                builder.registerActionEvent(content, NotificationLifeCycle.Background, builder.buttonActionType(button))
-            )
-        }
+            ?.toString()
+        NotificationActions.dispatch(context, model, buttonKey, input)
     }
 }

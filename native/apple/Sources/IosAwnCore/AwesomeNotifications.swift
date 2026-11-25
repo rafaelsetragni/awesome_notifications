@@ -339,6 +339,25 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
         completionHandler()
     }
 
+    // MARK: - Controls that are not buttons
+
+    /// Emits the action (or dismiss) event of [model] for the control
+    /// [buttonKey], with [input] as its typed value, as a pressed button does
+    /// (see `NotificationBuilder.controlEvent`). For add-ons whose controls are
+    /// not notification buttons: a media remote command, for instance.
+    public func dispatchAction(
+        model: [String: Any],
+        buttonKey: String,
+        input: String? = nil,
+        button: [String: Any]? = nil
+    ) {
+        let event = builder.controlEvent(
+            model: model, buttonKey: buttonKey, input: input, button: button,
+            lifeCycle: AppLifeCycle.current)
+        if let id = event.dismissId { dismiss(id: id) }
+        emit(event.eventName, event.data)
+    }
+
     // MARK: - Dismiss / cancel
 
     public func dismiss(id: Int) {

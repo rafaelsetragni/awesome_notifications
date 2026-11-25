@@ -103,4 +103,44 @@ class ReceiversTest {
         NotificationButtonReceiver().onReceive(context, intent)
         assertTrue(received.isEmpty())
     }
+
+    // --- NotificationActions.dispatch (controls that are not buttons) ---
+
+    @Test fun aControlEmitsItsActionWithItsInput() {
+        val control = mapOf<String, Any?>(
+            Definitions.NOTIFICATION_BUTTON_KEY to "awn.media.seekTo",
+            Definitions.NOTIFICATION_ACTION_TYPE to "SilentAction",
+            Definitions.NOTIFICATION_AUTO_DISMISSIBLE to false
+        )
+        NotificationActions.dispatch(
+            context, buttonModel("PLAY", "KeepOnTop"), "awn.media.seekTo", "37000", control)
+
+        assertEquals(1, received.size)
+        assertEquals(Definitions.EVENT_DEFAULT_ACTION, received[0].first)
+        assertEquals("awn.media.seekTo", received[0].second[Definitions.NOTIFICATION_BUTTON_KEY_PRESSED])
+        assertEquals("37000", received[0].second[Definitions.NOTIFICATION_BUTTON_KEY_INPUT])
+        assertEquals("SilentAction", received[0].second[Definitions.NOTIFICATION_ACTION_TYPE])
+        assertEquals(5, received[0].second[Definitions.NOTIFICATION_ID])
+    }
+
+    @Test fun aControlKeepsTheNotificationWhenNotAutoDismissible() {
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+        manager.createNotificationChannel(
+            android.app.NotificationChannel("c", "c", android.app.NotificationManager.IMPORTANCE_DEFAULT))
+        manager.notify(5, androidx.core.app.NotificationCompat.Builder(context, "c")
+            .setSmallIcon(android.R.drawable.ic_media_play).build())
+        val control = mapOf<String, Any?>(
+            Definitions.NOTIFICATION_BUTTON_KEY to "awn.media.pause",
+            Definitions.NOTIFICATION_ACTION_TYPE to "SilentAction",
+            Definitions.NOTIFICATION_AUTO_DISMISSIBLE to false
+        )
+        NotificationActions.dispatch(context, buttonModel("PLAY", "KeepOnTop"), "awn.media.pause", null, control)
+        assertEquals(listOf(5), manager.activeNotifications.map { it.id })
+        assertEquals(null, received[0].second[Definitions.NOTIFICATION_BUTTON_KEY_INPUT])
+    }
+
+    @Test fun withoutAControlTheModelButtonIsUsed() {
+        NotificationActions.dispatch(context, buttonModel("DEL", "DismissAction"), "DEL")
+        assertEquals(Definitions.EVENT_NOTIFICATION_DISMISSED, received[0].first)
+    }
 }

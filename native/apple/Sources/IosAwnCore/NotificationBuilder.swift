@@ -383,6 +383,34 @@ open class NotificationBuilder {
         return map
     }
 
+    /// What a notification's control does when used: the event to emit and
+    /// its data, and the notification to dismiss (if any). The path a pressed
+    /// button takes, open to add-ons whose controls are not notification
+    /// buttons (a media remote command, for instance).
+    ///
+    /// [button] describes such a control (its key, `actionType`,
+    /// `autoDismissible`); nil takes the model's button with [buttonKey].
+    public func controlEvent(
+        model: [String: Any],
+        buttonKey: String,
+        input: String? = nil,
+        button: [String: Any]? = nil,
+        lifeCycle: NotificationLifeCycle
+    ) -> (eventName: String, data: [String: Any], dismissId: Int?) {
+        let control = button ?? findButton(inModel: model, key: buttonKey)
+        var content = contentMap(fromModel: model)
+        content[Definitions.NOTIFICATION_BUTTON_KEY_PRESSED] = buttonKey
+        if let input = input { content[Definitions.NOTIFICATION_BUTTON_KEY_INPUT] = input }
+        let dismissId = shouldButtonAutoDismiss(control) ? readId(content) : nil
+        if buttonActionType(control) == .dismissAction {
+            return (Definitions.EVENT_NOTIFICATION_DISMISSED,
+                    registerDismissedEvent(content, lifeCycle: lifeCycle), dismissId)
+        }
+        return (Definitions.EVENT_DEFAULT_ACTION,
+                registerActionEvent(content, lifeCycle: lifeCycle, actionType: buttonActionType(control)),
+                dismissId)
+    }
+
     // MARK: - Dismiss concepts
 
     func readId(_ content: [String: Any]) -> Int? {
