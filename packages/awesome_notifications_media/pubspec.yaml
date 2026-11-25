@@ -1,0 +1,20 @@
+name: awesome_notifications_media
+description: "Media controls for awesome_notifications: the Android media notification, iOS / macOS Now Playing, Windows, Linux and Web media sessions, from one model."
+version: 1.0.0-dev.0
+homepage:
+resolution: workspace
+
+environment:
+  sdk: '>=3.6.0 <4.0.0'
+  flutter: '>=3.3.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  awesome_notifications:
+    path: ../awesome_notifications
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
