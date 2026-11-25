@@ -84,17 +84,6 @@ Current Linux gaps, planned for a follow-up (a small helper bundled with the app
 
 <br>
 
-# 🛑 ATTENTION - PLUGIN UNDER DEVELOPMENT
-    
-![image](https://user-images.githubusercontent.com/40064496/155188371-48e22104-8bb8-4f38-ba1a-1795eeb7b81b.png)
-
-*Working Progress Percentages of Awesome Notifications Plugin*
-
-OBS: Please note that these progress percentages are estimates and are subject to change. We are continually working to improve the Awesome Notifications plugin and add support for new platforms.
-
-<br>
-<br>
-
 # 🤝 Contributing
 
 Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) before submitting a pull request.
@@ -274,7 +263,6 @@ We are constantly working to improve Awesome Notifications and provide support f
 - [Awesome Notifications for Flutter - Year 2](#awesome-notifications-for-flutter---year-2)
     - [**Key Features:**](#key-features)
   - [Notification Types Available](#notification-types-available)
-- [🛑 ATTENTION - PLUGIN UNDER DEVELOPMENT](#-attention---plugin-under-development)
 - [🤝 Contributing](#-contributing)
 - [💰 Donate via Stripe or BuyMeACoffee](#-donate-via-stripe-or-buymeacoffee)
 - [💬 Discord Chat Server](#-discord-chat-server)
