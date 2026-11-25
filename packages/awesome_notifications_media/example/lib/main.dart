@@ -11,10 +11,12 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications_media/awesome_notifications_media.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 
 /// The album covers of the 0.12 example, pinned to a commit so they never move.
-const _covers = 'https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/'
+const _covers =
+    'https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/'
     '46032aae60fb47f3c372676c77bb59e470956339/example/assets/images';
 
 const _channelKey = 'media_player';
@@ -33,12 +35,16 @@ Future<void> main() async {
       enableVibration: false,
     ),
   ]);
-  await AwesomeNotifications().setListeners(onActionReceivedMethod: onActionReceivedMethod);
+  await AwesomeNotifications().setListeners(
+    onActionReceivedMethod: onActionReceivedMethod,
+  );
   runApp(const MediaExampleApp());
   // Never blocks the screen: the silent loop is only a helper (see SilentAudio).
-  unawaited(SilentAudio.initialize().catchError((Object e) {
-    debugPrint('Silent audio unavailable: $e');
-  }));
+  unawaited(
+    SilentAudio.initialize().catchError((Object e) {
+      debugPrint('Silent audio unavailable: $e');
+    }),
+  );
 }
 
 /// The system's media controls (and any other notification action) land here,
@@ -73,9 +79,13 @@ class SilentAudio {
     final player = AudioPlayer();
     final wav = _silentWav(const Duration(seconds: 2));
     if (kIsWeb) {
-      await player.setAudioSource(AudioSource.uri(Uri.dataFromBytes(wav, mimeType: 'audio/wav')));
+      await player.setAudioSource(
+        AudioSource.uri(Uri.dataFromBytes(wav, mimeType: 'audio/wav')),
+      );
     } else {
-      final file = File('${Directory.systemTemp.path}/awesome_notifications_silence.wav');
+      final file = File(
+        '${Directory.systemTemp.path}/awesome_notifications_silence.wav',
+      );
       await file.writeAsBytes(wav, flush: true);
       await player.setAudioSource(AudioSource.file(file.path));
     }
@@ -87,7 +97,9 @@ class SilentAudio {
     final player = _player;
     if (player == null) return;
     // play() completes only when playback stops: don't wait for it.
-    playing ? unawaited(player.play().catchError((_) {})) : await player.pause();
+    playing
+        ? unawaited(player.play().catchError((_) {}))
+        : await player.pause();
   }
 
   /// A mono 8 kHz 16-bit WAV of silence, made in memory (no bundled file).
@@ -143,22 +155,56 @@ class CloseCaption {
 /// "la la la" every 15 s, as in the 0.12 example.
 final List<CloseCaption> closeCaptions = [
   for (var s = 15; s <= 225; s += 15)
-    CloseCaption(Duration(seconds: s), Duration(seconds: s + 5), 'la la la la la la'),
+    CloseCaption(
+      Duration(seconds: s),
+      Duration(seconds: s + 5),
+      'la la la la la la',
+    ),
 ];
 
 const playlist = [
-  MediaModel('Bright Sharp', 'Champagne Supernova', Duration(minutes: 4, seconds: 21),
-      '$_covers/rock-disc.jpg', Color(0xFF3E2723)),
-  MediaModel('Best of Mozart', 'Allegro', Duration(minutes: 7, seconds: 41),
-      '$_covers/classic-disc.jpg', Color(0xFF4E342E)),
-  MediaModel('Dj Allucard', '21st Century', Duration(minutes: 4, seconds: 59),
-      '$_covers/remix-disc.jpg', Color(0xFF1A237E)),
-  MediaModel('Dj Brainiak', 'Speed of light', Duration(minutes: 4, seconds: 59),
-      '$_covers/dj-disc.jpg', Color(0xFF311B92)),
-  MediaModel('Back to the 80\'s', 'Disco revenge', Duration(minutes: 4, seconds: 59),
-      '$_covers/80s-disc.jpg', Color(0xFF880E4F)),
-  MediaModel('PeacefulMind', 'Never look at back', Duration(minutes: 4, seconds: 59),
-      '$_covers/old-disc.jpg', Color(0xFF004D40)),
+  MediaModel(
+    'Bright Sharp',
+    'Champagne Supernova',
+    Duration(minutes: 4, seconds: 21),
+    '$_covers/rock-disc.jpg',
+    Color(0xFF3E2723),
+  ),
+  MediaModel(
+    'Best of Mozart',
+    'Allegro',
+    Duration(minutes: 7, seconds: 41),
+    '$_covers/classic-disc.jpg',
+    Color(0xFF4E342E),
+  ),
+  MediaModel(
+    'Dj Allucard',
+    '21st Century',
+    Duration(minutes: 4, seconds: 59),
+    '$_covers/remix-disc.jpg',
+    Color(0xFF1A237E),
+  ),
+  MediaModel(
+    'Dj Brainiak',
+    'Speed of light',
+    Duration(minutes: 4, seconds: 59),
+    '$_covers/dj-disc.jpg',
+    Color(0xFF311B92),
+  ),
+  MediaModel(
+    'Back to the 80\'s',
+    'Disco revenge',
+    Duration(minutes: 4, seconds: 59),
+    '$_covers/80s-disc.jpg',
+    Color(0xFF880E4F),
+  ),
+  MediaModel(
+    'PeacefulMind',
+    'Never look at back',
+    Duration(minutes: 4, seconds: 59),
+    '$_covers/old-disc.jpg',
+    Color(0xFF004D40),
+  ),
 ];
 
 ///  *********************************************
@@ -233,9 +279,11 @@ class MediaPlayerCentral {
         goTo(position + const Duration(seconds: 15));
       case MediaControl.skipBackward:
       case MediaControl.rewind:
-        goTo(position - const Duration(seconds: 15) < Duration.zero
-            ? Duration.zero
-            : position - const Duration(seconds: 15));
+        goTo(
+          position - const Duration(seconds: 15) < Duration.zero
+              ? Duration.zero
+              : position - const Duration(seconds: 15),
+        );
     }
   }
 
@@ -279,7 +327,9 @@ class MediaPlayerCentral {
           artwork: current.cover,
           duration: current.length,
           position: position,
-          state: isPlaying ? NotificationPlayState.playing : NotificationPlayState.paused,
+          state: isPlaying
+              ? NotificationPlayState.playing
+              : NotificationPlayState.paused,
           controls: {
             MediaControl.skipPrevious,
             isPlaying ? MediaControl.pause : MediaControl.play,
@@ -302,10 +352,10 @@ class MediaExampleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const MaterialApp(
-        title: 'Awesome Notifications Media',
-        debugShowCheckedModeBanner: false,
-        home: MediaPlayerPage(),
-      );
+    title: 'Awesome Notifications Media',
+    debugShowCheckedModeBanner: false,
+    home: MediaPlayerPage(),
+  );
 }
 
 class MediaPlayerPage extends StatefulWidget {
@@ -324,7 +374,9 @@ class _MediaPlayerPageState extends State<MediaPlayerPage> {
   void initState() {
     super.initState();
     AwesomeNotifications().isNotificationAllowed().then((allowed) {
-      if (!allowed) AwesomeNotifications().requestPermissionToSendNotifications();
+      if (!allowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
     });
   }
 
@@ -338,62 +390,97 @@ class _MediaPlayerPageState extends State<MediaPlayerPage> {
 
   Widget _buildPlayer(BuildContext context) {
     final media = MediaPlayerCentral.current;
-    final contrast = media.color.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+    final contrast = media.color.computeLuminance() > 0.5
+        ? Colors.black
+        : Colors.white;
     final size = MediaQuery.sizeOf(context);
     final maxSize = max(size.width, size.height);
     final position = isDragging ? dragged : MediaPlayerCentral.position;
 
-    return Theme(
-      data: ThemeData(
-        brightness: contrast == Colors.white ? Brightness.dark : Brightness.light,
-        scaffoldBackgroundColor: media.color,
-        iconTheme: IconThemeData(color: contrast),
-        sliderTheme: SliderThemeData(
-          trackHeight: 4,
-          activeTrackColor: contrast,
-          inactiveTrackColor: contrast.withValues(alpha: 0.24),
-          thumbColor: contrast,
-          thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 16),
+    // White status bar text and icons over the album's dark color.
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent,
+      ),
+      child: Theme(
+        data: ThemeData(
+          brightness: contrast == Colors.white
+              ? Brightness.dark
+              : Brightness.light,
+          scaffoldBackgroundColor: media.color,
+          iconTheme: IconThemeData(color: contrast),
+          sliderTheme: SliderThemeData(
+            trackHeight: 4,
+            activeTrackColor: contrast,
+            inactiveTrackColor: contrast.withValues(alpha: 0.24),
+            thumbColor: contrast,
+            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 16),
+          ),
+        ),
+        child: Builder(
+          builder: (context) {
+            return Scaffold(
+              body: Stack(
+                children: [
+                  // The cover, blurred into the album color.
+                  Positioned.fill(
+                    child: Image.network(
+                      media.cover,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                    ),
+                  ),
+                  Positioned.fill(
+                    child: ColoredBox(
+                      color: media.color.withValues(alpha: 0.92),
+                    ),
+                  ),
+                  SafeArea(
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 20,
+                      ),
+                      children: [
+                        _art(media, size, maxSize, contrast, position),
+                        const SizedBox(height: 24),
+                        Text(
+                          media.band,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: contrast,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          media.track,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: contrast, fontSize: 20),
+                        ),
+                        const SizedBox(height: 16),
+                        _trackBar(media, position, contrast),
+                        _controls(maxSize, contrast),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ),
-      child: Builder(builder: (context) {
-        return Scaffold(
-          body: Stack(
-            children: [
-              // The cover, blurred into the album color.
-              Positioned.fill(
-                child: Image.network(media.cover, fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => const SizedBox.shrink()),
-              ),
-              Positioned.fill(child: ColoredBox(color: media.color.withValues(alpha: 0.92))),
-              SafeArea(
-                child: ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                  children: [
-                    _art(media, size, maxSize, contrast, position),
-                    const SizedBox(height: 24),
-                    Text(media.band,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: contrast, fontSize: 24, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    Text(media.track,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: contrast, fontSize: 20)),
-                    const SizedBox(height: 16),
-                    _trackBar(media, position, contrast),
-                    _controls(maxSize, contrast),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      }),
     );
   }
 
-  Widget _art(MediaModel media, Size size, double maxSize, Color contrast, Duration position) {
+  Widget _art(
+    MediaModel media,
+    Size size,
+    double maxSize,
+    Color contrast,
+    Duration position,
+  ) {
     final height = maxSize * 0.4;
     final caption = closeCaptions
         .where((c) => c.start <= position && c.end >= position)
@@ -414,14 +501,21 @@ class _MediaPlayerPageState extends State<MediaPlayerPage> {
                 stops: [0, 0.76, 0.96],
               ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height)),
               blendMode: BlendMode.dstIn,
-              child: Image.network(media.cover,
-                  height: height, width: size.width, fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) =>
-                      ColoredBox(color: contrast.withValues(alpha: 0.64))),
+              child: Image.network(
+                media.cover,
+                height: height,
+                width: size.width,
+                fit: BoxFit.cover,
+                errorBuilder: (_, _, _) =>
+                    ColoredBox(color: contrast.withValues(alpha: 0.64)),
+              ),
             ),
           ),
           if (closeCaptionOn)
-            Text(caption ?? '', style: TextStyle(color: contrast, fontSize: 20)),
+            Text(
+              caption ?? '',
+              style: TextStyle(color: contrast, fontSize: 20),
+            ),
         ],
       ),
     );
@@ -439,7 +533,8 @@ class _MediaPlayerPageState extends State<MediaPlayerPage> {
             isDragging = true;
             dragged = MediaPlayerCentral.position;
           }),
-          onChanged: (value) => setState(() => dragged = Duration(seconds: value.toInt())),
+          onChanged: (value) =>
+              setState(() => dragged = Duration(seconds: value.toInt())),
           onChangeEnd: (_) {
             setState(() => isDragging = false);
             MediaPlayerCentral.goTo(dragged);
@@ -452,10 +547,15 @@ class _MediaPlayerPageState extends State<MediaPlayerPage> {
             children: [
               Text(_print(position), style: TextStyle(color: contrast)),
               IconButton(
-                icon: Icon(Icons.closed_caption,
-                    size: 48,
-                    color: closeCaptionOn ? contrast : contrast.withValues(alpha: 0.48)),
-                onPressed: () => setState(() => closeCaptionOn = !closeCaptionOn),
+                icon: Icon(
+                  Icons.closed_caption,
+                  size: 48,
+                  color: closeCaptionOn
+                      ? contrast
+                      : contrast.withValues(alpha: 0.48),
+                ),
+                onPressed: () =>
+                    setState(() => closeCaptionOn = !closeCaptionOn),
               ),
               Text(_print(media.length), style: TextStyle(color: contrast)),
             ],
@@ -470,20 +570,28 @@ class _MediaPlayerPageState extends State<MediaPlayerPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        IconButton(icon: const Icon(Icons.stop), iconSize: small, onPressed: MediaPlayerCentral.stop),
         IconButton(
           icon: const Icon(Icons.skip_previous),
           iconSize: small,
           onPressed: MediaPlayerCentral.previous,
         ),
+        IconButton(
+          icon: const Icon(Icons.stop),
+          iconSize: small,
+          onPressed: MediaPlayerCentral.stop,
+        ),
         Container(
           padding: const EdgeInsets.all(4),
-          decoration:
-              BoxDecoration(color: contrast.withValues(alpha: 0.2), shape: BoxShape.circle),
+          decoration: BoxDecoration(
+            color: contrast.withValues(alpha: 0.2),
+            shape: BoxShape.circle,
+          ),
           child: IconButton(
-            icon: Icon(MediaPlayerCentral.isPlaying
-                ? Icons.pause_circle_filled
-                : Icons.play_circle_filled),
+            icon: Icon(
+              MediaPlayerCentral.isPlaying
+                  ? Icons.pause_circle_filled
+                  : Icons.play_circle_filled,
+            ),
             padding: EdgeInsets.zero,
             iconSize: maxSize * 0.08,
             onPressed: MediaPlayerCentral.playPause,
@@ -492,7 +600,9 @@ class _MediaPlayerPageState extends State<MediaPlayerPage> {
         IconButton(
           icon: const Icon(Icons.skip_next),
           iconSize: small,
-          onPressed: MediaPlayerCentral.hasNext ? MediaPlayerCentral.next : null,
+          onPressed: MediaPlayerCentral.hasNext
+              ? MediaPlayerCentral.next
+              : null,
         ),
       ],
     );
