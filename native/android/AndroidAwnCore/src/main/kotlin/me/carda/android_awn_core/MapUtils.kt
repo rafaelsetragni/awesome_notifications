@@ -19,6 +19,13 @@ class MapUtils private constructor() {
         else -> null
     }
 
+    /** Dart callback handles are 64-bit: an Int on the wire when small. */
+    fun getLong(value: Any?): Long? = when (value) {
+        is Number -> value.toLong()
+        is String -> value.toLongOrNull()
+        else -> null
+    }
+
     fun getString(value: Any?): String? = value as? String
 
     fun getBool(value: Any?): Boolean? = when (value) {

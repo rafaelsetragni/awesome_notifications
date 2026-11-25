@@ -18,7 +18,9 @@ object NotificationActions {
      * buttons (its key, `actionType`, `autoDismissible`); null takes the
      * model's button with that key. As for a pressed button, the notification
      * is dismissed when the button asks for it, and a `DismissAction` emits the
-     * dismiss event instead.
+     * dismiss event instead. [onFinished] runs once the action was delivered
+     * (a background isolate may take a while: a receiver keeps itself alive
+     * until then).
      */
     @JvmStatic
     @JvmOverloads
@@ -27,10 +29,12 @@ object NotificationActions {
         model: Map<String, Any?>,
         buttonKey: String,
         input: String? = null,
-        button: Map<String, Any?>? = null
+        button: Map<String, Any?>? = null,
+        onFinished: () -> Unit = {}
     ) {
         val builder = NotificationBuilder.getNewBuilder()
         val control = button ?: builder.findButton(model, buttonKey)
+        val actionType = builder.buttonActionType(control)
 
         var content = builder.contentMap(model) +
             (Definitions.NOTIFICATION_BUTTON_KEY_PRESSED to buttonKey)
@@ -40,17 +44,38 @@ object NotificationActions {
             builder.readId(content)?.let { NotificationManagerCompat.from(context).cancel(it) }
         }
 
-        if (builder.buttonActionType(control) == ActionType.DismissAction) {
-            AwesomeEventsReceiver.notifyAwesomeEvent(
-                Definitions.EVENT_NOTIFICATION_DISMISSED,
-                builder.registerDismissedEvent(content, NotificationLifeCycle.Background)
-            )
-        } else {
-            AwesomeEventsReceiver.notifyAwesomeEvent(
-                Definitions.EVENT_DEFAULT_ACTION,
-                builder.registerActionEvent(
-                    content, NotificationLifeCycle.Background, builder.buttonActionType(control))
-            )
+        // 0.12 routing: a disabled control does nothing; a silent-background
+        // one always runs in the background isolate; any other runs in the app
+        // when it is listening, otherwise (app killed) in the background isolate.
+        when {
+            actionType == ActionType.DisabledAction -> onFinished()
+
+            actionType == ActionType.DismissAction -> {
+                AwesomeEventsReceiver.notifyAwesomeEvent(
+                    Definitions.EVENT_NOTIFICATION_DISMISSED,
+                    builder.registerDismissedEvent(content, NotificationLifeCycle.Background)
+                )
+                onFinished()
+            }
+
+            actionType == ActionType.SilentBackgroundAction ||
+                !AwesomeEventsReceiver.hasListeners() -> {
+                val lifeCycle = if (AwesomeEventsReceiver.hasListeners()) {
+                    NotificationLifeCycle.Background
+                } else {
+                    NotificationLifeCycle.Terminated
+                }
+                BackgroundActions.execute(
+                    context, builder.registerActionEvent(content, lifeCycle, actionType), onFinished)
+            }
+
+            else -> {
+                AwesomeEventsReceiver.notifyAwesomeEvent(
+                    Definitions.EVENT_DEFAULT_ACTION,
+                    builder.registerActionEvent(content, NotificationLifeCycle.Background, actionType)
+                )
+                onFinished()
+            }
         }
     }
 }

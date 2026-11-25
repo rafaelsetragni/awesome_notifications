@@ -16,6 +16,9 @@ object AwesomeEventsReceiver {
         listeners.remove(listener)
     }
 
+    /** Whether an app is listening (its main isolate initialized the plugin). */
+    fun hasListeners(): Boolean = listeners.isNotEmpty()
+
     fun notifyAwesomeEvent(eventType: String, content: Map<String, Any?>) {
         for (listener in ArrayList(listeners)) {
             listener.onNewAwesomeEvent(eventType, content)

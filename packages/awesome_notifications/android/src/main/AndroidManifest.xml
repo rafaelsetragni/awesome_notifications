@@ -16,5 +16,13 @@
     <receiver
       android:name="me.carda.android_awn_core.NotificationButtonReceiver"
       android:exported="false" />
+
+    <!-- Installs the background action executor at process start: a button
+         pressed with the app killed runs the app's onActionReceivedMethod in a
+         background isolate. -->
+    <provider
+      android:name="me.carda.awesome_notifications.AwesomeNotificationsInitializer"
+      android:authorities="${applicationId}.awesome-notifications-init"
+      android:exported="false" />
   </application>
 </manifest>

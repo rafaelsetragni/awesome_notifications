@@ -2,6 +2,7 @@ package me.carda.awesome_notifications
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -23,6 +24,7 @@ import me.carda.android_awn_core.AwesomeEventListener
 import me.carda.android_awn_core.AwesomeEventsReceiver
 import me.carda.android_awn_core.AwesomeMethodHandlerRegistry
 import me.carda.android_awn_core.AwesomeNotifications
+import me.carda.android_awn_core.BackgroundActions
 import me.carda.android_awn_core.Definitions
 import me.carda.android_awn_core.MapUtils
 import me.carda.android_awn_core.NotificationBuilder
@@ -43,6 +45,7 @@ class AwesomeNotificationsPlugin :
 
     private lateinit var channel: MethodChannel
     private lateinit var core: AwesomeNotifications
+    private lateinit var appContext: Context
 
     private val mainHandler = Handler(Looper.getMainLooper())
 
@@ -58,10 +61,10 @@ class AwesomeNotificationsPlugin :
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(binding.binaryMessenger, "awesome_notifications")
         channel.setMethodCallHandler(this)
+        appContext = binding.applicationContext
         core = AwesomeNotifications(binding.applicationContext)
-
-        // Subscribe to core lifecycle events (created/displayed/tap/dismiss).
-        AwesomeEventsReceiver.subscribe(this)
+        // Also installed at process start (AwesomeNotificationsInitializer).
+        BackgroundActions.executor = ActionBackgroundExecutor
     }
 
     // MARK: - AwesomeEventListener
@@ -80,6 +83,14 @@ class AwesomeNotificationsPlugin :
                     (args?.get(Definitions.INITIALIZE_CHANNELS) as? List<Map<String, Any?>>)
                         ?: emptyList()
                 core.initialize(channels)
+                ActionHandles.save(
+                    appContext, ActionHandles.BACKGROUND_HANDLE,
+                    MapUtils.getInstance().getLong(args?.get(ActionHandles.BACKGROUND_HANDLE)))
+                // The app is listening from now on: its events (created,
+                // displayed, actions…) come here instead of a background
+                // isolate. A background engine attaches the plugin too, but
+                // its isolate does not initialize it.
+                AwesomeEventsReceiver.subscribe(this)
                 result.success(true)
             }
 
@@ -87,8 +98,12 @@ class AwesomeNotificationsPlugin :
             "getUtcTimeZoneIdentifier" -> result.success(Definitions.UTC_TIMEZONE)
 
             "setEventHandles" -> {
-                // Background isolate handles; foreground events are delivered
-                // live through this channel, so we just acknowledge.
+                // Live events come through this channel; the action handle is
+                // kept for a killed app's background isolate.
+                val args = call.arguments as? Map<String, Any?>
+                ActionHandles.save(
+                    appContext, ActionHandles.ACTION_HANDLE,
+                    MapUtils.getInstance().getLong(args?.get(ActionHandles.ACTION_HANDLE)))
                 result.success(true)
             }
 

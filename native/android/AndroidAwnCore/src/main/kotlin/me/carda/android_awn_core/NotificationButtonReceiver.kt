@@ -25,6 +25,9 @@ class NotificationButtonReceiver : BroadcastReceiver() {
         val input = RemoteInput.getResultsFromIntent(intent)
             ?.getCharSequence(Definitions.NOTIFICATION_BUTTON_KEY_INPUT)
             ?.toString()
-        NotificationActions.dispatch(context, model, buttonKey, input)
+        // The app may be killed: keep the receiver alive while the action runs
+        // in a background isolate.
+        val pending: PendingResult? = goAsync()
+        NotificationActions.dispatch(context, model, buttonKey, input) { pending?.finish() }
     }
 }

@@ -143,4 +143,46 @@ class ReceiversTest {
         NotificationActions.dispatch(context, buttonModel("DEL", "DismissAction"), "DEL")
         assertEquals(Definitions.EVENT_NOTIFICATION_DISMISSED, received[0].first)
     }
+
+    // --- 0.12 routing: the app's listener or the background isolate ---
+
+    private val background = mutableListOf<Map<String, Any?>>()
+
+    private fun withBackground(block: () -> Unit) {
+        BackgroundActions.executor = BackgroundActions.Executor { _, action, done ->
+            background.add(action)
+            done()
+        }
+        try { block() } finally { BackgroundActions.executor = null }
+    }
+
+    @Test fun withNoAppListeningTheActionRunsInTheBackgroundAsTerminated() = withBackground {
+        AwesomeEventsReceiver.unsubscribe(listener)
+        var finished = false
+        NotificationActions.dispatch(context, buttonModel("PLAY", "SilentAction"), "PLAY") { finished = true }
+        assertTrue(received.isEmpty())
+        assertEquals(1, background.size)
+        assertEquals("PLAY", background[0][Definitions.NOTIFICATION_BUTTON_KEY_PRESSED])
+        assertEquals("Terminated", background[0][Definitions.NOTIFICATION_ACTION_LIFECYCLE])
+        assertTrue(finished)
+    }
+
+    @Test fun aSilentBackgroundActionAlwaysRunsInTheBackground() = withBackground {
+        NotificationActions.dispatch(context, buttonModel("SYNC", "SilentBackgroundAction"), "SYNC")
+        assertTrue(received.isEmpty())
+        assertEquals("Background", background.single()[Definitions.NOTIFICATION_ACTION_LIFECYCLE])
+    }
+
+    @Test fun withTheAppListeningTheActionGoesToIt() = withBackground {
+        NotificationActions.dispatch(context, buttonModel("PLAY", "SilentAction"), "PLAY")
+        assertTrue(background.isEmpty())
+        assertEquals(Definitions.EVENT_DEFAULT_ACTION, received.single().first)
+    }
+
+    @Test fun aDisabledActionDoesNothing() = withBackground {
+        var finished = false
+        NotificationActions.dispatch(context, buttonModel("OFF", "DisabledAction"), "OFF") { finished = true }
+        assertTrue(received.isEmpty() && background.isEmpty())
+        assertTrue(finished)
+    }
 }
