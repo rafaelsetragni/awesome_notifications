@@ -18,3 +18,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+
+flutter:
+  plugin:
+    platforms:
+      web:
+        pluginClass: AwesomeNotificationsMediaWeb
+        fileName: awesome_notifications_media_web.dart

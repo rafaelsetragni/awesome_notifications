@@ -44,8 +44,22 @@ class MediaCapabilities {
       MediaCapabilities(seekBar: false, artwork: false, customButtons: false, lockScreen: false);
 }
 
+/// Answers the media methods and gives the command events in the app's own
+/// process, where there is no platform channel (web).
+abstract class MediaPlatformBridge {
+  /// Answers a channel method (`mediaStop`, `mediaUpdatePosition`,
+  /// `mediaCapabilities`) as the native side does.
+  Future<Object?> invokeMethod(String method, [Object? arguments]);
+
+  /// The command events, shaped as the event channel's.
+  Stream<Object?> get commandEvents;
+}
+
 /// The media session operations the core doesn't have.
 class AwesomeNotificationsMedia {
+  /// Set by a platform implementation that doesn't use the channels (web).
+  static MediaPlatformBridge? bridge;
+
   static final AwesomeNotificationsMedia _instance = AwesomeNotificationsMedia.private(
       const MethodChannel('awesome_notifications'),
       const EventChannel(MediaKeys.commandsChannel));
@@ -88,9 +102,8 @@ class AwesomeNotificationsMedia {
 
   /// The commands of every session whose `commandTarget` includes the stream,
   /// while the app runs.
-  Stream<MediaCommand> get commands => _commands ??= _events
-      .receiveBroadcastStream()
-      .map((event) {
+  Stream<MediaCommand> get commands => _commands ??=
+      (bridge?.commandEvents ?? _events.receiveBroadcastStream()).map((event) {
         final map = (event as Map).cast<String, dynamic>();
         return MediaCommand.parse(
           key: '${MediaKeys.commandPrefix}${map[MediaKeys.control]}',
@@ -128,7 +141,7 @@ class AwesomeNotificationsMedia {
 
   Future<void> _updatePosition(String sessionId, Duration position) async {
     if (!isPlatformSupported) return;
-    await _channel.invokeMethod(MediaKeys.methodUpdatePosition, {
+    await _invoke(MediaKeys.methodUpdatePosition, {
       MediaKeys.sessionId: sessionId,
       MediaKeys.position: position.inMilliseconds,
     });
@@ -138,14 +151,18 @@ class AwesomeNotificationsMedia {
   Future<void> stop(String sessionId) async {
     unbindPosition(sessionId);
     if (!isPlatformSupported) return;
-    await _channel.invokeMethod(MediaKeys.methodStop, sessionId);
+    await _invoke(MediaKeys.methodStop, sessionId);
   }
+
+  Future<Object?> _invoke(String method, [Object? arguments]) =>
+      bridge?.invokeMethod(method, arguments) ?? _channel.invokeMethod(method, arguments);
 
   /// What the media controls can do here.
   Future<MediaCapabilities> capabilities() async {
     if (!isPlatformSupported) return MediaCapabilities.none;
-    final map = await _channel.invokeMapMethod<String, dynamic>(MediaKeys.methodCapabilities);
-    if (map == null) return MediaCapabilities.none;
+    final result = await _invoke(MediaKeys.methodCapabilities);
+    if (result is! Map) return MediaCapabilities.none;
+    final map = result.cast<String, dynamic>();
     return MediaCapabilities(
       seekBar: map['seekBar'] == true,
       artwork: map['artwork'] == true,
