@@ -134,10 +134,13 @@ enum CommunicationContent {
         let me = person(conversation.me, isMe: true)
         let sender = conversation.message.sender.key == conversation.me.key
             ? me : person(conversation.message.sender, isMe: false)
-        let others = conversation.participants
-            .filter { $0.key != conversation.message.sender.key }
-            .map { person($0, isMe: false) }
-        let recipients = isGroup ? [me] + others : [me]
+        // A group's recipients are all its members, the sender included: iOS
+        // reads a group (and shows the group's picture) only when the message
+        // goes to more than one person besides the user.
+        let members = conversation.participants
+            .filter { $0.key != conversation.me.key }
+            .map { $0.key == conversation.message.sender.key ? sender : person($0, isMe: false) }
+        let recipients = isGroup ? [me] + members : [me]
 
         let intent = INSendMessageIntent(
             recipients: recipients,

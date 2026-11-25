@@ -86,8 +86,9 @@ final class ChatBuilderTests: XCTestCase {
         XCTAssertEqual(intent.sender?.displayName, "Ana")
         XCTAssertEqual(intent.sender?.personHandle?.type, .phoneNumber)
         XCTAssertEqual(intent.sender?.personHandle?.value, "+5511999")
-        // Me plus everyone but the sender.
-        XCTAssertEqual(intent.recipients?.map { $0.displayName }, ["Rafael", "Bia"])
+        // Me plus every member, the sender included: iOS shows the group's
+        // picture only when a message goes to more than one person besides me.
+        XCTAssertEqual(intent.recipients?.map { $0.displayName }, ["Rafael", "Ana", "Bia"])
         XCTAssertEqual(intent.recipients?.first?.isMe, true)
         XCTAssertEqual(intent.recipients?.last?.personHandle?.type, .emailAddress)
     }
