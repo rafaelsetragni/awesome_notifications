@@ -22,7 +22,8 @@ on iOS and macOS.
   conversation shortcut that puts the notification in the **Conversations** section
   (Android 11+), and the history of the conversation in one notification.
 * **iOS / macOS communication notifications:** the sender's photo replaces the app
-  icon, with the sender and group names, threaded by conversation.
+  icon, with the sender and group names; the messages of a conversation are grouped
+  together in Notification Center.
 * **Reply from the notification:** the typed text reaches your app, and Android adds
   it to the conversation.
 * **One-to-one and group conversations**, with the `Messaging` and
@@ -57,13 +58,13 @@ on iOS and macOS.
 
 | Feature | Android | iOS | macOS | Windows | Linux | Web |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|
-| Sender name and text | ✅ | ✅ | 🧪 | ⏳ | ⏳ | ⏳ |
-| Sender avatar | ✅ (Android 9+) | ✅ | 🧪 | ⏳ | ⏳ | ⏳ |
-| System conversation | ✅ Conversations section (Android 11+) | ✅ communication notification | 🧪 communication notification | ❌ | ❌ | ❌ |
-| History in one notification | ✅ (last 25 messages) | ❌ (one notification per message, threaded) | ❌ (threaded) | ⏳ | ⏳ | ⏳ |
-| Group name | ✅ | ✅ | 🧪 | ⏳ | ⏳ | ⏳ |
+| Sender name and text | ✅ | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
+| Sender avatar | ✅ (Android 9+) | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
+| System conversation | ✅ Conversations section (Android 11+) | ✅ communication notification | ✅ communication notification | ❌ | ❌ | ❌ |
+| History in one notification | ✅ (last 25 messages) | ❌ (one notification per message, grouped by conversation) | ❌ (grouped by conversation) | ⏳ | ⏳ | ⏳ |
+| Group name | ✅ | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
 | Group picture | ✅ (conversation shortcut icon) | ✅ | ❌ | ⏳ | ⏳ | ⏳ |
-| Reply from the notification | ✅ | ✅ | 🧪 | ⏳ | ⏳ | ❌ |
+| Reply from the notification | ✅ | ✅ | ✅ | ⏳ | ⏳ | ❌ |
 | Messages by push (`awesome_notifications_fcm`) | ⏳ | ⏳ (needs a Notification Service Extension) | ⏳ | ⏳ | ⏳ | ⏳ |
 | Bubbles | ⏳ | ❌ | ❌ | ❌ | ❌ | ❌ |
 
