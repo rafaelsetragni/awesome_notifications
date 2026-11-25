@@ -22,6 +22,9 @@ dev_dependencies:
 flutter:
   plugin:
     platforms:
+      android:
+        package: me.carda.awesome_notifications_media
+        pluginClass: AwesomeNotificationsMediaPlugin
       ios:
         pluginClass: AwesomeNotificationsMediaPlugin
       macos:

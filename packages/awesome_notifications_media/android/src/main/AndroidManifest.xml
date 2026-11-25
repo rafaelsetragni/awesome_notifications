@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- Installs the media decorator at process start (media built or used with the app closed). -->
+        <provider
+            android:name="me.carda.awesome_notifications_media.MediaInitializer"
+            android:authorities="${applicationId}.awesome-notifications-media-init"
+            android:exported="false" />
+        <!-- The media controls drawn as notification actions. -->
+        <receiver
+            android:name="me.carda.awesome_notifications_media.MediaCommandReceiver"
+            android:exported="false" />
+    </application>
+</manifest>
