@@ -257,6 +257,7 @@ class NotificationController {
         NotificationConversation(
           id: 'awesome-team',
           title: 'Awesome team',
+          image: '$_imagesRoot/awn-rocks-en.jpg',
           me: me,
           participants: const [ana, bot],
           message: fromAna

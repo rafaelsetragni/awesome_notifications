@@ -231,6 +231,9 @@ exactly as on iOS (step 3 above).
 On macOS the group picture is not available (macOS has no API for it; it shows the
 senders instead).
 
+On iOS, a group message shows the **sender's** photo, like the Messages app; the group
+picture appears only when the sender has no avatar.
+
 <br>
 
 ## ✅ Checking the setup
@@ -420,7 +423,7 @@ interactions. Use it when the conversation is gone for good, not just read.
 | `message` | `NotificationMessage` | yes | the new message |
 | `title` | String | `MessagingGroup` | the group's name |
 | `participants` | `List<NotificationPerson>` | `MessagingGroup` | the other people |
-| `image` | String (media source) | no | the group's picture (not on macOS) |
+| `image` | String (media source) | no | the group's picture (not on macOS); iOS shows it only when the sender has no avatar |
 | `history` | `ConversationHistory` | no (`append`) | Android: `append` to the notification on screen or `replace` it |
 | `shortcut` | bool | no (`true`) | Android: publish the conversation shortcut |
 
