@@ -73,6 +73,10 @@ class V012Api implements CompatApi {
           titleLocArgs: spec.titleLocArgs,
           bodyLocKey: spec.bodyLocKey,
           bodyLocArgs: spec.bodyLocArgs,
+          groupKey: spec.groupKey,
+          notificationLayout: spec.layout == null
+              ? NotificationLayout.Default
+              : NotificationLayout.values.byName(spec.layout!),
         ),
         actionButtons: spec.buttons.isEmpty
             ? null
@@ -107,6 +111,9 @@ class V012Api implements CompatApi {
 
   @override
   Future<void> cancelAll() => _awn.cancelAll();
+
+  @override
+  Future<void> dismiss(int id) => _awn.dismiss(id);
 }
 
 void main() {

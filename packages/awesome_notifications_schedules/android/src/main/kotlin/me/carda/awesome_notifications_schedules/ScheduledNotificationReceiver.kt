@@ -48,10 +48,13 @@ class ScheduledNotificationReceiver : BroadcastReceiver() {
             // Stamp the actual display time into the (already created-stamped,
             // possibly localized) model, so it is frozen into the posted
             // notification's tap PendingIntent and round-trips to the action.
-            sent = builder.stampDisplayedLifecycle(
-                model,
-                displayedDate = builder.nowUtc(),
-                lifeCycle = NotificationLifeCycle.Background
+            sent = builder.prepareLayout(
+                context,
+                builder.stampDisplayedLifecycle(
+                    model,
+                    displayedDate = builder.nowUtc(),
+                    lifeCycle = NotificationLifeCycle.Background
+                )
             )
             val notification = builder.createNotificationContent(context, sent)
             val id = builder.notificationId(sent)

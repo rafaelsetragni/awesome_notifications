@@ -34,6 +34,12 @@ open class NotificationBuilder protected constructor(
 ) {
     companion object {
         fun getNewBuilder(): NotificationBuilder = NotificationBuilder()
+
+        /**
+         * Set by a decorator that renders the layout itself (e.g. the messaging
+         * add-on): the core then skips its built-in layout for that model.
+         */
+        const val CUSTOM_LAYOUT = "awn.customLayout"
     }
 
     // MARK: - Decorator chain
@@ -53,15 +59,44 @@ open class NotificationBuilder protected constructor(
             stampCreatedLifecycle(model),
             displayedDate = nowUtc(),
             lifeCycle = NotificationLifeCycle.Foreground)
-        val notification = createNotificationContent(context, stamped)
+        val prepared = prepareLayout(context, stamped)
+        val notification = createNotificationContent(context, prepared)
             ?: return BuildOutcome.Invalid
-        val id = notificationId(stamped) ?: return BuildOutcome.Invalid
-        return BuildOutcome.Post(id, notification, stamped)
+        val id = notificationId(prepared) ?: return BuildOutcome.Invalid
+        return BuildOutcome.Post(id, notification, prepared)
     }
 
     /** Delegates to the wrapped inner builder (called by decorators). */
     fun next(context: Context, model: Map<String, Any?>): BuildOutcome =
         inner?.build(context, model) ?: BuildOutcome.Invalid
+
+    /**
+     * Decorator seam on the Android builder itself: called once per notification
+     * (immediate or scheduled), after the core applied its content (texts,
+     * images, layout, buttons) and right before `build()`, on the registered
+     * chain from the outermost decorator inwards. A decorator
+     * overrides it to set what the model can't express (a style, a shortcut,
+     * extras) and calls `super.decorate` to let the inner ones do theirs.
+     */
+    open fun decorate(
+        context: Context,
+        model: Map<String, Any?>,
+        builder: NotificationCompat.Builder
+    ) {
+        inner?.decorate(context, model, builder)
+    }
+
+    /** Whether a decorator renders this model's layout itself. */
+    fun hasCustomLayout(model: Map<String, Any?>): Boolean = model[CUSTOM_LAYOUT] == true
+
+    /**
+     * The model step of the layout, right before delivery (immediate or at a
+     * schedule's fire time): the 0.12 messaging layouts may move the message
+     * under its conversation's id and add the history. Unchanged when a
+     * decorator renders the layout itself.
+     */
+    fun prepareLayout(context: Context, model: Map<String, Any?>): Map<String, Any?> =
+        if (hasCustomLayout(model)) model else MessagingLayout.prepare(context, model)
 
     // MARK: - Lifecycle stamping (persisted into the stored content)
 
@@ -125,7 +160,13 @@ open class NotificationBuilder protected constructor(
         if (!stringUtils.isNullOrEmpty(body)) builder.setContentText(body)
 
         applyImages(context, content, builder)
+        if (!hasCustomLayout(model)) MessagingLayout.applyStyle(context, content, builder, bitmapUtils)
         applyActionButtons(context, id, model, builder)
+        builder.addExtras(
+            MessagingLayout.groupExtras(
+                context, id, mapUtils.getString(content[Definitions.NOTIFICATION_GROUP_KEY])))
+
+        NotificationBuilderRegistry.makeBuilder().decorate(context, model, builder)
 
         return builder.build()
     }

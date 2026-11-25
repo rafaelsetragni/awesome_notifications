@@ -47,6 +47,21 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
         registerChannel(channel)
     }
 
+    /// 0.12: a notification without a group key takes its channel's.
+    private func withChannelGroupKey(_ model: [String: Any]) -> [String: Any] {
+        var content = builder.contentMap(fromModel: model)
+        if let groupKey = content[Definitions.NOTIFICATION_GROUP_KEY] as? String, !groupKey.isEmpty {
+            return model
+        }
+        guard let channelKey = content[Definitions.NOTIFICATION_CHANNEL_KEY] as? String,
+              let groupKey = channels[channelKey]?[Definitions.NOTIFICATION_GROUP_KEY] as? String,
+              !groupKey.isEmpty else { return model }
+        content[Definitions.NOTIFICATION_GROUP_KEY] = groupKey
+        var updated = model
+        updated[Definitions.NOTIFICATION_CONTENT] = content
+        return updated
+    }
+
     private func registerChannel(_ channel: [String: Any]) {
         guard let key = channel[Definitions.NOTIFICATION_CHANNEL_KEY] as? String else { return }
         channels[key] = channel
@@ -169,7 +184,7 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
             let builder = NotificationBuilderRegistry.shared.makeBuilder()
             let chained: BuiltNotification?
             do {
-                chained = try builder.build(model: rawNotification)
+                chained = try builder.build(model: self.withChannelGroupKey(rawNotification))
             } catch let exception as AwesomeNotificationsException {
                 DispatchQueue.main.async { failure(exception) }
                 return

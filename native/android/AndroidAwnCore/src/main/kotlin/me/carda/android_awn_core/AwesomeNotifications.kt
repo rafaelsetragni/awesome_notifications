@@ -77,13 +77,14 @@ class AwesomeNotifications(
         callback: (Boolean) -> Unit
     ) {
         executor.execute {
+            val model = withChannelGroupKey(rawNotification)
             var failure: BuildOutcome.Failed? = null
             val created = try {
                 // Run the builder decorator chain (localization transforms the
                 // model, scheduling may take over delivery, …). In the bare core
                 // this is just the base builder, which posts immediately.
                 when (val outcome =
-                    NotificationBuilderRegistry.makeBuilder().build(context, rawNotification)) {
+                    NotificationBuilderRegistry.makeBuilder().build(context, model)) {
                     is BuildOutcome.Post -> {
                         NotificationManagerCompat.from(context)
                             .notify(outcome.id, outcome.notification)
@@ -157,6 +158,22 @@ class AwesomeNotifications(
     }
 
     // MARK: - Helpers
+
+    /**
+     * 0.12: a notification without a group key takes its channel's, so it is
+     * grouped (and, for the messaging layouts, threaded) with the channel.
+     */
+    private fun withChannelGroupKey(model: Map<String, Any?>): Map<String, Any?> {
+        val content = builder.contentMap(model)
+        if (!(content[Definitions.NOTIFICATION_GROUP_KEY] as? String).isNullOrEmpty()) return model
+        val channelKey = content[Definitions.NOTIFICATION_CHANNEL_KEY] as? String ?: return model
+        val groupKey = channels[channelKey]?.get(Definitions.NOTIFICATION_GROUP_KEY) as? String
+        if (groupKey.isNullOrEmpty()) return model
+        return model.toMutableMap().apply {
+            this[Definitions.NOTIFICATION_CONTENT] =
+                content.toMutableMap().apply { this[Definitions.NOTIFICATION_GROUP_KEY] = groupKey }
+        }
+    }
 
     private fun notificationManager(): NotificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

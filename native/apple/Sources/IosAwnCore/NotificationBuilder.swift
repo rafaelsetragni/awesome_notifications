@@ -173,10 +173,27 @@ open class NotificationBuilder {
         if !stringUtils.isNullOrEmpty(body) { unContent.body = body! }
         unContent.sound = .default
         unContent.categoryIdentifier = categoryIdentifier(forModel: model)
+        if let thread = threadIdentifier(forContent: content) {
+            unContent.threadIdentifier = thread
+        }
 
         applyImages(content, to: unContent)
         setUserInfoContent(model: model, content: unContent)
         return (id, unContent)
+    }
+
+    /// 0.12 `setGrouping` + `setMessagingLayout`: the messaging layouts thread
+    /// their channel's messages ("Messaging.<channelKey>", "MessagingGR.<channelKey>");
+    /// any other notification is threaded by its group key.
+    public func threadIdentifier(forContent content: [String: Any]) -> String? {
+        let channelKey = mapUtils.getString(content[Definitions.NOTIFICATION_CHANNEL_KEY]) ?? ""
+        switch mapUtils.getString(content[Definitions.NOTIFICATION_LAYOUT]) {
+        case "Messaging": return "Messaging." + channelKey
+        case "MessagingGroup": return "MessagingGR." + channelKey
+        default:
+            let groupKey = mapUtils.getString(content[Definitions.NOTIFICATION_GROUP_KEY])
+            return stringUtils.isNullOrEmpty(groupKey) ? nil : groupKey
+        }
     }
 
     // MARK: - Action buttons

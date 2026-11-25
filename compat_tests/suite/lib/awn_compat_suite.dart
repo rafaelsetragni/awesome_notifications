@@ -69,6 +69,10 @@ class NotificationSpec {
   final Map<String, LocalizationSpec>? localizations;
   final ScheduleSpec? schedule;
 
+  /// `NotificationLayout` name (e.g. 'Messaging'); null = the default layout.
+  final String? layout;
+  final String? groupKey;
+
   const NotificationSpec({
     required this.id,
     this.title = 'Hello',
@@ -81,6 +85,8 @@ class NotificationSpec {
     this.bodyLocArgs,
     this.localizations,
     this.schedule,
+    this.layout,
+    this.groupKey,
   });
 }
 
@@ -120,6 +126,7 @@ abstract class CompatApi {
   Future<void> cancelSchedulesByChannelKey(String channelKey);
   Future<void> cancelAllSchedules();
   Future<void> cancelAll();
+  Future<void> dismiss(int id);
 }
 
 /// Events published by the adapters' static listeners.
@@ -170,6 +177,17 @@ Future<Map<String, dynamic>?> _createAndAwaitDisplayed(
   if (!created) return null;
   final event = await shown;
   return event.isEmpty ? null : event;
+}
+
+/// The id the notification was displayed with, matched by its (unique) body:
+/// the messaging layouts may display it under another notification's id.
+Future<int?> _displayedId(CompatApi api, NotificationSpec spec) async {
+  final shown = CompatEvents.displayed.stream
+      .firstWhere((event) => event['body'] == spec.body)
+      .timeout(const Duration(seconds: 10), onTimeout: () => <String, dynamic>{});
+  if (!await api.createNotification(spec)) return null;
+  final event = await shown;
+  return event.isEmpty ? null : event['id'] as int?;
 }
 
 // ---------------------------------------------------------------------------
@@ -332,6 +350,59 @@ void defineCompatTests(CompatApi api) {
             localizations: const {'pt-br': LocalizationSpec(title: 'Do bloco')},
           ));
       expect([shown?['title'], shown?['body']], ['Do bloco', 'Texto simples']);
+    });
+  });
+
+  group('messaging layouts', () {
+    NotificationSpec message(int id,
+            {String layout = 'Messaging',
+            String? groupKey = 'compat_chat',
+            String title = 'Ana',
+            String? summary}) =>
+        NotificationSpec(
+            id: id,
+            title: title,
+            body: 'message $id',
+            summary: summary,
+            layout: layout,
+            groupKey: groupKey);
+
+    test('messages of a group are shown under the first one\'s id', () async {
+      final a = _id(), b = _id();
+      final first = await _displayedId(api, message(a));
+      final second = await _displayedId(api, message(b));
+      // 0.12 Android stacks the conversation in one notification; iOS only
+      // threads the messages, each under its own id.
+      expect('$first $second', p(android: '$a $a', ios: '$a $b'));
+    });
+
+    test('a MessagingGroup message joins the same group', () async {
+      final a = _id(), b = _id();
+      await _displayedId(api, message(a));
+      final group = await _displayedId(
+          api, message(b, layout: 'MessagingGroup', summary: 'Family'));
+      expect('$group', p(android: '$a', ios: '$b'));
+    });
+
+    test('without a groupKey every message keeps its id', () async {
+      final a = _id(), b = _id();
+      final first = await _displayedId(api, message(a, groupKey: null));
+      final second = await _displayedId(api, message(b, groupKey: null));
+      expect('$first $second', '$a $b');
+    });
+
+    test('without a title the message keeps its id', () async {
+      final a = _id(), b = _id();
+      await _displayedId(api, message(a));
+      expect(await _displayedId(api, message(b, title: '')), b);
+    });
+
+    test('once the group left the screen a message keeps its id', () async {
+      final a = _id(), b = _id();
+      await _displayedId(api, message(a));
+      await api.dismiss(a);
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+      expect(await _displayedId(api, message(b)), b);
     });
   });
 
