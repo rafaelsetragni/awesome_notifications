@@ -20,6 +20,11 @@ taps on play, pause, next or the progress bar come back to your app.
 plays; this package mirrors its state on the system controls and routes the user's
 commands back to it.
 
+![The same player on the iOS lock screen, in the app and in the Android Quick Settings](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-media.jpg)
+
+*The example app's player (center) and the same session in the iOS lock screen (left)
+and the Android Quick Settings (right).*
+
 <br>
 
 ### **Key Features:**
