@@ -22,6 +22,10 @@ dev_dependencies:
 flutter:
   plugin:
     platforms:
+      ios:
+        pluginClass: AwesomeNotificationsMediaPlugin
+      macos:
+        pluginClass: AwesomeNotificationsMediaPlugin
       web:
         pluginClass: AwesomeNotificationsMediaWeb
         fileName: awesome_notifications_media_web.dart

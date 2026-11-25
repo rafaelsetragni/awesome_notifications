@@ -72,6 +72,17 @@ let package = Package(
             dependencies: ["ChatLogic"],
             path: "native/apple/Tests/ChatLogicTests"
         ),
+        .target(
+            name: "MediaLogic",
+            dependencies: ["IosAwnCore"],
+            path: "packages/awesome_notifications_media/ios/awesome_notifications_media/Sources/awesome_notifications_media",
+            exclude: ["AwesomeNotificationsMediaPlugin.swift", "PrivacyInfo.xcprivacy"]
+        ),
+        .testTarget(
+            name: "MediaLogicTests",
+            dependencies: ["MediaLogic"],
+            path: "native/apple/Tests/MediaLogicTests"
+        ),
         // The service-extension products of the add-ons (symlinks to their
         // Flutter-free sources), compiled here so `swift build` checks them.
         .target(

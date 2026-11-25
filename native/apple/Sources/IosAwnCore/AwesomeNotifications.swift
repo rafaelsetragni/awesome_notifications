@@ -196,6 +196,12 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
                 DispatchQueue.main.async { completion(false) }
                 return
             }
+            // A decorator took over delivery: nothing to post (as Android's
+            // BuildOutcome.Handled, no created/displayed event either).
+            if chained.isHandled {
+                DispatchQueue.main.async { completion(true) }
+                return
+            }
 
             // Bake the (predicted) displayed lifecycle into the stored payload now
             // that the trigger is known, so the createdDate + displayedDate both

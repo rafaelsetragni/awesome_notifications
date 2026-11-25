@@ -16,16 +16,30 @@ public struct BuiltNotification {
     /// The (possibly decorator-transformed) model, so the caller stamps events
     /// from the same content that was built.
     public let model: [String: Any]
+    /// A decorator took over delivery (e.g. media shown as Now Playing): the
+    /// core posts nothing and the create call answers true (Android's
+    /// `BuildOutcome.Handled`).
+    public let isHandled: Bool
     public init(
         id: Int,
         content: UNMutableNotificationContent,
         trigger: UNNotificationTrigger? = nil,
-        model: [String: Any]
+        model: [String: Any],
+        isHandled: Bool = false
     ) {
         self.id = id
         self.content = content
         self.trigger = trigger
         self.model = model
+        self.isHandled = isHandled
+    }
+
+    /// The outcome of a decorator that took over delivery of [model].
+    public static func handled(model: [String: Any]) -> BuiltNotification {
+        let content = (model[Definitions.NOTIFICATION_CONTENT] as? [String: Any]) ?? [:]
+        return BuiltNotification(
+            id: MapUtils.shared.getInt(content[Definitions.NOTIFICATION_ID]) ?? 0,
+            content: UNMutableNotificationContent(), model: model, isHandled: true)
     }
 }
 
