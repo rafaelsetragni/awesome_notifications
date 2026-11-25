@@ -475,3 +475,56 @@ TEST(DispatchActionEmitsTheActionAndKeepsTheModel) {
   h.engine.dispatchAction(*stored, "awn.media.pause", std::nullopt, button);
   EXPECT_FALSE(has(h.last("defaultAction")->content, "buttonKeyInput"));
 }
+
+TEST(RemovalObserversSeeEveryDismissAndCancel) {
+  Harness h;
+  std::vector<std::vector<int64_t>> removed;
+  int token = h.engine.addRemovalObserver(
+      [&](const std::vector<int64_t>& ids) { removed.push_back(ids); });
+  h.create(model(1, {{"channelKey", "a"}, {"groupKey", "g"}}));
+  h.create(model(2, {{"channelKey", "b"}, {"groupKey", "g"}}));
+  h.create(model(3, {{"channelKey", "a"}}));
+
+  h.engine.dismiss(1);
+  h.engine.cancel(2);
+  h.engine.dismissByChannelKey("a");  // 3 (1 is gone)
+  EXPECT_EQ(removed, (std::vector<std::vector<int64_t>>{{1}, {2}, {3}}));
+  h.engine.cancelByChannelKey("nothing");  // no ids: not notified
+  EXPECT_EQ(removed.size(), size_t(3));
+
+  h.create(model(4, {{"groupKey", "g"}}));
+  h.engine.cancelByGroupKey("g");
+  h.create(model(5, {{"groupKey", "g"}}));
+  h.engine.dismissByGroupKey("g");
+  EXPECT_EQ(removed[3], std::vector<int64_t>{4});
+  EXPECT_EQ(removed[4], std::vector<int64_t>{5});
+
+  h.create(model(6));
+  h.create(model(7));
+  h.engine.dismissAll();
+  EXPECT_EQ(removed[5], (std::vector<int64_t>{6, 7}));
+  h.create(model(8));
+  h.engine.cancelAll();
+  EXPECT_EQ(removed[6], std::vector<int64_t>{8});
+  h.engine.cancelAll();  // nothing left
+  EXPECT_EQ(removed.size(), size_t(7));
+
+  h.engine.removeRemovalObserver(token);
+  h.create(model(9));
+  h.engine.cancel(9);
+  EXPECT_EQ(removed.size(), size_t(7));
+}
+
+TEST(RemovalObserverMayCancelMore) {
+  Harness h;
+  std::vector<int64_t> removed;
+  h.engine.addRemovalObserver([&](const std::vector<int64_t>& ids) {
+    removed.insert(removed.end(), ids.begin(), ids.end());
+    if (ids == std::vector<int64_t>{1}) h.engine.cancel(2);
+  });
+  h.create(model(1));
+  h.create(model(2));
+  h.engine.cancel(1);
+  EXPECT_EQ(removed, (std::vector<int64_t>{1, 2}));
+  EXPECT_TRUE(h.store->ids().empty());
+}

@@ -253,6 +253,7 @@ void AwesomeNotifications::dismissIds(const std::vector<int64_t>& ids) {
     tracker_.forget(id);
     forgetIfGone(id);
   }
+  notifyRemoved(ids);
 }
 
 void AwesomeNotifications::cancelIds(const std::vector<int64_t>& ids) {
@@ -261,6 +262,7 @@ void AwesomeNotifications::cancelIds(const std::vector<int64_t>& ids) {
   presenter_->removeDelivered(ids);
   for (auto id : ids) tracker_.forget(id);
   store_->remove(ids);
+  notifyRemoved(ids);
 }
 
 void AwesomeNotifications::dismiss(int64_t id) { dismissIds({id}); }
@@ -284,17 +286,41 @@ void AwesomeNotifications::cancelByGroupKey(const std::string& key) {
 }
 
 void AwesomeNotifications::dismissAll() {
+  auto known = store_->ids();
   presenter_->removeAllDelivered();
   tracker_.forgetAll();
   auto pending = presenter_->pendingIds();
   store_->retainWhere([&](int64_t id) { return contains(pending, id); });
+  notifyRemoved(known);
 }
 
 void AwesomeNotifications::cancelAll() {
+  auto known = store_->ids();
   presenter_->removeAllPending();
   presenter_->removeAllDelivered();
   tracker_.forgetAll();
   store_->removeAll();
+  notifyRemoved(known);
+}
+
+int AwesomeNotifications::addRemovalObserver(RemovalObserver observer) {
+  int token = nextRemovalToken_++;
+  removalObservers_.emplace_back(token, std::move(observer));
+  return token;
+}
+
+void AwesomeNotifications::removeRemovalObserver(int token) {
+  removalObservers_.erase(
+      std::remove_if(removalObservers_.begin(), removalObservers_.end(),
+                     [token](const auto& entry) { return entry.first == token; }),
+      removalObservers_.end());
+}
+
+void AwesomeNotifications::notifyRemoved(const std::vector<int64_t>& ids) {
+  if (ids.empty()) return;
+  // A copy: an observer may cancel more (re-entering) or unsubscribe.
+  auto observers = removalObservers_;
+  for (auto& entry : observers) entry.second(ids);
 }
 
 // MARK: - Schedules

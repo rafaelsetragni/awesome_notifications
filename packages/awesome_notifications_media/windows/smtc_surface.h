@@ -14,6 +14,7 @@
 #include <winrt/Windows.Media.h>
 
 #include "awn_media/media.h"
+#include "smtc_mapping.h"
 
 namespace awesome_notifications_media {
 
@@ -38,14 +39,14 @@ class SmtcSurface : public awn_media::MediaSurface,
 
   void SetCallbacks(Callbacks callbacks) { callbacks_ = std::move(callbacks); }
 
-  bool show(const awn_media::MediaSession& session) override;
-  void updatePosition(const awn_media::MediaSession& session) override;
+  bool show(const awn_media::Session& session) override;
+  void positionChanged(const awn_media::Session& session, bool jump) override;
   void clear() override;
 
  private:
   /// Gets the window's controls and subscribes to their events (once).
   bool Ensure();
-  void UpdateTimeline(const awn_media::MediaSession& session);
+  void UpdateTimeline(const awn_media::MediaModel& media);
   /// Resolves (downloads) the artwork off the platform thread, then sets it
   /// unless another artwork or session replaced it meanwhile.
   void LoadArtwork(const std::string& source, uint64_t generation);

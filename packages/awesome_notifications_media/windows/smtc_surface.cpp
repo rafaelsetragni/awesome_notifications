@@ -19,8 +19,9 @@ namespace awesome_notifications_media {
 
 using awn_media::ArtworkSource;
 using awn_media::Button;
-using awn_media::MediaSession;
-using awn_media::PlaybackStatus;
+using awn_media::MediaModel;
+using awn_media::Session;
+using awn_media::SmtcStatus;
 using winrt::Windows::Foundation::TimeSpan;
 using winrt::Windows::Media::MediaPlaybackStatus;
 using winrt::Windows::Media::MediaPlaybackType;
@@ -51,13 +52,13 @@ std::optional<Button> ButtonOf(SystemMediaTransportControlsButton button) {
   }
 }
 
-MediaPlaybackStatus StatusOf(PlaybackStatus status) {
+MediaPlaybackStatus StatusOf(SmtcStatus status) {
   switch (status) {
-    case PlaybackStatus::Closed: return MediaPlaybackStatus::Closed;
-    case PlaybackStatus::Changing: return MediaPlaybackStatus::Changing;
-    case PlaybackStatus::Playing: return MediaPlaybackStatus::Playing;
-    case PlaybackStatus::Paused: return MediaPlaybackStatus::Paused;
-    case PlaybackStatus::Stopped: break;
+    case SmtcStatus::Closed: return MediaPlaybackStatus::Closed;
+    case SmtcStatus::Changing: return MediaPlaybackStatus::Changing;
+    case SmtcStatus::Playing: return MediaPlaybackStatus::Playing;
+    case SmtcStatus::Paused: return MediaPlaybackStatus::Paused;
+    case SmtcStatus::Stopped: break;
   }
   return MediaPlaybackStatus::Stopped;
 }
@@ -179,8 +180,9 @@ bool SmtcSurface::Ensure() {
   }
 }
 
-bool SmtcSurface::show(const MediaSession& session) {
+bool SmtcSurface::show(const Session& shown) {
   if (!Ensure()) return false;
+  const MediaModel& session = shown.media;
   try {
     auto buttons = awn_media::buttonStatesOf(session);
     smtc_.IsEnabled(true);
@@ -191,8 +193,8 @@ bool SmtcSurface::show(const MediaSession& session) {
     smtc_.IsPreviousEnabled(buttons.previous);
     smtc_.IsFastForwardEnabled(buttons.fastForward);
     smtc_.IsRewindEnabled(buttons.rewind);
-    smtc_.PlaybackStatus(StatusOf(awn_media::playbackStatusOf(session.state)));
-    if (session.playbackSpeed > 0) smtc_.PlaybackRate(session.playbackSpeed);
+    smtc_.PlaybackStatus(StatusOf(awn_media::smtcStatusOf(session.playback())));
+    if (session.speed > 0) smtc_.PlaybackRate(session.speed);
 
     bool newSession = session.sessionId != sessionId_;
     bool newArtwork = newSession || session.artwork != artwork_;
@@ -218,10 +220,10 @@ bool SmtcSurface::show(const MediaSession& session) {
   }
 }
 
-void SmtcSurface::updatePosition(const MediaSession& session) {
+void SmtcSurface::positionChanged(const Session& session, bool) {
   if (!smtc_) return;
   try {
-    UpdateTimeline(session);
+    UpdateTimeline(session.media);
   } catch (const winrt::hresult_error&) {
   }
 }
@@ -242,7 +244,7 @@ void SmtcSurface::clear() {
   }
 }
 
-void SmtcSurface::UpdateTimeline(const MediaSession& session) {
+void SmtcSurface::UpdateTimeline(const MediaModel& session) {
   // A live stream (no duration) gets an empty timeline: no progress bar.
   auto timeline = awn_media::timelineOf(session);
   SystemMediaTransportControlsTimelineProperties properties;

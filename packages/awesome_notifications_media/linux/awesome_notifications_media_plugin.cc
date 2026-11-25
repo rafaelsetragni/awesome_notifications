@@ -7,7 +7,8 @@
 
 #include "awn/awesome_notifications.h"
 #include "awesome_notifications/awn_fl_value_codec.h"
-#include "src/media_model.h"
+#include "awn_media/media.h"
+#include "src/mpris_mapping.h"
 #include "src/mpris_player.h"
 
 #define AWESOME_NOTIFICATIONS_MEDIA_PLUGIN(obj)                                     \
@@ -91,7 +92,7 @@ void awesome_notifications_media_plugin_register_with_registrar(FlPluginRegistra
   awn_media::MprisPlayer::Callbacks callbacks;
   callbacks.onMethod = [](const std::string& method, int64_t offsetUs,
                           const std::string& trackId, int64_t positionUs) {
-    return media->controller->onPlayerMethod(method, offsetUs, trackId, positionUs);
+    return awn_media::onPlayerMethod(*media->controller, method, offsetUs, trackId, positionUs);
   };
   callbacks.position = [] { return media->controller->position(); };
   callbacks.raise = [] { media->Raise(); };
@@ -106,14 +107,19 @@ void awesome_notifications_media_plugin_register_with_registrar(FlPluginRegistra
          const std::optional<std::string>& input, const awn::ValueMap& button) {
         awn::AwesomeNotifications::shared().dispatchAction(model, buttonKey, input, button);
       },
-      [](const awn::ValueMap& event) {
-        if (!media->listening) return;
-        g_autoptr(FlValue) value = awesome_notifications::ToFlValue(awn::Value(event));
-        fl_event_channel_send(media->commands, value, nullptr, nullptr);
+      [](int64_t id) {
+        auto& core = awn::AwesomeNotifications::shared();
+        if (core.isConfigured()) core.cancel(id);
       });
+  media->controller->setStreamSink([](const awn::ValueMap& event) {
+    if (!media->listening) return;
+    g_autoptr(FlValue) value = awesome_notifications::ToFlValue(awn::Value(event));
+    fl_event_channel_send(media->commands, value, nullptr, nullptr);
+  });
 
   // Plugins register alphabetically: the core plugin already configured the
   // engine. The media builder replaces the freedesktop notification of a
   // MediaPlayer model with the MPRIS player.
-  awn_media::RegisterMedia(media->controller);
+  awn_media::RegisterMedia(media->controller, awn_media::mprisCapabilities(),
+                           awn::AwesomeNotifications::shared());
 }

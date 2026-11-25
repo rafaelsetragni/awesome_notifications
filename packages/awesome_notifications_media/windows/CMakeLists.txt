@@ -16,12 +16,15 @@ cmake_policy(VERSION 3.14...3.25)
 # not be changed
 set(PLUGIN_NAME "awesome_notifications_media_plugin")
 
-# The platform-independent media session (unit-tested in test/).
-include("${CMAKE_CURRENT_SOURCE_DIR}/media_core/awn_media.cmake")
+# The portable media logic shared with Linux (unit-tested in
+# desktop/media_core/tests, with the SMTC mapping of smtc_mapping.*).
+include("${CMAKE_CURRENT_SOURCE_DIR}/../desktop/media_core/awn_media.cmake")
 
 list(APPEND PLUGIN_SOURCES
   "awesome_notifications_media_plugin.cpp"
   "awesome_notifications_media_plugin.h"
+  "smtc_mapping.cpp"
+  "smtc_mapping.h"
   "smtc_surface.cpp"
   "smtc_surface.h"
   ${AWN_MEDIA_SOURCES}

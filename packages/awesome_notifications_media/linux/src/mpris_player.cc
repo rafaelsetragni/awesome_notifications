@@ -4,7 +4,6 @@
 #include <unistd.h>
 
 #include <algorithm>
-#include <cctype>
 #include <cstdio>
 #include <cstring>
 #include <system_error>
@@ -88,8 +87,6 @@ gboolean HandleSetProperty(GDBusConnection*, const gchar*, const gchar*, const g
 
 const GDBusInterfaceVTable kVTable = {HandleMethod, HandleGetProperty, HandleSetProperty, {}};
 
-bool StartsWith(const std::string& text, const char* prefix) { return text.rfind(prefix, 0) == 0; }
-
 bool IsFile(const std::filesystem::path& path) {
   std::error_code ec;
   return std::filesystem::is_regular_file(path, ec) && std::filesystem::file_size(path, ec) > 0;
@@ -150,25 +147,7 @@ bool GioDownload(const std::string& url, const std::filesystem::path& target) {
 
 std::string Download(const std::string& url, const std::filesystem::path& cacheDirectory) {
   // Cached by URL: the same cover is fetched once.
-  uint64_t hash = 14695981039346656037ULL;
-  for (unsigned char c : url) {
-    hash ^= c;
-    hash *= 1099511628211ULL;
-  }
-  std::string extension = ".png";
-  std::string lower = url.substr(0, url.find_first_of("?#"));
-  std::transform(lower.begin(), lower.end(), lower.begin(),
-                 [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
-  for (const char* candidate : {".jpg", ".jpeg", ".gif", ".png", ".bmp", ".webp"}) {
-    size_t n = std::strlen(candidate);
-    if (lower.size() >= n && lower.compare(lower.size() - n, n, candidate) == 0) {
-      extension = candidate;
-      break;
-    }
-  }
-  char name[32];
-  std::snprintf(name, sizeof(name), "%016llx", static_cast<unsigned long long>(hash));
-  std::filesystem::path target = cacheDirectory / (std::string(name) + extension);
+  std::filesystem::path target = cacheDirectory / artworkCacheName(url);
   if (IsFile(target)) return target.string();
 
   std::error_code ec;
@@ -195,24 +174,19 @@ GVariant* StringArray(std::initializer_list<const char*> items) {
 
 std::string ResolveArtworkFile(const std::string& source,
                                const std::filesystem::path& cacheDirectory) {
-  if (source.empty() || StartsWith(source, "resource://")) return {};
-  if (StartsWith(source, "https://") || StartsWith(source, "http://"))
-    return Download(source, cacheDirectory);
-
+  ArtworkSource artwork = artworkSourceOf(source);
   std::filesystem::path path;
-  if (StartsWith(source, "file://")) {
-    gchar* local = g_filename_from_uri(source.c_str(), nullptr, nullptr);
-    if (local) {
-      path = local;
-      g_free(local);
-    } else {
-      path = source.substr(std::strlen("file://"));
-    }
-  } else {
-    std::string asset = StartsWith(source, "asset://") ? source.substr(8) : source;
-    std::filesystem::path direct(asset);
-    path = direct.is_absolute() ? direct
-                                : ExecutableDirectory() / "data" / "flutter_assets" / direct;
+  switch (artwork.kind) {
+    case ArtworkSource::Kind::None:
+      return {};
+    case ArtworkSource::Kind::Remote:
+      return Download(artwork.path, cacheDirectory);
+    case ArtworkSource::Kind::File:
+      path = artwork.path;
+      break;
+    case ArtworkSource::Kind::Asset:
+      path = ExecutableDirectory() / "data" / "flutter_assets" / artwork.path;
+      break;
   }
   return IsFile(path) ? path.string() : std::string();
 }
@@ -257,20 +231,24 @@ bool MprisPlayer::Export() {
   return true;
 }
 
-void MprisPlayer::show(const Session& session) {
-  if (!Export()) return;
+bool MprisPlayer::show(const Session& session) {
+  if (!Export()) return false;
   bool sameArtwork = session_ && session.media.artwork == artworkSource_;
   session_ = session;
   if (!sameArtwork) ResolveArtwork(session.media.artwork);
   EmitPlayerChanged();
+  return true;
 }
 
-void MprisPlayer::seeked(const Session& session, int64_t positionMs) {
+void MprisPlayer::positionChanged(const Session& session, bool jump) {
   if (!connection_ || !session_ || session_->media.sessionId != session.media.sessionId) return;
   session_ = session;
-  g_dbus_connection_emit_signal(connection_, nullptr, kObjectPath, kPlayerInterface, "Seeked",
-                                g_variant_new("(x)", static_cast<gint64>(positionMs) * 1000),
-                                nullptr);
+  // Position isn't signaled by PropertiesChanged (clients poll it, and
+  // advance it from Rate): only a jump is announced.
+  if (!jump) return;
+  g_dbus_connection_emit_signal(
+      connection_, nullptr, kObjectPath, kPlayerInterface, "Seeked",
+      g_variant_new("(x)", static_cast<gint64>(session.media.positionMs) * 1000), nullptr);
 }
 
 void MprisPlayer::clear() {
@@ -291,7 +269,7 @@ void MprisPlayer::ResolveArtwork(const std::string& source) {
     g_free(uri);
     return url;
   };
-  if (!StartsWith(source, "https://") && !StartsWith(source, "http://")) {
+  if (artworkSourceOf(source).kind != ArtworkSource::Kind::Remote) {
     artUrl_ = toUrl(ResolveArtworkFile(source, cacheDirectory_));
     return;
   }
@@ -330,8 +308,9 @@ GVariant* MprisPlayer::Metadata() const {
     return g_variant_builder_end(&builder);
   }
   const MediaModel& media = session_->media;
+  std::string trackId = trackIdFor(media.sessionId);
   g_variant_builder_add(&builder, "{sv}", "mpris:trackid",
-                        g_variant_new_object_path(session_->trackId.c_str()));
+                        g_variant_new_object_path(trackId.c_str()));
   g_variant_builder_add(&builder, "{sv}", "xesam:title", g_variant_new_string(media.title.c_str()));
   if (!media.artist.empty()) {
     const gchar* artists[] = {media.artist.c_str(), nullptr};
@@ -406,7 +385,7 @@ GVariant* MprisPlayer::OnGetProperty(const gchar* interface, const gchar* proper
   double rate = speed > 0 ? speed : 1.0;
   if (name == "PlaybackStatus")
     return g_variant_new_string(
-        playbackStatusName(session_ ? session_->media.status() : PlaybackStatus::Stopped));
+        mprisPlaybackStatus(session_ ? session_->media.playback() : PlaybackState::Stopped));
   if (name == "Rate") return g_variant_new_double(rate);
   if (name == "MinimumRate") return g_variant_new_double(std::min(rate, 1.0));
   if (name == "MaximumRate") return g_variant_new_double(std::max(rate, 1.0));

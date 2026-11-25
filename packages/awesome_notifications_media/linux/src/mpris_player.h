@@ -8,7 +8,8 @@
 #include <optional>
 #include <string>
 
-#include "media_model.h"
+#include "awn_media/media.h"
+#include "mpris_mapping.h"
 
 namespace awn_media {
 
@@ -16,7 +17,7 @@ namespace awn_media {
 /// owns org.mpris.MediaPlayer2.<app id>.instance<pid> and exports
 /// /org/mpris/MediaPlayer2 (org.mpris.MediaPlayer2 + .Player). The name is
 /// taken at the first session, then kept for the app's life. Platform thread.
-class MprisPlayer : public Player, public std::enable_shared_from_this<MprisPlayer> {
+class MprisPlayer : public MediaSurface, public std::enable_shared_from_this<MprisPlayer> {
  public:
   struct Callbacks {
     /// A Player method call: returns whether it became a command.
@@ -33,9 +34,9 @@ class MprisPlayer : public Player, public std::enable_shared_from_this<MprisPlay
               Callbacks callbacks);
   ~MprisPlayer() override;
 
-  // Player
-  void show(const Session& session) override;
-  void seeked(const Session& session, int64_t positionMs) override;
+  // MediaSurface
+  bool show(const Session& session) override;
+  void positionChanged(const Session& session, bool jump) override;
   void clear() override;
 
   /// The bus name, once requested.
@@ -70,10 +71,10 @@ class MprisPlayer : public Player, public std::enable_shared_from_this<MprisPlay
   std::string artUrl_;
 };
 
-/// Local file of an artwork source: asset:// (or a relative path) under the
-/// bundle's flutter_assets, file://, an absolute path; https:// and http://
-/// downloaded once into `cacheDirectory` (blocking). Empty when unresolvable
-/// (resource:// has no Linux equivalent).
+/// Local file of an artwork source (artworkSourceOf): an asset under the
+/// bundle's flutter_assets, a local file, or a remote image downloaded once
+/// into `cacheDirectory` (blocking). Empty when unresolvable (resource:// has
+/// no Linux equivalent).
 std::string ResolveArtworkFile(const std::string& source,
                                const std::filesystem::path& cacheDirectory);
 

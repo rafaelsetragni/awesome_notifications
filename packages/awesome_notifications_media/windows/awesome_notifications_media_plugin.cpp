@@ -6,6 +6,8 @@
 #include <flutter/standard_method_codec.h>
 
 #include <memory>
+#include <optional>
+#include <string>
 
 #include "awesome_notifications/awn_value_codec.h"
 #include "awn/awesome_notifications.h"
@@ -72,22 +74,30 @@ AwesomeNotificationsMediaPlugin::AwesomeNotificationsMediaPlugin(
         return root;
       },
       [thread](std::function<void()> work) { thread->Post(std::move(work)); });
-  controller_ =
-      std::make_shared<awn_media::MediaController>(awn::AwesomeNotifications::shared(), surface_);
+  controller_ = std::make_shared<awn_media::MediaController>(
+      surface_,
+      [](const awn::ValueMap& model, const std::string& buttonKey,
+         const std::optional<std::string>& input, const awn::ValueMap& button) {
+        awn::AwesomeNotifications::shared().dispatchAction(model, buttonKey, input, button);
+      },
+      [](int64_t id) {
+        auto& core = awn::AwesomeNotifications::shared();
+        if (core.isConfigured()) core.cancel(id);
+      });
 
   std::weak_ptr<awn_media::MediaController> weak = controller_;
   SmtcSurface::Callbacks callbacks;
   callbacks.onButton = [weak](awn_media::Button button) {
-    if (auto controller = weak.lock()) controller->onButton(button);
+    if (auto controller = weak.lock()) awn_media::onButton(*controller, button);
   };
   callbacks.onSeek = [weak](int64_t position) {
-    if (auto controller = weak.lock()) controller->onSeek(position);
+    if (auto controller = weak.lock()) awn_media::onSeek(*controller, position);
   };
   surface_->SetCallbacks(std::move(callbacks));
 
   // The commands stream, while Dart listens.
   commands_ = std::make_unique<flutter::EventChannel<flutter::EncodableValue>>(
-      registrar->messenger(), awn_media::keys::commandsChannel,
+      registrar->messenger(), awn_media::keys::COMMANDS_CHANNEL,
       &flutter::StandardMethodCodec::GetInstance());
   commands_->SetStreamHandler(
       std::make_unique<flutter::StreamHandlerFunctions<flutter::EncodableValue>>(
@@ -109,7 +119,8 @@ AwesomeNotificationsMediaPlugin::AwesomeNotificationsMediaPlugin(
           }));
 
   // Plugins register alphabetically: the core is already registered.
-  awn_media::RegisterMedia(controller_);
+  awn_media::RegisterMedia(controller_, awn_media::smtcCapabilities(),
+                           awn::AwesomeNotifications::shared());
 }
 
 AwesomeNotificationsMediaPlugin::~AwesomeNotificationsMediaPlugin() {

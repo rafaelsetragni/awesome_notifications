@@ -12,6 +12,7 @@
 #include <optional>
 
 #include "awn_media/media.h"
+#include "smtc_mapping.h"
 #include "smtc_surface.h"
 
 namespace awesome_notifications_media {

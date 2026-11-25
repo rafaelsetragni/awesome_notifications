@@ -87,6 +87,16 @@ class AWN_API AwesomeNotifications {
   void dismissAll();
   void cancelAll();
 
+  /// Observes the notifications removed by the dismiss / cancel calls above
+  /// (every variant): a decorator that delivers a notification itself
+  /// (`BuiltNotification::deliver`, e.g. a system media session) releases what
+  /// it shows. Called on the platform thread, after the removal, with the ids
+  /// removed (for dismissAll / cancelAll: every id the engine knew). Returns a
+  /// token for `removeRemovalObserver`.
+  using RemovalObserver = std::function<void(const std::vector<int64_t>& ids)>;
+  int addRemovalObserver(RemovalObserver observer);
+  void removeRemovalObserver(int token);
+
   // Schedule management (for the scheduling decorator)
   /// Re-runs the builder chain on a stored model and re-presents it without
   /// emitting events (tops up the pre-armed occurrences of a repeating schedule).
@@ -108,6 +118,7 @@ class AWN_API AwesomeNotifications {
   void forgetIfGone(int64_t id);
   void dismissIds(const std::vector<int64_t>& ids);
   void cancelIds(const std::vector<int64_t>& ids);
+  void notifyRemoved(const std::vector<int64_t>& ids);
   /// Through the decorator's own delivery when it set one, else the presenter.
   void deliver(const BuiltNotification& built, std::function<void(bool)> done);
 
@@ -123,6 +134,8 @@ class AWN_API AwesomeNotifications {
   Value initialAction_;
   bool removeInitialActionFromEvents_ = false;
   std::function<void(const Value&)> pendingInitialAction_;
+  std::vector<std::pair<int, RemovalObserver>> removalObservers_;
+  int nextRemovalToken_ = 1;
 };
 
 }  // namespace awn
