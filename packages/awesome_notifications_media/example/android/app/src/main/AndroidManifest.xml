@@ -2,7 +2,7 @@
     <!-- The album covers come from the network. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="awesome_notifications_media_example"
+        android:label="Awesome Media"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
