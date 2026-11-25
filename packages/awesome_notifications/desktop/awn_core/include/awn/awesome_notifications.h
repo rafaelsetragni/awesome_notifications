@@ -68,6 +68,12 @@ class AWN_API AwesomeNotifications {
   /// activation is not one of ours.
   std::optional<ActionType> onActivated(const Activation& activation);
   void onDismissed(int64_t id);
+  /// Emits the action event of `model` as if `button` (keyed `buttonKey`, with
+  /// the typed `input`) was pressed, for a control that is not one of the
+  /// model's buttons (e.g. a media control). Leaves the notification and its
+  /// stored model alone.
+  void dispatchAction(const ValueMap& model, const std::string& buttonKey,
+                      const std::optional<std::string>& input, const ValueMap& button);
   /// A scheduled notification fired while the app was running.
   void onDisplayed(int64_t id);
 
@@ -102,6 +108,8 @@ class AWN_API AwesomeNotifications {
   void forgetIfGone(int64_t id);
   void dismissIds(const std::vector<int64_t>& ids);
   void cancelIds(const std::vector<int64_t>& ids);
+  /// Through the decorator's own delivery when it set one, else the presenter.
+  void deliver(const BuiltNotification& built, std::function<void(bool)> done);
 
   std::shared_ptr<NotificationPresenter> presenter_;
   std::shared_ptr<Dispatcher> dispatcher_;

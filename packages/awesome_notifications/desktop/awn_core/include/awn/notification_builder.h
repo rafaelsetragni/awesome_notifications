@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <optional>
 #include <string>
@@ -30,6 +31,11 @@ struct BuiltNotification {
   /// Android answered false for a scheduled notification it did schedule);
   /// otherwise the call answers whether it was presented.
   std::optional<bool> answer;
+  /// Set by a decorator that delivers the notification itself instead of the
+  /// OS notification (e.g. a system media session): the core calls it in place
+  /// of the presenter's `present`, then stores the model and emits the events
+  /// as usual. `done` answers whether it was delivered.
+  std::function<void(const BuiltNotification& built, std::function<void(bool)> done)> deliver;
 };
 
 /// Builds notifications from a serialized `NotificationModel` (the map produced

@@ -130,7 +130,7 @@ void AwesomeNotifications::createNotification(
   store_->put(built.id, built.model);
 
   auto dispatcher = dispatcher_;
-  presenter_->present(built, [this, dispatcher, built, done](bool presented) {
+  deliver(built, [this, dispatcher, built, done](bool presented) {
     dispatcher->post([this, built, done, presented] {
       if (!presented) {
         store_->remove(built.id);
@@ -216,6 +216,25 @@ std::optional<ActionType> AwesomeNotifications::onActivated(const Activation& ac
   return actionType;
 }
 
+void AwesomeNotifications::dispatchAction(const ValueMap& model, const std::string& buttonKey,
+                                          const std::optional<std::string>& input,
+                                          const ValueMap& button) {
+  ValueMap content = NotificationBuilder::content(model);
+  if (auto id = NotificationBuilder::readId(content)) content = tracker_.resolve(content, *id);
+  content[defs::NOTIFICATION_BUTTON_KEY_PRESSED] = buttonKey;
+  if (input) content[defs::NOTIFICATION_BUTTON_KEY_INPUT] = *input;
+
+  bool launchAction = !didFinishLaunch_;
+  ValueMap actionMap = NotificationBuilder::registerActionEvent(
+      content, launchAction ? LifeCycle::Terminated : currentLifeCycle(),
+      NotificationBuilder::buttonActionType(button));
+  if (launchAction) {
+    initialAction_ = actionMap;
+    finishLaunching();
+  }
+  emit(defs::EVENT_DEFAULT_ACTION, actionMap);
+}
+
 void AwesomeNotifications::onDismissed(int64_t id) {
   auto model = store_->get(id);
   if (!model) return;
@@ -285,7 +304,7 @@ bool AwesomeNotifications::rearm(const ValueMap& model) {
   if (!chained || !chained->fireDate) return false;
   BuiltNotification built = NotificationBuilder::stampDisplayed(*chained);
   store_->put(built.id, built.model);
-  presenter_->present(built, [](bool) {});
+  deliver(built, [](bool) {});
   return true;
 }
 
@@ -326,6 +345,14 @@ std::vector<int64_t> AwesomeNotifications::pendingIdsWhereContent(const std::str
 }
 
 // MARK: - Helpers
+
+void AwesomeNotifications::deliver(const BuiltNotification& built,
+                                   std::function<void(bool)> done) {
+  if (built.deliver)
+    built.deliver(built, std::move(done));
+  else
+    presenter_->present(built, std::move(done));
+}
 
 void AwesomeNotifications::emit(const char* event, const ValueMap& content) {
   AwesomeEventsReceiver::shared().notify(event, content);

@@ -26,6 +26,10 @@ flutter:
         pluginClass: AwesomeNotificationsMediaPlugin
       macos:
         pluginClass: AwesomeNotificationsMediaPlugin
+      linux:
+        pluginClass: AwesomeNotificationsMediaPlugin
+      windows:
+        pluginClass: AwesomeNotificationsMediaPluginCApi
       web:
         pluginClass: AwesomeNotificationsMediaWeb
         fileName: awesome_notifications_media_web.dart

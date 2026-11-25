@@ -419,3 +419,59 @@ TEST(DecoratorFailureReachesTheErrorCallback) {
   // Without an error callback the rejection answers created = false.
   EXPECT_FALSE(h.create(model(32)));
 }
+
+namespace {
+/// A decorator that delivers every notification itself (like a media session).
+class DeliverItself : public NotificationBuilder {
+ public:
+  DeliverItself(std::shared_ptr<NotificationBuilder> inner, std::vector<int64_t>* delivered)
+      : NotificationBuilder(std::move(inner)), delivered_(delivered) {}
+  std::optional<BuiltNotification> build(const ValueMap& m) override {
+    auto built = next(m);
+    auto* delivered = delivered_;
+    if (built) built->deliver = [delivered](const BuiltNotification& b, auto done) {
+      delivered->push_back(b.id);
+      done(true);
+    };
+    return built;
+  }
+
+ private:
+  std::vector<int64_t>* delivered_;
+};
+}  // namespace
+
+TEST(DecoratorDeliveryReplacesThePresenter) {
+  Harness h;
+  std::vector<int64_t> delivered;
+  NotificationBuilderRegistry::shared().registerDecorator(
+      1, [&](auto inner) { return std::make_shared<DeliverItself>(inner, &delivered); });
+  EXPECT_TRUE(h.create(model(41)));
+  EXPECT_EQ(delivered, std::vector<int64_t>{41});
+  EXPECT_TRUE(h.presenter->presented.empty());
+  EXPECT_TRUE(h.store->get(41).has_value());
+  EXPECT_TRUE(h.last("notificationCreated") != nullptr);
+  EXPECT_TRUE(h.last("notificationDisplayed") != nullptr);
+}
+
+TEST(DispatchActionEmitsTheActionAndKeepsTheModel) {
+  Harness h;
+  EXPECT_TRUE(h.create(model(42, {{"payload", ValueMap{{"k", "v"}}}})));
+  auto stored = h.store->get(42);
+  EXPECT_TRUE(stored.has_value());
+  ValueMap button{{"key", "awn.media.seekTo"}, {"actionType", "SilentAction"},
+                  {"autoDismissible", false}};
+  h.engine.dispatchAction(*stored, "awn.media.seekTo", std::string("12000"), button);
+  auto action = h.last("defaultAction");
+  EXPECT_TRUE(action != nullptr);
+  EXPECT_EQ(str(action->content, "buttonKeyPressed"), std::string("awn.media.seekTo"));
+  EXPECT_EQ(str(action->content, "buttonKeyInput"), std::string("12000"));
+  EXPECT_EQ(str(action->content, "actionType"), std::string("SilentAction"));
+  EXPECT_EQ(str(action->content, "actionLifeCycle"), std::string("Foreground"));
+  EXPECT_EQ(str(getMap(action->content, "payload"), "k"), std::string("v"));
+  EXPECT_EQ(h.presenter->delivered, std::vector<int64_t>{42});
+  EXPECT_TRUE(h.store->get(42).has_value());
+
+  h.engine.dispatchAction(*stored, "awn.media.pause", std::nullopt, button);
+  EXPECT_FALSE(has(h.last("defaultAction")->content, "buttonKeyInput"));
+}
