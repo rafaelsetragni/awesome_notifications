@@ -1,5 +1,5 @@
 
-# Awesome Notifications for Flutter - Year 2
+# Awesome Notifications for Flutter
 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications.jpg)
 
@@ -262,7 +262,7 @@ We are constantly working to improve Awesome Notifications and provide support f
 
 # 📙 Table of Contents
 
-- [Awesome Notifications for Flutter - Year 2](#awesome-notifications-for-flutter---year-2)
+- [Awesome Notifications for Flutter](#awesome-notifications-for-flutter)
     - [**Key Features:**](#key-features)
   - [Notification Types Available](#notification-types-available)
 - [🤝 Contributing](#-contributing)
