@@ -127,6 +127,15 @@ class WebMediaController implements MediaPlatformBridge {
     final isMediaLayout = content is Map && content['notificationLayout'] == 'MediaPlayer';
     final rawMedia = model[MediaKeys.media];
     if (rawMedia == null && !isMediaLayout) return null;
+    final source = content is Map ? content['createdSource'] : null;
+    if (source is String && source.toLowerCase() == 'firebase') {
+      throw _invalid('Media notifications can\'t come from a push',
+          'arguments.invalid.notificationMedia.push');
+    }
+    if (model['schedule'] != null) {
+      throw _invalid('Media notifications can\'t be scheduled',
+          'arguments.invalid.notificationMedia.schedule');
+    }
     if (rawMedia == null) {
       throw _invalid('A MediaPlayer notification needs a NotificationMedia',
           'arguments.invalid.notificationMedia');
@@ -152,13 +161,26 @@ class WebMediaController implements MediaPlatformBridge {
       ...?(newContent['payload'] as Map?)?.cast<String, String?>(),
       MediaKeys.payloadSessionId: sessionId,
     };
-    final stored = {...model, 'content': newContent, MediaKeys.media: media};
-    _sessions[sessionId] = stored;
+    // The core reports the updated model in the created / displayed events.
+    model['content'] = newContent;
+    model[MediaKeys.media] = media;
+    _sessions[sessionId] = {...model};
     activeSessionId = sessionId;
 
     if (!api.available) return false;
     _apply(sessionId, media);
     return true;
+  }
+
+  /// The core's removal hook: a cancel / dismiss of a session's notification
+  /// ([removes] tells it from its model) ends the session, as `mediaStop`
+  /// does, whatever its state.
+  void onRemoved(bool Function(Map<String, dynamic> model) removes) {
+    final removed = [
+      for (final e in _sessions.entries)
+        if (removes(e.value)) e.key,
+    ];
+    removed.forEach(_stop);
   }
 
   void _apply(String sessionId, Map<String, dynamic> media) {

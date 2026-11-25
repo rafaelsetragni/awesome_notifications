@@ -18,6 +18,8 @@ class AwesomeNotificationsMediaWeb {
       assetUrl: ui_web.assetManager.getAssetUrl,
     );
     AwesomeNotificationsWeb.registerNotificationBuilder(controller.build);
+    AwesomeNotificationsWeb.registerRemovalListener(
+        (removal) async => controller.onRemoved(removal.matches));
     AwesomeNotificationsMedia.bridge = controller;
   }
 }

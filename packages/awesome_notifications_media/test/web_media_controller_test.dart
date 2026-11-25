@@ -143,6 +143,79 @@ void main() {
               .having((e) => e.details, 'details', 'arguments.invalid.notificationMedia.layout')));
     });
 
+    Matcher rejected(String detail) => throwsA(isA<PlatformException>()
+        .having((e) => e.code, 'code', 'INVALID_ARGUMENTS')
+        .having((e) => e.details, 'details', detail));
+
+    test('rejects a push model (createdSource Firebase, any case)', () async {
+      for (final source in ['Firebase', 'FIREBASE', 'firebase']) {
+        final m = model();
+        (m['content'] as Map)['createdSource'] = source;
+        await expectLater(controller.build(m), rejected('arguments.invalid.notificationMedia.push'));
+      }
+      // A push is rejected before the other rules.
+      final m = model(withMedia: false)..['schedule'] = {'interval': 60};
+      (m['content'] as Map)['createdSource'] = 'Firebase';
+      await expectLater(controller.build(m), rejected('arguments.invalid.notificationMedia.push'));
+      expect(session.metadata, isNull);
+    });
+
+    test('rejects a scheduled model, before the layout rules', () async {
+      await expectLater(controller.build(model()..['schedule'] = {'interval': 60}),
+          rejected('arguments.invalid.notificationMedia.schedule'));
+      await expectLater(
+          controller.build(model(layout: NotificationLayout.Default)..['schedule'] = {'interval': 60}),
+          rejected('arguments.invalid.notificationMedia.schedule'));
+      await expectLater(controller.build(model(withMedia: false)..['schedule'] = {'interval': 60}),
+          rejected('arguments.invalid.notificationMedia.schedule'));
+      // A null schedule entry is no schedule.
+      expect(await controller.build(model()..['schedule'] = null), isTrue);
+    });
+
+    test('pushes and schedules of other models are left to the next builder', () async {
+      final m = model(layout: NotificationLayout.Default, withMedia: false)..['schedule'] = {'interval': 60};
+      (m['content'] as Map)['createdSource'] = 'Firebase';
+      expect(await controller.build(m), isNull);
+    });
+
+    test('a cancel / dismiss of the notification ends its session, even playing', () async {
+      Future<void> expectEnds(Map<String, Object?> removal, bool ends) async {
+        await controller.build(model());
+        expect(session.playbackState, 'playing');
+        // As the core's WebNotificationRemoval.matches does.
+        controller.onRemoved((m) {
+          final c = m['content'] as Map;
+          return removal.entries.every((e) => c[e.key] == e.value);
+        });
+        expect(session.metadata == null, ends, reason: '$removal');
+        if (ends) {
+          expect(session.playbackState, 'none');
+          expect(session.handlers, isEmpty);
+          // The session is gone: a later command / position update is ignored.
+          await controller.invokeMethod('mediaUpdatePosition', {'sessionId': 's1', 'position': 1});
+          expect(session.positionState, isNull);
+        }
+      }
+
+      await expectEnds({'id': 7}, true);
+      await expectEnds({'id': 8}, false);
+      await expectEnds({'channelKey': 'media'}, true);
+      await expectEnds({'channelKey': 'other'}, false);
+      await expectEnds({}, true);
+    });
+
+    test('a removal ends only the sessions it matches', () async {
+      await controller.build(model());
+      final other = model(media: const NotificationMedia(sessionId: 's2', title: 'B', state: NotificationPlayState.playing));
+      (other['content'] as Map)['id'] = 9;
+      await controller.build(other);
+      controller.onRemoved((m) => (m['content'] as Map)['id'] == 7);
+      // s2 is still active on the page.
+      expect(session.metadata?['title'], 'B');
+      controller.onRemoved((m) => (m['content'] as Map)['id'] == 9);
+      expect(session.metadata, isNull);
+    });
+
     test('builds the media session', () async {
       expect(await controller.build(model()), isTrue);
       expect(session.metadata,

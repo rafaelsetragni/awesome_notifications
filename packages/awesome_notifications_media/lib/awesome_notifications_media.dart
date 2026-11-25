@@ -44,6 +44,9 @@ class MediaCapabilities {
       MediaCapabilities(seekBar: false, artwork: false, customButtons: false, lockScreen: false);
 }
 
+/// Internal: platform implementations only. Not part of the public API (it
+/// may change at any time); apps use [AwesomeNotificationsMedia].
+///
 /// Answers the media methods and gives the command events in the app's own
 /// process, where there is no platform channel (web).
 abstract class MediaPlatformBridge {
@@ -57,6 +60,8 @@ abstract class MediaPlatformBridge {
 
 /// The media session operations the core doesn't have.
 class AwesomeNotificationsMedia {
+  /// Internal: platform implementations only. Not part of the public API.
+  ///
   /// Set by a platform implementation that doesn't use the channels (web).
   static MediaPlatformBridge? bridge;
 

@@ -96,7 +96,8 @@ void main() {
         extensions: [media()],
       );
       expect(((sent!.arguments as Map)['media'] as Map)['sessionId'], 'main-player');
-    });
+      // The web core has no channel: web_media_session_test covers it there.
+    }, testOn: 'vm');
   });
 
   group('MediaCommand', () {
