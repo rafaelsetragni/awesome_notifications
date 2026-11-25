@@ -80,6 +80,12 @@ class V1Api implements CompatApi {
         bodyLocKey: spec.bodyLocKey,
         bodyLocArgs: spec.bodyLocArgs,
         groupKey: spec.groupKey,
+        duration: spec.duration,
+        progress: spec.progress,
+        playbackSpeed: spec.playbackSpeed,
+        playState: spec.playState == null
+            ? null
+            : NotificationPlayState.values.byName(spec.playState!),
         notificationLayout: spec.layout == null
             ? NotificationLayout.Default
             : NotificationLayout.values.byName(spec.layout!),
@@ -88,7 +94,10 @@ class V1Api implements CompatApi {
           ? null
           : [
               for (final b in spec.buttons.entries)
-                NotificationActionButton(key: b.key, label: b.value)
+                NotificationActionButton(
+                    key: b.key,
+                    label: b.value,
+                    showInCompactView: spec.compactButtons.contains(b.key))
             ],
       extensions: [
         if (schedule != null) schedule,

@@ -96,7 +96,8 @@ open class NotificationBuilder protected constructor(
      * decorator renders the layout itself.
      */
     fun prepareLayout(context: Context, model: Map<String, Any?>): Map<String, Any?> =
-        if (hasCustomLayout(model)) model else MessagingLayout.prepare(context, model)
+        if (hasCustomLayout(model)) model
+        else MediaPlayerLayout.prepare(context, MessagingLayout.prepare(context, model))
 
     // MARK: - Lifecycle stamping (persisted into the stored content)
 
@@ -161,7 +162,11 @@ open class NotificationBuilder protected constructor(
 
         applyImages(context, content, builder)
         if (!hasCustomLayout(model)) MessagingLayout.applyStyle(context, content, builder, bitmapUtils)
-        applyActionButtons(context, id, model, builder)
+        val buttonIntents = applyActionButtons(context, id, model, builder)
+        if (!hasCustomLayout(model)) {
+            MediaPlayerLayout.applyStyle(
+                context, content, actionButtons(model), buttonIntents, builder, bitmapUtils)
+        }
         builder.addExtras(
             MessagingLayout.groupExtras(
                 context, id, mapUtils.getString(content[Definitions.NOTIFICATION_GROUP_KEY])))
@@ -177,19 +182,23 @@ open class NotificationBuilder protected constructor(
     fun actionButtons(model: Map<String, Any?>): List<Map<String, Any?>> =
         (model[Definitions.NOTIFICATION_BUTTONS] as? List<Map<String, Any?>>) ?: emptyList()
 
-    /** Adds an [NotificationCompat.Action] for each serialized action button. */
+    /**
+     * Adds an [NotificationCompat.Action] for each serialized action button and
+     * returns each one's intent by key. As 0.12, a disabled button is still
+     * shown, without an intent (so the media layout's compact view indexes
+     * keep pointing at the right buttons).
+     */
     private fun applyActionButtons(
         context: Context,
         id: Int,
         model: Map<String, Any?>,
         builder: NotificationCompat.Builder
-    ) {
+    ): Map<String, PendingIntent?> {
+        val intents = mutableMapOf<String, PendingIntent?>()
         actionButtons(model).forEachIndexed { index, button ->
             val key = mapUtils.getString(button[Definitions.NOTIFICATION_BUTTON_KEY])
             if (key.isNullOrEmpty()) return@forEachIndexed
-            if (mapUtils.getBool(button[Definitions.NOTIFICATION_BUTTON_ENABLED]) == false) {
-                return@forEachIndexed
-            }
+            val enabled = mapUtils.getBool(button[Definitions.NOTIFICATION_BUTTON_ENABLED]) != false
 
             val label = mapUtils.getString(button[Definitions.NOTIFICATION_BUTTON_LABEL]) ?: key
             val actionType =
@@ -198,9 +207,12 @@ open class NotificationBuilder protected constructor(
                 mapUtils.getBool(button[Definitions.NOTIFICATION_REQUIRE_INPUT_TEXT]) ?: false
             val isForeground = actionType == ActionType.Default
 
-            val pending = buttonPendingIntent(
-                context, id, index, key, model, isForeground, requireInput
-            )
+            val pending = if (enabled) {
+                buttonPendingIntent(context, id, index, key, model, isForeground, requireInput)
+            } else {
+                null
+            }
+            intents[key] = pending
             val actionBuilder = NotificationCompat.Action.Builder(
                 buttonIcon(context, button), label, pending
             )
@@ -213,6 +225,7 @@ open class NotificationBuilder protected constructor(
             }
             builder.addAction(actionBuilder.build())
         }
+        return intents
     }
 
     /** Resolves a button icon from a `resource://type/name` path (0 = no icon). */

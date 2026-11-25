@@ -160,7 +160,7 @@ internal object MessagingLayout {
     }
 
     /** Ids of the group's notifications on screen, first registered first. */
-    private fun activeIdsOfGroup(context: Context, groupKey: String?): List<Int> {
+    internal fun activeIdsOfGroup(context: Context, groupKey: String?): List<Int> {
         if (groupKey.isNullOrEmpty()) return emptyList()
         return notificationManager(context).activeNotifications
             .filter { it.notification.extras?.getString(EXTRA_GROUP_KEY) == groupKey }

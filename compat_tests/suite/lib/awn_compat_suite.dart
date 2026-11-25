@@ -73,6 +73,16 @@ class NotificationSpec {
   final String? layout;
   final String? groupKey;
 
+  /// Media player fields of the content.
+  final Duration? duration;
+  final double? progress, playbackSpeed;
+
+  /// `NotificationPlayState` name (e.g. 'paused').
+  final String? playState;
+
+  /// Keys of [buttons] shown in the compact view (media player).
+  final Set<String> compactButtons;
+
   const NotificationSpec({
     required this.id,
     this.title = 'Hello',
@@ -87,6 +97,11 @@ class NotificationSpec {
     this.schedule,
     this.layout,
     this.groupKey,
+    this.duration,
+    this.progress,
+    this.playbackSpeed,
+    this.playState,
+    this.compactButtons = const {},
   });
 }
 
@@ -188,6 +203,16 @@ Future<int?> _displayedId(CompatApi api, NotificationSpec spec) async {
   if (!await api.createNotification(spec)) return null;
   final event = await shown;
   return event.isEmpty ? null : event['id'] as int?;
+}
+
+/// The displayed event of a notification, matched by its (unique) body.
+Future<Map<String, dynamic>?> _displayedEvent(CompatApi api, NotificationSpec spec) async {
+  final shown = CompatEvents.displayed.stream
+      .firstWhere((event) => event['body'] == spec.body)
+      .timeout(const Duration(seconds: 10), onTimeout: () => <String, dynamic>{});
+  if (!await api.createNotification(spec)) return null;
+  final event = await shown;
+  return event.isEmpty ? null : event;
 }
 
 // ---------------------------------------------------------------------------
@@ -403,6 +428,76 @@ void defineCompatTests(CompatApi api) {
       await api.dismiss(a);
       await Future<void>.delayed(const Duration(milliseconds: 500));
       expect(await _displayedId(api, message(b)), b);
+    });
+  });
+
+  group('media player layout', () {
+    NotificationSpec media(int id,
+            {String? groupKey = 'compat_media',
+            Duration? duration,
+            double? progress,
+            double? playbackSpeed,
+            String? playState,
+            Map<String, String> buttons = const {},
+            Set<String> compactButtons = const {}}) =>
+        NotificationSpec(
+            id: id,
+            title: 'Bright Sharp',
+            body: 'track $id',
+            layout: 'MediaPlayer',
+            groupKey: groupKey,
+            duration: duration,
+            progress: progress,
+            playbackSpeed: playbackSpeed,
+            playState: playState,
+            buttons: buttons,
+            compactButtons: compactButtons);
+
+    String fields(Map<String, dynamic>? shown) => [
+          for (final key in ['duration', 'progress', 'playState', 'playbackSpeed'])
+            '$key=${shown?[key]}'
+        ].join(' ');
+
+    test('is displayed with its media fields', () async {
+      final shown = await _displayedEvent(
+          api,
+          media(_id(),
+              duration: const Duration(minutes: 4, seconds: 21),
+              progress: 25,
+              playbackSpeed: 1,
+              playState: 'paused'));
+      // 0.12 never carries the media fields in its events, even when sent.
+      expect(fields(shown), 'duration=null progress=null playState=null playbackSpeed=null');
+    });
+
+    test('without media fields', () async {
+      expect(fields(await _displayedEvent(api, media(_id()))),
+          'duration=null progress=null playState=null playbackSpeed=null');
+    });
+
+    test('media of a group are shown under the first one\'s id', () async {
+      final a = _id(), b = _id();
+      final first = await _displayedEvent(api, media(a));
+      final second = await _displayedEvent(api, media(b));
+      // 0.12 Android shows the group's player in one notification; iOS shows
+      // each one under its own id.
+      expect('${first?['id']} ${second?['id']}', p(android: '$a $a', ios: '$a $b'));
+    });
+
+    test('without a groupKey each keeps its id', () async {
+      final a = _id(), b = _id();
+      final first = await _displayedEvent(api, media(a, groupKey: null));
+      final second = await _displayedEvent(api, media(b, groupKey: null));
+      expect('${first?['id']} ${second?['id']}', '$a $b');
+    });
+
+    test('with compact view buttons', () async {
+      final shown = await _displayedEvent(
+          api,
+          media(_id(),
+              buttons: {'MEDIA_PREV': 'Previous', 'MEDIA_PLAY': 'Play', 'MEDIA_NEXT': 'Next'},
+              compactButtons: {'MEDIA_PLAY', 'MEDIA_NEXT'}));
+      expect(shown != null, isTrue);
     });
   });
 
