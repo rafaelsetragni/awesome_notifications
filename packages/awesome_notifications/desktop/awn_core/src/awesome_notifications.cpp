@@ -104,11 +104,21 @@ void AwesomeNotifications::getInitialAction(bool removeFromEvents,
 
 // MARK: - Create
 
-void AwesomeNotifications::createNotification(const ValueMap& model,
-                                              std::function<void(bool)> done) {
+void AwesomeNotifications::createNotification(
+    const ValueMap& model, std::function<void(bool)> done,
+    std::function<void(const AwesomeNotificationsException&)> fail) {
   // Build through the decorator chain (localization, scheduling, …).
   auto builder = NotificationBuilderRegistry::shared().makeBuilder();
-  auto chained = builder->build(model);
+  std::optional<BuiltNotification> chained;
+  try {
+    chained = builder->build(model);
+  } catch (const AwesomeNotificationsException& exception) {
+    if (fail)
+      fail(exception);
+    else
+      done(false);
+    return;
+  }
   if (!chained) {
     done(false);
     return;
@@ -131,7 +141,7 @@ void AwesomeNotifications::createNotification(const ValueMap& model,
       emit(defs::EVENT_NOTIFICATION_CREATED,
            NotificationBuilder::registerCreatedEvent(content, LifeCycle::Foreground));
       if (!built.fireDate) onDisplayed(built.id);
-      done(true);
+      done(built.answer.value_or(true));
     });
   });
 }

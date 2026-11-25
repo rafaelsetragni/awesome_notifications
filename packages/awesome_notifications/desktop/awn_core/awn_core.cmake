@@ -8,6 +8,7 @@ set(AWN_CORE_SOURCES
   "${AWN_CORE_DIR}/src/awesome_notifications.cpp"
   "${AWN_CORE_DIR}/src/date_utils.cpp"
   "${AWN_CORE_DIR}/src/displayed_tracker.cpp"
+  "${AWN_CORE_DIR}/src/exception.cpp"
   "${AWN_CORE_DIR}/src/json.cpp"
   "${AWN_CORE_DIR}/src/launch_args.cpp"
   "${AWN_CORE_DIR}/src/method_router.cpp"

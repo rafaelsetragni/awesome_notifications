@@ -51,14 +51,16 @@ void AwesomeMethodHandlerRegistry::unregisterHandler(
 }
 
 bool AwesomeMethodHandlerRegistry::handle(const std::string& method, const Value& arguments,
-                                          MethodResult result) {
+                                          MethodResult result, MethodError error) {
   std::vector<std::shared_ptr<AwesomeMethodHandler>> handlers;
   {
     std::lock_guard<std::mutex> lock(mutex_);
     handlers = handlers_;
   }
   for (const auto& handler : handlers) {
-    if (handler->handle(method, arguments, result)) return true;
+    bool handled = error ? handler->handle(method, arguments, result, error)
+                         : handler->handle(method, arguments, result);
+    if (handled) return true;
   }
   return false;
 }

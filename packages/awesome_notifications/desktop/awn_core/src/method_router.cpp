@@ -8,6 +8,11 @@ AwesomeMethodRouter::AwesomeMethodRouter(AwesomeNotifications& core) : core_(cor
 
 bool AwesomeMethodRouter::handle(const std::string& method, const Value& arguments,
                                  MethodResult result) {
+  return handle(method, arguments, std::move(result), nullptr);
+}
+
+bool AwesomeMethodRouter::handle(const std::string& method, const Value& arguments,
+                                 MethodResult result, MethodError error) {
   if (method == "initialize") {
     core_.initialize(getList(arguments.map(), defs::INITIALIZE_CHANNELS));
     result(Value(true));
@@ -37,7 +42,14 @@ bool AwesomeMethodRouter::handle(const std::string& method, const Value& argumen
     if (!arguments.isMap()) {
       result(Value(false));
     } else {
-      core_.createNotification(arguments.map(), [result](bool created) { result(Value(created)); });
+      core_.createNotification(
+          arguments.map(), [result](bool created) { result(Value(created)); },
+          [result, error](const AwesomeNotificationsException& exception) {
+            if (error)
+              error(exception.code(), exception.what(), Value(exception.details()));
+            else
+              result(Value());
+          });
     }
   } else if (method == "dismissNotification") {
     if (auto id = arguments.asInt()) core_.dismiss(*id);
@@ -65,7 +77,8 @@ bool AwesomeMethodRouter::handle(const std::string& method, const Value& argumen
     result(Value(true));
   } else {
     // Let registered decorators (scheduling, localization, …) answer.
-    return AwesomeMethodHandlerRegistry::shared().handle(method, arguments, std::move(result));
+    return AwesomeMethodHandlerRegistry::shared().handle(method, arguments, std::move(result),
+                                                         std::move(error));
   }
   return true;
 }

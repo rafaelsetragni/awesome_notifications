@@ -21,6 +21,10 @@ class AWN_API AwesomeMethodRouter {
   /// Calls `result` exactly once and returns true, or returns false (without
   /// calling `result`) when nobody implements `method`.
   bool handle(const std::string& method, const Value& arguments, MethodResult result);
+  /// Same, but a failing call (e.g. a decorator rejecting a notification)
+  /// answers `error` instead; without one it answers a null result.
+  bool handle(const std::string& method, const Value& arguments, MethodResult result,
+              MethodError error);
 
  private:
   AwesomeNotifications& core_;

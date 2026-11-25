@@ -159,10 +159,12 @@ void AwesomeNotificationsPlugin::HandleMethodCall(
       method_call.arguments() ? ToAwnValue(*method_call.arguments()) : awn::Value();
   // std::function must be copyable: share the one-shot result.
   std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>> shared(std::move(result));
-  bool handled = router_.handle(method_call.method_name(), arguments,
-                                [shared](const awn::Value& value) {
-                                  shared->Success(ToEncodable(value));
-                                });
+  bool handled = router_.handle(
+      method_call.method_name(), arguments,
+      [shared](const awn::Value& value) { shared->Success(ToEncodable(value)); },
+      [shared](const std::string& code, const std::string& message, const awn::Value& details) {
+        shared->Error(code, message, ToEncodable(details));
+      });
   if (!handled) shared->NotImplemented();
 }
 

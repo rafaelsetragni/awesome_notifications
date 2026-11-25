@@ -37,6 +37,10 @@ class AWN_API NotificationBuilderRegistry {
 };
 
 using MethodResult = std::function<void(const Value&)>;
+/// Fails a method call: reaches Dart as a `PlatformException(code, message,
+/// details)`.
+using MethodError =
+    std::function<void(const std::string& code, const std::string& message, const Value& details)>;
 
 /// Decorator seam for the method channel: a handler answers channel methods the
 /// core doesn't implement (e.g. the scheduling or localization methods).
@@ -46,6 +50,15 @@ class AWN_API AwesomeMethodHandler {
   /// If handled, calls `result` exactly once and returns true.
   virtual bool handle(const std::string& method, const Value& arguments,
                       MethodResult result) = 0;
+
+  /// Same as `handle`, but the handler may fail the call with `error` instead
+  /// (exactly one of the two is called). Defaults to `handle`, for handlers
+  /// that never fail.
+  virtual bool handle(const std::string& method, const Value& arguments, MethodResult result,
+                      MethodError error) {
+    (void)error;
+    return handle(method, arguments, std::move(result));
+  }
 };
 
 class AWN_API AwesomeMethodHandlerRegistry {
@@ -54,7 +67,8 @@ class AWN_API AwesomeMethodHandlerRegistry {
 
   void registerHandler(std::shared_ptr<AwesomeMethodHandler> handler);
   void unregisterHandler(const std::shared_ptr<AwesomeMethodHandler>& handler);
-  bool handle(const std::string& method, const Value& arguments, MethodResult result);
+  bool handle(const std::string& method, const Value& arguments, MethodResult result,
+              MethodError error = nullptr);
   void clearForTest();
 
  private:

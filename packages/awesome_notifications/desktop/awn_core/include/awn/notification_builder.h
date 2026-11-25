@@ -26,6 +26,10 @@ struct BuiltNotification {
   /// Decorator-owned delivery data (e.g. the repeat rule a scheduling decorator
   /// needs to re-arm a repeating schedule). Opaque to the core.
   Value trigger;
+  /// Set by a decorator that answers the create call itself (e.g. 0.12
+  /// Android answered false for a scheduled notification it did schedule);
+  /// otherwise the call answers whether it was presented.
+  std::optional<bool> answer;
 };
 
 /// Builds notifications from a serialized `NotificationModel` (the map produced
@@ -39,7 +43,9 @@ class AWN_API NotificationBuilder {
   explicit NotificationBuilder(std::shared_ptr<NotificationBuilder> inner = nullptr);
   virtual ~NotificationBuilder();
 
-  /// Produces the deliverable for a model, or nullopt when it is invalid.
+  /// Produces the deliverable for a model, or nullopt when it is invalid
+  /// (created = false). A decorator may also throw an
+  /// `AwesomeNotificationsException`: the create call then fails with it.
   virtual std::optional<BuiltNotification> build(const ValueMap& model);
 
   /// Delegates to the wrapped builder (called by decorators).

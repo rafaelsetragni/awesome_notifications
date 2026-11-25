@@ -360,3 +360,62 @@ TEST(RegistryOrdersDecoratorsByPriority) {
 }
 
 int main() { return awn_test::runAll(); }
+
+// MARK: - Decorator answers / failures
+
+namespace {
+
+/// Answers the create call itself, like 0.12 Android's scheduler (false).
+class AnswerFalse : public NotificationBuilder {
+ public:
+  using NotificationBuilder::NotificationBuilder;
+  std::optional<BuiltNotification> build(const ValueMap& m) override {
+    auto built = next(m);
+    if (built) built->answer = false;
+    return built;
+  }
+};
+
+class RejectEverything : public NotificationBuilder {
+ public:
+  using NotificationBuilder::NotificationBuilder;
+  std::optional<BuiltNotification> build(const ValueMap&) override {
+    throw AwesomeNotificationsException("INVALID_ARGUMENTS", "Nope", "arguments.invalid.test");
+  }
+};
+
+}  // namespace
+
+TEST(DecoratorAnswerIsWhatTheCallReturns) {
+  Harness h;
+  NotificationBuilderRegistry::shared().registerDecorator(
+      1, [](auto inner) { return std::make_shared<AnswerFalse>(inner); });
+  EXPECT_FALSE(h.create(model(30)));
+  // Still presented and reported as created.
+  EXPECT_EQ(h.presenter->presented.size(), static_cast<size_t>(1));
+  EXPECT_TRUE(h.last(defs::EVENT_NOTIFICATION_CREATED) != nullptr);
+}
+
+TEST(DecoratorFailureReachesTheErrorCallback) {
+  Harness h;
+  NotificationBuilderRegistry::shared().registerDecorator(
+      1, [](auto inner) { return std::make_shared<RejectEverything>(inner); });
+  std::string code, message, details;
+  bool answered = false;
+  AwesomeMethodRouter router(h.engine);
+  router.handle(
+      "createNewNotification", Value(model(31)), [&](const Value&) { answered = true; },
+      [&](const std::string& c, const std::string& m, const Value& d) {
+        code = c;
+        message = m;
+        details = d.asString().value_or("");
+      });
+  EXPECT_FALSE(answered);
+  EXPECT_EQ(code, std::string("INVALID_ARGUMENTS"));
+  EXPECT_EQ(message, std::string("Nope"));
+  EXPECT_EQ(details, std::string("arguments.invalid.test"));
+  EXPECT_TRUE(h.presenter->presented.empty());
+
+  // Without an error callback the rejection answers created = false.
+  EXPECT_FALSE(h.create(model(32)));
+}

@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "awn/displayed_tracker.h"
+#include "awn/exception.h"
 #include "awn/export.h"
 #include "awn/notification_store.h"
 #include "awn/platform.h"
@@ -55,7 +56,11 @@ class AWN_API AwesomeNotifications {
   void getInitialAction(bool removeFromEvents, std::function<void(const Value&)> done);
 
   // Create
-  void createNotification(const ValueMap& model, std::function<void(bool)> done);
+  /// `done` answers the created flag; `fail` (when given) receives a
+  /// decorator's rejection, otherwise reported as created = false.
+  void createNotification(
+      const ValueMap& model, std::function<void(bool)> done,
+      std::function<void(const AwesomeNotificationsException&)> fail = nullptr);
 
   // OS callbacks (posted to the platform thread by the bridge)
   /// Returns the action type of what was activated (the bridge brings the app
