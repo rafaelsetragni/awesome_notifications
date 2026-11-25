@@ -15,10 +15,7 @@ class AwesomeNotificationsChatPlugin : FlutterPlugin {
     private var methodHandler: ChatMethodHandler? = null
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        if (!installed) {
-            installed = true
-            NotificationBuilderRegistry.register(priority = PRIORITY) { inner -> ChatBuilder(inner) }
-        }
+        install()
         methodHandler = ChatMethodHandler(binding.applicationContext).also {
             AwesomeMethodHandlerRegistry.register(it)
         }
@@ -33,5 +30,13 @@ class AwesomeNotificationsChatPlugin : FlutterPlugin {
         /** Localization is 100 (outermost), scheduling 10 (innermost). */
         const val PRIORITY = 50
         @Volatile private var installed = false
+
+        /** Puts the decorator in the core's chain, once per process. */
+        @Synchronized
+        fun install() {
+            if (installed) return
+            installed = true
+            NotificationBuilderRegistry.register(priority = PRIORITY) { inner -> ChatBuilder(inner) }
+        }
     }
 }

@@ -1,2 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- Installs the chat decorator at process start (pushes with the app closed). -->
+        <provider
+            android:name="me.carda.awesome_notifications_chat.ChatInitializer"
+            android:authorities="${applicationId}.awesome-notifications-chat-init"
+            android:exported="false" />
+    </application>
 </manifest>

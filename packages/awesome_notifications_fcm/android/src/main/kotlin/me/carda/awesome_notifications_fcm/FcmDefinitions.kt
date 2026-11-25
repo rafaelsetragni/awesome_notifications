@@ -42,6 +42,8 @@ object FcmDefinitions {
     const val MODEL_BUTTONS = "actionButtons"
     const val MODEL_SCHEDULE = "schedule"
     const val MODEL_LOCALIZATIONS = "localizations"
+    /** The chat block (awesome_notifications_chat). */
+    const val MODEL_CONVERSATION = "conversation"
     const val MODEL_ANDROID = "Android"
     const val MODEL_IOS = "iOS"
 

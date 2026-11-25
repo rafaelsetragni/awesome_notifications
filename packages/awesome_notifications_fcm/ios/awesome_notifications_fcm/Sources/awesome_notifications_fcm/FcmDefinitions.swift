@@ -36,6 +36,8 @@ enum FcmDefinitions {
     static let MODEL_BUTTONS = "actionButtons"
     static let MODEL_SCHEDULE = "schedule"
     static let MODEL_LOCALIZATIONS = "localizations"
+    /// The chat block (awesome_notifications_chat).
+    static let MODEL_CONVERSATION = "conversation"
     static let MODEL_ANDROID = "Android"
     static let MODEL_IOS = "iOS"
 

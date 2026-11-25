@@ -5,9 +5,13 @@
 // one-to-one and a group conversation, answers from the notification itself
 // and marks a conversation as read. Android shows them as conversations; iOS
 // and macOS as communication notifications (see the package README for the
-// required Xcode setup).
+// required Xcode setup). Messages can also arrive by push: add your Firebase
+// config files (google-services.json / GoogleService-Info.plist) and send the
+// payload shown in the README to the FCM token the app displays.
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications_chat/awesome_notifications_chat.dart';
+import 'package:awesome_notifications_fcm/awesome_notifications_fcm.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 
@@ -38,7 +42,10 @@ void main() {
   // 1. Initialize with at least one channel. Keep the Future so the UI can wait
   //    for it: creating a notification before initialize completes can fail.
   final Future<bool> awesomeNotificationsInitialization =
-      NotificationController.initializeLocalNotifications();
+      NotificationController.initializeLocalNotifications().then((ok) async {
+        await NotificationController.initializeRemoteNotifications();
+        return ok;
+      });
 
   runApp(
     MyApp(
@@ -80,6 +87,39 @@ class NotificationController {
       ],
       debug: true,
     );
+  }
+
+  ///  *********************************************
+  ///     PUSH (FCM)
+  ///  *********************************************
+  /// The FCM token, shown on the home page to send test pushes to.
+  static final ValueNotifier<String> fcmToken = ValueNotifier('');
+
+  static Future<void> initializeRemoteNotifications() async {
+    if (!AwesomeNotificationsFcm.isPlatformSupported) return;
+    try {
+      await Firebase.initializeApp();
+    } catch (e) {
+      fcmToken.value = 'Firebase not configured: add your config files';
+      return;
+    }
+    await AwesomeNotificationsFcm().initialize(
+      onFcmTokenHandle: onFcmTokenReceived,
+      onFcmSilentDataHandle: onSilentDataReceived,
+      debug: true,
+    );
+    fcmToken.value = await AwesomeNotificationsFcm().requestFirebaseAppToken();
+  }
+
+  @pragma('vm:entry-point')
+  static Future<void> onFcmTokenReceived(String token) async {
+    fcmToken.value = token;
+    debugPrint('FCM token: $token');
+  }
+
+  @pragma('vm:entry-point')
+  static Future<void> onSilentDataReceived(FcmSilentData data) async {
+    debugPrint('Silent data: ${data.data}');
   }
 
   ///  *********************************************
@@ -406,6 +446,15 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: mainColor,
             labelColor: Colors.white,
             onPressed: _requestPermission,
+          ),
+          const _SectionDivisor('Push (FCM token)'),
+          ValueListenableBuilder<String>(
+            valueListenable: NotificationController.fcmToken,
+            builder: (context, token, _) => SelectableText(
+              token.isEmpty ? 'Waiting for the token…' : token,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           ),
           const _SectionDivisor('Conversations'),
           _WideButton(

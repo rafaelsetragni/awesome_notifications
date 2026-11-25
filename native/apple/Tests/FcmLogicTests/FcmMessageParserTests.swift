@@ -63,6 +63,33 @@ final class FcmMessageParserTests: XCTestCase {
         XCTAssertNil(c[Definitions.NOTIFICATION_PAYLOAD], "section keys must not leak into the payload")
     }
 
+    func testAConversationReachesTheCore() {
+        let structured = build([
+            "content": "{\"id\":7,\"channelKey\":\"chat\",\"notificationLayout\":\"Messaging\"}",
+            "conversation": "{\"id\":\"ana\",\"me\":{\"key\":\"me\",\"name\":\"Me\"},\"message\":{\"sender\":{\"key\":\"ana\",\"name\":\"Ana\"},\"text\":\"Hi\"}}"
+        ])
+        XCTAssertEqual((structured["conversation"] as? [String: Any])?["id"] as? String, "ana")
+        XCTAssertNil(content(structured)[Definitions.NOTIFICATION_PAYLOAD])
+
+        let flattened = build([
+            "content.id": "7",
+            "content.channelKey": "chat",
+            "conversation.id": "ana",
+            "conversation.me.key": "me",
+            "conversation.me.name": "Me",
+            "conversation.message.sender.key": "ana",
+            "conversation.message.sender.name": "Ana",
+            "conversation.message.text": "Hi",
+            "conversation.participants.0.key": "ana",
+            "conversation.participants.0.name": "Ana"
+        ])
+        let conversation = flattened["conversation"] as? [String: Any]
+        XCTAssertEqual(conversation?["id"] as? String, "ana")
+        XCTAssertEqual(((conversation?["message"] as? [String: Any])?["sender"] as? [String: Any])?["name"] as? String, "Ana")
+        XCTAssertEqual((conversation?["participants"] as? [Any])?.count, 1)
+        XCTAssertNil(content(flattened)[Definitions.NOTIFICATION_PAYLOAD], "conversation keys must not leak")
+    }
+
     func testIosOverridesApplyAndAndroidOnesAreIgnored() {
         // Overrides are model-shaped, like the Android ones and the original plugin.
         let structured = build([

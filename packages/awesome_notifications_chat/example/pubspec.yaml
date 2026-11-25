@@ -29,6 +29,11 @@ dependencies:
   awesome_notifications:
     path: ../../awesome_notifications
 
+  # Chat messages by push.
+  awesome_notifications_fcm:
+    path: ../../awesome_notifications_fcm
+  firebase_core: ^4.4.0
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8

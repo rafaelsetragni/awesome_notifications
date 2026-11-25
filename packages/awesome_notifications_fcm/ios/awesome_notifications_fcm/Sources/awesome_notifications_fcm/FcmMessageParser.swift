@@ -52,6 +52,10 @@ final class FcmMessageParser {
         if let loc = sections[FcmDefinitions.MODEL_LOCALIZATIONS] as? [String: Any], !loc.isEmpty {
             out[FcmDefinitions.MODEL_LOCALIZATIONS] = loc
         }
+        if let conversation = sections[FcmDefinitions.MODEL_CONVERSATION] as? [String: Any],
+           !conversation.isEmpty {
+            out[FcmDefinitions.MODEL_CONVERSATION] = conversation
+        }
 
         // (3) iOS overrides are model-shaped (`{content, actionButtons, …}`), as on Android.
         if let iosOverrides = sections[FcmDefinitions.MODEL_IOS] as? [String: Any] {
@@ -78,6 +82,7 @@ final class FcmMessageParser {
         sections[FcmDefinitions.MODEL_SCHEDULE] = FcmJson.parseObject(data[FcmDefinitions.MODEL_SCHEDULE])
         sections[FcmDefinitions.MODEL_BUTTONS] = FcmJson.parseList(data[FcmDefinitions.MODEL_BUTTONS])
         sections[FcmDefinitions.MODEL_LOCALIZATIONS] = FcmJson.parseObject(data[FcmDefinitions.MODEL_LOCALIZATIONS])
+        sections[FcmDefinitions.MODEL_CONVERSATION] = FcmJson.parseObject(data[FcmDefinitions.MODEL_CONVERSATION])
         sections[FcmDefinitions.MODEL_IOS] = FcmJson.parseObject(data[FcmDefinitions.MODEL_IOS])
         return sections
     }
@@ -122,6 +127,7 @@ final class FcmMessageParser {
             root == FcmDefinitions.MODEL_SCHEDULE ||
             root == FcmDefinitions.MODEL_BUTTONS ||
             root == FcmDefinitions.MODEL_LOCALIZATIONS ||
+            root == FcmDefinitions.MODEL_CONVERSATION ||
             root == FcmDefinitions.MODEL_ANDROID ||
             root == FcmDefinitions.MODEL_IOS
     }

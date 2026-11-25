@@ -116,6 +116,8 @@ class FcmMessageParser {
             ?.let { if (it.isNotEmpty()) out[FcmDefinitions.MODEL_BUTTONS] = it }
         (FcmJson.parseObjectOrNull(remoteData[FcmDefinitions.MODEL_LOCALIZATIONS]) as? Map<String, Any?>)
             ?.let { if (it.isNotEmpty()) out[FcmDefinitions.MODEL_LOCALIZATIONS] = it }
+        (FcmJson.parseObjectOrNull(remoteData[FcmDefinitions.MODEL_CONVERSATION]) as? Map<String, Any?>)
+            ?.let { if (it.isNotEmpty()) out[FcmDefinitions.MODEL_CONVERSATION] = it }
         return out
     }
 
@@ -166,6 +168,7 @@ class FcmMessageParser {
             FcmDefinitions.MODEL_SCHEDULE,
             FcmDefinitions.MODEL_BUTTONS,
             FcmDefinitions.MODEL_LOCALIZATIONS,
+            FcmDefinitions.MODEL_CONVERSATION,
             FcmDefinitions.MODEL_ANDROID,
             FcmDefinitions.MODEL_IOS
         )
