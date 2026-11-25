@@ -15,6 +15,7 @@ namespace {
 class FakePresenter : public NotificationPresenter {
  public:
   std::vector<int64_t> delivered, pending;
+  bool allowed = true;
 
   void present(const BuiltNotification& built, std::function<void(bool)> done) override {
     removePending({built.id});
@@ -32,7 +33,7 @@ class FakePresenter : public NotificationPresenter {
   void removeAllPending() override { pending.clear(); }
   std::vector<int64_t> deliveredIds() override { return delivered; }
   std::vector<int64_t> pendingIds() override { return pending; }
-  bool isAllowed() override { return true; }
+  bool isAllowed() override { return allowed; }
   void requestPermission(std::function<void(bool)> done) override { done(true); }
   std::string localTimeZone() override { return "UTC"; }
   int64_t utcOffset(const std::string&, TimePoint) override { return 0; }
@@ -68,6 +69,10 @@ struct Harness {
     NotificationBuilderRegistry::shared().clearForTest();
     AwesomeMethodHandlerRegistry::shared().clearForTest();
     engine.configure(presenter, std::make_shared<InlineDispatcher>(), store, false);
+    // 0.12 only schedules on an existing channel.
+    for (const char* key : {"basic", "a", "b"})
+      engine.setChannel(ValueMap{{"channelKey", key}, {"importance", "Default"}});
+    engine.setChannel(ValueMap{{"channelKey", "off"}, {"importance", "None"}});
     RegisterSchedules(engine);
     token = AwesomeEventsReceiver::shared().subscribe(
         [this](const std::string& name, const ValueMap& content) {
@@ -80,6 +85,23 @@ struct Harness {
     AwesomeMethodHandlerRegistry::shared().clearForTest();
   }
 
+  /// The answer, or "error <code> <details>" when the call failed.
+  std::string outcome(const std::string& method, Value arguments = Value()) {
+    std::string out = "(no answer)";
+    bool handled = router.handle(
+        method, arguments,
+        [&](const Value& v) {
+          if (v.isNull()) out = "null";
+          else if (v.isBool()) out = *v.asBool() ? "true" : "false";
+          else out = v.asString().value_or("value");
+        },
+        [&](const std::string& code, const std::string&, const Value& details) {
+          out = "error " + code + " " + details.asString().value_or("");
+        });
+    EXPECT_TRUE(handled);
+    return out;
+  }
+
   Value call(const std::string& method, Value arguments = Value()) {
     Value answer;
     bool handled = router.handle(method, arguments, [&](const Value& v) { answer = v; });
@@ -87,10 +109,10 @@ struct Harness {
     return answer;
   }
 
-  bool create(int id, ValueMap schedule, const char* channel = "basic") {
+  std::string create(int id, ValueMap schedule, const char* channel = "basic") {
     ValueMap model{{"content", ValueMap{{"id", id}, {"title", "T"}, {"channelKey", channel}}}};
     if (!schedule.empty()) model["schedule"] = schedule;
-    return call("createNewNotification", Value(model)).asBool().value_or(false);
+    return outcome("createNewNotification", Value(model));
   }
 };
 
@@ -98,7 +120,8 @@ struct Harness {
 
 TEST(ScheduledNotificationIsPendingWithScheduleSource) {
   Harness h;
-  EXPECT_TRUE(h.create(1, {{"interval", 120}}));
+  // 0.12 Android answered false for a notification it did schedule.
+  EXPECT_EQ(h.create(1, {{"interval", 120}}), std::string("false"));
   EXPECT_EQ(h.presenter->armed(1), size_t(1));
   EXPECT_TRUE(h.presenter->delivered.empty());
   EXPECT_EQ(h.events.size(), size_t(1));  // created only; displayed comes at fire time
@@ -109,32 +132,60 @@ TEST(ScheduledNotificationIsPendingWithScheduleSource) {
 
 TEST(NotificationWithoutScheduleIsImmediate) {
   Harness h;
-  EXPECT_TRUE(h.create(2, {}));
+  EXPECT_EQ(h.create(2, {}), std::string("true"));
   EXPECT_EQ(h.presenter->delivered, (std::vector<int64_t>{2}));
+  // An unrecognized schedule block is no schedule either.
+  EXPECT_EQ(h.create(3, {{"timeZone", "UTC"}}), std::string("true"));
 }
 
 TEST(RepeatingScheduleIsPreArmed) {
   Harness h;
-  EXPECT_TRUE(h.create(3, {{"interval", 60}, {"repeats", true}}));
+  EXPECT_EQ(h.create(3, {{"interval", 60}, {"repeats", true}}), std::string("false"));
   EXPECT_EQ(h.presenter->armed(3), kMaxArmedOccurrences);
-  EXPECT_TRUE(h.create(4, {{"hour", 9}, {"repeats", true}}));
+  EXPECT_EQ(h.create(4, {{"hour", 9}, {"minute", 0}, {"second", 0}, {"repeats", true}}),
+            std::string("false"));
   EXPECT_EQ(h.presenter->armed(4), kMaxArmedOccurrences);
 }
 
-TEST(PastOrInvalidScheduleIsRejected) {
+TEST(CreateAnswersLike012) {
   Harness h;
-  EXPECT_FALSE(h.create(5, {{"year", 2020}, {"month", 1}, {"day", 1}}));
-  EXPECT_FALSE(h.create(6, {{"interval", 10}, {"repeats", true}}));
+  // No future date: false, not stored.
+  EXPECT_EQ(h.create(5, {{"year", 2020}, {"month", 1}, {"day", 1}, {"hour", 0}}),
+            std::string("false"));
+  // Invalid schedules fail.
+  EXPECT_EQ(h.create(6, {{"interval", 30}, {"repeats", true}}),
+            std::string("error INVALID_ARGUMENTS arguments.invalid.notificationInterval.interval"));
+  EXPECT_EQ(h.create(7, {{"interval", 0}}),
+            std::string("error INVALID_ARGUMENTS arguments.invalid.notificationInterval.interval"));
+  EXPECT_EQ(h.create(8, {{"hour", 24}}),
+            std::string("error INVALID_ARGUMENTS arguments.invalid.notificationCalendar"));
+  EXPECT_EQ(h.create(9, {{"hour", nullptr}, {"minute", nullptr}}),
+            std::string("error INVALID_ARGUMENTS arguments.invalid.notificationCalendar"));
+  // A missing or disabled channel fails.
+  EXPECT_EQ(h.create(10, {{"interval", 60}}, "nope"),
+            std::string("error INVALID_ARGUMENTS insufficientPermissions.channel.nope"));
+  EXPECT_EQ(h.create(11, {{"interval", 60}}, "off"),
+            std::string("error INVALID_ARGUMENTS insufficientPermissions.channel.off"));
   EXPECT_TRUE(h.presenter->pending.empty());
 }
 
-TEST(ListAllSchedulesReturnsOneModelPerSchedule) {
+TEST(NotificationsNotAllowedFail) {
+  Harness h;
+  h.presenter->allowed = false;
+  EXPECT_EQ(h.create(1, {{"interval", 60}}),
+            std::string("error INSUFFICIENT_PERMISSIONS insufficientPermissions.global"));
+}
+
+TEST(ListAllSchedulesReturnsTheStoredSchedule) {
   Harness h;
   h.create(1, {{"interval", 60}, {"repeats", true}});
   h.create(2, {{"interval", 300}});
   h.create(3, {});
   auto list = h.call("listAllSchedules").list();
   EXPECT_EQ(list.size(), size_t(2));
+  ValueMap schedule = getMap(list[0].map(), "schedule");
+  EXPECT_EQ(getString(schedule, "timeZone").value_or(""), std::string("UTC"));
+  EXPECT_EQ(getInt(schedule, "interval").value_or(0), 60);
 }
 
 TEST(CancelSchedulesKeepDeliveredNotifications) {
@@ -150,6 +201,16 @@ TEST(CancelSchedulesKeepDeliveredNotifications) {
   EXPECT_FALSE(h.store->get(2).has_value());
 }
 
+TEST(CancelArgumentsAreValidated) {
+  Harness h;
+  EXPECT_EQ(h.outcome("cancelSchedule", Value(-1)),
+            std::string("error INVALID_ARGUMENTS arguments.invalid.dismiss.id"));
+  EXPECT_EQ(h.outcome("cancelSchedulesByChannelKey", Value("")),
+            std::string("error INVALID_ARGUMENTS arguments.invalid.dismiss.channelKey"));
+  EXPECT_EQ(h.outcome("cancelSchedulesByGroupKey", Value()),
+            std::string("error INVALID_ARGUMENTS arguments.invalid.dismiss.groupKey"));
+}
+
 TEST(CancelAllSchedules) {
   Harness h;
   h.create(1, {{"interval", 60}, {"repeats", true}});
@@ -159,13 +220,17 @@ TEST(CancelAllSchedules) {
   EXPECT_TRUE(h.store->ids().empty());
 }
 
-TEST(GetNextDateAnswersUtcString) {
+TEST(GetNextDateAnswersTheWallClockWithItsZone) {
   Harness h;
-  ValueMap args{{"fixedDate", "2026-07-05 08:30:00"}, {"schedule", ValueMap{{"interval", 60}}}};
-  EXPECT_EQ(h.call("getNextDate", Value(args)).asString().value_or(""),
-            std::string("2026-07-05 08:31:00"));
+  ValueMap args{{"fixedDate", "2026-07-05 08:30:00"},
+                {"schedule", ValueMap{{"interval", 60}, {"timeZone", "UTC"}}}};
+  EXPECT_EQ(h.outcome("getNextDate", Value(args)), std::string("2026-07-05 08:31:00 UTC"));
   ValueMap none{{"fixedDate", "2026-07-05 08:30:00"}, {"schedule", ValueMap{}}};
-  EXPECT_TRUE(h.call("getNextDate", Value(none)).isNull());
+  EXPECT_EQ(h.outcome("getNextDate", Value(none)),
+            std::string("error INVALID_ARGUMENTS arguments.invalid.schedule.data"));
+  ValueMap past{{"fixedDate", "2026-07-05 08:30:00"},
+                {"schedule", ValueMap{{"year", 2020}, {"timeZone", "UTC"}}}};
+  EXPECT_EQ(h.outcome("getNextDate", Value(past)), std::string("null"));
 }
 
 TEST(TopUpRearmsRepeatingSchedulesRunningLow) {

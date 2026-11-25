@@ -20,6 +20,11 @@ inline constexpr int kArmHorizonDays = 366;
 /// Builder decorator: gives a notification carrying a `schedule` its fire date
 /// (and the pre-armed later occurrences of a repeating one), and stamps its
 /// created source as Schedule. Without a schedule it just delegates.
+///
+/// It answers the create call like 0.12 on Android (the desktop reference):
+/// false once scheduled (or when the schedule has no next date, then not
+/// stored); an error for an invalid schedule, a missing / disabled channel or
+/// notifications not allowed.
 class ScheduleBuilder : public awn::NotificationBuilder {
  public:
   ScheduleBuilder(std::shared_ptr<awn::NotificationBuilder> inner, awn::AwesomeNotifications& core);
@@ -39,14 +44,15 @@ class ScheduleMethodHandler : public awn::AwesomeMethodHandler {
 
   bool handle(const std::string& method, const awn::Value& arguments,
               awn::MethodResult result) override;
+  bool handle(const std::string& method, const awn::Value& arguments, awn::MethodResult result,
+              awn::MethodError error) override;
 
  private:
   awn::AwesomeNotifications& core_;
 };
 
 /// The time-zone services of the platform presenter, as ScheduleMath needs them.
-OffsetProvider OffsetsOf(awn::AwesomeNotifications& core);
-std::string LocalZoneOf(awn::AwesomeNotifications& core);
+Zones ZonesOf(awn::AwesomeNotifications& core);
 
 /// Registers the decorator + method handler in the core registries and tops up
 /// the pre-armed occurrences of the repeating schedules. Call once, after the
