@@ -29,7 +29,8 @@ on iOS and macOS.
 * **One-to-one and group conversations**, with the `Messaging` and
   `MessagingGroup` layouts.
 * **Messages by push** with `awesome_notifications_fcm`: Android builds them even with
-  the app killed, iOS through a Notification Service Extension.
+  the app killed, iOS through a Notification Service Extension, macOS while the app
+  runs.
 * **The same Person model everywhere**, validated before it reaches the platform.
 
 <br>
@@ -68,7 +69,7 @@ on iOS and macOS.
 | Group name | ✅ | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
 | Group picture | ✅ (conversation shortcut icon) | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
 | Reply from the notification | ✅ | ✅ | ✅ | ⏳ | ⏳ | ❌ |
-| Messages by push (`awesome_notifications_fcm`) | ✅ | ✅ (Notification Service Extension) | ⏳ | ❌ | ❌ | ⏳ |
+| Messages by push (`awesome_notifications_fcm`) | ✅ | ✅ (Notification Service Extension) | ✅ while the app runs; plain text when closed | ❌ | ❌ | ⏳ |
 | Bubbles | ⏳ | ❌ | ❌ | ❌ | ❌ | ❌ |
 
 ✅ supported · 🧪 preview (implemented, still being validated) · ⏳ planned · ❌ not possible on this platform
@@ -280,6 +281,13 @@ same keys to **both** `macos/Runner/DebugProfile.entitlements` and
 **3. Declare the `INSendMessageIntent` activity type** in `macos/Runner/Info.plist`,
 exactly as on iOS (step 3 above).
 
+**4. (Push only) Enable push.** Follow the macOS setup of `awesome_notifications_fcm`:
+the **Push Notifications** capability (in both entitlements files, `com.apple.developer.aps-environment`)
+and `macos/Runner/GoogleService-Info.plist` added to the Runner target. While the app
+runs, a chat push shows as a communication notification, once. macOS has no Notification
+Service Extension support in this package yet: with the app closed, the push shows its
+alert as plain text.
+
 The group's picture works as on iOS (see the note at the end of [Configuring
 iOS](#-configuring-ios-required)).
 
@@ -447,7 +455,8 @@ With `awesome_notifications_fcm` installed, a push carries the same conversation
 notification, with the `Messaging` or `MessagingGroup` layout) and `conversation` (the
 `NotificationConversation`, with the [model's keys](#-model-reference)). Android needs
 nothing else, even with the app killed; iOS needs the
-[Notification Service Extension](#-configuring-ios-required) (step 4).
+[Notification Service Extension](#-configuring-ios-required) (step 4); macOS builds it
+while the app runs ([Configuring macOS](#-configuring-macos-required), step 4).
 
 An FCM v1 message to a group:
 
