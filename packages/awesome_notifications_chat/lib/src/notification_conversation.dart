@@ -15,8 +15,8 @@ class NotificationMessage {
   /// plugin.
   final DateTime? timestamp;
 
-  /// An image sent with the message (Android shows it in the conversation; iOS
-  /// attaches it to the notification).
+  /// An image sent with the message: iOS attaches it to the notification
+  /// (Android: planned).
   final String? image;
 
   const NotificationMessage({
