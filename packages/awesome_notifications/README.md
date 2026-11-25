@@ -39,7 +39,7 @@ Engage your users with custom local and push notifications on Flutter. Get real-
 
 ***iOS** notification examples:*
 
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications-ios-examples.jpg)
+![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-ios-examples.jpg)
 
 
 <br>
