@@ -28,6 +28,8 @@ on iOS and macOS.
   it to the conversation.
 * **One-to-one and group conversations**, with the `Messaging` and
   `MessagingGroup` layouts.
+* **Messages by push** with `awesome_notifications_fcm`: Android builds them even with
+  the app killed, iOS through a Notification Service Extension.
 * **The same Person model everywhere**, validated before it reaches the platform.
 
 <br>
@@ -91,6 +93,7 @@ on iOS and macOS.
 dependencies:
   awesome_notifications: any       # the core
   awesome_notifications_chat: any  # this package (same version line as the core)
+  awesome_notifications_fcm: any   # only to receive messages by push
 ```
 
 2. Get the packages:
@@ -243,6 +246,11 @@ Push messages must carry `"mutable-content": 1` (see [Sending messages by push](
 A push the extension doesn't recognize, or one it fails to rebuild, is shown as it
 arrived.
 
+On iOS, a group message shows the **group's** picture with the sender's name, like
+WhatsApp, as long as the group has more than one member besides the user (`participants`
+with two or more people). A "group" with a single other person reads as a one-to-one
+conversation and shows the sender's photo.
+
 <br>
 
 ## 🖥 Configuring macOS (required)
@@ -274,11 +282,6 @@ exactly as on iOS (step 3 above).
 
 On macOS the group picture is not available (macOS has no API for it; it shows the
 senders instead).
-
-On iOS, a group message shows the **group's** picture with the sender's name, like
-WhatsApp, as long as the group has more than one member besides the user (`participants`
-with two or more people). A "group" with a single other person reads as a one-to-one
-conversation and shows the sender's photo.
 
 <br>
 
@@ -435,6 +438,8 @@ final onScreen = await AwesomeNotificationsChat().listActiveConversations();
 `removeConversation` also removes the Android conversation shortcut and the iOS donated
 interactions. Use it when the conversation is gone for good, not just read.
 
+<br>
+
 ## Sending messages by push
 
 With `awesome_notifications_fcm` installed, a push carries the same conversation as
@@ -577,6 +582,25 @@ outside that section.
 
 **Android keeps showing a spinner after a reply**
 Call `addReply` after handling the typed text.
+
+**iOS: a push shows the alert's text as it is, not as a communication notification**
+The extension didn't run or didn't recognize the push: check `"mutable-content": 1` and an
+`alert` in `aps`, that the **NotificationService** extension is embedded in Runner, and
+that its `Info.plist` declares `INSendMessageIntent`. On the iOS Simulator,
+`xcrun simctl push` never runs the extension: test with a real push (FCM / APNs).
+
+**Xcode, extension target: "Entitlement com.apple.developer.usernotifications.communication
+not found and could not be included in profile"**
+Remove the Communication Notifications capability (and its entitlements file) from the
+**NotificationService** target: it belongs to the Runner target only.
+
+**Xcode: "Embedded binary is not signed with the same certificate as the parent app"**
+The extension's **Team** differs from Runner's. Select the same Team in both targets.
+
+**FCM answers `401 Invalid APNs credential` (`THIRD_PARTY_AUTH_ERROR`)**
+Firebase has no APNs key, or a key from another team. Upload the APNs authentication key
+(`.p8`) of the team that signs the app in **Project settings → Cloud Messaging**, with its
+Key ID and Team ID.
 
 <br>
 
