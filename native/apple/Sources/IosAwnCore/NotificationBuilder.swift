@@ -17,8 +17,8 @@ public struct BuiltNotification {
     /// from the same content that was built.
     public let model: [String: Any]
     /// A decorator took over delivery (e.g. media shown as Now Playing): the
-    /// core posts nothing and the create call answers true (Android's
-    /// `BuildOutcome.Handled`).
+    /// core posts nothing, still emits created + displayed, and the create call
+    /// answers true (Android's `BuildOutcome.Handled`).
     public let isHandled: Bool
     public init(
         id: Int,
@@ -98,7 +98,9 @@ open class NotificationBuilder {
     ) -> [String: Any] {
         var result = model
         var content = contentMap(fromModel: model)
-        if content[Definitions.NOTIFICATION_CREATED_DATE] == nil {
+        // Dart sends the unset fields as null (NSNull): unset, as for 0.12.
+        let date = content[Definitions.NOTIFICATION_CREATED_DATE]
+        if date == nil || date is NSNull {
             content[Definitions.NOTIFICATION_CREATED_DATE] = now()
             content[Definitions.NOTIFICATION_CREATED_LIFECYCLE] = lifeCycle.rawValue
             content[Definitions.NOTIFICATION_CREATED_SOURCE] = source.rawValue
@@ -151,6 +153,24 @@ open class NotificationBuilder {
         return BuiltNotification(
             id: built.id, content: built.content,
             trigger: built.trigger, model: updatedModel)
+    }
+
+    /// The lifecycle of a notification a decorator delivered itself (no system
+    /// notification): created now (unless already stamped) and displayed at the
+    /// same date and lifecycle, as an immediate posted notification. Idempotent,
+    /// so a decorator can stamp the model it keeps and the core stamps it again.
+    public func stampHandledLifecycle(
+        into model: [String: Any],
+        lifeCycle: NotificationLifeCycle = AppLifeCycle.current
+    ) -> [String: Any] {
+        let created = stampCreatedLifecycle(into: model, lifeCycle: lifeCycle)
+        let content = contentMap(fromModel: created)
+        return stampDisplayedLifecycle(
+            into: created,
+            displayedDate: (content[Definitions.NOTIFICATION_CREATED_DATE] as? String) ?? now(),
+            lifeCycle: NotificationLifeCycle(
+                rawValue: content[Definitions.NOTIFICATION_CREATED_LIFECYCLE] as? String ?? ""
+            ) ?? lifeCycle)
     }
 
     /// The next fire date of a delivery trigger (interval or calendar), formatted

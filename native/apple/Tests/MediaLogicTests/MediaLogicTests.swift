@@ -65,6 +65,40 @@ final class MediaLogicTests: XCTestCase {
         XCTAssertFalse(built!.isHandled)
     }
 
+    func testPushModelsAreRejected() {
+        for source in ["Firebase", "firebase", "FIREBASE"] {
+            XCTAssertEqual(detail(model(media: media(), content: ["createdSource": source])),
+                           "arguments.invalid.notificationMedia.push", source)
+        }
+        XCTAssertNil(detail(model(media: media(), content: ["createdSource": "Local"])))
+        // Not a media model: left to the next builder.
+        XCTAssertNil(detail(model(layout: "Default", media: nil, content: ["createdSource": "Firebase"])))
+    }
+
+    func testScheduledModelsAreRejected() {
+        var scheduled = model(media: media())
+        scheduled["schedule"] = ["interval": 60]
+        XCTAssertEqual(detail(scheduled), "arguments.invalid.notificationMedia.schedule")
+        scheduled["schedule"] = NSNull()
+        XCTAssertNil(detail(scheduled))
+        var other = model(layout: "Default", media: nil)
+        other["schedule"] = ["interval": 60]
+        XCTAssertNil(detail(other))
+    }
+
+    /// Push, then schedule, then the layout / media pairing.
+    func testTheRulesApplyInOrder() {
+        var pushed = model(media: nil, content: ["createdSource": "Firebase"])
+        pushed["schedule"] = ["interval": 60]
+        XCTAssertEqual(detail(pushed), "arguments.invalid.notificationMedia.push")
+        var scheduled = model(media: nil)
+        scheduled["schedule"] = ["interval": 60]
+        XCTAssertEqual(detail(scheduled), "arguments.invalid.notificationMedia.schedule")
+        var wrongLayout = model(layout: "BigPicture", media: media())
+        wrongLayout["schedule"] = ["interval": 60]
+        XCTAssertEqual(detail(wrongLayout), "arguments.invalid.notificationMedia.schedule")
+    }
+
     func testInvalidBlocksAreRejected() {
         let invalid: [[String: Any]] = [
             ["sessionId": " "], ["title": ""], ["position": -1], ["duration": 0],
@@ -117,6 +151,25 @@ final class MediaLogicTests: XCTestCase {
         XCTAssertEqual(built?.id, 100)
         // Built on the main thread (the test's), the session is shown at once.
         XCTAssertEqual(sessions.ownerId, "main")
+    }
+
+    /// The session keeps the lifecycle the core reports, so its action events
+    /// carry the created / displayed dates.
+    func testTheSessionModelCarriesTheLifecycle() throws {
+        let surface = FakeSurface()
+        var events: [[String: Any]] = []
+        let store = MediaSessions(surface: { _ in surface }, dispatch: { model, key, input, button in
+            events.append(NotificationBuilder().controlEvent(
+                model: model, buttonKey: key, input: input, button: button, lifeCycle: .foreground).data)
+        })
+        let built = try MediaBuilder(inner: NotificationBuilder(), sessions: { store }, loadArtwork: false)
+            .build(model: model(media: media()))
+        let content = try XCTUnwrap(built?.model["content"] as? [String: Any])
+        let created = try XCTUnwrap(content["createdDate"] as? String)
+        XCTAssertEqual(content["displayedDate"] as? String, created)
+        store.handle(.pause)
+        XCTAssertEqual(events.first?["createdDate"] as? String, created)
+        XCTAssertEqual(events.first?["displayedDate"] as? String, created)
     }
 
     // MARK: - Now Playing
@@ -277,6 +330,78 @@ final class MediaLogicTests: XCTestCase {
         XCTAssertEqual(surface.shown.count, 3)
         XCTAssertNil(surface.shown.last!)
         XCTAssertFalse(store.handle(.play))
+    }
+
+    // MARK: - Removal
+
+    private func session(id: Int, sessionId: String, channel: String = "media_player",
+                         group: String? = nil) -> (MediaSession, [String: Any]) {
+        var content: [String: Any] = ["channelKey": channel]
+        if let group = group { content["groupKey"] = group }
+        var m = model(media: media(["sessionId": sessionId]), content: content)
+        var c = m["content"] as! [String: Any]
+        c["id"] = id
+        m["content"] = c
+        return try! MediaBuilder.prepare(m)!
+    }
+
+    private func filled(_ surface: FakeSurface) -> MediaSessions {
+        let store = sessions(surface)
+        for (id, sessionId, channel, group) in [(1, "a", "music", "g1"), (2, "b", "music", "g2"),
+                                                (3, "c", "radio", "g1")] {
+            let (s, m) = session(id: id, sessionId: sessionId, channel: channel, group: group)
+            store.update(s, model: m, artwork: nil)
+        }
+        return store
+    }
+
+    func testRemovingANotificationEndsItsSession() {
+        let surface = FakeSurface()
+        let store = filled(surface)
+        XCTAssertEqual(store.session("c")?.state, .playing)  // playing sessions end too
+        store.remove(.id(3))
+        XCTAssertNil(store.session("c"))
+        XCTAssertNil(store.ownerId)
+        XCTAssertNil(surface.shown.last!)
+        store.remove(.id(99))
+        XCTAssertNotNil(store.session("a"))
+        XCTAssertNotNil(store.session("b"))
+    }
+
+    func testRemovingByChannelGroupOrAll() {
+        var store = filled(FakeSurface())
+        store.remove(.channelKey("music"))
+        XCTAssertNil(store.session("a"))
+        XCTAssertNil(store.session("b"))
+        XCTAssertNotNil(store.session("c"))
+        XCTAssertEqual(store.ownerId, "c")  // c owns Now Playing and stays
+
+        store = filled(FakeSurface())
+        store.remove(.groupKey("g1"))
+        XCTAssertNil(store.session("a"))
+        XCTAssertNotNil(store.session("b"))
+        XCTAssertNil(store.session("c"))
+
+        let surface = FakeSurface()
+        store = filled(surface)
+        store.remove(.all)
+        XCTAssertNil(store.session("a"))
+        XCTAssertNil(store.session("b"))
+        XCTAssertNil(store.ownerId)
+        XCTAssertNil(surface.shown.last!)
+        XCTAssertFalse(store.handle(.play))
+    }
+
+    /// The core's removal hook reaches the sessions (dismiss and cancel alike).
+    func testTheCoreRemovalHookEndsSessions() {
+        let store = filled(FakeSurface())
+        NotificationRemovalRegistry.shared.register(listener: store)
+        defer { NotificationRemovalRegistry.shared.unregister(listener: store) }
+        NotificationRemovalRegistry.shared.notify(.id(1), cancel: false)
+        NotificationRemovalRegistry.shared.notify(.id(2), cancel: true)
+        XCTAssertNil(store.session("a"))
+        XCTAssertNil(store.session("b"))
+        XCTAssertNotNil(store.session("c"))
     }
 
     func testMethodHandler() {

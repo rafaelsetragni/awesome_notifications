@@ -28,6 +28,11 @@ public enum MediaKeys {
     public static let methodCapabilities = "mediaCapabilities"
 
     public static let commandsChannel = "awesome_notifications_media/commands"
+
+    /// A model with a `schedule` entry can't be a media session.
+    public static let schedule = "schedule"
+    /// The content `createdSource` of a push (awesome_notifications_fcm).
+    public static let pushSource = "firebase"
     public static let control = "control"
 
     public static let layoutMediaPlayer = "MediaPlayer"

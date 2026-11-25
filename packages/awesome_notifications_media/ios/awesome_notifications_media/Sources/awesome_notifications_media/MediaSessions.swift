@@ -67,6 +67,25 @@ public final class MediaSessions {
         surface.show(nil, artwork: nil)
     }
 
+    /// Ends the sessions whose notification the app dismissed or cancelled,
+    /// as `stop` does, whatever their state.
+    public func remove(_ removal: NotificationRemoval) {
+        let ids = entries.filter { _, entry in
+            let content = (entry.model[Definitions.NOTIFICATION_CONTENT] as? [String: Any]) ?? [:]
+            switch removal {
+            case .all:
+                return true
+            case .id(let id):
+                return MapUtils.shared.getInt(content[Definitions.NOTIFICATION_ID]) == id
+            case .channelKey(let key):
+                return content[Definitions.NOTIFICATION_CHANNEL_KEY] as? String == key
+            case .groupKey(let key):
+                return content[Definitions.NOTIFICATION_GROUP_KEY] as? String == key
+            }
+        }.keys
+        for id in ids { stop(id) }
+    }
+
     /// Moves a session's position only (state and speed are kept).
     public func updatePosition(_ sessionId: String, position: Int) {
         guard var entry = entries[sessionId] else { return }
@@ -118,5 +137,11 @@ public final class MediaSessions {
         var event: [String: Any] = [MediaKeys.control: control.rawValue, MediaKeys.sessionId: sessionId]
         if let position = position { event[MediaKeys.position] = position }
         return event
+    }
+}
+
+extension MediaSessions: NotificationRemovalListener {
+    public func onNotificationsRemoved(_ removal: NotificationRemoval, cancel: Bool) {
+        if Thread.isMainThread { remove(removal) } else { DispatchQueue.main.async { self.remove(removal) } }
     }
 }

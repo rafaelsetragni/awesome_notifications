@@ -3,7 +3,8 @@ import IosAwnCore
 
 /// Takes over the `MediaPlayer` layout on iOS and macOS: the session is shown
 /// in the system's Now Playing (Control Center, lock screen, the macOS menu
-/// bar) and no notification is posted. The create call answers true.
+/// bar) and no notification is posted. The core still reports it created and
+/// displayed, and the create call answers true.
 public final class MediaBuilder: NotificationBuilder {
 
     /// Below chat (50), above scheduling (10): localization translates first.
@@ -20,9 +21,12 @@ public final class MediaBuilder: NotificationBuilder {
     }
 
     public override func build(model: [String: Any]) throws -> BuiltNotification? {
-        guard let (session, prepared) = try MediaBuilder.prepare(model) else {
+        guard let (session, valid) = try MediaBuilder.prepare(model) else {
             return try next(model)
         }
+        // Kept with the created / displayed lifecycle the core will report, so
+        // the session's action events carry it as a posted notification's do.
+        let prepared = stampHandledLifecycle(into: valid)
         let artwork = loadArtwork ? NowPlaying.artwork(from: session.artwork) : nil
         let sessions = self.sessions
         let show = { sessions().update(session, model: prepared, artwork: artwork) }
@@ -32,17 +36,23 @@ public final class MediaBuilder: NotificationBuilder {
 
     /// Validates a model and fills its content (title / body from the media,
     /// the session id in the payload). Nil when the model has neither the
-    /// layout nor a `media` block (not a media model).
+    /// layout nor a `media` block (not a media model). A push or a scheduled
+    /// model is rejected: a media session lives only while the app runs.
     public static func prepare(_ model: [String: Any]) throws -> (MediaSession, [String: Any])? {
         var content = (model[Definitions.NOTIFICATION_CONTENT] as? [String: Any]) ?? [:]
         let isMedia = content[Definitions.NOTIFICATION_LAYOUT] as? String == MediaKeys.layoutMediaPlayer
         let block = model[MediaKeys.media]
+        let hasBlock = block != nil && !(block is NSNull)
 
-        guard block != nil, !(block is NSNull) else {
-            if isMedia {
-                throw invalid("The MediaPlayer layout requires a NotificationMedia", ".notificationMedia")
-            }
-            return nil
+        guard isMedia || hasBlock else { return nil }
+        if (content[Definitions.NOTIFICATION_CREATED_SOURCE] as? String)?.lowercased() == MediaKeys.pushSource {
+            throw invalid("A media notification can't come from a push", ".notificationMedia.push")
+        }
+        if let schedule = model[MediaKeys.schedule], !(schedule is NSNull) {
+            throw invalid("A media notification can't be scheduled", ".notificationMedia.schedule")
+        }
+        guard hasBlock else {
+            throw invalid("The MediaPlayer layout requires a NotificationMedia", ".notificationMedia")
         }
         guard isMedia else {
             throw invalid("A NotificationMedia requires the MediaPlayer layout", ".notificationMedia.layout")

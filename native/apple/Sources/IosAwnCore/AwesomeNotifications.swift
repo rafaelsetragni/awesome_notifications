@@ -196,9 +196,16 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
                 DispatchQueue.main.async { completion(false) }
                 return
             }
-            // A decorator took over delivery: nothing to post (as Android's
-            // BuildOutcome.Handled, no created/displayed event either).
+            // A decorator took over delivery (as Android's BuildOutcome.Handled):
+            // nothing to post, but it was created and shown like any other.
             if chained.isHandled {
+                let model = builder.stampHandledLifecycle(into: chained.model)
+                let content = builder.contentMap(fromModel: model)
+                self.displayedTracker.forget(id: chained.id)
+                self.emit(
+                    Definitions.EVENT_NOTIFICATION_CREATED,
+                    builder.registerCreatedEvent(content, lifeCycle: AppLifeCycle.current))
+                self.emit(Definitions.EVENT_NOTIFICATION_DISPLAYED, content)
                 DispatchQueue.main.async { completion(true) }
                 return
             }
@@ -367,11 +374,13 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
     // MARK: - Dismiss / cancel
 
     public func dismiss(id: Int) {
+        NotificationRemovalRegistry.shared.notify(.id(id), cancel: false)
         displayedTracker.forget(id: id)
         center.removeDeliveredNotifications(withIdentifiers: [String(id)])
     }
 
     public func cancel(id: Int) {
+        NotificationRemovalRegistry.shared.notify(.id(id), cancel: true)
         displayedTracker.forget(id: id)
         let identifiers = [String(id)]
         center.removePendingNotificationRequests(withIdentifiers: identifiers)
@@ -379,11 +388,13 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
     }
 
     public func dismissAllNotifications() {
+        NotificationRemovalRegistry.shared.notify(.all, cancel: false)
         displayedTracker.forgetAll()
         center.removeAllDeliveredNotifications()
     }
 
     public func cancelAll() {
+        NotificationRemovalRegistry.shared.notify(.all, cancel: true)
         displayedTracker.forgetAll()
         center.removeAllPendingNotificationRequests()
         center.removeAllDeliveredNotifications()
@@ -393,19 +404,23 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
     // removes the pending request (which will be the schedule once that exists).
 
     public func dismissByChannelKey(_ channelKey: String) {
+        NotificationRemovalRegistry.shared.notify(.channelKey(channelKey), cancel: false)
         removeDelivered(matchingKey: Definitions.NOTIFICATION_CHANNEL_KEY, value: channelKey)
     }
 
     public func dismissByGroupKey(_ groupKey: String) {
+        NotificationRemovalRegistry.shared.notify(.groupKey(groupKey), cancel: false)
         removeDelivered(matchingKey: Definitions.NOTIFICATION_GROUP_KEY, value: groupKey)
     }
 
     public func cancelByChannelKey(_ channelKey: String) {
+        NotificationRemovalRegistry.shared.notify(.channelKey(channelKey), cancel: true)
         removeDelivered(matchingKey: Definitions.NOTIFICATION_CHANNEL_KEY, value: channelKey)
         removePending(matchingKey: Definitions.NOTIFICATION_CHANNEL_KEY, value: channelKey)
     }
 
     public func cancelByGroupKey(_ groupKey: String) {
+        NotificationRemovalRegistry.shared.notify(.groupKey(groupKey), cancel: true)
         removeDelivered(matchingKey: Definitions.NOTIFICATION_GROUP_KEY, value: groupKey)
         removePending(matchingKey: Definitions.NOTIFICATION_GROUP_KEY, value: groupKey)
     }

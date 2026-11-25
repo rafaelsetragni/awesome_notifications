@@ -23,6 +23,21 @@ final class NotificationBuilderLifecycleTests: XCTestCase {
         XCTAssertNotNil(content[Definitions.NOTIFICATION_CREATED_DATE])
     }
 
+    /// Dart sends unset fields as null: they are stamped all the same.
+    func testStampCreatedFillsNullFields() {
+        let stamped = builder.stampCreatedLifecycle(
+            into: model([
+                Definitions.NOTIFICATION_ID: 1,
+                Definitions.NOTIFICATION_CREATED_DATE: NSNull(),
+                Definitions.NOTIFICATION_CREATED_SOURCE: NSNull(),
+                Definitions.NOTIFICATION_CREATED_LIFECYCLE: NSNull()
+            ]))
+        let content = builder.contentMap(fromModel: stamped)
+        XCTAssertNotNil(content[Definitions.NOTIFICATION_CREATED_DATE] as? String)
+        XCTAssertEqual(content[Definitions.NOTIFICATION_CREATED_SOURCE] as? String, "Local")
+        XCTAssertEqual(content[Definitions.NOTIFICATION_CREATED_LIFECYCLE] as? String, "Foreground")
+    }
+
     func testStampCreatedIsNoOpWhenAlreadyStamped() {
         let stamped = builder.stampCreatedLifecycle(
             into: model([

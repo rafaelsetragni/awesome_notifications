@@ -14,6 +14,8 @@ public class AwesomeNotificationsMediaPlugin: NSObject, FlutterPlugin, FlutterSt
             MediaBuilder(inner: inner)
         }
         AwesomeMethodHandlerRegistry.shared.register(handler: methodHandler)
+        // The app's dismiss / cancel of a session's notification ends it.
+        NotificationRemovalRegistry.shared.register(listener: MediaSessions.shared)
         let events = FlutterEventChannel(name: MediaKeys.commandsChannel, binaryMessenger: registrar.messenger)
         events.setStreamHandler(AwesomeNotificationsMediaPlugin())
     }
