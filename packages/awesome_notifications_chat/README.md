@@ -47,6 +47,7 @@ on iOS and macOS.
   - [A group conversation](#a-group-conversation)
   - [Replying from the notification](#replying-from-the-notification)
   - [Marking a conversation as read](#marking-a-conversation-as-read)
+  - [Sending messages by push](#sending-messages-by-push)
 - [🏗 Model reference](#-model-reference)
 - [🔁 Migrating from the 0.12 Messaging layouts](#-migrating-from-the-012-messaging-layouts)
 - [🩺 Troubleshooting](#-troubleshooting)
@@ -65,7 +66,7 @@ on iOS and macOS.
 | Group name | ✅ | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
 | Group picture | ✅ (conversation shortcut icon) | ✅ | ❌ | ⏳ | ⏳ | ⏳ |
 | Reply from the notification | ✅ | ✅ | ✅ | ⏳ | ⏳ | ❌ |
-| Messages by push (`awesome_notifications_fcm`) | ⏳ | ⏳ (needs a Notification Service Extension) | ⏳ | ⏳ | ⏳ | ⏳ |
+| Messages by push (`awesome_notifications_fcm`) | ✅ | ✅ (Notification Service Extension) | ⏳ | ❌ | ❌ | ⏳ |
 | Bubbles | ⏳ | ❌ | ❌ | ❌ | ❌ | ❌ |
 
 ✅ supported · 🧪 preview (implemented, still being validated) · ⏳ planned · ❌ not possible on this platform
@@ -191,13 +192,56 @@ Add to `ios/Runner/Info.plist`, inside the top-level `<dict>`:
 
 If the key already exists, just add the `INSendMessageIntent` string to its array.
 
-**4. (Push only) Notification Service Extension — planned.**
+**4. (Push only) Add a Notification Service Extension.**
 
-Messages that arrive by push become communication notifications only inside a
-Notification Service Extension, with `"mutable-content": 1` in the payload. A ready-made
-extension (shared with `awesome_notifications_fcm`) is planned; until it ships, chat
-messages by push are not supported on iOS. Local messages (created by your app) work with
-steps 1 to 3.
+Local messages (created by your app) work with steps 1 to 3. A message that arrives by
+push (through `awesome_notifications_fcm`) becomes a communication notification only
+inside a **Notification Service Extension**: iOS runs it before showing the push, and
+the extension rebuilds the push through the same add-ons your app uses. The extension
+products are Swift packages, so this step needs Flutter's Swift Package Manager
+support (`flutter config --enable-swift-package-manager`).
+
+1. Generate Flutter's local packages once: `flutter build ios --config-only`.
+2. In Xcode (`ios/Runner.xcworkspace`), **File → New → Target… → Notification Service
+   Extension**. Name it `NotificationService`, language **Swift**, and answer
+   **Don't Activate** when Xcode asks to activate its scheme.
+3. Select the **NotificationService** target:
+   - **General → Minimum Deployments → iOS 15.0**.
+   - **Signing & Capabilities**: the **same Team as Runner**. An extension must be signed
+     with the app's team and certificate; its bundle id is the app's plus a suffix
+     (e.g. `com.example.app.NotificationService`). Don't add the Communication
+     Notifications capability here: it belongs to the app only.
+4. Add the packages to the extension. In the **NotificationService** target, **General →
+   Frameworks and Libraries → + → Add Other… → Add Package Dependency… → Add Local…**,
+   and add these folders from `ios/Flutter/ephemeral/Packages/.packages/`:
+
+   | Folder | Product to link |
+   |---|---|
+   | `awesome_notifications` | `IosAwnCore` |
+   | `awesome_notifications_fcm` | `AwesomeNotificationsFcmExtension` |
+   | `awesome_notifications_chat` | `AwesomeNotificationsChatExtension` |
+
+5. Replace `NotificationService/NotificationService.swift` with:
+
+   ```swift
+   import AwesomeNotificationsChatExtension
+   import AwesomeNotificationsFcmExtension
+   import IosAwnCore
+
+   class NotificationService: AwesomeServiceExtension {
+       override func registerAddOns() {
+           AwesomeFcmExtension.register()
+           AwesomeChatExtension.register()
+       }
+   }
+   ```
+
+6. Declare `INSendMessageIntent` in the **extension's** `NotificationService/Info.plist`
+   too (the same `NSUserActivityTypes` block of step 3), inside the top-level `<dict>`.
+
+Push messages must carry `"mutable-content": 1` (see [Sending messages by push](#sending-messages-by-push)).
+A push the extension doesn't recognize, or one it fails to rebuild, is shown as it
+arrived.
 
 <br>
 
@@ -391,7 +435,50 @@ final onScreen = await AwesomeNotificationsChat().listActiveConversations();
 `removeConversation` also removes the Android conversation shortcut and the iOS donated
 interactions. Use it when the conversation is gone for good, not just read.
 
-<br>
+## Sending messages by push
+
+With `awesome_notifications_fcm` installed, a push carries the same conversation as
+`createNotification`, as JSON strings in the FCM `data` block: `content` (the
+notification, with the `Messaging` or `MessagingGroup` layout) and `conversation` (the
+`NotificationConversation`, with the [model's keys](#-model-reference)). Android needs
+nothing else, even with the app killed; iOS needs the
+[Notification Service Extension](#-configuring-ios-required) (step 4).
+
+An FCM v1 message to a group:
+
+```json
+{
+  "message": {
+    "token": "<the device's FCM token>",
+    "data": {
+      "content": "{\"id\": 21, \"channelKey\": \"chat\", \"notificationLayout\": \"MessagingGroup\"}",
+      "conversation": "{\"id\": \"family\", \"title\": \"Family\", \"image\": \"https://example.com/family.jpg\", \"me\": {\"key\": \"me\", \"name\": \"Me\"}, \"participants\": [{\"key\": \"ana\", \"name\": \"Ana\", \"avatar\": \"https://example.com/ana.jpg\"}, {\"key\": \"bot\", \"name\": \"Awesome Bot\"}], \"message\": {\"sender\": {\"key\": \"ana\", \"name\": \"Ana\", \"avatar\": \"https://example.com/ana.jpg\"}, \"text\": \"On my way\"}}"
+    },
+    "apns": {
+      "payload": {
+        "aps": {
+          "alert": { "title": "Family", "body": "On my way" },
+          "mutable-content": 1,
+          "sound": "default"
+        }
+      }
+    }
+  }
+}
+```
+
+- **No top-level `notification` block** (as in `awesome_notifications_fcm`): on
+  Android the Firebase SDK would show it by itself, without the conversation. Android
+  builds the message from `data` alone.
+- **iOS needs `aps.alert` and `"mutable-content": 1`**: iOS runs the extension only for
+  a push with an alert, and shows that alert as it is when the extension can't run.
+- **Put the message text in the alert's `body`, without the sender's name.** The alert
+  is the content's starting point, and a body already in the content wins over the
+  message text. iOS already shows the sender as the title and the group's name as the
+  subtitle, so "Ana: On my way" would repeat the name. The alert's `title` is replaced
+  by the sender on iOS; use the group's name (or the sender's, one-to-one) for when the
+  extension can't run.
+
 <br>
 
 # 🏗 Model reference

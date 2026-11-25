@@ -9,7 +9,9 @@ let package = Package(
         .iOS("15.0")
     ],
     products: [
-        .library(name: "awesome-notifications-chat", targets: ["awesome_notifications_chat"])
+        .library(name: "awesome-notifications-chat", targets: ["awesome_notifications_chat"]),
+        // For the app's Notification Service Extension (no Flutter).
+        .library(name: "AwesomeNotificationsChatExtension", targets: ["AwesomeNotificationsChatExtension"])
     ],
     dependencies: [
         // Depend on the base plugin package and use its vended IosAwnCore product,
@@ -26,6 +28,12 @@ let package = Package(
     targets: [
         .target(
             name: "awesome_notifications_chat",
+            dependencies: [
+                .product(name: "IosAwnCore", package: "awesome_notifications")
+            ]
+        ),
+        .target(
+            name: "AwesomeNotificationsChatExtension",
             dependencies: [
                 .product(name: "IosAwnCore", package: "awesome_notifications")
             ]

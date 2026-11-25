@@ -10,7 +10,9 @@ let package = Package(
         .iOS("15.0")
     ],
     products: [
-        .library(name: "awesome-notifications-fcm", targets: ["awesome_notifications_fcm"])
+        .library(name: "awesome-notifications-fcm", targets: ["awesome_notifications_fcm"]),
+        // For the app's Notification Service Extension (no Flutter, no Firebase).
+        .library(name: "AwesomeNotificationsFcmExtension", targets: ["AwesomeNotificationsFcmExtension"])
     ],
     dependencies: [
         // Depend on the base plugin package and use its vended IosAwnCore product,
@@ -28,6 +30,12 @@ let package = Package(
             dependencies: [
                 .product(name: "IosAwnCore", package: "awesome_notifications"),
                 .product(name: "FirebaseMessaging", package: "firebase-ios-sdk")
+            ]
+        ),
+        .target(
+            name: "AwesomeNotificationsFcmExtension",
+            dependencies: [
+                .product(name: "IosAwnCore", package: "awesome_notifications")
             ]
         )
     ]

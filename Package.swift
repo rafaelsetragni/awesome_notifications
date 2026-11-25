@@ -72,6 +72,23 @@ let package = Package(
             dependencies: ["ChatLogic"],
             path: "native/apple/Tests/ChatLogicTests"
         ),
+        // The service-extension products of the add-ons (symlinks to their
+        // Flutter-free sources), compiled here so `swift build` checks them.
+        .target(
+            name: "AwesomeNotificationsFcmExtension",
+            dependencies: ["IosAwnCore"],
+            path: "packages/awesome_notifications_fcm/ios/awesome_notifications_fcm/Sources/AwesomeNotificationsFcmExtension"
+        ),
+        .target(
+            name: "AwesomeNotificationsChatExtension",
+            dependencies: ["IosAwnCore"],
+            path: "packages/awesome_notifications_chat/ios/awesome_notifications_chat/Sources/AwesomeNotificationsChatExtension"
+        ),
+        .testTarget(
+            name: "ServiceExtensionTests",
+            dependencies: ["AwesomeNotificationsFcmExtension", "AwesomeNotificationsChatExtension"],
+            path: "native/apple/Tests/ServiceExtensionTests"
+        ),
         .testTarget(
             name: "FcmLogicTests",
             dependencies: ["FcmLogic"],

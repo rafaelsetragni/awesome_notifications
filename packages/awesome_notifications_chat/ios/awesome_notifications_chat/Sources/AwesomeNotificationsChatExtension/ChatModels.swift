@@ -1,0 +1,1 @@
+../awesome_notifications_chat/ChatModels.swift
