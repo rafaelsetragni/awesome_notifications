@@ -24,6 +24,7 @@ public class AwesomeNotificationsFcmPlugin: NSObject, FlutterPlugin, MessagingDe
     private var channel: FlutterMethodChannel?
     private var silentHandle: Int64 = 0
     private let parser = FcmMessageParser()
+    private static let pushProvider = FcmPushProvider()
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(
@@ -34,6 +35,9 @@ public class AwesomeNotificationsFcmPlugin: NSObject, FlutterPlugin, MessagingDe
         instance.channel = channel
         registrar.addMethodCallDelegate(instance, channel: channel)
         AwesomeNotificationsFcmPlugin.instance = instance
+        // The core then leaves to this plugin the FCM pushes it builds, instead
+        // of also showing the system's raw copy.
+        RemoteModelProviderRegistry.shared.register(pushProvider)
         hookAppDelegate()
     }
 
@@ -167,6 +171,7 @@ public class AwesomeNotificationsFcmPlugin: NSObject, FlutterPlugin, MessagingDe
                 lifeCycle: lifeCycle
             )
             AwesomeNotifications.shared.createNotification(model) { _ in }
+            removeRawCopy(of: userInfo)
             return
         }
 
@@ -184,6 +189,26 @@ public class AwesomeNotificationsFcmPlugin: NSObject, FlutterPlugin, MessagingDe
     }
 
     // MARK: - Helpers
+
+    /// The system also shows a push with an alert when the app is not the
+    /// active one (then the core's willPresent never runs): remove that raw
+    /// copy, as the notification built here replaces it. It may land after
+    /// this call, so look again a moment later.
+    private func removeRawCopy(of userInfo: [String: Any]) {
+        guard let messageId = userInfo[FcmDefinitions.GCM_MESSAGE_ID] as? String else { return }
+        let center = UNUserNotificationCenter.current()
+        let remove = {
+            center.getDeliveredNotifications { delivered in
+                let ids = delivered
+                    .filter { $0.request.trigger is UNPushNotificationTrigger }
+                    .filter { ($0.request.content.userInfo[FcmDefinitions.GCM_MESSAGE_ID] as? String) == messageId }
+                    .map { $0.request.identifier }
+                if !ids.isEmpty { center.removeDeliveredNotifications(withIdentifiers: ids) }
+            }
+        }
+        remove()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: remove)
+    }
 
     private func deliverCurrentToken() {
         guard FirebaseApp.app() != nil else { return }
@@ -209,5 +234,22 @@ public class AwesomeNotificationsFcmPlugin: NSObject, FlutterPlugin, MessagingDe
             return id
         }
         return Int(Date().timeIntervalSince1970 * 1000) & 0x7fffffff
+    }
+}
+
+/// Recognizes, for the core, the FCM pushes this plugin builds: displayable
+/// ones that came through FCM.
+final class FcmPushProvider: RemoteModelProvider {
+    private let parser = FcmMessageParser()
+
+    func model(from request: UNNotificationRequest) -> [String: Any]? {
+        var userInfo: [String: Any] = [:]
+        for (key, value) in request.content.userInfo {
+            if let key = key as? String { userInfo[key] = value }
+        }
+        guard userInfo[FcmDefinitions.GCM_MESSAGE_ID] != nil, parser.isDisplayable(userInfo) else {
+            return nil
+        }
+        return parser.buildAwesomeMap(notificationId: 0, userInfo: userInfo, lifeCycle: AppLifeCycle.current)
     }
 }

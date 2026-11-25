@@ -240,6 +240,17 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
         withCompletionHandler completionHandler:
             @escaping (UNNotificationPresentationOptions) -> Void
     ) {
+        #if os(macOS)
+        // macOS hands every push to the running app, where the add-on (FCM)
+        // builds it as an awesome notification: the system's raw copy of that
+        // push would show it twice.
+        if notification.request.trigger is UNPushNotificationTrigger,
+           builder.notificationModel(fromUserInfo: notification.request.content.userInfo) == nil,
+           RemoteModelProviderRegistry.shared.model(from: notification.request) != nil {
+            completionHandler([])
+            return
+        }
+        #endif
         if let model = builder.notificationModel(
             fromUserInfo: notification.request.content.userInfo
         ) {

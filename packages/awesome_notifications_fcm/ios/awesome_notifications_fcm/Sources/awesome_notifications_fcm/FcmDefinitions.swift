@@ -45,6 +45,8 @@ enum FcmDefinitions {
 
     // Apple push envelope keys.
     static let APS = "aps"
+    /// The id FCM gives every message (in the push's userInfo).
+    static let GCM_MESSAGE_ID = "gcm.message_id"
     static let APS_ALERT = "alert"
     static let APS_TITLE = "title"
     static let APS_BODY = "body"
