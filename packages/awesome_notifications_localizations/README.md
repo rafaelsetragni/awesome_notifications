@@ -1,5 +1,7 @@
 # 🌎 awesome_notifications_localizations
 
+![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications.jpg)
+
 Multi-language support for [awesome_notifications](https://pub.dev/packages/awesome_notifications).
 
 [![pub package](https://img.shields.io/pub/v/awesome_notifications_localizations.svg)](https://pub.dev/packages/awesome_notifications_localizations)

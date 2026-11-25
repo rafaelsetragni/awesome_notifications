@@ -1,5 +1,7 @@
 # 🎵 awesome_notifications_media
 
+![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications.jpg)
+
 Media controls for [awesome_notifications](https://pub.dev/packages/awesome_notifications):
 the system's own player for your app on **Android, iOS, macOS, Windows, Linux and the
 Web**, from one model.

@@ -1,5 +1,7 @@
 # ⏰ awesome_notifications_schedules
 
+![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications.jpg)
+
 Notification scheduling for [awesome_notifications](https://pub.dev/packages/awesome_notifications).
 
 [![pub package](https://img.shields.io/pub/v/awesome_notifications_schedules.svg)](https://pub.dev/packages/awesome_notifications_schedules)

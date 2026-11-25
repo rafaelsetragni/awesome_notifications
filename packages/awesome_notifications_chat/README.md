@@ -1,5 +1,7 @@
 # 💬 awesome_notifications_chat
 
+![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications.jpg)
+
 Chat notifications for [awesome_notifications](https://pub.dev/packages/awesome_notifications):
 Android **conversations** and iOS / macOS **communication notifications**, from one
 shared Person model.
