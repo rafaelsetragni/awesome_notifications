@@ -92,9 +92,9 @@ on iOS and macOS.
 
 ```yaml
 dependencies:
-  awesome_notifications: any       # the core
-  awesome_notifications_chat: any  # this package (same version line as the core)
-  awesome_notifications_fcm: any   # only to receive messages by push
+  awesome_notifications: ^1.0.0       # the core
+  awesome_notifications_chat: ^1.0.0  # this package (same version line as the core)
+  awesome_notifications_fcm: ^1.0.0   # only to receive messages by push
 ```
 
 2. Get the packages:

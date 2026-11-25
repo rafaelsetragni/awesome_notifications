@@ -18,8 +18,8 @@ Add both the core and this decorator to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  awesome_notifications: ^0.10.0
-  awesome_notifications_schedules: ^0.10.0
+  awesome_notifications: ^1.0.0
+  awesome_notifications_schedules: ^1.0.0
 ```
 
 ## Usage

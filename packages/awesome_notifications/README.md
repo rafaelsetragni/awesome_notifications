@@ -71,6 +71,8 @@ All notification types can be created locally or via remote push services, with 
 | [`awesome_notifications_schedules`](https://pub.dev/packages/awesome_notifications_schedules) | ✅ | ✅ | ✅ | 🧪 | 🧪 | ❌ |
 | [`awesome_notifications_localizations`](https://pub.dev/packages/awesome_notifications_localizations) | ✅ | ✅ | ✅ | 🧪 | 🧪 | ⏳ |
 | [`awesome_notifications_fcm`](https://pub.dev/packages/awesome_notifications_fcm) | ✅ | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
+| [`awesome_notifications_chat`](https://pub.dev/packages/awesome_notifications_chat) | ✅ | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
+| [`awesome_notifications_media`](https://pub.dev/packages/awesome_notifications_media) | ✅ | ✅ | ✅ | 🧪 | 🧪 | 🧪 |
 
 ✅ supported · 🧪 preview (implemented, still being validated against the 0.12 behavior) · ⏳ planned · ❌ not possible on this platform
 
@@ -362,18 +364,18 @@ To use the `awesome_notifications`, follow these steps:
 
 ```yaml
 dependencies:
-  # Awesome plugins for local notifications
-  awesome_notifications_core: ^0.11.0 # use the latest core version available
-  awesome_notifications: ^0.11.0 # This version is managed by core plugin
+  awesome_notifications: ^1.0.0 # the core
 
-  # Awesome plugins for remote push notifications
-  awesome_notifications_fcm: ^0.11.0 # This version is managed by core plugin
-  # Attention:
-  # The firebase_messaging plugin is not necessary. awesome_notifications_fcm is a replacement for it
-  # firebase_messaging: ^X.X.X 
-  
-  # Firebase plugins, in case you intend to use Push Notifications with awesome packages
-  firebase_core: ^X.X.X # use the latest available
+  # Add-ons: only the ones you use, on the same version line as the core
+  awesome_notifications_schedules: ^1.0.0     # scheduled notifications
+  awesome_notifications_localizations: ^1.0.0 # translated notifications
+  awesome_notifications_fcm: ^1.0.0           # push notifications (Firebase Cloud Messaging)
+  awesome_notifications_chat: ^1.0.0          # chat / communication notifications
+  awesome_notifications_media: ^1.0.0         # media player controls
+
+  # Only with awesome_notifications_fcm (firebase_messaging is NOT needed: the
+  # FCM add-on replaces it)
+  firebase_core: ^X.X.X
 ```
 
 After adding the dependency, run the following command to get the package:
