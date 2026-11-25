@@ -17,11 +17,11 @@
 /// added) intercepts the build and registers the delayed delivery. The core
 /// stays unaware of scheduling.
 ///
-/// Scheduling exists on Android, iOS, macOS and Windows. Browsers have no API
-/// to schedule a local notification, so there is no web support (schedule
-/// from your server through push instead); Linux is in progress. Where it is
-/// not available, check [AwesomeNotificationsSchedules.isPlatformSupported]:
-/// the management calls answer "nothing scheduled" instead of throwing.
+/// Scheduling exists on Android, iOS, macOS, Windows and Linux. Browsers have
+/// no API to schedule a local notification, so there is no web support
+/// (schedule from your server through push instead). Where it is not
+/// available, check [AwesomeNotificationsSchedules.isPlatformSupported]: the
+/// management calls answer "nothing scheduled" instead of throwing.
 library;
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -52,20 +52,20 @@ class AwesomeNotificationsSchedules {
 
   static const MethodChannel _channel = MethodChannel('awesome_notifications');
 
-  /// Whether scheduling exists on this platform (Android, iOS, macOS and
-  /// Windows).
+  /// Whether scheduling exists on this platform (Android, iOS, macOS, Windows
+  /// and Linux).
   ///
   /// Browsers have no API to schedule a local notification, so it is false on
-  /// web; Linux is in progress. There the management calls answer "nothing
-  /// scheduled" (no-op / empty list / null), and the core does not create a
-  /// notification carrying a schedule, so it is never shown immediately by
-  /// mistake.
+  /// web. There the management calls answer "nothing scheduled" (no-op / empty
+  /// list / null), and the core does not create a notification carrying a
+  /// schedule, so it is never shown immediately by mistake.
   static bool get isPlatformSupported =>
       !kIsWeb &&
       (defaultTargetPlatform == TargetPlatform.android ||
           defaultTargetPlatform == TargetPlatform.iOS ||
           defaultTargetPlatform == TargetPlatform.macOS ||
-          defaultTargetPlatform == TargetPlatform.windows);
+          defaultTargetPlatform == TargetPlatform.windows ||
+          defaultTargetPlatform == TargetPlatform.linux);
 
   static bool _warnedUnsupported = false;
 

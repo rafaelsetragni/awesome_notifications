@@ -167,7 +167,7 @@ the language to the Runner project in Xcode so the file is bundled). The
 "notification_title" = "Este %@ está em Português do Brasil";
 ```
 
-On Windows, add one JSON file per language to the folder
+On Windows and Linux, add one JSON file per language to the folder
 `awesome_notifications/strings/` of your app and declare it as an asset in
 `pubspec.yaml`. They work like Android's `values*` folders: `pt-BR.json`
 first, then `pt.json`, then `default.json`. The texts use the same
@@ -192,18 +192,18 @@ field it provides.
 
 | Feature                                            | Android | iOS | macOS | Windows | Linux | Web |
 | -------------------------------------------------- | :-----: | :-: | :---: | :-----: | :---: | :-: |
-| Translated title / body / summary / images         |   ✅    | ✅  |  ✅   |   🧪    |  ⏳   | ⏳  |
-| Translated action button labels                    |   ✅    | ✅  |  ✅   |   🧪    |  ⏳   | ⏳  |
-| `titleLocKey` / `bodyLocKey` from string resources |   ✅    | ✅  |  ✅   |   🧪    |  ⏳   | ⏳  |
+| Translated title / body / summary / images         |   ✅    | ✅  |  ✅   |   🧪    |  🧪   | ⏳  |
+| Translated action button labels                    |   ✅    | ✅  |  ✅   |   🧪    |  🧪   | ⏳  |
+| `titleLocKey` / `bodyLocKey` from string resources |   ✅    | ✅  |  ✅   |   🧪    |  🧪   | ⏳  |
 
 ✅ supported · 🧪 preview (implemented, still being validated against the 0.12 behavior) · ⏳ planned · ❌ not possible on this platform
 
 On macOS, add the strings to `macos/Runner/<language>.lproj/Localizable.strings`
-just like on iOS. On Windows, the strings come from the JSON assets described
-in [Localization keys](#-localization-keys).
+just like on iOS. On Windows and Linux, the strings come from the JSON assets
+described in [Localization keys](#-localization-keys).
 
 Where Android and iOS behave differently (a missing key, several
-arguments), macOS follows iOS and Windows follows Android.
+arguments), macOS follows iOS, and Windows and Linux follow Android.
 
 <br>
 

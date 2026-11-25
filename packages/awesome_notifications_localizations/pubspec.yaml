@@ -47,6 +47,8 @@ flutter:
         pluginClass: AwesomeNotificationsLocalizationsPlugin
       ios:
         pluginClass: AwesomeNotificationsLocalizationsPlugin
+      linux:
+        pluginClass: AwesomeNotificationsLocalizationsPlugin
       macos:
         pluginClass: AwesomeNotificationsLocalizationsPlugin
       windows:

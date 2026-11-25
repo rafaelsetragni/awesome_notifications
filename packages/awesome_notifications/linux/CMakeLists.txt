@@ -11,9 +11,17 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 # not be changed.
 set(PLUGIN_NAME "awesome_notifications_plugin")
 
+# The portable desktop core (shared with Windows), compiled into this plugin.
+include("${CMAKE_CURRENT_SOURCE_DIR}/../desktop/awn_core/awn_core.cmake")
+
 # Any new source files that you add to the plugin should be added here.
 list(APPEND PLUGIN_SOURCES
   "awesome_notifications_plugin.cc"
+  "src/freedesktop_presenter.cc"
+  "src/glib_dispatcher.cc"
+  "src/image_resolver.cc"
+  "src/linux_platform.cc"
+  ${AWN_CORE_SOURCES}
 )
 
 # Define the plugin library target. Its name must not be changed (see comment
@@ -32,14 +40,20 @@ apply_standard_settings(${PLUGIN_NAME})
 # exported should be explicitly exported with the FLUTTER_PLUGIN_EXPORT macro.
 set_target_properties(${PLUGIN_NAME} PROPERTIES
   CXX_VISIBILITY_PRESET hidden)
-target_compile_definitions(${PLUGIN_NAME} PRIVATE FLUTTER_PLUGIN_IMPL)
+# The core's classes (AWN_API) are exported so decorator plugins that link
+# this target share its registries.
+target_compile_definitions(${PLUGIN_NAME}
+  PRIVATE FLUTTER_PLUGIN_IMPL AWN_BUILDING_CORE
+  INTERFACE AWN_USING_CORE)
 
-# Source include directories and library dependencies. Add any plugin-specific
-# dependencies here.
-target_include_directories(${PLUGIN_NAME} INTERFACE
-  "${CMAKE_CURRENT_SOURCE_DIR}/include")
+# Source include directories and library dependencies. libcurl is loaded at
+# run time (dlopen), so it is not a build dependency.
+target_include_directories(${PLUGIN_NAME}
+  PUBLIC "${AWN_CORE_INCLUDE_DIR}"
+  INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/include"
+  PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_link_libraries(${PLUGIN_NAME} PRIVATE flutter)
-target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)
+target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK ${CMAKE_DL_LIBS})
 
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an
@@ -81,9 +95,9 @@ add_executable(${TEST_RUNNER}
   ${PLUGIN_SOURCES}
 )
 apply_standard_settings(${TEST_RUNNER})
-target_include_directories(${TEST_RUNNER} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_include_directories(${TEST_RUNNER} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}" "${AWN_CORE_INCLUDE_DIR}")
 target_link_libraries(${TEST_RUNNER} PRIVATE flutter)
-target_link_libraries(${TEST_RUNNER} PRIVATE PkgConfig::GTK)
+target_link_libraries(${TEST_RUNNER} PRIVATE PkgConfig::GTK ${CMAKE_DL_LIBS})
 target_link_libraries(${TEST_RUNNER} PRIVATE gtest_main gmock)
 
 # Enable automatic test discovery.

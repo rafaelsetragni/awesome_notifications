@@ -40,7 +40,8 @@ fi
 
 # macOS: the process inherits TZ; the first run shows the permission prompt
 # (click Allow once, it persists for the app).
-if [ "$DEVICE" = "macos" ]; then
+# Linux: the process inherits TZ too (a notification server must be running).
+if [ "$DEVICE" = "macos" ] || [ "$DEVICE" = "linux" ]; then
   export TZ=$TIME_ZONE
 fi
 

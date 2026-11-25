@@ -25,15 +25,16 @@ class AwesomeNotificationsLocalizations {
   factory AwesomeNotificationsLocalizations() => _instance;
   AwesomeNotificationsLocalizations._();
 
-  /// Whether translation exists on this platform (Android, iOS, macOS and
-  /// Windows; Linux and web are in progress). Elsewhere [setLocalization]
+  /// Whether translation exists on this platform (Android, iOS, macOS, Windows
+  /// and Linux; web is in progress). Elsewhere [setLocalization]
   /// answers false and [getLocalization] an empty code, instead of throwing.
   static bool get isPlatformSupported =>
       !kIsWeb &&
       (defaultTargetPlatform == TargetPlatform.android ||
           defaultTargetPlatform == TargetPlatform.iOS ||
           defaultTargetPlatform == TargetPlatform.macOS ||
-          defaultTargetPlatform == TargetPlatform.windows);
+          defaultTargetPlatform == TargetPlatform.windows ||
+          defaultTargetPlatform == TargetPlatform.linux);
 
   /// Sets the language notifications are translated into (null = system default).
   Future<bool> setLocalization({required String? languageCode}) async {

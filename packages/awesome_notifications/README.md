@@ -67,14 +67,20 @@ All notification types can be created locally or via remote push services, with 
 
 | Package | Android | iOS | macOS | Windows | Linux | Web |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|
-| `awesome_notifications` (this core) | ✅ | ✅ | ✅ | 🧪 | ⏳ | ⏳ |
-| [`awesome_notifications_schedules`](https://pub.dev/packages/awesome_notifications_schedules) | ✅ | ✅ | ✅ | 🧪 | ⏳ | ❌ |
-| [`awesome_notifications_localizations`](https://pub.dev/packages/awesome_notifications_localizations) | ✅ | ✅ | ✅ | 🧪 | ⏳ | ⏳ |
+| `awesome_notifications` (this core) | ✅ | ✅ | ✅ | 🧪 | 🧪 | ⏳ |
+| [`awesome_notifications_schedules`](https://pub.dev/packages/awesome_notifications_schedules) | ✅ | ✅ | ✅ | 🧪 | 🧪 | ❌ |
+| [`awesome_notifications_localizations`](https://pub.dev/packages/awesome_notifications_localizations) | ✅ | ✅ | ✅ | 🧪 | 🧪 | ⏳ |
 | [`awesome_notifications_fcm`](https://pub.dev/packages/awesome_notifications_fcm) | ✅ | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
 
 ✅ supported · 🧪 preview (implemented, still being validated against the 0.12 behavior) · ⏳ planned · ❌ not possible on this platform
 
 The same call has the same effect on every platform, as far as the platform allows. Where Android and iOS behave differently, macOS follows iOS, and Windows and Linux follow Android. Where a package or platform is not available yet, its calls answer "unavailable" instead of throwing, so one code base runs everywhere. Each package's README details its own gaps.
+
+**Linux** uses the Desktop Notifications Specification (`org.freedesktop.Notifications` over D-Bus), so it works with GNOME, KDE, XFCE, dunst, mako and other notification servers. What a notification shows depends on the server: images, action buttons and typed replies (KDE) appear where the server supports them, and are left out elsewhere. Network images are downloaded with the system's `libcurl`, loaded at run time, so the build needs no extra packages. Linux has no notification permission an app can read: notifications are allowed whenever a notification server is running.
+
+Current Linux gaps, planned for a follow-up (a small helper bundled with the app):
+- the app must be running to receive taps, buttons and dismissals; a notification tapped after the app closed does nothing;
+- schedules fire while the app runs; occurrences that came due while it was closed are shown when it starts again (the latest one per notification).
 
 <br>
 

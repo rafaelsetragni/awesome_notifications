@@ -15,7 +15,8 @@ The tests only use what an app sees: return values, returned dates (wall
 clock and the UTC flag), displayed events, and the scheduled list. Where 0.12
 already behaved differently on Android and iOS, `p(android: …, ios: …)` keeps
 each platform's own reference. 0.12 had no desktop code, so `app_v1` holds
-macOS to the iOS reference (same Apple code) and Windows to the Android one.
+macOS to the iOS reference (same Apple code) and Windows and Linux to the
+Android one.
 
 ## Running
 
@@ -34,13 +35,17 @@ comparable across machines, and grants the notification permission:
 - Windows (`app_v1` only): the time zone can't be pinned per process; set it
   first with `tzutil /s "E. South America Standard Time"` (the suite checks
   the offset) and run the script from Git Bash with `windows` as the device.
+- Linux (`app_v1` only): a notification server must be running in the session
+  (any desktop has one; headless, e.g. in CI: `Xvfb`, `dbus-launch` and
+  `dunst`). Linux has no notification permission to grant. Run with
+  `TZ=America/Sao_Paulo` and `linux` as the device.
 
 Both host apps bundle the same translation strings, used by the
 `titleLocKey` / `bodyLocKey` tests:
 
 - Android: `res/values*/strings.xml`.
 - iOS / macOS: `Runner/*.lproj/Localizable.strings`.
-- Windows: `awesome_notifications/strings/*.json` (Flutter assets).
+- Windows / Linux: `awesome_notifications/strings/*.json` (Flutter assets).
 
 ## Adding a case
 

@@ -14,6 +14,7 @@ add_executable(awn_core_tests
   ${AWN_CORE_SOURCES}
   core_tests.cpp
   engine_tests.cpp
+  freedesktop_tests.cpp
 )
 target_include_directories(awn_core_tests PRIVATE "${AWN_CORE_INCLUDE_DIR}")
 if(MSVC)

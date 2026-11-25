@@ -65,9 +65,9 @@ See the `example/` app for a runnable, single‑file demo.
 
 | Feature | Android | iOS | macOS | Windows | Linux | Web |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|
-| Interval and calendar schedules | ✅ | ✅ | ✅ | 🧪 | ⏳ | ❌ |
-| List / cancel / `getNextDate` | ✅ | ✅ | ✅ | 🧪 | ⏳ | ❌ |
-| Re-armed after a reboot or an app update | ✅ | ✅ (system) | ✅ (system) | 🧪 | ⏳ | ❌ |
+| Interval and calendar schedules | ✅ | ✅ | ✅ | 🧪 | 🧪 | ❌ |
+| List / cancel / `getNextDate` | ✅ | ✅ | ✅ | 🧪 | 🧪 | ❌ |
+| Delivered while the app is closed | ✅ | ✅ | ✅ | 🧪 | ⏳ | ❌ |
 
 ✅ supported · 🧪 preview (implemented, still being validated against the 0.12 behavior) · ⏳ planned · ❌ not possible on this platform
 
@@ -75,7 +75,12 @@ See the `example/` app for a runnable, single‑file demo.
   Notification Triggers proposal was abandoned), and a page's timers stop when
   the tab closes. So this package does not declare web support. To notify a web
   user later, send a push from your server at the right time.
-- **Where scheduling is not available** (web, and Linux for now),
+- **Linux** has no system scheduler for notifications, so the app keeps its
+  schedules (saved to disk) and shows them with its own timer while it runs.
+  Occurrences that came due while the app was closed are shown as soon as it
+  starts again (the latest one per notification). Delivery with the app closed
+  is planned through a small helper bundled with the app.
+- **Where scheduling is not available** (web),
   `AwesomeNotificationsSchedules.isPlatformSupported` is `false`. The
   management calls answer "nothing scheduled" (no-op, an empty list, `null`)
   instead of throwing. A `createNotification` carrying a schedule answers

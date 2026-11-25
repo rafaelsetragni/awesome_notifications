@@ -190,12 +190,13 @@ void main() {
       expect(() => schedules.cancelSchedule(0x80000000), throwsArgumentError);
     });
 
-    test('android, iOS, macOS and Windows support scheduling', () {
+    test('android, iOS, macOS, Windows and Linux support scheduling', () {
       for (final platform in [
         TargetPlatform.android,
         TargetPlatform.iOS,
         TargetPlatform.macOS,
         TargetPlatform.windows,
+        TargetPlatform.linux,
       ]) {
         debugDefaultTargetPlatformOverride = platform;
         expect(AwesomeNotificationsSchedules.isPlatformSupported, isTrue,
@@ -204,8 +205,8 @@ void main() {
       debugDefaultTargetPlatformOverride = null;
     });
 
-    group('where scheduling does not exist (Linux for now)', () {
-      setUp(() => debugDefaultTargetPlatformOverride = TargetPlatform.linux);
+    group('where scheduling does not exist', () {
+      setUp(() => debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia);
       tearDown(() => debugDefaultTargetPlatformOverride = null);
 
       test('is reported as unsupported', () {

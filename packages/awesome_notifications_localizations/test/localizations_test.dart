@@ -240,8 +240,8 @@ void main() {
       expect(sent.containsKey('localizations'), isFalse);
     });
 
-    group('where translation is not available yet (Linux)', () {
-      setUp(() => debugDefaultTargetPlatformOverride = TargetPlatform.linux);
+    group('where translation is not available', () {
+      setUp(() => debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia);
       tearDown(() => debugDefaultTargetPlatformOverride = null);
 
       test('answers "unavailable" without reaching native', () async {

@@ -297,6 +297,12 @@ void main() {
       AwesomeNotificationsPlatform.operatingSystem = 'linux';
       AwesomeNotificationsPlatform.resetInstance();
       expect(AwesomeNotificationsPlatform.instance,
+          isA<MethodChannelAwesomeNotifications>());
+
+      // Platforms without a native engine get the no-op implementation.
+      AwesomeNotificationsPlatform.operatingSystem = 'fuchsia';
+      AwesomeNotificationsPlatform.resetInstance();
+      expect(AwesomeNotificationsPlatform.instance,
           isA<AwesomeNotificationsEmpty>());
     });
   });
