@@ -1,6 +1,6 @@
 name: awesome_notifications_schedules
 description: "Notification scheduling (interval/calendar) decorator for awesome_notifications."
-version: 0.0.1
+version: 1.0.0-dev.0
 homepage:
 resolution: workspace
 
