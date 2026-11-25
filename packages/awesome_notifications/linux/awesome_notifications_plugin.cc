@@ -30,7 +30,9 @@ using awesome_notifications::GlibDispatcher;
 /// The C++ side of the plugin: the engine's presenter, dispatcher and router,
 /// and the Flutter view whose window gives the app lifecycle.
 struct Bridge {
-  FlPluginRegistrar* registrar = nullptr;
+  /// The app's view, taken at registration (the registrar is released right
+  /// after it). Weak: cleared when the view goes.
+  FlView* view = nullptr;
   FlMethodChannel* channel = nullptr;
   std::shared_ptr<GlibDispatcher> dispatcher;
   std::shared_ptr<FreedesktopPresenter> presenter;
@@ -38,7 +40,6 @@ struct Bridge {
   int eventsToken = 0;
 
   GtkWindow* Window() const {
-    FlView* view = fl_plugin_registrar_get_view(registrar);
     if (view == nullptr) return nullptr;
     GtkWidget* toplevel = gtk_widget_get_toplevel(GTK_WIDGET(view));
     return GTK_IS_WINDOW(toplevel) ? GTK_WINDOW(toplevel) : nullptr;
@@ -121,6 +122,9 @@ static void awesome_notifications_plugin_dispose(GObject* object) {
   AwesomeNotificationsPlugin* self = AWESOME_NOTIFICATIONS_PLUGIN(object);
   if (self->bridge != nullptr) {
     awn::AwesomeEventsReceiver::shared().unsubscribe(self->bridge->eventsToken);
+    if (self->bridge->view != nullptr)
+      g_object_remove_weak_pointer(G_OBJECT(self->bridge->view),
+                                   reinterpret_cast<gpointer*>(&self->bridge->view));
     g_clear_object(&self->bridge->channel);
     delete self->bridge;
     self->bridge = nullptr;
@@ -154,7 +158,9 @@ void awesome_notifications_plugin_register_with_registrar(FlPluginRegistrar* reg
                                             g_object_unref);
 
   auto* bridge = new Bridge();
-  bridge->registrar = registrar;
+  bridge->view = fl_plugin_registrar_get_view(registrar);
+  if (bridge->view != nullptr)
+    g_object_add_weak_pointer(G_OBJECT(bridge->view), reinterpret_cast<gpointer*>(&bridge->view));
   bridge->channel = channel;
   bridge->dispatcher = std::make_shared<GlibDispatcher>();
   plugin->bridge = bridge;
