@@ -151,13 +151,27 @@ enum CommunicationContent {
             serviceName: nil,
             sender: sender,
             attachments: nil)
-        #if os(iOS)
-        // The group's picture (macOS has no API for it: it draws the senders).
         if isGroup, let image = image(conversation.image) {
-            intent.setImage(image, forParameterNamed: \.speakableGroupName)
+            setGroupImage(image, on: intent)
         }
-        #endif
         return intent
+    }
+
+    /// The group's picture, on the group name. The macOS SDK hides
+    /// `setImage(_:forParameterNamed:)` from AppKit apps (only Mac Catalyst
+    /// sees it), but the system's Intents framework implements it, so macOS
+    /// calls it through the Objective-C runtime.
+    @available(iOS 15.0, macOS 12.0, *)
+    static func setGroupImage(_ image: INImage, on intent: INSendMessageIntent) {
+        #if os(iOS)
+        intent.setImage(image, forParameterNamed: \.speakableGroupName)
+        #else
+        let selector = NSSelectorFromString("setImage:forParameterNamed:")
+        guard intent.responds(to: selector) else { return }
+        typealias SetImage = @convention(c) (AnyObject, Selector, INImage?, NSString) -> Void
+        let call = unsafeBitCast(intent.method(for: selector), to: SetImage.self)
+        call(intent, selector, image, "speakableGroupName")
+        #endif
     }
 
     @available(iOS 15.0, macOS 12.0, *)

@@ -66,7 +66,7 @@ on iOS and macOS.
 | System conversation | ✅ Conversations section (Android 11+) | ✅ communication notification | ✅ communication notification | ❌ | ❌ | ❌ |
 | History in one notification | ✅ (last 25 messages) | ❌ (one notification per message, grouped by conversation) | ❌ (grouped by conversation) | ⏳ | ⏳ | ⏳ |
 | Group name | ✅ | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
-| Group picture | ✅ (conversation shortcut icon) | ✅ | ❌ | ⏳ | ⏳ | ⏳ |
+| Group picture | ✅ (conversation shortcut icon) | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
 | Reply from the notification | ✅ | ✅ | ✅ | ⏳ | ⏳ | ❌ |
 | Messages by push (`awesome_notifications_fcm`) | ✅ | ✅ (Notification Service Extension) | ⏳ | ❌ | ❌ | ⏳ |
 | Bubbles | ⏳ | ❌ | ❌ | ❌ | ❌ | ❌ |
@@ -246,7 +246,7 @@ Push messages must carry `"mutable-content": 1` (see [Sending messages by push](
 A push the extension doesn't recognize, or one it fails to rebuild, is shown as it
 arrived.
 
-On iOS, a group message shows the **group's** picture with the sender's name, like
+On iOS (and macOS), a group message shows the **group's** picture with the sender's name, like
 WhatsApp, as long as the group has more than one member besides the user (`participants`
 with two or more people). A "group" with a single other person reads as a one-to-one
 conversation and shows the sender's photo.
@@ -280,8 +280,8 @@ same keys to **both** `macos/Runner/DebugProfile.entitlements` and
 **3. Declare the `INSendMessageIntent` activity type** in `macos/Runner/Info.plist`,
 exactly as on iOS (step 3 above).
 
-On macOS the group picture is not available (macOS has no API for it; it shows the
-senders instead).
+The group's picture works as on iOS (see the note at the end of [Configuring
+iOS](#-configuring-ios-required)).
 
 <br>
 
@@ -517,7 +517,7 @@ An FCM v1 message to a group:
 | `message` | `NotificationMessage` | yes | the new message |
 | `title` | String | `MessagingGroup` | the group's name |
 | `participants` | `List<NotificationPerson>` | `MessagingGroup` | the other people |
-| `image` | String (media source) | no | the group's picture (not on macOS); iOS shows it when the group has two or more other members |
+| `image` | String (media source) | no | the group's picture; iOS and macOS show it when the group has two or more other members |
 | `history` | `ConversationHistory` | no (`append`) | Android: `append` to the notification on screen or `replace` it |
 | `shortcut` | bool | no (`true`) | Android: publish the conversation shortcut |
 

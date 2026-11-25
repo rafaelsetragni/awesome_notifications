@@ -100,4 +100,16 @@ final class ChatBuilderTests: XCTestCase {
         XCTAssertNil(intent.speakableGroupName)
         XCTAssertEqual(intent.recipients?.map { $0.displayName }, ["Rafael"])
     }
+
+    /// macOS reaches the group picture through the Objective-C runtime (the
+    /// SDK hides the API from AppKit); the image lands on the group name.
+    func testTheGroupPictureIsSetOnTheGroupName() throws {
+        guard #available(iOS 15.0, macOS 12.0, *) else { throw XCTSkip("needs iOS 15 / macOS 12") }
+        let (parsed, _) = ChatConversation.parse(
+            conversation(title: "Família", participants: [ana, bia]), isGroup: true)
+        let intent = CommunicationContent.intent(for: parsed!, isGroup: true)
+        XCTAssertNil(intent.keyImage())
+        CommunicationContent.setGroupImage(INImage(imageData: Data([0x89, 0x50, 0x4E, 0x47])), on: intent)
+        XCTAssertNotNil(intent.keyImage())
+    }
 }
