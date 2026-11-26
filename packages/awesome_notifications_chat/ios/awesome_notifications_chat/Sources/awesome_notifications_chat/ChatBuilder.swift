@@ -175,7 +175,7 @@ enum CommunicationContent {
     }
 
     @available(iOS 15.0, macOS 12.0, *)
-    static func person(_ person: ChatPerson, isMe: Bool) -> INPerson {
+    static func person(_ person: NotificationPerson, isMe: Bool) -> INPerson {
         INPerson(
             personHandle: handle(person),
             nameComponents: nil,
@@ -188,17 +188,9 @@ enum CommunicationContent {
     }
 
     /// A `tel:` / `mailto:` URI is the person's phone / e-mail handle; otherwise
-    /// the key identifies them.
-    static func handle(_ person: ChatPerson) -> INPersonHandle {
-        if let uri = person.uri {
-            if uri.hasPrefix("tel:") {
-                return INPersonHandle(value: String(uri.dropFirst(4)), type: .phoneNumber)
-            }
-            if uri.hasPrefix("mailto:") {
-                return INPersonHandle(value: String(uri.dropFirst(7)), type: .emailAddress)
-            }
-        }
-        return INPersonHandle(value: person.key, type: .unknown)
+    /// the key identifies them (the core's `NotificationPerson.handle`).
+    static func handle(_ person: NotificationPerson) -> INPersonHandle {
+        return person.handle.inPersonHandle
     }
 
     static func image(_ source: String?) -> INImage? {

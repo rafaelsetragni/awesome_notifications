@@ -3,6 +3,10 @@ package me.carda.android_awn_core
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.BitmapShader
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Shader
 import io.flutter.FlutterInjector
 import java.io.BufferedInputStream
 import java.io.File
@@ -21,6 +25,17 @@ class BitmapUtils private constructor() {
     companion object {
         private var instance: BitmapUtils? = null
         fun getInstance(): BitmapUtils = instance ?: BitmapUtils().also { instance = it }
+    }
+
+    /** A circle cut from the center of [source] (the avatar look of a person). */
+    fun circleCrop(source: Bitmap): Bitmap {
+        val size = minOf(source.width, source.height)
+        val output = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            shader = BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        }
+        Canvas(output).drawCircle(size / 2f, size / 2f, size / 2f, paint)
+        return output
     }
 
     private enum class MediaSource { NETWORK, FILE, ASSET, RESOURCE, UNKNOWN }
@@ -90,6 +105,25 @@ class BitmapUtils private constructor() {
     } catch (e: Exception) {
         e.printStackTrace()
         null
+    }
+
+    /**
+     * 0.12 `getDrawableResourceId`: the id of `resource://type/name` (the
+     * prefix is optional), trying `res_name` first (the name 0.12 documents to
+     * keep a resource from being shrunk), then `name`. 0 when missing.
+     */
+    fun getDrawableResourceId(context: Context, reference: String?): Int {
+        if (reference.isNullOrEmpty()) return 0
+        val parts = clean(reference).split("/")
+        if (parts.size < 2) return 0
+        val (type, label) = parts[0] to parts[1]
+        return try {
+            context.resources.getIdentifier("res_$label", type, context.packageName)
+                .takeIf { it != 0 }
+                ?: context.resources.getIdentifier(label, type, context.packageName)
+        } catch (_: Exception) {
+            0
+        }
     }
 
     /** `resource://type/name`, e.g. `resource://drawable/app_icon`. */

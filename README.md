@@ -16,10 +16,12 @@ opt-in **capability add-ons** that *decorate* the core — you depend only on wh
 | [`awesome_notifications_schedules`](packages/awesome_notifications_schedules) | **Decorator**: schedule notifications by time interval or calendar date, once or repeating. |
 | [`awesome_notifications_localizations`](packages/awesome_notifications_localizations) | **Decorator**: show notifications in the user's language (per-language content + button labels). |
 | [`awesome_notifications_fcm`](packages/awesome_notifications_fcm) | **Decorator**: Firebase Cloud Messaging — display pushes through the core, silent background data, FCM/APNs tokens, topics. |
+| [`awesome_notifications_chat`](packages/awesome_notifications_chat) | **Decorator**: chat / communication notifications (Android conversations, iOS communication notifications). |
+| [`awesome_notifications_media`](packages/awesome_notifications_media) | **Decorator**: the system's media controls (Android media notification, Now Playing, MPRIS, SMTC, Media Session). |
+| [`awesome_notifications_calls`](packages/awesome_notifications_calls) | **Decorator**: the system's call UI (Android CallStyle + Telecom, iOS CallKit + VoIP pushes) and call notifications on desktop and Web. |
 
 More capability add-ons (decorators of the core) are migrated in incrementally:
-`_permissions` · `_foreground` · `_calls` · `_live_activities` ·
-`_media` · `_progress` · `_chat`.
+`_permissions` · `_foreground` · `_live_activities` · `_progress`.
 
 ## Working in the monorepo
 

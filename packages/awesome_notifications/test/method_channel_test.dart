@@ -34,6 +34,8 @@ void main() {
         case CHANNEL_METHOD_SET_EVENT_HANDLES:
         case CHANNEL_METHOD_REMOVE_NOTIFICATION_CHANNEL:
           return true;
+        case CHANNEL_METHOD_GET_PERMISSION_STATUSES:
+          return {'Alert': 'granted', 'CriticalAlert': 'notSupported', 'Bogus': 'granted', 'Sound': 'weird'};
         case CHANNEL_METHOD_CHECK_PERMISSIONS:
         case CHANNEL_METHOD_SHOULD_SHOW_RATIONALE:
           return <Object?>['Alert', 'Sound'];
@@ -144,6 +146,21 @@ void main() {
     expect(checked, contains(NotificationPermission.Sound));
     final rationale = await mc.shouldShowRationaleToRequest();
     expect(rationale, contains(NotificationPermission.Alert));
+  });
+
+  test('permission statuses keep only known permissions and statuses (0.12.1)',
+      () async {
+    final statuses = await mc.getPermissionStatusList(
+        channelKey: 'ch',
+        permissions: const [NotificationPermission.CriticalAlert]);
+    expect(calls.last.method, CHANNEL_METHOD_GET_PERMISSION_STATUSES);
+    expect(calls.last.arguments,
+        {NOTIFICATION_CHANNEL_KEY: 'ch', NOTIFICATION_PERMISSIONS: ['CriticalAlert']});
+    expect(statuses, {
+      NotificationPermission.Alert: NotificationPermissionStatus.granted,
+      NotificationPermission.CriticalAlert:
+          NotificationPermissionStatus.notSupported,
+    });
   });
 
   // --- badge ---

@@ -22,10 +22,14 @@ final class HandledNotificationTests: XCTestCase {
     override func setUp() {
         super.setUp()
         NotificationBuilderRegistry.shared.clearForTest()
+        // The test process has no notification center to read the
+        // critical-alert availability from: resolve it beforehand.
+        CriticalAlertUtils.setCache(false)
     }
 
     override func tearDown() {
         NotificationBuilderRegistry.shared.clearForTest()
+        CriticalAlertUtils.clearCache()
         super.tearDown()
     }
 

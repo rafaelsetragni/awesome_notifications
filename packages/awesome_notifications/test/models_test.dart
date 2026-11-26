@@ -221,7 +221,6 @@ void main() {
         showWhen: false,
         wakeUpScreen: true,
         fullScreenIntent: true,
-        criticalAlert: true,
         roundedLargeIcon: true,
         roundedBigPicture: true,
         autoDismissible: false,
@@ -253,7 +252,6 @@ void main() {
       expect(r.notificationLayout, NotificationLayout.BigPicture);
       expect(r.category, NotificationCategory.Alarm);
       expect(r.actionType, ActionType.SilentAction);
-      expect(r.criticalAlert, true);
       expect(r.wakeUpScreen, true);
       expect(r.autoDismissible, false);
       expect(r.locked, true);
@@ -265,6 +263,12 @@ void main() {
       expect(r.payload, {'uuid': 'abc', 'empty': null});
       // toString runs the pretty-printer over the full map.
       expect(content.toString(), contains('channelKey'));
+    });
+
+    test('a legacy criticalAlert key is ignored (0.12.1)', () {
+      final r = NotificationContent(id: 0, channelKey: '')
+          .fromMap({'id': 1, 'channelKey': 'c', 'criticalAlert': true});
+      expect(r!.toMap().containsKey('criticalAlert'), isFalse);
     });
 
     test('validate throws without id or channelKey', () {

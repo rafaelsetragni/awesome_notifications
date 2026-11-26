@@ -11,6 +11,7 @@ APPS = {
   'awesome_notifications_fcm':           ('fcm',           'Awesome Push'),
   'awesome_notifications_chat':          ('chat',          'Awesome Chat'),
   'awesome_notifications_media':         ('media',         'Awesome Media'),
+  'awesome_notifications_calls':         ('calls',         'Awesome Calls'),
 }
 TOP = '#%02X%02X%02X' % mk.TOP; BOTTOM = '#%02X%02X%02X' % mk.BOTTOM
 
@@ -47,6 +48,18 @@ for pkg, (key, name) in APPS.items():
         android:endColor="{BOTTOM}"
         android:type="linear" />
 </shape>
+''')
+        # Status bar (small) icon: Android draws only its alpha, so a white
+        # glyph on transparent, on the 24dp grid. `res_` keeps it from being
+        # shrunk in release builds (with raw/keep.xml), as 0.12 documents.
+        for d, px in {'mdpi':24,'hdpi':36,'xhdpi':48,'xxhdpi':72,'xxxhdpi':96}.items():
+            os.makedirs(f'{res}/drawable-{d}', exist_ok=True)
+            mk.glyph_layer(px*4, mk.GLYPHS[key], scale=20/24, alpha=1.0).resize((px,px), Image.LANCZOS).save(f'{res}/drawable-{d}/res_notification_icon.png')
+        os.makedirs(f'{res}/raw', exist_ok=True)
+        open(f'{res}/raw/keep.xml','w').write('''<?xml version="1.0" encoding="utf-8"?>
+<!-- Keeps the notification icon, referenced only by name from Dart. -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/res_notification_icon" />
 ''')
         sub(os.path.join(ex,'android/app/src/main/AndroidManifest.xml'), r'android:label="[^"]*"', f'android:label="{name}"')
         done.append('android')

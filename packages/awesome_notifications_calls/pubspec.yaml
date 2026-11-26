@@ -1,0 +1,40 @@
+name: awesome_notifications_calls
+description: "Calls for awesome_notifications: the system's call UI (Android CallStyle and full-screen, iOS CallKit and VoIP pushes) and the strongest call notification on macOS, Windows, Linux and Web, from one model."
+version: 1.0.0
+homepage:
+resolution: workspace
+
+environment:
+  sdk: '>=3.6.0 <4.0.0'
+  flutter: '>=3.3.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  awesome_notifications:
+    path: ../awesome_notifications
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: me.carda.awesome_notifications_calls
+        pluginClass: AwesomeNotificationsCallsPlugin
+      ios:
+        pluginClass: AwesomeNotificationsCallsPlugin
+      macos:
+        pluginClass: AwesomeNotificationsCallsPlugin
+      linux:
+        pluginClass: AwesomeNotificationsCallsPlugin
+      windows:
+        pluginClass: AwesomeNotificationsCallsPluginCApi
+      web:
+        pluginClass: AwesomeNotificationsCallsWeb
+        fileName: awesome_notifications_calls_web.dart

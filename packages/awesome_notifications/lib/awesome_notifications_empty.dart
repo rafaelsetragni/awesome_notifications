@@ -33,6 +33,20 @@ class AwesomeNotificationsEmpty extends AwesomeNotificationsPlatform
   }
 
   @override
+  Future<Map<NotificationPermission, NotificationPermissionStatus>>
+      getPermissionStatusList(
+          {String? channelKey,
+          List<NotificationPermission> permissions = const [
+            NotificationPermission.Badge,
+            NotificationPermission.Alert,
+            NotificationPermission.Sound,
+            NotificationPermission.Vibration,
+            NotificationPermission.Light
+          ]}) async {
+    return {};
+  }
+
+  @override
   Future<bool> createNotification({
     required NotificationContent content,
     List<NotificationActionButton>? actionButtons,

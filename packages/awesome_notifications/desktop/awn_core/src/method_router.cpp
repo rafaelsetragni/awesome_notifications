@@ -4,6 +4,15 @@
 
 namespace awn {
 
+namespace {
+// What a desktop notification server lets the user turn on or off: the
+// notification itself and its sound. Everything else (badge, vibration,
+// light, critical alerts, full-screen, …) has no desktop meaning.
+bool isDesktopPermission(const std::string& name) {
+  return name == "Alert" || name == "Sound";
+}
+}  // namespace
+
 AwesomeMethodRouter::AwesomeMethodRouter(AwesomeNotifications& core) : core_(core) {}
 
 bool AwesomeMethodRouter::handle(const std::string& method, const Value& arguments,
@@ -34,6 +43,30 @@ bool AwesomeMethodRouter::handle(const std::string& method, const Value& argumen
     ValueList requested = getList(arguments.map(), defs::NOTIFICATION_PERMISSIONS);
     core_.requestPermission([result, requested](bool granted) {
       result(granted ? Value(ValueList{}) : Value(requested));
+    });
+  } else if (method == "checkPermissions") {
+    // The requested permissions that are granted now.
+    ValueList requested = getList(arguments.map(), defs::NOTIFICATION_PERMISSIONS);
+    core_.isNotificationAllowed([result, requested](bool allowed) {
+      ValueList granted;
+      if (allowed)
+        for (const auto& permission : requested)
+          if (isDesktopPermission(permission.asString().value_or(""))) granted.push_back(permission);
+      result(Value(granted));
+    });
+  } else if (method == "getPermissionStatuses") {
+    // 0.12.1 contract: permission name -> granted | denied | notSupported.
+    ValueList requested = getList(arguments.map(), defs::NOTIFICATION_PERMISSIONS);
+    core_.isNotificationAllowed([result, requested](bool allowed) {
+      ValueMap statuses;
+      for (const auto& permission : requested) {
+        std::string name = permission.asString().value_or("");
+        if (name.empty()) continue;
+        statuses[name] = Value(!isDesktopPermission(name) ? "notSupported"
+                               : allowed                  ? "granted"
+                                                          : "denied");
+      }
+      result(Value(statuses));
     });
   } else if (method == "setNotificationChannel") {
     if (arguments.isMap()) core_.setChannel(arguments.map());

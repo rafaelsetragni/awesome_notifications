@@ -171,6 +171,15 @@ std::optional<ActionType> AwesomeNotifications::onActivated(const Activation& ac
     return std::nullopt;
   }
 
+  // A decorator's own buttons (a copy: an interceptor may unsubscribe).
+  auto interceptors = activationInterceptors_;
+  for (auto& entry : interceptors) {
+    if (auto handled = entry.second(*model, args->buttonKey, activation)) {
+      finishLaunching();
+      return handled;
+    }
+  }
+
   // The stored content carries the displayed lifecycle predicted at creation;
   // correct it if the notification was shown while the app was running.
   ValueMap content = tracker_.resolve(NotificationBuilder::content(*model), args->id);
@@ -314,6 +323,19 @@ void AwesomeNotifications::removeRemovalObserver(int token) {
       std::remove_if(removalObservers_.begin(), removalObservers_.end(),
                      [token](const auto& entry) { return entry.first == token; }),
       removalObservers_.end());
+}
+
+int AwesomeNotifications::addActivationInterceptor(ActivationInterceptor interceptor) {
+  int token = nextInterceptorToken_++;
+  activationInterceptors_.emplace_back(token, std::move(interceptor));
+  return token;
+}
+
+void AwesomeNotifications::removeActivationInterceptor(int token) {
+  activationInterceptors_.erase(
+      std::remove_if(activationInterceptors_.begin(), activationInterceptors_.end(),
+                     [token](const auto& entry) { return entry.first == token; }),
+      activationInterceptors_.end());
 }
 
 void AwesomeNotifications::notifyRemoved(const std::vector<int64_t>& ids) {

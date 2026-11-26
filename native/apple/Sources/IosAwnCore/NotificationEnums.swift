@@ -52,3 +52,46 @@ public enum MediaSourcePrefix {
     /// Loose prefix used to keep any http(s) URL whole.
     public static let http = "http"
 }
+
+/// Importance of a channel. The raw value matches the Dart
+/// `NotificationImportance` enum name (the wire format is `.name`).
+public enum NotificationImportance: String, CaseIterable {
+    case none = "None"
+    case min = "Min"
+    case low = "Low"
+    case `default` = "Default"
+    case high = "High"
+    case max = "Max"
+
+    /// 0.12 `EnumUtils.getEnumOrDefault`: a missing or unknown value is
+    /// `Default`.
+    public static func from(_ raw: Any?) -> NotificationImportance {
+        guard let raw = raw as? String else { return .default }
+        return NotificationImportance(rawValue: raw) ?? .default
+    }
+}
+
+/// A permission the app may ask for. The raw value matches the Dart
+/// `NotificationPermission` enum name.
+public enum NotificationPermission: String, CaseIterable {
+    case alert = "Alert"
+    case sound = "Sound"
+    case badge = "Badge"
+    case vibration = "Vibration"
+    case light = "Light"
+    case criticalAlert = "CriticalAlert"
+    case overrideDnD = "OverrideDnD"
+    case provisional = "Provisional"
+    case preciseAlarms = "PreciseAlarms"
+    case fullScreenIntent = "FullScreenIntent"
+    case car = "Car"
+}
+
+/// The status of a permission, as `getPermissionStatuses` answers it. The raw
+/// value matches the Dart `NotificationPermissionStatus` enum name.
+public enum NotificationPermissionStatus: String, CaseIterable {
+    case granted = "granted"
+    case denied = "denied"
+    case notDetermined = "notDetermined"
+    case notSupported = "notSupported"
+}

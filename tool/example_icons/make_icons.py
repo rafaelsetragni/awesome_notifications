@@ -3,7 +3,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 FONT=sys.argv[1]; OUT=sys.argv[2]
 # Awesome purple -> pink (from the 0.12 icon and logo)
 TOP=(0x7B,0x0A,0xC4); BOTTOM=(0xC2,0x18,0x8E)
-GLYPHS={'core':0xe44f,'schedules':0xe556,'localizations':0xe67b,'fcm':0xe16f,'chat':0xe153,'media':0xe415}
+GLYPHS={'core':0xe44f,'schedules':0xe556,'localizations':0xe67b,'fcm':0xe16f,'chat':0xe153,'media':0xe415,'calls':0xe126}
 def background(size):
     img=Image.new('RGB',(size,size))
     px=img.load()

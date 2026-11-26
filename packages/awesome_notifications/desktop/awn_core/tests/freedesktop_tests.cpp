@@ -106,3 +106,21 @@ TEST(FreedesktopSilentLockedAndCategory) {
                                   "Default", kFull);
   EXPECT_TRUE(none.category.empty());
 }
+
+TEST(FreedesktopPresentationHintsOverrideTheChannel) {
+  ValueMap m = modelWith({{"id", 1}});
+  m["desktopPresentation"] =
+      ValueMap{{"urgency", 2}, {"resident", true}, {"soundName", "phone-incoming-call"}};
+  auto n = Freedesktop::render(m, {}, false, "Low", kFull);
+  EXPECT_EQ(n.urgency, 2);
+  EXPECT_TRUE(n.resident);
+  EXPECT_EQ(n.soundName, std::string("phone-incoming-call"));
+  EXPECT_TRUE(Freedesktop::render(m, {}, true, "Low", kFull).soundName.empty());  // silent channel
+  m["desktopPresentation"] = ValueMap{{"silent", true}, {"urgency", 9}};
+  auto silent = Freedesktop::render(m, {}, false, "Default", kFull);
+  EXPECT_TRUE(silent.suppressSound);
+  EXPECT_EQ(silent.urgency, 2);
+  auto plain = Freedesktop::render(modelWith({{"id", 1}}), {}, false, "Default", kFull);
+  EXPECT_TRUE(plain.soundName.empty());
+  EXPECT_FALSE(plain.resident);
+}

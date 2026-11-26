@@ -1,12 +1,21 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
+import '../exceptions/awesome_notifications_exception.dart';
 
-import 'chat_keys.dart';
 
-/// Someone taking part in a conversation.
+/// Someone taking part in a notification: a conversation's sender, a call's
+/// caller.
 ///
 /// The same model becomes an `androidx.core.app.Person` on Android and an
-/// `INPerson` on iOS and macOS, so an app describes people once.
+/// `INPerson` on iOS and macOS, so an app describes people once. Add-ons
+/// (chat, calls) carry it in their own blocks.
 class NotificationPerson {
+  /// The map keys, shared with the native side.
+  static const String keyKey = 'key',
+      keyName = 'name',
+      keyAvatar = 'avatar',
+      keyUri = 'uri',
+      keyIsBot = 'isBot',
+      keyIsImportant = 'isImportant';
+
   /// A stable, unique identifier of the person (an account id, for example).
   final String key;
 
@@ -37,26 +46,26 @@ class NotificationPerson {
   });
 
   Map<String, dynamic> toMap() => {
-        ChatKeys.key: key,
-        ChatKeys.name: name,
-        if (avatar != null) ChatKeys.avatar: avatar,
-        if (uri != null) ChatKeys.uri: uri,
-        ChatKeys.isBot: isBot,
-        ChatKeys.isImportant: isImportant,
+        keyKey: key,
+        keyName: name,
+        if (avatar != null) keyAvatar: avatar,
+        if (uri != null) keyUri: uri,
+        keyIsBot: isBot,
+        keyIsImportant: isImportant,
       };
 
   /// Null when [map] is not a valid person.
   static NotificationPerson? fromMap(Map<String, dynamic>? map) {
     if (map == null) return null;
-    final key = map[ChatKeys.key], name = map[ChatKeys.name];
+    final key = map[keyKey], name = map[keyName];
     if (key is! String || name is! String) return null;
     return NotificationPerson(
       key: key,
       name: name,
-      avatar: map[ChatKeys.avatar] as String?,
-      uri: map[ChatKeys.uri] as String?,
-      isBot: map[ChatKeys.isBot] == true,
-      isImportant: map[ChatKeys.isImportant] == true,
+      avatar: map[keyAvatar] as String?,
+      uri: map[keyUri] as String?,
+      isBot: map[keyIsBot] == true,
+      isImportant: map[keyIsImportant] == true,
     );
   }
 

@@ -13,12 +13,7 @@ internal object ChatKeys {
     const val HISTORY = "history"
     const val SHORTCUT = "shortcut"
 
-    const val KEY = "key"
-    const val NAME = "name"
-    const val AVATAR = "avatar"
-    const val URI = "uri"
-    const val IS_BOT = "isBot"
-    const val IS_IMPORTANT = "isImportant"
+    // A person's keys: see the core's NotificationPerson.
 
     const val SENDER = "sender"
     const val TEXT = "text"

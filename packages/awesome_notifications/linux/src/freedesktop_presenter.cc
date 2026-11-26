@@ -181,6 +181,8 @@ void FreedesktopPresenter::Notify(int64_t id, const awn::FreedesktopNotification
     g_variant_builder_add(&hints, "{sv}", "category", g_variant_new_string(n.category.c_str()));
   if (n.suppressSound)
     g_variant_builder_add(&hints, "{sv}", "suppress-sound", g_variant_new_boolean(TRUE));
+  if (!n.soundName.empty())
+    g_variant_builder_add(&hints, "{sv}", "sound-name", g_variant_new_string(n.soundName.c_str()));
   if (n.resident) g_variant_builder_add(&hints, "{sv}", "resident", g_variant_new_boolean(TRUE));
   if (!n.inlineReplyAction.empty())
     g_variant_builder_add(&hints, "{sv}", "x-kde-reply-placeholder-text",

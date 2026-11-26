@@ -76,6 +76,39 @@ class FcmMessageParserTest {
     }
 
     @Test
+    fun `a call reaches the core, structured or flattened, and stays out of the payload`() {
+        val structured = parser.buildAwesomeMap(
+            context = context, notificationId = 1,
+            data = mapOf(
+                "content" to "{\"id\":300,\"channelKey\":\"calls\"}",
+                "call" to "{\"callId\":\"c-1\",\"caller\":{\"key\":\"ana\",\"name\":\"Ana\"}," +
+                    "\"state\":\"incoming\",\"video\":true,\"ringTimeout\":30000}"
+            ),
+            notification = null, lifeCycle = NotificationLifeCycle.Terminated
+        )
+        @Suppress("UNCHECKED_CAST")
+        val call = structured["call"] as Map<String, Any?>
+        assertEquals("c-1", call["callId"])
+        assertEquals(true, call["video"])
+        assertEquals(30000, (call["ringTimeout"] as Number).toInt())
+
+        val flattened = parser.buildAwesomeMap(
+            context = context, notificationId = 1,
+            data = mapOf(
+                "content.id" to "300", "content.channelKey" to "calls",
+                "call.callId" to "c-1", "call.state" to "incoming",
+                "call.caller.key" to "ana", "call.caller.name" to "Ana"
+            ),
+            notification = null, lifeCycle = NotificationLifeCycle.Terminated
+        )
+        @Suppress("UNCHECKED_CAST")
+        assertEquals("c-1", (flattened["call"] as Map<String, Any?>)["callId"])
+        @Suppress("UNCHECKED_CAST")
+        val content = flattened[Definitions.NOTIFICATION_CONTENT] as Map<String, Any?>
+        assertEquals(null, content[Definitions.NOTIFICATION_PAYLOAD])
+    }
+
+    @Test
     fun `structured content is parsed and stamped with the firebase source`() {
         val model = parser.buildAwesomeMap(
             context = context,

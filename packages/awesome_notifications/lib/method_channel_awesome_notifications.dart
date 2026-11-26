@@ -16,7 +16,8 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
 
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  final MethodChannel methodChannel = const MethodChannel('awesome_notifications');
+  final MethodChannel methodChannel =
+      const MethodChannel('awesome_notifications');
 
   ActionHandler? actionHandler;
   ActionHandler? dismissedHandler;
@@ -68,6 +69,42 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
   }
 
   @override
+  Future<Map<NotificationPermission, NotificationPermissionStatus>>
+      getPermissionStatusList(
+          {String? channelKey,
+          List<NotificationPermission> permissions = const [
+            NotificationPermission.Badge,
+            NotificationPermission.Alert,
+            NotificationPermission.Sound,
+            NotificationPermission.Vibration,
+            NotificationPermission.Light
+          ]}) async {
+    final Map<dynamic, dynamic>? statusMap = await methodChannel
+        .invokeMethod(CHANNEL_METHOD_GET_PERMISSION_STATUSES, {
+      NOTIFICATION_CHANNEL_KEY: channelKey,
+      NOTIFICATION_PERMISSIONS: _listPermissionToListString(permissions)
+    });
+    return _mapToPermissionStatusList(statusMap ?? const {});
+  }
+
+  Map<NotificationPermission, NotificationPermissionStatus>
+      _mapToPermissionStatusList(Map<dynamic, dynamic> statusMap) {
+    final Map<NotificationPermission, NotificationPermissionStatus> result = {};
+    statusMap.forEach((permissionKey, statusValue) {
+      final NotificationPermission? permission =
+          AwesomeAssertUtils.enumToString<NotificationPermission>(
+              permissionKey.toString(), NotificationPermission.values, null);
+      final NotificationPermissionStatus? status =
+          AwesomeAssertUtils.enumToString<NotificationPermissionStatus>(
+              statusValue.toString(),
+              NotificationPermissionStatus.values,
+              null);
+      if (permission != null && status != null) result[permission] = status;
+    });
+    return result;
+  }
+
+  @override
   Future<bool> createNotification({
     required NotificationContent content,
     List<NotificationActionButton>? actionButtons,
@@ -87,8 +124,8 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
       data.addAll(extension.toMap());
     }
 
-    final bool wasCreated =
-        await methodChannel.invokeMethod(CHANNEL_METHOD_CREATE_NOTIFICATION, data);
+    final bool wasCreated = await methodChannel.invokeMethod(
+        CHANNEL_METHOD_CREATE_NOTIFICATION, data);
 
     return wasCreated;
   }
@@ -101,7 +138,8 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
       // Normalize every top-level string that parses as a JSON object/array —
       // this covers content/schedule/actionButtons, the `localizations` block and
       // any future add-on key, without the core needing to know them by name.
-      final Map<String, dynamic> normalized = Map<String, dynamic>.from(mapData);
+      final Map<String, dynamic> normalized =
+          Map<String, dynamic>.from(mapData);
       for (final String key in normalized.keys.toList()) {
         final dynamic value = normalized[key];
         if (value is String) {
@@ -129,8 +167,8 @@ class MethodChannelAwesomeNotifications extends AwesomeNotificationsPlatform {
         data.putIfAbsent(entry.key, () => entry.value);
       }
 
-      final bool wasCreated =
-          await methodChannel.invokeMethod(CHANNEL_METHOD_CREATE_NOTIFICATION, data);
+      final bool wasCreated = await methodChannel.invokeMethod(
+          CHANNEL_METHOD_CREATE_NOTIFICATION, data);
 
       return wasCreated;
     } catch (e) {

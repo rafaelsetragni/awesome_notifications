@@ -14,6 +14,7 @@ workspace:
   - packages/awesome_notifications_fcm
   - packages/awesome_notifications_chat
   - packages/awesome_notifications_media
+  - packages/awesome_notifications_calls
 
 dev_dependencies:
   melos: ^7.0.0

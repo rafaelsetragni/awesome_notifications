@@ -19,6 +19,11 @@ object Definitions {
     const val NOTIFICATION_LAYOUT = "notificationLayout"
     const val NOTIFICATION_LARGE_ICON = "largeIcon"
     const val NOTIFICATION_BIG_PICTURE = "bigPicture"
+    const val NOTIFICATION_CATEGORY = "category"
+    const val NOTIFICATION_LOCKED = "locked"
+    const val NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen"
+    const val NOTIFICATION_FULL_SCREEN_INTENT = "fullScreenIntent"
+    const val NOTIFICATION_CUSTOM_SOUND = "customSound"
 
     // Action button fields
     const val NOTIFICATION_BUTTON_KEY = "key"
@@ -38,10 +43,20 @@ object Definitions {
     const val NOTIFICATION_CHANNEL_NAME = "channelName"
     const val NOTIFICATION_CHANNEL_DESCRIPTION = "channelDescription"
     const val NOTIFICATION_IMPORTANCE = "importance"
+    const val NOTIFICATION_PLAY_SOUND = "playSound"
+    const val NOTIFICATION_ENABLE_VIBRATION = "enableVibration"
+    const val NOTIFICATION_VIBRATION_PATTERN = "vibrationPattern"
+    const val NOTIFICATION_ENABLE_LIGHTS = "enableLights"
+    const val NOTIFICATION_LED_COLOR = "ledColor"
+    const val NOTIFICATION_CHANNEL_SHOW_BADGE = "channelShowBadge"
+    const val NOTIFICATION_SOUND_SOURCE = "soundSource"
+    const val NOTIFICATION_DEFAULT_RINGTONE_TYPE = "defaultRingtoneType"
+    const val NOTIFICATION_CHANNEL_CRITICAL_ALERTS = "criticalAlerts"
 
     // Initialize payload
     const val INITIALIZE_CHANNELS = "initializeChannels"
     const val INITIALIZE_DEFAULT_ICON = "defaultIcon"
+    const val NOTIFICATION_ICON = "icon"
     const val INITIALIZE_DEBUG_MODE = "debug"
 
     // Lifecycle / action metadata (native -> Dart)
@@ -67,6 +82,15 @@ object Definitions {
     const val DISMISSED_NOTIFICATION = "DISMISSED_NOTIFICATION"
     const val NOTIFICATION_BUTTON_ACTION_PREFIX = "ACTION_NOTIFICATION"
     const val NOTIFICATION_JSON = "notificationJson"
+
+    // 0.12 exception codes / detailed codes (the PlatformException code + details).
+    const val CODE_MISSING_ARGUMENTS = "MISSING_ARGUMENTS"
+    const val CODE_INVALID_ARGUMENTS = "INVALID_ARGUMENTS"
+    const val CODE_UNKNOWN_EXCEPTION = "UNKNOWN_EXCEPTION"
+    const val CODE_NOTIFICATION_THREAD_EXCEPTION = "NOTIFICATION_THREAD_EXCEPTION"
+    const val DETAILED_REQUIRED_ARGUMENTS = "arguments.required"
+    const val DETAILED_INVALID_ARGUMENTS = "arguments.invalid"
+    const val DETAILED_UNEXPECTED_ERROR = "unexpectedError"
 
     // The reference time zone all lifecycle dates are serialized in.
     const val UTC_TIMEZONE = "UTC"

@@ -89,6 +89,12 @@ class V1Api implements CompatApi {
         notificationLayout: spec.layout == null
             ? NotificationLayout.Default
             : NotificationLayout.values.byName(spec.layout!),
+        category: spec.category == null
+            ? null
+            : NotificationCategory.values.byName(spec.category!),
+        fullScreenIntent: spec.fullScreenIntent ?? false,
+        wakeUpScreen: spec.wakeUpScreen ?? false,
+        locked: spec.locked ?? false,
       ),
       actionButtons: spec.buttons.isEmpty
           ? null
@@ -136,6 +142,14 @@ class V1Api implements CompatApi {
 
   @override
   Future<void> dismiss(int id) => _awn.dismiss(id);
+
+  @override
+  Future<Map<String, String>> permissionStatuses(List<String> permissions) async {
+    final statuses = await _awn.getPermissionStatusList(
+        channelKey: compatChannelKey,
+        permissions: [for (final p in permissions) NotificationPermission.values.byName(p)]);
+    return {for (final e in statuses.entries) e.key.name: e.value.name};
+  }
 }
 
 void main() {

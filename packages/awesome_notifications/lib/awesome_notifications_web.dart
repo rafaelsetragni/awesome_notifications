@@ -32,7 +32,8 @@ class WebNotificationRemoval {
     final content = model[NOTIFICATION_CONTENT];
     if (content is! Map) return false;
     if (id != null) return content[NOTIFICATION_ID] == id;
-    if (channelKey != null) return content[NOTIFICATION_CHANNEL_KEY] == channelKey;
+    if (channelKey != null)
+      return content[NOTIFICATION_CHANNEL_KEY] == channelKey;
     if (groupKey != null) return content[NOTIFICATION_GROUP_KEY] == groupKey;
     return true;
   }
@@ -158,6 +159,20 @@ class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
         NotificationPermission.Light
       ]}) async {
     return [];
+  }
+
+  @override
+  Future<Map<NotificationPermission, NotificationPermissionStatus>>
+      getPermissionStatusList(
+          {String? channelKey,
+          List<NotificationPermission> permissions = const [
+            NotificationPermission.Badge,
+            NotificationPermission.Alert,
+            NotificationPermission.Sound,
+            NotificationPermission.Vibration,
+            NotificationPermission.Light
+          ]}) async {
+    return {};
   }
 
   @override

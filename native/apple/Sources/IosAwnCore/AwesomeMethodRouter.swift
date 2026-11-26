@@ -58,6 +58,30 @@ public final class AwesomeMethodRouter {
             let requested = (args?[Definitions.NOTIFICATION_PERMISSIONS] as? [String]) ?? []
             core.requestPermission { granted in result(granted ? [] : requested) }
 
+        case "getPermissionStatuses":
+            // 0.12.1: the arguments map and a non-empty permission list are
+            // required.
+            guard let args = arguments as? [String: Any] else {
+                result(AwesomeNotificationsException(
+                    code: AwesomeNotificationsException.CODE_MISSING_ARGUMENTS,
+                    message: "Arguments are missing",
+                    detailedCode: AwesomeNotificationsException.DETAILED_REQUIRED_ARGUMENTS))
+                break
+            }
+            guard let permissions = args[Definitions.NOTIFICATION_PERMISSIONS] as? [String],
+                  !permissions.isEmpty else {
+                result(AwesomeNotificationsException(
+                    code: AwesomeNotificationsException.CODE_INVALID_ARGUMENTS,
+                    message: "Permission list is required",
+                    detailedCode: AwesomeNotificationsException.DETAILED_REQUIRED_ARGUMENTS
+                        + ".permissionList"))
+                break
+            }
+            let channelKey = args[Definitions.NOTIFICATION_CHANNEL_KEY] as? String
+            core.getPermissionStatuses(permissions, filteringByChannelKey: channelKey) {
+                result($0)
+            }
+
         case "setNotificationChannel":
             if let args = arguments as? [String: Any] { core.setChannel(args) }
             result(true)

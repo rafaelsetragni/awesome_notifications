@@ -58,7 +58,9 @@ class NotificationController {
   ///  *********************************************
   static Future<bool> initializeLocalNotifications() {
     return AwesomeNotifications().initialize(
-      null, // no custom default icon → uses the app icon
+      // The status bar icon: a white glyph on transparent (Android draws only
+      // its alpha). Without it, the full-color app icon shows as a square.
+      'resource://drawable/res_notification_icon',
       [
         NotificationChannel(
           channelKey: channelKey,

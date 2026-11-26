@@ -1,4 +1,5 @@
 import Foundation
+import IosAwnCore
 
 /// Keys of the `conversation` block (same names as the Dart `ChatKeys`).
 enum ChatKeys {
@@ -11,11 +12,6 @@ enum ChatKeys {
     static let participants = "participants"
     static let image = "image"
     static let history = "history"
-
-    static let key = "key"
-    static let name = "name"
-    static let avatar = "avatar"
-    static let uri = "uri"
 
     static let sender = "sender"
     static let text = "text"
@@ -36,32 +32,14 @@ enum ChatKeys {
     static let layoutMessagingGroup = "MessagingGroup"
 }
 
-struct ChatPerson: Equatable {
-    let key: String
-    let name: String
-    let avatar: String?
-    let uri: String?
-
-    init?(_ value: Any?) {
-        guard let map = value as? [String: Any],
-              let key = map[ChatKeys.key] as? String, !key.trimmingCharacters(in: .whitespaces).isEmpty,
-              let name = map[ChatKeys.name] as? String, !name.trimmingCharacters(in: .whitespaces).isEmpty
-        else { return nil }
-        self.key = key
-        self.name = name
-        avatar = map[ChatKeys.avatar] as? String
-        uri = map[ChatKeys.uri] as? String
-    }
-}
-
 struct ChatMessage {
-    let sender: ChatPerson
+    let sender: NotificationPerson
     let text: String
     let image: String?
 
     init?(_ value: Any?) {
         guard let map = value as? [String: Any],
-              let sender = ChatPerson(map[ChatKeys.sender]),
+              let sender = NotificationPerson(map[ChatKeys.sender]),
               let text = map[ChatKeys.text] as? String, !text.trimmingCharacters(in: .whitespaces).isEmpty
         else { return nil }
         self.sender = sender
@@ -72,10 +50,10 @@ struct ChatMessage {
 
 struct ChatConversation {
     let id: String
-    let me: ChatPerson
+    let me: NotificationPerson
     let message: ChatMessage
     let title: String?
-    let participants: [ChatPerson]
+    let participants: [NotificationPerson]
     let image: String?
 
     func displayName(isGroup: Bool) -> String {
@@ -90,15 +68,15 @@ struct ChatConversation {
         guard let id = map[ChatKeys.id] as? String, !id.trimmingCharacters(in: .whitespaces).isEmpty else {
             return (nil, "The conversation needs a non-empty id")
         }
-        guard let me = ChatPerson(map[ChatKeys.me]) else {
+        guard let me = NotificationPerson(map[ChatKeys.me]) else {
             return (nil, "The conversation needs a person (key and name) as me")
         }
         guard let message = ChatMessage(map[ChatKeys.message]) else {
             return (nil, "The conversation needs a message with a sender (key and name) and a text")
         }
-        var participants: [ChatPerson] = []
+        var participants: [NotificationPerson] = []
         for raw in (map[ChatKeys.participants] as? [Any]) ?? [] {
-            guard let person = ChatPerson(raw) else {
+            guard let person = NotificationPerson(raw) else {
                 return (nil, "Every participant needs a key and a name")
             }
             participants.append(person)

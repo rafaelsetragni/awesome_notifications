@@ -17,6 +17,11 @@ public enum Definitions {
     public static let NOTIFICATION_LAYOUT = "notificationLayout"
     public static let NOTIFICATION_LARGE_ICON = "largeIcon"
     public static let NOTIFICATION_BIG_PICTURE = "bigPicture"
+    public static let NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen"
+    public static let NOTIFICATION_CATEGORY = "category"
+    public static let NOTIFICATION_FULL_SCREEN_INTENT = "fullScreenIntent"
+    public static let NOTIFICATION_PLAY_SOUND = "playSound"
+    public static let NOTIFICATION_CUSTOM_SOUND = "customSound"
 
     // Action button fields
     public static let NOTIFICATION_BUTTON_KEY = "key"
@@ -36,6 +41,13 @@ public enum Definitions {
     public static let NOTIFICATION_GROUP_KEY = "groupKey"
     public static let NOTIFICATION_CHANNEL_NAME = "channelName"
     public static let NOTIFICATION_IMPORTANCE = "importance"
+    public static let NOTIFICATION_SOUND_SOURCE = "soundSource"
+    public static let NOTIFICATION_ENABLE_VIBRATION = "enableVibration"
+    public static let NOTIFICATION_ENABLE_LIGHTS = "enableLights"
+    public static let NOTIFICATION_CHANNEL_SHOW_BADGE = "channelShowBadge"
+    /// The only switch of a critical alert (0.12.1): a `criticalAlert` key in
+    /// the content is not read.
+    public static let NOTIFICATION_CHANNEL_CRITICAL_ALERTS = "criticalAlerts"
 
     // Initialize payload
     public static let INITIALIZE_CHANNELS = "initializeChannels"
