@@ -2,28 +2,21 @@
 
 ![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications.jpg)
 
-Media controls for [awesome_notifications](https://pub.dev/packages/awesome_notifications):
-the system's own player for your app on **Android, iOS, macOS, Windows, Linux and the
-Web**, from one model.
+The system's own media player for your app, on **Android, iOS, macOS, Windows, Linux
+and the Web**, from one model.
 
 [![pub package](https://img.shields.io/pub/v/awesome_notifications_media.svg)](https://pub.dev/packages/awesome_notifications_media)
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/master/graph/badge.svg?flag=awesome_notifications_media)
 
-Show what your app is playing where the user expects it: the Android media
-notification and Quick Settings player, the iOS lock screen and Control Center, the
-macOS Now Playing, the Windows media overlay, the Linux desktop's media widget and the
-browser's media hub. You describe the track and the controls once, in Dart; the user's
-taps on play, pause, next or the progress bar come back to your app.
-
-**The package doesn't play audio.** Your player (just_audio, audioplayers, your own)
-plays; this package mirrors its state on the system controls and routes the user's
-commands back to it.
-
 ![The same player on the iOS lock screen, in the app and in the Android Quick Settings](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-media.jpg)
 
-*The example app's player (center) and the same session in the iOS lock screen (left)
-and the Android Quick Settings (right).*
+*The example app's player (center) and the same session on the iOS lock screen (left)
+and in the Android Quick Settings (right).*
+
+**The package doesn't play audio:** your player (just_audio, audioplayers, your own)
+plays; this package mirrors its state on the system controls and sends the user's
+commands back to your app.
 
 <br>
 
