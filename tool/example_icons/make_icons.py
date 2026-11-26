@@ -13,11 +13,14 @@ def background(size):
             px[x,y]=tuple(int(TOP[i]+(BOTTOM[i]-TOP[i])*t) for i in range(3))
     return img
 def glyph_layer(size, code, scale=0.56, alpha=0.86):
-    layer=Image.new('RGBA',(size,size),(0,0,0,0))
+    # Drawn on a larger canvas, then centered by its drawn pixels: the font's
+    # text box doesn't match the glyph's ink, which left it off center.
     font=ImageFont.truetype(FONT,int(size*scale))
-    d=ImageDraw.Draw(layer); ch=chr(code)
-    l,t,r,b=d.textbbox((0,0),ch,font=font)
-    d.text(((size-(r-l))/2-l,(size-(b-t))/2-t),ch,font=font,fill=(255,255,255,int(255*alpha)))
+    big=Image.new('RGBA',(size*2,size*2),(0,0,0,0))
+    ImageDraw.Draw(big).text((size//2,size//2),chr(code),font=font,fill=(255,255,255,int(255*alpha)))
+    ink=big.crop(big.getchannel('A').getbbox())
+    layer=Image.new('RGBA',(size,size),(0,0,0,0))
+    layer.paste(ink,((size-ink.width)//2,(size-ink.height)//2))
     return layer
 def icon(name,size=1024,scale=0.56):
     bg=background(size).convert('RGBA')
