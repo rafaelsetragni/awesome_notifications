@@ -1,0 +1,35 @@
+name: awesome_notifications_chat
+description: "Chat notifications for awesome_notifications: Android conversations and iOS / macOS communication notifications, with a shared Person model."
+version: 1.0.0
+homepage:
+resolution: workspace
+
+environment:
+  sdk: '>=3.6.0 <4.0.0'
+  flutter: '>=3.3.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  awesome_notifications:
+    path: ../awesome_notifications
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: me.carda.awesome_notifications_chat
+        pluginClass: AwesomeNotificationsChatPlugin
+      ios:
+        pluginClass: AwesomeNotificationsChatPlugin
+      linux:
+        pluginClass: AwesomeNotificationsChatPlugin
+      macos:
+        pluginClass: AwesomeNotificationsChatPlugin
+      windows:
+        pluginClass: AwesomeNotificationsChatPluginCApi

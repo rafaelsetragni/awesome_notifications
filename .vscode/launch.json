@@ -5,58 +5,120 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Simple Example",
-            "cwd": "example",
+            "name": "Example (Base)",
+            "cwd": "packages/awesome_notifications/example",
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart"
         },
         {
-            "name": "Simple Example (profile mode)",
-            "cwd": "example",
+            "name": "Example (Localizations)",
+            "cwd": "packages/awesome_notifications_localizations/example",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile",
             "program": "lib/main.dart"
         },
         {
-            "name": "Simple Example (release mode)",
-            "cwd": "example",
+            "name": "Example (Schedules)",
+            "cwd": "packages/awesome_notifications_schedules/example",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release",
             "program": "lib/main.dart"
         },
         {
-            "name": "Complete Example",
-            "cwd": "example",
+            "name": "Example (FCM)",
+            "cwd": "packages/awesome_notifications_fcm/example",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main_complete.dart"
+            "program": "lib/main.dart"
         },
         {
-            "name": "Complete Example (profile mode)",
-            "cwd": "example",
+            "name": "Example (Chat)",
+            "cwd": "packages/awesome_notifications_chat/example",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile",
-            "program": "lib/main_complete.dart"
+            "program": "lib/main.dart"
         },
         {
-            "name": "Complete Example (release mode)",
-            "cwd": "example",
+            "name": "Example (Media)",
+            "cwd": "packages/awesome_notifications_media/example",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release",
-            "program": "lib/main_complete.dart"
+            "program": "lib/main.dart"
         },
         {
-            "name": "All tests coverage",
+            "name": "Tests + coverage (Core)",
+            "cwd": "packages/awesome_notifications",
             "request": "launch",
             "type": "dart",
+            "program": "test/",
             "toolArgs": [
                 "--coverage"
             ]
+        },
+        {
+            "name": "Tests + coverage (Schedules)",
+            "cwd": "packages/awesome_notifications_schedules",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/",
+            "toolArgs": [
+                "--coverage"
+            ]
+        },
+        {
+            "name": "Tests + coverage (Localizations)",
+            "cwd": "packages/awesome_notifications_localizations",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/",
+            "toolArgs": [
+                "--coverage"
+            ]
+        },
+        {
+            "name": "Tests + coverage (FCM)",
+            "cwd": "packages/awesome_notifications_fcm",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/",
+            "toolArgs": [
+                "--coverage"
+            ]
+        },
+        {
+            "name": "Tests + coverage (Chat)",
+            "cwd": "packages/awesome_notifications_chat",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/",
+            "toolArgs": [
+                "--coverage"
+            ]
+        },
+        {
+            "name": "Tests + coverage (Media)",
+            "cwd": "packages/awesome_notifications_media",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/",
+            "toolArgs": [
+                "--coverage"
+            ]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Tests + coverage (All packages)",
+            "configurations": [
+                "Tests + coverage (Core)",
+                "Tests + coverage (Schedules)",
+                "Tests + coverage (Localizations)",
+                "Tests + coverage (FCM)",
+                "Tests + coverage (Chat)",
+                "Tests + coverage (Media)"
+            ],
+            "stopAll": true
         }
     ]
 }

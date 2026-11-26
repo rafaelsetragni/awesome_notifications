@@ -1,0 +1,31 @@
+name: awesome_notifications_fcm_example
+description: "Demonstrates how to use the awesome_notifications_fcm plugin."
+publish_to: 'none'
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  awesome_notifications_fcm:
+    # The example app is bundled with the plugin; a path dependency on the parent
+    # directory uses the current plugin sources.
+    path: ../
+
+  # Notifications are created through the core; the FCM decorator forwards pushes.
+  awesome_notifications:
+    path: ../../awesome_notifications
+
+  # Firebase must be initialized by the host app before the plugin starts.
+  firebase_core: ^4.4.0
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

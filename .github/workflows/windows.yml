@@ -1,0 +1,69 @@
+name: Windows
+
+# Builds the Windows native side of the plugins on a GitHub-hosted Windows VM.
+# It only proves the C++ compiles and links (and, once they exist, runs the
+# native unit tests); toast display is verified manually on a real desktop.
+on:
+  push:
+    branches: [ "master", "hotfix", "development", "release", "feature/monorepo-**" ]
+  pull_request:
+    branches: [ "master", "hotfix", "development", "release" ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        # bash -e: stop at the first failing command (PowerShell would not).
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      # The portable desktop core (shared with Linux), under MSVC /W4 /WX.
+      - name: Desktop core unit tests
+        run: |
+          cmake -S packages/awesome_notifications/desktop/awn_core/tests -B build/awn_core_tests
+          cmake --build build/awn_core_tests --config Debug
+          ctest --test-dir build/awn_core_tests -C Debug --output-on-failure
+
+      - name: Desktop scheduling unit tests
+        run: |
+          cmake -S packages/awesome_notifications_schedules/desktop/awn_schedules/tests -B build/awn_schedules_tests
+          cmake --build build/awn_schedules_tests --config Debug
+          ctest --test-dir build/awn_schedules_tests -C Debug --output-on-failure
+
+      - name: Desktop localization unit tests
+        run: |
+          cmake -S packages/awesome_notifications_localizations/desktop/awn_localizations/tests -B build/awn_localizations_tests
+          cmake --build build/awn_localizations_tests --config Debug
+          ctest --test-dir build/awn_localizations_tests -C Debug --output-on-failure
+
+      # Each example is built through a short drive letter mapped to the repo (subst): MSVC is limited
+      # to 260-character paths, and the runner's checkout path plus the long
+      # plugin names (.plugin_symlinks, build/plugins/<name>/<name>.dir) exceed it.
+      # The core example also depends on the schedules decorator, so this
+      # builds both plugins' Windows code.
+      - name: Build core example (Windows)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          subst X: "$PWD"
+          Set-Location X:\packages\awesome_notifications\example
+          flutter pub get
+          flutter build windows --debug
+
+      - name: Build localizations example (Windows)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          subst Y: "$PWD"
+          Set-Location Y:\packages\awesome_notifications_localizations\example
+          flutter pub get
+          flutter build windows --debug

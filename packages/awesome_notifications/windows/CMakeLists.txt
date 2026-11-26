@@ -1,0 +1,91 @@
+# The Flutter tooling requires that developers have a version of Visual Studio
+# installed that includes CMake 3.14 or later. You should not increase this
+# version, as doing so will cause the plugin to fail to compile for some
+# customers of the plugin.
+cmake_minimum_required(VERSION 3.14)
+
+# Project-level configuration.
+set(PROJECT_NAME "awesome_notifications")
+project(${PROJECT_NAME} LANGUAGES CXX)
+
+# Explicitly opt in to modern CMake behaviors to avoid warnings with recent
+# versions of CMake.
+cmake_policy(VERSION 3.14...3.25)
+
+# This value is used when generating builds using this plugin, so it must
+# not be changed
+set(PLUGIN_NAME "awesome_notifications_plugin")
+
+# The portable desktop core (shared with Linux), compiled into this plugin.
+include("${CMAKE_CURRENT_SOURCE_DIR}/../desktop/awn_core/awn_core.cmake")
+
+list(APPEND PLUGIN_SOURCES
+  "awesome_notifications_plugin.cpp"
+  "awesome_notifications_plugin.h"
+  "src/app_identity.cpp"
+  "src/app_identity.h"
+  "src/icu_time_zone.cpp"
+  "src/icu_time_zone.h"
+  "src/image_resolver.cpp"
+  "src/image_resolver.h"
+  "src/toast_activator.cpp"
+  "src/toast_activator.h"
+  "src/toast_presenter.cpp"
+  "src/toast_presenter.h"
+  "src/win_dispatcher.cpp"
+  "src/win_dispatcher.h"
+  "src/win_utils.cpp"
+  "src/win_utils.h"
+  ${AWN_CORE_SOURCES}
+)
+
+# Define the plugin library target. Its name must not be changed (see comment
+# on PLUGIN_NAME above).
+add_library(${PLUGIN_NAME} SHARED
+  "include/awesome_notifications/awesome_notifications_plugin_c_api.h"
+  "include/awesome_notifications/awn_value_codec.h"
+  "awesome_notifications_plugin_c_api.cpp"
+  ${PLUGIN_SOURCES}
+)
+
+# Apply a standard set of build settings that are configured in the
+# application-level CMakeLists.txt. This can be removed for plugins that want
+# full control over build settings.
+apply_standard_settings(${PLUGIN_NAME})
+# C++/WinRT needs the standard C++20 coroutines (in C++17 mode it falls back to
+# the removed <experimental/coroutine>). Only this target; decorators stay C++17.
+target_compile_features(${PLUGIN_NAME} PRIVATE cxx_std_20)
+
+# Symbols are hidden by default to reduce the chance of accidental conflicts
+# between plugins. This should not be removed; any symbols that should be
+# exported should be explicitly exported with the FLUTTER_PLUGIN_EXPORT macro.
+set_target_properties(${PLUGIN_NAME} PROPERTIES
+  CXX_VISIBILITY_PRESET hidden)
+
+# FLUTTER_PLUGIN_IMPL / AWN_BUILDING_CORE export this plugin's C API and the
+# core (AWN_API); decorator plugins that link this target import the core
+# (AWN_USING_CORE) so they share its registries.
+target_compile_definitions(${PLUGIN_NAME}
+  PRIVATE FLUTTER_PLUGIN_IMPL AWN_BUILDING_CORE
+  INTERFACE AWN_USING_CORE)
+
+# C4251: exported core classes hold std members (same compiler/CRT for every
+# plugin of the app, so it is safe). /bigobj: C++/WinRT headers.
+target_compile_options(${PLUGIN_NAME}
+  PUBLIC /wd4251 /utf-8
+  PRIVATE /bigobj)
+
+target_include_directories(${PLUGIN_NAME}
+  PUBLIC "${AWN_CORE_INCLUDE_DIR}"
+  INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/include"
+  PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_link_libraries(${PLUGIN_NAME}
+  PRIVATE flutter flutter_wrapper_plugin windowsapp urlmon version shlwapi)
+
+# List of absolute paths to libraries that should be bundled with the plugin.
+# This list could contain prebuilt libraries, or libraries created by an
+# external build triggered from this build file.
+set(awesome_notifications_bundled_libraries
+  ""
+  PARENT_SCOPE
+)

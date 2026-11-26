@@ -1,0 +1,1 @@
+../../../../ios/awesome_notifications_schedules/Sources/awesome_notifications_schedules/ScheduleModels.swift

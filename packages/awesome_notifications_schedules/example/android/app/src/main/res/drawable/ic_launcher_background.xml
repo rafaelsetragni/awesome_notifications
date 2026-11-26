@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Awesome purple to pink gradient behind the adaptive icon. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="315"
+        android:startColor="#7B0AC4"
+        android:endColor="#C2188E"
+        android:type="linear" />
+</shape>

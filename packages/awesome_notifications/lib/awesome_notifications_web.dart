@@ -1,0 +1,355 @@
+// In order to *not* need this ignore, consider extracting the "web" version
+// of your plugin as a separate package, instead of inlining it in the same
+// package as the core of your plugin.
+// ignore: avoid_web_libraries_in_flutter
+//import 'dart:html' as html show window;
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+
+import 'awesome_notifications.dart';
+import 'awesome_notifications_platform_web.dart';
+
+/// Takes over `createNotification` on the web for the models an add-on owns:
+/// answers null when the model isn't its own, true / false when it handled
+/// it, or throws to reject it. It may update the map's `content` (a new
+/// map): the created / displayed events of a handled model report it.
+typedef WebNotificationBuilder = Future<bool?> Function(
+    Map<String, dynamic> model);
+
+/// Which notifications a cancel / dismiss removes: the one with [id], every
+/// one of [channelKey] or of [groupKey], or all of them (every field null).
+class WebNotificationRemoval {
+  final int? id;
+  final String? channelKey;
+  final String? groupKey;
+
+  const WebNotificationRemoval({this.id, this.channelKey, this.groupKey});
+
+  /// [model] (a model map, as given to a builder) is removed.
+  bool matches(Map<String, dynamic> model) {
+    final content = model[NOTIFICATION_CONTENT];
+    if (content is! Map) return false;
+    if (id != null) return content[NOTIFICATION_ID] == id;
+    if (channelKey != null) return content[NOTIFICATION_CHANNEL_KEY] == channelKey;
+    if (groupKey != null) return content[NOTIFICATION_GROUP_KEY] == groupKey;
+    return true;
+  }
+}
+
+/// Told when the app cancels or dismisses notifications, so an add-on can
+/// release what it shows for them.
+typedef WebRemovalListener = Future<void> Function(
+    WebNotificationRemoval removal);
+
+/// A web implementation of the AwesomeNotificationsPlatform of the AwesomeNotifications plugin.
+class AwesomeNotificationsWeb extends AwesomeNotificationsPlatform {
+  /// Constructs a AwesomeNotificationsWeb
+  AwesomeNotificationsWeb();
+
+  static void registerWith(Registrar registrar) {
+    AwesomeNotificationsPlatform.instance = AwesomeNotificationsWeb();
+  }
+
+  static final List<WebNotificationBuilder> _builders = [];
+  static final List<WebRemovalListener> _removalListeners = [];
+  static ActionHandler? _actionHandler;
+  static NotificationHandler? _createdHandler;
+  static NotificationHandler? _displayedHandler;
+
+  /// Lets an add-on take over `createNotification` for the models it owns.
+  /// [builder] receives the whole model map (content, actionButtons and every
+  /// extension's entries).
+  static void registerNotificationBuilder(WebNotificationBuilder builder) {
+    if (!_builders.contains(builder)) _builders.add(builder);
+  }
+
+  /// Lets an add-on know when the app cancels or dismisses notifications
+  /// (by id, channel, group or all of them).
+  static void registerRemovalListener(WebRemovalListener listener) {
+    if (!_removalListeners.contains(listener)) _removalListeners.add(listener);
+  }
+
+  static Future<void> _removed(WebNotificationRemoval removal) async {
+    for (final listener in List.of(_removalListeners)) {
+      await listener(removal);
+    }
+  }
+
+  /// Emits the action event of [model] (a model map, as given to a builder),
+  /// as a pressed button does: `onActionReceivedMethod` receives it.
+  static Future<void> dispatchAction(
+    Map<String, dynamic> model, {
+    required String buttonKey,
+    String? input,
+    Map<String, dynamic>? button,
+  }) async {
+    final handler = _actionHandler;
+    if (handler == null) return;
+    final content = Map<String, dynamic>.from(
+        (model[NOTIFICATION_CONTENT] as Map?) ?? const {});
+    final action = ReceivedAction().fromMap({
+      ...content,
+      NOTIFICATION_BUTTON_KEY_PRESSED: buttonKey,
+      NOTIFICATION_BUTTON_KEY_INPUT: input ?? '',
+      if (button?[NOTIFICATION_ACTION_TYPE] != null)
+        NOTIFICATION_ACTION_TYPE: button![NOTIFICATION_ACTION_TYPE],
+      NOTIFICATION_ACTION_LIFECYCLE: NotificationLifeCycle.Foreground.name,
+      NOTIFICATION_ACTION_DATE:
+          AwesomeDateUtils.parseDateToString(DateTime.now().toUtc()),
+    });
+    await handler(action);
+  }
+
+  /// Emits the created and displayed events of [model] (a model a builder
+  /// handled), stamped as the native side stamps a posted notification.
+  static Future<void> _notifyShown(Map<String, dynamic> model) async {
+    final created = _createdHandler, displayed = _displayedHandler;
+    if (created == null && displayed == null) return;
+    final content = Map<String, dynamic>.from(
+        (model[NOTIFICATION_CONTENT] as Map?) ?? const {});
+    final now = AwesomeDateUtils.parseDateToString(DateTime.now().toUtc());
+    final lifeCycle = NotificationLifeCycle.Foreground.name;
+    content[NOTIFICATION_CREATED_SOURCE] ??= NotificationSource.Local.name;
+    content[NOTIFICATION_CREATED_LIFECYCLE] ??= lifeCycle;
+    content[NOTIFICATION_CREATED_DATE] = now;
+    content[NOTIFICATION_DISPLAYED_LIFECYCLE] = lifeCycle;
+    content[NOTIFICATION_DISPLAYED_DATE] = now;
+    if (created != null) await created(ReceivedNotification().fromMap(content));
+    if (displayed != null) {
+      await displayed(ReceivedNotification().fromMap(content));
+    }
+  }
+
+  /// Runs the builders: null when none took the model.
+  static Future<bool?> _build(Map<String, dynamic> model) async {
+    for (final builder in List.of(_builders)) {
+      final handled = await builder(model);
+      if (handled == null) continue;
+      if (handled) await _notifyShown(model);
+      return handled;
+    }
+    return null;
+  }
+
+  @override
+  Future<void> cancel(int id) => _removed(WebNotificationRemoval(id: id));
+
+  @override
+  Future<void> cancelAll() => _removed(const WebNotificationRemoval());
+
+  @override
+  Future<void> cancelNotificationsByChannelKey(String channelKey) =>
+      _removed(WebNotificationRemoval(channelKey: channelKey));
+
+  @override
+  Future<void> cancelNotificationsByGroupKey(String groupKey) =>
+      _removed(WebNotificationRemoval(groupKey: groupKey));
+
+  @override
+  Future<List<NotificationPermission>> checkPermissionList(
+      {String? channelKey,
+      List<NotificationPermission> permissions = const [
+        NotificationPermission.Badge,
+        NotificationPermission.Alert,
+        NotificationPermission.Sound,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light
+      ]}) async {
+    return [];
+  }
+
+  @override
+  Future<bool> createNotification({
+    required NotificationContent content,
+    List<NotificationActionButton>? actionButtons,
+    List<NotificationExtension>? extensions,
+  }) async {
+    if (_builders.isEmpty) return false;
+    final Map<String, dynamic> data = NotificationModel(
+      content: content,
+      actionButtons: actionButtons,
+    ).toMap();
+    for (final extension in extensions ?? const <NotificationExtension>[]) {
+      data.addAll(extension.toMap());
+    }
+    return await _build(data) ?? false;
+  }
+
+  /// As the method channel does: string entries holding JSON are decoded,
+  /// extra top-level keys are kept, and any failure answers false.
+  @override
+  Future<bool> createNotificationFromJsonData(
+      Map<String, dynamic> mapData) async {
+    if (_builders.isEmpty) return false;
+    try {
+      final normalized = Map<String, dynamic>.from(mapData);
+      for (final key in normalized.keys.toList()) {
+        final value = normalized[key];
+        if (value is! String) continue;
+        try {
+          final decoded = json.decode(value);
+          if (decoded is Map || decoded is List) normalized[key] = decoded;
+        } catch (_) {
+          // Not JSON: keep the string.
+        }
+      }
+      final model = NotificationModel().fromMap(normalized);
+      if (model == null) throw Exception('Notification map data is invalid');
+      final data = model.toMap();
+      for (final entry in normalized.entries) {
+        data.putIfAbsent(entry.key, () => entry.value);
+      }
+      return await _build(data) ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  @override
+  Future<int> decrementGlobalBadgeCounter() async {
+    return 0;
+  }
+
+  @override
+  Future<void> dismiss(int id) => _removed(WebNotificationRemoval(id: id));
+
+  @override
+  Future<void> dismissAllNotifications() =>
+      _removed(const WebNotificationRemoval());
+
+  @override
+  Future<void> dismissNotificationsByChannelKey(String channelKey) =>
+      _removed(WebNotificationRemoval(channelKey: channelKey));
+
+  @override
+  Future<void> dismissNotificationsByGroupKey(String groupKey) =>
+      _removed(WebNotificationRemoval(groupKey: groupKey));
+
+  @override
+  Future<NotificationLifeCycle> getAppLifeCycle() async {
+    return NotificationLifeCycle.Terminated;
+  }
+
+  @override
+  Future<Uint8List?> getDrawableData(String drawablePath) async {
+    return null;
+  }
+
+  @override
+  Future<ReceivedAction?> getInitialNotificationAction(
+      {bool removeFromActionEvents = false}) async {
+    return null;
+  }
+
+  @override
+  Future<int> getGlobalBadgeCounter() async {
+    return 0;
+  }
+
+  @override
+  Future<String> getLocalTimeZoneIdentifier() async {
+    return AwesomeNotifications.localTimeZoneIdentifier;
+  }
+
+  @override
+  Future<String> getUtcTimeZoneIdentifier() async {
+    return AwesomeNotifications.utcTimeZoneIdentifier;
+  }
+
+  @override
+  Future<int> incrementGlobalBadgeCounter() async {
+    return 0;
+  }
+
+  @override
+  Future<bool> initialize(
+    String? defaultIcon,
+    List<NotificationChannel> channels, {
+    List<NotificationChannelGroup>? channelGroups,
+    bool debug = false,
+  }) async {
+    return false;
+  }
+
+  @override
+  Future<bool> isNotificationAllowed() async {
+    return false;
+  }
+
+  @override
+  Future<bool> removeChannel(String channelKey) async {
+    return false;
+  }
+
+  @override
+  Future<bool> requestPermissionToSendNotifications(
+      {String? channelKey,
+      List<NotificationPermission> permissions = const [
+        NotificationPermission.Alert,
+        NotificationPermission.Sound,
+        NotificationPermission.Badge,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light
+      ]}) async {
+    return false;
+  }
+
+  @override
+  Future<void> resetGlobalBadge() async {}
+
+  @override
+  Future<void> setChannel(NotificationChannel notificationChannel,
+      {bool forceUpdate = false}) async {}
+
+  @override
+  Future<void> setGlobalBadgeCounter(int? amount) async {}
+
+  @override
+  Future<bool> setListeners(
+      {required ActionHandler onActionReceivedMethod,
+      NotificationHandler? onNotificationCreatedMethod,
+      NotificationHandler? onNotificationDisplayedMethod,
+      ActionHandler? onDismissActionReceivedMethod}) async {
+    _actionHandler = onActionReceivedMethod;
+    _createdHandler = onNotificationCreatedMethod;
+    _displayedHandler = onNotificationDisplayedMethod;
+    return false;
+  }
+
+  @override
+  Future<List<NotificationPermission>> shouldShowRationaleToRequest(
+      {String? channelKey,
+      List<NotificationPermission> permissions = const [
+        NotificationPermission.Badge,
+        NotificationPermission.Alert,
+        NotificationPermission.Sound,
+        NotificationPermission.Vibration,
+        NotificationPermission.Light
+      ]}) async {
+    return [];
+  }
+
+  @override
+  Future<void> showAlarmPage() async {}
+
+  @override
+  Future<void> showGlobalDndOverridePage() async {}
+
+  @override
+  Future<void> showNotificationConfigPage({String? channelKey}) async {}
+
+  @override
+  Future<bool> isNotificationActiveOnStatusBar({required int id}) async {
+    return false;
+  }
+
+  @override
+  Future<List<int>> getAllActiveNotificationIdsOnStatusBar() async {
+    return [];
+  }
+
+  @override
+  Future<void> dispose() async {}
+}

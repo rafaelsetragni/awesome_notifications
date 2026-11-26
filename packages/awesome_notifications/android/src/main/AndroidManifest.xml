@@ -1,0 +1,28 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="me.carda.awesome_notifications">
+
+  <!-- Required to post notifications on Android 13 (API 33) and above. -->
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+  <application>
+    <!-- Receives the notification deleteIntent (swipe-away) to emit the
+         "notificationDismissed" event. -->
+    <receiver
+      android:name="me.carda.android_awn_core.DismissedNotificationReceiver"
+      android:exported="false" />
+
+    <!-- Receives non-foreground action-button presses (KeepOnTop, SilentAction,
+         DismissAction, reply) to emit the matching action/dismiss event. -->
+    <receiver
+      android:name="me.carda.android_awn_core.NotificationButtonReceiver"
+      android:exported="false" />
+
+    <!-- Installs the background action executor at process start: a button
+         pressed with the app killed runs the app's onActionReceivedMethod in a
+         background isolate. -->
+    <provider
+      android:name="me.carda.awesome_notifications.AwesomeNotificationsInitializer"
+      android:authorities="${applicationId}.awesome-notifications-init"
+      android:exported="false" />
+  </application>
+</manifest>

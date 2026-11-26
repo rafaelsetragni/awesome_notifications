@@ -1,0 +1,30 @@
+name: awn_compat_v1
+description: Runs the black-box compat suite against the 1.0 monorepo packages.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.6.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  awesome_notifications:
+    path: ../../packages/awesome_notifications
+  awesome_notifications_schedules:
+    path: ../../packages/awesome_notifications_schedules
+  awesome_notifications_localizations:
+    path: ../../packages/awesome_notifications_localizations
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  awn_compat_suite:
+    path: ../suite
+
+flutter:
+  # Windows loc-key strings (the counterpart of Android's res/values*).
+  assets:
+    - awesome_notifications/strings/

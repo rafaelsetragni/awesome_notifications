@@ -1,0 +1,1 @@
+../../../../ios/awesome_notifications_media/Sources/awesome_notifications_media/MediaModels.swift
