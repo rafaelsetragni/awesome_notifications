@@ -1,0 +1,36 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+      The app declares the permissions of its calls (store policies ask the app
+      to justify them):
+        android.permission.USE_FULL_SCREEN_INTENT          incoming calls over the lock screen
+        android.permission.FOREGROUND_SERVICE              the call's foreground service
+        android.permission.FOREGROUND_SERVICE_PHONE_CALL   its phoneCall type (Android 14+)
+        android.permission.MANAGE_OWN_CALLS                Telecom (also merged from androidx core-telecom)
+      Without them the call still shows, with less (see the README).
+    -->
+    <application>
+        <!-- Installs the calls decorator at process start (a call pushed or answered with the app killed). -->
+        <provider
+            android:name="me.carda.awesome_notifications_calls.CallInitializer"
+            android:authorities="${applicationId}.awesome-notifications-calls-init"
+            android:exported="false" />
+        <!-- Decline, hang up, mute, hold and the ring timeout. -->
+        <receiver
+            android:name="me.carda.awesome_notifications_calls.CallCommandReceiver"
+            android:exported="false" />
+        <!-- Answer: applies it, then opens the app (over the lock screen). -->
+        <activity
+            android:name="me.carda.awesome_notifications_calls.CallAnswerActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:showWhenLocked="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- Keeps the process alive while a call lasts; Android 12+ needs it for an ongoing CallStyle. -->
+        <service
+            android:name="me.carda.awesome_notifications_calls.CallService"
+            android:exported="false"
+            android:foregroundServiceType="phoneCall" />
+    </application>
+</manifest>

@@ -83,6 +83,17 @@ let package = Package(
             dependencies: ["MediaLogic"],
             path: "native/apple/Tests/MediaLogicTests"
         ),
+        .target(
+            name: "CallsLogic",
+            dependencies: ["IosAwnCore"],
+            path: "packages/awesome_notifications_calls/ios/awesome_notifications_calls/Sources/awesome_notifications_calls",
+            exclude: ["AwesomeNotificationsCallsPlugin.swift", "PrivacyInfo.xcprivacy"]
+        ),
+        .testTarget(
+            name: "CallsLogicTests",
+            dependencies: ["CallsLogic"],
+            path: "native/apple/Tests/CallsLogicTests"
+        ),
         // The service-extension products of the add-ons (symlinks to their
         // Flutter-free sources), compiled here so `swift build` checks them.
         .target(

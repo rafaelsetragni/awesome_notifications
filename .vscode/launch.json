@@ -47,6 +47,13 @@
             "program": "lib/main.dart"
         },
         {
+            "name": "Example (Calls)",
+            "cwd": "packages/awesome_notifications_calls/example",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart"
+        },
+        {
             "name": "Tests + coverage (Core)",
             "cwd": "packages/awesome_notifications",
             "request": "launch",
@@ -105,6 +112,16 @@
             "toolArgs": [
                 "--coverage"
             ]
+        },
+        {
+            "name": "Tests + coverage (Calls)",
+            "cwd": "packages/awesome_notifications_calls",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/",
+            "toolArgs": [
+                "--coverage"
+            ]
         }
     ],
     "compounds": [
@@ -116,7 +133,8 @@
                 "Tests + coverage (Localizations)",
                 "Tests + coverage (FCM)",
                 "Tests + coverage (Chat)",
-                "Tests + coverage (Media)"
+                "Tests + coverage (Media)",
+                "Tests + coverage (Calls)"
             ],
             "stopAll": true
         }
