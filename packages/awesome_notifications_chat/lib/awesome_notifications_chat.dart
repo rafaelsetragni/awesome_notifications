@@ -14,7 +14,9 @@ import 'src/chat_keys.dart';
 import 'src/notification_conversation.dart';
 
 export 'src/notification_conversation.dart';
-export 'src/notification_person.dart';
+/// Moved to the core (shared with the calls add-on); re-exported here.
+export 'package:awesome_notifications/awesome_notifications.dart'
+    show NotificationPerson;
 
 /// What the conversation notification can do on this platform.
 class ChatCapabilities {

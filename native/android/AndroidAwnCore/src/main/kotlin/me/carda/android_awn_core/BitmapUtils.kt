@@ -3,6 +3,10 @@ package me.carda.android_awn_core
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.BitmapShader
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Shader
 import io.flutter.FlutterInjector
 import java.io.BufferedInputStream
 import java.io.File
@@ -21,6 +25,17 @@ class BitmapUtils private constructor() {
     companion object {
         private var instance: BitmapUtils? = null
         fun getInstance(): BitmapUtils = instance ?: BitmapUtils().also { instance = it }
+    }
+
+    /** A circle cut from the center of [source] (the avatar look of a person). */
+    fun circleCrop(source: Bitmap): Bitmap {
+        val size = minOf(source.width, source.height)
+        val output = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            shader = BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        }
+        Canvas(output).drawCircle(size / 2f, size / 2f, size / 2f, paint)
+        return output
     }
 
     private enum class MediaSource { NETWORK, FILE, ASSET, RESOURCE, UNKNOWN }

@@ -131,6 +131,32 @@ TEST(ToastXmlCapsButtonsAtFive) {
   EXPECT_FALSE(xml.find("btn=K5") != std::string::npos);
 }
 
+TEST(ToastXmlPresentationHints) {
+  ValueMap model{{"content", ValueMap{{"id", 2}, {"title", "Ana"}}},
+                 {"actionButtons",
+                  ValueList{ValueMap{{"key", "awn.call.accept"}, {"label", "Accept"}},
+                            ValueMap{{"key", "awn.call.decline"},
+                                     {"label", "Decline"},
+                                     {"isDangerousOption", true},
+                                     {"actionType", "SilentAction"}}}},
+                 {"desktopPresentation",
+                  ValueMap{{"toastScenario", "incomingCall"},
+                           {"toastAudio", "ms-winsoundevent:Notification.Looping.Call"},
+                           {"toastAudioLoop", true},
+                           {"toastButtonStyles", ValueMap{{"awn.call.accept", "Success"}}}}}};
+  auto xml = ToastXml::render(model, {}, false);
+  EXPECT_CONTAINS(xml, "<toast useButtonStyle=\"true\" launch=\"awn&amp;id=2\" scenario=\"incomingCall\">");
+  EXPECT_CONTAINS(xml, "btn=awn.call.accept\" hint-buttonStyle=\"Success\"");
+  EXPECT_CONTAINS(xml, "activationType=\"background\" hint-buttonStyle=\"Critical\"");
+  EXPECT_CONTAINS(xml, "<audio src=\"ms-winsoundevent:Notification.Looping.Call\" loop=\"true\"/>");
+  // A silent channel wins over the audio; the silent hint silences too.
+  EXPECT_CONTAINS(ToastXml::render(model, {}, true), "<audio silent=\"true\"/>");
+  model["desktopPresentation"] = ValueMap{{"silent", true}};
+  auto silent = ToastXml::render(model, {}, false);
+  EXPECT_CONTAINS(silent, "<audio silent=\"true\"/>");
+  EXPECT_FALSE(silent.find("scenario") != std::string::npos);
+}
+
 // MARK: - Store
 
 TEST(StorePersistsAcrossInstances) {

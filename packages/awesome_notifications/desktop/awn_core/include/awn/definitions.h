@@ -71,6 +71,29 @@ inline constexpr const char* EVENT_DEFAULT_ACTION = "defaultAction";
 inline constexpr const char* UTC_TIMEZONE = "UTC";
 }  // namespace defs
 
+/// Presentation hints a decorator may add to a model (top-level block, next to
+/// `content`; never sent to Dart): what the channel and the content can't say
+/// (e.g. a call's ringing toast). Absent = the 0.12 presentation, unchanged.
+namespace presentation {
+inline constexpr const char* BLOCK = "desktopPresentation";
+/// int 0 low, 1 normal, 2 critical: overrides the channel's (freedesktop).
+inline constexpr const char* URGENCY = "urgency";
+/// bool: stays on screen after an action (freedesktop "resident").
+inline constexpr const char* RESIDENT = "resident";
+/// bool true: no sound, whatever the channel says.
+inline constexpr const char* SILENT = "silent";
+/// Freedesktop sound naming spec name (e.g. "phone-incoming-call").
+inline constexpr const char* SOUND_NAME = "soundName";
+/// Toast `scenario` attribute (e.g. "incomingCall").
+inline constexpr const char* TOAST_SCENARIO = "toastScenario";
+/// Toast `<audio src>` (e.g. "ms-winsoundevent:Notification.Looping.Call").
+inline constexpr const char* TOAST_AUDIO = "toastAudio";
+/// bool: the toast audio loops.
+inline constexpr const char* TOAST_AUDIO_LOOP = "toastAudioLoop";
+/// Map button key -> toast `hint-buttonStyle` ("Success" / "Critical").
+inline constexpr const char* TOAST_BUTTON_STYLES = "toastButtonStyles";
+}  // namespace presentation
+
 /// Origin of a notification (wire values of the Dart `NotificationSource`).
 namespace source {
 inline constexpr const char* LOCAL = "Local";

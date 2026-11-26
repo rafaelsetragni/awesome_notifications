@@ -64,6 +64,7 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
     private static let lock = NSLock()
     private static var addOnsRegistered = false
 
+    private let handlerLock = NSLock()
     private var contentHandler: ((UNNotificationContent) -> Void)?
     private var bestAttempt: UNNotificationContent?
 
@@ -86,11 +87,24 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
 
         self.contentHandler = contentHandler
         bestAttempt = request.content
-        contentHandler(Self.render(request))
+        // Resolve the critical-alert availability first (async, never
+        // blocking): the extension has no app to have warmed it (0.12.1).
+        CriticalAlertUtils.ensureAvailabilityResolved {
+            self.deliver(Self.render(request))
+        }
     }
 
     open override func serviceExtensionTimeWillExpire() {
-        if let handler = contentHandler, let content = bestAttempt { handler(content) }
+        if let content = bestAttempt { deliver(content) }
+    }
+
+    /// Hands [content] to the system once (the render and the expiry may race).
+    private func deliver(_ content: UNNotificationContent) {
+        handlerLock.lock()
+        let handler = contentHandler
+        contentHandler = nil
+        handlerLock.unlock()
+        handler?(content)
     }
 
     /// The content to show for a push: rebuilt through the builder chain, or

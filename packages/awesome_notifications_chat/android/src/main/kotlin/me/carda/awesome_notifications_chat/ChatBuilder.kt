@@ -4,10 +4,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapShader
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Shader
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -21,6 +17,7 @@ import me.carda.android_awn_core.BitmapUtils
 import me.carda.android_awn_core.BuildOutcome
 import me.carda.android_awn_core.Definitions
 import me.carda.android_awn_core.NotificationBuilder
+import me.carda.android_awn_core.NotificationPerson
 
 /**
  * Takes over the `Messaging` / `MessagingGroup` layouts: the notification is an
@@ -185,20 +182,11 @@ internal class ChatRenderer(private val context: Context) {
         return NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(notification)
     }
 
-    private fun person(person: ChatPerson): Person {
-        val builder = Person.Builder()
-            .setKey(person.key)
-            .setName(person.name)
-            .setBot(person.isBot)
-            .setImportant(person.isImportant)
-        person.uri?.let { builder.setUri(it) }
-        avatar(person.avatar)?.let { builder.setIcon(IconCompat.createWithBitmap(it)) }
-        return builder.build()
-    }
+    private fun person(person: NotificationPerson): Person = person.toPerson(context, bitmaps)
 
     private fun avatar(source: String?): Bitmap? {
         if (source.isNullOrEmpty()) return null
-        return bitmaps.getBitmapFromSource(context, source)?.let { circle(it) }
+        return bitmaps.getBitmapFromSource(context, source)?.let { bitmaps.circleCrop(it) }
     }
 
     /** Publishes (or updates) the long-lived conversation shortcut. */
@@ -241,16 +229,6 @@ internal class ChatRenderer(private val context: Context) {
                 .setShowsUserInterface(false)
                 .build()
         }
-    }
-
-    private fun circle(source: Bitmap): Bitmap {
-        val size = minOf(source.width, source.height)
-        val output = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            shader = BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
-        }
-        Canvas(output).drawCircle(size / 2f, size / 2f, size / 2f, paint)
-        return output
     }
 
     private fun manager() =

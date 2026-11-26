@@ -24,6 +24,7 @@ import me.carda.android_awn_core.AwesomeEventListener
 import me.carda.android_awn_core.AwesomeEventsReceiver
 import me.carda.android_awn_core.AwesomeMethodHandlerRegistry
 import me.carda.android_awn_core.AwesomeNotifications
+import me.carda.android_awn_core.AwesomeNotificationsException
 import me.carda.android_awn_core.BackgroundActions
 import me.carda.android_awn_core.Definitions
 import me.carda.android_awn_core.MapUtils
@@ -124,6 +125,8 @@ class AwesomeNotificationsPlugin :
                 requestNotifications(requested, result)
             }
 
+            "getPermissionStatuses" -> getPermissionStatuses(call.arguments, result)
+
             "setNotificationChannel" -> {
                 (call.arguments as? Map<String, Any?>)?.let { core.setChannel(it) }
                 result.success(true)
@@ -185,6 +188,40 @@ class AwesomeNotificationsPlugin :
                 )
                 if (!handled) result.notImplemented()
             }
+        }
+    }
+
+    /**
+     * 0.12.1 `channelMethodGetPermissionStatuses`: args `channelKey` (String?)
+     * and `permissions` (permission names); answers a map permission name →
+     * `granted` / `denied` / `notDetermined` / `notSupported`. Missing args
+     * fail with MISSING_ARGUMENTS, an empty list with INVALID_ARGUMENTS, an
+     * unknown channel with INVALID_ARGUMENTS (`arguments.invalid.channel.key`),
+     * anything else with UNKNOWN_EXCEPTION, as 0.12.1 did.
+     */
+    @Suppress("UNCHECKED_CAST")
+    internal fun getPermissionStatuses(arguments: Any?, result: Result) {
+        try {
+            val args = arguments as? Map<String, Any?>
+                ?: throw AwesomeNotificationsException(
+                    Definitions.CODE_MISSING_ARGUMENTS,
+                    "Arguments are missing",
+                    Definitions.DETAILED_REQUIRED_ARGUMENTS)
+            val channelKey = args[Definitions.NOTIFICATION_CHANNEL_KEY] as String?
+            val permissions = args[Definitions.NOTIFICATION_PERMISSIONS] as List<String>?
+            if (permissions.isNullOrEmpty())
+                throw AwesomeNotificationsException(
+                    Definitions.CODE_INVALID_ARGUMENTS,
+                    "Permission list is required",
+                    Definitions.DETAILED_REQUIRED_ARGUMENTS + ".permissionList")
+            result.success(core.getPermissionStatuses(channelKey, permissions))
+        } catch (e: AwesomeNotificationsException) {
+            result.error(e.code, e.message, e.detailedCode)
+        } catch (e: Exception) {
+            result.error(
+                Definitions.CODE_UNKNOWN_EXCEPTION,
+                "${e.localizedMessage}",
+                Definitions.DETAILED_UNEXPECTED_ERROR + "." + e.javaClass.simpleName)
         }
     }
 

@@ -19,9 +19,10 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
     /// Real displayed lifecycle of notifications shown with the app open.
     private let displayedTracker = DisplayedLifecycleTracker()
 
-    /// iOS/macOS have no notification channels; we still keep the channel config
-    /// (sound, importance, …) so later features can honor it per channelKey.
-    private var channels: [String: [String: Any]] = [:]
+    /// iOS/macOS have no notification channels; the channel config (sound,
+    /// importance, critical alerts, …) is kept in `ChannelManager` and honored
+    /// per channelKey by the builder.
+    private var channels: ChannelManager { .shared }
 
     // Initial-action (launch) state. Until the launch phase settles, an action
     // arriving through `didReceive` is the one that launched the app.
@@ -54,7 +55,7 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
             return model
         }
         guard let channelKey = content[Definitions.NOTIFICATION_CHANNEL_KEY] as? String,
-              let groupKey = channels[channelKey]?[Definitions.NOTIFICATION_GROUP_KEY] as? String,
+              let groupKey = channels.channel(forKey: channelKey)?[Definitions.NOTIFICATION_GROUP_KEY] as? String,
               !groupKey.isEmpty else { return model }
         content[Definitions.NOTIFICATION_GROUP_KEY] = groupKey
         var updated = model
@@ -63,8 +64,7 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
     }
 
     private func registerChannel(_ channel: [String: Any]) {
-        guard let key = channel[Definitions.NOTIFICATION_CHANNEL_KEY] as? String else { return }
-        channels[key] = channel
+        channels.setChannel(channel)
     }
 
     /// Registers a category with `.customDismissAction` so the system reports
@@ -92,6 +92,8 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
 
     public func requestPermission(_ completion: @escaping (Bool) -> Void) {
         center.requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+            // 0.12.1: the answer may change the critical-alert availability.
+            CriticalAlertUtils.clearCache()
             if let error = error {
                 // e.g. UNErrorDomain 1 "Notifications are not allowed for this
                 // application" — an unsigned/ad-hoc macOS build can't ask.
@@ -103,9 +105,24 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
 
     public func isNotificationAllowed(_ completion: @escaping (Bool) -> Void) {
         center.getNotificationSettings { settings in
+            CriticalAlertUtils.updateCache(from: settings)
             let allowed = settings.authorizationStatus == .authorized
                 || settings.authorizationStatus == .provisional
             DispatchQueue.main.async { completion(allowed) }
+        }
+    }
+
+    /// 0.12.1 `getPermissionStatuses`: each permission name → `granted`,
+    /// `denied`, `notDetermined` or `notSupported` (answered on main).
+    public func getPermissionStatuses(
+        _ permissions: [String],
+        filteringByChannelKey channelKey: String?,
+        whenGotResults completion: @escaping ([String: String]) -> Void
+    ) {
+        PermissionManager.shared.getPermissionStatuses(
+            permissions, filteringByChannelKey: channelKey
+        ) { statuses in
+            DispatchQueue.main.async { completion(statuses) }
         }
     }
 
@@ -174,74 +191,84 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
         completion: @escaping (Bool) -> Void,
         failure: @escaping (AwesomeNotificationsException) -> Void
     ) {
-        // Build off the main thread (image loading does I/O).
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
+        // Build off the main thread (image loading does I/O), once the
+        // critical-alert availability is resolved (async, never blocking), so
+        // the builder's synchronous check reads the real value (0.12.1).
+        CriticalAlertUtils.ensureAvailabilityResolved { [weak self] in
+            DispatchQueue.global(qos: .userInitiated).async {
+                self?.buildAndDeliver(rawNotification, completion: completion, failure: failure)
+            }
+        }
+    }
 
-            // Build through the decorator chain (localization, scheduling, …),
-            // composed in priority order by the registry. Each decorator may
-            // transform the model and/or contribute a delivery trigger.
-            let builder = NotificationBuilderRegistry.shared.makeBuilder()
-            let chained: BuiltNotification?
-            do {
-                chained = try builder.build(model: self.withChannelGroupKey(rawNotification))
-            } catch let exception as AwesomeNotificationsException {
-                DispatchQueue.main.async { failure(exception) }
-                return
-            } catch {
-                DispatchQueue.main.async { completion(false) }
-                return
-            }
-            guard let chained = chained else {
-                DispatchQueue.main.async { completion(false) }
-                return
-            }
-            // A decorator took over delivery (as Android's BuildOutcome.Handled):
-            // nothing to post, but it was created and shown like any other.
-            if chained.isHandled {
-                let model = builder.stampHandledLifecycle(into: chained.model)
-                let content = builder.contentMap(fromModel: model)
-                self.displayedTracker.forget(id: chained.id)
+    private func buildAndDeliver(
+        _ rawNotification: [String: Any],
+        completion: @escaping (Bool) -> Void,
+        failure: @escaping (AwesomeNotificationsException) -> Void
+    ) {
+        // Build through the decorator chain (localization, scheduling, …),
+        // composed in priority order by the registry. Each decorator may
+        // transform the model and/or contribute a delivery trigger.
+        let builder = NotificationBuilderRegistry.shared.makeBuilder()
+        let chained: BuiltNotification?
+        do {
+            chained = try builder.build(model: self.withChannelGroupKey(rawNotification))
+        } catch let exception as AwesomeNotificationsException {
+            DispatchQueue.main.async { failure(exception) }
+            return
+        } catch {
+            DispatchQueue.main.async { completion(false) }
+            return
+        }
+        guard let chained = chained else {
+            DispatchQueue.main.async { completion(false) }
+            return
+        }
+        // A decorator took over delivery (as Android's BuildOutcome.Handled):
+        // nothing to post, but it was created and shown like any other.
+        if chained.isHandled {
+            let model = builder.stampHandledLifecycle(into: chained.model)
+            let content = builder.contentMap(fromModel: model)
+            self.displayedTracker.forget(id: chained.id)
+            self.emit(
+                Definitions.EVENT_NOTIFICATION_CREATED,
+                builder.registerCreatedEvent(content, lifeCycle: AppLifeCycle.current))
+            self.emit(Definitions.EVENT_NOTIFICATION_DISPLAYED, content)
+            DispatchQueue.main.async { completion(true) }
+            return
+        }
+
+        // Bake the (predicted) displayed lifecycle into the stored payload now
+        // that the trigger is known, so the createdDate + displayedDate both
+        // round-trip to the displayed/action events (a tapped notification
+        // otherwise reports them as null).
+        let built = builder.stampDisplayed(on: chained)
+
+        // Register the per-notification action-button category (if any) so
+        // iOS shows the buttons and reports which one was pressed.
+        if let category = builder.actionCategory(forModel: built.model) {
+            self.registerCategory(category)
+        }
+
+        // A scheduling decorator contributes a trigger from the notification's
+        // `schedule`; otherwise nil delivers it immediately.
+        // A new notification reusing an id starts with no display record.
+        self.displayedTracker.forget(id: built.id)
+        let request = UNNotificationRequest(
+            identifier: String(built.id),
+            content: built.content,
+            trigger: built.trigger
+        )
+        self.center.add(request) { error in
+            let created = error == nil
+            if created {
+                let content = builder.contentMap(fromModel: built.model)
                 self.emit(
                     Definitions.EVENT_NOTIFICATION_CREATED,
-                    builder.registerCreatedEvent(content, lifeCycle: AppLifeCycle.current))
-                self.emit(Definitions.EVENT_NOTIFICATION_DISPLAYED, content)
-                DispatchQueue.main.async { completion(true) }
-                return
+                    builder.registerCreatedEvent(content, lifeCycle: AppLifeCycle.current)
+                )
             }
-
-            // Bake the (predicted) displayed lifecycle into the stored payload now
-            // that the trigger is known, so the createdDate + displayedDate both
-            // round-trip to the displayed/action events (a tapped notification
-            // otherwise reports them as null).
-            let built = builder.stampDisplayed(on: chained)
-
-            // Register the per-notification action-button category (if any) so
-            // iOS shows the buttons and reports which one was pressed.
-            if let category = builder.actionCategory(forModel: built.model) {
-                self.registerCategory(category)
-            }
-
-            // A scheduling decorator contributes a trigger from the notification's
-            // `schedule`; otherwise nil delivers it immediately.
-            // A new notification reusing an id starts with no display record.
-            self.displayedTracker.forget(id: built.id)
-            let request = UNNotificationRequest(
-                identifier: String(built.id),
-                content: built.content,
-                trigger: built.trigger
-            )
-            self.center.add(request) { error in
-                let created = error == nil
-                if created {
-                    let content = builder.contentMap(fromModel: built.model)
-                    self.emit(
-                        Definitions.EVENT_NOTIFICATION_CREATED,
-                        builder.registerCreatedEvent(content, lifeCycle: AppLifeCycle.current)
-                    )
-                }
-                DispatchQueue.main.async { completion(created) }
-            }
+            DispatchQueue.main.async { completion(created) }
         }
     }
 
@@ -302,6 +329,9 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
             // Anything else is one of our button keys.
             let buttonKey = (systemDismiss || defaultTap) ? "" : actionId
             let pressedButton = builder.findButton(inModel: model, key: buttonKey)
+            // An add-on may act on its own buttons first, and keep the event.
+            let emitEvent = buttonKey.isEmpty
+                || NotificationActionInterceptorRegistry.shared.shouldEmit(model: model, buttonKey: buttonKey)
 
             // Carry the pressed button key + any typed text back to Dart.
             if !buttonKey.isEmpty {
@@ -321,10 +351,12 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
                 if !systemDismiss, let id = builder.readId(content) {
                     dismiss(id: id)
                 }
-                emit(
-                    Definitions.EVENT_NOTIFICATION_DISMISSED,
-                    builder.registerDismissedEvent(content, lifeCycle: .foreground)
-                )
+                if emitEvent {
+                    emit(
+                        Definitions.EVENT_NOTIFICATION_DISMISSED,
+                        builder.registerDismissedEvent(content, lifeCycle: .foreground)
+                    )
+                }
             } else {
                 // Default tap, or a non-dismiss button. Auto-dismiss the button's
                 // notification when requested (a plain tap is auto-dismissed by iOS).
@@ -332,6 +364,10 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
                    builder.shouldButtonAutoDismiss(pressedButton),
                    let id = builder.readId(content) {
                     dismiss(id: id)
+                }
+                if !emitEvent {
+                    completionHandler()
+                    return
                 }
                 // If the launch phase hasn't settled yet, this notification is the
                 // one that launched the app from a killed state: capture it as the
@@ -427,7 +463,19 @@ public final class AwesomeNotifications: NSObject, UNUserNotificationCenterDeleg
 
     // MARK: - Helpers
 
+    /// Content fields the 0.12 Apple events never carried (its content model
+    /// never read `category` / `fullScreenIntent`, and its events came without
+    /// `wakeUpScreen`): Dart reads them as null / false. They stay in the model,
+    /// where the builder uses them (wakeUpScreen → interruption level).
+    static let fieldsAbsentFromEvents = [
+        Definitions.NOTIFICATION_CATEGORY,
+        Definitions.NOTIFICATION_FULL_SCREEN_INTENT,
+        Definitions.NOTIFICATION_WAKE_UP_SCREEN,
+    ]
+
     private func emit(_ eventName: String, _ data: [String: Any]) {
+        var data = data
+        for key in Self.fieldsAbsentFromEvents { data.removeValue(forKey: key) }
         AwesomeEventsReceiver.shared.notifyAwesomeEvent(eventType: eventName, content: data)
     }
 

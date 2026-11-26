@@ -1,6 +1,5 @@
 package me.carda.android_awn_core
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
@@ -30,7 +29,6 @@ class AwesomeNotifications(
     // For event stamping / content extraction. The build itself goes through the
     // decorator chain composed by NotificationBuilderRegistry (see createNotification).
     private val builder = NotificationBuilder.getNewBuilder()
-    private val channels = mutableMapOf<String, Map<String, Any?>>()
 
     private val mainHandler = Handler(Looper.getMainLooper())
 
@@ -40,27 +38,27 @@ class AwesomeNotifications(
         channelList.forEach { setChannel(it) }
     }
 
+    /**
+     * Keeps the channel and creates its Android channel (sound with its
+     * `defaultRingtoneType`, critical alerts' DnD bypass — see [ChannelManager]).
+     */
     fun setChannel(channelData: Map<String, Any?>) {
-        val key = channelData[Definitions.NOTIFICATION_CHANNEL_KEY] as? String ?: return
-        channels[key] = channelData
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = channelData[Definitions.NOTIFICATION_CHANNEL_NAME] as? String ?: key
-            val importance = NotificationImportance
-                .from(channelData[Definitions.NOTIFICATION_IMPORTANCE] as? String)
-                .toAndroidImportance()
-            val channel = NotificationChannel(key, name, importance)
-            (channelData[Definitions.NOTIFICATION_CHANNEL_DESCRIPTION] as? String)?.let {
-                channel.description = it
-            }
-            notificationManager().createNotificationChannel(channel)
-        }
+        ChannelManager.setChannel(context, channelData)
     }
 
     // MARK: - Permissions
 
     fun isNotificationAllowed(): Boolean =
         NotificationManagerCompat.from(context).areNotificationsEnabled()
+
+    /**
+     * 0.12.1 `getPermissionStatuses`: each permission's status, for the app or
+     * for [channelKey]. See [PermissionManager.getPermissionStatuses].
+     *
+     * @throws AwesomeNotificationsException when [channelKey] does not exist.
+     */
+    fun getPermissionStatuses(channelKey: String?, permissions: List<String>): Map<String, String> =
+        PermissionManager.getPermissionStatuses(context, channelKey, permissions)
 
     // MARK: - Create / display
 
@@ -177,7 +175,7 @@ class AwesomeNotifications(
         val content = builder.contentMap(model)
         if (!(content[Definitions.NOTIFICATION_GROUP_KEY] as? String).isNullOrEmpty()) return model
         val channelKey = content[Definitions.NOTIFICATION_CHANNEL_KEY] as? String ?: return model
-        val groupKey = channels[channelKey]?.get(Definitions.NOTIFICATION_GROUP_KEY) as? String
+        val groupKey = ChannelManager.getChannel(channelKey)?.get(Definitions.NOTIFICATION_GROUP_KEY) as? String
         if (groupKey.isNullOrEmpty()) return model
         return model.toMutableMap().apply {
             this[Definitions.NOTIFICATION_CONTENT] =

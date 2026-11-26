@@ -205,15 +205,129 @@ open class NotificationBuilder {
         if !stringUtils.isNullOrEmpty(title) { unContent.title = title! }
         let body = mapUtils.getString(content[Definitions.NOTIFICATION_BODY])
         if !stringUtils.isNullOrEmpty(body) { unContent.body = body! }
-        unContent.sound = .default
         unContent.categoryIdentifier = categoryIdentifier(forModel: model)
         if let thread = threadIdentifier(forContent: content) {
             unContent.threadIdentifier = thread
         }
 
+        // The channel's configuration, in the 0.12 order: importance → sound,
+        // then wakeUpScreen and critical alert (each may raise the
+        // interruption level the previous one set).
+        let channel = ChannelManager.shared.channel(
+            forKey: mapUtils.getString(content[Definitions.NOTIFICATION_CHANNEL_KEY]))
+        let importance = setImportance(channel: channel, content: unContent)
+        setSound(content: content, channel: channel, importance: importance, unContent: unContent)
+
         applyImages(content, to: unContent)
+
+        setWakeUpScreen(content: content, unContent: unContent)
+        setCriticalAlert(channel: channel, unContent: unContent)
         setUserInfoContent(model: model, content: unContent)
         return (id, unContent)
+    }
+
+    // MARK: - Importance, sound and interruption level (0.12.1)
+
+    /// 0.12 `setImportance`: the channel's importance (`Default` without one)
+    /// is the interruption level — None/Min/Low passive, Default active,
+    /// High/Max time sensitive (iOS 15 / macOS 12). The content has no
+    /// importance of its own (0.12 never read one).
+    @discardableResult
+    func setImportance(
+        channel: [String: Any]?,
+        content unContent: UNMutableNotificationContent
+    ) -> NotificationImportance {
+        let importance = NotificationImportance.from(channel?[Definitions.NOTIFICATION_IMPORTANCE])
+        if #available(iOS 15.0, macOS 12.0, *) {
+            switch importance {
+            case .none, .min, .low: unContent.interruptionLevel = .passive
+            case .default: unContent.interruptionLevel = .active
+            case .high, .max: unContent.interruptionLevel = .timeSensitive
+            }
+        }
+        return importance
+    }
+
+    /// 0.12 `setSound`. A critical channel whose alerts can be delivered plays
+    /// the content's custom sound, else the channel's sound source, else the
+    /// default critical sound — or nothing when either the content or the
+    /// channel turned the sound off, whatever the importance. Otherwise a
+    /// Default/High/Max importance plays the same sources ending in the default
+    /// sound (or nothing when turned off), and None/Min/Low plays nothing.
+    func setSound(
+        content: [String: Any],
+        channel: [String: Any]?,
+        importance: NotificationImportance,
+        unContent: UNMutableNotificationContent
+    ) {
+        let playSound = (mapUtils.getBool(content[Definitions.NOTIFICATION_PLAY_SOUND]) ?? true)
+            && (mapUtils.getBool(channel?[Definitions.NOTIFICATION_PLAY_SOUND]) ?? true)
+        let customSound = mapUtils.getString(content[Definitions.NOTIFICATION_CUSTOM_SOUND])
+        let soundSource = mapUtils.getString(channel?[Definitions.NOTIFICATION_SOUND_SOURCE])
+
+        if CriticalAlertUtils.isCriticalAlertRequested(channel: channel)
+            && CriticalAlertUtils.canDeliverCriticalAlerts() {
+            guard playSound else {
+                unContent.sound = nil
+                return
+            }
+            if !stringUtils.isNullOrEmpty(customSound) {
+                unContent.sound = AudioUtils.shared.getSoundFromSource(customSound)
+                return
+            }
+            if !stringUtils.isNullOrEmpty(soundSource) {
+                unContent.sound = AudioUtils.shared.getSoundFromSource(soundSource)
+                return
+            }
+            unContent.sound = Self.defaultCriticalSound
+            return
+        }
+
+        switch importance {
+        case .default, .high, .max:
+            guard playSound else {
+                unContent.sound = nil
+                return
+            }
+            if !stringUtils.isNullOrEmpty(customSound) {
+                unContent.sound = AudioUtils.shared.getSoundFromSource(customSound)
+                return
+            }
+            if !stringUtils.isNullOrEmpty(soundSource) {
+                unContent.sound = AudioUtils.shared.getSoundFromSource(soundSource)
+                return
+            }
+            unContent.sound = .default
+        case .none, .min, .low:
+            break
+        }
+    }
+
+    static var defaultCriticalSound: UNNotificationSound { .defaultCritical }
+
+    /// 0.12 `setWakeUpScreen`: `wakeUpScreen` makes it time sensitive (iOS 15 /
+    /// macOS 12), over the importance's level.
+    func setWakeUpScreen(content: [String: Any], unContent: UNMutableNotificationContent) {
+        guard mapUtils.getBool(content[Definitions.NOTIFICATION_WAKE_UP_SCREEN]) ?? false else {
+            return
+        }
+        if #available(iOS 15.0, macOS 12.0, *) {
+            unContent.interruptionLevel = .timeSensitive
+        }
+    }
+
+    /// 0.12.1 `setCriticalAlert`: a critical channel makes it critical (iOS 15 /
+    /// macOS 12) when critical alerts can be delivered — over wakeUpScreen and
+    /// the importance. Otherwise it keeps the standard delivery.
+    func setCriticalAlert(channel: [String: Any]?, unContent: UNMutableNotificationContent) {
+        guard CriticalAlertUtils.isCriticalAlertRequested(channel: channel) else { return }
+        guard CriticalAlertUtils.canDeliverCriticalAlerts() else {
+            NSLog("[AwesomeNotifications] Critical alert requested but not available; using standard delivery")
+            return
+        }
+        if #available(iOS 15.0, macOS 12.0, *) {
+            unContent.interruptionLevel = .critical
+        }
     }
 
     /// 0.12 `setGrouping` + `setMessagingLayout`: the messaging layouts thread

@@ -18,6 +18,10 @@ public struct AwesomeNotificationsException: Error {
 
     /// 0.12's `ExceptionCode.CODE_INVALID_ARGUMENTS`.
     public static let CODE_INVALID_ARGUMENTS = "INVALID_ARGUMENTS"
+    /// 0.12's `ExceptionCode.CODE_MISSING_ARGUMENTS`.
+    public static let CODE_MISSING_ARGUMENTS = "MISSING_ARGUMENTS"
+    /// 0.12's `ExceptionCode.DETAILED_REQUIRED_ARGUMENTS`.
+    public static let DETAILED_REQUIRED_ARGUMENTS = "arguments.required"
     /// 0.12's `ExceptionCode.DETAILED_INVALID_ARGUMENTS`.
     public static let DETAILED_INVALID_ARGUMENTS = "arguments.invalid"
 }

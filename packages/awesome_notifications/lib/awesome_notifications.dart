@@ -5,6 +5,7 @@ import 'awesome_notifications_platform.dart'
 import 'i_awesome_notifications.dart';
 import 'src/enumerators/notification_life_cycle.dart';
 import 'src/enumerators/notification_permission.dart';
+import 'src/enumerators/notification_permission_status.dart';
 import 'src/models/notification_action_button.dart';
 import 'src/models/notification_extension.dart';
 import 'src/models/notification_channel.dart';
@@ -25,6 +26,7 @@ export 'src/enumerators/notification_importance.dart';
 export 'src/enumerators/notification_layout.dart';
 export 'src/enumerators/notification_life_cycle.dart';
 export 'src/enumerators/notification_permission.dart';
+export 'src/enumerators/notification_permission_status.dart';
 export 'src/enumerators/notification_privacy.dart';
 export 'src/enumerators/notification_source.dart';
 export 'src/enumerators/notification_play_state.dart';
@@ -39,6 +41,7 @@ export 'src/models/model.dart';
 export 'src/models/notification_content.dart';
 export 'src/models/notification_extension.dart';
 export 'src/models/notification_model.dart';
+export 'src/models/notification_person.dart';
 export 'src/models/received_models/received_action.dart';
 export 'src/models/received_models/received_notification.dart';
 export 'src/utils/awesome_assert_utils.dart';
@@ -104,15 +107,28 @@ class AwesomeNotifications implements IAwesomeNotifications {
   }
 
   @override
+  Future<Map<NotificationPermission, NotificationPermissionStatus>>
+      getPermissionStatusList(
+          {String? channelKey,
+          List<NotificationPermission> permissions = const [
+            NotificationPermission.Badge,
+            NotificationPermission.Alert,
+            NotificationPermission.Sound,
+            NotificationPermission.Vibration,
+            NotificationPermission.Light
+          ]}) {
+    return AwesomeNotificationsPlatform.instance.getPermissionStatusList(
+        channelKey: channelKey, permissions: permissions);
+  }
+
+  @override
   Future<bool> createNotification({
     required NotificationContent content,
     List<NotificationActionButton>? actionButtons,
     List<NotificationExtension>? extensions,
   }) {
     return AwesomeNotificationsPlatform.instance.createNotification(
-        content: content,
-        actionButtons: actionButtons,
-        extensions: extensions);
+        content: content, actionButtons: actionButtons, extensions: extensions);
   }
 
   @override

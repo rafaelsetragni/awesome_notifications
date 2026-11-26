@@ -83,6 +83,10 @@ class NotificationSpec {
   /// Keys of [buttons] shown in the compact view (media player).
   final Set<String> compactButtons;
 
+  /// `NotificationCategory` name (e.g. 'Call').
+  final String? category;
+  final bool? fullScreenIntent, wakeUpScreen, locked;
+
   const NotificationSpec({
     required this.id,
     this.title = 'Hello',
@@ -102,6 +106,10 @@ class NotificationSpec {
     this.playbackSpeed,
     this.playState,
     this.compactButtons = const {},
+    this.category,
+    this.fullScreenIntent,
+    this.wakeUpScreen,
+    this.locked,
   });
 }
 
@@ -142,6 +150,9 @@ abstract class CompatApi {
   Future<void> cancelAllSchedules();
   Future<void> cancelAll();
   Future<void> dismiss(int id);
+
+  /// `getPermissionStatusList` (0.12.1), as permission name → status name.
+  Future<Map<String, String>> permissionStatuses(List<String> permissions);
 }
 
 /// Events published by the adapters' static listeners.
@@ -428,6 +439,68 @@ void defineCompatTests(CompatApi api) {
       await api.dismiss(a);
       await Future<void>.delayed(const Duration(milliseconds: 500));
       expect(await _displayedId(api, message(b)), b);
+    });
+  });
+
+  group('call notifications', () {
+    String fields(Map<String, dynamic>? shown) => [
+          for (final key in ['category', 'fullScreenIntent', 'wakeUpScreen', 'locked'])
+            '$key=${shown?[key]}'
+        ].join(' ');
+
+    test('a Call category is displayed with its fields', () async {
+      final shown = await _displayedEvent(
+          api,
+          NotificationSpec(
+              id: _id(),
+              body: 'call ${_nextId}',
+              category: 'Call',
+              fullScreenIntent: true,
+              wakeUpScreen: true,
+              locked: true,
+              buttons: const {'ACCEPT': 'Accept', 'REJECT': 'Reject'}));
+      // 0.12 events never carry `locked`; iOS events don't carry the
+      // category either, and its full screen / wake up read false.
+      expect(
+          fields(shown),
+          p(
+              android: 'category=Call fullScreenIntent=true wakeUpScreen=true locked=null',
+              ios: 'category=null fullScreenIntent=false wakeUpScreen=false locked=null'));
+    });
+
+    test('an Alarm category', () async {
+      final shown = await _displayedEvent(
+          api, NotificationSpec(id: _id(), body: 'alarm ${_nextId}', category: 'Alarm'));
+      expect(
+          fields(shown),
+          p(
+              android: 'category=Alarm fullScreenIntent=false wakeUpScreen=false locked=null',
+              ios: 'category=null fullScreenIntent=false wakeUpScreen=false locked=null'));
+    });
+
+    test('a locked notification is still dismissed by its id', () async {
+      final id = _id();
+      await _displayedEvent(api, NotificationSpec(id: id, body: 'locked $id', locked: true));
+      await api.dismiss(id);
+      // Nothing to observe but that dismiss completes without an exception.
+      expect(true, isTrue);
+    });
+  });
+
+  group('permission statuses (0.12.1)', () {
+    test('the granted notification permissions and critical alerts', () async {
+      final statuses = await api.permissionStatuses(
+          const ['Alert', 'Sound', 'Badge', 'Vibration', 'Light', 'CriticalAlert']);
+      expect(
+          ([for (final e in statuses.entries) '${e.key}=${e.value}']..sort()).join(' '),
+          // Android 0.12.1, with the permission granted by `pm grant` (never
+          // requested in the app): the requested-once permissions read as
+          // not determined.
+          p(
+              android: 'Alert=notDetermined Badge=notDetermined CriticalAlert=notDetermined '
+                  'Light=granted Sound=granted Vibration=granted',
+              ios: 'Alert=granted Badge=granted CriticalAlert=notDetermined '
+                  'Light=granted Sound=granted Vibration=granted'));
     });
   });
 

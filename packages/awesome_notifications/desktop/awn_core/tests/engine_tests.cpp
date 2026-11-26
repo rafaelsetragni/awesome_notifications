@@ -177,6 +177,47 @@ TEST(DismissActionButtonEmitsDismissed) {
   EXPECT_TRUE(h.last("defaultAction") == nullptr);
 }
 
+TEST(ActivationInterceptorTakesOverItsButtons) {
+  Harness h;
+  std::vector<std::string> seen;
+  int token = h.engine.addActivationInterceptor(
+      [&](const ValueMap& m, const std::string& key, const Activation&) -> std::optional<ActionType> {
+        seen.push_back(key);
+        if (key != "OWN") return std::nullopt;
+        EXPECT_EQ(NotificationBuilder::readId(NotificationBuilder::content(m)).value_or(0),
+                  int64_t(6));
+        return ActionType::SilentAction;
+      });
+  h.create(model(6, {}, ValueList{ValueMap{{"key", "OWN"}}, ValueMap{{"key", "OTHER"}}}));
+  auto type = h.engine.onActivated({LaunchArgs::encode(6, "OWN"), {}});
+  EXPECT_TRUE(type == ActionType::SilentAction);
+  EXPECT_TRUE(h.last("defaultAction") == nullptr);
+  EXPECT_TRUE(h.store->get(6).has_value());  // left alone
+  // Not its own: the engine handles it as usual.
+  h.engine.onActivated({LaunchArgs::encode(6, "OTHER"), {}});
+  EXPECT_EQ(str(h.last("defaultAction")->content, "buttonKeyPressed"), std::string("OTHER"));
+  EXPECT_EQ(seen, (std::vector<std::string>{"OWN", "OTHER"}));
+  h.engine.removeActivationInterceptor(token);
+  h.create(model(7, {}, ValueList{ValueMap{{"key", "OWN"}}}));
+  h.engine.onActivated({LaunchArgs::encode(7, "OWN"), {}});
+  EXPECT_EQ(seen.size(), size_t(2));
+  EXPECT_EQ(str(h.last("defaultAction")->content, "buttonKeyPressed"), std::string("OWN"));
+}
+
+TEST(InterceptedLaunchActivationSettlesTheLaunch) {
+  Harness h(/*launchedByNotification=*/true);
+  h.store->put(8, model(8));
+  h.engine.addActivationInterceptor(
+      [](const ValueMap&, const std::string&, const Activation&) -> std::optional<ActionType> {
+        return ActionType::Default;
+      });
+  Value initial("unanswered");
+  h.engine.getInitialAction(false, [&](const Value& v) { initial = v; });
+  EXPECT_TRUE(initial == Value("unanswered"));  // waiting for the launch activation
+  h.engine.onActivated({LaunchArgs::encode(8), {}});
+  EXPECT_TRUE(initial.isNull());  // settled, nothing emitted by the engine
+}
+
 TEST(ForeignActivationIsIgnored) {
   Harness h;
   EXPECT_FALSE(h.engine.onActivated({"something-else", {}}).has_value());
@@ -325,6 +366,24 @@ TEST(RouterReportsMissingPermissions) {
   h.presenter->allowed = true;
   router.handle("requestNotifications", Value(args), [&](const Value& v) { answer = v; });
   EXPECT_TRUE(answer.list().empty());
+}
+
+TEST(RouterReportsPermissionStatuses) {
+  Harness h;
+  AwesomeMethodRouter router(h.engine);
+  Value answer;
+  ValueMap args{{"permissions", ValueList{Value("Alert"), Value("Sound"), Value("CriticalAlert")}}};
+  h.presenter->allowed = true;
+  router.handle("checkPermissions", Value(args), [&](const Value& v) { answer = v; });
+  EXPECT_EQ(answer.list().size(), size_t(2));
+  router.handle("getPermissionStatuses", Value(args), [&](const Value& v) { answer = v; });
+  EXPECT_EQ(answer.map().at("Alert").asString().value_or(""), std::string("granted"));
+  EXPECT_EQ(answer.map().at("CriticalAlert").asString().value_or(""), std::string("notSupported"));
+  h.presenter->allowed = false;
+  router.handle("checkPermissions", Value(args), [&](const Value& v) { answer = v; });
+  EXPECT_TRUE(answer.list().empty());
+  router.handle("getPermissionStatuses", Value(args), [&](const Value& v) { answer = v; });
+  EXPECT_EQ(answer.map().at("Sound").asString().value_or(""), std::string("denied"));
 }
 
 TEST(RouterFallsThroughToDecorators) {

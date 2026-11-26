@@ -1,39 +1,15 @@
 package me.carda.awesome_notifications_chat
 
+import me.carda.android_awn_core.NotificationPerson
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
-/** A participant, parsed from the `conversation` block. */
-internal data class ChatPerson(
-    val key: String,
-    val name: String,
-    val avatar: String?,
-    val uri: String?,
-    val isBot: Boolean,
-    val isImportant: Boolean
-) {
-    companion object {
-        fun from(map: Any?): ChatPerson? {
-            val m = map as? Map<*, *> ?: return null
-            val key = (m[ChatKeys.KEY] as? String)?.takeIf { it.isNotBlank() } ?: return null
-            val name = (m[ChatKeys.NAME] as? String)?.takeIf { it.isNotBlank() } ?: return null
-            return ChatPerson(
-                key, name,
-                m[ChatKeys.AVATAR] as? String,
-                m[ChatKeys.URI] as? String,
-                m[ChatKeys.IS_BOT] == true,
-                m[ChatKeys.IS_IMPORTANT] == true
-            )
-        }
-    }
-}
-
-internal data class ChatMessage(val sender: ChatPerson, val text: String, val timestampMillis: Long) {
+internal data class ChatMessage(val sender: NotificationPerson, val text: String, val timestampMillis: Long) {
     companion object {
         fun from(map: Any?): ChatMessage? {
             val m = map as? Map<*, *> ?: return null
-            val sender = ChatPerson.from(m[ChatKeys.SENDER]) ?: return null
+            val sender = NotificationPerson.from(m[ChatKeys.SENDER]) ?: return null
             val text = (m[ChatKeys.TEXT] as? String)?.takeIf { it.isNotBlank() } ?: return null
             return ChatMessage(sender, text, parseUtc(m[ChatKeys.TIMESTAMP] as? String))
         }
@@ -54,10 +30,10 @@ internal data class ChatMessage(val sender: ChatPerson, val text: String, val ti
 
 internal data class ChatConversation(
     val id: String,
-    val me: ChatPerson,
+    val me: NotificationPerson,
     val message: ChatMessage,
     val title: String?,
-    val participants: List<ChatPerson>,
+    val participants: List<NotificationPerson>,
     val image: String?,
     val replaceHistory: Boolean,
     val shortcut: Boolean
@@ -75,13 +51,13 @@ internal data class ChatConversation(
             val m = block as? Map<*, *> ?: return null to "The conversation is not a map"
             val id = (m[ChatKeys.ID] as? String)?.takeIf { it.isNotBlank() }
                 ?: return null to "The conversation needs a non-empty id"
-            val me = ChatPerson.from(m[ChatKeys.ME])
+            val me = NotificationPerson.from(m[ChatKeys.ME])
                 ?: return null to "The conversation needs a person (key and name) as me"
             val message = ChatMessage.from(m[ChatKeys.MESSAGE])
                 ?: return null to "The conversation needs a message with a sender (key and name) and a text"
             val rawParticipants = m[ChatKeys.PARTICIPANTS] as? List<*> ?: emptyList<Any?>()
             val participants = rawParticipants.map {
-                ChatPerson.from(it) ?: return null to "Every participant needs a key and a name"
+                NotificationPerson.from(it) ?: return null to "Every participant needs a key and a name"
             }
             val keys = mutableSetOf(me.key)
             for (person in participants) {

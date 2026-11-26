@@ -12,14 +12,6 @@ abstract final class ChatKeys {
   static const history = 'history';
   static const shortcut = 'shortcut';
 
-  // Person
-  static const key = 'key';
-  static const name = 'name';
-  static const avatar = 'avatar';
-  static const uri = 'uri';
-  static const isBot = 'isBot';
-  static const isImportant = 'isImportant';
-
   // Message
   static const sender = 'sender';
   static const text = 'text';

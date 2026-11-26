@@ -97,6 +97,19 @@ class AWN_API AwesomeNotifications {
   int addRemovalObserver(RemovalObserver observer);
   void removeRemovalObserver(int token);
 
+  /// Lets a decorator take over the activations of its own notifications
+  /// (e.g. a call's Accept / Decline). Called first by `onActivated`, on the
+  /// platform thread, with the stored model and the activated button's key
+  /// (empty for the notification itself). Returning an action type handles the
+  /// activation: the engine then emits nothing and leaves the notification and
+  /// its model alone (the decorator emits through `dispatchAction` if it must),
+  /// settles the launch and answers that type. nullopt: the engine handles it
+  /// as usual. Returns a token for `removeActivationInterceptor`.
+  using ActivationInterceptor = std::function<std::optional<ActionType>(
+      const ValueMap& model, const std::string& buttonKey, const Activation& activation)>;
+  int addActivationInterceptor(ActivationInterceptor interceptor);
+  void removeActivationInterceptor(int token);
+
   // Schedule management (for the scheduling decorator)
   /// Re-runs the builder chain on a stored model and re-presents it without
   /// emitting events (tops up the pre-armed occurrences of a repeating schedule).
@@ -136,6 +149,8 @@ class AWN_API AwesomeNotifications {
   std::function<void(const Value&)> pendingInitialAction_;
   std::vector<std::pair<int, RemovalObserver>> removalObservers_;
   int nextRemovalToken_ = 1;
+  std::vector<std::pair<int, ActivationInterceptor>> activationInterceptors_;
+  int nextInterceptorToken_ = 1;
 };
 
 }  // namespace awn

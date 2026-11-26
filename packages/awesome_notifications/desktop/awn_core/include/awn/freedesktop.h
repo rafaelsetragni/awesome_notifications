@@ -33,6 +33,8 @@ struct FreedesktopNotification {
   std::string imagePath;  // file:// URI
   std::string category;
   bool suppressSound = false;
+  /// "sound-name" hint (freedesktop sound naming spec), or empty.
+  std::string soundName;
   /// Stays on screen after an action is invoked (KeepOnTop / locked).
   bool resident = false;
   /// The button whose text is typed in place (servers with "inline-reply").

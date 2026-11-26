@@ -95,7 +95,6 @@ class NotificationContent extends BaseNotificationContent {
       super.showWhen,
       super.wakeUpScreen,
       super.fullScreenIntent,
-      super.criticalAlert,
       super.roundedLargeIcon,
       super.roundedBigPicture,
       super.autoDismissible,

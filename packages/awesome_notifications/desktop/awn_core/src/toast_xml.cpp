@@ -63,9 +63,16 @@ std::string ToastXml::render(const ValueMap& model, const ToastImages& images, b
   bool rounded = getBool(content, defs::NOTIFICATION_ROUNDED_LARGE_ICON).value_or(false);
   ActionType contentAction =
       actionTypeFrom(getString(content, defs::NOTIFICATION_ACTION_TYPE).value_or(""));
+  // A decorator's presentation hints (defs::presentation), when it set some.
+  ValueMap hints = getMap(model, presentation::BLOCK);
+  if (getBool(hints, presentation::SILENT).value_or(false)) silent = true;
+  std::string scenario = getString(hints, presentation::TOAST_SCENARIO).value_or("");
+  std::string audio = getString(hints, presentation::TOAST_AUDIO).value_or("");
+  ValueMap buttonStyles = getMap(hints, presentation::TOAST_BUTTON_STYLES);
 
   std::string xml = "<toast" + attr("launch", LaunchArgs::encode(id));
   if (isBackground(contentAction)) xml += attr("activationType", "background");
+  if (!scenario.empty()) xml += attr("scenario", scenario);
   xml += "><visual><binding template=\"ToastGeneric\">";
   if (!title.empty()) xml += "<text>" + escape(title) + "</text>";
   if (!body.empty()) xml += "<text>" + escape(body) + "</text>";
@@ -101,7 +108,11 @@ std::string ToastXml::render(const ValueMap& model, const ToastImages& images, b
     actions += "<action" + attr("content", label) + attr("arguments", LaunchArgs::encode(id, key));
     if (isBackground(type)) actions += attr("activationType", "background");
     if (requiresText) actions += attr("hint-inputId", key);
-    if (getBool(button, defs::NOTIFICATION_IS_DANGEROUS_OPTION).value_or(false))
+    std::string style = getString(buttonStyles, key).value_or("");
+    if (!style.empty()) {
+      actions += attr("hint-buttonStyle", style);
+      styled = true;
+    } else if (getBool(button, defs::NOTIFICATION_IS_DANGEROUS_OPTION).value_or(false))
     {
       actions += " hint-buttonStyle=\"Critical\"";
       styled = true;
@@ -113,7 +124,13 @@ std::string ToastXml::render(const ValueMap& model, const ToastImages& images, b
   // Button styles only apply when the toast opts in.
   if (styled) xml.insert(6, " useButtonStyle=\"true\"");
 
-  if (silent) xml += "<audio silent=\"true\"/>";
+  if (silent) {
+    xml += "<audio silent=\"true\"/>";
+  } else if (!audio.empty()) {
+    xml += "<audio" + attr("src", audio);
+    if (getBool(hints, presentation::TOAST_AUDIO_LOOP).value_or(false)) xml += " loop=\"true\"";
+    xml += "/>";
+  }
   xml += "</toast>";
   return xml;
 }

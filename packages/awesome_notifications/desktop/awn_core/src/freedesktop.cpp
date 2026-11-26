@@ -1,5 +1,6 @@
 #include "awn/freedesktop.h"
 
+#include <algorithm>
 #include <cctype>
 #include <cstdio>
 #include <map>
@@ -187,6 +188,14 @@ FreedesktopNotification Freedesktop::render(const ValueMap& model, const Freedes
   auto category = categories().find(getString(content, defs::NOTIFICATION_CATEGORY).value_or(""));
   if (category != categories().end()) out.category = category->second;
   out.resident = getBool(content, kLocked).value_or(false);
+
+  // A decorator's presentation hints (defs::presentation), when it set some.
+  ValueMap hints = getMap(model, presentation::BLOCK);
+  if (auto urgency = getInt(hints, presentation::URGENCY))
+    out.urgency = static_cast<int>(std::clamp<int64_t>(*urgency, 0, 2));
+  if (getBool(hints, presentation::RESIDENT).value_or(false)) out.resident = true;
+  if (getBool(hints, presentation::SILENT).value_or(false)) out.suppressSound = true;
+  if (!out.suppressSound) out.soundName = getString(hints, presentation::SOUND_NAME).value_or("");
 
   if (capabilities.count("actions") == 0) return out;
 

@@ -1,7 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'chat_keys.dart';
-import 'notification_person.dart';
 
 /// One message of a conversation.
 class NotificationMessage {

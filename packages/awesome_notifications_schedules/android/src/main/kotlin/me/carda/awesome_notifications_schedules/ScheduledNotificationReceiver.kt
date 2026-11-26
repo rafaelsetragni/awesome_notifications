@@ -56,10 +56,10 @@ class ScheduledNotificationReceiver : BroadcastReceiver() {
                     lifeCycle = NotificationLifeCycle.Background
                 )
             )
-            val notification = builder.createNotificationContent(context, sent)
-            val id = builder.notificationId(sent)
-            if (notification != null && id != null) {
-                try {
+            try {
+                val notification = builder.createNotificationContent(context, sent)
+                val id = builder.notificationId(sent)
+                if (notification != null && id != null) {
                     NotificationManagerCompat.from(context).notify(id, notification)
                     AwesomeEventsReceiver.notifyAwesomeEvent(
                         Definitions.EVENT_NOTIFICATION_DISPLAYED,
@@ -67,9 +67,11 @@ class ScheduledNotificationReceiver : BroadcastReceiver() {
                             builder.contentMap(sent), NotificationLifeCycle.Background
                         )
                     )
-                } catch (_: SecurityException) {
-                    // POST_NOTIFICATIONS not granted (Android 13+).
                 }
+            } catch (_: SecurityException) {
+                // POST_NOTIFICATIONS not granted (Android 13+), or a
+                // `wakeUpScreen` without WAKE_LOCK: as 0.12, not shown, and
+                // the schedule still goes on below.
             }
         }
 

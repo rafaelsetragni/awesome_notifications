@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import androidx.core.app.RemoteInput
 import java.text.SimpleDateFormat
@@ -60,8 +61,17 @@ open class NotificationBuilder protected constructor(
             displayedDate = nowUtc(),
             lifeCycle = NotificationLifeCycle.Foreground)
         val prepared = prepareLayout(context, stamped)
-        val notification = createNotificationContent(context, prepared)
-            ?: return BuildOutcome.Invalid
+        val notification = try {
+            createNotificationContent(context, prepared)
+        } catch (e: SecurityException) {
+            // 0.12: the wake lock without WAKE_LOCK fails the whole send, which
+            // the create call answered as a NOTIFICATION_THREAD_EXCEPTION.
+            return BuildOutcome.Failed(
+                Definitions.CODE_NOTIFICATION_THREAD_EXCEPTION,
+                "${e.localizedMessage}", // 0.12 String.format("%s", …)
+                Definitions.DETAILED_UNEXPECTED_ERROR
+            )
+        } ?: return BuildOutcome.Invalid
         val id = notificationId(prepared) ?: return BuildOutcome.Invalid
         return BuildOutcome.Post(id, notification, prepared)
     }
@@ -149,10 +159,12 @@ open class NotificationBuilder protected constructor(
         val channelKey =
             mapUtils.getString(content[Definitions.NOTIFICATION_CHANNEL_KEY]) ?: return null
 
+        val channel = ChannelManager.getChannel(channelKey)
+        val contentIntent = contentIntent(context, id, model)
         val builder = NotificationCompat.Builder(context, channelKey)
             .setSmallIcon(context.applicationInfo.icon)
             .setAutoCancel(shouldAutoDismiss(content))
-            .setContentIntent(contentIntent(context, id, model))
+            .setContentIntent(contentIntent)
             .setDeleteIntent(deleteIntent(context, id, model))
 
         val title = mapUtils.getString(content[Definitions.NOTIFICATION_TITLE])
@@ -171,9 +183,146 @@ open class NotificationBuilder protected constructor(
             MessagingLayout.groupExtras(
                 context, id, mapUtils.getString(content[Definitions.NOTIFICATION_GROUP_KEY])))
 
+        setLockedNotification(content, channel, builder)
+        setCategory(content, builder)
+        setSound(context, content, channelKey, channel, builder)
+        setFullScreenIntent(content, contentIntent, builder)
+
         NotificationBuilderRegistry.makeBuilder().decorate(context, model, builder)
 
-        return builder.build()
+        val notification = builder.build()
+        setWakeUpScreen(context, content)
+        setCategoryFlags(content, notification)
+        return notification
+    }
+
+    // MARK: - 0.12 content / channel options
+
+    /**
+     * 0.12 `setLockedNotification`, quirk included: content `locked: true`
+     * makes the notification ongoing; otherwise a channel `locked: true`
+     * applies the content's own value, defaulting to true. But 0.12's content
+     * model always defaults `locked` to false, so a content without `locked`
+     * reads false and a locked channel alone never locks a notification.
+     * Only a Boolean counts (0.12 `getValueOrDefault`).
+     */
+    private fun setLockedNotification(
+        content: Map<String, Any?>,
+        channel: Map<String, Any?>?,
+        builder: NotificationCompat.Builder
+    ) {
+        // 0.12 content model: `locked` defaults to false (never null).
+        val contentLocked = content[Definitions.NOTIFICATION_LOCKED] as? Boolean ?: false
+        val channelLocked = ChannelManager.locked(channel)
+        if (contentLocked) {
+            builder.setOngoing(true)
+        } else if (channelLocked) {
+            // 0.12 `getValueOrDefault(content.locked, true)`: the content's
+            // false, so the locked channel has no effect.
+            builder.setOngoing(contentLocked)
+        }
+    }
+
+    /** 0.12 `setCategory`: the category's raw value (e.g. `Call` → `call`). */
+    private fun setCategory(content: Map<String, Any?>, builder: NotificationCompat.Builder) {
+        NotificationCategory.from(content[Definitions.NOTIFICATION_CATEGORY])
+            ?.let { builder.setCategory(it.rawValue) }
+    }
+
+    /**
+     * 0.12 `setSound`: when the channel plays sound (Android 8+: its Android
+     * channel has a sound, as 0.12 read it back), the content's `customSound`
+     * or else the channel's `soundSource`, or without either the default sound
+     * of the channel's `defaultRingtoneType`; otherwise no sound. (Android 8+
+     * plays the channel's sound; this is what Android 7 plays.)
+     */
+    private fun setSound(
+        context: Context,
+        content: Map<String, Any?>,
+        channelKey: String,
+        channel: Map<String, Any?>?,
+        builder: NotificationCompat.Builder
+    ) {
+        val playSound =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                ChannelManager.getAndroidChannel(context, channelKey)?.let { it.sound != null }
+                    ?: ChannelManager.playSound(channel)
+            } else {
+                ChannelManager.playSound(channel)
+            }
+        var uri: android.net.Uri? = null
+        if (playSound) {
+            val customSound = content[Definitions.NOTIFICATION_CUSTOM_SOUND] as? String
+            val soundSource = if (stringUtils.isNullOrEmpty(customSound))
+                channel?.get(Definitions.NOTIFICATION_SOUND_SOURCE) as? String
+            else customSound
+            uri = ChannelManager.retrieveSoundResourceUri(
+                context, ChannelManager.defaultRingtoneType(channel), soundSource)
+        }
+        builder.setSound(uri)
+    }
+
+    /** 0.12 `setFullScreenIntent`: `fullScreenIntent: true` uses the tap intent. */
+    private fun setFullScreenIntent(
+        content: Map<String, Any?>,
+        contentIntent: PendingIntent,
+        builder: NotificationCompat.Builder
+    ) {
+        if (content[Definitions.NOTIFICATION_FULL_SCREEN_INTENT] as? Boolean == true) {
+            builder.setFullScreenIntent(contentIntent, true)
+        }
+    }
+
+    /**
+     * 0.12 `setCategoryFlags`, after the build: `Alarm` is insistent and can't
+     * be cleared; `Call` is also high priority.
+     */
+    private fun setCategoryFlags(content: Map<String, Any?>, notification: Notification) {
+        when (NotificationCategory.from(content[Definitions.NOTIFICATION_CATEGORY])) {
+            NotificationCategory.Alarm -> {
+                notification.flags = notification.flags or
+                    Notification.FLAG_INSISTENT or Notification.FLAG_NO_CLEAR
+            }
+            NotificationCategory.Call -> {
+                @Suppress("DEPRECATION")
+                notification.flags = notification.flags or Notification.FLAG_INSISTENT or
+                    Notification.FLAG_HIGH_PRIORITY or Notification.FLAG_NO_CLEAR
+            }
+            else -> {}
+        }
+    }
+
+    /**
+     * 0.12 `setWakeUpScreen` / `wakeUpScreen`, after the build and before the
+     * notification is shown: `wakeUpScreen: true` with the screen off turns it
+     * on for 3 s (a bright screen wake lock). The app declares WAKE_LOCK
+     * itself (since 0.10); without it the wake lock throws a
+     * SecurityException and, as in 0.12, the notification is not shown and
+     * the create call fails (see [build]).
+     */
+    private fun setWakeUpScreen(context: Context, content: Map<String, Any?>) {
+        if (content[Definitions.NOTIFICATION_WAKE_UP_SCREEN] as? Boolean == true) {
+            wakeUpScreen(context)
+        }
+    }
+
+    fun wakeUpScreen(context: Context) {
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        if (!powerManager.isInteractive) {
+            @Suppress("DEPRECATION")
+            val wakeLock = powerManager.newWakeLock(
+                PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                appName(context) + ":NotificationBuilder:WakeupLock"
+            )
+            wakeLock.acquire(3000)
+        }
+    }
+
+    /** 0.12 `getAppName`. */
+    private fun appName(context: Context): String {
+        val info = context.applicationInfo
+        return if (info.labelRes == 0) info.nonLocalizedLabel?.toString() ?: ""
+        else context.getString(info.labelRes)
     }
 
     // MARK: - Action buttons

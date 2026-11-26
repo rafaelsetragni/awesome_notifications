@@ -44,7 +44,6 @@ void main() {
       c.showWhen;
       c.wakeUpScreen;
       c.fullScreenIntent;
-      c.criticalAlert;
       c.roundedLargeIcon;
       c.roundedBigPicture;
       c.autoDismissible;
