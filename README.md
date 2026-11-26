@@ -19,9 +19,10 @@ opt-in **capability add-ons** that *decorate* the core — you depend only on wh
 | [`awesome_notifications_chat`](packages/awesome_notifications_chat) | **Decorator**: chat / communication notifications (Android conversations, iOS communication notifications). |
 | [`awesome_notifications_media`](packages/awesome_notifications_media) | **Decorator**: the system's media controls (Android media notification, Now Playing, MPRIS, SMTC, Media Session). |
 | [`awesome_notifications_calls`](packages/awesome_notifications_calls) | **Decorator**: the system's call UI (Android CallStyle + Telecom, iOS CallKit + VoIP pushes) and call notifications on desktop and Web. |
+| [`awesome_notifications_live_activities`](packages/awesome_notifications_live_activities) | **Decorator**: live activities: iOS Live Activities (Lock Screen, Dynamic Island) with a widget it ships, Android 16 Live Updates, and progress notifications updated in place everywhere else. |
 
 More capability add-ons (decorators of the core) are migrated in incrementally:
-`_permissions` · `_foreground` · `_live_activities` · `_progress`.
+`_permissions` · `_foreground` · `_progress`.
 
 ## Working in the monorepo
 

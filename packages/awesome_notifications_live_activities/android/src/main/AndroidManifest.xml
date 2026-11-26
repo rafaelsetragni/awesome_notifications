@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Android 16+: the app's live activities show as Live Updates (status bar chip, lock screen, Always-On Display). -->
+    <uses-permission android:name="android.permission.POST_PROMOTED_NOTIFICATIONS" />
+    <application>
+        <!-- Installs the live activities decorator at process start (a push or a swipe with the app killed). -->
+        <provider
+            android:name="me.carda.awesome_notifications_live_activities.LiveInitializer"
+            android:authorities="${applicationId}.awesome-notifications-live-activities-init"
+            android:exported="false" />
+    </application>
+</manifest>

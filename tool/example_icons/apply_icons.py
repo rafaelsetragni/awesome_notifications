@@ -12,6 +12,7 @@ APPS = {
   'awesome_notifications_chat':          ('chat',          'Awesome Chat'),
   'awesome_notifications_media':         ('media',         'Awesome Media'),
   'awesome_notifications_calls':         ('calls',         'Awesome Calls'),
+  'awesome_notifications_live_activities': ('live_activities', 'Awesome Live'),
 }
 TOP = '#%02X%02X%02X' % mk.TOP; BOTTOM = '#%02X%02X%02X' % mk.BOTTOM
 

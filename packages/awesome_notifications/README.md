@@ -74,6 +74,7 @@ All notification types can be created locally or via remote push services, with 
 | [`awesome_notifications_chat`](https://pub.dev/packages/awesome_notifications_chat) | ✅ | ✅ | ✅ | ⏳ | ⏳ | ⏳ |
 | [`awesome_notifications_media`](https://pub.dev/packages/awesome_notifications_media) | ✅ | ✅ | ✅ | 🧪 | 🧪 | 🧪 |
 | [`awesome_notifications_calls`](https://pub.dev/packages/awesome_notifications_calls) | ✅ | 🧪 | 🧪 | 🧪 | 🧪 | 🧪 |
+| [`awesome_notifications_live_activities`](https://pub.dev/packages/awesome_notifications_live_activities) | ✅ | ✅ | 🧪 | 🧪 | 🧪 | 🧪 |
 
 ✅ supported · 🧪 preview (implemented, still being validated against the 0.12 behavior) · ⏳ planned · ❌ not possible on this platform
 
@@ -374,6 +375,7 @@ dependencies:
   awesome_notifications_chat: ^1.0.0          # chat / communication notifications
   awesome_notifications_media: ^1.0.0         # media player controls
   awesome_notifications_calls: ^1.0.0         # calls (CallKit, CallStyle, VoIP pushes)
+  awesome_notifications_live_activities: ^1.0.0 # live activities (iOS Live Activities, Android Live Updates)
 
   # Only with awesome_notifications_fcm (firebase_messaging is NOT needed: the
   # FCM add-on replaces it)
