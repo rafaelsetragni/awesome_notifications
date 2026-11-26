@@ -162,7 +162,7 @@ open class NotificationBuilder protected constructor(
         val channel = ChannelManager.getChannel(channelKey)
         val contentIntent = contentIntent(context, id, model)
         val builder = NotificationCompat.Builder(context, channelKey)
-            .setSmallIcon(context.applicationInfo.icon)
+            .setSmallIcon(smallIcon(context, content, channel))
             .setAutoCancel(shouldAutoDismiss(content))
             .setContentIntent(contentIntent)
             .setDeleteIntent(deleteIntent(context, id, model))
@@ -197,6 +197,30 @@ open class NotificationBuilder protected constructor(
     }
 
     // MARK: - 0.12 content / channel options
+
+    /**
+     * 0.12 `setSmallIcon`: the content's `icon`, else the channel's `icon`,
+     * else the `defaultIcon` given to `initialize`, else `mipmap/ic_launcher`
+     * (each a `resource://drawable/name`, `res_name` tried first). Android
+     * draws it as a silhouette (only its alpha), so a full-color launcher
+     * icon shows as a solid square.
+     *
+     * Where 0.12 set a missing resource (id 0) and the post failed, 1.0 keeps
+     * looking down the list, and ends at the app's launcher icon.
+     */
+    private fun smallIcon(context: Context, content: Map<String, Any?>, channel: Map<String, Any?>?): Int {
+        val bitmaps = BitmapUtils.getInstance()
+        val content012 = mapUtils.getString(content[Definitions.NOTIFICATION_ICON])
+        val channel012 = mapUtils.getString(channel?.get(Definitions.NOTIFICATION_ICON))
+        val default012 = DefaultsManager.getDefaultIcon(context)
+        for (reference in listOf(content012, channel012, default012)) {
+            if (reference.isNullOrEmpty()) continue
+            val id = bitmaps.getDrawableResourceId(context, reference)
+            if (id != 0) return id
+        }
+        val launcher = context.resources.getIdentifier("ic_launcher", "mipmap", context.packageName)
+        return if (launcher != 0) launcher else context.applicationInfo.icon
+    }
 
     /**
      * 0.12 `setLockedNotification`, quirk included: content `locked: true`

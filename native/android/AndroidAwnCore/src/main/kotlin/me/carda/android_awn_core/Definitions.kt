@@ -56,6 +56,7 @@ object Definitions {
     // Initialize payload
     const val INITIALIZE_CHANNELS = "initializeChannels"
     const val INITIALIZE_DEFAULT_ICON = "defaultIcon"
+    const val NOTIFICATION_ICON = "icon"
     const val INITIALIZE_DEBUG_MODE = "debug"
 
     // Lifecycle / action metadata (native -> Dart)

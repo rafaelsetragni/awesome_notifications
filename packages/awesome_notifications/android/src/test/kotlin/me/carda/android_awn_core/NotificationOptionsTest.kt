@@ -75,6 +75,48 @@ class NotificationOptionsTest {
 
     private fun Notification.has(flag: Int) = flags and flag == flag
 
+    // MARK: - Small icon (0.12 setSmallIcon)
+
+    private fun drawable(name: String) =
+        context.resources.getIdentifier(name, "drawable", context.packageName)
+
+    private val iconA = "notification_icon_background" // androidx.core drawables
+    private val iconB = "notification_bg"
+
+    @Test fun theSmallIconFollowsContentThenChannelThenDefault() {
+        assertTrue(drawable(iconA) != 0 && drawable(iconB) != 0)
+        DefaultsManager.setDefaultIcon(context, null)
+
+        channel("ch", Definitions.NOTIFICATION_ICON to "resource://drawable/$iconB")
+        assertEquals(drawable(iconA),
+            build(Definitions.NOTIFICATION_ICON to "resource://drawable/$iconA").smallIcon.resId)
+        assertEquals(drawable(iconB), build().smallIcon.resId)
+
+        channel("ch")
+        DefaultsManager.setDefaultIcon(context, "resource://drawable/$iconA")
+        assertEquals(drawable(iconA), build().smallIcon.resId)
+        // A missing resource keeps looking down the list.
+        assertEquals(drawable(iconA),
+            build(Definitions.NOTIFICATION_ICON to "resource://drawable/missing").smallIcon.resId)
+    }
+
+    @Test fun initializeStoresTheDefaultIconAndNullClearsIt() {
+        val core = AwesomeNotifications(context, Executor { it.run() })
+        core.initialize(emptyList(), "resource://drawable/$iconA")
+        assertEquals("resource://drawable/$iconA", DefaultsManager.getDefaultIcon(context))
+        core.initialize(emptyList())
+        assertNull(DefaultsManager.getDefaultIcon(context))
+    }
+
+    @Test fun withoutAnyIconTheLauncherIconIsUsed() {
+        DefaultsManager.setDefaultIcon(context, null)
+        channel()
+        assertEquals(context.applicationInfo.icon.takeIf {
+            context.resources.getIdentifier("ic_launcher", "mipmap", context.packageName) == 0
+        } ?: context.resources.getIdentifier("ic_launcher", "mipmap", context.packageName),
+            build().smallIcon?.resId ?: 0)
+    }
+
     // MARK: - Category
 
     @Test fun theCategoryIsItsRawValue() {

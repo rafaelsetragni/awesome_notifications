@@ -34,7 +34,12 @@ class AwesomeNotifications(
 
     // MARK: - Initialization
 
-    fun initialize(channelList: List<Map<String, Any?>>) {
+    /**
+     * 0.12 `initialize`: stores the [defaultIcon] (the small icon of every
+     * notification without its own; null clears it) and sets the channels.
+     */
+    fun initialize(channelList: List<Map<String, Any?>>, defaultIcon: String? = null) {
+        DefaultsManager.setDefaultIcon(context, defaultIcon)
         channelList.forEach { setChannel(it) }
     }
 

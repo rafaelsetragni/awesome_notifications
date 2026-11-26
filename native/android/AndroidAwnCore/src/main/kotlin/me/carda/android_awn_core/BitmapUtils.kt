@@ -107,6 +107,25 @@ class BitmapUtils private constructor() {
         null
     }
 
+    /**
+     * 0.12 `getDrawableResourceId`: the id of `resource://type/name` (the
+     * prefix is optional), trying `res_name` first (the name 0.12 documents to
+     * keep a resource from being shrunk), then `name`. 0 when missing.
+     */
+    fun getDrawableResourceId(context: Context, reference: String?): Int {
+        if (reference.isNullOrEmpty()) return 0
+        val parts = clean(reference).split("/")
+        if (parts.size < 2) return 0
+        val (type, label) = parts[0] to parts[1]
+        return try {
+            context.resources.getIdentifier("res_$label", type, context.packageName)
+                .takeIf { it != 0 }
+                ?: context.resources.getIdentifier(label, type, context.packageName)
+        } catch (_: Exception) {
+            0
+        }
+    }
+
     /** `resource://type/name`, e.g. `resource://drawable/app_icon`. */
     private fun bitmapFromResource(context: Context, reference: String): Bitmap? {
         val parts = reference.split("/")
