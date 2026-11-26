@@ -56,16 +56,26 @@ object MediaSourcePrefix {
 enum class NotificationImportance {
     None, Min, Low, Default, High, Max;
 
-    /** The matching Android channel importance constant. */
-    fun toAndroidImportance(): Int = when (this) {
-        None -> android.app.NotificationManager.IMPORTANCE_NONE
-        Min -> android.app.NotificationManager.IMPORTANCE_MIN
-        Low -> android.app.NotificationManager.IMPORTANCE_LOW
-        Default -> android.app.NotificationManager.IMPORTANCE_DEFAULT
-        High, Max -> android.app.NotificationManager.IMPORTANCE_HIGH
+    /**
+     * 0.12 `toAndroidImportance`: the ordinal, which is Android's
+     * `IMPORTANCE_*` (None 0 … High 4), so `Max` is `IMPORTANCE_MAX` (5).
+     */
+    fun toAndroidImportance(): Int = ordinal
+
+    /** 0.12 `toAndroidPriority`: the pre-Android 8 priority of a notification. */
+    fun toAndroidPriority(): Int = when (this) {
+        None, Min -> androidx.core.app.NotificationCompat.PRIORITY_MIN
+        Low -> androidx.core.app.NotificationCompat.PRIORITY_LOW
+        High -> androidx.core.app.NotificationCompat.PRIORITY_HIGH
+        Max -> androidx.core.app.NotificationCompat.PRIORITY_MAX
+        Default -> androidx.core.app.NotificationCompat.PRIORITY_DEFAULT
     }
 
     companion object {
+        /** 0.12 `fromAndroidImportance`: the ordinal, clamped to 0…5. */
+        fun fromAndroidImportance(importance: Int): NotificationImportance =
+            values()[importance.coerceIn(0, 5)]
+
         /** Parses the wire value (tolerating an "Enum."-prefixed form); default [Default]. */
         fun from(raw: String?): NotificationImportance {
             if (raw.isNullOrEmpty()) return Default
@@ -240,3 +250,91 @@ enum class NotificationPermission {
 
 /** The status `getPermissionStatuses` answers per permission (the wire value is the name). */
 enum class NotificationPermissionStatus { granted, denied, notDetermined, notSupported }
+
+/**
+ * 0.12 `NotificationPrivacy`, the lock screen visibility of a notification,
+ * with its `toAndroidPrivacy`.
+ */
+enum class NotificationPrivacy {
+    Secret, Private, Public;
+
+    companion object {
+        /**
+         * 0.12 `getSafeEnum`, quirks included: `s…` is Secret, then a second
+         * char `u` is Public and `r` is Private; null / empty / no match is
+         * null.
+         */
+        fun fromSafeName(raw: String?): NotificationPrivacy? {
+            if (raw.isNullOrEmpty()) return null
+            return when {
+                safeCharMatches(raw, 0, 's') -> Secret
+                safeCharMatches(raw, 1, 'u') -> Public
+                safeCharMatches(raw, 1, 'r') -> Private
+                else -> null
+            }
+        }
+
+        /**
+         * 0.12 `getValueOrDefault`: absent is [default]; a String is parsed
+         * (null when it matches nothing); any other value is [default].
+         */
+        fun fromMapValue(raw: Any?, default: NotificationPrivacy?): NotificationPrivacy? = when (raw) {
+            null -> default
+            is String -> fromSafeName(raw)
+            else -> default
+        }
+
+        /** 0.12 `toAndroidPrivacy`: null is Private. */
+        fun toAndroidPrivacy(privacy: NotificationPrivacy?): Int = when (privacy ?: Private) {
+            Secret -> android.app.Notification.VISIBILITY_SECRET
+            Public -> android.app.Notification.VISIBILITY_PUBLIC
+            Private -> android.app.Notification.VISIBILITY_PRIVATE
+        }
+    }
+}
+
+/** 0.12 `GroupSort`: how a channel's grouped notifications are ordered. */
+enum class GroupSort {
+    Asc, Desc;
+
+    companion object {
+        /**
+         * 0.12 `fromMap` + `getSafeEnum`: absent (or not a String) is Desc;
+         * `a…` is Asc, `d…` Desc, anything else null (which 0.12 then
+         * treated as "not Asc").
+         */
+        fun from(raw: Any?): GroupSort? {
+            val r = raw as? String ?: return Desc
+            return when {
+                safeCharMatches(r, 0, 'a') -> Asc
+                safeCharMatches(r, 0, 'd') -> Desc
+                else -> null
+            }
+        }
+    }
+}
+
+/**
+ * 0.12 `GroupAlertBehaviour`: which notifications of a group alert. The
+ * ordinal is `NotificationCompat.GROUP_ALERT_*` (All 0, Summary 1, Children 2).
+ */
+enum class GroupAlertBehaviour {
+    All, Summary, Children;
+
+    companion object {
+        /**
+         * 0.12 `fromMap` + `getSafeEnum`: absent (or not a String) is All;
+         * `c…` Children, `a…` All, `s…` Summary. An unknown text was null in
+         * 0.12 and made the build throw; here it falls back to All.
+         */
+        fun from(raw: Any?): GroupAlertBehaviour {
+            val r = raw as? String ?: return All
+            return when {
+                safeCharMatches(r, 0, 'c') -> Children
+                safeCharMatches(r, 0, 'a') -> All
+                safeCharMatches(r, 0, 's') -> Summary
+                else -> All
+            }
+        }
+    }
+}

@@ -24,6 +24,18 @@ object Definitions {
     const val NOTIFICATION_WAKE_UP_SCREEN = "wakeUpScreen"
     const val NOTIFICATION_FULL_SCREEN_INTENT = "fullScreenIntent"
     const val NOTIFICATION_CUSTOM_SOUND = "customSound"
+    const val NOTIFICATION_SUMMARY = "summary"
+    const val NOTIFICATION_SHOW_WHEN = "showWhen"
+    const val NOTIFICATION_PRIVACY = "privacy"
+    const val NOTIFICATION_TICKER = "ticker"
+    const val NOTIFICATION_CHRONOMETER = "chronometer"
+    const val NOTIFICATION_TIMEOUT_AFTER = "timeoutAfter"
+    const val NOTIFICATION_COLOR = "color"
+    const val NOTIFICATION_BACKGROUND_COLOR = "backgroundColor"
+    const val NOTIFICATION_PROGRESS = "progress"
+    const val NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND = "hideLargeIconOnExpand"
+    const val NOTIFICATION_ROUNDED_LARGE_ICON = "roundedLargeIcon"
+    const val NOTIFICATION_ROUNDED_BIG_PICTURE = "roundedBigPicture"
 
     // Action button fields
     const val NOTIFICATION_BUTTON_KEY = "key"
@@ -33,6 +45,8 @@ object Definitions {
     const val NOTIFICATION_REQUIRE_INPUT_TEXT = "requireInputText"
     const val NOTIFICATION_BUTTON_KEY_PRESSED = "buttonKeyPressed"
     const val NOTIFICATION_BUTTON_KEY_INPUT = "buttonKeyInput"
+    const val NOTIFICATION_IS_DANGEROUS_OPTION = "isDangerousOption"
+    const val NOTIFICATION_AUTHENTICATION_REQUIRED = "isAuthenticationRequired"
 
     // Permissions
     const val NOTIFICATION_PERMISSIONS = "permissions"
@@ -52,9 +66,19 @@ object Definitions {
     const val NOTIFICATION_SOUND_SOURCE = "soundSource"
     const val NOTIFICATION_DEFAULT_RINGTONE_TYPE = "defaultRingtoneType"
     const val NOTIFICATION_CHANNEL_CRITICAL_ALERTS = "criticalAlerts"
+    const val NOTIFICATION_CHANNEL_GROUP_KEY = "channelGroupKey"
+    const val NOTIFICATION_CHANNEL_GROUP_NAME = "channelGroupName"
+    const val NOTIFICATION_DEFAULT_PRIVACY = "defaultPrivacy"
+    const val NOTIFICATION_DEFAULT_COLOR = "defaultColor"
+    const val NOTIFICATION_LED_ON_MS = "ledOnMs"
+    const val NOTIFICATION_LED_OFF_MS = "ledOffMs"
+    const val NOTIFICATION_GROUP_SORT = "groupSort"
+    const val NOTIFICATION_GROUP_ALERT_BEHAVIOR = "groupAlertBehavior"
+    const val NOTIFICATION_ONLY_ALERT_ONCE = "onlyAlertOnce"
 
     // Initialize payload
     const val INITIALIZE_CHANNELS = "initializeChannels"
+    const val INITIALIZE_CHANNEL_GROUPS = "initializeChannelGroups"
     const val INITIALIZE_DEFAULT_ICON = "defaultIcon"
     const val NOTIFICATION_ICON = "icon"
     const val INITIALIZE_DEBUG_MODE = "debug"

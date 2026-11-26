@@ -2,6 +2,7 @@
 # Runs the black-box compat suite with one host app on one device.
 #   ./run_compat.sh app_v012 <device-id>   # reference: awesome_notifications 0.12
 #   ./run_compat.sh app_v1   <device-id>   # the 1.0 monorepo
+#   A third argument runs another test file (render_test.dart: see render_diff.sh).
 # Both must pass with the SAME suite (compat_tests/suite).
 set -u
 export PATH="$HOME/Library/Android/sdk/platform-tools:$PATH"
@@ -32,7 +33,7 @@ if xcrun simctl list devices booted 2>/dev/null | grep -q "$DEVICE"; then
   BUNDLE=$(grep -m1 'PRODUCT_BUNDLE_IDENTIFIER = ' "$DIR/ios/Runner.xcodeproj/project.pbxproj" \
     | sed 's/.*= //; s/;//')
   xcrun simctl uninstall "$DEVICE" "$BUNDLE" >/dev/null 2>&1
-  (cd "$DIR" && flutter build ios --simulator --debug -t integration_test/compat_test.dart >/dev/null) || exit 1
+  (cd "$DIR" && flutter build ios --simulator --debug -t "integration_test/${3:-compat_test.dart}" >/dev/null) || exit 1
   xcrun simctl install "$DEVICE" "$DIR/build/ios/iphonesimulator/Runner.app" || exit 1
   applesimutils --byId "$DEVICE" --bundle "$BUNDLE" --setPermissions notifications=YES || exit 1
   sleep 5
@@ -45,4 +46,4 @@ if [ "$DEVICE" = "macos" ] || [ "$DEVICE" = "linux" ]; then
   export TZ=$TIME_ZONE
 fi
 
-cd "$DIR" && flutter test integration_test/compat_test.dart -d "$DEVICE" -r expanded
+cd "$DIR" && flutter test "integration_test/${3:-compat_test.dart}" -d "$DEVICE" -r expanded

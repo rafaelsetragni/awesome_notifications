@@ -38,8 +38,9 @@ class NotificationBuilderContentTest {
             )
         )
         assertNotNull(notification)
-        assertEquals("Title", notification!!.extras.getString(Notification.EXTRA_TITLE))
-        assertEquals("Body", notification.extras.getString(Notification.EXTRA_TEXT))
+        // 0.12: the texts are HTML (a Spanned, not a String).
+        assertEquals("Title", notification!!.extras.getCharSequence(Notification.EXTRA_TITLE).toString())
+        assertEquals("Body", notification.extras.getCharSequence(Notification.EXTRA_TEXT).toString())
     }
 
     @Test fun nullWhenIdMissing() {

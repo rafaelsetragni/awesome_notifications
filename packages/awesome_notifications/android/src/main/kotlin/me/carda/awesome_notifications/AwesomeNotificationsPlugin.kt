@@ -83,7 +83,13 @@ class AwesomeNotificationsPlugin :
                 val channels =
                     (args?.get(Definitions.INITIALIZE_CHANNELS) as? List<Map<String, Any?>>)
                         ?: emptyList()
-                core.initialize(channels, args?.get(Definitions.INITIALIZE_DEFAULT_ICON) as? String)
+                val channelGroups =
+                    (args?.get(Definitions.INITIALIZE_CHANNEL_GROUPS) as? List<Map<String, Any?>>)
+                        ?: emptyList()
+                core.initialize(
+                    channels,
+                    args?.get(Definitions.INITIALIZE_DEFAULT_ICON) as? String,
+                    channelGroups)
                 ActionHandles.save(
                     appContext, ActionHandles.BACKGROUND_HANDLE,
                     MapUtils.getInstance().getLong(args?.get(ActionHandles.BACKGROUND_HANDLE)))

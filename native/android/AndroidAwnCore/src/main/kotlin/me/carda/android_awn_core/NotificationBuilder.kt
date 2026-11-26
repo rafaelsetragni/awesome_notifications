@@ -4,10 +4,14 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Build
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
+import androidx.core.text.HtmlCompat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -152,36 +156,71 @@ open class NotificationBuilder protected constructor(
 
     // MARK: - Build
 
-    /** Builds an Android notification from a serialized model, or null if invalid. */
-    fun createNotificationContent(context: Context, model: Map<String, Any?>): Notification? {
+    /**
+     * Builds an Android notification from a serialized model, or null if
+     * invalid. As 0.12 `NotificationSender`, a notification of a group with
+     * nothing of that group on screen first posts the group's summary (see
+     * [postGroupSummary]); the caller then posts this one.
+     */
+    fun createNotificationContent(context: Context, model: Map<String, Any?>): Notification? =
+        createNotificationContent(context, model, groupSummary = false)
+
+    /**
+     * The 0.12 `getNotificationBuilderFromModel` steps, in its order (the
+     * steps that only touch independent builder fields stay where 1.0 had
+     * them). [groupSummary] builds the group's summary notification.
+     */
+    private fun createNotificationContent(
+        context: Context,
+        model: Map<String, Any?>,
+        groupSummary: Boolean
+    ): Notification? {
         val content = contentMap(model)
         val id = mapUtils.getInt(content[Definitions.NOTIFICATION_ID]) ?: return null
         val channelKey =
             mapUtils.getString(content[Definitions.NOTIFICATION_CHANNEL_KEY]) ?: return null
 
         val channel = ChannelManager.getChannel(channelKey)
+        // 0.12 `getChannelByKey`: on Android 8+ the channel's importance,
+        // vibration and lights are read back from its Android channel.
+        val androidChannel =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                ChannelManager.getAndroidChannel(context, channelKey)
+            else null
+        val layout =
+            NotificationLayout.from(mapUtils.getString(content[Definitions.NOTIFICATION_LAYOUT]))
+        val groupKey = groupKey(content, channel)
         val contentIntent = contentIntent(context, id, model)
         val builder = NotificationCompat.Builder(context, channelKey)
             .setSmallIcon(smallIcon(context, content, channel))
             .setAutoCancel(shouldAutoDismiss(content))
             .setContentIntent(contentIntent)
-            .setDeleteIntent(deleteIntent(context, id, model))
+        // 0.12 `setNotificationPendingIntents`: a group summary has no dismiss intent.
+        if (!groupSummary) builder.setDeleteIntent(deleteIntent(context, id, model))
 
-        val title = mapUtils.getString(content[Definitions.NOTIFICATION_TITLE])
-        if (!stringUtils.isNullOrEmpty(title)) builder.setContentTitle(title)
-        val body = mapUtils.getString(content[Definitions.NOTIFICATION_BODY])
-        if (!stringUtils.isNullOrEmpty(body)) builder.setContentText(body)
+        setTitle(content, builder)
+        setBody(content, builder)
+        setSummary(content, builder)
+        setGrouping(content, layout, groupKey, channel, groupSummary, id, builder)
+        setVisibility(content, channel, builder)
+        setShowWhen(content, builder)
+        if (!hasCustomLayout(model)) setLayout(context, content, layout, builder)
+        setLargeIcon(context, content, layout, builder)
+        setTicker(content, builder)
+        setOnlyAlertOnce(layout, channel, builder)
+        setImportance(channel, androidChannel, builder)
+        setChronometer(content, builder)
+        setTimeoutAfter(content, builder)
+        setVibrationPattern(channel, androidChannel, builder)
+        setLights(channel, androidChannel, builder)
+        setLayoutColor(content, channel, builder)
 
-        applyImages(context, content, builder)
-        if (!hasCustomLayout(model)) MessagingLayout.applyStyle(context, content, builder, bitmapUtils)
         val buttonIntents = applyActionButtons(context, id, model, builder)
         if (!hasCustomLayout(model)) {
             MediaPlayerLayout.applyStyle(
                 context, content, actionButtons(model), buttonIntents, builder, bitmapUtils)
         }
-        builder.addExtras(
-            MessagingLayout.groupExtras(
-                context, id, mapUtils.getString(content[Definitions.NOTIFICATION_GROUP_KEY])))
+        builder.addExtras(MessagingLayout.groupExtras(context, id, groupKey))
 
         setLockedNotification(content, channel, builder)
         setCategory(content, builder)
@@ -193,7 +232,435 @@ open class NotificationBuilder protected constructor(
         val notification = builder.build()
         setWakeUpScreen(context, content)
         setCategoryFlags(content, notification)
+        if (!groupSummary) postGroupSummary(context, model, content, layout, groupKey)
         return notification
+    }
+
+    // MARK: - 0.12 texts, grouping, visibility and alerting
+
+    /** 0.12 `setTitle`: the title as HTML. */
+    private fun setTitle(content: Map<String, Any?>, builder: NotificationCompat.Builder) {
+        val title = mapUtils.getString(content[Definitions.NOTIFICATION_TITLE]) ?: return
+        builder.setContentTitle(HtmlUtils.fromHtml(title))
+    }
+
+    /** 0.12 `setBody`: the body as HTML. */
+    private fun setBody(content: Map<String, Any?>, builder: NotificationCompat.Builder) {
+        val body = mapUtils.getString(content[Definitions.NOTIFICATION_BODY]) ?: return
+        builder.setContentText(HtmlUtils.fromHtml(body))
+    }
+
+    /** 0.12 `setSummary`: the `summary` (as HTML) is the sub text. */
+    private fun setSummary(content: Map<String, Any?>, builder: NotificationCompat.Builder) {
+        val summary = ChannelManager.string012(content[Definitions.NOTIFICATION_SUMMARY]) ?: return
+        builder.setSubText(HtmlUtils.fromHtml(summary))
+    }
+
+    /** 0.12 `getGroupKey`: the content's `groupKey`, else the channel's. */
+    private fun groupKey(content: Map<String, Any?>, channel: Map<String, Any?>?): String? {
+        val contentKey = ChannelManager.string012(content[Definitions.NOTIFICATION_GROUP_KEY])
+        return if (!stringUtils.isNullOrEmpty(contentKey)) contentKey
+        else ChannelManager.groupKey(channel)
+    }
+
+    /**
+     * 0.12 `setGrouping`, quirks included: not for the Messaging layouts
+     * (their group is the conversation). With a group key: the group, the
+     * summary flag for the group summary, a sort key of the current time
+     * (`groupSort: Asc`; any other value sorts descending, as
+     * `Long.MAX_VALUE - now`) followed by the id, and the channel's
+     * `groupAlertBehavior` (default All).
+     */
+    private fun setGrouping(
+        content: Map<String, Any?>,
+        layout: NotificationLayout,
+        groupKey: String?,
+        channel: Map<String, Any?>?,
+        groupSummary: Boolean,
+        id: Int,
+        builder: NotificationCompat.Builder
+    ) {
+        if (MessagingLayout.isMessaging(layout)) return
+        if (stringUtils.isNullOrEmpty(groupKey)) return
+        builder.setGroup(groupKey)
+        if (groupSummary) builder.setGroupSummary(true)
+        val now = System.currentTimeMillis()
+        val sortKey =
+            (if (ChannelManager.groupSort(channel) == GroupSort.Asc) now else Long.MAX_VALUE - now)
+                .toString()
+        builder.setSortKey(sortKey + id.toString())
+        builder.setGroupAlertBehavior(ChannelManager.groupAlertBehavior(channel).ordinal)
+    }
+
+    /**
+     * 0.12 `NotificationSender` + `_buildSummaryGroupNotification`, quirks
+     * included: on Android 7+, a `Default` layout notification of a group
+     * with nothing of that group on screen first posts a summary of the
+     * group — a copy of the notification under a new random id, without its
+     * large icon and big picture — so later ones stack under it. The summary
+     * then counts as on screen, so the next ones of the group post none.
+     * Not for a layout a decorator renders itself.
+     */
+    private fun postGroupSummary(
+        context: Context,
+        model: Map<String, Any?>,
+        content: Map<String, Any?>,
+        layout: NotificationLayout,
+        groupKey: String?
+    ) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return
+        if (layout != NotificationLayout.Default || hasCustomLayout(model)) return
+        if (stringUtils.isNullOrEmpty(groupKey)) return
+        if (MessagingLayout.activeIdsOfGroup(context, groupKey).isNotEmpty()) return
+
+        val summaryId = nextRandomId()
+        val summaryContent = content.toMutableMap().apply {
+            this[Definitions.NOTIFICATION_ID] = summaryId
+            this[Definitions.NOTIFICATION_LAYOUT] = NotificationLayout.Default.name
+            this[Definitions.NOTIFICATION_LARGE_ICON] = null
+            this[Definitions.NOTIFICATION_BIG_PICTURE] = null
+        }
+        val summaryModel =
+            model.toMutableMap().apply { this[Definitions.NOTIFICATION_CONTENT] = summaryContent }
+        val summary = createNotificationContent(context, summaryModel, groupSummary = true) ?: return
+        try {
+            NotificationManagerCompat.from(context).notify(summaryId, summary)
+        } catch (_: SecurityException) {
+            // No POST_NOTIFICATIONS: the notification's own post reports it.
+        }
+    }
+
+    /** 0.12 `IntegerUtils.generateNextRandomId`: a random int, made positive. */
+    private fun nextRandomId(): Int {
+        val value = random.nextInt()
+        return if (value < 0) value * -1 else value
+    }
+
+    private val random = java.security.SecureRandom()
+
+    /**
+     * 0.12 `setVisibility`, quirk included: the content's `privacy`, else the
+     * channel's `defaultPrivacy` (default Private). But 0.12's content model
+     * defaults `privacy` to Private, so the channel's applies only when the
+     * content's is a text that is no privacy at all.
+     */
+    private fun setVisibility(
+        content: Map<String, Any?>,
+        channel: Map<String, Any?>?,
+        builder: NotificationCompat.Builder
+    ) {
+        val privacy = NotificationPrivacy.fromMapValue(
+            content[Definitions.NOTIFICATION_PRIVACY], NotificationPrivacy.Private)
+            ?: ChannelManager.defaultPrivacy(channel)
+        builder.setVisibility(NotificationPrivacy.toAndroidPrivacy(privacy))
+    }
+
+    /** 0.12 `showWhen`: only a Boolean counts; default true. */
+    private fun showWhen(content: Map<String, Any?>): Boolean =
+        content[Definitions.NOTIFICATION_SHOW_WHEN] as? Boolean ?: true
+
+    /** 0.12 `setShowWhen`: the time is shown unless `showWhen: false`. */
+    private fun setShowWhen(content: Map<String, Any?>, builder: NotificationCompat.Builder) {
+        builder.setShowWhen(showWhen(content))
+    }
+
+    /**
+     * 0.12 `setTicker`: the `ticker`, else the `summary`, else the `body`,
+     * else the `title` (the first one not blank).
+     */
+    private fun setTicker(content: Map<String, Any?>, builder: NotificationCompat.Builder) {
+        fun orElse(value: String?, default: String?) =
+            if (stringUtils.isNullOrEmpty(value)) default else value
+        var ticker = orElse(ChannelManager.string012(content[Definitions.NOTIFICATION_TICKER]), "")
+        ticker = orElse(ticker, ChannelManager.string012(content[Definitions.NOTIFICATION_SUMMARY]))
+        ticker = orElse(ticker, ChannelManager.string012(content[Definitions.NOTIFICATION_BODY]))
+        ticker = orElse(ticker, ChannelManager.string012(content[Definitions.NOTIFICATION_TITLE]))
+        builder.setTicker(ticker)
+    }
+
+    /**
+     * 0.12 `setOnlyAlertOnce`: a `ProgressBar` layout (its updates must not
+     * ring again) or a channel with `onlyAlertOnce: true`.
+     */
+    private fun setOnlyAlertOnce(
+        layout: NotificationLayout,
+        channel: Map<String, Any?>?,
+        builder: NotificationCompat.Builder
+    ) {
+        builder.setOnlyAlertOnce(
+            layout == NotificationLayout.ProgressBar || ChannelManager.onlyAlertOnce(channel))
+    }
+
+    /**
+     * 0.12 `setImportance`: the channel's importance as the notification's
+     * priority (what Android 7 and older use). On Android 8+ it is read back
+     * from the Android channel, so a user's change counts.
+     */
+    private fun setImportance(
+        channel: Map<String, Any?>?,
+        androidChannel: android.app.NotificationChannel?,
+        builder: NotificationCompat.Builder
+    ) {
+        val importance = androidChannel
+            ?.let { NotificationImportance.fromAndroidImportance(it.importance) }
+            ?: ChannelManager.importance(channel)
+        builder.setPriority(importance.toAndroidPriority())
+    }
+
+    /**
+     * 0.12 `setChronometer`, quirks included: a `chronometer` of 0 or more
+     * seconds (and `showWhen` not false) counts up from that many seconds
+     * ago (`when` = now − seconds × 1000, an int product as in 0.12).
+     */
+    private fun setChronometer(content: Map<String, Any?>, builder: NotificationCompat.Builder) {
+        val chronometer =
+            (content[Definitions.NOTIFICATION_CHRONOMETER] as? Number)?.toInt() ?: return
+        if (chronometer < 0 || !showWhen(content)) return
+        builder.setWhen(System.currentTimeMillis() - chronometer * 1000)
+        builder.setUsesChronometer(true)
+    }
+
+    /**
+     * 0.12 `setTimeoutAfter`: a `timeoutAfter` of 1 or more seconds removes
+     * the notification after that time (an int product, as in 0.12).
+     */
+    private fun setTimeoutAfter(content: Map<String, Any?>, builder: NotificationCompat.Builder) {
+        val timeoutAfter =
+            (content[Definitions.NOTIFICATION_TIMEOUT_AFTER] as? Number)?.toInt() ?: return
+        if (timeoutAfter < 1) return
+        builder.setTimeoutAfter((timeoutAfter * 1000).toLong())
+    }
+
+    /**
+     * 0.12 `setVibrationPattern` (what Android 7 and older use): a vibrating
+     * channel uses its pattern, when it has one; a channel that does not
+     * vibrate sets the `[0]` pattern. On Android 8+ whether it vibrates is
+     * read back from the Android channel.
+     */
+    private fun setVibrationPattern(
+        channel: Map<String, Any?>?,
+        androidChannel: android.app.NotificationChannel?,
+        builder: NotificationCompat.Builder
+    ) {
+        val enableVibration = androidChannel?.shouldVibrate() ?: ChannelManager.enableVibration(channel)
+        if (enableVibration) {
+            val pattern = ChannelManager.vibrationPattern(channel)
+            if (pattern != null && pattern.isNotEmpty()) builder.setVibrate(pattern)
+        } else {
+            builder.setVibrate(longArrayOf(0))
+        }
+    }
+
+    /**
+     * 0.12 `setLights` (what Android 7 and older use): a channel with lights
+     * blinks its `ledColor` (default white) `ledOnMs` on (300) / `ledOffMs`
+     * off (700). On Android 8+ whether it has lights is read back from the
+     * Android channel.
+     */
+    private fun setLights(
+        channel: Map<String, Any?>?,
+        androidChannel: android.app.NotificationChannel?,
+        builder: NotificationCompat.Builder
+    ) {
+        val enableLights = androidChannel?.shouldShowLights() ?: ChannelManager.enableLights(channel)
+        if (enableLights) {
+            builder.setLights(
+                ChannelManager.ledColor(channel),
+                ChannelManager.ledOnMs(channel),
+                ChannelManager.ledOffMs(channel))
+        }
+    }
+
+    /**
+     * 0.12 `setLayoutColor`, quirks included: with a `backgroundColor` (a
+     * number) the notification is colorized with it; otherwise the accent
+     * color is the content's `color`, else the channel's `defaultColor`. Black
+     * means "no color" in that fallback, so an unset color is set as black
+     * (not left at Android's default) and a content color of black takes the
+     * channel's.
+     */
+    private fun setLayoutColor(
+        content: Map<String, Any?>,
+        channel: Map<String, Any?>?,
+        builder: NotificationCompat.Builder
+    ) {
+        val backgroundColor = (content[Definitions.NOTIFICATION_BACKGROUND_COLOR] as? Number)?.toInt()
+        if (backgroundColor == null) {
+            builder.setColor(layoutColor(content, channel))
+        } else {
+            builder.setColorized(true)
+            builder.setColor(backgroundColor)
+        }
+    }
+
+    /** 0.12 `getLayoutColor`. */
+    private fun layoutColor(content: Map<String, Any?>, channel: Map<String, Any?>?): Int {
+        val color = (content[Definitions.NOTIFICATION_COLOR] as? Number)?.toInt() ?: Color.BLACK
+        if (color != Color.BLACK) return color
+        return ChannelManager.defaultColor(channel)
+    }
+
+    // MARK: - 0.12 layouts (setLayout)
+
+    /**
+     * 0.12 `setLayout`: the layout's style (BigPicture, BigText, Inbox,
+     * Messaging, ProgressBar; MediaPlayer needs the buttons' intents, so it
+     * is applied after them). A layout whose content is missing falls back to
+     * the default one; a failure is logged and ignored, as in 0.12.
+     */
+    private fun setLayout(
+        context: Context,
+        content: Map<String, Any?>,
+        layout: NotificationLayout,
+        builder: NotificationCompat.Builder
+    ) {
+        try {
+            when (layout) {
+                NotificationLayout.BigPicture -> setBigPictureLayout(context, content, builder)
+                NotificationLayout.BigText -> setBigTextStyle(content, builder)
+                NotificationLayout.Inbox -> setInboxLayout(content, builder)
+                NotificationLayout.Messaging, NotificationLayout.MessagingGroup ->
+                    MessagingLayout.applyStyle(context, content, builder, bitmapUtils)
+                NotificationLayout.ProgressBar -> setProgressLayout(content, builder)
+                else -> {}
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("NotificationBuilder", "${e.message}")
+        }
+    }
+
+    private fun rounded(content: Map<String, Any?>, key: String): Boolean =
+        content[key] as? Boolean ?: false
+
+    /**
+     * 0.12 `setBigPictureLayout`, quirks included: with `hideLargeIconOnExpand`
+     * the large icon is the big picture itself (or, without one, the large
+     * icon, rounded if either is), and it is hidden when expanded; otherwise
+     * the large icon (the big picture's bitmap when both paths are equal).
+     * Without a big picture only the large icon is set. Expanded, the title
+     * and the BODY (as the summary text) show.
+     */
+    private fun setBigPictureLayout(
+        context: Context,
+        content: Map<String, Any?>,
+        builder: NotificationCompat.Builder
+    ): Boolean {
+        val bigPictureReference = ChannelManager.string012(content[Definitions.NOTIFICATION_BIG_PICTURE])
+        val largeIconReference = ChannelManager.string012(content[Definitions.NOTIFICATION_LARGE_ICON])
+        val hideLargeIconOnExpand =
+            content[Definitions.NOTIFICATION_HIDE_LARGE_ICON_ON_EXPAND] as? Boolean ?: false
+        val roundedLargeIcon = rounded(content, Definitions.NOTIFICATION_ROUNDED_LARGE_ICON)
+        val roundedBigPicture = rounded(content, Definitions.NOTIFICATION_ROUNDED_BIG_PICTURE)
+
+        var bigPicture: Bitmap? = null
+        var largeIcon: Bitmap? = null
+        if (!stringUtils.isNullOrEmpty(bigPictureReference)) {
+            bigPicture = bitmapUtils.getBitmapFromSource(context, bigPictureReference, roundedBigPicture)
+        }
+        if (hideLargeIconOnExpand) {
+            largeIcon = bigPicture
+                ?: if (!stringUtils.isNullOrEmpty(largeIconReference))
+                    bitmapUtils.getBitmapFromSource(
+                        context, largeIconReference, roundedLargeIcon || roundedBigPicture)
+                else null
+        } else {
+            val areEqual = !stringUtils.isNullOrEmpty(largeIconReference) &&
+                largeIconReference == bigPictureReference
+            if (areEqual) largeIcon = bigPicture
+            else if (!stringUtils.isNullOrEmpty(largeIconReference))
+                largeIcon = bitmapUtils.getBitmapFromSource(context, largeIconReference, roundedLargeIcon)
+        }
+
+        if (largeIcon != null) builder.setLargeIcon(largeIcon)
+        if (bigPicture == null) return false
+
+        val style = NotificationCompat.BigPictureStyle()
+        style.bigPicture(bigPicture)
+        style.bigLargeIcon(if (hideLargeIconOnExpand) null else largeIcon)
+        val title = mapUtils.getString(content[Definitions.NOTIFICATION_TITLE])
+        if (!stringUtils.isNullOrEmpty(title)) style.setBigContentTitle(HtmlUtils.fromHtml(title))
+        val body = mapUtils.getString(content[Definitions.NOTIFICATION_BODY])
+        if (!stringUtils.isNullOrEmpty(body)) style.setSummaryText(HtmlUtils.fromHtml(body))
+        builder.setStyle(style)
+        return true
+    }
+
+    /**
+     * 0.12 `setBigTextStyle`: expanded, the whole body (HTML), with the
+     * summary and title. Without a body the default layout is kept.
+     */
+    private fun setBigTextStyle(content: Map<String, Any?>, builder: NotificationCompat.Builder): Boolean {
+        val body = mapUtils.getString(content[Definitions.NOTIFICATION_BODY])
+        if (stringUtils.isNullOrEmpty(body)) return false
+        val style = NotificationCompat.BigTextStyle()
+        style.bigText(HtmlUtils.fromHtml(body))
+        val summary = ChannelManager.string012(content[Definitions.NOTIFICATION_SUMMARY])
+        if (!stringUtils.isNullOrEmpty(summary)) style.setSummaryText(HtmlUtils.fromHtml(summary))
+        val title = mapUtils.getString(content[Definitions.NOTIFICATION_TITLE])
+        if (!stringUtils.isNullOrEmpty(title)) style.setBigContentTitle(HtmlUtils.fromHtml(title))
+        builder.setStyle(style)
+        return true
+    }
+
+    /**
+     * 0.12 `setInboxLayout`, quirks included: each line of the body is an
+     * inbox line (Java `split`, so trailing empty lines are dropped). The
+     * summary text is the `summary`; without one it is "+ N more" (N = the
+     * number of lines). A blank but present `summary` leaves no summary text.
+     */
+    private fun setInboxLayout(content: Map<String, Any?>, builder: NotificationCompat.Builder): Boolean {
+        val body = mapUtils.getString(content[Definitions.NOTIFICATION_BODY])
+        if (stringUtils.isNullOrEmpty(body)) return false
+        val lines = body!!.split(Regex("\\r?\\n")).dropLastWhile { it.isEmpty() }
+        if (lines.isEmpty()) return false
+
+        val style = NotificationCompat.InboxStyle()
+        val summary = ChannelManager.string012(content[Definitions.NOTIFICATION_SUMMARY])
+        // 0.12 quirk: with a summary, this first summary text is the BODY;
+        // the summary replaces it right below.
+        style.setSummaryText(
+            if (stringUtils.isNullOrEmpty(summary)) "+ ${lines.size} more"
+            else HtmlUtils.fromHtml(body))
+        val title = mapUtils.getString(content[Definitions.NOTIFICATION_TITLE])
+        if (!stringUtils.isNullOrEmpty(title)) style.setBigContentTitle(HtmlUtils.fromHtml(title))
+        if (summary != null) style.setSummaryText(HtmlUtils.fromHtml(summary))
+        for (line in lines) style.addLine(HtmlUtils.fromHtml(line))
+        builder.setStyle(style)
+        return true
+    }
+
+    /**
+     * 0.12 `setProgressLayout`: a 0–100 bar at `progress` (truncated and
+     * clamped to 0…100); indeterminate without a `progress`.
+     */
+    private fun setProgressLayout(content: Map<String, Any?>, builder: NotificationCompat.Builder) {
+        val progress = progress012(content[Definitions.NOTIFICATION_PROGRESS])
+        builder.setProgress(100, maxOf(0, minOf(100, progress?.toInt() ?: 0)), progress == null)
+    }
+
+    /** 0.12 `progress` (a Float): a number, or a numeric text; else null. */
+    private fun progress012(value: Any?): Float? = when (value) {
+        is Number -> value.toFloat()
+        is String -> value.toFloatOrNull()
+        else -> null
+    }
+
+    /**
+     * 0.12 `setLargeIcon`: the large icon (rounded with `roundedLargeIcon`),
+     * except for the BigPicture layout, which sets its own.
+     */
+    private fun setLargeIcon(
+        context: Context,
+        content: Map<String, Any?>,
+        layout: NotificationLayout,
+        builder: NotificationCompat.Builder
+    ) {
+        if (layout == NotificationLayout.BigPicture) return
+        val largeIconReference = ChannelManager.string012(content[Definitions.NOTIFICATION_LARGE_ICON])
+        if (stringUtils.isNullOrEmpty(largeIconReference)) return
+        bitmapUtils.getBitmapFromSource(
+            context, largeIconReference, rounded(content, Definitions.NOTIFICATION_ROUNDED_LARGE_ICON))
+            ?.let { builder.setLargeIcon(it) }
     }
 
     // MARK: - 0.12 content / channel options
@@ -360,6 +827,11 @@ open class NotificationBuilder protected constructor(
      * returns each one's intent by key. As 0.12, a disabled button is still
      * shown, without an intent (so the media layout's compact view indexes
      * keep pointing at the right buttons).
+     *
+     * 0.12 `createActionButtons`, quirks included: a reply button is left out
+     * below Android 7; the label is HTML, red for `isDangerousOption`, else in
+     * the button's `color` (its int as a `<font color>`); and
+     * `isAuthenticationRequired` asks to unlock the device first.
      */
     private fun applyActionButtons(
         context: Context,
@@ -379,6 +851,8 @@ open class NotificationBuilder protected constructor(
             val requireInput =
                 mapUtils.getBool(button[Definitions.NOTIFICATION_REQUIRE_INPUT_TEXT]) ?: false
             val isForeground = actionType == ActionType.Default
+            // 0.12: a reply is not available below Android 7.
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N && requireInput) return@forEachIndexed
 
             val pending = if (enabled) {
                 buttonPendingIntent(context, id, index, key, model, isForeground, requireInput)
@@ -387,8 +861,9 @@ open class NotificationBuilder protected constructor(
             }
             intents[key] = pending
             val actionBuilder = NotificationCompat.Action.Builder(
-                buttonIcon(context, button), label, pending
-            )
+                buttonIcon(context, button), buttonLabel(button, label), pending
+            ).setAuthenticationRequired(
+                button[Definitions.NOTIFICATION_AUTHENTICATION_REQUIRED] as? Boolean ?: false)
             if (requireInput) {
                 actionBuilder.addRemoteInput(
                     RemoteInput.Builder(Definitions.NOTIFICATION_BUTTON_KEY_INPUT)
@@ -399,6 +874,18 @@ open class NotificationBuilder protected constructor(
             builder.addAction(actionBuilder.build())
         }
         return intents
+    }
+
+    /** 0.12: the button's label as HTML, red when dangerous, else in its color. */
+    private fun buttonLabel(button: Map<String, Any?>, label: String): CharSequence {
+        val dangerous = button[Definitions.NOTIFICATION_IS_DANGEROUS_OPTION] as? Boolean ?: false
+        val color = (button[Definitions.NOTIFICATION_COLOR] as? Number)?.toInt()
+        return HtmlCompat.fromHtml(
+            if (dangerous) "<font color=\"16711680\">$label</font>"
+            else if (color != null) "<font color=\"$color\">$label</font>"
+            else label,
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
     }
 
     /** Resolves a button icon from a `resource://type/name` path (0 = no icon). */
@@ -466,44 +953,6 @@ open class NotificationBuilder protected constructor(
             ActionType.KeepOnTop -> false
             else ->
                 mapUtils.getBool(button?.get(Definitions.NOTIFICATION_AUTO_DISMISSIBLE)) ?: true
-        }
-    }
-
-    /**
-     * Applies the large icon and (for the BigPicture layout) the big picture,
-     * loading bitmaps from any of the four media sources. Runs I/O — call build()
-     * off the main thread.
-     */
-    private fun applyImages(
-        context: Context,
-        content: Map<String, Any?>,
-        builder: NotificationCompat.Builder
-    ) {
-        val layout =
-            NotificationLayout.from(mapUtils.getString(content[Definitions.NOTIFICATION_LAYOUT]))
-        val bigPicturePath = mapUtils.getString(content[Definitions.NOTIFICATION_BIG_PICTURE])
-        val largeIconPath = mapUtils.getString(content[Definitions.NOTIFICATION_LARGE_ICON])
-        val isBigPicture =
-            layout == NotificationLayout.BigPicture && !bigPicturePath.isNullOrEmpty()
-
-        if (isBigPicture) {
-            val bigPicture = bitmapUtils.getBitmapFromSource(context, bigPicturePath)
-            val largeIcon = if (!largeIconPath.isNullOrEmpty()) {
-                bitmapUtils.getBitmapFromSource(context, largeIconPath)
-            } else {
-                null
-            }
-            if (largeIcon != null) builder.setLargeIcon(largeIcon)
-            if (bigPicture != null) {
-                builder.setStyle(
-                    NotificationCompat.BigPictureStyle()
-                        .bigPicture(bigPicture)
-                        .bigLargeIcon(null as android.graphics.Bitmap?)
-                )
-            }
-        } else if (!largeIconPath.isNullOrEmpty()) {
-            bitmapUtils.getBitmapFromSource(context, largeIconPath)
-                ?.let { builder.setLargeIcon(it) }
         }
     }
 
