@@ -18,7 +18,6 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentCaptor
@@ -39,13 +38,6 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
 class AwesomeNotificationsFcmPluginTest {
-
-    companion object {
-        /** Mockito 5.0's Byte Buddy predates Java 21 class files: let it read them. */
-        @JvmStatic @BeforeClass fun allowNewerClassFiles() {
-            System.setProperty("net.bytebuddy.experimental", "true")
-        }
-    }
 
     private val context: Context get() = ApplicationProvider.getApplicationContext()
 

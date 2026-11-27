@@ -77,7 +77,7 @@ dependencies {
     implementation("androidx.media:media:1.7.0")
 
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-core:5.0.0")
+    testImplementation("org.mockito:mockito-core:5.14.2")
     // Real org.json so JsonUtils (map <-> JSON) can be unit-tested without
     // Robolectric; it shadows the throwing stubs in the mockable android.jar.
     testImplementation("org.json:json:20240303")

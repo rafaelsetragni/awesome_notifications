@@ -46,12 +46,6 @@ import org.robolectric.annotation.Config
 @Config(sdk = [34])
 class ActionBackgroundExecutorTest {
 
-    companion object {
-        // Mockito's Byte Buddy (1.12) predates the Java 21 test JVM: let it
-        // read the newer class files to mock the Flutter engine classes.
-        init { System.setProperty("net.bytebuddy.experimental", "true") }
-    }
-
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val loader: FlutterLoader = Mockito.mock(FlutterLoader::class.java)
     private val callbackInfo: FlutterCallbackInformation = Mockito.mock(FlutterCallbackInformation::class.java)
