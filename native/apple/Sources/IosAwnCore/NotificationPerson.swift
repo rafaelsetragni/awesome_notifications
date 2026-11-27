@@ -107,6 +107,7 @@ public struct NotificationPersonHandle: Equatable {
 #if canImport(Intents)
 extension NotificationPersonHandle {
     /// The Intents handle (communication notifications, `INPerson`).
+    @available(macOS 11.0, *)
     public var inPersonHandle: INPersonHandle {
         let inType: INPersonHandleType
         switch type {

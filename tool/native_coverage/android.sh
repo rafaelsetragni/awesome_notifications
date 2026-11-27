@@ -12,6 +12,9 @@ packages="$*"
 for package in $packages; do
   [ -f "packages/$package/android/build.gradle.kts" ] || continue
   (cd "packages/$package/example" && flutter pub get >/dev/null)
+  # The Gradle wrapper of a Flutter app isn't committed: Flutter writes it.
+  [ -x "packages/$package/example/android/gradlew" ] ||
+    (cd "packages/$package/example" && flutter build apk --config-only >/dev/null)
   (cd "packages/$package/example/android" && ./gradlew ":$package:awnCoverageReport" --rerun-tasks -q)
   python3 tool/native_coverage/lcov_tools.py jacoco "$package" \
     "$ROOT/packages/$package/example/build/$package/reports/jacoco/awnCoverageReport/awnCoverageReport.xml"
