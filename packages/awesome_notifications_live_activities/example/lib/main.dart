@@ -162,8 +162,10 @@ abstract final class Delivery {
   }
 }
 
-/// A match: the score as two metrics, the clock running by itself, goals
-/// from the app or straight from the activity's buttons.
+/// A match, drawn as a scoreboard (the versus layout): each team's logo,
+/// name and score, the half and the clock running by itself between them,
+/// the latest play below. Goals come from the app or straight from the
+/// activity's buttons.
 class Match {
   final int home, away;
   final DateTime kickOff;
@@ -181,17 +183,22 @@ class Match {
   static Future<void> goal(Match match, {required bool home}) => _post(
     Match(match.home + (home ? 1 : 0), match.away + (home ? 0 : 1), match.kickOff),
     alert: true,
+    play: home ? 'Goal! The Lions finish a quick counterattack' : 'Goal! The Eagles head in a corner',
   );
 
   static Future<void> finish(Match match) => _post(match, ended: true);
 
-  static Future<void> _post(Match m, {bool alert = false, bool ended = false}) async {
+  static Future<void> _post(Match m, {bool alert = false, bool ended = false, String? play}) async {
     await _postActivity(
       content: NotificationContent(
         id: _matchId,
         channelKey: _channel,
         title: ended ? 'Full time' : 'Lions vs Eagles',
-        body: ended ? 'Lions ${m.home} – ${m.away} Eagles' : 'Second half',
+        body: ended
+            ? (m.home == m.away ? 'A draw' : '${m.home > m.away ? 'Lions' : 'Eagles'} win')
+            : play ?? 'Kick off! The Lions start with the ball',
+        // The player of the latest play.
+        largeIcon: 'https://picsum.photos/id/64/128/128',
         payload: {
           'demo': 'match',
           'home': '${m.home}',
@@ -218,11 +225,23 @@ class Match {
       activity: NotificationLiveActivity(
         activityId: 'match',
         state: ended ? LiveActivityState.ended : LiveActivityState.active,
+        layout: LiveActivityLayout.versus,
+        // Android 16+: the scoreboard (the package's own layout) instead of a
+        // Live Update, which draws only the system's styles (no scoreboard).
+        androidLiveUpdate: false,
         metrics: [
-          LiveActivityMetric(label: 'Lions', value: '${m.home}'),
-          LiveActivityMetric(label: 'Eagles', value: '${m.away}'),
+          LiveActivityMetric(
+            label: 'LIO',
+            value: '${m.home}',
+            image: 'https://picsum.photos/id/1074/128/128',
+          ),
+          LiveActivityMetric(
+            label: 'EAG',
+            value: '${m.away}',
+            image: 'https://picsum.photos/id/1024/128/128',
+          ),
         ],
-        shortText: '${m.home}–${m.away}',
+        shortText: ended ? 'Final' : '2nd half',
         accentColor: _purple,
         timer: ended ? null : LiveActivityTimer.elapsed(start: m.kickOff),
         alert: alert,
@@ -278,6 +297,9 @@ abstract final class Focus {
       ],
       activity: NotificationLiveActivity(
         activityId: 'focus',
+        // The app's own layout: android/app/src/main/res/layout/focus_timer.xml
+        // and, on iOS, FocusTimerView in ios/LiveActivityWidget.
+        customLayout: 'focus_timer',
         shortText: 'Focus',
         accentColor: const Color(0xFF1E88E5),
         timer: LiveActivityTimer.countDown(start: start, end: end),
@@ -435,7 +457,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           _DemoCard(
             icon: Icons.sports_soccer,
             title: 'Match',
-            subtitle: 'Two metrics, a running clock, goals from the Lock Screen',
+            subtitle: 'A scoreboard (versus layout), a running clock, goals from the Lock Screen',
             activity: match,
             actions: [
               FilledButton(onPressed: () => _run(Match.start), child: const Text('Kick off')),
@@ -457,7 +479,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           _DemoCard(
             icon: Icons.timer_outlined,
             title: 'Focus timer',
-            subtitle: 'A 25 minute countdown the system runs by itself',
+            subtitle: 'The app\'s own layout (customLayout): a 25 minute countdown',
             activity: focus,
             actions: [
               FilledButton(onPressed: () => _run(Focus.start), child: const Text('Start')),

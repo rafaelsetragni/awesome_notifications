@@ -57,10 +57,13 @@ public struct AwnLiveActivityState: Codable, Hashable {
         public var label: String
         public var value: String
         public var unit: String?
-        public init(label: String, value: String, unit: String? = nil) {
+        /// The side's picture in the versus layout (a file name, as the icons).
+        public var image: String?
+        public init(label: String, value: String, unit: String? = nil, image: String? = nil) {
             self.label = label
             self.value = value
             self.unit = unit
+            self.image = image
         }
     }
 
@@ -97,6 +100,10 @@ public struct AwnLiveActivityState: Codable, Hashable {
     public var timerEnd: Double?
     public var countDown: Bool?
     public var metrics: [Metric]?
+    /// [layoutVersus]: drawn as a scoreboard (nil: the standard layout).
+    public var layout: String?
+    /// The app's own layout name (`customLayout`): the app's widget draws it.
+    public var customLayout: String?
     public var shortText: String?
     /// ARGB.
     public var accentColor: Int?
@@ -110,8 +117,11 @@ public struct AwnLiveActivityState: Codable, Hashable {
         startIcon: String? = nil, endIcon: String? = nil, largeIcon: String? = nil,
         timerStart: Double? = nil, timerEnd: Double? = nil, countDown: Bool? = nil,
         metrics: [Metric]? = nil, shortText: String? = nil, accentColor: Int? = nil,
-        buttons: [Button]? = nil, ended: Bool? = nil
+        buttons: [Button]? = nil, ended: Bool? = nil, layout: String? = nil,
+        customLayout: String? = nil
     ) {
+        self.layout = layout
+        self.customLayout = customLayout
         self.title = title
         self.body = body
         self.progress = progress
@@ -130,6 +140,19 @@ public struct AwnLiveActivityState: Codable, Hashable {
         self.accentColor = accentColor
         self.buttons = buttons
         self.ended = ended
+    }
+
+    public static let layoutVersus = "versus"
+
+    /// Drawn as a scoreboard: two metrics facing each other.
+    public var isVersus: Bool { layout == AwnLiveActivityState.layoutVersus && (metrics?.count ?? 0) == 2 }
+
+    /// The accent color (ARGB) as red, green, blue and opacity (0 to 1).
+    public var accentComponents: (red: Double, green: Double, blue: Double, opacity: Double)? {
+        guard let argb = accentColor else { return nil }
+        let value = UInt32(truncatingIfNeeded: argb)
+        return (Double((value >> 16) & 0xFF) / 255, Double((value >> 8) & 0xFF) / 255,
+                Double(value & 0xFF) / 255, Double((value >> 24) & 0xFF) / 255)
     }
 
     /// The timer's start / end as dates.

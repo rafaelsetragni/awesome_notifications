@@ -113,6 +113,33 @@ void main() {
           'immediate');
     });
 
+    test('versus: the layout and each side\'s image', () {
+      final block = _block(const NotificationLiveActivity(
+        layout: LiveActivityLayout.versus,
+        metrics: [
+          LiveActivityMetric(label: 'LIO', value: '1', image: 'https://x/lions.png'),
+          LiveActivityMetric(label: 'EAG', value: '0'),
+        ],
+      ));
+      expect(block['layout'], 'versus');
+      expect(block['metrics'], [
+        {'label': 'LIO', 'value': '1', 'image': 'https://x/lions.png'},
+        {'label': 'EAG', 'value': '0'},
+      ]);
+      expect(_block(const NotificationLiveActivity()).containsKey('layout'), isFalse);
+      expect(_block(const NotificationLiveActivity()).containsKey('androidLiveUpdate'), isFalse);
+      expect(_block(const NotificationLiveActivity(androidLiveUpdate: false))['androidLiveUpdate'], isFalse);
+      expect(_block(const NotificationLiveActivity(customLayout: 'focus_timer'))['customLayout'], 'focus_timer');
+      expect(() => const NotificationLiveActivity(customLayout: 'Focus-Timer').toMap(),
+          _throwsInvalid('customLayout'));
+      expect(
+          () => const NotificationLiveActivity(
+                layout: LiveActivityLayout.versus,
+                metrics: [LiveActivityMetric(label: 'a', value: '1')],
+              ).toMap(),
+          _throwsInvalid('exactly 2 metrics'));
+    });
+
     test('refuses an invalid model before reaching the platform', () {
       expect(() => const NotificationLiveActivity(activityId: ' ').toMap(),
           _throwsInvalid('activityId'));

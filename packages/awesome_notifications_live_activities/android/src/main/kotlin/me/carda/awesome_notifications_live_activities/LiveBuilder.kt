@@ -32,6 +32,10 @@ internal class LiveBuilder(inner: NotificationBuilder) : NotificationBuilder(inn
         val id = notificationId(model) ?: return invalid("A live activity needs the notification id", "")
         val (live, error) = LiveActivityModel.parse(block, id)
         if (live == null) return invalid(error!!, "")
+        live.customLayout?.let { name ->
+            if (LiveCustomLayout.layoutId(context, name) == 0)
+                return invalid("The live activity's customLayout $name is not a layout of the app (res/layout/$name.xml)", "")
+        }
 
         val removalAt = LiveActivities.removalAt(live)
         if ((live.ended && live.dismissal == LiveDismissal.Immediate) ||

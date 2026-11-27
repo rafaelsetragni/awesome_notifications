@@ -99,8 +99,12 @@ public enum LiveActivityNotifications {
             state.countDown = timer.countDown
         }
         if !activity.metrics.isEmpty {
-            state.metrics = activity.metrics.map { .init(label: $0.label, value: $0.value, unit: $0.unit) }
+            state.metrics = activity.metrics.map {
+                .init(label: $0.label, value: $0.value, unit: $0.unit, image: activity.versus || activity.customLayout != nil ? image($0.image) : nil)
+            }
         }
+        if activity.versus { state.layout = AwnLiveActivityState.layoutVersus }
+        state.customLayout = activity.customLayout
         state.shortText = activity.shortText
         state.accentColor = activity.accentColor
         let buttons = buttonStates(prepared.model)

@@ -19,7 +19,8 @@ import me.carda.android_awn_core.HtmlUtils
  *   (`setShortCriticalText`). Never colorized (promotion forbids it): the
  *   accent color is the notification's color. The metrics go in the body
  *   (MetricStyle is Android 17, not in this compile SDK).
- * - Before: an ongoing notification drawn by the package's own layout
+ * - Before, or with `androidLiveUpdate` false: an ongoing notification drawn
+ *   by the package's own layout
  *   ([LiveCustomLayout]) inside the system's decorated notification, which
  *   mirrors the Live Update: short text, segmented bar with its points,
  *   metrics in columns.
@@ -39,7 +40,10 @@ internal object LiveNotifications {
         @Suppress("UNCHECKED_CAST")
         val content = (model[Definitions.NOTIFICATION_CONTENT] as? Map<String, Any?>).orEmpty()
         val active = !live.ended
-        val promoted = Build.VERSION.SDK_INT >= PROMOTED_SDK
+        // Android 16+ promotes only the system's styles: a Live Update, or
+        // (androidLiveUpdate false) the package's own layout, not promoted.
+        // A custom layout is never promoted either.
+        val promoted = Build.VERSION.SDK_INT >= PROMOTED_SDK && live.liveUpdate && live.customLayout == null
 
         builder.setOnlyAlertOnce(!live.alert)
             .setOngoing(active)
@@ -52,7 +56,9 @@ internal object LiveNotifications {
         if (promoted) {
             builder.setColorized(false)
                 .setRequestPromotedOngoing(active)
-            live.shortText?.let { builder.setShortCriticalText(it) }
+            // The chip: the score of a versus activity (its short text, the
+            // period, goes in the body), else the short text.
+            (if (live.versus) scoreOf(live) else live.shortText)?.let { builder.setShortCriticalText(it) }
             if (hasBar) builder.setStyle(progressStyle(context, live, value))
         } else {
             // No Live Updates: the package's own layout, inside the system's
@@ -73,10 +79,17 @@ internal object LiveNotifications {
         val lines = extraLines(live, shortTextInBody = false)
         if (lines.isNotEmpty()) {
             val text = SpannableStringBuilder()
-            // The body as the core draws it (0.12 `setBody`: HTML).
-            HtmlUtils.fromHtml(content[Definitions.NOTIFICATION_BODY] as? String)
-                ?.let { if (it.isNotEmpty()) text.append(it).append('\n') }
-            text.append(lines.joinToString("\n"))
+            // The body as the core draws it (0.12 `setBody`: HTML). A versus
+            // activity's score goes first: the collapsed view shows it.
+            val body = HtmlUtils.fromHtml(content[Definitions.NOTIFICATION_BODY] as? String)
+                ?.takeIf { it.isNotEmpty() }
+            if (live.versus) {
+                text.append(lines.joinToString("\n"))
+                body?.let { text.append('\n').append(it) }
+            } else {
+                body?.let { text.append(it).append('\n') }
+                text.append(lines.joinToString("\n"))
+            }
             builder.setContentText(text)
         }
     }
@@ -84,10 +97,20 @@ internal object LiveNotifications {
     /** What the system can't draw, as text: the short text (before Android 16) and the metrics. */
     fun extraLines(live: LiveActivityModel, shortTextInBody: Boolean): List<String> {
         val lines = mutableListOf<String>()
+        if (live.versus) {
+            // `LIO 1 – 2 EAG · 2nd half`
+            val (left, right) = live.metrics
+            lines.add(listOfNotNull("${left.label} ${left.value} – ${right.value} ${right.label}", live.shortText)
+                .joinToString(" · "))
+            return lines
+        }
         if (shortTextInBody) live.shortText?.let { lines.add(it) }
         if (live.metrics.isNotEmpty()) lines.add(live.metrics.joinToString(" · ") { it.text })
         return lines
     }
+
+    /** A versus activity's score, `1–2`. */
+    fun scoreOf(live: LiveActivityModel): String = "${live.metrics[0].value}–${live.metrics[1].value}"
 
     /** ProgressStyle: the segments (one in the accent color without any), the points, the icons. */
     fun progressStyle(context: Context, live: LiveActivityModel, value: Double?): NotificationCompat.ProgressStyle {

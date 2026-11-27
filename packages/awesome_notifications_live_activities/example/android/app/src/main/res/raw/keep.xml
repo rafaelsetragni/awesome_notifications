@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Keeps the notification icon, referenced only by name from Dart. -->
+<!-- Keeps the notification icon and the focus timer's layout, referenced
+     only by name from Dart (release builds drop unreferenced resources). -->
 <resources xmlns:tools="http://schemas.android.com/tools"
-    tools:keep="@drawable/res_notification_icon" />
+    tools:keep="@drawable/res_notification_icon,@layout/focus_timer" />

@@ -14,6 +14,21 @@ enum LiveActivityState {
   ended,
 }
 
+/// How the package draws the activity where it draws it itself (iOS's
+/// widget, Android's own layout before Android 16). Every other surface
+/// shows the same content as text.
+enum LiveActivityLayout {
+  /// The title and body, the progress bar, the metrics in columns.
+  standard,
+
+  /// Two sides facing each other, as a scoreboard: the first metric on the
+  /// left, the second on the right (each with its [LiveActivityMetric.image],
+  /// its label and its value in large type), the short text and the clock in
+  /// the middle, and the body below them (the latest play). Needs exactly
+  /// two metrics.
+  versus,
+}
+
 /// A part of the progress bar, in its own color (a ride's legs, a
 /// delivery's stages). Lengths are relative to each other.
 class LiveActivitySegment {
@@ -109,12 +124,18 @@ class LiveActivityMetric {
   /// Left out where space is short (Android's collapsed view).
   final String? unit;
 
-  const LiveActivityMetric({required this.label, required this.value, this.unit});
+  /// A picture of the side in [LiveActivityLayout.versus] (a team's logo):
+  /// `resource://`, `asset://`, `file://` or `https://`, as the core's
+  /// `largeIcon`. The standard layout doesn't draw it.
+  final String? image;
+
+  const LiveActivityMetric({required this.label, required this.value, this.unit, this.image});
 
   Map<String, dynamic> toMap() => {
         LiveActivityKeys.label: label,
         LiveActivityKeys.value: value,
         if (unit != null) LiveActivityKeys.unit: unit,
+        if (image != null) LiveActivityKeys.image: image,
       };
 }
 
@@ -174,8 +195,11 @@ class NotificationLiveActivity implements NotificationExtension {
   final LiveActivityProgress? progress;
   final LiveActivityTimer? timer;
 
-  /// Up to three.
+  /// Up to three ([LiveActivityLayout.versus]: exactly two).
   final List<LiveActivityMetric> metrics;
+
+  /// How the package's own views draw it.
+  final LiveActivityLayout layout;
 
   /// A few characters for the tightest places: Android's status bar chip,
   /// iOS's compact Dynamic Island.
@@ -200,12 +224,32 @@ class NotificationLiveActivity implements NotificationExtension {
   /// iOS 18+: the broadcast channel whose pushes update this activity.
   final String? pushChannel;
 
+  /// Android 16+: shown as a Live Update, promoted by the system (the status
+  /// bar chip, the top of the shade and the Lock Screen), drawn with the
+  /// system's own styles. False: drawn by the package's own layout, as
+  /// before Android 16 (the [LiveActivityLayout.versus] scoreboard included),
+  /// as an ongoing notification among the others, with no chip. Android 16+
+  /// only promotes the system's styles, so it is one or the other.
+  final bool androidLiveUpdate;
+
+  /// The app's own layout, by name (lowercase letters, digits and `_`):
+  /// - Android: the app's layout resources `res/layout/<name>.xml`
+  ///   (collapsed) and, optional, `<name>_expanded.xml`, which the package
+  ///   fills by view id (`@id/awn_live_title`, `@id/awn_live_clock`…). A
+  ///   custom layout is never a Live Update (Android 16+ promotes only the
+  ///   system's styles).
+  /// - iOS: the app's own widget reads it (`context.state.customLayout`) and
+  ///   draws it; the package's widget ignores it.
+  /// - Elsewhere: ignored (the activity shows as text).
+  final String? customLayout;
+
   const NotificationLiveActivity({
     this.activityId,
     this.state = LiveActivityState.active,
     this.progress,
     this.timer,
     this.metrics = const [],
+    this.layout = LiveActivityLayout.standard,
     this.shortText,
     this.accentColor,
     this.staleAt,
@@ -213,6 +257,8 @@ class NotificationLiveActivity implements NotificationExtension {
     this.alert = false,
     this.dismissal = LiveActivityDismissal.system,
     this.pushChannel,
+    this.androidLiveUpdate = true,
+    this.customLayout,
   });
 
   /// Throws [AwesomeNotificationsException] when the model is invalid. Whether
@@ -224,11 +270,17 @@ class NotificationLiveActivity implements NotificationExtension {
       fail('The live activity\'s activityId can\'t be empty (leave it out to use the notification id)');
     }
     if (metrics.length > 3) fail('A live activity has at most 3 metrics');
+    if (layout == LiveActivityLayout.versus && metrics.length != 2) {
+      fail('A versus live activity needs exactly 2 metrics, one per side');
+    }
     for (final metric in metrics) {
       if (metric.label.trim().isEmpty) fail('A live activity metric needs a label');
     }
     if (shortText != null && shortText!.trim().isEmpty) {
       fail('The live activity\'s shortText can\'t be empty');
+    }
+    if (customLayout != null && !RegExp(r'^[a-z][a-z0-9_]*$').hasMatch(customLayout!)) {
+      fail('The live activity\'s customLayout must be a resource name: lowercase letters, digits and _');
     }
     if (pushChannel != null && pushChannel!.trim().isEmpty) {
       fail('The live activity\'s pushChannel can\'t be empty');
@@ -265,6 +317,7 @@ class NotificationLiveActivity implements NotificationExtension {
         if (progress != null) LiveActivityKeys.progress: progress!.toMap(),
         if (timer != null) LiveActivityKeys.timer: timer!.toMap(),
         LiveActivityKeys.metrics: [for (final m in metrics) m.toMap()],
+        if (layout != LiveActivityLayout.standard) LiveActivityKeys.layout: layout.name,
         if (shortText != null) LiveActivityKeys.shortText: shortText,
         if (accentColor != null) LiveActivityKeys.accentColor: accentColor!.toARGB32(),
         if (staleAt != null) LiveActivityKeys.staleAt: staleAt!.toUtc().millisecondsSinceEpoch,
@@ -272,6 +325,8 @@ class NotificationLiveActivity implements NotificationExtension {
         LiveActivityKeys.alert: alert,
         LiveActivityKeys.dismissal: dismissal.toValue(),
         if (pushChannel != null) LiveActivityKeys.pushChannel: pushChannel,
+        if (!androidLiveUpdate) LiveActivityKeys.androidLiveUpdate: false,
+        if (customLayout != null) LiveActivityKeys.customLayout: customLayout,
       },
     };
   }

@@ -18,6 +18,11 @@ abstract final class LiveActivityKeys {
   static const alert = 'alert';
   static const dismissal = 'dismissal';
   static const pushChannel = 'pushChannel';
+  static const androidLiveUpdate = 'androidLiveUpdate';
+  static const customLayout = 'customLayout';
+
+  /// `standard` or `versus` (see `LiveActivityLayout`).
+  static const layout = 'layout';
 
   // LiveActivityProgress
   static const segments = 'segments';
@@ -38,6 +43,7 @@ abstract final class LiveActivityKeys {
   static const label = 'label';
   static const value = 'value';
   static const unit = 'unit';
+  static const image = 'image';
 
   // LiveActivityDismissal: `default`, `immediate` or milliseconds (UTC).
   static const dismissalDefault = 'default';

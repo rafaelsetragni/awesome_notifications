@@ -16,6 +16,8 @@ internal object LiveKeys {
     const val ALERT = "alert"
     const val DISMISSAL = "dismissal"
     const val PUSH_CHANNEL = "pushChannel"
+    const val ANDROID_LIVE_UPDATE = "androidLiveUpdate"
+    const val CUSTOM_LAYOUT = "customLayout"
 
     const val SEGMENTS = "segments"
     const val POINTS = "points"
@@ -33,6 +35,10 @@ internal object LiveKeys {
     const val LABEL = "label"
     const val VALUE = "value"
     const val UNIT = "unit"
+    const val IMAGE = "image"
+    const val LAYOUT = "layout"
+    const val LAYOUT_STANDARD = "standard"
+    const val LAYOUT_VERSUS = "versus"
 
     const val DISMISSAL_DEFAULT = "default"
     const val DISMISSAL_IMMEDIATE = "immediate"

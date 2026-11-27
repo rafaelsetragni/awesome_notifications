@@ -26,7 +26,8 @@ class LiveActivityCapabilities {
   /// Segments, points and icons on the progress bar.
   final bool progressSegments;
 
-  /// Metrics in their own layout (iOS, Android 17+); elsewhere in the body.
+  /// Metrics in a layout of their own (iOS; Android's own layout, before
+  /// Android 16 or without its Live Update); elsewhere a line in the body.
   final bool metrics;
 
   /// The activity shows the notification's action buttons (iOS 17+, Android,

@@ -195,6 +195,43 @@ class LiveActivitiesTest {
         assertEquals("The live activity timer needs a start or an end", error(mapOf(LiveKeys.TIMER to mapOf<String, Any?>())))
         assertEquals("Unknown live activity dismissal: later", error(mapOf(LiveKeys.DISMISSAL to "later")))
         assertEquals("The live activity alert must be a bool", error(mapOf(LiveKeys.ALERT to 3)))
+        assertEquals("Unknown live activity layout: grid", error(mapOf(LiveKeys.LAYOUT to "grid")))
+        assertEquals("The live activity androidLiveUpdate must be a bool", error(mapOf(LiveKeys.ANDROID_LIVE_UPDATE to 1)))
+        assertEquals("The live activity's customLayout must be a resource name: lowercase letters, digits and _",
+            error(mapOf(LiveKeys.CUSTOM_LAYOUT to "Focus-Timer")))
+        assertEquals("A versus live activity needs exactly 2 metrics, one per side",
+            error(mapOf(LiveKeys.LAYOUT to LiveKeys.LAYOUT_VERSUS, LiveKeys.METRICS to listOf(metric("a", "1")))))
+    }
+
+    @Test fun beforeAndroid16AVersusActivityIsAScoreboard() {
+        val metrics = listOf(metric("LIO", "1"), metric("EAG", "0"))
+        val block = live(shortText = "2nd half", metrics = metrics, accentColor = 0xFF2196F3.toInt(),
+            timer = mapOf(LiveKeys.START to now - 60_000, LiveKeys.COUNT_DOWN to false))
+            .toMutableMap().apply { this[LiveKeys.LAYOUT] = LiveKeys.LAYOUT_VERSUS }
+        assertEquals(true, create(live = block).created)
+        val n = shown()!!
+        for (view in listOf(inflate(n.contentView), inflate(n.bigContentView))) {
+            assertEquals("LIO", textOf(view, R.id.awn_vs_label_0))
+            assertEquals("1", textOf(view, R.id.awn_vs_value_0))
+            assertEquals("EAG", textOf(view, R.id.awn_vs_label_1))
+            assertEquals("0", textOf(view, R.id.awn_vs_value_1))
+            assertEquals("2nd half", textOf(view, R.id.awn_vs_short))
+            assertTrue(visible(view, R.id.awn_vs_clock))
+        }
+        // Collapsed: the scoreboard only; expanded: the latest play below.
+        assertFalse(visible(inflate(n.contentView), R.id.awn_vs_play))
+        val expanded = inflate(n.bigContentView)
+        assertTrue(visible(expanded, R.id.awn_vs_play))
+        assertEquals("On the way", textOf(expanded, R.id.awn_vs_body))
+    }
+
+    @Test fun aVersusLineAndScore() {
+        val (model, _) = LiveActivityModel.parse(mapOf(
+            LiveKeys.LAYOUT to LiveKeys.LAYOUT_VERSUS, LiveKeys.SHORT_TEXT to "2nd half",
+            LiveKeys.METRICS to listOf(metric("LIO", "1"), metric("EAG", "0"))), 1)
+        assertTrue(model!!.versus)
+        assertEquals(listOf("LIO 1 – 0 EAG · 2nd half"), LiveNotifications.extraLines(model, shortTextInBody = false))
+        assertEquals("1–0", LiveNotifications.scoreOf(model))
     }
 
     // MARK: - Refusals
@@ -365,6 +402,42 @@ class LiveActivitiesTest {
         assertTrue(n.flags and Notification.FLAG_ONGOING_EVENT != 0)
         // The chip carries the short text; the metrics go in the body.
         assertEquals("On the way\nSpeed 42 km/h", text(n))
+    }
+
+    @Config(sdk = [36])
+    @Test fun onAndroid16WithoutLiveUpdatesItIsThePackagesOwnLayout() {
+        val block = live(shortText = "12 min", progress = mapOf(LiveKeys.SEGMENTS to listOf(mapOf(LiveKeys.LENGTH to 100))))
+            .toMutableMap().apply { this[LiveKeys.ANDROID_LIVE_UPDATE] = false }
+        assertEquals(true, create(content = mapOf(Definitions.NOTIFICATION_PROGRESS to 60), live = block).created)
+        val n = shown()!!
+        assertFalse(n.extras.getBoolean("android.requestPromotedOngoing"))
+        assertTrue(n.flags and Notification.FLAG_ONGOING_EVENT != 0)
+        assertEquals("android.app.Notification\$DecoratedCustomViewStyle", n.extras.getString(Notification.EXTRA_TEMPLATE))
+        assertEquals("12 min", textOf(inflate(n.contentView), R.id.awn_live_short))
+    }
+
+    @Config(sdk = [36])
+    @Test fun aCustomLayoutIsTheAppsLayoutFilledByIdAndNeverPromoted() {
+        // Any layout of the app's resources: here one of the package's own.
+        val block = live(shortText = "12 min", metrics = listOf(metric("Speed", "42", "km/h")))
+            .toMutableMap().apply { this[LiveKeys.CUSTOM_LAYOUT] = "awn_live_expanded" }
+        assertEquals(true, create(live = block).created)
+        val n = shown()!!
+        assertFalse(n.extras.getBoolean("android.requestPromotedOngoing"))
+        val collapsed = inflate(n.contentView)
+        assertEquals("On the way", textOf(collapsed, R.id.awn_live_body))
+        assertEquals("12 min", textOf(collapsed, R.id.awn_live_short))
+        assertEquals("42 km/h", textOf(collapsed, R.id.awn_live_metric_value_0))
+        assertEquals("Speed", textOf(collapsed, R.id.awn_live_metric_label_0))
+        assertFalse(visible(collapsed, R.id.awn_live_metric_value_1))
+    }
+
+    @Test fun aCustomLayoutTheAppDoesNotHaveIsRefused() {
+        val block = live().toMutableMap().apply { this[LiveKeys.CUSTOM_LAYOUT] = "no_such_layout" }
+        val outcome = create(live = block)
+        assertEquals("INVALID_ARGUMENTS", outcome.code)
+        assertEquals("arguments.invalid.notificationLiveActivity", outcome.detail)
+        assertNull(shown())
     }
 
     @Config(sdk = [36])

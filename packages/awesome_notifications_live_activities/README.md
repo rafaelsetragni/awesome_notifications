@@ -1,6 +1,6 @@
 # ⏱ awesome_notifications_live_activities
 
-![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications.jpg)
+![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-banner.jpg)
 
 Glanceable activities that update in place (a delivery, a ride, a match, a timer) on
 **Android, iOS, macOS, Windows, Linux and the Web**, from one model.
@@ -25,6 +25,8 @@ Glanceable activities that update in place (a delivery, a ride, a match, a timer
 * **Progress with segments and points**, a **clock the system runs by itself**
   (countdown or elapsed), up to **three metrics**, a **short status text**, an image and
   **buttons** that reach `onActionReceivedMethod` like any notification button.
+* **Your own layout** when you need one: an Android layout resource the package
+  fills, and your own SwiftUI on iOS, reusing the package's views.
 * **Push:** iOS push-to-start and update tokens (and iOS 18 broadcast channels);
   FCM data pushes everywhere else.
 
@@ -41,6 +43,7 @@ Glanceable activities that update in place (a delivery, a ride, a match, a timer
   - [Updating and ending it](#updating-and-ending-it)
   - [Buttons](#buttons)
   - [Status, permission and capabilities](#status-permission-and-capabilities)
+  - [Your own layout (customLayout)](#your-own-layout-customlayout)
 - [📨 Live activities by push](#-live-activities-by-push)
 - [🔍 How it works on each platform](#-how-it-works-on-each-platform)
 - [🏗 Model reference](#-model-reference)
@@ -69,8 +72,8 @@ Glanceable activities that update in place (a delivery, a ride, a match, a timer
 
 ```yaml
 dependencies:
-  awesome_notifications: ^1.0.0
-  awesome_notifications_live_activities: ^1.0.0
+  awesome_notifications: ^1.0.0-dev
+  awesome_notifications_live_activities: ^1.0.0-dev
 ```
 
 Initialize the core as usual, with a channel for your activities. Nothing else is
@@ -108,6 +111,8 @@ from this package. These steps use Flutter's Swift Package Manager support.
        var body: some Widget { AwnLiveActivityWidget() }
    }
    ```
+   To draw some activities yourself, return your own widget instead (see
+   [Your own layout](#your-own-layout-customlayout)).
 5. Add the **App Groups** capability with the same group (for example
    `group.com.example.app`) to Runner and to the extension. The package copies your
    activity's images there, where the widget can read them.
@@ -203,6 +208,46 @@ await AwesomeNotifications().createNotification(
   current.
 * A schedule is refused (`INVALID_ARGUMENTS`): a live activity starts now.
 
+### A scoreboard: the versus layout
+
+`layout: LiveActivityLayout.versus` draws two sides facing each other: the first
+metric on the left and the second on the right, each with its `image` (a team's
+logo), its label and its value in large type; `shortText` and the clock in the
+middle; and the body (the latest play) below, beside the large icon, with the
+accent color as a bar. It needs exactly two metrics.
+
+```dart
+NotificationLiveActivity(
+  layout: LiveActivityLayout.versus,
+  metrics: const [
+    LiveActivityMetric(label: 'LIO', value: '1', image: 'https://example.com/lions.png'),
+    LiveActivityMetric(label: 'EAG', value: '0', image: 'https://example.com/eagles.png'),
+  ],
+  shortText: '2nd half',
+  timer: LiveActivityTimer.elapsed(start: kickOff),
+)
+```
+
+The iOS widget (Lock Screen and Dynamic Island, with each side's logo and score in
+the compact island) and Android's own layout draw the scoreboard. Android 16's Live
+Update can't hold a layout of its own: as a Live Update it shows the score as its
+status bar chip (`1–0`) and the line `LIO 1 – 0 EAG · 2nd half` above the body. Set
+`androidLiveUpdate: false` to draw the scoreboard on Android 16+ too (see below). The
+other platforms show the metrics as text, as in the standard layout.
+
+### Android 16+: Live Update or the package's layout
+
+`androidLiveUpdate` (default `true`) chooses how Android 16+ shows the activity:
+
+| | `true`: Live Update | `false`: the package's layout |
+|---|---|---|
+| Drawn by | the system's styles (`ProgressStyle`, text) | the package's layout, as before Android 16 (the versus scoreboard included) |
+| Status bar chip | yes (`shortText`, or the versus score) | no |
+| Top of the shade, Lock Screen | promoted | an ongoing notification among the others |
+
+Android only promotes notifications drawn with its own styles, so it is one or the
+other. Before Android 16 the package's layout is always used.
+
 ## Updating and ending it
 
 Send it again with the **same notification id**: it changes in place, silently. Set
@@ -253,8 +298,204 @@ live.onStatusChanged.listen((a) => print('${a.activityId}: ${a.status}')); // en
 final shown = await live.activities();       // what the system shows now
 final enabled = await live.areEnabled();     // the user allows live activities
 await live.requestPermission();              // opens the settings page (iOS, Android 16+)
-final caps = await live.capabilities();      // systemSurface, progressSegments, metrics…
+final caps = await live.capabilities();      // what this device draws (below)
 ```
+
+`capabilities()` tells what the current device draws, so the app can adapt its content
+(for example, put the metrics in the body where they have no layout of their own):
+
+| Capability | It means | iOS 16.1+ | Android 16+ | Android < 16 | macOS, Windows, Linux | Web |
+|---|---|:-:|:-:|:-:|:-:|:-:|
+| `systemSurface` | The activity has a surface of its own, beyond the notification list: iOS's Lock Screen and Dynamic Island, Android 16's Live Update (status bar chip, top of the shade, Lock Screen). Without it, the activity is a notification updated in place. | ✅ | ✅ | ❌ | ❌ | ❌ |
+| `progressSegments` | The progress bar draws its segments in their colors, its points and its icons. Without it, a plain bar (or a text line `▰▰▰▱▱ 60%`). | ✅ | ✅ | ✅ | ❌ | ❌ |
+| `metrics` | The metrics get a layout of their own (columns, the versus scoreboard). Without it, they are a text line in the body (`Speed 42 km/h · Stops 2`). | ✅ | ❌ ¹ | ✅ | ❌ | ❌ |
+| `buttons` | The activity shows the notification's action buttons, which reach `onActionReceivedMethod`. | iOS 17+ | ✅ | ✅ | ✅ | ❌ |
+| `push` | Activities can start and update by push with the app killed (iOS: ActivityKit pushes; Android: FCM data pushes). | ✅ | ✅ | ✅ | ❌ | ❌ |
+
+¹ As a Live Update. With `androidLiveUpdate: false` (or a `customLayout`), Android 16+
+draws them like Android < 16.
+
+The example app shows them as chips on its status card.
+
+## Your own layout (customLayout)
+
+The package's layouts (standard and versus) need no native code. When an activity needs a
+look of its own, name a layout of your app with `customLayout`: on Android it is a
+layout resource the package fills; on iOS your widget extension draws it. The name is a
+resource name (lowercase letters, digits and `_`). The other platforms ignore it and show
+the activity as text.
+
+```dart
+NotificationLiveActivity(
+  activityId: 'focus',
+  customLayout: 'focus_timer',
+  timer: LiveActivityTimer.countDown(start: start, end: end),
+)
+```
+
+The example app's focus timer does this on both platforms.
+
+### 🤖 Android: a layout resource
+
+1. Create `android/app/src/main/res/layout/focus_timer.xml` (the collapsed view) and,
+   optionally, `focus_timer_expanded.xml` (the expanded view; without it, the
+   collapsed one is used expanded too). Use only the views notifications allow
+   (`LinearLayout`, `FrameLayout`, `RelativeLayout`, `TextView`, `ImageView`,
+   `Chronometer`, `ProgressBar`…).
+2. Give the views the package should fill one of these ids (reference them with
+   `@id/`, not `@+id/`: the package declares them). Any id the layout doesn't have is
+   skipped; a text view whose text is empty is hidden.
+
+   | View id | View | Filled with |
+   |---|---|---|
+   | `awn_live_title` | `TextView` | The notification's `title` (HTML as the core draws it) |
+   | `awn_live_body` | `TextView` | The notification's `body` |
+   | `awn_live_short` | `TextView` | `shortText`, in `accentColor` |
+   | `awn_live_clock` | `Chronometer` | The `timer`, run by the system (counting down or up); hidden without a timer or once ended |
+   | `awn_live_bar` | `ImageView` | The progress bar, drawn with its segments and points |
+   | `awn_live_image` | `ImageView` | The notification's `largeIcon` |
+   | `awn_live_accent` | any view | `accentColor` as its background |
+   | `awn_live_metric_value_0` … `_2` | `TextView` | Each metric's `value` and `unit` |
+   | `awn_live_metric_label_0` … `_2` | `TextView` | Each metric's `label` |
+   | `awn_live_metric_image_0` … `_2` | `ImageView` | Each metric's `image` |
+
+   ```xml
+   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:gravity="center_vertical"
+       android:orientation="horizontal">
+
+       <LinearLayout
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_weight="1"
+           android:orientation="vertical">
+
+           <TextView
+               android:id="@id/awn_live_title"
+               style="@style/TextAppearance.Compat.Notification.Title"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
+
+           <TextView
+               android:id="@id/awn_live_body"
+               style="@style/TextAppearance.Compat.Notification"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
+       </LinearLayout>
+
+       <Chronometer
+           android:id="@id/awn_live_clock"
+           style="@style/TextAppearance.Compat.Notification.Title"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textSize="32sp"
+           android:visibility="gone" />
+   </LinearLayout>
+   ```
+3. Keep the layout in release builds: it is referenced only by name, so the resource
+   shrinker would drop it. In `android/app/src/main/res/raw/keep.xml`:
+   ```xml
+   <resources xmlns:tools="http://schemas.android.com/tools"
+       tools:keep="@layout/focus_timer,@layout/focus_timer_expanded" />
+   ```
+
+The system keeps its header (the app's name and icon) and the buttons around the layout.
+A custom layout is never a Live Update: Android 16+ only promotes notifications drawn
+with its own styles, so it shows as an ongoing notification, with no status bar chip. A
+`customLayout` the app doesn't have is refused (`INVALID_ARGUMENTS`).
+
+### 🍎 iOS: your own widget
+
+On iOS every activity is drawn by the Widget Extension. Instead of returning
+`AwnLiveActivityWidget()`, return a widget of your own for `AwnLiveActivityAttributes`:
+draw the activities whose `customLayout` you know, and hand the others to the
+package's views.
+
+```swift
+import ActivityKit
+import AwesomeNotificationsLiveActivitiesWidget
+import SwiftUI
+import WidgetKit
+
+@main
+struct LiveActivityWidgetBundle: WidgetBundle {
+    var body: some Widget { LiveActivityWidget() }
+}
+
+struct LiveActivityWidget: Widget {
+    var body: some WidgetConfiguration {
+        ActivityConfiguration(for: AwnLiveActivityAttributes.self) { context in
+            // The Lock Screen (and StandBy, CarPlay, the Apple Watch).
+            if context.state.customLayout == "focus_timer" {
+                FocusTimerView(context: context)
+            } else {
+                AwnLiveActivityWidget.lockScreen(context)
+            }
+        } dynamicIsland: { context in
+            // Your own DynamicIsland { … } for your layouts, or the package's.
+            AwnLiveActivityWidget.dynamicIsland(context)
+        }
+    }
+}
+
+struct FocusTimerView: View {
+    let context: ActivityViewContext<AwnLiveActivityAttributes>
+
+    var body: some View {
+        let state = context.state
+        VStack(spacing: 12) {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(state.title ?? "").font(.headline)
+                    Text(state.body ?? "").font(.subheadline).foregroundColor(.secondary)
+                }
+                Spacer()
+                if let timer = AwnTimerText(state: state) {
+                    timer.font(.system(size: 40, weight: .medium).monospacedDigit())
+                        .multilineTextAlignment(.trailing)
+                        .frame(maxWidth: 140, alignment: .trailing)
+                }
+            }
+            AwnButtonsView(attributes: context.attributes, state: state, compact: true)
+        }
+        .padding(16)
+        .activitySystemActionForegroundColor(AwnColors.accent(state))
+    }
+}
+```
+
+What your views can read:
+
+| | What it is |
+|---|---|
+| `context.attributes.activityId` | The activity's id |
+| `context.state.customLayout` | The layout name the app sent |
+| `context.state.title`, `.body` | The notification's title and body |
+| `context.state.shortText` | `shortText` |
+| `context.state.progress`, `.fraction` | The progress, 0 to 100 and 0 to 1 (nil: indeterminate) |
+| `context.state.segments`, `.points` | The progress bar's segments and points |
+| `context.state.metrics` | The metrics: `label`, `value`, `unit`, `image` |
+| `context.state.timerStartDate`, `.timerEndDate`, `.countDown` | The timer |
+| `context.state.accentColor` | The accent color (ARGB); `AwnColors.accent(state)` as a `Color` |
+| `context.state.largeIcon` | The large icon's image name |
+| `context.state.buttons` | The notification's buttons |
+| `context.state.ended` | The activity is over (its final content) |
+
+And the package's pieces you can reuse in your views:
+
+| | What it draws |
+|---|---|
+| `AwnLiveActivityWidget.lockScreen(context)` | The package's Lock Screen view of the activity |
+| `AwnLiveActivityWidget.dynamicIsland(context)` | The package's Dynamic Island of the activity |
+| `AwnImage(name:appGroup:)` | An image of the activity (`state.largeIcon`, a metric's `image`, the progress icons), with `appGroup: context.attributes.appGroup` |
+| `AwnTimerText(state:)` | The timer, run by the system (nil without one) |
+| `AwnProgressView(attributes:state:)` | The progress bar with its segments and points |
+| `AwnButtonsView(attributes:state:compact:)` | The buttons (iOS 17+), which reach `onActionReceivedMethod` |
+| `AwnColors.accent(state)` | The accent color |
+
+The Lock Screen gives an activity at most 160 points of height; larger content is cut.
 
 <br>
 
@@ -313,10 +554,10 @@ when the app runs (`activities()`, `end`, status events).
   in the App Group. The whole state must fit in 4 KB (iOS's limit): larger is refused.
   If iOS refuses to start it (the user turned Live Activities off), the package shows a
   notification instead.
-* **Android 16+:** a `ProgressStyle` notification that asks to be promoted, with
+* **Android 16+** (`androidLiveUpdate`, the default): a `ProgressStyle` notification that asks to be promoted, with
   `shortText` as its status bar chip, ongoing while active and alerting only once.
   Promoted notifications can't be colorized, so `backgroundColor` is ignored.
-* **Android < 16:** an ongoing notification, alerting only once, with the package's own
+* **Android < 16, or `androidLiveUpdate: false`:** an ongoing notification, alerting only once, with the package's own
   layout inside the system's decorated notification (which keeps the header and the
   buttons): the title with the running clock and `shortText`, the segmented bar with its
   points (solid up to the progress, faded after it), and, expanded, the image, the body
@@ -337,7 +578,8 @@ when the app runs (`activities()`, `end`, status events).
 | `state` | `LiveActivityState` | `active` | `ended` ends it |
 | `progress` | `LiveActivityProgress?` | — | `segments`, `points`, `trackerIcon`, `startIcon`, `endIcon`; the value is `content.progress` |
 | `timer` | `LiveActivityTimer?` | — | `.countDown(end:, start:)` or `.elapsed(start:)` |
-| `metrics` | `List<LiveActivityMetric>` | `[]` | Up to 3: `label`, `value`, `unit` |
+| `metrics` | `List<LiveActivityMetric>` | `[]` | Up to 3: `label`, `value`, `unit`, `image` (versus) |
+| `layout` | `LiveActivityLayout` | `standard` | `versus`: a scoreboard of exactly 2 metrics |
 | `shortText` | `String?` | — | Status bar chip / compact Dynamic Island |
 | `accentColor` | `Color?` | — | Progress and icons |
 | `staleAt` | `DateTime?` | — | iOS: stale; elsewhere: removed |
@@ -345,6 +587,8 @@ when the app runs (`activities()`, `end`, status events).
 | `alert` | `bool` | `false` | This update sounds |
 | `dismissal` | `LiveActivityDismissal` | `system` | When an ended activity goes away |
 | `pushChannel` | `String?` | — | iOS 18+ broadcast channel |
+| `androidLiveUpdate` | `bool` | `true` | Android 16+: a Live Update; `false`: the package's own layout (no chip) |
+| `customLayout` | `String?` | — | The app's own layout: Android `res/layout/<name>.xml`, iOS your widget |
 
 <br>
 
@@ -365,6 +609,9 @@ when the app runs (`activities()`, `end`, status events).
   app's intents; later presses work.
 * **Android 16: no status bar chip.** The chip shows only while your app is in the
   background, and only if `areEnabled()` is true.
-* **`INVALID_ARGUMENTS`:** more than 3 metrics, an empty `activityId`/`shortText`, a
+* **Android: a `customLayout` works in debug but is refused in release.** The resource
+  shrinker dropped the layout: keep it in `res/raw/keep.xml` (see above).
+* **`INVALID_ARGUMENTS`:** more than 3 metrics, a versus layout without exactly 2, a
+  `customLayout` the Android app doesn't have, an empty `activityId`/`shortText`, a
   point outside the segments, a countdown that ends before it starts, a schedule, or (iOS)
   a state over 4 KB.

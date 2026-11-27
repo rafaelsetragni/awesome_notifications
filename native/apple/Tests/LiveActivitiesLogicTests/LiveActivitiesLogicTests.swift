@@ -142,7 +142,10 @@ final class LiveActivitiesLogicTests: XCTestCase {
             ["progress": ["segments": [["length": 10]], "points": [["position": 11]]]],
             ["timer": ["start": 2000, "end": 1000, "countDown": true]],
             ["timer": ["countDown": true]],
-            ["dismissal": "later"]
+            ["dismissal": "later"],
+            ["layout": "grid"],
+            ["customLayout": "Focus-Timer"],
+            ["layout": "versus", "metrics": [["label": "a", "value": "1"]]]
         ]
         for block in invalid {
             let code = detailedCode { _ = try LiveActivityNotifications.prepare(model(block: block)) }
@@ -229,6 +232,40 @@ final class LiveActivitiesLogicTests: XCTestCase {
                                        .init(key: "STOP", label: "Stop", destructive: true)])
         XCTAssertNil(state.ended)
         XCTAssertEqual(state.fraction, 0.6)
+    }
+
+    func testVersusMapsEachSidesImage() throws {
+        let prepared = try prepared(model(block: [
+            "layout": "versus",
+            "metrics": [["label": "LIO", "value": "1", "image": "https://x/lions.png"],
+                        ["label": "EAG", "value": "0", "image": "https://x/eagles.png"]],
+            "shortText": "2nd half"
+        ]))
+        XCTAssertTrue(prepared.activity.versus)
+        let state = LiveActivityNotifications.contentState(prepared) { $0.map { "img:" + $0 } }
+        XCTAssertEqual(state.layout, "versus")
+        XCTAssertTrue(state.isVersus)
+        XCTAssertEqual(state.metrics, [.init(label: "LIO", value: "1", image: "img:https://x/lions.png"),
+                                       .init(label: "EAG", value: "0", image: "img:https://x/eagles.png")])
+        // The standard layout draws no side images: none is stored.
+        let standard = try self.prepared(model(block: [
+            "metrics": [["label": "LIO", "value": "1", "image": "https://x/lions.png"]]
+        ]))
+        let plain = LiveActivityNotifications.contentState(standard) { $0.map { "img:" + $0 } }
+        XCTAssertNil(plain.layout)
+        XCTAssertFalse(plain.isVersus)
+        XCTAssertNil(plain.metrics?.first?.image)
+    }
+
+    func testCustomLayoutReachesTheAppsWidgetWithTheMetricImages() throws {
+        let prepared = try prepared(model(block: [
+            "customLayout": "focus_timer",
+            "metrics": [["label": "LIO", "value": "1", "image": "https://x/lions.png"]]
+        ]))
+        XCTAssertEqual(prepared.activity.customLayout, "focus_timer")
+        let state = LiveActivityNotifications.contentState(prepared) { $0.map { "img:" + $0 } }
+        XCTAssertEqual(state.customLayout, "focus_timer")
+        XCTAssertEqual(state.metrics?.first?.image, "img:https://x/lions.png")
     }
 
     func testIndeterminateBarAndNoBar() throws {

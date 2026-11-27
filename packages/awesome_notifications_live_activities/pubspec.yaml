@@ -1,6 +1,6 @@
 name: awesome_notifications_live_activities
 description: "Live activities for awesome_notifications: iOS Live Activities (Lock Screen, Dynamic Island), Android Live Updates, and an in-place progress notification on macOS, Windows, Linux and Web, from one model."
-version: 1.0.0
+version: 1.0.0-dev
 homepage:
 resolution: workspace
 

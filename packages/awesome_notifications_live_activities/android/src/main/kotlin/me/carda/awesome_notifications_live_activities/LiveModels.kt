@@ -24,7 +24,7 @@ internal data class LiveTimer(val start: Long?, val end: Long?) {
     val countDown: Boolean get() = end != null
 }
 
-internal data class LiveMetric(val label: String, val value: String, val unit: String?) {
+internal data class LiveMetric(val label: String, val value: String, val unit: String?, val image: String? = null) {
     /** `Speed 42 km/h`, as the other platforms write it. */
     val text: String get() = listOfNotNull(label, value, unit).filter { it.isNotEmpty() }.joinToString(" ")
 }
@@ -60,11 +60,17 @@ internal data class LiveActivityModel(
     val progress: LiveProgress?,
     val timer: LiveTimer?,
     val metrics: List<LiveMetric>,
+    /** Drawn as a scoreboard (`LiveActivityLayout.versus`): exactly two metrics. */
+    val versus: Boolean,
     val shortText: String?,
     val accentColor: Int?,
     /** UTC milliseconds. */
     val staleAt: Long?,
     val alert: Boolean,
+    /** Android 16+: a Live Update (promoted); false: the package's own layout. */
+    val liveUpdate: Boolean,
+    /** The app's layout resource name (`res/layout/<name>.xml`), drawn instead of the package's. */
+    val customLayout: String?,
     val dismissal: LiveDismissal,
     /** The block as received, with its defaults filled in (what the model carries on). */
     val raw: Map<String, Any?>
@@ -113,8 +119,15 @@ internal data class LiveActivityModel(
                 val value = metric[LiveKeys.VALUE] as? String ?: return null to "A live activity metric needs a value"
                 val unit = metric[LiveKeys.UNIT]
                 if (unit != null && unit !is String) return null to "A live activity metric unit must be a string"
-                LiveMetric(label, value, unit as String?)
+                val image = metric[LiveKeys.IMAGE]
+                if (image != null && image !is String) return null to "A live activity metric image must be a string"
+                LiveMetric(label, value, unit as String?, image as String?)
             }
+            val layout = map[LiveKeys.LAYOUT] ?: LiveKeys.LAYOUT_STANDARD
+            if (layout != LiveKeys.LAYOUT_STANDARD && layout != LiveKeys.LAYOUT_VERSUS)
+                return null to "Unknown live activity layout: $layout"
+            val versus = layout == LiveKeys.LAYOUT_VERSUS
+            if (versus && metrics.size != 2) return null to "A versus live activity needs exactly 2 metrics, one per side"
 
             val progress = map[LiveKeys.PROGRESS]?.let { rawProgress ->
                 val p = mapOf(rawProgress) ?: return null to "The live activity progress must be a map"
@@ -157,6 +170,13 @@ internal data class LiveActivityModel(
                 if (map[key] != null && number(map[key]) == null) return null to "The live activity $key must be a number"
             }
             val alert = bool(map[LiveKeys.ALERT], false) ?: return null to "The live activity alert must be a bool"
+            val liveUpdate = bool(map[LiveKeys.ANDROID_LIVE_UPDATE], true)
+                ?: return null to "The live activity androidLiveUpdate must be a bool"
+            val customLayout = map[LiveKeys.CUSTOM_LAYOUT]?.let {
+                if (it !is String || !Regex("^[a-z][a-z0-9_]*$").matches(it))
+                    return null to "The live activity's customLayout must be a resource name: lowercase letters, digits and _"
+                it
+            }
             val dismissal = LiveDismissal.from(map[LiveKeys.DISMISSAL])
                 ?: return null to "Unknown live activity dismissal: ${map[LiveKeys.DISMISSAL]}"
 
@@ -174,10 +194,13 @@ internal data class LiveActivityModel(
                 progress = progress,
                 timer = timer,
                 metrics = metrics,
+                versus = versus,
                 shortText = shortText,
                 accentColor = color(map[LiveKeys.ACCENT_COLOR]),
                 staleAt = number(map[LiveKeys.STALE_AT])?.toLong(),
                 alert = alert,
+                liveUpdate = liveUpdate,
+                customLayout = customLayout,
                 dismissal = dismissal,
                 raw = raw
             ) to null

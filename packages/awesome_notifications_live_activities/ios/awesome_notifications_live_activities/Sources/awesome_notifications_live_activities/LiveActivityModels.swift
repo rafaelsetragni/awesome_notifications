@@ -18,6 +18,9 @@ public enum LiveActivityKeys {
     public static let alert = "alert"
     public static let dismissal = "dismissal"
     public static let pushChannel = "pushChannel"
+    public static let layout = "layout"
+    public static let layoutVersus = "versus"
+    public static let customLayout = "customLayout"
 
     public static let segments = "segments"
     public static let points = "points"
@@ -35,6 +38,7 @@ public enum LiveActivityKeys {
     public static let label = "label"
     public static let value = "value"
     public static let unit = "unit"
+    public static let image = "image"
 
     public static let dismissalDefault = "default"
     public static let dismissalImmediate = "immediate"
@@ -162,6 +166,8 @@ public struct LiveActivityMetric: Equatable {
     public var label: String
     public var value: String
     public var unit: String?
+    /// The side's picture in the versus layout.
+    public var image: String? = nil
 }
 
 /// The `liveActivity` block of a notification model.
@@ -172,6 +178,10 @@ public struct NotificationLiveActivity: Equatable {
     public var progress: LiveActivityProgress?
     public var timer: LiveActivityTimer?
     public var metrics: [LiveActivityMetric] = []
+    /// Drawn as a scoreboard (`LiveActivityLayout.versus`).
+    public var versus = false
+    /// The app's own layout name, drawn by the app's widget.
+    public var customLayout: String?
     public var shortText: String?
     public var accentColor: Int?
     /// Milliseconds since the epoch (UTC).
@@ -274,9 +284,27 @@ public struct NotificationLiveActivity: Equatable {
                 let metricValue = (metric[LiveActivityKeys.value] as? String)
                     ?? number(metric[LiveActivityKeys.value]).map { String($0) } ?? ""
                 activity.metrics.append(LiveActivityMetric(
-                    label: label, value: metricValue, unit: metric[LiveActivityKeys.unit] as? String))
+                    label: label, value: metricValue, unit: metric[LiveActivityKeys.unit] as? String,
+                    image: metric[LiveActivityKeys.image] as? String))
             }
         }
+
+        if let raw = value(LiveActivityKeys.layout) {
+            guard let name = raw as? String, name == "standard" || name == LiveActivityKeys.layoutVersus else {
+                return (nil, "Unknown live activity layout: \(raw)")
+            }
+            activity.versus = name == LiveActivityKeys.layoutVersus
+            if activity.versus, activity.metrics.count != 2 {
+                return (nil, "A versus live activity needs exactly 2 metrics, one per side")
+            }
+        }
+
+        let (customLayout, customOk) = string(LiveActivityKeys.customLayout)
+        guard customOk, customLayout.map({ $0.range(of: "^[a-z][a-z0-9_]*$", options: .regularExpression) != nil }) ?? true
+        else {
+            return (nil, "The live activity's customLayout must be a resource name: lowercase letters, digits and _")
+        }
+        activity.customLayout = customLayout
 
         let (shortText, shortOk) = string(LiveActivityKeys.shortText)
         guard shortOk else { return (nil, "The live activity's shortText must be a string") }
