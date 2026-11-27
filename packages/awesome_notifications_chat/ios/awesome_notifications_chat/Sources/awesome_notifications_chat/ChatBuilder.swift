@@ -189,10 +189,12 @@ enum CommunicationContent {
 
     /// A `tel:` / `mailto:` URI is the person's phone / e-mail handle; otherwise
     /// the key identifies them (the core's `NotificationPerson.handle`).
+    @available(iOS 15.0, macOS 12.0, *)
     static func handle(_ person: NotificationPerson) -> INPersonHandle {
         return person.handle.inPersonHandle
     }
 
+    @available(iOS 15.0, macOS 12.0, *)
     static func image(_ source: String?) -> INImage? {
         guard let source = source, !source.isEmpty,
               let bitmap = BitmapUtils.shared.getBitmapFromSource(source),

@@ -23,6 +23,8 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          # The version the packages are developed and verified with.
+          flutter-version: '3.47.3'
 
       # The portable desktop core (shared with Linux), under MSVC /W4 /WX.
       - name: Desktop core unit tests

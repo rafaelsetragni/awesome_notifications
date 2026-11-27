@@ -48,7 +48,8 @@ final class NotificationPersonTests: XCTestCase {
     }
 
     #if canImport(Intents)
-    func testINPersonHandle() {
+    func testINPersonHandle() throws {
+        guard #available(macOS 11.0, *) else { throw XCTSkip("needs macOS 11") }
         let handle = NotificationPerson(key: "k", name: "n", uri: "mailto:a@b.com").handle.inPersonHandle
         XCTAssertEqual(handle.value, "a@b.com")
         XCTAssertEqual(handle.type, .emailAddress)

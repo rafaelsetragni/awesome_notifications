@@ -22,7 +22,9 @@ public final class ChatMethodHandler: AwesomeMethodHandler {
             let id = arguments as? String
             removeDelivered(id) {
                 guard let id = id else { result(true); return }
-                // Also forget the donated interactions of the conversation.
+                // Also forget the donated interactions of the conversation
+                // (chat needs macOS 12, so the check always passes in an app).
+                guard #available(macOS 11.0, *) else { result(true); return }
                 INInteraction.delete(with: id) { _ in result(true) }
             }
         case ChatKeys.methodListActive:

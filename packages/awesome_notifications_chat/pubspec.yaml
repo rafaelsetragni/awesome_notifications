@@ -1,7 +1,8 @@
 name: awesome_notifications_chat
 description: "Chat notifications for awesome_notifications: Android conversations and iOS / macOS communication notifications, with a shared Person model."
+repository: https://github.com/rafaelsetragni/awesome_notifications
+homepage: https://discord.awesome-notifications.carda.me/
 version: 1.0.0-dev
-homepage:
 resolution: workspace
 
 environment:
