@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'awesome_notifications'
-  s.version          = '1.0.0'
+  s.version          = '1.0.0-dev'
   s.summary          = 'Local and push notifications plugin (iOS bridge).'
   s.description      = <<-DESC
 Flutter bridge for Awesome Notifications on iOS. Translates method-channel calls

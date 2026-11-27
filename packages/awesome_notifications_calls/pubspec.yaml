@@ -1,6 +1,6 @@
 name: awesome_notifications_calls
 description: "Calls for awesome_notifications: the system's call UI (Android CallStyle and full-screen, iOS CallKit and VoIP pushes) and the strongest call notification on macOS, Windows, Linux and Web, from one model."
-version: 1.0.0
+version: 1.0.0-dev
 homepage:
 resolution: workspace
 

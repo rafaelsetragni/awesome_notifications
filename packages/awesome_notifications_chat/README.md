@@ -1,6 +1,6 @@
 # 💬 awesome_notifications_chat
 
-![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications.jpg)
+![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-banner.jpg)
 
 Chat notifications for [awesome_notifications](https://pub.dev/packages/awesome_notifications):
 Android **conversations** and iOS / macOS **communication notifications**, from one
@@ -94,9 +94,9 @@ on iOS and macOS.
 
 ```yaml
 dependencies:
-  awesome_notifications: ^1.0.0       # the core
-  awesome_notifications_chat: ^1.0.0  # this package (same version line as the core)
-  awesome_notifications_fcm: ^1.0.0   # only to receive messages by push
+  awesome_notifications: ^1.0.0-dev       # the core
+  awesome_notifications_chat: ^1.0.0-dev  # this package (same version line as the core)
+  awesome_notifications_fcm: ^1.0.0-dev   # only to receive messages by push
 ```
 
 2. Get the packages:

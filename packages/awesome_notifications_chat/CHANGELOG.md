@@ -1,3 +1,3 @@
-## 0.0.1
+## 1.0.0-dev
 
-* TODO: Describe initial release.
+* Development preview of the 1.0 monorepo.

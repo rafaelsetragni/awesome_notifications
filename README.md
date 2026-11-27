@@ -1,6 +1,6 @@
 # Awesome Notifications — Monorepo
 
-![Awesome Notifications](assets/readme/awesome-notifications.jpg)
+![Awesome Notifications](assets/readme/awesome-notifications-banner.jpg)
 
 Monorepo for the **Awesome Notifications** plugin family, managed with
 [Melos](https://melos.invertase.dev) on top of Dart pub workspaces.

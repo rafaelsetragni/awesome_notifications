@@ -1,6 +1,6 @@
 name: awesome_notifications_fcm
 description: "Firebase Cloud Messaging (push) decorator for awesome_notifications: FCM/APNs tokens, silent background data and rich push, displayed through the core engine."
-version: 1.0.0
+version: 1.0.0-dev
 homepage: https://discord.awesome-notifications.carda.me/
 repository: https://github.com/rafaelsetragni/awesome_notifications
 

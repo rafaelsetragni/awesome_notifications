@@ -1,6 +1,6 @@
 name: awesome_notifications_chat
 description: "Chat notifications for awesome_notifications: Android conversations and iOS / macOS communication notifications, with a shared Person model."
-version: 1.0.0
+version: 1.0.0-dev
 homepage:
 resolution: workspace
 
