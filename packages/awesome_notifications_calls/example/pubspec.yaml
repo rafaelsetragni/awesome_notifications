@@ -69,6 +69,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # The caller's photo, so it shows without a connection.
+  assets:
+    - assets/images/girl-phonecall.jpg
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

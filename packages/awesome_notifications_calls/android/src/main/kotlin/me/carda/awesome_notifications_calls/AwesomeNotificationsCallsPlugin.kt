@@ -76,8 +76,10 @@ class AwesomeNotificationsCallsPlugin :
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) = attach(binding)
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) = attach(binding)
-    override fun onDetachedFromActivityForConfigChanges() = detach()
-    override fun onDetachedFromActivity() = detach()
+    // A config change recreates the activity, which still receives the
+    // settings page's result: the pending request waits for it.
+    override fun onDetachedFromActivityForConfigChanges() = detach(answerPending = false)
+    override fun onDetachedFromActivity() = detach(answerPending = true)
 
     private fun attach(binding: ActivityPluginBinding) {
         this.binding = binding
@@ -88,14 +90,18 @@ class AwesomeNotificationsCallsPlugin :
         openedForCall(binding.activity.intent)
     }
 
-    private fun detach() {
+    private fun detach(answerPending: Boolean) {
+        // Read before the activity is let go: the answer needs its context.
+        val context = activityContext()
         binding?.removeOnNewIntentListener(this)
         binding?.removeActivityResultListener(this)
         binding = null
         activity = null
         overLockScreen = false
         Calls.onCallsChanged = null
-        pendingFullScreen?.invoke(CallMethodHandler.canUseFullScreenIntent(activityContext() ?: return))
+        if (!answerPending || context == null) return
+        // Leaving for good: no result will come, so answer with what is allowed now.
+        pendingFullScreen?.invoke(CallMethodHandler.canUseFullScreenIntent(context))
         pendingFullScreen = null
     }
 

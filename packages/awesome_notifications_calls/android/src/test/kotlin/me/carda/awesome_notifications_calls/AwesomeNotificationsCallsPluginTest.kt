@@ -277,20 +277,29 @@ class AwesomeNotificationsCallsPluginTest {
         assertTrue(second.isEmpty())
     }
 
-    @Test fun leavingTheActivityKeepsAPendingRequestForTheNextOne() {
+    @Test fun leavingTheActivityAnswersAPendingRequestWithTheCurrentPermission() {
         assertFalse(allowed())
         plugin.onAttachedToEngine(pluginBinding())
         plugin.onAttachedToActivity(FakeActivityBinding(activity()))
         val first = invoke(CallKeys.METHOD_REQUEST_FULL_SCREEN_INTENT).second
-        // The activity is already gone when detach looks for it: nothing is answered yet.
+        assertTrue(first.isEmpty())
+        // No result will come once the activity is gone: answered now, once.
         plugin.onDetachedFromActivity()
-        assertTrue(first.isEmpty())
-        // Without an activity a result is consumed but answers nothing.
+        assertEquals(listOf<Any?>(false), first)
         assertTrue(plugin.onActivityResult(0x0CA11, Activity.RESULT_OK, null))
-        assertTrue(first.isEmpty())
-        // The next request (with an activity again) answers the pending one.
+        assertEquals(listOf<Any?>(false), first)
+    }
+
+    @Test fun aConfigChangeKeepsThePendingRequestForTheRecreatedActivity() {
+        assertFalse(allowed())
+        plugin.onAttachedToEngine(pluginBinding())
         plugin.onAttachedToActivity(FakeActivityBinding(activity()))
-        invoke(CallKeys.METHOD_REQUEST_FULL_SCREEN_INTENT)
+        val first = invoke(CallKeys.METHOD_REQUEST_FULL_SCREEN_INTENT).second
+        plugin.onDetachedFromActivityForConfigChanges()
+        assertTrue(first.isEmpty())
+        // The recreated activity receives the settings page's result.
+        plugin.onReattachedToActivityForConfigChanges(FakeActivityBinding(activity()))
+        assertTrue(plugin.onActivityResult(0x0CA11, Activity.RESULT_OK, null))
         assertEquals(listOf<Any?>(false), first)
     }
 

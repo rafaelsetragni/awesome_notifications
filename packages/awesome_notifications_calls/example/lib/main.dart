@@ -10,10 +10,10 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// The caller's photo of the 0.12 example, pinned to a commit so it never moves.
-const _callerPhoto =
-    'https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/'
-    '46032aae60fb47f3c372676c77bb59e470956339/example/assets/images/girl-phonecall.jpg';
+/// The caller's photo (the 0.12 example's), bundled with the app so it shows
+/// without a connection. The notifications read it as `asset://`.
+const _callerPhotoAsset = 'assets/images/girl-phonecall.jpg';
+const _callerPhoto = 'asset://$_callerPhotoAsset';
 
 const _channelKey = 'calls';
 const _notificationId = 300;
@@ -523,8 +523,8 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
             // A video call shows your camera while it rings; a voice call,
             // the caller's photo.
             camera?.view() ??
-                Image.network(
-                  _callerPhoto,
+                Image.asset(
+                  _callerPhotoAsset,
                   fit: BoxFit.cover,
                   errorBuilder: (_, _, _) => const SizedBox(),
                 ),
@@ -916,8 +916,8 @@ class _SimulatedRemoteState extends State<_SimulatedRemote>
             child: child,
           );
         },
-        child: Image.network(
-          _callerPhoto,
+        child: Image.asset(
+          _callerPhotoAsset,
           fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,
