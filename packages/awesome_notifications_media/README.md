@@ -1,6 +1,6 @@
 # 🎵 awesome_notifications_media
 
-![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications.jpg)
+![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-banner.jpg)
 
 The system's own media player for your app, on **Android, iOS, macOS, Windows, Linux
 and the Web**, from one model.
@@ -107,8 +107,8 @@ playing now, in the app.
 
 ```yaml
 dependencies:
-  awesome_notifications: ^1.0.0        # the core
-  awesome_notifications_media: ^1.0.0  # this package (same version line as the core)
+  awesome_notifications: ^1.0.0-dev        # the core
+  awesome_notifications_media: ^1.0.0-dev  # this package (same version line as the core)
 ```
 
 2. Get the packages:

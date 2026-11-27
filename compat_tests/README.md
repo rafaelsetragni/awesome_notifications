@@ -47,6 +47,23 @@ Both host apps bundle the same translation strings, used by the
 - iOS / macOS: `Runner/*.lproj/Localizable.strings`.
 - Windows / Linux: `awesome_notifications/strings/*.json` (Flutter assets).
 
+## What Android shows (render_diff.sh)
+
+The suite above only sees what Dart sees. `render_diff.sh` checks what Android
+actually draws: both apps post the same raw notifications
+(`suite/lib/render_cases.dart`, through `createNotificationFromJsonData`), and
+the script diffs `dumpsys notification` (flags, priority, color, visibility,
+group and its summary, ticker, timeout, chronometer, progress, the style's
+extras, the channel). `render_normalize.py` drops what changes on every run
+(addresses, times, uids, 0.12's random group summary ids).
+
+```bash
+./render_diff.sh <android-device-id>   # posts with both apps, then diffs
+```
+
+It ends with `RENDER MATCH` when 1.0 shows what 0.12 shows. Dumps are in
+`build/render_<app>.txt`.
+
 ## Adding a case
 
 1. Write the test in `suite/lib/awn_compat_suite.dart`.

@@ -3,7 +3,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 FONT=sys.argv[1]; OUT=sys.argv[2]
 # Awesome purple -> pink (from the 0.12 icon and logo)
 TOP=(0x7B,0x0A,0xC4); BOTTOM=(0xC2,0x18,0x8E)
-GLYPHS={'core':0xe44f,'schedules':0xe556,'localizations':0xe67b,'fcm':0xe16f,'chat':0xe153,'media':0xe415,'calls':0xe126}
+GLYPHS={'core':0xe44f,'schedules':0xe556,'localizations':0xe67b,'fcm':0xe16f,'chat':0xe153,'media':0xe415,'calls':0xe126,'live_activities':0xe0ee}
 def background(size):
     img=Image.new('RGB',(size,size))
     px=img.load()
@@ -13,11 +13,14 @@ def background(size):
             px[x,y]=tuple(int(TOP[i]+(BOTTOM[i]-TOP[i])*t) for i in range(3))
     return img
 def glyph_layer(size, code, scale=0.56, alpha=0.86):
-    layer=Image.new('RGBA',(size,size),(0,0,0,0))
+    # Drawn on a larger canvas, then centered by its drawn pixels: the font's
+    # text box doesn't match the glyph's ink, which left it off center.
     font=ImageFont.truetype(FONT,int(size*scale))
-    d=ImageDraw.Draw(layer); ch=chr(code)
-    l,t,r,b=d.textbbox((0,0),ch,font=font)
-    d.text(((size-(r-l))/2-l,(size-(b-t))/2-t),ch,font=font,fill=(255,255,255,int(255*alpha)))
+    big=Image.new('RGBA',(size*2,size*2),(0,0,0,0))
+    ImageDraw.Draw(big).text((size//2,size//2),chr(code),font=font,fill=(255,255,255,int(255*alpha)))
+    ink=big.crop(big.getchannel('A').getbbox())
+    layer=Image.new('RGBA',(size,size),(0,0,0,0))
+    layer.paste(ink,((size-ink.width)//2,(size-ink.height)//2))
     return layer
 def icon(name,size=1024,scale=0.56):
     bg=background(size).convert('RGBA')

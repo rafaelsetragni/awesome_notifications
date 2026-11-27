@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The view ids the package fills in an app's own layout (customLayout).
+     Reference them as @id/awn_live_title, @id/awn_live_clock… -->
+<resources>
+    <item name="awn_live_title" type="id" />
+    <item name="awn_live_body" type="id" />
+    <item name="awn_live_short" type="id" />
+    <item name="awn_live_clock" type="id" />
+    <item name="awn_live_bar" type="id" />
+    <item name="awn_live_image" type="id" />
+    <item name="awn_live_accent" type="id" />
+    <item name="awn_live_metric_value_0" type="id" />
+    <item name="awn_live_metric_label_0" type="id" />
+    <item name="awn_live_metric_image_0" type="id" />
+    <item name="awn_live_metric_value_1" type="id" />
+    <item name="awn_live_metric_label_1" type="id" />
+    <item name="awn_live_metric_image_1" type="id" />
+    <item name="awn_live_metric_value_2" type="id" />
+    <item name="awn_live_metric_label_2" type="id" />
+    <item name="awn_live_metric_image_2" type="id" />
+</resources>

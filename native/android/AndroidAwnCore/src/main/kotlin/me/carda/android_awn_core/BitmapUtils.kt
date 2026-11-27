@@ -6,6 +6,9 @@ import android.graphics.BitmapFactory
 import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
 import android.graphics.Shader
 import io.flutter.FlutterInjector
 import java.io.BufferedInputStream
@@ -36,6 +39,36 @@ class BitmapUtils private constructor() {
         }
         Canvas(output).drawCircle(size / 2f, size / 2f, size / 2f, paint)
         return output
+    }
+
+    /**
+     * 0.12 `roundBitmap`, quirk included: same size as [bitmap], cut by a
+     * circle centered on it whose radius is half its WIDTH (a portrait image
+     * keeps flat top/bottom edges; a landscape one is cropped above/below).
+     */
+    fun roundBitmap(bitmap: Bitmap): Bitmap {
+        val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(output)
+        val paint = Paint()
+        val rect = Rect(0, 0, bitmap.width, bitmap.height)
+        paint.isAntiAlias = true
+        canvas.drawARGB(0, 0, 0, 0)
+        paint.color = 0xff424242.toInt()
+        var bitmapWidth = bitmap.width.toFloat()
+        var bitmapHeight = bitmap.height.toFloat()
+        if (bitmapWidth <= 0 || bitmapHeight <= 0) return bitmap
+        bitmapWidth /= 2
+        bitmapHeight /= 2
+        canvas.drawCircle(bitmapWidth, bitmapHeight, bitmapWidth, paint)
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+        canvas.drawBitmap(bitmap, rect, rect, paint)
+        return output
+    }
+
+    /** 0.12 `getBitmapFromSource(context, path, roundedBitmap)`. */
+    fun getBitmapFromSource(context: Context, path: String?, rounded: Boolean): Bitmap? {
+        val bitmap = getBitmapFromSource(context, path) ?: return null
+        return if (rounded) roundBitmap(bitmap) else bitmap
     }
 
     private enum class MediaSource { NETWORK, FILE, ASSET, RESOURCE, UNKNOWN }

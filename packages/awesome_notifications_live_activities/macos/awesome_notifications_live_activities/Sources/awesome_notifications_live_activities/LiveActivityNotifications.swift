@@ -1,0 +1,1 @@
+../../../../ios/awesome_notifications_live_activities/Sources/awesome_notifications_live_activities/LiveActivityNotifications.swift

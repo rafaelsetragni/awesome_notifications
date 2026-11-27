@@ -1,6 +1,6 @@
 name: awesome_notifications_media
 description: "Media controls for awesome_notifications: the Android media notification, iOS / macOS Now Playing, Windows, Linux and Web media sessions, from one model."
-version: 1.0.0
+version: 1.0.0-dev
 homepage:
 resolution: workspace
 

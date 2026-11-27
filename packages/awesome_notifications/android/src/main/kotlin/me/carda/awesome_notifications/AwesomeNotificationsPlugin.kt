@@ -1,15 +1,14 @@
 package me.carda.awesome_notifications
 
-import android.Manifest
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.core.app.RemoteInput
-import androidx.core.content.ContextCompat
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -30,6 +29,7 @@ import me.carda.android_awn_core.Definitions
 import me.carda.android_awn_core.MapUtils
 import me.carda.android_awn_core.NotificationBuilder
 import me.carda.android_awn_core.NotificationLifeCycle
+import me.carda.android_awn_core.PermissionManager
 
 /**
  * Thin Flutter bridge: translates method-channel calls into the Flutter-free
@@ -54,11 +54,6 @@ class AwesomeNotificationsPlugin :
     /// The action that launched the app from a killed state (via the Activity's
     /// initial intent), if any — returned by getInitialAction.
     private var initialAction: Map<String, Any?>? = null
-    private var pendingPermissionResult: Result? = null
-    private var pendingRequestedPermissions: List<String> = emptyList()
-
-    private val permissionRequestCode = 101010
-
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(binding.binaryMessenger, "awesome_notifications")
         channel.setMethodCallHandler(this)
@@ -83,7 +78,13 @@ class AwesomeNotificationsPlugin :
                 val channels =
                     (args?.get(Definitions.INITIALIZE_CHANNELS) as? List<Map<String, Any?>>)
                         ?: emptyList()
-                core.initialize(channels, args?.get(Definitions.INITIALIZE_DEFAULT_ICON) as? String)
+                val channelGroups =
+                    (args?.get(Definitions.INITIALIZE_CHANNEL_GROUPS) as? List<Map<String, Any?>>)
+                        ?: emptyList()
+                core.initialize(
+                    channels,
+                    args?.get(Definitions.INITIALIZE_DEFAULT_ICON) as? String,
+                    channelGroups)
                 ActionHandles.save(
                     appContext, ActionHandles.BACKGROUND_HANDLE,
                     MapUtils.getInstance().getLong(args?.get(ActionHandles.BACKGROUND_HANDLE)))
@@ -122,7 +123,8 @@ class AwesomeNotificationsPlugin :
                 val args = call.arguments as? Map<String, Any?>
                 val requested =
                     (args?.get(Definitions.NOTIFICATION_PERMISSIONS) as? List<String>) ?: emptyList()
-                requestNotifications(requested, result)
+                requestNotifications(
+                    args?.get(Definitions.NOTIFICATION_CHANNEL_KEY) as? String, requested, result)
             }
 
             "getPermissionStatuses" -> getPermissionStatuses(call.arguments, result)
@@ -226,49 +228,47 @@ class AwesomeNotificationsPlugin :
     }
 
     // Dart expects back the list of permissions still MISSING after the request
-    // (empty list = everything granted).
-    private fun requestNotifications(requested: List<String>, result: Result) {
-        fun missing(): List<String> =
-            if (core.isNotificationAllowed()) emptyList() else requested
-
-        // Before Android 13 there is no runtime notification permission.
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            result.success(missing())
-            return
+    // (empty list = everything granted). 0.12 `requestUserPermissions`: the
+    // system dialog while Android lets it show, else the settings page; the
+    // answer comes when the dialog answers or the app is back in front.
+    private fun requestNotifications(channelKey: String?, requested: List<String>, result: Result) {
+        try {
+            PermissionManager.requestUserPermissions(activity, appContext, channelKey, requested) { missing ->
+                mainHandler.post { result.success(missing) }
+            }
+        } catch (e: AwesomeNotificationsException) {
+            result.error(e.code, e.message, e.detailedCode)
+        } catch (e: Exception) {
+            result.error(
+                Definitions.CODE_UNKNOWN_EXCEPTION,
+                "${e.localizedMessage}",
+                Definitions.DETAILED_UNEXPECTED_ERROR + "." + e.javaClass.simpleName)
         }
-        val currentActivity = activity
-        if (currentActivity == null) {
-            result.success(missing())
-            return
-        }
-        val granted = ContextCompat.checkSelfPermission(
-            currentActivity, Manifest.permission.POST_NOTIFICATIONS
-        ) == PackageManager.PERMISSION_GRANTED
-        if (granted) {
-            result.success(emptyList<String>())
-            return
-        }
-        pendingPermissionResult = result
-        pendingRequestedPermissions = requested
-        currentActivity.requestPermissions(
-            arrayOf(Manifest.permission.POST_NOTIFICATIONS), permissionRequestCode
-        )
     }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
-    ): Boolean {
-        if (requestCode != permissionRequestCode) return false
-        val granted = grantResults.isNotEmpty() &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED
-        pendingPermissionResult?.success(
-            if (granted) emptyList<String>() else pendingRequestedPermissions
-        )
-        pendingPermissionResult = null
-        pendingRequestedPermissions = emptyList()
-        return true
+    ): Boolean = PermissionManager.onDialogResult(requestCode)
+
+    /** Back from a settings page: the waiting permission requests answer. */
+    private val foregroundCallbacks = object : Application.ActivityLifecycleCallbacks {
+        override fun onActivityResumed(resumed: Activity) {
+            if (resumed === activity) PermissionManager.onForeground()
+        }
+        override fun onActivityCreated(a: Activity, state: Bundle?) {}
+        override fun onActivityStarted(a: Activity) {}
+        override fun onActivityPaused(a: Activity) {}
+        override fun onActivityStopped(a: Activity) {}
+        override fun onActivitySaveInstanceState(a: Activity, state: Bundle) {}
+        override fun onActivityDestroyed(a: Activity) {}
+    }
+
+    private fun watchForeground(attached: Activity?) {
+        activity?.application?.unregisterActivityLifecycleCallbacks(foregroundCallbacks)
+        activity = attached
+        attached?.application?.registerActivityLifecycleCallbacks(foregroundCallbacks)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -350,7 +350,7 @@ class AwesomeNotificationsPlugin :
     // MARK: - ActivityAware
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        activity = binding.activity
+        watchForeground(binding.activity)
         binding.addRequestPermissionsResultListener(this)
         binding.addOnNewIntentListener(this)
         // Cold start: the app may have been launched by tapping a notification.
@@ -358,16 +358,16 @@ class AwesomeNotificationsPlugin :
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
-        activity = null
+        watchForeground(null)
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        activity = binding.activity
+        watchForeground(binding.activity)
         binding.addRequestPermissionsResultListener(this)
         binding.addOnNewIntentListener(this)
     }
 
     override fun onDetachedFromActivity() {
-        activity = null
+        watchForeground(null)
     }
 }

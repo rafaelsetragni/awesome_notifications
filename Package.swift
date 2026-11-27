@@ -94,6 +94,21 @@ let package = Package(
             dependencies: ["CallsLogic"],
             path: "native/apple/Tests/CallsLogicTests"
         ),
+        .target(
+            name: "AwesomeNotificationsLiveActivitiesWidget",
+            path: "packages/awesome_notifications_live_activities/ios/awesome_notifications_live_activities/AwesomeNotificationsLiveActivitiesWidget/Sources/AwesomeNotificationsLiveActivitiesWidget"
+        ),
+        .target(
+            name: "LiveActivitiesLogic",
+            dependencies: ["IosAwnCore", "AwesomeNotificationsLiveActivitiesWidget"],
+            path: "packages/awesome_notifications_live_activities/ios/awesome_notifications_live_activities/Sources/awesome_notifications_live_activities",
+            exclude: ["AwesomeNotificationsLiveActivitiesPlugin.swift", "PrivacyInfo.xcprivacy"]
+        ),
+        .testTarget(
+            name: "LiveActivitiesLogicTests",
+            dependencies: ["LiveActivitiesLogic", "AwesomeNotificationsLiveActivitiesWidget"],
+            path: "native/apple/Tests/LiveActivitiesLogicTests"
+        ),
         // The service-extension products of the add-ons (symlinks to their
         // Flutter-free sources), compiled here so `swift build` checks them.
         .target(

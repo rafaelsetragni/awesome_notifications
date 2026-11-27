@@ -54,10 +54,17 @@ class NotificationEnumsTest {
     }
 
     @Test fun importanceMapsToAndroidConstants() {
-        // High and Max share the same Android importance; None differs from Default.
+        // 0.12: the ordinal, which is Android's IMPORTANCE_* (Max is IMPORTANCE_MAX).
         assertEquals(
-            NotificationImportance.High.toAndroidImportance(),
-            NotificationImportance.Max.toAndroidImportance()
+            listOf(
+                android.app.NotificationManager.IMPORTANCE_NONE,
+                android.app.NotificationManager.IMPORTANCE_MIN,
+                android.app.NotificationManager.IMPORTANCE_LOW,
+                android.app.NotificationManager.IMPORTANCE_DEFAULT,
+                android.app.NotificationManager.IMPORTANCE_HIGH,
+                android.app.NotificationManager.IMPORTANCE_MAX
+            ),
+            NotificationImportance.values().map { it.toAndroidImportance() }
         )
         assertNotEquals(
             NotificationImportance.None.toAndroidImportance(),

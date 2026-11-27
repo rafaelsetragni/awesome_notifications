@@ -1,3 +1,3 @@
-## 1.0.0
+## 1.0.0-dev
 
 * Media controls package (in development).

@@ -23,11 +23,34 @@ import java.util.concurrent.ConcurrentHashMap
  *    LED color, and the badge (default off);
  *  - critical alerts (0.12.1): `criticalAlerts: true` makes the channel
  *    bypass Do Not Disturb (`setBypassDnd`). Channel-only: nothing touches
- *    the device's interruption filter or notification policy.
+ *    the device's interruption filter or notification policy;
+ *  - the importance (0.12: its ordinal, so `Max` is `IMPORTANCE_MAX`) and
+ *    the channel group (`channelGroupKey`, when that group was set by
+ *    `initialize`'s `channelGroups`).
  */
 object ChannelManager {
 
     private val channels = ConcurrentHashMap<String, Map<String, Any?>>()
+
+    /**
+     * 0.12 `ChannelGroupManager.saveChannelGroup`: a group with an empty
+     * `channelGroupName` or `channelGroupKey` is skipped; otherwise its
+     * Android channel group is created (Android 8+).
+     */
+    fun setChannelGroup(context: Context, groupData: Map<String, Any?>) {
+        val key = string012(groupData[Definitions.NOTIFICATION_CHANNEL_GROUP_KEY])
+        val name = string012(groupData[Definitions.NOTIFICATION_CHANNEL_GROUP_NAME])
+        if (name.isNullOrBlank() || key.isNullOrBlank()) return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationManager(context).createNotificationChannelGroup(
+                android.app.NotificationChannelGroup(key, name))
+        }
+    }
+
+    /** Whether a channel group [key] was set (0.12 `getChannelGroupByKey != null`). */
+    private fun channelGroupExists(context: Context, key: String): Boolean =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+            notificationManager(context).notificationChannelGroups.any { it.id == key }
 
     /** The channel data the app set for [channelKey], if any. */
     fun getChannel(channelKey: String?): Map<String, Any?>? =
@@ -52,6 +75,12 @@ object ChannelManager {
             channel.description = it
         }
 
+        // 0.12: the channel joins its group only when that group exists.
+        val groupKey = string012(channelData[Definitions.NOTIFICATION_CHANNEL_GROUP_KEY])
+        if (!groupKey.isNullOrBlank() && channelGroupExists(context, groupKey)) {
+            channel.group = groupKey
+        }
+
         if (playSound(channelData)) {
             val audioAttributes = AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -74,7 +103,7 @@ object ChannelManager {
 
         val enableLights = enableLights(channelData)
         channel.enableLights(enableLights)
-        if (enableLights) ledColor(channelData)?.let { channel.lightColor = it }
+        if (enableLights) channel.lightColor = ledColor(channelData)
 
         if (criticalAlerts(channelData)) channel.setBypassDnd(true)
 
@@ -113,13 +142,75 @@ object ChannelManager {
             else -> null
         }
 
-    /** 0.12 default: white. An ARGB above Int.MAX_VALUE arrives as a Long. */
-    fun ledColor(channelData: Map<String, Any?>?): Int? =
-        when (val value = channelData?.get(Definitions.NOTIFICATION_LED_COLOR)) {
-            null -> 0xFFFFFFFF.toInt()
-            is Number -> value.toInt()
-            else -> null
+    /**
+     * 0.12 default: white, also for a value that is not a number. An ARGB
+     * above Int.MAX_VALUE arrives as a Long.
+     */
+    fun ledColor(channelData: Map<String, Any?>?): Int =
+        (channelData?.get(Definitions.NOTIFICATION_LED_COLOR) as? Number)?.toInt()
+            ?: 0xFFFFFFFF.toInt()
+
+    /** 0.12: a number; default 300 ms. */
+    fun ledOnMs(channelData: Map<String, Any?>?): Int =
+        (channelData?.get(Definitions.NOTIFICATION_LED_ON_MS) as? Number)?.toInt() ?: 300
+
+    /** 0.12: a number; default 700 ms. */
+    fun ledOffMs(channelData: Map<String, Any?>?): Int =
+        (channelData?.get(Definitions.NOTIFICATION_LED_OFF_MS) as? Number)?.toInt() ?: 700
+
+    /** 0.12 `importance`: default `Default`. */
+    fun importance(channelData: Map<String, Any?>?): NotificationImportance =
+        NotificationImportance.from(channelData?.get(Definitions.NOTIFICATION_IMPORTANCE) as? String)
+
+    /** 0.12: only a Boolean counts; default false. */
+    fun onlyAlertOnce(channelData: Map<String, Any?>?): Boolean =
+        channelData?.get(Definitions.NOTIFICATION_ONLY_ALERT_ONCE) as? Boolean ?: false
+
+    /** 0.12 `defaultPrivacy`: default Private; an unknown text is null. */
+    fun defaultPrivacy(channelData: Map<String, Any?>?): NotificationPrivacy? =
+        NotificationPrivacy.fromMapValue(
+            channelData?.get(Definitions.NOTIFICATION_DEFAULT_PRIVACY), NotificationPrivacy.Private)
+
+    fun groupSort(channelData: Map<String, Any?>?): GroupSort? =
+        GroupSort.from(channelData?.get(Definitions.NOTIFICATION_GROUP_SORT))
+
+    fun groupAlertBehavior(channelData: Map<String, Any?>?): GroupAlertBehaviour =
+        GroupAlertBehaviour.from(channelData?.get(Definitions.NOTIFICATION_GROUP_ALERT_BEHAVIOR))
+
+    /** 0.12 `groupKey`: a String (any other value as its text); default null. */
+    fun groupKey(channelData: Map<String, Any?>?): String? =
+        string012(channelData?.get(Definitions.NOTIFICATION_GROUP_KEY))
+
+    /**
+     * 0.12 `defaultColor` (a Long): a number, or a `0x`/`#` hex text (alpha
+     * FF when it has 6 digits); default `0xFF000000` (black).
+     */
+    fun defaultColor(channelData: Map<String, Any?>?): Int {
+        val black = 0xFF000000L
+        val value = channelData?.get(Definitions.NOTIFICATION_DEFAULT_COLOR)
+        val long = when (value) {
+            null -> black
+            is Number -> value.toLong()
+            is String -> {
+                val matcher = java.util.regex.Pattern
+                    .compile("(0x|#)(\\w{2})?(\\w{6})", java.util.regex.Pattern.CASE_INSENSITIVE)
+                    .matcher(value)
+                if (matcher.find()) {
+                    val text = (matcher.group(2) ?: "FF") + matcher.group(3)
+                    text.toLongOrNull(16) ?: black
+                } else black
+            }
+            else -> black
         }
+        return long.toInt()
+    }
+
+    /** 0.12 `getValueOrDefault(…, String.class, …)`: a non-String value as its text. */
+    internal fun string012(value: Any?): String? = when (value) {
+        null -> null
+        is String -> value
+        else -> value.toString()
+    }
 
     /** 0.12: only a Boolean counts; default false. */
     fun criticalAlerts(channelData: Map<String, Any?>?): Boolean =

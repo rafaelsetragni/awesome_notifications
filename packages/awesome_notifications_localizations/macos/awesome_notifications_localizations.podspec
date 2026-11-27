@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'awesome_notifications_localizations'
-  s.version          = '0.0.1'
+  s.version          = '1.0.0-dev'
   s.summary          = 'A new Flutter plugin project.'
   s.description      = <<-DESC
 A new Flutter plugin project.

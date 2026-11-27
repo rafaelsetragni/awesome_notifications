@@ -1,6 +1,6 @@
 # 🌎 awesome_notifications_localizations
 
-![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications.jpg)
+![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-banner.jpg)
 
 Multi-language support for [awesome_notifications](https://pub.dev/packages/awesome_notifications).
 
@@ -20,8 +20,8 @@ Add this package together with `awesome_notifications` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  awesome_notifications: ^1.0.0
-  awesome_notifications_localizations: ^1.0.0
+  awesome_notifications: ^1.0.0-dev
+  awesome_notifications_localizations: ^1.0.0-dev
 ```
 
 Initialize Awesome Notifications as usual (see the

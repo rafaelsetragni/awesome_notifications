@@ -1,6 +1,6 @@
 # ⏰ awesome_notifications_schedules
 
-![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications.jpg)
+![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-banner.jpg)
 
 Notification scheduling for [awesome_notifications](https://pub.dev/packages/awesome_notifications).
 
@@ -20,8 +20,8 @@ Add both the core and this decorator to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  awesome_notifications: ^1.0.0
-  awesome_notifications_schedules: ^1.0.0
+  awesome_notifications: ^1.0.0-dev
+  awesome_notifications_schedules: ^1.0.0-dev
 ```
 
 ## Usage

@@ -36,10 +36,16 @@ class AwesomeNotifications(
 
     /**
      * 0.12 `initialize`: stores the [defaultIcon] (the small icon of every
-     * notification without its own; null clears it) and sets the channels.
+     * notification without its own; null clears it), sets the channel groups
+     * and then the channels (so a channel can join its group).
      */
-    fun initialize(channelList: List<Map<String, Any?>>, defaultIcon: String? = null) {
+    fun initialize(
+        channelList: List<Map<String, Any?>>,
+        defaultIcon: String? = null,
+        channelGroups: List<Map<String, Any?>> = emptyList()
+    ) {
         DefaultsManager.setDefaultIcon(context, defaultIcon)
+        channelGroups.forEach { ChannelManager.setChannelGroup(context, it) }
         channelList.forEach { setChannel(it) }
     }
 
