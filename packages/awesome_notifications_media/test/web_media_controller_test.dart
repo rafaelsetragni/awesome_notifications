@@ -279,6 +279,21 @@ void main() {
       expect(dispatched, isEmpty);
     });
 
+    test('rejects media without a sessionId or a title', () async {
+      for (final media in [
+        {'sessionId': '', 'title': 'T'},
+        {'sessionId': 's1'},
+      ]) {
+        final m = model()..['media'] = media;
+        await expectLater(controller.build(m), rejected('arguments.invalid.notificationMedia'),
+            reason: '$media');
+      }
+    });
+
+    test('an unknown method is not implemented on the web', () async {
+      await expectLater(controller.invokeMethod('bogus'), throwsA(isA<MissingPluginException>()));
+    });
+
     test('mediaUpdatePosition, mediaStop and mediaCapabilities', () async {
       await controller.build(model());
       await controller.invokeMethod('mediaUpdatePosition', {'sessionId': 's1', 'position': 90000});

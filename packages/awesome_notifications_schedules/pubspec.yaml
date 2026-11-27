@@ -12,8 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   # Local path during dev; a real release would pin a published version.
-  awesome_notifications:
-    path: ../awesome_notifications
+  awesome_notifications: ^1.0.0-dev
 
 dev_dependencies:
   flutter_test:

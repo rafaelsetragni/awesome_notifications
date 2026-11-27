@@ -92,10 +92,15 @@ dependencies {
 // task; this task turns the resulting .exec into an XML/HTML report over the
 // AndroidAwnCore + plugin Kotlin classes.
 //
-// CAVEAT: classes exercised only under Robolectric (the engine, receivers,
-// cancel registry, content build) read as 0% here — JaCoCo's on-the-fly agent
-// does not see Robolectric's sandbox classloader. They ARE covered by passing
-// tests; the pure-JVM-tested classes report their real coverage.
+// Robolectric loads the classes in its own sandbox classloader; the agent
+// only counts them with includeNoLocationClasses.
+tasks.withType<Test>().configureEach {
+    extensions.configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
+}
+
 tasks.register<JacocoReport>("awnCoverageReport") {
     dependsOn("testDebugUnitTest")
     executionData.setFrom(

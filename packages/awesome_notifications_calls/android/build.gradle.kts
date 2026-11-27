@@ -24,6 +24,7 @@ allprojects {
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("jacoco")
 }
 
 android {
@@ -81,4 +82,26 @@ dependencies {
     testImplementation("org.json:json:20240303")
     testImplementation("org.robolectric:robolectric:4.14.1")
     testImplementation("androidx.test:core-ktx:1.6.1")
+}
+
+// Unit-test coverage (JaCoCo). Robolectric loads the classes in its own
+// sandbox classloader; the agent only counts them with includeNoLocationClasses.
+tasks.withType<Test>().configureEach {
+    extensions.configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
+}
+
+tasks.register<JacocoReport>("awnCoverageReport") {
+    dependsOn("testDebugUnitTest")
+    executionData.setFrom(fileTree(layout.buildDirectory).include("**/testDebugUnitTest.exec"))
+    classDirectories.setFrom(
+        fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/debug")) { exclude("**/R.class", "**/R$*.class", "**/BuildConfig.class") }
+    )
+    sourceDirectories.setFrom(files("src/main/kotlin", "src/main/java"))
+    reports {
+        xml.required.set(true)
+        html.required.set(false)
+    }
 }

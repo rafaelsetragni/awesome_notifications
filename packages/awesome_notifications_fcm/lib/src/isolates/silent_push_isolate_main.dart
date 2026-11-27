@@ -38,8 +38,11 @@ Future<void> channelMethodSilentCallbackHandle(MethodCall call) async {
         (call.arguments as Map).cast<String, dynamic>());
 
     if (!success) {
+      // receiveSilentData returns true or throws.
+      // coverage:ignore-start
       throw AwesomeNotificationsFcmException(
           'Silent data could not be recovered');
+      // coverage:ignore-end
     }
   } catch (e) {
     debugPrint('Awesome Notifications FCM: an error occurred in your '

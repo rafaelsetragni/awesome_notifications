@@ -51,6 +51,13 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+
+# The add-ons depend on the published core (awesome_notifications: ^1.0.0-dev);
+# this keeps every package of the example on the core of this repository.
+dependency_overrides:
+  awesome_notifications:
+    path: ../../awesome_notifications
+
 flutter:
 
   # The following line ensures that the Material Icons font is

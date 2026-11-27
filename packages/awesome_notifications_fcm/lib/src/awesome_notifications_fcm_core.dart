@@ -124,8 +124,11 @@ class AwesomeNotificationsFcm {
         try {
           if (!await receiveSilentData(
               (call.arguments as Map).cast<String, dynamic>())) {
+            // receiveSilentData returns true or throws.
+            // coverage:ignore-start
             throw AwesomeNotificationsFcmException(
                 'Silent data could not be recovered');
+            // coverage:ignore-end
           }
         } on DartCallbackException {
           debugPrint('Fatal: could not find silent callback');

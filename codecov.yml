@@ -3,6 +3,18 @@
 # only touches one package doesn't drop the others' numbers. Package README
 # badges point at their own flag, e.g.
 #   https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/master/graph/badge.svg?flag=awesome_notifications_schedules
+#
+# A package's flag combines its Dart coverage (flutter test) with its native
+# coverage: Android (JaCoCo), Apple (swift test) and the desktop C++ engines
+# (clang), produced by tool/native_coverage/*.sh. The shared engines under
+# native/ count for the core. Dart is kept at 100% and every native platform
+# at 90% or more; a line that can never run is marked as ignored, with a
+# comment saying why.
+ignore:
+  - "**/example/**"
+  - "**/test/**"
+  - "**/tests/**"
+  - "native/apple/Tests/**"
 coverage:
   status:
     project:
@@ -19,32 +31,62 @@ flag_management:
 flags:
   awesome_notifications:
     paths:
-      - packages/awesome_notifications/lib
+      - packages/awesome_notifications/
+      - native/
   awesome_notifications_schedules:
     paths:
-      - packages/awesome_notifications_schedules/lib
+      - packages/awesome_notifications_schedules/
   awesome_notifications_localizations:
     paths:
-      - packages/awesome_notifications_localizations/lib
+      - packages/awesome_notifications_localizations/
   awesome_notifications_fcm:
     paths:
-      - packages/awesome_notifications_fcm/lib
+      - packages/awesome_notifications_fcm/
+  awesome_notifications_chat:
+    paths:
+      - packages/awesome_notifications_chat/
+  awesome_notifications_media:
+    paths:
+      - packages/awesome_notifications_media/
+  awesome_notifications_calls:
+    paths:
+      - packages/awesome_notifications_calls/
+  awesome_notifications_live_activities:
+    paths:
+      - packages/awesome_notifications_live_activities/
 
 component_management:
   individual_components:
     - component_id: core
       name: awesome_notifications
       paths:
-        - packages/awesome_notifications/lib/**
+        - packages/awesome_notifications/**
+        - native/**
     - component_id: schedules
       name: awesome_notifications_schedules
       paths:
-        - packages/awesome_notifications_schedules/lib/**
+        - packages/awesome_notifications_schedules/**
     - component_id: localizations
       name: awesome_notifications_localizations
       paths:
-        - packages/awesome_notifications_localizations/lib/**
+        - packages/awesome_notifications_localizations/**
     - component_id: fcm
       name: awesome_notifications_fcm
       paths:
-        - packages/awesome_notifications_fcm/lib/**
+        - packages/awesome_notifications_fcm/**
+    - component_id: chat
+      name: awesome_notifications_chat
+      paths:
+        - packages/awesome_notifications_chat/**
+    - component_id: media
+      name: awesome_notifications_media
+      paths:
+        - packages/awesome_notifications_media/**
+    - component_id: calls
+      name: awesome_notifications_calls
+      paths:
+        - packages/awesome_notifications_calls/**
+    - component_id: live_activities
+      name: awesome_notifications_live_activities
+      paths:
+        - packages/awesome_notifications_live_activities/**

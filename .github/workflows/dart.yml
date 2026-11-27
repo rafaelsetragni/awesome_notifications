@@ -12,13 +12,11 @@ on:
     branches: [ "master", "hotfix", "development", "release" ]
 
 jobs:
-  build:
+  analyze:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-      - id: flutter-action
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
 
@@ -31,48 +29,103 @@ jobs:
       - name: Analyze all packages
         run: melos exec -- flutter analyze --no-fatal-infos
 
-      # Each package is tested with coverage and its lcov is uploaded to Codecov
-      # under its own flag, so every package reports its own statistic.
-      - name: Test — awesome_notifications
-        run: flutter test --coverage
-        working-directory: packages/awesome_notifications
-      - name: Upload coverage — awesome_notifications
-        uses: codecov/codecov-action@v4
+  # Each package is tested with coverage and its lcov is uploaded to Codecov
+  # under its own flag (see codecov.yml), so every package reports its own
+  # statistic and the README badges show each one.
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - awesome_notifications
+          - awesome_notifications_schedules
+          - awesome_notifications_localizations
+          - awesome_notifications_fcm
+          - awesome_notifications_chat
+          - awesome_notifications_media
+          - awesome_notifications_calls
+          - awesome_notifications_live_activities
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
-          flags: awesome_notifications
-          files: packages/awesome_notifications/coverage/lcov.info
+          channel: 'stable'
 
-      - name: Test — awesome_notifications_schedules
+      - name: Test
         run: flutter test --coverage
-        working-directory: packages/awesome_notifications_schedules
-      - name: Upload coverage — awesome_notifications_schedules
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
-          flags: awesome_notifications_schedules
-          files: packages/awesome_notifications_schedules/coverage/lcov.info
+        working-directory: packages/${{ matrix.package }}
 
-      - name: Test — awesome_notifications_localizations
-        run: flutter test --coverage
-        working-directory: packages/awesome_notifications_localizations
-      - name: Upload coverage — awesome_notifications_localizations
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
-          flags: awesome_notifications_localizations
-          files: packages/awesome_notifications_localizations/coverage/lcov.info
+      # flutter test writes paths relative to the package (lib/...); the
+      # repository paths keep files of the same name in different packages apart.
+      - name: Repository paths in the lcov
+        run: sed -i "s#^SF:lib/#SF:packages/${{ matrix.package }}/lib/#" packages/${{ matrix.package }}/coverage/lcov.info
 
-      - name: Test — awesome_notifications_fcm
-        run: flutter test --coverage
-        working-directory: packages/awesome_notifications_fcm
-      - name: Upload coverage — awesome_notifications_fcm
+      - name: Upload coverage
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
-          flags: awesome_notifications_fcm
-          files: packages/awesome_notifications_fcm/coverage/lcov.info
+          flags: ${{ matrix.package }}
+          disable_search: true
+          files: packages/${{ matrix.package }}/coverage/lcov.info
+
+  # Native coverage, uploaded under the same per-package flag as the Dart one,
+  # so each package's number combines Dart and native (see codecov.yml).
+  android-coverage:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - awesome_notifications
+          - awesome_notifications_schedules
+          - awesome_notifications_localizations
+          - awesome_notifications_fcm
+          - awesome_notifications_chat
+          - awesome_notifications_media
+          - awesome_notifications_calls
+          - awesome_notifications_live_activities
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Kotlin unit tests with coverage
+        run: tool/native_coverage/android.sh ${{ matrix.package }}
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+          disable_search: true
+          flags: ${{ matrix.package }}
+          files: coverage/android/${{ matrix.package }}.lcov
+
+  apple-desktop-coverage:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Swift unit tests with coverage
+        run: tool/native_coverage/apple.sh
+
+      - name: Desktop (C++) unit tests with coverage
+        run: tool/native_coverage/desktop.sh
+
+      - name: Upload coverage
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: |
+          pip3 install --quiet --break-system-packages codecov-cli
+          for file in coverage/apple/*.lcov coverage/desktop/*.lcov; do
+            package="$(basename "$file" .lcov)"
+            codecovcli upload-process --disable-search \
+              -t "$CODECOV_TOKEN" -F "$package" -f "$file" || true
+          done

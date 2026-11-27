@@ -18,8 +18,7 @@ dependencies:
   # decorator is a preprocessor: it turns a Firebase message into a core payload
   # and hands it to the core's create/display pipeline — it never displays itself.
   # Local path during dev; a real release would pin a published version.
-  awesome_notifications:
-    path: ../awesome_notifications
+  awesome_notifications: ^1.0.0-dev
   # Firebase must be initialized by the host app; we depend on it so the native
   # side can query FirebaseApp availability and the app shares one Firebase.
   firebase_core: ^4.4.0

@@ -21,3 +21,6 @@ pubspec.lock
 # Swift Package Manager
 .build/
 .swiftpm/
+
+# Test coverage (flutter test --coverage)
+coverage/

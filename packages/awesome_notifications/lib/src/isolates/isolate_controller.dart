@@ -51,9 +51,12 @@ class IsolateController {
   /// This method handle the silent callback as a flutter plugin
   Future<void> channelMethodIsolateShutdown(MethodCall call) async {
     try {} catch (error, stacktrace) {
+      // An empty try never throws.
+      // coverage:ignore-start
       Logger.e("channelMethodIsolateShutdown",
           "An error occurred in your background messaging handler: $error");
       Logger.e("receiveSilentAction", stacktrace.toString());
+      // coverage:ignore-end
     }
   }
 
