@@ -6,8 +6,8 @@ import PackageDescription
 let package = Package(
     name: "awesome_notifications_fcm",
     platforms: [
-        // Firebase 12 supports macOS 10.15+.
-        .macOS("10.15")
+        // firebase_core 5 (Firebase 13) requires macOS 11 for Swift packages.
+        .macOS("11.0")
     ],
     products: [
         .library(name: "awesome-notifications-fcm", targets: ["awesome_notifications_fcm"])
@@ -18,7 +18,7 @@ let package = Package(
         .package(name: "awesome_notifications", path: "../awesome_notifications"),
         .package(name: "FlutterFramework", path: "../FlutterFramework"),
         // Same firebase-ios-sdk line as iOS (and as the firebase_core plugin).
-        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", "12.0.0"..<"13.0.0")
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", "13.0.0"..<"14.0.0")
     ],
     targets: [
         .target(

@@ -74,7 +74,7 @@ dependencies {
 
     // Firebase Cloud Messaging. The BOM keeps the transitive Firebase libraries
     // aligned; firebase_core (the Flutter plugin) initializes FirebaseApp.
-    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation(platform("com.google.firebase:firebase-bom:35.2.0"))
     implementation("com.google.firebase:firebase-messaging")
 
     testImplementation("junit:junit:4.13.2")

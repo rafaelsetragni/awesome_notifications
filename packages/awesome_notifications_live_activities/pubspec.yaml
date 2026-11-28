@@ -2,7 +2,7 @@ name: awesome_notifications_live_activities
 description: "Live activities for awesome_notifications: iOS Live Activities (Lock Screen, Dynamic Island), Android Live Updates, and an in-place progress notification on macOS, Windows, Linux and Web, from one model."
 repository: https://github.com/rafaelsetragni/awesome_notifications
 homepage: https://discord.awesome-notifications.carda.me/
-version: 1.0.0-dev
+version: 1.0.0-dev.1
 resolution: workspace
 
 environment:
@@ -14,7 +14,7 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  awesome_notifications: ^1.0.0-dev
+  awesome_notifications: ^1.0.0-dev.1
 
 dev_dependencies:
   flutter_test:

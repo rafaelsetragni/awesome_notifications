@@ -43,14 +43,10 @@ android {
 
     sourceSets {
         getByName("main") {
-            // The Flutter-free engine lives once at the repo root under
-            // native/android/AndroidAwnCore and is compiled into the plugin from
-            // here (single source of truth). Later it can be split into its own
-            // Maven Central module without moving the sources.
-            java.srcDirs(
-                "src/main/kotlin",
-                "../../../native/android/AndroidAwnCore/src/main/kotlin"
-            )
+            // The Flutter-free engine (me.carda.android_awn_core) lives in
+            // src/main/kotlin so it ships with the package; native/android links
+            // to it. Later it can be split into its own Maven Central module.
+            java.srcDirs("src/main/kotlin")
         }
         getByName("test") {
             java.srcDirs("src/test/kotlin")
@@ -110,10 +106,7 @@ tasks.register<JacocoReport>("awnCoverageReport") {
         fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/debug"))
     )
     sourceDirectories.setFrom(
-        files(
-            "src/main/kotlin",
-            "../../../native/android/AndroidAwnCore/src/main/kotlin"
-        )
+        files("src/main/kotlin")
     )
     reports {
         xml.required.set(true)

@@ -20,7 +20,7 @@ jobs:
         with:
           channel: 'stable'
           # The version the packages are developed and verified with.
-          flutter-version: '3.47.3'
+          flutter-version: '3.50.1'
 
       - name: Install Melos
         run: dart pub global activate melos
@@ -54,7 +54,7 @@ jobs:
         with:
           channel: 'stable'
           # The version the packages are developed and verified with.
-          flutter-version: '3.47.3'
+          flutter-version: '3.50.1'
 
       - name: Test
         run: flutter test --coverage
@@ -100,7 +100,7 @@ jobs:
         with:
           channel: 'stable'
           # The version the packages are developed and verified with.
-          flutter-version: '3.47.3'
+          flutter-version: '3.50.1'
 
       - name: Kotlin unit tests with coverage
         run: tool/native_coverage/android.sh ${{ matrix.package }}

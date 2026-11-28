@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'awesome_notifications_schedules'
-  s.version          = '1.0.0-dev'
+  s.version          = '1.0.0-dev.1'
   s.summary          = 'A new Flutter plugin project.'
   s.description      = <<-DESC
 A new Flutter plugin project.

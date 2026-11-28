@@ -1,6 +1,6 @@
 # ⏱ awesome_notifications_live_activities
 
-![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-banner.jpg)
+![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-banner.jpg)
 
 Glanceable activities that update in place (a delivery, a ride, a match, a timer) on
 **Android, iOS, macOS, Windows, Linux and the Web**, from one model.
@@ -72,8 +72,8 @@ Glanceable activities that update in place (a delivery, a ride, a match, a timer
 
 ```yaml
 dependencies:
-  awesome_notifications: ^1.0.0-dev
-  awesome_notifications_live_activities: ^1.0.0-dev
+  awesome_notifications: ^1.0.0-dev.1
+  awesome_notifications_live_activities: ^1.0.0-dev.1
 ```
 
 Initialize the core as usual, with a channel for your activities. Nothing else is

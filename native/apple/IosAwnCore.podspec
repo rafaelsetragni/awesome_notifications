@@ -5,7 +5,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'IosAwnCore'
-  s.version          = '1.0.0-dev'
+  s.version          = '1.0.0-dev.1'
   s.summary          = 'Flutter-free notification engine for Apple platforms.'
   s.description      = <<-DESC
 The Apple-side native engine of Awesome Notifications. Contains no Flutter

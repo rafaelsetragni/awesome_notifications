@@ -1,6 +1,6 @@
 # 📞 awesome_notifications_calls
 
-![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-banner.jpg)
+![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-banner.jpg)
 
 The system's own call screen for your app's calls, on **Android, iOS, macOS, Windows,
 Linux and the Web**, from one model.
@@ -81,8 +81,8 @@ platform.
 
 ```yaml
 dependencies:
-  awesome_notifications: ^1.0.0-dev        # the core
-  awesome_notifications_calls: ^1.0.0-dev  # this package (same version line as the core)
+  awesome_notifications: ^1.0.0-dev.1        # the core
+  awesome_notifications_calls: ^1.0.0-dev.1  # this package (same version line as the core)
 ```
 
 2. Get the packages:

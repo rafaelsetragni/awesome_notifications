@@ -1,6 +1,6 @@
 # 🎵 awesome_notifications_media
 
-![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-banner.jpg)
+![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-banner.jpg)
 
 The system's own media player for your app, on **Android, iOS, macOS, Windows, Linux
 and the Web**, from one model.
@@ -9,7 +9,7 @@ and the Web**, from one model.
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/master/graph/badge.svg?flag=awesome_notifications_media)
 
-![The same player on the iOS lock screen, in the app and in the Android Quick Settings](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-media.jpg)
+![The same player on the iOS lock screen, in the app and in the Android Quick Settings](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-media.jpg)
 
 *The example app's player (center) and the same session on the iOS lock screen (left)
 and in the Android Quick Settings (right).*
@@ -107,8 +107,8 @@ playing now, in the app.
 
 ```yaml
 dependencies:
-  awesome_notifications: ^1.0.0-dev        # the core
-  awesome_notifications_media: ^1.0.0-dev  # this package (same version line as the core)
+  awesome_notifications: ^1.0.0-dev.1        # the core
+  awesome_notifications_media: ^1.0.0-dev.1  # this package (same version line as the core)
 ```
 
 2. Get the packages:

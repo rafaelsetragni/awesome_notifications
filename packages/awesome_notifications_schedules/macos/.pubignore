@@ -1,0 +1,4 @@
+# awesome_notifications here links to the core Swift package for this
+# repository's example app (Flutter resolves the example's plugin from its real
+# folder). An app finds the core next to this plugin, so the link is not shipped.
+/awesome_notifications

@@ -20,9 +20,9 @@ let package = Package(
         // decorator registries the base plugin uses. The sibling path resolves
         // from Flutter's ios/Flutter/ephemeral/Packages/.packages layout.
         .package(name: "awesome_notifications", path: "../awesome_notifications"),
-        // Firebase Cloud Messaging. Kept on the 12.x line so it resolves to the
+        // Firebase Cloud Messaging. Kept on the 13.x line so it resolves to the
         // same firebase-ios-sdk the firebase_core Flutter plugin pulls in.
-        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", "12.0.0"..<"13.0.0")
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", "13.0.0"..<"14.0.0")
     ],
     targets: [
         .target(

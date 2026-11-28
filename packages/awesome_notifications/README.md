@@ -1,7 +1,7 @@
 
 # Awesome Notifications for Flutter
 
-![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-banner.jpg)
+![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-banner.jpg)
 
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#)
 [![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#)
@@ -39,7 +39,7 @@ Engage your users with custom local and push notifications on Flutter. Get real-
 
 ***iOS** notification examples:*
 
-![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-ios-examples.jpg)
+![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-ios-examples.jpg)
 
 
 <br>
@@ -366,16 +366,16 @@ To use the `awesome_notifications`, follow these steps:
 
 ```yaml
 dependencies:
-  awesome_notifications: ^1.0.0-dev # the core
+  awesome_notifications: ^1.0.0-dev.1 # the core
 
   # Add-ons: only the ones you use, on the same version line as the core
-  awesome_notifications_schedules: ^1.0.0-dev     # scheduled notifications
-  awesome_notifications_localizations: ^1.0.0-dev # translated notifications
-  awesome_notifications_fcm: ^1.0.0-dev           # push notifications (Firebase Cloud Messaging)
-  awesome_notifications_chat: ^1.0.0-dev          # chat / communication notifications
-  awesome_notifications_media: ^1.0.0-dev         # media player controls
-  awesome_notifications_calls: ^1.0.0-dev         # calls (CallKit, CallStyle, VoIP pushes)
-  awesome_notifications_live_activities: ^1.0.0-dev # live activities (iOS Live Activities, Android Live Updates)
+  awesome_notifications_schedules: ^1.0.0-dev.1     # scheduled notifications
+  awesome_notifications_localizations: ^1.0.0-dev.1 # translated notifications
+  awesome_notifications_fcm: ^1.0.0-dev.1           # push notifications (Firebase Cloud Messaging)
+  awesome_notifications_chat: ^1.0.0-dev.1          # chat / communication notifications
+  awesome_notifications_media: ^1.0.0-dev.1         # media player controls
+  awesome_notifications_calls: ^1.0.0-dev.1         # calls (CallKit, CallStyle, VoIP pushes)
+  awesome_notifications_live_activities: ^1.0.0-dev.1 # live activities (iOS Live Activities, Android Live Updates)
 
   # Only with awesome_notifications_fcm (firebase_messaging is NOT needed: the
   # FCM add-on replaces it)

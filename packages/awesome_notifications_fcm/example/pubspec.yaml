@@ -19,7 +19,7 @@ dependencies:
     path: ../../awesome_notifications
 
   # Firebase must be initialized by the host app before the plugin starts.
-  firebase_core: ^4.4.0
+  firebase_core: ^5.2.0
 
   cupertino_icons: ^1.0.8
 

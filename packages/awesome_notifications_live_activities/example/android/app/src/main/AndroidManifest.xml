@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Release builds: the example loads images from the internet. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="Awesome Live"
         android:name="${applicationName}"

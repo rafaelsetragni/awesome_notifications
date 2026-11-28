@@ -2,7 +2,7 @@ name: awesome_notifications_localizations
 description: "Localizations (translation) decorator for awesome_notifications — translates the notification at build time via the core's builder decorator seam."
 repository: https://github.com/rafaelsetragni/awesome_notifications
 homepage: https://discord.awesome-notifications.carda.me/
-version: 1.0.0-dev
+version: 1.0.0-dev.1
 # Resolved as part of the awesome_notifications monorepo (Dart pub workspace).
 resolution: workspace
 
@@ -14,7 +14,7 @@ dependencies:
   flutter:
     sdk: flutter
   # Local path during dev; a real release would pin a published version.
-  awesome_notifications: ^1.0.0-dev
+  awesome_notifications: ^1.0.0-dev.1
 
 dev_dependencies:
   flutter_test:

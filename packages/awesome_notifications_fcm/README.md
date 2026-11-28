@@ -1,6 +1,6 @@
 # 🔔 awesome_notifications_fcm
 
-![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/assets/readme/awesome-notifications-banner.jpg)
+![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-banner.jpg)
 
 Firebase Cloud Messaging (push) for [awesome_notifications](https://pub.dev/packages/awesome_notifications).
 
@@ -30,8 +30,8 @@ for local notifications. The core stays push‑agnostic.
 
 ```yaml
 dependencies:
-  awesome_notifications: ^1.0.0-dev
-  awesome_notifications_fcm: ^1.0.0-dev
+  awesome_notifications: ^1.0.0-dev.1
+  awesome_notifications_fcm: ^1.0.0-dev.1
   firebase_core: ^4.4.0
 ```
 
