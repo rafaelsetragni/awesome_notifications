@@ -2,9 +2,6 @@
 
 ![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-banner.jpg)
 
-Media controls for [awesome_notifications](https://pub.dev/packages/awesome_notifications): the system's own media player for your
-app, on **Android, iOS, macOS, Windows, Linux and the Web**, from one model.
-
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#)
 [![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#)
 [![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.awesome-notifications.carda.me)
@@ -14,14 +11,17 @@ app, on **Android, iOS, macOS, Windows, Linux and the Web**, from one model.
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/development/graph/badge.svg?flag=awesome_notifications_media)
 
-![The same player on the iOS lock screen, in the app and in the Android Quick Settings](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-media.jpg)
-
-*The example app's player (center) and the same session on the iOS lock screen (left)
-and in the Android Quick Settings (right).*
+Media controls for [awesome_notifications](https://pub.dev/packages/awesome_notifications): the system's own media player for your
+app, on **Android, iOS, macOS, Windows, Linux and the Web**, from one model.
 
 **The package doesn't play audio:** your player (just_audio, audioplayers, your own)
 plays; this package mirrors its state on the system controls and sends the user's
 commands back to your app.
+
+![The same player on the iOS lock screen, in the app and in the Android Quick Settings](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-media.jpg)
+
+*The example app's player (center) and the same session on the iOS lock screen (left)
+and in the Android Quick Settings (right).*
 
 <br>
 

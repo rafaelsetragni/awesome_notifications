@@ -2,8 +2,6 @@
 
 ![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-banner.jpg)
 
-Firebase Cloud Messaging (push) for [awesome_notifications](https://pub.dev/packages/awesome_notifications).
-
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#)
 [![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#)
 [![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.awesome-notifications.carda.me)
@@ -13,10 +11,7 @@ Firebase Cloud Messaging (push) for [awesome_notifications](https://pub.dev/pack
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/development/graph/badge.svg?flag=awesome_notifications_fcm)
 
-![A Firebase push on the iOS lock screen, the app and the Android notification shade](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/awesome-notifications-fcm.jpg)
-
-*A Firebase push displayed by the Awesome Notifications engine on the iOS lock screen (left)
-and in the Android notification shade (right), next to the example app (center).*
+Firebase Cloud Messaging (push) for [awesome_notifications](https://pub.dev/packages/awesome_notifications).
 
 Receive Firebase pushes and **display them through the awesome_notifications
 engine** — same channels, layouts, action buttons, images and lifecycle events
@@ -24,6 +19,11 @@ as a local notification. The plugin is a *preprocessor*: it turns an incoming
 Firebase message into a core notification and hands it to `createNotification`
 natively, so `onNotificationCreated` / `onActionReceived` fire exactly as they do
 for local notifications. The core stays push‑agnostic.
+
+![A Firebase push on the iOS lock screen, the app and the Android notification shade](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/awesome-notifications-fcm.jpg)
+
+*A Firebase push displayed by the Awesome Notifications engine on the iOS lock screen (left)
+and in the Android notification shade (right), next to the example app (center).*
 
 ## Features
 

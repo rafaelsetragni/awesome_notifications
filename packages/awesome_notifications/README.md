@@ -12,13 +12,12 @@
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/development/graph/badge.svg?flag=awesome_notifications)
 
+Engage your users with custom local and push notifications on Flutter. Get real-time events and never miss a user interaction with Awesome Notifications.
+
 ![A big picture notification on the iOS lock screen, in the app and in the Android notification shade](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/awesome-notifications-showcase.jpg)
 
 *The example app (center), a big picture notification on the iOS lock screen (left) and the
 same notification, next to one with action buttons, in the Android notification shade (right).*
-
-
-Engage your users with custom local and push notifications on Flutter. Get real-time events and never miss a user interaction with Awesome Notifications.
 
 <br>
 <br>
