@@ -11,6 +11,7 @@ final class FcmServiceExtensionTests: XCTestCase {
         FakeNotificationCenter.install()
         RemoteModelProviderRegistry.shared.clearForTest()
         NotificationBuilderRegistry.shared.clearForTest()
+        AwesomeServiceExtension.resetAddOnsForTest()
         CriticalAlertUtils.setCache(false)
     }
 

@@ -3,7 +3,10 @@
 # Package.swift) -> coverage/apple/<package>.lcov
 set -e
 cd "$(dirname "$0")/../.."
-swift test --enable-code-coverage
+# A failing test still exports what ran (the job fails at the end), so the
+# coverage reaches Codecov whatever the outcome.
+status=0
+swift test --enable-code-coverage || status=$?
 BIN="$(swift build --show-bin-path)"
 PROFILE="$BIN/codecov/default.profdata"
 set --
@@ -17,3 +20,4 @@ xcrun llvm-cov export -format=lcov -instr-profile "$PROFILE" "$@" \
   -ignore-filename-regex='(\.build|/Tests/)' > coverage/apple.raw.lcov
 python3 tool/native_coverage/lcov_tools.py split apple coverage/apple.raw.lcov
 rm coverage/apple.raw.lcov
+exit $status

@@ -69,8 +69,10 @@ final class AwesomeServiceExtensionTests: XCTestCase {
         fake.categories = [UNNotificationCategory(
             identifier: "reply", actions: [], intentIdentifiers: [], options: [])]
 
-        // The first push of the process (the only test class that receives
-        // pushes, and its first test alphabetically) registers the add-ons.
+        // The first push of the process registers the add-ons (reset here:
+        // other test classes in the same process receive pushes too).
+        AwesomeServiceExtension.resetAddOnsForTest()
+        Extension.registrations = 0
         let first = Extension()
         var delivered: [UNNotificationContent] = []
         first.didReceive(push()) { delivered.append($0) }

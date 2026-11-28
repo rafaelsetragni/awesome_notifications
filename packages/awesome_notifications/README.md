@@ -1,5 +1,5 @@
 
-# Awesome Notifications for Flutter
+# <img src="https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/icons/awesome_notifications.png" width="40" height="40" align="top" alt=""> Awesome Notifications for Flutter
 
 ![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-banner.jpg)
 
@@ -10,7 +10,7 @@
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](#)
 [![pub package](https://img.shields.io/pub/v/awesome_notifications.svg)](https://pub.dev/packages/awesome_notifications)
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
-![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/master/graph/badge.svg?flag=awesome_notifications)
+![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/development/graph/badge.svg?flag=awesome_notifications)
 
 
 Engage your users with custom local and push notifications on Flutter. Get real-time events and never miss a user interaction with Awesome Notifications.
@@ -90,7 +90,7 @@ Current Linux gaps, planned for a follow-up (a small helper bundled with the app
 
 # 🤝 Contributing
 
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) before submitting a pull request.
+Contributions are welcome! Please read our [Contributing Guide](https://github.com/rafaelsetragni/awesome_notifications/blob/development/CONTRIBUTING.md) before submitting a pull request.
 
 **Important:** All pull requests must target the `development` branch. PRs aimed at `master` will be rejected.
 

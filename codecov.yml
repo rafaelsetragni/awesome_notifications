@@ -2,7 +2,7 @@
 # flag (see .github/workflows/dart.yml); the flags carry forward so a PR that
 # only touches one package doesn't drop the others' numbers. Package README
 # badges point at their own flag, e.g.
-#   https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/master/graph/badge.svg?flag=awesome_notifications_schedules
+#   https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/development/graph/badge.svg?flag=awesome_notifications_schedules
 #
 # A package's flag combines its Dart coverage (flutter test) with its native
 # coverage: Android (JaCoCo), Apple (swift test) and the desktop C++ engines

@@ -1,12 +1,17 @@
-# 🌎 awesome_notifications_localizations
+# <img src="https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/icons/awesome_notifications_localizations.png" width="40" height="40" align="top" alt=""> awesome_notifications_localizations
 
 ![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-banner.jpg)
 
 Multi-language support for [awesome_notifications](https://pub.dev/packages/awesome_notifications).
 
+[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#)
+[![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#)
+[![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.awesome-notifications.carda.me)
+
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](#)
 [![pub package](https://img.shields.io/pub/v/awesome_notifications_localizations.svg)](https://pub.dev/packages/awesome_notifications_localizations)
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
-![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/master/graph/badge.svg?flag=awesome_notifications_localizations)
+![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/development/graph/badge.svg?flag=awesome_notifications_localizations)
 
 Show your notifications in the user's language: translate the title, body,
 summary, large icon, big picture and action button labels — all from a single

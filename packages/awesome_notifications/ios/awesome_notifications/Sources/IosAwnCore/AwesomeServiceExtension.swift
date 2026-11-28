@@ -72,6 +72,13 @@ open class AwesomeServiceExtension: UNNotificationServiceExtension {
     /// builders). Called once per extension process.
     open func registerAddOns() {}
 
+    /// Lets the next extension register its add-ons again (tests share one
+    /// process, so an earlier test would otherwise have used the only turn).
+    static func resetAddOnsForTest() {
+        lock.lock(); defer { lock.unlock() }
+        addOnsRegistered = false
+    }
+
     open override func didReceive(
         _ request: UNNotificationRequest,
         withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void

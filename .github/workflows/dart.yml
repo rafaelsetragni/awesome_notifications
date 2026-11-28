@@ -63,9 +63,11 @@ jobs:
       # flutter test writes paths relative to the package (lib/...); the
       # repository paths keep files of the same name in different packages apart.
       - name: Repository paths in the lcov
+        if: ${{ !cancelled() }}
         run: sed -i "s#^SF:lib/#SF:packages/${{ matrix.package }}/lib/#" packages/${{ matrix.package }}/coverage/lcov.info
 
       - name: Upload coverage
+        if: ${{ !cancelled() }}
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -102,10 +104,19 @@ jobs:
           # The version the packages are developed and verified with.
           flutter-version: '3.50.1'
 
+      # Up to 3 tries: a dependency download that fails on the runner
+      # (Maven Central, the Gradle plugin portal) mustn't drop the package's number.
       - name: Kotlin unit tests with coverage
-        run: tool/native_coverage/android.sh ${{ matrix.package }}
+        run: |
+          for attempt in 1 2 3; do
+            tool/native_coverage/android.sh ${{ matrix.package }} && exit 0
+            echo "::warning::attempt $attempt failed"
+            sleep 30
+          done
+          exit 1
 
       - name: Upload coverage
+        if: ${{ !cancelled() }}
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -123,9 +134,11 @@ jobs:
         run: tool/native_coverage/apple.sh
 
       - name: Desktop (C++) unit tests with coverage
+        if: ${{ !cancelled() }}
         run: tool/native_coverage/desktop.sh
 
       - name: Upload coverage
+        if: ${{ !cancelled() }}
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
