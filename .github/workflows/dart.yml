@@ -97,7 +97,8 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          # Robolectric's Android 36 sandbox needs Java 21.
+          java-version: '21'
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
@@ -142,9 +143,12 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
-          pip3 install --quiet --break-system-packages codecov-cli
+          # The standalone uploader: pip can't build codecov-cli on the
+          # runner's newest Python.
+          curl -sSfLo codecov https://cli.codecov.io/latest/macos/codecov
+          chmod +x codecov
           for file in coverage/apple/*.lcov coverage/desktop/*.lcov; do
             package="$(basename "$file" .lcov)"
-            codecovcli upload-process --disable-search \
+            ./codecov upload-process --disable-search \
               -t "$CODECOV_TOKEN" -F "$package" -f "$file" || true
           done
