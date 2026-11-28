@@ -6,9 +6,13 @@ cd "$(dirname "$0")/../.."
 # A failing test still exports what ran (the job fails at the end), so the
 # coverage reaches Codecov whatever the outcome.
 status=0
-swift test --enable-code-coverage || status=$?
+# The schedule tests read the device's time zone as America/Sao_Paulo (the
+# runners are on UTC).
+TZ=America/Sao_Paulo swift test --enable-code-coverage || status=$?
 BIN="$(swift build --show-bin-path)"
 PROFILE="$BIN/codecov/default.profdata"
+# swift test merges the raw profiles only when every test passed.
+[ -f "$PROFILE" ] || xcrun llvm-profdata merge -sparse "$BIN"/codecov/*.profraw -o "$PROFILE"
 set --
 for bundle in "$BIN"/*.xctest; do
   name="$(basename "$bundle" .xctest)"
