@@ -13,6 +13,11 @@ Notification scheduling for [awesome_notifications](https://pub.dev/packages/awe
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/development/graph/badge.svg?flag=awesome_notifications_schedules)
 
+![A scheduled big picture notification on the iOS lock screen, in the app and in the Android notification shade](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/awesome-notifications-schedules.jpg)
+
+*A big picture notification scheduled in the example app (center), delivered 10 seconds later
+on the iOS lock screen (left) and in the Android notification shade (right).*
+
 Deliver notifications later — by a time interval or a calendar date, once or
 repeating. Scheduling is attached to a normal `createNotification` call through
 the `extensions:` slot; the native decorator (installed automatically by this

@@ -15,6 +15,11 @@ shared Person model.
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/development/graph/badge.svg?flag=awesome_notifications_chat)
 
+![Ana's message on the iOS lock screen, in the app and as Android conversations](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/awesome-notifications-chat.jpg)
+
+*The example app (center), Ana's message as an iOS communication notification (left) and as
+Android conversations, direct and in a group, with an inline reply (right).*
+
 Show messages the way messaging apps do: with the sender's photo and name, the
 group's name, the history of the conversation and a reply typed right in the
 notification. You describe the people of a conversation once, in Dart, and the

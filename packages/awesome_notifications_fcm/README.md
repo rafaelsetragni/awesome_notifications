@@ -13,6 +13,11 @@ Firebase Cloud Messaging (push) for [awesome_notifications](https://pub.dev/pack
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/development/graph/badge.svg?flag=awesome_notifications_fcm)
 
+![A Firebase push on the iOS lock screen, the app and the Android notification shade](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/awesome-notifications-fcm.jpg)
+
+*A Firebase push displayed by the Awesome Notifications engine on the iOS lock screen (left)
+and in the Android notification shade (right), next to the example app (center).*
+
 Receive Firebase pushes and **display them through the awesome_notifications
 engine** — same channels, layouts, action buttons, images and lifecycle events
 as a local notification. The plugin is a *preprocessor*: it turns an incoming

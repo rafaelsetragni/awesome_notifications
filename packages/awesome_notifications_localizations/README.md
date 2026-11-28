@@ -13,6 +13,11 @@ Multi-language support for [awesome_notifications](https://pub.dev/packages/awes
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/development/graph/badge.svg?flag=awesome_notifications_localizations)
 
+![The same notification in German on iOS and in Chinese on Android](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/awesome-notifications-localizations.jpg)
+
+*The same notification, declared once in the example app (center), shown in German on iOS
+(left) and in Chinese on Android (right), with its picture and buttons translated too.*
+
 Show your notifications in the user's language: translate the title, body,
 summary, large icon, big picture and action button labels — all from a single
 `createNotification` call.
