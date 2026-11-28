@@ -26,7 +26,7 @@ const NotificationPerson me = NotificationPerson(key: 'me', name: 'Me');
 const NotificationPerson ana = NotificationPerson(
   key: 'ana',
   name: 'Ana',
-  avatar: '$_imagesRoot/american.jpg',
+  avatar: '$_imagesRoot/girl-phonecall.jpg',
   isImportant: true,
 );
 const NotificationPerson bot = NotificationPerson(

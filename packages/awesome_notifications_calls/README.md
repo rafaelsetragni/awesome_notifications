@@ -14,6 +14,11 @@ your app's calls, on **Android, iOS, macOS, Windows, Linux and the Web**, from o
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/development/graph/badge.svg?flag=awesome_notifications_calls)
 
+![An incoming call on the iOS lock screen, in the app and on Android](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/awesome-notifications-calls.jpg)
+
+*An incoming call from the example app (center): CallKit over the iOS lock screen (left) and
+the Android CallStyle notification over the app's ringing screen (right).*
+
 **The package doesn't carry the call:** your audio / video stack (WebRTC, agora,
 livekit, SIP, your own) connects it; this package shows the call where the system shows
 calls and sends the user's answers back to your app.

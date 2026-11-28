@@ -15,6 +15,11 @@ and the Web**, from one model.
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/development/graph/badge.svg?flag=awesome_notifications_live_activities)
 
+![A delivery as an iOS Live Activity, in the app and as Android progress notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/awesome-notifications-live-activities.jpg)
+
+*A delivery started in the example app (center): an iOS Live Activity on the lock screen (left)
+and notifications updated in place on Android, with a match scoreboard (right).*
+
 <br>
 
 ### **Key Features:**
