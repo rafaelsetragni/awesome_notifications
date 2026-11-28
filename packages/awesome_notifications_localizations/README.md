@@ -2,8 +2,6 @@
 
 ![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-banner.jpg)
 
-Multi-language support for [awesome_notifications](https://pub.dev/packages/awesome_notifications).
-
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#)
 [![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#)
 [![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.awesome-notifications.carda.me)
@@ -13,14 +11,16 @@ Multi-language support for [awesome_notifications](https://pub.dev/packages/awes
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/development/graph/badge.svg?flag=awesome_notifications_localizations)
 
-![The same notification in German on iOS and in Chinese on Android](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/awesome-notifications-localizations.jpg)
-
-*The same notification, declared once in the example app (center), shown in German on iOS
-(left) and in Chinese on Android (right), with its picture and buttons translated too.*
+Multi-language support for [awesome_notifications](https://pub.dev/packages/awesome_notifications).
 
 Show your notifications in the user's language: translate the title, body,
 summary, large icon, big picture and action button labels — all from a single
 `createNotification` call.
+
+![The same notification in German on iOS and in Chinese on Android](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/awesome-notifications-localizations.jpg)
+
+*The same notification, declared once in the example app (center), shown in German on iOS
+(left) and in Chinese on Android (right), with its picture and buttons translated too.*
 
 <br>
 

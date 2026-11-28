@@ -2,10 +2,6 @@
 
 ![Awesome Notifications](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/30bf59533a2d324f2de0ded285511bef6ede2e98/assets/readme/awesome-notifications-banner.jpg)
 
-Chat notifications for [awesome_notifications](https://pub.dev/packages/awesome_notifications):
-Android **conversations** and iOS / macOS **communication notifications**, from one
-shared Person model.
-
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](#)
 [![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)](#)
 [![Discord](https://img.shields.io/discord/888523488376279050.svg?style=for-the-badge&colorA=7289da&label=Chat%20on%20Discord)](https://discord.awesome-notifications.carda.me)
@@ -15,16 +11,20 @@ shared Person model.
 ![Full tests workflow](https://github.com/rafaelsetragni/awesome_notifications/actions/workflows/dart.yml/badge.svg?branch=master)
 ![codecov badge](https://codecov.io/gh/rafaelsetragni/awesome_notifications/branch/development/graph/badge.svg?flag=awesome_notifications_chat)
 
-![Ana's message on the iOS lock screen, in the app and as Android conversations](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/awesome-notifications-chat.jpg)
-
-*The example app (center), Ana's message as an iOS communication notification (left) and as
-Android conversations, direct and in a group, with an inline reply (right).*
+Chat notifications for [awesome_notifications](https://pub.dev/packages/awesome_notifications):
+Android **conversations** and iOS / macOS **communication notifications**, from one
+shared Person model.
 
 Show messages the way messaging apps do: with the sender's photo and name, the
 group's name, the history of the conversation and a reply typed right in the
 notification. You describe the people of a conversation once, in Dart, and the
 package turns them into an `androidx.core.app.Person` on Android and an `INPerson`
 on iOS and macOS.
+
+![Ana's message on the iOS lock screen, in the app and as Android conversations](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/development/assets/readme/awesome-notifications-chat.jpg)
+
+*The example app (center), Ana's message as an iOS communication notification (left) and as
+Android conversations, direct and in a group, with an inline reply (right).*
 
 <br>
 
