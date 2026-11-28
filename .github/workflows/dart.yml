@@ -99,6 +99,12 @@ jobs:
           distribution: 'temurin'
           # Robolectric's Android 36 sandbox needs Java 21.
           java-version: '21'
+      # Caches Gradle's dependencies between runs: the 8 jobs downloading
+      # them at once hit Maven Central's rate limit (429 Too Many Requests).
+      # It writes the cache from development too (only master by default).
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
@@ -112,7 +118,7 @@ jobs:
           for attempt in 1 2 3; do
             tool/native_coverage/android.sh ${{ matrix.package }} && exit 0
             echo "::warning::attempt $attempt failed"
-            sleep 30
+            sleep $((attempt * 60))
           done
           exit 1
 
